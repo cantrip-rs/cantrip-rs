@@ -27,6 +27,7 @@ Bot2.Hand.Mox Sapphire.Cast
 Bot1.Hand.Mountain.Play
 Bot1.Battlefield.Mountain.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 Bot2.Battlefield.Island.Activate
 Bot2.Battlefield.Mox Sapphire.Activate

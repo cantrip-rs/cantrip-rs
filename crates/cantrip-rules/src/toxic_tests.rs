@@ -55,7 +55,7 @@ fn to_a_player(_: &dyn Query, _: &Asker, proposal: &Proposal) -> bool {
 
 fn keep<const KEEP: u16>(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
     if let Proposal::Damage(d) = proposal {
-        d.amount = d.amount.min(KEEP);
+        d.amount = d.amount.min(i64::from(KEEP));
     }
 }
 
@@ -94,14 +94,14 @@ fn put(g: &mut Game, def: &'static CardDef, controller: PlayerId) -> ObjectId {
 }
 
 fn cx(g: &mut Game) -> Cx<'_> {
-    Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// `source` deals `amount` damage to `target`, combat damage or not, as one event of its own.
 fn deal(g: &mut Game, source: ObjectId, target: Target, amount: u16, combat: bool) {
     let mut cx = cx(g);
     let mut batch = ops::DamageBatch::default();
-    ops::deal_damage_with(&mut cx, source, target, amount, combat, &mut batch);
+    ops::deal_damage_with(&mut cx, source, target, i64::from(amount), combat, &mut batch);
     let mut events = Vec::new();
     batch.finish(&mut cx, &mut events);
 }

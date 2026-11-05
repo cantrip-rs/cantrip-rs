@@ -36,6 +36,9 @@ Bot1.Pass
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Chrome Companion.Activate(Ability: {2}; Bot2.Graveyard.Lightning Bolt)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

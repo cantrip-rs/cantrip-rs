@@ -21,6 +21,8 @@ Bot1.Battlefield.Mox Pearl.Activate
 ! Bot1.Hand.Stratosoarer.Activate(Mana: short)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Stratosoarer.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Search(Island)
 

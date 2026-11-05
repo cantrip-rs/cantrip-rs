@@ -56,6 +56,7 @@ Bot2.Pass
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Mind Stone.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -64,6 +65,7 @@ Bot1.Choose(Island; Plains)
 ? Bot1.Library.Count = 11
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Sol Ring.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

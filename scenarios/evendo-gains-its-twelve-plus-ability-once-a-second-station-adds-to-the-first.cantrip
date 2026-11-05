@@ -54,6 +54,8 @@ Bot1.Pass
 [T5 Bot1.Main1]
 Bot1.Battlefield.Evendo, Waking Haven.Activate(Ability: for each creature)
 Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {G}{G}
 Bot1.Battlefield.Evendo, Waking Haven.Activate(Ability: Station)
 Bot1.Choose(Lake-town Mariners)

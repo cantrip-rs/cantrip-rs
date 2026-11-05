@@ -17,6 +17,8 @@ Bot1.Pass
 Bot1.Hand.Island.Play
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Darkwater Catacombs.Activate(Ability: {1}, {T})
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {U}{B}
 ! Bot1.Battlefield.Darkwater Catacombs.Activate(Ability: {1}, {T})
 

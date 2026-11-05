@@ -25,6 +25,7 @@ Bot1.Hand.Mox Jet.Cast
 Bot1.Hand.Mox Jet.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 Bot1.Hand.Zombie Master.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Battlefield.Mox Jet#1.Activate
 Bot1.Battlefield.Mox Jet#2.Activate
@@ -40,6 +41,7 @@ Bot1.Battlefield.Mox Jet#1.Activate
 ! Bot1.Battlefield.Zombie Master.Activate
 ! Bot1.Battlefield.Ornithopter.Activate
 Bot1.Battlefield.Walking Corpse.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

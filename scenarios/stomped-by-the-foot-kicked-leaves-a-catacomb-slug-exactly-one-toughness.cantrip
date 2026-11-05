@@ -31,6 +31,8 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Stomped by the Foot.Cast(Bot2.Battlefield.Catacomb Slug)
 Bot1.Modes(Kicker—Sacrifice an artifact or creature)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass

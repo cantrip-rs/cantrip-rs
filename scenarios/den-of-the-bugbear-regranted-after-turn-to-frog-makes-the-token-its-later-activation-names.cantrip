@@ -59,6 +59,7 @@ Bot1.Modes(Elf)
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Den of the Bugbear.Activate(Ability: Until end of turn)
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mountain.Activate
 Bot1.Hand.Turn to Frog.Cast(Den of the Bugbear)

@@ -35,6 +35,9 @@ Bot1.Hand.Team Avatar.Activate(Bot2.Battlefield.Ornithopter)
 Bot1.Battlefield.Mox Pearl#1.Activate
 Bot1.Battlefield.Mox Pearl#2.Activate
 Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

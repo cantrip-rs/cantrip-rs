@@ -34,7 +34,7 @@ fn raid(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(defending) = g.defending_player(item.object) else { return Ok(()) };
     let artifacts = g.permanents_of(defending).into_iter().filter(|&id| g.chars(id).is(CardType::Artifact)).count();
     if artifacts > 0 {
-        g.damage(item.object, Target::Player(defending), artifacts as u16);
+        g.damage(item.object, Target::Player(defending), i64::from(artifacts as u16));
     }
     Ok(())
 }

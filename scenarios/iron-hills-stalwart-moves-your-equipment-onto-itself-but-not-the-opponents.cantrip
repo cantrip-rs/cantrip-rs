@@ -43,6 +43,7 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Paradise Mantle.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -61,6 +62,7 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Iron Hills Stalwart.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

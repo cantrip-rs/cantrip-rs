@@ -31,6 +31,7 @@ Bot1.Hand.Witherbloom Command.Cast
 Bot1.Modes(1; 2)
 Bot1.Target(Bot1)
 Bot1.Target(Mox Ruby)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = 
 Bot1.Pass
 Bot1.Choose(Forest)

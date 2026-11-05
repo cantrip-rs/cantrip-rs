@@ -28,6 +28,9 @@ Bot1.Pass
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Blasted Landscape.Activate
 Bot1.Graveyard.World Breaker.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Forest)
 ? Bot1.Mana =
 Bot1.Pass

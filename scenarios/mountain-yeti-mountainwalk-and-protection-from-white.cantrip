@@ -40,6 +40,7 @@ Bot2.Hand.Plains.Play
 Bot2.Battlefield.Plains.Activate
 ! Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Mountain Yeti)
 Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Memnite)
+Bot2.Choose(Close mana window)
 ? Bot2.Mana =
 Bot2.Pass
 Bot1.Pass

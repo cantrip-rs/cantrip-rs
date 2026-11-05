@@ -4,6 +4,16 @@
 
 use cantrip_api::*;
 
+/// "This ability has been activated N times this turn" (CR 113.2c, 602.5c), for the exact selected instance.
+/// Vampire Bats and Farrelite Priest count their own independently acquired copies this way.
+pub fn this_ability_activations_this_turn(q: &dyn Query, asker: &Asker) -> usize {
+    let instance = asker.instance.expect("an activated ability is asked with its exact instance");
+    q.history().select(EventQuery::kind(EventMask::ABILITY_ACTIVATED).object(asker.source).this_turn())
+        .filter(|r| matches!(r.event, Event::AbilityActivated { ability, instance: key, .. }
+            if ability == instance.ability && key == instance.acquisition))
+        .count()
+}
+
 /// The `Cast` record of the spell `id`, or of the spell the permanent `id` became (CR 400.7, 608.3): the latest one. A copy of a
 /// spell was not cast (CR 707.10) and has none, and a permanent put onto the battlefield was never a spell.
 pub fn cast_of(q: &dyn Query, id: ObjectId) -> Option<Cast> {
@@ -328,22 +338,11 @@ pub fn faced_a_dilemma(event: &Event) -> Option<PlayerId> {
     }
 }
 
-/// "The sacrificed creature's power" (CR 601.2h, 608.2h): the power of what `spell`'s additional cost sacrificed, as it last
-/// existed on the battlefield, pumps, counters and copy effects included. The sacrifice is the last one from the battlefield
-/// in the history before the spell was cast. A copy of the spell was never cast: it reads what the original sacrificed (CR
-/// 707.10, whose example is Fling), through a copy of a copy too. Kazuul's Fury and Fling print it.
+/// "The sacrificed creature's power" (CR 601.2h, 608.2h, 707.10): the creature paid for the spell's own first
+/// printed additional cost, as it last existed. A copy uses the original spell's cost object. Fling and Kazuul's Fury print it.
 pub fn sacrificed_creatures_power(q: &dyn Query, spell: ObjectId) -> i32 {
-    let records = q.history().all();
-    let spell = q.history().original_spell(spell);
-    let Some(cast) = records.iter().rposition(|r| matches!(r.event, Event::Cast(c) if c.spell == spell)) else { return 0 };
-    records[..cast]
-        .iter()
-        .rev()
-        .find_map(|r| match r.event {
-            Event::ZoneChange { old, from, reason: ZoneReason::Sacrifice, .. } if from.is(ZoneKind::Battlefield) => Some(old),
-            _ => None,
-        })
-        .map_or(0, |creature| q.chars(creature).power.unwrap_or(0) as i32)
+    q.history().spell_cost_objects(spell, CostOrigin::PrintedAdditional, 0, CostPart::Permanents)
+        .next().map_or(0, |creature| q.chars(creature).power.unwrap_or(0) as i32)
 }
 
 /// "That creature's power" of a creature a resolving ability sacrificed (CR 701.21, 608.2h): the power of the permanent that

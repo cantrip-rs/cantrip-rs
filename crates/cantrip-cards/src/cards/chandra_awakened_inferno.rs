@@ -39,16 +39,10 @@ fn burn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 // --- The emblem ---------------------------------------------------------------------------------------------------
 
-/// "At the beginning of your upkeep, this emblem deals 1 damage to you." You are the emblem's controller.
-fn one_damage_to_you(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.damage(item.object, Target::Player(item.controller), 1);
-    Ok(())
-}
-
 pub static EMBLEM: CardDef = CardDef {
     name: "Chandra, Awakened Inferno emblem",
     has_cost: false,
-    abilities: &[triggered(triggers::YOUR_UPKEEP, one_damage_to_you, "At the beginning of your upkeep, this emblem deals 1 damage to you.")],
+    abilities: &[triggered(triggers::YOUR_UPKEEP, cantrip_mechanics::effects::source_deals_one_to_controller, "At the beginning of your upkeep, this emblem deals 1 damage to you.")],
     text: "At the beginning of your upkeep, this emblem deals 1 damage to you.",
     ..CardDef::BLANK
 };

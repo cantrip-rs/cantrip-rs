@@ -30,6 +30,7 @@ Bot2.Hand.Mountain.Play
 Bot2.Battlefield.Mountain.Activate
 Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Terror of the Peaks)
 ? Stack = Lightning Bolt
+Bot2.Choose(Pay mana)
 ? Bot2.Life = 17
 Bot2.Pass
 Bot1.Pass

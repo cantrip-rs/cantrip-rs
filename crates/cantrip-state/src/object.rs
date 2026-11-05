@@ -27,6 +27,9 @@ pub struct Obj {
     /// `remove_counters`, and put on only by the put path, `cantrip_rules::counters`, which names the player who puts them
     /// (CR 122.6a) and lets the replacement effects of counters being put apply (CR 614.1a).
     counters: [i16; CounterKind::COUNT],
+    /// Whether the current counter array is nonempty. Kept by the same private put/remove/clear paths so that the
+    /// layers' common no-counter guard does not scan every counter kind on every object.
+    any_counters: bool,
     /// When it entered its zone (CR 613.7d), for ordering and for layer timestamps.
     pub timestamp: u32,
     /// The copy effects on it (CR 707.2, 613.2, layer 1a): the values it copied, which are its copiable values unless it
@@ -488,6 +491,31 @@ impl Acquired {
     pub const OWN: Acquired = Acquired { by: AcquiredBy::Own, stamp: 0, part: 0 };
 }
 
+/// An individual ability's acquisition (CR 113.2c, 602.5c), independent of its current offered slot.
+/// `Acquired` still groups linked abilities (CR 607); this also distinguishes the donor and equal instances.
+/// `acquired` is the actual layer entry even when linked abilities count a self-granted ability as its own text.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub struct AbilityAcquisition {
+    pub acquired: Acquired,
+    /// The particular card whose abilities were granted, not merely its card definition.
+    pub origin: ObjectId,
+    /// Equal occurrences within one acquisition/origin, counted before slots can be packed or costs paid.
+    pub ordinal: u8,
+    /// Granted by a static ability, rather than a resolving instruction; needed by grants with activation limits.
+    pub static_grant: bool,
+}
+impl AbilityAcquisition {
+    pub const OWN: Self = Self { acquired: Acquired::OWN, origin: ObjectId::NONE, ordinal: 0, static_grant: false };
+}
+impl Default for AbilityAcquisition { fn default() -> Self { Self::OWN } }
+
+/// The definition and acquisition of the ability being asked, with its source carried by the asker/item/event.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub struct AbilityInstance {
+    pub ability: AbilityRef,
+    pub acquisition: AbilityAcquisition,
+}
+
 /// An ability as linked abilities know it (CR 607.1, 607.2a, 607.5): the object it is an ability of, the card whose text it
 /// is printed in - the object's own card, the card a copy effect gives it (CR 707.2), or the card whose ability an effect
 /// granted (CR 607.1a) - read as a whole (either face of a transforming double-faced card, CR 607.1b, and either door of a
@@ -515,6 +543,9 @@ pub struct ExileLink {
     pub from: Zone,
     /// "Until [by] leaves the battlefield" (CR 610.3): it returns as soon as `by` is no longer there.
     pub until_leaves: bool,
+    /// The player responsible for the original effect, for its later one-shot return (CR 610.3). A spell merely
+    /// making the exiler leave is not the player returning these objects. None for an actorless rules/setup effect.
+    pub return_by: Option<PlayerId>,
     /// Exiled encoded on `by` by cipher (CR 702.99b): it is encoded on that creature while both stay where they are.
     pub encoded: bool,
 }
@@ -538,7 +569,7 @@ impl ExileLink {
 
     /// A link to the ability `by`, from `from`.
     pub fn new(by: Linked, from: Zone, until_leaves: bool) -> ExileLink {
-        ExileLink { by: by.object, text: by.text, acquired: by.acquired, from, until_leaves, encoded: false }
+        ExileLink { by: by.object, text: by.text, acquired: by.acquired, from, until_leaves, return_by: None, encoded: false }
     }
 }
 
@@ -559,6 +590,7 @@ impl Obj {
             damage: _,
             deathtouched: _,
             counters: _,
+            any_counters: _,
             timestamp: _,
             copy: _,
             loyalty_turn: _,
@@ -628,6 +660,7 @@ impl Obj {
             damage: 0,
             deathtouched: false,
             counters: [0; CounterKind::COUNT],
+            any_counters: false,
             timestamp: 0,
             copy: None,
             loyalty_turn: 0,
@@ -717,7 +750,7 @@ impl Obj {
 
     /// Whether it has any counter on it.
     pub fn has_counters(&self) -> bool {
-        self.counters.iter().any(|&c| c != 0)
+        self.any_counters
     }
 
     /// Every kind of counter on it, by `CounterKind` number.
@@ -729,12 +762,17 @@ impl Obj {
     /// them on, so anything may do it.
     pub fn remove_counters(&mut self, kind: CounterKind, n: i16) {
         let c = &mut self.counters[kind as usize];
+        let had = *c != 0;
         *c = (*c - n.max(0)).max(0);
+        if had && *c == 0 {
+            self.any_counters = self.counters.iter().any(|&n| n != 0);
+        }
     }
 
     /// Takes every counter off it: an object made into a normal form, for comparing positions (`cantrip_rules::loops`).
     pub fn clear_counters(&mut self) {
         self.counters = [0; CounterKind::COUNT];
+        self.any_counters = false;
     }
 
     /// The write of the put path. Only `cantrip_rules::counters` calls this, once it has named the player putting the
@@ -745,6 +783,7 @@ impl Obj {
         for (n, &add) in self.counters.iter_mut().zip(counts) {
             if add > 0 {
                 *n = n.saturating_add(add);
+                self.any_counters = true;
             }
         }
     }
@@ -1208,6 +1247,8 @@ pub struct StackItem {
     pub subject: Target,
     /// What the event that triggered it carried (CR 603.2): the spell cast, the object that targeted.
     pub data: [u32; 2],
+    /// Exact quantity frozen from matched damage events. None for legacy payloads.
+    pub event_amount: Option<i64>,
     /// The objects it is about that are not its targets, in `GameState::members`. For a "one or more" ability (CR 603.2c):
     /// the objects of the batch that triggered it. For an activated ability: the permanents its cost chose and tapped,
     /// sacrificed or returned (CR 601.2h by way of 602.2b), which its effect may name ("the tapped creature's power",
@@ -1243,6 +1284,10 @@ pub struct StackItem {
     /// delayed triggered ability, after that ability was created (`Delayed::since`): what an instruction to transform its
     /// source asks the history about (CR 701.27f).
     pub since: u32,
+    /// The history head immediately before this ability's own final {T} cost (CR 602.2b, 611.2b), or `since` if it has none.
+    /// "Remains tapped" follows this interval: untapping while activating mana abilities before the final {T} cost
+    /// cannot end the interval that cost starts. Copies start a new interval when created (CR 707.10).
+    pub tapped_since: u32,
     /// A copy of an ability (CR 707.10): it was neither activated nor triggered, so it is not the instance of a state
     /// trigger that has triggered and not yet left the stack (CR 603.8). A copy of a spell is told by its object
     /// (`Obj::card_copy`).
@@ -1253,6 +1298,8 @@ pub struct StackItem {
     /// How its source acquired the ability it is (CR 607.5): what an ability linked to it is linked by (`Query::linked`).
     /// Own for a spell.
     pub acquired: Acquired,
+    /// Exact activated-ability identity, captured before costs (CR 602.5c); copies retain it without another activation.
+    pub instance: AbilityAcquisition,
     /// For an ability, the words of its text (CR 612) as it was put on the stack: its source's then - as activated (CR 602.2),
     /// as put there triggered (CR 603.3). The ability exists independently of its source (CR 113.7a), and a text-changing
     /// effect changes only the spell or permanent it affects (CR 612.1), so what changes the source's text after that changes
@@ -1263,6 +1310,12 @@ pub struct StackItem {
 }
 
 impl StackItem {
+    /// Exact quantity promised by a damage_amount triggered ability.
+    /// Missing payloads are a contract violation, never legacy data fallback.
+    pub fn matched_damage_amount(&self) -> i64 {
+        self.event_amount.expect("damage_amount ability must carry its frozen matched quantity")
+    }
+
     /// No shares: every target's is 0.
     pub const NO_SHARES: u32 = u32::MAX;
 
@@ -1299,10 +1352,8 @@ pub struct ContinuousEffect {
     pub affected: ObjectId,
     pub kind: EffectKind,
     pub duration: Duration,
-    /// For an effect that grants an ability (`EffectKind::AddAbility`), the words of the text that created it as it did
-    /// (CR 611.2c, 612.1): the granted ability is that text's, so it reads them - a text change on the object it was granted
-    /// to, or on its source afterwards, changes no ability it has from the effect (Artificial Evolution's ruling: "It will
-    /// not change any effects that are on the permanent"). `Words::NONE` for every other effect.
+    /// For a granted ability, replacement or prevention, the words of the text that created the effect (CR 611.2c,
+    /// 612.1). Later text changes on its source do not change that resolved effect. Other effects use `Words::NONE`.
     pub words: Words,
 }
 
@@ -1324,9 +1375,10 @@ pub enum EffectKind {
     /// Gains these keywords, layer 6.
     AddKeywords(Keywords),
     /// Loses these keywords (CR 613.1f), layer 6, at the effect's timestamp: "permanents your opponents control lose hexproof
-    /// and indestructible" (Shadowspear). What is granted after it is kept.
+    /// and indestructible" (Shadowspear). Named landwalk references include the matching snow variant
+    /// (`Keywords::for_effect`); grants stay exact. What is granted after it is kept.
     LoseKeywords(Keywords),
-    /// Gains this ability (a triggered or activated ability granted to it), layer 6.
+    /// Gains this ability (activated, triggered or a supported static rule), layer 6.
     AddAbility(AbilityRef),
     /// Protection from a player (CR 702.16a): their spells and abilities can't target it, their creatures can't block
     /// it, and damage their sources would deal to it is prevented. Layer 6.
@@ -1618,6 +1670,11 @@ pub enum EffectKind {
     /// (CR 303.4c, 704.5m). Necromancy's "it becomes an Aura with 'enchant creature put onto the battlefield with
     /// Necromancy'", Old-Growth Troll's "It's an Aura enchantment with enchant Forest you control" (`EntersAs`).
     Enchant(CardId),
+    /// "It can't be regenerated" (CR 101.2, 701.19c), for as long as this effect
+    /// lasts: Incinerate, Hurr Jackal. Shield-creating effects still resolve, but
+    /// neither a shield nor a static regeneration replacement saves it. This is
+    /// an effect on the permanent, not an ability it loses in layer 6.
+    CantBeRegenerated,
 }
 
 impl EffectKind {
@@ -1723,6 +1780,15 @@ pub enum Duration {
     /// begin if it is untapped then. Braided Net; Rust Tick, Amber Prison and the other "doesn't untap ... for as long as"
     /// cards word theirs about their own source instead.
     WhileTapped,
+    /// "For as long as [the source] remains tapped" (CR 611.2b). The source must remain present on the battlefield
+    /// and tapped continuously from its activation's final {T} cost (or creation on the stack). An interval broken
+    /// before resolution does not restart unless the complete condition starts again DURING that resolution.
+    /// Ashnod's Battle Gear, Tawnos's Weaponry, Zelyon Sword, Spirit Shield, Willow Satyr and Seasinger print this.
+    WhileSourceTapped,
+    /// "For as long as you control [the source] and [it] remains tapped" (CR 611.2b), as on Rubinia Soulsinger (Master Thief and
+    /// Merieke Ri Berit use the same uninterrupted source-control condition). "You" is the effect's controller. Losing control ends it even if control comes back later;
+    /// the tap interval follows the final {T} cost, while control follows the ability's creation on the stack.
+    WhileSourceTappedAndControlled,
     /// "For as long as [condition]" (CR 611.2b), the condition the card's own: the `index`th of its `lasting` list, asked of
     /// the effect whenever the state-based actions are checked. It ends the first time the condition is false, and does
     /// nothing if it is false as the effect would begin; it never comes back. Old Man of the Sea's "for as long as this
@@ -1932,6 +1998,8 @@ pub struct PendingTrigger {
     /// What the event was about (the player or object "it" and "that player" refer to): no target, never checked.
     pub subject: Target,
     pub data: [u32; 2],
+    /// Exact quantity frozen from matched damage events. None for legacy payloads.
+    pub event_amount: Option<i64>,
     /// The batch it was triggered by, for a "one or more" ability (CR 603.2c).
     pub members: Span,
     /// For a reflexive triggered ability whose effect counts what its first part did ("tap up to that many target
@@ -1948,8 +2016,8 @@ pub struct PendingTrigger {
     pub words: Option<Words>,
 }
 
-/// A run of `GameState::members`: the objects of one batch of simultaneous events, kept for the ability they
-/// triggered (CR 603.2c, 608.2h). Its length is a `u32`, as a batch can hold every object of the game (RX-1).
+/// A run of `GameState::members`: object identities kept for a batch's triggered ability (CR 603.2c),
+/// or an object's last-known combat relationships (CR 608.2h). Its length is a `u32`, as a group can hold every object of the game (RX-1).
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Default)]
 pub struct Span {
     pub start: u32,
@@ -1990,6 +2058,9 @@ pub enum DelayedWhen {
     /// "Whenever [event] this turn" (CR 603.7b): triggers each time the ability's own `listens`/`matches` accept an
     /// event, until the cleanup step ends the turn. The ability's `matches` is asked of `source`.
     ThisTurn,
+    /// "Whenever [this object does something] this turn": watch the named object while retaining the creating ability's
+    /// separate source (CR 603.7b, 603.7d-e).
+    ThisTurnWatching(ObjectId),
     /// "Until [event]" (CR 610.3, 603.7): triggers once, the next time its `listens`/`matches` accept an event, whenever that is, and is
     /// then used up. The ability's `matches` is asked of `source`, which may be gone by then.
     UntilEvent,
@@ -2013,6 +2084,10 @@ pub enum DelayedWhen {
     /// the step (Sundial of the Infinite) or is never taken (skipped, CR 500.11), it never triggers, and it is dropped as
     /// the next turn begins.
     ExtraTurnStep { step: Step, turn: u32 },
+
+    /// At this step of the next turn to actually begin, or the named player's next turn (CR 603.7, 614.10a).
+    /// Extra occurrences in the current turn do not count; a skipped target step cannot move the trigger to a later turn.
+    StepOfNextTurn { step: Step, of: Option<PlayerId> },
     /// "At the beginning of the [step] on [player]'s next turn" (CR 603.7): triggers once, at that step of the first turn of
     /// `player` to begin after turn number `after` (the turn it was made in, so never that turn's, even when it is that
     /// player's). A skipped turn never begins and is not it: the ability waits for the first that isn't skipped (CR 614.10a,
@@ -2021,12 +2096,13 @@ pub enum DelayedWhen {
     /// Landseeker's "at the beginning of the end step on your next turn" and Meandering Towershell's "at the beginning of
     /// the declare attackers step on your next turn".
     NextTurnStep { step: Step, player: PlayerId, after: u32 },
+
 }
 
 impl DelayedWhen {
     /// Whether it triggers on events, as many times as they happen, rather than once at a step.
     pub fn is_event(self) -> bool {
-        matches!(self, DelayedWhen::ThisTurn | DelayedWhen::UntilEvent | DelayedWhen::UntilNextTurnOf(_) | DelayedWhen::NextThisTurn | DelayedWhen::WhenEvent)
+        matches!(self, DelayedWhen::ThisTurn | DelayedWhen::ThisTurnWatching(_) | DelayedWhen::UntilEvent | DelayedWhen::UntilNextTurnOf(_) | DelayedWhen::NextThisTurn | DelayedWhen::WhenEvent)
     }
 
     /// Whether the first event it triggers on uses it up (CR 603.7b): "until", "when you next" and "when [event]".
@@ -2037,10 +2113,10 @@ impl DelayedWhen {
 
 impl Delayed {
     /// The object whose events its ability's `matches` is asked about: the object a "when [event]" ability watches, its
-    /// `subject` (`DelayedWhen::WhenEvent`); for any other, its source.
+    /// `subject` (`DelayedWhen::WhenEvent`) or the object named by `ThisTurnWatching`; otherwise its source.
     pub fn watched(&self) -> ObjectId {
         match (self.when, self.subject) {
-            (DelayedWhen::WhenEvent, Target::Object(id)) => id,
+            (DelayedWhen::WhenEvent, Target::Object(id)) | (DelayedWhen::ThisTurnWatching(id), _) => id,
             _ => self.source,
         }
     }
@@ -2051,7 +2127,8 @@ impl Delayed {
 /// from (CR 702.167c), and the width of `Obj::activated_mask`.
 pub const MAX_ABILITIES: usize = 32;
 
-/// An object's characteristics as it last existed (CR 608.2h, 603.10, 400.7), kept when it ceases to be that object, or
+/// An object's information as it last existed (CR 608.2h, 603.10, 400.7), including characteristics and combat relationships,
+/// kept when it ceases to be that object, or
 /// as a spell became cast (`StackItem::cast_known`, CR 601.2i): what the layers compute, which its row cannot give
 /// afterwards. The controller is captured too: a same-identity phased-out object's live control may later change.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
@@ -2092,6 +2169,11 @@ pub struct LastKnown {
     /// It was an attacking creature (CR 506.3) as it last was on the battlefield: combat forgets a permanent that leaves it, so
     /// "whenever an attacking creature you control dies" asks this (CR 603.10a).
     pub attacking: bool,
+    /// Exact incarnations this object was blocking, and creatures blocking it, at this snapshot (CR 608.2h, 113.7a).
+    /// Runs of the existing immutable `GameState::members` arena; no fixed blocker limit or per-card remembered state.
+    /// Source queries use these only after leaving its expected battlefield zone; current relationships stay separate.
+    pub blocked_creatures: Span,
+    pub blocking_creatures: Span,
     /// Its mana value as it last had it (CR 202.3; on the stack, X counted, CR 202.3e): a cast's is its mana value as it
     /// became cast (`history::Cast::value`).
     pub mana_value: u32,
@@ -2174,6 +2256,8 @@ pub struct ManaFrom {
     pub restriction: Option<ManaRestriction>,
     /// The object that produced it (CR 106.3), `ObjectId::NONE` for a player's own mana ability (CR 605.1a).
     pub source: ObjectId,
+    /// Whether that source was snow when it produced this mana (CR 107.4h), not its current characteristics.
+    pub snow: bool,
     /// How long the mana lasts (CR 106.4, 500.5a).
     pub lasts: ManaLasts,
     pub pool: ManaPool,
@@ -2200,14 +2284,17 @@ pub enum ManaPick<'a> {
     From(ObjectId),
     /// Mana none of these sources produced.
     Except(&'a [ObjectId]),
+    /// A captured source quality, optionally one source or excluding the sources told apart by another rule.
+    Quality { snow: bool, from: Option<ObjectId>, except: &'a [ObjectId] },
 }
 
 impl ManaPick<'_> {
-    pub fn takes(&self, source: ObjectId) -> bool {
+    pub fn takes(&self, source: ObjectId, snow: bool) -> bool {
         match self {
             ManaPick::Any => true,
             ManaPick::From(s) => *s == source,
             ManaPick::Except(not) => !not.contains(&source),
+            ManaPick::Quality { snow: wanted, from, except } => *wanted == snow && from.map_or(!except.contains(&source), |s| s == source),
         }
     }
 }
@@ -2422,6 +2509,8 @@ pub enum ManaPayment {
     /// 109.2), not a card in a hand, a graveyard or exile.
     /// `equip`: whether the ability is an equip ability (CR 702.6a).
     Ability { source: TypeSet, subtypes: SubtypeSet, on_battlefield: bool, equip: bool },
+    /// Activating an ability granted to a player; it has no object whose types can satisfy a source restriction.
+    PlayerAbility,
     /// Anything else: a special action, "unless ... pays", a cost a resolving effect asks for.
     Other,
 }
@@ -2606,6 +2695,7 @@ impl ManaRestriction {
             (ManaRestriction::Abilities(allowed, of), ManaPayment::Ability { source, on_battlefield, .. }) => {
                 of.admits(on_battlefield) && (allowed.0 == 0 || allowed.0 & source.0 != 0)
             }
+            (ManaRestriction::Abilities(allowed, AbilitiesOf::Sources), ManaPayment::PlayerAbility) => allowed.0 == 0,
             (ManaRestriction::SpellsOrAbilities(allowed, of), ManaPayment::Ability { source, on_battlefield, .. }) => {
                 of.admits(on_battlefield) && allowed.0 & source.0 != 0
             }
@@ -3141,6 +3231,14 @@ mod tests {
         assert_eq!(punks.parts(), &[ManaRestriction::ARTIFACT_SPELLS, ManaRestriction::ABILITIES]);
         assert!(punks.is_known() && !ManaRestriction::AnyOf(&[ManaRestriction::ABILITIES]).is_known());
     }
+
+    #[test]
+    fn player_ability_does_not_inherit_the_granting_objects_types() {
+        assert!(ManaRestriction::ABILITIES.may_pay(&ManaPayment::PlayerAbility));
+        assert!(!ManaRestriction::CREATURE_ABILITIES.may_pay(&ManaPayment::PlayerAbility));
+        assert!(!ManaRestriction::ARTIFACT_ABILITIES.may_pay(&ManaPayment::PlayerAbility));
+        assert!(!ManaRestriction::CREATURE_SPELLS_OR_ABILITIES.may_pay(&ManaPayment::PlayerAbility));
+    }
 }
 
 #[cfg(test)]
@@ -3152,7 +3250,9 @@ mod copiable_tests {
     /// merged permanent's run of other components (`merged`, CR 702.140e) took the last word: the values had no byte to spare.
     #[test]
     fn the_rare_exceptions_cost_an_object_nothing_and_read_back() {
-        assert!(std::mem::size_of::<Option<Copiable>>() <= 168, "Option<Copiable> is {} bytes", std::mem::size_of::<Option<Copiable>>());
+        // The second keyword word for landwalk variants adds eight bytes to the old 168-byte budget; the rare
+        // copy exceptions still share existing space rather than adding their own storage.
+        assert!(std::mem::size_of::<Option<Copiable>>() <= 176, "Option<Copiable> is {} bytes", std::mem::size_of::<Option<Copiable>>());
         let plain = Copiable::of(CardId(1));
         assert!(!plain.has_exceptions() && plain.legendary_stated().is_none() && plain.stated_loyalty().is_none());
         let ob = plain.nonlegendary().with_loyalty(0);

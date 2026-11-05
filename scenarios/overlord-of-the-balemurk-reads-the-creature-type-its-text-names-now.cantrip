@@ -23,6 +23,7 @@ Bot1.Hand.Mox Ruby.Cast
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Overlord of the Balemurk.Cast(Ability: Impending)
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Artificial Evolution.Cast(Stack.Overlord of the Balemurk)
 Bot1.Pass

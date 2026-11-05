@@ -6,7 +6,7 @@ use cantrip_mechanics::targets;
 /// sentence, so the damage is dealt at once (CR 120.3, 608.2c). A target that has become illegal is left out and the other
 /// is still dealt its damage (CR 608.2b; the spell is countered only if both are illegal).
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let hits: Vec<(ObjectId, Target, u16)> = [(0, 4), (1, 2)]
+    let hits: Vec<(ObjectId, Target, i64)> = [(0, 4), (1, 2)]
         .into_iter()
         .filter(|&(slot, _)| g.target_legal(item, slot))
         .map(|(slot, amount)| (item.object, g.state().target(item, slot), amount))

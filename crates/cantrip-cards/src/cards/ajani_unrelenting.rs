@@ -32,7 +32,7 @@ fn minus_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// -3: "Ajani deals 4 damage to each creature except for tokens you control": one damage event for every other creature,
 /// dealt at once (CR 120.2, 608.2c). The tokens are judged as it resolves, the Cadet this activation made among them.
 fn minus_three(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let hits: Vec<(ObjectId, Target, u16)> = g
+    let hits: Vec<(ObjectId, Target, i64)> = g
         .state()
         .battlefield()
         .iter()

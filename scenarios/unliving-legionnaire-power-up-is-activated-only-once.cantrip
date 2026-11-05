@@ -41,6 +41,7 @@ Bot1.Hand.Unliving Legionnaire.Cast
 Bot1.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 Bot1.Battlefield.Unliving Legionnaire.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 ! Bot1.Battlefield.Unliving Legionnaire.Activate

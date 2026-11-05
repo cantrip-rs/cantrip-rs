@@ -33,6 +33,8 @@ Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Plumb the Forbidden.Cast
 Bot1.Modes(2)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ragavan, Nimble Pilferer)
 Bot1.Choose(Cecil, Dark Knight)
 Bot1.Pass

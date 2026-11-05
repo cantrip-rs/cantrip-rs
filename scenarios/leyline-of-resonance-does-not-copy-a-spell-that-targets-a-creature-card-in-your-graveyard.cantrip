@@ -23,6 +23,7 @@ Bot1.Hand.Llanowar Elves.Cast
 Bot1.Hand.Mountain.Play
 Bot1.Battlefield.Mountain.Activate
 Bot1.Hand.Lightning Bolt.Cast(Llanowar Elves)
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 Bot1.Pass
 Bot1.Target(Bot2)

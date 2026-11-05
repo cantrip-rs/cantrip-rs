@@ -21,6 +21,7 @@ Bot1.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Horn of Deafening.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Battlefield.Island.Activate
@@ -36,6 +37,9 @@ Bot2.Pass
 Bot2.Attack(Grizzly Bears > Bot1)
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Horn of Deafening.Activate(Bot2.Battlefield.Grizzly Bears)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

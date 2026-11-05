@@ -25,18 +25,18 @@ static BEAR: CardDef = CardDef {
 fn deflect(g: &mut dyn cantrip_api::Game, asker: &Asker, chosen: ObjectId, prevented: &[Prevented]) {
     let to = g.controller(chosen);
     let amount = u16::try_from(Prevented::total(prevented)).expect("test damage is small");
-    g.damage(asker.source, Target::Player(to), amount);
+    g.damage(asker.source, Target::Player(to), i64::from(amount));
 }
 
 /// "[The effect's source] deals that much damage to [the other player]" (Refraction Trap's "any target", as a fixed one).
 fn to_them(g: &mut dyn cantrip_api::Game, asker: &Asker, _: ObjectId, prevented: &[Prevented]) {
     let amount = u16::try_from(Prevented::total(prevented)).expect("test damage is small");
-    g.damage(asker.source, Target::Player(THEM), amount);
+    g.damage(asker.source, Target::Player(THEM), i64::from(amount));
 }
 
 /// The parts it was told of, as life its controller gains: one for each part, so a test can count them.
 fn count_parts(g: &mut dyn cantrip_api::Game, asker: &Asker, _: ObjectId, prevented: &[Prevented]) {
-    g.gain_life(asker.controller, prevented.len() as i32);
+    g.gain_life(asker.controller, i64::from(prevented.len() as i32));
 }
 
 static PALM: CardDef = CardDef {
@@ -120,7 +120,7 @@ fn table() -> Table {
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// A frame to ask questions in, its answers given in advance: what the run reads back as it asks (`Cx::ask_core`).
@@ -147,14 +147,14 @@ fn prevention_effects(cx: &Cx) -> Vec<Shield> {
 }
 
 /// The damage events in the history, in order: source, recipient, amount.
-fn dealt(cx: &Cx) -> Vec<(ObjectId, Target, u16)> {
+fn dealt(cx: &Cx) -> Vec<(ObjectId, Target, i64)> {
     cx.g.log.iter().filter_map(|r| match r.event {
         Event::Damage { source, target, amount, .. } => Some((source, target, amount)),
         _ => None,
     }).collect()
 }
 
-fn prevented(cx: &Cx) -> Vec<(ObjectId, Target, u16)> {
+fn prevented(cx: &Cx) -> Vec<(ObjectId, Target, i64)> {
     cx.g.log.iter().filter_map(|r| match r.event {
         Event::DamagePrevented { source, target, amount, .. } => Some((source, target, amount)),
         _ => None,

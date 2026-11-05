@@ -34,6 +34,7 @@ Bot2.Pass
 Bot1.Battlefield.Hungering Puppetbeast.Activate
 Bot1.Battlefield.Lotus Petal.Activate(Color: Green)
 ! Bot1.Choose(Lotus Petal)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Heartwood Token)
 ? Bot1.Mana =
 ? Bot1.Graveyard = Lotus Petal; Black Lotus

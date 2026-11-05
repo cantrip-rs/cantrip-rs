@@ -42,6 +42,7 @@ Bot1.Hand.Mountain.Play
 Bot1.Battlefield.Mountain.Activate
 ! Bot1.Hand.Claim the Firstborn.Cast(Bot2.Battlefield.Keral Keep Disciples)
 Bot1.Hand.Claim the Firstborn.Cast(Bot2.Battlefield.Hired Blade)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = 
 Bot1.Pass
 Bot2.Pass

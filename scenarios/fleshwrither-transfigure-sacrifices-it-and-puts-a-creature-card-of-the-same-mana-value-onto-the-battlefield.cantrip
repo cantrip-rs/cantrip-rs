@@ -51,6 +51,10 @@ Bot1.Battlefield.Fleshwrither.Activate(Ability: Transfigure)
 Bot1.Battlefield.Blasted Landscape.Activate
 Bot1.Battlefield.Mox Jet#2.Activate
 Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 ! Bot1.Search(Wrath of God)

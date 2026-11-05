@@ -68,6 +68,11 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Tam, the Possibility.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {G}
 ? Bot1.Battlefield.Tam, the Possibility.Tapped = true
 Bot1.Target(Bot1.Battlefield.Wrenn and Six)

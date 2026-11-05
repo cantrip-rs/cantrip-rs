@@ -51,6 +51,9 @@ Bot1.Modes(1; 2)
 Bot1.Target(Bot2.Battlefield.Sol Ring)
 Bot1.Target(Hero of Bladehold)
 ? Client.Bot1.Prompt.Title = Pyrrhic Strike: choose a creature you control to blight (it gets -1/-1 counters)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Endurance)
 ? Client.Bot1.Confirm =
 [T3 Bot1.Main2]

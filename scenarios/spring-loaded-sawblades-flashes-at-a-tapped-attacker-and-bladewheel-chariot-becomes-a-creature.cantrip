@@ -45,6 +45,10 @@ Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mox Emerald)
 [T7 Bot1.Main1]
 Bot1.Battlefield.Bladewheel Chariot.Activate(Ability: Tap two)

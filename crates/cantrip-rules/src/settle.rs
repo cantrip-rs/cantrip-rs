@@ -202,6 +202,7 @@ fn check_once(cx: &mut Cx) -> R<bool> {
     }
 
     // CR 704.5f, g, h, i: creatures with no toughness or lethal damage, planeswalkers with no loyalty.
+    let mut aura_hosts_left = Vec::new();
     let mut to_graveyard = Vec::new();
     let mut destroyed = Vec::new();
     let mut unattach = Vec::new();
@@ -251,7 +252,7 @@ fn check_once(cx: &mut Cx) -> R<bool> {
             }
         }
         // CR 704.5m: an Aura attached to an illegal object, or to nothing, goes to its owner's graveyard. CR 704.5n:
-        // an Equipment attached to an illegal permanent becomes unattached; so does anything else attached to
+        // an Equipment or Fortification attached to an illegal permanent becomes unattached; so does anything else attached to
         // anything (CR 704.5p).
         if let Some(host) = obj.attached_to
             && chars.has_subtype(Subtype::Role)
@@ -267,12 +268,21 @@ fn check_once(cx: &mut Cx) -> R<bool> {
                 if bestowed(&*cx, id) {
                     unbestow.push(id);
                 } else {
+                    // CR 400.7f: only this unattached-Aura SBA can follow an earlier departure. An illegal Aura
+                    // while its host remains, a later sacrifice, and Equipment never acquire this exception.
+                    if let Some(host) = obj.attached_to.filter(|&host| {
+                        // The old row retains its departure zone. A card an Aura enchanted in a graveyard is not
+                        // an enchanted permanent leaving the battlefield, even if that physical card was once there.
+                        cx.s().obj(host).zone.is(ZoneKind::Battlefield) && !live(cx.s(), host)
+                    }) {
+                        aura_hosts_left.push((id, host));
+                    }
                     to_graveyard.push(id);
                 }
                 continue;
             }
         } else if let Some(host) = obj.attached_to
-            && !(chars.has_subtype(Subtype::Equipment) && crate::attach::host_allows(&*cx, id, host, false))
+            && !crate::attach::host_allows(&*cx, id, host, false)
         {
             unattach.push(id);
         }
@@ -425,6 +435,7 @@ fn check_once(cx: &mut Cx) -> R<bool> {
             // Lethal damage destroys (CR 704.5g-h): a regeneration shield may replace that (CR 701.19a, 614.8), ordered with the
             // other replacement effects (CR 616.1).
             let mut moving = ops::Moving { destroy: destroyed.contains(&id), ..ops::Moving::to(id, Zone::graveyard(cx.s().obj(id).owner)) };
+            moving.aura_host_left = aura_hosts_left.iter().find_map(|&(a, h)| (a == id).then_some(h));
             if sagas_sacrificed.contains(&id) {
                 moving.reason = Some(ZoneReason::Sacrifice);
             }
@@ -496,7 +507,7 @@ fn check_once(cx: &mut Cx) -> R<bool> {
 fn triggered(cx: &Cx, ability: AbilityRef) -> &'static TriggeredDef {
     match cx.cards().ability(ability) {
         AbilityDef::Triggered(t) => t,
-        AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) => unreachable!("a triggered ability"),
+        AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => unreachable!("a triggered ability"),
     }
 }
 
@@ -555,7 +566,7 @@ fn choose_trigger_targets_after(
     targets: &mut Vec<Target>, of: &mut Vec<u8>, first_spec: u8, after_divided: bool,
 ) -> R<bool> {
     // Asked as the ability it is (CR 607.5): one an effect gave its source reads only its own links.
-    let asker = Asker { source: trigger.source, controller: trigger.controller, by: layers::given_link(cx.cards(), cx.s(), trigger.source, trigger.ability, trigger.acquired), spell: false };
+    let asker = Asker { instance: None, source: trigger.source, controller: trigger.controller, by: layers::given_link(cx.cards(), cx.s(), trigger.source, trigger.ability, trigger.acquired), spell: false };
     let start = targets.len();
     let slots = crate::resolve::expand_specs(cx.s(), trigger.controller, specs);
     // "If [it] was kicked, instead choose ..." (CR 702.33a, 601.2c), of the source.
@@ -608,7 +619,7 @@ fn choose_trigger_targets_after(
             if left_the_game(cx, trigger.controller) {
                 return Ok(false);
             }
-            let ask = RequestKind::ChooseTarget { label: spec.label, slot_player: *slot_player,
+            let ask = RequestKind::ChooseTarget { replacing: None, label: spec.label, slot_player: *slot_player,
                 source: trigger.source,
                 purpose: Purpose::Targets,
                 candidates,
@@ -661,7 +672,7 @@ fn trigger_counted(cx: &Cx, trigger: &PendingTrigger) -> u16 {
     // "Up to X target ...", X read from the game now, as the ability goes on the stack (CR 603.3d, 601.2c).
     if let Some(count) = triggered(cx, trigger.ability).counted_by {
         let by = layers::given_link(cx.cards(), cx.s(), trigger.source, trigger.ability, trigger.acquired);
-        return count(cx, &Asker { source: trigger.source, controller: trigger.controller, by, spell: false });
+        return count(cx, &Asker { instance: None, source: trigger.source, controller: trigger.controller, by, spell: false });
     }
     let source = cx.s().obj(trigger.source);
     trigger.count.unwrap_or(if source.x > 0 { source.x } else { u16::from(source.kicked) })
@@ -680,7 +691,7 @@ fn put_trigger_as(cx: &mut Cx, trigger: PendingTrigger, by: Option<Linked>) -> R
     }
     let def = triggered(cx, trigger.ability);
     // Asked as the ability it is (CR 607.5): one an effect gave its source reads only its own links.
-    let asker = Asker { source: trigger.source, controller: trigger.controller, by: layers::given_link(cx.cards(), cx.s(), trigger.source, trigger.ability, trigger.acquired), spell: false };
+    let asker = Asker { instance: None, source: trigger.source, controller: trigger.controller, by: layers::given_link(cx.cards(), cx.s(), trigger.source, trigger.ability, trigger.acquired), spell: false };
     let mut targets = Vec::new();
     let mut of: Vec<u8> = Vec::new();
     let mut shares: Vec<u32> = Vec::new();
@@ -764,7 +775,7 @@ fn put_trigger_as(cx: &mut Cx, trigger: PendingTrigger, by: Option<Linked>) -> R
     } else if !choose_trigger_targets(cx, &trigger, def.targets, false, &mut targets, &mut of, 0)? {
         return Ok(());
     }
-    let mut item = StackItem {
+    let mut item = StackItem { instance: AbilityAcquisition::OWN, event_amount: trigger.event_amount,
         kind: StackKind::Triggered,
         object: trigger.source,
         ability: trigger.ability,
@@ -793,6 +804,7 @@ fn put_trigger_as(cx: &mut Cx, trigger: PendingTrigger, by: Option<Linked>) -> R
         attacking: false,
         // Put on the stack now, or, a delayed triggered ability, created when its `Delayed` was (CR 701.27f).
         since: trigger.since.unwrap_or(cx.g.log.len() as u32),
+        tapped_since: cx.g.log.len() as u32,
         copied: false,
         cast_known: u32::MAX,
         acquired: trigger.acquired,
@@ -910,7 +922,7 @@ fn consider(
             && let Some(state) = t.state
         {
             if (later.is_some() || !look_back)
-                && state(own, &Asker { source, controller, by: by(), spell: false })
+                && state(own, &Asker { instance: None, source, controller, by: by(), spell: false })
                 && !state_trigger_waiting(cx, source, ability, found, later.as_deref())
             {
                 found.push((state_trigger(source, ability, controller, acquired_at(nth)), t, Again::new()));
@@ -929,13 +941,13 @@ fn consider(
             } else if t.cast_option.is_some() {
                 paid_to_cast(cx, source, &chars, nth, event)
             } else if t.listens.intersects(mask) {
-                t.fires(own, &Asker { source, controller, by: by(), spell: false }, event)
+                t.fires(own, &Asker { instance: None, source, controller, by: by(), spell: false }, event)
             } else {
                 None
             }
         {
             if let Some(condition) = t.condition
-                && !condition(own, &Asker { source, controller, by: by(), spell: false })
+                && !condition(own, &Asker { instance: None, source, controller, by: by(), spell: false })
             {
                 continue;
             }
@@ -955,7 +967,7 @@ fn consider(
                 _ => &mut *found,
             };
             into.push((
-                PendingTrigger {
+                PendingTrigger { event_amount: matched_damage_amount(t, event),
                     source,
                     ability,
                     controller,
@@ -1003,7 +1015,7 @@ fn inherent(cx: &mut Cx, index: u8, controller: PlayerId, subject: Target, event
     if index == cantrip_api::intrinsic::SPEED_UP {
         cx.record(Event::Triggered { source, ability });
     }
-    found.push((PendingTrigger { source, ability, controller, subject, data: [0; 2], members: Span::default(), count: None, since: None, acquired: Acquired::OWN, words: None }, t, again));
+    found.push((PendingTrigger { event_amount: None, source, ability, controller, subject, data: [0; 2], members: Span::default(), count: None, since: None, acquired: Acquired::OWN, words: None }, t, again));
 }
 
 /// The slot of `chars`'s abilities that the `nth` of `Chars::abilities()` is in.
@@ -1019,7 +1031,7 @@ fn delayed_link(cx: &Cx, d: &cantrip_state::Delayed) -> Option<Linked> {
 
 /// The triggering of a state trigger (CR 603.8): about no event, so nothing is its subject.
 fn state_trigger(source: ObjectId, ability: AbilityRef, controller: PlayerId, acquired: Acquired) -> PendingTrigger {
-    PendingTrigger { source, ability, controller, subject: Target::None, data: [0; 2], members: Span::default(), count: None, since: None, acquired, words: None }
+    PendingTrigger { event_amount: None, source, ability, controller, subject: Target::None, data: [0; 2], members: Span::default(), count: None, since: None, acquired, words: None }
 }
 
 /// Whether a state trigger of `source` has triggered and not yet left the stack (CR 603.8): found for this batch, waiting
@@ -1046,7 +1058,7 @@ fn state_triggers(cx: &mut Cx) {
         for (nth, ability) in chars.abilities().enumerate() {
             if let AbilityDef::Triggered(t) = cx.cards().ability(ability)
                 && let Some(state) = t.state
-                && state(cx, &Asker { source, controller, by: cx.link_nth(source, &chars, nth), spell: false })
+                && state(cx, &Asker { instance: None, source, controller, by: cx.link_nth(source, &chars, nth), spell: false })
                 && !state_trigger_waiting(cx, source, ability, &found, None)
             {
                 found.push((state_trigger(source, ability, controller, acquired_at(nth)), t, Again::new()));
@@ -1085,7 +1097,7 @@ pub(crate) fn state_triggers_now(cx: &mut Cx) {
         for (nth, ability) in chars.abilities().enumerate() {
             if let AbilityDef::Triggered(t) = cx.cards().ability(ability)
                 && let Some(state) = t.state
-                && state(cx, &Asker { source, controller, by: cx.link_nth(source, &chars, nth), spell: false })
+                && state(cx, &Asker { instance: None, source, controller, by: cx.link_nth(source, &chars, nth), spell: false })
                 && !state_trigger_waiting(cx, source, ability, &found, None)
             {
                 found.push((state_trigger(source, ability, controller, acquired_at(nth)), t, Again::new()));
@@ -1139,7 +1151,7 @@ fn chapter_reached(cx: &Cx, source: ObjectId, chars: &Chars, chapter: u8, event:
             }
             // The whole history so far: the move that brought it is in the batch being judged, which `Query::history`
             // leaves out while triggers are found (`Game::history_end`).
-            if *total != chapter && chars.has(Keyword::ReadAhead) && History::new(&cx.g.log, cx.s().turn.number).entered_this_turn(source) {
+            if *total != chapter && chars.has(Keyword::ReadAhead) && History::with_receipts(&cx.g.log, cx.s().turn.number, &cx.s().cost_receipts).entered_this_turn(source) {
                 return None;
             }
             Fired::PLAIN
@@ -1188,7 +1200,7 @@ impl<'a> TriggerStatics<'a> {
         self.sources(cx, triggering).iter().any(|&id| {
             let obj = cx.s().obj(id);
             cx.cards().texts_linked(cx.s(), id).any(|(c, by)| {
-                let asker = Asker { source: id, controller: obj.controller, by, spell: false };
+                let asker = Asker { instance: None, source: id, controller: obj.controller, by, spell: false };
                 cx.card(c).trigger_rules.iter().any(|rule| rule(cx, &asker, event, triggering))
             })
         })
@@ -1202,7 +1214,7 @@ impl<'a> TriggerStatics<'a> {
             // Numbered across the definitions it has rules from (CR 702.140e), each rule its own, asked as its own card's.
             let rules = cx.cards().texts_linked(cx.s(), id).flat_map(|(c, by)| cx.card(c).additional_triggers.iter().map(move |r| (r, by)));
             for (n, (rule, by)) in rules.enumerate() {
-                let asker = Asker { source: id, controller: obj.controller, by, spell: false };
+                let asker = Asker { instance: None, source: id, controller: obj.controller, by, spell: false };
                 if rule(cx, &asker, event, triggering) && !again.contains(&AdditionalTrigger::Static(id, n as u8)) {
                     again.push(AdditionalTrigger::Static(id, n as u8));
                 }
@@ -1397,6 +1409,14 @@ impl Query for BoardThen<'_> {
         self.q.can_target(asker, target)
     }
 
+    fn can_attach_to(&self, attachment: ObjectId, host: ObjectId) -> bool {
+        self.q.can_attach_to(attachment, host)
+    }
+
+    fn can_untap(&self, permanent: ObjectId) -> bool {
+        self.q.can_untap(permanent)
+    }
+
     fn words(&self, id: ObjectId) -> Words {
         self.q.words(id)
     }
@@ -1515,6 +1535,22 @@ pub(crate) fn lost_the_game(cx: &mut Cx, losses: &[(PlayerId, LossReason)], batt
 }
 
 /// Every triggered ability this event triggers (CR 603.2).
+/// Ask the event of the watched object, but ask the creating ability's conditions of its actual source.
+pub(crate) fn delayed_fires(q: &dyn Query, d: &cantrip_state::Delayed, t: &TriggeredDef, asker: &Asker, event: &Event) -> Option<Fired> {
+    let own = crate::resolve::Given { q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None,
+        text: d.words.map(|w| (d.watched(), w)) };
+    if matches!(d.when, DelayedWhen::ThisTurnWatching(_)) {
+        let source_asker = Asker { source: d.source, ..*asker };
+        let source_text = crate::resolve::Given { text: d.words.map(|w| (d.source, w)), ..own };
+        if t.only_if.is_some_and(|c| !c(&source_text, &source_asker))
+            || t.condition.is_some_and(|c| !c(&source_text, &source_asker)) { return None; }
+        if let Some(asked) = t.asked { asked(&own, asker, event) } else { (t.matches)(&own, asker.source, event) }
+    } else {
+        let fired = t.fires(&own, asker, event)?;
+        t.condition.is_none_or(|c| c(&own, asker)).then_some(fired)
+    }
+}
+
 pub fn collect_triggers(cx: &mut Cx, event: &Event, before: Option<Before>, start: usize) {
     collect_batch(cx, std::slice::from_ref(event), before, start);
 }
@@ -1614,7 +1650,7 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                     // "You" in its trigger event is its own controller, the player who controlled the spell or ability that
                     // created it (CR 603.7d-e), whoever controls its source now and wherever the source has gone. So is "you"
                     // in an intervening "if" (CR 603.4). Its event is asked of the object it watches (`Delayed::watched`).
-                    let asker = Asker { source: d.watched(), controller: d.controller, by: delayed_link(cx, &d), spell: false };
+                    let asker = Asker { instance: None, source: d.watched(), controller: d.controller, by: delayed_link(cx, &d), spell: false };
                     // Its text is the one that created it (`Delayed::words`, CR 603.7, 113.7a), its source's now notwithstanding.
                     let given = crate::resolve::Given {
                         q: &*cx,
@@ -1640,8 +1676,7 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                         // triggered it does (CR 605.1b, 605.4a), in `tapped_for_mana`.
                         && !t.mana_ability
                         && t.listens.intersects(mask)
-                        && let Some(fired) = t.fires(own, &asker, event)
-                        && t.condition.is_none_or(|condition| condition(own, &asker))
+                        && let Some(fired) = delayed_fires(own, &d, t, &asker, event)
                         // The end of an "until" exile is no triggered ability but the second one-shot effect the rules create
                         // immediately after the event (CR 610.3), so nothing that stops abilities triggering stops it, and the
                         // event that ends the wait always uses it up below. A "this turn" delayed ability is a triggered ability
@@ -1661,12 +1696,12 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                             ))
                     {
                         found.push((
-                            PendingTrigger {
+                            PendingTrigger { event_amount: matched_damage_amount(t, event),
                                 source: d.source,
                                 ability: d.ability,
                                 controller: d.controller,
                                 // "Until" and "when [event]" are about the object they were made for (CR 603.7c), and the objects it carries (`delayed_trigger_about`) go with it.
-                                subject: if matches!(d.when, DelayedWhen::UntilEvent | DelayedWhen::WhenEvent) { d.subject } else { fired.subject },
+                                subject: if matches!(d.when, DelayedWhen::UntilEvent | DelayedWhen::WhenEvent) { d.subject } else if matches!(d.when, DelayedWhen::ThisTurnWatching(_)) && fired.subject == Target::None { Target::Object(d.watched()) } else { fired.subject },
                                 data: fired.data,
                                 members: d.members,
                                 count: None,
@@ -1730,7 +1765,7 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                         && let Some(fired) = if t.cast_option.is_some() {
                             paid_to_cast(cx, id, &chars, nth, event)
                         } else {
-                            t.fires(own, &Asker { source: id, controller: cx.s().obj(id).controller, by: by(), spell: false }, event)
+                            t.fires(own, &Asker { instance: None, source: id, controller: cx.s().obj(id).controller, by: by(), spell: false }, event)
                         }
                     {
                         // A spell is controlled by whoever cast it; a card in another zone answers to its owner.
@@ -1740,7 +1775,7 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                             cx.s().obj(id).owner
                         };
                         if let Some(condition) = t.condition
-                            && !condition(own, &Asker { source: id, controller, by: by(), spell: false })
+                            && !condition(own, &Asker { instance: None, source: id, controller, by: by(), spell: false })
                         {
                             continue;
                         }
@@ -1752,7 +1787,7 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                         let mut again = Again::new();
                         statics.additional(cx, event, &triggering, &mut again);
                         found.push((
-                            PendingTrigger {
+                            PendingTrigger { event_amount: matched_damage_amount(t, event),
                                 source: id,
                                 ability,
                                 controller,
@@ -1792,6 +1827,9 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
     // static abilities that make it trigger again for their events (CR 603.2d).
     let mut kept: Vec<(PendingTrigger, &'static TriggeredDef, Vec<ObjectId>, Again)> = Vec::with_capacity(found.len());
     for (trigger, def, again) in found {
+        // Quantity was captured while matching, never reconstructed from the
+        // later board or an approximate interval of event history.
+
         if def.once_per_batch
             && let Some(existing) =
                 kept.iter_mut().find(|(k, d, _, _)| {
@@ -1814,7 +1852,13 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                 d.sums_per_subject && k.source == trigger.source && k.ability == trigger.ability && k.subject == trigger.subject
             })
         {
-            existing.0.data[0] += trigger.data[0];
+            if def.damage_amount {
+                let amount = trigger.event_amount.expect("damage trigger captured its matched amount");
+                let previous = existing.0.event_amount.expect("damage trigger captured its first matched amount");
+                existing.0.event_amount = Some(previous.checked_add(amount).expect("matched damage sum exceeds i64 semantic domain"));
+            } else {
+                existing.0.data[0] += trigger.data[0];
+            }
             add_again(&mut existing.3, again);
             continue;
         }
@@ -1829,7 +1873,12 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
 
     for (mut trigger, def, members, again) in kept {
         // "Deals N or more damage": judged on the batch's total, once its events are added up (CR 603.2c).
-        if trigger.data[0] < def.sums_at_least {
+        let amount = if def.damage_amount {
+            trigger.event_amount.expect("damage trigger captured its matched amount")
+        } else {
+            i64::from(trigger.data[0])
+        };
+        if amount < i64::from(def.sums_at_least) {
             continue;
         }
         // It triggers once, and once more for each static ability that says so (CR 603.2d): each a triggering of its own,
@@ -1867,6 +1916,25 @@ fn add_again(into: &mut Again, again: Again) {
     }
 }
 
+/// The turn a delayed instruction selected, found from the actual turn beginnings after it was created.
+/// Extra steps/phases do not begin a turn; a skipped turn never records a beginning (CR 500.8, 614.10a).
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) enum DelayedTurn { Waiting, Current, Passed }
+
+pub(crate) fn delayed_turn(cx: &Cx, since: u32, of: Option<PlayerId>) -> DelayedTurn {
+    let mut turns = cx.g.log[since as usize..].iter().filter_map(|record| match record.event {
+        Event::TurnBegan { player, .. } => Some(player),
+        _ => None,
+    });
+    if turns.find(|&player| of.is_none_or(|of| of == player)).is_none() {
+        DelayedTurn::Waiting
+    } else if turns.next().is_some() {
+        DelayedTurn::Passed
+    } else {
+        DelayedTurn::Current
+    }
+}
+
 /// A step has begun: its "at the beginning of" abilities trigger, and so do the delayed abilities waiting for it,
 /// which are used up (CR 603.7c) unless they wait for each such step for the rest of the game.
 pub fn step_began(cx: &mut Cx, step: Step) {
@@ -1881,10 +1949,15 @@ pub fn step_began(cx: &mut Cx, step: Step) {
         let d = cx.s().delayed[at];
         let (due, used_up) = match d.when {
             DelayedWhen::Step { step: s, on_turn_of } => (s == step && on_turn_of.is_none_or(|p| p == active), true),
+            DelayedWhen::StepOfNextTurn { step: s, of } => match delayed_turn(cx, d.since, of) {
+                DelayedTurn::Waiting => (false, true),
+                DelayedTurn::Current => (s == step, true),
+                DelayedTurn::Passed => { cx.st().delayed_remove(at); continue; }
+            },
             DelayedWhen::EachStep { step: s, on_turn_of } => (s == step && on_turn_of.is_none_or(|p| p == active), false),
             DelayedWhen::ExtraTurnStep { step: s, turn } => (s == step && cx.s().turn.extra == turn, true),
             DelayedWhen::NextTurnStep { step: s, player, after } => (s == step && player == active && cx.s().turn.number > after, true),
-            DelayedWhen::ThisTurn | DelayedWhen::UntilEvent | DelayedWhen::UntilNextTurnOf(_) | DelayedWhen::NextThisTurn | DelayedWhen::WhenEvent => {
+            DelayedWhen::ThisTurn | DelayedWhen::ThisTurnWatching(_) | DelayedWhen::UntilEvent | DelayedWhen::UntilNextTurnOf(_) | DelayedWhen::NextThisTurn | DelayedWhen::WhenEvent => {
                 (false, false)
             }
         };
@@ -1894,7 +1967,7 @@ pub fn step_began(cx: &mut Cx, step: Step) {
             } else {
                 at += 1;
             }
-            cx.st().trigger_push(PendingTrigger { source: d.source, ability: d.ability, controller: d.controller, subject: d.subject, data: [0; 2], members: d.members, count: None, since: Some(d.since), acquired: d.acquired, words: d.words });
+            cx.st().trigger_push(PendingTrigger { event_amount: None, source: d.source, ability: d.ability, controller: d.controller, subject: d.subject, data: [0; 2], members: d.members, count: None, since: Some(d.since), acquired: d.acquired, words: d.words });
         } else {
             at += 1;
         }
@@ -1918,7 +1991,7 @@ fn suspended_cards(cx: &mut Cx, active: PlayerId) {
         .filter(|&id| cx.s().obj(id).counters(CounterKind::Time) > 0 && cx.card(cx.s().obj(id).card).suspend.is_some())
         .collect();
     for source in suspended {
-        cx.st().trigger_push(PendingTrigger {
+        cx.st().trigger_push(PendingTrigger { event_amount: None,
             source,
             ability: AbilityRef { card: intrinsic, index: cantrip_api::intrinsic::SUSPEND_UPKEEP },
             controller: active,
@@ -1937,8 +2010,15 @@ fn suspended_cards(cx: &mut Cx, active: PlayerId) {
 pub fn still_holds(cx: &Cx, item: &StackItem) -> bool {
     match cx.cards().ability(item.ability) {
         AbilityDef::Triggered(TriggeredDef { condition: Some(condition), .. }) => {
-            condition(cx, &Asker { source: item.object, controller: item.controller, by: cx.link_of(item), spell: false })
+            condition(cx, &Asker { instance: None, source: item.object, controller: item.controller, by: cx.link_of(item), spell: false })
         }
         _ => true,
     }
+}
+
+/// Called only after the ability's matcher accepted this event.
+fn matched_damage_amount(def: &TriggeredDef, event: &Event) -> Option<i64> {
+    if !def.damage_amount { return None; }
+    let Event::Damage { amount, .. } = *event else { panic!("damage_amount requires a damage-only matcher") };
+    Some(amount)
 }

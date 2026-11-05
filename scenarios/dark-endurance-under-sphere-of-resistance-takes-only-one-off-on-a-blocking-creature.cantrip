@@ -42,6 +42,7 @@ Bot2.Block(Ornithopter > Savannah Lions)
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Dark Endurance.Cast(Ornithopter)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = 
 Bot1.Pass
 Bot2.Pass

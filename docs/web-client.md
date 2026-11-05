@@ -8,6 +8,14 @@ hold them to it.
 
 ## Running it
 
+A resolving choice with more than 256 possible numbers uses a bounded number field: type a whole number and confirm,
+or adjust it by one. Invalid input disables confirmation; neither stepping nor submission changes it to a different
+legal value. Smaller number choices keep their existing option buttons.
+
+The random seat samples the complete inclusive range without making a list. The language-model seat asks one bounded
+scalar question and parses an exact whole-number reply, with its existing retry limit. The tactical seat currently
+uses the prompt's legal minimum default for this new numeric prompt; this change adds no tactical scalar policy.
+
 `tools\play-game.cmd` is the quickest way to play: a server, the web client, a browser tab per person
 (`?seat=N&name=...`) and a bot or a language model for each other seat (`dotnet\tools\Cantrip.Bot`). By hand:
 

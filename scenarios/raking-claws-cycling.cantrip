@@ -17,6 +17,8 @@ Bot1.Hand.Mox Ruby.Cast
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Raking Claws.Activate(Ability: Cycling)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 [Expect]
 Bot1.Graveyard = Raking Claws

@@ -33,6 +33,7 @@ Bot1.Choose(Forest)
 [T3 Bot1.Main2]
 Bot1.Battlefield.Forest.Activate
 Bot1.Graveyard.Llanowar Elves.Cast
+Bot1.Choose(Pay mana)
 Bot1.Choose(Forest)
 [Bot1.End]
 ? Stack.Count = 0

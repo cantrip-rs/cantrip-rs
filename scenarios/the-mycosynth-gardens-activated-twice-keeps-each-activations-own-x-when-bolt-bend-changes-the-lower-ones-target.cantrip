@@ -58,6 +58,8 @@ Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.The Mycosynth Gardens.Activate(Ability: becomes; X: 1)
 ! Bot1.Target(Bot1.Battlefield.Gold Pan)
 Bot1.Target(Bot1.Battlefield.Sol Ring)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Candelabra of Tawnos.Activate(X: 1)
@@ -71,6 +73,9 @@ Bot1.Battlefield.The Mycosynth Gardens.Activate(Ability: becomes; X: 2)
 ! Bot1.Target(Bot1.Battlefield.Expedition Map)
 ! Bot1.Target(Bot1.Battlefield.Candelabra of Tawnos)
 Bot1.Target(Bot1.Battlefield.Gold Pan)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 ? Stack.Count = 2
 Bot1.Pass

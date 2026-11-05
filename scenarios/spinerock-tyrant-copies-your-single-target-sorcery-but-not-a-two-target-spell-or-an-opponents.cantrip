@@ -51,6 +51,7 @@ Bot2.Pass
 Bot1.Hand.Cinder Strike.Cast
 Bot1.Modes(Cast without blighting)
 Bot1.Target(Spinerock Tyrant)
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 Bot1.Pass
 Bot2.Pass

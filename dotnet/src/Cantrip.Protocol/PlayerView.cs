@@ -22,7 +22,7 @@ namespace Cantrip.Protocol;
 public sealed class PlayerView
 {
     /// <summary>Protocol version, checked at the handshake so mismatched builds fail loudly.</summary>
-    public const int ProtocolVersion = 227;
+    public const int ProtocolVersion = 228;
 
     [Key(0)]
     public int Version { get; set; } = ProtocolVersion;
@@ -245,6 +245,10 @@ public sealed class RestrictedManaView
     /// </summary>
     [Key(7)]
     public ViewHandle Source { get; set; }
+    /// <summary>Snow-source mana quality or the {S} symbol it pays (CR 107.4h).</summary>
+    [Key(8)]
+    public bool Snow { get; set; }
+
 }
 
 /// <summary>

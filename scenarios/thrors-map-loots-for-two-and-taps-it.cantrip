@@ -28,6 +28,8 @@ Bot1.Search(Forest)
 Bot1.Battlefield.Thrór's Map.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Battlefield.Thrór's Map.Tapped = true
 Bot1.Pass
 Bot1.Choose(Plains)

@@ -45,6 +45,7 @@ Bot1.Hand.A.I.M. Scientists.Cast
 Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Echo, Perceptive Prodigy.Activate(Stack.A.I.M. Scientists)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

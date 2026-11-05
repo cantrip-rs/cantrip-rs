@@ -19,7 +19,7 @@ fn gain_exiled_power(g: &mut dyn Rules, item: &StackItem) -> Result<(), Suspend>
     let exiled = g.cost_objects(item).first().copied();
     if let Some(exiled) = exiled {
         let power = g.chars(exiled).power.unwrap_or(0) as i32;
-        g.gain_life(item.controller, power);
+        g.gain_life(item.controller, i64::from(power));
     }
     Ok(())
 }

@@ -22,15 +22,21 @@ Bot1.Hand.Ornithopter.Cast
 Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Parallax Wave.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T3 Bot1.Main1]
 Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
 Bot1.Hand.Gloom.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Battlefield.Parallax Wave.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

@@ -369,7 +369,7 @@ fn answers(verb: ScriptVerb, kind: &RequestKind) -> bool {
         V::PayCost => matches!(kind, RequestKind::PayCosts { .. }),
         V::Undo => matches!(kind, RequestKind::Priority { .. } | RequestKind::PayCosts { .. }),
         V::Accept | V::Decline => matches!(kind, RequestKind::May { .. } | RequestKind::UnlessPays { .. }),
-        V::Choose => matches!(kind, RequestKind::ChooseCards { .. } | RequestKind::TapForPower { .. } | RequestKind::CollectEvidence { .. } | RequestKind::Craft { .. }),
+        V::Choose => matches!(kind, RequestKind::ChooseCostPayment { .. } | RequestKind::ChooseCards { .. } | RequestKind::TapForPower { .. } | RequestKind::CollectEvidence { .. } | RequestKind::Craft { .. }),
         V::ChoosePlayer => matches!(kind, RequestKind::ChoosePlayer { .. }),
         V::Discard => matches!(kind, RequestKind::DiscardToHandSize { .. }),
         V::Attack => matches!(kind, RequestKind::DeclareAttackers { .. }),
@@ -394,6 +394,7 @@ fn answers(verb: ScriptVerb, kind: &RequestKind) -> bool {
 
 fn kind_name(kind: &RequestKind) -> &'static str {
     match kind {
+        RequestKind::ChooseCostPayment { .. } => "ChooseCostPayment",
         RequestKind::Priority { .. } => "Priority",
         RequestKind::PayCosts { .. } => "PayCosts",
         RequestKind::UnlessPays { .. } => "UnlessPays",
@@ -467,7 +468,11 @@ impl<'s> Run<'s> {
                         format!("{:?} {src} #{} {desc}{}", o.kind, o.index, o.mana.map(|m| format!(" {m:?}")).unwrap_or_default())
                     })
                     .collect();
-                format!("{} [{}]", kind_name(&r.kind), list.join(" | "))
+                let detail = match &r.kind {
+                    RequestKind::PayCosts { mana_abilities, announcing, .. } => format!(" mana_abilities={mana_abilities} announcing={announcing}"),
+                    _ => String::new(),
+                };
+                format!("{}{detail} [{}]", kind_name(&r.kind), list.join(" | "))
             }
             RequestKind::ChooseCards { rule, .. } => {
                 let words: String = rule.words(&|id| self.game.cards.get(CardId(id as u16)).name.to_string()).iter().map(|w| format!(" {w}")).collect();
@@ -512,9 +517,8 @@ impl<'s> Run<'s> {
         self.before = self.window();
         match self.game.answer(request.id, request.player, answer.clone()) {
             Ok(()) => {
-                if self.undo.may_take_back(&self.game, &noted) {
-                    self.undo.push(noted, ());
-                }
+                let kept = noted.is_mana().then_some(());
+                self.undo.track(&self.game, noted, kept);
                 Ok(())
             }
             Err(Rejected(why)) => match step {
@@ -613,7 +617,7 @@ impl<'s> Run<'s> {
             // `! Bot1.Accept`, `! Bot1.Choose`, a bare `! Bot1.Target` or `! Bot2.Block`...: the player is not asked that kind of question
             // before their next priority (a bare Block: no block is possible, so the declaration is never asked for).
             if let Some(ScriptStep::Refused { action, line, text }) = self.current()
-                && ((action.verb.is_question() && !(matches!(action.verb, ScriptVerb::Choose | ScriptVerb::ChoosePlayer | ScriptVerb::Colors | ScriptVerb::Name) && action.positional().next().is_some())
+                && ((action.verb.is_question() && !(matches!(action.verb, ScriptVerb::Choose | ScriptVerb::ChoosePlayer | ScriptVerb::Colors | ScriptVerb::Name | ScriptVerb::Number) && action.positional().next().is_some())
                     && !(matches!(action.verb, ScriptVerb::Choose) && action.text.contains('('))
                     && !(matches!(action.verb, ScriptVerb::Arrange) && !action.raw_arguments.trim().is_empty()))
                     || (matches!(action.verb, ScriptVerb::Target | ScriptVerb::Modes | ScriptVerb::Block | ScriptVerb::Attack)
@@ -698,10 +702,13 @@ impl<'s> Run<'s> {
             if let Some(ScriptStep::Action(step)) = self.current()
                 && step.verb == ScriptVerb::PayCost
                 && request.player == player_of(step.bot)
-                && let RequestKind::UnlessPays { x: Some(_), times, .. } = &request.kind
+                && let RequestKind::UnlessPays { x, times, .. } = &request.kind
                 && (x_of(step)?.is_some() || times_of(step)?.is_some())
             {
                 let (line, text) = (step.line, step.text.clone());
+                if x.is_none() {
+                    return fail(format!("line {line}: {text}: the question does not choose {}", if step.named("Times").is_some() { "a number of times" } else { "X" }));
+                }
                 if step.named("Times").is_some() != times.is_some() {
                     return fail(format!(
                         "line {line}: {text}: the question chooses {}",
@@ -739,6 +746,24 @@ impl<'s> Run<'s> {
                 let Some(most) = times else { return fail(format!("line {line}: {text}: the question is not of a number of times")) };
                 if wanted >= 1 && wanted <= *most {
                     return fail(format!("line {line} says {text} must not be allowed, but the cost may be paid up to {most} times"));
+                }
+                self.next();
+                continue;
+            }
+
+            // `! Bot1.PayCost(X: 1)`: that X cannot be chosen at this payment. A fixed cost offers no X choice even when
+            // paying it is offered. Probe the actual increment/decrement options on a fork, leaving this question intact.
+            if let Some(ScriptStep::Refused { action, line, text }) = self.current()
+                && matches!(action.verb, ScriptVerb::PayCost)
+                && request.player == player_of(action.bot)
+                && let RequestKind::UnlessPays { times, .. } = &request.kind
+                && let Some(wanted) = x_of(action)?
+            {
+                if times.is_some() {
+                    return fail(format!("line {line}: {text}: the question chooses a number of times, not X"));
+                }
+                if payment_x_can_be_chosen(&self.game, wanted)? {
+                    return fail(format!("line {line} says {text} must not be allowed, but X can be chosen as {wanted}"));
                 }
                 self.next();
                 continue;
@@ -1016,10 +1041,39 @@ impl<'s> Run<'s> {
                 self.assisting = None;
             }
         } else {
+            // Explicitly finish the planned X announcement before a following state check. Intermediate increments are
+            // still driven by the cast's X plan; only the final announcement consumes this script line.
+            let confirm_x = matches!(&request.kind, RequestKind::PayCosts { announcing: true, .. })
+                && matches!(self.current(), Some(ScriptStep::Action(step)) if step.verb == ScriptVerb::Choose
+                    && request.player == player_of(step.bot)
+                    && step.positional().next().is_some_and(|s| s.eq_ignore_ascii_case("Confirm X")));
+            if confirm_x {
+                let Some(answer) = self.auto_pay(request)? else {
+                    return fail(format!("{} cannot confirm X", bot(request.player)));
+                };
+                let done = matches!(&answer, Answer::Announce(_))
+                    || matches!(&answer, Answer::Act(action) if action.kind == ActionKind::ConfirmCasting);
+                let line = if done { let Some(ScriptStep::Action(step)) = self.current() else { unreachable!() }; Some(step) } else { None };
+                return Ok(Decision { intent: Intent::Answer(answer), line });
+            }
+            // An explicit payment line can advance one mana assignment after the mana window, so subsequent checks
+            // observe the paid state. The ordinary payment plan still selects the unit, including any Spend: choices.
+            let explicit_mana = matches!(&request.kind, RequestKind::PayCosts { mana_abilities: false, announcing: false, .. })
+                && matches!(self.current(), Some(ScriptStep::Action(step)) if step.verb == ScriptVerb::Choose
+                    && request.player == player_of(step.bot)
+                    && step.positional().next().is_some_and(|s| s.eq_ignore_ascii_case("Assign mana")));
+            if explicit_mana {
+                let answer = self.auto_pay(request)?;
+                if let Some(Answer::Act(action)) = answer && action.kind == ActionKind::AssignMana {
+                    let Some(ScriptStep::Action(step)) = self.current() else { unreachable!() };
+                    return Ok(Decision { intent: Intent::Answer(Answer::Act(action)), line: Some(step) });
+                }
+                return fail(format!("{} has no mana assignment available", bot(request.player)));
+            }
             // A mana ability the line under the cursor activates is activated while paying (CR 601.2g), before the pool
             // pays: what it does - a source it sacrifices, a type it takes away - may change what the pool's mana pays for.
             if let Some(ScriptStep::Action(step)) = self.current()
-                && matches!(step.verb, ScriptVerb::Activate)
+                && (matches!(step.verb, ScriptVerb::Activate) || (matches!(step.verb, ScriptVerb::Choose) && step.positional().next().is_some_and(|s| s.eq_ignore_ascii_case("Close mana window"))))
                 && request.player == player_of(step.bot)
                 && let Some(answer) = self.matches(step, request)?
             {
@@ -1126,6 +1180,7 @@ impl<'s> Run<'s> {
 
     fn default(&mut self, request: &Request) -> R<Answer> {
         Ok(match &request.kind {
+            RequestKind::ChooseCostPayment { .. } => Answer::CostPayment(0),
             RequestKind::Priority { .. } => Answer::Pass,
             // Paying for a spell with assist (CR 702.132a), where no line says more: a window for mana abilities is closed,
             // the player assisting pays nothing, and what they announced is paid from their pool as their line's `Spend:` says.
@@ -1323,6 +1378,31 @@ impl<'s> Run<'s> {
                 options.iter().find(|o| o.kind == ActionKind::CancelCasting).map(|o| Answer::Act(Action::of(o)))
             }
             (V::Cancel, _) if request.may_cancel => Some(Answer::Cancel),
+            (V::Choose, RequestKind::PayCosts { mana_abilities: true, options, .. }) if step.positional().next().is_some_and(|s| s.eq_ignore_ascii_case("Close mana window")) => {
+                options.iter().find(|o| o.kind == ActionKind::ConfirmCasting).map(|o| Answer::Act(Action::of(o)))
+            }
+            (V::Choose, RequestKind::ChooseCostPayment { choices, .. }) => {
+                if let Some(number) = step.named("Cost") {
+                    let index = number.parse::<usize>().ok().and_then(|n| n.checked_sub(1));
+                    return match index.filter(|&i| i < choices.len()) {
+                        Some(i) => Ok(Some(Answer::CostPayment(i))),
+                        None => fail(format!("line {}: Cost must name an offered cost number", step.line)),
+                    };
+                }
+                let Some(spec) = step.positional().next() else { return fail(format!("line {}: Choose needs a cost label or object", step.line)) };
+                let mut found: Vec<usize> = choices.iter().enumerate().filter_map(|(i, c)| c.label.eq_ignore_ascii_case(spec).then_some(i)).collect();
+                if found.is_empty() {
+                    let needle = spec.to_lowercase();
+                    found = choices.iter().enumerate().filter_map(|(i, c)| c.label.to_lowercase().contains(&needle).then_some(i)).collect();
+                }
+                if found.is_empty() {
+                    let pool: Vec<ObjectId> = choices.iter().flat_map(|c| c.objects.iter().copied()).collect();
+                    let objects = self.objects(step, spec, &pool)?;
+                    found = choices.iter().enumerate().filter_map(|(i, c)| c.objects.iter().any(|id| objects.contains(id)).then_some(i)).collect();
+                }
+                if found.len() != 1 { return fail(format!("line {}: {spec} does not identify exactly one payment", step.line)); }
+                Some(Answer::CostPayment(found[0]))
+            }
             (V::Choose, RequestKind::ChooseCards { .. }) => Some(self.pick_by_rule(step, request)?),
             // Harmonize's creature is up to one (CR 702.180a): unless the script taps one, none is.
             (V::Choose, RequestKind::TapForPower { purpose: Purpose::TapToReduce, cards, .. }) => Some(self.pick(step, cards, 1, false)?),
@@ -1358,8 +1438,17 @@ impl<'s> Run<'s> {
                 };
                 Some(Answer::Announce(value))
             }
-            (V::Target, RequestKind::ChooseTarget { candidates, least, count, .. }) => {
-                self.choose_target(step, candidates, *least, *count)?
+            (V::Target, RequestKind::ChooseTarget { candidates, least, count, replacing, .. }) => {
+                // A script may name the original target to keep it. The wire answer is
+                // empty, so the old target is never offered as a new candidate (115.7d).
+                let named: Vec<&str> = step.positional().collect();
+                if let (Some((_, original)), [spec]) = (replacing, named.as_slice())
+                    && self.target(step, spec, &[*original])?.is_some()
+                {
+                    Some(Answer::Targets(Vec::new()))
+                } else {
+                    self.choose_target(step, candidates, *least, *count)?
+                }
             }
             (V::Divide, RequestKind::ChooseDividedTargets { candidates, .. }) => Some(self.divide(step, candidates)?),
             (V::RemoveCounters, RequestKind::RemoveCounters { pools, total, up_to, .. }) => Some(self.remove_counters(step, pools, *total, *up_to)?),
@@ -1572,22 +1661,9 @@ impl<'s> Run<'s> {
             let p = player_of(b);
             return Ok(candidates.iter().copied().find(|&t| t == Target::Player(p)));
         }
-        // An ability on the stack is named for its source, as `Stack.Name`: the topmost of that name, or with `#n` the nth
-        // from the top (`Stack.Name#2`, the one under it).
-        if let Some((zone, name)) = spec.split_once('.')
-            && zone.eq_ignore_ascii_case("Stack")
-        {
-            let (name, nth) = match name.rsplit_once('#') {
-                Some((n, k)) if k.trim().parse::<usize>().is_ok_and(|k| k > 0) => (n, k.trim().parse::<usize>().unwrap() - 1),
-                _ => (name, 0),
-            };
-            let stack = &self.game.state.stack;
-            let found = candidates.iter().copied().filter(|t| matches!(t, Target::Ability(_))).rev().filter(|t| {
-                matches!(t, Target::Ability(n) if stack.iter().any(|i| i.serial == *n && self.game.known_name(i.object).eq_ignore_ascii_case(name.trim())))
-            }).nth(nth);
-            if found.is_some() {
-                return Ok(found);
-            }
+        // A stack ability's identity and ordinal are independent of this question's candidates.
+        if let Some(ability) = self.stack_ability(spec) {
+            return Ok(ability.filter(|ability| candidates.contains(ability)));
         }
         let pool: Vec<ObjectId> = candidates.iter().filter_map(|t| t.object()).collect();
         let found = self.objects(step, spec, &pool)?;
@@ -1597,6 +1673,20 @@ impl<'s> Run<'s> {
             return fail(format!("line {}: {spec} could be more than one card; write the one meant", step.line));
         }
         Ok(Some(Target::Object(first)))
+    }
+
+    /// `None` means no ability has this source name; `Some(None)` means the name exists but that ordinal does not.
+    fn stack_ability(&self, spec: &str) -> Option<Option<Target>> {
+        let (zone, name) = spec.split_once('.')?;
+        if !zone.eq_ignore_ascii_case("Stack") { return None; }
+        let (name, nth) = match name.rsplit_once('#') {
+            Some((n, k)) if k.trim().parse::<usize>().is_ok_and(|k| k > 0) => (n, k.trim().parse::<usize>().unwrap() - 1),
+            _ => (name, 0),
+        };
+        let abilities: Vec<Target> = self.game.state.stack.iter().rev()
+            .filter(|i| i.kind != StackKind::Spell && self.game.known_name(i.object).eq_ignore_ascii_case(name.trim()))
+            .map(|i| Target::Ability(i.serial)).collect();
+        (!abilities.is_empty()).then(|| abilities.get(nth).copied())
     }
 
     /// The cards a `Choose(..)` or `Search(..)` line names for a choice of cards or a library search, judged by the question's
@@ -1682,6 +1772,17 @@ impl<'s> Run<'s> {
     /// proves nothing.
     fn check_refused_declaration(&self, action: &ActionStep, line: usize, text: &str, request: &Request) -> R<()> {
         match &request.kind {
+            // A bare Number refuses the question; Number(n) refuses only that
+            // answer, leaving this very question for the next scripted line.
+            RequestKind::ChooseNumber { least, most, .. } => {
+                let spec = action.positional().next().unwrap_or("").trim();
+                let Ok(value) = spec.parse::<u32>() else {
+                    return fail(format!("line {line}: {spec} is not a number"));
+                };
+                if check_answer(&self.game, request, &Answer::Announce(value)).is_ok() {
+                    return fail(format!("line {line} says {text} must not be allowed, but a number from {least} to {most} may be chosen"));
+                }
+            }
             // `! Bot1.ChoosePlayer(Bot1)`: that player is no answer the question accepts - not among its candidates (Shinryu,
             // Transcendent Rival's "choose an opponent" leaves its controller out), judged by the rules' own check of the answer.
             RequestKind::ChoosePlayer { .. } => {
@@ -1694,6 +1795,7 @@ impl<'s> Run<'s> {
                 }
                 if check_answer(&self.game, request, &Answer::Player(p)).is_ok() {
                     return fail(format!("line {line} says {text} must not be choosable, but it is"));
+
                 }
             }
             RequestKind::DeclareBlockers { eligible, attackers, allowed, requirements } => {
@@ -1932,6 +2034,18 @@ impl<'s> Run<'s> {
                     return Ok(());
                 }
                 for spec in action.positional() {
+                    // Resolve a named stack ability against the stack itself, not only the offered
+                    // candidates. Its source may be on the battlefield or have left the game.
+                    // Prefer that ability over a same-named spell, as target() does when offered.
+                    if let Some(ability) = self.stack_ability(spec.trim()) {
+                        let Some(ability) = ability else {
+                            return fail(format!("line {line}: {text} proves nothing: no such ability is on the stack"));
+                        };
+                        if candidates.contains(&ability) {
+                            return fail(format!("line {line} says {text} must not be a legal target, but it is"));
+                        }
+                        continue;
+                    }
                     if bot_id(spec).is_none() && self.objects(action, spec.trim(), &everything)?.is_empty() {
                         return fail(format!("line {line}: {text} proves nothing: no such card is in the game"));
                     }
@@ -2118,9 +2232,9 @@ impl<'s> Run<'s> {
             if parts.len() != 2 {
                 return fail(format!("line {}: write a block as \"Blocker > Attacker\", not \"{spec}\"", step.line));
             }
-            let blockers: Vec<ObjectId> =
-                self.objects(step, parts[0].trim(), eligible)?.into_iter().filter(|b| !blocks.iter().any(|x| x.0 == *b)).collect();
             let Some(attacker) = self.objects(step, parts[1].trim(), attackers)?.into_iter().next() else { return Ok(None) };
+            let blockers: Vec<ObjectId> = self.objects(step, parts[0].trim(), eligible)?.into_iter()
+                .filter(|&b| !blocks.contains(&(b, attacker))).collect();
             if blockers.is_empty() {
                 return Ok(None);
             }
@@ -2650,6 +2764,7 @@ impl<'s> Run<'s> {
                     }
                     chosen
                 }
+                [] if option.targets_optional => Vec::new(),
                 [] if option.target_candidates.len() == option.targets_required as usize => option.target_candidates.clone(),
                 [] => {
                     return fail(format!(
@@ -2739,6 +2854,41 @@ fn x_of(step: &ActionStep) -> R<Option<u16>> {
     }
 }
 
+/// Whether the payment's actual picker can reach this X (regardless of whether the pool could then pay it). No picker
+/// means no X choice. Only offered steps are taken, on a fork; neither a failed answer nor an unexpected new question
+/// counts as proof that the original payment refused X.
+fn payment_x_can_be_chosen(game: &Game, wanted: u16) -> R<bool> {
+    let Some(request) = game.pending() else { return fail("no payment question to probe") };
+    let RequestKind::UnlessPays { x, times: None, source, subject, .. } = &request.kind else {
+        return fail("the payment probe requires an X question, not a number of times");
+    };
+    let Some(mut current) = *x else { return Ok(false) };
+    if current == wanted {
+        return Ok(true);
+    }
+    let (player, source, subject) = (request.player, *source, *subject);
+    let mut probe = game.fork_for_search();
+    while current != wanted {
+        let request = probe.pending().cloned().ok_or_else(|| Fail("the X probe lost its payment question".into()))?;
+        let RequestKind::UnlessPays { options, .. } = &request.kind else { return fail("the X probe changed question") };
+        let direction = if current < wanted { ActionKind::IncreaseX } else { ActionKind::DecreaseX };
+        let Some(option) = options.iter().find(|o| o.kind == direction) else { return Ok(false) };
+        probe.answer(request.id, request.player, Answer::Act(Action::of(option)))
+            .map_err(|why| Fail(format!("the engine refused its offered X step: {why:?}")))?;
+        probe.run();
+        let next = probe.pending().ok_or_else(|| Fail("the X probe ended its payment question".into()))?;
+        let RequestKind::UnlessPays { x: Some(n), times: None, source: next_source, subject: next_subject, .. } = &next.kind else {
+            return fail("the X probe changed question");
+        };
+        let expected = if direction == ActionKind::IncreaseX { current + 1 } else { current - 1 };
+        if next.player != player || *next_source != source || *next_subject != subject || *n != expected {
+            return fail("the X probe did not take exactly one step of the same payment");
+        }
+        current = *n;
+    }
+    Ok(true)
+}
+
 /// The comma-separated names a line's key lists (`Convoke: Llanowar Elves, Birds of Paradise`).
 fn names_of(step: &ActionStep, key: &str) -> VecDeque<String> {
     step.named(key).map(|t| t.split(',').map(|n| n.trim().to_string()).filter(|n| !n.is_empty()).collect()).unwrap_or_default()
@@ -2787,6 +2937,17 @@ fn spend_of(step: &ActionStep) -> R<VecDeque<Spend>> {
                 }
                 None => None,
             };
+            let mut snow = None;
+            rest.retain(|word| {
+                if word.eq_ignore_ascii_case("Snow") { snow = Some(true); false }
+                else if word.eq_ignore_ascii_case("NonSnow") { snow = Some(false); false }
+                else { true }
+            });
+            let mut pay_snow = None;
+            if let Some(at) = rest.iter().position(|word| word.eq_ignore_ascii_case("for")) {
+                pay_snow = match rest.get(at + 1).copied() { Some("{S}") => Some(true), Some("mana") => Some(false), _ => return fail(format!("line {}: Spend: {piece} must say for {{S}} or for mana", step.line)) };
+                rest.drain(at..at + 2);
+            }
             let restriction = if rest.is_empty() {
                 None
             } else {
@@ -2795,7 +2956,7 @@ fn spend_of(step: &ActionStep) -> R<VecDeque<Spend>> {
                     None => return fail(format!("line {}: Spend: {piece} names something that is not a mana restriction", step.line)),
                 }
             };
-            out.push_back((mana, restriction, from));
+            out.push_back((mana, restriction, from, snow, pay_snow));
         }
     }
     Ok(out)
@@ -2805,30 +2966,30 @@ fn spend_of(step: &ActionStep) -> R<VecDeque<Spend>> {
 /// halves by name, the fused cast of a fuse card, its modes, its own ways of being cast and alternative costs, and the
 /// labels its card names. What a refusal of an absent mode (`! Bot1.Modes(Fuse)`) is checked against, so that a mode
 /// the source never could offer is a typo, not a refusal that holds.
-fn modes_the_source_could_offer(game: &Game, source: ObjectId) -> Vec<&'static str> {
+fn modes_the_source_could_offer(game: &Game, source: ObjectId) -> Vec<String> {
     if source.0 as usize >= game.state.objects.len() {
         return Vec::new();
     }
     let def = game.cards.get(game.state.obj(source).card);
-    let mut out = vec![def.name];
+    let mut out = vec![def.name.to_string()];
     if let Some((left, right)) = def.split {
-        out.extend([left.name, right.name]);
+        out.extend([left.name.to_string(), right.name.to_string()]);
     }
     if def.fuse {
-        out.push(label_text(&Label::Fused(game.state.obj(source).card)));
+        out.push(label_text(&Label::Fused(game.state.obj(source).card)).into_owned());
     }
-    out.extend(def.inset_faces().map(|(_, f)| f.name));
-    out.extend(def.back.map(|b| b.name));
+    out.extend(def.inset_faces().map(|(_, f)| f.name.to_string()));
+    out.extend(def.back.map(|b| b.name.to_string()));
     let faces = std::iter::once(def).chain(def.split.into_iter().flat_map(|(l, r)| [l, r])).chain(def.inset_faces().map(|(_, f)| f)).chain(def.back);
     for face in faces {
-        out.extend(face.modal.iter().flat_map(|m| m.modes.iter().map(|mode| mode.text)));
-        out.extend(face.ways.iter().map(|w| w.text));
-        out.extend(face.spell_alternatives.iter().map(|a| a.text));
-        out.extend(face.labels.iter().copied());
+        out.extend(face.modal.iter().flat_map(|m| m.modes.iter().map(|mode| mode.text.to_string())));
+        out.extend(face.ways.iter().map(|w| w.text.to_string()));
+        out.extend(face.spell_alternatives.iter().map(|a| a.text.to_string()));
+        out.extend(face.labels.iter().map(|text| text.to_string()));
     }
     // The alternative costs resolved spells and abilities gave a player's next spell (CR 611.2c), whatever card it is.
     out.extend(game.state.effects.iter().filter_map(|e| match e.kind {
-        EffectKind::SpellAlternative { card, index, .. } => game.cards.get(card).lasting_spell_alternatives.get(index as usize).map(|a| a.text),
+        EffectKind::SpellAlternative { card, index, .. } => game.cards.get(card).lasting_spell_alternatives.get(index as usize).map(|a| a.text.to_string()),
         _ => None,
     }));
     out

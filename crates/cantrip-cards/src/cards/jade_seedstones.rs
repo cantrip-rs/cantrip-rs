@@ -16,7 +16,7 @@ fn distribute(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// which ceased to exist, or for a Jadeheart Attendant that entered any other way.
 fn gain_crafted_mana_value(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let total: u32 = craft::exiled_cards_used_to_craft(g, item.object).into_iter().map(|c| g.mana_value(c)).sum();
-    g.gain_life(item.controller, total as i32);
+    g.gain_life(item.controller, i64::from(total as i32));
     Ok(())
 }
 

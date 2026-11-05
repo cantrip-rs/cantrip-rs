@@ -45,6 +45,7 @@ Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Thanos, the Mad Titan.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {C}
 Bot1.Pass
 Bot1.Modes(Odd)

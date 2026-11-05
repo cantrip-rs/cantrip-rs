@@ -33,6 +33,11 @@ Bot1.Modes(Collect evidence)
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Griselbrand)
 Bot1.Pass
 Bot1.Choose(Island)

@@ -30,6 +30,10 @@ Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Mountain.Activate
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {W}
 Bot1.Pass
 Bot2.Pass

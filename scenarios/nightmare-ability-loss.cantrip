@@ -21,6 +21,7 @@ Bot1.Hand.Mox Sapphire.Cast
 Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 Bot1.Hand.Nightmare.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

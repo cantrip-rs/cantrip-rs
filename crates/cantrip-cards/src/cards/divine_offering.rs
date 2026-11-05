@@ -6,7 +6,7 @@ use cantrip_oracle as oracle;
 fn offering(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(artifact) = destroy_target(g, item, 0) else { return Ok(()) };
     g.end_sentence();
-    let value = g.mana_value(artifact) as i32;
+    let value = i64::from(g.mana_value(artifact));
     g.gain_life(item.controller, value);
     Ok(())
 }

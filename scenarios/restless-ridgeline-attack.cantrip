@@ -25,6 +25,7 @@ Bot1.Hand.Grizzly Bears.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Restless Ridgeline.Activate(Ability: becomes)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

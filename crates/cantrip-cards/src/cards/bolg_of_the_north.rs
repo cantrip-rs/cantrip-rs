@@ -24,13 +24,13 @@ fn may_sacrifice_another_creature(g: &mut dyn Game, item: &StackItem) -> Result<
 fn deal_damage_and_amass_the_excess(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
     let target = Target::Object(creature);
-    if let Some(result) = g.damage_result(item.object, target, item.x as u16)
+    if let Some(result) = g.damage_result(item.object, target, i64::from(item.x as u16))
         && result.target == target
         && result.excess > 0
     {
         g.end_sentence();
         // A counter count holds at most what the engine's width does (RX-5).
-        amass(g, item.controller, item.object, &tokens::GOBLIN_ARMY, Subtype::Goblin, result.excess.min(i16::MAX as u32) as i16)?;
+        amass(g, item.controller, item.object, &tokens::GOBLIN_ARMY, Subtype::Goblin, result.excess.min(i64::from(i16::MAX as u32)) as i16)?;
     }
     Ok(())
 }

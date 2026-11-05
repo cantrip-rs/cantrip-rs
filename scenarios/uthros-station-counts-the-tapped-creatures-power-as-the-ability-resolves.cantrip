@@ -51,6 +51,8 @@ Bot2.Pass
 ? Bot1.Battlefield.Uthros, Titanic Godcore.Counters.Charge = 12
 Bot1.Battlefield.Uthros, Titanic Godcore.Activate(Ability: for each artifact)
 Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {U}{U}{U}
 
 [Expect]

@@ -34,6 +34,9 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Hand.Ruthless Radrat.Cast(Kicked: 1)
 ? Client.Bot1.Prompt.Title = Pay squad for Ruthless Radrat?
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Dark Ritual; Dark Ritual; Dark Ritual; Dark Ritual)
 Bot1.Pass
 Bot2.Pass

@@ -48,6 +48,8 @@ Bot1.Hand.Collective Brutality.Cast
 Bot1.Modes(2; 3)
 Bot1.Target(Llanowar Elves)
 Bot1.Target(Bot2)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Island)
 Bot1.Battlefield.Mox Ruby#1.Activate
 Bot1.Battlefield.Mox Ruby#2.Activate

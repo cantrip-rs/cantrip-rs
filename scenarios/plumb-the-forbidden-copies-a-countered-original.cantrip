@@ -36,6 +36,8 @@ Bot1.Battlefield.Swamp#1.Activate
 Bot1.Battlefield.Swamp#2.Activate
 Bot1.Hand.Plumb the Forbidden.Cast
 Bot1.Modes(2)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 Bot1.Choose(Ornithopter)
 Bot1.Pass

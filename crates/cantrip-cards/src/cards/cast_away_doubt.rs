@@ -6,7 +6,7 @@ use cantrip_oracle as oracle;
 /// (CR 120.2, 102.2), after the draws.
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     effects::draw(g, item, 2)?;
-    let hits: Vec<(ObjectId, Target, u16)> = g.state().apnap().map(|p| (item.object, Target::Player(p), 2)).collect();
+    let hits: Vec<(ObjectId, Target, i64)> = g.state().apnap().map(|p| (item.object, Target::Player(p), 2)).collect();
     g.damage_together(&hits);
     Ok(())
 }

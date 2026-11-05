@@ -20,6 +20,7 @@ Bot1.Hand.Island.Play
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Deathlace.Cast(Bot1.Battlefield.Boros Swiftblade)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T3 Bot1.Main2]
 [Expect]

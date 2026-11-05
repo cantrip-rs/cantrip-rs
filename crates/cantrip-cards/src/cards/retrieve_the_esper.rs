@@ -18,7 +18,7 @@ static ROBOT_WARRIOR: CardDef = CardDef {
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let made = tokens::create(g, item.controller, &ROBOT_WARRIOR, 1)?;
     if history::cast_from_graveyard(g.history(), item.object).is_some() {
-        let counters: Vec<(ObjectId, CounterKind, i16)> = made.into_iter().map(|token| (token, CounterKind::PlusOne, 2)).collect();
+        let counters: Vec<(ObjectId, CounterKind, i64)> = made.into_iter().map(|token| (token, CounterKind::PlusOne, 2)).collect();
         g.add_counters_together(&counters);
     }
     Ok(())

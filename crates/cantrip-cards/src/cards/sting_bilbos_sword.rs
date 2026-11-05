@@ -11,7 +11,7 @@ fn hone_and_attach(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let creatures = item.target(0).player().filter(|_| g.target_legal(item, 0)).map_or(0, |opponent| {
         g.permanents_of(opponent).into_iter().filter(|&id| g.chars(id).is(CardType::Creature)).count()
     });
-    g.add_counters(item.object, CounterKind::Hone, creatures.min(i16::MAX as usize) as i16);
+    g.add_counters(item.object, CounterKind::Hone, i64::from(creatures.min(i16::MAX as usize) as i16));
     if let Some(creature) = targets::object(g, item, 1) {
         g.attach(item.object, creature);
     }

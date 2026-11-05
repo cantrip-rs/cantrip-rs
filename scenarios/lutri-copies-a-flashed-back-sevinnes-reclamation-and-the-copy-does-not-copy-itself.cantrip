@@ -34,6 +34,7 @@ Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Graveyard.Sevinne's Reclamation.Cast(Bot1.Graveyard.Black Lotus; Ability: Flashback)
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Mountain#2.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Pearl.Activate

@@ -30,6 +30,7 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Hand.Return the Favor.Cast
 Bot1.Modes(Copy target)
 Bot1.Target(Stack.Lightning Bolt)
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Counterspell.Cast(Stack.Lightning Bolt)

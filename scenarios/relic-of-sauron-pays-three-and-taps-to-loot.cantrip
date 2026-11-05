@@ -27,6 +27,9 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Relic of Sauron.Activate(Ability: Draw two cards)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Island)
 
 [Expect]

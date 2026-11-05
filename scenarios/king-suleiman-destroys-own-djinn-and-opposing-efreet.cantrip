@@ -35,6 +35,7 @@ Bot2.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Exhibition Tidecaller.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

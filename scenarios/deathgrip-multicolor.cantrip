@@ -30,6 +30,7 @@ Bot2.Pass
 Bot1.Battlefield.Mox Jet#1.Activate
 Bot1.Battlefield.Mox Jet#2.Activate
 Bot1.Battlefield.Deathgrip.Activate(Stack.Troyan, Gutsy Explorer)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T3 Bot1.Main1]
 Bot1.Hand.Ornithopter.Cast

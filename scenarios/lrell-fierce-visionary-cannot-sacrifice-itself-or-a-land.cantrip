@@ -25,6 +25,8 @@ Bot1.Hand.Memnite.Cast
 Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.L'Rell, Fierce Visionary.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Memnite)
 Bot1.Arrange(Swamp |)
 [Expect]

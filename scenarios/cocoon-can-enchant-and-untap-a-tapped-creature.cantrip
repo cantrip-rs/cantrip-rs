@@ -21,6 +21,7 @@ Bot1.Hand.Quirion Ranger.Cast
 [T3 Bot1.Main1]
 Bot1.Battlefield.Llanowar Elves.Activate
 Bot1.Hand.Cocoon.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

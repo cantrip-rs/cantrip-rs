@@ -45,6 +45,9 @@ Bot1.Modes(Blight 2)
 Bot1.Modes(1; 2)
 Bot1.Target(Bot2.Battlefield.Sol Ring)
 Bot1.Target(Hero of Bladehold)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Endurance)
 ? Stack = Pyrrhic Strike
 Bot1.Pass

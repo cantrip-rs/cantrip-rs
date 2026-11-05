@@ -34,6 +34,7 @@ Bot2.Hand.Mox Pearl.Cast
 Bot2.Pass
 Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot2.Hand.Frantic Search.Cast
+Bot2.Choose(Close mana window)
 Bot2.Battlefield.Mox Jet.Activate
 Bot2.Battlefield.Mox Pearl.Activate
 Bot2.Hand.Diabolic Edict.Cast(Bot1)

@@ -34,6 +34,8 @@ Bot1.Pass
 Bot1.Battlefield.Plains.Activate
 ! Bot1.Battlefield.Voldaren Thrillseeker.Activate(Bot1.Battlefield.Plains)
 Bot1.Battlefield.Voldaren Thrillseeker.Activate(Bot2)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 ? Bot1.Battlefield.Plains#2.Tapped = false
 Bot1.Pass

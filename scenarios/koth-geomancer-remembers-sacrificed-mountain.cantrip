@@ -21,6 +21,7 @@ Bot2.Pass
 Bot1.Hand.Mountain.Play
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Crop Rotation.Cast
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mountain)
 Bot1.Pass
 Bot2.Pass

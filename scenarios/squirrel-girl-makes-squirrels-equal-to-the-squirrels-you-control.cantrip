@@ -50,6 +50,7 @@ Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.The Unbeatable Squirrel Girl.Activate(Ability: Create X)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Attack(The Unbeatable Squirrel Girl > Bot2)

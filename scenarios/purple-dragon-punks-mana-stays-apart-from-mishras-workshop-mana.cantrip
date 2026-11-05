@@ -32,6 +32,7 @@ Bot2.Pass
 Bot1.Battlefield.Mishra's Workshop.Activate
 Bot1.Battlefield.Purple Dragon Punks.Activate
 Bot1.Battlefield.Blazing Rootwalla.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {C}{C}{C} (ArtifactSpells)
 Bot1.Hand.Sol Ring.Cast
 Bot1.Pass

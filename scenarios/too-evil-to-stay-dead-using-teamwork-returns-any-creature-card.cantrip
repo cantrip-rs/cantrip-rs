@@ -49,6 +49,9 @@ Bot1.Battlefield.Swamp.Activate
 Bot1.Hand.Too Evil to Stay Dead.Cast
 Bot1.Modes(Teamwork 4)
 Bot1.Target(Bot1.Graveyard.Catacomb Slug)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Highborn Vampire)
 ? Bot1.Mana =
 Bot1.Pass

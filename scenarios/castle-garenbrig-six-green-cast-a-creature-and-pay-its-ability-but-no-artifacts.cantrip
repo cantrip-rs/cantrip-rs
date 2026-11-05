@@ -48,6 +48,11 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 ? Bot1.Mana = {B}{R}{G}{G}
 Bot1.Battlefield.Castle Garenbrig.Activate(Ability: six)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {G}{G}{G}{G}{G}{G} (CreatureSpellsOrAbilitiesOfCreatures)
 ? Bot1.Battlefield.Castle Garenbrig.Tapped = true
 ! Bot1.Battlefield.Aether Spellbomb.Activate(Ability: Draw; Mana: short)

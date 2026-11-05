@@ -40,6 +40,7 @@ Bot1.Hand.Ninja of the Hand.Cast
 Bot1.Pass
 Bot1.Battlefield.Ancient Tomb#2.Activate
 Bot1.Battlefield.Ninja of the Hand.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 ! Bot1.Battlefield.Ninja of the Hand.Activate

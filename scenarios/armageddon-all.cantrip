@@ -21,6 +21,7 @@ Bot2.Hand.Mountain.Play
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Armageddon.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 

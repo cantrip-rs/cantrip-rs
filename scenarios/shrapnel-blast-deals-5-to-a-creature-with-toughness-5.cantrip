@@ -30,6 +30,8 @@ Bot1.Hand.Mountain.Play
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Shrapnel Blast.Cast(Bot2.Battlefield.Rhox Faithmender)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 [T3 Bot1.Main2]
 

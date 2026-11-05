@@ -25,7 +25,7 @@ fn sensational_save(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Sus
     if web_slinging::was_cast_using_web_slinging(g, entering.object)
         && let Some(creature) = returned_creature(g, entering.object)
     {
-        entering.counters[CounterKind::PlusOne as usize] += g.mana_value(creature).min(i16::MAX as u32) as i16;
+        entering.counters[CounterKind::PlusOne as usize] += i64::from(g.mana_value(creature).min(i16::MAX as u32) as i16);
     }
     Ok(())
 }

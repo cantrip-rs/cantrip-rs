@@ -45,6 +45,9 @@ Bot1.Battlefield.Swamp#1.Activate
 Bot1.Battlefield.Swamp#2.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.The Stone Brain.Activate(Bot2)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {B}
 Bot1.Name(Ornithopter)
 Bot1.Choose(Ornithopter)

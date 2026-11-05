@@ -53,7 +53,7 @@ pub fn enters_tapped(_: &mut dyn Game, entering: &mut Entering) -> Result<(), Su
 /// keep it tapped through `N` untaps. Baloth Prime (six) and Tonberry (one) print it.
 pub fn enters_tapped_with_stun_counters<const N: i16>(_: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
     entering.tapped = true;
-    entering.counters[CounterKind::Stun as usize] += N;
+    entering.counters[CounterKind::Stun as usize] += i64::from(N);
     Ok(())
 }
 

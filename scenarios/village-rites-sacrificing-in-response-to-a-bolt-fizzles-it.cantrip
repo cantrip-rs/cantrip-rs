@@ -20,6 +20,7 @@ Bot2.Battlefield.Mountain.Activate
 Bot2.Hand.Lightning Bolt.Cast(Ornithopter)
 Bot1.Battlefield.Swamp.Activate
 Bot1.Hand.Village Rites.Cast
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 [T2 Bot2.Main2]
 

@@ -65,6 +65,7 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Helicarrier Strike.Cast
 Bot1.Modes(Teamwork 2)
 Bot1.Target(Bot2.Battlefield.Ageless Guardian#1)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Agent Maria Hill)
 Bot1.Pass
 Bot2.Pass
@@ -76,6 +77,7 @@ Bot2.Pass
 Bot1.Battlefield.Plains.Activate
 Bot1.Hand.Helicarrier Strike.Cast
 Bot1.Modes(Teamwork 2)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Cabal Evangel)
 Bot1.Pass
 Bot2.Pass

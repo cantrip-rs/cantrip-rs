@@ -44,6 +44,7 @@ Bot1.Attack(Llanowar Elves; Llanowar Elves)
 ? Combat.AttackCost = {4}
 Bot1.Battlefield.Black Lotus.Activate(Color: Green)
 Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Choose(Close mana window)
 [T3 Bot1.Attackers]
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Battlefield.Mox Ruby.Activate

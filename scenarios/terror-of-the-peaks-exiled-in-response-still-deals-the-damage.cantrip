@@ -36,6 +36,7 @@ Bot1.Target(Bot2)
 Bot1.Pass
 Bot2.Battlefield.Plains.Activate
 Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Terror of the Peaks)
+Bot2.Choose(Pay mana)
 ? Bot2.Life = 17
 Bot2.Pass
 Bot1.Pass

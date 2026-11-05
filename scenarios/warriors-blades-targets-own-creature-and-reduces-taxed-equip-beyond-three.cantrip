@@ -47,6 +47,7 @@ Bot2.Name(Warrior's Blades)
 ? Bot1.Battlefield.Walking Ballista.Toughness = 5
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Warrior's Blades.Activate(Walking Ballista)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {C}
 Bot1.Pass
 [T7 Bot1.Main1]
@@ -55,6 +56,7 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Warrior's Blades.Activate(Walking Ballista)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 [Expect]

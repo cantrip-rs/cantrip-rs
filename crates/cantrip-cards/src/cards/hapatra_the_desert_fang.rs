@@ -16,7 +16,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         .max()
         .unwrap_or(0)
         .min(i16::MAX as u32) as i16;
-    let puts: Vec<(ObjectId, CounterKind, i16)> = targets::legal_objects(g, item).into_iter().map(|id| (id, CounterKind::MinusOne, x)).collect();
+    let puts: Vec<(ObjectId, CounterKind, i64)> = targets::legal_objects(g, item).into_iter().map(|id| (id, CounterKind::MinusOne, i64::from(x))).collect();
     g.add_counters_together(&puts);
     Ok(())
 }

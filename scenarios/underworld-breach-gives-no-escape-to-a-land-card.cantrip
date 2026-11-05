@@ -33,6 +33,7 @@ Bot1.Hand.Underworld Breach.Cast
 Bot1.Pass
 ! Bot1.Graveyard.Island.Cast
 Bot1.Graveyard.Lightning Bolt.Cast(Bot2; Ability: Escape)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Black Lotus; Faithless Looting; Island)
 Bot1.Pass
 [Bot1.Main1]

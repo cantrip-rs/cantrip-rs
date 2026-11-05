@@ -10,7 +10,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some(result) = g.damage_result(item.object, target, 6)
         && result.target == target && result.excess > 0
     {
-        empower::jace(g, item.controller, item.object, result.excess.min(i16::MAX as u32) as i16)?;
+        empower::jace(g, item.controller, item.object, result.excess.min(i64::from(i16::MAX as u32)) as i16)?;
     }
     Ok(())
 }

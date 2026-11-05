@@ -18,6 +18,7 @@ Bot1.Hand.Mox Sapphire.Cast
 Bot1.Hand.Ornithopter.Cast
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Thousand-Faced Shadow.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
 Bot1.Hand.Grizzly Bears.Cast
@@ -27,6 +28,10 @@ Bot1.Attack(Thousand-Faced Shadow; Ornithopter; Grizzly Bears > Bot2)
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Ninja of the New Moon.Activate(Ability: Ninjutsu)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass

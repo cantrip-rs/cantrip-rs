@@ -26,7 +26,7 @@ fn remove_lore_counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspen
     }
     let removed: i16 = chosen.into_iter().map(|saga| g.remove_counters(saga, CounterKind::Lore, 1)).sum();
     if removed > 0 {
-        g.add_counters(item.object, CounterKind::PlusOne, removed);
+        g.add_counters(item.object, CounterKind::PlusOne, i64::from(removed));
     }
     Ok(())
 }

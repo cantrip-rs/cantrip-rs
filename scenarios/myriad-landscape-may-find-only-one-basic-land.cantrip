@@ -25,6 +25,9 @@ Bot2.Pass
 Bot1.Battlefield.Myriad Landscape.Activate(Ability: {2}, {T}, Sacrifice this land)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Search(Forest)
 

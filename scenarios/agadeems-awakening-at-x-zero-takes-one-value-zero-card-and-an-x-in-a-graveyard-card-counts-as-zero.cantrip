@@ -48,6 +48,7 @@ Bot1.Hand.Agadeem's Awakening.Cast(X: 0)
 ! Bot1.Target(Llanowar Elves)
 ! Bot1.Target(Ornithopter; Walking Ballista)
 Bot1.Target(Walking Ballista)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 [Bot1.Main2]

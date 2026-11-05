@@ -32,6 +32,7 @@ Bot2.Hand.Lightning Bolt.Cast(Bot1)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Louisoix's Sacrifice.Cast(Stack.Lightning Bolt)
 Bot1.Modes(Sacrifice a legendary creature)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Cecil, Dark Knight)
 ? Bot1.Battlefield = Mox Jet; Mox Sapphire; Ornithopter
 Bot1.Pass

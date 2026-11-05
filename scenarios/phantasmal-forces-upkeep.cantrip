@@ -19,6 +19,7 @@ Bot1.Hand.Mox Ruby.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Phantasmal Forces.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T2 Bot2.Main1]
 Bot2.Hand.Black Lotus.Cast

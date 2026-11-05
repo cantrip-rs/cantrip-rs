@@ -8,19 +8,12 @@ fn when_youre_dealt_damage(
     asker: &Asker,
     event: &Event,
 ) -> Option<Fired> {
-    let Event::Damage { target, amount, .. } = event else { return None };
-    let amount = *amount;
-    let subject = *target;
-    let data = [u32::from(amount), 0];
-    if matches!(* target, Target::Player(p) if asker.controller == p) {
-        return Some(Fired { subject, data });
+    if let Event::Damage { target: Target::Player(player), amount, .. } = event
+        && *player == asker.controller && *amount > 0
+    {
+        return Fired::about(Target::Player(*player));
     }
     None
-}
-
-/// The vitality counters for `damage` dealt, at the counter width (RX-5): never a different, wrapped value.
-fn counters_for_damage(damage: u32) -> i16 {
-    i16::try_from(damage).unwrap_or(i16::MAX)
 }
 
 /// "Whenever you're dealt damage, put that many vitality counters on this Aura." (CR 608.2, 122.1).
@@ -28,7 +21,7 @@ fn put_many_vitality_counters_aura(
     g: &mut dyn Game,
     item: &StackItem,
 ) -> Result<(), Suspend> {
-    g.add_counters(item.object, CounterKind::Vitality, counters_for_damage(item.data[0]));
+    g.add_counters(item.object, CounterKind::Vitality, item.matched_damage_amount());
     Ok(())
 }
 
@@ -54,6 +47,7 @@ pub static CARD: CardDef = CardDef {
                 put_many_vitality_counters_aura,
                 "Whenever you're dealt damage, put that many vitality counters on this Aura.",
             )
+            .damage_amount()
             .sums_per_subject(),
         triggered(
             triggers::YOUR_UPKEEP,
@@ -64,14 +58,3 @@ pub static CARD: CardDef = CardDef {
     enchant: Some(targets::ARTIFACT),
     ..oracle::LIVING_ARTIFACT
 };
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn damage_counter_conversion_at_the_counter_width() {
-        assert_eq!(super::counters_for_damage(0), 0);
-        assert_eq!(super::counters_for_damage(32767), 32767);
-        assert_eq!(super::counters_for_damage(32768), i16::MAX);
-        assert_eq!(super::counters_for_damage(u32::MAX), i16::MAX);
-    }
-}

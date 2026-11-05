@@ -34,6 +34,8 @@ Bot1.Battlefield.Island#2.Activate
 Bot1.Hand.We Say Thee Nay!.Cast
 Bot1.Modes(Teamwork 2)
 Bot1.Target(Stack.Lightning Bolt)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Guerrilla Gorilla)
 Bot2.Pass
 Bot2.Decline

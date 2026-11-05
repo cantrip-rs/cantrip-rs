@@ -62,6 +62,12 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 ! Bot1.Battlefield.The Darkness Crystal.Activate(Bot2.Exile.Ornithopter)
 Bot1.Battlefield.The Darkness Crystal.Activate(Bot2.Exile.Memnite)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 [T8 Bot2.Upkeep]

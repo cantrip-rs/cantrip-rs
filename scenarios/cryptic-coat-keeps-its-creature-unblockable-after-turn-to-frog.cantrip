@@ -36,6 +36,7 @@ Bot2.Hand.Ornithopter.Cast
 Bot1.Hand.Forest.Play
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield..Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Battlefield.Llanowar Elves.Keywords = (absent)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Emerald.Activate

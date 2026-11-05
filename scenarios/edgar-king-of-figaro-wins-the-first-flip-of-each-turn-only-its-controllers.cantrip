@@ -45,6 +45,9 @@ Bot2.Pass
 ? Bot1.Life = 20
 Bot1.Battlefield.Mana Crypt.Activate
 Bot1.Battlefield.The Gold Saucer.Activate(Ability: #2)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

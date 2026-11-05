@@ -30,6 +30,9 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Villainous Hideout.Activate(Ability: Target Villain you control connives; Bot1.Battlefield.Aerial Doombot)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Counterspell)
 Bot1.Pass
 Bot2.Pass

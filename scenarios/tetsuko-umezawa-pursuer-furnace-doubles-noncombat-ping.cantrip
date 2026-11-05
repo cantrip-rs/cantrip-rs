@@ -30,6 +30,7 @@ Bot2.Hand.Black Lotus.Cast
 Bot2.Battlefield.Black Lotus.Activate(Color: Red)
 Bot2.Battlefield.Mountain.Activate
 Bot2.Hand.Furnace of Rath.Cast
+Bot2.Choose(Close mana window)
 Bot2.Battlefield.Mox Emerald.Activate
 Bot2.Hand.Llanowar Elves.Cast
 [T3 Bot1.Main1]

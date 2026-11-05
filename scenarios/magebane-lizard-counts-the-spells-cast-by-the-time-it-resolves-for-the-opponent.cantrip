@@ -35,6 +35,7 @@ Bot1.Pass
 ? Stack.Count = 0
 Bot2.Battlefield.Mountain.Activate
 Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Choose(Close mana window)
 ? Stack.Count = 2
 Bot2.Battlefield.Mox Ruby.Activate
 Bot2.Hand.Lightning Bolt.Cast(Bot1)

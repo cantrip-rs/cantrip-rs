@@ -22,6 +22,9 @@ Bot1.Pass
 Bot1.Battlefield.Mana Crypt.Activate
 Bot1.Hand.Barkhide Mauler.Activate
 ? Stack = Barkhide Mauler
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Graveyard = Barkhide Mauler
 ? Bot1.Revealed = Barkhide Mauler
 Bot1.Pass

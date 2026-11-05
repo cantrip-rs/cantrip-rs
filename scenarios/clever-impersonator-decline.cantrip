@@ -21,6 +21,7 @@ Bot2.Hand.Island.Play
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Clever Impersonator.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Decline

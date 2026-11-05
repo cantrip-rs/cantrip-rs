@@ -25,6 +25,8 @@ Bot1.Hand.Ornithopter.Cast
 Bot1.Pass
 Bot1.Hand.Fanatical Offering.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 [T3 Bot1.Main2]

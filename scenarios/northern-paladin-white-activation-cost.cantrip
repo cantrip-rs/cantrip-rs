@@ -22,6 +22,7 @@ Bot1.Hand.Muck Rats.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Battlefield.Mox Pearl#1.Activate
 Bot1.Hand.Northern Paladin.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T2 Bot2.Main1]
 Bot2.Hand.Mox Jet.Cast
@@ -39,6 +40,9 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl#1.Activate
 Bot1.Battlefield.Mox Pearl#2.Activate
 Bot1.Battlefield.Northern Paladin.Activate(Bot2.Battlefield.Muck Rats)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 [T5 Bot1.Main2]
 [Expect]

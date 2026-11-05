@@ -27,6 +27,7 @@ Bot1.Hand.Deadly Precision.Cast(Bot2.Battlefield.Llanowar Elves)
 Bot1.Modes(Sacrifice an artifact or creature)
 Bot1.Battlefield.Swamp.Activate
 ! Bot1.Choose(Swamp)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mox Ruby)
 Bot1.Pass
 [T3 Bot1.Main2]

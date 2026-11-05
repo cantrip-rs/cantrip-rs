@@ -25,6 +25,7 @@ Bot1.Hand.Mox Jet.Cast
 Bot1.Hand.Mox Ruby.Cast
 Bot1.Hand.War Behemoth.Cast(Ability: Morph)
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = 
 ? Stack..FaceDown = true
 ? Stack..FaceDownName = War Behemoth

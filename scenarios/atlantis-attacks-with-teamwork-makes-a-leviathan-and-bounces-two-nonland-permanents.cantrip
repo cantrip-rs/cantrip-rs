@@ -58,6 +58,13 @@ Bot1.Target(Bot1)
 ! Bot1.Target(Count: 0)
 ! Bot1.Target(Bot2.Battlefield.Mox Pearl; Bot2.Battlefield.Mox Jet; Bot1.Battlefield.Mox Ruby)
 Bot1.Target(Bot2.Battlefield.Mox Pearl; Bot2.Battlefield.Mox Jet)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Bonecrusher Giant)
 ? Bot1.Mana =
 Bot1.Pass

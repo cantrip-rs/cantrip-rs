@@ -38,6 +38,7 @@ Bot2.Hand.Thalia, Guardian of Thraben.Cast
 Bot1.Battlefield.Mox Ruby#1.Activate
 Bot1.Battlefield.Mox Ruby#2.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Choose(Close mana window)
 ? Stack = Chalice of the Void; Lightning Bolt
 Bot1.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)

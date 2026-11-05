@@ -54,6 +54,9 @@ Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mistmeadow Council.Activate(Bot2.Battlefield.Sol Ring)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

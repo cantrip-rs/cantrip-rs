@@ -83,6 +83,8 @@ Bot1.Modes(Teamwork 4)
 Bot1.Target(Bot2.Battlefield.Nyxborn Courser)
 ! Bot1.Target(Bot2.Battlefield.Nyxborn Courser)
 Bot1.Target(Bot2.Battlefield.Nyxborn Marauder)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ! Bot1.Choose(Centaur Courser)
 Bot1.Choose(Giant Cockroach)
 Bot1.Pass

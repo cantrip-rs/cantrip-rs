@@ -8,7 +8,7 @@ use cantrip_oracle as oracle;
 fn tap_stun_and_draw(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let creatures = targets::legal_objects(g, item);
     g.tap_together(&creatures);
-    let puts: Vec<(ObjectId, CounterKind, i16)> = creatures.into_iter().map(|creature| (creature, CounterKind::Stun, 1)).collect();
+    let puts: Vec<(ObjectId, CounterKind, i64)> = creatures.into_iter().map(|creature| (creature, CounterKind::Stun, 1)).collect();
     g.add_counters_together(&puts);
     g.draw(item.controller, 1);
     Ok(())

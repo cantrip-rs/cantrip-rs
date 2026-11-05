@@ -18,7 +18,7 @@ fn damage_equal_to_greatest_power_in_your_graveyard(g: &mut dyn Game, item: &Sta
     let graveyard = g.state().zone(Zone::graveyard(item.controller)).to_vec();
     let greatest = graveyard.into_iter().map(|card| g.chars(card)).filter(|c| c.is(CardType::Creature)).filter_map(|c| c.power).max().unwrap_or(0);
     if greatest > 0 {
-        g.damage(item.object, Target::Object(victim), greatest as u16);
+        g.damage(item.object, Target::Object(victim), i64::from(greatest));
     }
     Ok(())
 }

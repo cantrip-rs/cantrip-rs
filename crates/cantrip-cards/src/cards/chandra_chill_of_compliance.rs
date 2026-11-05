@@ -32,7 +32,7 @@ fn tap_and_stun(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(permanent) = targets::object(g, item, 0) else { return Ok(()) };
     g.tap(permanent);
     if item.x > 0 {
-        g.add_counters(permanent, CounterKind::Stun, item.x as i16);
+        g.add_counters(permanent, CounterKind::Stun, i64::from(item.x as i16));
     }
     Ok(())
 }

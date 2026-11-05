@@ -29,8 +29,12 @@ Bot1.Battlefield.Mountain#2.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Shrapnel Blast.Cast(Bot2)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 Bot1.Hand.Shrapnel Blast.Cast(Bot1)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 [T3 Bot1.Main2]
 

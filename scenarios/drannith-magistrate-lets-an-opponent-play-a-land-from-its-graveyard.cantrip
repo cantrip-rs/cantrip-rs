@@ -38,6 +38,7 @@ Bot2.Battlefield.Mox Ruby.Activate
 Bot2.Battlefield.Mox Jet.Activate
 Bot2.Battlefield.Mox Emerald.Activate
 Bot2.Hand.Crucible of Worlds.Cast
+Bot2.Choose(Close mana window)
 Bot2.Battlefield.Mountain.Activate
 Bot2.Hand.Faithless Looting.Cast
 Bot2.Choose(Mountain; Island)

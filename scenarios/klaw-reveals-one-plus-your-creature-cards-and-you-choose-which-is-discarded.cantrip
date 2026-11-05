@@ -37,6 +37,7 @@ Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Klaw, Sonic Subjugator.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Target(Bot2)

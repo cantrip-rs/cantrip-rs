@@ -23,6 +23,9 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Hand.Black Lotus.Cast
 Bot1.Hand.Masked Bandits.Activate(Bot1.Battlefield.Island)
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 [T1 Bot1.Main1]
 ? Exile = Masked Bandits
 ! Bot1.Battlefield.Island.Activate(Color: White)

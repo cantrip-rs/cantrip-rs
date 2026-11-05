@@ -25,6 +25,8 @@ Bot1.Attack(Walking Ballista > Bot2)
 Bot1.Hand.Scarlet Spider, Ben Reilly.Cast(Ability: Web-slinging)
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Walking Ballista)
 [T3 Bot1.End]
 

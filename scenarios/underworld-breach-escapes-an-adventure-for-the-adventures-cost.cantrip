@@ -29,6 +29,8 @@ Bot1.Choose(Bonecrusher Giant; Island)
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mountain.Activate
 Bot1.Graveyard.Bonecrusher Giant.Cast(Bot2; Ability: Stomp: Escape)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Black Lotus; Faithless Looting; Island)
 Bot1.Pass
 

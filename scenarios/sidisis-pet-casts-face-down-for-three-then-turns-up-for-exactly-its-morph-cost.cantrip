@@ -22,6 +22,7 @@ Bot1.Hand.Swamp.Play
 Bot1.Hand.Black Lotus.Cast
 Bot1.Hand.Sidisi's Pet.Cast(Ability: Morph)
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = 
 ? Stack..FaceDown = true
 ? Stack..FaceDownName = Sidisi's Pet

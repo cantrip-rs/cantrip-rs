@@ -18,7 +18,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         .filter(|&id| g.chars(id).is(CardType::Creature) && g.chars(id).toughness.is_some_and(|toughness| i32::from(toughness) <= i32::from(x)))
         .collect();
     let destroyed = g.destroy_all(&creatures);
-    g.lose_life(you, i32::from(x));
+    g.lose_life(you, i64::from(x));
     if x < 6 {
         return Ok(());
     }

@@ -44,6 +44,7 @@ Bot2.Pass
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Dwarven Shortsword.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = 
 Bot1.Pass
 Bot2.Pass

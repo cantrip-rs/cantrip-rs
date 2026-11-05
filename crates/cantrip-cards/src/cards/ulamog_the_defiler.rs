@@ -17,7 +17,7 @@ fn exile_half(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// every player's exile, as it enters. Entering from exile it is still there and sees itself (the ruling).
 fn enters(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
     let greatest = g.state().seats().flat_map(|p| g.state().zone(Zone::exile(p)).iter().copied()).map(|c| g.mana_value(c)).max().unwrap_or(0);
-    entering.counters[CounterKind::PlusOne as usize] += greatest.min(i16::MAX as u32) as i16;
+    entering.counters[CounterKind::PlusOne as usize] += i64::from(greatest.min(i16::MAX as u32) as i16);
     Ok(())
 }
 

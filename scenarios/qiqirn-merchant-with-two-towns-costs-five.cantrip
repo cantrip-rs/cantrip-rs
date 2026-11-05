@@ -32,6 +32,11 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Battlefield.Adventurer's Inn.Activate
 Bot1.Battlefield.Adventurer's Inn.Activate
 Bot1.Battlefield.Qiqirn Merchant.Activate(Ability: Draw three)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 [Bot1.Main2]
 

@@ -35,3 +35,4 @@ serde_json = "1"
 [dev-dependencies]
 # The rules a test card's effect is written against (`cantrip_api::Game`), which `cantrip_engine` names `Game` for the engine's.
 cantrip-api.workspace = true
+cantrip-state.workspace = true

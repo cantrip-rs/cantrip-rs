@@ -40,6 +40,7 @@ Bot1.Hand.Hercules, Prince of Power.Cast
 Bot1.Pass
 Bot1.Battlefield.Ancient Tomb#2.Activate
 Bot1.Battlefield.Hercules, Prince of Power.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 ! Bot1.Battlefield.Hercules, Prince of Power.Activate

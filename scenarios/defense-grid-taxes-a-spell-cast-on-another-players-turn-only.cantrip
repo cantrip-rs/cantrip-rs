@@ -37,12 +37,14 @@ Bot2.Hand.Mox Ruby.Cast
 Bot2.Battlefield.Mountain.Activate
 ? Bot2.Mana = {R}
 Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Choose(Close mana window)
 ? Bot2.Mana =
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Mox Ruby#1.Activate
 ? Bot1.Mana = {R}{R}
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {R}
 Bot2.Battlefield.Mox Ruby#1.Activate
 Bot2.Battlefield.Mox Ruby#2.Activate

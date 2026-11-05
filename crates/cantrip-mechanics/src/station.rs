@@ -21,7 +21,7 @@ fn put_charge_counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
     let chars = g.chars(tapped);
     let amount = if g.stations_using_toughness(tapped) { chars.toughness } else { chars.power }.unwrap_or(0);
     if amount > 0 {
-        g.add_counters(item.object, CounterKind::Charge, amount);
+        g.add_counters(item.object, CounterKind::Charge, i64::from(amount));
     }
     Ok(())
 }

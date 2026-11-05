@@ -35,6 +35,9 @@ Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Ahriman.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Memnite)
 Bot1.Pass
 Bot2.Pass

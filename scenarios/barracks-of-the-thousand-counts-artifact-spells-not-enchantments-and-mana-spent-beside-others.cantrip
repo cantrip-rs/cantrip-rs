@@ -44,6 +44,7 @@ Bot1.Hand.Mind Stone.Cast
 Bot1.Battlefield.Barracks of the Thousand.Activate
 Bot1.Battlefield.Mind Stone.Activate(Ability: {T}: Add {C}.)
 Bot1.Hand.Cathar Commando.Cast
+Bot1.Choose(Close mana window)
 ? Stack = Barracks of the Thousand; Cathar Commando
 [T7 Bot1.Main2]
 

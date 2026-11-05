@@ -10,7 +10,7 @@ fn damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         let chars = g.chars(id);
         g.controller(id) == opponent && chars.is(CardType::Creature) && chars.colors.has(color)
     }).count();
-    let amount = u16::try_from(count * 2).unwrap_or(u16::MAX);
+    let amount = i64::try_from(count).expect("creature count fits the native object domain") * 2;
     g.damage(item.object, Target::Player(opponent), amount);
     Ok(())
 }

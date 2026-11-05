@@ -30,6 +30,7 @@ Bot1.Choose(Hero of Bladehold; Hero of Bladehold)
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Analyze the Pollen.Cast
 Bot1.Modes(Collect evidence)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Hero of Bladehold; Hero of Bladehold)
 Bot1.Search(Llanowar Elves)
 [Bot1.Main2]

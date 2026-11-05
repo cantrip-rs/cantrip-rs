@@ -49,8 +49,8 @@ public sealed partial class MainPage
             return;
         }
 
-        int assigned = _dividedShares.Values.Sum();
-        int targeted = _dividedShares.Count(pair => pair.Value > 0);
+        int assigned = _dividedShares.Values.Sum() + _selection.DividedPlayerShares.Values.Sum();
+        int targeted = _dividedShares.Count(pair => pair.Value > 0) + _selection.DividedPlayerShares.Count(pair => pair.Value > 0);
         bool counters = divide.Text.Contains("counter", StringComparison.OrdinalIgnoreCase);
 
         foreach (TargetMessage candidate in divide.Candidates)
@@ -69,7 +69,7 @@ public sealed partial class MainPage
                 share > 0,
                 room,
                 counters,
-                delta => _dividedShares[handle] = Math.Max(0, _dividedShares.GetValueOrDefault(handle) + delta));
+                delta => _selection.SetDividedShare(candidate, _dividedShares.GetValueOrDefault(handle) + delta));
         }
     }
 

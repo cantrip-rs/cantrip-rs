@@ -31,6 +31,7 @@ Bot1.Pass
 Bot1.Battlefield.Mana Crypt#1.Activate
 Bot1.Battlefield.Mox Jet#1.Activate
 Bot1.Hand.Rage into the Valley.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -40,6 +41,7 @@ Bot2.Pass
 Bot1.Battlefield.Mana Crypt#2.Activate
 Bot1.Battlefield.Mox Jet#2.Activate
 Bot1.Hand.Rage into the Valley.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

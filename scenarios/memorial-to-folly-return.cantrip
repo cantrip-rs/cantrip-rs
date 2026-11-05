@@ -43,6 +43,10 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 ! Bot1.Battlefield.Memorial to Folly.Activate(Bot2.Graveyard.Ornithopter; Ability: Return)
 ! Bot1.Battlefield.Memorial to Folly.Activate(Bot1.Graveyard.Shock; Ability: Return)
 Bot1.Battlefield.Memorial to Folly.Activate(Bot1.Graveyard.Ornithopter; Ability: Return)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 [Expect]

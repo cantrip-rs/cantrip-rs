@@ -16,6 +16,7 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Hand.Mox Sapphire.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Hand.Vizier of Tumbling Sands.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T2 Bot2.Main1]
 Bot2.Hand.Island.Play

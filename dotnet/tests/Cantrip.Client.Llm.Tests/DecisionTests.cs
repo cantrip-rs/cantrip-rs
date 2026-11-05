@@ -679,6 +679,7 @@ public sealed class DecisionTests
 
     public static TheoryData<PromptPayload> EveryPrompt() =>
     [
+        new ChooseNumberPromptMessage { Player = Me, Least = 300, Most = uint.MaxValue },
         new PriorityPromptMessage
         {
             Player = Me,

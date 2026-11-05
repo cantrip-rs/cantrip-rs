@@ -26,6 +26,8 @@ Bot1.Battlefield.Swamp#1.Activate
 Bot1.Battlefield.Swamp#2.Activate
 Bot1.Hand.Silence the Echo.Cast(Bot2.Battlefield.Llanowar Elves)
 Bot1.Modes(Sacrifice a creature or planeswalker)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 [T3 Bot1.Main2]

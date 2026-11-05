@@ -35,6 +35,12 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Green)
 Bot1.Battlefield.Llanowar Elves.Activate
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Llanowar Elves)
 Bot1.Name(+1/+1 counter)
 Bot1.Name(Haste)

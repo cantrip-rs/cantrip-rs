@@ -8,11 +8,8 @@ use cantrip_oracle as oracle;
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let spent = g.obj(item.object).spent.total();
     damage_target(g, item, 0, spent as u16);
-    for creature in g.permanents_of(item.controller) {
-        if g.chars(creature).is(CardType::Creature) {
-            g.untap(creature);
-        }
-    }
+    let creatures: Vec<ObjectId> = g.permanents_of(item.controller).into_iter().filter(|&id| g.chars(id).is(CardType::Creature)).collect();
+    g.untap_together(&creatures);
     Ok(())
 }
 

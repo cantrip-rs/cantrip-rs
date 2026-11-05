@@ -19,11 +19,13 @@ Bot1.Hand.Sol Ring.Cast
 Bot1.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Hand.Dragon Engine.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Dragon Engine.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -34,6 +36,7 @@ Bot2.Pass
 ? Bot1.Battlefield.Dragon Engine.Toughness = 3
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Dragon Engine.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

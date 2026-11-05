@@ -445,7 +445,7 @@ pub static INCUBATOR: CardDef = CardDef {
 pub fn incubate(g: &mut dyn Game, controller: PlayerId, n: i16) -> Result<(), Suspend> {
     let incubator = g.card_id(&INCUBATOR);
     // The Incubator is the rule's (CR 701.53a, 111.10i), as are the words of incubate's reminder text (CR 207.2a).
-    g.create_tokens_with_counters(incubator, controller, 1, false, &[(CounterKind::PlusOne, n)], Words::NONE)?;
+    g.create_tokens_with_counters(incubator, controller, 1, false, &[(CounterKind::PlusOne, i64::from(n))], Words::NONE)?;
     Ok(())
 }
 
@@ -550,7 +550,7 @@ pub fn create_fractal_with_counters(g: &mut dyn Game, controller: PlayerId, n: i
     let made = create(g, controller, &FRACTAL, 1)?;
     g.end_sentence();
     if n > 0 {
-        let puts: Vec<(ObjectId, CounterKind, i16)> = made.iter().map(|&token| (token, CounterKind::PlusOne, n)).collect();
+        let puts: Vec<(ObjectId, CounterKind, i64)> = made.iter().map(|&token| (token, CounterKind::PlusOne, i64::from(n))).collect();
         g.add_counters_together(&puts);
     }
     Ok(made)
@@ -1327,6 +1327,35 @@ pub static HUMAN_MONK: CardDef = CardDef {
     text: "{T}: Add {G}.",
     abilities: &[mana_ability(TAP, add(Mana::G), "{T}: Add {G}.")],
     ..token!(Human Monk)
+};
+
+/// A 1/1 white, red, and green Sand Warrior creature token (CR 111).
+/// Hazezon Tamar, Hazezon, Shaper of Sand and Desert Warfare create this exact token.
+pub static SAND_WARRIOR: CardDef = CardDef {
+    types: TypeSet::of(&[CardType::Creature]),
+    colors: Some(ColorSet(25)),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Sand Warrior)
+};
+
+/// A 1/1 green Saproling creature token (CR 111). Aether Mutation, Artifact Mutation and Aura Mutation create this
+/// exact token.
+pub static SAPROLING: CardDef = CardDef {
+    types: TypeSet::of(&[CardType::Creature]),
+    colors: Some(ColorSet(16)),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Saproling)
+};
+
+/// A 1/1 white Citizen creature token (CR 111). Icatian Crier and Icatian Town create this exact token.
+pub static CITIZEN_1_1_WHITE: CardDef = CardDef {
+    types: TypeSet::of(&[CardType::Creature]),
+    colors: Some(ColorSet(1)),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Citizen)
 };
 
 #[cfg(test)]

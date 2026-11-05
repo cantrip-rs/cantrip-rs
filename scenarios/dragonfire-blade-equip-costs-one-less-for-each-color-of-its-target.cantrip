@@ -38,6 +38,7 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 ? Bot1.Mana = {B}{R}{C}{C}
 Bot1.Battlefield.Dragonfire Blade.Activate(Ornithopter)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Battlefield.Mountain.Activate
@@ -53,6 +54,7 @@ Bot1.Hand.Mother of Runes.Cast
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Dragonfire Blade.Activate(Mother of Runes)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 

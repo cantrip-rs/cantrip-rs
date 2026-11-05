@@ -50,8 +50,8 @@ pub enum Proto {
     Step { turn: i32, step: Step, active: PlayerId },
     Moved { old: ObjectId, new: ObjectId, from: Zone, to: Zone, reason: ZoneReason },
     Created { object: ObjectId, controller: PlayerId, name: String },
-    Life { player: PlayerId, delta: i32, total: i32 },
-    Damage { object: ObjectId, amount: i32 },
+    Life { player: PlayerId, delta: i64, total: i32 },
+    Damage { object: ObjectId, amount: i64 },
     Tap { object: ObjectId, tapped: bool },
     Cast { spell: ObjectId, controller: PlayerId, targets: Vec<Target>, x: Option<i32>, modes: Vec<String>, kicked: i32, gift: Option<PlayerId> },
     AbilityPut { serial: u32, source: ObjectId, controller: PlayerId, text: String, targets: Vec<Target>, triggered: bool, modes: Vec<String> },
@@ -160,7 +160,7 @@ impl Tracker {
                 self.last_turn = turn;
                 out.push(Proto::Step { turn: turn.0, step, active: turn.1 });
             }
-            Event::ZoneChange { old, new, from, to, reason, part } => {
+            Event::ZoneChange { old, new, from, to, reason, part, .. } => {
                 if to.is(ZoneKind::Gone) {
                     return;
                 }
@@ -176,15 +176,16 @@ impl Tracker {
             }
             Event::LifeChange { player, delta } => {
                 let total = self.life.get_mut(player.index()).map(|l| {
-                    *l += delta;
+                    *l = i32::try_from(i64::from(*l) + delta).expect("event life total fits physical i32 state");
                     *l
                 });
                 out.push(Proto::Life { player, delta, total: total.unwrap_or(game.state.player(player).life) });
             }
             Event::Damage { target: Target::Object(object), amount, .. } => {
-                out.push(Proto::Damage { object, amount: i32::from(amount) });
+                out.push(Proto::Damage { object, amount });
             }
             Event::Tapped { permanent } => out.push(Proto::Tap { object: permanent, tapped: true }),
+            Event::Untapped { permanent } => out.push(Proto::Tap { object: permanent, tapped: false }),
             Event::SpellCast { spell, player, .. } => {
                 let (targets, x, modes, kicked, gift) = spell_facts(game, spell);
                 out.push(Proto::Cast { spell, controller: player, targets, x, modes, kicked, gift });
@@ -256,7 +257,7 @@ impl Tracker {
                 if let Some(seen) = resolved.and_then(|serial| self.stack.remove(&serial).map(|seen| (serial, seen))) {
                     let (serial, seen) = seen;
                     let first = match self.run {
-                        Some((Cause::Ability { source: s, ability: a }, first)) if s == source && a == ability => first,
+                        Some((Cause::Ability { source: s, ability: a, .. }, first)) if s == source && a == ability => first,
                         _ => next + out.len() as u64,
                     };
                     out.push(Proto::AbilityResolved { serial, source: seen.source, controller: seen.controller, targets: seen.targets, first });

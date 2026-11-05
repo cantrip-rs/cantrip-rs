@@ -24,6 +24,9 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Hand.Shattered Seraph.Activate(Bot1.Battlefield.Island)
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 [T1 Bot1.Main1]
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Exile = Shattered Seraph
 ! Bot1.Battlefield.Island.Activate(Color: Red)
 Bot1.Exile.Shattered Seraph.Cast

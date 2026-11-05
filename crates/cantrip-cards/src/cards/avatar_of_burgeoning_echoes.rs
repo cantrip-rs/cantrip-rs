@@ -14,7 +14,7 @@ fn empower_jace(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 fn counters_for_each_land(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
     let lands = lands_you_control(g, item.controller);
-    g.add_counters(creature, CounterKind::PlusOne, lands as i16);
+    g.add_counters(creature, CounterKind::PlusOne, i64::from(lands as i16));
     Ok(())
 }
 

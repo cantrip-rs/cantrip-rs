@@ -30,6 +30,7 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 Bot1.Battlefield.Mox Jet#1.Activate
 Bot1.Battlefield.Mox Jet#2.Activate
 Bot1.Hand.Sengir Vampire.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 [T2 Bot2.Main1]

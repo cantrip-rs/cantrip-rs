@@ -60,6 +60,7 @@ Bot1.Modes(Destroy target noncreature artifact)
 ! Bot1.Target(Bot2.Battlefield.Memnite)
 ! Bot1.Target(Bot1.Battlefield.Centaur Courser)
 Bot1.Target(Bot2.Battlefield.Mox Pearl)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

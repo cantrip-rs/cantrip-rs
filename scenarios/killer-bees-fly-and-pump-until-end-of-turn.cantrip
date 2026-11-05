@@ -29,6 +29,7 @@ Bot1.Hand.Mox Emerald.Cast
 Bot1.Hand.Forest.Play
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Killer Bees.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -36,6 +37,7 @@ Bot2.Pass
 ? Bot1.Battlefield.Killer Bees.Toughness = 2
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Killer Bees.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -52,6 +54,7 @@ Bot2.Block(Bot2.Battlefield.Memnite > Bot1.Battlefield.Memnite)
 [T5 Bot1.Main1]
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Killer Bees.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

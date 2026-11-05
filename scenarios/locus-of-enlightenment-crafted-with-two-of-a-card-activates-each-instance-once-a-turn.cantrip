@@ -52,6 +52,7 @@ Bot1.Battlefield.Mountain#1.Activate
 Bot1.Battlefield.Mountain#2.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Choose(craft materials)
 Bot1.Choose(Graveyard.Walking Ballista; Goblin Bombardment; Goblin Bombardment; Mox Ruby)
 [T9 Bot1.Main1]
 Bot1.Hand.Ornithopter.Cast

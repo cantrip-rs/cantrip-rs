@@ -22,6 +22,7 @@ Bot1.Hand.Mox Pearl.Cast
 Bot1.Hand.Mox Sapphire.Cast
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Iron Star.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Hand.Ornithopter.Cast
 ? Stack = Ornithopter
@@ -41,6 +42,7 @@ Bot2.Hand.Ancestral Recall.Cast(Bot2)
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.PayCost

@@ -131,6 +131,9 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
     let source = o.source.map(|s| handles.handle(s)).unwrap_or(ViewHandle::NONE);
     let mut m = ActionOptionMessage::new(action_kind_view(o.kind), source);
     m.ability_index = i32::from(o.index);
+    m.snow = o.snow;
+    m.pay_snow = o.pay_snow;
+
     // A face-down permanent's special action that turns it face up (CR 116.2b): for its mana cost (CR 701.40b, 701.58b), or
     // for the morph or disguise cost it would have face up (CR 702.37e, 702.168d), that way's keyword line naming the cost.
     let mut turn_up_way = None;
@@ -160,6 +163,9 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
     m.targets_optional = o.targets_optional;
     m.color_choices = colors_view(o.color_choices);
     m.description = describe(game.cards, &game.state, &game.log, o).to_string();
+    if o.kind == ActionKind::AssignMana && let Some(mana) = o.mana {
+        m.description = format!("Pay {} with {}{{{}}}", if o.pay_snow { "{S}" } else { "an ordinary symbol" }, if o.snow { "snow " } else { "" }, mana.symbol());
+    }
     if m.kind == ActionKindView::UnlockDoor {
         m.description = format!("Unlock {} {}", m.spell_name, m.cost_text);
     }
@@ -288,7 +294,8 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
             m.target_candidates = candidates;
         }
         ActionKind::ActivateAbility => {
-            let ability = game.chars(src).abilities().nth(o.index as usize).map(|a| game.cards.ability(a));
+            let ability_ref = game.chars(src).abilities().nth(o.index as usize);
+            let ability = ability_ref.map(|a| game.cards.ability(a));
             if let Some(AbilityDef::Activated(d)) = ability {
                 m.life_cost = i32::try_from(turn_up_way.map_or(d.cost.life, |w| w.turn_up.life)).unwrap_or(i32::MAX);
                 // A cost that returns tapped permanents, chosen once the mana is paid (CR 602.2b, 601.2g-h: Urban Retreat).
@@ -300,10 +307,9 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
                 {
                     m.description = format!("{} (costs {cost})", m.description);
                 }
-                // A total the cost changes in play make other than the printed cost, for an ability whose cost no target
-                // decides (CR 601.2f by way of 602.2b, 605.3: Gloom's {3} more on a white enchantment's abilities, its mana
-                // abilities included): the row says what it costs now.
-                if !d.special_action && !(o.targets_required == 1 && !o.target_candidates.is_empty() && !d.is_mana_ability()) {
+                // A changed total for an ability whose cost no target decides (CR 601.2f by way of 602.2b).
+                // Mana abilities below also expose the payable cost and any life it adds, and annotate their row once.
+                if !d.special_action && !d.is_mana_ability() && !(o.targets_required == 1 && !o.target_candidates.is_empty()) {
                     let player = game.state.obj(src).controller;
                     if let Some(&(total, life)) = activation_costs(game, player, src, o.index, &[Target::None]).first()
                         && (total != d.cost.mana || life > 0)
@@ -313,12 +319,34 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
                     }
                 }
                 if d.is_mana_ability() {
+                    // The action reads the ability's current words just as the card view does (CR 612.1). Protect the
+                    // ability's own card name from word replacement, including when another object granted it.
+                    if let Some(a) = ability_ref {
+                        m.description = crate::text::changed_text(&m.description, game.cards.get(a.card).name, Query::words(game, src));
+                    }
                     // What it adds as the replacement effects on a tap for mana leave it (CR 106.12b), where any would change
                     // it and the row can say it; else what it lists.
                     let player = game.state.obj(src).controller;
-                    let (fixed, any) = replaced_mana_yields(game, player, src, o.index)
-                        .and_then(|yields| row_yield(&yields))
-                        .unwrap_or((d.adds, u32::from(d.adds_any.max(1))));
+                    let replaced = replaced_mana_yields(game, player, src, o.index).and_then(|yields| row_yield(&yields));
+                    let (fixed, any) = replaced.unwrap_or((d.adds, u32::from(d.adds_any.max(1))));
+                    // The printed ability remains the description; say separately when the current yield differs from
+                    // it, so a replacement effect or variable mana ability does not leave that text misleading.
+                    if replaced.is_some() && (fixed != d.adds || (!o.color_choices.is_empty() && any != u32::from(d.adds_any.max(1)))) {
+                        let mut now = String::new();
+                        for mana in Mana::ALL {
+                            for _ in 0..fixed.get(mana) {
+                                now.push_str(&format!("{{{}}}", mana.symbol()));
+                            }
+                        }
+                        if !o.color_choices.is_empty() && any > 0 {
+                            if !now.is_empty() { now.push_str(" and "); }
+                            now.push_str(&format!("{any} of the chosen color"));
+                        }
+                        if now.is_empty() { now.push_str("no mana"); }
+                        // Affected players may choose the order of replacement effects, so row_yield chooses one
+                        // achievable outcome rather than promising it is the only one.
+                        m.description = format!("{} (can add {now} now)", m.description);
+                    }
                     for mana in Mana::ALL {
                         for _ in 0..fixed.get(mana) {
                             m.produces.push(mana_view(mana));
@@ -327,9 +355,18 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
                     if !o.color_choices.is_empty() {
                         m.produces_of_any_one_color = wire(any);
                     }
-                    m.cost_text = cost_text_of(&d.cost, def.name);
-                    // A mana ability's sacrifice comes with the activation: the engine takes it as a target. One permanent has
-                    // its own field; a cost of several (Supportive Parents' two creatures) is asked as that many targets.
+                    let mut cost = d.cost;
+                    if let Some(&(total, life)) = activation_costs(game, player, src, o.index, &[]).first() {
+                        cost.mana = total;
+                        cost.life = cost.life.saturating_add(life);
+                        m.life_cost = i32::try_from(cost.life).unwrap_or(i32::MAX);
+                        if cost.mana != d.cost.mana || life > 0 {
+                            let total = if cost.life > 0 { format!("{total} and {} life", cost.life) } else { total.to_string() };
+                            m.description = format!("{} (costs {total})", m.description);
+                        }
+                    }
+                    m.cost_text = cost_text_of(&cost, def.name);
+                    // A mana ability's sacrifice comes with the activation: the engine takes it as a target.
                     if d.cost.permanents.is_some_and(|p| p.count == 1) && o.targets_required > 0 {
                         m.sacrifice_candidates = candidates.iter().map(|t| t.object).collect();
                         m.targets_required = 0;
@@ -360,24 +397,22 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
 /// What a mana ability's row says it adds where replacement effects change what a tap for mana produces
 /// (`replaced_mana_yields`): its fixed mana, and how many of the type its activation names. Of several outcomes, the order
 /// that leaves the most mana, which the player orders the effects for as the tap resolves (CR 616.1). None where the row
-/// can't say it: the outcome of a type named is not that many of the type named and the same fixed mana for every type
-/// (Contamination's {B} whatever color an any-color land names), so the row keeps what the ability lists.
+/// can't say it: the outcome of a type named is not that many of the type named and the same fixed mana for every type.
+/// A replacement can also leave the same fixed mana regardless of the chosen type (Damping Sphere, Contamination).
 fn row_yield(yields: &[(Option<Mana>, Vec<ManaPool>)]) -> Option<(ManaPool, u32)> {
     let best = |outcomes: &[ManaPool]| outcomes.iter().copied().fold(None::<ManaPool>, |b, o| match b {
         Some(b) if b.total() >= o.total() => Some(b),
         _ => Some(o),
     });
-    let outcomes: Vec<(Option<Mana>, ManaPool)> = yields.iter().filter_map(|(c, o)| best(o).map(|o| (*c, o))).collect();
+    let outcomes: Vec<(Option<Mana>, ManaPool)> = yields.iter().map(|(c, o)| best(o).map(|o| (*c, o))).collect::<Option<_>>()?;
     match outcomes.as_slice() {
         [] => None,
         [(None, o)] => Some((*o, 0)),
-        [(Some(c), o)] => {
-            let k = o.get(*c);
-            let mut fixed = *o;
-            fixed.0[*c as usize] = 0;
-            (k > 0).then_some((fixed, k))
-        }
+        [(Some(_), o)] => Some((*o, 0)),
         several => {
+            if several.iter().all(|(c, o)| c.is_some() && *o == several[0].1) {
+                return Some((several[0].1, 0));
+            }
             let fixed = ManaPool(std::array::from_fn(|m| several.iter().map(|(_, o)| o.0[m]).min().unwrap_or(0)));
             let mut k = None;
             for (c, o) in several {
@@ -656,7 +691,7 @@ fn modes_detail(game: &Game, modes: &[Label], faces: bool) -> (String, bool) {
                 (String::new(), false)
             }
         }
-        None if modes.iter().all(|l| matches!(l, Label::Card(..) | Label::Option(..) | Label::Name(_) | Label::Pile { .. } | Label::FaceUpPile { .. } | Label::FaceDownPile { .. })) => ("Chosen, not targeted".into(), false),
+        None if modes.iter().all(|l| matches!(l, Label::Card(..) | Label::Option(..) | Label::WordedCard(..) | Label::WordedOption(..) | Label::Name(_) | Label::Pile { .. } | Label::FaceUpPile { .. } | Label::FaceDownPile { .. })) => ("Chosen, not targeted".into(), false),
         None => (String::new(), false),
     }
 }
@@ -744,7 +779,7 @@ fn damage_words(game: &Game, asked: PlayerId, d: DamageAbout) -> String {
 }
 
 /// Counters about to be put on a permanent, in words: "2 +1/+1 counters would be put on Walking Ballista".
-fn counter_words(game: &Game, subject: Option<ObjectId>, counters: &[(CounterKind, i16)]) -> String {
+fn counter_words(game: &Game, subject: Option<ObjectId>, counters: &[(CounterKind, i64)]) -> String {
     let kinds: Vec<String> = counters
         .iter()
         .map(|&(kind, n)| format!("{n} {} counter{}", kind.name(), if n == 1 { "" } else { "s" }))
@@ -838,10 +873,18 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
     let player = seat(request.player);
     let opening = game.state.agenda.last().is_some_and(|f| f.kind == FrameKind::Opening);
     let payload = match &request.kind {
+        RequestKind::ChooseCostPayment { source, choices } => PromptPayload::ChooseCostPaymentPromptMessage(ChooseCostPaymentPrompt {
+            player,
+            source: source_handle(game, handles, *source),
+            choices: choices.iter().enumerate().map(|(index, c)| CostPaymentChoiceView {
+                key: index.to_string(), label: c.label.clone(),
+                objects: c.objects.iter().map(|&object| offered_handle(game, handles, object)).collect(),
+            }).collect(),
+        }),
         RequestKind::Priority { options } => {
             PromptPayload::PriorityPromptMessage(PriorityPrompt { player, options: options_messages(game, handles, options) })
         }
-        RequestKind::PayCosts { source, total, remaining, options, announcing, x, most, least, loyalty, attackers, life, governs, assist } => {
+        RequestKind::PayCosts { source, total, remaining, options, mana_abilities, announcing, x, most, least, loyalty, attackers, life, governs, assist } => {
             let def = game.cards.get(game.state.obj(*source).card);
             let kicker = def.kicker;
             let spends_no_mana = game.chars(*source).has(Keyword::CantSpendManaToCast);
@@ -853,10 +896,12 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                 total: total.to_string(),
                 remaining: remaining.to_string(),
                 remaining_generic: wire(remaining.generic),
+                remaining_snow: remaining.snow,
                 remaining_colored: remaining_colored(remaining),
                 remaining_colorless: wire(remaining.symbols[Mana::C as usize]),
                 remaining_hybrid: remaining_hybrid(remaining),
                 options: options_messages(game, handles, options),
+                mana_abilities: *mana_abilities,
                 has_x: total.x > 0 || (*announcing && kicker.is_some()),
                 x: wire(*x),
                 // The kicker's cost: its mana, and in words what it is beside mana (Squad--Exile four cards, CR 702.157a), which
@@ -893,6 +938,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
             })
         }
         RequestKind::UnlessPays { source, subject, total, remaining, life, life_payable, question, options, x, times } => PromptPayload::UnlessPaysPromptMessage(UnlessPaysPrompt {
+            remaining_snow: remaining.snow,
             player,
             source: source_handle(game, handles, *source),
             subject: source_handle(game, handles, *subject),
@@ -1057,7 +1103,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                 ..Default::default()
             })
         }
-        RequestKind::ChooseTarget { source, purpose, candidates, optional, least, count, any_number, label, slot_player, together } => {
+        RequestKind::ChooseTarget { source, purpose, candidates, optional, least, count, any_number, label, slot_player, together, replacing } => {
             let source_handle = source_handle(game, handles, *source);
             // A rule of the slot's targets together that keeps a running total of mana value (CR 202.3): its most, and each
             // candidate's mana value, read where it is (an {X} in a graveyard is 0, CR 202.3e).
@@ -1075,7 +1121,14 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                 player,
                 ability: source_handle,
                 source: source_handle,
-                text: (*label).to_string(),
+                text: match replacing {
+                    Some((index, target)) => {
+                        let named = target_words(game, *target);
+                        let named = if named.is_empty() { "an ability or unavailable target" } else { &named };
+                        format!("Target {} ({named}). {label}", index + 1)
+                    }
+                    None => (*label).to_string(),
+                },
                 // "With total mana value X or less" (CR 601.2c, 202.3): each candidate's mana value, index for index, and the
                 // most the targets chosen may add up to.
                 mana_values: if tally.is_some() { sent.iter().map(|&(_, v)| v).collect() } else { Vec::new() },
@@ -1086,6 +1139,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                 optional: *optional,
                 count: wire(*count),
                 targeted: *purpose == Purpose::Targets,
+                keep_original: replacing.is_some(),
                 // Only a printed range has a minimum (the wire's zero is "exactly count, or none where optional").
                 minimum: if *least > 0 && least < count { wire(*least) } else { 0 },
                 any_number: *any_number,
@@ -1126,7 +1180,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                                 EffectKind::SpellAlternative { card: c, index: i, player: p, words } if c == *card && i == *index && p == request.player => Some(words),
                                 _ => None,
                             })
-                            .map_or_else(|| label_text(l).to_string(), |words| crate::text::changed_text(label_text(l), game.cards.get(*card).name, words)),
+                            .map_or_else(|| label_text_in(game.cards, l).to_string(), |words| crate::text::changed_text(&label_text_in(game.cards, l), game.cards.get(*card).name, words)),
                         // The face-down pile's cards are not the chooser's to see, only how many there are (CR 700.3).
                         Label::FaceDownPile { count } if *count > 0 => format!("{}: {count} {}", label_text(l), if *count == 1 { "card" } else { "cards" }),
                         Label::Pile { cards, .. } | Label::FaceUpPile { cards } if !cards.is_empty() => format!("{}: {}", label_text(l), cards.iter()
@@ -1134,7 +1188,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                                 let name = game.name(id);
                                 if !name.is_empty() { name } else if game.obj(id).face_down { "Face-down permanent" } else { "Nameless permanent" }
                             }).collect::<Vec<_>>().join(", ")),
-                        other => label_text(other).to_string(),
+                        other => label_text_in(game.cards, other).to_string(),
                     })
                     .collect(),
                 eligible: eligible.iter().map(|&m| i32::from(m)).collect(),
@@ -1208,8 +1262,11 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
             ..Default::default()
         }),
         RequestKind::ChooseNumber { source, least, most, heading } => {
-            if most < least || most - least > 255 {
-                return Err("ChooseNumber ranges must contain between 1 and 256 values".into());
+            if most < least { return Err("ChooseNumber requires an inclusive nonempty range".into()); }
+            if most - least > 255 {
+                return Ok((PromptPayload::ChooseNumberPromptMessage(ChooseNumberPrompt {
+                    player, source: source_handle(game, handles, *source), least: *least, most: *most, heading: (*heading).into(),
+                }), request.may_cancel));
             }
             let modes: Vec<String> = (*least..=*most).map(|n| n.to_string()).collect();
             PromptPayload::ChooseModesPromptMessage(ChooseModesPrompt {
@@ -1561,6 +1618,40 @@ fn count_shown(count: Count, verdict: &SelectionVerdictView) -> i32 {
 mod tests {
     use super::*;
 
+    #[test]
+    fn a_mana_ability_row_shows_the_total_cost_including_added_life() {
+        fn reduction(_: &dyn Query, _: ObjectId, _: PlayerId, costed: Costed, _: &[Target]) -> CostDelta {
+            if matches!(costed, Costed::Ability(..)) {
+                CostDelta { life: 3, ..CostDelta::less_to_one(2) }
+            } else { CostDelta::NONE }
+        }
+        static SOURCE: CardDef = CardDef {
+            name: "Cost row source", types: TypeSet::of(&[CardType::Artifact]),
+            abilities: &[mana_ability(cost("{2}, {T}"), add(Mana::U), "{2}, {T}: Add {U}.")], ..CardDef::BLANK
+        };
+        static MODIFIER: CardDef = CardDef { name: "Cost row modifier", cost_changes: &[reduction], ..CardDef::BLANK };
+        let cards = Box::leak(Box::new(CardTable::new([&SOURCE, &MODIFIER])));
+        let mut game = Game::new(cards, &Setup { decks: vec![Vec::new(), Vec::new()], ..Setup::default() });
+        let me = game.state.seats().next().unwrap();
+        let mut put = |def| {
+            let id = game.state.push_obj(Obj::new(cards.id_of(def), me, Zone::BATTLEFIELD));
+            game.state.zone_push(Zone::BATTLEFIELD, id); game.state.see_statics(); id
+        };
+        let source = put(&SOURCE); put(&MODIFIER);
+        let option = ActionOption::on(ActionKind::ActivateAbility, source, 0);
+        let message = option_message(&game, &mut HandleSpace::new(), &option);
+        assert_eq!(message.cost_text, "{1}, {T}, Pay 3 life");
+        assert_eq!(message.life_cost, 3);
+        assert!(message.description.contains("costs {1} and 3 life"));
+        let modifier = game.state.battlefield()[1];
+        game.state.zone_remove(Zone::BATTLEFIELD, modifier);
+        game.state.see_statics();
+        let message = option_message(&game, &mut HandleSpace::new(), &option);
+        assert_eq!(message.cost_text, "{2}, {T}");
+        assert_eq!(message.life_cost, 0);
+        assert!(!message.description.contains("(costs"));
+    }
+
     /// A game dealt these two decks, top of the library first, and the objects of the first seat's opening hand.
     fn game_with(first: &[&str]) -> (Game, Vec<ObjectId>) {
         let deck = |top: &[&str]| top.iter().map(|c| c.to_string()).chain(std::iter::repeat_n("Forest".to_string(), 20)).collect::<Vec<_>>();
@@ -1568,6 +1659,64 @@ mod tests {
         let seat = game.state.seats().next().expect("a seat");
         let hand = game.state.zone(Zone::hand(seat)).to_vec();
         (game, hand)
+    }
+
+    #[test]
+    fn wide_number_range_projects_without_enumerating_values() {
+        let (game, hand) = game_with(&["Forest"]);
+        let request = Request { id: 1, player: PlayerId(0), may_cancel: false,
+            kind: RequestKind::ChooseNumber { source: hand[0], least: 1, most: u32::MAX, heading: "Put counters" } };
+        let (payload, _) = prompt(&game, &request, &mut HandleSpace::new()).expect("a bounded numeric prompt");
+        let json = serde_json::to_value(payload).unwrap();
+        assert_eq!(json["Least"], 1); assert_eq!(json["Most"], u32::MAX);
+        assert_eq!(json["Heading"], "Put counters"); assert!(json.get("Modes").is_none());
+        assert!(json.to_string().len() < 512);
+    }
+    #[test]
+    fn wide_number_small_range_control_retains_the_modes_wire_shape() {
+        let (game, hand) = game_with(&["Forest"]);
+        let request = Request { id: 1, player: PlayerId(0), may_cancel: false,
+            kind: RequestKind::ChooseNumber { source: hand[0], least: 5, most: 7, heading: "Put counters" } };
+        let (payload, _) = prompt(&game, &request, &mut HandleSpace::new()).unwrap();
+        let PromptPayload::ChooseModesPromptMessage(p) = payload else { panic!("legacy modes") };
+        assert_eq!(p.modes, ["5", "6", "7"]); assert_eq!(p.eligible, [0, 1, 2]);
+        assert_eq!(p.heading, "Put counters");
+    }
+    #[test]
+    fn wide_number_answers_roundtrip_exact_values_and_reject_invalid_values_without_clamping() {
+        let (game, hand) = game_with(&["Forest"]); let mut handles = HandleSpace::new();
+        let request = Request { id: 1, player: PlayerId(0), may_cancel: false,
+            kind: RequestKind::ChooseNumber { source: hand[0], least: 300, most: u32::MAX, heading: "Put counters" } };
+        for value in [300, 65535, u32::MAX] {
+            let native = Answer::Announce(value);
+            let payload = crate::answer::payload_of(&native, &request, &mut handles, &game);
+            let bytes = serde_json::to_vec(&payload).unwrap(); let read: AnswerPayload = serde_json::from_slice(&bytes).unwrap();
+            assert_eq!(crate::answer::translate(&read, &request, &handles, &game).ok(), Some(native));
+        }
+        assert!(crate::answer::translate(&AnswerPayload::NumberChosenAnswer(NumberChosenAnswer { value: 299 }), &request, &handles, &game).is_err());
+        assert!(serde_json::from_str::<AnswerPayload>(r#"{"$type":"NumberChosenAnswer","Value":4294967296}"#).is_err());
+        assert!(serde_json::from_str::<AnswerPayload>(r#"{"$type":"NumberChosenAnswer","Value":-1}"#).is_err());
+        let (payload, _) = prompt(&game, &request, &mut handles).unwrap();
+        assert_eq!(crate::answer::translate(&payload.default_answer(), &request, &handles, &game).ok(), Some(Answer::Announce(300)));
+    }
+    #[test]
+    fn wide_number_small_high_range_retains_modes_and_exact_native_answer_values() {
+        let (game, hand) = game_with(&["Forest"]); let mut handles = HandleSpace::new();
+        for (least, most) in [(u32::MAX - 1, u32::MAX), (i32::MAX as u32 - 1, i32::MAX as u32 + 1)] {
+            let request = Request { id: 1, player: PlayerId(0), may_cancel: false,
+                kind: RequestKind::ChooseNumber { source: hand[0], least, most, heading: "Put counters" } };
+            let (payload, _) = prompt(&game, &request, &mut handles).unwrap();
+            let PromptPayload::ChooseModesPromptMessage(p) = payload else { panic!("small ranges retain modes") };
+            assert_eq!(p.modes, (least..=most).map(|n| n.to_string()).collect::<Vec<_>>());
+            for value in least..=most {
+                let native = Answer::Announce(value);
+                let payload = crate::answer::payload_of(&native, &request, &mut handles, &game);
+                let bytes = serde_json::to_vec(&payload).unwrap(); let read: AnswerPayload = serde_json::from_slice(&bytes).unwrap();
+                assert_eq!(crate::answer::translate(&read, &request, &handles, &game).ok(), Some(native));
+                if value <= i32::MAX as u32 { assert!(matches!(read, AnswerPayload::AnnounceAnswer(_)), "existing representable answer shape"); }
+            }
+            assert!(crate::answer::translate(&AnswerPayload::ModesChosenAnswer(ModesChosenAnswer { modes: vec![(most - least + 1) as i32] }), &request, &handles, &game).is_err());
+        }
     }
 
     /// A choice is worded as its card words it, not as the cards that happen to be eligible: a hand with only creatures left is
@@ -1620,6 +1769,32 @@ mod tests {
     /// A part of a test rule that refuses an Ornithopter: what a card's own rule would be.
     fn no_ornithopter(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
         Verdict::each(choice, |card| q.chars(card).name != "Ornithopter")
+    }
+
+    #[test]
+    fn retarget_prompt_names_the_kept_target_without_offering_it_as_a_candidate() {
+        let (mut game, hand) = game_with(&["Llanowar Elves", "Ornithopter"]);
+        let seat = game.state.seats().next().expect("a seat");
+        // The old object is no longer live, yet its identity is still the copied target.
+        game.state.update_obj(hand[0], |obj| obj.became = Some(hand[1]));
+        let request = Request {
+            id: 1,
+            player: seat,
+            kind: RequestKind::ChooseTarget {
+                replacing: Some((1, Target::Object(hand[0]))),
+                source: hand[0], purpose: Purpose::Targets,
+                candidates: vec![Target::Object(hand[1])], optional: true, least: 0, count: 1,
+                any_number: false, label: "Choose a new target or none to keep the current one.",
+                slot_player: None, together: None,
+            },
+            may_cancel: false,
+        };
+        let mut handles = HandleSpace::new();
+        let PromptPayload::ChooseTargetPromptMessage(p) = prompt(&game, &request, &mut handles).expect("a prompt").0 else { panic!("targets") };
+        assert_eq!(p.text, "Target 2 (Llanowar Elves). Choose a new target or none to keep the current one.");
+        assert!(p.optional && p.keep_original);
+        assert_eq!(p.candidates.len(), 1);
+        assert_eq!(p.candidates[0].object, handles.handle(hand[1]));
     }
 
     /// A choice of cards reaches the client as its rule says it: the count and how it counts, the words its parts add to the
@@ -1696,7 +1871,7 @@ mod tests {
             let request = Request {
                 id: 1,
                 player: seat,
-                kind: RequestKind::ChooseTarget {
+                kind: RequestKind::ChooseTarget { replacing: None,
                     source: hand[0],
                     purpose: Purpose::Targets,
                     candidates: hand[..3].iter().map(|&c| Target::Object(c)).collect(),
@@ -1739,7 +1914,7 @@ mod tests {
         let request = Request {
             id: 1,
             player: seat,
-            kind: RequestKind::ChooseTarget {
+            kind: RequestKind::ChooseTarget { replacing: None,
                 source: hand[0],
                 purpose: Purpose::Targets,
                 candidates: hand[..3].iter().map(|&c| Target::Object(c)).collect(),
@@ -1787,6 +1962,32 @@ mod tests {
         assert_eq!(heading, "Gollum, Riddle Master: choose Odd or Even");
         assert_eq!(modes, vec!["Odd".to_string(), "Even".to_string()]);
         assert_eq!(ask(vec![Label::Card(card, 0), Label::Card(card, 1)]).0, "");
+    }
+
+    #[test]
+    fn captured_choice_words_reach_both_rows_and_heading_on_the_games_table() {
+        static DEF: CardDef = CardDef {
+            name: "Worded Wall", labels: &["1/6 Wall artifact creature with defender", "swampwalk"],
+            types: TypeSet::of(&[CardType::Artifact]), ..CardDef::BLANK
+        };
+        let table = Box::leak(Box::new(CardTable::new([&DEF])));
+        let mut game = Game::new(table, &Setup { decks: vec![Vec::new(), Vec::new()], ..Default::default() });
+        let card = table.id_of(&DEF);
+        let source = game.state.push_obj(Obj::new(card, PlayerId(0), Zone::hand(PlayerId(0))));
+        game.state.zone_push(Zone::hand(PlayerId(0)), source);
+        let words = Words::NONE.changed(Word::Subtype(Subtype::Wall), Word::Subtype(Subtype::Elf))
+            .changed(Word::Subtype(Subtype::Swamp), Word::Subtype(Subtype::Island));
+        let request = Request {
+            id: 1, player: PlayerId(0), may_cancel: false,
+            kind: RequestKind::ChooseModes { source,
+                modes: vec![Label::Option(card, 0).with_words(words), Label::Option(card, 1).with_words(words)],
+                eligible: vec![0, 1], count: 1, at_most: 0, affordable: Vec::new(), additional_cost: false, repeat: false },
+        };
+        let PromptPayload::ChooseModesPromptMessage(prompt) = prompt(&game, &request, &mut HandleSpace::new()).unwrap().0
+            else { panic!("a modes prompt") };
+        assert_eq!(prompt.modes, ["1/6 Elf artifact creature with defender", "islandwalk"]);
+        assert_eq!(prompt.heading, "Worded Wall: choose 1/6 Elf artifact creature with defender or islandwalk");
+        assert_eq!(prompt.detail, "Chosen, not targeted");
     }
 
     /// Which permission a spell is cast by, where its text asks (CR 601.3: Necromancy beside Valley Floodcaller): the question
@@ -2087,13 +2288,16 @@ fn phyrexian_heading(game: &Game, source: ObjectId, modes: &[Label]) -> Option<S
 /// which a permanent entering as a copy of it is not yet (CR 707.5); riot's choice (CR 702.136a), the rules' own, is "Riot:
 /// choose +1/+1 counter or Haste". None when the options are anything else.
 fn options_heading(game: &Game, modes: &[Label]) -> Option<String> {
-    let Some(&Label::Option(card, _)) = modes.first() else { return None };
-    if !modes.iter().all(|l| matches!(l, Label::Option(c, _) if *c == card)) {
+    let card = match modes.first()? {
+        Label::Option(card, _) | Label::WordedOption(card, _, _) => *card,
+        _ => return None,
+    };
+    if !modes.iter().all(|l| matches!(l, Label::Option(c, _) | Label::WordedOption(c, _, _) if *c == card)) {
         return None;
     }
-    let words: Vec<&str> = modes.iter().map(label_text).collect();
+    let words: Vec<_> = modes.iter().map(|label| label_text_in(game.cards, label)).collect();
     let listed = match words.split_last() {
-        Some((last, [])) => (*last).to_string(),
+        Some((last, [])) => last.to_string(),
         Some((last, rest)) => format!("{} or {last}", rest.join(", ")),
         None => return None,
     };
@@ -2146,8 +2350,7 @@ mod row_yield_tests {
     }
 
     /// A mana ability's row under replacement effects (CR 106.12b): fixed mana as it is left, the most of several orders;
-    /// "N of the color named" where every color named gives N of it (a doubler on an any-color land); and none where the
-    /// color named changes nothing it adds (Contamination's {B}), for which the row keeps what the ability lists.
+    /// "N of the color named" where every color named gives N of it, and a fixed yield if all choices produce the same.
     #[test]
     fn a_rows_yield_is_said_where_the_row_can_say_it() {
         let tomb = [(None, vec![pool(&[(Mana::C, 1)]), pool(&[(Mana::C, 2)])])];
@@ -2155,6 +2358,10 @@ mod row_yield_tests {
         let doubled: Vec<(Option<Mana>, Vec<ManaPool>)> = [Mana::W, Mana::U, Mana::B].into_iter().map(|m| (Some(m), vec![pool(&[(m, 2)])])).collect();
         assert_eq!(row_yield(&doubled), Some((ManaPool::default(), 2)));
         let black: Vec<(Option<Mana>, Vec<ManaPool>)> = [Mana::W, Mana::U].into_iter().map(|m| (Some(m), vec![pool(&[(Mana::B, 1)])])).collect();
-        assert_eq!(row_yield(&black), None);
+        assert_eq!(row_yield(&black), Some((pool(&[(Mana::B, 1)]), 0)));
+        let none: Vec<(Option<Mana>, Vec<ManaPool>)> = [Mana::W, Mana::U].into_iter().map(|m| (Some(m), vec![ManaPool::default()])).collect();
+        assert_eq!(row_yield(&none), Some((ManaPool::default(), 0)));
+        let missing = [(Some(Mana::W), vec![pool(&[(Mana::W, 1)])]), (Some(Mana::U), vec![])];
+        assert_eq!(row_yield(&missing), None);
     }
 }

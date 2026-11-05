@@ -18,8 +18,8 @@ fn destroy_it(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 fn mega_flare(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let total: u32 = g.permanents_of(item.controller).into_iter().filter(|&id| id != item.object).map(|id| g.mana_value(id)).sum();
     if total > 0 {
-        let hits: Vec<(ObjectId, Target, u16)> =
-            g.state().opponents(item.controller).map(|opponent| (item.object, Target::Player(opponent), total.min(u16::MAX as u32) as u16)).collect();
+        let hits: Vec<(ObjectId, Target, i64)> =
+            g.state().opponents(item.controller).map(|opponent| (item.object, Target::Player(opponent), i64::from(total.min(u16::MAX as u32) as u16))).collect();
         g.damage_together(&hits);
     }
     Ok(())

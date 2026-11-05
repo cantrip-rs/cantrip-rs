@@ -21,6 +21,7 @@ Bot2.Hand.Forest.Play
 Bot2.Hand.Black Lotus.Cast
 Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot2.Hand.Prodigal Sorcerer.Cast
+Bot2.Choose(Close mana window)
 Bot2.Battlefield.Forest.Activate
 Bot2.Hand.Rancor.Cast(Prodigal Sorcerer)
 [T4 Bot2.Main1]

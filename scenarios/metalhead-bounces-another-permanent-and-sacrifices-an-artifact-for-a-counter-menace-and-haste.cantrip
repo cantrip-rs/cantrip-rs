@@ -37,6 +37,7 @@ Bot2.Pass
 Bot1.Battlefield.Mox Ruby.Activate
 ! Bot1.Battlefield.Metalhead.Activate(Sacrifice: Metalhead)
 Bot1.Battlefield.Metalhead.Activate(Sacrifice: Mox Jet)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mox Jet)
 Bot1.Pass
 Bot2.Pass

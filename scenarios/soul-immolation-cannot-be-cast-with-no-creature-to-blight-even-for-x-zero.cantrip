@@ -20,7 +20,19 @@ Bot1.Hand.Mox Jet.Cast
 Bot1.Pass
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Jet.Activate
-! Bot1.Hand.Soul Immolation.Cast(X: 0)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Soul Immolation.Cast(X: 0)
+Bot1.Choose(Confirm X)
+? Bot1.Hand.Soul Immolation.Colors = Red
+? Bot1.Mana = {B}{R}{R}{R}{R}
+? Bot1.Life = 20
+? Stack.Count = 0
+? Exile.Count = 0
 
 [Expect]
 Bot1.Hand.Count = 5

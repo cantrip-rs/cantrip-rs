@@ -28,6 +28,8 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Urban Retreat.Activate
 ? Bot1.Revealed = Urban Retreat
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 ? Stack = Urban Retreat
 ? Bot1.Hand = Ornithopter; Plains; Plains; Plains; Plains; Urban Retreat

@@ -37,6 +37,7 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Gleemox.Activate(Color: White)
 Bot1.Battlefield.Mountain.Activate
 Bot1.Hand.Excalbian Gamemaster.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

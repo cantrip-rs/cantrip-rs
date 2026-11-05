@@ -35,6 +35,9 @@ Bot1.Modes(Blight 2)
 Bot1.Modes(1; 2)
 Bot1.Target(Phyrexian Dragon Engine)
 Bot1.Target(Phyrexian Dragon Engine)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Endurance)
 Bot1.Pass
 

@@ -40,6 +40,12 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Battlefield.Island#1.Activate
 Bot1.Battlefield.Island#2.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Graveyard.Ornithopter)
 [T5 Bot1.DeclareAttackers]
 ? Bot1.Battlefield.Iceberg Titan.Power = 6

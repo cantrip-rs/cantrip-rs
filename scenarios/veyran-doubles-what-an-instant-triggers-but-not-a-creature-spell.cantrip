@@ -49,6 +49,7 @@ Bot1.Triggers(Hydro-Man, Fluid Felon; Hydro-Man, Fluid Felon; Veyran, Voice of D
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Baleful Strix.Cast
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 [T3 Bot1.Main2]
 

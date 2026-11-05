@@ -47,6 +47,12 @@ Bot1.Hand.Ornithopter.Cast
 Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Jill, Shiva's Dominant.Activate
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

@@ -27,6 +27,8 @@ Bot1.Hand.Alchor's Tomb.Cast
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Alchor's Tomb.Activate(Bot1.Battlefield.Merfolk of the Pearl Trident)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Colors(White)
 Bot1.Pass

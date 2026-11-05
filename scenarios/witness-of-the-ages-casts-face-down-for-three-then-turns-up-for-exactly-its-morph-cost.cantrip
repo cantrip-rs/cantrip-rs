@@ -25,6 +25,7 @@ Bot2.Pass
 Bot1.Hand.Black Lotus.Cast
 Bot1.Hand.Witness of the Ages.Cast(Ability: Morph)
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = 
 ? Stack..FaceDown = true
 ? Stack..FaceDownName = Witness of the Ages

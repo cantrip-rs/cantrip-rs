@@ -30,6 +30,7 @@ Bot1.Hand.Forest.Play
 Bot1.Hand.Black Lotus.Cast
 Bot1.Hand.Cybernetic Specialist.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {U}
 Bot1.Pass
 Bot2.Pass
@@ -45,6 +46,7 @@ Bot2.Arrange(Island |)
 Bot1.Battlefield.Forest.Activate
 ! Bot1.Battlefield.Cybernetic Specialist.Activate(Bot2.Graveyard.Opt)
 Bot1.Battlefield.Cybernetic Specialist.Activate(Bot1.Graveyard.Grizzly Bears)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -54,6 +56,8 @@ Bot2.Hand.Island.Play
 Bot1.Hand.Island.Play
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Cybernetic Specialist.Activate(Bot1.Graveyard.Black Lotus)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

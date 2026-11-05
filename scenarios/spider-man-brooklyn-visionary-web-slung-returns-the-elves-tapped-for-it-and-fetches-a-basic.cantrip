@@ -34,6 +34,9 @@ Bot1.Battlefield.Llanowar Elves.Activate
 ? Client.Bot1.Prompt.Detail = {2}{G} of {2}{G} still to pay  ·  click mana in your pool, or tap a land
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Forest#2.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Llanowar Elves)
 ! Bot1.Search(Tropical Island)
 Bot1.Search(Forest)

@@ -22,7 +22,7 @@ fn invade(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let invasion = g.obj(item.object).counters(CounterKind::Invasion);
     let made = tokens::create(g, item.controller, &ALIEN, 1)?;
     for &alien in &made {
-        g.add_counters(alien, CounterKind::PlusOne, invasion);
+        g.add_counters(alien, CounterKind::PlusOne, i64::from(invasion));
     }
     g.add_counters(item.object, CounterKind::Invasion, 1);
     Ok(())

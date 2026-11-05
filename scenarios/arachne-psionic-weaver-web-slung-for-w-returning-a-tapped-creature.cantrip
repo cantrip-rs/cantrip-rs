@@ -23,6 +23,7 @@ Bot1.Attack(Ornithopter > Bot2)
 Bot1.Battlefield.Plains.Activate
 ? Bot1.Mana = {W}
 Bot1.Hand.Arachne, Psionic Weaver.Cast(Ability: Web-slinging)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Bot1.Battlefield.Ornithopter)
 Bot1.Name(Artifact)
 ? Bot1.Mana = 

@@ -25,6 +25,7 @@ Bot1.Pass
 Bot2.Battlefield.Mox Ruby.Activate
 Bot2.Hand.Redirect Lightning.Cast(Stack.Lightning Bolt)
 Bot2.Modes(Pay 5 life)
+Bot2.Choose(Pay mana)
 ? Bot2.Mana = 
 ? Bot2.Life = 15
 Bot2.Pass

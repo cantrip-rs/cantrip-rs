@@ -43,6 +43,7 @@ Bot2.Choose(Forest)
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Culling the Weak.Cast
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot1.Battlefield.Mox Ruby.Activate

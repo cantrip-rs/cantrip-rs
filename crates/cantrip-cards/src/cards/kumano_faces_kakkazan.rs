@@ -14,7 +14,7 @@ fn chapter_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         .copied()
         .filter(|&id| g.chars(id).is(CardType::Planeswalker) && opponents.contains(&g.controller(id)))
         .collect();
-    let hits: Vec<(ObjectId, Target, u16)> = opponents
+    let hits: Vec<(ObjectId, Target, i64)> = opponents
         .iter()
         .map(|&p| Target::Player(p))
         .chain(walkers.into_iter().map(Target::Object))

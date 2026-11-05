@@ -29,6 +29,7 @@ Bot1.Hand.Swamp.Play
 Bot1.Battlefield.Swamp.Activate
 Bot1.Hand.Bone Shards.Cast(Bot2.Battlefield.Llanowar Elves)
 Bot1.Modes(Discard a card)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mountain)
 Bot1.Pass
 [T3 Bot1.Main2]

@@ -6,7 +6,7 @@ use cantrip_oracle as oracle;
 /// they are attached to or not. Each counter gives the creature its Equipment is attached to +1/+0 (CR 122.1j, the layers).
 fn hone_each_equipment(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let you = item.controller;
-    let puts: Vec<(ObjectId, CounterKind, i16)> =
+    let puts: Vec<(ObjectId, CounterKind, i64)> =
         cantrip_mechanics::attach::equipment_controlled(g, you).into_iter().map(|id| (id, CounterKind::Hone, 1)).collect();
     g.add_counters_together(&puts);
     Ok(())

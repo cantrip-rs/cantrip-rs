@@ -20,7 +20,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     // Divided in u32: the targets are a count of objects, which may pass a u16 (RX-1); each share is at most X.
     let each = (u32::from(item.x) / count_u32(legal.len())) as u16;
     if each > 0 {
-        let hits: Vec<(ObjectId, Target, u16)> = legal.into_iter().map(|t| (item.object, t, each)).collect();
+        let hits: Vec<(ObjectId, Target, i64)> = legal.into_iter().map(|t| (item.object, t, i64::from(each))).collect();
         g.damage_together(&hits);
     }
     Ok(())

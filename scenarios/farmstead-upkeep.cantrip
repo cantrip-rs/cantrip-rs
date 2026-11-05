@@ -20,6 +20,7 @@ Bot1.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 ! Bot1.Hand.Farmstead.Cast(Bot1.Battlefield.Ornithopter)
 Bot1.Hand.Farmstead.Cast(Bot1.Battlefield.Plains)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T3 Bot1.Upkeep]
 Bot1.Battlefield.Plains.Activate

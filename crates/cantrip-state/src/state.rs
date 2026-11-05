@@ -1,6 +1,7 @@
 //! The game state and its one write API. Every write records how to undo it, so that a game can be moved back
 //! through what happened: make and unmake for search, and the rollback a re-run card effect needs.
 
+use crate::cost_receipt::*;
 use crate::decision::*;
 use crate::object::*;
 use crate::vocab::*;
@@ -44,6 +45,8 @@ pub struct GameState {
     /// What happened this turn (CR 603.2h, 608.2m, 601.2i), for the rules that ask about it.
     /// The objects of the batches "one or more" abilities triggered by (`Span` names a run of it). Append-only.
     pub members: Vec<ObjectId>,
+    /// Immutable receipt details referenced by history events; append-only and journalled.
+    pub cost_receipts: Vec<CostReceiptDetails>,
     /// The targets of stack items with more than `INLINE_TARGETS` of them, each with the spec it was chosen for
     /// (`StackItem::spill` names a run of it). Append-only, journaled.
     pub spill_targets: Vec<Target>,
@@ -63,6 +66,8 @@ pub struct GameState {
     /// each target). Append-only, journaled.
     pub share_arena: Vec<u32>,
     pub attackers: Vec<Attacker>,
+    /// Creatures still blocking (CR 509.1g), independently of whether any attacker they blocked remains in combat.
+    pub blockers: Vec<ObjectId>,
     pub blocks: Vec<Block>,
     /// Extra turns waiting to be taken (CR 500.7): the most recently created last, and taken first.
     pub extra_turns: Vec<ExtraTurn>,
@@ -284,7 +289,7 @@ impl GameState {
         &Turn,
         &Vec<ContinuousEffect>,
         (&Vec<PendingTrigger>, &Vec<Delayed>, &Vec<PlayPermission>),
-        (&Vec<Attacker>, &Vec<Block>, &Vec<ExtraTurn>, (&LoopWatch, &Vec<LoopKey>)),
+        (&Vec<Attacker>, &Vec<ObjectId>, &Vec<Block>, &Vec<ExtraTurn>, (&LoopWatch, &Vec<LoopKey>)),
         &Vec<Frame>,
         (&Rng, u32, &Outcome, bool, &Vec<ObjectId>, &Vec<StackItem>, (&Vec<Target>, &Vec<u8>, &Vec<u32>), (&Vec<Merge>, &Vec<Vec<Copiable>>, &Vec<(ObjectId, u32)>)),
     ) {
@@ -296,7 +301,7 @@ impl GameState {
             &self.turn,
             &self.effects,
             (&self.triggers, &self.delayed, &self.permissions),
-            (&self.attackers, &self.blocks, &self.extra_turns, (&self.loop_watch, &self.loop_keys)),
+            (&self.attackers, &self.blockers, &self.blocks, &self.extra_turns, (&self.loop_watch, &self.loop_keys)),
             &self.agenda,
             (
                 &self.rng,
@@ -319,7 +324,7 @@ impl PartialEq for GameState {
         // stack items of the spells cast (`StackItem::cast_known`), and by the history's declarations of attackers
         // (`Event::Attacks::known`); the rows themselves are compared, not hashed, since every move, every cast and every
         // attacker declared adds one.
-        self.position() == other.position() && self.last_known == other.last_known
+        self.position() == other.position() && self.last_known == other.last_known && self.cost_receipts == other.cost_receipts
     }
 }
 
@@ -410,6 +415,8 @@ pub enum Undo {
     LeftStackPushed,
     LeftStackPopped(Box<StackItem>),
     /// Members appended since the list was this long.
+    CostReceiptPushed,
+    CostReceiptPopped(Box<CostReceiptDetails>),
     MembersPushed(u32),
     MembersPopped(Vec<ObjectId>),
     /// Spilled targets appended since the arena was this long.
@@ -426,6 +433,7 @@ pub enum Undo {
     SourcesPopped(Vec<Vec<Copiable>>),
     MergedObjectsSet(Vec<(ObjectId, u32)>),
     AttackersSet(Vec<Attacker>),
+    BlockersSet(Vec<ObjectId>),
     BlocksSet(Vec<Block>),
     ExtraTurnsSet(Vec<ExtraTurn>),
     LoopWatchSet(LoopWatch),
@@ -463,6 +471,8 @@ impl Undo {
                 | Undo::DelayedInserted(_)
                 | Undo::LeftStackPushed
                 | Undo::LeftStackPopped(_)
+                | Undo::CostReceiptPushed
+                | Undo::CostReceiptPopped(_)
                 | Undo::MembersPushed(_)
                 | Undo::MembersPopped(_)
                 | Undo::TargetsSpilled(_)
@@ -524,6 +534,7 @@ impl GameState {
             last_known: Vec::new(),
             left_stack: Vec::new(),
             members: Vec::new(),
+            cost_receipts: Vec::new(),
             spill_targets: Vec::new(),
             spill_specs: Vec::new(),
             share_arena: Vec::new(),
@@ -531,6 +542,7 @@ impl GameState {
             merged_sources: Vec::new(),
             merged_objects: Vec::new(),
             attackers: Vec::new(),
+            blockers: Vec::new(),
             blocks: Vec::new(),
             extra_turns: Vec::new(),
             loop_watch: LoopWatch::default(),
@@ -730,7 +742,7 @@ impl GameState {
 
     /// Adds `n` mana of one kind that `source` produced (CR 106.3) to `player`'s pool (CR 106.4): mana `restriction` limits,
     /// if it has one (CR 106.6), kept apart; mana that lasts as `lasts` says (CR 500.5a), which no restricted mana does.
-    pub fn add_mana(&mut self, player: PlayerId, mana: Mana, n: u32, source: ObjectId, restriction: Option<ManaRestriction>, lasts: ManaLasts) {
+    pub fn add_mana(&mut self, player: PlayerId, mana: Mana, n: u32, source: ObjectId, restriction: Option<ManaRestriction>, lasts: ManaLasts, snow: bool) {
         let m = mana as usize;
         // A pool has no limit (CR 106.4); its counts are `u32`, past any number of rounds a loop is let run, and saturate
         // rather than wrap so that the sources' entries still add up to them.
@@ -752,7 +764,7 @@ impl GameState {
             }),
         }
         let lasts = if restriction.is_none() { lasts } else { ManaLasts::Step };
-        match self.mana_from.iter().position(|e| e.player == player && e.restriction == restriction && e.source == source && e.lasts == lasts) {
+        match self.mana_from.iter().position(|e| e.player == player && e.restriction == restriction && e.source == source && e.lasts == lasts && e.snow == snow) {
             Some(at) => {
                 let old = self.mana_from[at];
                 self.mana_from[at].pool.0[m] += n;
@@ -761,7 +773,7 @@ impl GameState {
             None => {
                 let mut pool = ManaPool::default();
                 pool.0[m] = n;
-                self.mana_from.push(ManaFrom { player, restriction, source, lasts, pool });
+                self.mana_from.push(ManaFrom { player, restriction, source, snow, lasts, pool });
                 self.log(Undo::ManaFromPushed);
             }
         }
@@ -777,7 +789,7 @@ impl GameState {
         mana: Mana,
         n: u32,
         pick: ManaPick,
-        taken: &mut Vec<(ObjectId, Mana, u32)>,
+        taken: &mut Vec<(ObjectId, Mana, u32, bool)>,
     ) -> u32 {
         let m = mana as usize;
         let mut left = n;
@@ -785,10 +797,10 @@ impl GameState {
             let mut at = 0;
             while left > 0 && at < self.mana_from.len() {
                 let e = self.mana_from[at];
-                if e.player == player && e.restriction == restriction && e.lasts == lasts && e.pool.0[m] > 0 && pick.takes(e.source) {
+                if e.player == player && e.restriction == restriction && e.lasts == lasts && e.pool.0[m] > 0 && pick.takes(e.source, e.snow) {
                     let take = e.pool.0[m].min(left);
                     left -= take;
-                    taken.push((e.source, mana, take));
+                    taken.push((e.source, mana, take, e.snow));
                     let mut after = e;
                     after.pool.0[m] -= take;
                     if after.pool.is_empty() {
@@ -1240,7 +1252,15 @@ impl GameState {
     /// Records a fact of this turn.
 
 
-    /// Keeps the objects of a batch for the ability it triggered.
+    /// Add immutable receipt provenance and journal its allocation.
+    pub fn cost_receipt_push(&mut self, receipt: CostReceiptDetails) -> usize {
+        let id = self.cost_receipts.len();
+        self.cost_receipts.push(receipt);
+        self.log(Undo::CostReceiptPushed);
+        id
+    }
+
+    /// Keeps immutable object identities for a triggered batch or a source's last-known combat relationships.
     pub fn members_push(&mut self, objects: &[ObjectId]) -> Span {
         let start = self.members.len();
         if objects.is_empty() {
@@ -1525,9 +1545,24 @@ impl GameState {
         self.log(Undo::AttackersSet(old));
     }
 
+    /// Replaces attacker relationships; a newly assigned blocker begins blocking. Removing a relationship does not
+    /// remove its blocker from combat (CR 509.1g); the core changes that independent status with `set_blockers`.
     pub fn set_blocks(&mut self, blocks: Vec<Block>) {
+        let mut added = Vec::new();
+        for b in &blocks {
+            if !self.blockers.contains(&b.blocker) && !added.contains(&b.blocker) { added.push(b.blocker); }
+        }
+        if !added.is_empty() {
+            let mut blockers = self.blockers.clone(); blockers.extend(added);
+            self.set_blockers(blockers);
+        }
         let old = std::mem::replace(&mut self.blocks, blocks);
         self.log(Undo::BlocksSet(old));
+    }
+
+    pub fn set_blockers(&mut self, blockers: Vec<ObjectId>) {
+        let old = std::mem::replace(&mut self.blockers, blockers);
+        self.log(Undo::BlockersSet(old));
     }
 
     /// The timestamp keyword counters of `kind` on `object` have (CR 613.7c): that of the latest one put on it, or the
@@ -1797,6 +1832,43 @@ impl GameState {
         self.chars_epoch += 1;
     }
 
+    /// Rewrite a hidden card's saved casting-way number in the live frames and their rollback copies.
+    /// Casting-way numbers are positions in the card's own `ways`, not a public identity.
+    pub fn remap_hidden_cast_ways(&mut self, chain: &[ObjectId], ways: &[(u8, u8)]) {
+        if ways.is_empty() { return; }
+        let remap = |index: &mut u8| {
+            if let Some((_, new)) = ways.iter().find(|(old, _)| old == index) { *index = *new; }
+        };
+        let patch = |frame: &mut Frame| {
+            for (_, answer) in &mut frame.answers {
+                if let Answer::Act(action) = answer
+                    && action.kind == ActionKind::CastSpell
+                    && action.source.is_some_and(|source| chain.contains(&source))
+                { remap(&mut action.index); }
+            }
+        };
+        for &id in chain { remap(&mut self.objects[id.index()].cast_way); }
+        for item in self.stack.iter_mut().chain(self.left_stack.iter_mut()) {
+            if chain.contains(&item.object) { remap(&mut item.way); }
+        }
+        for frame in &mut self.agenda { patch(frame); }
+        let mut len = self.objects.len();
+        for entry in self.journal.entries.iter_mut().rev() {
+            match entry {
+                Undo::ObjectPushed => len -= 1,
+                Undo::ObjectPopped(obj) => {
+                    if chain.contains(&ObjectId(len as u32)) { remap(&mut obj.cast_way); }
+                    len += 1;
+                }
+                Undo::FramePopped(frame) | Undo::FrameRemoved(_, frame) | Undo::FrameSet(_, frame) => patch(frame),
+                Undo::Object(id, obj) if chain.contains(id) => remap(&mut obj.cast_way),
+                Undo::StackPopped(item) | Undo::StackSet(_, item) | Undo::LeftStackPopped(item)
+                    if chain.contains(&item.object) => remap(&mut item.way),
+                _ => {}
+            }
+        }
+    }
+
     /// The last-known rows, kept and in the journal, of the objects of `chain` (hidden ones `rebind_hidden` deals anew) for
     /// which `shows` holds: those that show the card they were dealt from.
     fn hidden_rows_mut<'a>(&'a mut self, chain: &'a [ObjectId]) -> impl Iterator<Item = &'a mut LastKnown> + 'a {
@@ -1833,7 +1905,9 @@ impl GameState {
         for row in self.hidden_rows_mut(chain) {
             if shows(row) {
                 match rows.iter().find(|(id, _)| *id == row.id) {
-                    Some((_, l)) => *row = *l,
+                    // A search world changes hidden card characteristics, not the public combat relationship
+                    // an earlier incarnation had. Preserve the same immutable history spans in journal copies too.
+                    Some((_, l)) => *row = LastKnown { blocked_creatures: row.blocked_creatures, blocking_creatures: row.blocking_creatures, ..*l },
                     None => debug_assert!(false, "a row that shows a hidden card has a row of the card it is dealt"),
                 }
             }
@@ -2028,6 +2102,8 @@ impl GameState {
                 self.left_stack.pop();
             }
             Undo::LeftStackPopped(item) => self.left_stack.push(*item),
+            Undo::CostReceiptPushed => { self.cost_receipts.pop(); }
+            Undo::CostReceiptPopped(receipt) => self.cost_receipts.push(*receipt),
             Undo::MembersPushed(len) => self.members.truncate(len as usize),
             Undo::MembersPopped(objects) => self.members.extend(objects),
             Undo::TargetsSpilled(len) => {
@@ -2046,6 +2122,7 @@ impl GameState {
                 self.spill_specs.extend(specs);
             }
             Undo::AttackersSet(old) => self.attackers = old,
+            Undo::BlockersSet(old) => self.blockers = old,
             Undo::BlocksSet(old) => self.blocks = old,
             Undo::ExtraTurnsSet(old) => self.extra_turns = old,
             Undo::LoopWatchSet(old) => self.loop_watch = old,
@@ -2141,6 +2218,8 @@ impl GameState {
             Undo::LastKnownPopped(_) => Undo::LastKnownPushed,
             Undo::LeftStackPushed => Undo::LeftStackPopped(Box::new(*self.left_stack.last().expect("an item"))),
             Undo::LeftStackPopped(_) => Undo::LeftStackPushed,
+            Undo::CostReceiptPushed => Undo::CostReceiptPopped(Box::new(*self.cost_receipts.last().expect("receipt"))),
+            Undo::CostReceiptPopped(_) => Undo::CostReceiptPushed,
             Undo::MembersPushed(len) => Undo::MembersPopped(self.members[*len as usize..].to_vec()),
             Undo::MembersPopped(_) => Undo::MembersPushed(self.members.len() as u32),
             Undo::TargetsSpilled(len) => Undo::TargetsUnspilled(
@@ -2156,6 +2235,7 @@ impl GameState {
             Undo::MergedObjectsSet(_) => Undo::MergedObjectsSet(self.merged_objects.clone()),
             Undo::TargetsUnspilled(..) => Undo::TargetsSpilled(self.spill_targets.len()),
             Undo::AttackersSet(_) => Undo::AttackersSet(self.attackers.clone()),
+            Undo::BlockersSet(_) => Undo::BlockersSet(self.blockers.clone()),
             Undo::BlocksSet(_) => Undo::BlocksSet(self.blocks.clone()),
             Undo::ExtraTurnsSet(_) => Undo::ExtraTurnsSet(self.extra_turns.clone()),
             Undo::LoopWatchSet(_) => Undo::LoopWatchSet(self.loop_watch.clone()),
@@ -2190,7 +2270,7 @@ mod tests {
     use super::*;
 
     fn item() -> StackItem {
-        StackItem {
+        StackItem { event_amount: None,
             kind: StackKind::Spell,
             object: ObjectId(1),
             ability: AbilityRef { card: CardId(0), index: 0 },
@@ -2216,9 +2296,11 @@ mod tests {
             flashback: false,
             attacking: false,
             since: 0,
+            tapped_since: 0,
             copied: false,
             cast_known: u32::MAX,
             acquired: Acquired::OWN,
+            instance: AbilityAcquisition::OWN,
             words: Words::NONE,
         }
     }
@@ -2253,6 +2335,23 @@ mod tests {
         fork.rollback(start);
         // At the start the real order was 0 1 2 3 4 5; each object stands where the one it replaced stood.
         assert_eq!(fork.zone(library), &[ids[3], ids[0], ids[4], ids[1], ids[2], ids[5]][..]);
+    }
+
+    #[test]
+    fn receipt_details_survive_clone_rollback_and_redo_without_index_narrowing() {
+        let mut state = GameState::new(2, 1);
+        let mark = state.mark();
+        let receipt = CostReceiptDetails { origin: Some(CostOrigin::AdditionalChoice(700)), component: 900, part: CostPart::Discard(1000) };
+        let id = state.cost_receipt_push(receipt);
+        assert_eq!(state.cost_receipts[id], receipt);
+        let mut copy = state.clone_with_journal();
+        let (undos, redos) = state.step_back(mark);
+        assert!(state.cost_receipts.is_empty());
+        state.step_forward(undos, redos);
+        assert_eq!(state.cost_receipts[id], receipt);
+        copy.rollback(mark);
+        assert!(copy.cost_receipts.is_empty());
+        assert_eq!(state.cost_receipts[id], receipt);
     }
 
     /// Past `INLINE_TARGETS` a stack item's targets and specs are in the game's arena, and its shares in theirs, read back whole; changing one
@@ -2315,10 +2414,10 @@ mod tests {
         let mut s = GameState::new(2, 1);
         let p = PlayerId(0);
         for i in 0..300u32 {
-            s.add_mana(p, Mana::B, 1, ObjectId(i), None, ManaLasts::Step);
+            s.add_mana(p, Mana::B, 1, ObjectId(i), None, ManaLasts::Step, false);
         }
         for _ in 0..300u32 {
-            s.add_mana(p, Mana::B, 1, ObjectId(1000), None, ManaLasts::Step);
+            s.add_mana(p, Mana::B, 1, ObjectId(1000), None, ManaLasts::Step, false);
         }
         assert_eq!(s.player(p).pool.get(Mana::B), 600);
         let shares: u32 = s.mana_from_of(p).map(|e| e.pool.get(Mana::B)).sum();
@@ -2339,9 +2438,9 @@ mod tests {
         let src = ObjectId(1);
         let pool = |s: &GameState| (s.player(p).pool.get(Mana::R), s.player(p).pool.get(Mana::G), s.player(p).pool.get(Mana::B));
         let add = |s: &mut GameState| {
-            s.add_mana(p, Mana::R, 1, src, None, ManaLasts::Step);
-            s.add_mana(p, Mana::G, 2, src, None, ManaLasts::Combat);
-            s.add_mana(p, Mana::B, 3, src, None, ManaLasts::Turn);
+            s.add_mana(p, Mana::R, 1, src, None, ManaLasts::Step, false);
+            s.add_mana(p, Mana::G, 2, src, None, ManaLasts::Combat, false);
+            s.add_mana(p, Mana::B, 3, src, None, ManaLasts::Turn, false);
         };
         add(&mut s);
         assert_eq!(pool(&s), (1, 2, 3));
@@ -2354,9 +2453,9 @@ mod tests {
         assert_eq!(s.mana_from_of(p).count(), 0);
 
         // One kind of mana of each duration: spending two takes the step's, then the combat's, leaving the turn's.
-        s.add_mana(p, Mana::R, 1, src, None, ManaLasts::Turn);
-        s.add_mana(p, Mana::R, 1, src, None, ManaLasts::Combat);
-        s.add_mana(p, Mana::R, 1, src, None, ManaLasts::Step);
+        s.add_mana(p, Mana::R, 1, src, None, ManaLasts::Turn, false);
+        s.add_mana(p, Mana::R, 1, src, None, ManaLasts::Combat, false);
+        s.add_mana(p, Mana::R, 1, src, None, ManaLasts::Step, false);
         let mut taken = Vec::new();
         assert_eq!(s.spend_mana(p, None, Mana::R, 2, ManaPick::Any, &mut taken), 2);
         s.empty_mana(p, ManaLasts::Combat);
@@ -2375,12 +2474,12 @@ mod tests {
         let src = ObjectId(1);
         let mut red = [false; 6];
         red[Mana::R as usize] = true;
-        s.add_mana(p, Mana::R, 1, src, None, ManaLasts::Step);
-        s.add_mana(p, Mana::R, 2, ObjectId(2), None, ManaLasts::Turn);
-        s.add_mana(p, Mana::R, 1, ObjectId(2), None, ManaLasts::Step);
-        s.add_mana(p, Mana::G, 1, src, None, ManaLasts::Step);
-        s.add_mana(p, Mana::R, 1, src, Some(ManaRestriction::GainsHaste), ManaLasts::Step);
-        s.add_mana(p, Mana::G, 1, src, Some(ManaRestriction::GainsHaste), ManaLasts::Step);
+        s.add_mana(p, Mana::R, 1, src, None, ManaLasts::Step, false);
+        s.add_mana(p, Mana::R, 2, ObjectId(2), None, ManaLasts::Turn, false);
+        s.add_mana(p, Mana::R, 1, ObjectId(2), None, ManaLasts::Step, false);
+        s.add_mana(p, Mana::G, 1, src, None, ManaLasts::Step, false);
+        s.add_mana(p, Mana::R, 1, src, Some(ManaRestriction::GainsHaste), ManaLasts::Step, false);
+        s.add_mana(p, Mana::G, 1, src, Some(ManaRestriction::GainsHaste), ManaLasts::Step, false);
 
         s.empty_mana_keeping(p, ManaLasts::Step, red);
         assert_eq!((s.player(p).pool.get(Mana::R), s.player(p).pool.get(Mana::G)), (4, 0));

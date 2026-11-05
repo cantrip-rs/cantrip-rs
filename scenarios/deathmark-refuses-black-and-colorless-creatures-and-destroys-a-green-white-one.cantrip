@@ -28,6 +28,7 @@ Bot2.Hand.Mox Pearl.Cast
 Bot2.Battlefield.Mox Jet.Activate
 Bot2.Battlefield.Forest.Activate
 Bot2.Hand.Dark Confidant.Cast
+Bot2.Choose(Close mana window)
 Bot2.Battlefield.Mox Emerald.Activate
 Bot2.Battlefield.Mox Pearl.Activate
 Bot2.Hand.Gaddock Teeg.Cast

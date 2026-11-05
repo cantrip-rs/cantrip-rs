@@ -22,6 +22,8 @@ Bot1.Hand.Birds of Paradise.Cast
 Bot1.Hand.Urban Retreat.Activate
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Birds of Paradise.Activate(Color: Green)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Birds of Paradise)
 [T3 Bot1.Main2]
 

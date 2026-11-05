@@ -38,6 +38,12 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 ! Bot1.Battlefield.Room of Refuge.Activate(Ability: Sacrifice this land; Sol Ring)
 Bot1.Battlefield.Room of Refuge.Activate(Ability: Sacrifice this land; Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 [T3 Bot1.Main2]
 

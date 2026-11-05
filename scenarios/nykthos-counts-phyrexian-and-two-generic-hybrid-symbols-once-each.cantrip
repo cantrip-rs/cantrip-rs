@@ -36,6 +36,11 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Norn's Annex.Cast
 # The first {W/P} paid with 2 life, the second with white mana.
 Bot1.Modes(1)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -48,6 +53,9 @@ Bot1.Battlefield.Nykthos, Shrine to Nyx.Activate(Ability: {2}; Color: Green)
 Bot1.Battlefield.Mox Emerald#1.Activate
 Bot1.Battlefield.Mox Emerald#2.Activate
 Bot1.Battlefield.Nykthos, Shrine to Nyx.Activate(Ability: {2}; Color: White)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {W}{W}
 
 [Expect]

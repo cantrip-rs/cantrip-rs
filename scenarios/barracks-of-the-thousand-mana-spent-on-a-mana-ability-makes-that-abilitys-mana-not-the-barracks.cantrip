@@ -36,6 +36,8 @@ Bot1.Arrange(Healer's Hawk | )
 [T5 Bot1.Main1]
 Bot1.Battlefield.Barracks of the Thousand.Activate
 Bot1.Battlefield.Crystal Grotto.Activate(Ability: any color; Color: White)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.ManaFrom = {W} Crystal Grotto
 Bot1.Hand.Healer's Hawk.Cast
 ? Stack = Healer's Hawk

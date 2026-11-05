@@ -30,6 +30,7 @@ Bot2.Hand.Mox Ruby.Cast
 Bot2.Pass
 Bot2.Battlefield.Mountain.Activate
 Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Choose(Close mana window)
 ? Stack = Chalice of the Void; Lightning Bolt
 Bot2.Battlefield.Mox Ruby#1.Activate
 Bot2.Battlefield.Mox Ruby#2.Activate

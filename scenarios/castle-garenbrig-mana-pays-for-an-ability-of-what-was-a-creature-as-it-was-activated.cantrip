@@ -66,6 +66,11 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Castle Garenbrig.Activate(Ability: six)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {G}{G}{G}{G}{G}{G} (CreatureSpellsOrAbilitiesOfCreatures)
 Bot1.Battlefield.Krark-Clan Ironworks.Activate(Sacrifice: Mox Emerald)
 Bot1.Battlefield.Krark-Clan Ironworks.Activate(Sacrifice: Mox Jet)

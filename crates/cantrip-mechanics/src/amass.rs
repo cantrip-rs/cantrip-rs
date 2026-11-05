@@ -58,7 +58,7 @@ pub fn amass_army(
         },
     };
     // The amassing player puts them (CR 701.47a, 122.6), whoever controls the effect: Azog's "its controller amasses".
-    g.add_counters_by(controller, army, CounterKind::PlusOne, n);
+    g.add_counters_by(controller, army, CounterKind::PlusOne, i64::from(n));
     if !g.chars(army).has_subtype(subtype) {
         g.add_effect(source, army, EffectKind::AddSubtype(subtype), Duration::Indefinite);
     }

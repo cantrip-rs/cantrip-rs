@@ -16,9 +16,11 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Hand.Mox Jet.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 Bot1.Hand.Frozen Shade.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Frozen Shade.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

@@ -25,6 +25,8 @@ Bot1.Search(Bone Sabres)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Stoneforge Mystic.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose()
 Bot1.Pass
 [Bot1.Main2]

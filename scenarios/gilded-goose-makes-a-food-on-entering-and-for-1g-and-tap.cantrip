@@ -42,6 +42,9 @@ Bot1.Hand.Forest.Play
 Bot1.Battlefield.Forest#2.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Gilded Goose#1.Activate(Ability: Create a Food)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = 
 ? Bot1.Battlefield.Gilded Goose#1.Tapped = true
 ! Bot1.Battlefield.Gilded Goose#1.Activate(Ability: Create a Food)

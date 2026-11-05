@@ -24,6 +24,8 @@ Bot1.Hand.Mox Pearl.Cast
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Geier Reach Sanitarium.Activate(Ability: Each player draws)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mountain)
 Bot2.Choose(Island)
 ? Bot1.Mana =

@@ -27,6 +27,8 @@ Bot1.Pass
 Bot2.Pass
 ? Bot1.Mana = {W}{B}{B}
 Bot1.Hand.Touch the Spirit Realm.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {B}
 Bot1.Pass
 Bot2.Pass

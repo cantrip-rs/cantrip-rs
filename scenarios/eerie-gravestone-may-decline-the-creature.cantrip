@@ -32,6 +32,8 @@ Bot1.Pass
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Eerie Gravestone.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose()
 [Bot1.Main2]
 

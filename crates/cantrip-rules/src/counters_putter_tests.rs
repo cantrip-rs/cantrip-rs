@@ -90,7 +90,7 @@ fn resolving(g: &mut Game) -> usize {
 }
 
 fn cx(g: &mut Game, frame: usize) -> Cx<'_> {
-    Cx { g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// The watchers' triggers waiting to be put on the stack, by watcher.

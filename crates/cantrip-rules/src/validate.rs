@@ -23,7 +23,7 @@ fn fits(option: &ActionOption, action: &Action) -> bool {
         return false;
     }
     // Restricted mana is a kind of its own (CR 106.6): spending it is answered with its restriction.
-    if option.kind == ActionKind::AssignMana && (option.mana != action.mana || option.restriction != action.restriction) {
+    if option.kind == ActionKind::AssignMana && (option.mana != action.mana || option.restriction != action.restriction || option.snow != action.snow || option.pay_snow != action.pay_snow) {
         return false;
     }
     match action.color {
@@ -390,6 +390,9 @@ pub fn check(game: &Game, request: &Request, answer: &Answer) -> Result<(), Reje
                 Some(why) => no(why),
                 None => Ok(()),
             }
+        }
+        (RequestKind::ChooseCostPayment { choices, .. }, Answer::CostPayment(index)) => {
+            if *index < choices.len() { Ok(()) } else { no("not one of the cost payments offered") }
         }
         (RequestKind::OrderTriggers { sources, .. }, Answer::Order(order)) => {
             let mut seen = order.clone();

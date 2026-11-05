@@ -41,6 +41,9 @@ Bot2.Pass
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Key to the Side-Door.Activate(Ability: Target creature; Bot1.Battlefield.Elvish Mystic)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 [T3 Bot1.DeclareAttackers]

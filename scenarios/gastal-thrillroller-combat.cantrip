@@ -26,6 +26,7 @@ Bot2.Hand.Ornithopter.Cast
 [T3 Bot1.Main1]
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Hand.Gastal Thrillroller.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T3 Bot1.DeclareAttackers]
 Bot1.Attack(Gastal Thrillroller > Bot2)

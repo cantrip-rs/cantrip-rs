@@ -75,6 +75,9 @@ Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Island#2.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Emrakul, the Promised End.Activate(Bot2.Battlefield.Sol Ring)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Pass

@@ -22,7 +22,7 @@ fn damage_equal_to_its_power(g: &mut dyn Game, item: &StackItem) -> Result<(), S
     let Target::Object(entered) = item.subject else { return Ok(()) };
     let power = g.chars(entered).power.unwrap_or(0);
     if power > 0 {
-        g.damage(item.object, item.target(0), power as u16);
+        g.damage(item.object, item.target(0), i64::from(power as u16));
     }
     Ok(())
 }

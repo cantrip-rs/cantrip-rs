@@ -5,7 +5,7 @@ use cantrip_oracle as oracle;
 /// "Put a +1/+1 counter on each artifact creature and/or Vehicle you control" (CR 122.1, 608.2, 101.4): every artifact creature
 /// and every Vehicle (crewed into a creature or not, CR 301.7) its controller controls as it resolves, all at once.
 fn counter_on_each_artifact_creature_and_or_vehicle(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let puts: Vec<(ObjectId, CounterKind, i16)> = g
+    let puts: Vec<(ObjectId, CounterKind, i64)> = g
         .permanents_of(item.controller)
         .into_iter()
         .filter(|&id| {

@@ -193,6 +193,14 @@ public sealed partial class MainPage
                 FillChooseModes(client, modes);
                 break;
 
+            case ChooseNumberPromptMessage number:
+                FillChooseNumber(client, number);
+                break;
+
+            case ChooseCostPaymentPromptMessage payment:
+                FillChooseCostPayment(client, payment);
+                break;
+
             case OrderTriggersPromptMessage triggers:
                 FillOrderTriggers(client, triggers);
                 break;
@@ -310,7 +318,7 @@ public sealed partial class MainPage
             : $"  ·  hold {key} to have the colour picked";
 
         int Ways(ActionOptionMessage option) =>
-            option.ProducesOfAnyOneColor > 0 || option.ProducesOfAnyColorEach > 0
+            option.ProducesOfAnyOneColor > 0 || option.ProducesOfAnyColorEach > 0 || option.ColorChoices.Count > 0
                 ? Math.Max(option.ColorChoices.Count, 2)
                 : _actions.For(option.Source).Count;
     }
@@ -327,6 +335,23 @@ public sealed partial class MainPage
 
         if (prompt.AssistStep.Length > 0 && FillAssist(client, prompt, name))
         {
+            return;
+        }
+
+        if (prompt.ManaAbilities)
+        {
+            Prompt($"Make mana for {name}", $"{prompt.Total} is owed  ·  activate mana abilities now, then choose Done to begin paying");
+            if (_actions.Confirm is { } done)
+            {
+                _pass = () => Send(client, AnswerFor(done));
+                AddButton("Done", () => Send(client, AnswerFor(done)), primary: true).Tooltip = "Done activating mana abilities" + Suffix(PassKey);
+            }
+
+            if (_actions.Cancel is { } cancel)
+            {
+                AddCancelButton(() => Send(client, AnswerFor(cancel)));
+            }
+
             return;
         }
 
@@ -849,7 +874,8 @@ public sealed partial class MainPage
         }
 
         Prompt(
-            prompt.AnyNumber ? $"Any number of {nouns} for {source}"
+            prompt.KeepOriginal ? $"Choose a new target for {source}"
+                : prompt.AnyNumber ? $"Any number of {nouns} for {source}"
                 : prompt.Count == 1 && prompt.Optional ? $"Up to one {noun} for {source}"
                 : prompt.Count == 1 ? $"{(prompt.Targeted ? "Target" : "Choice")} for {source}"
                 : prompt.Optional ? $"Up to {prompt.Count} {nouns} for {source}"
@@ -866,7 +892,7 @@ public sealed partial class MainPage
             AddButton(
                 _pickedTargets.Count switch
                 {
-                    0 => prompt.AnyNumber ? "Choose none" : prompt.Count == 1 ? $"No {noun}" : $"No {nouns}",
+                    0 => prompt.KeepOriginal ? "Keep current target" : prompt.AnyNumber ? "Choose none" : prompt.Count == 1 ? $"No {noun}" : $"No {nouns}",
                     1 => $"Done with 1 {noun}",
                     var picked => $"Done with {picked} {nouns}",
                 },
@@ -912,12 +938,12 @@ public sealed partial class MainPage
         }
 
         string source = client.Object(prompt.Source)?.Name ?? client.Object(prompt.Ability)?.Name ?? "An ability";
-        int assigned = _dividedShares.Values.Sum();
-        int targeted = _dividedShares.Count(pair => pair.Value > 0);
+        int assigned = _dividedShares.Values.Sum() + _selection.DividedPlayerShares.Values.Sum();
+        int targeted = _dividedShares.Count(pair => pair.Value > 0) + _selection.DividedPlayerShares.Count(pair => pair.Value > 0);
 
         Prompt(
             $"Divide {prompt.Total} for {source}",
-            $"{prompt.Text}  ·  {assigned} of {prompt.Total} assigned, among {targeted} target{(targeted == 1 ? string.Empty : "s")}{(prompt.MaxTargets > 0 ? $" (up to {prompt.MaxTargets})" : string.Empty)}{(prompt.Optional ? "  ·  or no target at all" : string.Empty)}  ·  click a card to add one, or use its − and +");
+            $"{prompt.Text}  ·  {assigned} of {prompt.Total} assigned, among {targeted} target{(targeted == 1 ? string.Empty : "s")}{(prompt.MaxTargets > 0 ? $" (up to {prompt.MaxTargets})" : string.Empty)}{(prompt.Optional ? "  ·  or no target at all" : string.Empty)}  ·  click a card or use the share controls");
 
         bool none = prompt.Optional && assigned == 0;
 
@@ -927,12 +953,10 @@ public sealed partial class MainPage
             {
                 Shares =
                 [
-                    .. _dividedShares
-                        .Where(pair => pair.Value > 0)
-                        .Select(pair => new TargetShareMessage
+                    .. _selection.DividedOrder.Select(target => new TargetShareMessage
                         {
-                            Target = new TargetMessage { Object = new ViewHandle(pair.Key) },
-                            Amount = pair.Value,
+                            Target = target,
+                            Amount = target.IsPlayer ? _selection.DividedPlayerShares[target.Player] : _dividedShares[target.Object.Value],
                         }),
                 ],
             }),
@@ -944,6 +968,8 @@ public sealed partial class MainPage
             AddButton("Clear", () =>
             {
                 _dividedShares.Clear();
+                _selection.DividedPlayerShares.Clear();
+                _selection.DividedOrder.Clear();
                 _needsRedraw = true;
             });
         }
@@ -952,6 +978,15 @@ public sealed partial class MainPage
         {
             if (candidate.IsPlayer)
             {
+                int seat = candidate.Player;
+                int playerShare = _selection.DividedPlayerShares.GetValueOrDefault(seat);
+                bool room = playerShare > 0 || prompt.MaxTargets == 0 || targeted < prompt.MaxTargets;
+                string playerName = seat == client.Seat ? "you" : NameOf(client, seat);
+                _buttons.Children.Add(Stepper(
+                    6,
+                    Step($"Remove from {playerName}", playerShare > 0, () => _selection.SetDividedShare(candidate, playerShare - 1)),
+                    new SymbolText(13, Theme.Fg) { Text = $"{playerShare}  {playerName}" },
+                    Step($"Add to {playerName}", assigned < prompt.Total && room, () => _selection.SetDividedShare(candidate, playerShare + 1))));
                 continue;
             }
 
@@ -975,9 +1010,9 @@ public sealed partial class MainPage
 
             _buttons.Children.Add(Stepper(
                 6,
-                Step("−", share > 0, () => _dividedShares[handle] = Math.Max(0, share - 1)),
+                Step("−", share > 0, () => _selection.SetDividedShare(candidate, share - 1)),
                 new SymbolText(13, Theme.Fg) { Text = $"{share}  {name}" },
-                Step("+", assigned < prompt.Total && canAddTarget, () => _dividedShares[handle] = share + 1)));
+                Step("+", assigned < prompt.Total && canAddTarget, () => _selection.SetDividedShare(candidate, share + 1))));
         }
     }
 
@@ -1111,6 +1146,50 @@ public sealed partial class MainPage
 
     /// <summary>How many of a long list's options, the best matches for what is typed, the dock shows at once.</summary>
     private const int OptionsShown = 8;
+
+    private void FillChooseNumber(GameClient client, ChooseNumberPromptMessage prompt)
+    {
+        string source = client.Object(prompt.Source)?.Name ?? "This ability";
+        Prompt(prompt.Heading.Length > 0 ? prompt.Heading : $"Choose a number for {source}",
+            $"{source}  ·  Choose a whole number from {prompt.Least} to {prompt.Most}");
+        _selection.NumberTyped ??= prompt.Least.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        var field = new TextBox { PlaceholderText = "Number", Text = _selection.NumberTyped, Width = 220, FontSize = 13 };
+        _buttons.Children.Add(field);
+        var lower = new DockButton("−", primary: false) { Tooltip = "Lower the number by one" };
+        var raise = new DockButton("+", primary: false) { Tooltip = "Raise the number by one" };
+        void Submit()
+        {
+            if (NumberChoice.TryValue(prompt, _selection.NumberTyped, out uint value))
+                Send(client, new NumberChosenAnswer { Value = value });
+        }
+        var chosen = AddButton("Choose number", Submit, primary: true);
+        void Refresh()
+        {
+            bool valid = NumberChoice.TryValue(prompt, _selection.NumberTyped, out uint value);
+            chosen.Caption = valid ? $"Choose {value}" : "Choose number";
+            chosen.Enabled = valid;
+            lower.Enabled = NumberChoice.Step(prompt, _selection.NumberTyped, up: false) is not null;
+            raise.Enabled = NumberChoice.Step(prompt, _selection.NumberTyped, up: true) is not null;
+        }
+        void Step(bool up)
+        {
+            if (NumberChoice.Step(prompt, _selection.NumberTyped, up) is { } value)
+                field.Text = value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        }
+        lower.Clicked += () => Step(up: false);
+        raise.Clicked += () => Step(up: true);
+        _buttons.Children.Add(Stepper(8, lower, new SymbolText(13, Theme.Fg) { Text = "One at a time" }, raise));
+        field.TextChanged += (_, _) => { _selection.NumberTyped = field.Text; Refresh(); };
+        field.KeyDown += (_, e) =>
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                Submit(); RedrawNow();
+                e.Handled = true;
+            }
+        };
+        Refresh();
+    }
 
     /// <summary>
     /// Choosing a modal spell's modes (CR 700.2), or one of a card's named options (CR 614.12a): one button per mode, or
@@ -1588,6 +1667,16 @@ public sealed partial class MainPage
     /// that with two redirections the one chosen first passes the damage on to the other. Sources that share a name are told
     /// apart by what can be seen of them: the damage marked on each, and whether it is tapped.
     /// </summary>
+    private void FillChooseCostPayment(GameClient client, ChooseCostPaymentPromptMessage prompt)
+    {
+        Prompt("Choose a cost to pay next", "You may pay the remaining costs in any legal order.");
+        foreach (CostPaymentChoiceView choice in prompt.Choices)
+        {
+            string key = choice.Key;
+            AddButton(choice.Label, () => Send(client, new CostPaymentChosenAnswer { Key = key }));
+        }
+    }
+
     private void FillChooseReplacement(GameClient client, ChooseReplacementPromptMessage prompt)
     {
         // What the event is where the table words it ("You would gain 3 life", "3 damage from Lightning Bolt to you"), else
@@ -1851,23 +1940,24 @@ public sealed partial class MainPage
     {
         // Whose library: the searcher's own, or another player's (Deadly Cover-Up searches its owner's), named so the
         // player never reads "your library" of someone else's.
-        string library = prompt.Owner == 0 || prompt.Owner == client.Seat
-            ? "your library"
-            : $"{client.View?.Players.FirstOrDefault(player => player.Seat == prompt.Owner)?.Name ?? $"seat {prompt.Owner}"}'s library";
+        string owner = prompt.Owner == 0 || prompt.Owner == client.Seat
+            ? "your"
+            : $"{client.View?.Players.FirstOrDefault(player => player.Seat == prompt.Owner)?.Name ?? $"seat {prompt.Owner}"}'s";
+        string library = $"{owner} library";
         string title = $"Search {library}";
         string destination = prompt.Destination switch
         {
             SearchDestinationView.TopOfLibrary => $"to put on top of {library}",
-            SearchDestinationView.Graveyard => "to put into your graveyard",
+            SearchDestinationView.Graveyard => $"to put into {owner} graveyard",
             SearchDestinationView.Battlefield => "to put onto the battlefield",
             SearchDestinationView.BattlefieldTapped => "to put onto the battlefield tapped",
             SearchDestinationView.CastFree => "to cast without paying its mana cost",
             SearchDestinationView.Found => string.Empty,
-            SearchDestinationView.LandTappedElseHand => "a land card to put onto the battlefield tapped, any other into your hand",
+            SearchDestinationView.LandTappedElseHand => $"a land card to put onto the battlefield tapped, any other into {owner} hand",
             SearchDestinationView.Exile => "to exile",
             SearchDestinationView.ExileFaceDown => "to exile face down",
             SearchDestinationView.Cast => "to cast as the effect resolves",
-            _ => "to put into your hand",
+            _ => $"to put into {owner} hand",
         };
         string take = prompt.Destination switch
         {
@@ -2604,9 +2694,17 @@ public sealed partial class MainPage
             enabled: problem.Length == 0,
             primary: true).Tooltip = "Lock in the division" + Suffix(PassKey);
 
+        string DistinctName(ViewHandle handle, IReadOnlyList<ViewHandle> handles, string fallback)
+        {
+            string name = client.Object(handle)?.Name ?? fallback;
+            List<ViewHandle> same = handles.Where(h => (client.Object(h)?.Name ?? fallback) == name).ToList();
+            return same.Count > 1 ? $"{name} #{same.IndexOf(handle) + 1}" : name;
+        }
+
+        List<ViewHandle> sources = prompt.Divisions.Select(d => d.Source).ToList();
         foreach (DamageDivisionMessage division in prompt.Divisions)
         {
-            string source = client.Object(division.Source)?.Name ?? "A creature";
+            string source = DistinctName(division.Source, sources, "A creature");
             int assigned = Assigned(division);
 
             _buttons.Children.Add(new SymbolText(13, assigned == division.Damage ? Theme.Fg : Theme.FgMuted, semibold: true)
@@ -2616,7 +2714,7 @@ public sealed partial class MainPage
 
             foreach (ViewHandle blocker in division.Creatures)
             {
-                string name = client.Object(blocker)?.Name ?? "a creature";
+                string name = DistinctName(blocker, division.Creatures, "a creature");
                 AddShareRow(division, blocker.Value, name, source, name);
             }
 
@@ -2631,6 +2729,8 @@ public sealed partial class MainPage
     /// A share's row: − and + beside how much of the source's damage goes to it. Each button is named for what it does and
     /// the share it changes ("More of Ulvenwald Oddity's damage to Benalish Hero (now 2)"), as a person reading it hears it.
     /// </summary>
+    private sealed record DamageShareControl(int Source, int Creature);
+
     private void AddShareRow(DamageDivisionMessage division, int creature, string name, string source, string to)
     {
         (int Source, int Creature) key = (division.Source.Value, creature);
@@ -2639,6 +2739,7 @@ public sealed partial class MainPage
 
         DockButton less = Step("−", share > 0, () => _shares[key] = Math.Max(0, share - 1));
         DockButton more = Step("+", room, () => _shares[key] = share + 1);
+        less.Tag = more.Tag = new DamageShareControl(division.Source.Value, creature);
         Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(less, $"Less of {source}'s damage to {to} (now {share})");
         Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(more, $"More of {source}'s damage to {to} (now {share})");
         _buttons.Children.Add(Stepper(6, less, new SymbolText(13, Theme.Fg) { Text = $"{share}  {name}" }, more));

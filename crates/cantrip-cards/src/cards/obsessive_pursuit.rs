@@ -17,7 +17,7 @@ fn lose_life_and_create_a_clue(g: &mut dyn Game, item: &StackItem) -> Result<(),
 fn counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
     let x = permanents_sacrificed_this_turn(g, item.controller);
-    g.add_counters(creature, CounterKind::PlusOne, x.min(i16::MAX as usize) as i16);
+    g.add_counters(creature, CounterKind::PlusOne, i64::from(x.min(i16::MAX as usize) as i16));
     if x >= 3 {
         effects::gain_lifelink_until_end_of_turn(g, item.object, creature);
     }

@@ -54,6 +54,15 @@ Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Survey Mechan.Activate(Ability: It deals 3 damage)
 Bot1.Target(Bot2.Battlefield.Leatherback Baloth)
 Bot1.Target(Bot2)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

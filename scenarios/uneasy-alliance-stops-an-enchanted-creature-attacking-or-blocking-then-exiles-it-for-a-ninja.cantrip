@@ -57,6 +57,11 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Plains#1.Activate
 Bot1.Battlefield.Plains#2.Activate
 Bot1.Battlefield.Uneasy Alliance.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Graveyard = Uneasy Alliance
 ? Bot2.Battlefield.Elvish Mystic#1.Power = 1
 Bot1.Pass

@@ -14,7 +14,7 @@ fn suspend(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let count = g.card(g.obj(card).card).suspend.map_or(0, |s| s.count);
     let exiled = g.exile(card);
     if g.obj(exiled).zone.is(ZoneKind::Exile) {
-        g.add_counters(exiled, CounterKind::Time, count as i16);
+        g.add_counters(exiled, CounterKind::Time, i64::from(count as i16));
     }
     Ok(())
 }

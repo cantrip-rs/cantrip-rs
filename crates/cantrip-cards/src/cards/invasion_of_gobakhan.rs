@@ -24,7 +24,7 @@ fn counters_on_attackers(g: &mut dyn Game, _: &StackItem) -> Result<(), Suspend>
         .copied()
         .filter(|&id| g.attacked_this_turn(id) && g.chars(id).is(CardType::Creature))
         .collect();
-    let puts: Vec<(ObjectId, CounterKind, i16)> = attackers.into_iter().map(|id| (id, CounterKind::PlusOne, 1)).collect();
+    let puts: Vec<(ObjectId, CounterKind, i64)> = attackers.into_iter().map(|id| (id, CounterKind::PlusOne, 1)).collect();
     g.add_counters_together(&puts);
     Ok(())
 }

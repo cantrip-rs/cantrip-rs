@@ -28,6 +28,10 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Plains.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Figure of Destiny)
 [T1 Bot1.Main2]
 ? Bot1.Hand.Count = 0

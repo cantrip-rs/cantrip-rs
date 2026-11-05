@@ -28,6 +28,8 @@ Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Goldmeadow Nomad)
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Pearl#1.Activate
 Bot1.Graveyard.Goldmeadow Nomad.Activate
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 
 [Expect]

@@ -284,10 +284,12 @@ impl ManaTally {
 }
 
 /// A mana cost (CR 202): generic, and a count of each colored symbol; hybrid, monocolored hybrid, Phyrexian and {X}
-/// symbols. Snow ({S}) is not built.
+/// symbols, and snow-source requirements ({S}, CR 107.4h), which are not mana types.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Default)]
 pub struct ManaCost {
     pub generic: u32,
+    /// {S} symbols: each requires one mana of any type produced by a snow source (CR 107.4h).
+    pub snow: u32,
     /// W U B R G C, as `Mana` orders them.
     pub symbols: [u32; 6],
     /// Hybrid symbols (CR 107.4e): each paid with either of two types of mana. Two colors ({W/U}), or a color and
@@ -304,10 +306,11 @@ pub struct ManaCost {
 }
 
 impl ManaCost {
-    pub const ZERO: ManaCost = ManaCost { generic: 0, symbols: [0; 6], hybrid: [None; 6], twobrid: [0; 5], phyrexian: [0; 5], x: 0 };
+    pub const ZERO: ManaCost = ManaCost { generic: 0, snow: 0, symbols: [0; 6], hybrid: [None; 6], twobrid: [0; 5], phyrexian: [0; 5], x: 0 };
 
     pub fn mana_value(&self) -> u32 {
         self.generic
+            + self.snow
             + self.symbols.iter().sum::<u32>()
             + self.hybrid.iter().flatten().count() as u32
             + 2 * self.twobrid.iter().sum::<u32>()
@@ -386,6 +389,7 @@ impl ManaCost {
     pub fn plus(&self, other: &ManaCost) -> ManaCost {
         let mut sum = *self;
         sum.generic += other.generic;
+        sum.snow += other.snow;
         sum.x += other.x;
         for i in 0..6 {
             sum.symbols[i] += other.symbols[i];
@@ -406,7 +410,7 @@ impl ManaCost {
     /// twice). `None` when the result does not fit the cost's shape: more {X} symbols than a byte counts, or more hybrid
     /// symbols than its slots hold. Never a smaller cost than `n` payments.
     pub fn times(&self, n: u32) -> Option<ManaCost> {
-        let mut out = ManaCost { generic: self.generic * n, x: u8::try_from(u32::from(self.x) * n).ok()?, hybrid: [None; 6], ..*self };
+        let mut out = ManaCost { generic: self.generic * n, snow: self.snow * n, x: u8::try_from(u32::from(self.x) * n).ok()?, hybrid: [None; 6], ..*self };
         for i in 0..6 {
             out.symbols[i] = self.symbols[i] * n;
         }
@@ -469,6 +473,7 @@ impl fmt::Display for ManaCost {
                 write!(f, "{{{}/P}}", Color::ALL[i].symbol())?;
             }
         }
+        for _ in 0..self.snow { f.write_str("{S}")?; }
         for mana in Mana::ALL {
             for _ in 0..self.symbols[mana as usize] {
                 write!(f, "{{{}}}", mana.symbol())?;
@@ -1085,6 +1090,17 @@ pub enum Keyword {
     /// `settle`). Printed (Founding the Third Path, The Cruelty of Gix, Urza Assembles the Titans) or granted (Barbara
     /// Wright's "Sagas you control have read ahead"); instances are redundant (CR 702.155c).
     ReadAhead = 59,
+    /// Snow landwalk variants (CR 702.14a,c). Rime Dryad and Legions of Lim-Dûl print snow forestwalk and snow
+    /// swampwalk; all five land types are needed when an effect changes a basic land type word (CR 612.2).
+    SnowPlainswalk = 60,
+    SnowIslandwalk = 61,
+    SnowSwampwalk = 62,
+    SnowMountainwalk = 63,
+    SnowForestwalk = 64,
+    /// Snow landwalk (CR 702.14c): any snow land, as printed on Zombie Musher.
+    SnowLandwalk = 65,
+    /// Desertwalk (CR 702.14c): a land with the Desert subtype, as printed on Desert Nomads.
+    Desertwalk = 66,
     /// "This creature assigns combat damage equal to its toughness rather than its power" (CR 510.1a): printed, or granted as
     /// an ability ("has" or "gains", CR 113.1a), so the layers decide whether it has it (CR 613.1f, 613.7): "loses all
     /// abilities" takes it from a creature, and one granted later is kept. It changes the damage assigned and nothing else:
@@ -1092,10 +1108,34 @@ pub enum Keyword {
     /// ability of the creature - "each creature you control assigns", "equipped creature assigns" - it is that permanent's
     /// `CardDef::damage_by_toughness`, or a player's `EffectKind::CreaturesAssignDamageByToughness`; `static_rules::combat_damage_of`
     /// reads all three.
-    AssignsDamageByToughness = 60,
+    AssignsDamageByToughness = 67,
 }
 
 impl Keyword {
+    /// Every supported landwalk variant (CR 702.14a), for effects referring to landwalk without a qualifier.
+    pub const ALL_LANDWALKS: [Keyword; 14] = [
+        Self::Plainswalk, Self::Islandwalk, Self::Swampwalk, Self::Mountainwalk, Self::Forestwalk,
+        Self::NonbasicLandwalk, Self::LegendaryLandwalk, Self::SnowPlainswalk, Self::SnowIslandwalk,
+        Self::SnowSwampwalk, Self::SnowMountainwalk, Self::SnowForestwalk, Self::SnowLandwalk, Self::Desertwalk,
+    ];
+
+    /// Each snow basic-landwalk and the land type it names. Snow remains a separate restriction after a text change.
+    pub const SNOW_LANDWALKS: [(Keyword, Subtype); 5] = [
+        (Self::SnowPlainswalk, Subtype::Plains), (Self::SnowIslandwalk, Subtype::Island),
+        (Self::SnowSwampwalk, Subtype::Swamp), (Self::SnowMountainwalk, Subtype::Mountain),
+        (Self::SnowForestwalk, Subtype::Forest),
+    ];
+
+    /// The snow counterpart of an ordinary basic-landwalk. A reference to islandwalk includes snow islandwalk
+    /// (Merfolk Assassin's official 2006-10-15 ruling); granting islandwalk still grants only islandwalk.
+    pub const fn snow_landwalk(self) -> Option<Keyword> {
+        match self {
+            Self::Plainswalk => Some(Self::SnowPlainswalk), Self::Islandwalk => Some(Self::SnowIslandwalk),
+            Self::Swampwalk => Some(Self::SnowSwampwalk), Self::Mountainwalk => Some(Self::SnowMountainwalk),
+            Self::Forestwalk => Some(Self::SnowForestwalk), _ => None,
+        }
+    }
+
     /// Each basic landwalk keyword (CR 702.14a) and the basic land type it names.
     pub const LANDWALKS: [(Keyword, Subtype); 5] = [
         (Keyword::Plainswalk, Subtype::Plains),
@@ -1124,27 +1164,52 @@ pub enum DayNight {
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Default)]
-pub struct Keywords(pub u64);
+pub struct Keywords(pub u128);
 
 impl Keywords {
     pub const NONE: Keywords = Keywords(0);
+    /// All landwalk variants, for an unqualified reference such as "creatures with landwalk" or "lose landwalk".
+    pub const LANDWALKS: Keywords = Keywords::of(&Keyword::ALL_LANDWALKS);
+
+    /// Whether an effect's reference to an ability matches this set (CR 702.1d). Unlike exact `has`, a reference to a
+    /// basic-landwalk also includes its snow counterpart (Merfolk Assassin's official 2006-10-15 ruling).
+    pub fn matches(self, keyword: Keyword) -> bool {
+        self.has(keyword) || keyword.snow_landwalk().is_some_and(|snow| self.has(snow))
+    }
+
+    /// Expand named ability references for effects that check or remove them. Grants must use the original exact set:
+    /// granting forestwalk does not grant snow forestwalk. An unqualified landwalk reference uses `LANDWALKS`.
+    pub fn for_effect(self) -> Keywords {
+        let mut result = self;
+        for (ordinary, _) in Keyword::LANDWALKS {
+            if self.has(ordinary) {
+                result = result.with(ordinary.snow_landwalk().unwrap());
+            }
+        }
+        result
+    }
+
+    /// Whether this set has any landwalk variant (CR 702.14a).
+    pub fn has_landwalk(self) -> bool {
+        self.0 & Self::LANDWALKS.0 != 0
+    }
 
     pub const fn of(keywords: &[Keyword]) -> Keywords {
-        let mut bits = 0u64;
+        let mut bits = 0u128;
         let mut i = 0;
         while i < keywords.len() {
-            bits |= 1u64 << keywords[i] as u8;
+            bits |= 1u128 << keywords[i] as u8;
             i += 1;
         }
         Keywords(bits)
     }
 
     pub fn has(self, k: Keyword) -> bool {
-        self.0 & (1u64 << k as u8) != 0
+        self.0 & (1u128 << k as u8) != 0
     }
 
     pub fn with(self, k: Keyword) -> Keywords {
-        Keywords(self.0 | (1u64 << k as u8))
+        Keywords(self.0 | (1u128 << k as u8))
     }
 }
 
@@ -1156,10 +1221,11 @@ impl fmt::Debug for Keywords {
 
 /// Counters an object can have (CR 122), by kind: one line each - the kind, its index in an object's dense counter array,
 /// its name as Oracle text writes it (CR 122.1), and the token the scenario dump names it by (`Counters.PlusOnePlusOne`).
-/// A kind a new card prints is one more line at the end: the host's view and events, proliferate, "remove all counters"
+/// A power/toughness counter also names its signed deltas (CR 122.1a), applied in layer 7c. Armor Thrull's +1/+2 and
+/// Clockwork Avian's +1/+0 use the same rule. A kind a new card prints is one more line at the end: the host's view and events, proliferate, "remove all counters"
 /// and the client's pills all walk `CounterKind::ALL` and name the kind, so nothing else changes.
 macro_rules! counter_kinds {
-    ($($kind:ident = $n:literal, $name:literal, $token:literal;)*) => {
+    ($($kind:ident = $n:literal, $name:literal, $token:literal $(, ($power:literal, $toughness:literal))?;)*) => {
         #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
         #[repr(u8)]
         pub enum CounterKind {
@@ -1169,6 +1235,12 @@ macro_rules! counter_kinds {
         impl CounterKind {
             pub const ALL: [CounterKind; [$($n),*].len()] = [$(CounterKind::$kind),*];
             pub const COUNT: usize = Self::ALL.len();
+
+            /// Every power/toughness counter and the signed change one counter makes (CR 122.1a, 613.4c).
+            /// Other named counters have no intrinsic power/toughness effect.
+            pub const POWER_TOUGHNESS: &[(CounterKind, i16, i16)] = &[
+                $($( (CounterKind::$kind, $power, $toughness), )?)*
+            ];
 
             /// The counter's name as Oracle text writes it (CR 122.1).
             pub fn name(self) -> &'static str {
@@ -1188,8 +1260,8 @@ macro_rules! counter_kinds {
 }
 
 counter_kinds! {
-    PlusOne = 0, "+1/+1", "PlusOnePlusOne";
-    MinusOne = 1, "-1/-1", "MinusOneMinusOne";
+    PlusOne = 0, "+1/+1", "PlusOnePlusOne", (1, 1);
+    MinusOne = 1, "-1/-1", "MinusOneMinusOne", (-1, -1);
     Loyalty = 2, "loyalty", "Loyalty";
     Time = 3, "time", "Time";
     Lore = 4, "lore", "Lore";
@@ -1255,8 +1327,35 @@ counter_kinds! {
     Vitality = 61, "vitality", "Vitality";
     Fire = 62, "fire", "Fire";
     Conqueror = 63, "conqueror", "Conqueror";
-    Film = 64, "film", "Film";
-    Peace = 65, "peace", "Peace";
+
+    // Private foundation additions follow the published counter prefix (CR 122.1).
+    Wind = 64, "wind", "Wind";
+    Hatchling = 65, "hatchling", "Hatchling";
+    Sleep = 66, "sleep", "Sleep";
+    Plus1Plus0 = 67, "+1/+0", "Plus1Plus0", (1, 0);
+    Plus0Plus1 = 68, "+0/+1", "Plus0Plus1", (0, 1);
+    Plus2Plus2 = 69, "+2/+2", "Plus2Plus2", (2, 2);
+    Minus2Minus2 = 70, "-2/-2", "Minus2Minus2", (-2, -2);
+    Plus0Minus1 = 71, "-0/-1", "Plus0Minus1", (0, -1);
+    Plus0Minus2 = 72, "-0/-2", "Plus0Minus2", (0, -2);
+    Plus1Plus2 = 73, "+1/+2", "Plus1Plus2", (1, 2);
+    Minus2Minus1 = 74, "-2/-1", "Minus2Minus1", (-2, -1);
+    Plus2Plus0 = 75, "+2/+0", "Plus2Plus0", (2, 0);
+    Plus0Plus2 = 76, "+0/+2", "Plus0Plus2", (0, 2);
+    Minus1Plus0 = 77, "-1/-0", "Minus1Plus0", (-1, 0);
+    Carrion = 78, "carrion", "Carrion";
+    Credit = 79, "credit", "Credit";
+    Depletion = 80, "depletion", "Depletion";
+    Healing = 81, "healing", "Healing";
+    Javelin = 82, "javelin", "Javelin";
+    Paralyzation = 83, "paralyzation", "Paralyzation";
+    Spore = 84, "spore", "Spore";
+    Storage = 85, "storage", "Storage";
+    Tide = 86, "tide", "Tide";
+    Music = 87, "music", "Music";
+    Film = 88, "film", "Film";
+    Peace = 89, "peace", "Peace";
+
 }
 
 impl CounterKind {
@@ -1864,3 +1963,71 @@ mod count_tests {
     }
 }
 
+
+#[cfg(test)]
+mod carrion_counter_tests {
+    use super::*;
+    #[test]
+    fn published_counter_ids_survive_foundation_composition() {
+        // Published IDs are a raw observation contract, independent of private prototype order.
+        for (kind, id) in [
+            (CounterKind::Pupa, 58), (CounterKind::Matrix, 59), (CounterKind::Scream, 60),
+            (CounterKind::Vitality, 61), (CounterKind::Fire, 62), (CounterKind::Conqueror, 63),
+        ] {
+            assert_eq!(kind as usize, id);
+        }
+        for (index, kind) in CounterKind::ALL.iter().enumerate() {
+            assert_eq!(*kind as usize, index);
+        }
+    }
+
+    #[test]
+    fn carrion_is_a_distinct_named_counter_with_an_appended_dense_id() {
+        let carrion = CounterKind::ALL.iter().copied().find(|kind| kind.name() == "carrion").expect("Osai Vultures uses carrion counters");
+        assert_eq!(carrion as usize, 78);
+        assert_eq!(carrion.token(), "Carrion");
+        assert_ne!(carrion, CounterKind::Corpse);
+        assert_eq!(CounterKind::ALL[carrion as usize], carrion);
+        assert_eq!(CounterKind::Music as usize, 87);
+        assert_eq!(CounterKind::Film as usize, 88);
+        assert_eq!(CounterKind::Peace as usize, 89);
+        assert_eq!(CounterKind::COUNT, 90);
+        assert!(!CounterKind::POWER_TOUGHNESS.iter().any(|(kind, _, _)| *kind == carrion));
+    }
+}
+
+#[cfg(test)]
+mod landwalk_keyword_tests {
+    use super::*;
+
+    #[test]
+    fn effect_references_include_the_corresponding_snow_variant_without_changing_raw_membership() {
+        let cases = [
+            (Keyword::Plainswalk, Keyword::SnowPlainswalk, Subtype::Plains),
+            (Keyword::Islandwalk, Keyword::SnowIslandwalk, Subtype::Island),
+            (Keyword::Swampwalk, Keyword::SnowSwampwalk, Subtype::Swamp),
+            (Keyword::Mountainwalk, Keyword::SnowMountainwalk, Subtype::Mountain),
+            (Keyword::Forestwalk, Keyword::SnowForestwalk, Subtype::Forest),
+        ];
+        for (ordinary, snow, ty) in cases {
+            assert_eq!(ordinary.snow_landwalk(), Some(snow));
+            let set = Keywords::of(&[snow]);
+            assert!(set.matches(ordinary));
+            assert!(set.has(snow));
+            assert!(!set.has(ordinary));
+            assert!(!Keywords::of(&[ordinary]).has(snow));
+            for (other, _, other_ty) in cases {
+                assert_eq!(set.matches(other), ty == other_ty);
+            }
+            assert!(!set.matches(Keyword::SnowLandwalk), "snow landwalk is a distinct ability");
+        }
+        assert!(!Keywords::NONE.has_landwalk());
+        assert!(!Keywords::of(&[Keyword::Flying]).has_landwalk());
+        for walk in Keyword::ALL_LANDWALKS {
+            assert!(Keywords::of(&[walk]).has_landwalk());
+            assert!(Keywords::LANDWALKS.has(walk));
+        }
+        assert_eq!(Keywords::LANDWALKS.0.count_ones(), 14);
+        assert_eq!(Keywords::of(&[Keyword::Flying]).for_effect(), Keywords::of(&[Keyword::Flying]));
+    }
+}

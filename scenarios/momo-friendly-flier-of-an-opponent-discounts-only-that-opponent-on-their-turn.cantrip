@@ -38,6 +38,7 @@ Bot2.Pass
 Bot2.Hand.Island.Play
 Bot2.Battlefield.Island.Activate
 Bot2.Hand.Faerie Mastermind.Cast
+Bot2.Choose(Close mana window)
 ? Bot2.Mana =
 Bot2.Pass
 Bot1.Pass

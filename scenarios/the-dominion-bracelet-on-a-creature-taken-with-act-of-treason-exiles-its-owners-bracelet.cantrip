@@ -89,6 +89,18 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Mana Vault.Activate
 Bot1.Battlefield.Grizzly Bears.Activate(Bot2)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 

@@ -29,6 +29,7 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Lier, Disciple of the Drowned.Cast
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Mountain.Activate
 Bot1.Hand.Faithless Looting.Cast
 Bot1.Choose(Bonecrusher Giant; Leave // Chance)

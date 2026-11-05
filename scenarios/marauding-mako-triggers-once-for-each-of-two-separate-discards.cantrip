@@ -27,10 +27,15 @@ Bot1.Hand.Mountain.Play
 Bot1.Hand.Miscalculation.Activate
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Mountain.Activate
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Stack.Count = 2
 Bot1.Hand.Miscalculation.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Stack.Count = 4
 
 [Expect]

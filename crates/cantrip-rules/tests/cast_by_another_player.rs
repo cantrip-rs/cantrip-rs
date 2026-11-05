@@ -55,7 +55,7 @@ fn opponent_casts_their_card(g: &mut dyn cantrip_api::Game, item: &StackItem) ->
     checks.push(!g.cast_ways_during_resolution_by(card, them).is_empty());
     // What each judged is recorded where the test reads it: a counter on nothing would change the game, so a life total.
     let gained = checks.iter().enumerate().map(|(n, &c)| if c { 1 << n } else { 0 }).sum::<i32>();
-    g.gain_life(item.controller, gained);
+    g.gain_life(item.controller, i64::from(gained));
     g.cast_during_resolution_as(card, CastTerms { caster: Some(them), ..CastTerms::default() })?;
     Ok(())
 }
@@ -101,7 +101,7 @@ fn game_with(theirs: &str) -> (RulesGame, ObjectId, ObjectId) {
         t.set_step(Step::PrecombatMain);
         t.began = true;
     });
-    game.state.add_mana(THEM, Mana::C, 1, ObjectId::NONE, None, ManaLasts::Step);
+    game.state.add_mana(THEM, Mana::C, 1, ObjectId::NONE, None, ManaLasts::Step, false);
     game.state.frame_push(Frame::new(FrameKind::Priority));
     (game, probe_id, card_id)
 }

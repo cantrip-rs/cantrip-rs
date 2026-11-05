@@ -24,6 +24,7 @@ Bot1.Battlefield.Mox Jet#1.Activate
 Bot1.Battlefield.Mox Jet#2.Activate
 ! Bot1.Hand.Warp Artifact.Cast(Bot1.Battlefield.Island)
 Bot1.Hand.Warp Artifact.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

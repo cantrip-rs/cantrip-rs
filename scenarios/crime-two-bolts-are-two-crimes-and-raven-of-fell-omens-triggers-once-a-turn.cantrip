@@ -30,6 +30,7 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Pass
 Bot1.Battlefield.Mountain.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 Bot1.Pass
 Bot2.Pass
@@ -43,6 +44,7 @@ Bot2.Pass
 [T6 Bot2.Main1]
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 [T6 Bot2.Main2]
 

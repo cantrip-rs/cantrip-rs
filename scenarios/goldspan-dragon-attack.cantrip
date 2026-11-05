@@ -36,6 +36,8 @@ Bot1.Pass
 Bot2.Battlefield.Island.Activate
 Bot2.Battlefield.Mox Jet.Activate
 Bot2.Hand.Deadly Dispute.Cast
+Bot2.Choose(Pay mana)
+Bot2.Choose(Pay mana)
 Bot2.Choose(Ornithopter)
 Bot2.Pass
 Bot1.Pass

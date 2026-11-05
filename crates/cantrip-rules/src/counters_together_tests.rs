@@ -106,12 +106,12 @@ fn put(g: &mut Game, def: &'static CardDef, controller: PlayerId) -> ObjectId {
 }
 
 fn cx(g: &mut Game) -> Cx<'_> {
-    Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
-fn one(kind: CounterKind, n: i16) -> [i16; CounterKind::COUNT] {
+fn one(kind: CounterKind, n: i16) -> [i64; CounterKind::COUNT] {
     let mut counts = [0; CounterKind::COUNT];
-    counts[kind as usize] = n;
+    counts[kind as usize] = i64::from(n);
     counts
 }
 

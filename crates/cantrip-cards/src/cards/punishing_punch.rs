@@ -16,7 +16,7 @@ fn deal_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let (Some(creature), Some(victim)) = (targets::object(g, item, 0), targets::object(g, item, 1)) {
         let power = g.chars(creature).power.unwrap_or(0);
         if power > 0 {
-            g.damage(creature, Target::Object(victim), 2 * power as u16);
+            g.damage(creature, Target::Object(victim), i64::from(2 * power as u16));
         }
     }
     Ok(())

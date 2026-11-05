@@ -7,7 +7,7 @@ use cantrip_oracle as oracle;
 /// opponents control not at all; the Shrine type is read through this card's words (CR 612).
 fn drain_for_each_shrine(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let shrine = g.words(item.object).subtype(Subtype::Shrine);
-    let x = permanents_with_subtype_you_control(g, item.controller, shrine) as i32;
+    let x = i64::try_from(permanents_with_subtype_you_control(g, item.controller, shrine)).expect("shrine count fits the native object domain");
     g.each_opponent_loses_life(item.controller, x);
     g.gain_life(item.controller, x);
     Ok(())

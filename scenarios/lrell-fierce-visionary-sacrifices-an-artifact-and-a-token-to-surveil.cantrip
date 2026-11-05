@@ -23,6 +23,8 @@ Bot1.Hand.L'Rell, Fierce Visionary.Cast
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.L'Rell, Fierce Visionary.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mox Pearl)
 Bot1.Arrange(| Swamp)
 [Bot1.Main2]
@@ -30,6 +32,8 @@ Bot1.Hand.Swamp.Play
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.L'Rell, Fierce Visionary.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Klingon Warrior Token)
 Bot1.Arrange(Swamp |)
 [T4 Bot2.Main1]

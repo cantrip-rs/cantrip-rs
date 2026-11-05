@@ -37,6 +37,7 @@ Bot2.Pass
 [T5 Bot1.Main1]
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.June, Bounty Hunter.Activate
+Bot1.Choose(Pay mana)
 Bot1.Choose(Bot1.Battlefield.Grizzly Bears)
 ? Bot1.Mana =
 Bot1.Pass

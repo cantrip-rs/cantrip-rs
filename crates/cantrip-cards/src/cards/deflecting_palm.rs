@@ -15,8 +15,8 @@ fn palm(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 fn deflect(g: &mut dyn Game, asker: &Asker, _chosen: ObjectId, prevented: &[Prevented]) {
     let Some(first) = prevented.first() else { return };
     let to = g.controller(first.source);
-    let amount = u16::try_from(Prevented::total(prevented)).unwrap_or(u16::MAX);
-    g.damage(asker.source, Target::Player(to), amount);
+    let amount = Prevented::total(prevented);
+    g.damage(asker.source, Target::Player(to), i64::from(amount));
 }
 
 pub static CARD: CardDef = CardDef {

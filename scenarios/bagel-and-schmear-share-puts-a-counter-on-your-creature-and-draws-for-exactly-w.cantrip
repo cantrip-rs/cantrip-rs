@@ -23,6 +23,7 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Bagel and Schmear.Activate(Ornithopter)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

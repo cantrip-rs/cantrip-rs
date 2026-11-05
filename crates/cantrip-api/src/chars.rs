@@ -54,6 +54,9 @@ pub struct Chars {
     /// enters (CR 702.136a, 614.12), its choice made separately.
     pub riot: u16,
     pub abilities: [Option<AbilityRef>; MAX_ABILITIES],
+    /// Physical donors of borrowed ability definitions. NONE for printed/copiable text and ordinary grants.
+    /// Kept beside slots during layer evaluation, then incorporated into the stable acquisition key.
+    pub ability_origins: [ObjectId; MAX_ABILITIES],
     /// It has no mana cost (CR 118.6, 707.9b): a copy that says so, whatever the card it copies prints. Its mana
     /// value is 0.
     pub no_cost: bool,
@@ -94,7 +97,37 @@ pub fn current_words(state: &GameState, id: ObjectId) -> Words {
     words
 }
 
+/// Text changes on a permanent spell carry to the permanent it becomes
+/// (CR 400.7a). Other old-zone text changes do not affect the new object.
+/// Shared with the native prospective-entry projection (CR 614.12).
+pub fn text_change_carries(from: Zone, kind: EffectKind) -> bool {
+    from.is(ZoneKind::Stack) && matches!(kind, EffectKind::ChangeText { .. })
+}
+
+/// The words of the permanent as it would enter: its prospective copy values,
+/// then the spell's applicable text changes, never its old copy's words twice.
+pub fn words_for_entry(state: &GameState, entering: &crate::Entering) -> Words {
+    let obj = state.obj(entering.object);
+    let mut words = if obj.face_down_values().is_some() { Words::NONE }
+        else { entering.copy.or(obj.copy).map_or(Words::NONE, |c| c.words) };
+    for effect in &state.effects {
+        if effect.affected == entering.object && text_change_carries(obj.zone, effect.kind)
+            && let EffectKind::ChangeText { from, to } = effect.kind
+        {
+            words = words.changed(from, to);
+        }
+    }
+    words
+}
+
 impl Chars {
+    /// Gives one ability with its physical donor, preserving equal definitions as independent instances.
+    pub fn grant_ability_from(&mut self, ability: AbilityRef, origin: ObjectId) {
+        if let Some(slot) = self.abilities.iter().position(Option::is_none) {
+            self.abilities[slot] = Some(ability);
+            self.ability_origins[slot] = origin;
+        }
+    }
     /// The complete characteristics `last` kept (CR 400.7, 608.2h): expected-zone information, including a spell as it
     /// became cast (601.2i) and a permanent just before phasing out (702.26b).
     pub fn as_known(mut self, last: &LastKnown) -> Chars {
@@ -123,6 +156,7 @@ impl Chars {
         self.hexproof_from = last.hexproof_from;
         self.must_attack = last.must_attack;
         self.abilities = last.abilities;
+        self.ability_origins = [ObjectId::NONE; MAX_ABILITIES];
         self
     }
 

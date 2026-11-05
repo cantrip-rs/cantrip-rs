@@ -21,6 +21,8 @@ Bot1.Hand.Chromatic Star.Cast
 Bot1.Hand.Forest.Play
 Bot1.Battlefield.Chromatic Star.Activate(Color: Red)
 Bot1.Battlefield.Forest.Activate
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ! Bot1.Undo
 Bot1.Pass
 Bot1.Battlefield.Forest.Activate

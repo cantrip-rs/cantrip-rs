@@ -20,6 +20,7 @@ Bot1.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Crimson Manticore.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Pearl.Activate
@@ -35,6 +36,8 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Attack(Ageless Guardian > Bot2)
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Crimson Manticore.Activate(Bot1.Battlefield.Ageless Guardian)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

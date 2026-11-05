@@ -11,7 +11,7 @@ fn each_opponent_loses_again(g: &mut dyn Game, item: &StackItem) -> Result<(), S
     let opponents: Vec<PlayerId> = g.state().opponents(item.controller).collect();
     for opponent in opponents {
         let lost = g.history().life_lost(opponent);
-        g.lose_life(opponent, i32::try_from(lost).unwrap_or(i32::MAX));
+        g.lose_life(opponent, i64::from(i32::try_from(lost).unwrap_or(i32::MAX)));
     }
     Ok(())
 }

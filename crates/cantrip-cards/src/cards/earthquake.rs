@@ -5,15 +5,15 @@ use cantrip_oracle as oracle;
 /// players and every creature without flying on the battlefield (CR 608.2c, 120.2).
 fn earthquake_deals_x_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let x = item.x;
-    let mut hits: Vec<(ObjectId, Target, u16)> = g
+    let mut hits: Vec<(ObjectId, Target, i64)> = g
         .state()
         .battlefield()
         .iter()
         .copied()
         .filter(|&id| g.chars(id).is(CardType::Creature) && !g.chars(id).keywords.has(Keyword::Flying))
-        .map(|id| (item.object, Target::Object(id), x))
+        .map(|id| (item.object, Target::Object(id), i64::from(x)))
         .collect();
-    hits.extend(g.state().apnap().map(|p| (item.object, Target::Player(p), x)));
+    hits.extend(g.state().apnap().map(|p| (item.object, Target::Player(p), i64::from(x))));
     g.damage_together(&hits);
     Ok(())
 }

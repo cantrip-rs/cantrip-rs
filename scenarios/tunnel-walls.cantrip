@@ -34,6 +34,7 @@ Bot1.Hand.Tunnel.Cast(Bot1.Battlefield.Wall of Wood)
 [T5 Bot1.Main1]
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Tunnel.Cast(Bot2.Battlefield.Wall of Wood)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 [Expect]

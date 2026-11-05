@@ -36,6 +36,10 @@ Bot1.Battlefield.Mox Jet#1.Activate
 Bot1.Battlefield.Mox Jet#2.Activate
 Bot1.Battlefield.Mox Jet#3.Activate
 Bot1.Battlefield.Skycoach Waypoint.Activate(Ability: {3}, {T}; Bot1.Battlefield.Bloodline Recollector)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

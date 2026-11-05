@@ -21,6 +21,7 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Botanical Brawler.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

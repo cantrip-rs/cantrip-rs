@@ -32,6 +32,7 @@ Bot2.Hand.Mox Ruby.Cast
 Bot2.Hand.Mox Ruby.Cast
 Bot2.Battlefield.Mountain.Activate
 Bot2.Hand.Faithless Looting.Cast
+Bot2.Choose(Close mana window)
 ? Bot2.Mana = 
 Bot2.Pass
 Bot2.Choose(Island; Island)

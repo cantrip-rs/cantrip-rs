@@ -14,7 +14,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         let power = i32::from(chars.power.unwrap_or(0));
         let amount = if chars.has(Keyword::Flying) { power * 2 } else { power };
         if amount > 0 {
-            g.damage(creature, Target::Object(creature), u16::try_from(amount).unwrap_or(u16::MAX));
+            g.damage(creature, Target::Object(creature), i64::from(u16::try_from(amount).unwrap_or(u16::MAX)));
         }
     }
     Ok(())

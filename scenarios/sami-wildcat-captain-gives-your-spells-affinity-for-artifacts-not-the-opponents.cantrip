@@ -57,6 +57,7 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Cost of Brilliance.Cast
 Bot1.Target(Bot2)
 Bot1.Target(Count: 0)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -65,6 +66,7 @@ Bot2.Pass
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Pest Mascot.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

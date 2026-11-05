@@ -31,6 +31,7 @@ Bot1.Modes(Blight 1)
 Bot1.Target(Bot2.Battlefield.Llanowar Elves)
 ? Client.Bot1.Prompt.Title = Requiting Hex: choose a creature you control to blight (it gets -1/-1 counters)
 ? Client.Bot1.Prompt.Detail = 0 of 1 chosen  ·  click them on the battlefield
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 ? Client.Bot1.Confirm =
 [T3 Bot1.Main2]

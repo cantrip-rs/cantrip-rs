@@ -38,6 +38,8 @@ Bot1.Pass
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Graveyard.Life // Death.Cast(Bot1.Graveyard.Marauding Mako; Ability: Death: Escape)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Black Lotus; Faithless Looting; Lightning Bolt)
 Bot1.Pass
 

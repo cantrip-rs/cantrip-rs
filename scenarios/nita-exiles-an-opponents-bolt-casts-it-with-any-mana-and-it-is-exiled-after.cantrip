@@ -38,6 +38,8 @@ Bot1.Hand.Plains.Play
 Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Nita, Forum Conciliator.Activate(Bot2.Graveyard.Lightning Bolt)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass

@@ -13,7 +13,7 @@ fn chapter_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// Saga's text, read through its words (CR 612).
 fn chapter_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let villain = g.words(item.object).subtype(Subtype::Villain);
-    let mut hits: Vec<(ObjectId, Target, u16)> = g
+    let mut hits: Vec<(ObjectId, Target, i64)> = g
         .state()
         .battlefield()
         .iter()

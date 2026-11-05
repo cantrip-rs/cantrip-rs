@@ -27,6 +27,7 @@ Bot1.Hand.Grizzly Bears.Cast
 Bot1.Pass
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Escape Velocity.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -44,6 +45,8 @@ Bot1.Pass
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Graveyard.Escape Velocity.Cast(Bot1.Battlefield.Ornithopter; Ability: Escape)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Black Lotus; Grizzly Bears)
 ? Bot1.Mana =
 Bot1.Pass

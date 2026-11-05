@@ -28,6 +28,9 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Stomped by the Foot.Cast(Bot2.Battlefield.Thalia, Guardian of Thraben)
 Bot1.Modes(Kicker—Sacrifice an artifact or creature)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot1.Pass

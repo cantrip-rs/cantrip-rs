@@ -30,6 +30,9 @@ Bot1.Hand.Forest.Play
 Bot1.Battlefield.Forest#1.Activate
 Bot1.Battlefield.Forest#2.Activate
 Bot1.Battlefield.Roadside Reliquary.Activate(Ability: Draw)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

@@ -43,6 +43,7 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Hand.Grizzly Bears.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {G}
 Bot1.Pass
 Bot2.Pass

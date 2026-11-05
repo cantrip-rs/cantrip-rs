@@ -36,6 +36,7 @@ Bot1.Battlefield.Swamp#1.Activate
 Bot1.Battlefield.Swamp#2.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Super-Skrull.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 [T5 Bot1.Main1]
@@ -47,6 +48,7 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Swamp#1.Activate
 Bot1.Battlefield.Super-Skrull.Activate(Ability: {5}{U}; Bot2)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

@@ -30,6 +30,8 @@ Bot2.Hand.Mox Emerald.Cast
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Rite of Oblivion.Cast(Bot2.Battlefield.Mox Ruby)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mox Sapphire)
 [T3 Bot1.Main2]
 ? Bot2.Battlefield.Count = 2
@@ -40,6 +42,10 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Graveyard.Rite of Oblivion.Cast(Bot2.Battlefield.Mox Emerald; Ability: Flashback)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mox Pearl)
 
 [Expect]

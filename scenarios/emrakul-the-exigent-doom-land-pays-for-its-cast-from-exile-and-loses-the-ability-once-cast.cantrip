@@ -23,6 +23,10 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Hand.Black Lotus.Cast
 Bot1.Hand.Emrakul, the Exigent Doom.Activate(Bot1.Battlefield.Island)
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 [T1 Bot1.Main1]
 ? Exile = Emrakul, the Exigent Doom
 ? Bot1.Graveyard = Black Lotus

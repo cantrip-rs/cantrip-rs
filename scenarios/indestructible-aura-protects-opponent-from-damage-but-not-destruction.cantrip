@@ -25,6 +25,7 @@ Bot2.Hand.Memnite.Cast
 Bot2.Pass
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Indestructible Aura.Cast(Bot2.Battlefield.Memnite)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

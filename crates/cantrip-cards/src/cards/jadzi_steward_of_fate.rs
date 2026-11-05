@@ -12,7 +12,7 @@ fn oracles_gift(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.end_sentence();
     let fractal = g.words(item.object).subtype(Subtype::Fractal);
     let fractals: Vec<ObjectId> = g.permanents_of(you).into_iter().filter(|&id| g.chars(id).has_subtype(fractal)).collect();
-    let puts: Vec<(ObjectId, CounterKind, i16)> = fractals.into_iter().map(|id| (id, CounterKind::PlusOne, item.x as i16)).collect();
+    let puts: Vec<(ObjectId, CounterKind, i64)> = fractals.into_iter().map(|id| (id, CounterKind::PlusOne, i64::from(item.x as i16))).collect();
     g.add_counters_together(&puts);
     Ok(())
 }

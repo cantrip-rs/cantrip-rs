@@ -38,6 +38,8 @@ Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 ! Bot1.Battlefield.Alchor's Tomb.Activate(Bot2.Battlefield.Ornithopter)
 Bot1.Battlefield.Alchor's Tomb.Activate(Bot1.Battlefield.Merfolk of the Pearl Trident)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Colors(Red)
 Bot1.Pass
@@ -49,6 +51,8 @@ Bot2.Pass
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Alchor's Tomb.Activate(Bot1.Battlefield.Island)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Colors(Blue)
 Bot1.Pass

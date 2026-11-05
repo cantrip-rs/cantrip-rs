@@ -6,7 +6,7 @@ use cantrip_oracle as oracle;
 /// about to be dealt, 0 for a negative power; the damage stays that of its source (CR 614.5: two Hawkeyes add both powers).
 fn plus_hawkeyes_power(q: &dyn Query, asker: &Asker, proposal: &mut Proposal) {
     if let Proposal::Damage(d) = proposal {
-        d.amount = d.amount.saturating_add(q.chars(asker.source).power.unwrap_or(0).max(0) as u16);
+        d.amount = d.amount.checked_add(i64::from(q.chars(asker.source).power.unwrap_or(0).max(0) as u16)).expect("damage expression exceeds i64 semantic domain");
     }
 }
 

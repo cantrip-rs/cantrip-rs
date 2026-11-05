@@ -11,7 +11,7 @@ fn artifact_with_mana_value_x(q: &dyn Query, asker: &Asker, t: Target) -> bool {
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some(artifact) = destroy_target_no_regen(g, item, 0) {
         g.end_sentence();
-        g.damage(item.object, Target::Player(g.controller(artifact)), item.x as u16);
+        g.damage(item.object, Target::Player(g.controller(artifact)), i64::from(item.x));
     }
     Ok(())
 }

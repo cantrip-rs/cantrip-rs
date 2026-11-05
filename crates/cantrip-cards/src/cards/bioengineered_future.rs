@@ -5,8 +5,8 @@ use cantrip_oracle as oracle;
 
 /// How many lands have entered the battlefield under `player`'s control this turn (CR 603.6a), judged as each entered (the
 /// controller and card types `Event::Entered` holds), so one that has since left or been stolen still counts.
-fn lands_entered_under_control_this_turn(q: &dyn Query, player: PlayerId) -> i16 {
-    q.history().entered().filter(|e| e.controller == player && e.is(CardType::Land)).count() as i16
+fn lands_entered_under_control_this_turn(q: &dyn Query, player: PlayerId) -> i64 {
+    q.history().entered().filter(|e| e.controller == player && e.is(CardType::Land)).count().try_into().expect("land entry count fits i64")
 }
 
 /// "Each creature you control enters with an additional +1/+1 counter on it for each land that entered the battlefield under

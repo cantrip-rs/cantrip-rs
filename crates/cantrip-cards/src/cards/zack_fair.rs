@@ -33,7 +33,7 @@ fn sacrifice_effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
     effects::gain_indestructible_until_end_of_turn(g, item.object, creature);
     // Every kind together, one event (CR 608.2, 122.6).
-    let puts: Vec<(ObjectId, CounterKind, i16)> = CounterKind::ALL.into_iter().map(|kind| (creature, kind, g.obj(item.object).counters(kind))).collect();
+    let puts: Vec<(ObjectId, CounterKind, i64)> = CounterKind::ALL.into_iter().map(|kind| (creature, kind, i64::from(g.obj(item.object).counters(kind)))).collect();
     g.add_counters_together(&puts);
     let equipment = equipment_attached_to(g, item.object);
     let chosen = match equipment.as_slice() {

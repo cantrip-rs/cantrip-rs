@@ -44,6 +44,7 @@ Bot2.Battlefield.Mox Ruby#1.Activate
 Bot2.Battlefield.Mox Ruby#2.Activate
 Bot2.Battlefield.Mox Jet.Activate
 Bot2.Hand.Giant Cindermaw.Cast
+Bot2.Choose(Close mana window)
 Bot2.Battlefield.Mox Pearl.Activate
 Bot2.Battlefield.Mox Emerald.Activate
 Bot2.Hand.Ajani Resolute.Cast

@@ -105,3 +105,4 @@ fn waiting_texts_are_the_oracle_text() {
     assert!(read > 0, "no waiting text read");
     assert!(wrong.is_empty(), "{} waiting texts that are not their card's Oracle text:\n{}", wrong.len(), wrong.join("\n"));
 }
+

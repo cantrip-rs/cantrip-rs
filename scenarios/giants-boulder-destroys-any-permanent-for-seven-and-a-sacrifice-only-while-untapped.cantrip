@@ -35,6 +35,8 @@ Bot2.Hand.Island.Play
 Bot1.Hand.Mountain.Play
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Giant's Boulder.Activate(Ability: Add one mana; Color: Blue)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {U}
 ! Bot1.Battlefield.Giant's Boulder.Activate(Ability: Destroy)
 [T5 Bot1.Main1]

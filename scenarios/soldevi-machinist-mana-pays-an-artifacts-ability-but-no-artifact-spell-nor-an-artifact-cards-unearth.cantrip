@@ -55,6 +55,7 @@ Bot1.Pass
 Bot2.Pass
 ? Bot1.Mana = {C}{C} (AbilitiesOfArtifacts)
 Bot1.Battlefield.Aether Spellbomb.Activate(Ability: Draw)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {C} (AbilitiesOfArtifacts)
 Bot1.Pass
 Bot2.Pass

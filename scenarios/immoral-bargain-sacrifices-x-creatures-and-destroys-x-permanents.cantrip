@@ -41,6 +41,9 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Immoral Bargain.Cast(X: 2)
 Bot1.Target(Bot2.Battlefield.Mox Pearl; Bot2.Battlefield.Mox Sapphire)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ragavan, Nimble Pilferer; Cecil, Dark Knight)
 Bot1.Pass
 [Bot1.Main1]

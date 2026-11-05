@@ -7,7 +7,7 @@ use cantrip_oracle as oracle;
 /// "When this creature enters, it deals 2 damage to each opponent and you scry 2." The damage is dealt to every opponent
 /// at once (CR 120.2), then its controller scries (CR 701.22).
 fn enters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let hits: Vec<(ObjectId, Target, u16)> = g.state().opponents(item.controller).map(|p| (item.object, Target::Player(p), 2)).collect();
+    let hits: Vec<(ObjectId, Target, i64)> = g.state().opponents(item.controller).map(|p| (item.object, Target::Player(p), 2)).collect();
     g.damage_together(&hits);
     scry(g, item.controller, item.object, 2)
 }

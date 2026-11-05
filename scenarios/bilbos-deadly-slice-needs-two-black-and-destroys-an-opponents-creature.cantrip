@@ -34,6 +34,7 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Jet#2.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Bilbo's Deadly Slice.Cast(Bot2.Battlefield.Memnite)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

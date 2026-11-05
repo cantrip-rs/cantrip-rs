@@ -6,7 +6,7 @@ use cantrip_oracle as oracle;
 fn crumble(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some(artifact) = destroy_target_no_regen(g, item, 0) {
         g.end_sentence();
-        let amount = g.mana_value(artifact) as i32;
+        let amount = i64::from(g.mana_value(artifact));
         let controller = g.controller(artifact);
         g.gain_life(controller, amount);
     }

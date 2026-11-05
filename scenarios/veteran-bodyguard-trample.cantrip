@@ -32,6 +32,7 @@ Bot2.Hand.Mox Ruby.Cast
 Bot2.Hand.Mox Jet.Cast
 Bot2.Battlefield.Black Lotus.Activate(Color: Green)
 Bot2.Hand.Grizzly Bears.Cast
+Bot2.Choose(Close mana window)
 Bot2.Battlefield.Mox Ruby.Activate
 Bot2.Battlefield.Mox Jet.Activate
 Bot2.Hand.Goblin Deathraiders.Cast

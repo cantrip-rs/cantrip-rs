@@ -25,6 +25,7 @@ Bot1.Hand.Warhost's Frenzy.Cast
 ? Bot1.Battlefield.Ornithopter.Power = 2
 Bot1.Battlefield.Swamp.Activate
 Bot1.Hand.Village Rites.Cast
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 
 [Expect]

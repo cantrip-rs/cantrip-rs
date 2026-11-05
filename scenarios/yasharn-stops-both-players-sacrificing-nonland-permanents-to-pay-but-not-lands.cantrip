@@ -55,9 +55,18 @@ Bot2.Pass
 Bot2.Hand.Black Lotus.Cast
 Bot2.Pass
 ! Bot2.Battlefield.Black Lotus.Activate
-! Bot2.Hand.Village Rites.Cast
+Bot2.Hand.Village Rites.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Choose(Close mana window)
+? Bot2.Hand.Village Rites.Colors = Black
+? Bot2.Battlefield.Mox Jet.Tapped = false
+? Bot2.Battlefield.Ornithopter.Tapped = false
+? Bot2.Mana =
+? Bot2.Life = 20
+? Stack.Count = 0
 Bot2.Battlefield.Forest.Activate
 Bot2.Hand.Crop Rotation.Cast
+Bot2.Choose(Pay mana)
 Bot2.Choose(Forest)
 Bot2.Search(Island)
 Bot2.Battlefield.Mox Jet.Activate
@@ -68,6 +77,7 @@ Bot1.Pass
 ? Bot1.Graveyard = Yasharn, Implacable Earth; Forest; Black Lotus
 Bot2.Battlefield.Black Lotus.Activate(Color: Black)
 Bot2.Hand.Village Rites.Cast
+Bot2.Choose(Pay mana)
 Bot2.Choose(Ornithopter)
 Bot2.Pass
 

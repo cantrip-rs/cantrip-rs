@@ -27,6 +27,7 @@ Bot2.Hand.Forest.Play
 [T2 Bot2.Main2]
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Life // Death.Cast(Ability: Life)
+Bot1.Choose(Close mana window)
 ? Stack = Valley Floodcaller; Life
 Bot1.Pass
 Bot2.Pass

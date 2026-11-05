@@ -60,6 +60,7 @@ Bot1.Battlefield.Mountain#1.Activate
 Bot1.Battlefield.Mountain#2.Activate
 Bot1.Battlefield.Mind Stone.Activate(Ability: Add)
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Choose(craft materials)
 Bot1.Choose(Graveyard.Walking Ballista; Aether Spellbomb; Pyrite Spellbomb; Mind Stone; Goblin Bombardment)
 [T11 Bot1.Main1]
 Bot1.Hand.Ornithopter.Cast

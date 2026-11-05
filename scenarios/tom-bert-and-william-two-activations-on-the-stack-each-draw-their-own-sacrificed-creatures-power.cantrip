@@ -44,9 +44,11 @@ Bot2.Pass
 ? Bot1.Hand.Count = 0
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Tom, Bert, and William.Activate
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter#1)
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Tom, Bert, and William.Activate
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass

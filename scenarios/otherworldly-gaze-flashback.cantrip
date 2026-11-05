@@ -17,6 +17,7 @@ Bot1.Hand.Mox Sapphire.Cast
 Bot1.Hand.Mox Ruby.Cast
 Bot1.Battlefield.Mox Sapphire#1.Activate
 Bot1.Hand.Otherworldly Gaze.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Arrange(Hill Giant; Grizzly Bears | Shock)

@@ -53,6 +53,8 @@ Bot1.Hand.Island.Play
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Hostile Hostel.Activate(Ability: Sacrifice)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Tap Hostile Hostel)
 ! Bot1.Choose(Mountain)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
@@ -63,6 +65,8 @@ Bot2.Pass
 Bot1.Hand.Island.Play
 Bot1.Battlefield.Hostile Hostel.Activate(Ability: Sacrifice)
 Bot1.Battlefield.Island.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Tap Hostile Hostel)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass
@@ -72,6 +76,8 @@ Bot2.Pass
 Bot1.Hand.Island.Play
 Bot1.Battlefield.Hostile Hostel.Activate(Ability: Sacrifice)
 Bot1.Battlefield.Island.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Tap Hostile Hostel)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass

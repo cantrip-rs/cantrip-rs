@@ -46,6 +46,9 @@ Bot1.Battlefield.Mox Sapphire.Activate
 ? Bot1.Graveyard.Count = 4
 ? Bot1.Mana = {U}{R}{G}
 Bot1.Graveyard.Uro, Titan of Nature's Wrath.Cast(Ability: Escape)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Black Lotus; Lotus Petal; Lotus Petal)
 Bot1.Triggers(sacrifice it unless; gain 3 life and draw)
 [T3 Bot1.Main2]

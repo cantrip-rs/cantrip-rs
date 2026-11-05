@@ -33,6 +33,7 @@ Bot1.Pass
 Bot1.Battlefield.Ancient Tomb#2.Activate
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Human Torch, Johnny Storm.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

@@ -45,6 +45,7 @@ Bot1.Hand.Dragon's Rage Channeler.Cast
 Bot1.Hand.Krosan Grip.Cast(Bot2.Battlefield.Mox Pearl)
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Sol Ring.Activate
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 Bot1.Pass
 Bot2.Pass

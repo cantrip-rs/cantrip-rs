@@ -674,7 +674,7 @@ public sealed class LifeChangedEvent : GameEventView
     public int Player { get; set; }
 
     [Key(1)]
-    public int Delta { get; set; }
+    public long Delta { get; set; }
 
     [Key(2)]
     public int NewTotal { get; set; }
@@ -687,7 +687,7 @@ public sealed class DamageMarkedEvent : GameEventView
     public ViewHandle Object { get; set; }
 
     [Key(1)]
-    public int Amount { get; set; }
+    public long Amount { get; set; }
 }
 
 [MessagePackObject]
@@ -924,6 +924,8 @@ public sealed class AnswerMessage : ClientMessage
 [Union(19, typeof(ChooseStartingPlayerPromptMessage))]
 [Union(20, typeof(MulliganPromptMessage))]
 [Union(21, typeof(RemoveCountersPromptMessage))]
+[Union(22, typeof(ChooseNumberPromptMessage))]
+[Union(23, typeof(ChooseCostPaymentPromptMessage))]
 public abstract class PromptPayload
 {
     /// <summary>
@@ -1045,6 +1047,37 @@ public sealed class ChooseModesPromptMessage : PromptPayload
             ? [.. Enumerable.Range(0, Count).Select(i => Eligible[Math.Min(i, Eligible.Count - 1)])]
             : [.. Preferred.Take(Count)],
     };
+}
+
+/// <summary>One currently payable cost operation. Key is opaque and preserved exactly in the answer.</summary>
+[MessagePackObject]
+public sealed class CostPaymentChoiceView
+{
+    [Key(0)] public string Key { get; set; } = string.Empty;
+    [Key(1)] public string Label { get; set; } = string.Empty;
+    [Key(2)] public List<ViewHandle> Objects { get; set; } = [];
+}
+
+/// <summary>Choose the next operation to pay for a spell or ability (CR 601.2h).</summary>
+[MessagePackObject]
+public sealed class ChooseCostPaymentPromptMessage : PromptPayload
+{
+    [Key(0)] public int Player { get; set; }
+    [Key(1)] public ViewHandle Source { get; set; }
+    [Key(2)] public List<CostPaymentChoiceView> Choices { get; set; } = [];
+    public override AnswerPayload Default() => new CostPaymentChosenAnswer { Key = Choices.FirstOrDefault()?.Key ?? string.Empty };
+}
+
+/// <summary>A whole number in an inclusive range. Small ranges retain the existing modes presentation.</summary>
+[MessagePackObject]
+public sealed class ChooseNumberPromptMessage : PromptPayload
+{
+    [Key(0)] public int Player { get; set; }
+    [Key(1)] public ViewHandle Source { get; set; }
+    [Key(2)] public uint Least { get; set; }
+    [Key(3)] public uint Most { get; set; }
+    [Key(4)] public string Heading { get; set; } = string.Empty;
+    public override AnswerPayload Default() => new NumberChosenAnswer { Value = Least };
 }
 
 /// <summary>
@@ -1631,6 +1664,10 @@ public sealed class ChooseTargetPromptMessage : PromptPayload, ISelectionPrompt
     [Key(14)]
     public SelectionVerdictView? Verdict { get; set; }
 
+    /// <summary>Choosing none keeps this target unchanged (CR 115.7d), even if it is illegal.</summary>
+    [Key(15)]
+    public bool KeepOriginal { get; set; }
+
     /// <summary>The object candidates, in order: what the rule of the targets together judges (a player is no card to it).</summary>
     IReadOnlyList<ViewHandle> ISelectionPrompt.Candidates => [.. Candidates.Where(candidate => !candidate.IsPlayer).Select(candidate => candidate.Object)];
 
@@ -2215,6 +2252,9 @@ public sealed class UnlessPaysPromptMessage : PromptPayload
 
     /// <summary>Declining, which is always among the options.</summary>
     public override AnswerPayload Default() => new TakeActionAnswer { Kind = ActionKindView.DeclineCost };
+    [Key(21)]
+    public uint RemainingSnow { get; set; }
+
 }
 
 /// <summary>
@@ -2282,8 +2322,8 @@ public sealed class ActionOptionMessage
     public bool Affordable { get; set; }
 
     /// <summary>
-    /// For an activation: mana of a single color the ability adds on top of <see cref="Produces"/>. When more than zero,
-    /// the answer has to name a color, as activating Black Lotus does.
+    /// For an activation: mana of a single color the ability adds on top of <see cref="Produces"/>. The answer's
+    /// possible color choices are in <see cref="ColorChoices"/> even when a replacement makes this yield zero.
     /// </summary>
     [Key(7)]
     public int ProducesOfAnyOneColor { get; set; }
@@ -2445,6 +2485,14 @@ public sealed class ActionOptionMessage
     /// </summary>
     [Key(34)]
     public bool CastPrototyped { get; set; }
+    /// <summary>Snow-source mana quality or the {S} symbol it pays (CR 107.4h).</summary>
+    [Key(35)]
+    public bool Snow { get; set; }
+
+    /// <summary>Snow-source mana quality or the {S} symbol it pays (CR 107.4h).</summary>
+    [Key(36)]
+    public bool PaySnow { get; set; }
+
 }
 
 /// <summary>
@@ -2699,6 +2747,14 @@ public sealed class PayCostsPromptMessage : PromptPayload
     /// <summary>Whether this asks the player assisting with another player's spell (CR 702.132a), who may not give it up.</summary>
     [IgnoreMember]
     public bool Assisting => AssistStep is AssistSteps.HelperActivates or AssistSteps.HelperAnnounces or AssistSteps.HelperPays;
+    /// <summary>Snow-source mana symbols {S} still owed (CR 107.4h).</summary>
+    [Key(31)]
+    public uint RemainingSnow { get; set; }
+
+    /// <summary>Confirming closes the mana ability window without spending mana (CR 601.2g).</summary>
+    [Key(32)]
+    public bool ManaAbilities { get; set; }
+
 }
 
 /// <summary>The steps of a payment with assist (CR 702.132a), as <see cref="PayCostsPromptMessage.AssistStep"/> names them.</summary>
@@ -3280,6 +3336,8 @@ public sealed class DamageShareMessage
 [Union(16, typeof(TargetsDividedAnswer))]
 [Union(17, typeof(CountersRemovedAnswer))]
 [Union(18, typeof(AnnounceAnswer))]
+[Union(19, typeof(NumberChosenAnswer))]
+[Union(20, typeof(CostPaymentChosenAnswer))]
 public abstract class AnswerPayload;
 
 /// <summary>The counters taken for a <see cref="RemoveCountersPromptMessage"/>: how many of each kind from each permanent.</summary>
@@ -3304,6 +3362,20 @@ public sealed class AnnounceAnswer : AnswerPayload
 {
     [Key(0)]
     public int Value { get; set; }
+}
+
+/// <summary>The opaque key of the cost payment chosen from a <see cref="ChooseCostPaymentPromptMessage"/>.</summary>
+[MessagePackObject]
+public sealed class CostPaymentChosenAnswer : AnswerPayload
+{
+    [Key(0)] public string Key { get; set; } = string.Empty;
+}
+
+/// <summary>The exact value selected for a <see cref="ChooseNumberPromptMessage"/>.</summary>
+[MessagePackObject]
+public sealed class NumberChosenAnswer : AnswerPayload
+{
+    [Key(0)] public uint Value { get; set; }
 }
 
 /// <summary>The modes chosen for a <see cref="ChooseModesPromptMessage"/>, as indexes into its modes.</summary>
@@ -3540,8 +3612,19 @@ public sealed class TakeActionAnswer : AnswerPayload
             Effect = option.Effect,
             SpendSubtypes = [.. option.SpendSubtypes],
             SpendManaValue = option.SpendManaValue,
+            Snow = option.Snow,
+            PaySnow = option.PaySnow,
+            Mana = option.Kind == ActionKindView.AssignMana && option.Produces.Count > 0 ? option.Produces[0] : null,
         };
     }
+    /// <summary>Snow-source mana quality or the {S} symbol it pays (CR 107.4h).</summary>
+    [Key(16)]
+    public bool Snow { get; set; }
+
+    /// <summary>Snow-source mana quality or the {S} symbol it pays (CR 107.4h).</summary>
+    [Key(17)]
+    public bool PaySnow { get; set; }
+
 }
 
 /// <summary>

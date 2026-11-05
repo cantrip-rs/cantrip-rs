@@ -24,6 +24,7 @@ Bot2.Hand.Steel Wall.Cast
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Glyph of Life.Cast(Bot2.Battlefield.Steel Wall)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Battlefield.Mox Ruby#1.Activate

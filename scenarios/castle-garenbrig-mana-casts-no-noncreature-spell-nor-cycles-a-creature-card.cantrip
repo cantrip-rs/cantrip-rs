@@ -27,6 +27,11 @@ Bot1.Hand.Castle Garenbrig.Play
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Black Lotus.Activate(Color: Green)
 Bot1.Battlefield.Castle Garenbrig.Activate(Ability: six)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {G}{G}{G}{G}{G}{G} (CreatureSpellsOrAbilitiesOfCreatures)
 Bot1.Hand.Llanowar Elves.Cast
 Bot1.Pass

@@ -16,6 +16,7 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Hand.Forest.Play
 Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
 Bot1.Hand.Crop Rotation.Cast
+Bot1.Choose(Pay mana)
 Bot1.Choose(Forest)
 Bot1.Pass
 Bot2.Pass

@@ -37,6 +37,7 @@ Bot1.Battlefield.Unclaimed Territory.Activate(Ability: any color; Color: Green)
 Bot1.Battlefield.Maelstrom of the Spirit Dragon.Activate(Ability: any color; Color: Green)
 ? Bot1.Mana = {G} (ElfCreatureSpells) {G} (DragonOrOmenSpells)
 Bot1.Hand.Llanowar Elves.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {G} (DragonOrOmenSpells)
 Bot1.Pass
 Bot2.Pass

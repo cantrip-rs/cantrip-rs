@@ -23,6 +23,7 @@ Bot1.Hand.Hidden Strings.Cast
 ! Bot1.Target(Bot1.Graveyard.Black Lotus)
 Bot1.Target(Bot1.Battlefield.Mox Sapphire)
 Bot1.Target(Bot1.Battlefield.Island)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

@@ -62,6 +62,10 @@ Bot1.Hand.Urgent Necropsy.Cast
 Bot1.Target(Memnite)
 Bot1.Target(Memnite)
 Bot1.Target(Weaponize the Monsters)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Lightning Bolt)
 Bot1.Pass
 Bot2.Hand.Mana Leak.Cast(Stack.Urgent Necropsy)

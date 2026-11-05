@@ -29,6 +29,7 @@ Bot2.Hand.Ornithopter.Cast
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Go for the Throat.Cast(Bot2.Battlefield.Dryad Arbor)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = 
 Bot1.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)

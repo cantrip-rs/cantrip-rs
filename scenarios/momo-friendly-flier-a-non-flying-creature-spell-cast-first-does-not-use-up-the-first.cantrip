@@ -26,6 +26,7 @@ Bot2.Pass
 Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Cathar Commando.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

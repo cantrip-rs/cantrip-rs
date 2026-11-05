@@ -21,7 +21,7 @@ fn power_bite(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 fn loyalty_bite(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let (Some(walker), Some(victim)) = (targets::object(g, item, 0), targets::object(g, item, 1)) {
         let loyalty = g.obj(walker).counters(CounterKind::Loyalty).max(0);
-        g.damage(walker, Target::Object(victim), loyalty as u16);
+        g.damage(walker, Target::Object(victim), i64::from(loyalty as u16));
     }
     Ok(())
 }

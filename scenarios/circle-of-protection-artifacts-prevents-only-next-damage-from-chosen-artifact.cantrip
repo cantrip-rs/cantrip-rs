@@ -23,6 +23,7 @@ Bot1.Pass
 Bot1.Battlefield.Mox Pearl#1.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Circle of Protection: Artifacts.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Battlefield.Mox Pearl#2.Activate
@@ -48,6 +49,7 @@ Bot1.Pass
 Bot1.Battlefield.Mox Pearl#1.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Circle of Protection: Artifacts.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

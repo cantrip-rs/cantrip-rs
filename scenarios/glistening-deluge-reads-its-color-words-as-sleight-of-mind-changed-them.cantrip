@@ -42,6 +42,7 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Jet#1.Activate
 Bot1.Battlefield.Mox Jet#2.Activate
 Bot1.Hand.Glistening Deluge.Cast
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Sleight of Mind.Cast(Stack.Glistening Deluge)
 Bot1.Pass

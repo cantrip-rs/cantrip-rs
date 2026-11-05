@@ -147,6 +147,9 @@ fn pay(game: &Game, random: &mut Random, remaining: &ManaCost, options: &[Action
 
 pub fn decide(game: &Game, random: &mut Random, request: &Request) -> Answer {
     match &request.kind {
+        RequestKind::ChooseCostPayment { choices, .. } => {
+            if choices.is_empty() { Answer::Cancel } else { Answer::CostPayment(0) }
+        }
         RequestKind::Priority { options } => {
             let takeable: Vec<&ActionOption> = options
                 .iter()
@@ -165,6 +168,15 @@ pub fn decide(game: &Game, random: &mut Random, request: &Request) -> Answer {
         RequestKind::PayCosts { announcing: true, options, .. } => {
             // Announces X or kicks as nothing: the seat keeps to what it judged affordable.
             Answer::Act(Action::of(options.iter().find(|o| o.kind == ActionKind::ConfirmCasting).expect("confirm")))
+        }
+        RequestKind::PayCosts { remaining, options, mana_abilities: true, .. } => {
+            let done = || Answer::Act(Action::of(options.iter().find(|o| o.kind == ActionKind::ConfirmCasting).expect("close mana window")));
+            if remaining.is_zero() { done() } else {
+                match pay(game, random, remaining, options) {
+                    Answer::Act(action) if action.kind == ActionKind::ActivateAbility => Answer::Act(action),
+                    _ => done(),
+                }
+            }
         }
         RequestKind::PayCosts { remaining, options, .. } => pay(game, random, remaining, options),
         RequestKind::UnlessPays { options, .. } => {

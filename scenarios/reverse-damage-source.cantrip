@@ -31,6 +31,7 @@ Bot1.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
 Bot1.Hand.Reverse Damage.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -42,6 +43,7 @@ Bot2.Attack(Grizzly Bears > Bot1)
 [T6 Bot2.Main1]
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Hand.Reverse Damage.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

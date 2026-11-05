@@ -44,4 +44,4 @@ Bot2.Pass
 [Expect]
 Turn = 3
 Bot2.Life = 18
-Bot1.Graveyard = Fling; Return the Favor; Black Lotus; Walking Ballista
+Bot1.Graveyard = Fling; Return the Favor; Walking Ballista; Black Lotus

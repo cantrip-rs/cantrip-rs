@@ -47,6 +47,7 @@ Bot2.Pass
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Dark Deed.Cast(Bot2.Battlefield.Dune Beetle)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Battlefield.Swamp.Activate

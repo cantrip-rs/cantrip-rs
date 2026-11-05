@@ -109,7 +109,7 @@ fn two_creatures_that_fight_deal_each_other_their_power() {
 }
 
 /// The amounts of each damage event dealt to `id`, in order.
-fn damage_to(game: &Game, id: ObjectId) -> Vec<u16> {
+fn damage_to(game: &Game, id: ObjectId) -> Vec<i64> {
     game.history()
         .all()
         .iter()

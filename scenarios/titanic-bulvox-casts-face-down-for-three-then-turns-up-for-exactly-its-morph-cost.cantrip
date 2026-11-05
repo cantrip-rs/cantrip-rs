@@ -26,6 +26,7 @@ Bot1.Hand.Mox Sapphire.Cast
 Bot1.Hand.Mox Jet.Cast
 Bot1.Hand.Titanic Bulvox.Cast(Ability: Morph)
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = 
 ? Stack..FaceDown = true
 ? Stack..FaceDownName = Titanic Bulvox

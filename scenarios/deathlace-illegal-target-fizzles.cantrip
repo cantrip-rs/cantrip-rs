@@ -26,6 +26,7 @@ Bot2.Hand.Unsummon.Cast(Bot1.Battlefield.Llanowar Elves)
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Deathlace.Cast(Bot1.Battlefield.Mox Emerald)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T3 Bot1.Main2]
 [Expect]

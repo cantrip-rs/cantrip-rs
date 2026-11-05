@@ -20,7 +20,7 @@ fn spell_enters(_: &dyn Query, _: &Asker, affected: ObjectId, proposal: &Proposa
 /// X, "the number of colors of mana spent to cast it", of the creature spell that is entering.
 fn add_counters_per_color(q: &dyn Query, _: &Asker, affected: ObjectId, proposal: &mut Proposal) {
     if let Proposal::ZoneChange(z) = proposal {
-        z.counters[CounterKind::PlusOne as usize] += sunburst::colors_spent(q, affected) as i16;
+        z.counters[CounterKind::PlusOne as usize] += i64::from(sunburst::colors_spent(q, affected) as i16);
     }
 }
 

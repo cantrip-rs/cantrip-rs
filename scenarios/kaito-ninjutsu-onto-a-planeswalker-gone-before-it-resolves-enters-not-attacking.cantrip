@@ -46,6 +46,9 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Kaito, Bane of Nightmares.Activate(Ability: Ninjutsu)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Guerrilla Gorilla)
 Bot1.Hand.Lightning Bolt.Cast(Liliana of the Veil)
 Bot1.Battlefield.Mox Ruby.Activate

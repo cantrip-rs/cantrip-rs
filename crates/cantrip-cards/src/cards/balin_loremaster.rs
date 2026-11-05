@@ -17,7 +17,7 @@ fn wheel(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let x = g.discard_hand(you).len();
     g.draw(you, x as u32);
     if storied::has_an_enduring_story(g.state(), you) {
-        let hits: Vec<(ObjectId, Target, u16)> = g.state().opponents(you).map(|p| (item.object, Target::Player(p), x as u16)).collect();
+        let hits: Vec<(ObjectId, Target, i64)> = g.state().opponents(you).map(|p| (item.object, Target::Player(p), i64::from(x as u16))).collect();
         g.damage_together(&hits);
     }
     Ok(())

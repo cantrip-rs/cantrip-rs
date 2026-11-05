@@ -34,6 +34,10 @@ Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Coral Merfolk)
 ! Bot1.Target(Bot2.Battlefield.Forest)
 Bot1.Target(Bot2.Battlefield.Llanowar Elves)

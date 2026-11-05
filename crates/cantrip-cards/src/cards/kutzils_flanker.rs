@@ -19,7 +19,7 @@ fn counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
                     && g.obj(old).controller == you)
         })
         .count();
-    g.add_counters(item.object, CounterKind::PlusOne, left as i16);
+    g.add_counters(item.object, CounterKind::PlusOne, i64::from(left as i16));
     Ok(())
 }
 

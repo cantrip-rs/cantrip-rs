@@ -28,9 +28,12 @@ Bot1.Battlefield.Mountain#2.Activate
 ? Bot1.Mana = {R}{R}
 ! Bot1.Battlefield.Rakdos Signet.Activate(Color: Green)
 Bot1.Battlefield.Rakdos Signet.Activate
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {B}{R}{R}
 ! Bot1.Battlefield.Rakdos Signet.Activate
 Bot1.Hand.Grim Repriser.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {R}
 
 [Expect]

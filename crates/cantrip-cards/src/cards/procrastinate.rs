@@ -12,7 +12,7 @@ fn twice(x: u16) -> i16 {
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
     g.tap(creature);
-    g.add_counters(creature, CounterKind::Stun, twice(item.x));
+    g.add_counters(creature, CounterKind::Stun, i64::from(twice(item.x)));
     Ok(())
 }
 

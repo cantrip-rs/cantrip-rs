@@ -25,6 +25,9 @@ Bot1.Battlefield.Warped Landscape.Activate(Ability: {T}: Add {C})
 Bot1.Battlefield.Warped Landscape.Activate(Ability: {2}, {T}, Sacrifice this land)
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 ! Bot1.Search(Tundra)
 Bot1.Search(Forest)

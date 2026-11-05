@@ -33,6 +33,9 @@ Bot1.Battlefield.Swamp#3.Activate
 ? Bot1.Mana = {B}{B}{B}
 Bot1.Hand.Rottenmouth Viper.Cast(X: 3)
 ! Bot1.Choose(Swamp)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter#1; Ornithopter#2; Ornithopter#3)
 ? Bot1.Mana =
 Bot1.Pass

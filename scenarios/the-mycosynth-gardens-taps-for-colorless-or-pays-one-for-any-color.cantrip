@@ -20,11 +20,14 @@ Bot1.Pass
 Bot1.Battlefield.The Mycosynth Gardens.Activate(Ability: Add {C})
 ? Bot1.Mana = {C}
 Bot1.Hand.Sol Ring.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.The Mycosynth Gardens.Activate(Ability: {1}; Color: Red)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {R}
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
 Bot1.Pass

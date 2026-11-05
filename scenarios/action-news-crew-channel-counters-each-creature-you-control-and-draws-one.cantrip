@@ -35,6 +35,12 @@ Bot1.Battlefield.Mox Pearl#2.Activate
 Bot1.Battlefield.Mox Pearl#3.Activate
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Hand.Action News Crew.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

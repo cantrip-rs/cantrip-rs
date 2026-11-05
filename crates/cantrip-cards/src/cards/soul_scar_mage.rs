@@ -26,7 +26,7 @@ fn put_minus_one_counters(g: &mut dyn Game, _: &Asker, before: &Proposal, _: &Pr
     if let Proposal::Damage(d) = before
         && let Some(creature) = d.target.object()
     {
-        g.add_counters(creature, CounterKind::MinusOne, d.amount.min(i16::MAX as u16) as i16);
+        g.add_counters(creature, CounterKind::MinusOne, d.amount);
     }
 }
 

@@ -24,6 +24,9 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Hand.Rakish Revelers.Activate(Bot1.Battlefield.Island)
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 [T1 Bot1.Main1]
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Exile = Rakish Revelers
 ! Bot1.Battlefield.Island.Activate(Color: Black)
 Bot1.Exile.Rakish Revelers.Cast

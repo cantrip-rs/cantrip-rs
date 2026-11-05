@@ -57,6 +57,7 @@ Bot2.Battlefield.Mox Ruby#1.Activate
 Bot2.Battlefield.Mox Emerald.Activate
 Bot2.Hand.Torch the Tower.Cast(Bot1.Battlefield.Ornithopter)
 Bot2.Modes(Bargain:)
+Bot2.Choose(Pay mana)
 Bot2.Choose(Mox Ruby)
 Bot2.Arrange( | Island)
 Bot2.Pass

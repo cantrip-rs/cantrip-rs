@@ -46,6 +46,7 @@ Bot1.Battlefield.D'Vana Tendi, Optimistic Ensign.Activate(Mox Emerald; Ability: 
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.D'Vana Tendi, Optimistic Ensign.Activate(Ability: Surveil 1)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Arrange( | Island)
 [T5 Bot1.Main2]

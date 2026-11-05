@@ -29,6 +29,8 @@ Bot2.Hand.Mox Sapphire.Cast
 Bot1.Hand.Bankrupt in Blood.Cast
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter; Ornithopter)
 Bot1.Pass
 Bot2.Hand.Counterspell.Cast(Stack.Bankrupt in Blood)

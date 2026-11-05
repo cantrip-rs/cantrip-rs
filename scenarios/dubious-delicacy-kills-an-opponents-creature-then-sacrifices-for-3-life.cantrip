@@ -40,6 +40,8 @@ Bot2.Pass
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Dubious Delicacy.Activate(Ability: {2}, {T}, Sacrifice this artifact: You gain 3 life.)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

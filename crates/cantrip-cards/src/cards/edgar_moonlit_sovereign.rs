@@ -7,7 +7,7 @@ fn grow(g:&mut dyn Game,i:&StackItem)->Result<(),Suspend>{g.add_counters(i.objec
 /// The recipients are creatures with a counter as the ability resolves (CR 608.2h).
 fn team(g:&mut dyn Game,i:&StackItem)->Result<(),Suspend>{
  let ids:Vec<_>=g.permanents_of(i.controller).into_iter().filter(|&id|g.chars(id).is(CardType::Creature)&&g.obj(id).counters(CounterKind::PlusOne)>0).collect();
- let puts:Vec<(ObjectId,CounterKind,i16)>=ids.into_iter().map(|id|(id,CounterKind::PlusOne,1)).collect();
+ let puts:Vec<(ObjectId,CounterKind,i64)>=ids.into_iter().map(|id|(id,CounterKind::PlusOne,1)).collect();
  g.add_counters_together(&puts);Ok(())
 }
 pub static CARD:CardDef=CardDef{

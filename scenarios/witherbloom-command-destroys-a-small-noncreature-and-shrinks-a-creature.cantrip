@@ -62,6 +62,7 @@ Bot1.Modes(2; 3)
 ! Bot1.Target(Woodland Changeling)
 Bot1.Target(Mind Stone)
 Bot1.Target(Woodland Changeling)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = 
 Bot1.Pass
 [T3 Bot1.Main2]

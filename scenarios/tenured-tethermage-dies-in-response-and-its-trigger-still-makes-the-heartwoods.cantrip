@@ -25,6 +25,7 @@ Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Tenured Tethermage.Cast
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Lotus Petal.Activate(Color: Red)
 Bot1.Hand.Shock.Cast(Tenured Tethermage)
 Bot1.Pass

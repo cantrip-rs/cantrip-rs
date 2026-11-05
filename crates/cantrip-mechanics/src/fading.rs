@@ -8,7 +8,7 @@ use cantrip_api::*;
 const FADE: usize = CounterKind::Fade as usize;
 
 pub fn enters<const N: i16>(_: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
-    entering.counters[FADE] += N;
+    entering.counters[FADE] += i64::from(N);
     Ok(())
 }
 

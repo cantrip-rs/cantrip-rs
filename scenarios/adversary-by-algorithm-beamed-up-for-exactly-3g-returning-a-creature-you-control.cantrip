@@ -48,6 +48,10 @@ Bot1.Battlefield.Forest#2.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Emerald#2.Activate
 Bot1.Graveyard.Adversary by Algorithm.Cast(Ability: Beam me up)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ! Bot1.Choose(Bot2.Battlefield.Llanowar Elves)
 Bot1.Choose(Bot1.Battlefield.Llanowar Elves)
 ? Bot1.Mana =

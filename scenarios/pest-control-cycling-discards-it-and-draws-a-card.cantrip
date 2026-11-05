@@ -21,6 +21,8 @@ Bot1.Hand.Swamp.Play
 Bot1.Hand.Pest Control.Activate
 Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Swamp.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = 
 [T3 Bot1.Main2]
 

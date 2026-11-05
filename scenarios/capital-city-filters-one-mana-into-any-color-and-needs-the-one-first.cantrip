@@ -18,6 +18,8 @@ Bot1.Battlefield.Capital City.Activate(Ability: {T}: Add {C})
 Bot1.Hand.Island.Play
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Capital City.Activate(Ability: any color; Color: Red)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {R}
 [T3 Bot1.Main2]
 

@@ -10,7 +10,7 @@ fn put_counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
     let Target::Object(spell) = item.subject else { return Ok(()) };
     let x = g.mana_value(spell).min(i16::MAX as u32) as i16;
-    g.add_counters(creature, CounterKind::PlusOne, x);
+    g.add_counters(creature, CounterKind::PlusOne, i64::from(x));
     Ok(())
 }
 

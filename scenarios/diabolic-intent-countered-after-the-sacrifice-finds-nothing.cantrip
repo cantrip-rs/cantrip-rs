@@ -28,6 +28,8 @@ Bot1.Hand.Ornithopter.Cast
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Diabolic Intent.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 Bot2.Battlefield.Island.Activate
 Bot2.Battlefield.Mox Sapphire.Activate

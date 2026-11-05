@@ -741,6 +741,9 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Kaito, Bane of Nightmares.Activate(Ability: Ninjutsu)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Guerrilla Gorilla)
 Bot1.Pass
 [Handover Bot2.Pass]
@@ -1302,6 +1305,173 @@ fn mutated_under_a_morph() -> String {
     MUTATED_OVER_A_MORPH.replace("Bot1.Modes(1)\n[Handover Bot1.Pass]", "Bot1.Modes(2)\n[Handover Bot1.Pass]")
 }
 
+#[test]
+fn an_inflight_hidden_morph_is_dealt_from_compatible_cards_without_revealing_which() {
+    let text = mutated_under_a_morph().replace("Island x14", "Abzan Guide\nIsland x13");
+    let script = GameScript::parse(&text, "two morphs").unwrap();
+    let mut game = cantrip_script::run(&script).unwrap_or_else(|f| panic!("{}", f.report)).game;
+    let node = game.tree.path(game.at).into_iter().find(|&node| {
+        game.goto(node);
+        matches!(game.pending(), Some(Request { kind: RequestKind::PayCosts { source, .. }, .. })
+            if game.state.obj(*source).face_down)
+    }).expect("the face-down spell's mana window");
+    game.goto(node);
+    let seat = PlayerId(1);
+    let knowledge = Knowledge::of(&game, seat);
+    let mut names = BTreeSet::new();
+    for seed in 0..64 {
+        let mut world = game.fork_for_search();
+        world.reseed(seed);
+        determinize(&mut world, &knowledge, seat, InfoMode::Decklist, prior(), &mut Rng::new(seed));
+        let Some(Request { kind: RequestKind::PayCosts { source, .. }, .. }) = world.pending() else { panic!("the mana window remains") };
+        assert!(world.state.obj(*source).face_down);
+        names.insert(world.cards.get(world.state.obj(*source).card).name);
+        assert!(observe_indexed(&world, &knowledge, seat, InfoMode::Decklist).is_none(), "an opponent cannot see an in-progress announcement");
+    }
+    assert_eq!(names, BTreeSet::from(["Abzan Guide", "Ainok Tracker"]));
+
+    // An incomplete hidden-mode prior has no morph card. The observed cast role still has
+    // to be satisfied without filling the world with the actual card's identity.
+    let mut incomplete = Prior::new();
+    incomplete.add(cards(), std::iter::repeat_n(card("Island").unwrap(), 20), 1.0);
+    let mut hidden_names = BTreeSet::new();
+    for seed in 0..32 {
+        let mut world = game.fork_for_search();
+        determinize(&mut world, &knowledge, seat, InfoMode::Hidden, &incomplete, &mut Rng::new(seed));
+        let Some(Request { kind: RequestKind::PayCosts { source, .. }, .. }) = world.pending() else { panic!("the mana window remains") };
+        let def = world.cards.get(world.state.obj(*source).card);
+        assert!(def.ways.iter().any(|way| way.kind.morph()));
+        hidden_names.insert(def.name);
+    }
+    assert!(hidden_names.len() > 1, "a prior missing the observed role does not expose the real card");
+}
+
+#[test]
+fn an_inflight_morph_replays_when_its_sampled_cards_way_has_a_different_index() {
+    // The extra way is a test fixture; it proves that an index in one card is not the role itself.
+    let abzan = cards().get(card("Abzan Guide").unwrap());
+    let morph = *abzan.ways.iter().find(|way| way.kind.morph()).expect("Abzan has morph");
+    let ways = Box::leak(vec![WayDef { kind: WayKind::Other, ..morph }, morph].into_boxed_slice());
+    let replacement = Box::leak(Box::new(CardDef { ways, ..*abzan }));
+    let table = Box::leak(Box::new(CardTable::new(cards().cards.iter().copied().map(|def|
+        if def.name == "Abzan Guide" { &*replacement } else { def }))));
+    let text = mutated_under_a_morph().replace("Island x14", "Abzan Guide\nIsland x13");
+    let script = GameScript::parse(&text, "shifted morph way").unwrap();
+    let mut game = cantrip_script::run_on(&script, table).unwrap_or_else(|f| panic!("{}", f.report)).game;
+    let node = game.tree.path(game.at).into_iter().find(|&node| {
+        game.goto(node);
+        matches!(game.pending(), Some(Request { kind: RequestKind::PayCosts { source, .. }, .. })
+            if game.state.obj(*source).face_down)
+    }).unwrap();
+    game.goto(node);
+    let seat = PlayerId(1);
+    let knowledge = Knowledge::of(&game, seat);
+    let mut sampled_abzan = false;
+    for seed in 0..64 {
+        let mut world = game.fork_for_search();
+        determinize(&mut world, &knowledge, seat, InfoMode::Decklist, prior(), &mut Rng::new(seed));
+        let Some(Request { kind: RequestKind::PayCosts { source, .. }, .. }) = world.pending() else { panic!("the mana window remains") };
+        if world.cards.get(world.state.obj(*source).card).name == "Abzan Guide" {
+            sampled_abzan = true;
+            let index = world.state.agenda.iter().flat_map(|f| &f.answers).find_map(|(_, answer)| match answer {
+                Answer::Act(action) if action.kind == ActionKind::CastSpell => Some(action.index), _ => None,
+            }).unwrap();
+            assert_eq!(index, 2, "the saved action names the sampled card's morph way");
+            let saved = world.at;
+            let request = world.pending().cloned().unwrap();
+            let RequestKind::PayCosts { options, .. } = &request.kind else { unreachable!() };
+            let close = options.iter().find(|option| option.kind == ActionKind::ConfirmCasting).expect("the mana window can close");
+            world.answer(request.id, request.player, Answer::Act(Action::of(close))).unwrap();
+            world.rollback(saved);
+            let saved_index = world.state.agenda.iter().flat_map(|f| &f.answers).find_map(|(_, answer)| match answer {
+                Answer::Act(action) if action.kind == ActionKind::CastSpell => Some(action.index), _ => None,
+            }).unwrap();
+            assert_eq!(saved_index, 2, "rollback retains the sampled card's cast way");
+        }
+    }
+    assert!(sampled_abzan, "a compatible hidden identity is not fixed to the actual card");
+}
+
+#[test]
+fn a_resolved_hidden_morph_keeps_its_public_casting_role_in_sampled_history() {
+    let text = mutated_under_a_morph().replace("Island x14", "Abzan Guide\nIsland x13");
+    let script = GameScript::parse(&text, "resolved morphs").unwrap();
+    let mut game = cantrip_script::run(&script).unwrap_or_else(|f| panic!("{}", f.report)).game;
+    let node = game.tree.path(game.at).into_iter().find(|&node| {
+        game.goto(node);
+        game.state.battlefield().iter().any(|&id| game.state.obj(id).face_down)
+            && matches!(game.pending(), Some(Request { kind: RequestKind::Priority { .. }, .. }))
+    }).expect("the resolved face-down permanent");
+    game.goto(node);
+    let seat = PlayerId(1);
+    let knowledge = Knowledge::of(&game, seat);
+    let mut names = BTreeSet::new();
+    let mut prior_observation = None;
+    for seed in 0..64 {
+        let mut world = game.fork_for_search();
+        world.reseed(seed);
+        determinize(&mut world, &knowledge, seat, InfoMode::Decklist, prior(), &mut Rng::new(seed));
+        let id = world.state.battlefield().iter().copied().find(|&id| world.state.obj(id).face_down).unwrap();
+        names.insert(world.cards.get(world.state.obj(id).card).name);
+        let cast = world.log.iter().find_map(|r| match r.event {
+            Event::Cast(c) if world.state.obj(c.spell).became == Some(id) => Some(c), _ => None,
+        }).expect("the face-down cast remains in public history");
+        let card = world.cards.get(world.state.obj(cast.spell).card);
+        assert!(card.ways[usize::from(cast.way) - 1].kind.morph());
+        let observation = observe_indexed(&world, &knowledge, seat, InfoMode::Decklist).map(|(observation, _)| observation).expect("priority is public");
+        if let Some(previous) = &prior_observation { assert_eq!(&observation, previous, "the sampled identity is not disclosed"); }
+        prior_observation = Some(observation);
+    }
+    assert_eq!(names, BTreeSet::from(["Abzan Guide", "Ainok Tracker"]));
+}
+
+#[test]
+fn overlapping_face_down_roles_are_matched_without_losing_deck_cards() {
+    // A controlled card-table fixture: one card has morph alone; the other has both
+    // morph and disguise. The latter is the only possible card for the disguise cast.
+    let abzan = cards().get(card("Abzan Guide").unwrap());
+    let morph = *abzan.ways.iter().find(|way| way.kind.morph()).unwrap();
+    let ways = Box::leak(vec![morph, WayDef { kind: WayKind::Disguise, text: "Disguise", ..morph }].into_boxed_slice());
+    let dual = Box::leak(Box::new(CardDef { ways, ..*abzan }));
+    let table = Box::leak(Box::new(CardTable::new(cards().cards.iter().copied().map(|def|
+        if def.name == "Abzan Guide" { &*dual } else { def }))));
+    let text = "[Bot1 Deck]\nAinok Tracker\nAbzan Guide\nBlack Lotus x2\nIsland x20\n\
+        [Bot2 Deck]\nIsland x24\n\
+        [Actions]\nBot1.Hand.Black Lotus#1.Cast\nBot1.Pass\nBot2.Pass\n\
+        Bot1.Battlefield.Black Lotus.Activate(Color: Blue)\nBot1.Hand.Ainok Tracker.Cast(Ability: Morph)\nBot1.Pass\nBot2.Pass\n\
+        Bot1.Hand.Black Lotus.Cast\nBot1.Pass\nBot2.Pass\nBot1.Battlefield.Black Lotus.Activate(Color: Blue)\n\
+        Bot1.Hand.Abzan Guide.Cast(Ability: Disguise)\nBot1.Pass\nBot2.Pass\n\
+        [Expect]\nBot1.Battlefield.Count = 2\n";
+    let script = GameScript::parse(text, "overlapping face-down roles").unwrap();
+    let game = cantrip_script::run_on(&script, table).unwrap_or_else(|failure| panic!("{}", failure.report)).game;
+    assert_eq!(game.state.battlefield().iter().filter(|&&id| game.state.obj(id).face_down).count(), 2);
+    let held = |g: &Game| {
+        let mut cards: Vec<_> = g.state.zones.iter().flatten().filter_map(|&id| {
+            let object = g.state.obj(id);
+            (!object.token && !object.card_copy && object.became.is_none()).then_some((object.owner, object.card))
+        }).collect();
+        cards.sort();
+        cards
+    };
+    let expected = held(&game);
+    let seat = PlayerId(1);
+    let knowledge = Knowledge::of(&game, seat);
+    for seed in 0..128 {
+        let mut world = game.fork_for_search();
+        determinize(&mut world, &knowledge, seat, InfoMode::Decklist, prior(), &mut Rng::new(seed));
+        assert_eq!(held(&world), expected, "deck multiplicities at seed {seed}");
+        let roles: Vec<_> = world.log.iter().filter_map(|r| match r.event {
+            Event::Cast(c) if world.state.obj(c.spell).face_down => {
+                let def = world.cards.get(world.state.obj(c.spell).card);
+                Some((def.name, def.ways[usize::from(c.way) - 1].kind))
+            }
+            _ => None,
+        }).collect();
+        assert!(roles.iter().any(|&(name, role)| name == "Ainok Tracker" && role.morph()), "{roles:?}");
+        assert!(roles.iter().any(|&(name, role)| name == "Abzan Guide" && role == WayKind::Disguise), "{roles:?}");
+    }
+}
+
 /// Every mutate scenario, and the games above, at every node of their games: a world dealt for either seat, in Decklist
 /// mode, holds each player's registered deck exactly - every card of every zone, and every component of a merged permanent
 /// (CR 730.2), counted once. A merged card counted twice or not at all (a mutating spell is in no zone once it merged, CR
@@ -1360,8 +1530,11 @@ fn worlds_hold_every_card_of_a_merged_permanent_once() {
             for seat in game.state.seats().collect::<Vec<_>>() {
                 let mut world = game.fork_for_search();
                 world.reseed(5);
-                determinize(&mut world, &Knowledge::of(&game, seat), seat, InfoMode::Decklist, prior(), &mut Rng::new(5));
-                assert_eq!(held(&world), real, "{name}: a world for {seat:?} holds other cards than the decks");
+                let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                    determinize(&mut world, &Knowledge::of(&game, seat), seat, InfoMode::Decklist, prior(), &mut Rng::new(5));
+                }));
+                assert!(result.is_ok(), "{name}: dealing a world for {seat:?} failed at tree node {node:?}");
+                assert_eq!(held(&world), real, "{name}: a world for {seat:?} holds other cards than the decks at tree node {node:?}");
                 worlds += 1;
             }
         }

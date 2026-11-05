@@ -25,10 +25,12 @@ Bot1.Hand.Black Lotus.Cast
 [T2 Bot2.Main1]
 Bot1.Battlefield.Black Lotus.Activate(Color: Green)
 Bot1.Battlefield.Survival of the Fittest.Activate
+Bot1.Choose(Pay mana)
 Bot1.Choose(Birds of Paradise)
 ? Stack.Count = 1
 ? Bot1.Hand = Elvish Mystic; Forest
 Bot1.Battlefield.Survival of the Fittest.Activate
+Bot1.Choose(Pay mana)
 Bot1.Choose(Elvish Mystic)
 ? Stack.Count = 2
 Bot1.Search(Llanowar Elves)

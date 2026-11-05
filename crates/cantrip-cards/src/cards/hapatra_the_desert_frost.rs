@@ -21,7 +21,7 @@ const FOR_EACH_OPPONENT: TargetSpec = target(creature_the_slots_opponent_control
 fn tap_and_stun(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let creatures = targets::legal_objects(g, item);
     g.tap_together(&creatures);
-    let puts: Vec<(ObjectId, CounterKind, i16)> = creatures.into_iter().map(|id| (id, CounterKind::Stun, 1)).collect();
+    let puts: Vec<(ObjectId, CounterKind, i64)> = creatures.into_iter().map(|id| (id, CounterKind::Stun, 1)).collect();
     g.add_counters_together(&puts);
     Ok(())
 }

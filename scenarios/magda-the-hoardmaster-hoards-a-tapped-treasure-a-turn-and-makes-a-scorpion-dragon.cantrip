@@ -27,6 +27,7 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Hand.Magda, the Hoardmaster.Cast
 Bot1.Pass
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 Bot1.Pass
 Bot2.Pass
@@ -42,10 +43,12 @@ Bot1.Pass
 Bot1.Hand.Mountain.Play
 Bot1.Battlefield.Mountain#1.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 [T4 Bot2.Upkeep]
 Bot1.Battlefield.Mountain#2.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 [T4 Bot2.Main1]
 ! Bot1.Battlefield.Magda, the Hoardmaster.Activate

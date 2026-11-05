@@ -38,6 +38,8 @@ Bot1.Battlefield.Mox Jet.Activate
 ? Bot1.Graveyard.Count = 0
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Eerie Gravestone.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ! Bot1.Choose(Plains)
 Bot1.Choose(Birds of Paradise)
 [Bot1.Main2]

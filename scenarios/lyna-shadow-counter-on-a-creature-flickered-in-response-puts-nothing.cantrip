@@ -34,8 +34,10 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Lyna, Veil of Vengeance.Activate(Cecil, Dark Knight)
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Plains.Activate
 Bot1.Hand.Ephemerate.Cast(Cecil, Dark Knight)
+Bot1.Choose(Close mana window)
 [T3 Bot1.Main2]
 
 [Expect]

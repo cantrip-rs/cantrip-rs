@@ -18,11 +18,11 @@ fn choose_target_wall_creature_whenever_target_0(
 /// "Whenever that creature is dealt damage by an attacking creature this turn" (CR 603.2). The subject is the Wall dealt the
 /// damage, so what several attackers deal it at once is one event for the total (`sums_per_subject`: CR 120.2, 603.2c).
 fn watch_1_event(q: &dyn Query, asker: &Asker, event: &Event) -> Option<Fired> {
-    let Event::Damage { source, target, amount, .. } = event else { return None };
-    let (source, amount) = (*source, *amount);
+    let Event::Damage { source, target, .. } = event else { return None };
+    let source = *source;
     let subject = Target::Object(asker.source);
     let data = [
-        u32::from(amount),
+        0,
         match target {
             Target::Object(o) => o.0,
             _ => u32::MAX,
@@ -53,9 +53,10 @@ pub static CARD: CardDef = CardDef {
     delayed: &[
         triggered(
             when_asked(EventMask::DAMAGE, watch_1_event),
-            effects::gain_that_much_life,
+            effects::gain_matched_damage_life,
             "Whenever that creature is dealt damage by an attacking creature this turn, you gain that much life.",
         )
+        .damage_amount()
         .sums_per_subject(),
     ],
     ..oracle::GLYPH_OF_LIFE

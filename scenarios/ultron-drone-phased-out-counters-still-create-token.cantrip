@@ -37,6 +37,7 @@ Bot1.Battlefield.Island#1.Activate
 Bot1.Battlefield.Island#2.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Ultron Drone.Activate
+Bot1.Choose(Close mana window)
 ? Stack = Ultron Drone
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Hand.Teferi's Protection.Cast

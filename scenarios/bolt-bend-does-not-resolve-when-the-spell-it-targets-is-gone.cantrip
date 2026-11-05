@@ -42,6 +42,7 @@ Bot2.Battlefield.Mox Jet.Activate
 Bot2.Battlefield.Mox Pearl.Activate
 Bot2.Battlefield.Mox Emerald.Activate
 Bot2.Hand.Bolt Bend.Cast(Stack.Lightning Bolt)
+Bot2.Choose(Close mana window)
 Bot2.Battlefield.Mox Sapphire.Activate
 Bot2.Battlefield.Island.Activate
 Bot2.Hand.Counterspell.Cast(Stack.Lightning Bolt)

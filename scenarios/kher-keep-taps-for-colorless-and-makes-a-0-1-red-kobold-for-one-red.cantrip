@@ -24,6 +24,9 @@ Bot1.Battlefield.Kher Keep.Activate(Ability: {T}: Add {C})
 Bot1.Battlefield.Mountain#1.Activate
 Bot1.Battlefield.Mountain#2.Activate
 Bot1.Battlefield.Kher Keep.Activate(Ability: {1}{R}, {T})
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

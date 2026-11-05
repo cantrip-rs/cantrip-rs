@@ -42,6 +42,7 @@ Bot1.Battlefield.Mountain#2.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Desolation of Smaug.Cast
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Artificial Evolution.Cast(Stack.Desolation of Smaug)
 Bot1.Pass

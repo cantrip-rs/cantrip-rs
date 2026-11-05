@@ -41,6 +41,7 @@ Bot1.Battlefield.Island.Activate
 Bot1.Hand.Abrade.Cast
 Bot1.Modes(Abrade deals 3 damage)
 Bot1.Target(Ms. Marvel, Kamala Khan)
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 
 [Expect]

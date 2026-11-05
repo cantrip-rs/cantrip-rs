@@ -49,6 +49,8 @@ Bot2.Hand.Island.Play
 Bot1.Battlefield.Mox Jet#1.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Deadly Dispute.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(The Master of Lake-town)
 Bot1.Pass
 Bot2.Pass

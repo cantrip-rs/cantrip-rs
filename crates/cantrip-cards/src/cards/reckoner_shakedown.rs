@@ -26,7 +26,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         0 => None,
         1 => Some(candidates[0]),
         _ => {
-            let ask = RequestKind::ChooseTarget { label: "", slot_player: None, together: None,
+            let ask = RequestKind::ChooseTarget { replacing: None, label: "", slot_player: None, together: None,
                 source: item.object,
                 purpose: Purpose::Targets,
                 candidates: candidates.iter().map(|&id| Target::Object(id)).collect(),

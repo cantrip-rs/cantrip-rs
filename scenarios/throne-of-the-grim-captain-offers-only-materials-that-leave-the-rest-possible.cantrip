@@ -43,6 +43,10 @@ Bot1.Hand.Thieving Skydiver.Cast
 Bot1.Battlefield.Throne of the Grim Captain.Activate(Ability: Craft)
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Battlefield.Island#2.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Graveyard.Rampaging Ferocidon)
 ! Bot1.Choose(Hullbreacher)
 Bot1.Choose(Thieving Skydiver)

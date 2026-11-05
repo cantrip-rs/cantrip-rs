@@ -20,6 +20,10 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: B)
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Champion of the Weird.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Goblin Grappler)
 [T1 Bot1.Main2]
 ? Bot1.Hand.Count = 3

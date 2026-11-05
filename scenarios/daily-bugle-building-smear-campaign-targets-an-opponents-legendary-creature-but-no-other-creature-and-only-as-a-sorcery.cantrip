@@ -38,6 +38,8 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 ! Bot1.Battlefield.Daily Bugle Building.Activate(Ability: Smear Campaign; Ornithopter)
 Bot1.Battlefield.Daily Bugle Building.Activate(Ability: Smear Campaign; Bot2.Battlefield.Thalia, Guardian of Thraben)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

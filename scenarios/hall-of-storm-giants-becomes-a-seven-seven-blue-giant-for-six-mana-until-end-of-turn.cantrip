@@ -31,6 +31,7 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Hall of Storm Giants.Activate(Ability: Until end of turn)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = 
 Bot1.Attack(Hall of Storm Giants > Bot2)
 ? Bot1.Battlefield.Hall of Storm Giants.Types = Land; Creature

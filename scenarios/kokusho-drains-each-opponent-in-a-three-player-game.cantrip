@@ -31,6 +31,7 @@ Bot1.Hand.Kokusho, the Evening Star.Cast
 Bot1.Pass
 Bot1.Battlefield.Swamp.Activate
 Bot1.Hand.Culling the Weak.Cast
+Bot1.Choose(Pay mana)
 Bot1.Choose(Kokusho, the Evening Star)
 Bot1.Pass
 [T2 Bot2.Upkeep]

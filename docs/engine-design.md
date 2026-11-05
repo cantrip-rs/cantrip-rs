@@ -98,6 +98,15 @@ strength, sweeping many similar entities every frame, buys nothing here.
 - **Objects are IDs.** An ID indexes a row holding the object's card (an index into the immutable card table),
   counters, damage, status, controller, owner, zone, attachments and timestamps. An object that changes zones becomes
   a new object (CR 400.7) with a new ID; its last-known information is a frozen row.
+  That row also keeps both directions of its combat relationships, in two spans of the journalled `members` arena
+  (CR 608.2b,h, 113.7a). Each simultaneous departure is captured against the whole pre-removal graph. The public
+  `Query::creatures_blocked_by` and `creatures_blocking` ask the current graph for a live source, and its frozen graph
+  once it has left or phased out: Tinder Wall's sacrifice cost, Abu Ja'far's death ability and Ydwen Efreet's pending
+  trigger need the same authority. IDs remain the exact old incarnations; a target's current legality is still the
+  targeting procedure's. Earlier combat removal, phase-in and a new incarnation do not revive old current pairings.
+  Reading this historical graph notifies the history watch; its arena offsets are excluded from loop identity just
+  as event-history offsets are. Search-world rebinding preserves these public relationships while changing hidden
+  characteristics. No new event category or per-card remembered state is involved.
 - **Zones are ordered lists of IDs.** Continuous effects, pending and delayed triggers and replacement effects are
   compact records that name objects by ID and card behavior by function index.
 - **Derived data is not state.** A cache of something computed from the state (the list of static-ability sources)
@@ -148,6 +157,24 @@ a search branch is a sibling path that shares everything above it.
   and the position it lands on is compared.
 
 **The event history is the record the rules ask about the past** (`cantrip_api::history`, read with `q.history()`).
+
+Battlefield arrivals retain the player who put the object there in
+`Event::ZoneChange::put_by` (CR 110.2a, 608.2c), independently of its entering
+controller. Thelon's Chant and Tourach's Chant use this player. Existing zone-change
+dispatch, batching and `Event::player()` meanings are unchanged; the separately
+recorded `Entered` event still describes the entering controller and characteristics.
+Default entry verbs use the actual acting/resolving player, including scoped
+replacement and mana effects. Explicit named-player actions use
+`put_onto_battlefield_by` or simultaneous `put_all_onto_battlefield_by`: each row
+separately states its controller and actor. Shared search/put recipes and existing
+"each player puts/returns" callers name those players explicitly. A control-only
+entry replacement preserves the actor; a replacement redirecting a move onto the
+battlefield supplies its own instructed player. Tokens are put by their creator,
+before any entry replacement changes control. A CR 610.3 one-shot return retains
+the original effect's actor on its `ExileLink`, rather than inheriting a later spell
+that makes the exiler leave. Non-entry moves and genuinely actorless rules/setup
+events retain `None`; neither the active player nor entering controller substitutes
+for an unknown actor. No new trigger point or observation tensor layout is added.
 Every rules event since the game began is a `Record` (serial, turn, step, the active player, its cause, and the
 `Event`), recorded after its triggers are collected and its replacements applied. Records name objects and copy
 nothing out of them: what an object was is read from its row, frozen as it left, or its last-known snapshot. It is
@@ -334,6 +361,25 @@ only the candidates the host's verdict on those picked says may be added.
   so losing its abilities leaves it and no keyword of the permanent says it ("creatures with no abilities", CR 613.1f).
   "Can't become untapped" is `CardDef::cant_become_untapped` (Frozen in Ice): the same kind of rule, but it holds in every untap, an
   effect's and a stun counter's too (`ops::untap`, CR 101.2, 122.1d).
+  Untapping is one planned simultaneous instruction (`Game::untap_together`, CR 502.3, 701.26b, 603.2c): every
+  prohibition and stun replacement is decided before anything changes; all status/counter changes happen before
+  durations and control settle. The untap step and multi-object card instructions use the same operation. Actual
+  untaps emit `Event::Untapped` in one trigger batch (Wake Thrasher, Mesmeric Orb); its distinct bit 64 widens
+  `EventMask` to u128 so exact tapped-history counts remain unchanged. The native observation maps that bit to
+  its own appended event category (66); the existing unknown category stays 65, and the encoder schema/hash
+  explicitly reject older model layouts. Removing stun or a prohibited untap emits none. `Query::can_untap` asks whether the untap is payable before replacements: stun still permits a
+  cost (CR 118.11), while "can't become untapped" does not. Untap-step-only restrictions do not bar an untap cost.
+  `Duration::WhileSourceTapped` (Ashnod's Battle Gear, Seasinger, Lwaxana Troi) and
+  `WhileSourceTappedAndControlled` (Rubinia Soulsinger) ask the history about an uninterrupted source interval
+  before first applying (CR 611.2b). `StackItem::tapped_since` starts at the source's final {T} cost; source control
+  still counts from the ability's creation on the stack. A copy starts a fresh interval when created (CR 707.10).
+  An interval broken and restored before resolution cannot revive that ability; the complete condition restarting
+  during that resolution can. The resolving frame's existing history mark supplies that boundary, including replay
+  after questions. Immediate mana abilities use their own declaration, final tap cost and resolution anchors beside
+  `mana_activation_x`; both context values restore after nested activations, suspension or failed payment. A
+  condition broken during an immediate mana ability's costs still cannot revive before its own resolution. Custom `AsLongAs` predicates, `WhileCounter`, play `Expiry`, and `WhileSourceOnBattlefield` keep their
+  existing current-state beginning checks; their arbitrary pre-resolution condition histories are not reconstructed
+  by these source-tapped duration types.
 - **Text-changing effects (612, layer 3)** are `EffectKind::ChangeText { from, to }`, a `Word` (a color word or a
   subtype) replaced by another. The layers change the type line; card code reads every word of its rules text through
   `Query::words` (`Words`, the changes in timestamp order unless one depends on another), so the card does what its changed text says. A token's
@@ -343,7 +389,10 @@ only the candidates the host's verdict on those picked says may be added.
   source's words then (`StackItem::words`), and while its own condition, targets and instructions are read
   (`Cx::own_text`, `resolve::Given::text`) `Query::words` of its source answers those - the engine turns that off while it
   asks other abilities in the middle of them (triggers, replacement effects, state triggers). A spell reads its own words
-  (a text change on the stack changes it); static abilities read their source's words now. An ability a resolved effect
+  (a text change on the stack changes it); static abilities read their source's words now. A resolved replacement or
+  prevention also retains its creating text in `ContinuousEffect::words` (611.2c, 612.1), for matching, applying and its
+  follow-up instructions. The objects it examines keep their current qualities; other abilities asked during its
+  instructions read their own text. An ability a resolved effect
   grants, and a delayed triggered ability, is the creating text's (611.2c, 603.7): the effect keeps that text's words
   (`ContinuousEffect::words`, for `EffectKind::AddAbility`; `Delayed::words`), and the ability is asked whether it triggers,
   and goes on the stack, with them (`PendingTrigger::words`, `layers::granted_words`, by the effect the layers say put each
@@ -361,6 +410,15 @@ only the candidates the host's verdict on those picked says may be added.
   effect that sets a name (612.8, "named Everflame, Heroes' Legacy") is `EffectKind::SetName`, in layer 3: the object
   has that name alone (`Chars::name_set`), for the legend rule and every "same name" or chosen-name question
   (`library::object_names`).
+- **Choice captions in changed text (612).** Labels that quote the source's text capture its words as
+  `Label::WordedCard` or `WordedOption`; their printed card and option index stay fixed. `choose::one_of` captures the
+  source text read by the resolving instruction. An entry choice instead reads `Query::words_as_enters`: prospective
+  `Entering::copy.words`, followed only by applicable permanent-spell text changes (400.7a, 614.12, 707.5), independently
+  of the resolving effect's words. The native prospective-entry projection shares the same carry rule. Host rows,
+  choice headings and scenario mode matching all use engine `label_text_in` and its shared rules-text renderer,
+  preserving card names and reminder text. Static captions borrow their strings; changed captions are owned, never
+  interned or leaked. `ChosenOption` keeps its printed identity; ordinary labels, names and modal choices retain their
+  existing indices and representation.
 - **Dependency (613.8): the layer pass.** Each layer's application order is fixed once per position over the whole game
   (`layers.rs`, "The layer pass" below for the design): every entry of the layer - each static ability of each source, each
   ability an object was given, each resolved effect and keyword counter - in timestamp order (613.7), then ordered by the
@@ -936,6 +994,35 @@ triggers while the condition holds unless it has already triggered and not left 
 on the stack (`state_trigger_waiting`) - so it triggers again once it has resolved or been countered, if the state still
 holds; an object that changed zones is a new one with a new ability (CR 400.7).
 
+Replacement and prevention bookkeeping belongs to the core action it modifies (CR 614.6, 615.7, 616.1): exhausting a
+shield, consuming a one-use replacement and doing its `then` must not count as independent instructions of the spell
+that caused the event. A simultaneous zone change, damage event or counter placement keeps one core instruction over
+all its parts. A replacement or prevention callback still checks its own card's instructions at a separate resolution
+depth; two changes in that callback still need `instruction` or `end_sentence`. The pending state check is carried into
+the callback, so an event or explicit sentence boundary judges all pending changes, then the enclosing instruction's
+source and depth are restored. One transient judgment bit propagates a boundary even when the callback subsequently
+changes the game again; it is verifier call bookkeeping, not persisted rules state or a card history counter. The
+caller's own pending instruction is never forgiven by entering a callback. Neither state-based actions nor additional
+priority are introduced.
+
+Damage replacements can expand the event before any damage is processed into its results (CR 120.4b-d, 614.6).
+A printed or granted replacement's query-only `with_damage` callback declares `DamageComponent`s alongside its
+reshape: `Additional` is damage introduced by a new source (Eye for an Eye), while `Redirected` retains the original
+source, combat status and amount attribution (Harm's Way, Captain's Maneuver). Partial redirection uses the same
+recipient validation as whole redirection (CR 614.9); an impossible destination leaves the original damage and a
+once-only effect intact. A once-only replacement applies to every currently eligible component of this event before it is consumed,
+including original damage brought to the same recipient by a partial redirection. Every branch inherits the effects
+already applied to its parent (CR 614.5), and a newly
+introduced source can be chosen for a remaining limited prevention shield (CR 615.7). Original sibling components
+and additions finish replacement/prevention before any have results; source/controller characteristics and
+life-dependent infect are read before those simultaneous results. `damage` and `damage_together` total the original
+fragments, excluding additions; the existing singular `damage_result` returns the first actual original component.
+Eye's added damage is noncombat: CR120.2a defines the creature's assigned combat damage, while Eye is the
+spell source specified by its effect (CR120.2b; its2009-02-01 source ruling). Sharing the modified event does not
+change that source or classification. All components are recorded and announced together. Prevention's additional effects (`PreventionThen`) still happen
+immediately after that event (CR 615.5), so Divine Deflection remains a separate damage event. Ordinary replacement
+`then` callbacks keep their instruction verification and do not implicitly acquire simultaneous damage semantics.
+
 A delayed triggered ability waits as a `Delayed` record in the state, on no object (CR 603.7): once at the next such step
 (`DelayedWhen::Step`), at each such step for the rest of the game (`EachStep`: paradigm, CR 702.192a, which goes on whatever
 happens to the card it came from), or on events: each one this turn (`ThisTurn`), until an event (`UntilEvent`), until a
@@ -946,6 +1033,23 @@ land dies or is put into exile, return it", earthbend, CR 701.66a; its `matches`
 `Delayed::watched`, it is stopped as any triggered ability is, and nothing the object loses or gains changes it, CR
 603.7c; dropped as a turn begins once that object has changed zones). Only the end of an "until" wait (`UntilEvent`) is
 no triggered ability (CR 610.3), so nothing stops it.
+
+`Game::delayed_trigger_with` exposes both existing typed roles for step-delayed abilities: an independent singular
+`subject` and one real-object list (`Delayed::members`, read through `event_objects` on its stack item). Infinite
+Authority carries the original enchanted creature separately from the opposing creature, including across its nested
+end-combat/end-step callbacks; Gift of Immortality and Next of Kin carry the returned/new host separately from the Aura
+card in its first graveyard incarnation. Source, controller, acquired text, words and creation moment remain those
+of the creating ability (CR 603.7c-e). No object IDs delimit groups, and no extra persistent state is required. This
+constructor accepts step variants only; event-delayed subject/list retention remains a separate procedure. The
+existing subject-only and list-only constructors keep their previous behavior.
+
+An explicit step of the next turn (`DelayedWhen::StepOfNextTurn { step, of }`, Mishra's Bauble and Urza's Bauble)
+waits for the first actual `TurnBegan` after the ability was created, optionally for a named player. It reads those
+events after `Delayed::since`; extra phases and steps in the creation turn cannot satisfy it, and an extra turn
+can. If the selected turn ends without the step, the wait expires instead of drifting to a later turn (CR 614.10a).
+A later occurrence of the step within that selected turn still counts. This differs from `Step`, which waits for
+the next actual occurrence even if it is in the current turn. The host includes both waits in the controller's
+visible pending effects until they trigger or expire, using their source and ability text.
 
 An instruction to transform (CR 701.27) is `ops::transform`, which turns a double-faced permanent over and records
 `Event::Transformed`. An activated or triggered ability of a permanent that tries to transform that permanent does so only
@@ -1335,7 +1439,8 @@ the text the object has now; either face of a transforming card and either door 
 `CardTable::linked_card`), and how the object acquired the ability (`Acquired`: by its own text, by a copy effect applied
 to it later - the timestamp of its `EffectKind::RestoreCopy`, `GameState::copy_acquired` - or by the effect that granted it,
 which `layers::ability_givers` names), and `Query::exiled_with` answers only an ability of that same text acquired the same
-way. A stack item, a pending trigger and a delayed trigger carry how their ability was acquired (worked out as it is
+way. A resolving ability's `Cause::Ability` also retains that captured `Acquired`, so a history lookup for tokens it
+created can distinguish a later copy effect's linked abilities (Dance of Many). A stack item, a pending trigger and a delayed trigger carry how their ability was acquired (worked out as it is
 activated or triggers, `layers::acquired`, with nothing to work out unless an effect could have given it; a look-back
 trigger as it was then, `Then`). So a creature that copies another (Mirrorweave) does not see, through the copied text's
 linked ability, the cards its own text exiled, nor a creature the cards an ability lent to it exiled (Agatha's Soul
@@ -1841,6 +1946,30 @@ since: the history does not keep the controller or the types an object entered w
 
 ### Counters put by an effect, by a cost and by a turn-based action
 
+`Game::add_counters_with_limit(object, kind, amount, maximum_total)` preserves an instruction's restriction on the
+resulting total (Clockwork Beast and Clockwork Avian; CR 101.2, 608.2c, 609.3, 614.17). The requested amount goes through
+the ordinary counter replacement chain first; only then does the common put path restrict that kind to the remaining
+room, before storage, timestamps or `CountersPut` observations. The restriction belongs to that placement, so entry
+doubling and other effects can exceed the printed number, and existing counters above it are never removed. Other
+counter kinds remain unchanged. The actual acting player puts them, as with `add_counters`.
+
+The existing quantity domains remain separate (RX-5): stored counters use `i16` and stack X uses `u16`. Counter
+proposals use wider `i64` intermediates so replacements can reduce an amount before storage; the final write retains
+the existing saturation, and hypothetical entering characteristics use the same bounded counter field as the state.
+`choose::number` uses a bounded `u32` range; the host presents at most 256 values as modes and larger ranges as scalar input.
+The limit must not be implemented by reducing an up-to-X choice to remaining room (a halving replacement can make a
+larger choice fit), or by clamping X to 255. Wider intermediates and scalar input do not widen the stored counter or X
+domains or introduce arbitrary-precision game state.
+
+`Game::pay_counter_cost(payer, placements)` pays a resolving counter cost on already selected objects (CR 118.3,
+118.11, 118.12a). Thelon's Chant and Tourach's Chant put a -1/-1 counter on a chosen creature; Sheltering Ancient's
+cumulative upkeep puts +1/+1 counters on opposing creatures. The card/shared selection keeps the ability's original
+source and `Purpose::PutCounters`, while the core checks every positive recipient for live state, phasing and counter
+bans before paying any component. Each row is a separate component, including repeated recipients, and goes through
+the common counter-placement path with `How::Cost` and the actual payer, in the order supplied. Components retain
+separate replacement/trigger observations, so later components see counters placed earlier. Replacements changing a placement to
+zero still pay the cost. This neither changes the meaning of `may_pay.source` nor performs the blight keyword action.
+
 Every counter comes to be on an object or a player through one path, `cantrip_rules::counters` (`put`, `put_all`,
 `entering` and `place_arrived` for what a permanent enters or a card arrives with, `put_on_player`), and every counter is
 put by a player, named there as a `PlayerId`, never left out: the controller of the spell or ability whose effect puts it
@@ -2048,8 +2177,27 @@ not its old position, since its effect may have taken an item under it (Ertai Re
 
 "You may activate each of those abilities only once each turn" (Locus, Mairsil, the Pretender) is
 `CardDef::granted_once_each_turn`: the card says how many of its permanent's instances of an ability its static gave with
-the limit, and `actions::granted_limit_reached` counts that ability's activations by the object this turn in the history
-(CR 602.5b); an unlimited instance of the same ability is used first.
+the limit, and `actions::granted_limit_reached` counts the selected instance's activations by the object this turn in
+the history (CR 602.5b-c). An unlimited instance of the same ability keeps its independent budget.
+
+Activation identity is separate from the grouping of linked abilities. `AbilityAcquisition` records the actual grant
+entry, physical donor and equal occurrence within that grant; it is captured before costs on `StackItem::instance`
+and `Event::AbilityActivated::instance`. Availability conditions and mana callbacks receive the same exact definition
+and acquisition through `Asker::instance`. Removing another donor may pack the displayed slots, but does not transfer
+its activation count. A fresh grant or copy has a fresh acquisition; changing control does not. A self-granted ability
+printed in the object's own text still shares its existing CR607 linked group while retaining its own activation
+identity. `statics::grant_activated_abilities_from` retains donor incarnations, and the shared history question
+`this_ability_activations_this_turn` supplies Vampire Bats and Farrelite Priest's independent counts. Native `.once()`
+and `.once_each_turn()` restrictions use the same event identity; the existing activation-turn marker is a cheap guard.
+A copied static ability uses its captured copy acquisition when it generates a grant (`Giver::activation`); a
+separately granted layer6 static that survives the copy retains its existing acquisition. This does not change
+`Giver::by`/`acquired`, linked groups, or the order in which continuous effects apply.
+
+These are internal authority fields, not new player choices or wire/model observations. On this isolated base their
+explicit memory costs are Event36, Cause16, Record64, StackItem296, Asker44 and Chars528 bytes; characteristics retain
+a parallel physical-donor array while layers run. Captured metadata follows ordinary journalled stack/history writes,
+fork/undo/redo, and stack copies; it adds no mutable activation-count cache. Loop positions canonicalize donor IDs and
+acquisition timestamps rather than treating ever-increasing IDs as new positions.
 
 An object holds up to `MAX_ABILITIES` (32) abilities, printed and granted (`Chars::abilities`, `LastKnown::abilities`), and
 `Obj::activated_mask` is as wide: Locus has every activated ability of the cards used to craft it (CR 702.167c), nine or
@@ -2305,8 +2453,7 @@ The host shows it as a pool chip of its own (`RestrictedManaView::source`, capti
 scenario spends it with `Spend: W from Barracks of the Thousand` and the dump lists the pool by source (`BotN.ManaFrom`).
 Mana no rule tells apart is spent in the order it came, ordinary before lasting, as before. Barracks of the Thousand tells
 apart its own. The same records answer "mana from a Treasure was spent to cast it" (Kalain, Reclusive Painter), "spend only
-mana produced by creatures" (Myr Superion) and {S}, "mana from a snow source" (CR 107.4h; Icehide Troll), none in content
-yet; restricted mana is told apart by its restriction alone, since no card yet tells it apart by source too. The benchmark
+mana produced by creatures" (Myr Superion). Restricted mana is told apart by its restriction alone, since no card yet tells it apart by source too. The benchmark
 (`cantrip-bench --games 128`, "engine answering", 2026-10-17, main 13a3944f against the branch, three back-to-back pairs):
 9.82/9.93, 9.53/9.92, 9.81/10.06 us, about 2.5% for keeping every unit's source and recording each payment.
 
@@ -2524,6 +2671,28 @@ division spares: all of it on one creature it would not kill, or on the one wort
 captions it as the opponent's creature's damage, and the attacking band carries its number to the view (`BAND 1` on the
 card). "Bands with other" (CR 702.22b) is not built: no card in content has it.
 
+### Becoming blocked and rampage
+
+Becoming blocked (CR 509.3c) is a transition of an attacker, `Event::BecameBlocked`, distinct from each
+`Event::Blocks` relationship (CR 509.3d). Declaring several blockers records one transition for each newly blocked
+attacker, including every affected member of an attacking band; the whole declaration is in state before triggers
+are collected. `Game::become_blocked` performs the same transition when an effect makes an attacker blocked without
+adding a blocker (Dazzling Beauty, Curtain of Light). An already blocked creature causes no further transition.
+The event shares the `BLOCKS` mask bit; matchers distinguish its variant.
+
+Rampage (CR 702.23) is a shared keyword recipe, `cantrip_mechanics::rampage::trigger::<N>(text)`. Each printed or granted
+instance triggers once on the transition, counts the creatures still blocking the source as it resolves, and creates
+one ordinary end-of-turn pump. Later changes to blockers do not change that bonus.
+
+`Game::remove_from_combat` exposes the core's existing removal operation (CR 506.4): in particular, removing the last
+blocker leaves an attacker blocked. `Game::become_unblocked` is the separate operation for an effect that changes that
+status. It does not emit the declare-blockers `Unblocked` event: "attacks and isn't blocked" abilities do not trigger
+when a later effect makes the creature unblocked (CR 509.3g). The printed False Orders / Imprison / Ydwen Efreet recipe
+lives in `cantrip_mechanics::combat::remove_from_combat_and_unblock`: it consults this combat's `Blocks` history to
+identify attackers that had become blocked by only the removed creature. A second blocker that left earlier still
+prevents this unblocking. Removal and unblocking are separate instructions; the attackers becoming unblocked together
+are one instruction. Moving through the search tree restores both the blocked flags and the transition history.
+
 ### The regular combat damage step
 
 The quantity assigned is read by the core (`static_rules::combat_damage_of`, CR 510.1a), shared by attackers, blockers
@@ -2543,6 +2712,17 @@ Combat assignments themselves leave out a departed player (CR 800.4e), not merel
 trample assignment and from a trample division's options; remaining creatures still receive assignments normally.
 Both damage steps use the same procedure.
 
+Blocking status is independent of remaining attacker relationships (CR 509.1g, 510.1d): a creature keeps blocking when
+all creatures it blocked leave combat. `GameState::blockers` holds those creatures and `blocks` holds their remaining
+attacker associations. `set_blocks` starts blocking for newly assigned creatures without clearing the independent
+status of other blockers. Removal from combat, regeneration, control or type changes, and combat ending clear that
+status at the rules-defined time. A card asks `Query::is_blocking` (Righteousness and Rally); targeting helpers use the
+same query. A blocker with no remaining attacker assigns no combat damage, but its first strike or double strike still
+creates a first-strike damage step and the priority window before regular combat damage (CR 510.4). The step decision
+reads the independent blockers list, even when no block associations remain. The state journal, exact state hash and
+normalized loop key include blocking status; scenarios can assert `Combat.Blockers` and its count separately from
+`Combat.Blocks`. Last-known relationships of a departed blocker are a separate question.
+
 The combat state is the one truth of what is attacked. An `Attacker` names what it attacks (`target`) and its defending
 player (`defending`, CR 508.5), fixed as it begins attacking. A planeswalker or battle being attacked is removed from
 combat the moment the rules say (CR 506.4), and the creatures attacking it go on attacking nothing - `target` becomes
@@ -2558,7 +2738,7 @@ changes: one that was both stays while it is either (a planeswalker no longer a 
 it), while one that was only a planeswalker and becomes only a battle, or the reverse, is removed (CR 506.4). It is asked
 wherever control is settled - every event, every effect begun, the end of an instruction,
 the state-based actions (`settle_lasting_and_control`) - and at every change with no event (`Cx::state_changed`), free
-while nothing attacks. The same check removes an attacking or blocking creature that has stopped being a creature (CR
+while nothing attacks or blocks. The same check removes an attacking or blocking creature that has stopped being a creature (CR
 506.4: an artifact Ensoul Artifact or March of the Machines animated, once the enchantment leaves), for good, though it
 be a creature again before damage; its blocks end with it, and a creature it blocked stays blocked. The two are apart
 (CR 506.4d): a planeswalker creature that blocks and is attacked keeps being attacked once it is no longer a creature,
@@ -2578,13 +2758,27 @@ first-strike damage deals no more, and one that gains it only afterwards deals i
 
 ### Landwalk
 
-Landwalk (CR 702.14) is an evasion ability, a keyword per basic land type: `Keyword::Islandwalk`, `Plainswalk`,
-`Swampwalk`, `Mountainwalk`, `Forestwalk`, which `turn::can_block` reads with the land type each names
-(`Keyword::LANDWALKS`): no creature of a defending player who controls a land of that type, as the layers have it now, may
-block it (CR 702.14c), whatever landwalk the blocker has (702.14d). An ability that grants one names its land type through
-its source's words (CR 612.2: Lord of Atlantis with Island changed to Swamp grants swampwalk, `Keyword::landwalk`). A
-printed landwalk follows a text change of its land type in layer 3 (Magical Hack's "swampwalk" to "plainswalk" on Bog
-Wraith). Another kind of landwalk (nonbasic, snow) is another keyword.
+Landwalk (CR 702.14) is an evasion ability, represented by exact core keywords: five ordinary basic-landwalks,
+five snow basic-landwalks, snow landwalk, desertwalk, nonbasic landwalk and legendary landwalk. Rime Dryad and
+Legions of Lim-Dûl print snow forestwalk and snow swampwalk; Zombie Musher prints snow landwalk, Desert Nomads
+desertwalk, Dryad Sophisticate nonbasic landwalk, and Livonya Silone and Ayumi, the Last Visitor legendary landwalk.
+`turn::can_block` reads the defending player's current lands (CR 702.14c), including their current land type,
+controller and basic, snow or legendary supertypes. A non-snow Forest does not qualify for snow forestwalk; a
+blocker's own landwalk never cancels the attacker's (CR 702.14d). The scan is guarded on the attacker's landwalk bits.
+
+`Keywords::has` remains exact. `Keywords::matches` and `Keywords::for_effect` interpret an effect's named keyword
+reference, including snow islandwalk when islandwalk is named (Merfolk Assassin's official ruling, 2006-10-15).
+`Keywords::LANDWALKS` and `has_landwalk` cover the entire supported family for an unqualified reference. Keyword
+removal expands named references; granting an ability uses only the exact supplied bits. Layer 3 changes a printed
+landwalk's land type word while preserving its snow restriction (CR 612.2); grants read their source's words.
+
+Keyword IDs remain append-only. `Keywords` is a 128-bit mask so the appended variants do not reuse existing IDs.
+The copy-value layout (`Option<Copiable>`) grows from 168 to 176 bytes for that additional keyword word; rare copy
+exceptions remain packed into its existing space. The raw AI observation schema is 3, with a 128-bit keyword field; postcard and typed JSON retain high bits. The
+existing fixed tensor's 48 keyword features still represent only bits 0 through 47. The host protocol continues
+to expose keyword text, including granted and lost variants, without a numeric-mask wire change. The Oracle build
+reads the exact standalone printed landwalk phrase even when external metadata tags it only as “Landwalk”; a
+reference or grant in another ability does not give its source landwalk.
 
 ### Can't attack unless, and can't attack you
 
@@ -2761,6 +2955,28 @@ game of a match after sideboarding (`DeckRules`, shared with the deck editor, an
 The benchmark is unchanged within the noise (2026-10-23, four alternating rounds, engine answering: 9.50, 9.53, 9.37, 9.20 us per decision before and 9.48, 9.32, 9.23, 9.28 us
 after).
 
+### Power/toughness counters
+
+Every P/T counter is named separately in `counter_kinds!`, with its own stable number, Oracle name, scenario token, and
+signed `(power, toughness)` deltas (CR 122.1a). `CounterKind::POWER_TOUGHNESS` contains only those rows: an ordinary
+named counter has no intrinsic P/T effect. Armor Thrull's +1/+2, Clockwork Avian's +1/+0, Essence Flare's -0/-1, and
+Spirit Shackle's -0/-2 all use the same layer rule. Adding a named counter still requires only its ordinary table row.
+The additional printed P/T kinds are appended after existing ids; none of those ids changes.
+
+`layers::counters` adds each kind's count times its deltas in layer 7c (CR 613.4c), after base-setting effects and before
+switching power and toughness. The calculation sums unlike counters at a wider integer width before clamping to the
+engine's stored P/T width, so large opposite modifiers can offset without an intermediate wrap or clamp. Counters
+continue to apply after abilities are lost and to creature cards in zones other than the battlefield. An artifact or
+Vehicle's counters do not modify it while it is not a creature, and begin applying when it becomes one.
+
+Unlike counters remain different kinds even if their P/T changes cancel numerically. Only the +1/+1 and -1/-1 pair
+annihilates as a state-based action (CR 704.5q); +2/+2 and -2/-2 counters remain for costs, removal, and proliferate.
+The existing counter put/remove paths, event records, journal, replacement effects, and layer-cache invalidation are
+shared by the new kinds. `Obj::has_counters` caches whether the private counter array is nonempty; only the existing
+put/remove/clear paths maintain it, avoiding a scan of every kind on each layer query. The flag follows the array
+through the journal. Focused native regressions cover each printed delta, mixed counters, animation, ability loss,
+base-setting and switching, graveyard cards, numerical boundaries, annihilation, and undo/redo.
+
 ### Keyword counters
 
 A keyword counter gives its permanent the keyword it is named for (CR 122.1b): flying, first strike, double strike,
@@ -2829,6 +3045,30 @@ components (CR 730.3b), which nothing in exile reads.
 
 Every pending request comes with its legal answers enumerated, cheaply and in a stable order. The client's prompt
 and the AI's move list are the same data.
+
+### Regeneration prohibitions and static regeneration
+
+A resolved “can't be regenerated” uses `EffectKind::CantBeRegenerated` on the
+permanent; a printed static rule uses `CardDef::regeneration_bans`. A rule granted
+as an ability uses `granted_regeneration_ban`, in the granting card's `delayed`
+table, and the usual `EffectKind::AddAbility`. Its holder supplies the source and
+controller. Layer 6 determines whether the granted ability remains: losing it
+ends its prohibition, while a later grant functions again. These are rules about
+regeneration, not a prohibition on casting, activating or resolving effects that
+create shields (CR 701.19c). Incinerate, Hurr Jackal and Bone Shaman use the same
+native prohibition check, whether destruction comes from an effect or a lethal
+or deathtouch state-based action.
+
+A static ability can replace destruction with regeneration directly (Clergy of
+the Holy Nimbus, CR 701.19b). `ZoneChange::regenerated` requests that outcome;
+`regeneration_shield` records only that the core's shield replacement applied.
+The move regenerates either kind, but consumes a shield only for that second
+case. Before considering further replacements, the core rejects a regeneration
+request barred by either a continuous rule or one-shot no-regeneration
+destruction. This leaves the original destruction available to other applicable
+replacements, including shield counters. Proposals are judged before any
+simultaneous moves, so destroying a prohibition's source with its affected
+creatures does not lift it for that destruction event.
 
 ## Interfaces
 
@@ -2966,3 +3206,71 @@ Known gaps:
 - **Multiplayer:** the rules are written for two players today, and multiplayer (CR 800) must not be designed out.
 - **Determinism across machines:** the same results on every platform the server and training run on, which rules
   out depending on hash map iteration order or unordered floating point.
+
+### X in activated mana abilities
+
+A mana activation announces its own X, including the amount removed by
+`VariableCost::RemoveAnyNumberOfCounters`. The cost removes exactly that many
+counters before its effect resolves immediately. The source's casting X remains
+independent (CR 107.3k, 602.2b, 605.3a). `Query::mana_ability_x` reads the
+activation's value after sacrifice or exile; a nested mana activation temporarily
+replaces it and restores the outer value on return or suspension.
+
+`x_is_mana_amount` declares that positive X only changes the amount or number of
+mana colors chosen. Production queries ignore cost payability (CR 106.7) and
+retain zero, one, and multiple-mana outcomes, including Damping Sphere's
+replacement at two mana. Color questions use chunks of at most 255 while the
+mana amount keeps its full width; Wizard's Rockets no longer truncates X.
+
+
+### Snow-source mana and {S} (CR 107.4h)
+
+`ManaCost::snow` counts {S} separately from generic and the six mana types. Icehide Troll and Rime Transfusion
+use the same requirement; Snow-Covered Island and Snow-Covered Mountain produce ordinary blue/red mana whose
+source has the snow supertype. The source's current characteristics (or LKI for a sacrificed source) are captured
+when mana is produced, in `ManaFrom::snow`. Spending never consults the now-live source to reconstruct that quality.
+Replacement production retains the original producer's quality; a triggered mana ability has its own source.
+Nested activation costs preserve the enclosing source and are included in the staged availability flow.
+
+The existing mana flow has a snow-only demand and independently tagged supplies. Generic reductions, convoke,
+delve and improvise do not pay {S}. Explicit AssignMana options identify both the captured quality (`snow`) and
+whether that unit pays {S} (`pay_snow`), alongside its ordinary mana type, source and spending restriction.
+The shared script payment planner uses the same exact matching to avoid consuming a snow unit needed elsewhere.
+`Spend: {U} Snow for {S}` selects it explicitly. Undo, cancellation and goto retain the journaled quality.
+`ManaSpent::snow` records the exact u64 snow count even where the older per-color ManaTally saturates at 255;
+`History::snow_mana_spent_to_cast` reads that production-time provenance (Blood on the Snow).
+
+The host exposes snow pool chips and both allocation choices, including restricted snow mana. Protocol 227 appends
+Snow/PaySnow flags and RemainingSnow; raw observation schema 4 adds snow_pool/cost/option fields. Its snow_pool
+aggregates use u64 per mana type, summing the independently stored u32 restricted pools without narrowing. Encoded schema 3
+keeps tensor dimensions/vocabulary fixed and assigns player cells25–30, game31 and option29–30 to those facts.
+Snow payment windows use the existing Option/Act factoring, so each legal allocation and mana ability remains
+reachable by the policy. Ordinary payment factoring remains AutoPay.
+
+Schema-2 production graphs remain supported through the explicit `LegacySnowInputV2` input compatibility mode.
+Only exact known hashes ac26dc68cba342fb (raw3) and 6c8e810d37df2b8e (raw4) are accepted. The adapter masks only
+newly assigned snow cells **by token kind**, preserving the established meanings of those projection columns on card
+and event tokens. Native tract/ORT, remote clients/servers and GPU packing apply the same contract. Manifests,
+weights and saved schema-2 references keep their original provenance. Schema-3 graphs receive all snow features.
+This keeps older policies functional with exact legal choices; it does not claim they were trained for snow strategy.
+
+Snow's exact u64 provenance aligns the isolated Event to 32 bytes and Record to 56 bytes. At MAX_GAME_EVENTS
+(2,097,152), raw record payload is bounded by 117,440,512 bytes (112 MiB), before Vec/tree/state overhead.
+A foundation combining independently widened damage/life events must measure and guard its actual composed layout;
+it must not preserve a smaller bound by clipping provenance.
+
+
+### Combined blocked-card foundation
+
+Snow mana, wide number choices, final counter-placement limits, Aura graveyard identity and independent
+acquired abilities share one local foundation. The combined native layout is measured as Event 40, Cause 16,
+Record 72, StackItem 296, PendingTrigger 92, Asker 44 and Chars 528 bytes. At the existing 2,097,152-record limit,
+raw history records occupy at most 144 MiB, excluding their containers and other state. The Aura metadata still
+fits its zone-change variant; isolated feature layout receipts are not the combined memory budget.
+
+The worker base used wire 226. The unpublished numeric and snow branches are combined into wire 227 with
+shape E447E2B351D3DA77. Encoded schema 3 includes snow features while retaining the existing tensor widths;
+the non-snow payload is compared to the existing schema-2 byte golden with its historical header. Both browser controls and tests remain:
+wide numeric entry and snow-symbol allocation. Composition requires its own full validation before promotion.
+
+A copy that permits new targets chooses them before it is placed on the stack (CR 707.10c). The shared retarget procedure keeps each original occurrence on an empty answer, even if that object has left or become illegal; a different target is judged under the item's controller and the completed target set is checked together (CR 115.7d-e). Modes, target counts and divisions stay as copied. An invalid final set leaves the item unchanged and is offered again. The host names the occurrence without offering the stale target as a candidate; protocol 228 tells the client that the empty answer means “Keep current target.”

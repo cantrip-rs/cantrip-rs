@@ -13,7 +13,7 @@ fn source_would_deal_damage(_: &dyn Query, _: &Asker, proposal: &Proposal) -> bo
 /// dealt to orders it with prevention (CR 616.1, the Mending Hands ruling).
 fn double_that_damage(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
     if let Proposal::Damage(d) = proposal {
-        d.amount = d.amount.saturating_mul(2);
+        d.amount = d.amount.checked_mul(2).expect("damage expression exceeds i64 semantic domain");
     }
 }
 

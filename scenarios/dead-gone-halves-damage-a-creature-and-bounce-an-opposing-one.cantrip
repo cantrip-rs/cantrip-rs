@@ -56,6 +56,7 @@ Bot1.Battlefield.Mox Ruby.Activate
 ! Bot1.Hand.Dead // Gone.Cast(Bot2.Battlefield.Mox Emerald; Ability: Dead)
 ! Bot1.Hand.Dead // Gone.Cast(Bot2; Ability: Dead)
 Bot1.Hand.Dead // Gone.Cast(Bot2.Battlefield.Blind Phantasm; Ability: Dead)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -73,6 +74,7 @@ Bot2.Pass
 [T5 Bot1.Main1]
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Dead // Gone.Cast(Bot1.Battlefield.Ornithopter; Ability: Dead)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

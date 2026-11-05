@@ -29,6 +29,7 @@ Bot1.Hand.Lavaspur Boots.Cast
 Bot1.Pass
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Lavaspur Boots.Activate(Geist of Saint Thalia)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Battlefield.Mox Ruby.Activate

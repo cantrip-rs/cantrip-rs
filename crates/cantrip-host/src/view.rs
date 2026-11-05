@@ -77,6 +77,23 @@ pub fn step_view(step: Step) -> TurnStepView {
     }
 }
 
+fn step_name(step: Step) -> &'static str {
+    match step {
+        Step::Untap => "untap step",
+        Step::Upkeep => "upkeep",
+        Step::Draw => "draw step",
+        Step::PrecombatMain => "precombat main phase",
+        Step::BeginCombat => "beginning of combat",
+        Step::DeclareAttackers => "declare attackers step",
+        Step::DeclareBlockers => "declare blockers step",
+        Step::CombatDamage => "combat damage step",
+        Step::EndOfCombat => "end of combat",
+        Step::PostcombatMain => "postcombat main phase",
+        Step::End => "end step",
+        Step::Cleanup => "cleanup step",
+    }
+}
+
 pub fn color_view(color: Color) -> ColorView {
     match color {
         Color::White => ColorView::White,
@@ -279,7 +296,7 @@ pub fn hexproof_from_text(qualities: HexproofFrom) -> String {
 }
 
 /// The keywords as a card's text words them, for the ones an effect gave an object or took from it.
-const KEYWORD_WORDS: [(Keyword, &str); 54] = [
+const KEYWORD_WORDS: [(Keyword, &str); 61] = [
     (Keyword::Flying, "Flying"),
     (Keyword::Haste, "Haste"),
     (Keyword::Vigilance, "Vigilance"),
@@ -329,6 +346,13 @@ const KEYWORD_WORDS: [(Keyword, &str); 54] = [
     (Keyword::Skulk, "Skulk"),
     (Keyword::NonbasicLandwalk, "Nonbasic landwalk"),
     (Keyword::LegendaryLandwalk, "Legendary landwalk"),
+    (Keyword::SnowPlainswalk, "Snow plainswalk"),
+    (Keyword::SnowIslandwalk, "Snow islandwalk"),
+    (Keyword::SnowSwampwalk, "Snow swampwalk"),
+    (Keyword::SnowMountainwalk, "Snow mountainwalk"),
+    (Keyword::SnowForestwalk, "Snow forestwalk"),
+    (Keyword::SnowLandwalk, "Snow landwalk"),
+    (Keyword::Desertwalk, "Desertwalk"),
     (Keyword::Wither, "Wither"),
     (Keyword::Phasing, "Phasing"),
     (Keyword::CantBeCopied, "This spell can't be copied."),
@@ -565,8 +589,9 @@ impl<'a> Projector<'a> {
         }
         // Ordinary mana a rule tells apart by the source that produced it (CR 106.3) is a kind of its own, as restricted mana
         // is: that source's, shown apart from the rest and named by it.
-        for source in game.mana_told_apart(p) {
-            for e in s.mana_from_of(p).filter(|e| e.restriction.is_none() && e.source == source) {
+        let told = game.mana_told_apart(p);
+        for &source in &told {
+            for e in s.mana_from_of(p).filter(|e| !e.snow && e.restriction.is_none() && e.source == source) {
                 for mana in Mana::ALL {
                     let n = e.pool.get(mana);
                     if n > 0 {
@@ -585,9 +610,25 @@ impl<'a> Projector<'a> {
                 }
             }
         }
+        for entry in s.mana_from_of(p).filter(|e| e.snow) {
+            let (filter, effect, spend_subtypes, spend_mana_value) = entry.restriction.map_or((ManaSpendFilterView::None, ManaSpendEffectView::None, Vec::new(), 0), restriction_view);
+            let source = if entry.restriction.is_none() && told.contains(&entry.source) { handles.handle(entry.source) } else { ViewHandle::NONE };
+            for mana in Mana::ALL {
+                let n = entry.pool.get(mana);
+                if n == 0 { continue; }
+                if entry.restriction.is_none() { summary.mana[mana as usize] -= count(n); }
+                match summary.restricted_mana.iter_mut().find(|r| r.snow && r.source == source && r.r#type == Some(mana_view(mana))
+                    && r.filter == filter && r.effect == effect && r.spend_subtypes == spend_subtypes && r.spend_mana_value == spend_mana_value) {
+                    Some(r) => r.amount += count(n),
+                    None => summary.restricted_mana.push(RestrictedManaView { r#type: Some(mana_view(mana)), amount: count(n),
+                        filter, effect, spend_subtypes: spend_subtypes.clone(), spend_mana_value, source, snow: true }),
+                }
+            }
+        }
         for (restriction, pool) in s.restricted_of(p) {
             for mana in Mana::ALL {
-                let n = pool.get(mana);
+                let snow: u32 = s.mana_from_of(p).filter(|e| e.snow && e.restriction == Some(restriction)).map(|e| e.pool.get(mana)).sum();
+                let n = pool.get(mana) - snow;
                 if n > 0 {
                     let (filter, effect, spend_subtypes, spend_mana_value) = restriction_view(restriction);
                     summary.restricted_mana.push(RestrictedManaView {
@@ -598,6 +639,7 @@ impl<'a> Projector<'a> {
                         spend_subtypes,
                         spend_mana_value,
                         source: ViewHandle::NONE,
+                        snow: false,
                     });
                 }
             }
@@ -722,6 +764,9 @@ impl<'a> Projector<'a> {
                 && matches!(
                     d.when,
                     DelayedWhen::ThisTurn
+                        | DelayedWhen::ThisTurnWatching(_)
+                        | DelayedWhen::Step { .. }
+                        | DelayedWhen::StepOfNextTurn { .. }
                         | DelayedWhen::NextThisTurn
                         | DelayedWhen::UntilNextTurnOf(_)
                         | DelayedWhen::EachStep { .. }
@@ -800,7 +845,7 @@ impl<'a> Projector<'a> {
                 }
                 _ => continue,
             };
-            summary.pending_effects.push(format!("{text}{}.", self.until_text(e.duration)));
+            summary.pending_effects.push(format!("{text}{}.", self.effect_until_text(e)));
         }
         // "You have shroud" (CR 702.18a) and hexproof (CR 702.11c) from a static ability of a permanent, as it applies now.
         for (keyword, word) in [(Keyword::Shroud, "shroud"), (Keyword::Hexproof, "hexproof")] {
@@ -862,7 +907,7 @@ impl<'a> Projector<'a> {
         {
             let label = label_text(&Label::Card(dungeon, player.room - 1));
             summary.dungeon = "Undercity".into();
-            summary.dungeon_room = label.split(" \u{2014} ").next().unwrap_or(label).to_string();
+            summary.dungeon_room = label.split(" \u{2014} ").next().unwrap_or(&label).to_string();
         }
         summary
     }
@@ -923,11 +968,28 @@ impl<'a> Projector<'a> {
             _ if whom.is_empty() => String::new(),
             _ => format!(" to {whom}"),
         };
-        Some(format!("{how} that would be dealt{to}{} ({}).", self.until_text(e.duration), card.name))
+        Some(format!("{how} that would be dealt{to}{} ({}).", self.effect_until_text(e), card.name))
     }
 
     /// How long an effect lasts, as `viewer` reads it: " this turn", " until your next turn", " until Bot1's next turn", or
     /// nothing for one that lasts as long as its object.
+
+    /// Source-dependent effects carry their source and controller; the affected object alone cannot name their duration.
+    fn effect_until_text(&self, e: &ContinuousEffect) -> String {
+        let from = self.game.name(e.source);
+        match e.duration {
+            Duration::WhileSourceTapped => format!(" for as long as {from} remains tapped"),
+            Duration::WhileSourceTappedAndControlled => {
+                let whose = if e.controller == self.viewer { "your".to_string() }
+                    else { format!("{}'s", self.player_name(e.controller)) };
+                format!(" for as long as {from} remains tapped and under {whose} control")
+            }
+            Duration::WhileSourceOnBattlefield => format!(" for as long as {from} remains on the battlefield"),
+            Duration::AsLongAs(card, index) => self.game.cards.get(card).lasting.get(index as usize)
+                .map_or(String::new(), |l| format!(" for as long as {}", l.text.replace("{source}", from))),
+            other => self.until_text(other),
+        }
+    }
 
     fn until_text(&self, duration: Duration) -> String {
         match duration {
@@ -1290,7 +1352,8 @@ impl<'a> Projector<'a> {
         }
         // One of the words its text offered to choose between as it entered (CR 607.2f), by the word: "Jeskai", "Odd".
         if let Some(chosen) = s.chosen_option(text) {
-            choices.push(ChoiceView { key: "option".into(), value: label_text(&Label::Option(chosen.card, chosen.index)).to_string(), ..Default::default() });
+            let label = Label::Option(chosen.card, chosen.index).with_words(Query::words(game, id));
+            choices.push(ChoiceView { key: "option".into(), value: label_text_in(game.cards, &label).into_owned(), ..Default::default() });
         }
         if let Some(chosen) = s.chosen_number(text) {
             choices.push(ChoiceView { key: "number".into(), value: chosen.to_string(), ..Default::default() });
@@ -1479,6 +1542,54 @@ impl<'a> Projector<'a> {
         // "Can't attack", "can't block", "can't be blocked [except by ...]" and "blocks if able" from a resolved effect (CR 508.1c, 509.1b-c), with how long they last: no ability
         // of the creature says so, so its face does.
         if on_battlefield {
+            // A delayed trigger can watch a particular permanent this turn (CR 603.7c); identify that object, even when
+            // another permanent has the same name. The originating ability and its frozen words remain public.
+            for d in &s.delayed {
+                if !matches!(d.when, DelayedWhen::ThisTurnWatching(watched) if watched == id) { continue; }
+                let ability_card = game.cards.get(d.ability.card);
+                let source = game.cards.get(game.chars(d.source).card).name;
+                let words = d.words.unwrap_or_else(|| Query::words(game, d.source));
+                let text = crate::text::changed_text(game.cards.ability(d.ability).text(), ability_card.name, words);
+                view.granted_abilities.push(AbilityTextView {
+                    text: format!("Pending delayed ability from {source} (this turn): {text}"), spent: false,
+                });
+            }
+            // A step-delayed ability can carry particular objects for its later instructions (CR 603.7c): show it on
+            // each still-identical permanent, so two objects with the same name remain distinguishable. Glyph of
+            // Destruction and Old Hob, Alleycat Blues both carry objects to be destroyed at the next end step.
+            for d in &s.delayed {
+                let DelayedWhen::Step { step, on_turn_of } = d.when else { continue };
+                if d.subject != Target::Object(id) && !s.members(d.members).contains(&id) { continue; }
+                let ability_card = game.cards.get(d.ability.card);
+                let source = game.cards.get(game.chars(d.source).card).name;
+                let text = game.cards.ability(d.ability).text();
+                let words = d.words.unwrap_or_else(|| Query::words(game, d.source));
+                let text = crate::text::changed_text(text, ability_card.name, words);
+                let turn = match on_turn_of {
+                    Some(p) if p == self.viewer => " during your turn".to_string(),
+                    Some(p) => format!(" during {}'s turn", self.player_name(p)),
+                    None => String::new(),
+                };
+                view.granted_abilities.push(AbilityTextView {
+                    text: format!("Pending delayed ability from {source} (next {}{turn}): {text}", step_name(step)),
+                    spent: false,
+                });
+            }
+            // Once such an ability triggers, its captured objects move to its stack item; keep the association visible
+            // while players can respond, rather than dropping it before the ability resolves (CR 603.3, 603.7c).
+            for item in &s.stack {
+                if item.kind != StackKind::Triggered || !item.ability.is_delayed()
+                    || (item.subject != Target::Object(id) && !s.members(item.members).contains(&id)) { continue; }
+                let ability_card = game.cards.get(item.ability.card);
+                // Some stack items use sentinel ability indices; only a listed delayed ability has text here.
+                if ability_card.delayed.get((item.ability.index - AbilityRef::DELAYED) as usize).is_none() { continue; }
+                let source = game.cards.get(game.chars(item.object).card).name;
+                let text = crate::text::changed_text(game.cards.ability(item.ability).text(), ability_card.name, item.words);
+                view.granted_abilities.push(AbilityTextView {
+                    text: format!("Delayed ability on the stack from {source}: {text}"),
+                    spent: false,
+                });
+            }
             for e in s.effects.iter().filter(|e| e.affected == id) {
                 let what = match e.kind {
                     EffectKind::CantAttack => "Can't attack",
@@ -1492,7 +1603,7 @@ impl<'a> Projector<'a> {
                     },
                     // A requirement to block (CR 509.1c): "Blocks this turn if able."
                     EffectKind::MustBlock => {
-                        let until = match self.until_text(e.duration) {
+                        let until = match self.effect_until_text(e) {
                             when if when.is_empty() => " each combat".to_string(),
                             when => when,
                         };
@@ -1501,7 +1612,7 @@ impl<'a> Projector<'a> {
                     }
                     // A requirement to block one creature (CR 509.1c, 702.39a): "Blocks Goblin Grappler this combat if able."
                     EffectKind::MustBlockAttacker(attacker) => {
-                        let until = self.until_text(e.duration);
+                        let until = self.effect_until_text(e);
                         view.granted_abilities.push(AbilityTextView { text: format!("Blocks {}{until} if able.", game.name(attacker)), spent: false });
                         continue;
                     }
@@ -1514,12 +1625,14 @@ impl<'a> Projector<'a> {
                             Target::Object(o) => game.name(o).to_string(),
                             _ => continue,
                         };
-                        view.granted_abilities.push(AbilityTextView { text: format!("Attacks {whom}{} if able.", self.until_text(e.duration)), spent: false });
+                        view.granted_abilities.push(AbilityTextView { text: format!("Attacks {whom}{} if able.", self.effect_until_text(e)), spent: false });
                         continue;
                     }
                     EffectKind::CantActivateAbilities => "Its activated abilities can't be activated",
                     EffectKind::CantBeSacrificed => "Can't be sacrificed",
                     EffectKind::CantBecomeUntapped => "Can't become untapped",
+                    EffectKind::CantBeRegenerated => "Can't be regenerated",
+                    EffectKind::RegenerationShield => "Regenerate instead of the next destruction",
                     // "Doesn't untap during its controller's next untap step." (CR 502.3); for another duration, "during its
                     // controller's untap step" and how long.
                     EffectKind::DoesntUntap => match e.duration {
@@ -1531,11 +1644,23 @@ impl<'a> Projector<'a> {
                     EffectKind::Control(p) if e.duration != Duration::Indefinite => {
                         let who = if p == self.viewer { "You control".to_string() } else { format!("{} controls", self.names.get(p.index()).cloned().unwrap_or_default()) };
                         let from = game.cards.get(game.chars(e.source).card).name;
-                        let until = match e.duration {
-                            Duration::AsLongAs(card, index) => game.cards.get(card).lasting.get(index as usize).map_or(String::new(), |l| format!(" for as long as {}", l.text.replace("{source}", from))),
-                            other => self.until_text(other),
-                        };
+                        let until = self.effect_until_text(e);
                         view.granted_abilities.push(AbilityTextView { text: format!("{who} it{until} ({from})."), spent: false });
+                        continue;
+                    }
+                    // A resolved replacement about this permanent remains relevant after its source leaves or changes.
+                    // Use the creating card and captured words, just as the rules do, rather than its source's current text.
+                    EffectKind::Replacement { card, index } => {
+                        let def = game.cards.get(card);
+                        let Some(rule) = def.granted_replacements.get(index as usize) else { continue };
+                        let text = if rule.text.is_empty() {
+                            format!("{}{}", rule.hint, self.effect_until_text(e))
+                        } else {
+                            crate::text::changed_text(rule.text, def.name, e.words)
+                        };
+                        view.granted_abilities.push(AbilityTextView {
+                            text: format!("{} ({}).", text.trim_end_matches('.'), def.name), spent: false,
+                        });
                         continue;
                     }
                     // A prevention shield on it (CR 615.7), or all damage to it prevented: no ability of its own says so.
@@ -1552,7 +1677,7 @@ impl<'a> Projector<'a> {
                     }
                     _ => continue,
                 };
-                view.granted_abilities.push(AbilityTextView { text: format!("{what}{}.", self.until_text(e.duration)), spent: false });
+                view.granted_abilities.push(AbilityTextView { text: format!("{what}{}.", self.effect_until_text(e)), spent: false });
             }
             // A resolved rule about an open set that takes it in now (CR 611.2c: Falter's "creatures without flying can't block
             // this turn"), in its card's words and named for it: no ability of the permanent says so.
@@ -1574,7 +1699,7 @@ impl<'a> Projector<'a> {
             if c.has(Keyword::Defender) && c.is(CardType::Creature) {
                 const TEXT: &str = "Can attack as though it didn't have defender";
                 if let Some(e) = s.effects.iter().find(|e| e.affected == id && e.kind == EffectKind::CanAttackDespiteDefender) {
-                    view.granted_abilities.push(AbilityTextView { text: format!("{TEXT}{}.", self.until_text(e.duration)), spent: false });
+                    view.granted_abilities.push(AbilityTextView { text: format!("{TEXT}{}.", self.effect_until_text(e)), spent: false });
                 } else if game.may_attack_despite_defender(id) {
                     view.granted_abilities.push(AbilityTextView { text: format!("{TEXT}."), spent: false });
                 }
@@ -1715,6 +1840,220 @@ fn protection_words(c: &Chars, names: &[String]) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn uncrewed_vehicle_projects_its_printed_stats_without_creature_characteristics() {
+        let cards = cantrip_engine::cards();
+        let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+        let owner = PlayerId(0);
+        let card = cards.find("Smuggler's Copter").expect("the printed Vehicle");
+        let id = game.state.push_obj(Obj::new(card, owner, Zone::BATTLEFIELD));
+        game.state.zone_push(Zone::BATTLEFIELD, id);
+        let names = vec!["A".to_string(), "B".to_string()];
+        let faces = HashSet::new();
+        for viewer in [owner, PlayerId(1), PUBLIC] {
+            let projector = Projector { game: &game, viewer, names: &names, conceded: &[false, false], faces: &faces };
+            let mut handles = HandleSpace::new();
+            let handle = handles.handle(id);
+            let shown = projector.describe(id, handle, None, &mut handles);
+            assert_eq!((shown.power, shown.toughness), (None, None), "an uncrewed Vehicle is not a creature");
+            assert_eq!((shown.printed_power, shown.printed_toughness), (Some(3), Some(3)));
+            let json = serde_json::to_string(&shown).unwrap();
+            let roundtrip: ObjectView = serde_json::from_str(&json).unwrap();
+            assert_eq!((roundtrip.power, roundtrip.toughness), (None, None));
+            assert_eq!((roundtrip.printed_power, roundtrip.printed_toughness), (Some(3), Some(3)));
+        }
+    }
+
+    #[test]
+    fn landwalk_and_toughness_assignment_are_visible_when_granted_and_lost() {
+        let cards = cantrip_engine::cards();
+        let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+        let owner = PlayerId(0);
+        let id = game.state.push_obj(Obj::new(cards.find("Grizzly Bears").unwrap(), owner, Zone::BATTLEFIELD));
+        game.state.zone_push(Zone::BATTLEFIELD, id);
+        let names = vec!["A".to_string(), "B".to_string()];
+        let faces = HashSet::new();
+        for (walk, words) in [
+            (Keyword::Plainswalk, "Plainswalk"), (Keyword::Islandwalk, "Islandwalk"),
+            (Keyword::Swampwalk, "Swampwalk"), (Keyword::Mountainwalk, "Mountainwalk"), (Keyword::Forestwalk, "Forestwalk"),
+            (Keyword::NonbasicLandwalk, "Nonbasic landwalk"), (Keyword::LegendaryLandwalk, "Legendary landwalk"),
+            (Keyword::SnowPlainswalk, "Snow plainswalk"), (Keyword::SnowIslandwalk, "Snow islandwalk"),
+            (Keyword::SnowSwampwalk, "Snow swampwalk"), (Keyword::SnowMountainwalk, "Snow mountainwalk"),
+            (Keyword::SnowForestwalk, "Snow forestwalk"), (Keyword::SnowLandwalk, "Snow landwalk"), (Keyword::Desertwalk, "Desertwalk"),
+            (Keyword::AssignsDamageByToughness, "This creature assigns combat damage equal to its toughness rather than its power."),
+        ] {
+            game.state.effects_retain(|_| false);
+            let timestamp = game.state.timestamp();
+            game.state.effect_push(ContinuousEffect { source: id, controller: owner, timestamp, affected: id,
+                kind: EffectKind::AddKeywords(Keywords::of(&[walk])), duration: Duration::EndOfTurn, words: Words::NONE });
+            for viewer in [owner, PlayerId(1), PUBLIC] {
+                let projector = Projector { game: &game, viewer, names: &names, conceded: &[false, false], faces: &faces };
+                let mut handles = HandleSpace::new();
+                let handle = handles.handle(id);
+                let shown = projector.describe(id, handle, None, &mut handles);
+                assert_eq!(shown.granted_abilities.iter().map(|a| a.text.as_str()).collect::<Vec<_>>(), [words]);
+                let json = serde_json::to_string(&shown).unwrap();
+                assert_eq!(serde_json::from_str::<ObjectView>(&json).unwrap().granted_abilities[0].text, words);
+            }
+        }
+        // A printed high-bit keyword is also named when an effect removes it.
+        let def: &'static CardDef = Box::leak(Box::new(CardDef { name: "Snow walker", types: TypeSet::of(&[CardType::Creature]),
+            keywords: Keywords::of(&[Keyword::SnowForestwalk]), text: "Snow forestwalk", ..CardDef::BLANK }));
+        let cards = Box::leak(Box::new(CardTable::new([def])));
+        let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+        let id = game.state.push_obj(Obj::new(cards.id_of(def), owner, Zone::BATTLEFIELD));
+        game.state.zone_push(Zone::BATTLEFIELD, id);
+        let timestamp = game.state.timestamp();
+        game.state.effect_push(ContinuousEffect { source: id, controller: owner, timestamp, affected: id,
+            kind: EffectKind::LoseKeywords(Keywords::of(&[Keyword::Forestwalk])), duration: Duration::EndOfTurn, words: Words::NONE });
+        let projector = Projector { game: &game, viewer: owner, names: &names, conceded: &[false, false], faces: &faces };
+        let mut handles = HandleSpace::new();
+        let handle = handles.handle(id);
+        assert_eq!(projector.describe(id, handle, None, &mut handles).lost_abilities, ["Snow forestwalk"]);
+    }
+
+    /// Source-dependent durations must tell every seat which permanent must remain tapped,
+    /// and whose control must persist. These are distinct from the affected creature's tap state.
+    #[test]
+    fn source_dependent_untap_restrictions_name_the_source_and_its_duration() {
+        let cards = cantrip_engine::cards();
+        let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+        let owner = PlayerId(0);
+        let mut obj = Obj::new(cards.find("Icy Manipulator").unwrap(), owner, Zone::BATTLEFIELD);
+        obj.tapped = true;
+        let source = game.state.push_obj(obj);
+        let target = game.state.push_obj(Obj::new(cards.find("Grizzly Bears").unwrap(), owner, Zone::BATTLEFIELD));
+        game.state.zone_push(Zone::BATTLEFIELD, source);
+        game.state.zone_push(Zone::BATTLEFIELD, target);
+        let timestamp = game.state.timestamp();
+        game.state.effect_push(ContinuousEffect { source, controller: owner, timestamp, affected: target,
+            kind: EffectKind::DoesntUntap, duration: Duration::WhileSourceTapped, words: Words::NONE });
+        let names = vec!["A".to_string(), "B".to_string()];
+        let faces = HashSet::new();
+        for viewer in [owner, PlayerId(1), PUBLIC] {
+            let projector = Projector { game: &game, viewer, names: &names, conceded: &[false, false], faces: &faces };
+            let mut handles = HandleSpace::new();
+            let handle = handles.handle(target);
+            let view = projector.describe(target, handle, None, &mut handles);
+            let lines: Vec<_> = view.granted_abilities.iter().map(|a| a.text.as_str()).collect();
+            assert_eq!(lines, ["Doesn't untap during its controller's untap step for as long as Icy Manipulator remains tapped."]);
+            let json = serde_json::to_string(&view).unwrap();
+            let decoded: ObjectView = serde_json::from_str(&json).unwrap();
+            assert_eq!(decoded.granted_abilities[0].text, lines[0]);
+        }
+        game.state.effects_retain(|_| false);
+        let projector = Projector { game: &game, viewer: owner, names: &names, conceded: &[false, false], faces: &faces };
+        let mut handles = HandleSpace::new();
+        let handle = handles.handle(target);
+        assert!(projector.describe(target, handle, None, &mut handles).granted_abilities.is_empty());
+    }
+
+    #[test]
+    fn source_dependent_control_names_the_original_effect_controller() {
+        let cards = cantrip_engine::cards();
+        let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+        let owner = PlayerId(0);
+        let mut obj = Obj::new(cards.find("Icy Manipulator").unwrap(), owner, Zone::BATTLEFIELD);
+        obj.tapped = true;
+        let source = game.state.push_obj(obj);
+        let target = game.state.push_obj(Obj::new(cards.find("Grizzly Bears").unwrap(), owner, Zone::BATTLEFIELD));
+        game.state.zone_push(Zone::BATTLEFIELD, source);
+        game.state.zone_push(Zone::BATTLEFIELD, target);
+        let timestamp = game.state.timestamp();
+        game.state.effect_push(ContinuousEffect { source, controller: owner, timestamp, affected: target,
+            kind: EffectKind::Control(owner), duration: Duration::WhileSourceTappedAndControlled, words: Words::NONE });
+        let names = vec!["A".to_string(), "B".to_string()];
+        let faces = HashSet::new();
+        for viewer in [owner, PlayerId(1), PUBLIC] {
+            let projector = Projector { game: &game, viewer, names: &names, conceded: &[false, false], faces: &faces };
+            let mut handles = HandleSpace::new();
+            let handle = handles.handle(target);
+            let shown = projector.describe(target, handle, None, &mut handles);
+            let expected = if viewer == owner {
+                "You control it for as long as Icy Manipulator remains tapped and under your control (Icy Manipulator)."
+            } else {
+                "A controls it for as long as Icy Manipulator remains tapped and under A's control (Icy Manipulator)."
+            };
+            assert_eq!(shown.granted_abilities.iter().map(|a| a.text.as_str()).collect::<Vec<_>>(), [expected]);
+        }
+    }
+
+    #[test]
+    fn a_resolved_replacement_is_visible_on_its_affected_permanent() {
+        let cards = cantrip_engine::cards();
+        let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+        let owner = PlayerId(0);
+        let card = cards.find("Chandra, Awakened Inferno").unwrap();
+        let source = game.state.push_obj(Obj::new(card, owner, Zone::BATTLEFIELD));
+        let target = game.state.push_obj(Obj::new(cards.find("Grizzly Bears").unwrap(), owner, Zone::BATTLEFIELD));
+        game.state.zone_push(Zone::BATTLEFIELD, source);
+        game.state.zone_push(Zone::BATTLEFIELD, target);
+        let timestamp = game.state.timestamp();
+        game.state.effect_push(ContinuousEffect { source, controller: owner, timestamp, affected: target,
+            kind: EffectKind::Replacement { card, index: 0 }, duration: Duration::EndOfTurn, words: Words::NONE });
+        let names = vec!["A".to_string(), "B".to_string()];
+        let faces = HashSet::new();
+        for viewer in [owner, PlayerId(1), PUBLIC] {
+            let projector = Projector { game: &game, viewer, names: &names, conceded: &[false, false], faces: &faces };
+            let mut handles = HandleSpace::new();
+            let handle = handles.handle(target);
+            let shown = projector.describe(target, handle, None, &mut handles);
+            assert_eq!(shown.granted_abilities.iter().map(|a| a.text.as_str()).collect::<Vec<_>>(),
+                ["If a permanent dealt damage this way would die this turn, exile it instead (Chandra, Awakened Inferno)."]);
+            let mut handles = HandleSpace::new();
+            let handle = handles.handle(source);
+            assert!(!projector.describe(source, handle, None, &mut handles).granted_abilities.iter()
+                .any(|a| a.text.contains("exile it instead")), "an object-bound effect belongs on its recipient");
+        }
+        game.state.effects_retain(|_| false);
+        let projector = Projector { game: &game, viewer: owner, names: &names, conceded: &[false, false], faces: &faces };
+        let mut handles = HandleSpace::new();
+        let handle = handles.handle(target);
+        assert!(projector.describe(target, handle, None, &mut handles).granted_abilities.is_empty());
+    }
+
+    #[test]
+    fn resolved_regeneration_shields_and_bans_are_visible_until_removed() {
+        let cards = cantrip_engine::cards();
+        let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+        let owner = PlayerId(0);
+        let card = cards.find("Grizzly Bears").expect("printed creature");
+        let id = game.state.push_obj(Obj::new(card, owner, Zone::BATTLEFIELD));
+        game.state.zone_push(Zone::BATTLEFIELD, id);
+        let names = vec!["A".to_string(), "B".to_string()];
+        let faces = HashSet::new();
+        let lines = |game: &Game, viewer| {
+            let projector = Projector { game, viewer, names: &names, conceded: &[false, false], faces: &faces };
+            let mut handles = HandleSpace::new();
+            let handle = handles.handle(id);
+            projector.describe(id, handle, None, &mut handles).granted_abilities
+                .into_iter().map(|a| a.text).collect::<Vec<_>>()
+        };
+        assert!(lines(&game, owner).is_empty());
+        for (kind, duration) in [
+            (EffectKind::RegenerationShield, Duration::EndOfTurn),
+            (EffectKind::CantBeRegenerated, Duration::EndOfCombat),
+        ] {
+            let timestamp = game.state.timestamp();
+            game.state.effect_push(ContinuousEffect {
+                source: id, controller: owner, timestamp, affected: id,
+                kind, duration, words: Words::NONE,
+            });
+        }
+        for viewer in [owner, PlayerId(1), PUBLIC] {
+            assert_eq!(lines(&game, viewer), [
+                "Regenerate instead of the next destruction this turn.",
+                "Can't be regenerated this combat.",
+            ]);
+        }
+        game.state.effects_retain(|e| e.kind != EffectKind::RegenerationShield);
+        for viewer in [owner, PlayerId(1), PUBLIC] {
+            assert_eq!(lines(&game, viewer), ["Can't be regenerated this combat."]);
+        }
+        game.state.effects_retain(|_| false);
+        assert!(lines(&game, owner).is_empty());
+    }
+
     use super::*;
 
     /// A restriction the wire has a word for reads back as it was sent, a union of restrictions (`AnyOf`) among them: Purple
@@ -1786,7 +2125,7 @@ mod tests {
         let deck = vec![cards.find("Celestial Reunion").expect("the card"); 20];
         let game = cantrip_engine::Game::new(cards, &Setup { decks: vec![deck.clone(), deck], ..Default::default() });
         let id = game.state.zone(Zone::library(PlayerId(0)))[0];
-        let item = StackItem {
+        let item = StackItem { event_amount: None,
             kind: StackKind::Spell,
             object: id,
             ability: AbilityRef { card: game.chars(id).card, index: 0 },
@@ -1811,10 +2150,11 @@ mod tests {
             exile_instead: ExileInstead::Never,
             flashback: false,
             attacking: false,
-            since: 0,
+            since: 0, tapped_since: 0,
             copied: false,
             cast_known: u32::MAX,
             acquired: Acquired::OWN,
+            instance: AbilityAcquisition::OWN,
             words: Words::NONE,
         };
         let names = vec!["A".to_string(), "B".to_string()];

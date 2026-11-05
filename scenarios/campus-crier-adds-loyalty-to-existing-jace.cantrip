@@ -18,6 +18,7 @@ Bot1.Hand.Mox Ruby.Cast
 Bot1.Hand.Black Lotus.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Hand.Campus Crier.Cast
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Campus Crier)
 Bot1.Graveyard.Campus Crier.Activate
@@ -25,6 +26,7 @@ Bot1.Graveyard.Campus Crier.Activate
 Bot1.Hand.Black Lotus.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Hand.Campus Crier.Cast
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Campus Crier)
 Bot1.Graveyard.Campus Crier.Activate

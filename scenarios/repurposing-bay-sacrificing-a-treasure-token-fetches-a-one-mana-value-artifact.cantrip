@@ -38,12 +38,17 @@ Bot1.Pass
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Deadly Dispute.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mox Pearl)
 Bot1.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Repurposing Bay.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Tap Repurposing Bay)
 Bot1.Choose(Treasure Token)
 ! Bot1.Search(Mind Stone)
 Bot1.Search(Sol Ring)

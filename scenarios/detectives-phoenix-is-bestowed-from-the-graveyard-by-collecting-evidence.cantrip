@@ -30,6 +30,7 @@ Bot1.Pass
 Bot1.Choose(Detective's Phoenix; Griselbrand)
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Graveyard.Detective's Phoenix.Cast(Bot1.Battlefield.Ornithopter; Ability: Bestow)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Griselbrand)
 Bot1.Pass
 

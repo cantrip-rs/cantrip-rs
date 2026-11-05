@@ -26,6 +26,7 @@ Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Glimpse the Core.Cast
 Bot1.Modes(1)
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Magical Hack.Cast(Stack.Glimpse the Core)
 Bot1.Pass

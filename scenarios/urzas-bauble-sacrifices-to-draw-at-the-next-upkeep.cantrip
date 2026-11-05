@@ -12,6 +12,7 @@ Swamp x14
 Bot1.Hand.Urza's Bauble.Cast
 Bot1.Battlefield.Urza's Bauble.Activate(Bot2)
 ? Bot1.Hand.Count = 6
+Bot1.Choose(Tap Urza's Bauble)
 ? Bot1.Graveyard = Urza's Bauble
 [T2 Bot2.Main1]
 

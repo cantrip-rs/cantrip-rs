@@ -67,6 +67,8 @@ Bot1.Battlefield.Forest.Activate
 ! Bot1.Battlefield.Dawn-Blessed Pennant.Activate(Bot1.Graveyard.Lightning Bolt)
 ! Bot1.Battlefield.Dawn-Blessed Pennant.Activate(Bot2.Graveyard.Llanowar Elves)
 Bot1.Battlefield.Dawn-Blessed Pennant.Activate(Bot1.Graveyard.Llanowar Elves)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

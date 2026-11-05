@@ -13,7 +13,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     }
     g.end_sentence();
     if g.obj(item.object).cast_from == Some(ZoneKind::Graveyard) {
-        let others: Vec<(ObjectId, CounterKind, i16)> = g
+        let others: Vec<(ObjectId, CounterKind, i64)> = g
             .permanents_of(item.controller)
             .into_iter()
             .filter(|&id| Some(id) != target && g.chars(id).is(CardType::Creature))

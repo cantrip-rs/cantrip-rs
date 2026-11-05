@@ -40,6 +40,7 @@ Bot1.Hand.Volcanic Villain.Cast
 Bot1.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Battlefield.Volcanic Villain.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 ! Bot1.Battlefield.Volcanic Villain.Activate

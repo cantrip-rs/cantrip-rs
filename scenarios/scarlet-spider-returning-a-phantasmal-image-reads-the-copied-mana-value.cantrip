@@ -35,6 +35,8 @@ Bot1.Accept
 Bot1.Hand.Scarlet Spider, Ben Reilly.Cast(Ability: Web-slinging)
 Bot1.Battlefield.Llanowar Elves#2.Activate
 Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Llanowar Elves)
 [T5 Bot1.Main2]
 

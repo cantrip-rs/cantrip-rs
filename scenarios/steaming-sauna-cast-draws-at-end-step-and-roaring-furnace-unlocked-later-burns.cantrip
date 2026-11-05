@@ -38,6 +38,7 @@ Bot2.Hand.Llanowar Elves.Cast
 Bot1.Battlefield.Steaming Sauna.Activate(Ability: left door)
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Choose(Close mana window)
 ? Stack = Roaring Furnace // Steaming Sauna
 ? Bot1.Hand.Count = 4
 

@@ -32,6 +32,7 @@ Bot2.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Backfire.Cast(Bot2.Battlefield.Goblin Deathraiders)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 [T4 Bot2.BeginCombat]

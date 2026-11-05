@@ -31,6 +31,10 @@ Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Figure of Destiny)
 Bot1.Pass
 Bot2.Battlefield.Island.Activate

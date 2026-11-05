@@ -20,3 +20,12 @@ mod search_any_number;
 mod source_of_your_choice_delayed;
 mod turn_face_up_by_effect;
 mod until_exile;
+
+/// Follow the explicit mana-ability window and then the actual mana payment; retain each test's preferred source.
+fn pay(options: &[cantrip_engine::ActionOption], remaining: &cantrip_engine::ManaCost, mana_abilities: bool, preferred: Option<&cantrip_engine::ActionOption>) -> cantrip_engine::Answer {
+    use cantrip_engine::{Action, ActionKind, Answer};
+    let confirm = options.iter().find(|o| o.kind == ActionKind::ConfirmCasting);
+    let assign = options.iter().find(|o| o.kind == ActionKind::AssignMana);
+    let choice = if mana_abilities && !remaining.is_zero() { preferred.or(confirm) } else { assign.or(confirm) };
+    Answer::Act(Action::of(choice.expect("the chosen payment can proceed")))
+}

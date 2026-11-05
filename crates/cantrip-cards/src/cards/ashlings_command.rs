@@ -13,7 +13,7 @@ fn draw_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// (CR 608.2b).
 fn two_damage_to_each_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(player) = targets::player(g, item, 0) else { return Ok(()) };
-    let hits: Vec<(ObjectId, Target, u16)> = g
+    let hits: Vec<(ObjectId, Target, i64)> = g
         .permanents_of(player)
         .into_iter()
         .filter(|&id| g.chars(id).is(CardType::Creature))

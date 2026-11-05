@@ -38,6 +38,8 @@ Bot1.Battlefield.Mox Sapphire#2.Activate
 Bot1.Hand.Dispelling Exhale.Cast
 Bot1.Modes(Behold a Dragon)
 Bot1.Target(Stack.Lightning Bolt)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Phyrexian Dragon Engine)
 Bot2.Pass
 Bot2.PayCost

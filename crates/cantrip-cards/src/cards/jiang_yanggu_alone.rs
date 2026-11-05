@@ -8,7 +8,7 @@ fn discard_draw_then_grow(g: &mut dyn Game, item: &StackItem) -> Result<(), Susp
     effects::discard_then_draw(g, item, 1)?;
     let Target::Object(attacker) = item.subject else { return Ok(()) };
     let discarded = history::cards_discarded_this_turn(g, item.controller) as i16;
-    g.add_counters(attacker, CounterKind::PlusOne, discarded);
+    g.add_counters(attacker, CounterKind::PlusOne, i64::from(discarded));
     Ok(())
 }
 

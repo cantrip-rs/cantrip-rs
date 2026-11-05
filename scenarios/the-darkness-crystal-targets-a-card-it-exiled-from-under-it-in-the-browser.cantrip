@@ -66,6 +66,13 @@ Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.The Darkness Crystal.Activate(Bot2.Exile.Memnite)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 [T6 Bot2.Upkeep]

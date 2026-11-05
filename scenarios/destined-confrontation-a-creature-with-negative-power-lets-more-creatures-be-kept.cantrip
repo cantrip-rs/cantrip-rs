@@ -48,6 +48,7 @@ Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Hand.Destined Confrontation.Cast
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Icy Reception.Cast
 Bot1.Modes(Target creature gets -5/-0)

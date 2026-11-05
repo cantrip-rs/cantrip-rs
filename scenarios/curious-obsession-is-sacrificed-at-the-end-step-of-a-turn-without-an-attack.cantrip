@@ -26,6 +26,7 @@ Bot1.Attack(Savannah Lions > Bot2)
 [T3 Bot1.Main2]
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Curious Obsession.Cast(Bot1.Battlefield.Savannah Lions)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 [T3 Bot1.End]

@@ -31,6 +31,9 @@ Bot1.Battlefield.Swamp#3.Activate
 Bot1.Hand.Rottenmouth Viper.Cast(X: 3)
 ? Client.Bot1.Prompt.Title = Sacrifice how many for Rottenmouth Viper?
 ? Client.Bot1.Prompt.Detail = 0 of up to 3  ·  each takes {1} off  ·  {5}{B} in all  ·  which ones come after the mana
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter#1; Ornithopter#2; Ornithopter#3)
 Bot1.Pass
 Bot2.Pass

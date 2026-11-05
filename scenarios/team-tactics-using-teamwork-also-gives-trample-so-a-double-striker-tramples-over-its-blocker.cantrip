@@ -40,6 +40,8 @@ Bot1.Hand.Team Tactics.Cast
 Bot1.Modes(Teamwork 1)
 Bot1.Target(Memnite#1)
 ! Bot1.Choose(Crimson Kobolds)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Memnite#2)
 ? Bot1.Mana =
 Bot1.Pass

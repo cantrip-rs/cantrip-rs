@@ -43,6 +43,7 @@ Bot2.Battlefield.Black Lotus.Activate(Color: Red)
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Graveyard.Shock.Cast(Bot2; Ability: Flashback)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Island.Activate

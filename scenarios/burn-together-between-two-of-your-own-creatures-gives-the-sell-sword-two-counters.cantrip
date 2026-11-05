@@ -29,6 +29,7 @@ Bot1.Hand.Simian Spirit Guide.Cast
 [T3 Bot1.Main1]
 Bot1.Battlefield.Black Lotus.Activate(Color: Green)
 Bot1.Hand.Elvish Spirit Guide.Cast
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Callous Sell-Sword.Cast(Ability: Burn Together)
 Bot1.Target(Simian Spirit Guide)

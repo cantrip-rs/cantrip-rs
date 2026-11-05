@@ -12,6 +12,18 @@ use cantrip_api::*;
 /// 702.78a conspire, 702.85a cascade, 702.153a casualty), whose ability text may be the keyword alone.
 const CAST_KEYWORDS: [&str; 6] = ["storm", "replicate", "ripple", "conspire", "cascade", "casualty"];
 
+/// A printed keyword, with its parameter if any, rather than the beginning of a card name such as Storm Seeker.
+fn starts_with_cast_keyword(text: &str) -> bool {
+    CAST_KEYWORDS.iter().any(|keyword| {
+        let Some(rest) = text.strip_prefix(keyword) else { return false };
+        let rest = rest.trim_start();
+        rest.is_empty() || rest.starts_with(['.', ','])
+            || matches!(*keyword, "replicate" | "ripple" | "casualty")
+                && (rest.starts_with(|c: char| c.is_ascii_digit() || matches!(c, '{' | '\u{2014}' | '-'))
+                    || rest == "x" || rest.starts_with("x.") || rest.starts_with("x,") || rest.starts_with("x "))
+    })
+}
+
 /// The zones the words of a triggered ability say it functions in (CR 113.6), for a card named `name`: the union over its
 /// trigger conditions (CR 113.6k: "when you cast this spell and whenever this creature attacks" has two, functioning in
 /// different zones), each of which functions
@@ -30,7 +42,7 @@ const CAST_KEYWORDS: [&str; 6] = ["storm", "replicate", "ripple", "conspire", "c
 fn said_zones(text: &str, name: &str) -> ZoneKinds {
     let text = without_reminders(&text.to_ascii_lowercase().replace('\u{2014}', "-"));
     let name = name.to_ascii_lowercase();
-    if CAST_KEYWORDS.iter().any(|k| text.starts_with(k)) {
+    if starts_with_cast_keyword(&text) {
         return ON_THE_STACK;
     }
     let condition = text.split(", ").next().unwrap_or_default();
@@ -112,6 +124,8 @@ fn the_reader_reads_the_printed_forms() {
         ("When you cast this spell, take an extra turn after this one.", "Emrakul, the Aeons Torn", ON_THE_STACK),
         ("When you do, copy this spell for each creature sacrificed this way.", "Plumb the Forbidden", ON_THE_STACK),
         ("Cascade", "Bloodbraid Elf", ON_THE_STACK),
+        ("At the beginning of your upkeep, if this card is exiled with a scream counter on it, remove a scream counter from it.", "All Hallow's Eve", ZoneKinds::of(&[ZoneKind::Exile])),
+        ("When this creature is exiled, if this card is exiled, you gain 1 life.", "Test", ON_THE_BATTLEFIELD),
         ("When you cast this spell and whenever this creature attacks, destroy up to one target nonland permanent.", "Cityscape Leveler", both),
         ("When Emrakul is put into a graveyard from anywhere, its owner shuffles their graveyard into their library.", "Emrakul, the Aeons Torn", IN_A_GRAVEYARD),
         ("When this card is put into your graveyard from your library, create a 2/2 black Zombie creature token.", "Test", IN_A_GRAVEYARD),
@@ -160,8 +174,21 @@ fn cast_keyword(text: &str) -> bool {
     let text = text.to_ascii_lowercase();
     text.split(['"', '\u{201c}', '\u{201d}']).step_by(2).flat_map(|part| part.split('\n')).any(|line| {
         let line = without_reminders(line);
-        CAST_KEYWORDS.iter().any(|k| line.starts_with(k) || line.contains(&format!(" have {k}")) || line.contains(&format!(" has {k}")))
+        starts_with_cast_keyword(&line) || [" have ", " has "].iter().any(|joint| {
+            line.match_indices(joint).any(|(at, _)| starts_with_cast_keyword(&line[at + joint.len()..]))
+        })
     })
+}
+
+#[test]
+fn a_card_name_is_not_a_cast_keyword() {
+    for text in ["Storm Seeker deals damage to target player.", "Storm Crow has flying.", "Stormfront Riders has flying."] {
+        assert!(!cast_keyword(text), "{text}");
+    }
+    for text in ["Storm", "Storm (When you cast this spell, copy it.)", "Replicate {U}", "Ripple 4", "Casualty X. The copy isn't legendary.", "Spells you cast have cascade."] {
+        assert!(cast_keyword(text), "{text}");
+    }
+    assert!(!cast_keyword("Create a token with \"Cascade\"."));
 }
 
 /// The triggered abilities of an Oracle text: each line, quoted ability and parenthesised reminder cut into sentences, a

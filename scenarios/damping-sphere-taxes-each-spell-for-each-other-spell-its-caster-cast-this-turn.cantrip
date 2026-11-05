@@ -33,6 +33,7 @@ Bot1.Pass
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Damping Sphere.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Battlefield.Mox Emerald.Activate
@@ -47,6 +48,7 @@ Bot2.Hand.Mox Jet.Cast
 Bot2.Pass
 Bot2.Battlefield.Mox Jet.Activate
 Bot2.Hand.Mox Ruby.Cast
+Bot2.Choose(Close mana window)
 ? Bot2.Mana =
 Bot2.Pass
 Bot2.Battlefield.Mox Ruby.Activate

@@ -28,6 +28,8 @@ Bot1.Hand.Swamp.Play
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Currency Converter.Activate(Ability: Draw a card)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Lightning Bolt)
 Bot1.Accept
 ? Exile = Lightning Bolt

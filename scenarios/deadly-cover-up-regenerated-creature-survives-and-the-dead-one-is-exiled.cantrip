@@ -46,6 +46,11 @@ Bot1.Modes(Collect evidence)
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Griselbrand)
 Bot2.Battlefield.Mox Emerald.Activate
 Bot2.Battlefield.Yavimaya Hollow.Activate(Bot2.Battlefield.Ornithopter; Ability: Regenerate)

@@ -28,6 +28,12 @@ Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Crystal Quarry.Activate(Ability: {5}, {T})
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {W}{U}{B}{R}{G}
 ! Bot1.Battlefield.Crystal Quarry.Activate(Ability: {5}, {T})
 

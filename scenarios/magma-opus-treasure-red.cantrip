@@ -12,6 +12,8 @@ Bot1.Hand.Mox Ruby.Cast
 Bot1.Battlefield.Mox Ruby#1.Activate
 Bot1.Battlefield.Mox Ruby#2.Activate
 Bot1.Hand.Magma Opus.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

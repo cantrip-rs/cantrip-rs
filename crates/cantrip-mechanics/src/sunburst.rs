@@ -23,6 +23,6 @@ pub fn enters(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> 
     let colors = colors_spent(g, entering.object);
     let card = g.obj(entering.object).card;
     let kind = if g.token_chars(card, entering.copy).is(CardType::Creature) { CounterKind::PlusOne } else { CounterKind::Charge };
-    entering.counters[kind as usize] += colors;
+    entering.counters[kind as usize] += i64::from(colors);
     Ok(())
 }

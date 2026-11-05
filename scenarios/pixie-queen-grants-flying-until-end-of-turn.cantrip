@@ -27,6 +27,7 @@ Bot1.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: Green)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Pixie Queen.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 [T2 Bot2.Main1]
@@ -38,6 +39,10 @@ Bot1.Battlefield.Mox Emerald#2.Activate
 Bot1.Battlefield.Mox Emerald#3.Activate
 ! Bot1.Battlefield.Pixie Queen.Activate(Bot1.Battlefield.Mox Pearl)
 Bot1.Battlefield.Pixie Queen.Activate(Bot1.Battlefield.Memnite)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 ? Bot1.Battlefield.Pixie Queen.Tapped = true
 Bot1.Pass
@@ -52,6 +57,10 @@ Bot1.Battlefield.Mox Emerald#1.Activate
 Bot1.Battlefield.Mox Emerald#2.Activate
 Bot1.Battlefield.Mox Emerald#3.Activate
 Bot1.Battlefield.Pixie Queen.Activate(Bot2.Battlefield.Memnite)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

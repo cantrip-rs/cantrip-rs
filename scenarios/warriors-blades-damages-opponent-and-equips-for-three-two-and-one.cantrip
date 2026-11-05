@@ -30,6 +30,7 @@ Bot1.Hand.Walking Ballista.Cast(X: 1)
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Warrior's Blades.Activate(Ornithopter)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [Bot1.Main2]
 ? Bot1.Battlefield.Ornithopter.Power = 2
@@ -37,6 +38,7 @@ Bot1.Battlefield.Warrior's Blades.Activate(Ornithopter)
 [T5 Bot1.Main1]
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Warrior's Blades.Activate(Walking Ballista)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [Bot1.Main2]
 ? Bot1.Battlefield.Walking Ballista.Power = 3
@@ -50,6 +52,7 @@ Bot1.Battlefield.Walking Ballista.Activate(Ability: Put)
 [T9 Bot1.Main1]
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Warrior's Blades.Activate(Walking Ballista)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {C}
 Bot1.Pass
 [Expect]

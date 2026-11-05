@@ -16,7 +16,7 @@ fn damage_from_equipped_creature(q: &dyn Query, asker: &Asker, p: &Proposal) -> 
 
 fn double(_: &dyn Query, _: &Asker, p: &mut Proposal) {
     if let Proposal::Damage(d) = p {
-        d.amount = d.amount.saturating_mul(2);
+        d.amount = d.amount.checked_mul(2).expect("damage expression exceeds i64 semantic domain");
     }
 }
 

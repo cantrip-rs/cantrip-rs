@@ -18,7 +18,7 @@ fn damage_from_a_lizard_mouse_otter_or_raccoon(q: &dyn Query, asker: &Asker, p: 
 
 fn plus_one(_: &dyn Query, _: &Asker, p: &mut Proposal) {
     if let Proposal::Damage(d) = p {
-        d.amount = d.amount.saturating_add(1);
+        d.amount = d.amount.checked_add(1).expect("damage expression exceeds i64 semantic domain");
     }
 }
 

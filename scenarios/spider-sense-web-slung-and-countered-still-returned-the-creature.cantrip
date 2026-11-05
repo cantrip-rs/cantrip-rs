@@ -30,6 +30,7 @@ Bot2.Battlefield.Mox Ruby.Activate
 Bot2.Hand.Lightning Bolt.Cast(Bot1)
 Bot1.Hand.Spider-Sense.Cast(Stack.Lightning Bolt; Ability: Web-slinging)
 Bot1.Battlefield.Birds of Paradise.Activate(Color: Blue)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Birds of Paradise)
 Bot2.Battlefield.Mox Sapphire.Activate
 Bot2.Battlefield.Island.Activate

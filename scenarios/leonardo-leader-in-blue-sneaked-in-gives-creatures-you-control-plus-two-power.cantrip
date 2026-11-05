@@ -31,6 +31,11 @@ Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Battlefield.Plains#1.Activate
 Bot1.Battlefield.Plains#2.Activate
 Bot1.Hand.Leonardo, Leader in Blue.Cast(Ability: Sneak)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass

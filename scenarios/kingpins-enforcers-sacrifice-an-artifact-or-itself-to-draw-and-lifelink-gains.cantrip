@@ -32,6 +32,7 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Kingpin's Enforcers.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 [T3 Bot1.Main1]
@@ -42,15 +43,21 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Kingpin's Enforcers.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Swamp#1.Activate
-? Bot1.Mana =
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mox Pearl)
+? Bot1.Mana =
 Bot1.Pass
 Bot1.Battlefield.Kingpin's Enforcers.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Swamp#2.Activate
-? Bot1.Mana =
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Kingpin's Enforcers)
+? Bot1.Mana =
 Bot1.Pass
 
 [Expect]

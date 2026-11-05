@@ -34,6 +34,7 @@ Bot2.Battlefield.Mind Stone#1.Activate(Ability: Draw a card)
 ? Bot2.Life = 20
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Crumble.Cast(Bot2.Battlefield.Mind Stone)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 
 [Expect]

@@ -8,17 +8,8 @@ use cantrip_oracle as oracle;
 /// board before the event, so it still sees what it was attached to. Fires on the card as it is in the graveyard (the new
 /// object, CR 400.7).
 fn enchanted_creature_dies(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
-    match event {
-        Event::ZoneChange { old, new, from, to, .. }
-            if from.is(ZoneKind::Battlefield)
-                && to.is(ZoneKind::Graveyard)
-                && q.obj(source).attached_to == Some(*old)
-                && q.chars(*old).is(CardType::Creature) =>
-        {
-            Fired::about(Target::Object(*new))
-        }
-        _ => None,
-    }
+    let (_, new) = cantrip_mechanics::triggers::enchanted_creature_died(q, source, event)?;
+    Fired::about(Target::Object(new))
 }
 
 /// "Return that card to the battlefield tapped under its owner's control" (CR 110.2a): the card as it is in the graveyard.

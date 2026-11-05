@@ -30,6 +30,7 @@ Bot1.Pass
 Bot2.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Ether.Activate
+Bot1.Choose(Tap Ether)
 ? Bot1.Mana = {U}
 ? Exile = Ether
 Bot1.Hand.Ancestral Recall.Cast(Bot1)

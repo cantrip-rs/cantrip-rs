@@ -13,7 +13,7 @@ fn destroy_unless_damaged(g: &mut dyn Game, item: &StackItem) -> Result<(), Susp
     let Some(permanent) = targets::object(g, item, 0) else { return Ok(()) };
     let controller = g.controller(permanent);
     if effects::ask_may(g, controller, item.object, Purpose::Ask(&TAKE_DAMAGE))? {
-        let power = targets::power_or_last_known(g, item.object).max(0) as u16;
+        let power = i64::from(targets::power_or_last_known(g, item.object).max(0));
         g.damage(item.object, Target::Player(controller), power);
     } else {
         destroy_target(g, item, 0);

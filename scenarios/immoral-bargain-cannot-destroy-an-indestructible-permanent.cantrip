@@ -35,6 +35,9 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Immoral Bargain.Cast(X: 1)
 Bot1.Target(Bot2.Battlefield.Arwen, Mortal Queen)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 [T3 Bot1.Main2]
 

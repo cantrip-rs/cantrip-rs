@@ -63,6 +63,9 @@ Bot1.Hand.Nykthos, Shrine to Nyx.Play
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Nykthos, Shrine to Nyx.Activate(Ability: {2}; Color: Black)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {B}{B}{B}
 
 [Expect]

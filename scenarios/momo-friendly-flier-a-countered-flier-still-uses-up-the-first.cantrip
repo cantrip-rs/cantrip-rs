@@ -32,6 +32,7 @@ Bot2.Hand.Mox Sapphire.Cast
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Faerie Mastermind.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Battlefield.Island.Activate
@@ -43,6 +44,7 @@ Bot2.Pass
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Faerie Mastermind.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

@@ -37,6 +37,8 @@ Bot2.Pass
 Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.The Needs of the Many.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass

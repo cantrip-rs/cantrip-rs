@@ -16,8 +16,8 @@ fn pass_counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let counters = g.obj(item.object).counter_array();
     let made = tokens::create(g, item.controller, &tokens::FRACTAL, 1)?;
     g.end_sentence();
-    let puts: Vec<(ObjectId, CounterKind, i16)> =
-        made.iter().flat_map(|&token| CounterKind::ALL.into_iter().map(move |kind| (token, kind, counters[kind as usize]))).collect();
+    let puts: Vec<(ObjectId, CounterKind, i64)> =
+        made.iter().flat_map(|&token| CounterKind::ALL.into_iter().map(move |kind| (token, kind, i64::from(counters[kind as usize])))).collect();
     g.add_counters_together(&puts);
     Ok(())
 }

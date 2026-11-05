@@ -31,6 +31,8 @@ Bot2.Pass
 ? Bot1.Battlefield.Memnite.Keywords = (absent)
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Taxi Driver.Activate(Memnite)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

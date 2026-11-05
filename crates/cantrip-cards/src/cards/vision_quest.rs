@@ -27,7 +27,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let (found, searched_library) =
         search_zone_and_or_library(g, you, item.object, &[Zone::graveyard(you)], SearchDestination::Battlefield, Purpose::PutOntoBattlefield, &ASK, rule)?;
     if let Some(&card) = found.first() {
-        let counters = [(CounterKind::PlusOne, i16::try_from(x).unwrap_or(i16::MAX))];
+        let counters = [(CounterKind::PlusOne, i64::from(i16::try_from(x).unwrap_or(i16::MAX)))];
         let entered = g.put_onto_battlefield_with_counters(card, you, false, &counters)?;
         if x >= 4 && g.is_on_battlefield(entered) {
             effects::gain_until_end_of_turn(g, item.object, entered, Keyword::Haste);

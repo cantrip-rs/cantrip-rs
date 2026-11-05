@@ -26,6 +26,12 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Green)
 Bot1.Battlefield.Llanowar Elves.Activate
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Forest#2.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Llanowar Elves)
 [T3 Bot1.Main2]
 

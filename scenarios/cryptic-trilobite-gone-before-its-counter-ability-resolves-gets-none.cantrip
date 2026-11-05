@@ -25,6 +25,7 @@ Bot2.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Cryptic Trilobite.Activate(Ability: Put a +1/+1 counter)
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Cryptic Trilobite.Activate(Ability: Remove)
 ? Bot1.Graveyard = Cryptic Trilobite
 Bot1.Pass

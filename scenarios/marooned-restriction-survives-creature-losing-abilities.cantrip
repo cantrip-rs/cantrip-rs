@@ -35,6 +35,7 @@ Bot2.Decline
 Bot2.Battlefield.Mox Sapphire#2.Activate
 Bot2.Battlefield.Mox Sapphire#3.Activate
 Bot2.Hand.Kasmina's Transmutation.Cast(Ornithopter)
+Bot2.Choose(Close mana window)
 Bot2.Battlefield.Mox Ruby.Activate
 Bot2.Hand.Lightning Bolt.Cast(Klingon Warrior Token)
 [T3 Bot1.Main1]

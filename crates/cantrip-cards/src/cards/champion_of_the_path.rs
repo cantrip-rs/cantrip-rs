@@ -9,7 +9,7 @@ use cantrip_oracle as oracle;
 fn elemental_deals_damage_to_each_opponent(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(elemental) = item.subject.object() else { return Ok(()) };
     let power = targets::power_or_last_known(g, elemental).max(0) as u16;
-    let hits: Vec<(ObjectId, Target, u16)> = g.state().opponents(item.controller).map(|p| (elemental, Target::Player(p), power)).collect();
+    let hits: Vec<(ObjectId, Target, i64)> = g.state().opponents(item.controller).map(|p| (elemental, Target::Player(p), i64::from(power))).collect();
     g.damage_together(&hits);
     Ok(())
 }

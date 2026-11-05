@@ -20,7 +20,7 @@ fn exile_a_permanent_card(g: &mut dyn Game, item: &StackItem) -> Result<(), Susp
     let value = g.mana_value(chosen) as i32;
     g.exile_with(&[chosen], g.linked(item), false);
     if value > 0 {
-        g.gain_life(you, value);
+        g.gain_life(you, i64::from(value));
     }
     Ok(())
 }
@@ -32,7 +32,7 @@ fn counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if amount > 0
         && let Some(creature) = targets::object(g, item, 0)
     {
-        g.add_counters(creature, CounterKind::PlusOne, amount as i16);
+        g.add_counters(creature, CounterKind::PlusOne, i64::from(amount as i16));
     }
     Ok(())
 }

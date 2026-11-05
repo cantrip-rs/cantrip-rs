@@ -41,6 +41,9 @@ Bot1.Hand.Scarlet Spider, Ben Reilly.Cast(Ability: Web-slinging {G}{W}{U})
 Bot1.Battlefield.Llanowar Elves.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Llanowar Elves)
 Bot1.Pass
 Bot2.Pass

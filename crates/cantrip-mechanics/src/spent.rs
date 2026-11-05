@@ -19,7 +19,7 @@ pub fn two<const M: u8>(q: &dyn Query, asker: &Asker) -> bool {
 /// Wildgrowth Archaic and Rancorous Archaic print it.
 pub fn enters_with_a_plus_one_counter_for_each_color_spent(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
     let colors = crate::sunburst::colors_spent(g, entering.object) as i16;
-    entering.counters[CounterKind::PlusOne as usize] += colors;
+    entering.counters[CounterKind::PlusOne as usize] += i64::from(colors);
     Ok(())
 }
 

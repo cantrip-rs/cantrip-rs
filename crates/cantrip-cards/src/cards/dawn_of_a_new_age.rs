@@ -11,7 +11,7 @@ fn enters(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
         .into_iter()
         .filter(|&id| g.chars(id).is(CardType::Creature))
         .count();
-    entering.counters[HOPE] += creatures as i16;
+    entering.counters[HOPE] += i64::from(creatures as i16);
     Ok(())
 }
 

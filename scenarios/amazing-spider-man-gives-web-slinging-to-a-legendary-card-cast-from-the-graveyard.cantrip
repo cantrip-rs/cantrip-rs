@@ -67,6 +67,9 @@ Bot1.Graveyard.Peter Parker.Cast(Ability: Peter Parker: Web-slinging)
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Spider Token)
 Bot1.Pass
 Bot2.Pass

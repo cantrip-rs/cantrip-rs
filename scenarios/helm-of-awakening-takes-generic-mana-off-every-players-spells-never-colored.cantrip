@@ -29,6 +29,7 @@ Bot1.Hand.Mountain.Play
 Bot1.Battlefield.Mountain.Activate
 ? Bot1.Mana = {R}
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T2 Bot2.Main1]
 Bot2.Hand.Island.Play

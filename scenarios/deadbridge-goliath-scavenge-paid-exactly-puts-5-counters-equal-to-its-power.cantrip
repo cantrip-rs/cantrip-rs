@@ -41,6 +41,12 @@ Bot1.Battlefield.Mox Emerald#1.Activate
 Bot1.Battlefield.Mox Emerald#2.Activate
 Bot1.Graveyard.Deadbridge Goliath.Activate(Ability: Scavenge; Bot1.Battlefield.Memnite)
 ? Stack.Count = 1
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = 
 Bot1.Pass
 

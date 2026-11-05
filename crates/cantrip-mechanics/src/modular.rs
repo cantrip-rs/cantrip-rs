@@ -25,7 +25,7 @@ fn move_the_counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
     let counters = g.obj(item.object).counters(CounterKind::PlusOne);
     if ask_may(g, item.controller, item.object, Purpose::Ask(&ASK))? {
-        g.add_counters(creature, CounterKind::PlusOne, counters);
+        g.add_counters(creature, CounterKind::PlusOne, i64::from(counters));
     }
     Ok(())
 }

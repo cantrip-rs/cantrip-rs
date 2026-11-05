@@ -43,6 +43,7 @@ Bot2.Pass
 Bot1.Battlefield.Mox Pearl.Activate
 ! Bot1.Battlefield.Wizard's Staff.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip Wizard)
 Bot1.Battlefield.Wizard's Staff.Activate(Bot1.Battlefield.Jace, Vryn's Prodigy; Ability: Equip Wizard)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -62,6 +63,7 @@ Bot1.Battlefield.Mox Sapphire#1.Activate
 Bot1.Battlefield.Mox Sapphire#2.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Wizard's Staff.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip {3})
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

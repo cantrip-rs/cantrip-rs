@@ -10,7 +10,7 @@ fn cant_block_stature_while_her_power_is_one_or_less(q: &dyn Query, source: Obje
 
 /// "Put X +1/+1 counters on Stature." X is the one announced for the ability.
 fn x_counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.add_counters(item.object, CounterKind::PlusOne, item.x as i16);
+    g.add_counters(item.object, CounterKind::PlusOne, i64::from(item.x as i16));
     Ok(())
 }
 

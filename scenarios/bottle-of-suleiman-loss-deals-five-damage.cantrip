@@ -26,6 +26,7 @@ Bot2.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Bottle of Suleiman.Activate
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 ? Bot1.Graveyard = Bottle of Suleiman; Black Lotus
 ? Stack.Count = 1

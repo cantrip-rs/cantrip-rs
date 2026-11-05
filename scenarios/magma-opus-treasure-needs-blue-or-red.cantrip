@@ -19,6 +19,8 @@ Bot1.Hand.Mox Sapphire.Cast
 Bot1.Battlefield.Mox Sapphire#1.Activate
 Bot1.Battlefield.Mox Sapphire#2.Activate
 Bot1.Hand.Magma Opus.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {B}{B}
 Bot1.Pass
 Bot2.Pass

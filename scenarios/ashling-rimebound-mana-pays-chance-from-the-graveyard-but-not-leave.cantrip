@@ -45,6 +45,7 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Leave // Chance.Cast(Ability: Leave)
 Bot1.Target(Mox Sapphire)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {W}{W} (ManaValue4OrGreaterSpells)
 Bot1.Pass
 Bot2.Pass

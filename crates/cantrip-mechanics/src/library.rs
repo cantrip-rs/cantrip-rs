@@ -163,7 +163,7 @@ fn into_graveyard(g: &mut dyn Game, player: PlayerId, found: &[ObjectId]) -> Vec
 fn onto_battlefield(g: &mut dyn Game, player: PlayerId, found: Vec<ObjectId>, tapped: bool) -> Result<Vec<ObjectId>, Suspend> {
     // All the cards found enter at the same time (CR 110.2a, 701.23): each sees the others already there, as a landfall-like
     // "if you control N other Forests" does (Roiling Canopy).
-    let arrived = g.put_all_onto_battlefield_as(&found.into_iter().map(|c| (c, player, tapped)).collect::<Vec<_>>())?;
+    let arrived = g.put_all_onto_battlefield_by(&found.into_iter().map(|c| (c, player, tapped, player)).collect::<Vec<_>>(), &[])?;
     g.shuffle(player);
     Ok(arrived)
 }
@@ -408,7 +408,7 @@ pub fn search_land_tapped_else_hand(
     debug_assert_eq!(how.count, 1, "the search finds a card: one card goes one way or the other");
     let found = find(g, player, source, SearchDestination::LandTappedElseHand, how, eligible)?;
     let went = match found.first() {
-        Some(&land) if g.chars(land).is(CardType::Land) => Some(g.put_onto_battlefield(land, player, true)?),
+        Some(&land) if g.chars(land).is(CardType::Land) => Some(g.put_onto_battlefield_by(land, player, true, player)?),
         Some(&card) if how.reveal => g.move_together_revealed(&[(card, Zone::hand(player))], MoveReason::Search).first().copied(),
         Some(&card) => g.move_together(&[(card, Zone::hand(player))], MoveReason::Search).first().copied(),
         None => None,
@@ -646,8 +646,8 @@ fn enter_and_place(
     let arrived = if chosen.is_empty() {
         Vec::new()
     } else {
-        let entering: Vec<(ObjectId, PlayerId, bool)> = chosen.into_iter().map(|c| (c, player, tapped)).collect();
-        g.put_all_onto_battlefield_as(&entering)?
+        let entering: Vec<_> = chosen.into_iter().map(|c| (c, player, tapped, player)).collect();
+        g.put_all_onto_battlefield_by(&entering, &[])?
     };
     then(g, &arrived)?;
     match rest {
@@ -699,7 +699,7 @@ pub fn reveal_top_land_to_battlefield_rest_to_graveyard(
     g.reveal(player, &revealed);
     let land = crate::choose::select(g, player, source, Purpose::PutOntoBattlefield, revealed.clone(), crate::select::land_cards(crate::select::as_many_as_can(1)))?.first().copied();
     if let Some(land) = land {
-        g.put_onto_battlefield(land, player, tapped)?;
+        g.put_onto_battlefield_by(land, player, tapped, player)?;
     }
     let rest: Vec<ObjectId> = revealed.into_iter().filter(|&c| Some(c) != land).collect();
     g.put_into_graveyard(&rest);
@@ -815,7 +815,7 @@ pub fn mill_then_put_onto_battlefield(
     let among = g.mill(player, count);
     let eligible: Vec<ObjectId> = among.iter().copied().filter(|&c| wanted(&g.chars(c))).collect();
     if let Some(card) = crate::choose::card_from(g, player, source, Purpose::PutOntoBattlefield, among, eligible)? {
-        g.put_onto_battlefield(card, player, false)?;
+        g.put_onto_battlefield_by(card, player, false, player)?;
     }
     Ok(())
 }

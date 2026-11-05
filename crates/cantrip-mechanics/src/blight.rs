@@ -26,7 +26,7 @@ pub fn in_effect(g: &mut dyn Game, player: PlayerId, source: ObjectId, n: u8) ->
     let eligible = candidates(g, player);
     let chosen = crate::choose::cards_from_kind(g, player, source, Purpose::Blight, "creature", eligible.clone(), eligible, 1, false)?;
     let Some(&creature) = chosen.first() else { return Ok(None) };
-    g.add_counters_by(player, creature, CounterKind::MinusOne, i16::from(n));
+    g.add_counters_by(player, creature, CounterKind::MinusOne, i64::from(i16::from(n)));
     Ok(Some(creature))
 }
 

@@ -14,7 +14,7 @@ fn enters(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
             c.is(CardType::Creature) && c.has_subtype(chosen)
         })
         .count();
-    entering.counters[CounterKind::Fellowship as usize] += count as i16;
+    entering.counters[CounterKind::Fellowship as usize] += i64::from(count as i16);
     Ok(())
 }
 

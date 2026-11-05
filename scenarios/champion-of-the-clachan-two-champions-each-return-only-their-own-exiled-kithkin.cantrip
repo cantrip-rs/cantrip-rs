@@ -28,6 +28,10 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Plains.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Figure of Destiny)
 [T3 Bot1.Main1]
 Bot1.Hand.Champion of the Clachan.Cast
@@ -35,6 +39,10 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Plains.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Knight of Meadowgrain)
 [T4 Bot2.Main1]
 Bot2.Hand.Plains.Play

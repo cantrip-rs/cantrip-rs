@@ -26,6 +26,7 @@ Bot1.Attack(Ornithopter > Bot2)
 [T5 Bot1.Main2]
 Bot1.Hand.Spider-Man, Web-Slinger.Cast(Ability: Web-slinging)
 Bot1.Battlefield.Plains.Activate
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 [T5 Bot1.End]
 

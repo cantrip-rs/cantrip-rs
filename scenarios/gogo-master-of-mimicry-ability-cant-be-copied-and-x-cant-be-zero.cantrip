@@ -49,6 +49,8 @@ Bot1.Battlefield.Walking Ballista.Activate(Bot2; Ability: Remove)
 Bot1.Battlefield.Gogo, Master of Mimicry.Activate(Stack.Walking Ballista; X: 1)
 ! Bot1.Battlefield.Gogo, Master of Mimicry.Activate(Stack.Walking Ballista; X: 0)
 Bot1.Battlefield.Echo, Perceptive Prodigy.Activate(Stack.Gogo, Master of Mimicry)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = 
 Bot1.Pass
 Bot2.Pass

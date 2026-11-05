@@ -8,7 +8,7 @@ use crate::*;
 
 /// Pool mana a payment spends: its kind, its restriction (CR 106.6), and the name of the source that produced it, for
 /// mana of one kind from several sources.
-pub type Spend = (Mana, Option<ManaRestriction>, Option<String>);
+pub type Spend = (Mana, Option<ManaRestriction>, Option<String>, Option<bool>, Option<bool>);
 
 /// What a payment is told to do beyond paying what is owed from the pool: the X or kicker count to announce, the pool
 /// mana to spend first, the creatures Convoke taps (in the order the payment asks, CR 702.51a) and how many cards Delve
@@ -125,6 +125,8 @@ pub fn auto_pay(
         let from = |o: &ActionOption| o.source.map(|s| game.known_name(s).to_string());
         return match assign.iter().find(|o| {
             (o.mana, o.restriction) == (Some(wanted.0), wanted.1)
+                && wanted.3.is_none_or(|snow| snow == o.snow)
+                && wanted.4.is_none_or(|pay_snow| pay_snow == o.pay_snow)
                 && from(o).map(|n| n.to_ascii_lowercase())
                     == wanted.2.as_ref().map(|n| n.to_ascii_lowercase())
         }) {
@@ -134,6 +136,10 @@ pub fn auto_pay(
                 assign.iter().map(|o| (o.mana, from(o))).collect::<Vec<_>>()
             )),
         };
+    }
+    if remaining.snow > 0 || assign.iter().any(|o| o.snow) {
+        let viable = game.viable_pool_assignments(request.player, remaining, options);
+        return Ok(viable.first().map(|&i| Answer::Act(Action::of(&options[i]))));
     }
     if !remaining.is_zero()
         && let Some(o) = assign

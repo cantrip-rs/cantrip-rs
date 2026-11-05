@@ -43,6 +43,9 @@ Bot1.Pass
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Animal Sanctuary.Activate(Ability: Put a +1/+1; Bot1.Battlefield.Aven Envoy)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -64,6 +67,9 @@ Bot1.Pass
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Animal Sanctuary.Activate(Ability: Put a +1/+1; Bot1.Battlefield.Mountain Goat)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -76,6 +82,9 @@ Bot1.Pass
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Animal Sanctuary.Activate(Ability: Put a +1/+1; Bot1.Battlefield.Cauldron Familiar)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -88,6 +97,9 @@ Bot1.Pass
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Animal Sanctuary.Activate(Ability: Put a +1/+1; Bot1.Battlefield.Isamaru, Hound of Konda)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -100,6 +112,9 @@ Bot1.Pass
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Animal Sanctuary.Activate(Ability: Put a +1/+1; Bot1.Battlefield.Yoked Ox)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -109,6 +124,9 @@ Bot2.Pass
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Animal Sanctuary.Activate(Ability: Put a +1/+1; Bot2.Battlefield.Hexdrinker)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

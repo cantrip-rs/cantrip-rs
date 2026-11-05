@@ -23,6 +23,7 @@ Bot1.Hand.Mox Pearl.Cast
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Lazav, the Multifarious.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Arrange(| Grizzly Bears)
@@ -47,6 +48,7 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Lazav, the Multifarious.Activate(X: 2)
 ! Bot1.Target(Bot2.Graveyard.Grizzly Bears)
 Bot1.Target(Bot1.Graveyard.Grizzly Bears)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 [Expect]

@@ -27,6 +27,8 @@ Bot1.Pass
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.The Masters of Evil.Activate(Ability: Discard this card)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 ! Bot1.Search(Military Intelligence)

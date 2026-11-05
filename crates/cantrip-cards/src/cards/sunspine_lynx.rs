@@ -7,7 +7,7 @@ use cantrip_oracle as oracle;
 /// player's own count, as the ability resolves, dealt to every player at once. A land with no basic supertype is nonbasic
 /// (CR 205.4a); a player who controls none is dealt no damage (CR 120.8).
 fn burn_each_player(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let hits: Vec<(ObjectId, Target, u16)> = g
+    let hits: Vec<(ObjectId, Target, i64)> = g
         .state()
         .apnap()
         .map(|p| {
@@ -15,7 +15,7 @@ fn burn_each_player(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
                 let c = g.chars(id);
                 c.is(CardType::Land) && !c.supertypes.basic
             });
-            (item.object, Target::Player(p), u16::try_from(nonbasic.count()).unwrap_or(u16::MAX))
+            (item.object, Target::Player(p), i64::from(u16::try_from(nonbasic.count()).unwrap_or(u16::MAX)))
         })
         .filter(|&(_, _, n)| n > 0)
         .collect();

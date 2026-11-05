@@ -48,6 +48,10 @@ Bot1.Hand.Urgent Necropsy.Cast
 Bot1.Target(Haywire Mite)
 Bot1.Target(Haywire Mite)
 Bot1.Target(Goblin Bombardment)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Lightning Bolt; Lightning Bolt; Lightning Bolt)
 Bot1.Pass
 Bot2.Pass

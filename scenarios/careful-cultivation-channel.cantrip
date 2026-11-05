@@ -12,6 +12,8 @@ Bot1.Hand.Mox Emerald.Cast
 Bot1.Battlefield.Mox Emerald#1.Activate
 Bot1.Battlefield.Mox Emerald#2.Activate
 Bot1.Hand.Careful Cultivation.Activate(Ability: Channel)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 ? Bot1.Graveyard = Careful Cultivation
 Bot1.Pass

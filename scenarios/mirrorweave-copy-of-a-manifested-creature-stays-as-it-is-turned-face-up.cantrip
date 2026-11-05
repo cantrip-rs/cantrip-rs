@@ -42,6 +42,9 @@ Bot1.Battlefield.Mountain.Activate
 Bot1.Hand.Abhorrent Oculus.Cast
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Island; Island; Island; Island; Black Lotus; Wheel of Fortune)
 [T2 Bot2.Upkeep]
 Bot1.Arrange(Snapcaster Mage | Lightning Bolt)

@@ -19,7 +19,7 @@ fn applies(q: &dyn Query, asker: &Asker, proposal: &Proposal) -> bool {
 
 fn apply(q: &dyn Query, asker: &Asker, proposal: &mut Proposal) {
     if let Proposal::ZoneChange(z) = proposal {
-        z.counters[CounterKind::PlusOne as usize] += opponents_who_lost_life_this_turn(q, asker.controller) as i16;
+        z.counters[CounterKind::PlusOne as usize] += i64::from(opponents_who_lost_life_this_turn(q, asker.controller) as i16);
     }
 }
 

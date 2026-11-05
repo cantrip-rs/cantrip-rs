@@ -24,6 +24,7 @@ Bot1.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Aladdin.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 [T3 Bot1.Main1]
@@ -37,6 +38,10 @@ Bot1.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 ! Bot1.Battlefield.Aladdin.Activate(Aladdin)
 Bot1.Battlefield.Aladdin.Activate(Ornithopter)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 [T5 Bot1.Main2]

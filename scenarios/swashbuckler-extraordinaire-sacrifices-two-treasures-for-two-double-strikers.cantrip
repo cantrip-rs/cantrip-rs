@@ -31,6 +31,8 @@ Bot1.Hand.Swamp.Play
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Swamp.Activate
 Bot1.Hand.Deadly Dispute.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 [T3 Bot1.BeginCombat]
 ? Bot1.Battlefield = Mountain; Swamp; Swashbuckler Extraordinaire; Ornithopter; Treasure Token; Treasure Token

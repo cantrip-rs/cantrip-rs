@@ -41,6 +41,7 @@ Bot1.Hand.Tail Swipe.Cast
 Bot1.Target(Elvish Mystic)
 ! Bot1.Target(Bot1.Battlefield.Elvish Mystic)
 Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {G}
 [T4 Bot2.Main1]
 

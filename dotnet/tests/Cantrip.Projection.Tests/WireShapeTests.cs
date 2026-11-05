@@ -29,7 +29,7 @@ public sealed class WireShapeTests
     /// The wire as it stands. Written as version and digest together so the two are updated in one edit rather than
     /// one of them being remembered — and so this line never names a version it has drifted away from.
     /// </summary>
-    private const string Recorded = "227:64AD789DE62BA325";
+    private const string Recorded = "228:6628EE7044D305EA";
 
     /// <summary>
     /// In-person play's own wire (<c>Cantrip.Protocol.InPerson</c>, docs/in-person.md), guarded the same way against its
@@ -44,6 +44,19 @@ public sealed class WireShapeTests
     public void The_wire_has_not_changed_without_the_protocol_version_moving()
     {
         Check(Recorded, PlayerView.ProtocolVersion, Shape(type => type.Namespace != InPersonNamespace), "PlayerView.ProtocolVersion", "Recorded");
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Printed_stats_and_until_exile_are_independent_on_the_wire(bool returns)
+    {
+        var view = new ObjectView { PrintedPower = 4, PrintedToughness = 6, ExiledUntilLeaves = returns, ExiledWith = new ViewHandle(23) };
+        var decoded = MessagePackSerializer.Deserialize<ObjectView>(MessagePackSerializer.Serialize(view));
+        Assert.Equal(4, decoded.PrintedPower);
+        Assert.Equal(6, decoded.PrintedToughness);
+        Assert.Equal(returns, decoded.ExiledUntilLeaves);
+        Assert.Equal(view.ExiledWith, decoded.ExiledWith);
     }
 
     [Fact]

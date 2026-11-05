@@ -63,6 +63,11 @@ Bot2.Modes(Collect evidence)
 Bot2.Battlefield.Black Lotus.Activate(Color: Black)
 Bot2.Battlefield.Swamp.Activate
 Bot2.Battlefield.Swamp.Activate
+Bot2.Choose(Pay mana)
+Bot2.Choose(Pay mana)
+Bot2.Choose(Pay mana)
+Bot2.Choose(Pay mana)
+Bot2.Choose(Pay mana)
 Bot2.Choose(Griselbrand)
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Yavimaya Hollow.Activate(Bot1.Battlefield.Wan Shi Tong, Librarian; Ability: Regenerate)

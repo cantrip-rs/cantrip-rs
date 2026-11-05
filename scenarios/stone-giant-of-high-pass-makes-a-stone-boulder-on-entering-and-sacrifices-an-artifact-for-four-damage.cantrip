@@ -60,6 +60,9 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Stone-Giant of High Pass.Activate(Bot2.Battlefield.Memnite)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mox Jet)
 ? Bot1.Mana =
 Bot1.Pass

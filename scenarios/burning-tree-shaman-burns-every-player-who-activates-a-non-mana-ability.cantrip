@@ -66,6 +66,7 @@ Bot2.Pass
 ? Bot1.Life = 20
 Bot1.Battlefield.Mountain#2.Activate
 Bot1.Battlefield.Figure of Destiny.Activate
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 Bot1.Pass
 Bot2.Pass
@@ -76,6 +77,8 @@ Bot2.Pass
 Bot2.Hand.Forest.Play
 Bot2.Battlefield.Forest.Activate
 Bot2.Hand.Generous Ent.Activate(Ability: Forestcycling)
+Bot2.Choose(Close mana window)
+Bot2.Choose(Discard Generous Ent)
 ? Stack.Count = 2
 Bot2.Pass
 Bot1.Pass

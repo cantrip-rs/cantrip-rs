@@ -26,6 +26,8 @@ Bot1.Hand.Island.Play
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Deadly Dispute.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mox Ruby)
 Bot2.Hand.Mox Jet.Cast
 [T3 Bot1.Main1]

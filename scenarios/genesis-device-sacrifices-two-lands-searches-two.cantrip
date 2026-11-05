@@ -18,6 +18,7 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: G)
 Bot1.Hand.Genesis Device.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Search(Forest)
@@ -47,6 +48,12 @@ Bot1.Battlefield.Mox Pearl#2.Activate
 Bot1.Battlefield.Mox Pearl#3.Activate
 ? Bot1.Mana = {W}{W}{W}{G}{G}
 Bot1.Battlefield.Genesis Device.Activate
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

@@ -34,6 +34,9 @@ Bot1.Battlefield.Mox Ruby#1.Activate
 Bot1.Battlefield.Mox Ruby#2.Activate
 Bot1.Battlefield.Mox Ruby#3.Activate
 Bot1.Graveyard.Boarding Action.Cast(Ability: Beam me up)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ! Bot1.Choose(Ornithopter)
 Bot1.Choose(Klingon Warrior Token)
 Bot1.Pass

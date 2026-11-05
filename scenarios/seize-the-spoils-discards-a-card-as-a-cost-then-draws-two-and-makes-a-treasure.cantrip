@@ -25,6 +25,9 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Seize the Spoils.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Memnite)
 ? Bot1.Graveyard = Memnite
 Bot1.Pass

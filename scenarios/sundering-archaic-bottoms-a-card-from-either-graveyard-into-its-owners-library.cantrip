@@ -47,6 +47,7 @@ Bot2.Pass
 Bot1.Battlefield.Mox Jet#1.Activate
 Bot1.Battlefield.Mox Jet#2.Activate
 Bot1.Battlefield.Sundering Archaic.Activate(Ability: {2}; Bot2.Graveyard.Lightning Bolt)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -55,6 +56,7 @@ Bot2.Pass
 Bot1.Battlefield.Mox Jet#3.Activate
 Bot1.Battlefield.Mox Jet#4.Activate
 Bot1.Battlefield.Sundering Archaic.Activate(Ability: {2}; Bot1.Graveyard.Lightning Bolt)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

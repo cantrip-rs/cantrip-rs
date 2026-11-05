@@ -37,6 +37,11 @@ Bot1.Pass
 Bot1.Hand.Dark Ritual.Cast
 Bot1.Pass
 Bot1.Graveyard.From the Catacombs.Cast(Bot1.Graveyard.Ornithopter; Ability: Escape)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Dark Ritual; Dark Ritual; Dark Ritual; Dark Ritual; Faithless Looting)
 Bot1.Pass
 

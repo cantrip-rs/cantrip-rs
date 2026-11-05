@@ -73,6 +73,7 @@ Bot1.Hand.Claim the Firstborn.Cast(Bot2.Battlefield.Agents of HYDRA)
 Bot1.Pass
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Village Rites.Cast
+Bot1.Choose(Pay mana)
 Bot1.Choose(Agents of HYDRA)
 Bot1.Pass
 Bot1.Pass

@@ -71,6 +71,11 @@ Bot1.Battlefield.Mox Sapphire.Activate
 ! Bot1.Battlefield.Seedship Broodtender.Activate(Bot1.Graveyard.Black Lotus)
 ! Bot1.Battlefield.Seedship Broodtender.Activate(Bot2.Graveyard.Haywire Mite)
 Bot1.Battlefield.Seedship Broodtender.Activate(Bot1.Graveyard.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

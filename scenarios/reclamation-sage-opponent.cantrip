@@ -19,6 +19,7 @@ Bot2.Hand.Island.Play
 [T3 Bot1.Main1]
 Bot1.Battlefield.Black Lotus.Activate(Color: Green)
 Bot1.Hand.Reclamation Sage.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 ! Bot1.Target(Bot2.Battlefield.Island)
 Bot1.Target(Bot2.Battlefield.Mox Ruby)

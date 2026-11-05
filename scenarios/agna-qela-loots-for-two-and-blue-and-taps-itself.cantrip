@@ -25,6 +25,9 @@ Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Agna Qel'a.Activate(Ability: Draw a card)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Lightning Bolt)
 ? Bot1.Graveyard = Lightning Bolt
 ! Bot1.Battlefield.Agna Qel'a.Activate(Ability: Draw a card)

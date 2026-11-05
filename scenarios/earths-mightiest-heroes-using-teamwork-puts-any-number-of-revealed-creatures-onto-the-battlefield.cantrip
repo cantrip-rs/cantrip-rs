@@ -64,6 +64,12 @@ Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Earth's Mightiest Heroes.Cast
 Bot1.Modes(Teamwork 5)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ! Bot1.Choose(Grizzly Bears#1; Grizzly Bears#2)
 Bot1.Choose(Grizzly Bears#1; Centaur Courser)
 ? Bot1.Mana =

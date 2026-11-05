@@ -35,6 +35,8 @@ Bot2.Hand.Hill Giant.Cast
 Bot1.Battlefield.Island.Activate
 ! Bot1.Battlefield.Helm of Chatzuk.Activate(Bot1.Battlefield.Island)
 Bot1.Battlefield.Helm of Chatzuk.Activate(Bot1.Battlefield.Llanowar Elves)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -49,6 +51,8 @@ Bot1.AssignDamage(Hill Giant > Ornithopter: 3)
 ? Bot1.Battlefield.Llanowar Elves.Keywords = (absent)
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Helm of Chatzuk.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

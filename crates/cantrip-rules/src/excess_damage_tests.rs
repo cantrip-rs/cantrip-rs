@@ -13,13 +13,13 @@ static MULTI: CardDef =
 fn to_self(_: &dyn Query, a: &Asker, d: &DamageEvent) -> bool {
     d.target == Target::Object(a.source)
 }
-fn two(_: &dyn Query, _: &Asker, _: &DamageEvent) -> u16 {
+fn two(_: &dyn Query, _: &Asker, _: &DamageEvent) -> i64 {
     2
 }
 static SHIELDED: CardDef =
-    CardDef { name: "Excess Shielded", preventions: &[PreventionDef { hint: "prevent two", applies: to_self, amount: Some(two) }], ..BEAR };
+    CardDef { name: "Excess Shielded", preventions: &[PreventionDef { hint: "prevent two", applies: to_self, amount: PreventionAmount::Specific(two) }], ..BEAR };
 static IMMUNE: CardDef =
-    CardDef { name: "Excess Immune", preventions: &[PreventionDef { hint: "prevent all", applies: to_self, amount: None }], ..BEAR };
+    CardDef { name: "Excess Immune", preventions: &[PreventionDef { hint: "prevent all", applies: to_self, amount: PreventionAmount::All }], ..BEAR };
 fn to_another(_: &dyn Query, a: &Asker, p: &Proposal) -> bool {
     matches!(p, Proposal::Damage(d) if matches!(d.target, Target::Object(id) if id != a.source))
 }
@@ -123,16 +123,16 @@ fn cx(g: &mut Game) -> Cx<'_> {
         cursor: 0,
         mana_source: None,
         entering: None,
-        lineage: Vec::new(),
+        lineage: Vec::new(), damage: None,
         asked_at: None,
         doer: None,
         producing: None,
     }
 }
-fn hit(g: &mut Game, source: ObjectId, target: ObjectId, amount: u16) -> Option<DamageResult> {
-    cantrip_api::Game::damage_result(&mut cx(g), source, Target::Object(target), amount)
+fn hit(g: &mut Game, source: ObjectId, target: ObjectId, amount: i64) -> Option<DamageResult> {
+    cantrip_api::Game::damage_result(&mut cx(g), source, Target::Object(target), i64::from(amount))
 }
-fn recorded(g: &Game) -> Vec<(Target, u16, u32)> {
+fn recorded(g: &Game) -> Vec<(Target, i64, i64)> {
     g.log
         .iter()
         .filter_map(|r| match r.event {

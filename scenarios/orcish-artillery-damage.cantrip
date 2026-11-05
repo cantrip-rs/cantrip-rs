@@ -15,6 +15,7 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Hand.Mox Ruby.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Hand.Orcish Artillery.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T2 Bot2.Main1]
 Bot2.Hand.Ornithopter.Cast
@@ -32,6 +33,8 @@ Bot1.Battlefield.Orcish Artillery.Activate(Bot2)
 [T5 Bot1.Main2]
 ? Bot1.Life = 17
 ? Bot2.Life = 18
+? Bot1.Battlefield.Orcish Artillery.Tapped = true
+! Bot1.Battlefield.Orcish Artillery.Activate(Bot2)
 [T7 Bot1.Main1]
 Bot1.Battlefield.Orcish Artillery.Activate(Bot1)
 [T7 Bot1.Main2]

@@ -16,6 +16,56 @@ namespace Cantrip.Server.Tests;
 /// </summary>
 public sealed class ProtocolJsonTests
 {
+    // Retain the old numeric DTO types independently of the production types.
+    // Comparing the complete union bytes proves compact old-range compatibility.
+    [Union(1, typeof(LegacyLife))]
+    [Union(2, typeof(LegacyDamage))]
+    public abstract class LegacyQuantityEvent { }
+
+    [MessagePackObject]
+    public sealed class LegacyLife : LegacyQuantityEvent
+    {
+        [Key(0)] public int Player { get; set; }
+        [Key(1)] public int Delta { get; set; }
+        [Key(2)] public int NewTotal { get; set; }
+    }
+
+    [MessagePackObject]
+    public sealed class LegacyDamage : LegacyQuantityEvent
+    {
+        [Key(0)] public ViewHandle Object { get; set; }
+        [Key(1)] public int Amount { get; set; }
+    }
+
+    [Fact]
+    public void Wide_quantities_preserve_old_range_union_bytes_and_exact_wide_roundtrips()
+    {
+        foreach (int amount in new[] { 0, 2, 127, 128, 65535, int.MaxValue })
+        {
+            var before = new LegacyDamage { Object = new ViewHandle(5), Amount = amount };
+            var after = new DamageMarkedEvent { Object = new ViewHandle(5), Amount = amount };
+            Assert.Equal(MessagePackSerializer.Serialize<LegacyQuantityEvent>(before), MessagePackSerializer.Serialize<GameEventView>(after));
+        }
+        foreach (int delta in new[] { int.MinValue, -3, 0, 127, int.MaxValue })
+        {
+            var before = new LegacyLife { Player = 2, Delta = delta, NewTotal = 17 };
+            var after = new LifeChangedEvent { Player = 2, Delta = delta, NewTotal = 17 };
+            Assert.Equal(MessagePackSerializer.Serialize<LegacyQuantityEvent>(before), MessagePackSerializer.Serialize<GameEventView>(after));
+        }
+        foreach (long amount in new[] { 4294967302L, long.MaxValue })
+        {
+            GameEventView value = new DamageMarkedEvent { Object = new ViewHandle(5), Amount = amount };
+            var restored = Assert.IsType<DamageMarkedEvent>(MessagePackSerializer.Deserialize<GameEventView>(MessagePackSerializer.Serialize(value)));
+            Assert.Equal(amount, restored.Amount);
+        }
+        foreach (long delta in new[] { -4294967295L, 4294967295L })
+        {
+            GameEventView value = new LifeChangedEvent { Player = 2, Delta = delta, NewTotal = -2147483648 };
+            var restored = Assert.IsType<LifeChangedEvent>(MessagePackSerializer.Deserialize<GameEventView>(MessagePackSerializer.Serialize(value)));
+            Assert.Equal(delta, restored.Delta);
+        }
+    }
+
     public static TheoryData<string> Prompts =>
     [
         """{"$type":"PriorityPromptMessage","Player":1,"Options":[{"Kind":"PlayLand","Source":3,"AbilityIndex":0,"TargetsRequired":0,"TargetCandidates":[],"Produces":["Green"],"Affordable":true,"ProducesOfAnyOneColor":0,"HasX":false,"MaxX":-1,"Description":"","LifeCost":0,"DamageToController":0,"ColorChoices":[],"CostText":"","TargetsOptional":false,"Filter":"None","Effect":"None","SpellName":"","ProducesOfAnyColorEach":0,"SacrificeCandidates":[],"Tap":null,"PaysUpTo":0,"Alternative":0,"LifeGained":0,"GrantedBy":""},{"Kind":"CastSpell","Source":4,"TargetsRequired":1,"TargetCandidates":[{"Player":2,"Object":0},{"Player":0,"Object":3}],"Tap":5},{"Kind":"CastSpell","Source":6,"AbilityIndex":1,"CostText":"{3}","Description":"Morph {3}{W}","CastFaceDown":true,"CastPrototyped":false}]}""",
@@ -40,6 +90,8 @@ public sealed class ProtocolJsonTests
         """{"$type":"ChooseDividedTargetsPromptMessage","Player":1,"Ability":4,"Source":4,"Text":"divided as you choose","Candidates":[{"Player":2,"Object":0},{"Player":0,"Object":5}],"Total":3,"MaxTargets":0,"Optional":false}""",
         """{"$type":"ChooseStartingPlayerPromptMessage","Player":2,"Candidates":[1,2]}""",
         """{"$type":"MulliganPromptMessage","Player":1,"Mulligans":1,"Keeps":6}""",
+        """{"$type":"ChooseNumberPromptMessage","Player":2,"Source":4,"Least":0,"Most":4294967295,"Heading":"Put counters"}""",
+        """{"$type":"ChooseCostPaymentPromptMessage","Player":1,"Source":4,"Choices":[{"Key":"0","Label":"Sacrifice Grizzly Bears as the additional cost","Objects":[8]},{"Key":"1","Label":"Pay 2 life","Objects":[]}]}""",
         """{"$type":"RemoveCountersPromptMessage","Player":1,"Source":4,"Total":3,"Pools":[{"Object":5,"Counter":"-1/-1","Count":2},{"Object":6,"Counter":"+1/+1","Count":1}],"UpTo":true}""",
     ];
 
@@ -59,6 +111,8 @@ public sealed class ProtocolJsonTests
         """{"$type":"TriggersOrderedAnswer","Order":[1,0]}""",
         """{"$type":"CancelAnnouncementAnswer"}""",
         """{"$type":"AnnounceAnswer","Value":3}""",
+        """{"$type":"NumberChosenAnswer","Value":4294967295}""",
+        """{"$type":"CostPaymentChosenAnswer","Key":"9007199254740993"}""",
         """{"$type":"CardNamedAnswer","Name":"Lightning Bolt"}""",
         """{"$type":"PlayerChosenAnswer","Player":2}""",
         """{"$type":"ColorsChosenAnswer","Colors":["Blue"]}""",
@@ -72,6 +126,8 @@ public sealed class ProtocolJsonTests
         """{"$type":"ObjectMovedEvent","Object":0,"From":"Library","FromOwner":2,"To":"Hand","ToOwner":2,"Reason":"Draw"}""",
         """{"$type":"LifeChangedEvent","Player":2,"Delta":-3,"NewTotal":17}""",
         """{"$type":"DamageMarkedEvent","Object":5,"Amount":2}""",
+        """{"$type":"LifeChangedEvent","Player":2,"Delta":-4294967295,"NewTotal":-2147483648}""",
+        """{"$type":"DamageMarkedEvent","Object":5,"Amount":4294967302}""",
         """{"$type":"TapChangedEvent","Object":3,"Tapped":true}""",
         """{"$type":"StepBeganEvent","Turn":2,"Step":"PrecombatMain","ActivePlayer":2}""",
         """{"$type":"SpellCastEvent","Spell":4,"Controller":1,"Targets":[{"Player":2,"Object":0}],"X":null,"Modes":[],"Kicked":0,"Buyback":false,"GiftPromisedTo":null}""",

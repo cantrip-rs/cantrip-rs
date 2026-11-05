@@ -32,6 +32,7 @@ Bot1.Hand.Mox Sapphire.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Starfield Vocalist.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -49,6 +50,7 @@ Bot2.Arrange(Forest; Plains |)
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Starbreach Whale.Cast(Ability: Warp)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

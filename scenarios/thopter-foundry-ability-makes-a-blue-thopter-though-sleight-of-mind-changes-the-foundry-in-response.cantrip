@@ -32,6 +32,7 @@ Bot1.Hand.Thopter Foundry.Cast
 Bot1.Hand.Mox Emerald.Cast
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Thopter Foundry.Activate(Sacrifice: Mox Pearl)
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Island.Activate
 Bot1.Hand.Sleight of Mind.Cast(Thopter Foundry)
 Bot1.Pass

@@ -9,7 +9,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if item.x > 0
         && let Some(creature) = targets::object(g, item, 0)
     {
-        g.add_counters(creature, CounterKind::PlusOne, item.x as i16);
+        g.add_counters(creature, CounterKind::PlusOne, i64::from(item.x as i16));
     }
     if targets::object(g, item, 1).is_some() {
         let greatest = u32::from(greatest_power::among_creatures_you_control(g, item.controller));

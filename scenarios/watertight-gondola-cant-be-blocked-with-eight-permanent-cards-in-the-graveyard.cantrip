@@ -46,6 +46,10 @@ Bot1.Battlefield.Island#1.Activate
 Bot1.Battlefield.Island#2.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Graveyard.Island)
 [T7 Bot1.Main1]
 Bot1.Battlefield.Watertight Gondola.Activate(Ability: Crew)

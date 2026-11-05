@@ -27,6 +27,7 @@ Bot2.Hand.Mox Emerald.Cast
 Bot2.Hand.Black Lotus.Cast
 Bot2.Battlefield.Black Lotus.Activate(Color: Black)
 Bot2.Hand.Liliana of the Veil.Cast
+Bot2.Choose(Close mana window)
 Bot2.Battlefield.Plains.Activate
 Bot2.Battlefield.Mox Pearl.Activate
 Bot2.Battlefield.Mox Emerald.Activate

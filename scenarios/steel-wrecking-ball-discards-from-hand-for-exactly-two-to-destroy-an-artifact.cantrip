@@ -28,6 +28,8 @@ Bot1.Pass
 Bot1.Battlefield.Mox Jet.Activate
 ! Bot1.Hand.Steel Wrecking Ball.Activate(Bot2.Battlefield.Island)
 Bot1.Hand.Steel Wrecking Ball.Activate(Bot2.Battlefield.Mox Sapphire)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

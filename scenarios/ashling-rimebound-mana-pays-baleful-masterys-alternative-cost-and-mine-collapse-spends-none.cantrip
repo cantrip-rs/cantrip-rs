@@ -48,6 +48,7 @@ Bot2.Pass
 ? Bot1.Mana = {B}{B} (ManaValue4OrGreaterSpells)
 ? Bot2.Battlefield = Ornithopter
 Bot1.Hand.Baleful Mastery.Cast(Bot2.Battlefield.Ornithopter; Ability: {1}{B})
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

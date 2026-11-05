@@ -42,6 +42,7 @@ Bot1.Colors(Red; Red; Red; Red)
 ? Bot1.Mana = {R}{R}{R}{R} (DragonSpells)
 ! Bot1.Battlefield.Firdoch Core.Activate(Ability: {4}; Mana: short)
 Bot1.Hand.Firdoch Core.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {R} (DragonSpells)
 Bot1.Pass
 Bot2.Pass

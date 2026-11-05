@@ -48,6 +48,7 @@ Bot1.Battlefield.Mox Pearl.Activate
 ! Bot1.Battlefield.Yoshimaru, Beloved Companion.Activate(Ornithopter)
 ! Bot1.Battlefield.Yoshimaru, Beloved Companion.Activate(Karakas)
 Bot1.Battlefield.Yoshimaru, Beloved Companion.Activate(Yoshimaru, Beloved Companion)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T3 Bot1.Main2]
 ? Bot1.Battlefield.Yoshimaru, Beloved Companion.Counters.PlusOnePlusOne = 2

@@ -38,6 +38,7 @@ Bot2.Hand.Mox Jet.Cast
 Bot2.Hand.Black Lotus.Cast
 Bot2.Hand.Sol Ring.Cast
 Bot2.Battlefield.Mox Jet.Activate
+Bot2.Choose(Close mana window)
 Bot2.Battlefield.Plains.Activate
 Bot2.Hand.Swords to Plowshares.Cast(Ancient Adamantoise)
 Bot2.Pass

@@ -48,6 +48,7 @@ Bot1.Pass
 ? Bot1.Emblems.Count = 1
 Bot1.Battlefield.Mountain.Activate
 Bot1.Graveyard.Chain Lightning.Cast(Bot2)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Forest)
 
 [Expect]

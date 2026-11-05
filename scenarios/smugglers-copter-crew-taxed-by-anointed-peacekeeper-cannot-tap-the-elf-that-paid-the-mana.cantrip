@@ -43,6 +43,7 @@ Bot2.Name(Smuggler's Copter)
 Bot1.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Choose(Close mana window)
 ? Stack.Count = 0
 ? Bot1.Mana =
 ? Bot1.Battlefield.Smuggler's Copter.Types = Artifact
@@ -51,6 +52,8 @@ Bot1.Battlefield.Llanowar Elves.Activate
 Bot1.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Llanowar Elves)
 [T3 Bot1.Main2]
 

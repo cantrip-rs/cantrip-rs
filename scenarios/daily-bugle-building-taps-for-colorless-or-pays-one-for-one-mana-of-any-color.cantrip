@@ -20,6 +20,8 @@ Bot2.Pass
 Bot1.Hand.Mox Emerald.Cast
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Daily Bugle Building.Activate(Ability: {1}; Color: Red)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {R}
 
 [Expect]

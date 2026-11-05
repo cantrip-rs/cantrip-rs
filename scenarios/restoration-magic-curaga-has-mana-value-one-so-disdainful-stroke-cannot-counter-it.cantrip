@@ -40,6 +40,7 @@ Bot2.Hand.Mox Ruby.Cast
 Bot2.Battlefield.Black Lotus.Activate(Color: White)
 Bot2.Battlefield.Mox Pearl.Activate
 Bot2.Hand.Serra Paragon.Cast
+Bot2.Choose(Close mana window)
 Bot2.Battlefield.Mox Sapphire.Activate
 Bot2.Battlefield.Island.Activate
 Bot2.Hand.Disdainful Stroke.Cast(Stack.Serra Paragon)

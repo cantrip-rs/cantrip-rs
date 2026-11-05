@@ -31,6 +31,7 @@ Bot1.Hand.Torch the Tower.Cast(Bot2.Battlefield.Keen-Eyed Curator)
 Bot1.Modes(Bargain:)
 Bot1.Battlefield.Mountain.Activate
 ! Bot1.Choose(Mountain)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mox Ruby)
 Bot1.Arrange( | Lightning Bolt)
 [T3 Bot1.Main2]

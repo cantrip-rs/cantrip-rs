@@ -27,6 +27,8 @@ Bot1.Hand.Flamecache Gecko.Cast
 Bot1.Pass
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Flamecache Gecko.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Island)
 
 [Expect]

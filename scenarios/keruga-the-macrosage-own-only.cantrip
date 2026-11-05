@@ -32,6 +32,7 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Green)
 Bot1.Battlefield.Mox Emerald#1.Activate
 Bot1.Battlefield.Mox Emerald#2.Activate
 Bot1.Hand.Keruga, the Macrosage.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Hand.Ornithopter.Cast

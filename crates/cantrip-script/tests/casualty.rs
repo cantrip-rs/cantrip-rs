@@ -19,7 +19,7 @@ use cantrip_mechanics::casualty;
 
 /// "You gain X life", X as announced.
 fn gain_x(g: &mut dyn Rules, item: &StackItem) -> Result<(), Suspend> {
-    g.gain_life(item.controller, i32::from(item.x));
+    g.gain_life(item.controller, i64::from(item.x));
     Ok(())
 }
 
@@ -239,6 +239,12 @@ fn play(game: &mut Game, casts: &[&str], plan: Plan) -> Seen {
                             .unwrap_or_else(|| panic!("nothing to pay with: {options:?}")),
                     )),
                 }
+            }
+            RequestKind::ChooseCostPayment { choices, .. } => {
+                let choice = choices.iter().position(|c| c.label.starts_with("Sacrifice"))
+                    .or_else(|| choices.iter().position(|c| c.label.starts_with("Pay mana")))
+                    .expect("a casualty or mana payment is offered");
+                Answer::CostPayment(choice)
             }
             RequestKind::ChooseCards { cards, purpose: Purpose::SacrificeCost, .. } => {
                 seen.sacrificable.push(cards.iter().map(|&c| game.name(c)).collect());

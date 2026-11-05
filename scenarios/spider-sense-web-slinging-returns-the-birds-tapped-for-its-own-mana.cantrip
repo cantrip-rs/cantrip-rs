@@ -30,6 +30,7 @@ Bot1.Hand.Spider-Sense.Cast(Stack.Lightning Bolt; Ability: Web-slinging)
 ? Bot1.Battlefield.Birds of Paradise.Tapped = false
 Bot1.Battlefield.Birds of Paradise.Activate(Color: Blue)
 ? Client.Bot1.Prompt.Title = Spider-Sense: choose a tapped creature to return to its owner's hand to pay for it
+Bot1.Choose(Pay mana)
 Bot1.Choose(Birds of Paradise)
 ? Stack = Spider-Sense; Lightning Bolt
 ? Bot1.Hand.Count = 6

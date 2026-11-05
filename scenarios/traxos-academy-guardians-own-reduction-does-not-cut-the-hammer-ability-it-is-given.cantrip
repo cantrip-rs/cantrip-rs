@@ -33,6 +33,7 @@ Bot1.Pass
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Traxos, Academy Guardian.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Hand.Island.Play
@@ -54,6 +55,9 @@ Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Traxos, Academy Guardian.Activate(Bot2.Battlefield.Sol Ring)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

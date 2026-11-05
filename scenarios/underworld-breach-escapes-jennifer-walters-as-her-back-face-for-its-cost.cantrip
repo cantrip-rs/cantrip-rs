@@ -40,6 +40,12 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Plains.Activate
 Bot1.Graveyard.Jennifer Walters.Cast(Ability: back face)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Faithless Looting; Plains; Black Lotus)
 Bot1.Pass
 Bot2.Pass

@@ -14,7 +14,7 @@ fn loot_and_drain(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(player) = item.subject.player() else { return Ok(()) };
     for card in discarded {
         if hand::discarded_chars(&*g, card).is_some() {
-            let value = g.mana_value(card) as i32;
+            let value = i64::from(g.mana_value(card));
             g.lose_life(player, value);
         }
     }

@@ -52,6 +52,10 @@ Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Baloth Prime.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Forest)
 [T3 Bot1.Main2]
 

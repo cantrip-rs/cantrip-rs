@@ -18,6 +18,7 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Hand.Mox Ruby.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Green)
 Bot1.Hand.The Aesir Escape Valhalla.Cast
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
 [T1 Bot1.Main2]

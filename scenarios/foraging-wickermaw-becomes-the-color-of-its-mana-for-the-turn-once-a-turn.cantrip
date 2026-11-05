@@ -25,6 +25,7 @@ Bot1.Hand.Foraging Wickermaw.Cast
 Bot1.Arrange(Island | )
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Foraging Wickermaw.Activate(Color: Red)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {R}
 ? Bot1.Battlefield.Foraging Wickermaw.Colors = Red
 Bot1.Battlefield.Mox Sapphire.Activate

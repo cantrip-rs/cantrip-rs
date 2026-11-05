@@ -73,7 +73,7 @@ pub struct Entering {
     pub object: ObjectId,
     pub controller: PlayerId,
     pub tapped: bool,
-    pub counters: [i16; CounterKind::COUNT],
+    pub counters: [i64; CounterKind::COUNT],
     pub copy: Option<Copiable>,
     /// It enters prepared (CR 722.2).
     pub prepared: bool,
@@ -384,6 +384,8 @@ pub enum Costed {
     /// The permanent (or card) whose ability is being activated, which of its abilities, and that ability as linked abilities
     /// know it where an effect gave it the object (`Asker::by`, CR 607.5). A mana ability too (CR 605.3, 602.2b).
     Ability(ObjectId, AbilityRef, Option<Linked>),
+    /// An ability granted to a player, with its granting effect as it was when activation began.
+    PlayerAbility(PlayerId, AbilityRef, ContinuousEffect),
     /// The object a special action with a cost is taken for (CR 116.2), and the ability-shaped entry that is the action:
     /// plotting a card (CR 116.2k, 702.170a: "plotting cards from your hand costs {2} less"), suspending, foretelling,
     /// turning a face-down permanent face up, unlocking a door. A special action is not an activated ability (CR 116.1), so
@@ -626,6 +628,9 @@ impl Discards {
 pub struct Asker {
     pub source: ObjectId,
     pub controller: PlayerId,
+    /// Exact selected activated ability for its condition/mana callback; stack effects carry it on their StackItem.
+    /// None when asking as a spell, static rule, triggered ability or a card's other hook.
+    pub instance: Option<AbilityInstance>,
     /// The ability whose function is asked, as linked abilities know it (CR 607.1, 607.5), where an effect gave `source`
     /// that ability: what `Query::linked_to` of this asker answers, so the function reads only that ability's links (the
     /// choices it made, the cards it exiled). None for one of the text `source` has - its own or a copy effect's, every
@@ -642,18 +647,18 @@ pub struct Asker {
 impl Asker {
     /// `source` and `controller` asking with the text `source` has (`by` none).
     pub const fn new(source: ObjectId, controller: PlayerId) -> Asker {
-        Asker { source, controller, by: None, spell: false }
+        Asker { instance: None, source, controller, by: None, spell: false }
     }
 
     /// The spell `source`, controlled by `controller`, asking (`spell`): being cast, or on the stack.
     pub const fn spell(source: ObjectId, controller: PlayerId) -> Asker {
-        Asker { source, controller, by: None, spell: true }
+        Asker { instance: None, source, controller, by: None, spell: true }
     }
 
     /// The ability `by` of `by.object`, controlled by `controller`, asking: as linked abilities know it, where that differs
     /// from the text the object has (`by`).
     pub const fn ability(controller: PlayerId, by: Linked) -> Asker {
-        Asker { source: by.object, controller, by: Some(by), spell: false }
+        Asker { instance: None, source: by.object, controller, by: Some(by), spell: false }
     }
 }
 
@@ -756,6 +761,8 @@ impl TargetSpec {
 /// A cost (CR 118).
 #[derive(Clone, Copy)]
 pub struct Cost {
+    /// Independently identified, static component costs. Empty for an atomic cost.
+    pub components: &'static [Cost],
     pub mana: ManaCost,
     /// A waterbend cost beside `mana` (CR 701.67a-b): "waterbend {5}" pays {5} as the rest of the cost's mana is paid, an untapped
     /// artifact or creature tapped for each generic mana of it, which no other mana of the cost may be paid with. Its {X} is
@@ -1052,13 +1059,15 @@ impl Cost {
     /// Whether the cost is mana and permanents to tap or remove and nothing else (CR 118.3): the parts a spell's optional cost
     /// an ability gave it (`TriggeredDef::cast_option`) pays. Judged by `is_tap_only`, which names every part of a cost.
     pub fn is_mana_and_permanents_only(&self) -> bool {
-        Cost { mana: ManaCost::ZERO, tap: true, permanents: None, tap_permanents: false, ..*self }.is_tap_only()
+        Cost { components: &[], mana: ManaCost::ZERO, tap: true, permanents: None, tap_permanents: false, ..*self }.is_tap_only()
+            && self.components.iter().all(Cost::is_mana_and_permanents_only)
     }
 
     /// Whether the cost is {T} and nothing else (CR 107.5): what a basic land's mana ability costs. Every part is named, so
     /// a part added to `Cost` must be judged here too.
     pub fn is_tap_only(&self) -> bool {
         let Cost {
+            components,
             mana,
             waterbend,
             tap,
@@ -1100,7 +1109,7 @@ impl Cost {
             tap_to_reduce,
             materials,
         } = *self;
-        tap && mana.is_zero() && mana.x == 0
+        components.is_empty() && tap && mana.is_zero() && mana.x == 0
             && waterbend.is_zero()
             && waterbend.x == 0
             && !sacrifice_self
@@ -1149,6 +1158,7 @@ impl Cost {
         let mut c = self;
         for _ in 1..n {
             c.mana.generic += self.mana.generic;
+            c.mana.snow += self.mana.snow;
             for i in 0..6 {
                 c.mana.symbols[i] += self.mana.symbols[i];
             }
@@ -1188,11 +1198,34 @@ impl Cost {
         if largest == 0 { 255 } else { 255 / largest }
     }
 
+    /// Independent components of one cost, in declaration order (CR 118.3). Components remain available to the
+    /// payment procedure even when their mana and other totals are considered together.
+    pub const fn sequence(components: &'static [Cost]) -> Cost {
+        let mut whole = Cost::NONE;
+        let mut i = 0;
+        while i < components.len() {
+            let mut part = components[i];
+            // Permanent components are intentionally kept separately: combining their counts would discard their
+            // filters and the identity of each payment. Other costs still contribute to their shared totals.
+            part.permanents = None;
+            part.tap_permanents = false;
+            // Keep the first chooser as aggregate availability metadata. Every independent chooser and its
+            // filter remains in components and is scheduled separately; a second must not be merged into it.
+            if whole.choose.is_some() { part.choose = None; }
+            part.components = &[];
+            whole = whole.and(part);
+            i += 1;
+        }
+        whole.components = components;
+        whole
+    }
+
     /// This cost and another paid together: the parts of the same kind add (an additional cost's discard and an
     /// escalate cost's discard are discards of one choice). A card writes "{1}, {T}" as `cost("{1}").and(TAP)`.
     pub const fn and(self, other: Cost) -> Cost {
         let mut c = self;
         c.mana.generic += other.mana.generic;
+        c.mana.snow += other.mana.snow;
         let mut i = 0;
         while i < 6 {
             c.mana.symbols[i] += other.mana.symbols[i];
@@ -1323,6 +1356,7 @@ impl Cost {
 
     pub const NONE: Cost =
         Cost {
+            components: &[],
             mana: ManaCost::ZERO,
             waterbend: ManaCost::ZERO,
             tap: false,
@@ -1469,9 +1503,13 @@ pub struct ActivatedDef {
     pub effect: Effect,
     /// A mana ability's own effect (CR 605.1a), where it does more than add the mana `adds` and `adds_any` list: it
     /// resolves immediately, and `effect` is unused. One with {X} in its cost has X announced first (CR 107.3a, 605.3a);
-    /// the effect reads it as `Obj::x` of its source. A mana ability with none adds what it lists
+    /// the effect reads it through `Query::mana_ability_x`. A mana ability with none adds what it lists
     /// (`is_mana_ability`, `add_listed`).
     pub mana: Option<ManaEffect>,
+    /// In this ability, positive X changes only the amount of mana produced or how many colors of that mana are chosen.
+    /// Its possible mana types can therefore be judged with X=1 (CR 106.7); X=0 is judged separately. This is a contract
+    /// of the effect, not a guess from its cost; do not set it when X can change a condition or select different effects.
+    pub x_is_mana_amount: bool,
     /// A mana ability that adds mana of any one color: the activation names the color (CR 106.5).
     pub any_color: bool,
     /// The colors an `any_color` ability may name ("Add {B}, {R}, or {G}"); none means all five.
@@ -1480,6 +1518,8 @@ pub struct ActivatedDef {
     /// (CR 106.7): "add one mana of any type that land could produce". Named by colorless as `Action::mana` `Some(C)`; an
     /// ability that adds nothing when the permanent could produce nothing (CR 106.5).
     pub colors_from_sacrifice: bool,
+    /// The atomic cost component whose sacrifice supplies those mana types, when more than one component sacrifices.
+    pub colors_from_sacrifice_component: Option<usize>,
     /// The colors an `any_color` ability may name, worked out from the game when it is offered ("any of the exiled
     /// card's colors": a linked ability, CR 607.2a). With no colors there is none to choose: the ability is still
     /// offered, and adds no mana (CR 106.5). Overrides `colors`.
@@ -1592,10 +1632,12 @@ impl ActivatedDef {
         targets: &[],
         effect: no_effect,
         mana: None,
+        x_is_mana_amount: false,
         any_color: false,
         colors: ColorSet::NONE,
         colors_from: None,
         colors_from_sacrifice: false,
+        colors_from_sacrifice_component: None,
         from: ZoneKind::Battlefield,
         adds: ManaPool([0; 6]),
         adds_any: 0,
@@ -1658,7 +1700,10 @@ impl TriggeredDef {
         mana_ability: false,
         mana_yield: TriggeredMana::Unstated,
         sums_per_subject: false,
+
+        damage_amount: false,
         sums_at_least: 0,
+
         triggers_each_turn: 0,
         members_of: None,
         counted_by_amount: false,
@@ -1762,11 +1807,17 @@ pub struct TriggeredDef {
     /// 603.2c): damage dealt to one creature at once is one event, however many sources dealt it. "Whenever a creature
     /// you control is dealt damage ... that much damage" (The Sensational She-Hulk, Screaming Nemesis).
     pub sums_per_subject: bool,
+
+    /// Capture the exact amount of an already-matched Damage event in the core
+    /// payload. Its matcher must match only Damage events. With sums_per_subject,
+    /// sum only those matched events, preserving every matcher filter.
+    pub damage_amount: bool,
     /// With `sums_per_subject`, "deals N or more damage" (CR 603.2c, 510.2): it triggers only if its batch's events about one
     /// subject add up to at least this, so damage dealt at once to several creatures and players counts as one total, and less
     /// than it triggers nothing at all. 0 for any amount. Spinneret and Spiderling (4, any recipients) and Deus of Calamity (6,
     /// to one opponent: the opponent is the subject) print it.
     pub sums_at_least: u32,
+
     /// "This ability triggers only N times each turn" (no numbered rule; CR 603.2h is "do this only once each turn"): 0 for no limit. A triggering that would exceed it
     /// does not happen, and one that happens uses one up.
     pub triggers_each_turn: u8,
@@ -1838,6 +1889,37 @@ pub enum AbilityDef {
     /// abilities" takes it (CR 613.7) and it ends with the effect. While the object has it on the battlefield, the rule applies
     /// to its controller as a printed one would (`actions::each_play_rule`), named by this `AbilityRef::delayed` (`Grant`).
     PlayRule(PlayRuleDef),
+    /// A static regeneration prohibition an effect grants, named through the
+    /// granting card's `delayed` table. It functions while the holder has this
+    /// ability, just as a printed `CardDef::regeneration_bans` rule does.
+    RegenerationBan(RegenerationBanDef),
+    /// An ability of this creature allowing additional attackers to be blocked (CR 509.1a).
+    /// Unlike a rule another permanent imposes, this is lost and copied as an ability.
+    BlockAllowance(BlockAllowanceDef),
+}
+
+/// A creature's own ability to block additional attackers. `u32::MAX` means any number.
+/// Palace Guard and Wall of Glare permit any number; Foriysian Brigade permits one more.
+#[derive(Clone, Copy)]
+pub struct BlockAllowanceDef {
+    pub additional: u32,
+    pub additional_by: Option<fn(&dyn Query, &Asker) -> u32>,
+    pub text: &'static str,
+}
+
+pub const fn block_allowance(additional: u32, text: &'static str) -> AbilityDef {
+    AbilityDef::BlockAllowance(BlockAllowanceDef { additional, additional_by: None, text })
+}
+
+/// The additional allowance can depend on the current holder and game state (e.g. Kemba's Legion).
+pub const fn block_allowance_by(additional: fn(&dyn Query, &Asker) -> u32, text: &'static str) -> AbilityDef {
+    AbilityDef::BlockAllowance(BlockAllowanceDef { additional: 0, additional_by: Some(additional), text })
+}
+
+#[derive(Clone, Copy)]
+pub struct RegenerationBanDef {
+    pub rule: RegenerationBan,
+    pub text: &'static str,
 }
 
 /// A play rule as an ability an object is given (`AbilityDef::PlayRule`): the rule, and the quoted text that gives it.
@@ -1854,6 +1936,8 @@ impl AbilityDef {
             AbilityDef::Triggered(t) => t.text,
             AbilityDef::Static(s) => s.text,
             AbilityDef::PlayRule(p) => p.text,
+            AbilityDef::RegenerationBan(ban) => ban.text,
+            AbilityDef::BlockAllowance(allowance) => allowance.text,
         }
     }
 }
@@ -2428,6 +2512,11 @@ pub type SpellRule = fn(&dyn Query, &Asker, PlayerId, ObjectId) -> bool;
 /// Lookout).
 pub type BlockRule = fn(&dyn Query, ObjectId, ObjectId, ObjectId) -> bool;
 
+/// Additional attackers a blocker may block because of a static rule of this source (CR 509.1a).
+/// Unlike an ability granted to the blocker, the rule holds if the blocker loses its abilities.
+/// Brave the Sands and High Ground each permit a creature their controller controls to block one more.
+pub type AdditionalBlocks = fn(&dyn Query, ObjectId, ObjectId) -> u32;
+
 /// A restriction on blocking that a resolving spell or ability makes for a duration (CR 509.1b, 611.2a): "this creature can't
 /// be blocked this turn except by creatures with haste" (Gingerbrute; Resilient Roadrunner, Run for Your Life and Joven's Tools
 /// say the like). The effect (`EffectKind::BlockRestriction`) is on its `affected` object, not an ability of it or of its
@@ -2461,6 +2550,8 @@ pub enum LastingRuleKind {
     /// "Can't block" (CR 509.1b): Falter's "creatures without flying", Aragorn, King of Gondor's "creatures", Headliner
     /// Scarlett's "creatures target player controls".
     CantBlock,
+    /// The affected set can block this many additional attackers; u32::MAX means any number.
+    AdditionalBlocks(u32),
     /// "Attacks [this turn] if able" (CR 508.1d): one requirement for each such effect. The creature's controller still
     /// chooses what it attacks (the Goblin Diplomats ruling). Goblin Diplomats, Bident of Thassa.
     MustAttack,
@@ -2843,6 +2934,12 @@ pub type CostBan = fn(&dyn Query, &Asker, PlayerId, CostFor, CostPayment) -> boo
 /// control but don't own ... can't be sacrificed". A permanent's own "this permanent can't be sacrificed", printed or
 /// granted, is `Keyword::CantBeSacrificed`; the core reads both (`Game::can_sacrifice`).
 pub type SacrificeBan = fn(&dyn Query, &Asker, ObjectId) -> bool;
+
+/// A static ability saying a permanent can't be regenerated (CR 101.2, 701.19b-c).
+/// The source's abilities must function, but losing the affected permanent's
+/// abilities does not end the prohibition. Bone Shaman grants such an ability;
+/// Incinerate and Hurr Jackal make the same prohibition as a resolved effect.
+pub type RegenerationBan = fn(&dyn Query, &Asker, ObjectId) -> bool;
 
 /// A static ability that says face-down permanents can't be turned face up (CR 101.2, 708.7): true for a face-down
 /// permanent on the battlefield that can't be, judged as it is now. "Can't" beats every "can" (CR 101.2), so it stops each
@@ -3354,6 +3451,8 @@ pub struct CardDef {
     pub spell_rules: &'static [SpellRule],
     /// Its static abilities that limit blocking (CR 509.1b), while it is on the battlefield.
     pub block_rules: &'static [BlockRule],
+    /// Static rules that let a blocker block additional attackers (CR 509.1a).
+    pub additional_blocks: &'static [AdditionalBlocks],
     /// Its static abilities that limit how many creatures may block an attacker (CR 509.1b), while it is on the battlefield.
     pub blocker_limits: &'static [BlockerLimit],
     /// Its static abilities that require creatures to block (CR 509.1c), while it is on the battlefield.
@@ -3437,6 +3536,9 @@ pub struct CardDef {
     /// Its static abilities that say permanents can't be sacrificed (CR 101.2, 701.21a), while it is on the battlefield with
     /// its abilities: Assault Suit's "equipped creature ... can't be sacrificed". See `SacrificeBan`.
     pub sacrifice_bans: &'static [SacrificeBan],
+    /// Static rules that forbid regenerating a permanent (CR 701.19b-c).
+    /// They do not prevent creating regeneration shields. See `RegenerationBan`.
+    pub regeneration_bans: &'static [RegenerationBan],
     /// Its static abilities that say face-down permanents can't be turned face up (CR 101.2, 708.7), while it is on the
     /// battlefield with its abilities: Karlov Watchdog's "permanents your opponents control can't be turned face up during
     /// your turn". See `FaceUpBan`.
@@ -3636,6 +3738,7 @@ impl CardDef {
         cast_rules: &[],
         spell_rules: &[],
         block_rules: &[],
+        additional_blocks: &[],
         blocker_limits: &[],
         block_requirements: &[],
         must_be_blocked: &[],
@@ -3663,6 +3766,7 @@ impl CardDef {
         player_counter_bans: &[],
         cost_bans: &[],
         sacrifice_bans: &[],
+        regeneration_bans: &[],
         face_up_bans: &[],
         untap_bans: &[],
         cant_become_untapped: &[],
@@ -3737,6 +3841,7 @@ impl CardDef {
             (!self.cast_rules.is_empty(), "cast rules"),
             (!self.spell_rules.is_empty(), "spell rules"),
             (!self.block_rules.is_empty(), "block rules"),
+            (!self.additional_blocks.is_empty(), "additional blocks"),
             (!self.blocker_limits.is_empty(), "blocker limits"),
             (!self.block_requirements.is_empty(), "block requirements"),
             (!self.must_be_blocked.is_empty(), "must be blocked"),
@@ -3764,6 +3869,7 @@ impl CardDef {
             (!self.player_counter_bans.is_empty(), "player counter bans"),
             (!self.cost_bans.is_empty(), "cost bans"),
             (!self.sacrifice_bans.is_empty(), "sacrifice bans"),
+            (!self.regeneration_bans.is_empty(), "regeneration bans"),
             (!self.face_up_bans.is_empty(), "face-up bans"),
             (!self.untap_bans.is_empty(), "untap bans"),
             (!self.cant_become_untapped.is_empty(), "rules against becoming untapped"),
@@ -4550,7 +4656,7 @@ impl CardTable {
         let trigger_rules: Vec<bool> = cards.iter().map(|c| !c.trigger_rules.is_empty() || !c.additional_triggers.is_empty()).collect();
         let designators: Vec<bool> = cards.iter().map(|c| c.ascend || c.storied).collect();
         let engines: Vec<bool> = cards.iter().map(|c| c.start_your_engines).collect();
-        let block_rules: Vec<bool> = cards.iter().map(|c| !c.block_rules.is_empty() || !c.blocker_limits.is_empty()).collect();
+        let block_rules: Vec<bool> = cards.iter().map(|c| !c.block_rules.is_empty() || !c.blocker_limits.is_empty() || !c.additional_blocks.is_empty()).collect();
         let attack_rules: Vec<bool> = cards.iter().map(|c| !c.attack_rules.is_empty()).collect();
         let attack_alone_rules: Vec<bool> = cards.iter().map(|c| !c.attack_alone_rules.is_empty()).collect();
         let targeting_rules: Vec<bool> = cards.iter().map(|c| !c.targeting_rules.is_empty()).collect();
@@ -4970,7 +5076,7 @@ impl CardTable {
         match self.ability(ability) {
             AbilityDef::Activated(a) => a.modal,
             AbilityDef::Triggered(t) => t.modal,
-            AbilityDef::Static(_) | AbilityDef::PlayRule(_) => None,
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => None,
         }
     }
 
@@ -4979,7 +5085,7 @@ impl CardTable {
     pub fn cost_choice_of(&self, ability: AbilityRef) -> &'static [ExtraCost] {
         match self.ability(ability) {
             AbilityDef::Activated(a) => a.cost_choice,
-            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) => &[],
+            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => &[],
         }
     }
 

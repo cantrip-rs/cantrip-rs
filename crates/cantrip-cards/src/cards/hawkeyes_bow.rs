@@ -8,7 +8,7 @@ use cantrip_oracle as oracle;
 /// is the source; each opponent of the Equipment's controller still in the game takes one event, all dealt together (CR 120.2).
 fn ping_each_opponent(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = item.subject.object() else { return Ok(()) };
-    let hits: Vec<(ObjectId, Target, u16)> = g.state().opponents(item.controller).map(|p| (creature, Target::Player(p), 1)).collect();
+    let hits: Vec<(ObjectId, Target, i64)> = g.state().opponents(item.controller).map(|p| (creature, Target::Player(p), 1)).collect();
     g.damage_together(&hits);
     Ok(())
 }

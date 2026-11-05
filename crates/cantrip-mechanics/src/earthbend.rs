@@ -31,7 +31,7 @@ pub fn effect<const N: i16>(g: &mut dyn Game, item: &StackItem) -> Result<(), Su
         g.add_effect(item.object, land, EffectKind::SetPt(0, 0), Duration::Indefinite);
         Ok(())
     })?;
-    g.add_counters(land, CounterKind::PlusOne, N);
+    g.add_counters(land, CounterKind::PlusOne, i64::from(N));
     g.delayed_trigger(DelayedWhen::WhenEvent, item.object, item.controller, AbilityRef::delayed(card, 0), Target::Object(land));
     Ok(())
 }

@@ -16,7 +16,7 @@ fn landfall(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
             }
         }
         2 => {
-            let mut hits: Vec<(ObjectId, Target, u16)> =
+            let mut hits: Vec<(ObjectId, Target, i64)> =
                 g.state().opponents(controller).map(|p| (item.object, Target::Player(p), 4)).collect();
             let walkers: Vec<ObjectId> = g
                 .state()

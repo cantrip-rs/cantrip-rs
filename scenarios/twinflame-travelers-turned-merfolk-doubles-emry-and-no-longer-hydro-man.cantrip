@@ -48,6 +48,7 @@ Bot1.Modes(Merfolk)
 ? Bot1.Battlefield.Twinflame Travelers.Subtypes = Merfolk; Sorcerer
 Bot1.Battlefield.Volcanic Island.Activate(Ability: {U})
 Bot1.Hand.Emry, Lurker of the Loch.Cast
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 Bot1.Pass
 Bot2.Pass

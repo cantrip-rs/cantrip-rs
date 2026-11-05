@@ -24,6 +24,9 @@ Bot1.Hand.Amazing Spider-Girl.Cast(Ability: Web-slinging)
 Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Plains#2.Activate
 Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 [T3 Bot1.End]
 ? Bot1.Battlefield = Plains; Mox Pearl; Plains; Amazing Spider-Girl

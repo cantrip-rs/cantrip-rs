@@ -36,6 +36,7 @@ Bot1.Modes(Its own)
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Swamp.Activate
 Bot1.Accept
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {C}
 [T5 Bot1.Main1]
 [Expect]

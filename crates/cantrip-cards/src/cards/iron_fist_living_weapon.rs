@@ -16,7 +16,7 @@ fn gain_the_ability(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// existed if he has left the battlefield (CR 113.7a); no damage for a power of 0 or less (CR 120.8).
 fn deal_damage_equal_to_power(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let power = g.chars(item.object).power.unwrap_or(0).max(0) as u16;
-    g.damage(item.object, item.target(0), power);
+    g.damage(item.object, item.target(0), i64::from(power));
     Ok(())
 }
 

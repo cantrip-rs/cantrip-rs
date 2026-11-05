@@ -65,6 +65,7 @@ Bot1.Attack(Arcades Sabboth > Bot2)
 ? Bot1.Battlefield.Arcades Sabboth.Toughness = 7
 Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Arcades Sabboth.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

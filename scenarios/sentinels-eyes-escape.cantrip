@@ -20,6 +20,7 @@ Bot1.Pass
 Bot1.Battlefield.Mox Pearl.Activate
 ! Bot1.Hand.Sentinel's Eyes.Cast(Bot1.Battlefield.Mox Ruby)
 Bot1.Hand.Sentinel's Eyes.Cast(Bot1.Battlefield.Ornithopter#1)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -31,6 +32,7 @@ Bot1.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Graveyard.Sentinel's Eyes.Cast(Bot1.Battlefield.Ornithopter; Ability: Escape)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter; Lightning Bolt)
 ? Bot1.Mana =
 Bot1.Pass

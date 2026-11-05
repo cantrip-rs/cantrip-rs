@@ -30,6 +30,7 @@ Bot1.Battlefield.Mox Sapphire#2.Activate
 ! Bot1.Hand.Repudiate // Replicate.Cast(Bot2.Battlefield.Grizzly Bears; Ability: Replicate)
 ! Bot1.Hand.Repudiate // Replicate.Cast(Bot1.Battlefield.Island; Ability: Replicate)
 Bot1.Hand.Repudiate // Replicate.Cast(Bot1.Battlefield.Grizzly Bears; Ability: Replicate)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

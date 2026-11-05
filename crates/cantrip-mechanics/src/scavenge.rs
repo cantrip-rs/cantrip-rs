@@ -19,7 +19,7 @@ use cantrip_api::*;
 fn put_counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
     let power = g.chars(item.object).power.unwrap_or(0).max(0);
-    g.add_counters(creature, CounterKind::PlusOne, power);
+    g.add_counters(creature, CounterKind::PlusOne, i64::from(power));
     Ok(())
 }
 

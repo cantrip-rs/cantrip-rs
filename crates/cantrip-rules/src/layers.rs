@@ -49,14 +49,18 @@ pub struct Giver {
     /// text the ability is (`granted_words`). `ObjectId::NONE` and `Acquired::OWN` for one no entry gave.
     pub from: ObjectId,
     pub by: Acquired,
+    /// Exact generating ability's acquisition, separate from CR607 linked grouping and layer ordering.
+    pub activation: Acquired,
+    pub origin: ObjectId,
+    pub static_grant: bool,
 }
 
 impl Giver {
-    pub const NONE: Giver = Giver { object: ObjectId::NONE, acquired: Acquired::OWN, from: ObjectId::NONE, by: Acquired::OWN };
+    pub const NONE: Giver = Giver { object: ObjectId::NONE, acquired: Acquired::OWN, from: ObjectId::NONE, by: Acquired::OWN, activation: Acquired::OWN, origin: ObjectId::NONE, static_grant: false };
 
     /// The giver `object`'s effect `acquired` is, which put the ability there.
     const fn entry(object: ObjectId, acquired: Acquired) -> Giver {
-        Giver { object, acquired, from: object, by: acquired }
+        Giver { object, acquired, from: object, by: acquired, activation: acquired, origin: ObjectId::NONE, static_grant: false }
     }
 
     /// The giver of a resolved effect that gave an object an ability (`EffectKind::AddAbility`): its source, as the effect's
@@ -148,6 +152,26 @@ pub fn acquired(cards: &CardTable, state: &GameState, log: &[Record], id: Object
     if giver.object == ObjectId::NONE { text } else { giver.acquired }
 }
 
+/// Exact activation identity, without changing the group that links related abilities (CR 607).
+/// Slot numbers are only used while deriving it; removal of another donor does not change this donor's key.
+pub fn instance(cards: &CardTable, state: &GameState, log: &[Record], id: ObjectId, chars: &Chars, slot: usize) -> AbilityAcquisition {
+    let givers = (acquisition_possible(cards, state) && !surely_its_text(cards, chars, slot))
+        .then(|| ability_givers(cards, state, log, id));
+    let text = state.copy_acquired(id);
+    let base = |at: usize| {
+        let giver = givers.as_ref().map_or(Giver::NONE, |g| g[at]);
+        AbilityAcquisition {
+            acquired: if giver.from == ObjectId::NONE { text } else { giver.activation },
+            origin: giver.origin,
+            ordinal: 0,
+            static_grant: giver.static_grant,
+        }
+    };
+    let mut key = base(slot);
+    key.ordinal = (0..slot).filter(|&at| chars.abilities[at] == chars.abilities[slot] && base(at) == key).count() as u8;
+    key
+}
+
 /// The words of the text `ability`, an ability `id` has that `giver` put there (`ability_givers`), is printed in, where that
 /// is not `id`'s own text (CR 612.1, 612.3): for one a resolved effect granted (`EffectKind::AddAbility`), the words the
 /// granting text had as it did (`ContinuousEffect::words`, CR 611.2c), whatever has changed `id`'s text or the effect's
@@ -225,24 +249,30 @@ fn watched_givers(id: ObjectId) -> Option<[Giver; cantrip_state::MAX_ABILITIES]>
 fn watching_givers(cards: &CardTable, id: ObjectId, giver: Giver, chars: &mut Chars, f: impl FnOnce(&mut Chars)) {
     let Some(givers) = watched_givers(id) else { return f(chars) };
     let before = chars.abilities;
+    let origins = chars.ability_origins;
+    for (slot, ability) in chars.abilities.iter().enumerate() {
+        if ability.is_none() { chars.ability_origins[slot] = ObjectId::NONE; }
+    }
     f(chars);
     let mut after = givers;
     // An ability that left a slot and is now in another was moved (the abilities kept by "loses all abilities except mana
     // abilities", packed together): it keeps its giver. Any other new one is the entry's.
     let mut moved = [false; cantrip_state::MAX_ABILITIES];
     for (slot, ability) in chars.abilities.iter().enumerate() {
-        if *ability == before[slot] {
+        if *ability == before[slot] && chars.ability_origins[slot] == origins[slot] {
             continue;
         }
         let from = (0..before.len()).find(|&from| !moved[from] && before[from].is_some() && before[from] == *ability && chars.abilities[from] != before[from]);
         after[slot] = match from {
             Some(from) => {
                 moved[from] = true;
+                chars.ability_origins[slot] = origins[from];
                 givers[from]
             }
-            None if giver.object == id && ability.is_some_and(|a| own_text(cards, chars, a)) => Giver { from: giver.from, by: giver.by, ..Giver::NONE },
+            None if giver.object == id && ability.is_some_and(|a| own_text(cards, chars, a)) => Giver { from: giver.from, by: giver.by, activation: giver.activation, static_grant: giver.static_grant, ..Giver::NONE },
             None => giver,
         };
+        after[slot].origin = chars.ability_origins[slot];
     }
     GIVERS.with(|g| g.set(after));
 }
@@ -398,7 +428,7 @@ impl LayerQuery for View<'_> {
     }
 
     fn history(&self) -> History<'_> {
-        History::new(self.log, self.state.turn.number)
+        History::with_receipts(self.log, self.state.turn.number, &self.state.cost_receipts)
     }
 
     fn chars(&self, id: ObjectId) -> Chars {
@@ -674,7 +704,9 @@ fn object<'a>(cards: &CardTable, state: &'a GameState, id: ObjectId) -> Object<'
     // A spell's text can be changed too (CR 612.1: "target spell or permanent").
     // The effects on a card do not follow it to the stack (CR 400.7): a card judged as a spell has none.
     let has_effects = (on_battlefield || spell) && judged_as.is_none() && state.effects.iter().any(|e| e.affected == id);
-    let has_counters = on_battlefield && obj.has_counters();
+    // P/T counters also modify creature cards in other zones (CR 122.1a). A hypothetical spell is a new object, not
+    // the card whose counters these are; departed objects use their last-known characteristics above.
+    let has_counters = judged_as.is_none() && obj.became.is_none() && obj.has_counters();
     let has_own = !def.statics.is_empty() || sources.iter().any(|v| !cards.get(v.card).statics.is_empty());
     // `statics_seen` is set by hone counters as well (CR 122.1j), which need no card with a static ability.
     let (any_sources, has_hone) = if state.statics_seen {
@@ -1346,6 +1378,7 @@ fn initial(cards: &CardTable, card: CardId, copy: Option<&Copiable>) -> Chars {
         // Printed riot (CR 702.136a): one instance, the card's or the one it copies.
         riot: u16::from(def.riot),
         abilities,
+        ability_origins: [ObjectId::NONE; MAX_ABILITIES],
         no_cost,
         name_set: false,
         lost_all: false,
@@ -1526,8 +1559,15 @@ impl GEntry {
             statics_of(cards, state, source).position(|s| std::ptr::eq(s, st)).unwrap_or(0)
         };
         match self.kind {
-            GKind::Static { source, st, .. } => Giver::entry(source, grant(part_of(source, st))),
-            GKind::Given { holder, st, .. } | GKind::Granted { holder, st, .. } => Giver::entry(holder, grant(part_of(holder, st))),
+            GKind::Static { source, st, .. } => {
+                let by = grant(part_of(source, st));
+                let text = state.copy_acquired(source);
+                // A fresh copied static ability generates a fresh grant, even when its holder's layer timestamp
+                // and the borrowed definition/donor are unchanged. A separate layer6 grant does not refresh.
+                let activation = if text.by == AcquiredBy::Copy { Acquired { stamp: text.stamp, ..by } } else { by };
+                Giver { activation, static_grant: true, ..Giver::entry(source, by) }
+            }
+            GKind::Given { holder, st, .. } | GKind::Granted { holder, st, .. } => Giver { static_grant: true, ..Giver::entry(holder, grant(part_of(holder, st))) },
             GKind::Effect(e) => Giver::entry(e.source, grant(0)),
         }
     }
@@ -1765,7 +1805,7 @@ fn applies(view: &View, o: &ObjCtx, entry: &GEntry, snap: &Snap) -> bool {
                     EffectKind::ChangeText { from: Word::Subtype(from), .. } => {
                         let chars = &snap.chars;
                         (chars.subtypes.has(from) && !(from.is_creature_type() && chars.keywords.has(Keyword::Changeling)))
-                            || Keyword::landwalk(from).is_some_and(|walk| chars.keywords.has(walk))
+                            || Keyword::landwalk(from).is_some_and(|walk| chars.keywords.matches(walk))
                     }
                     EffectKind::ChangeText { from: Word::Color(from), .. } => {
                         snap.chars.hexproof_from.colors().has(from) || snap.chars.protection.has(from)
@@ -2300,7 +2340,7 @@ fn fields(c: &Chars) -> [(&'static str, Field); 22] {
         ("colors", bits(c.colors.0.into())),
         ("power", Field::Number(c.power)),
         ("toughness", Field::Number(c.toughness)),
-        ("keywords", bits(c.keywords.0)),
+        ("keywords", Field::Bits(vec![c.keywords.0 as u64, (c.keywords.0 >> 64) as u64])),
         ("protection", bits(c.protection.0.into())),
         ("protection from types", bits(c.protection_types.0.into())),
         ("protection from subtypes", Field::Bits(c.protection_subtypes.0.to_vec())),
@@ -2443,7 +2483,7 @@ fn contract_pairs(base: Chars, ability: AbilityRef) -> Vec<(Chars, Chars)> {
     // keywords
     vary(&|c| c.keywords = c.keywords.with(Keyword::Flying));
     vary(&|c| c.keywords = Keywords::NONE);
-    vary(&|c| c.keywords = Keywords(u64::MAX));
+    vary(&|c| c.keywords = Keywords(u128::MAX));
     // protection
     vary(&|c| c.protection = ColorSet::of(Color::Red));
     vary(&|c| c.protection_types = TypeSet::of(&[CardType::Creature]));
@@ -2480,8 +2520,8 @@ fn contract_pairs(base: Chars, ability: AbilityRef) -> Vec<(Chars, Chars)> {
 /// The raw state a static ability's effect may check before it does anything, varied: the source attached to the object or
 /// not, a counter of every kind on both, the source at its highest class level and with choices made (a creature type, a
 /// color, a player), the object under the other player's control, and life totals high; a crowded game (another of the
-/// source's card, an artifact, a black and a white permanent, an Equipment attached to the source, creature cards in the
-/// graveyards and cards in hand); and the source in a hand.
+/// source's card, an artifact, a black and a white permanent, two Forests, a snow land, an Equipment attached to the source, creature cards
+/// in the graveyards and cards in hand); and the source in a hand.
 const SCENES: usize = 7;
 
 fn contract_scene(cards: &CardTable, card: CardId, target: CardId, scene: usize) -> (GameState, ObjectId, ObjectId) {
@@ -2526,7 +2566,7 @@ fn contract_scene(cards: &CardTable, card: CardId, target: CardId, scene: usize)
             }
         };
         put(Some(card), Zone::BATTLEFIELD, None);
-        for name in ["Sol Ring", "Bloodghast", "White Knight"] {
+        for name in ["Sol Ring", "Bloodghast", "White Knight", "Forest", "Forest", "Snow-Covered Forest"] {
             put(cards.find(name), Zone::BATTLEFIELD, None);
         }
         put(cards.find("Colossus Hammer"), Zone::BATTLEFIELD, Some(source));
@@ -2894,10 +2934,12 @@ fn apply_effect(effect: &ContinuousEffect, layer: Layer, chars: &mut Chars) {
                 }
                 // CR 612.2: the land type of a landwalk ability is a word of the text, "forestwalk" to "islandwalk"; only the
                 // printed abilities are there yet (what layer 6 grants comes after).
-                if let (Some(walk), Some(new)) = (Keyword::landwalk(from), Keyword::landwalk(to))
-                    && chars.keywords.has(walk)
-                {
-                    chars.keywords = Keywords(chars.keywords.0 & !Keywords::of(&[walk]).0 | Keywords::of(&[new]).0);
+                if let (Some(walk), Some(new)) = (Keyword::landwalk(from), Keyword::landwalk(to)) {
+                    for (old, new) in [(walk, new), (walk.snow_landwalk().unwrap(), new.snow_landwalk().unwrap())] {
+                        if chars.keywords.has(old) {
+                            chars.keywords = Keywords(chars.keywords.0 & !Keywords::of(&[old]).0 | Keywords::of(&[new]).0);
+                        }
+                    }
                 }
             }
             // CR 612.8: an effect that sets the name is a text-changing effect; the object loses every name it had.
@@ -2968,7 +3010,7 @@ fn apply_effect(effect: &ContinuousEffect, layer: Layer, chars: &mut Chars) {
             // CR 613.1f: lost at this effect's timestamp, so a keyword granted after it is kept. Losing hexproof loses every
             // "hexproof from [quality]" too (CR 702.11e).
             (Layer::Ability, EffectKind::LoseKeywords(k)) => {
-                chars.keywords = Keywords(chars.keywords.0 & !k.0);
+                chars.keywords = Keywords(chars.keywords.0 & !k.for_effect().0);
                 if k.has(Keyword::Hexproof) {
                     chars.hexproof_from = HexproofFrom::NONE;
                 }
@@ -3011,13 +3053,19 @@ fn apply_effect(effect: &ContinuousEffect, layer: Layer, chars: &mut Chars) {
     }
 }
 
-/// +1/+1 and -1/-1 counters, in layer 7c (CR 613.4c). Keyword counters are layer 6's, among its effects (`keyword_counters`).
+/// Every P/T counter, in layer 7c (CR 122.1a, 613.4c). Sum signed deltas before applying the engine's P/T width so
+/// unlike counters can offset one another without an intermediate wrap or clamp. Keyword counters belong to layer 6.
 fn counters(obj: &Obj, chars: &mut Chars) {
-    let plus = obj.counters(CounterKind::PlusOne) - obj.counters(CounterKind::MinusOne);
-    if plus != 0 {
-        chars.power = chars.power.map(|v| v + plus);
-        chars.toughness = chars.toughness.map(|v| v + plus);
+    if !chars.is(CardType::Creature) {
+        return;
     }
+    let (power, toughness) = CounterKind::POWER_TOUGHNESS.iter().fold((0i64, 0i64), |(p, t), &(kind, dp, dt)| {
+        let n = i64::from(obj.counters(kind));
+        (p + n * i64::from(dp), t + n * i64::from(dt))
+    });
+    let add = |base: i16, delta: i64| (i64::from(base) + delta).clamp(i64::from(i16::MIN), i64::from(i16::MAX)) as i16;
+    chars.power = chars.power.map(|v| add(v, power));
+    chars.toughness = chars.toughness.map(|v| add(v, toughness));
 }
 
 /// Hone counters (CR 122.1j): "A hone counter on an Equipment gives +1/+0 to any creature that Equipment is attached to",
@@ -3404,7 +3452,7 @@ mod tests {
         let ability = AbilityRef::delayed(card, 0);
         let mut abilities = [None; MAX_ABILITIES];
         abilities[0] = Some(ability);
-        let chars = Chars {
+        let chars = Chars { ability_origins: [ObjectId::NONE; MAX_ABILITIES],
             card,
             name: "Holder",
             types: TypeSet::NONE,
@@ -4079,8 +4127,8 @@ mod player_keyword_tests {
         let mut state = GameState::new(2, 0);
         let veil = put(&cards, &mut state, "Player Shroud Test Veil", 0, Zone::BATTLEFIELD);
         let ward = put(&cards, &mut state, "Player Hexproof Test Ward", 1, Zone::BATTLEFIELD);
-        let mine = Asker { source: put(&cards, &mut state, "Player Keyword Test Spark", 0, Zone::hand(PlayerId(0))), controller: PlayerId(0), by: None, spell: false };
-        let theirs = Asker { source: put(&cards, &mut state, "Player Keyword Test Spark", 1, Zone::hand(PlayerId(1))), controller: PlayerId(1), by: None, spell: false };
+        let mine = Asker { instance: None, source: put(&cards, &mut state, "Player Keyword Test Spark", 0, Zone::hand(PlayerId(0))), controller: PlayerId(0), by: None, spell: false };
+        let theirs = Asker { instance: None, source: put(&cards, &mut state, "Player Keyword Test Spark", 1, Zone::hand(PlayerId(1))), controller: PlayerId(1), by: None, spell: false };
         state.see_statics();
         assert!(player_has(&cards, &state, &[], PlayerId(0), Keyword::Shroud));
         assert!(!player_has(&cards, &state, &[], PlayerId(1), Keyword::Shroud));

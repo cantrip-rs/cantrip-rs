@@ -35,12 +35,15 @@ Bot2.Pass
 Bot2.Battlefield.Forest.Activate
 Bot2.Battlefield.Mox Jet.Activate
 Bot2.Hand.Deadly Dispute.Cast
+Bot2.Choose(Pay mana)
+Bot2.Choose(Pay mana)
 Bot2.Choose(Ornithopter)
 Bot2.Pass
 [T3 Bot1.Main1]
 Bot1.Hand.Plains.Play
 Bot1.Battlefield.Plains#2.Activate
 Bot1.Hand.Dusk Rose Reliquary.Cast
+Bot1.Choose(Pay mana)
 Bot1.Choose(Healer's Hawk)
 Bot1.Pass
 Bot1.Target(Treasure Token)

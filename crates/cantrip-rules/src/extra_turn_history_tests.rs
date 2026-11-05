@@ -26,7 +26,7 @@ fn game() -> Game {
 }
 
 fn begin_untap(game: &mut Game) {
-    let mut cx = Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let mut cx = Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     assert!(matches!(crate::turn::begin_step(&mut cx), Ok(Flow::Done)));
 }
 

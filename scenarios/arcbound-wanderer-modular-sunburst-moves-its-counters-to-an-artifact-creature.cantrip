@@ -38,6 +38,7 @@ Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Arcbound Wanderer.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T2 Bot2.Main1]
 Bot2.Hand.Forest.Play

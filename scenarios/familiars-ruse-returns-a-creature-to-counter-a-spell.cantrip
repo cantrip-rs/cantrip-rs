@@ -29,6 +29,8 @@ Bot2.Hand.Duress.Cast(Bot1)
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Familiar's Ruse.Cast(Duress)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 
 [Expect]

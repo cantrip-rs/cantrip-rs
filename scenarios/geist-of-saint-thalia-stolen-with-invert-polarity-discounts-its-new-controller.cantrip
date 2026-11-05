@@ -41,12 +41,14 @@ Bot1.Hand.Invert Polarity.Cast(Geist of Saint Thalia)
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Lightning Greaves.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 [T4 Bot2.Main1]
 Bot2.Battlefield.Mox Jet.Activate
 Bot2.Battlefield.Mox Pearl.Activate
 Bot2.Hand.Lightning Greaves.Cast
+Bot2.Choose(Close mana window)
 ? Bot2.Mana =
 Bot2.Pass
 [Bot2.Main2]

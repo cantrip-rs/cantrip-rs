@@ -16,7 +16,7 @@ fn copy_as_fractal(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let values = g.copiable_values(permanent).with_type(CardType::Creature).with_subtype(g.words(item.object).subtype(Subtype::Fractal)).sized(0, 0);
     let made = g.create_token_copies_of(values, item.controller, 1)?;
     g.end_sentence();
-    let puts: Vec<(ObjectId, CounterKind, i16)> = made.iter().map(|&token| (token, CounterKind::PlusOne, 6)).collect();
+    let puts: Vec<(ObjectId, CounterKind, i64)> = made.iter().map(|&token| (token, CounterKind::PlusOne, 6)).collect();
     g.add_counters_together(&puts);
     Ok(())
 }

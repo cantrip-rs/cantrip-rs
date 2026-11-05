@@ -27,6 +27,9 @@ Bot1.Hand.Mountain.Play
 Bot1.Hand.Irrigated Farmland.Activate(Ability: Cycling)
 Bot1.Battlefield.Mountain#1.Activate
 Bot1.Battlefield.Mountain#2.Activate
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

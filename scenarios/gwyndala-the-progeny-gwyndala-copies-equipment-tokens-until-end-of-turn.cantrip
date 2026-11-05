@@ -32,6 +32,7 @@ Bot2.Pass
 Bot1.Hand.Cranial Plating.Cast
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

@@ -64,6 +64,7 @@ Bot1.Battlefield.Island#3.Activate
 Bot1.Hand.Genesis Effect.Cast
 Bot1.Target(Bot1.Battlefield.Glacial Wall)
 Bot1.Target(Bot1.Battlefield.Island)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 
 [Expect]

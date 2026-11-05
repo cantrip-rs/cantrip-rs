@@ -4,7 +4,7 @@ use cantrip_oracle as oracle;
 
 /// "Put a decayed counter on each of X target creatures" (CR 122.1b): each one still a legal target (CR 608.2b).
 fn renew(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let puts: Vec<(ObjectId, CounterKind, i16)> =
+    let puts: Vec<(ObjectId, CounterKind, i64)> =
         targets::legal_objects(g, item).into_iter().map(|creature| (creature, CounterKind::Decayed, 1)).collect();
     g.add_counters_together(&puts);
     Ok(())

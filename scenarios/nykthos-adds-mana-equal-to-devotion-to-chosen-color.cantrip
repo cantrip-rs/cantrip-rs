@@ -41,6 +41,9 @@ Bot1.Pass
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Llanowar Elves.Activate
 Bot1.Battlefield.Nykthos, Shrine to Nyx.Activate(Ability: {2}; Color: Green)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {G}{G}{G}
 
 [Expect]

@@ -33,6 +33,11 @@ Bot1.Battlefield.Dire Flail.Activate(Ability: Craft)
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Battlefield.Mox Ruby#1.Activate
 Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter#1)
 [T2 Bot2.Main1]
 Bot2.Hand.Ornithopter.Cast

@@ -37,6 +37,7 @@ Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Thorin's Last Stand.Cast
 Bot1.Modes(Creatures you control get)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -54,6 +55,7 @@ Bot1.Hand.Thorin's Last Stand.Cast
 Bot1.Modes(Destroy target artifact or enchantment)
 ! Bot1.Target(Bot1.Battlefield.Plains#1)
 Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

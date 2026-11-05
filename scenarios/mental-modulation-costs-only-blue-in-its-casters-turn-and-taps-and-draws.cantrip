@@ -27,6 +27,7 @@ Bot2.Hand.Forest.Play
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Mental Modulation.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 ? Bot1.Hand.Count = 5
 ! Bot1.Hand.Mental Modulation.Cast(Bot2.Battlefield.Forest)

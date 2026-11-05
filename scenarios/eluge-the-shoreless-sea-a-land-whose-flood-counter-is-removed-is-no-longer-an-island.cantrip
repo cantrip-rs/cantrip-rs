@@ -54,6 +54,7 @@ Bot1.Pass
 Bot1.Hand.Island.Play
 Bot1.Hand.Brainstorm.Cast
 Bot1.Battlefield.Island.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -65,6 +66,7 @@ Bot2.Pass
 ? Bot1.Battlefield.Mountain.Subtypes = Island; Mountain
 Bot1.Hand.Brainstorm.Cast
 Bot1.Battlefield.Mountain.Activate(Ability: {U})
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

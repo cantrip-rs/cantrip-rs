@@ -29,6 +29,7 @@ Bot2.Attack(Memnite > Bot1)
 Bot1.Block(Steel Wall > Memnite)
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Glyph of Destruction.Cast(Steel Wall)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

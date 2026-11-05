@@ -21,6 +21,7 @@ Bot1.Hand.Monastery Swiftspear.Cast
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Greater Realm of Preservation.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Ruby.Activate
@@ -28,6 +29,7 @@ Bot1.Hand.Shock.Cast(Bot1)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Greater Realm of Preservation.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

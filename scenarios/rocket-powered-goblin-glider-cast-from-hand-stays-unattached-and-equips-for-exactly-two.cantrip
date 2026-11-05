@@ -40,6 +40,7 @@ Bot2.Pass
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Rocket-Powered Goblin Glider.Activate(Grizzly Bears)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

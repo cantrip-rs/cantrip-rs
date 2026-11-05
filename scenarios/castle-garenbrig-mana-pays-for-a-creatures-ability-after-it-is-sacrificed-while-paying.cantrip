@@ -50,6 +50,12 @@ Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Jet.Activate
 ? Stack.Count = 1
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {G}{G}{G}{G} (CreatureSpellsOrAbilitiesOfCreatures)
 Bot1.Pass
 Bot2.Pass

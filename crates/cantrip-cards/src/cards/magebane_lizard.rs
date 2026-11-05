@@ -8,7 +8,7 @@ use cantrip_oracle as oracle;
 fn deal_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Target::Player(player) = item.subject else { return Ok(()) };
     let spells = g.history().casts_by(player).filter(|c| !c.is(CardType::Creature)).count();
-    g.damage(item.object, Target::Player(player), spells.min(u16::MAX as usize) as u16);
+    g.damage(item.object, Target::Player(player), i64::from(spells.min(u16::MAX as usize) as u16));
     Ok(())
 }
 

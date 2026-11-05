@@ -49,6 +49,7 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
 Bot1.Modes(Casualty 1)
 ! Bot1.Choose(Ornithopter)
+Bot1.Choose(Silverquill, the Disputant)
 Bot1.Choose(Llanowar Elves)
 Bot1.Pass
 Bot2.Pass

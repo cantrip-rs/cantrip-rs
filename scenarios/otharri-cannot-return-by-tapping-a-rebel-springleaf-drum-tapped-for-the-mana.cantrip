@@ -57,6 +57,7 @@ Bot1.Battlefield.Springleaf Drum.Activate(Tap: Rebel Token; Color: White)
 Bot1.Battlefield.Mountain#1.Activate
 Bot1.Battlefield.Mountain#2.Activate
 Bot1.Battlefield.Mountain#3.Activate
+Bot1.Choose(Close mana window)
 ? Stack.Count = 0
 ? Bot1.Mana =
 ? Bot1.Graveyard = Otharri, Suns' Glory
@@ -68,6 +69,10 @@ Bot1.Battlefield.Plains#1.Activate
 Bot1.Battlefield.Mountain#1.Activate
 Bot1.Battlefield.Mountain#2.Activate
 Bot1.Battlefield.Mountain#3.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Rebel Token)
 Bot1.Pass
 Bot2.Pass

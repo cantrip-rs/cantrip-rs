@@ -250,7 +250,7 @@ TensorRT-style compilers see static shapes:
 This is `cantrip_obs::encode` (its schema version and every width, list and vocabulary are in `ai/encoding.json`,
 which a fast test keeps equal to the code; `encoder_hash` is its FNV-1a). Every token has the same shape: a kind
 (pad, game, player, card, hidden, pool card, event, option, pooled), a card row (u16; 0 is the unknown card), 9
-categoricals (zone 10, owner 9, controller 9, step 13, ask kind 27, event kind 66, from-zone 10, option token kind
+categoricals (zone 10, owner 9, controller 9, step 13, ask kind 27, event kind 67, from-zone 10, option token kind
 29, action 13), 4 pointers to other tokens (255 for none), 96 numbers (powers-of-two scales, rounded through f16)
 and a legal bit; dense, a 64-token position is 13.6 kB, and the compact form (the nonzero numbers only) is about
 1.4 kB. Tokens come in a fixed order: the game, the players, the objects in canonical order (a library's top 3 kept,
@@ -334,6 +334,7 @@ Each request kind therefore gets its own factoring, in `cantrip-obs`, with the c
 | blockers | per potential blocker: which attacker or none; constraints applied as masks where they are local, the whole block validated at the end |
 | N cards or targets | one at a time, a slot at a time, "done" when "up to" allows |
 | X | a choice among buckets up to what the seat can pay |
+| resolving number, more than 256 values | eight base-16 digits of the offset from the inclusive minimum; at most 16 choices per step |
 | damage assignment, divided amounts, counter removal | one unit or chunk at a time, in the rules' order where they impose one |
 | trigger order, card order | one at a time, "next first" |
 | a card name | among the format's names the belief and the seat's own deck make plausible, not all names |
@@ -359,6 +360,19 @@ How it is built (`cantrip_obs::factor`, `cantrip_ai::answer`):
   number of {X}; life for an X paid in life; loyalty for a loyalty X. It counts no cost reduction, so an X a reduction
   makes affordable may be masked. The engine answer moves X a step at a time (`IncreaseX`, `DecreaseX`) to the bucket
   and then confirms.
+- **Resolving numbers.** Small ranges whose values fit the legacy signed wire retain the existing modes representation.
+  Wider ranges, and small ranges above that signed limit, carry exact inclusive
+  `least` and `most` in raw `AskKind::ChooseNumber`, with `FactoredAnswer::Number` preserving the complete answer.
+  Eight base-16 digits encode the offset from `least`; a prefix is masked only when it has no completion within
+  `most - least`. This offers every legal value without enumerating the range, including both unsigned endpoints.
+  Existing `Tok::X` tokens carry digits 0 through 15. Bounds occupy eight byte-valued existing numeric slots
+  (`ASK[0..6]`, `X`, `X_MOST`); no value is rounded into a bucket. Raw observation schema 4 adds this shape, while
+  encoded schema 2, token vocabulary, dimensions and weights remain unchanged. The layout's raw-schema field changes
+  its computed encoder hash; existing small-choice encoded bytes are unchanged.
+  Each prefix remains observable: `game::CHOSEN` carries its length, and ordered chosen-token rows carry every prior
+  digit in `option::X`, marked `option::CHOSEN` with `option::ORDER`. Eight digits fit the existing sixteen-token
+  history; digit, count and order values remain exact after compact float16 encoding. Thus equal bounds and equal
+  current options do not alias different digit prefixes or positions.
 - **Payment** is no policy step: `AutoPay`, and paying an "unless pays" cost, are made by `cantrip_ai::pay` (the
   payment heuristic, moved from `cantrip-script`), one engine answer at a time.
 - **The decomposition rule** (`decompose`, the inverse): a list the answer orders (cards, targets, modes, colors,
@@ -1166,3 +1180,13 @@ An adversarial review read this plan against the code. It found these problems, 
   - unknown-card rows;
   - bench measurements for the core changes;
   - realistic times.
+
+
+### Composed foundation observation contract
+
+Raw observation schema 5 preserves the published counter IDs through Conqueror (63) and appends
+private foundation counter kinds after that prefix. It rejects raw schema 4, whose private counter
+IDs gave several numbers different meanings. The snow provenance and exact numeric-choice shapes
+remain present. Encoded schema 3 keeps its dimensions and payload layout: these named counters
+all use the existing other-counters feature. The layout's raw schema field changes the encoder
+hash; model manifests must use their actual compatible contract, never merely be retagged.

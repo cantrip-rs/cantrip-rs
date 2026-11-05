@@ -28,6 +28,7 @@ Bot1.Hand.Mox Emerald.Cast
 Bot1.Hand.Mox Jet.Cast
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Ghost Vacuum.Cast
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Faithless Looting.Cast
 Bot1.Pass

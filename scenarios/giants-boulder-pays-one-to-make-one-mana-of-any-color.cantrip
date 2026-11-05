@@ -24,6 +24,8 @@ Bot1.Hand.Giant's Boulder.Cast
 Bot1.Pass
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Giant's Boulder.Activate(Ability: Add one mana; Color: Red)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {R}
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
 Bot1.Pass

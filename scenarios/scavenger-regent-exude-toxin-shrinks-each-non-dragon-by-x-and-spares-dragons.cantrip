@@ -45,6 +45,7 @@ Bot2.Battlefield.Mox Emerald.Activate
 Bot2.Battlefield.Mox Sapphire.Activate
 Bot2.Battlefield.Mox Pearl.Activate
 Bot2.Hand.Scavenger Regent.Cast
+Bot2.Choose(Close mana window)
 Bot2.Battlefield.Mox Ruby.Activate
 Bot2.Battlefield.Swamp.Activate
 Bot2.Hand.Samut, Hazoret's Champion.Cast

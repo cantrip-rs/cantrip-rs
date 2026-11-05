@@ -38,6 +38,7 @@ Bot2.Hand.Mox Jet.Cast
 Bot2.Battlefield.Forest.Activate
 Bot2.Battlefield.Mox Emerald.Activate
 Bot2.Hand.Sword of the Meek.Cast
+Bot2.Choose(Close mana window)
 Bot2.Battlefield.Mox Pearl.Activate
 Bot2.Battlefield.Mox Jet.Activate
 Bot2.Hand.Disenchant.Cast(Sword of the Meek)

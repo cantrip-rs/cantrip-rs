@@ -7,7 +7,7 @@ use cantrip_oracle as oracle;
 /// (CR 608.2, 101.4). It activates no loyalty ability of the others (the rulings).
 fn loyalty_on_red_planeswalkers(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let red = g.words(item.object).color(Color::Red);
-    let walkers: Vec<(ObjectId, CounterKind, i16)> = g
+    let walkers: Vec<(ObjectId, CounterKind, i64)> = g
         .permanents_of(item.controller)
         .into_iter()
         .filter(|&id| {

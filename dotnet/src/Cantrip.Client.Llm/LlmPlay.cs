@@ -303,7 +303,8 @@ public sealed class LlmPlay : IAutoPlayer
 
 
             You will be shown the position from your seat and asked a question with lettered choices. Reply with the
-            letter, and nothing else. Every choice you are offered is legal; the rules have already been checked, so
+            letter, and nothing else. A numeric question instead gives an inclusive range: reply with the whole number
+            it asks for, exactly as its instructions say. Every choice you are offered is legal; the rules have already been checked, so
             you are choosing what is good, not what is allowed. Anything you are not asked about — which land to tap
             for a cost, and the like — is handled for you.
 

@@ -22,10 +22,12 @@ Bot1.Hand.Ornithopter.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Green)
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Icy Manipulator.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Battlefield.Mox Pearl.Activate
 ! Bot1.Battlefield.Icy Manipulator.Activate(Bot2)
 Bot1.Battlefield.Icy Manipulator.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

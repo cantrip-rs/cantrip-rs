@@ -19,7 +19,7 @@ pub fn lands<const N: i16>(g: &mut dyn Game, entering: &mut Entering) -> Result<
     if chosen.is_empty() {
         return Ok(());
     }
-    let sacrificed = g.sacrifice(you, &chosen).len() as i16;
-    entering.counters[CounterKind::PlusOne as usize] += N * sacrificed;
+    let sacrificed = i64::try_from(g.sacrifice(you, &chosen).len()).expect("sacrificed objects fit the native count domain");
+    entering.counters[CounterKind::PlusOne as usize] += i64::from(N) * sacrificed;
     Ok(())
 }

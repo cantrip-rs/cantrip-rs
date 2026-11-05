@@ -41,6 +41,8 @@ Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Forest.Activate
 ! Bot1.Graveyard.Lightning Bolt.Cast
 Bot1.Graveyard.Faerie Mastermind.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Forest)
 Bot1.Pass
 Bot2.Pass

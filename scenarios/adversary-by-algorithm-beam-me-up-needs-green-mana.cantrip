@@ -35,6 +35,10 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Forest.Play
 Bot1.Battlefield.Forest.Activate
 Bot1.Graveyard.Adversary by Algorithm.Cast(Ability: Beam me up)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Bot1.Battlefield.Illusion Token)
 Bot1.Pass
 Bot2.Pass

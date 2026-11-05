@@ -35,6 +35,7 @@ Bot2.Hand.Unsummon.Cast(Gingerbrute)
 Bot1.Battlefield.Mountain.Activate
 Bot1.Hand.Detonate.Cast(X: 0)
 Bot1.Target(Bot1.Battlefield.Mox Ruby)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T5 Bot1.Main2]
 

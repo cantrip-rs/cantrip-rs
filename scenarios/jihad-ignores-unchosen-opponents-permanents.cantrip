@@ -39,6 +39,7 @@ Bot3.Hand.Llanowar Elves.Cast
 [T4 Bot1.Main1]
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Hand.Jihad.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Colors(Green)
 Bot1.ChoosePlayer(Bot2)

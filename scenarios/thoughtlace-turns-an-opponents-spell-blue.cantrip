@@ -22,6 +22,7 @@ Bot2.Battlefield.Mox Ruby.Activate
 Bot2.Hand.Lightning Bolt.Cast(Bot1)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Thoughtlace.Cast(Stack.Lightning Bolt)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

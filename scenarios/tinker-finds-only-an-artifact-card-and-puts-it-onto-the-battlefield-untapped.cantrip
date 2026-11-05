@@ -26,6 +26,9 @@ Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Tinker.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mox Pearl)
 ! Bot1.Search(Island)
 ! Bot1.Search(Lightning Bolt)

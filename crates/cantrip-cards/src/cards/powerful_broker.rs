@@ -14,7 +14,7 @@ fn permanent_or_player(q: &dyn Query, asker: &Asker, t: Target) -> bool {
 fn give_another_of_each_kind(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some(object) = targets::object(g, item, 0) {
         let have = g.obj(object).counter_array();
-        let puts: Vec<(ObjectId, CounterKind, i16)> =
+        let puts: Vec<(ObjectId, CounterKind, i64)> =
             CounterKind::ALL.into_iter().filter(|&kind| have[kind as usize] > 0).map(|kind| (object, kind, 1)).collect();
         g.add_counters_together(&puts);
         return Ok(());

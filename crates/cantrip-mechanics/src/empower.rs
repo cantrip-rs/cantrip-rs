@@ -50,7 +50,7 @@ pub fn jace(g: &mut dyn Game, controller: PlayerId, source: ObjectId, n: i16) ->
         _ => choose::cards_from_kind(g, controller, source, Purpose::PutCounters(CounterKind::Loyalty, n.clamp(0, 255) as u8), "Jace planeswalker token", owned.clone(), owned, 1, false)?.first().copied(),
     };
     if let Some(jace) = jace {
-        g.add_counters(jace, CounterKind::Loyalty, n);
+        g.add_counters(jace, CounterKind::Loyalty, i64::from(n));
     }
     Ok(())
 }

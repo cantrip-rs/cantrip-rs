@@ -50,6 +50,7 @@ Bot1.Colors(Red; Red; Red; Red)
 ? Bot1.Battlefield.Phyrexian Dragon Engine.Damage = 0
 ! Bot1.Hand.Lightning Bolt.Cast(Bot2; Mana: short)
 Bot1.Hand.Magmatic Hellkite.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

@@ -24,6 +24,7 @@ Bot2.Hand.Tundra.Play
 Bot1.Battlefield.Black Lotus.Activate(Color: Green)
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Tsunami.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 [Expect]

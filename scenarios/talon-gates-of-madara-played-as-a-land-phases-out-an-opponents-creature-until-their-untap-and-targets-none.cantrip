@@ -35,6 +35,8 @@ Bot1.Pass
 Bot1.Battlefield.Talon Gates of Madara#1.Activate(Ability: {T}: Add {C}.)
 ? Bot1.Mana = {C}
 Bot1.Battlefield.Talon Gates of Madara#2.Activate(Ability: {1}; Color: U)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {U}
 
 [Expect]

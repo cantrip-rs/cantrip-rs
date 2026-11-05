@@ -8,7 +8,7 @@ fn hurricane(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         .filter(|&id| targets::has_flying_creature(g, id))
         .map(Target::Object).collect();
     recipients.extend(g.state().apnap().map(Target::Player));
-    let damage: Vec<_> = recipients.into_iter().map(|target| (item.object, target, item.x as u16)).collect();
+    let damage: Vec<_> = recipients.into_iter().map(|target| (item.object, target, i64::from(item.x))).collect();
     g.damage_together(&damage);
     Ok(())
 }

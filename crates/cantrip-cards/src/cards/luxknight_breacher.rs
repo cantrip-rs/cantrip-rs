@@ -14,7 +14,7 @@ fn enters_with_counters(g: &mut dyn Game, entering: &mut Entering) -> Result<(),
             chars.is(CardType::Creature) || chars.is(CardType::Artifact)
         })
         .count();
-    entering.counters[CounterKind::PlusOne as usize] += counted as i16;
+    entering.counters[CounterKind::PlusOne as usize] += i64::try_from(counted).expect("battlefield count fits i64");
     Ok(())
 }
 

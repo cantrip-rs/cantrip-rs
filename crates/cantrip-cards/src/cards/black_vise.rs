@@ -52,7 +52,7 @@ fn artifact_deals_x_damage_player(
             .into_iter()
             .collect::<Vec<ObjectId>>()
             .len() as i64 - 4)
-            .max(0) as u16
+            .max(0)
     };
     let recipients_1 = item
         .subject
@@ -60,7 +60,7 @@ fn artifact_deals_x_damage_player(
         .into_iter()
         .map(Target::Player)
         .collect::<Vec<Target>>();
-    let batch: Vec<(ObjectId, Target, u16)> = recipients_1
+    let batch: Vec<(ObjectId, Target, i64)> = recipients_1
         .iter()
         .map(|t| (item.object, *t, amount_1))
         .collect();

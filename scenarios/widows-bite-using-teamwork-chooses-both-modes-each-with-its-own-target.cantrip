@@ -55,6 +55,8 @@ Bot1.Modes(Teamwork 3)
 Bot1.Target(Bot1.Battlefield.Savannah Lions)
 Bot1.Target(Bot1.Battlefield.Centaur Courser)
 ! Bot1.Choose(Savannah Lions)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Centaur Courser)
 ? Bot1.Mana =
 Bot1.Pass

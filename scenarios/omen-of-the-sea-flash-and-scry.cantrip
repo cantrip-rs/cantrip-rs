@@ -29,6 +29,10 @@ Bot1.Arrange(Shock | Lightning Bolt)
 Bot1.Hand.Black Lotus.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Battlefield.Omen of the Sea.Activate
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Arrange(Sol Ring | Hill Giant)
 [Expect]

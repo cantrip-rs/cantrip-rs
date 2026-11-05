@@ -14,7 +14,7 @@ fn noncombat_damage_below_power(q: &dyn Query, asker: &Asker, p: &Proposal) -> b
     let power = q.chars(asker.source).power.unwrap_or(0);
     d.amount > 0
         && !d.combat
-        && i32::from(d.amount) < i32::from(power)
+        && d.amount < i64::from(power)
         && q.controller(d.source) == asker.controller
         && q.chars(d.source).colors.has(q.words(asker.source).color(Color::Red))
         && q.state().opponents(asker.controller).any(|opponent| opponent == player)
@@ -23,7 +23,7 @@ fn noncombat_damage_below_power(q: &dyn Query, asker: &Asker, p: &Proposal) -> b
 /// "That source deals damage equal to Ojer Axonil's power instead."
 fn equal_to_power(q: &dyn Query, asker: &Asker, p: &mut Proposal) {
     if let Proposal::Damage(d) = p {
-        d.amount = q.chars(asker.source).power.unwrap_or(0).max(0) as u16;
+        d.amount = i64::from(q.chars(asker.source).power.unwrap_or(0).max(0) as u16);
     }
 }
 
@@ -32,13 +32,13 @@ fn equal_to_power(q: &dyn Query, asker: &Asker, p: &mut Proposal) {
 /// changed control still counts), to any player or permanent, added up across sources.
 fn red_sources_dealt_four_noncombat_damage(q: &dyn Query, asker: &Asker) -> bool {
     let red = q.words(asker.source).color(Color::Red);
-    let dealt: u32 = q
+    let dealt: i64 = q
         .history()
         .this_turn()
         .iter()
         .filter_map(|r| match r.event {
             Event::Damage { amount, kind, controller, .. } if !kind.is_combat() && controller == asker.controller && kind.colors().has(red) => {
-                Some(u32::from(amount))
+                Some(amount)
             }
             _ => None,
         })

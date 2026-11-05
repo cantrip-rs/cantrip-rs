@@ -34,7 +34,7 @@ fn creature_deals_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspe
     let Target::Object(creature) = item.subject else { return Ok(()) };
     if g.target_legal(item, 0) {
         let power = g.chars(creature).power.unwrap_or(0).max(0) as u16;
-        g.damage(creature, item.target(0), power);
+        g.damage(creature, item.target(0), i64::from(power));
     }
     Ok(())
 }

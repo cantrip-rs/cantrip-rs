@@ -28,6 +28,7 @@ Bot2.Hand.Mox Sapphire.Cast
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Culling the Weak.Cast
+Bot1.Choose(Pay mana)
 Bot1.Choose(Elvish Mystic)
 Bot2.Battlefield.Island.Activate
 Bot2.Battlefield.Mox Sapphire.Activate

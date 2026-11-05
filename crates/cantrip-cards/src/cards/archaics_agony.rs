@@ -10,7 +10,7 @@ use cantrip_oracle as oracle;
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let target = item.target(0);
     let x = sunburst::colors_spent(g, item.object) as u16;
-    if let Some(result) = g.damage_result(item.object, target, x)
+    if let Some(result) = g.damage_result(item.object, target, i64::from(x))
         && result.target == target
         && result.excess > 0
     {

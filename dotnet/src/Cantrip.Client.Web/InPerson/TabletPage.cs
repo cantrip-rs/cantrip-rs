@@ -617,7 +617,7 @@ public sealed partial class TabletPage : UserControl
 
         foreach (RestrictedManaView restricted in player.RestrictedMana)
         {
-            mana.Add(new PlayerRail.ManaChipSpec(restricted.Type, restricted.Amount, "restricted", null, null));
+            mana.Add(new PlayerRail.ManaChipSpec(restricted.Type, restricted.Amount, restricted.Snow ? "snow" : "restricted", null, null));
         }
 
         half.Rail.Update(

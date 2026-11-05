@@ -38,6 +38,10 @@ Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Figure of Destiny)
 [T3 Bot1.Main2]
 

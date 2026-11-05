@@ -6,8 +6,8 @@ use cantrip_oracle as oracle;
 /// counted once, as the spell resolves, and all the damage is dealt at once.
 fn damage_each_flier(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let amount = devotion::devotion(g, item.controller, Color::Green) as u16;
-    let batch: Vec<(ObjectId, Target, u16)> =
-        g.state().battlefield().iter().copied().filter(|&id| targets::has_flying_creature(g, id)).map(|id| (item.object, Target::Object(id), amount)).collect();
+    let batch: Vec<(ObjectId, Target, i64)> =
+        g.state().battlefield().iter().copied().filter(|&id| targets::has_flying_creature(g, id)).map(|id| (item.object, Target::Object(id), i64::from(amount))).collect();
     g.damage_together(&batch);
     Ok(())
 }

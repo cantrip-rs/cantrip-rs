@@ -16,6 +16,7 @@ Bot1.Hand.Ornithopter.Cast
 Bot1.Battlefield.Mox Emerald.Activate
 ! Bot1.Hand.Living Artifact.Cast(Bot1.Battlefield.Island)
 Bot1.Hand.Living Artifact.Cast(Ornithopter)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Battlefield.Mox Jet.Activate

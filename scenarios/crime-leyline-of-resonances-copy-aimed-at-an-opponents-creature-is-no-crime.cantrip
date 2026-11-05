@@ -38,6 +38,7 @@ Bot1.Hand.Raven of Fell Omens.Cast
 Bot1.Hand.Mountain.Play
 Bot1.Battlefield.Mountain.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 Bot1.Pass
 Bot2.Pass

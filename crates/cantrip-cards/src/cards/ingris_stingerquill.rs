@@ -7,7 +7,7 @@ use cantrip_oracle as oracle;
 /// left the battlefield by now (CR 113.7a, 608.2h); one damage event for each opponent still in the game, dealt together.
 fn attacker_deals_1_to_each_opponent(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Target::Object(attacker) = item.subject else { return Ok(()) };
-    let hits: Vec<(ObjectId, Target, u16)> = g.state().opponents(item.controller).map(|p| (attacker, Target::Player(p), 1)).collect();
+    let hits: Vec<(ObjectId, Target, i64)> = g.state().opponents(item.controller).map(|p| (attacker, Target::Player(p), 1)).collect();
     g.damage_together(&hits);
     Ok(())
 }

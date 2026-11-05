@@ -39,7 +39,7 @@ fn tap_myr(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         _ => None,
     };
     if let Some(target) = hit {
-        g.damage(item.object, target, x as u16);
+        g.damage(item.object, target, i64::from(x as u16));
     }
     Ok(())
 }

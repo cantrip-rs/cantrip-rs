@@ -31,6 +31,8 @@ Bot2.Pass
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Braided Net.Activate(Ability: Craft)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Graveyard.Black Lotus)
 Bot1.Pass
 Bot2.Pass

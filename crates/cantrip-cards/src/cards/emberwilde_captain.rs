@@ -25,8 +25,8 @@ fn you_are_the_monarch(q: &dyn Query, asker: &Asker) -> bool {
 /// Dealt by the permanent, equal to the number of cards in that player's hand as the ability resolves.
 fn burn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Target::Player(p) = item.subject {
-        let cards = u16::try_from(g.state().zone(Zone::hand(p)).len()).unwrap_or(u16::MAX);
-        g.damage(item.object, Target::Player(p), cards);
+        let amount = cantrip_mechanics::effects::damage_for_cards_in_hand(g, p);
+        g.damage(item.object, Target::Player(p), i64::from(amount));
     }
     Ok(())
 }

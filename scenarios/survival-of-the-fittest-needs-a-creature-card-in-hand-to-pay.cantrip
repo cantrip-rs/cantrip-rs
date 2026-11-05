@@ -29,6 +29,7 @@ Bot1.Hand.Survival of the Fittest.Cast
 ? Bot1.Hand = Lightning Bolt; Lightning Bolt; Forest; Forest; Elvish Mystic
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Survival of the Fittest.Activate
+Bot1.Choose(Pay mana)
 Bot1.Choose(Elvish Mystic)
 Bot1.Search(Noble Hierarch)
 

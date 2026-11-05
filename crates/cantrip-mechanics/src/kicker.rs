@@ -10,7 +10,7 @@ use cantrip_api::*;
 /// Enters with a counter of kind `KIND` for each time it was kicked. An object put onto the battlefield without being
 /// cast was never kicked and enters bare.
 pub fn enters_with_counters<const KIND: usize>(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
-    entering.counters[KIND] += g.obj(entering.object).kicked as i16;
+    entering.counters[KIND] += i64::from(g.obj(entering.object).kicked as i16);
     Ok(())
 }
 

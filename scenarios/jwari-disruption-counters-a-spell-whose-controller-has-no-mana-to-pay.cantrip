@@ -26,6 +26,7 @@ Bot2.Hand.Duress.Cast(Bot1)
 Bot1.Hand.Jwari Disruption.Cast(Duress)
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = 
 [T2 Bot2.Main2]
 

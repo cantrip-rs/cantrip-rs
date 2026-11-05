@@ -39,6 +39,8 @@ Bot1.Battlefield.Mox Sapphire#2.Activate
 Bot1.Hand.Countersculpt.Cast
 Bot1.Modes(Behold a Jace)
 Bot1.Target(Stack.Lightning Bolt)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Jace Token)
 [T2 Bot2.Main2]
 

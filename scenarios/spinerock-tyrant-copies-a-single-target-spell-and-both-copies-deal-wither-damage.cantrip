@@ -42,6 +42,7 @@ Bot2.Pass
 Bot1.Hand.Mountain.Play
 Bot1.Battlefield.Mountain#3.Activate
 Bot1.Hand.Lightning Bolt.Cast(Spinerock Tyrant)
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 Bot1.Pass
 Bot2.Pass

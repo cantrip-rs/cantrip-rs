@@ -39,6 +39,7 @@ Bot1.Pass
 Bot1.Battlefield.Mox Pearl.Activate
 ? Bot1.Mana = {W}
 Bot1.Battlefield.Greatsword of Tyr.Activate(Dwarven Mauler)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Attack(Dwarven Mauler > Bot2)

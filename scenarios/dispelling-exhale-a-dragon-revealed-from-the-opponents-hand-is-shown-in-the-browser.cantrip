@@ -33,6 +33,8 @@ Bot2.Battlefield.Mox Sapphire#2.Activate
 Bot2.Hand.Dispelling Exhale.Cast
 Bot2.Modes(Behold a Dragon)
 Bot2.Target(Stack.Lightning Bolt)
+Bot2.Choose(Pay mana)
+Bot2.Choose(Pay mana)
 Bot2.Choose(Kokusho, the Evening Star)
 ? Client.Bot1.OpponentHand = Kokusho, the Evening Star
 ? Client.Bot1.Log.Has = Bot2 reveals [Kokusho, the Evening Star].

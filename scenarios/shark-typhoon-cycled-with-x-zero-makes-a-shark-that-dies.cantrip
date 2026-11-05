@@ -18,6 +18,8 @@ Bot1.Hand.Mox Sapphire.Cast
 Bot1.Hand.Shark Typhoon.Activate(Ability: Cycling; X: 0)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 ? Stack.Count = 2
 ? LeftBattlefield.Count = 0

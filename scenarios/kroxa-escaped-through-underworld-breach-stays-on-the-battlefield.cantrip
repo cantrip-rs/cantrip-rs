@@ -47,6 +47,8 @@ Bot1.Battlefield.Lotus Petal.Activate(Color: Red)
 Bot1.Battlefield.Lotus Petal.Activate(Color: Red)
 ? Bot1.Graveyard.Count = 4
 Bot1.Graveyard.Kroxa, Titan of Death's Hunger.Cast(Ability: Escape)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Lotus Petal; Lotus Petal; Lotus Petal)
 Bot1.Triggers(sacrifice it unless; each opponent discards)
 ? Bot1.Mana = {R}

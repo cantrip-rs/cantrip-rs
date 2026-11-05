@@ -8,7 +8,7 @@ use cantrip_oracle as oracle;
 /// creatures (CR 109.2) get one each, put at once; a convoker that left or is no longer a creature gets none, and a creature
 /// that did not convoke gets none.
 fn counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let puts: Vec<(ObjectId, CounterKind, i16)> = convoking_creatures_on_the_battlefield(g, item.object)
+    let puts: Vec<(ObjectId, CounterKind, i64)> = convoking_creatures_on_the_battlefield(g, item.object)
         .into_iter()
         .map(|creature| (creature, CounterKind::PlusOne, 1))
         .collect();

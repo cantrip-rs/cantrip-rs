@@ -1,4 +1,4 @@
-# Flashback pays the additional cost too: on turn 9 Bot1 has five untapped Swamps for {4}{B} but nothing to sacrifice, so the flashback is not offered (refusal); an Ornithopter makes it so (the positive control). Bot2 counters
+# Flashback pays the additional cost too: on turn 9 Bot1 has five untapped Swamps for {4}{B} but nothing to sacrifice, so a flashback attempt cannot finish and rolls back (CR 733); an Ornithopter makes it payable (the positive control). Bot2 counters
 # the flashback with Counterspell and the Insight is exiled anyway - "then exile it" does not need the spell to resolve (CR 702.34a) - the Ornithopter already sacrificed and nothing drawn.
 
 [Bot1 Deck]
@@ -25,6 +25,8 @@ Bot1.Hand.Mox Jet.Cast
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Swamp.Activate
 Bot1.Hand.Eviscerator's Insight.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mox Jet)
 [T2 Bot2.Main1]
 Bot2.Hand.Island.Play
@@ -47,10 +49,20 @@ Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp.Activate
-! Bot1.Graveyard.Eviscerator's Insight.Cast(Ability: Flashback)
+Bot1.Graveyard.Eviscerator's Insight.Cast(Ability: Flashback)
+? Bot1.Graveyard.Eviscerator's Insight.Colors = Black
+? Bot1.Mana = {B}{B}{B}{B}{B}
+? Bot1.Life = 20
+? Exile.Count = 0
+? Stack.Count = 0
 Bot1.Hand.Ornithopter.Cast
 Bot1.Pass
 Bot1.Graveyard.Eviscerator's Insight.Cast(Ability: Flashback)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 Bot2.Battlefield.Island.Activate
 Bot2.Battlefield.Island#2.Activate

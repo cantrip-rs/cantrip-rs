@@ -48,6 +48,7 @@ Bot3.Hand.Savannah Lions.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 ! Bot1.Hand.Jovial Evil.Cast(Bot1)
 Bot1.Hand.Jovial Evil.Cast(Bot2)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

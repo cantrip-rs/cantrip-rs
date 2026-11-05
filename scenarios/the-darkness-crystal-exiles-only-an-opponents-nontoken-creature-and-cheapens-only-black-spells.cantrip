@@ -58,6 +58,7 @@ Bot1.Hand.Mountain.Play
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Withering Torment.Cast(Bot2.Battlefield.Memnite)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -68,6 +69,7 @@ Bot2.Pass
 Bot2.Battlefield.Plains.Activate
 Bot2.Battlefield.Mox Jet.Activate
 Bot2.Hand.Night's Whisper.Cast
+Bot2.Choose(Close mana window)
 ? Bot2.Mana =
 Bot2.Pass
 [T5 Bot1.Main1]
@@ -75,6 +77,7 @@ Bot1.Hand.Mountain.Play
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Mountain.Activate
 Bot1.Hand.Pyroclasm.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 [T6 Bot2.Upkeep]

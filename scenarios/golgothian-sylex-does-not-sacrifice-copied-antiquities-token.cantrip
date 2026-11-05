@@ -25,6 +25,7 @@ Bot1.Pass
 Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Golgothian Sylex.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
@@ -36,6 +37,7 @@ Bot1.Battlefield.Kiki-Jiki, Mirror Breaker.Activate(Ornithopter)
 Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Golgothian Sylex.Activate
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

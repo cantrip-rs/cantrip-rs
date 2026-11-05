@@ -41,7 +41,7 @@ fn artifact_less(q: &dyn Query, _: ObjectId, _: PlayerId, costed: Costed, _: &[T
 fn chapter_three(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(opponent) = targets::player(g, item, 0) else { return Ok(()) };
     let x = g.permanents_of(item.controller).into_iter().filter(|&id| g.chars(id).is(CardType::Artifact)).map(|id| g.mana_value(id)).max().unwrap_or(0);
-    g.damage(item.object, Target::Player(opponent), x as u16);
+    g.damage(item.object, Target::Player(opponent), i64::from(x as u16));
     Ok(())
 }
 

@@ -84,6 +84,7 @@ Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 ! Bot1.Battlefield.Liliana the Repentant.Activate(Ability: Exhaust; Bot2.Graveyard.Ornithopter)
 Bot1.Battlefield.Liliana the Repentant.Activate(Ability: Exhaust; Bot1.Graveyard.Ornithopter)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

@@ -8,7 +8,7 @@ use cantrip_oracle as oracle;
 /// redirection sent it to.
 fn retaliate(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let before = g.history().head() as usize;
-    g.damage(item.object, item.target(0), item.data[0] as u16);
+    g.damage(item.object, item.target(0), item.matched_damage_amount());
     let dealt_to = |r: &Record| match r.event {
         Event::Damage { source, target: Target::Player(p), amount, .. } if source == item.object && amount > 0 => Some(p),
         _ => None,
@@ -26,7 +26,7 @@ fn retaliate(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 }
 
 pub static CARD: CardDef = CardDef {
-    abilities: &[triggered(triggers::THIS_DEALT_DAMAGE, retaliate, "Whenever this creature is dealt damage, it deals that much damage to any other target. If a player is dealt damage this way, they can't gain life for the rest of the game.")
+    abilities: &[triggered(triggers::THIS_TAKES_DAMAGE, retaliate, "Whenever this creature is dealt damage, it deals that much damage to any other target. If a player is dealt damage this way, they can't gain life for the rest of the game.").damage_amount()
         .targets(&[targets::ANY_OTHER_TARGET])
         .sums_per_subject()],
     ..oracle::SCREAMING_NEMESIS

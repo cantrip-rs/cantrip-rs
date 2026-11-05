@@ -41,7 +41,7 @@ fn ally(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let opponents: Vec<PlayerId> = g.state().opponents(you).collect();
     let owned = opponents.into_iter().flat_map(|p| g.permanents_of(p)).filter(|&id| g.obj(id).owner == you).count();
     for token in tokens::create(g, you, &tokens::ALLY, 1)? {
-        g.add_counters(token, CounterKind::PlusOne, owned as i16);
+        g.add_counters(token, CounterKind::PlusOne, i64::from(owned as i16));
     }
     Ok(())
 }

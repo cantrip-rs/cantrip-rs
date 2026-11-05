@@ -41,6 +41,7 @@ Bot2.Battlefield.Mountain.Activate
 ? Bot1.Mana = {R}
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {R}
 Bot1.Pass
 Bot2.Pass

@@ -22,7 +22,7 @@ fn creature_deals_combat_damage_to_you(q: &dyn Query, me: &Asker, event: &Event)
 fn tap_them_and_stun(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let them = g.event_objects(item).to_vec();
     g.tap_together(&them);
-    let puts: Vec<(ObjectId, CounterKind, i16)> = them.into_iter().map(|id| (id, CounterKind::Stun, 1)).collect();
+    let puts: Vec<(ObjectId, CounterKind, i64)> = them.into_iter().map(|id| (id, CounterKind::Stun, 1)).collect();
     g.add_counters_together(&puts);
     Ok(())
 }

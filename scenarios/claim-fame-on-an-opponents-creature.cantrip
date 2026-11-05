@@ -27,6 +27,7 @@ Bot1.Hand.Faithless Looting.Cast
 Bot1.Pass
 Bot1.Choose(Claim // Fame; Wind Drake)
 Bot1.Graveyard.Claim // Fame.Cast(Bot2.Battlefield.Ornithopter; Ability: Fame)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

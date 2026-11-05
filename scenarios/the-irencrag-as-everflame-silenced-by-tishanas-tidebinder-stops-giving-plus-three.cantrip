@@ -31,6 +31,7 @@ Bot1.Hand.Mox Jet.Cast
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.The Irencrag.Cast
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Plains.Activate
 Bot1.Hand.Aunt May.Cast
 Bot1.Pass

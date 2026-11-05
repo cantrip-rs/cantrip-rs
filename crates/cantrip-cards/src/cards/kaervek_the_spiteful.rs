@@ -17,7 +17,7 @@ pub static CARD: CardDef = CardDef {
         static_ability(
             Layer::PtModify,
             other_creatures_get_1_1_affects,
-            cantrip_mechanics::statics::plus_pt::<-1, -1>,
+            cantrip_mechanics::statics::plus_pt_saturating::<-1, -1>,
             "Other creatures get -1/-1.",
         ),
     ],

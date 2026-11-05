@@ -18,7 +18,7 @@ pub const fn way(cost: ManaCost, text: &'static str) -> WayDef {
 /// spell it is entering from, which keeps the way it was cast for.
 pub fn enters<const N: i16>(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
     if g.obj(entering.object).cast_way == 1 {
-        entering.counters[TIME] += N;
+        entering.counters[TIME] += i64::from(N);
     }
     Ok(())
 }

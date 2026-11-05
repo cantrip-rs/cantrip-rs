@@ -13,7 +13,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let cards: Vec<(ObjectId, PlayerId)> = targets::legal_objects(g, item).into_iter().map(|c| (c, you)).collect();
     let entered = g.put_all_onto_battlefield(&cards)?;
     g.end_sentence();
-    let counters: Vec<(ObjectId, CounterKind, i16)> = entered.into_iter().filter(|&id| g.is_on_battlefield(id)).map(|id| (id, CounterKind::PlusOne, 1)).collect();
+    let counters: Vec<(ObjectId, CounterKind, i64)> = entered.into_iter().filter(|&id| g.is_on_battlefield(id)).map(|id| (id, CounterKind::PlusOne, 1)).collect();
     g.add_counters_together(&counters);
     Ok(())
 }

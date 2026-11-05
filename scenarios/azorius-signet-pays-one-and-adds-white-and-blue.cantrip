@@ -28,9 +28,12 @@ Bot1.Battlefield.Plains#2.Activate
 ! Bot1.Battlefield.Azorius Signet.Activate(Color: Black)
 ! Bot1.Battlefield.Azorius Signet.Activate(Color: Colorless)
 Bot1.Battlefield.Azorius Signet.Activate
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {W}{W}{U}
 ! Bot1.Battlefield.Azorius Signet.Activate
 Bot1.Hand.Giver of Runes.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {W}{U}
 
 [Expect]

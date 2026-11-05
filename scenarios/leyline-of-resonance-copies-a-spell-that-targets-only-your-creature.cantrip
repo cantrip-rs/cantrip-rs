@@ -26,6 +26,7 @@ Bot1.Pass
 Bot1.Hand.Forest.Play
 Bot1.Battlefield.Forest#1.Activate
 Bot1.Hand.Snakeskin Veil.Cast(Llanowar Elves)
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 Bot1.Pass
 Bot1.Pass

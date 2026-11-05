@@ -10,20 +10,20 @@ use cantrip_api::*;
 /// Double the number of `kind` counters on each of `permanents`, each one's count read before any is doubled, and all the
 /// counters put on at once (CR 608.2, 101.4: one event, CR 603.2c).
 pub fn counters(g: &mut dyn Game, permanents: &[ObjectId], kind: CounterKind) {
-    let puts: Vec<(ObjectId, CounterKind, i16)> =
-        permanents.iter().map(|&id| (id, kind, g.obj(id).counters(kind))).filter(|&(_, _, n)| n > 0).collect();
+    let puts: Vec<(ObjectId, CounterKind, i64)> =
+        permanents.iter().map(|&id| (id, kind, i64::from(g.obj(id).counters(kind)))).filter(|&(_, _, n)| n > 0).collect();
     g.add_counters_together(&puts);
 }
 
 /// Double the number of each kind of counter on each of `permanents` (CR 701.10e): every count of every kind is read before
 /// any is doubled, and all the counters are put on at once, as one event. Ultimate Spider-Man prints it.
 pub fn each_kind_of_counter(g: &mut dyn Game, permanents: &[ObjectId]) {
-    let mut puts: Vec<(ObjectId, CounterKind, i16)> = Vec::new();
+    let mut puts: Vec<(ObjectId, CounterKind, i64)> = Vec::new();
     for &id in permanents {
         for kind in CounterKind::ALL {
             let have = g.obj(id).counters(kind);
             if have > 0 {
-                puts.push((id, kind, have));
+                puts.push((id, kind, i64::from(have)));
             }
         }
     }
@@ -49,9 +49,9 @@ pub fn power(g: &mut dyn Game, source: ObjectId, creature: ObjectId) {
 pub fn life_total(g: &mut dyn Game, player: PlayerId) {
     let life = g.state().player(player).life;
     if life >= 0 {
-        g.gain_life(player, life);
+        g.gain_life(player, i64::from(life));
     } else {
-        g.lose_life(player, -life);
+        g.lose_life(player, -i64::from(life));
     }
 }
 

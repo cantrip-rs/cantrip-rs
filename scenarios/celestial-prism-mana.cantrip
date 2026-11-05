@@ -15,6 +15,7 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Hand.Mox Sapphire.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Hand.Celestial Prism.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -23,6 +24,9 @@ Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Island.Play
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Celestial Prism.Activate(Color: Red)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {R}
 
 [Expect]

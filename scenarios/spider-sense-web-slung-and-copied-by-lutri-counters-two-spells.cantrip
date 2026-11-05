@@ -34,6 +34,7 @@ Bot2.Battlefield.Mountain.Activate
 Bot2.Hand.Lightning Bolt.Cast(Bot1)
 Bot1.Hand.Spider-Sense.Cast(Stack.Lightning Bolt; Ability: Web-slinging)
 Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 Bot2.Battlefield.Mox Ruby.Activate
 Bot2.Hand.Lightning Bolt.Cast(Bot1)

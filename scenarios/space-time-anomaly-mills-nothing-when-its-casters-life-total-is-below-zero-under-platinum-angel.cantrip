@@ -45,6 +45,7 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 ? Bot1.Life = -1
 Bot1.Hand.Space-Time Anomaly.Cast(Bot2)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

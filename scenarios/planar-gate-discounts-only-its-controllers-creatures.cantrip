@@ -30,6 +30,7 @@ Bot1.Pass
 Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
 Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
 Bot1.Hand.Planar Gate.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 [T2 Bot2.Main1]
@@ -51,6 +52,7 @@ Bot1.Pass
 [T5 Bot1.Main1]
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -62,6 +64,7 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Grizzly Bears.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {W}
 Bot1.Pass
 Bot2.Pass

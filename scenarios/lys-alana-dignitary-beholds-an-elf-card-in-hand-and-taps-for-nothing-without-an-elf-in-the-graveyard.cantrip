@@ -23,6 +23,8 @@ Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Lys Alana Dignitary.Cast
 Bot1.Modes(Behold an Elf)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Elvish Mystic)
 Bot1.Pass
 Bot2.Pass

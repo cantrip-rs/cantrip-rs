@@ -22,6 +22,10 @@ Bot1.Attack(Ornithopter > Bot2)
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Battlefield.Plains.Activate
 Bot1.Hand.Leonardo, Sewer Samurai.Cast(Ability: Sneak)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass

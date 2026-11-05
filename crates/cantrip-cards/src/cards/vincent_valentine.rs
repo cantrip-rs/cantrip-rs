@@ -20,7 +20,7 @@ fn creature_an_opponent_controls_dies(q: &dyn Query, me: &Asker, event: &Event) 
 fn counters_equal_to_its_power(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Target::Object(died) = item.subject else { return Ok(()) };
     let power = targets::power_or_last_known(g, died);
-    g.add_counters_together(&[(item.object, CounterKind::PlusOne, power)]);
+    g.add_counters_together(&[(item.object, CounterKind::PlusOne, i64::from(power))]);
     Ok(())
 }
 

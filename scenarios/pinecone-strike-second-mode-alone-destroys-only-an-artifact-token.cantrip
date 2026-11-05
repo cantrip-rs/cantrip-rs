@@ -41,6 +41,7 @@ Bot1.Hand.Pinecone Strike.Cast
 Bot1.Modes(2)
 ! Bot1.Target(Bot1.Battlefield.Mox Jet)
 Bot1.Target(Treasure Token)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

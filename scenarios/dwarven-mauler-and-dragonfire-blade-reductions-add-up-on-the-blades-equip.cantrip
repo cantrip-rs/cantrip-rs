@@ -23,6 +23,7 @@ Bot1.Hand.Dragonfire Blade.Cast
 Bot1.Battlefield.Mox Jet.Activate
 ? Bot1.Mana = {B}
 Bot1.Battlefield.Dragonfire Blade.Activate(Dwarven Mauler)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 

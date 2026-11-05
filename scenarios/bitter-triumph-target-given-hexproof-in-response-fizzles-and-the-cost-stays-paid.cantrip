@@ -35,6 +35,8 @@ Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp#2.Activate
 Bot1.Hand.Bitter Triumph.Cast(Bot2.Battlefield.Basking Rootwalla)
 Bot1.Modes(Discard a card)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Island)
 Bot2.Battlefield.Forest.Activate
 Bot2.Hand.Snakeskin Veil.Cast(Bot2.Battlefield.Basking Rootwalla)

@@ -32,12 +32,14 @@ Bot1.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Propaganda.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
 Bot1.Hand.Island.Play
 Bot1.Battlefield.Island.Activate
 Bot1.Hand.Brain Freeze.Cast(Bot2)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -45,6 +47,7 @@ Bot2.Pass
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.March of the Machines.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

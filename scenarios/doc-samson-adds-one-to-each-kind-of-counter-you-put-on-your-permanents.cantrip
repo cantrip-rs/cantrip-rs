@@ -55,6 +55,7 @@ Bot1.Hand.Go Nuts!.Cast
 Bot1.Modes(Cast without teamwork)
 Bot1.Modes(1)
 Bot1.Target(Bot1.Battlefield.Doc Samson, Super Psychiatrist)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {G}{G}
 Bot1.Pass
 Bot2.Pass

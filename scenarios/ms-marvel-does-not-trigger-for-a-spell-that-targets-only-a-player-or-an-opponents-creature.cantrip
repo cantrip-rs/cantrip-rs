@@ -47,6 +47,7 @@ Bot2.Pass
 [T5 Bot1.Main1]
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Lightning Bolt.Cast(Ms. Marvel, Kamala Khan)
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 Bot1.Pass
 Bot2.Pass

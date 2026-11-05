@@ -36,6 +36,8 @@ Bot1.Hand.Mountain.Play
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mountain.Activate
 Bot1.Hand.Deadly Dispute.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Munitions)
 Bot1.Target(Bot2)
 Bot1.Pass

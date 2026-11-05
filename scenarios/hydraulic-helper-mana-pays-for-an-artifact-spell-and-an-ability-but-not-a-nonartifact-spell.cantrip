@@ -29,6 +29,7 @@ Bot1.Pass
 [T5 Bot1.Main1]
 Bot1.Battlefield.Hydraulic Helper.Activate
 Bot1.Battlefield.Aether Spellbomb.Activate(Ability: Draw)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 

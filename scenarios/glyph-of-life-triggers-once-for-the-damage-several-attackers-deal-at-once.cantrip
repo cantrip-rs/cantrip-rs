@@ -40,6 +40,7 @@ Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Blech, Loafing Pest.Cast
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Glyph of Life.Cast(Bot2.Battlefield.Wall of Mist)
 Bot1.Pass

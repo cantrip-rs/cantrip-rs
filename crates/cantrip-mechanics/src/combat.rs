@@ -48,7 +48,7 @@ pub fn choose_among(g: &mut dyn Game, you: PlayerId, source: ObjectId, candidate
         0 => None,
         1 => Some(candidates[0]),
         _ => {
-            let ask = RequestKind::ChooseTarget { label: "Choose what it attacks as it enters attacking: a player, a planeswalker or a battle.", slot_player: None, together: None,
+            let ask = RequestKind::ChooseTarget { replacing: None, label: "Choose what it attacks as it enters attacking: a player, a planeswalker or a battle.", slot_player: None, together: None,
                 source,
                 purpose: Purpose::EnterAttacking,
                 candidates: candidates.to_vec(),
@@ -119,6 +119,29 @@ pub fn create_attacking(g: &mut dyn Game, you: PlayerId, token: CardId, tapped: 
 /// abilities is still under it (CR 613.1f). Alpha Authority and Meltstrider's Resolve print it.
 pub fn one_blocker_at_most(q: &dyn Query, source: ObjectId, attacker: ObjectId) -> Option<usize> {
     (q.obj(source).attached_to == Some(attacker)).then_some(1)
+}
+
+/// Remove this blocker from combat; creatures it blocked that had become blocked by only this creature this combat
+/// become unblocked (False Orders and Imprison). History matters: another blocker leaving earlier does not qualify
+/// an attacker that had been blocked by two creatures (CR 509.1h, 509.3g).
+pub fn remove_from_combat_and_unblock(g: &mut dyn Game, blocker: ObjectId) {
+    let unblocked: Vec<ObjectId> = g.state().blocks.iter().filter(|b| b.blocker == blocker).map(|b| b.attacker).filter(|&attacker| {
+        let mut seen = false;
+        for record in crate::history::this_combat(g) {
+            if let Event::Blocks { blocker: other, attacker: blocked, .. } = record.event {
+                if blocked == attacker {
+                    if other != blocker { return false; }
+                    seen = true;
+                }
+            }
+        }
+        seen
+    }).collect();
+    g.remove_from_combat(blocker);
+    g.end_sentence();
+    instruction(g, |g| {
+        for &attacker in &unblocked { g.become_unblocked(attacker); }
+    });
 }
 
 /// "During combat" (CR 506.1): any step of the combat phase, beginning of combat through end of combat. Yuriko, Blade of the

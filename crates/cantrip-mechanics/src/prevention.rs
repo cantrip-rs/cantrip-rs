@@ -195,19 +195,53 @@ pub fn next_time_source_would_damage_you(g: &mut dyn Game, item: &StackItem, ind
     Ok(Some(source))
 }
 
-/// Whether `id` is one of the colors `COLORS` (a `ColorSet`'s bits) as the text of `source` words them (CR 612).
-fn is_of_colors<const COLORS: u8>(q: &dyn Query, source: ObjectId, id: ObjectId) -> bool {
+/// A source with the color named by the resolving source's text (CR 609.7b, 612.2).
+/// Circle of Protection: White and Circle of Protection: Blue print this choice.
+fn source_of_color(q: &dyn Query, choice: &cantrip_api::select::Choice, color: u32) -> cantrip_api::select::Verdict {
+    let colors = ColorSet::of(Color::ALL[color as usize]);
+    cantrip_api::select::Verdict::each(choice, |id| is_of_colors(q, choice.source, id, colors))
+}
+
+/// Damage from the chosen source while it has the color named by the effect (CR 609.7b).
+pub fn by_chosen_source_of_color<const COLOR: u8>(q: &dyn Query, asker: &Asker, chosen: ObjectId, damage: &DamageEvent) -> bool {
+    by_chosen_source(q, chosen, damage)
+        && is_of_colors(q, asker.source, damage.source, ColorSet::of(Color::ALL[COLOR as usize]))
+}
+
+/// Choose a source of the named color and prevent its next damage to you this turn (CR 609.7a-b, 615.8).
+/// Circle of Protection: White and Circle of Protection: Blue print this recipe.
+pub fn next_time_colored_source_would_damage_you<const COLOR: u8>(g: &mut dyn Game, item: &StackItem, index: u8) -> Result<(), Suspend> {
+    let kind = match g.words(item.object).color(Color::ALL[COLOR as usize]) {
+        Color::White => "white source of damage",
+        Color::Blue => "blue source of damage",
+        Color::Black => "black source of damage",
+        Color::Red => "red source of damage",
+        Color::Green => "green source of damage",
+    };
+    let rule = Selection::new(Count::AsManyAsCan(1))
+        .with(crate::select::part(&(source_of_color as SelectFn), COLOR as u32, ""))
+        .called(kind);
+    let sources = damage_sources(g);
+    let choice = cantrip_api::select::Choice { chooser: item.controller, source: item.object, candidates: &sources, selected: &[] };
+    if !cantrip_api::select::judge(g, &rule, &choice).addable.any() {
+        return Ok(());
+    }
+    next_time_source_would_damage_you(g, item, index, rule).map(|_| ())
+}
+
+/// Whether `id` is one of `wanted` colors as the text of `source` words them (CR 612).
+fn is_of_colors(q: &dyn Query, source: ObjectId, id: ObjectId, wanted: ColorSet) -> bool {
     let colors = q.chars(id).colors;
-    Color::ALL.into_iter().any(|c| ColorSet(COLORS).has(c) && colors.has(q.words(source).color(c)))
+    Color::ALL.into_iter().any(|c| wanted.has(c) && colors.has(q.words(source).color(c)))
 }
 
 /// A `SelectFn` for "a [color] source of your choice": a source of one of the colors `COLORS`, in the words of the effect's text.
 pub fn source_of_colors<const COLORS: u8>(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
-    Verdict::each(choice, |id| is_of_colors::<COLORS>(q, choice.source, id))
+    Verdict::each(choice, |id| is_of_colors(q, choice.source, id, ColorSet(COLORS)))
 }
 
 /// A `GrantedPreventionDef::applies` for "the next time a [color] source of your choice would deal damage to you": damage from
 /// the source chosen (`by_chosen_source`), as long as it is still one of the colors `COLORS` (CR 609.7b).
 pub fn from_chosen_source_of_colors<const COLORS: u8>(q: &dyn Query, asker: &Asker, affected: ObjectId, d: &DamageEvent) -> bool {
-    by_chosen_source(q, affected, d) && is_of_colors::<COLORS>(q, asker.source, d.source)
+    by_chosen_source(q, affected, d) && is_of_colors(q, asker.source, d.source, ColorSet(COLORS))
 }

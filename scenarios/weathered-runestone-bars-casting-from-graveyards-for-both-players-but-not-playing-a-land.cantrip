@@ -37,6 +37,7 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Weathered Runestone.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Green)
 Bot1.Hand.Crucible of Worlds.Cast
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Faithless Looting.Cast
 Bot1.Choose(Plains; Mox Sapphire)

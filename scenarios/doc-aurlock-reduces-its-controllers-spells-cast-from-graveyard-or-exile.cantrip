@@ -58,6 +58,7 @@ Bot2.Choose(Island; Island)
 Bot1.Hand.Mountain.Play
 Bot1.Battlefield.Mountain#1.Activate
 Bot1.Graveyard.Faithless Looting.Cast(Ability: Flashback)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -65,6 +66,7 @@ Bot1.Choose(Island; Island)
 Bot1.Battlefield.Mountain#2.Activate
 Bot1.Battlefield.Forest.Activate
 Bot1.Hand.Bonecrusher Giant.Cast(Bot2; Ability: Stomp)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

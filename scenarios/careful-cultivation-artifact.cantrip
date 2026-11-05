@@ -18,6 +18,7 @@ Bot2.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: Green)
 ! Bot1.Hand.Careful Cultivation.Cast(Bot1.Battlefield.Island)
 Bot1.Hand.Careful Cultivation.Cast(Bot1.Battlefield.Sol Ring)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

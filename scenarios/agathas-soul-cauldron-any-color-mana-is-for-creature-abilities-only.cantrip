@@ -42,6 +42,8 @@ Bot1.Pass
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Pyrite Spellbomb.Activate(Bot2; Ability: {R})
 Bot1.Battlefield.Mountain.Activate
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = {U}
 Bot1.Pass
 Bot2.Pass

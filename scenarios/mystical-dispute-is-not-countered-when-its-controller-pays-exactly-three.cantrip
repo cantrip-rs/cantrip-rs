@@ -30,6 +30,7 @@ Bot2.Battlefield.Island.Activate
 Bot2.Hand.Opt.Cast
 Bot1.Battlefield.Island.Activate
 Bot1.Hand.Mystical Dispute.Cast(Stack.Opt)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 # Without this pass Bot2 would tap its Islands before the Dispute resolves.
 Bot1.Pass

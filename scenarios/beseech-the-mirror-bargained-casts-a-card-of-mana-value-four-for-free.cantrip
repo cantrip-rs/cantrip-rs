@@ -22,6 +22,10 @@ Bot1.Hand.Beseech the Mirror.Cast
 Bot1.Modes(Bargain:)
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mox Jet)
 Bot1.Search(Cogwork Librarian)
 Bot1.Accept

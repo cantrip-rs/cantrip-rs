@@ -27,6 +27,7 @@ Bot2.Hand.Mox Emerald.Cast
 Bot2.Battlefield.Plains.Activate
 Bot2.Battlefield.Mox Pearl.Activate
 Bot2.Hand.Thalia, Guardian of Thraben.Cast
+Bot2.Choose(Close mana window)
 Bot2.Battlefield.Mox Emerald#1.Activate
 Bot2.Hand.Llanowar Elves.Cast
 Bot2.Battlefield.Mox Emerald#2.Activate

@@ -6,13 +6,13 @@ use cantrip_oracle as oracle;
 /// to target creature (CR 603.10a, 608.2h, 120.7).
 fn death_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(target) = targets::object(g, item, 0) else { return Ok(()) };
-    let amount = 3 + g.history().this_turn().iter().filter_map(|record| {
+    let amount = g.history().this_turn().iter().filter_map(|record| {
         let Event::Damage { source, target, amount, kind, controller, known, .. } = record.event else { return None };
         let dealt = DamageDealt { source, target, amount, combat: kind.is_combat(), controller, known };
         (source != item.object && target == Target::Object(item.object) && dealt.chars(g).name == "Blazing Effigy")
-            .then_some(u64::from(amount))
-    }).sum::<u64>();
-    g.damage(item.object, Target::Object(target), u16::try_from(amount).unwrap_or(u16::MAX));
+            .then_some(amount)
+    }).try_fold(3i64, |sum, amount| sum.checked_add(amount)).expect("Blazing Effigy damage exceeds i64 semantic domain");
+    g.damage(item.object, Target::Object(target), amount);
     Ok(())
 }
 

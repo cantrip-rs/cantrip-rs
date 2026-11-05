@@ -26,6 +26,7 @@ Bot2.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Battlefield.Mox Sapphire#2.Activate
 Bot1.Hand.Spark Double.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

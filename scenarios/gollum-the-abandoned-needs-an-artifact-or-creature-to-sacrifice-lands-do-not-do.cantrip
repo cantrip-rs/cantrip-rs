@@ -45,6 +45,8 @@ Bot1.Hand.Ornithopter.Cast
 Bot1.Graveyard.Gollum the Abandoned.Activate
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp#2.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 
 [Expect]

@@ -57,6 +57,7 @@ Bot1.Target(Bot2.Battlefield.Mountain)
 [T5 Bot1.Main2]
 Bot1.Hand.Time Walk.Cast
 Bot1.Battlefield.Island.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T7 Bot2.Main1]
 Bot2.Hand.Lightning Strike.Cast(Bot1)

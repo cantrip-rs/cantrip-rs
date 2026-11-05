@@ -1,11 +1,12 @@
 //! The engine for its users (the scenario runner, the benchmarks, later the host and the Python bindings): the rules,
 //! and the card table every card crate contributes to, built once per process and never copied.
 
-use std::sync::OnceLock;
+use std::{borrow::Cow, sync::OnceLock};
 
 pub mod pay;
 pub mod undo;
 pub mod visibility;
+pub mod text;
 
 pub use cantrip_api::*;
 pub use cantrip_rules::{Game, Rejected, Setup, activation_costs, eligible_companions, revealed_companion, ApplyContract, apply_contract_check, alternative_cast_total, cast_costs, cast_face_of, cast_total, exile_cast_texts, granted_cast_cost, life_for_cast, chars, check_answer, attack_targets, describe, distribution_problem, first_choices, selection_verdict, live, name_problem, nameable, default_name, summoning_sick, granted_cast_total, special_action_costs, sacrifices_for_reduction, replaced_mana_yields, options_with_mana_to_spare, payment_mana_options_with_mana_to_spare};
@@ -108,16 +109,25 @@ pub fn deal_on(
 }
 
 /// A label's text, as a client shows it and a scenario names it.
-pub fn label_text(label: &Label) -> &'static str {
+pub fn label_text(label: &Label) -> Cow<'static, str> {
     label_text_in(cards(), label)
 }
 
 /// `label_text` read from `table`: a game dealt on a table of its own (`run_on`, test-only cards among it) names its cards'
 /// labels by that table's ids.
-pub fn label_text_in(table: &'static CardTable, label: &Label) -> &'static str {
+pub fn label_text_in(table: &'static CardTable, label: &Label) -> Cow<'static, str> {
+    match *label {
+        Label::WordedCard(card, _, words) | Label::WordedOption(card, _, words) => {
+            Cow::Owned(text::changed_text(printed_label_text_in(table, label), table.get(card).name, words))
+        }
+        _ => Cow::Borrowed(printed_label_text_in(table, label)),
+    }
+}
+
+fn printed_label_text_in(table: &'static CardTable, label: &Label) -> &'static str {
     let cards = || table;
     match *label {
-        Label::Card(card, i) | Label::Option(card, i) => cards().get(card).labels.get(i as usize).copied().unwrap_or(""),
+        Label::Card(card, i) | Label::Option(card, i) | Label::WordedCard(card, i, _) | Label::WordedOption(card, i, _) => cards().get(card).labels.get(i as usize).copied().unwrap_or(""),
         Label::Name(card) | Label::Face(card) => cards().get(card).name,
         Label::Fused(_) => "Fuse: both halves",
         Label::Mutate { on_top: true } => "Put it on top",

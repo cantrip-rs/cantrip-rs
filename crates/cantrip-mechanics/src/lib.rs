@@ -33,6 +33,7 @@ pub mod cipher;
 pub mod chosen_type;
 pub mod hand;
 pub mod players;
+pub mod poison;
 pub mod history;
 pub mod library;
 pub mod impending;
@@ -163,6 +164,7 @@ pub mod increment;
 pub mod ingest;
 pub mod provoke;
 pub mod flanking;
+pub mod rampage;
 pub mod dethrone;
 pub mod devour;
 pub mod sunburst;
@@ -290,18 +292,20 @@ pub fn discard_two_unless_discarding(
     Ok(g.discard_paying(&chosen, &paying))
 }
 
-/// "[Player] discards `count` cards at random" (CR 701.9b; Hymn to Tourach, Mind Twist): the hand put in a random order
-/// (Fisher-Yates, as the C# engine's `Randomize`) and the first `count` taken; a smaller hand is discarded whole. They
-/// leave together, as one discard (CR 701.9a).
+/// "[Player] discards `count` cards at random" (CR 701.9b; Hymn to Tourach, Mind Twist): select uniformly without
+/// replacement through the engine's recorded random-choice API. A hand no larger than `count` leaves whole without
+/// a random choice. All selected cards leave together, as one discard (CR 701.9a).
 pub fn discard_at_random(g: &mut dyn Game, player: PlayerId, count: usize) {
     let mut hand = g.state().zone(Zone::hand(player)).to_vec();
     let count = hand.len().min(count);
     if count == 0 {
         return;
     }
-    for i in (1..hand.len()).rev() {
-        let j = g.random(i as u32 + 1) as usize;
-        hand.swap(i, j);
+    if count < hand.len() {
+        for i in 0..count {
+            let j = i + g.choose_at_random(hand.len() - i);
+            hand.swap(i, j);
+        }
     }
     g.discard_together(&hand[..count]);
 }
@@ -563,7 +567,7 @@ pub fn connive_n(g: &mut dyn Game, creature: ObjectId, source: ObjectId, count: 
     let discarded = g.discard_together(&chosen);
     let nonland = discarded.iter().filter(|&&c| hand::discarded_nonland_card(&*g, c)).count() as i16;
     if nonland > 0 && g.is_on_battlefield(creature) && g.obj(creature).became.is_none() {
-        g.add_counters(creature, CounterKind::PlusOne, nonland);
+        g.add_counters(creature, CounterKind::PlusOne, i64::from(nonland));
     }
     Ok(())
 }
@@ -792,7 +796,7 @@ pub fn lands_you_control(q: &dyn Query, player: PlayerId) -> usize {
 /// Deals damage to the target in `slot`, if it is still legal.
 pub fn damage_target(g: &mut dyn Game, item: &StackItem, slot: usize, amount: u16) {
     if g.target_legal(item, slot) {
-        g.damage(item.object, g.state().target(item, slot), amount);
+        g.damage(item.object, g.state().target(item, slot), i64::from(amount));
     }
 }
 
@@ -800,8 +804,8 @@ pub fn damage_target(g: &mut dyn Game, item: &StackItem, slot: usize, amount: u1
 /// item that is still legal is dealt `amount` by the item's source, all together as one event. A target that has become
 /// illegal is left out. Prismari Charm, Batroc the Leaper and Way of the Warlord print it.
 pub fn damage_each_target(g: &mut dyn Game, item: &StackItem, amount: u16) {
-    let hits: Vec<(ObjectId, Target, u16)> =
-        (0..item.target_count as usize).filter(|&slot| g.target_legal(item, slot)).map(|slot| (item.object, g.state().target(item, slot), amount)).collect();
+    let hits: Vec<(ObjectId, Target, i64)> =
+        (0..item.target_count as usize).filter(|&slot| g.target_legal(item, slot)).map(|slot| (item.object, g.state().target(item, slot), i64::from(amount))).collect();
     g.damage_together(&hits);
 }
 
@@ -810,10 +814,9 @@ pub fn damage_each_target(g: &mut dyn Game, item: &StackItem, amount: u16) {
 /// that has since become illegal is left out with its share (CR 608.2b), and the rest is dealt together as one event.
 /// Pyrokinesis, Fire Covenant, Fury and Shatterskull Smashing print it.
 pub fn damage_divided(g: &mut dyn Game, item: &StackItem) {
-    let hits: Vec<(ObjectId, Target, u16)> = (0..item.target_count as usize)
+    let hits: Vec<(ObjectId, Target, i64)> = (0..item.target_count as usize)
         .filter(|&slot| g.target_legal(item, slot) && g.state().share(item, slot) > 0)
-        // Damage is dealt in a u16 for now: a share past it deals as much as that holds (the damage widening is W2's).
-        .map(|slot| (item.object, g.state().target(item, slot), u16::try_from(g.state().share(item, slot)).unwrap_or(u16::MAX)))
+        .map(|slot| (item.object, g.state().target(item, slot), i64::from(g.state().share(item, slot))))
         .collect();
     g.damage_together(&hits);
 }
@@ -824,12 +827,12 @@ pub fn damage_divided(g: &mut dyn Game, item: &StackItem) {
 /// one is the announcement's rule (the core's `Divide`), not asked again here. The counters are put on all the targets at
 /// once (CR 608.2, 101.4: one event, CR 603.2c). Court of Garenbrig and Elusive Otter's Grove's Bounty print it.
 pub fn counters_divided(g: &mut dyn Game, item: &StackItem, kind: CounterKind) {
-    let mut puts: Vec<(ObjectId, CounterKind, i16)> = Vec::new();
+    let mut puts: Vec<(ObjectId, CounterKind, i64)> = Vec::new();
     for slot in 0..item.target_count as usize {
         if let Some(object) = targets::object(g, item, slot)
             && g.state().share(item, slot) > 0
         {
-            puts.push((object, kind, i16::try_from(g.state().share(item, slot)).unwrap_or(i16::MAX)));
+            puts.push((object, kind, i64::from(g.state().share(item, slot))));
         }
     }
     g.add_counters_together(&puts);

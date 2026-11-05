@@ -36,6 +36,9 @@ Bot1.Battlefield.Mox Pearl#2.Activate
 Bot1.Battlefield.Mox Pearl#3.Activate
 Bot1.Hand.Soaring Stoneglider.Cast
 Bot1.Modes(Exile two cards from your graveyard)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Lightning Bolt; Island)
 [T3 Bot1.Main2]
 ? Bot1.Battlefield.Owlin Historian.Power = 3

@@ -23,7 +23,7 @@ fn destroy_x_target_mountains_volcanic(
     let destroyed = g.destroy_all(&objects_0);
     g.end_sentence();
     let amount = destroyed.iter().filter(|&&id| g.obj(id).zone.is(ZoneKind::Graveyard)).count();
-    cantrip_mechanics::effects::damage_each_creature_and_player_n(g, item, amount as u16);
+    cantrip_mechanics::effects::damage_each_creature_and_player_n(g, item, i64::try_from(amount).expect("mountain count fits the native object domain"));
     Ok(())
 }
 

@@ -8,7 +8,7 @@ use cantrip_oracle as oracle;
 fn counters_on_the_pests_and_company(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let words = g.words(item.object);
     let kinds = [Subtype::Pest, Subtype::Bat, Subtype::Insect, Subtype::Snake, Subtype::Spider].map(|s| words.subtype(s));
-    let puts: Vec<(ObjectId, CounterKind, i16)> = g
+    let puts: Vec<(ObjectId, CounterKind, i64)> = g
         .permanents_of(item.controller)
         .into_iter()
         .filter(|&id| kinds.iter().any(|&k| g.chars(id).has_subtype(k)))

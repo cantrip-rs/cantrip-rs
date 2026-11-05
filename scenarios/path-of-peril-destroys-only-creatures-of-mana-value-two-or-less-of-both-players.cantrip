@@ -59,6 +59,7 @@ Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Path of Peril.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = {G}
 Bot1.Pass
 [T5 Bot1.Main2]

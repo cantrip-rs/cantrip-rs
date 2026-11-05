@@ -14,9 +14,8 @@ fn plus_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// not, nothing asked when there are none.
 fn untap_two_lands(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let lands: Vec<ObjectId> = g.state().battlefield().iter().copied().filter(|&id| g.chars(id).is(CardType::Land)).collect();
-    for land in choose::cards(g, item.controller, item.object, Purpose::Untap, lands, 2, true)? {
-        g.untap(land);
-    }
+    let chosen = choose::cards(g, item.controller, item.object, Purpose::Untap, lands, 2, true)?;
+    g.untap_together(&chosen);
     Ok(())
 }
 

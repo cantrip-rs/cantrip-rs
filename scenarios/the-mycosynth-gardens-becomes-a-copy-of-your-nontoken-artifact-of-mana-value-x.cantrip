@@ -41,6 +41,8 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.The Mycosynth Gardens.Activate(Ability: becomes; X: 1)
 ! Bot1.Target(Bot1.Battlefield.Mox Jet; Gold Pan; Treasure Token; Bot2.Battlefield.Sol Ring)
 Bot1.Target(Bot1.Battlefield.Sol Ring)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = 
 Bot1.Pass
 Bot2.Pass

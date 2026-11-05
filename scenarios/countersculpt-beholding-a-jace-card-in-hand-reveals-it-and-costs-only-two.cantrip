@@ -32,6 +32,8 @@ Bot1.Target(Stack.Lightning Bolt)
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 ? Client.Bot1.Prompt.Title = Countersculpt: choose a Jace you control or reveal a Jace card from your hand to behold
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Jace, the Mind Sculptor)
 ? Client.Bot1.Confirm = Behold it
 [T2 Bot2.Main2]

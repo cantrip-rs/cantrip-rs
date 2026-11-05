@@ -21,6 +21,7 @@ Bot2.Hand.Ornithopter.Cast
 Bot1.Hand.Black Lotus.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Hand.Thieving Skydiver.Cast(Kicked: 1)
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Plains.Activate
 Bot1.Hand.Ephemerate.Cast(Bot1.Battlefield.Ornithopter)
 [Bot1.Main2]

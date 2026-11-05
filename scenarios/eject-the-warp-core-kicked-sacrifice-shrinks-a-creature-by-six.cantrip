@@ -33,6 +33,8 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Eject the Warp Core.Cast(Bot2.Battlefield.Wall of Ice)
 Bot1.Modes(Kicker—Sacrifice an artifact or creature)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mox Pearl)
 Bot1.Pass
 

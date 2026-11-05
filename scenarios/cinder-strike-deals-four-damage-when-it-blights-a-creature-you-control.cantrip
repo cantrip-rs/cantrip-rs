@@ -56,6 +56,7 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Cinder Strike.Cast
 Bot1.Modes(Blight 1)
 Bot1.Target(Bot2.Battlefield.Boneclub Berserker)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Elder Auntie)
 Bot1.Pass
 Bot2.Pass

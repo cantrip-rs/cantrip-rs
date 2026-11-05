@@ -23,7 +23,7 @@ pub fn resolve(g: &mut dyn Game, item: &StackItem, n: i16, keywords: &[Keyword],
     if g.target_legal(item, 0)
         && let Target::Object(creature) = item.target(0)
     {
-        g.add_counters(creature, CounterKind::PlusOne, n);
+        g.add_counters(creature, CounterKind::PlusOne, i64::from(n));
         if creature != item.object {
             // "It gains the following abilities": one instruction (`Game::one_instruction`).
             g.one_instruction(&mut |g| {

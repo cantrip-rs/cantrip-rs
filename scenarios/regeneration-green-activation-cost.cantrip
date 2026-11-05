@@ -27,6 +27,7 @@ Bot1.Pass
 Bot1.Battlefield.Island.Activate
 ! Bot1.Hand.Regeneration.Cast(Bot1.Battlefield.Island)
 Bot1.Hand.Regeneration.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -38,6 +39,7 @@ Bot1.Battlefield.Mox Ruby.Activate
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Regeneration.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

@@ -15,6 +15,7 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Green)
 Bot1.Battlefield.Mox Emerald#1.Activate
 Bot1.Hand.Jayemdae Tome.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Emerald#1.Activate
@@ -26,6 +27,10 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Mox Emerald#4.Activate
 Bot1.Battlefield.Jayemdae Tome.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 ? Bot1.Battlefield.Jayemdae Tome.Tapped = true
 Bot1.Pass

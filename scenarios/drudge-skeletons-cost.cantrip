@@ -14,6 +14,7 @@ Bot1.Hand.Mox Pearl.Cast
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl#1.Activate
 Bot1.Hand.Drudge Skeletons.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Battlefield.Mox Pearl#2.Activate
@@ -21,6 +22,7 @@ Bot1.Battlefield.Mox Pearl#2.Activate
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Drudge Skeletons.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [Expect]
 Bot1.Battlefield.Drudge Skeletons.Power = 1

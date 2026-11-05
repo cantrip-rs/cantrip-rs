@@ -78,6 +78,7 @@ static ONCE_REDIRECT: CardDef = CardDef {
         applies: to_other,
         apply: to_affected,
         then: None,
+        damage: None,
         once: true,
         text: "",
     }],
@@ -111,7 +112,7 @@ fn game() -> (RulesGame, ObjectId) {
 }
 
 fn cx(game: &mut RulesGame) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 #[test]

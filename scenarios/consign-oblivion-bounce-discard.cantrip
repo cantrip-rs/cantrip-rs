@@ -25,6 +25,7 @@ Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
 ! Bot1.Hand.Consign // Oblivion.Cast(Bot1.Battlefield.Swamp; Ability: Consign)
 Bot1.Hand.Consign // Oblivion.Cast(Bot1.Battlefield.Ornithopter; Ability: Consign)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 [T3 Bot1.Main1]
@@ -35,6 +36,7 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Swamp.Activate
 ! Bot1.Graveyard.Consign // Oblivion.Cast(Bot1; Ability: Oblivion)
 Bot1.Graveyard.Consign // Oblivion.Cast(Bot2; Ability: Oblivion)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 

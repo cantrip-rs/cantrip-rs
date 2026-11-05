@@ -12,7 +12,7 @@ use crate::{Cx, R};
 /// `subject`. Its source is a new object in no zone: it ceases to matter once the ability resolves. The source.
 pub(crate) fn queue(cx: &mut Cx, card: CardId, index: u8, controller: PlayerId, subject: Target) -> ObjectId {
     let source = cx.st().push_obj(Obj::new(card, controller, Zone::GONE));
-    cx.st().trigger_push(PendingTrigger {
+    cx.st().trigger_push(PendingTrigger { event_amount: None,
         source,
         ability: AbilityRef { card, index },
         controller,
@@ -108,7 +108,7 @@ pub(crate) fn inherent_triggers(cx: &Cx, event: &Event) -> Vec<(u8, PlayerId, Ta
 /// deals combat damage to the monarch, its controller becomes the monarch"; "whenever one or more creatures a player
 /// controls deal combat damage to the player who has the initiative, the controller of those creatures takes the
 /// initiative", once for each such player however many creatures that was.
-fn combat_damage(cx: &Cx, source: ObjectId, victim: PlayerId, amount: u16, found: &mut Vec<(u8, PlayerId, Target)>) {
+fn combat_damage(cx: &Cx, source: ObjectId, victim: PlayerId, amount: i64, found: &mut Vec<(u8, PlayerId, Target)>) {
     let player = *cx.s().player(victim);
     if amount == 0 || !(player.monarch || player.initiative) {
         return;

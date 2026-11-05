@@ -16,6 +16,7 @@ use cantrip_rules::tree::NodeId;
 /// told events and handles; nothing for the scenario runner).
 pub struct Undo<T> {
     entries: Vec<Entry<T>>,
+    pending: Option<(Before, T, usize, usize)>,
 }
 
 struct Entry<T> {
@@ -33,6 +34,8 @@ pub struct Before {
     log_from: usize,
     triggers: usize,
     stack: usize,
+    priority_depth: Option<usize>,
+    cancels: bool,
 }
 
 impl Before {
@@ -45,7 +48,7 @@ impl Before {
 
 impl<T> Default for Undo<T> {
     fn default() -> Self {
-        Undo { entries: Vec::new() }
+        Undo { entries: Vec::new(), pending: None }
     }
 }
 
@@ -59,6 +62,8 @@ impl<T> Undo<T> {
             log_from: game.log.len(),
             triggers: game.state.triggers.len(),
             stack: game.state.stack.len(),
+            priority_depth: matches!(game.pending().map(|r| &r.kind), Some(RequestKind::Priority { .. })).then_some(game.state.agenda.len()),
+            cancels: matches!(answer, Answer::Act(action) if action.kind == ActionKind::CancelCasting),
         }
     }
 
@@ -80,6 +85,44 @@ impl<T> Undo<T> {
         undoable
     }
 
+    /// Follows a priority-started mana activation across its suspended cost and effect questions. Only public payment
+    /// and color questions are retained; all other questions conservatively end the courtesy undo history.
+    pub fn track(&mut self, game: &Game, before: Before, kept: Option<T>) -> bool {
+        if let Some((start, saved, depth, previously_activated)) = self.pending.take() {
+            let active = game.state.agenda.get(depth).is_some_and(|f| {
+                matches!(f.kind, cantrip_state::FrameKind::Act { player } if player == start.player)
+            });
+            if active {
+                let safe = game.pending().is_some_and(|r| r.player == start.player && matches!(r.kind,
+                    RequestKind::PayCosts { .. } | RequestKind::ChooseCostPayment { .. } | RequestKind::ChooseColors { .. }));
+                if safe { let count = activation_count(game, &start); self.pending = Some((start, saved, depth, count)); return true; }
+                self.entries.clear();
+                return false;
+            }
+            let completed = !before.cancels && activation_count(game, &start) > previously_activated;
+            if completed && self.may_take_back(game, &start) { self.push(start, saved); return true; }
+            self.entries.clear();
+            return false;
+        }
+        if let Some(saved) = kept {
+            let depth = before.priority_depth.unwrap_or(usize::MAX);
+            let active = game.state.agenda.get(depth).is_some_and(|f| {
+                matches!(f.kind, cantrip_state::FrameKind::Act { player } if player == before.player)
+            });
+            if active {
+                let safe = game.pending().is_some_and(|r| r.player == before.player && matches!(r.kind,
+                    RequestKind::PayCosts { .. } | RequestKind::ChooseCostPayment { .. } | RequestKind::ChooseColors { .. }));
+                if safe { let count = activation_count(game, &before); self.pending = Some((before, saved, depth, count)); return true; }
+                self.entries.clear();
+                return false;
+            }
+            if self.may_take_back(game, &before) { self.push(before, saved); return true; }
+            return false;
+        }
+        if self.may_take_back(game, &before) { /* No retained snapshot means no undo entry. */ }
+        false
+    }
+
     /// Records the answer `before` noted as one that may be taken back, with what the keeper holds beside it. Call
     /// only when [`Undo::may_take_back`] said so.
     pub fn push(&mut self, before: Before, kept: T) {
@@ -87,14 +130,19 @@ impl<T> Undo<T> {
         self.entries.push(Entry { player: before.player, source, node: before.node, kept });
     }
 
+    /// Whether this player has an activation being followed through its payment questions.
+    pub fn pending_for(&self, player: PlayerId) -> bool {
+        self.pending.as_ref().is_some_and(|(before, _, _, _)| before.player == player)
+    }
+
     /// The permanent whose mana ability `player` may take back now, if any.
     pub fn offered(&self, player: PlayerId) -> Option<ObjectId> {
-        self.entries.last().filter(|e| e.player == player).map(|e| e.source)
+        if self.pending.is_some() { None } else { self.entries.last().filter(|e| e.player == player).map(|e| e.source) }
     }
 
     /// What the keeper holds beside the latest entry.
     pub fn last_kept(&mut self) -> Option<&mut T> {
-        self.entries.last_mut().map(|e| &mut e.kept)
+        if let Some((_, kept, _, _)) = &mut self.pending { Some(kept) } else { self.entries.last_mut().map(|e| &mut e.kept) }
     }
 
     /// Takes back the latest mana ability `player` activated: the game goes back to the node before it, and what the
@@ -109,7 +157,15 @@ impl<T> Undo<T> {
     /// Nothing may be taken back any more: a concession, or the game set aside.
     pub fn clear(&mut self) {
         self.entries.clear();
+        self.pending = None;
     }
+}
+
+/// Replayed activation records for this source since the original priority answer. Requiring a new record on the
+/// final answer avoids treating an earlier nested activation of the same source as a completed outer activation.
+fn activation_count(game: &Game, before: &Before) -> usize {
+    game.log[before.log_from.min(game.log.len())..].iter().filter(|r| matches!(r.event,
+        Event::AbilityActivated { source, player, .. } if Some(source) == before.source && player == before.player)).count()
 }
 
 /// The source of a mana ability `answer` activates (CR 605.1a), if it activates one that could be taken back: not one

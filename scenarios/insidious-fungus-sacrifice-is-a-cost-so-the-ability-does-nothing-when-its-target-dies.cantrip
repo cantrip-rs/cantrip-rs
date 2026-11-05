@@ -30,6 +30,9 @@ Bot1.Battlefield.Mox Ruby#1.Activate
 Bot1.Battlefield.Insidious Fungus.Activate
 Bot1.Modes(1)
 Bot1.Target(Ornithopter)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Graveyard = Insidious Fungus
 Bot1.Battlefield.Mox Ruby#2.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)

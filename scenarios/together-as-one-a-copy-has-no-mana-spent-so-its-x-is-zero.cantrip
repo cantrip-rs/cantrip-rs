@@ -36,6 +36,7 @@ Bot1.Battlefield.Volcanic Island.Activate(Ability: {R})
 Bot1.Hand.Together as One.Cast
 Bot1.Target(Bot2)
 Bot1.Target(Bot2)
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Hand.Lutri, the Spellchaser.Cast
 ? Stack.Count = 2

@@ -32,6 +32,9 @@ Bot1.Battlefield.Oteclan Landmark.Activate(Ability: Craft)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 [T2 Bot2.Main1]
 Bot2.Hand.Mountain.Play

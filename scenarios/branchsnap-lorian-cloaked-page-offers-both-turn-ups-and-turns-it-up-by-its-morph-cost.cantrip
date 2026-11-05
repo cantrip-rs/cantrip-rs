@@ -35,6 +35,7 @@ Bot1.Pass
 ? Client.Bot1.Battlefield..Actions = Turn face up for its mana cost | Turn face up — Morph {G}
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.#1.Activate(Ability: morph cost)
+Bot1.Choose(Close mana window)
 ? Bot1.Battlefield.Branchsnap Lorian.FaceDown = (absent)
 [Bot1.Main2]
 

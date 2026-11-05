@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{damage_target, targets};
+use cantrip_mechanics::{targets};
 use cantrip_oracle as oracle;
 
 /// "Combat damage that would be dealt by creatures you control can't be prevented" (CR 615.12): the damage of any
@@ -15,7 +15,7 @@ fn deals_combat_damage_to_an_opponent(q: &dyn Query, source: ObjectId, event: &E
         Event::Damage { source: from, target: Target::Player(p), amount, kind, .. }
             if kind.is_combat() && *from == source && *amount > 0 && *p != q.controller(source) =>
         {
-            Some(Fired { subject: Target::Player(*p), data: [*amount as u32, 0] })
+            Some(Fired { subject: Target::Player(*p), data: [0, 0] })
         }
         _ => None,
     }
@@ -28,7 +28,7 @@ fn planeswalker_that_player_controls(q: &dyn Query, _: &Asker, t: Target) -> boo
 
 /// "It deals that much damage to target planeswalker that player controls."
 fn damage_the_planeswalker(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    damage_target(g, item, 0, item.data[0] as u16);
+    if g.target_legal(item, 0) { g.damage(item.object, item.target(0), item.matched_damage_amount()); }
     Ok(())
 }
 
@@ -40,7 +40,7 @@ pub static CARD: CardDef = CardDef {
         Keyword::CantBeBlockedByPowerTwoOrLess,
     ]),
     unpreventable_damage: &[creatures_you_control_deal_unpreventable_combat_damage],
-    abilities: &[triggered(when(EventMask::DAMAGE, deals_combat_damage_to_an_opponent), damage_the_planeswalker, "Whenever Questing Beast deals combat damage to an opponent, it deals that much damage to target planeswalker that player controls.")
+    abilities: &[triggered(when(EventMask::DAMAGE, deals_combat_damage_to_an_opponent), damage_the_planeswalker, "Whenever Questing Beast deals combat damage to an opponent, it deals that much damage to target planeswalker that player controls.").damage_amount()
         .targets(&[target(planeswalker_that_player_controls)])],
     ..oracle::QUESTING_BEAST
 };

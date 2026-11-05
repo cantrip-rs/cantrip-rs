@@ -21,7 +21,7 @@ fn counters_on_tapped_creatures(g: &mut dyn Game, item: &StackItem) -> Result<()
         .filter(|&id| g.obj(id).tapped && g.chars(id).is(CardType::Creature))
         .collect();
     // All at once (CR 608.2, 101.4).
-    let puts: Vec<(ObjectId, CounterKind, i16)> = tapped.into_iter().map(|id| (id, CounterKind::PlusOne, 1)).collect();
+    let puts: Vec<(ObjectId, CounterKind, i64)> = tapped.into_iter().map(|id| (id, CounterKind::PlusOne, 1)).collect();
     g.add_counters_together(&puts);
     Ok(())
 }

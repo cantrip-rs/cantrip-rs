@@ -22,6 +22,10 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Takenuma, Abandoned Mire.Activate
 ! Bot1.Choose()
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 [Bot1.Main1]

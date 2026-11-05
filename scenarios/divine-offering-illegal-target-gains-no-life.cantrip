@@ -25,6 +25,7 @@ Bot2.Hand.Steel Wall.Cast
 Bot1.Battlefield.Mox Pearl#1.Activate
 Bot1.Battlefield.Mox Ruby#1.Activate
 Bot1.Hand.Divine Offering.Cast(Bot2.Battlefield.Mind Stone)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Battlefield.Mox Ruby.Activate

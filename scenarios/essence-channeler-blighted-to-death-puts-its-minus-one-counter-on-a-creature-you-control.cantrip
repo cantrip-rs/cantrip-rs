@@ -36,6 +36,7 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Requiting Hex.Cast
 Bot1.Modes(Blight 1)
 Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Essence Channeler)
 Bot1.Target(Ornithopter#1)
 [T3 Bot1.Main2]

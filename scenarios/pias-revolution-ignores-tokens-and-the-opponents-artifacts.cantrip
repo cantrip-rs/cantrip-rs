@@ -45,6 +45,8 @@ Bot2.Battlefield.Lotus Petal.Activate(Color: Blue)
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Deadly Dispute.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Llanowar Elves)
 Bot1.Pass
 Bot2.Pass

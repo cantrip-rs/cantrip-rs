@@ -25,6 +25,9 @@ Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Tinker.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mox Jet)
 Bot1.Search(Blightsteel Colossus)
 

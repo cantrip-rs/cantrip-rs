@@ -32,6 +32,7 @@ Bot2.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Golgothian Sylex.Activate
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 ? Bot1.Battlefield.Golgothian Sylex.Tapped = true
 Bot1.Pass

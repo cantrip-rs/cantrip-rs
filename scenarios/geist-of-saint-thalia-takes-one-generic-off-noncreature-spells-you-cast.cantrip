@@ -25,10 +25,12 @@ Bot1.Hand.Mox Ruby.Cast
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Geist of Saint Thalia.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Lightning Greaves.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Battlefield.Mox Ruby.Activate

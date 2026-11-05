@@ -58,6 +58,7 @@ Bot1.Modes(Target creature you control deals)
 Bot1.Target(Bot1.Battlefield.Centaur Courser)
 ! Bot1.Target(Bot1.Battlefield.Centaur Courser)
 Bot1.Target(Bot2.Battlefield.Centaur Courser)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

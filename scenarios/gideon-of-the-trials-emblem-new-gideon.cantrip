@@ -19,6 +19,7 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Hand.Black Lotus.Cast
 Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
 Bot1.Hand.Gideon of the Trials#1.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -42,6 +43,7 @@ Bot2.Battlefield.Vampire Hexmage.Activate(Bot1.Battlefield.Gideon of the Trials)
 ? Bot1.CantWin = (absent)
 Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
 Bot1.Hand.Gideon of the Trials.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

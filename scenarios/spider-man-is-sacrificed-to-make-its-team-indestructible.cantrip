@@ -63,6 +63,8 @@ Bot1.Battlefield.Plains.Activate
 Bot1.Hand.Spectacular Spider-Man.Cast
 Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Spectacular Spider-Man.Activate(Ability: Sacrifice)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Graveyard = Spectacular Spider-Man
 
 [T9 Bot1.Main1]

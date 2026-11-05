@@ -23,6 +23,8 @@ Bot1.Hand.Swamp.Play
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp#2.Activate
 Bot1.Hand.Deadly Dispute.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mox Jet)
 [T3 Bot1.Main2]
 ? Bot1.Battlefield.Moonshadow.Counters.MinusOneMinusOne = 5

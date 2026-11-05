@@ -27,6 +27,7 @@ Bot1.Hand.Mountain.Play
 Bot1.Hand.Torch the Tower.Cast(Bot2.Battlefield.Llanowar Elves)
 Bot1.Modes(Bargain:)
 Bot1.Battlefield.Mountain.Activate
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mox Ruby)
 Bot1.Pass
 Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Llanowar Elves)

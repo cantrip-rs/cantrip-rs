@@ -37,6 +37,7 @@ Bot1.Pass
 Bot1.Battlefield.Mountain.Activate
 ? Delayed = Loki Laufeyson
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 Bot1.Pass
 Bot1.Target(Ornithopter)

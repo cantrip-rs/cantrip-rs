@@ -30,6 +30,7 @@ Bot1.Hand.Active Volcano.Cast
 Bot1.Modes(Destroy target blue permanent)
 ! Bot1.Target(Bot2.Battlefield.Mountain Bandit)
 Bot1.Target(Bot1.Battlefield.Baleful Strix)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 
 [Expect]

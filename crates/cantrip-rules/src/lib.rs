@@ -5,6 +5,10 @@
 
 pub mod tree;
 mod actions;
+#[cfg(test)]
+mod ability_acquisition_identity_tests;
+#[cfg(test)]
+mod delayed_capture_tests;
 mod takeback;
 #[cfg(test)]
 mod base_power_tests;
@@ -29,6 +33,8 @@ mod attack_option_tests;
 #[cfg(test)]
 mod attacking_tokens_tests;
 mod attach;
+#[cfg(test)]
+mod aura_identity_tests;
 mod counters;
 #[cfg(test)]
 mod combat_assignment_tests;
@@ -156,15 +162,31 @@ mod mixed_zone_tests;
 #[cfg(test)]
 mod mana_trigger_tests;
 #[cfg(test)]
+mod mana_counter_cost_tests;
+#[cfg(test)]
+mod next_turn_delayed_tests;
+#[cfg(test)]
+mod blocking_status_tests;
+#[cfg(test)]
 mod own_text_tests;
 #[cfg(test)]
+mod effect_text_tests;
+#[cfg(test)]
+mod mana_cost_change_tests;
+#[cfg(test)]
 mod mana_replacement_tests;
+#[cfg(test)]
+mod replacement_instruction_tests;
+#[cfg(test)]
+mod damage_expansion_tests;
 #[cfg(test)]
 mod entry_order_tests;
 #[cfg(test)]
 mod excess_damage_tests;
 #[cfg(test)]
 mod must_block_tests;
+#[cfg(test)]
+mod blocked_transition_tests;
 #[cfg(test)]
 mod room_door_tests;
 #[cfg(test)]
@@ -181,6 +203,8 @@ mod cycled_tests;
 mod counters_putter_tests;
 #[cfg(test)]
 mod counters_together_tests;
+#[cfg(test)]
+mod pt_counter_tests;
 #[cfg(test)]
 mod toxic_tests;
 #[cfg(test)]
@@ -203,6 +227,20 @@ mod transformed_cast_tests;
 mod turn;
 #[cfg(test)]
 mod cant_become_untapped_tests;
+#[cfg(test)]
+mod untap_interval_tests;
+#[cfg(test)]
+mod combat_lki_tests;
+#[cfg(test)]
+mod entry_actor_tests;
+#[cfg(test)]
+mod resolving_counter_cost_tests;
+#[cfg(test)]
+mod counter_ceiling_tests;
+#[cfg(test)]
+mod wide_number_tests;
+#[cfg(test)]
+mod regeneration_ban_tests;
 #[cfg(test)]
 mod lasting_rules_tests;
 #[cfg(test)]
@@ -247,9 +285,28 @@ pub struct Game {
     /// 113.7a). Off while the engine asks other abilities - triggers, replacement effects, state triggers, durations -
     /// in the middle of them: those are their own text, the source's now. Bookkeeping of a call, not of the game.
     pub(crate) own_text: std::cell::Cell<bool>,
+    /// The resolved replacement/prevention whose follow-up instructions are running. Bookkeeping of a call only;
+    /// other abilities asked during it read their own text, as with a resolving stack ability.
+    pub(crate) effect_words: std::cell::Cell<Option<(ObjectId, Words)>>,
+    /// The current mana activation's X, scoped across nested activations and reset before suspension returns.
+    pub(crate) mana_activation_x: Option<u16>,
+    /// The current immediate mana ability's history anchors (CR 605.3, 611.2b), scoped with its activation X.
+    /// Bookkeeping of this call, never per-card remembered state; nested abilities restore the enclosing interval.
+    mana_interval: Option<ManaInterval>,
     /// What the run under way has done with mana abilities, for taking an action back without reversing the ones that may
     /// not be (`takeback`, CR 733.1). Bookkeeping of a run, not of the game.
     pub(crate) takeback: takeback::Takeback,
+}
+
+/// An immediate mana ability's own declaration, final {T} cost and resolution boundaries (CR 605.3, 611.2b).
+/// The records remain the authority for its interval; these are positions in that history, like a resolving frame's mark.
+#[derive(Clone, Debug, PartialEq, Eq)]
+struct ManaInterval {
+    source: ObjectId,
+    since: u32,
+    tapped_since: u32,
+    resolution: u32,
+    cost_objects: Vec<(usize, cantrip_api::CostPart, ObjectId)>,
 }
 
 /// When the state triggers judge a change that records no event (CR 603.8: a state trigger "triggers as soon as the game
@@ -275,10 +332,14 @@ pub(crate) struct StateCheck {
     /// Such a change by an instruction of the resolution that is done: another, before the state triggers judge it, is a
     /// second instruction the card has not said is one with it, nor apart from it.
     done: bool,
+    /// An event or explicit instruction boundary judged pending changes in this
+    /// callback scope, even if another change became pending afterward. Call
+    /// bookkeeping only, not remembered game history (CR 603.8, 608.2c).
+    judged: bool,
 }
 
 impl StateCheck {
-    pub(crate) const NONE: StateCheck = StateCheck { depth: 0, resolving: None, due: false, open: false, done: false };
+    pub(crate) const NONE: StateCheck = StateCheck { depth: 0, resolving: None, due: false, open: false, done: false, judged: false };
 }
 
 /// The most events a game records before it is a draw (`docs/rules-exceptions.md`, RX-1): a run of play that never repeats
@@ -310,7 +371,7 @@ impl Clone for Game {
             history_end: self.history_end,
             check: StateCheck::NONE,
             spells_as_cast: Default::default(),
-            own_text: Default::default(),
+            own_text: Default::default(), effect_words: Default::default(), mana_activation_x: None, mana_interval: None,
             takeback: Default::default(),
         }
     }
@@ -427,7 +488,7 @@ impl Game {
             t.priority = chooser;
         });
 
-        let mut game = Game { state, log: Vec::new(), tree: tree::Tree::new(), at: tree::NodeId::ROOT, cards, verify: false, max_events: MAX_GAME_EVENTS, history_end: None, check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), takeback: Default::default() };
+        let mut game = Game { state, log: Vec::new(), tree: tree::Tree::new(), at: tree::NodeId::ROOT, cards, verify: false, max_events: MAX_GAME_EVENTS, history_end: None, check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), effect_words: Default::default(), mana_activation_x: None, mana_interval: None, takeback: Default::default() };
         // CR 103.2b: the companion chosen as the deck was built is revealed once the starting player is known, if the starting
         // deck - the library as dealt - fulfils its condition; one that doesn't is a sideboard card, and nothing is said of it.
         for (p, id) in companions {
@@ -440,7 +501,7 @@ impl Game {
         } else {
             // A scenario's deal: seven each, in turn order, kept.
             for p in game.state.apnap().collect::<Vec<_>>() {
-                let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+                let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
                 for _ in 0..7 {
                     ops::draw(&mut cx, p);
                 }
@@ -465,6 +526,12 @@ impl Game {
     }
 
     /// The question the game is waiting on, if any.
+    /// Pool assignments that leave a complete payment in the pool, for shared scripted payment. This is advice:
+    /// the payer's other offered assignments remain legal, and the native AI can choose each of them directly.
+    pub fn viable_pool_assignments(&self, player: PlayerId, remaining: &ManaCost, options: &[ActionOption]) -> Vec<usize> {
+        actions::viable_pool_assignments(&self.state, player, remaining, options)
+    }
+
     pub fn pending(&self) -> Option<&Request> {
         self.state.agenda.last().and_then(|f| f.pending.as_ref())
     }
@@ -491,7 +558,7 @@ impl Game {
             }
             // RX-1: a game as long as the engine records is a draw, between two frames, so that no frame is left half done.
             if self.log.len() >= self.max_events {
-                let mut cx = Cx { g: self, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+                let mut cx = Cx { g: self, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
                 ops::end_game(&mut cx, Outcome::Draw);
                 cx.record(Event::GameDrawn { reason: DrawReason::EventLimit });
                 return;
@@ -510,7 +577,7 @@ impl Game {
 
             let kind = self.state.agenda[at].kind;
             let (flow, asked_at) = {
-                let mut cx = Cx { g: self, frame: at, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+                let mut cx = Cx { g: self, frame: at, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
                 let flow = match kind {
                     FrameKind::Opening => turn::opening(&mut cx),
                     FrameKind::BeginStep => turn::begin_step(&mut cx),
@@ -526,7 +593,7 @@ impl Game {
                             cx.st().update_frame(at, |f| f.unjudged = false);
                         }
                         let resolving = cx.resolving().map(|item| item.object);
-                        cx.g.check = StateCheck { depth: 1, resolving, due: carried, open: false, done: carried };
+                        cx.g.check = StateCheck { depth: 1, resolving, due: carried, open: false, done: carried, judged: false };
                         let flow = resolve::resolve(&mut cx);
                         let check = std::mem::replace(&mut cx.g.check, StateCheck::NONE);
                         if check.due {
@@ -609,7 +676,7 @@ impl Game {
                 Err(Stop::Cancel) => {
                     // Everything the announcement did is undone (CR 733.1) but the mana abilities that may not be
                     // (`takeback`), and the frame goes.
-                    let mut cx = Cx { g: self, frame: at, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+                    let mut cx = Cx { g: self, frame: at, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
                     takeback::take_back(&mut cx, mark, log_mark as usize, takeback::Since::frame(objects_mark));
                     self.state.frame_remove(at);
                 }
@@ -748,7 +815,7 @@ impl Game {
         if self.state.is_over() || outcome == Outcome::InProgress {
             return;
         }
-        let mut cx = Cx { g: self, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: self, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
         ops::end_game(&mut cx, outcome);
     }
 
@@ -786,7 +853,7 @@ impl Game {
             }
         }
         if now {
-            let mut cx = Cx { g: self, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+            let mut cx = Cx { g: self, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
             ops::concede(&mut cx, player);
         }
         // A staged run's question to the player who left is made by another, or not at all (CR 800.4f-h).
@@ -849,7 +916,7 @@ impl Game {
         let state = self.state.clone_with_journal_from(floor);
         let root = self.tree.next();
         let tree = tree::Tree::rooted(root, (state.mark(), self.log.len()));
-        Game { state, log: self.log.clone(), tree, at: root, cards: self.cards, verify: self.verify, max_events: self.max_events, history_end: None, check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), takeback: Default::default() }
+        Game { state, log: self.log.clone(), tree, at: root, cards: self.cards, verify: self.verify, max_events: self.max_events, history_end: None, check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), effect_words: Default::default(), mana_activation_x: None, mana_interval: None, takeback: Default::default() }
     }
 
     /// Gives the game's generator another seed (`GameState::reseed`): a fork for search that must not shuffle or roll
@@ -939,6 +1006,8 @@ impl Game {
                     hexproof_from: c.hexproof_from,
                     must_attack: c.must_attack,
                     attacking: false,
+                    blocked_creatures: Default::default(),
+                    blocking_creatures: Default::default(),
                     mana_value,
                     abilities: c.abilities,
                     words: Words::NONE,
@@ -955,7 +1024,7 @@ impl Game {
             }
         };
         for record in &mut self.log {
-            if let Cause::Ability { source, ability } = &mut record.cause {
+            if let Cause::Ability { source, ability, .. } = &mut record.cause {
                 patch(*source, ability);
             }
             match &mut record.event {
@@ -1097,6 +1166,9 @@ pub(crate) struct Cx<'a> {
     /// (CR 614.5, `replace::run_then`): a card Thought Reflection's "draw two cards instead" draws meets every draw replacement
     /// but that Thought Reflection's. Empty outside one.
     pub lineage: Vec<replace::Applied>,
+    /// Specific prevention receipts for the current damage formation. Nested damage calls save/restore a fresh
+    /// context (CR 615.10); pure components share it. Never retained in a position or observation.
+    pub damage: Option<Box<replace::DamageContext>>,
     /// Where the journal and the history stood when this run's question was asked: a run that goes on past a question it
     /// could not stop at (`ask_core`) is wound back to here, so the question is put to the position it was asked in, with
     /// the objects it names, and not to the one the run began from.
@@ -1120,6 +1192,7 @@ pub(crate) struct Produced {
     pub amount: u32,
     pub restriction: Option<ManaRestriction>,
     pub lasts: ManaLasts,
+    pub snow: bool,
 }
 
 impl<'a> Cx<'a> {
@@ -1285,11 +1358,11 @@ impl<'a> Cx<'a> {
         // Asked as the ability it is, acquired as the resolving one that makes it trigger was (CR 607.5).
         let by = layers::given_link(self.g.cards, &self.g.state, source, ability, self.resolving_acquired(source));
         if let AbilityDef::Triggered(TriggeredDef { condition: Some(condition), .. }) = self.g.cards.ability(ability)
-            && !condition(&*self, &Asker { source, controller, by, spell: false })
+            && !condition(&*self, &Asker { instance: None, source, controller, by, spell: false })
         {
             return;
         }
-        self.g.state.trigger_push(cantrip_state::PendingTrigger {
+        self.g.state.trigger_push(cantrip_state::PendingTrigger { event_amount: None,
             source,
             ability,
             controller,
@@ -1406,7 +1479,7 @@ impl<'a> Cx<'a> {
     /// The state triggers have judged the game as it is now (`StateCheck`): every change so far is seen.
     pub(crate) fn state_judged(&mut self) {
         let StateCheck { depth, resolving, .. } = self.g.check;
-        self.g.check = StateCheck { depth, resolving, ..StateCheck::NONE };
+        self.g.check = StateCheck { depth, resolving, judged: true, ..StateCheck::NONE };
     }
 
     /// Carries out `f` as one instruction (`StateCheck`): what it changes with no event is judged once it is done, and, within
@@ -1498,16 +1571,21 @@ impl<'a> Cx<'a> {
     /// counters, CR 714.3c; damage's counters, CR 120.3b-d), so no frame of the rules' own runs card code that puts counters
     /// without one of these; the active player stands in should one ever do, and a debug build stops there.
     pub fn doer(&self) -> PlayerId {
+        self.acting_player().unwrap_or_else(|| {
+            debug_assert!(false, "card code acted with no player doing it");
+            self.g.state.turn.active
+        })
+    }
+
+    /// The action's actual player, if it has one. Unlike `doer`, this never substitutes a player for rules/setup.
+    pub(crate) fn acting_player(&self) -> Option<PlayerId> {
         if let Some(p) = self.doer {
-            return p;
+            return Some(p);
         }
         match self.g.state.agenda.get(self.frame).map(|f| f.kind) {
-            Some(FrameKind::Act { player }) => player,
-            Some(FrameKind::Resolve { .. }) if let Some(item) = self.resolving() => item.controller,
-            _ => {
-                debug_assert!(false, "card code acted with no player doing it");
-                self.g.state.turn.active
-            }
+            Some(FrameKind::Act { player }) => Some(player),
+            Some(FrameKind::Resolve { .. }) => self.resolving().map(|item| item.controller),
+            _ => None,
         }
     }
 
@@ -1523,11 +1601,11 @@ impl<'a> Cx<'a> {
 
     /// Counters one instruction of an effect puts (`Game::add_counters_together`, `add_counters_together_by`): what it puts on
     /// an object by one player is one placement on it, every kind together (CR 122.6, 608.2), and all of them are one event.
-    fn put_counters_together(&mut self, puts: impl Iterator<Item = (PlayerId, ObjectId, CounterKind, i16)>, len: usize) {
+    fn put_counters_together(&mut self, puts: impl Iterator<Item = (PlayerId, ObjectId, CounterKind, i64)>, len: usize) {
         let mut placements: Vec<counters::Placement> = Vec::with_capacity(len);
         for (by, object, kind, amount) in puts.filter(|&(_, _, _, amount)| amount > 0) {
             match placements.iter_mut().find(|p| p.object == object && p.by == by) {
-                Some(p) => p.counts[kind as usize] += amount,
+                Some(p) => p.counts[kind as usize] = p.counts[kind as usize].checked_add(amount).expect("counter placement exceeds i64 semantic domain"),
                 None => {
                     let mut counts = [0; CounterKind::COUNT];
                     counts[kind as usize] = amount;
@@ -1546,7 +1624,7 @@ impl<'a> Cx<'a> {
             FrameKind::BeginStep | FrameKind::Opening => Cause::Turn,
             FrameKind::Resolve { .. } => match self.resolving() {
                 Some(item) if item.kind == StackKind::Spell => Cause::Spell(item.object),
-                Some(item) => Cause::Ability { source: item.object, ability: item.ability },
+                Some(item) => Cause::Ability { source: item.object, ability: item.ability, acquired: item.acquired },
                 None => Cause::Rules,
             },
             _ => Cause::Rules,
@@ -1567,12 +1645,31 @@ impl<'a> Cx<'a> {
 
     /// Adds unrestricted mana that lasts past the end of its step, as `lasts` says (CR 106.4, 500.5a).
     fn add_lasting_mana(&mut self, player: PlayerId, mana: Mana, amount: u32, lasts: ManaLasts) {
-        if self.hold(Produced { to: player, mana, amount, restriction: None, lasts }) {
+        let snow = self.mana_is_snow();
+        if self.hold(Produced { to: player, mana, amount, restriction: None, lasts, snow }) {
             return;
         }
         let source = self.mana_source();
         takeback::produced(self.g, source);
-        self.g.state.add_mana(player, mana, amount, source, None, lasts);
+        self.g.state.add_mana(player, mana, amount, source, None, lasts, snow);
+    }
+
+    /// Runs one immediate mana ability with its own history interval and activation X. Restores the enclosing
+    /// activation even if this one suspends or cannot pay its costs (CR 605.3, 107.3k, 611.2b).
+    pub(crate) fn with_mana_interval<T>(&mut self, source: ObjectId, f: impl FnOnce(&mut Self) -> T) -> T {
+        let head = self.g.log.len() as u32;
+        let outer_interval = self.g.mana_interval.replace(ManaInterval { source, since: head, tapped_since: head, resolution: head, cost_objects: Vec::new() });
+        let outer_x = self.g.mana_activation_x.take();
+        let done = f(self);
+        self.g.mana_activation_x = outer_x;
+        self.g.mana_interval = outer_interval;
+        done
+    }
+
+    /// CR 107.4h: current characteristics at production, including LKI if the source has left (CR 608.2h).
+    fn mana_is_snow(&self) -> bool {
+        let source = self.mana_source();
+        source != ObjectId::NONE && self.chars(source).supertypes.snow
     }
 
     /// The source of mana added now (CR 106.3): the mana ability's source while one runs, else the spell resolving or the
@@ -1596,16 +1693,26 @@ impl<'a> Cx<'a> {
     /// an event - is each one's own text, its source's now.
     pub(crate) fn own_text<T>(&mut self, own: bool, f: impl FnOnce(&mut Self) -> T) -> T {
         let outer = self.g.own_text.replace(own);
+        let effect = self.g.effect_words.replace(None);
         let result = f(self);
+        self.g.effect_words.set(effect);
         self.g.own_text.set(outer);
         result
     }
 
-    /// The words an effect that `source`'s text creates now keeps (`ContinuousEffect::words`): for one that grants an ability,
-    /// the words of that text as it is - a resolving ability's as it was put on the stack (`Cx::own_text`), a spell's own -
-    /// which the granted ability reads from then on (CR 611.2c, 113.7a). `Words::NONE` for any other effect.
+    /// Execute the remaining instructions of a resolved effect using its creation text.
+    pub(crate) fn effect_text<T>(&mut self, effect: &ContinuousEffect, f: impl FnOnce(&mut Self) -> T) -> T {
+        self.own_text(true, |cx| {
+            cx.g.effect_words.set(Some((effect.source, effect.words)));
+            f(cx)
+        })
+    }
+
+    /// The creation text retained by a granted ability, replacement or prevention (CR 611.2c, 113.7a).
     pub(crate) fn granting_words(&self, source: ObjectId, kind: EffectKind) -> Words {
-        if matches!(kind, EffectKind::AddAbility(_)) { Query::words(self, source) } else { Words::NONE }
+        if matches!(kind, EffectKind::AddAbility(_) | EffectKind::Replacement { .. } | EffectKind::ReplacementRule { .. } | EffectKind::Prevention { .. }) {
+            Query::words(self, source)
+        } else { Words::NONE }
     }
 
     /// `own_text(false, ..)` for a question asked of a shared `Cx`: the other abilities' text is read until the guard drops.
@@ -1627,6 +1734,14 @@ impl Drop for OthersText<'_> {
 }
 
 impl Query for Game {
+    fn can_attach_to(&self, attachment: ObjectId, host: ObjectId) -> bool {
+        crate::attach::host_allows(self, attachment, host, true)
+    }
+
+    fn can_untap(&self, permanent: ObjectId) -> bool {
+        ops::can_untap(self, self.cards, permanent)
+    }
+
     fn state(&self) -> &GameState {
         &self.state
     }
@@ -1673,6 +1788,23 @@ impl Query for Game {
 }
 
 impl Query for Cx<'_> {
+    fn can_attach_to(&self, attachment: ObjectId, host: ObjectId) -> bool {
+        crate::attach::host_allows(self, attachment, host, true)
+    }
+    fn mana_ability_cost_objects(&self, component: usize, part: cantrip_api::CostPart) -> Vec<ObjectId> {
+        self.g.mana_interval.as_ref().into_iter().flat_map(|i| &i.cost_objects)
+            .filter_map(|&(c, p, o)| (c == component && p == part).then_some(o)).collect()
+
+    }
+
+    fn can_untap(&self, permanent: ObjectId) -> bool {
+        ops::can_untap(self, self.cards(), permanent)
+    }
+
+    fn mana_ability_x(&self) -> Option<u32> {
+        self.g.mana_activation_x.map(u32::from)
+    }
+
     fn state(&self) -> &GameState {
         &self.g.state
     }
@@ -1728,6 +1860,12 @@ impl Query for Cx<'_> {
     /// (CR 113.7a, 612.1). A spell reads its own, which a text change on the stack does change.
     fn words(&self, id: ObjectId) -> Words {
         if self.g.own_text.get()
+            && let Some((source, words)) = self.g.effect_words.get()
+            && source == id
+        {
+            return words;
+        }
+        if self.g.own_text.get()
             && let Some(item) = self.resolving()
             && item.kind != StackKind::Spell
             && item.object == id
@@ -1745,7 +1883,7 @@ impl Cx<'_> {
         let turn = self.g.state.turn.number;
         let by = match self.cause() {
             Cause::Spell(spell) => Grant { object: spell, ability: AbilityRef::spell(self.g.state.obj(spell).card) },
-            Cause::Ability { source, ability } => Grant { object: source, ability },
+            Cause::Ability { source, ability, .. } => Grant { object: source, ability },
             _ => Grant { object: fallback, ability: AbilityRef::spell(self.g.state.obj(fallback).card) },
         };
         let permission = PlayPermission { what, player, grant, by, turn };
@@ -1962,15 +2100,15 @@ impl cantrip_api::Game for Cx<'_> {
         ops::mill_together(self, mills)
     }
 
-    fn damage(&mut self, source: ObjectId, target: Target, amount: u16) -> u16 {
+    fn damage(&mut self, source: ObjectId, target: Target, amount: i64) -> i64 {
         ops::damage(self, source, target, amount, false)
     }
 
-    fn damage_result(&mut self, source: ObjectId, target: Target, amount: u16) -> Option<DamageResult> {
+    fn damage_result(&mut self, source: ObjectId, target: Target, amount: i64) -> Option<DamageResult> {
         ops::damage_result(self, source, target, amount, false)
     }
 
-    fn damage_together(&mut self, damage: &[(ObjectId, Target, u16)]) -> Vec<u16> {
+    fn damage_together(&mut self, damage: &[(ObjectId, Target, i64)]) -> Vec<i64> {
         ops::damage_together(self, damage)
     }
 
@@ -1978,7 +2116,7 @@ impl cantrip_api::Game for Cx<'_> {
         ops::heal(self, permanent)
     }
 
-    fn each_opponent_loses_life(&mut self, player: PlayerId, amount: i32) -> i32 {
+    fn each_opponent_loses_life(&mut self, player: PlayerId, amount: i64) -> i64 {
         ops::each_opponent_loses_life(self, player, amount)
     }
 
@@ -2110,7 +2248,16 @@ impl cantrip_api::Game for Cx<'_> {
             .map_err(|_| Suspend)
     }
 
-    fn put_onto_battlefield_attacking(&mut self, object: ObjectId, controller: PlayerId, defender: Target, counters: &[(CounterKind, i16)]) -> Result<ObjectId, Suspend> {
+    fn put_onto_battlefield_by(&mut self, object: ObjectId, controller: PlayerId, tapped: bool, by: PlayerId) -> Result<ObjectId, Suspend> {
+        ops::put_onto_battlefield_by(self, &[(object, controller, tapped, by)], &[])
+            .map(|v| v.first().copied().unwrap_or(object)).map_err(|_| Suspend)
+    }
+
+    fn put_all_onto_battlefield_by(&mut self, objects: &[(ObjectId, PlayerId, bool, PlayerId)], counters: &[(CounterKind, i64)]) -> Result<Vec<ObjectId>, Suspend> {
+        ops::put_onto_battlefield_by(self, objects, counters).map_err(|_| Suspend)
+    }
+
+    fn put_onto_battlefield_attacking(&mut self, object: ObjectId, controller: PlayerId, defender: Target, counters: &[(CounterKind, i64)]) -> Result<ObjectId, Suspend> {
         ops::put_onto_battlefield_attacking(self, object, controller, defender, counters).map_err(|_| Suspend)
     }
 
@@ -2128,7 +2275,7 @@ impl cantrip_api::Game for Cx<'_> {
         ops::put_onto_battlefield_becoming(self, object, controller, becomes).map_err(|_| Suspend)
     }
 
-    fn put_all_onto_battlefield_becoming(&mut self, objects: &[(ObjectId, PlayerId)], item: &StackItem, what: &'static EntersAs, counters: &[(CounterKind, i16)]) -> Result<Vec<ObjectId>, Suspend> {
+    fn put_all_onto_battlefield_becoming(&mut self, objects: &[(ObjectId, PlayerId)], item: &StackItem, what: &'static EntersAs, counters: &[(CounterKind, i64)]) -> Result<Vec<ObjectId>, Suspend> {
         let becomes = Becomes { what, card: item.ability.card, words: self.words(item.object) };
         let all: Vec<(ObjectId, PlayerId, bool)> = objects.iter().map(|&(id, p)| (id, p, false)).collect();
         ops::put_onto_battlefield_becoming_all(self, &all, counters, becomes).map_err(|_| Suspend)
@@ -2146,7 +2293,7 @@ impl cantrip_api::Game for Cx<'_> {
         ops::put_onto_battlefield(self, objects, ZoneReason::Other).map_err(|_| Suspend)
     }
 
-    fn put_all_onto_battlefield_with_counters(&mut self, objects: &[(ObjectId, PlayerId, bool)], counters: &[(CounterKind, i16)]) -> Result<Vec<ObjectId>, Suspend> {
+    fn put_all_onto_battlefield_with_counters(&mut self, objects: &[(ObjectId, PlayerId, bool)], counters: &[(CounterKind, i64)]) -> Result<Vec<ObjectId>, Suspend> {
         ops::put_onto_battlefield_with(self, objects, ZoneReason::Other, counters).map_err(|_| Suspend)
     }
 
@@ -2167,13 +2314,13 @@ impl cantrip_api::Game for Cx<'_> {
         ops::as_it_would_exist(self, entering).chars
     }
 
-    fn put_onto_battlefield_with_counters(&mut self, object: ObjectId, controller: PlayerId, tapped: bool, counters: &[(CounterKind, i16)]) -> Result<ObjectId, Suspend> {
+    fn put_onto_battlefield_with_counters(&mut self, object: ObjectId, controller: PlayerId, tapped: bool, counters: &[(CounterKind, i64)]) -> Result<ObjectId, Suspend> {
         ops::put_onto_battlefield_with(self, &[(object, controller, tapped)], ZoneReason::Other, counters)
             .map(|v| v.first().copied().unwrap_or(object))
             .map_err(|_| Suspend)
     }
 
-    fn create_tokens_with_counters(&mut self, def: CardId, controller: PlayerId, count: u32, tapped: bool, counters: &[(CounterKind, i16)], words: Words) -> Result<Vec<ObjectId>, Suspend> {
+    fn create_tokens_with_counters(&mut self, def: CardId, controller: PlayerId, count: u32, tapped: bool, counters: &[(CounterKind, i64)], words: Words) -> Result<Vec<ObjectId>, Suspend> {
         let tokens: Vec<(CardId, PlayerId)> = (0..count).map(|_| (def, controller)).collect();
         ops::create_tokens_worded(self, &tokens, tapped, None, counters, words, None, None).map_err(|_| Suspend)
     }
@@ -2203,11 +2350,27 @@ impl cantrip_api::Game for Cx<'_> {
         ops::attack_with_tokens(self, entered, defender);
     }
 
+    fn become_blocked(&mut self, attacker: ObjectId) {
+        ops::set_blocked(self, attacker, true);
+    }
+
+    fn remove_from_combat(&mut self, permanent: ObjectId) {
+        let before = self.s().mark();
+        ops::remove_from_combat(self, &[permanent]);
+        if self.s().mark() != before {
+            self.state_changed();
+        }
+    }
+
+    fn become_unblocked(&mut self, attacker: ObjectId) {
+        ops::set_blocked(self, attacker, false);
+    }
+
     fn put_onto_battlefield_transformed(&mut self, object: ObjectId, controller: PlayerId, tapped: bool) -> Result<ObjectId, Suspend> {
         ops::put_onto_battlefield_as(self, object, controller, tapped, true, ZoneReason::Other, &[]).map_err(|_| Suspend)
     }
 
-    fn put_onto_battlefield_transformed_with_counters(&mut self, object: ObjectId, controller: PlayerId, tapped: bool, counters: &[(CounterKind, i16)]) -> Result<ObjectId, Suspend> {
+    fn put_onto_battlefield_transformed_with_counters(&mut self, object: ObjectId, controller: PlayerId, tapped: bool, counters: &[(CounterKind, i64)]) -> Result<ObjectId, Suspend> {
         ops::put_onto_battlefield_as(self, object, controller, tapped, true, ZoneReason::Other, counters).map_err(|_| Suspend)
     }
 
@@ -2257,6 +2420,15 @@ impl cantrip_api::Game for Cx<'_> {
         let acquired = self.resolving_acquired(source);
         let words = Some(Query::words(&*self, source));
         self.g.state.delayed_push(cantrip_state::Delayed { when, source, controller, ability, subject, members: cantrip_state::Span::default(), since, acquired, words });
+    }
+
+    fn delayed_trigger_with(&mut self, when: DelayedWhen, source: ObjectId, controller: PlayerId, ability: AbilityRef, subject: Target, objects: &[ObjectId]) {
+        assert!(!when.is_event(), "combined delayed captures require a step trigger");
+        let members = self.g.state.members_push(objects);
+        let since = self.g.log.len() as u32;
+        let acquired = self.resolving_acquired(source);
+        let words = Some(Query::words(&*self, source));
+        self.g.state.delayed_push(cantrip_state::Delayed { when, source, controller, ability, subject, members, since, acquired, words });
     }
 
     fn reflexive_trigger(&mut self, source: ObjectId, controller: PlayerId, ability: AbilityRef, subject: Target) {
@@ -2365,7 +2537,7 @@ impl cantrip_api::Game for Cx<'_> {
         counters::put_on_player(self, player, counters::PlayerCounts { experience: amount.min(u16::MAX as u32) as u16, ..Default::default() }, by);
     }
 
-    fn give_poison(&mut self, player: PlayerId, amount: u32) {
+    fn give_poison(&mut self, player: PlayerId, amount: i64) {
         let by = self.doer();
         ops::give_poison(self, player, amount, by);
     }
@@ -2437,6 +2609,10 @@ impl cantrip_api::Game for Cx<'_> {
         ops::untap(self, permanent);
     }
 
+    fn untap_together(&mut self, permanents: &[ObjectId]) {
+        ops::untap_together(self, permanents);
+    }
+
     fn exert(&mut self, permanent: ObjectId) {
         ops::exert(self, permanent);
     }
@@ -2474,13 +2650,14 @@ impl cantrip_api::Game for Cx<'_> {
         ops::create_token_attached(self, def, controller, host).map_err(|_| Suspend)
     }
 
-    fn gain_life(&mut self, player: PlayerId, amount: i32) {
+    fn gain_life(&mut self, player: PlayerId, amount: i64) {
         ops::change_life(self, player, amount);
     }
 
     fn can_gain_life(&self, player: PlayerId) -> bool {
         !static_rules::cant_gain_life(self, self.cards(), player) && !ops::life_total_cant_change(self.s(), player)
     }
+
 
     fn can_lose_life(&self, player: PlayerId) -> bool {
         !static_rules::cant_lose_life(self, self.cards(), player) && !ops::life_total_cant_change(self.s(), player)
@@ -2490,7 +2667,10 @@ impl cantrip_api::Game for Cx<'_> {
         static_rules::stations_by_toughness(self, creature)
     }
 
-    fn lose_life(&mut self, player: PlayerId, amount: i32) {
+
+
+    fn lose_life(&mut self, player: PlayerId, amount: i64) {
+
         ops::change_life(self, player, -amount);
     }
 
@@ -2500,12 +2680,13 @@ impl cantrip_api::Game for Cx<'_> {
     }
 
     fn add_mana(&mut self, player: PlayerId, mana: Mana, amount: u32) {
-        if self.hold(Produced { to: player, mana, amount, restriction: None, lasts: ManaLasts::Step }) {
+        let snow = self.mana_is_snow();
+        if self.hold(Produced { to: player, mana, amount, restriction: None, lasts: ManaLasts::Step, snow }) {
             return;
         }
         let source = self.mana_source();
         takeback::produced(self.g, source);
-        self.g.state.add_mana(player, mana, amount, source, None, ManaLasts::Step);
+        self.g.state.add_mana(player, mana, amount, source, None, ManaLasts::Step, snow);
     }
 
     fn become_day(&mut self) -> Result<(), Suspend> {
@@ -2529,36 +2710,47 @@ impl cantrip_api::Game for Cx<'_> {
     }
 
     fn add_restricted_mana(&mut self, player: PlayerId, mana: Mana, amount: u32, restriction: ManaRestriction) {
-        if self.hold(Produced { to: player, mana, amount, restriction: Some(restriction), lasts: ManaLasts::Step }) {
+        let snow = self.mana_is_snow();
+        if self.hold(Produced { to: player, mana, amount, restriction: Some(restriction), lasts: ManaLasts::Step, snow }) {
             return;
         }
         let source = self.mana_source();
         takeback::produced(self.g, source);
-        self.g.state.add_mana(player, mana, amount, source, Some(restriction), ManaLasts::Step);
+        self.g.state.add_mana(player, mana, amount, source, Some(restriction), ManaLasts::Step, snow);
     }
 
-    fn add_counters(&mut self, object: ObjectId, kind: CounterKind, amount: i16) {
+    fn add_counters(&mut self, object: ObjectId, kind: CounterKind, amount: i64) {
         // Taking counters off is `remove_counters`; a negative amount still removes them in a release build.
         debug_assert!(amount >= 0, "use remove_counters");
         if amount < 0 {
-            counters::remove(self, object, kind, -amount);
+            let available = i64::from(self.s().obj(object).counters(kind).max(0));
+            counters::remove(self, object, kind, i16::try_from(amount.saturating_neg().min(available)).unwrap());
             return;
         }
         let by = self.doer();
         counters::put(self, object, kind, amount, by, counters::How::Effect);
     }
 
-    fn add_counters_together(&mut self, puts: &[(ObjectId, CounterKind, i16)]) {
+    fn add_counters_with_limit(&mut self, object: ObjectId, kind: CounterKind, amount: i64, maximum_total: i64) {
+        let by = self.doer();
+        counters::put_with_limit(self, object, kind, amount, by, maximum_total);
+    }
+
+    fn add_counters_together(&mut self, puts: &[(ObjectId, CounterKind, i64)]) {
         let by = self.doer();
         self.put_counters_together(puts.iter().map(|&(object, kind, amount)| (by, object, kind, amount)), puts.len());
     }
 
-    fn add_counters_by(&mut self, by: PlayerId, object: ObjectId, kind: CounterKind, amount: i16) {
+    fn add_counters_by(&mut self, by: PlayerId, object: ObjectId, kind: CounterKind, amount: i64) {
         debug_assert!(amount >= 0, "use remove_counters");
         counters::put(self, object, kind, amount, by, counters::How::Effect);
     }
 
-    fn add_counters_together_by(&mut self, puts: &[(PlayerId, ObjectId, CounterKind, i16)]) {
+    fn pay_counter_cost(&mut self, payer: PlayerId, puts: &[(ObjectId, CounterKind, i64)]) -> bool {
+        counters::pay_cost(self, payer, puts)
+    }
+
+    fn add_counters_together_by(&mut self, puts: &[(PlayerId, ObjectId, CounterKind, i64)]) {
         self.put_counters_together(puts.iter().copied(), puts.len());
     }
 
@@ -2596,7 +2788,8 @@ impl cantrip_api::Game for Cx<'_> {
     fn add_player_effect(&mut self, controller: PlayerId, source: ObjectId, kind: EffectKind, duration: Duration) {
         debug_assert!(kind.outlives_affected(), "a player's effect is about the player, not an object");
         let timestamp = self.g.state.timestamp();
-        self.g.state.effect_push(ContinuousEffect { source, controller, timestamp, affected: source, kind, duration, words: Words::NONE });
+        let words = self.granting_words(source, kind);
+        self.g.state.effect_push(ContinuousEffect { source, controller, timestamp, affected: source, kind, duration, words });
         self.state_changed();
     }
 
@@ -2750,7 +2943,7 @@ impl cantrip_api::Game for Cx<'_> {
         let player = self.g.state.obj(permanent).controller;
         let ability = AbilityRef { card: self.g.state.obj(permanent).card, index: actions::EXTRA_LOYALTY_ALLOWED };
         for _ in 0..times {
-            self.record(Event::AbilityActivated { source: permanent, ability, player, by: Grant::NONE });
+            self.record(Event::AbilityActivated { source: permanent, ability, player, by: Grant::NONE, instance: AbilityAcquisition::OWN });
         }
     }
 
@@ -2955,3 +3148,15 @@ mod tests {
         assert_eq!(game.state.rng, before.rng);
     }
 }
+
+#[cfg(test)]
+mod snow_cost_tests;
+
+#[cfg(test)]
+mod shared_exile_helpers_tests;
+
+#[cfg(test)]
+mod non_target_attachment_tests;
+
+#[cfg(test)]
+mod copy_retarget_tests;

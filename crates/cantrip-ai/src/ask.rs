@@ -21,6 +21,7 @@ pub struct Perms {
 pub(crate) fn cost_obs(c: &ManaCost) -> CostObs {
     CostObs {
         generic: c.generic,
+        snow: c.snow,
         symbols: c.symbols,
         hybrid: c
             .hybrid
@@ -53,6 +54,8 @@ pub(crate) fn option_obs(o: &ActionOption, refs: &HashMap<ObjectId, u32>) -> Opt
         names_nothing: o.names_nothing,
         mana: o.mana.map(|m| m as u8),
         restriction: o.restriction.map(|r| format!("{r:?}")),
+        snow: o.snow,
+        pay_snow: o.pay_snow,
         pays_nothing: o.pays_nothing,
         granted_by: o.granted_by.map(|g| (target_ref(Target::Object(g.object), refs), g.ability.index)),
         paid_by: o.paid_by.map(|g| (target_ref(Target::Object(g.object), refs), g.ability.index)),
@@ -89,6 +92,8 @@ fn label_name(game: &Game, l: &Label) -> String {
     let name = |c: CardId| game.cards.get(c).name;
     match *l {
         Label::Card(c, n) => format!("Card:{}:{n}", name(c)),
+        Label::WordedCard(c, n, words) => format!("WordedCard:{}:{n}:{words:?}", name(c)),
+        Label::WordedOption(c, n, words) => format!("WordedOption:{}:{n}:{words:?}", name(c)),
         Label::Name(c) => format!("Name:{}", name(c)),
         Label::Mode(a, n) => format!("Mode:{}:{}:{n}", name(a.card), a.index),
         Label::Extra(c, n) => format!("Extra:{}:{n}", name(c)),
@@ -96,6 +101,135 @@ fn label_name(game: &Game, l: &Label) -> String {
         Label::Face(c) => format!("Face:{}", name(c)),
         Label::Miracle(m) => format!("Miracle:{}:{}:{}", name(m.card), name(m.granter), m.index),
         ref other => format!("{other:?}"),
+    }
+}
+
+#[cfg(test)]
+mod worded_label_tests {
+    use super::*;
+
+    #[test]
+    fn cost_payment_observation_and_answers_keep_large_operation_keys() {
+        static DEF: CardDef = CardDef { name: "Cost payment observation", ..CardDef::BLANK };
+        let cards = Box::leak(Box::new(CardTable::new([&DEF])));
+        let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+        while !game.state.agenda.is_empty() { game.state.frame_remove(0); }
+        let source = game.state.push_obj(Obj::new(cards.id_of(&DEF), PlayerId(0), Zone::BATTLEFIELD));
+        game.state.zone_push(Zone::BATTLEFIELD, source);
+        let choice = CostPaymentChoice { label: "Pay 3 life".into(), objects: vec![source], kind: CostPaymentKind::Life };
+        let request = Request { id: 1, player: PlayerId(0), may_cancel: false,
+            kind: RequestKind::ChooseCostPayment { source, choices: vec![choice; 65_538] } };
+        let knowledge = crate::knowledge::Knowledge::of(&game, request.player);
+        let (observation, index) = crate::observe::observe_indexed(&game, &knowledge, request.player, InfoMode::Full).unwrap();
+        let answering = crate::answer::Answering::new(&game, &request, &observation, &index);
+        let AskKind::ChooseCostPayment { choices } = &answering.ask.kind else { panic!("cost payment observation") };
+        assert_eq!(choices[65_536].kind, CostPaymentKindObs::Life);
+        assert_eq!(choices[65_536].label, "Pay 3 life");
+        assert_ne!(choices[65_536].objects[0], Ref::None);
+        for value in [255, 256, 65_535, 65_536, 65_537] {
+            let native = Answer::CostPayment(value);
+            let factored = answering.factored(&request, &native, None).unwrap();
+            assert_eq!(factored, factor::FactoredAnswer::CostPayment(value));
+            let tokens = factor::decompose(&answering.ask, &[], &factored).unwrap();
+            let mut machine = factor::Machine::new(&answering.ask, &[]);
+            for token in tokens { assert!(machine.choose_token(token)); }
+            assert_eq!(answering.engine(&game, &request, machine.answer().unwrap()).unwrap(), native);
+        }
+    }
+
+    #[test]
+    fn wide_number_observation_keeps_a_bounded_representation_of_every_value() {
+        static DEF: CardDef = CardDef { name: "Wide numeric observation", ..CardDef::BLANK };
+        let cards = Box::leak(Box::new(CardTable::new([&DEF])));
+        let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+        let source = game.state.push_obj(Obj::new(cards.id_of(&DEF), PlayerId(0), Zone::BATTLEFIELD));
+        let request = Request { id: 1, player: PlayerId(0), may_cancel: false,
+            kind: RequestKind::ChooseNumber { source, least: 0, most: u32::MAX, heading: "Put counters" } };
+        let (ask, _) = ask_of(&game, &request, &HashMap::from([(source, 0)]));
+        assert!(serde_json::to_string(&ask).unwrap().len() < 512);
+    }
+
+    #[test]
+    fn wide_number_recorded_answers_keep_their_exact_native_value() {
+        static DEF: CardDef = CardDef { name: "Wide number recording", ..CardDef::BLANK };
+        let cards = Box::leak(Box::new(CardTable::new([&DEF])));
+        let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+        while !game.state.agenda.is_empty() { game.state.frame_remove(0); }
+        let source = game.state.push_obj(Obj::new(cards.id_of(&DEF), PlayerId(0), Zone::BATTLEFIELD));
+        game.state.zone_push(Zone::BATTLEFIELD, source);
+        let request = Request { id: 1, player: PlayerId(0), may_cancel: false,
+            kind: RequestKind::ChooseNumber { source, least: 7, most: u32::MAX, heading: "Put counters" } };
+        let knowledge = crate::knowledge::Knowledge::of(&game, request.player);
+        let (observation, index) = crate::observe::observe_indexed(&game, &knowledge, request.player, InfoMode::Full).unwrap();
+        let answering = crate::answer::Answering::new(&game, &request, &observation, &index);
+        for value in [7, 300, 65535, 0xdeadbeef, u32::MAX] {
+            let native = Answer::Announce(value);
+            let factored = answering.factored(&request, &native, None).unwrap();
+            assert_eq!(factored, factor::FactoredAnswer::Number(value));
+            let tokens = factor::decompose(&answering.ask, &[], &factored).unwrap();
+            let mut machine = factor::Machine::new(&answering.ask, &[]);
+            for token in tokens { assert!(machine.choose_token(token)); }
+            assert_eq!(answering.engine(&game, &request, machine.answer().unwrap()).unwrap(), native);
+        }
+    }
+
+    #[test]
+    fn wide_number_small_ranges_across_signed_and_unsigned_endpoints_remain_exact_and_finite() {
+        static DEF: CardDef = CardDef { name: "High small number", ..CardDef::BLANK };
+        let cards = Box::leak(Box::new(CardTable::new([&DEF])));
+        let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+        while !game.state.agenda.is_empty() { game.state.frame_remove(0); }
+        let source = game.state.push_obj(Obj::new(cards.id_of(&DEF), PlayerId(0), Zone::BATTLEFIELD));
+        game.state.zone_push(Zone::BATTLEFIELD, source);
+        let knowledge = crate::knowledge::Knowledge::of(&game, PlayerId(0));
+        let (mut observation, index) = crate::observe::observe_indexed(&game, &knowledge, PlayerId(0), InfoMode::Full).unwrap();
+        for (least, most) in [(u32::MAX - 1, u32::MAX), (i32::MAX as u32 - 1, i32::MAX as u32 + 1)] {
+            let request = Request { id: 1, player: PlayerId(0), may_cancel: false,
+                kind: RequestKind::ChooseNumber { source, least, most, heading: "Put counters" } };
+            let answering = crate::answer::Answering::new(&game, &request, &observation, &index);
+            assert_eq!(answering.ask.kind, AskKind::ChooseNumber { least, most });
+            observation.request = Some(RequestObs { player: 0, kind: "ChooseNumber".into(), candidates: vec![], ask: Some(answering.ask.clone()) });
+            for value in least..=most {
+                let native = Answer::Announce(value);
+                let factored = answering.factored(&request, &native, None).unwrap();
+                assert_eq!(factored, factor::FactoredAnswer::Number(value));
+                let mut machine = factor::Machine::new(&answering.ask, &[]);
+                let encoded = encode::encode_machine(&observation, &machine, &|_: &str| 0);
+                assert!(!encoded.cap_hit); assert!(encoded.nums.iter().all(|n| n.is_finite()));
+                let compact = encode::from_compact(&encode::to_compact(&encoded)).unwrap();
+                assert!(compact.nums.iter().all(|n| n.is_finite()));
+                let slots = [encode::game::ASK, encode::game::ASK+1, encode::game::ASK+2, encode::game::ASK+3,
+                    encode::game::ASK+4, encode::game::ASK+5, encode::game::X, encode::game::X_MOST];
+                let bytes = least.to_be_bytes().into_iter().chain(most.to_be_bytes());
+                for (slot, byte) in slots.into_iter().zip(bytes) {
+                    assert_eq!(compact.nums_of(0)[slot] * 8.0, f32::from(byte), "high bounds remain exact features");
+                }
+                for token in factor::decompose(&answering.ask, &[], &factored).unwrap() { assert!(machine.choose_token(token)); }
+                assert_eq!(answering.engine(&game, &request, machine.answer().unwrap()).unwrap(), native);
+            }
+        }
+    }
+
+    #[test]
+    fn observation_preserves_printed_indices_and_distinguishes_captured_words() {
+        static DEF: CardDef = CardDef { name: "Observation Choices", labels: &["Wall", "swampwalk"], ..CardDef::BLANK };
+        let table = Box::leak(Box::new(CardTable::new([&DEF])));
+        let mut game = Game::new(table, &Setup { decks: vec![Vec::new(), Vec::new()], ..Default::default() });
+        let card = table.id_of(&DEF);
+        let source = game.state.push_obj(Obj::new(card, PlayerId(0), Zone::BATTLEFIELD));
+        let words = Words::NONE.changed(Word::Subtype(Subtype::Wall), Word::Subtype(Subtype::Elf));
+        let changed = words.changed(Word::Subtype(Subtype::Elf), Word::Subtype(Subtype::Shapeshifter));
+        let labels = vec![Label::Card(card, 1), Label::Option(card, 0), Label::Option(card, 0).with_words(words), Label::Option(card, 0).with_words(changed)];
+        let request = Request { id: 1, player: PlayerId(0), may_cancel: false,
+            kind: RequestKind::ChooseModes { source, modes: labels, eligible: vec![0, 2, 3], count: 1,
+                at_most: 0, affordable: vec![3, 0], additional_cost: false, repeat: false } };
+        let (ask, _) = ask_of(&game, &request, &HashMap::from([(source, 0)]));
+        let AskKind::ChooseModes { labels, eligible, affordable, count, .. } = ask.kind else { panic!("modes") };
+        assert_eq!(labels[0], "Card:Observation Choices:1");
+        assert_eq!(labels[1], format!("Option({card:?}, 0)"));
+        assert!(labels[2].starts_with("WordedOption:Observation Choices:0:"));
+        assert_ne!(labels[2], labels[3]);
+        assert_eq!((eligible, affordable, count), (vec![0, 2, 3], vec![3, 0], 1));
     }
 }
 
@@ -225,6 +359,29 @@ pub(crate) fn ask_of(
     let mut perms = Perms::default();
     let mut source = Ref::None;
     let kind = match &request.kind {
+        RequestKind::ChooseCostPayment { source: s, choices } => {
+            source = r(*s);
+            AskKind::ChooseCostPayment { choices: choices.iter().map(|choice| CostPaymentObs {
+                label: choice.label.clone(), objects: choice.objects.iter().map(|&id| r(id)).collect(),
+                kind: match choice.kind {
+                    CostPaymentKind::Life => CostPaymentKindObs::Life,
+                    CostPaymentKind::Tap => CostPaymentKindObs::Tap,
+                    CostPaymentKind::Sacrifice => CostPaymentKindObs::Sacrifice,
+                    CostPaymentKind::Return => CostPaymentKindObs::Return,
+                    CostPaymentKind::Exile => CostPaymentKindObs::Exile,
+                    CostPaymentKind::Mana => CostPaymentKindObs::Mana,
+                    CostPaymentKind::Energy => CostPaymentKindObs::Energy,
+                    CostPaymentKind::Counters => CostPaymentKindObs::Counters,
+                    CostPaymentKind::Discard => CostPaymentKindObs::Discard,
+                    CostPaymentKind::Behold => CostPaymentKindObs::Behold,
+                    CostPaymentKind::Exert => CostPaymentKindObs::Exert,
+                    CostPaymentKind::Unattach => CostPaymentKindObs::Unattach,
+                    CostPaymentKind::Library => CostPaymentKindObs::Library,
+                    CostPaymentKind::CommitHelpers => CostPaymentKindObs::CommitHelpers,
+                    CostPaymentKind::Choose => CostPaymentKindObs::Choose,
+                },
+            }).collect() }
+        }
         RequestKind::Priority { options: os } => AskKind::Priority {
             options: options(os, refs, &mut perms),
         },
@@ -233,6 +390,7 @@ pub(crate) fn ask_of(
             total,
             remaining,
             options: os,
+            mana_abilities,
             announcing,
             x,
             most,
@@ -249,6 +407,7 @@ pub(crate) fn ask_of(
                 total: cost_obs(total),
                 remaining: cost_obs(remaining),
                 options: options(os, refs, &mut perms),
+                mana_abilities: *mana_abilities,
                 announcing: *announcing,
                 x: u16::try_from(*x).unwrap_or(u16::MAX),
                 x_most: u16::try_from(x_most).unwrap_or(u16::MAX),
@@ -395,15 +554,20 @@ pub(crate) fn ask_of(
         }
         RequestKind::ChooseNumber { source: s, least, most, .. } => {
             source = r(*s);
-            let max_index = u8::try_from(most - least).expect("ChooseNumber range is bounded by the mechanic");
-            AskKind::ChooseModes {
-                labels: (*least..=*most).map(|n| n.to_string()).collect(),
-                eligible: (0..=max_index).collect(),
-                count: 1,
-                at_most: 1,
-                affordable: Vec::new(),
-                additional_cost: false,
-                repeat: false,
+            // Keep old representable small choices unchanged; high bounds also need exact numeric features.
+            if most - least > 255 || *most > i32::MAX as u32 {
+                AskKind::ChooseNumber { least: *least, most: *most }
+            } else {
+                let max_index = (most - least) as u8;
+                AskKind::ChooseModes {
+                    labels: (*least..=*most).map(|n| n.to_string()).collect(),
+                    eligible: (0..=max_index).collect(),
+                    count: 1,
+                    at_most: 1,
+                    affordable: Vec::new(),
+                    additional_cost: false,
+                    repeat: false,
+                }
             }
         }
         RequestKind::May { source: s, purpose } => {
@@ -639,8 +803,11 @@ pub(crate) fn ask_of(
                 .iter()
                 .flat_map(|q| allowed.iter().copied().filter(move |&(b, a)| q.blocker.is_none_or(|x| x == b) && q.attacker.is_none_or(|x| x == a)))
                 .collect();
+            let mut blockers: Vec<(Ref, u32)> = eligible.iter().map(|&b| (r(b), requirements.capacity_of(b))).collect();
+            blockers.sort_by_key(|p| p.0);
             AskKind::DeclareBlockers {
-                eligible: rs(eligible),
+                eligible: blockers.iter().map(|p| p.0).collect(),
+                max_attackers_per_blocker: blockers.iter().map(|p| p.1).collect(),
                 attackers,
                 allowed: pairs(allowed),
                 required: pairs(&required),

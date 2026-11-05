@@ -108,7 +108,14 @@ fn keyword_name(k: u8) -> &'static str {
         57 => "CantBeCopied",
         58 => "Mutate",
         59 => "ReadAhead",
-        60 => "AssignsDamageByToughness",
+        60 => "SnowPlainswalk",
+        61 => "SnowIslandwalk",
+        62 => "SnowSwampwalk",
+        63 => "SnowMountainwalk",
+        64 => "SnowForestwalk",
+        65 => "SnowLandwalk",
+        66 => "Desertwalk",
+        67 => "AssignsDamageByToughness",
         _ => "?",
     }
 }
@@ -300,6 +307,7 @@ impl StateDump {
         d.list("Combat.Attackers", attackers, false);
         let blocks = s.blocks.iter().map(|b| format!("{} > {}", game.known_name(b.blocker), game.known_name(b.attacker))).collect();
         d.list("Combat.Blocks", blocks, false);
+        d.list("Combat.Blockers", s.blockers.iter().map(|&id| game.known_name(id).to_string()).collect(), false);
         // While a declaration's cost to attack is being paid (CR 508.1h-j): the total, what is still owed, and the attackers
         // it is for. Absent at any other time.
         if let Some(Request { kind: RequestKind::PayCosts { total, remaining, attackers, .. }, .. }) = game.pending()
@@ -354,7 +362,7 @@ impl StateDump {
                 && let Some(dungeon) = game.cards.undercity
             {
                 let label = label_text(&Label::Card(dungeon, player.room - 1));
-                d.set(format!("{b}.Dungeon"), format!("Undercity: {}", label.split(" \u{2014} ").next().unwrap_or(label)));
+                d.set(format!("{b}.Dungeon"), format!("Undercity: {}", label.split(" \u{2014} ").next().unwrap_or(&label)));
             }
             let completed = game.history().select(EventQuery::kind(EventMask::DUNGEON_COMPLETED).player(p)).count();
             if completed > 0 {
@@ -446,7 +454,7 @@ impl StateDump {
             // {W}{W} Plains" (restricted mana too, without its restriction).
             let from: Vec<String> = s
                 .mana_from_of(p)
-                .map(|e| format!("{} {}", mana_text(&e.pool), if e.source == ObjectId::NONE { "none".to_string() } else { game.known_name(e.source).to_string() }))
+                .map(|e| format!("{} {}", format!("{}{}", mana_text(&e.pool), if e.snow { " snow" } else { "" }), if e.source == ObjectId::NONE { "none".to_string() } else { game.known_name(e.source).to_string() }))
                 .collect();
             if !from.is_empty() {
                 d.list(&format!("{b}.ManaFrom"), from, false);
@@ -690,7 +698,8 @@ impl StateDump {
                     }
                     // The word chosen as it entered (CR 607.2f): "Jeskai", "Odd".
                     if let Some(chosen) = s.chosen_option(own) {
-                        d.set(format!("{key}.ChosenOption"), label_text(&Label::Option(chosen.card, chosen.index)));
+                        let label = Label::Option(chosen.card, chosen.index).with_words(Query::words(game, id));
+                        d.set(format!("{key}.ChosenOption"), label_text_in(game.cards, &label));
                     }
                     if let Some(chosen) = s.chosen_number(own) {
                         d.set(format!("{key}.ChosenNumber"), chosen);
@@ -749,7 +758,7 @@ impl StateDump {
                         d.list(&format!("{key}.Colors"), colors, true);
                     }
                     let mut keywords: Vec<String> =
-                        (0..64u8).filter(|&k| c.keywords.0 & (1u64 << k) != 0).map(|k| keyword_name(k).to_string()).collect();
+                        (0..128u8).filter(|&k| c.keywords.0 & (1u128 << k) != 0).map(|k| keyword_name(k).to_string()).collect();
                     if !keywords.is_empty() {
                         keywords.sort();
                         d.list(&format!("{key}.Keywords"), keywords, true);
@@ -913,7 +922,7 @@ impl StateDump {
 /// The keys the dump writes outside any player (each list with `.Count` beside it).
 const GAME_KEYS: &[&str] = &[
     "Turn", "Step", "ActivePlayer", "PriorityPlayer", "Result", "DrawReason", "Monarch", "Initiative", "DayNight", "Stack", "Exile",
-    "Exile.FaceDown", "Combat.Attackers", "Combat.Blocks", "Combat.AttackCost", "Combat.AttackCost.Remaining",
+    "Exile.FaceDown", "Combat.Attackers", "Combat.Blockers", "Combat.Blocks", "Combat.AttackCost", "Combat.AttackCost.Remaining",
     "Combat.AttackCost.Attackers", "Delayed", "LeftBattlefield", "Prevented", "Attached",
 ];
 
@@ -1050,8 +1059,39 @@ mod tests {
     }
 
     #[test]
+    fn high_landwalk_bits_and_carrion_counters_have_named_dump_expectations() {
+        fn enters(_: &mut dyn cantrip_api::Game, entering: &mut Entering) -> Result<(), Suspend> {
+            entering.counters[CounterKind::Carrion as usize] = 2;
+            Ok(())
+        }
+        static PROBE: CardDef = CardDef { name: "Data probe", oracle: true, types: TypeSet::of(&[CardType::Creature]),
+            power: Some(2), toughness: Some(2), enters: Some(enters),
+            keywords: Keywords::of(&[Keyword::SnowForestwalk, Keyword::Desertwalk]), ..CardDef::BLANK };
+        let table = Box::leak(Box::new(CardTable::new(cantrip_cards::all().into_iter().chain([&PROBE]))));
+        let script = crate::GameScript::parse("
+[Bot1 Deck]
+Data probe
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Data probe.Cast
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Data probe.Keywords = Desertwalk; SnowForestwalk
+Bot1.Battlefield.Data probe.Counters.Carrion = 2
+Bot1.Battlefield.Data probe.Counters.Corpse = (absent)
+", "landwalk-and-carrion-data").unwrap();
+        if let Err(failure) = crate::run_on(&script, table) { panic!("{}", failure.report); }
+    }
+
+    #[test]
     fn a_parent_or_a_misspelt_key_is_not_writable() {
         assert!(writable("Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne"));
+        assert!(writable("Bot1.Battlefield.Osai Vultures.Counters.Carrion"));
         assert!(writable("Bot1.Battlefield.Grizzly Bears#2.Tapped"));
         assert!(writable("Bot2.Graveyard.Sandman, Shifting Scoundrel.Power"));
         assert!(writable("Bot1.Exile.Llanowar Elves.Counters.PlusOnePlusOne"));

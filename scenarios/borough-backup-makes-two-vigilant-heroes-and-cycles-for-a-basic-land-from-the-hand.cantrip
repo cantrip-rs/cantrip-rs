@@ -26,6 +26,8 @@ Bot1.Pass
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Borough Backup.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 ! Bot1.Search(Tropical Island)
 Bot1.Search(Plains)

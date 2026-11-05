@@ -11,6 +11,15 @@
 use crate::select::{total_mana_value_at_most, Count, Selection};
 use cantrip_api::*;
 
+/// Choose one non-target from candidates (CR 608.2d), with a label describing the choice. Backdraft and Gix's
+/// Command use this when choosing a player or creature, respectively.
+pub fn one_target(g: &mut dyn Game, player: PlayerId, source: ObjectId, candidates: Vec<Target>, label: &'static str) -> Result<Option<Target>, Suspend> {
+    if candidates.is_empty() { return Ok(None) }
+    let ask = RequestKind::ChooseTarget { source, purpose: Purpose::Choose, candidates, optional: false, least: 1, count: 1,
+        any_number: false, label, slot_player: None, together: None, replacing: None };
+    Ok(match g.ask(player, ask)? { Answer::Targets(chosen) => chosen.first().copied(), _ => None })
+}
+
 /// "Choose [cards]": the cards `rule` allows (`crate::select`: how many, of what quality, together how), chosen from among
 /// `cards`, every one of which the player sees - a revealed hand, the cards looked at, a graveyard. Asked whenever there are
 /// cards to show, even when none of them may be chosen (seeing them is part of the effect: Duress); a caller with nothing
@@ -176,7 +185,25 @@ pub fn player(g: &mut dyn Game, chooser: PlayerId, source: ObjectId, candidates:
 }
 
 /// One of the labelled options `modes`, by index (a pile, a mode, "tap or untap"), asked even when the choice is forced.
-pub fn one_of(g: &mut dyn Game, player: PlayerId, source: ObjectId, modes: Vec<Label>) -> Result<u8, Suspend> {
+pub fn one_of(g: &mut dyn Game, player: PlayerId, source: ObjectId, mut modes: Vec<Label>) -> Result<u8, Suspend> {
+    if modes.iter().any(|label| matches!(label, Label::Card(..) | Label::Option(..))) {
+        let words = g.words(source);
+        if !words.is_printed() {
+            for label in &mut modes {
+                *label = match *label {
+                    Label::Card(card, index) => Label::Card(card, index).with_words(words),
+                    Label::Option(card, index) => Label::Option(card, index).with_words(words),
+                    _ => continue,
+                };
+            }
+        }
+    }
+    one_of_captured(g, player, source, modes)
+}
+
+/// The labels already carry the text offering them. In particular an entry
+/// whose new text is printed must not recapture its underlying object's words.
+fn one_of_captured(g: &mut dyn Game, player: PlayerId, source: ObjectId, modes: Vec<Label>) -> Result<u8, Suspend> {
     let eligible = (0..modes.len() as u8).collect();
     let ask = RequestKind::ChooseModes { source, modes, eligible, count: 1, at_most: 0, affordable: Vec::new(), additional_cost: false, repeat: false };
     match g.ask(player, ask)? {
@@ -321,7 +348,10 @@ pub fn option(g: &mut dyn Game, player: PlayerId, source: ObjectId, card: CardId
 /// print it. The linked abilities read it with `chosen_option`.
 pub fn option_as_enters(g: &mut dyn Game, entering: &mut Entering, def: &'static CardDef, options: core::ops::Range<u8>) -> Result<(), Suspend> {
     let card = g.card_id(def);
-    let index = option(g, entering.controller, entering.object, card, options)?;
+    let start = options.start;
+    let words = g.words_as_enters(entering);
+    let modes = options.map(|i| Label::Option(card, i).with_words(words)).collect();
+    let index = start + one_of_captured(g, entering.controller, entering.object, modes)?;
     entering.chosen_option = Some(ChosenOption { card, index });
     Ok(())
 }
@@ -330,7 +360,7 @@ pub fn option_as_enters(g: &mut dyn Game, entering: &mut Entering, def: &'static
 /// when only one value is legal. `heading` is the card's named ability or instruction. Expel the Interlopers and Nyota
 /// Uhura, Communications print this choice.
 pub fn number(g: &mut dyn Game, player: PlayerId, source: ObjectId, least: u32, most: u32, heading: &'static str) -> Result<u32, Suspend> {
-    assert!(least <= most && most - least <= u8::MAX.into(), "a number choice must contain between 1 and 256 values");
+    assert!(least <= most, "a number choice must have an inclusive nonempty range");
     match g.ask(player, RequestKind::ChooseNumber { source, least, most, heading })? {
         Answer::Announce(value) => Ok(value),
         _ => unreachable!("the core validates answers to ChooseNumber"),

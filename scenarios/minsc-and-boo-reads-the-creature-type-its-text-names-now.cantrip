@@ -26,6 +26,7 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Minsc & Boo, Timeless Heroes.Cast
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Artificial Evolution.Cast(Stack.Minsc & Boo, Timeless Heroes)
 Bot1.Pass

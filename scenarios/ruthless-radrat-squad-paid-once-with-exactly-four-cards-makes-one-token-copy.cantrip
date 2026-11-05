@@ -35,6 +35,9 @@ Bot2.Pass
 Bot1.Hand.Ruthless Radrat.Cast(Kicked: 1)
 ! Bot1.Hand.Ruthless Radrat.Cast(Kicked: 2)
 ! Bot1.Choose(Dark Ritual; Dark Ritual; Dark Ritual)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Dark Ritual; Dark Ritual; Dark Ritual; Dark Ritual)
 Bot1.Pass
 Bot2.Pass

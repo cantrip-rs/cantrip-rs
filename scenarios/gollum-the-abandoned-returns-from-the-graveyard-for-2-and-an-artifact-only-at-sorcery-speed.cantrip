@@ -49,6 +49,8 @@ Bot2.Modes()
 Bot1.Graveyard.Gollum the Abandoned.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Mox Ruby)
 
 [Expect]

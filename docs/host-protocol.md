@@ -89,6 +89,15 @@ Version 204. `XGoverns` is, for an X that is not paid in mana, what the cost say
 creature you sacrifice" (CR 702.153a) - and empty for any other; a page captions the announcement with it in place of the mana
 wording ("not enough mana for it" would be false of a creature's power). Version 206.
 
+**Choosing a number.** A resolving number choice with at most 256 values retains its existing modes prompt and answer.
+A wider range uses `ChooseNumberPromptMessage`: `Player`, `Source`, inclusive `Least` and `Most`, and `Heading`, answered
+by `NumberChosenAnswer.Value`. All values through 4294967295 are represented exactly, without listing every value.
+The client accepts a typed whole number or steps by one within the bounds, and sends only on confirmation; invalid input
+is not clamped. The host validates the inclusive bounds. Default answers choose `Least`. New union members are appended
+without renumbering existing members; protocol version 229 rejects an older client at the handshake. Small menus near
+the unsigned endpoint keep their labels and relative mode indexes; a native bot's answer uses `NumberChosenAnswer`
+if the selected value cannot fit the legacy signed `AnnounceAnswer`, so its value is not clipped.
+
 **Checking a selection.** A choice of cards (`ChooseCardsPromptMessage`) and a library search (`SearchLibraryPromptMessage`)
 are judged by the question's selection rule (docs/engine-design.md, "Selection rules"), which the client cannot run: the
 prompt says how many it takes for its caption (`Count`, `CountKind`: `Exactly`, `UpTo`, `AnyNumber`, `AsManyAsCan`), its
@@ -290,3 +299,24 @@ gives it a handle of its own - not the handle it passed to what it became (`Hand
 different object - and the view holds it as an `ObjectView` with `Zone` `Gone` (in no zone's `Contents`, so no board or
 pile draws it) for as long as the question is outstanding; the client lists it in the choice window with the other
 sources. Version 224.
+
+
+Snow mana (protocol 228, CR 107.4h): `RestrictedManaView.Snow` marks mana whose source was snow when it was produced,
+including unrestricted units, shown separately from the ordinary `Mana` array. An `AssignMana` option and its
+`TakeActionAnswer` carry `Snow` and `PaySnow` independently of the six mana types: the latter chooses a {S} demand
+rather than an ordinary symbol. Use `OptionId` and the exact flags/type/restriction/source offered. A mana ability's
+`Snow` flag describes its current producer as advice; the engine captures actual quality on production.
+`PayCostsPromptMessage` and `UnlessPaysPromptMessage` append `RemainingSnow` as an unsigned count. The oracle-form
+`Total` and `Remaining` strings display {S} directly. Ordinary pool/cost behavior keeps false/zero defaults.
+
+When choosing new targets for a spell or ability, protocol 228 sets `ChooseTargetPrompt.KeepOriginal` on the per-target prompt. An empty target answer keeps the identified original target, including one that has become illegal; it is never sent as a candidate solely to represent keeping it (CR 115.7d, 707.10c). The prompt text identifies the original occurrence, and the client labels the empty answer “Keep current target.”
+
+For a mana activation, `ColorChoices` names the colors the answer may choose independently of the resulting yield.
+`Produces` is fixed mana and `ProducesOfAnyOneColor` is the additional amount of the chosen color. A replacement can
+make all choices produce the same fixed mana, leaving `ProducesOfAnyOneColor` zero while a color must still be named.
+This meaning is part of protocol version 229.
+Cost payment ordering (protocol 228, CR 601.2h): `ChooseCostPaymentPromptMessage` carries `Source` and `Choices`.
+Each choice carries a semantic `Label`, the real `Objects` involved (empty for a non-object cost), and an opaque
+`Key`. A `CostPaymentChosenAnswer` returns that key exactly. Keys are decimal strings rather than JSON numbers, so
+large native ordinals are not rounded by JavaScript or narrowed by a client. The engine rejects malformed or unoffered
+keys. The prompt is asked again after each operation, with the still-legal choices; its first choice is the default.

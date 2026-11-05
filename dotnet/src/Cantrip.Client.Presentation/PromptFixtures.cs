@@ -183,6 +183,9 @@ public static class PromptFixtures
     [
         "lobby",
         "priority",
+        "regeneration-effects",
+        "regeneration-effects-ended",
+        "delayed-carried-object",
         "priority-stack",
         "priority-stack-many",
         "priority-stack-modal-trigger",
@@ -194,7 +197,7 @@ public static class PromptFixtures
         "targeting-optional",
         "discard-one",
         "discard-many",
-        "paying",
+        "paying", "paying-snow",
         "paying-dual",
         "paying-waterbend",
         "paying-improvise",
@@ -216,11 +219,13 @@ public static class PromptFixtures
         "bought-back",
         "choose-target",
         "choose-target-optional",
+        "choose-new-target-keep",
         "choose-target-several",
         "choose-target-up-to-several",
         "choose-target-mode",
         "choose-target-range",
         "divide-targets",
+        "divide-targets-players",
         "divide-targets-capped",
         "divide-targets-optional",
         "choose-not-targeted",
@@ -281,6 +286,9 @@ public static class PromptFixtures
         "may-have-controller-draw-one",
         "may-take-damage-instead-of-return",
         "modes-one",
+        "cost-payment-order",
+        "number-wide",
+        "number-maximum",
         "separate-piles",
         "choose-pile",
         "additional-cost",
@@ -314,6 +322,7 @@ public static class PromptFixtures
         "order-triggers",
         "search",
         "search-single-card",
+        "search-opponents-hand",
         "search-several",
         "search-exile",
         "search-exile-face-down",
@@ -362,6 +371,10 @@ public static class PromptFixtures
         "distribute-one",
         "surveil",
         "arrange-in-any-order",
+        "arrange-graveyard-on-library",
+        "arrange-library-on-library",
+        "arrange-opponent-library",
+        "arrange-opponent-library-one",
         "arrange-onto-the-bottom",
         "distribute-to-hand",
         "distribute-tight",
@@ -487,6 +500,8 @@ public static class PromptFixtures
 
     private static PromptPresentationContext? Presentation(PromptPayload prompt, PlayerView view, string fixture)
     {
+        // These fixtures exercise the fallback used by older prompts without presentation metadata.
+        if (fixture is "arrange-graveyard-on-library" or "arrange-library-on-library" or "arrange-opponent-library" or "arrange-opponent-library-one") return null;
         PromptPresentationContext? context = prompt switch
         {
             ChooseCardsPromptMessage choose => new()
@@ -586,6 +601,31 @@ public static class PromptFixtures
             case "priority":
                 return Priority();
 
+            case "regeneration-effects":
+                // The native host projects resolved regeneration effects through the
+                // ordinary granted text, on either player's permanent.
+                foreach (int handle in new[] { MyBrute, TheirRecruit })
+                {
+                    Object(view, handle).GrantedAbilities =
+                    [
+                        new AbilityTextView { Text = "Regenerate instead of the next destruction this turn." },
+                        new AbilityTextView { Text = "Can't be regenerated this combat." },
+                    ];
+                }
+                return Priority();
+
+            case "regeneration-effects-ended":
+                return Priority();
+
+            case "delayed-carried-object":
+                Object(view, MyBrute).Name = "Steel Wall";
+                Object(view, TheirRecruit).Name = "Steel Wall";
+                Object(view, MyBrute).GrantedAbilities =
+                [
+                    new AbilityTextView { Text = "Pending delayed ability from Glyph of Destruction (next end step): Destroy it at the beginning of the next end step." },
+                ];
+                return Priority();
+
             case "priority-stack":
                 // Their spell is waiting to resolve, which is what the window to respond is for.
                 Announce(view, "Swords to Plowshares", "{W}", "Exile target creature. Its controller gains life equal to its power.", Rival);
@@ -657,6 +697,21 @@ public static class PromptFixtures
                     Count = 3,
                     MaximumHandSize = 7,
                     Hand = Hand(),
+                };
+
+            case "paying-snow":
+                view.Players.Single(p => p.Seat == Viewer).RestrictedMana =
+                [new RestrictedManaView { Type = ManaTypeView.Blue, Amount = 2, Snow = true }];
+                return new PayCostsPromptMessage
+                {
+                    Player = Viewer, Spell = new ViewHandle(HandHerald), Total = "{U}{S}", Remaining = "{U}{S}",
+                    RemainingColored = [ColorView.Blue], RemainingSnow = 1,
+                    Options =
+                    [
+                        new ActionOptionMessage { Kind = ActionKindView.AssignMana, Produces = [ManaTypeView.Blue], Snow = true, PaySnow = false, OptionId = 1, Description = "Pay an ordinary symbol with snow {U}" },
+                        new ActionOptionMessage { Kind = ActionKindView.AssignMana, Produces = [ManaTypeView.Blue], Snow = true, PaySnow = true, OptionId = 2, Description = "Pay {S} with snow {U}" },
+                        new ActionOptionMessage { Kind = ActionKindView.CancelCasting, Source = new ViewHandle(HandHerald) },
+                    ],
                 };
 
             case "paying":
@@ -1049,6 +1104,21 @@ public static class PromptFixtures
                     Optional = true,
                 };
 
+            case "choose-new-target-keep":
+                Trigger(view, "Fork", "Copy target instant or sorcery spell. You may choose new targets for the copy.");
+                return new ChooseTargetPromptMessage
+                {
+                    Player = Viewer,
+                    Ability = new ViewHandle(OnStack),
+                    Source = ViewHandle.None,
+                    Text = "Target 1 (Sea Sprite). Choose a new target or none to keep the current one.",
+                    KeepOriginal = true,
+                    Candidates = [new TargetMessage { Object = new ViewHandle(TheirSentinel) }],
+                    Targeted = true,
+                    Optional = true,
+                    Count = 1,
+                };
+
             case "choose-target-several":
                 // Candelabra of Tawnos' "Untap X target lands" with X of two: one question, two clicks, and the header
                 // counts them off.
@@ -1180,6 +1250,24 @@ public static class PromptFixtures
                     [
                         new TargetMessage { Object = new ViewHandle(TheirRecruit) },
                         new TargetMessage { Object = new ViewHandle(TheirSentinel) },
+                    ],
+                };
+
+            case "divide-targets-players":
+                Object(view, HandRitual).Name = "Fiery Justice";
+                return new ChooseDividedTargetsPromptMessage
+                {
+                    Player = Viewer,
+                    Ability = new ViewHandle(HandRitual),
+                    Source = new ViewHandle(HandRitual),
+                    Text = "Divide damage among any targets.",
+                    Total = 3,
+                    MaxTargets = 2,
+                    Candidates =
+                    [
+                        new TargetMessage { Player = Viewer },
+                        new TargetMessage { Player = Rival },
+                        new TargetMessage { Object = new ViewHandle(TheirRecruit) },
                     ],
                 };
 
@@ -1816,6 +1904,24 @@ public static class PromptFixtures
                     Detail = "Chosen, not targeted",
                 };
 
+            case "cost-payment-order":
+                Announce(view, "Fling", "{1}{R}", "As an additional cost, sacrifice a creature.", Viewer, CardTypeView.Instant);
+                return new ChooseCostPaymentPromptMessage
+                {
+                    Player = Viewer,
+                    Source = new ViewHandle(OnStack),
+                    Choices =
+                    [
+                        new CostPaymentChoiceView { Key = "0", Label = "Sacrifice Grizzly Bears for Fling" },
+                        new CostPaymentChoiceView { Key = "1", Label = "Sacrifice Captain Jean-Luc Picard for casualty" },
+                    ],
+                };
+            case "number-wide":
+                Announce(view, "Clockwork Beast", "{6}", "Put up to X +1/+0 counters on this creature. This ability can't cause the total number of +1/+0 counters on this creature to be greater than seven.", Viewer, CardTypeView.Creature);
+                return new ChooseNumberPromptMessage { Player = Viewer, Source = new ViewHandle(OnStack), Least = 0, Most = 65535, Heading = "Put counters" };
+            case "number-maximum":
+                Announce(view, "Clockwork Avian", "{5}", "Choose a number.", Viewer, CardTypeView.Creature);
+                return new ChooseNumberPromptMessage { Player = Viewer, Source = new ViewHandle(OnStack), Least = uint.MaxValue - 300, Most = uint.MaxValue, Heading = "Choose a number" };
             case "modes-one":
                 return new ChooseModesPromptMessage
                 {
@@ -2215,6 +2321,10 @@ public static class PromptFixtures
                 // A library down to its last card. The wording around a count of one is where "1 cards" hides.
                 return Search(view, cards: 1, count: 1, optional: true, SearchDestinationView.Hand);
 
+            case "search-opponents-hand":
+                // Jester's Mask: its controller chooses from the opponent's library for that opponent's hand.
+                return Search(view, cards: 9, count: 1, optional: false, SearchDestinationView.Hand, owner: Rival);
+
             case "search-several":
                 return Search(view, cards: 9, count: 2, optional: false, SearchDestinationView.Battlefield);
 
@@ -2529,6 +2639,46 @@ public static class PromptFixtures
                 return Distribute(view, cards: 3, mayShuffle: true, spell: "Ponder",
                     text: "Look at the top three cards of your library, then put them back in any order.",
                     places: [Place(CardDestinationKindView.LibraryTop)]);
+
+            case "arrange-opponent-library":
+            case "arrange-opponent-library-one":
+            {
+                CardDestinationMessage destination = Place(CardDestinationKindView.LibraryTop);
+                destination.Owner = Rival;
+                DistributeCardsPromptMessage prompt = Distribute(view, cards: name == "arrange-opponent-library-one" ? 1 : 3,
+                    mayShuffle: false, spell: "Natural Selection",
+                    text: "Look at the top three cards of target player's library, then put them back in any order.",
+                    places: [destination]);
+                foreach (ViewHandle card in prompt.Cards)
+                {
+                    ObjectView looked = view.Objects.First(o => o.Handle == card);
+                    looked.Owner = Rival;
+                    looked.Controller = Rival;
+                    looked.ZoneOwner = Rival;
+                }
+                return prompt;
+            }
+
+            case "arrange-graveyard-on-library":
+            case "arrange-library-on-library":
+            {
+                bool fromGraveyard = name == "arrange-graveyard-on-library";
+                DistributeCardsPromptMessage prompt = Distribute(view, cards: 2, mayShuffle: false,
+                    spell: fromGraveyard ? "Drafna's Restoration" : "Ponder",
+                    text: "Put the cards on top of the library in any order.",
+                    places: [Place(CardDestinationKindView.LibraryTop)]);
+                if (fromGraveyard)
+                {
+                    ZoneView graveyard = view.Zones.First(zone => zone.Kind == ZoneKindView.Graveyard && zone.Owner == Viewer);
+                    foreach (ViewHandle card in prompt.Cards)
+                    {
+                        view.Objects.First(o => o.Handle == card).Zone = ZoneKindView.Graveyard;
+                        graveyard.Contents.Add(card);
+                    }
+                    graveyard.Count = graveyard.Contents.Count;
+                }
+                return prompt;
+            }
 
             // Lim-Dûl's Vault: one pile and nothing to decide but the order, the mirror of Ponder's single top pile.
             case "arrange-onto-the-bottom":
@@ -3161,7 +3311,8 @@ public static class PromptFixtures
         int cards,
         int count,
         bool optional,
-        SearchDestinationView destination)
+        SearchDestinationView destination,
+        int owner = Viewer)
     {
         string[] names = ["Swamp", "Dark Ritual", "Entomb", "Reanimate", "Thoughtseize", "Swamp", "Griselbrand", "Demonic Tutor", "Swamp"];
         string[] costs = [string.Empty, "{B}", "{B}", "{B}", "{B}", string.Empty, "{4}{B}{B}{B}{B}", "{1}{B}", string.Empty];
@@ -3178,10 +3329,10 @@ public static class PromptFixtures
             {
                 Handle = new ViewHandle(handle),
                 Zone = ZoneKindView.Library,
-                ZoneOwner = Viewer,
+                ZoneOwner = owner,
                 Kind = ObjectKindView.Card,
-                Owner = Viewer,
-                Controller = Viewer,
+                Owner = owner,
+                Controller = owner,
                 Name = names[i % names.Length],
                 ManaCost = costs[i % costs.Length],
                 CardTypes = [land ? CardTypeView.Land : CardTypeView.Sorcery],
@@ -3199,11 +3350,12 @@ public static class PromptFixtures
             }
         }
 
-        Zone(view, ZoneKindView.Library, Viewer).Count = cards;
+        Zone(view, ZoneKindView.Library, owner).Count = cards;
 
         return new SearchLibraryPromptMessage
         {
             Player = Viewer,
+            Owner = owner,
             Count = count,
             CountKind = optional ? CountKindView.UpTo : CountKindView.AsManyAsCan,
             Library = library,

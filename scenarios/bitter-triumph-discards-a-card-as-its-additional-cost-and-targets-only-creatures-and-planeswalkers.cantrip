@@ -30,6 +30,8 @@ Bot1.Battlefield.Swamp#2.Activate
 ! Bot1.Hand.Bitter Triumph.Cast(Bot2.Battlefield.Mox Jet)
 Bot1.Hand.Bitter Triumph.Cast(Bot2.Battlefield.Dark Confidant)
 Bot1.Modes(Discard a card)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Island)
 [T3 Bot1.Main2]
 

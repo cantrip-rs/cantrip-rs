@@ -25,6 +25,7 @@ Bot1.Hand.Arena of Glory.Play
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Arena of Glory.Activate(Ability: Exert)
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Arena of Glory.Activate(Ability: Exert; Spend: R)
 
 [Expect]

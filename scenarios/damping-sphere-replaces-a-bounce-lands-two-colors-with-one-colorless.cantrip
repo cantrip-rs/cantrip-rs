@@ -31,11 +31,14 @@ Bot1.Hand.Gruul Turf.Play
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Mind Stone.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Battlefield.Gruul Turf.Activate
 ? Bot1.Mana = {C}
 Bot1.Battlefield.Mind Stone.Activate(Ability: Sacrifice)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 
 [Expect]

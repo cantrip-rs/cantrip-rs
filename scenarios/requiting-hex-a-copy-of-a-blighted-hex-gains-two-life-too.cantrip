@@ -31,6 +31,7 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Requiting Hex.Cast
 Bot1.Modes(Blight 1)
 Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Hand.Lutri, the Spellchaser.Cast

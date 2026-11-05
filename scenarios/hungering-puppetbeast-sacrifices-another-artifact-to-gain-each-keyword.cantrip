@@ -30,6 +30,7 @@ Bot2.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Hungering Puppetbeast.Activate(Sacrifice: Heartwood Token)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Heartwood Token)
 Bot1.Pass
 Bot1.Modes(Trample)

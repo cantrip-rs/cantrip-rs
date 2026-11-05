@@ -23,6 +23,7 @@ Bot1.Hand.Mox Ruby.Cast
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Reckoner Bankbuster.Cast
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Mother of Runes.Cast
 ! Bot1.Battlefield.Reckoner Bankbuster.Activate(Ability: Crew 3)

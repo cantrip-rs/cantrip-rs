@@ -22,6 +22,7 @@ Bot1.Hand.Mox Emerald.Cast
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Tetsuko Umezawa, Fugitive.Cast
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Llanowar Elves.Cast
 [T2 Bot2.Main1]

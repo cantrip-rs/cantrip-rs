@@ -40,6 +40,12 @@ Bot1.Battlefield.Blasted Landscape.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Graveyard.Drudge Beetle.Activate(Ability: Scavenge; Bot1.Battlefield.Memnite)
 ? Stack.Count = 1
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = 
 Bot1.Pass
 

@@ -35,6 +35,7 @@ Bot2.Hand.Deathrite Shaman.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Cleanse.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

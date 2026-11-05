@@ -30,6 +30,13 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Pass
 Bot1.Battlefield.Polukranos Reborn.Activate(Ability: Transform)
 Bot1.Modes(1)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana = 
 Bot1.Pass
 

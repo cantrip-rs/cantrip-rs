@@ -31,8 +31,10 @@ Bot1.Hand.Dispelling Exhale.Cast
 ? Client.Bot1.Prompt.Modes = Cast without beholding; Behold a Dragon: choose a Dragon you control or reveal one from your hand
 Bot1.Modes(Behold a Dragon)
 Bot1.Target(Stack.Lightning Bolt)
+Bot1.Choose(Pay mana)
 ? Client.Bot1.Prompt.Title = Dispelling Exhale: choose a Dragon you control or reveal a Dragon card from your hand to behold
 ? Client.Bot1.Prompt.Detail = 0 of 1 chosen  ·  click them in your hand
+Bot1.Choose(Pay mana)
 Bot1.Choose(Kokusho, the Evening Star)
 ? Client.Bot1.Confirm = Behold it
 Bot2.Pass

@@ -7,7 +7,7 @@ use cantrip_oracle as oracle;
 /// battlefield from that graveyard counts itself (its ruling).
 fn enters_with_counters(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
     let creatures = cantrip_mechanics::creature_cards_in_graveyard(g, entering.controller);
-    entering.counters[CounterKind::PlusOne as usize] += creatures.min(i16::MAX as usize) as i16;
+    entering.counters[CounterKind::PlusOne as usize] += i64::from(creatures.min(i16::MAX as usize) as i16);
     Ok(())
 }
 

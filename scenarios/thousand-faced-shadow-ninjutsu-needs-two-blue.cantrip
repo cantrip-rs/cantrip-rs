@@ -36,6 +36,10 @@ Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Island.Activate
 Bot1.Hand.Thousand-Faced Shadow.Activate(Ability: Ninjutsu)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 ? Bot1.Mana =
 Bot1.Pass

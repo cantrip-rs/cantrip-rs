@@ -25,6 +25,7 @@ Bot1.Hand.Ornithopter.Cast
 Bot1.Pass
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mishra's Factory.Activate(Ability: {1})
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -41,6 +42,7 @@ Bot1.Battlefield.Mishra's Factory.Activate(Ability: Add {C})
 ? Bot1.Mana = {C}
 ? Bot1.Battlefield.Mishra's Factory.Tapped = true
 Bot1.Battlefield.Mishra's Factory.Activate(Ability: {1})
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

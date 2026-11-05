@@ -27,6 +27,7 @@ Bot1.Hand.Mountain.Play
 Bot1.Battlefield.Hardbristle Bandit.Activate(Color: Red)
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
 ? Bot1.Battlefield.Hardbristle Bandit.Tapped = true
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 Bot1.Pass
 Bot2.Pass
@@ -42,6 +43,7 @@ Bot2.Pass
 [T4 Bot2.Main1]
 Bot1.Battlefield.Mountain.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 [T4 Bot2.Main2]
 

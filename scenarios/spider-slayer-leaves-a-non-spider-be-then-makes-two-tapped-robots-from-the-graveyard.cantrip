@@ -50,6 +50,12 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Island.Play
 Bot1.Battlefield.Island.Activate
 Bot1.Graveyard.Spider-Slayer, Hatred Honed.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 ? Stack.Count = 1
 Bot1.Pass

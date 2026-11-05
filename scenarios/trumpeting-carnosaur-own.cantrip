@@ -30,6 +30,9 @@ Bot1.Battlefield.Mox Ruby#1.Activate
 Bot1.Battlefield.Mox Ruby#2.Activate
 Bot1.Battlefield.Mox Ruby#3.Activate
 Bot1.Hand.Trumpeting Carnosaur.Activate(Bot1.Battlefield.Ageless Guardian)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 
 [Expect]

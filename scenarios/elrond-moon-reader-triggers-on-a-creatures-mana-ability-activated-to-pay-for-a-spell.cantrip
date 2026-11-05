@@ -39,6 +39,7 @@ Bot2.Pass
 ? Bot1.Library.Count = 19
 Bot1.Hand.Llanowar Elves.Cast
 Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 ? Bot1.Library.Count = 19
 Bot1.Pass

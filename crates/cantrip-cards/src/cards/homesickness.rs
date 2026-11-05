@@ -12,7 +12,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     for &id in &creatures {
         g.tap(id);
     }
-    let puts: Vec<(ObjectId, CounterKind, i16)> = creatures.into_iter().map(|id| (id, CounterKind::Stun, 1)).collect();
+    let puts: Vec<(ObjectId, CounterKind, i64)> = creatures.into_iter().map(|id| (id, CounterKind::Stun, 1)).collect();
     g.add_counters_together(&puts);
     Ok(())
 }

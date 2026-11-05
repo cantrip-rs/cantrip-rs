@@ -21,9 +21,9 @@ fn sandstorm_deals_1_damage_attacking(
             .map(Target::Object)
             .collect::<Vec<Target>>()
     };
-    let batch: Vec<(ObjectId, Target, u16)> = recipients_0
+    let batch: Vec<(ObjectId, Target, i64)> = recipients_0
         .iter()
-        .map(|t| (item.object, *t, 1u16))
+        .map(|t| (item.object, *t, 1i64))
         .collect();
     g.damage_together(&batch);
     Ok(())

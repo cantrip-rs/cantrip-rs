@@ -37,6 +37,7 @@ Bot2.Hand.Raging Goblin.Cast
 [T4 Bot2.BeginCombat]
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Circle of Protection: Black.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

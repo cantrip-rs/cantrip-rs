@@ -43,6 +43,8 @@ Bot2.Modes()
 Bot1.Hand.Swamp.Play
 Bot1.Battlefield.Swamp.Activate
 Bot1.Graveyard.Timeline Culler.Cast(Ability: graveyard)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
 ? Bot1.Life = 18
 Bot1.Attack(Timeline Culler > Bot2)
 [T4 Bot2.Main1]

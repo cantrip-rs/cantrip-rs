@@ -29,12 +29,14 @@ Bot1.Hand.Mox Ruby.Cast
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Ghostfire Blade.Activate(Ornithopter)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Battlefield.Sol Ring.Activate
 ? Bot1.Battlefield.Ornithopter.Power = 2
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Ghostfire Blade.Activate(Llanowar Elves)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 

@@ -19,6 +19,7 @@ Bot1.Battlefield.Turtle Lair.Activate(Ability: any color; Color: Blue)
 ? Bot1.Mana = {U} (NinjaOrTurtleSpells)
 ! Bot1.Hand.Lightning Bolt.Cast(Bot2; Mana: short)
 Bot1.Hand.Aegis Turtle.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

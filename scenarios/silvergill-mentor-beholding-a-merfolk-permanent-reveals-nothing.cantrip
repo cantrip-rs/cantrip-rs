@@ -25,6 +25,8 @@ Bot1.Hand.Silvergill Mentor.Cast
 Bot1.Modes(Behold a Merfolk)
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Cenote Scout)
 ? Bot1.Mana =
 Bot1.Pass

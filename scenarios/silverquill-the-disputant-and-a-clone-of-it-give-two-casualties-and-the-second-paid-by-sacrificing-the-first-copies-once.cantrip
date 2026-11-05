@@ -67,6 +67,7 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
 Bot1.Modes(Cast without casualty)
 Bot1.Modes(Casualty 1)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Silverquill, the Disputant#1)
 ? Stack.Count = 2
 Bot1.Pass

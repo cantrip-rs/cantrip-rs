@@ -16,6 +16,7 @@ Bot1.Hand.Mox Sapphire.Cast
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Greater Realm of Preservation.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T2 Bot2.Main1]
 Bot2.Hand.Swamp.Play
@@ -27,6 +28,7 @@ Bot2.Hand.Carrion Screecher.Cast
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Greater Realm of Preservation.Activate
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

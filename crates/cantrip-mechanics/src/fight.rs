@@ -22,7 +22,7 @@ pub fn targets_fight(g: &mut dyn Game, item: &StackItem, first: usize, second: u
 /// Kapow! (one) print it.
 pub fn plus_one_counters_on_first_target_then_it_fights_second<const N: i16>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some(creature) = targets::object(g, item, 0) {
-        g.add_counters(creature, CounterKind::PlusOne, N);
+        g.add_counters(creature, CounterKind::PlusOne, i64::from(N));
     }
     g.end_sentence();
     targets_fight(g, item, 0, 1);
@@ -48,7 +48,7 @@ pub fn attached_creature_fights_first_target(g: &mut dyn Game, item: &StackItem)
 pub fn bite(g: &mut dyn Game, creature: ObjectId, victim: ObjectId) {
     let power = g.chars(creature).power.unwrap_or(0);
     if power > 0 {
-        g.damage(creature, Target::Object(victim), power as u16);
+        g.damage(creature, Target::Object(victim), i64::from(power as u16));
     }
 }
 
@@ -69,11 +69,11 @@ pub fn targets_bite(g: &mut dyn Game, item: &StackItem, source_slot: usize, vict
 pub fn targets_each_bite_last(g: &mut dyn Game, item: &StackItem) {
     let recipient_slot = item.target_count as usize - 1;
     let Some(recipient) = targets::object(g, item, recipient_slot) else { return };
-    let hits: Vec<(ObjectId, Target, u16)> = (0..recipient_slot)
+    let hits: Vec<(ObjectId, Target, i64)> = (0..recipient_slot)
         .filter_map(|slot| {
             let source = targets::object(g, item, slot)?;
             let power = g.chars(source).power.unwrap_or(0).max(0) as u16;
-            Some((source, Target::Object(recipient), power))
+            Some((source, Target::Object(recipient), i64::from(power)))
         })
         .collect();
     g.damage_together(&hits);

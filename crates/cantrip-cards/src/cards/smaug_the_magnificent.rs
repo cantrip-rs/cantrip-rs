@@ -10,7 +10,7 @@ use cantrip_oracle as oracle;
 fn treasure_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let treasures = treasures_controlled(g, item.controller).len();
     if treasures > 0 && g.target_legal(item, 0) {
-        g.damage(item.object, item.target(0), treasures as u16);
+        g.damage(item.object, item.target(0), i64::from(treasures as u16));
     }
     Ok(())
 }

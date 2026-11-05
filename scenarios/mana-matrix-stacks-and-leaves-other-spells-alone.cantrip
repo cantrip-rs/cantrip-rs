@@ -62,6 +62,7 @@ Bot1.Pass
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Chart a Course.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -69,6 +70,7 @@ Bot1.Choose(Island)
 [T7 Bot1.Main1]
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.March of the Machines.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

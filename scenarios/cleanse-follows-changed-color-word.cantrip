@@ -27,6 +27,7 @@ Bot2.Hand.Muck Rats.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Cleanse.Cast
+Bot1.Choose(Close mana window)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Sleight of Mind.Cast(Stack.Cleanse)
 Bot1.Pass

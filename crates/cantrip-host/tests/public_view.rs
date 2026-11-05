@@ -183,13 +183,23 @@ fn a_morph_is_face_down_to_the_public_while_its_controller_knows_it() {
 #[test]
 fn a_foretold_card_is_face_down_to_the_public() {
     let mut seen = false;
+    let mut last_public = None;
     play("augury-raven-foretell-paid-exactly-and-cast-from-exile-for-the-foretell-cost", |_, public, seats| {
+        let current_public = serde_json::to_value(&public.view).unwrap();
         for o in public.view.objects.iter().filter(|o| o.face_down && o.zone == Some(ZoneKindView::Exile)) {
             seen = true;
             assert!(!o.known && o.name.is_empty() && o.face_down_name.is_empty(), "{o:?}");
-            let mine = seats[&1].objects.iter().find(|x| Some(&x.handle.0) == public.maps[&1].get(&o.handle.0)).expect("Bot1 sees it");
-            assert!(mine.known, "{mine:?}");
+            match seats[&1].objects.iter().find(|x| Some(&x.handle.0) == public.maps[&1].get(&o.handle.0)) {
+                Some(mine) => assert!(mine.known, "{mine:?}"),
+                None => {
+                    // The public retains its completed position while the caster sees the unfinished cast.
+                    assert_eq!(last_public.as_ref(), Some(&current_public), "only a deferred snapshot can retain the old exile object");
+                    assert!(seats[&1].objects.iter().any(|mine| mine.known && mine.name == "Augury Raven" && mine.zone == Some(ZoneKindView::Stack)),
+                        "Bot1 knows the new spell while the public still sees its old face-down exile object");
+                }
+            }
         }
+        last_public = Some(current_public);
     });
     assert!(seen, "the foretold card was in exile");
 }
@@ -404,7 +414,7 @@ fn a_whole_game_projects_soundly_for_the_public() {
 fn choose(prompt: &PromptPayload, allow_cast: &mut bool) -> AnswerPayload {
     match prompt {
         PromptPayload::PriorityPromptMessage(p) => {
-            let pick = |kind: ActionKindView, quiet: bool| p.options.iter().find(|o| o.kind == kind && (!quiet || o.produces.is_empty()));
+            let pick = |kind: ActionKindView, quiet: bool| p.options.iter().find(|o| o.kind == kind && (!quiet || (o.produces.is_empty() && o.produces_of_any_one_color == 0)));
             match pick(ActionKindView::PlayLand, false).or(pick(ActionKindView::CastSpell, false).filter(|_| *allow_cast)).or(pick(ActionKindView::ActivateAbility, true)) {
                 Some(o) => AnswerPayload::TakeActionAnswer(TakeActionAnswer::take(o)),
                 None => AnswerPayload::PassAnswer(PassAnswer {}),
@@ -412,13 +422,13 @@ fn choose(prompt: &PromptPayload, allow_cast: &mut bool) -> AnswerPayload {
         }
         PromptPayload::PayCostsPromptMessage(p) => {
             let pick = |kind: ActionKindView| p.options.iter().find(|o| o.kind == kind);
-            if let Some(o) = pick(ActionKindView::ConfirmCasting) {
-                return AnswerPayload::TakeActionAnswer(TakeActionAnswer::take(o));
-            }
-            if let Some(o) = p.options.iter().find(|o| o.kind == ActionKindView::ActivateAbility && !o.produces.is_empty()) {
+            if let Some(o) = p.options.iter().find(|o| o.kind == ActionKindView::ActivateAbility && o.source != p.spell && (!o.produces.is_empty() || o.produces_of_any_one_color > 0)) {
                 let mut answer = TakeActionAnswer::take(o);
                 answer.color = o.color_choices.first().copied();
                 return AnswerPayload::TakeActionAnswer(answer);
+            }
+            if let Some(o) = pick(ActionKindView::ConfirmCasting) {
+                return AnswerPayload::TakeActionAnswer(TakeActionAnswer::take(o));
             }
             if let Some(o) = pick(ActionKindView::AssignMana) {
                 *allow_cast = false;

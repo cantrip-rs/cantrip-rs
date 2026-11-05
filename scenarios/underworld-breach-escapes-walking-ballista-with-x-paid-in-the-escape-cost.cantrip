@@ -27,6 +27,8 @@ Bot1.Choose(Walking Ballista; Island)
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mountain.Activate
 Bot1.Graveyard.Walking Ballista.Cast(X: 1; Ability: Escape)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Black Lotus; Faithless Looting; Island)
 Bot1.Pass
 

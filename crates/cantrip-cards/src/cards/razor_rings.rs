@@ -10,7 +10,7 @@ fn damage_and_gain_life_equal_to_excess(g: &mut dyn Game, item: &StackItem) -> R
     if let Some(result) = g.damage_result(item.object, target, 4)
         && result.target == target
     {
-        g.gain_life(item.controller, result.excess.min(i32::MAX as u32) as i32);
+        g.gain_life(item.controller, result.excess);
     }
     Ok(())
 }

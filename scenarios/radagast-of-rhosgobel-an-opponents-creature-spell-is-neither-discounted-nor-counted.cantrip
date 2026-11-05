@@ -31,6 +31,7 @@ Bot1.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: Green)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Radagast of Rhosgobel.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
@@ -50,6 +51,7 @@ Bot1.Pass
 Bot2.Battlefield.Mox Emerald#1.Activate
 Bot2.Battlefield.Mox Pearl.Activate
 Bot2.Hand.Grizzly Bears.Cast
+Bot2.Choose(Close mana window)
 ? Bot2.Mana =
 Bot2.Pass
 Bot1.Pass

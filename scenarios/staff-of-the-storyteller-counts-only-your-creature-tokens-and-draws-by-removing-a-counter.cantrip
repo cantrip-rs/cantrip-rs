@@ -50,6 +50,8 @@ Bot1.Battlefield.Swamp.Activate
 ? Bot1.Hand.Count = 5
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Fanatical Offering.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Spirit Token)
 Bot1.Pass
 [T3 Bot1.Main2]

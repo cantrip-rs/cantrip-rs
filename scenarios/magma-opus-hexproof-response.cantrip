@@ -34,6 +34,7 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Magma Opus.Cast
 Bot1.Divide(Bot2: 4)
 Bot1.Target(Bot1.Battlefield.Island; Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Battlefield.Mox Emerald.Activate

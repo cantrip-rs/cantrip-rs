@@ -50,6 +50,7 @@ Bot1.Battlefield.Mox Pearl#1.Activate
 Bot1.Battlefield.Mana Crypt#1.Activate
 Bot1.Battlefield.Mana Crypt#2.Activate
 Bot1.Exile.Great Ugly-Looking Goblin.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

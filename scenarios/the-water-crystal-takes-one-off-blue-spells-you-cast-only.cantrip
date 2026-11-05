@@ -41,11 +41,13 @@ Bot1.Hand.Island.Play
 Bot1.Battlefield.Island#1.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Hullbreacher.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Mind Stone.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 [T4 Bot2.Main1]

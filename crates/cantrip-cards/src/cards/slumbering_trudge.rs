@@ -6,7 +6,7 @@ use cantrip_oracle as oracle;
 /// counters is never negative, so with X of 3 or more it gets none (ruling).
 fn enters_stunned(_: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
     if entering.x < 3 {
-        entering.counters[CounterKind::Stun as usize] += 3 - entering.x as i16;
+        entering.counters[CounterKind::Stun as usize] += i64::from(3 - entering.x as i16);
     }
     if entering.x <= 2 {
         entering.tapped = true;

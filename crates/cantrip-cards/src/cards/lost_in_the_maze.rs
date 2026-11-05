@@ -9,7 +9,7 @@ use cantrip_oracle as oracle;
 fn tap_and_stun(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let creatures = targets::legal_objects(g, item);
     g.tap_together(&creatures);
-    let puts: Vec<(ObjectId, CounterKind, i16)> = creatures
+    let puts: Vec<(ObjectId, CounterKind, i64)> = creatures
         .into_iter()
         .filter(|&creature| g.obj(creature).controller != item.controller)
         .map(|creature| (creature, CounterKind::Stun, 1))

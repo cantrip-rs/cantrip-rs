@@ -202,7 +202,7 @@ pub const ANOTHER_ATTACKING_CREATURE: TargetSpec = target(another_attacking_crea
 pub fn attacking_or_blocking_creature_filter(q: &dyn Query, _: &Asker, t: Target) -> bool {
     matches!(t, Target::Object(id) if permanent(q, id)
         && q.chars(id).is(CardType::Creature)
-        && (q.is_attacking(id) || q.state().blocks.iter().any(|b| b.blocker == id)))
+        && (q.is_attacking(id) || q.is_blocking(id)))
 }
 pub const ATTACKING_OR_BLOCKING_CREATURE: TargetSpec = target(attacking_or_blocking_creature_filter);
 pub const CREATURE_YOU_CONTROL: TargetSpec = target(creature_you_control_filter);
@@ -297,10 +297,13 @@ pub const PLAYER: TargetSpec = target(player_filter);
 pub const OPPONENT: TargetSpec = target(opponent_filter);
 pub const SPELL: TargetSpec = target(spell_filter);
 fn spell_or_ability_with_a_single_target_filter(q: &dyn Query, _: &Asker, t: Target) -> bool {
-    let stack = &q.state().stack;
+    let state = q.state();
+    let stack = &state.stack;
+    // An unchosen optional slot keeps its position with None; it announces no target (CR 115.1, 115.7a).
+    let single = |item: &StackItem| state.targets(item).iter().filter(|&&target| target != Target::None).take(2).count() == 1;
     match t {
-        Target::Object(id) => stack.iter().any(|i| i.kind == StackKind::Spell && i.object == id && i.target_count == 1),
-        Target::Ability(serial) => stack.iter().any(|i| i.kind != StackKind::Spell && i.serial == serial && i.target_count == 1),
+        Target::Object(id) => stack.iter().any(|i| i.kind == StackKind::Spell && i.object == id && single(i)),
+        Target::Ability(serial) => stack.iter().any(|i| i.kind != StackKind::Spell && i.serial == serial && single(i)),
         _ => false,
     }
 }
@@ -1210,6 +1213,7 @@ pub fn card_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target, types: &[
         Target::Object(id) => {
             let obj = q.obj(id);
             obj.zone == Zone::graveyard(asker.controller)
+                && !obj.token // A token is not a card, even before state-based actions remove it (CR 111.6).
                 && obj.became.is_none()
                 && (types.is_empty() || types.iter().any(|&ty| q.chars(id).is(ty)))
         }

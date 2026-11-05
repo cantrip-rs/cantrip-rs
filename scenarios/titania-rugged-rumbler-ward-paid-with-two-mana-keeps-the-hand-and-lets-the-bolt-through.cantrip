@@ -28,6 +28,7 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Titania, Rugged Rumbler.Cast
 Bot1.Modes(Discard a card)
+Bot1.Choose(Discard 1 card)
 Bot1.Choose(Island)
 [T2 Bot2.Main1]
 Bot2.Hand.Mox Ruby.Cast

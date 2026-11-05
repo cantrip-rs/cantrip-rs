@@ -26,6 +26,7 @@ Bot2.Block(Dragon Sniper > Bofur, Reliable Guardian)
 [T3 Bot1.Blockers]
 Bot1.Battlefield.Swamp.Activate
 Bot1.Hand.Darkness.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 [T3 Bot1.Main2]
 ? Bot1.Battlefield.Bofur, Reliable Guardian.Damage = 0

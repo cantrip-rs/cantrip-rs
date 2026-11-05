@@ -25,6 +25,7 @@ Bot2.Hand.Fang of Shigeki.Cast
 [T3 Bot1.Main1]
 Bot1.Battlefield.Black Lotus.Activate(Color: Green)
 Bot1.Hand.Tranquility.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana =
 Bot1.Pass
 [Expect]

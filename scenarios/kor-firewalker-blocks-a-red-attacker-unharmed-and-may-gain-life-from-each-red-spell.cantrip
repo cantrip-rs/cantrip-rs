@@ -45,6 +45,7 @@ Bot2.Block(Kor Firewalker > Embereth Shieldbreaker)
 Bot1.Battlefield.Mountain.Activate
 ! Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Kor Firewalker)
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Choose(Close mana window)
 ? Stack.Count = 2
 Bot1.Pass
 Bot2.Accept

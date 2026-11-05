@@ -47,6 +47,9 @@ Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Ruby#3.Activate
 ! Bot1.Graveyard.Beetle, Legacy Criminal.Activate(Bot2.Battlefield.Mox Pearl)
 Bot1.Graveyard.Beetle, Legacy Criminal.Activate(Bot2.Battlefield.Memnite)
+Bot1.Choose(Close mana window)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

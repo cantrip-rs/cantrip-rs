@@ -23,6 +23,8 @@ Bot1.Hand.Amulet of Kroog.Cast
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Amulet of Kroog.Activate(Bot1)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 [T4 Bot2.Main1]
 Bot2.Hand.Mountain.Play

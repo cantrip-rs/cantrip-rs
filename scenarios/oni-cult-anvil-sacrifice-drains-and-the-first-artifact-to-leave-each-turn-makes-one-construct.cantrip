@@ -34,11 +34,13 @@ Bot2.Pass
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Oni-Cult Anvil.Cast
+Bot1.Choose(Close mana window)
 ? Bot1.Mana = 
 Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Oni-Cult Anvil.Activate
 ! Bot1.Choose(Plains)
+Bot1.Choose(Tap Oni-Cult Anvil)
 Bot1.Choose(Mox Emerald)
 Bot1.Pass
 Bot2.Pass

@@ -4,7 +4,7 @@ use cantrip_oracle as oracle;
 
 fn loyalty(g: &mut dyn Game, comet: ObjectId, delta: i16) {
     if delta >= 0 {
-        g.add_counters(comet, CounterKind::Loyalty, delta);
+        g.add_counters(comet, CounterKind::Loyalty, i64::from(delta));
     } else {
         g.remove_counters(comet, CounterKind::Loyalty, -delta);
     }
@@ -49,12 +49,12 @@ fn roll(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
                 .map(Target::Object)
                 .collect();
             candidates.extend(g.state().apnap().map(Target::Player));
-            let ask = RequestKind::ChooseTarget { label: "", slot_player: None, together: None, source: comet, purpose: Purpose::Targets, candidates, optional: false, least: 1, count: 1, any_number: false };
+            let ask = RequestKind::ChooseTarget { replacing: None, label: "", slot_player: None, together: None, source: comet, purpose: Purpose::Targets, candidates, optional: false, least: 1, count: 1, any_number: false };
             if let Answer::Targets(chosen) = g.ask(you, ask)?
                 && let Some(&hit) = chosen.first()
             {
                 let amount = g.obj(comet).counters(CounterKind::Loyalty).max(0) as u16;
-                g.damage(comet, hit, amount);
+                g.damage(comet, hit, i64::from(amount));
             }
             loyalty(g, comet, -2);
         }

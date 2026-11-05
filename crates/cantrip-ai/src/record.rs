@@ -66,6 +66,8 @@ impl Ending {
 
 /// A run of answers to one payment: the same request kind for the same thing, by the same seat.
 pub(crate) fn run_key(request: &Request) -> Option<(PlayerId, u8, ObjectId, ObjectId, bool)> {
+    // Allocations and production choices are separate decisions; an option index cannot continue into a changed list.
+    if crate::atomic::snow_request(request) { return None; }
     match &request.kind {
         RequestKind::PayCosts {
             source, announcing, ..
