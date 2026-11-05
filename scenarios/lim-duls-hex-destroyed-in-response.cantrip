@@ -1,0 +1,31 @@
+# Removing the Hex in response does not stop its already triggered ability from dealing damage (CR 113.7a).
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Lim-Dûl's Hex
+Island x17
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Disenchant
+Island x17
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lim-Dûl's Hex.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Lim-Dûl's Hex)
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Graveyard = Lim-Dûl's Hex
+Bot1.Life = 19
+Bot2.Life = 19

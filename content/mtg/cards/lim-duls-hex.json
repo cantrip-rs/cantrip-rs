@@ -1,0 +1,6 @@
+{
+  "name": "Lim-Dûl's Hex",
+  "manaCost": "{1}{B}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of your upkeep, for each player, this enchantment deals 1 damage to that player unless they pay {B} or {3}."
+}

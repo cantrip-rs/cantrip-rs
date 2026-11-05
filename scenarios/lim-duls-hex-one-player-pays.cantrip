@@ -1,0 +1,25 @@
+# Each player chooses separately: paying {B} prevents only Bot1's damage, while Bot2 takes one (CR 101.4, 120.3a).
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Lim-Dûl's Hex
+Island x17
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lim-Dûl's Hex.Cast
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19
