@@ -1,0 +1,51 @@
+# Tomik enters in response: an artifact land remains in the graveyard but is no longer a legal target.
+# The nonland artifact and player remain legal, so Drafna's Restoration still resolves (CR 608.2b).
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Faithless Looting
+Darksteel Citadel
+Memnite
+Drafna's Restoration
+Island x20
+
+[Bot2 Deck]
+Forest
+Black Lotus
+Primal Prayers
+Tomik, Distinguished Advokist
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Darksteel Citadel; Memnite)
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Primal Prayers.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Energy = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Drafna's Restoration.Cast
+Bot1.Target(Bot1)
+Bot1.Target(Darksteel Citadel; Memnite)
+Bot2.Hand.Tomik, Distinguished Advokist.Cast(Ability: Pay {E})
+Bot1.Pass
+? Bot2.Battlefield.Tomik, Distinguished Advokist.Power = 2
+[T3 Bot1.Main2]
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Drafna's Restoration; Faithless Looting; Darksteel Citadel
+Bot1.Hand.Memnite.Power = 1
+Bot2.Energy = 1

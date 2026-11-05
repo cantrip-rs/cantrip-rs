@@ -1,0 +1,40 @@
+# A player gaining hexproof leaves an artifact target legal, but the spell cannot determine that player's library (CR 608.2b).
+[Bot1 Deck]
+Island
+Drafna's Restoration
+Island x20
+[Bot2 Deck]
+Forest
+Black Lotus
+Primal Prayers
+Crystal Barricade
+Mox Ruby
+Faithless Looting
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Primal Prayers.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot2.Choose(Ornithopter; Island)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Drafna's Restoration.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Hand.Crystal Barricade.Cast(Ability: Pay {E})
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Graveyard.Ornithopter.Power = 0
+Bot2.Battlefield.Crystal Barricade.Power = 0

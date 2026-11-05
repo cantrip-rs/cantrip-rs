@@ -1,0 +1,6 @@
+{
+  "name": "Drafna's Restoration",
+  "manaCost": "{U}",
+  "type": "Sorcery",
+  "oracleText": "Put any number of target artifact cards from target player's graveyard on top of their library in any order."
+}

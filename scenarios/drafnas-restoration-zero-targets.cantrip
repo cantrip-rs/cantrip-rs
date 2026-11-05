@@ -1,0 +1,16 @@
+# Any number includes zero: targeting a player with no artifact targets still resolves.
+[Bot1 Deck]
+Island
+Drafna's Restoration
+Island x18
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Drafna's Restoration.Cast
+Bot1.Target(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Graveyard = Drafna's Restoration
