@@ -1,0 +1,74 @@
+# A creature sharing even one color with the enchantment controller's creature is exempt; a different opponent's red creature is not (CR 603.2).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Invoke Prejudice
+Savannah Lions x2
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Figure of Destiny
+Memnite
+Island x20
+
+[Bot3 Deck]
+Mox Ruby
+Dwarven Trader
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Invoke Prejudice.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Figure of Destiny.Cast
+? Stack.Count = 1
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+? Bot2.Battlefield.Figure of Destiny.Power = 1
+Bot2.Hand.Memnite.Cast
+? Stack.Count = 2
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+Bot2.PayCost
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+? Bot2.Battlefield.Memnite.Power = 1
+[T3 Bot3.Main1]
+Bot3.Hand.Mox Ruby.Cast
+Bot3.Battlefield.Mox Ruby.Activate
+Bot3.Hand.Dwarven Trader.Cast
+? Stack.Count = 2
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot3.Graveyard.Dwarven Trader.Power = 1
+[T4 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[Expect]
+Bot1.Battlefield.Savannah Lions#1.Power = 2
+Bot1.Battlefield.Savannah Lions#2.Power = 2
+Bot2.Battlefield.Figure of Destiny.Power = 1
+Bot3.Graveyard.Dwarven Trader.Power = 1
