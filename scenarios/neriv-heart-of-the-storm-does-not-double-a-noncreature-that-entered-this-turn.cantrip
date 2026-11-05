@@ -1,0 +1,42 @@
+# Neriv, Heart of the Storm: "If a creature you control that entered this turn would deal damage" (CR 614.1a) - a creature only.
+# Bot1's Aeolipile, an artifact cast this turn after Neriv, is sacrificed to deal 2 damage to Bot2: a permanent Bot1 controlled
+# that entered this turn, but not a creature, so the damage is not doubled. Bot2 goes from 20 to 18, not 16.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+Black Lotus
+Neriv, Heart of the Storm
+Aeolipile
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Neriv, Heart of the Storm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Aeolipile.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Aeolipile.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard = Aeolipile; Black Lotus

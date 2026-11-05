@@ -1,0 +1,43 @@
+# Neriv, Heart of the Storm says "a creature you control" (CR 614.1a): Bot1 controls Neriv, and Bot2's Cerodon Yearling, which
+# entered on turn 2 and attacks with haste, deals its 2 damage as printed. Bot1 goes from 20 to 18, not 16.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Jet
+Neriv, Heart of the Storm
+Mountain x10
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Cerodon Yearling
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Neriv, Heart of the Storm.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Cerodon Yearling.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.DeclareAttackers]
+Bot2.Attack(Cerodon Yearling > Bot1)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 18

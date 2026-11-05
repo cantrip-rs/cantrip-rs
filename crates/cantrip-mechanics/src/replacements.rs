@@ -505,7 +505,7 @@ pub fn plus<const N: u32>(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
 /// dealt is twice as much, still dealt by the same source to the same recipient (the rulings), once it has been divided or
 /// assigned among its recipients. Two such effects make it four times as much (CR 614.5), and the player or controller of the
 /// permanent it is dealt to orders it with other replacement and prevention effects (CR 616.1). Furnace of Rath, Gisela, Blade
-/// of Goldnight, Trance Kuja, Collective Inferno and Mjölnir, Hammer of Thor print it.
+/// of Goldnight, Trance Kuja, Collective Inferno, Mjölnir, Hammer of Thor and Neriv, Heart of the Storm print it.
 pub fn double_that_damage(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
     if let Proposal::Damage(d) = proposal {
         d.amount = d.amount * 2;

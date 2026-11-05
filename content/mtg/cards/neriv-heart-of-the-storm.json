@@ -1,0 +1,11 @@
+{
+  "name": "Neriv, Heart of the Storm",
+  "manaCost": "{1}{R}{W}{B}",
+  "type": "Legendary Creature — Spirit Dragon",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Flying\nIf a creature you control that entered this turn would deal damage, it deals twice that much damage instead.",
+  "keywords": [
+    "Flying"
+  ]
+}

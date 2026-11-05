@@ -1,0 +1,40 @@
+# Neriv, Heart of the Storm, cast on turn 1: "If a creature you control that entered this turn would deal damage, it deals twice
+# that much damage instead" (CR 614.1a, 120.3). On turn 3 Bot1 casts Cerodon Yearling (2/2 haste) and attacks with it and with
+# Neriv: the Yearling entered this turn and deals 4; Neriv entered on turn 1 and deals its 4 as printed. Bot2 loses 8, from 20 to 12.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Jet
+Neriv, Heart of the Storm
+Cerodon Yearling
+Mountain x10
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Neriv, Heart of the Storm.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cerodon Yearling.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Neriv, Heart of the Storm > Bot2; Cerodon Yearling > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 12
