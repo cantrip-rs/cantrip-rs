@@ -330,7 +330,7 @@ Each request kind therefore gets its own factoring, in `cantrip-obs`, with the c
 | Request | Steps |
 | --- | --- |
 | priority, modes, a yes/no, a color, which replacement | one choice among the candidates |
-| attackers | per creature: attack (at what) or stay, a defender at its cap (CR 508.1c, `max_attackers`) masked; then validated |
+| attackers | per creature: attack (at what) or stay, a defender at its cap (CR 508.1c, `max_attackers`) masked, and no declaration made whose one attacker can't attack alone (CR 508.1c, `alone`); then validated |
 | blockers | per potential blocker: which attacker or none; constraints applied as masks where they are local, the whole block validated at the end |
 | N cards or targets | one at a time, a slot at a time, "done" when "up to" allows |
 | X | a choice among buckets up to what the seat can pay |

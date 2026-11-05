@@ -814,6 +814,7 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
             most,
             max_attackers,
             barred,
+            alone,
             ..
         } => {
             // A defender at its cap takes no more attackers (CR 508.1c). A declaration obeys `most` requirements (CR
@@ -823,7 +824,14 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
             // is room the attackers share, so there the best of each is only a bound: no legal declaration is ever
             // masked, and one the caps leave short of the most is the validator's to refuse (a global refusal). Where
             // the choices so far leave nothing that can make up the most, staying home is offered, for the validator.
+            //
+            // A creature a static ability forbids to attack alone may not be the one attacker (CR 508.1c: Pet Sehlat). A
+            // choice is offered only where the declaration can still end legal by that rule, which is exact: such a
+            // creature's attack, as the first, only where a creature still to come can attack something with room beside
+            // it; and, where its attack is the one so far, staying home only while one still to come can. Each choice
+            // that rule offers keeps one on offer, so the declaration never ends with such a creature alone.
             let cap = |i: usize| max_attackers.get(i).copied().unwrap_or(u8::MAX);
+            let room = |attacking: &[usize], i: usize| cap(i) == u8::MAX || attacking[i] < usize::from(cap(i));
             let gain = |c: Ref, d: Ref| {
                 requirements
                     .iter()
@@ -833,23 +841,44 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
             // An attack a restriction forbids (CR 508.1c) is never offered, and obeys nothing.
             let open = |c: Ref, d: Ref| !barred.contains(&(c, d));
             let best = |c: Ref| defenders.iter().filter(|&&d| open(c, d)).map(|&d| gain(c, d)).max().unwrap_or(0);
+            // Whether one of `later` can attack something with room left beside the attacks counted in `attacking`.
+            let beside = |later: &[Ref], attacking: &[usize]| {
+                later
+                    .iter()
+                    .any(|&e| defenders.iter().enumerate().any(|(i, &d)| open(e, d) && room(attacking, i)))
+            };
             let mut rest: u32 = eligible.iter().map(|&c| best(c)).sum();
             let mut obeyed = 0u32;
             let mut attacking = vec![0usize; defenders.len()];
-            let mut attacks = Vec::new();
-            for &c in eligible {
+            let mut attacks: Vec<(Ref, Ref)> = Vec::new();
+            for (k, &c) in eligible.iter().enumerate() {
                 rest -= best(c);
+                let later = &eligible[k + 1..];
+                let lone = matches!(attacks[..], [(a, _)] if alone.contains(&a));
                 let mut step = Step::default();
-                step.push(Token::on(Tok::Stay, c), obeyed + rest >= *most);
+                // Whether each choice leaves the declaration able to end legal by "can't attack alone", index for index.
+                let mut legal_alone = vec![!lone || beside(later, &attacking)];
+                step.push(Token::on(Tok::Stay, c), legal_alone[0] && obeyed + rest >= *most);
                 for (i, &d) in defenders.iter().enumerate() {
-                    let room = cap(i) == u8::MAX || attacking[i] < usize::from(cap(i));
-                    step.push(
-                        Token::of(Tok::Attack, c, d, 0),
-                        room && open(c, d) && obeyed + gain(c, d) + rest >= *most,
-                    );
+                    let free = room(&attacking, i) && open(c, d);
+                    let first_alone = attacks.is_empty() && alone.contains(&c);
+                    let fine = free
+                        && (!first_alone || {
+                            let mut after = attacking.clone();
+                            after[i] += 1;
+                            beside(later, &after)
+                        });
+                    legal_alone.push(fine);
+                    step.push(Token::of(Tok::Attack, c, d, 0), fine && obeyed + gain(c, d) + rest >= *most);
                 }
+                // Nothing makes up the most: staying home, for the validator; or, where the one attack so far is by a
+                // creature that can't attack alone and this is the last creature that can attack beside it, an attack.
                 if !step.mask.iter().any(|&m| m) {
-                    step.mask[0] = true;
+                    if legal_alone[0] {
+                        step.mask[0] = true;
+                    } else {
+                        step.mask.clone_from(&legal_alone);
+                    }
                 }
                 let t = p.pick(step)?;
                 if t.kind == Tok::Attack {
@@ -1565,6 +1594,7 @@ mod tests {
             can_pay: 0,
             max_attackers: vec![u8::MAX, u8::MAX],
             barred: vec![],
+            alone: vec![],
         });
         let mut m = Machine::new(&a, &[]);
         m.choose_token(Token::on(Tok::Stay, o(1)));
@@ -1589,6 +1619,7 @@ mod tests {
             can_pay: 0,
             max_attackers: vec![u8::MAX, u8::MAX],
             barred: vec![(o(1), Ref::Player(1))],
+            alone: vec![],
         });
         let m = Machine::new(&a, &[]);
         assert!(!legal(&m, Token::of(Tok::Attack, o(1), Ref::Player(1), 0)));
@@ -1608,6 +1639,7 @@ mod tests {
             can_pay: 0,
             max_attackers: vec![1, 1],
             barred: vec![],
+            alone: vec![],
         });
         let mut m = Machine::new(&a, &[]);
         m.choose_token(Token::of(Tok::Attack, o(1), Ref::Player(1), 0));
@@ -1633,6 +1665,7 @@ mod tests {
             can_pay: 0,
             max_attackers: vec![u8::MAX, 1],
             barred: vec![],
+            alone: vec![],
         });
         assert!(!legal(&Machine::new(&open, &[]), Token::on(Tok::Stay, o(3))));
         // Where attacking that player costs something (Ghostly Prison), the requirement is not to pay (CR 508.1d): it may.
@@ -1646,9 +1679,55 @@ mod tests {
             can_pay: 0,
             max_attackers: vec![u8::MAX],
             barred: vec![],
+            alone: vec![],
         });
         assert!(legal(&Machine::new(&taxed, &[]), Token::on(Tok::Stay, o(3))));
         round_trip(&taxed, &FactoredAnswer::Attack(vec![(o(3), Ref::Player(1))]));
+    }
+
+    #[test]
+    fn a_creature_that_cannot_attack_alone_attacks_only_beside_another() {
+        // Creature 1 can't attack alone (CR 508.1c: Pet Sehlat) and must attack if able, and it is the only creature: the
+        // most is none (CR 508.1d), and it may only stay home.
+        let lone = ask(AskKind::DeclareAttackers {
+            eligible: vec![o(1)],
+            defenders: vec![Ref::Player(1)],
+            requirements: vec![(o(1), Ref::Player(1), 1)],
+            most: 0,
+            costs: vec![],
+            can_pay: 0,
+            max_attackers: vec![u8::MAX],
+            barred: vec![],
+            alone: vec![o(1)],
+        });
+        let m = Machine::new(&lone, &[]);
+        assert!(!legal(&m, Token::of(Tok::Attack, o(1), Ref::Player(1), 0)));
+        round_trip(&lone, &FactoredAnswer::Attack(vec![]));
+        // With creature 2 to come, it may attack, and then creature 2 must attack beside it: staying home would leave it
+        // alone. Where the player takes one attacker (CR 508.1c: Judoon Enforcers), creature 2 can attack beside it only
+        // the planeswalker.
+        let two = ask(AskKind::DeclareAttackers {
+            eligible: vec![o(1), o(2)],
+            defenders: vec![Ref::Player(1), o(9)],
+            requirements: vec![],
+            most: 0,
+            costs: vec![],
+            can_pay: 0,
+            max_attackers: vec![1, u8::MAX],
+            barred: vec![(o(2), o(9))],
+            alone: vec![o(1)],
+        });
+        let m = Machine::new(&two, &[]);
+        // Creature 2 may attack only player 1, which is full once creature 1 attacks it.
+        assert!(!legal(&m, Token::of(Tok::Attack, o(1), Ref::Player(1), 0)));
+        assert!(legal(&m, Token::of(Tok::Attack, o(1), o(9), 0)));
+        let m = walk(&two, &[Token::of(Tok::Attack, o(1), o(9), 0)]);
+        assert!(!legal(&m, Token::on(Tok::Stay, o(2))));
+        round_trip(&two, &FactoredAnswer::Attack(vec![(o(1), o(9)), (o(2), Ref::Player(1))]));
+        // Creature 1 staying home leaves creature 2 free to attack alone or stay.
+        let m = walk(&two, &[Token::on(Tok::Stay, o(1))]);
+        assert!(legal(&m, Token::on(Tok::Stay, o(2))));
+        assert!(legal(&m, Token::of(Tok::Attack, o(2), Ref::Player(1), 0)));
     }
 
     #[test]
@@ -1668,6 +1747,7 @@ mod tests {
             can_pay: 0,
             max_attackers: vec![u8::MAX; 3],
             barred: vec![],
+            alone: vec![],
         });
         let m = Machine::new(&goaded, &[]);
         assert!(!legal(&m, Token::on(Tok::Stay, o(1))));
@@ -1683,6 +1763,7 @@ mod tests {
             can_pay: 0,
             max_attackers: vec![u8::MAX],
             barred: vec![],
+            alone: vec![],
         });
         round_trip(&gone, &FactoredAnswer::Attack(vec![]));
         // One creature may make up for another: one paying to obey two leaves the other free to stay home.
@@ -1699,6 +1780,7 @@ mod tests {
             can_pay: 3,
             max_attackers: vec![u8::MAX; 2],
             barred: vec![],
+            alone: vec![],
         });
         let m = walk(&paid, &[Token::on(Tok::Stay, o(1))]);
         assert!(!legal(&m, Token::on(Tok::Stay, o(2))));

@@ -574,6 +574,8 @@ pub(crate) fn ask_of(
             // CR 508.1c: the attacks a restriction forbids.
             let mut barred: Vec<(Ref, Ref)> = requirements.barred.iter().map(|&(a, d)| (r(a), t(d))).collect();
             barred.sort();
+            // CR 508.1c: the creatures a static ability forbids to attack alone.
+            let alone = rs(&requirements.alone_barred);
             AskKind::DeclareAttackers {
                 eligible: rs(eligible),
                 defenders,
@@ -583,6 +585,7 @@ pub(crate) fn ask_of(
                 can_pay: *can_pay,
                 max_attackers,
                 barred,
+                alone,
             }
         }
         RequestKind::AssignCombatDamage { divisions } => {

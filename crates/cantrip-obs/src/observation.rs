@@ -342,7 +342,8 @@ pub enum AskKind {
     /// obeys `most`. `costs` what an attack costs (attacker, defender, mana value of the cost); `can_pay` the most the seat
     /// can pay. `max_attackers` the most creatures that may attack each defender (CR 508.1c), index for index with
     /// `defenders`; `u8::MAX` where nothing caps it. `barred` the attacks (attacker, defender; sorted) a restriction forbids
-    /// (CR 508.1c: "creatures with flying can't attack you").
+    /// (CR 508.1c: "creatures with flying can't attack you"). `alone` the creatures (sorted) a static ability forbids to
+    /// attack alone (CR 508.1c: Pet Sehlat's "can't attack alone"): a declaration whose one attacker is one of them is illegal.
     DeclareAttackers {
         eligible: Vec<Ref>,
         defenders: Vec<Ref>,
@@ -353,6 +354,8 @@ pub enum AskKind {
         max_attackers: Vec<u8>,
         #[serde(default)]
         barred: Vec<(Ref, Ref)>,
+        #[serde(default)]
+        alone: Vec<Ref>,
     },
     /// One division per creature with a choice, sorted by source.
     AssignCombatDamage { divisions: Vec<DivisionObs> },
