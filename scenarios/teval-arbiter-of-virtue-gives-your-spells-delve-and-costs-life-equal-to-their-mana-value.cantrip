@@ -1,0 +1,67 @@
+# Teval, Arbiter of Virtue: "Spells you cast have delve" and "Whenever you cast a spell, you lose life equal to its mana value."
+# Bot1 casts Teval on turn 1 ({2}{B}{G}{U}: Mox Jet, Mox Emerald, Mox Sapphire and a Lotus Petal each; the three Petals end in
+# the graveyard). On turn 3 Walking Ballista, which has no delve of its own, is cast for X = 1 ({X}{X} = {2}): two graveyard cards pay
+# all of it (CR 702.66a), and a third is not offered, though the graveyard holds one - it can pay no more of the cost (CR 601.2f-h).
+# Bot1 loses 2, the spell's mana value with X counted as chosen (CR 202.3e). On turn 5 a second Ballista is cast for X = 2 ({4}): the
+# one card left is exiled, the Moxen pay the other {3}, and no card is offered, there being none: Bot1 loses 4 more, from 18 to 14.
+# Bot2's Ancestral Recall on turn 2 is no spell Bot1 casts: Bot1 loses nothing for it (the other side's spell).
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Teval, Arbiter of Virtue
+Lotus Petal
+Lotus Petal
+Lotus Petal
+Walking Ballista
+Walking Ballista
+Plains x13
+
+[Bot2 Deck]
+Ancestral Recall
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Lotus Petal.Activate(Color: Blue)
+Bot1.Battlefield.Lotus Petal.Activate(Color: Blue)
+Bot1.Battlefield.Lotus Petal.Activate(Color: Blue)
+Bot1.Hand.Teval, Arbiter of Virtue.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Ancestral Recall.Cast(Bot2)
+Bot2.Pass
+? Bot1.Life = 20
+[T3 Bot1.Main1]
+Bot1.Hand.Walking Ballista.Cast(X: 1; Delve: 2)
+! Bot1.PayCost(Delve: 1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Walking Ballista.Cast(X: 2; Delve: 1)
+! Bot1.PayCost(Delve: 1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 14
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 14
+Bot1.Graveyard.Count = 0

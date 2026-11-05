@@ -1,0 +1,44 @@
+# Teval, Arbiter of Virtue: "Spells you cast have delve" (CR 702.66a, 113.6) - its controller's spells, not an opponent's. Bot1
+# casts Teval on turn 1. On turn 2 Bot2 sacrifices Black Lotus for {B}{B}{B}, putting it in Bot2's graveyard, and casts Mind Stone
+# ({2}) asking to delve a card: no graveyard card is offered, so the Lotus's mana pays all of it and the Lotus stays in Bot2's
+# graveyard, nothing exiled. Bot1 loses no life for Bot2's spells either.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Teval, Arbiter of Virtue
+Plains x20
+
+[Bot2 Deck]
+Black Lotus
+Mind Stone
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Teval, Arbiter of Virtue.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot2.Graveyard = Black Lotus
+Bot2.Hand.Mind Stone.Cast(Delve: 1)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield = Mind Stone
+Bot2.Graveyard = Black Lotus
+Exile.Count = 0
+Bot1.Life = 20

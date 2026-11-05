@@ -1,0 +1,57 @@
+# Teval's "you lose life equal to its mana value" reads the spell as it last existed on the stack when it has left (CR 608.2h),
+# its X counted as chosen (CR 202.3e; ruling 2025-04-04). Bot1 casts Walking Ballista for X = 2 ({4}: three Moxen and one
+# Lotus Petal exiled to delve), and Bot2 counters it in response to Teval's trigger. The trigger still resolves: Bot1 loses 4,
+# not the 0 the Ballista card has in the graveyard. Bot2's Counterspell is not Bot1's spell, so Bot1 loses nothing for it.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Teval, Arbiter of Virtue
+Lotus Petal
+Lotus Petal
+Walking Ballista
+Plains x13
+
+[Bot2 Deck]
+Counterspell
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Lotus Petal.Activate(Color: Blue)
+Bot1.Battlefield.Lotus Petal.Activate(Color: Blue)
+Bot1.Hand.Teval, Arbiter of Virtue.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Walking Ballista.Cast(X: 2; Delve: 1)
+Bot1.Pass
+Bot2.Battlefield.Island#1.Activate
+Bot2.Battlefield.Island#2.Activate
+Bot2.Hand.Counterspell.Cast(Stack.Walking Ballista)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Walking Ballista; Lotus Petal
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Life = 16
+Bot2.Graveyard = Counterspell
+Exile = Lotus Petal

@@ -1,0 +1,12 @@
+{
+  "name": "Teval, Arbiter of Virtue",
+  "manaCost": "{2}{B}{G}{U}",
+  "type": "Legendary Creature — Spirit Dragon",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Flying, lifelink\nSpells you cast have delve. (Each card you exile from your graveyard while casting those spells pays for {1}.)\nWhenever you cast a spell, you lose life equal to its mana value.",
+  "keywords": [
+    "Flying",
+    "Lifelink"
+  ]
+}
