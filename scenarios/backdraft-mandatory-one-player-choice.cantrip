@@ -1,0 +1,45 @@
+# Both players cast a sorcery this turn: Backdraft must choose exactly one, including its own controller (CR 608.2d).
+[Bot1 Deck]
+Teferi, Time Raveler
+Black Lotus x2
+Mox Pearl
+Mox Ruby
+Firebolt
+Backdraft
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Firebolt
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Teferi, Time Raveler.Cast
+Bot1.Pass
+Bot1.Battlefield.Teferi, Time Raveler.Activate(Ability: +1)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Firebolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Firebolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Backdraft.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Count: 0)
+! Bot1.Target(Bot1; Bot2)
+Bot1.Target(Bot1)
+Bot1.Choose(Firebolt)
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 18
