@@ -1,0 +1,45 @@
+# Removing Kjeldoran Dead in response does not remove its enters trigger; its controller still sacrifices a creature (CR 113.7a).
+[Bot1 Deck]
+Mox Jet
+Kjeldoran Dead
+Memnite
+Island
+Island
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kjeldoran Dead.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack = Kjeldoran Dead
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Kjeldoran Dead)
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard.Kjeldoran Dead.Power = 3
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Kjeldoran Dead.Power = 3
+Bot1.Graveyard.Memnite.Power = 1
+Bot1.Battlefield.Count = 1
