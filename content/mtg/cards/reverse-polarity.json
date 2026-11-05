@@ -1,0 +1,6 @@
+{
+  "name": "Reverse Polarity",
+  "manaCost": "{W}{W}",
+  "type": "Instant",
+  "oracleText": "You gain X life, where X is twice the damage dealt to you so far this turn by artifacts."
+}
