@@ -1,0 +1,36 @@
+# Leyline replaces Ornithopter's death with exile, so Hellfire deals only 3 damage (CR 700.4, 614.6).
+[Bot1 Deck]
+Leyline of the Void
+Hellfire
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Swamp x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Accept
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hellfire.Cast
+? Bot1.Mana =
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Ornithopter
+Bot2.Graveyard.Count = 0
+Bot1.Life = 17

@@ -1,0 +1,6 @@
+{
+  "name": "Hellfire",
+  "manaCost": "{2}{B}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "Destroy all nonblack creatures. Hellfire deals X plus 3 damage to you, where X is the number of creatures that died this way."
+}
