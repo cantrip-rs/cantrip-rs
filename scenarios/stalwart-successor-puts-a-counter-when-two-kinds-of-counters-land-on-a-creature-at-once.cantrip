@@ -1,0 +1,73 @@
+# Stalwart Successor: "Whenever one or more counters are put on a creature you control, if it's the first time counters have been
+# put on that creature this turn, put a +1/+1 counter on that creature" (CR 603.2c, 603.4). On turn 5 Bot1's Dockworker Drone
+# enters with a +1/+1 counter, the Successor gives it a second, and Alchemist's Assistant's renew gives it a lifelink counter.
+# Sacrificed to Ashnod's Altar, the Drone puts its counters, two +1/+1 and a lifelink, on the Successor at once: one time
+# counters are put on it, the first this turn, still so as the ability resolves. The Successor ends with three +1/+1 counters.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Mox Jet
+Mox Emerald
+Mox Pearl
+Stalwart Successor
+Ashnod's Altar
+Alchemist's Assistant
+Dockworker Drone
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Stalwart Successor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ashnod's Altar.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Alchemist's Assistant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ashnod's Altar.Activate(Sacrifice: Alchemist's Assistant)
+? Bot1.Graveyard = Alchemist's Assistant; Black Lotus
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Dockworker Drone.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dockworker Drone.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Alchemist's Assistant.Activate(Bot1.Battlefield.Dockworker Drone)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Dockworker Drone.Counters.Lifelink = 1
+? Bot1.Battlefield.Dockworker Drone.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Ashnod's Altar.Activate(Sacrifice: Dockworker Drone)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stalwart Successor.Counters.PlusOnePlusOne = 2
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Stalwart Successor.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Stalwart Successor.Counters.Lifelink = 1

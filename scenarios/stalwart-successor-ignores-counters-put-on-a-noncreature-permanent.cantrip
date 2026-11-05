@@ -1,0 +1,38 @@
+# Stalwart Successor: "Whenever one or more counters are put on a creature you control" (CR 603.2, 122.6) - a creature only. Bot1's
+# Everflowing Chalice, kicked once, enters with a charge counter: counters put on an artifact Bot1 controls, the first this turn,
+# but not on a creature, so the ability does not trigger and the Chalice gets no +1/+1 counter.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Pearl
+Black Lotus
+Stalwart Successor
+Everflowing Chalice
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Stalwart Successor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Everflowing Chalice.Cast(Kicked: 1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Everflowing Chalice.Counters.Charge = 1
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Everflowing Chalice.Counters.Charge = 1
+Bot1.Battlefield.Everflowing Chalice.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Stalwart Successor.Counters.PlusOnePlusOne = (absent)

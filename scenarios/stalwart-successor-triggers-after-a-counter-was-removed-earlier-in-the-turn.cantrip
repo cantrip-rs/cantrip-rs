@@ -1,0 +1,56 @@
+# Stalwart Successor asks whether counters have been put on the creature this turn (CR 603.4). A counter removed from it does not
+# count. Bot1's Walking Ballista, cast on turn 1, enters with one counter and the ability gives it a second. On turn 3 Bot1 removes
+# a counter to deal 1 damage to Bot2, then pays {4} to put one on. That is the first counter put on it this turn, so the ability
+# puts another: three counters, not two.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+Stalwart Successor
+Walking Ballista
+Plains
+Plains
+Plains x12
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Stalwart Successor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Walking Ballista.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Walking Ballista.Activate(Bot2; Ability: Remove)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Walking Ballista.Activate(Ability: {4})
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 3
+Stack.Count = 0
