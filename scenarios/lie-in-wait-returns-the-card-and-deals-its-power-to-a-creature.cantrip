@@ -1,0 +1,62 @@
+# Lie in Wait: Bot1's Alpine Grizzly (4/2) dies to its own Lightning Bolt. Lie in Wait then returns it to Bot1's hand and deals damage equal
+# to its power, 4, to Bot2's Grizzly Bears (2/2), which dies. A noncreature card in Bot1's graveyard (the Bolt) and a creature card in Bot2's
+# graveyard (the Bolt, no creature card) is no legal first target.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Alpine Grizzly
+Lightning Bolt
+Lie in Wait
+Island x30
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Alpine Grizzly)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Alpine Grizzly.Power = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Lie in Wait.Cast
+! Bot1.Target(Graveyard.Lightning Bolt)
+Bot1.Target(Graveyard.Alpine Grizzly)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+? Bot1.Hand.Alpine Grizzly.Power = 4
+? Bot1.Graveyard.Alpine Grizzly = (absent)
+? Bot2.Battlefield.Grizzly Bears = (absent)
+
+[Expect]
+Bot2.Graveyard.Grizzly Bears.Power = 2
+Bot1.Hand.Alpine Grizzly.Power = 4

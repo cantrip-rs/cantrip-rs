@@ -1,0 +1,65 @@
+# Lie in Wait: in response Bot1's own Lightning Bolt kills Bot2's Grizzly Bears, the second target. Lie in Wait still resolves for the target that is
+# legal (CR 608.2b) and returns Bot1's Alpine Grizzly to its hand, and no damage is dealt to anything (Bot2 stays on 20).
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Alpine Grizzly
+Lightning Bolt
+Lie in Wait
+Lightning Bolt
+Island x30
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Alpine Grizzly)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Lie in Wait.Cast
+Bot1.Target(Graveyard.Alpine Grizzly)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears = (absent)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+? Bot1.Hand.Alpine Grizzly.Power = 4
+? Bot1.Graveyard.Alpine Grizzly = (absent)
+
+[Expect]
+Bot1.Hand.Alpine Grizzly.Power = 4
+Bot2.Life = 20
+Bot1.Life = 20
