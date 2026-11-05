@@ -1,0 +1,31 @@
+# The enchanted land's controller, not Kudzu's controller, chooses where it moves (CR 608.2h).
+[Bot1 Deck]
+Kudzu
+Black Lotus
+Forest
+Dryad Arbor
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Kudzu.Cast(Bot1.Battlefield.Forest)
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Dryad Arbor.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Choose(Bot2.Battlefield.Island)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Island.Activate
+Bot2.Choose(Bot1.Battlefield.Dryad Arbor)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Kudzu.AttachedTo = Dryad Arbor
+Bot2.Graveyard = Island

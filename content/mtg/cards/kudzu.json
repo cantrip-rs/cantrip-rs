@@ -1,0 +1,6 @@
+{
+  "name": "Kudzu",
+  "manaCost": "{1}{G}{G}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant land\nWhen enchanted land becomes tapped, destroy it. That land's controller may attach this Aura to a land of their choice."
+}

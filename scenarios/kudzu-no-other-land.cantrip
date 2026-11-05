@@ -1,0 +1,30 @@
+# Tapping a different land leaves Kudzu's land untouched; when that land taps with no other land available, Kudzu falls off (CR 603.2, 704.5m).
+[Bot1 Deck]
+Kudzu
+Black Lotus
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Kudzu.Cast(Bot1.Battlefield.Forest)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Kudzu.AttachedTo = Forest
+Bot1.Battlefield.Forest.Activate
+Bot1.Choose(Bot2.Battlefield.Island)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Island.Activate
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Kudzu; Forest; Black Lotus
+Bot2.Graveyard = Island

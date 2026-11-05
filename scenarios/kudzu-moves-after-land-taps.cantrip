@@ -1,0 +1,26 @@
+# Kudzu destroys the enchanted land when it becomes tapped, then its controller may move it to another player's land (CR 603.2, 701.8a, 701.3a).
+[Bot1 Deck]
+Kudzu
+Black Lotus
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Kudzu.Cast(Bot1.Battlefield.Forest)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Choose(Bot2.Battlefield.Island)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Forest; Black Lotus
+Bot1.Battlefield.Kudzu.AttachedTo = Island
