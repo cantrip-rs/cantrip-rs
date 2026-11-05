@@ -63,11 +63,13 @@ fn fail<T>(message: impl Into<String>) -> R<T> {
 struct Casting {
     player: PlayerId,
     plan: PayPlan,
+    /// The line named `Delve:` cards to exile, which `! Bot1.PayCost(Delve: 1)` is asked of once they are.
+    delving: bool,
 }
 
 impl Casting {
     fn new(player: PlayerId, x: Option<u32>, spend: VecDeque<Spend>) -> Casting {
-        Casting { player, plan: PayPlan::new(x, spend) }
+        Casting { player, plan: PayPlan::new(x, spend), delving: false }
     }
 }
 
@@ -784,6 +786,34 @@ impl<'s> Run<'s> {
                 continue;
             }
 
+            // `! Bot1.PayCost(Delve: 1)`: once the cards the cast's `Delve:` named are exiled, the payment offers no further graveyard
+            // card to exile (CR 702.66a, 601.2f-h: no more than the cards in the graveyard, no more than the generic mana the spell
+            // owes). It is judged at the player's next payment or priority: a card offered there fails it, and a payment that is
+            // done, or asks for mana alone, holds it.
+            if let Some(ScriptStep::Refused { action, line, text }) = self.current()
+                && matches!(action.verb, ScriptVerb::PayCost)
+                && request.player == player_of(action.bot)
+                && let Some(count) = action.named("Delve")
+                && matches!(request.kind, RequestKind::PayCosts { .. } | RequestKind::Priority { .. })
+                && let Some(casting) = &self.casting
+                && casting.player == request.player
+                && casting.plan.delve == 0
+            {
+                if !matches!(count.trim().parse::<u32>(), Ok(n) if n >= 1) {
+                    return fail(format!("line {line}: {text}: `Delve: {count}` is not a number of cards of one or more"));
+                }
+                if !casting.delving {
+                    return fail(format!("line {line}: {text} proves nothing: the cast before it names no `Delve:` cards"));
+                }
+                if let RequestKind::PayCosts { options, .. } = &request.kind
+                    && options.iter().any(|o| o.kind == ActionKind::ExileToPay)
+                {
+                    return fail(format!("line {line} says {text} must not be offered, but another graveyard card may be exiled to pay"));
+                }
+                self.next();
+                continue;
+            }
+
             // `! Bot1.PayCost`: at the player's next "unless pays" question, paying is not among the options.
             if let Some(ScriptStep::Refused { action, line, text }) = self.current()
                 && matches!(action.verb, ScriptVerb::PayCost)
@@ -837,6 +867,7 @@ impl<'s> Run<'s> {
 
             if let Some(ScriptStep::Refused { action, line, text }) = self.current()
                 && request.player == player_of(action.bot)
+                && !(action.verb == ScriptVerb::PayCost && action.named("Delve").is_some())
                 && (answers(action.verb, &request.kind) || self.refused_at_payment(action, &request.kind))
                 && !(action.verb == ScriptVerb::Choose && action.named("Cost").is_none()
                     && action.positional().next().is_none() && !action.text.contains('(')
@@ -1295,6 +1326,7 @@ impl<'s> Run<'s> {
                         Err(_) => return fail(format!("line {}: {text} is not a number", step.line)),
                     },
                 };
+                casting.delving = casting.plan.delve > 0;
                 self.casting = Some(casting);
             }
             // `Bot1.Accept(X: 5)`: a cast the "may" makes as it resolves announces that X (CR 107.3a), as a miracle cost that
@@ -1357,7 +1389,7 @@ impl<'s> Run<'s> {
             RequestKind::PayCosts { assist: AssistStep::HelperPays, source, remaining, .. } => {
                 let mut plan = self.assisting.take().filter(|a| a.player == request.player).map_or_else(PayPlan::default, |a| a.plan);
                 let answer = cantrip_engine::pay::auto_pay(&self.game, request, &mut plan).map_err(Fail)?;
-                self.assisting = Some(Casting { player: request.player, plan });
+                self.assisting = Some(Casting { player: request.player, plan, delving: false });
                 return match answer {
                     Some(answer) => Ok(answer),
                     None => fail(format!("{} is assisting with {} with {remaining} still owed, and their pool does not pay it", bot(request.player), self.game.known_name(*source))),
