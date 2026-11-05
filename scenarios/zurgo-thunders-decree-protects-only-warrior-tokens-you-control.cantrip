@@ -1,0 +1,77 @@
+# Zurgo, Thunder's Decree: "During your end step, Warrior tokens you control have 'This token can't be sacrificed.'" - only
+# Warrior tokens, and only its controller's (CR 109.2, 613.1f). Both players have a Zurgo and an Ashnod's Altar. Bot2's Zurgo
+# attacks on turn 4 and its two mobilized Warriors outlive Bot2's own end step. In Bot1's end step on turn 5, Bot1's Zurgo gives
+# nothing to a token that is not a Warrior, so Bot1 sacrifices one of its Lingering Souls Spirits, and nothing to the Warriors an
+# opponent controls, so Bot2 sacrifices one of its Warrior tokens.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Zurgo, Thunder's Decree
+Black Lotus
+Lingering Souls
+Ashnod's Altar
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Zurgo, Thunder's Decree
+Black Lotus
+Ashnod's Altar
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Zurgo, Thunder's Decree.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spirit Token#2.Colors = White
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Zurgo, Thunder's Decree.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Ashnod's Altar.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ashnod's Altar.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Zurgo, Thunder's Decree > Bot1)
+[T4 Bot2.Main2]
+? Bot2.Battlefield.Warrior Token#2.Colors = Red
+[T5 Bot1.End]
+Bot1.Battlefield.Ashnod's Altar.Activate(Sacrifice: Spirit Token#1)
+Bot1.Pass
+Bot2.Battlefield.Ashnod's Altar.Activate(Sacrifice: Warrior Token#1)
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 16
+Bot1.Battlefield = Ashnod's Altar; Mox Jet; Mox Pearl; Mox Ruby; Spirit Token; Zurgo, Thunder's Decree
+Bot2.Battlefield = Ashnod's Altar; Mox Jet; Mox Pearl; Mox Ruby; Warrior Token; Zurgo, Thunder's Decree

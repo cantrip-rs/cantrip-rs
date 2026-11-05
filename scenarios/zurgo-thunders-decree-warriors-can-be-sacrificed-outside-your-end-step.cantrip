@@ -1,0 +1,49 @@
+# Zurgo's protection is only for Warrior tokens during its controller's end step (CR 604.1, 613.1f, 701.21a). Bot1's Ashnod's
+# Altar sacrifices a creature for {C}{C}: in the declare blockers step, a mobilized Warrior token is sacrificed with no trouble;
+# in the end step, once mobilize's sacrifice has resolved to nothing, the other token can't be (the refusal) but Zurgo itself, a Warrior card and not a token, can be, and does.
+# The sacrificed Warrior deals no combat damage: Zurgo 2 + the one Warrior left 1 = 3, so Bot2 is at 17.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Zurgo, Thunder's Decree
+Black Lotus
+Ashnod's Altar
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Zurgo, Thunder's Decree.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Ashnod's Altar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Zurgo, Thunder's Decree > Bot2)
+[T3 Bot1.Blockers]
+Bot1.Battlefield.Ashnod's Altar.Activate(Sacrifice: Warrior Token#1)
+? Bot1.Battlefield.Warrior Token#2 = (absent)
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+! Bot1.Battlefield.Ashnod's Altar.Activate(Sacrifice: Warrior Token)
+Bot1.Battlefield.Ashnod's Altar.Activate(Sacrifice: Zurgo, Thunder's Decree)
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield = Ashnod's Altar; Mox Jet; Mox Pearl; Mox Ruby; Warrior Token
+Bot1.Graveyard = Zurgo, Thunder's Decree; Black Lotus

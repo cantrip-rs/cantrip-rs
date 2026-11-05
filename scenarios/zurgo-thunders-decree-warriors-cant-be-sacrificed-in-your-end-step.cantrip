@@ -1,0 +1,35 @@
+# Zurgo's mobilize 2 (CR 702.181a) makes two tapped and attacking 1/1 Warriors on turn 3, and mobilize sacrifices them at the
+# beginning of the next end step. That end step is Bot1's own, and during it Zurgo gives Warrior tokens Bot1 controls "can't be
+# sacrificed" (CR 604.1, 613.1f, 701.21a), so the delayed sacrifice does nothing and both are still on the battlefield, having
+# dealt 4 to Bot2 with Zurgo (2+1+1). Checked in the end step itself, as the expectation block runs after the turn is over.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Zurgo, Thunder's Decree
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Zurgo, Thunder's Decree.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Zurgo, Thunder's Decree > Bot2)
+[T3 Bot1.End]
+? Bot1.Battlefield.Warrior Token#2.Tapped = true
+? Bot1.Battlefield.Warrior Token#1.Tapped = true
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Warrior Token#2.Colors = Red
+Bot1.Battlefield.Warrior Token#1.Colors = Red
