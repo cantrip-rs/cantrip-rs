@@ -1,0 +1,39 @@
+# Severance Priest: the token is X/X with X the mana value of the exiled card. Bot1 exiles Mox Jet (mana value 0), so when Bot2
+# bolts the Priest Bot2 creates a 0/0 Spirit, which is put into the graveyard by a state-based action (CR 704.5f) and ceases to exist:
+# no Spirit is left on Bot2's battlefield, and Mox Jet stays exiled.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Severance Priest
+Plains x17
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Island x4
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Severance Priest.Cast
+Bot1.Choose(Mox Jet)
+[T1 Bot1.Main2]
+? Exile = Mox Jet
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Severance Priest)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Severance Priest
+Exile = Mox Jet
+Bot2.Battlefield = Mox Ruby

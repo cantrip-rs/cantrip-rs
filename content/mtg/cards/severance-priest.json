@@ -1,0 +1,11 @@
+{
+  "name": "Severance Priest",
+  "manaCost": "{W}{B}{G}",
+  "type": "Creature — Djinn Cleric",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Deathtouch\nWhen this creature enters, target opponent reveals their hand. You may choose a nonland card from it. If you do, exile that card.\nWhen this creature leaves the battlefield, the exiled card's owner creates an X/X white Spirit creature token, where X is the mana value of the exiled card.",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

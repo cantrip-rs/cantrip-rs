@@ -1,0 +1,30 @@
+# Severance Priest: "You may choose a nonland card from it." Bot2's hand is all lands, so nothing is eligible and nothing is exiled
+# (the hand is still revealed). Bot2's hand stays seven cards and the Priest is a 3/3 with deathtouch.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Severance Priest
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Severance Priest.Cast
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot2.Hand.Count = 7
+Bot1.Battlefield.Severance Priest.Power = 3
+Bot1.Battlefield.Severance Priest.Keywords = Deathtouch

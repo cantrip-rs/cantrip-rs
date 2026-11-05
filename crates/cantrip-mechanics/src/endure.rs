@@ -7,7 +7,7 @@ use cantrip_api::*;
 const ENDURE: Question = Question::new("PutCounters", "put the +1/+1 counters on it instead of creating a Spirit token?", "", "Put counters", "Create a token");
 
 /// The white Spirit creature token endure makes (CR 701.63a): the generic definition, its size N/N given as it is made
-/// (`endure`). A card that endures lists it in its `EXTRA`, as do Abzan Monument (its X/X), Great Arashin City and Revival
+/// (`endure`). A card that endures lists it in its `EXTRA`, as do Abzan Monument and Severance Priest (their X/Xs), Great Arashin City and Revival
 /// of the Ancestors (their 1/1s), which make the same white Spirit.
 pub static SPIRIT: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::White)),

@@ -1,0 +1,44 @@
+# Severance Priest: its two abilities are independent triggers (CR 603.2, 607.2a). Bot1 casts the Priest and, with the enters ability
+# still on the stack, Swords to Plowshares exiles the Priest (Bot1 gains 3): the leaves ability resolves first and finds nothing
+# exiled, so no one creates a token, and then the enters ability exiles Mind Stone for good. Nothing returns and no token is made.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Severance Priest
+Swords to Plowshares
+Plains
+Plains x14
+
+[Bot2 Deck]
+Mind Stone
+Island x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Severance Priest.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Severance Priest)
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mind Stone)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Life = 23
+Exile = Mind Stone; Severance Priest
+Bot2.Hand.Count = 6
+Bot2.Battlefield.Count = 0

@@ -1,0 +1,44 @@
+# Severance Priest: its enters ability reveals Bot2's hand and Bot1 may choose a nonland card from it. Bot1 exiles Mind Stone (mana
+# value 2), and the card stays exiled (unlike Tidehollow Sculler's). When Bot2 bolts the Priest, its second ability has the exiled
+# card's owner, Bot2, create a 2/2 white Spirit token.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Severance Priest
+Plains x17
+
+[Bot2 Deck]
+Mox Ruby
+Mind Stone
+Lightning Bolt
+Island x4
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Severance Priest.Cast
+Bot1.Choose(Mind Stone)
+[T1 Bot1.Main2]
+? Bot2.Hand.Count = 6
+? Exile = Mind Stone
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Severance Priest)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Severance Priest
+Exile = Mind Stone
+Bot2.Hand.Count = 5
+Bot2.Battlefield.Spirit Token.Power = 2
+Bot2.Battlefield.Spirit Token.Toughness = 2
+Bot2.Battlefield.Spirit Token.Colors = White
+Bot2.Battlefield.Spirit Token.Subtypes = Spirit
