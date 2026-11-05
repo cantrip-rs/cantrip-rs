@@ -1,0 +1,43 @@
+# Revival of the Ancestors, chapter II: "among one, two, or three target creatures" (CR 601.2d, 603.3d). Bot1 chooses all three
+# Spirits, one counter each, three 2/2s. Bot1's Ornithopter is a fourth creature, but the three counters can give no more than
+# three targets one each, so a division among four is refused.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Mox Ruby
+Revival of the Ancestors
+Ornithopter
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Revival of the Ancestors.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Divide(Spirit Token#1: 1; Spirit Token#2: 1; Spirit Token#3: 1; Ornithopter: 1)
+Bot1.Divide(Spirit Token#1: 1; Spirit Token#2: 1; Spirit Token#3: 1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Spirit Token#1.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Spirit Token#2.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Spirit Token#3.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)

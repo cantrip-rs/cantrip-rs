@@ -1,0 +1,6 @@
+{
+  "name": "Revival of the Ancestors",
+  "manaCost": "{1}{W}{B}{G}",
+  "type": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Create three 1/1 white Spirit creature tokens.\nII — Distribute three +1/+1 counters among one, two, or three target creatures you control.\nIII — Creatures you control gain trample and lifelink until end of turn."
+}

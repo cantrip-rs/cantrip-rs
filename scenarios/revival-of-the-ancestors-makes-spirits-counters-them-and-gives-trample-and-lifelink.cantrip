@@ -1,0 +1,57 @@
+# Revival of the Ancestors, a Saga (CR 714). I: three 1/1 white Spirit tokens as it enters (endure's white Spirit, made 1/1).
+# II (turn 3): three +1/+1 counters are divided among two of the Spirits, two and one (CR 601.2d). III (turn 5): creatures Bot1
+# controls gain trample and lifelink until end of turn, and the Saga is sacrificed after it. All three Spirits attack and are
+# unblocked, 3 + 2 + 1 damage: Bot2 14, and lifelink gains Bot1 6.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Mox Ruby
+Revival of the Ancestors
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Revival of the Ancestors.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spirit Token#1.Power = 1
+? Bot1.Battlefield.Spirit Token#1.Toughness = 1
+? Bot1.Battlefield.Spirit Token#1.Colors = White
+? Bot1.Battlefield.Count = 8
+[T3 Bot1.Main1]
+Bot1.Divide(Spirit Token#1: 2; Spirit Token#2: 1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spirit Token#1.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Spirit Token#2.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Spirit Token#3.Counters.PlusOnePlusOne = (absent)
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spirit Token#1.Keywords = Lifelink; Trample
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Spirit Token#1; Spirit Token#2; Spirit Token#3 > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Life = 26
+Bot1.Battlefield.Revival of the Ancestors = (absent)
