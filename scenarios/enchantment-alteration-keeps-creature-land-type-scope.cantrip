@@ -1,0 +1,37 @@
+# An artifact is not an additional allowed shared type: the original host is a creature, so the new host must be a creature.
+# Animate Artifact can enchant the artifact land, isolating this spell's type restriction from the Aura's enchant restriction.
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Ornithopter
+Animate Artifact
+Enchantment Alteration
+Island x20
+[Bot2 Deck]
+Darksteel Citadel
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Animate Artifact.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Darksteel Citadel.Play
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Enchantment Alteration.Cast(Bot1.Battlefield.Animate Artifact)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Bot1.Battlefield.Ornithopter)
+! Bot1.Choose()
+! Bot1.Choose(Bot2.Battlefield.Darksteel Citadel)
+Bot1.Choose(Bot2.Battlefield.Memnite)
+[Expect]
+Bot1.Battlefield.Animate Artifact.AttachedTo = Memnite
+Bot2.Battlefield.Memnite.Power = 1

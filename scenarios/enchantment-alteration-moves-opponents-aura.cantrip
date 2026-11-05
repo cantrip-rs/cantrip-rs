@@ -1,0 +1,29 @@
+# The spell targets an opponent's Aura, not its host or destination, and moves it to another creature (CR 115.1a, 701.3).
+[Bot1 Deck]
+Mox Sapphire
+Memnite
+Enchantment Alteration
+Island x20
+[Bot2 Deck]
+Mox Emerald
+Ornithopter
+Rancor
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Rancor.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Enchantment Alteration.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Hand.Enchantment Alteration.Cast(Bot2.Battlefield.Rancor)
+? Bot1.Mana =
+! Bot1.Choose(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Bot1.Battlefield.Memnite)
+[Expect]
+Bot2.Battlefield.Rancor.AttachedTo = Memnite

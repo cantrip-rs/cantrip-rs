@@ -1,0 +1,35 @@
+# Protection from green makes Coast Watcher an illegal host for Rancor; exactly one of two legal creatures is chosen (CR 702.16c, 608.2d).
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Ornithopter
+Memnite
+Phyrexian Walker
+Rancor
+Enchantment Alteration
+Island x20
+[Bot2 Deck]
+Black Lotus
+Coast Watcher
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rancor.Cast(Bot1.Battlefield.Ornithopter)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Coast Watcher.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Enchantment Alteration.Cast(Bot1.Battlefield.Rancor)
+? Bot1.Mana =
+! Bot1.Choose(Bot2.Battlefield.Coast Watcher)
+! Bot1.Choose(Bot1.Battlefield.Memnite; Bot1.Battlefield.Phyrexian Walker)
+Bot1.Choose(Bot1.Battlefield.Memnite)
+[Expect]
+Bot1.Battlefield.Rancor.AttachedTo = Memnite

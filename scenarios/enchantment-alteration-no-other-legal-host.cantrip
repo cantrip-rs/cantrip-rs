@@ -1,0 +1,23 @@
+# With no other creature, the Aura remains on its original host (CR 101.2, 701.3a).
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Ornithopter
+Rancor
+Enchantment Alteration
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rancor.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Enchantment Alteration.Cast(Bot1.Battlefield.Rancor)
+Bot1.Choose()
+[Expect]
+Bot1.Battlefield.Rancor.AttachedTo = Ornithopter
+Bot1.Graveyard = Enchantment Alteration
