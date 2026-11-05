@@ -1,0 +1,42 @@
+# Exactly two nonartifact creatures are exiled, including one's own and an opponent's, then the caster takes 5 damage (CR 115.1a, 701.13a, 120.3).
+[Bot1 Deck]
+Black Lotus
+Grizzly Bears
+Llanowar Elves
+Black Lotus
+Ashes to Ashes
+Island
+Island
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Ornithopter
+Island x24
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Ashes to Ashes.Cast
+! Bot1.Target(Count: 1)
+! Bot1.Target(Count: 3)
+! Bot1.Target(Bot2.Battlefield.Ornithopter; Bot2.Battlefield.Island)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears; Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+[Expect]
+Exile = Grizzly Bears; Grizzly Bears
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Life = 15
+Bot2.Life = 20

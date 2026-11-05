@@ -1,0 +1,32 @@
+# With only one creature and a land, Ashes to Ashes cannot be cast; adding a second creature makes the same cast legal (CR 115.1a).
+[Bot1 Deck]
+Black Lotus
+Grizzly Bears
+Black Lotus
+Ashes to Ashes
+Forest
+Llanowar Elves
+Island
+Island x20
+[Bot2 Deck]
+Island x27
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Hand.Ashes to Ashes.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ashes to Ashes.Cast
+Bot1.Target(Bot1.Battlefield.Grizzly Bears; Bot1.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+[Expect]
+Exile.Count = 2
+Bot1.Life = 15

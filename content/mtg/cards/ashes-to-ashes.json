@@ -1,0 +1,6 @@
+{
+  "name": "Ashes to Ashes",
+  "manaCost": "{1}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "Exile two target nonartifact creatures. Ashes to Ashes deals 5 damage to you."
+}

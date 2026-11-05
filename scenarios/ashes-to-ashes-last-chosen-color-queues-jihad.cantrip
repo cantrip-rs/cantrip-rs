@@ -1,0 +1,56 @@
+# Exiling the chosen player's last green permanent makes Jihad's state trigger true before Ashes deals damage.
+[Bot1 Deck]
+Jihad
+Black Lotus
+Mox Pearl
+Mox Jet
+Ashes to Ashes
+Savannah Lions
+Swamp x2
+Island x20
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Mox Pearl
+Savannah Lions
+Island x20
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Jihad.Cast
+? Bot1.Mana =
+Bot1.Colors(Green)
+Bot1.ChoosePlayer(Bot2)
+? Bot2.Battlefield.Savannah Lions.Power = 4
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ashes to Ashes.Cast
+Bot1.Target(Bot1.Battlefield.Savannah Lions; Bot2.Battlefield.Llanowar Elves)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 15
+Bot1.Graveyard = Jihad; Ashes to Ashes; Black Lotus
+Bot2.Battlefield.Savannah Lions.Power = 2
+Exile = Savannah Lions; Llanowar Elves
