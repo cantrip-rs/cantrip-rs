@@ -1,0 +1,40 @@
+# Sacrifice requires exactly one creature in addition to black mana, paid before opponents may respond (CR 601.2h, 601.2i).
+# A creature with mana value two yields exactly two black mana (CR 106.3).
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Grizzly Bears
+Sacrifice
+Ornithopter
+Swamp
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sacrifice.Cast
+? Bot1.Hand = Grizzly Bears; Sacrifice; Ornithopter; Swamp; Island
+? Stack = Black Lotus
+? Bot1.Mana = {B}
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Sacrifice.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Choose(Sacrifice 1 permanent)
+! Bot1.Choose()
+! Bot1.Choose(Grizzly Bears; Ornithopter)
+Bot1.Choose(Grizzly Bears)
+? Bot1.Mana = {G}{G}
+? Bot1.Graveyard = Grizzly Bears; Black Lotus
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Mana = {B}{B}{G}{G}
+Bot1.Battlefield = Mox Jet; Ornithopter; Swamp
