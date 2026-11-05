@@ -1,0 +1,41 @@
+# Only the chosen Elf attacks, so the end-step trigger sees its attack and leaves it alive.
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Arcum's Whistle
+Llanowar Elves
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Arcum's Whistle.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Arcum's Whistle.Activate(Bot1.Battlefield.Llanowar Elves)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Decline
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack()
+Bot1.Attack(Llanowar Elves > Bot2)
+[T3 Bot1.End]
+? Bot1.Battlefield.Llanowar Elves.Tapped = true
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack()
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Tapped = false
+Bot2.Life = 19

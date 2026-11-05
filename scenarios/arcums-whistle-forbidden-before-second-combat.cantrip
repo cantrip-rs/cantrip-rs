@@ -1,0 +1,31 @@
+# A second combat does not reopen the Whistle's activation window after the first attackers step.
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Arcum's Whistle
+Raph & Leo, Sibling Rivals
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Arcum's Whistle.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Raph & Leo, Sibling Rivals.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Raph & Leo, Sibling Rivals > Bot2)
+[T3 Bot1.BeginCombat]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+! Bot1.Battlefield.Arcum's Whistle.Activate(Bot1.Battlefield.Raph & Leo, Sibling Rivals)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Raph & Leo, Sibling Rivals > Bot2)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Arcum's Whistle.Tapped = false

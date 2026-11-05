@@ -1,0 +1,36 @@
+# The active player pays the tapped Elf’s mana value, so it survives without attacking.
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Arcum's Whistle
+Island x20
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Arcum's Whistle.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Llanowar Elves.Activate
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Arcum's Whistle.Activate(Bot2.Battlefield.Llanowar Elves)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+! Bot2.PayCost(X: 1)
+Bot2.PayCost
+? Bot2.Mana =
+[T4 Bot2.End]
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Tapped = true
