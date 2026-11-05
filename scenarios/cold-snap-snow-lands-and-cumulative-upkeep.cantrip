@@ -1,0 +1,73 @@
+# Cold Snap damages each active player for their own snow lands, and its
+# cumulative upkeep increases and can be declined (CR 603.2, 702.24a).
+[Bot1 Deck]
+Cold Snap
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Snow-Covered Plains
+Snow-Covered Plains
+Plains x20
+[Bot2 Deck]
+Snow-Covered Forest
+Snow-Covered Forest
+Wall of Shards
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Snow-Covered Plains.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Cold Snap.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+? Bot2.Life = 20
+Bot2.Hand.Snow-Covered Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Wall of Shards.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.PayCost(X: 1)
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Cold Snap.Counters.Age = 1
+[T3 Bot1.Main1]
+? Bot1.Life = 19
+Bot1.Hand.Snow-Covered Plains.Play
+[T4 Bot2.Main1]
+? Bot2.Life = 19
+Bot2.Hand.Snow-Covered Forest.Play
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Snow-Covered Plains#1.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Snow-Covered Plains#2.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Cold Snap.Counters.Age = 2
+[T5 Bot1.Main1]
+? Bot1.Life = 17
+Bot1.Hand.Plains.Play
+[T6 Bot2.Main1]
+? Bot2.Life = 17
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T7 Bot1.Main1]
+? Bot1.Life = 15
+[Expect]
+Bot1.Graveyard = Cold Snap; Black Lotus
+Bot1.Battlefield.Cold Snap = (absent)
