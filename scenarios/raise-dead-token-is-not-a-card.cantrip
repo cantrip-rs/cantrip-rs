@@ -1,0 +1,32 @@
+# Etali casts Diabolic Intent by sacrificing a Phyrexian Goblin, then can cast Raise Dead during the same resolution. A token in the graveyard is not a card (CR 111.6, 704.5d).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Gleeful Demolition
+Show and Tell
+Etali, Primal Conqueror
+Mox Pearl
+Island
+Diabolic Intent
+Island x20
+[Bot2 Deck]
+Island x7
+Raise Dead
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Gleeful Demolition.Cast(Mox Pearl)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Etali, Primal Conqueror)
+Bot2.Choose()
+Bot1.Choose(Diabolic Intent)
+Bot1.Choose(Phyrexian Goblin Token)
+[T1 Bot1.Main2]
+[Expect]
+Exile = Raise Dead

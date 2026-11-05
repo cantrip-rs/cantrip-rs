@@ -1,0 +1,48 @@
+# Raise Dead targets a creature card in its caster's graveyard and returns it to its owner's hand (CR 115.1a, 400.3).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Ornithopter
+Shock
+Shock
+Raise Dead
+Swamp
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+! Bot1.Hand.Raise Dead.Cast(Bot2.Graveyard.Ornithopter)
+! Bot1.Hand.Raise Dead.Cast(Bot1.Graveyard.Shock)
+Bot1.Hand.Raise Dead.Cast(Bot1.Graveyard.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Ornithopter.Power = 0
+Bot2.Graveyard = Ornithopter
