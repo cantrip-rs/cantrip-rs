@@ -1,0 +1,61 @@
+# Flow of Maggots can be blocked by a Wall but not a non-Wall; its cumulative upkeep adds age counters, costs
+# one per counter, and is optional (CR 509.1b, 702.24a). Another attacker can be blocked by the non-Wall.
+[Bot1 Deck]
+Flow of Maggots
+Black Lotus
+Mox Jet
+Sol Ring
+Memnite
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Wall of Wood
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Flow of Maggots.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Wall of Wood.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+! Bot1.PayCost(X: 1)
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana = {C}
+? Bot1.Battlefield.Flow of Maggots.Counters.Age = 1
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Flow of Maggots > Bot2; Memnite > Bot2)
+! Bot2.Block(Grizzly Bears > Flow of Maggots)
+Bot2.Block(Wall of Wood > Flow of Maggots; Grizzly Bears > Memnite)
+? Combat.Blocks.Count = 2
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+! Bot1.PayCost
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Flow of Maggots.Counters.Age = 2
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[Expect]
+Bot1.Battlefield.Flow of Maggots = (absent)
+Bot1.Graveyard = Flow of Maggots; Memnite; Black Lotus
