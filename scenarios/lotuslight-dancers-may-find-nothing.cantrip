@@ -1,0 +1,43 @@
+# Lotuslight Dancers: the search may find none at all (CR 701.23b, the ruling). Bot1 finds nothing, so the graveyard stays empty and Dark Ritual, Giant
+# Growth and Ancestral Recall stay in the library.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Lotuslight Dancers
+Island
+Dark Ritual
+Giant Growth
+Ancestral Recall
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lotuslight Dancers.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Search()
+? Bot1.Graveyard.Dark Ritual = (absent)
+? Bot1.Graveyard.Giant Growth = (absent)
+? Bot1.Graveyard.Ancestral Recall = (absent)
+
+[Expect]
+Bot1.Graveyard.Dark Ritual = (absent)
+Bot1.Graveyard.Giant Growth = (absent)

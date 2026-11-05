@@ -1,0 +1,59 @@
+# Lotuslight Dancers: Bot1's library has Dark Ritual (black), Giant Growth (green), Ancestral Recall (blue) and Lightning Bolt (red). Lightning Bolt is
+# no card the search can find, and the other three are found and put into the graveyard; the Bolt stays in the library. Lifelink: the Dancers
+# attack on the next turn, Bot2 goes to 17 and Bot1 to 23.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Lotuslight Dancers
+Island
+Dark Ritual
+Giant Growth
+Ancestral Recall
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Dark Ritual
+Giant Growth
+Ancestral Recall
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lotuslight Dancers.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Lightning Bolt)
+Bot1.Search(Dark Ritual; Giant Growth; Ancestral Recall)
+? Bot1.Graveyard.Dark Ritual.Colors.Count = 1
+? Bot1.Graveyard.Giant Growth.Colors.Count = 1
+? Bot1.Graveyard.Ancestral Recall.Colors.Count = 1
+? Bot1.Graveyard.Lightning Bolt = (absent)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lotuslight Dancers > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Life = 23
+
+[Expect]
+Bot1.Graveyard.Dark Ritual.Colors.Count = 1
+Bot1.Graveyard.Giant Growth.Colors.Count = 1
+Bot1.Graveyard.Ancestral Recall.Colors.Count = 1
+Bot1.Graveyard.Lightning Bolt = (absent)

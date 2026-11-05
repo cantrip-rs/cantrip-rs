@@ -1,0 +1,46 @@
+# Lotuslight Dancers: Lie in Wait is black, green and blue, and counts as one card: it is found as the blue card, with Dark Ritual as the black card and
+# Giant Growth as the green card (the ruling). Ancestral Recall stays in the library, as no third place is left for it.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Lotuslight Dancers
+Island
+Lie in Wait
+Dark Ritual
+Giant Growth
+Ancestral Recall
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lotuslight Dancers.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Lie in Wait; Dark Ritual; Giant Growth; Ancestral Recall)
+Bot1.Search(Lie in Wait; Dark Ritual; Giant Growth)
+? Bot1.Graveyard.Lie in Wait.Colors.Count = 3
+? Bot1.Graveyard.Dark Ritual.Colors.Count = 1
+? Bot1.Graveyard.Giant Growth.Colors.Count = 1
+? Bot1.Graveyard.Ancestral Recall = (absent)
+
+[Expect]
+Bot1.Graveyard.Lie in Wait.Colors.Count = 3
+Bot1.Graveyard.Ancestral Recall = (absent)

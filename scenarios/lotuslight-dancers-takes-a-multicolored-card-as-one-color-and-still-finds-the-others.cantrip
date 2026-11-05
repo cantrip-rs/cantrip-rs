@@ -1,0 +1,48 @@
+# Lotuslight Dancers: Abrupt Decay is black and green, and counts as one card only. Taking it as the black card, Bot1 still finds Giant Growth as the
+# green card and Ancestral Recall as the blue card (the ruling). Dark Ritual, Giant Growth and Abrupt Decay together are refused, as there
+# is no blue card among them and only two of the three colors to share out: Dark Ritual and Abrupt Decay both need black or green, and so does Giant Growth.
+# Dark Ritual stays in the library.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Lotuslight Dancers
+Island
+Abrupt Decay
+Dark Ritual
+Giant Growth
+Ancestral Recall
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lotuslight Dancers.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Dark Ritual; Giant Growth; Abrupt Decay)
+Bot1.Search(Abrupt Decay; Giant Growth; Ancestral Recall)
+? Bot1.Graveyard.Abrupt Decay.Colors.Count = 2
+? Bot1.Graveyard.Giant Growth.Colors.Count = 1
+? Bot1.Graveyard.Ancestral Recall.Colors.Count = 1
+? Bot1.Graveyard.Dark Ritual = (absent)
+
+[Expect]
+Bot1.Graveyard.Abrupt Decay.Colors.Count = 2
+Bot1.Graveyard.Dark Ritual = (absent)

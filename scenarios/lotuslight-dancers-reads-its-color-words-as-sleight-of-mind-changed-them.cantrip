@@ -1,0 +1,56 @@
+# Lotuslight Dancers' "black" is a color word of its text (CR 612.1, 612.2): with the enters trigger on the stack Bot1 changes it with Sleight of Mind to
+# "red", so the trigger searches for a red card, a green card and a blue card. Lightning Bolt (red) can be found and Dark Ritual (black) no longer
+# can; Bot1 takes the Bolt, Giant Growth and Ancestral Recall. Everything happens on Bot1's second turn, when the draw has given the sixth mana.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Lotuslight Dancers
+Sleight of Mind
+Island
+Dark Ritual
+Giant Growth
+Ancestral Recall
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lotuslight Dancers.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sleight of Mind.Cast(Bot1.Battlefield.Lotuslight Dancers)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Black)
+Bot1.Colors(Red)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Dark Ritual)
+Bot1.Search(Lightning Bolt; Giant Growth; Ancestral Recall)
+? Bot1.Graveyard.Lightning Bolt.Colors.Count = 1
+? Bot1.Graveyard.Giant Growth.Colors.Count = 1
+? Bot1.Graveyard.Ancestral Recall.Colors.Count = 1
+? Bot1.Graveyard.Dark Ritual = (absent)
+
+[Expect]
+Bot1.Graveyard.Lightning Bolt.Colors.Count = 1
+Bot1.Graveyard.Dark Ritual = (absent)
