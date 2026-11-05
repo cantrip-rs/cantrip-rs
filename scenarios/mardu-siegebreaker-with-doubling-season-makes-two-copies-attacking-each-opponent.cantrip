@@ -1,0 +1,58 @@
+# Three players: Doubling Season makes Mardu Siegebreaker's creation twice that many of those tokens (CR 614.1a). Each further
+# copy is made for an opponent by the same "for each opponent ... attacking that opponent", so it attacks that opponent too, with
+# no choice asked (CR 508.4): two Ornithopter copies attack Bot2 and two attack Bot3.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Jet
+Doubling Season
+Ornithopter
+Mardu Siegebreaker
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Doubling Season.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Hand.Ornithopter.Cast
+[T4 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mardu Siegebreaker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Exile = Ornithopter
+[T4 Bot1.DeclareAttackers]
+Bot1.Attack(Mardu Siegebreaker > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Stack.Count = 0
+
+[Expect]
+Combat.Attackers = Mardu Siegebreaker > Bot2; Ornithopter > Bot2; Ornithopter > Bot3; Ornithopter > Bot2; Ornithopter > Bot3

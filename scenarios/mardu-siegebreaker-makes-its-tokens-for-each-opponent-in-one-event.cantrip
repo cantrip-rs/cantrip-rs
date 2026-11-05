@@ -1,0 +1,62 @@
+# Three players: Mardu Siegebreaker's "for each opponent, create a tapped token that's a copy of the exiled card attacking that
+# opponent" is one instruction, so its two Ornithopter tokens - one attacking Bot2, one attacking Bot3 - are created together in
+# one event (CR 101.4), and Mister Fantastic, Reed Richards' "Whenever one or more tokens you control enter" triggers once for
+# them, not once for each opponent (CR 603.2c). Each token is attacking its own opponent (CR 508.4).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mister Fantastic, Reed Richards
+Ornithopter
+Mardu Siegebreaker
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mister Fantastic, Reed Richards.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[T4 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mardu Siegebreaker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Exile = Ornithopter
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Mardu Siegebreaker > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Stack = Mister Fantastic, Reed Richards
+? Stack.Count = 1
+
+[Expect]
+Combat.Attackers = Mardu Siegebreaker > Bot2; Ornithopter > Bot2; Ornithopter > Bot3

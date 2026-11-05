@@ -1,0 +1,49 @@
+# Mardu Siegebreaker (haste) enters and exiles Bot1's Ornithopter until it leaves (CR 610.3). It attacks: Bot1 creates a tapped token
+# copy of the exiled Ornithopter attacking Bot2 (CR 508.4), which was not declared as an attacker. At the beginning of Bot1's next end step the token is
+# sacrificed (CR 603.7c); the Ornithopter card stays exiled.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Mardu Siegebreaker
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mardu Siegebreaker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+? Bot1.Battlefield.Ornithopter = (absent)
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Mardu Siegebreaker > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Combat.Attackers.Count = 2
+? Bot1.Battlefield.Ornithopter.Tapped = true
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter = (absent)
+Exile = Ornithopter
+Bot2.Life = 16

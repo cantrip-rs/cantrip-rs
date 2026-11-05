@@ -1,0 +1,12 @@
+{
+  "name": "Mardu Siegebreaker",
+  "manaCost": "{1}{R}{W}{B}",
+  "type": "Creature — Human Warrior",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Deathtouch, haste\nWhen this creature enters, exile up to one other target creature you control until this creature leaves the battlefield.\nWhenever this creature attacks, for each opponent, create a tapped token that's a copy of the exiled card attacking that opponent. At the beginning of your next end step, sacrifice those tokens.",
+  "keywords": [
+    "Deathtouch",
+    "Haste"
+  ]
+}

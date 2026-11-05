@@ -1,0 +1,41 @@
+# Mardu Siegebreaker's enters ability is "up to one": Bot1 chooses no creature, so nothing is exiled with it, and when it
+# attacks there is no exiled card to copy: no token is created (CR 610.3). Bot1's Ornithopter stays on the battlefield.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Mardu Siegebreaker
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mardu Siegebreaker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Mardu Siegebreaker > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Combat.Attackers.Count = 1
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = false
+Exile.Count = 0

@@ -1,0 +1,47 @@
+# Mardu Siegebreaker exiles one of Bot1's Spirit tokens. A token that leaves the battlefield ceases to exist (CR 111.7), so nothing is
+# exiled with the Siegebreaker to copy when it attacks: no token is created and only the Siegebreaker attacks.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Lingering Souls
+Mardu Siegebreaker
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mardu Siegebreaker.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Spirit Token)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Mardu Siegebreaker > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Combat.Attackers.Count = 1
+
+? Bot1.Battlefield.Count = 6
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Exile.Count = 0
