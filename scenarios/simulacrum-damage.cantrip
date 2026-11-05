@@ -1,0 +1,41 @@
+# Simulacrum restores damage dealt this turn and deals that much to its creature (CR 119.3, 120.3).
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Kraken Hatchling
+Polluted Delta
+Shock
+Simulacrum
+Shock
+Volcanic Island
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kraken Hatchling.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Polluted Delta.Play
+Bot1.Battlefield.Polluted Delta.Activate
+Bot1.Search(Volcanic Island)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1)
+Bot1.Pass
+Bot1.Battlefield.Volcanic Island.Activate(Ability: {R})
+Bot1.Hand.Shock.Cast(Bot1)
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Simulacrum.Cast(Bot1)
+Bot1.Hand.Simulacrum.Cast(Bot1.Battlefield.Kraken Hatchling)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Life = 19
+Bot1.Graveyard = Kraken Hatchling; Simulacrum; Shock; Shock; Polluted Delta
+Bot1.Battlefield.Kraken Hatchling = (absent)
