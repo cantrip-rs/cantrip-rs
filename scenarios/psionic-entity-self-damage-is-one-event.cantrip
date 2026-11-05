@@ -1,0 +1,58 @@
+# The two simultaneous amounts from one source to one creature are treated as one proposal, so Flamecaller adds one.
+# This is inferred from the damage procedure and source/time treatment (CR 120.4, 614.5, 702.64b), not a card-specific ruling.
+[Bot1 Deck]
+Psionic Entity
+Black Lotus x3
+Valley Flamecaller
+Artificial Evolution
+Mox Sapphire
+Black Lotus
+Giant Growth
+Giant Growth
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Psionic Entity.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Valley Flamecaller.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Artificial Evolution.Cast(Bot1.Battlefield.Valley Flamecaller)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Lizard)
+Bot1.Modes(Illusion)
+[T7 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Psionic Entity)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Psionic Entity)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Psionic Entity.Activate(Bot1.Battlefield.Psionic Entity)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Psionic Entity.Toughness = 8
+Bot1.Battlefield.Psionic Entity.Damage = 6

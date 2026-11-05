@@ -1,0 +1,8 @@
+{
+  "name": "Psionic Entity",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Illusion",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{T}: This creature deals 2 damage to any target and 3 damage to itself."
+}
