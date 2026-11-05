@@ -1,0 +1,44 @@
+# A merged creature dies: both cards return, and paying returns Puppet Master (CR 730.3c).
+[Bot1 Deck]
+Plains
+Ornithopter
+Black Lotus x3
+Cubwarden
+Puppet Master
+Island x20
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus#2.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Cubwarden.Cast(Ornithopter; Ability: Mutate)
+Bot1.Pass
+Bot1.Modes(2)
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Puppet Master.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.PayCost
+? Bot1.Mana =
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Hand.Ornithopter.Power = 0
+Bot1.Hand.Cubwarden.Power = 3
+Bot1.Hand.Puppet Master.Colors = Blue

@@ -1,0 +1,44 @@
+# The creature returns and payment is still possible if the Aura has left its graveyard, but the Aura cannot return (CR 400.7f).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire x3
+Puppet Master
+Tormod's Crypt
+Island x20
+[Bot2 Deck]
+Ornithopter
+Mountain
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Tormod's Crypt.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Puppet Master.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Hand.Ornithopter.Power = 0
+Bot1.Hand.Puppet Master = (absent)
+Exile = Black Lotus; Puppet Master; Tormod's Crypt
