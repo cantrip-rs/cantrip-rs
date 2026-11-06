@@ -1,0 +1,29 @@
+# Choosing the life mode gains its controller exactly 2 life and pays {1}, tapping and sacrificing the artifact (CR 602.2, 119.3).
+[Bot1 Deck]
+Balm of Restoration
+Mox Pearl
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Balm of Restoration.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Balm of Restoration.Activate
+! Bot1.Modes(Count: 0)
+! Bot1.Modes(1; 2)
+Bot1.Modes(You gain 2 life)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+[Bot1.Main2]
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 20
+Bot1.Graveyard = Balm of Restoration
+LeftBattlefield = Balm of Restoration (tapped)

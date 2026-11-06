@@ -1,0 +1,8 @@
+{
+  "name": "Basal Thrull",
+  "manaCost": "{B}{B}",
+  "type": "Creature — Thrull",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "{T}, Sacrifice this creature: Add {B}{B}."
+}

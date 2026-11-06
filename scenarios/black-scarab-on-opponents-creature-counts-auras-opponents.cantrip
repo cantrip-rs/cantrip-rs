@@ -1,0 +1,24 @@
+# The Aura's controller is the reference for "an opponent", even when it enchants an opponent's creature (CR 109.5).
+[Bot1 Deck]
+Mox Pearl
+Black Scarab
+Island x20
+[Bot2 Deck]
+Mox Jet
+Hired Poisoner
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Hired Poisoner.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Black Scarab.Cast(Bot2.Battlefield.Hired Poisoner)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Hired Poisoner.Power = 3
+Bot2.Battlefield.Hired Poisoner.Toughness = 3
+Bot1.Battlefield.Black Scarab.AttachedTo = Hired Poisoner

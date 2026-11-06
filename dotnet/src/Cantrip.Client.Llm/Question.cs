@@ -132,6 +132,18 @@ public interface IChooser
     /// </summary>
     /// <exception cref="NoChoiceException">No answer could be got at all, so the caller falls back to the prompt's own.</exception>
     IReadOnlyList<int> Choose(Question question);
+
+    /// <summary>An exact whole number in the question's inclusive bounds, without enumerating the range.</summary>
+    uint ChooseNumber(NumberQuestion question) => throw new NoChoiceException("This chooser does not answer numeric questions.");
+}
+
+/// <summary>A bounded scalar question, separate from keyed choices so every numeric value stays representable.</summary>
+public sealed class NumberQuestion
+{
+    public required string Heading { get; init; }
+    public required uint Least { get; init; }
+    public required uint Most { get; init; }
+    public override string ToString() => $"{Heading}\nChoose a whole number from {Least} to {Most}, inclusive.\n\nFirst give one short line saying why. Then, on the last line, write only the whole number.";
 }
 
 /// <summary>

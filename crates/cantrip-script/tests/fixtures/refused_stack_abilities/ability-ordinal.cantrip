@@ -1,0 +1,40 @@
+[Bot1 Deck]
+Black Lotus x2
+Mox Sapphire
+Echo, Perceptive Prodigy
+Cloistered Telepath
+Island x20
+[Bot2 Deck]
+Black Lotus
+Cloistered Telepath
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Echo, Perceptive Prodigy.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Cloistered Telepath.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack = Cloistered Telepath
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Cloistered Telepath.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 2
+! Bot1.Battlefield.Echo, Perceptive Prodigy.Activate(Stack.Cloistered Telepath#1)
+Bot1.Battlefield.Echo, Perceptive Prodigy.Activate(Stack.Cloistered Telepath#2)
+[Expect]

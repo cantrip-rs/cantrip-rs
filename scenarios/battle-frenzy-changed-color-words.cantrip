@@ -1,0 +1,40 @@
+# Sleight of Mind changes both instances of green to red, including nongreen (CR 612.1).
+[Bot1 Deck]
+Battle Frenzy
+Sleight of Mind
+Elvish Mystic
+Dwarven Trader
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dwarven Trader.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Battle Frenzy.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleight of Mind.Cast(Stack.Battle Frenzy)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Green)
+Bot1.Colors(Red)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+[Expect]
+Bot1.Battlefield.Elvish Mystic.Power = 2
+Bot1.Battlefield.Elvish Mystic.Toughness = 1
+Bot1.Battlefield.Dwarven Trader.Power = 2
+Bot1.Battlefield.Dwarven Trader.Toughness = 2

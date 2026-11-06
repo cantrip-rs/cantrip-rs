@@ -1,0 +1,58 @@
+# Binding Grasp enchants a creature, controls and gives it +0/+1, then is kept for {1}{U} and sacrificed when unpaid (CR 303.4, 603.2, 118.12a).
+[Bot1 Deck]
+Binding Grasp
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Binding Grasp.Cast(Bot1.Battlefield.Mox Sapphire)
+Bot1.Hand.Binding Grasp.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Binding Grasp.AttachedTo = Memnite
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Memnite.Toughness = 2
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+! Bot1.PayCost
+Bot1.Decline
+[Expect]
+Bot1.Graveyard = Binding Grasp; Black Lotus
+Bot1.Battlefield.Binding Grasp = (absent)
+Bot2.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Memnite.Toughness = 1
+Bot2.Battlefield.Ornithopter.Toughness = 2

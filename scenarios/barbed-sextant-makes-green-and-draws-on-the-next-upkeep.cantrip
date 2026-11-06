@@ -1,0 +1,37 @@
+# Barbed Sextant consumes one mana, taps and sacrifices itself to make one green mana immediately (CR 605.3b).
+# The controller draws on the next player's upkeep and no further card on a later upkeep.
+[Bot1 Deck]
+Barbed Sextant
+Mox Pearl
+Island x18
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Barbed Sextant.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Barbed Sextant.Activate(Color: Green; Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Barbed Sextant.Activate(Color: Colorless)
+Bot1.Battlefield.Barbed Sextant.Activate(Color: Green)
+Bot1.Choose(Pay mana)
+? Bot1.Mana = {G}
+? Bot1.Hand.Count = 4
+? Bot1.Graveyard = Barbed Sextant
+? LeftBattlefield = Barbed Sextant (tapped)
+[T2 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Count = 5
+[T2 Bot2.Main1]
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 6
+[T4 Bot2.Main1]
+? Bot1.Hand.Count = 6
+[Expect]
+Bot1.Graveyard = Barbed Sextant

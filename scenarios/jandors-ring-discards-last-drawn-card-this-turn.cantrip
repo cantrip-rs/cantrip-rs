@@ -42,6 +42,7 @@ Bot2.Pass
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Jandor's Ring.Activate
+Bot1.Choose(Tap Jandor's Ring)
 ! Bot1.Choose(Forest)
 ! Bot1.Choose(Mountain)
 Bot1.Choose(Plains)

@@ -1,0 +1,49 @@
+# A blue-and-green creature cannot block the enchanted creature, but can block another attacker; a colorless creature can block the enchanted one (CR 509.1b).
+[Bot1 Deck]
+Mox Pearl
+Blue Scarab
+Memnite
+Memnite
+Island
+Island
+Island
+Island x20
+[Bot2 Deck]
+Mox Emerald
+Mox Sapphire
+Gaea's Skyfolk
+Memnite
+Island
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Blue Scarab.Cast(Bot1.Battlefield.Memnite#1)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Gaea's Skyfolk.Cast
+? Bot2.Mana =
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Gaea's Skyfolk.Colors = Blue; Green
+? Bot1.Battlefield.Memnite#1.Power = 3
+? Bot1.Battlefield.Memnite#1.Toughness = 3
+Bot1.Attack(Memnite#1 > Bot2; Memnite#2 > Bot2)
+! Bot2.Block(Gaea's Skyfolk > Memnite#1)
+Bot2.Block(Gaea's Skyfolk > Memnite#2; Memnite > Memnite#1)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Toughness = 3
+Bot2.Battlefield.Memnite = (absent)
+Bot2.Battlefield.Gaea's Skyfolk.Power = 2

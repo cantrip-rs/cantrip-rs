@@ -1,0 +1,6 @@
+{
+  "name": "Arnjlot's Ascent",
+  "manaCost": "{1}{U}{U}",
+  "type": "Enchantment",
+  "oracleText": "Cumulative upkeep {U} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\n{1}: Target creature gains flying until end of turn."
+}

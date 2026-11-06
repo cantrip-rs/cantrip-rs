@@ -1,0 +1,8 @@
+{
+  "name": "Blinking Spirit",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Spirit",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{0}: Return this creature to its owner's hand."
+}

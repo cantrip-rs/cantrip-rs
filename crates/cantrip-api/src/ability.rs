@@ -17,7 +17,7 @@ use cantrip_state::*;
 use crate::card::*;
 use crate::event::EventMask;
 use crate::game::Game;
-use crate::replace::{GrantedApplies, GrantedApply, GrantedReplacementDef, GrantedThen, ReplacementApplies, ReplacementApply, ReplacementDef, ReplacementKind, ReplacementThen};
+use crate::replace::{GrantedApplies, GrantedApply, GrantedDamage, GrantedReplacementDef, GrantedThen, ReplacementApplies, ReplacementApply, ReplacementDamage, ReplacementDef, ReplacementKind, ReplacementThen};
 
 /// The tap symbol, {T} (CR 107.5).
 pub const TAP: Cost = Cost { tap: true, ..Cost::NONE };
@@ -186,6 +186,7 @@ const fn parse_symbols(symbols: &str) -> (ManaCost, bool) {
             1 => match b[inner.0] {
                 b'T' => tap = true,
                 b'X' => c.x += 1,
+                b'S' => c.snow += 1,
                 b'0'..=b'9' => c.generic += (b[inner.0] - b'0') as u32,
                 m => c.symbols[mana_of(m) as usize] += 1,
             },
@@ -540,17 +541,27 @@ pub fn add_listed(g: &mut dyn Game, controller: PlayerId, def: &ActivatedDef, ch
 const fn activated(a: AbilityDef, method: &str) -> ActivatedDef {
     match a {
         AbilityDef::Activated(d) => d,
-        AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) => panic!("{}", method),
+        AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("{}", method),
     }
 }
 
 impl AbilityDef {
+    /// This mana ability reads its own X only as the amount of mana it produces (or the number of its colors chosen).
+    /// Positive X never changes its possible mana types. Allows "could produce" to ignore the ability's costs (CR 106.7).
+    pub const fn x_is_mana_amount(self) -> AbilityDef {
+        let def = activated(self, "only an activated mana ability has a mana amount X");
+        assert!(def.is_mana_ability(), "only an activated mana ability has a mana amount X");
+        AbilityDef::Activated(ActivatedDef {
+            x_is_mana_amount: true,
+            ..def
+        })
+    }
     /// Its targets (CR 115.1), one slot each.
     pub const fn targets(self, targets: &'static [TargetSpec]) -> AbilityDef {
         match self {
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { targets, ..d }),
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { targets, ..t }),
-            AbilityDef::Static(_) | AbilityDef::PlayRule(_) => panic!("a static ability has no targets"),
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("a static ability has no targets"),
         }
     }
 
@@ -611,7 +622,7 @@ impl AbilityDef {
         match self {
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { condition: Some(condition), ..d }),
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { condition: Some(condition), ..t }),
-            AbilityDef::Static(_) | AbilityDef::PlayRule(_) => panic!("a static ability has no condition"),
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("a static ability has no condition"),
         }
     }
 
@@ -619,7 +630,7 @@ impl AbilityDef {
     pub const fn only_if(self, only_if: Condition) -> AbilityDef {
         match self {
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { only_if: Some(only_if), ..t }),
-            AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) => panic!("only a triggered ability triggers only if"),
+            AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("only a triggered ability triggers only if"),
         }
     }
 
@@ -628,7 +639,7 @@ impl AbilityDef {
     pub const fn pay_one_of(self, ways: &'static [ExtraCost]) -> AbilityDef {
         match self {
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { cost_choice: ways, ..d }),
-            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) => panic!("only an activated ability has a cost"),
+            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("only an activated ability has a cost"),
         }
     }
 
@@ -638,7 +649,7 @@ impl AbilityDef {
             AbilityDef::Activated(_) if modal.max == ModalDef::COUNTED => panic!("an activated ability has no count for \"that many\" modes"),
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { modal: Some(modal), ..d }),
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { modal: Some(modal), ..t }),
-            AbilityDef::Static(_) | AbilityDef::PlayRule(_) => panic!("a static ability has no modes"),
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("a static ability has no modes"),
         }
     }
 
@@ -648,9 +659,14 @@ impl AbilityDef {
         AbilityDef::Activated(ActivatedDef { colors_from: Some(colors_from), ..activated(self, "only a mana ability names colors") })
     }
 
-    /// "Add one mana of any type the sacrificed land could produce" (CR 106.7).
+    /// "Add one mana of any type the sacrificed land could produce" (CR 106.7), when the cost has one sacrifice component.
     pub const fn colors_from_sacrifice(self) -> AbilityDef {
         AbilityDef::Activated(ActivatedDef { colors_from_sacrifice: true, ..activated(self, "only a mana ability names colors") })
+    }
+
+    /// Name the atomic cost component whose sacrificed permanent supplies the mana types.
+    pub const fn colors_from_sacrifice_component(self, component: usize) -> AbilityDef {
+        AbilityDef::Activated(ActivatedDef { colors_from_sacrifice: true, colors_from_sacrifice_component: Some(component), ..activated(self, "only a mana ability names colors") })
     }
 
     /// Its mana cost is a waterbend cost (CR 701.67a).
@@ -706,7 +722,7 @@ impl AbilityDef {
 const fn triggered_def(a: AbilityDef, method: &str) -> TriggeredDef {
     match a {
         AbilityDef::Triggered(t) => t,
-        AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) => panic!("{}", method),
+        AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("{}", method),
     }
 }
 
@@ -744,9 +760,19 @@ impl AbilityDef {
         AbilityDef::Triggered(TriggeredDef { sums_per_subject: true, ..triggered_def(self, "only a triggered ability sums its events") })
     }
 
+
+    /// Freeze the exact amount of each matched damage event in
+    /// `StackItem::event_amount`, independently of the legacy data slots.
+    /// The matcher must return Some only for Event::Damage. Summation uses
+    /// exactly its matched subset when `.sums_per_subject()` is also set.
+    pub const fn damage_amount(self) -> AbilityDef {
+        AbilityDef::Triggered(TriggeredDef { damage_amount: true, ..triggered_def(self, "only a triggered ability captures matched damage") })
+    }
+
     /// "Deals N or more damage" (CR 603.2c): `sums_per_subject`, triggering only if the amounts add up to at least `n`.
     pub const fn sums_at_least(self, n: u32) -> AbilityDef {
         AbilityDef::Triggered(TriggeredDef { sums_per_subject: true, sums_at_least: n, ..triggered_def(self, "only a triggered ability sums its events") })
+
     }
 
     /// "This ability triggers only N times each turn" (no numbered rule; CR 603.2h is "do this only once each turn").
@@ -778,7 +804,8 @@ impl AbilityDef {
         match self {
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { divide: Some(divide), ..d }),
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { divide: Some(divide), ..t }),
-            AbilityDef::Static(_) | AbilityDef::PlayRule(_) => panic!("a static ability has no targets to divide among"),
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_)
+            | AbilityDef::BlockAllowance(_) => panic!("a static ability has no targets to divide among"),
         }
     }
 
@@ -1028,6 +1055,13 @@ pub const fn granted_play_rule(rule: PlayRule, text: &'static str) -> AbilityDef
     AbilityDef::PlayRule(PlayRuleDef { rule, text })
 }
 
+/// A regeneration prohibition granted as a static ability (CR 613.1f,
+/// 701.19c), as Bone Shaman grants. The holder is the rule's source; later
+/// ability loss removes it, and later grants are independent new abilities.
+pub const fn granted_regeneration_ban(rule: RegenerationBan, text: &'static str) -> AbilityDef {
+    AbilityDef::RegenerationBan(RegenerationBanDef { rule, text })
+}
+
 /// A static ability an effect gives an object (CR 613.1f) that affects the objects `affects` accepts, the object that
 /// has it as the source (CR 113.6): The Irencrag's "it gains 'Equipped creature gets +3/+3'". Granted with
 /// `EffectKind::AddAbility` from the card's `delayed` list, it applies in `layer` (`Layer::Ability`, ordered with the other layer 6 effects by `appear`, or `Layer::PtDefine` and later;
@@ -1087,6 +1121,12 @@ impl ReplacementDef {
         ReplacementDef { then: Some(then), ..self }
     }
 
+    /// Adds damage components to this same damage event (CR 120.4b-d, 614.6).
+    pub const fn with_damage(self, damage: ReplacementDamage) -> ReplacementDef {
+        assert!(matches!(self.kind, ReplacementKind::Damage), "only a damage replacement adds damage components");
+        ReplacementDef { damage: Some(damage), ..self }
+    }
+
     /// "You may ... instead" (CR 614.1a): the effect's "you", its source's controller (CR 109.5), is asked `question` as the effect would apply.
     pub const fn optional(self, question: &'static Question) -> ReplacementDef {
         ReplacementDef { optional: Some(question), ..self }
@@ -1101,13 +1141,19 @@ impl ReplacementDef {
 
 /// A replacement effect a resolving spell or ability makes for a while (CR 611.2), about the object it was made for.
 pub const fn granted_replacement(kind: ReplacementKind, applies: GrantedApplies, apply: GrantedApply, hint: &'static str) -> GrantedReplacementDef {
-    GrantedReplacementDef { hint, kind, applies, apply, then: None, once: false, text: "" }
+    GrantedReplacementDef { hint, kind, applies, apply, then: None, damage: None, once: false, text: "" }
 }
 
 impl GrantedReplacementDef {
     /// What the effect does to the game as it applies, besides reshaping the event.
     pub const fn then(self, then: GrantedThen) -> GrantedReplacementDef {
         GrantedReplacementDef { then: Some(then), ..self }
+    }
+
+    /// Adds damage components to this same damage event (CR 120.4b-d, 614.6).
+    pub const fn with_damage(self, damage: GrantedDamage) -> GrantedReplacementDef {
+        assert!(matches!(self.kind, ReplacementKind::Damage), "only a damage replacement adds damage components");
+        GrantedReplacementDef { damage: Some(damage), ..self }
     }
 
     /// "The next time ... would ...": the effect ends as it applies, used up (CR 614.1a).

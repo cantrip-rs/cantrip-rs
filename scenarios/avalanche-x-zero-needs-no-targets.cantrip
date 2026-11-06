@@ -1,0 +1,25 @@
+# X=0 chooses no targets and leaves an opponent's snow land intact (CR 107.3a).
+[Bot1 Deck]
+Avalanche
+Black Lotus
+Mox Pearl
+Mountain x17
+[Bot2 Deck]
+Snow-Covered Plains
+Plains x19
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Plains.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Avalanche.Cast(X: 0)
+! Bot1.Target
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Avalanche; Black Lotus
+Bot2.Battlefield.Snow-Covered Plains.Tapped = false

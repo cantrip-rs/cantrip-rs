@@ -1,0 +1,36 @@
+# A snow creature and an opponent's snow land do not satisfy Blizzard's casting restriction; one's own snow land does (CR 601.3).
+[Bot1 Deck]
+Blizzard
+Snow-Covered Forest
+Mox Emerald
+Gleemox
+Black Lotus
+Wall of Shards
+Island x20
+[Bot2 Deck]
+Snow-Covered Plains
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Wall of Shards.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Plains.Play
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+! Bot1.Hand.Blizzard.Cast
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Hand.Blizzard.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Blizzard.Types = Enchantment
+Bot1.Battlefield.Wall of Shards.Supertypes = Snow

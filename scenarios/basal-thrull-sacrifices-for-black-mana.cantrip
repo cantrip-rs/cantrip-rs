@@ -1,0 +1,36 @@
+# Basal Thrull costs two black mana; summoning sickness and tapping stop its ability, which taps and sacrifices it to add {B}{B} (CR 107.4a, 302.6, 605.1a, 701.21a).
+
+[Bot1 Deck]
+Basal Thrull
+Mox Jet
+Mox Sapphire
+Swamp
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Sapphire.Cast
+! Bot1.Hand.Basal Thrull.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Basal Thrull.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Basal Thrull.Activate
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Basal Thrull > Bot2)
+[T3 Bot1.Main2]
+! Bot1.Battlefield.Basal Thrull.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Basal Thrull.Activate
+? Bot1.Mana = {B}{B}
+
+[Expect]
+Bot1.Mana = {B}{B}
+Bot1.Graveyard = Basal Thrull
+Bot1.Battlefield.Basal Thrull = (absent)

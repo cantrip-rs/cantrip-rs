@@ -20,8 +20,8 @@ fn exiled_creature_cards(view: &dyn LayerQuery, by: ObjectId) -> Vec<ObjectId> {
 /// ability as written, so the creature is its source and "this creature" means it (CR 113.7, 613.1f).
 /// The same ability twice is two abilities (CR 602.5c): a Rootwalla that exiled itself has its pump twice.
 fn grant_abilities(view: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
-    let cards: Vec<CardId> = exiled_creature_cards(view, source).into_iter().map(|c| view.state().obj(c).card).collect();
-    cantrip_mechanics::statics::grant_activated_abilities_of(view, &cards, chars);
+    let cards: Vec<_> = exiled_creature_cards(view, source).into_iter().map(|c| (c, view.state().obj(c).card)).collect();
+    cantrip_mechanics::statics::grant_activated_abilities_from(view, &cards, chars);
 }
 
 /// "{T}: Exile target card from a graveyard. When a creature card is exiled this way, put a +1/+1 counter on target

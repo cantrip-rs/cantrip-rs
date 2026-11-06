@@ -1,0 +1,36 @@
+# A stolen Blinking Spirit returns to its owner’s hand when its temporary controller activates it (CR 108.3, 602.2).
+[Bot1 Deck]
+Blinking Spirit
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Plains x20
+[Bot2 Deck]
+Black Lotus
+Act of Treason
+Mountain x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Blinking Spirit.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Act of Treason.Cast(Bot1.Battlefield.Blinking Spirit)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Blinking Spirit.Activate
+? Bot2.Mana =
+[Bot2.Main2]
+[Expect]
+Bot1.Hand.Blinking Spirit.Colors = White
+Bot1.Battlefield.Blinking Spirit = (absent)
+Bot2.Graveyard = Act of Treason; Black Lotus

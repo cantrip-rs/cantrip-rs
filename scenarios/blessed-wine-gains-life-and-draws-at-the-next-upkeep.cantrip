@@ -1,0 +1,31 @@
+# Blessed Wine gains its controller one life immediately and draws one card in the next turn's upkeep (CR 119.3, 603.7).
+[Bot1 Deck]
+Blessed Wine
+Mox Pearl
+Mox Sapphire
+Plains x17
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Blessed Wine.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+? Bot2.Life = 20
+? Bot1.Hand.Count = 4
+[T2 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Count = 5
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 6
+[T4 Bot2.Main1]
+? Bot1.Hand.Count = 6
+[Expect]
+Bot1.Life = 21

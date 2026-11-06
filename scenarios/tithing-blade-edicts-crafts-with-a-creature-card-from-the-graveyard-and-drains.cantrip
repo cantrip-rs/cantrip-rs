@@ -53,6 +53,7 @@ Bot1.Battlefield.Swamp#3.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 ! Bot1.Choose(Mox Jet)
 ! Bot1.Choose(Bot2.Battlefield.Llanowar Elves)
+Bot1.Choose(craft materials)
 Bot1.Choose(Graveyard.Llanowar Elves)
 [T5 Bot1.Main2]
 ? Bot1.Battlefield.Consuming Sepulcher.Colors = Black

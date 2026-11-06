@@ -76,7 +76,7 @@ pub fn forced(kind: &RequestKind) -> bool {
 /// has reached its limit, "the first card drawn this turn" once one has been): asked of the history, and counted as a read
 /// of it (`note_read`) only while it could still change. A loop within the turn can't be told apart by a settled answer.
 pub fn settled_read<T>(cx: &Cx, ask: impl FnOnce(&History) -> T, settled: impl FnOnce(&T) -> bool) -> T {
-    let history = History { records: &cx.g.log, turn: cx.s().turn.number };
+    let history = History { records: &cx.g.log, turn: cx.s().turn.number, receipts: &cx.s().cost_receipts };
     let answer = ask(&history);
     if !settled(&answer) {
         note_read();
@@ -291,6 +291,8 @@ impl<'a> Canon<'a> {
         stamps.extend(s.zones.iter().flatten().map(|&id| s.obj(id).timestamp));
         stamps.extend(s.effects.iter().map(|e| e.timestamp));
         stamps.extend(s.counter_stamps.iter().map(|c| c.timestamp));
+        // An activation retains its acquisition even when paying its cost removed that grant.
+        stamps.extend(s.stack.iter().filter_map(|i| (i.instance.acquired.by != AcquiredBy::Own).then_some(i.instance.acquired.stamp)));
         stamps.sort_unstable();
         stamps.dedup();
         Canon { s, number, stamps }
@@ -345,7 +347,10 @@ impl Hash for Name<'_> {
             o.exiled = None;
             o.marks.choices = o.marks.choices.without_objects();
             if let Some(phased) = &mut o.marks.phased { phased.last_known = 0; }
-            let known = s.last_known(id).map(|k| LastKnown { id: ObjectId::NONE, ..*k });
+            // Combat relationships in an LKI row are immutable historical records. Their query notes a read of
+            // the past, clearing the loop run just as an event-history query does. Arena offsets are not position
+            // identity (and recursively hashing paired departed sources would create cycles).
+            let known = s.last_known(id).map(|k| LastKnown { id: ObjectId::NONE, blocked_creatures: Default::default(), blocking_creatures: Default::default(), ..*k });
             (o, known).hash(h);
         };
         match s.obj(id).became {
@@ -466,7 +471,7 @@ fn write_position<H: Hasher>(s: &GameState, canon: &Canon, h: &mut H, hashed: bo
     s.restricted_mana.hash(h);
     s.mana_from.len().hash(h);
     for m in &s.mana_from {
-        (m.player, m.restriction, canon.id(m.source), m.lasts, m.pool).hash(h);
+        (m.player, m.restriction, canon.id(m.source), m.snow, m.lasts, m.pool).hash(h);
     }
     s.counter_stamps.len().hash(h);
     for c in &s.counter_stamps {
@@ -485,7 +490,7 @@ fn write_position<H: Hasher>(s: &GameState, canon: &Canon, h: &mut H, hashed: bo
                 o.exiled.map(|e| (canon.id(e.by), e.text, e.from, e.until_leaves, e.encoded)),
                 o.marks.choices.objects_raw().map(|c| c.map(|c| canon.id(c))),
                 stamp,
-                s.phased_last_known(id).map(|last| LastKnown { id: ObjectId::NONE, ..*last }),
+                s.phased_last_known(id).map(|last| LastKnown { id: ObjectId::NONE, blocked_creatures: Default::default(), blocking_creatures: Default::default(), ..*last }),
             )
                 .hash(h);
             o.timestamp = 0;
@@ -525,6 +530,11 @@ fn write_position<H: Hasher>(s: &GameState, canon: &Canon, h: &mut H, hashed: bo
         i.members = cantrip_state::Span::default();
         i.serial = 0;
         i.since = 0;
+        i.tapped_since = 0;
+        let key = i.instance;
+        (key.acquired.by, if key.acquired.by == AcquiredBy::Own { 0 } else { canon.rank(key.acquired.stamp) },
+            key.acquired.part, canon.id(key.origin), key.ordinal, key.static_grant).hash(h);
+        i.instance = AbilityAcquisition::OWN;
         i.hash(h);
     }
     s.effects.len().hash(h);
@@ -560,6 +570,8 @@ fn write_position<H: Hasher>(s: &GameState, canon: &Canon, h: &mut H, hashed: bo
         (canon.id(a.id), canon.target(a.target), a.defending, a.attacked_as, a.blocked, a.first_strike, a.band).hash(h);
     }
     s.blocks.len().hash(h);
+    s.blockers.len().hash(h);
+    for &id in &s.blockers { canon.id(id).hash(h); }
     for b in &s.blocks {
         (canon.id(b.blocker), canon.id(b.attacker)).hash(h);
     }
@@ -608,7 +620,7 @@ mod tests {
     }
 
     fn cx(game: &mut Game) -> Cx<'_> {
-        Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+        Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
     }
 
     #[test]
@@ -661,7 +673,7 @@ mod tests {
     /// CR 104.4b: a question with one legal answer is no choice; one with more is.
     #[test]
     fn only_a_question_with_one_legal_answer_is_forced() {
-        let choose = |candidates: Vec<Target>, optional: bool| RequestKind::ChooseTarget {
+        let choose = |candidates: Vec<Target>, optional: bool| RequestKind::ChooseTarget { replacing: None,
             source: ObjectId(0),
             purpose: Purpose::Targets,
             candidates,
@@ -677,7 +689,7 @@ mod tests {
         assert!(!forced(&choose(vec![Target::Object(ObjectId(1))], true)), "choosing none is another answer");
         assert!(!forced(&choose(vec![Target::Object(ObjectId(1)), Target::Object(ObjectId(2))], false)));
         // "One or two targets" with two candidates: choosing one of them is another answer (CR 601.2c).
-        let one_or_two = RequestKind::ChooseTarget {
+        let one_or_two = RequestKind::ChooseTarget { replacing: None,
             source: ObjectId(0),
             purpose: Purpose::Targets,
             candidates: vec![Target::Object(ObjectId(1)), Target::Object(ObjectId(2))],

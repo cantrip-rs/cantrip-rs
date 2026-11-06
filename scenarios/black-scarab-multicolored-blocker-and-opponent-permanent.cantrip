@@ -1,0 +1,59 @@
+# Black Scarab ignores its controller's black permanent and an opponent's green creature, then gives +2/+2 when the opponent controls a black-green Gorgon; the Gorgon cannot block but a green Elf can (CR 303.4, 509.1b, 613.1g).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Grizzly Bears
+Hired Poisoner
+Black Scarab
+Llanowar Elves
+Island x20
+[Bot2 Deck]
+Black Lotus
+Pitiless Gorgon
+Llanowar Elves
+Forest
+Island x23
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hired Poisoner.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Black Scarab.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Black Scarab.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+? Bot1.Battlefield.Grizzly Bears.Toughness = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Pitiless Gorgon.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 4
+? Bot1.Battlefield.Grizzly Bears.Toughness = 4
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+[T3 Bot1.DeclareBlockers]
+! Bot2.Block(Pitiless Gorgon > Grizzly Bears)
+Bot2.Block(Llanowar Elves > Grizzly Bears)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Black Scarab.AttachedTo = Grizzly Bears
+Bot1.Battlefield.Grizzly Bears.Power = 4
+Bot2.Graveyard.Llanowar Elves.Power = 1
+Bot2.Battlefield.Pitiless Gorgon.Power = 2
+Bot2.Life = 20

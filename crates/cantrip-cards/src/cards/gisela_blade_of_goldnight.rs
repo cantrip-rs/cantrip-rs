@@ -40,6 +40,6 @@ pub static CARD: CardDef = CardDef {
         double_that_damage,
         "deals double that damage to an opponent or their permanent instead",
     )],
-    preventions: &[PreventionDef { hint: "prevents half that damage, rounded up", applies: to_you, amount: Some(half_rounded_up) }],
+    preventions: &[PreventionDef { hint: "prevents half that damage, rounded up", applies: to_you, amount: PreventionAmount::Relative(half_rounded_up) }],
     ..oracle::GISELA_BLADE_OF_GOLDNIGHT
 };

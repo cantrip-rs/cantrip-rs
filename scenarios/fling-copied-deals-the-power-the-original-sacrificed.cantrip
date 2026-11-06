@@ -31,6 +31,7 @@ Bot1.Hand.Fling.Cast(Bot2)
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Choose(Close mana window)
 Bot1.Hand.Return the Favor.Cast
 Bot1.Modes(Copy target)
 Bot1.Target(Stack.Fling)
@@ -44,4 +45,4 @@ Bot2.Pass
 [Expect]
 Turn = 3
 Bot2.Life = 18
-Bot1.Graveyard = Fling; Return the Favor; Black Lotus; Walking Ballista
+Bot1.Graveyard = Fling; Return the Favor; Walking Ballista; Black Lotus

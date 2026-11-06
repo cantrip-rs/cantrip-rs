@@ -1,0 +1,61 @@
+# The Baton gives a Bear banding so it can band with an Elf, and its controller assigns the blocker's damage; later it grants banding to an opponent's creature until cleanup (CR 702.22c, 702.22k, 611.2a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Baton of Morale
+Grizzly Bears
+Llanowar Elves
+Island
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Ornithopter
+Island x24
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Baton of Morale.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Baton of Morale.Activate(Bot2.Battlefield.Island)
+Bot1.Battlefield.Baton of Morale.Activate(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Grizzly Bears > Bot2; Llanowar Elves > Bot2)
+Bot1.Choose(Llanowar Elves)
+? Combat.Attackers = Grizzly Bears > Bot2 (band 1); Llanowar Elves > Bot2 (band 1)
+Bot2.Block(Grizzly Bears > Bot1.Battlefield.Grizzly Bears)
+Bot1.AssignDamage(Bot2.Battlefield.Grizzly Bears > Llanowar Elves: 2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Grizzly Bears.Damage = 0
+? Bot2.Graveyard.Grizzly Bears.Power = 2
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Baton of Morale.Activate(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Keywords = Banding; Flying
+[T6 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Ornithopter.Keywords = Flying

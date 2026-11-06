@@ -111,18 +111,18 @@ fn choose(prompt: &PromptPayload) -> AnswerPayload {
             if let Some(o) = p
                 .options
                 .iter()
-                .find(|o| o.kind == ActionKindView::ConfirmCasting)
-            {
-                return AnswerPayload::TakeActionAnswer(TakeActionAnswer::take(o));
-            }
-            if let Some(o) = p
-                .options
-                .iter()
-                .find(|o| o.kind == ActionKindView::ActivateAbility && !o.produces.is_empty())
+                .find(|o| o.kind == ActionKindView::ActivateAbility && o.source != p.spell && (!o.produces.is_empty() || o.produces_of_any_one_color > 0))
             {
                 let mut answer = TakeActionAnswer::take(o);
                 answer.color = o.color_choices.first().copied();
                 return AnswerPayload::TakeActionAnswer(answer);
+            }
+            if let Some(o) = p
+                .options
+                .iter()
+                .find(|o| o.kind == ActionKindView::ConfirmCasting)
+            {
+                return AnswerPayload::TakeActionAnswer(TakeActionAnswer::take(o));
             }
             if let Some(o) = p
                 .options

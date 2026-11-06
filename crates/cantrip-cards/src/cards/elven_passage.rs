@@ -8,9 +8,7 @@ use cantrip_oracle as oracle;
 fn fetch_and_maybe_untap(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let arrived = lands::fetch_basic_land_to_battlefield(g, item.controller, item.object, true)?;
     if behold::on_resolution(g, item.controller, item.object, behold::elf, "Elf")? {
-        for land in arrived {
-            g.untap(land);
-        }
+        g.untap_together(&arrived);
     }
     Ok(())
 }

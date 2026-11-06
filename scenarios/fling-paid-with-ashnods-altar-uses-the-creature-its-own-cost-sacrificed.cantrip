@@ -35,6 +35,7 @@ Bot2.Pass
 Bot1.Hand.Fling.Cast(Bot2)
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Ashnod's Altar.Activate(Sacrifice: Ornithopter)
+Bot1.Choose(additional cost of Fling)
 Bot1.Choose(Hired Blade)
 Bot1.Pass
 Bot2.Pass

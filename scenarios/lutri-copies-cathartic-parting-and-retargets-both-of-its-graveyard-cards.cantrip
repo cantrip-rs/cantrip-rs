@@ -2,7 +2,7 @@
 # into their library. You may shuffle up to four target cards from your graveyard into your library.") and Bot1 chooses new targets
 # for the copy (CR 707.10c, 115.7d). Each target slot keeps the number of targets it was announced with: the first slot's one
 # permanent (Mox Pearl becomes Mox Jet) and the second slot's two graveyard cards together (Lotus Petal and Black Lotus become Black
-# Lotus and Chromatic Star), asked as one choice of two (CR 601.2c). The copy resolves first: Mox Jet, Black Lotus and Chromatic
+# Lotus and Chromatic Star), chosen one occurrence at a time (CR 601.2c). The copy resolves first: Mox Jet, Black Lotus and Chromatic
 # Star are shuffled away, leaving Lotus Petal in the graveyard (the check). The original then shuffles Mox Pearl and Lotus Petal;
 # its Black Lotus target is gone (CR 608.2b). The graveyard cards got there as mana: the Petal, the Lotus and the Star are
 # sacrificed for it (the Star draws a card as it goes).
@@ -53,7 +53,8 @@ Bot1.Hand.Lutri, the Spellchaser.Cast
 Bot1.Pass
 Bot1.Pass
 Bot1.Target(Bot2.Battlefield.Mox Jet)
-Bot1.Target(Black Lotus; Chromatic Star)
+Bot1.Target(Black Lotus)
+Bot1.Target(Chromatic Star)
 Bot1.Pass
 Bot1.Accept
 ? Bot1.Graveyard = Lotus Petal

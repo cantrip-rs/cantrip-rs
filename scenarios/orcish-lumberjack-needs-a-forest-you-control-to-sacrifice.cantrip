@@ -1,5 +1,5 @@
 # "Sacrifice a Forest": with only a Mountain and a Lumberjack, and with Bot2's Forest on the battlefield (not Bot1's to
-# sacrifice), the ability is not offered on turn 3 (refused). With Bot1's own Forest played it is, and Bot1 gets {G}{G}{G}.
+# sacrifice), an attempted activation is rolled back. With Bot1's own Forest played, it succeeds and produces {G}{G}{G}.
 
 [Bot1 Deck]
 Mountain
@@ -20,7 +20,14 @@ Bot1.Pass
 [T2 Bot2.Main1]
 Bot2.Hand.Forest.Play
 [T3 Bot1.Main1]
-! Bot1.Battlefield.Orcish Lumberjack.Activate
+Bot1.Battlefield.Orcish Lumberjack.Activate
+? Bot1.Battlefield = Mountain; Orcish Lumberjack
+? Bot1.Battlefield.Orcish Lumberjack.Tapped = false
+? Bot1.Mana =
+? Bot1.Life = 20
+? Bot2.Battlefield = Forest
+? Bot1.Graveyard.Count = 0
+? Stack.Count = 0
 Bot1.Hand.Forest.Play
 Bot1.Battlefield.Orcish Lumberjack.Activate(Sacrifice: Forest; Colors: G,G,G)
 

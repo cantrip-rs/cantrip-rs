@@ -1,0 +1,6 @@
+{
+  "name": "Blessed Wine",
+  "manaCost": "{1}{W}",
+  "type": "Instant",
+  "oracleText": "You gain 1 life.\nDraw a card at the beginning of the next turn's upkeep."
+}

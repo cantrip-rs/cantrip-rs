@@ -39,6 +39,7 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Lluwen, Imperfect Naturalist.Activate
+Bot1.Choose(Tap Lluwen, Imperfect Naturalist)
 ! Bot1.Choose(Grizzly Bears)
 Bot1.Choose(Island)
 

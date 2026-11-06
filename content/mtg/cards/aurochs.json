@@ -1,0 +1,11 @@
+{
+  "name": "Aurochs",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Aurochs",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Trample\nWhenever this creature attacks, it gets +1/+0 until end of turn for each other attacking Aurochs.",
+  "keywords": [
+    "Trample"
+  ]
+}

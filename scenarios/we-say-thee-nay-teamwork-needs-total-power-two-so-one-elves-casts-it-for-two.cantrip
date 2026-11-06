@@ -1,5 +1,5 @@
 # Teamwork 2 needs creatures with total power 2 or more: Bot1's lone Llanowar Elves has power 1, so tapping it cannot pay for
-# teamwork - the question offers only the cast without it (! Modes with Teamwork 2) - and the ransom is the plain {2}. Bot2's Black
+# teamwork, so attempting it rolls back. The spell is then cast without teamwork and the ransom is the plain {2}. Bot2's Black
 # Lotus leaves {R}{R} after the Bolt and pays it: the Bolt resolves (Bot1 at 17) although it would have been countered at {4}.
 
 [Bot1 Deck]
@@ -32,7 +32,15 @@ Bot2.Hand.Lightning Bolt.Cast(Bot1)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Sapphire#2.Activate
 Bot1.Hand.We Say Thee Nay!.Cast
-! Bot1.Modes(Teamwork 2)
+Bot1.Modes(Teamwork 2)
+Bot1.Target(Stack.Lightning Bolt)
+? Bot1.Hand.We Say Thee Nay!.Colors = Blue
+? Bot1.Battlefield.Llanowar Elves.Tapped = false
+? Bot1.Mana = {U}{U}
+? Bot1.Life = 20
+? Stack.Count = 1
+Bot1.Hand.We Say Thee Nay!.Cast
+Bot1.Modes(Cast without teamwork)
 Bot1.Target(Stack.Lightning Bolt)
 Bot2.Pass
 Bot2.PayCost

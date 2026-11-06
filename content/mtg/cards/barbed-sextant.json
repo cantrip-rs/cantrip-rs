@@ -1,0 +1,6 @@
+{
+  "name": "Barbed Sextant",
+  "manaCost": "{1}",
+  "type": "Artifact",
+  "oracleText": "{1}, {T}, Sacrifice this artifact: Add one mana of any color. Draw a card at the beginning of the next turn's upkeep."
+}

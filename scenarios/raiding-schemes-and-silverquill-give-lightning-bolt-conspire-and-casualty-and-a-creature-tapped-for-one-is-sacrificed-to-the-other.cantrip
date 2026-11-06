@@ -64,7 +64,9 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
 Bot1.Modes(Conspire:)
 Bot1.Modes(Casualty 1)
+Bot1.Choose(Raiding Schemes)
 Bot1.Choose(Goblin Champion; Cacophony Scamp)
+Bot1.Choose(Silverquill, the Disputant)
 Bot1.Choose(Cacophony Scamp)
 ? Stack.Count = 1
 Bot1.Triggers(dies; Conspire; Casualty)
