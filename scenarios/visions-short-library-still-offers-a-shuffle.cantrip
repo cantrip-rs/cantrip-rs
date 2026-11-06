@@ -1,0 +1,28 @@
+# With only two cards in the target's library, Visions looks at both and still allows its caster to
+# have that player shuffle; looking does not draw or lose the game (CR 608.2h, 701.24a).
+[Bot1 Deck]
+Visions
+Mox Pearl
+Plains x20
+
+[Bot2 Deck]
+Island x7
+Forest
+Mountain
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Visions.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Looked = Forest; Mountain
+Bot1.Accept
+[Expect]
+Bot2.Shuffles = 1
+Bot1.Shuffles = 0
+Bot2.Library.Count = 2
+Bot2.Hand.Count = 7
+Result = InProgress

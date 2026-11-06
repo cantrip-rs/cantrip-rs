@@ -95,6 +95,8 @@ pub enum Tok {
     Next,
     /// Replacement effect `n`.
     Index,
+    /// A base-16 digit of a cost-payment operation index, most significant first.
+    CostDigit,
 }
 
 /// An option token: a kind, the canonical objects or players it names, and a small number.
@@ -216,6 +218,9 @@ pub enum FactoredAnswer {
     /// Triggers by their place in the ask, in the order put on the stack.
     Order(Vec<u8>),
     Index(u8),
+    /// An exact numeric choice, never rounded to an X bucket or mode offset.
+    Number(u32),
+    CostPayment(usize),
 }
 
 enum Stop {
@@ -281,6 +286,10 @@ fn offers(options: &[OptionObs], kind: u8) -> bool {
 
 /// The most steps the machine for `ask` takes.
 pub fn bound(ask: &Ask) -> usize {
+    if snow_payment(&ask.kind) {
+        let options = match &ask.kind { AskKind::PayCosts { options, .. } | AskKind::UnlessPays { options, .. } => options, _ => unreachable!() };
+        return 2 + options.iter().map(|o| o.targets_required as usize).max().unwrap_or(0);
+    }
     let n = match &ask.kind {
         AskKind::Priority { options } => {
             2 + options
@@ -290,6 +299,8 @@ pub fn bound(ask: &Ask) -> usize {
                 .unwrap_or(0)
         }
         AskKind::PayCosts { .. } => 1,
+        AskKind::ChooseNumber { .. } => 8,
+        AskKind::ChooseCostPayment { .. } => usize::BITS as usize / 4,
         AskKind::UnlessPays { .. } => 2,
         AskKind::ChooseCards { count, .. }
         | AskKind::ChooseTarget { count, .. }
@@ -496,6 +507,19 @@ fn names_with(ask: &Ask, names: &[String]) -> Vec<String> {
     all
 }
 
+/// Payment windows whose source quality or snow demand requires an explicit allocation choice.
+/// Ordinary costs retain their established automatic payment factoring.
+pub fn snow_payment(kind: &AskKind) -> bool {
+    match kind {
+        AskKind::PayCosts { announcing: true, .. } => false,
+        AskKind::PayCosts { remaining, options, .. }
+        | AskKind::UnlessPays { remaining, options, .. } => {
+            remaining.snow != 0 || options.iter().any(|o| o.snow || o.pay_snow)
+        }
+        _ => false,
+    }
+}
+
 fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> {
     use FactoredAnswer as F;
     let yes_no = |p: &mut Picker| -> Flow<FactoredAnswer> {
@@ -509,6 +533,34 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
         })
     };
     match &ask.kind {
+        AskKind::ChooseCostPayment { choices } => {
+            let Some(span) = choices.len().checked_sub(1) else { return Err(Stop::Cancel) };
+            let mut prefix = 0usize;
+            for shift in (0..usize::BITS / 4).rev().map(|digit| digit * 4) {
+                let mut step = Step::default();
+                for digit in 0..16u16 {
+                    let low = ((prefix << 4) | usize::from(digit)) << shift;
+                    step.push(Token::n(Tok::CostDigit, u32::from(digit)), low <= span);
+                }
+                prefix = (prefix << 4) | p.pick(step)?.n as usize;
+            }
+            Ok(F::CostPayment(prefix))
+        }
+        AskKind::ChooseNumber { least, most } => {
+            // Eight base-16 digits encode an offset exactly. At most sixteen options fit the existing encoder budget;
+            // a prefix is legal iff at least one completion lies inside the inclusive range.
+            let span = u64::from(*most) - u64::from(*least);
+            let mut prefix = 0u64;
+            for shift in (0..8).rev().map(|digit| digit * 4) {
+                let mut step = Step::default();
+                for digit in 0..16 {
+                    let low = ((prefix << 4) | u64::from(digit)) << shift;
+                    step.push(Token::n(Tok::X, digit), low <= span);
+                }
+                prefix = (prefix << 4) | u64::from(p.pick(step)?.n);
+            }
+            Ok(F::Number((u64::from(*least) + prefix) as u32))
+        }
         AskKind::Priority { options } => {
             let mut step = Step::default();
             step.push(Token::new(Tok::Pass), true);
@@ -524,6 +576,18 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
             if t.kind == Tok::Pass {
                 return Ok(F::Pass);
             }
+            act(&options[t.n as usize], t.n as usize, p)
+        }
+        AskKind::PayCosts { options, .. } | AskKind::UnlessPays { options, .. }
+            if snow_payment(&ask.kind) =>
+        {
+            let mut step = Step::default();
+            for (i, o) in options.iter().enumerate() {
+                let targetable = o.targets_optional
+                    || o.target_candidates.len() >= o.targets_required as usize;
+                step.push(Token::of(Tok::Option, o.source, Ref::None, i as u32), targetable);
+            }
+            let t = p.pick(step)?;
             act(&options[t.n as usize], t.n as usize, p)
         }
         AskKind::PayCosts {
@@ -922,7 +986,7 @@ fn program(ask: &Ask, names: &[String], p: &mut Picker) -> Flow<FactoredAnswer> 
                     if t.kind != Tok::Block {
                         break;
                     }
-                    blocked[t.n as usize] += 1;
+                    blocked[t.n as usize] = blocked[t.n as usize].saturating_add(1);
                     blocks.push((c, t.b));
                     made += 1;
                 }
@@ -1166,16 +1230,29 @@ pub fn decompose(
     let mut wanted: Vec<Token> = Vec::new();
     let mut push = |t: Token| wanted.push(t);
     match (&ask.kind, answer) {
+        (AskKind::ChooseCostPayment { choices }, F::CostPayment(value)) if *value < choices.len() => {
+            for shift in (0..usize::BITS / 4).rev().map(|digit| digit * 4) {
+                push(Token::n(Tok::CostDigit, ((value >> shift) & 15) as u32));
+            }
+        }
+        (AskKind::ChooseNumber { least, most }, F::Number(value)) if (*least..=*most).contains(value) => {
+            let offset = value - least;
+            for shift in (0..8).rev().map(|digit| digit * 4) {
+                push(Token::n(Tok::X, ((offset >> shift) & 15) as u32));
+            }
+        }
         (_, F::Cancel) => push(Token::new(Tok::Cancel)),
         (AskKind::Priority { .. }, F::Pass) => push(Token::new(Tok::Pass)),
         (
-            AskKind::Priority { options },
+            AskKind::Priority { options }
+            | AskKind::PayCosts { options, .. }
+            | AskKind::UnlessPays { options, .. },
             F::Act {
                 option,
                 targets,
                 color,
             },
-        ) => {
+        ) if matches!(&ask.kind, AskKind::Priority { .. }) || snow_payment(&ask.kind) => {
             let o = options.get(*option as usize).ok_or("no such option")?;
             push(Token::of(Tok::Option, o.source, Ref::None, *option));
             for &t in targets {
@@ -1433,6 +1510,51 @@ pub fn kind_name(kind: &AskKind) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn cost_payment_indices_beyond_u16_roundtrip_without_aliases() {
+        let choice = crate::CostPaymentObs { label: "Sacrifice a creature".into(), objects: Vec::new(), kind: crate::CostPaymentKindObs::Sacrifice };
+        let ask = Ask { may_cancel: false, source: Ref::None, kind: AskKind::ChooseCostPayment { choices: vec![choice; 65_538] } };
+        for value in [0, 255, 256, 65_535, 65_536, 65_537] {
+            let answer = FactoredAnswer::CostPayment(value);
+            let tokens = decompose(&ask, &[], &answer).unwrap();
+            assert_eq!(tokens.len(), usize::BITS as usize / 4);
+            let mut machine = Machine::new(&ask, &[]);
+            for token in tokens { assert!(machine.choose_token(token)); }
+            assert_eq!(machine.answer(), Some(&answer));
+        }
+        assert!(decompose(&ask, &[], &FactoredAnswer::CostPayment(65_538)).is_err());
+    }
+
+    #[test]
+    fn wide_number_digits_roundtrip_all_endpoints_and_interior_values_exactly() {
+        for (least, most) in [(0, u32::MAX), (42, u32::MAX), (u32::MAX - 300, u32::MAX), (0, 65535), (100, 500)] {
+            let ask = Ask { may_cancel: false, source: Ref::None, kind: AskKind::ChooseNumber { least, most } };
+            for value in [least, least + 1, least + (most - least) / 2, most] {
+                let answer = FactoredAnswer::Number(value);
+                let tokens = decompose(&ask, &[], &answer).unwrap();
+                assert_eq!(tokens.len(), 8);
+                let mut machine = Machine::new(&ask, &[]);
+                for token in tokens { assert!(machine.step().unwrap().tokens.len() <= 16); assert!(machine.choose_token(token)); }
+                assert_eq!(machine.answer(), Some(&answer));
+            }
+        }
+    }
+    #[test]
+    fn wide_number_prefix_masks_only_remove_prefixes_with_no_legal_completion() {
+        let ask = Ask { may_cancel: false, source: Ref::None, kind: AskKind::ChooseNumber { least: 100, most: 400 } };
+        let mut machine = Machine::new(&ask, &[]);
+        for _ in 0..5 { assert!(machine.choose_token(Token::n(Tok::X, 0))); }
+        assert!(!machine.choose_token(Token::n(Tok::X, 2)));
+        assert!(machine.choose_token(Token::n(Tok::X, 1)));
+        assert!(!machine.choose_token(Token::n(Tok::X, 3)));
+        assert!(machine.choose_token(Token::n(Tok::X, 2)));
+        assert!(!machine.choose_token(Token::n(Tok::X, 13)));
+        assert!(machine.choose_token(Token::n(Tok::X, 12)));
+        assert_eq!(machine.answer(), Some(&FactoredAnswer::Number(400)));
+        assert!(decompose(&ask, &[], &FactoredAnswer::Number(401)).is_err());
+        assert!(decompose(&ask, &[], &FactoredAnswer::Number(99)).is_err());
+    }
     use crate::{CounterPoolObs, DestinationObs, DivisionObs};
 
     fn ask(kind: AskKind) -> Ask {
@@ -1471,6 +1593,29 @@ mod tests {
     fn round_trip(ask: &Ask, answer: &FactoredAnswer) {
         let tokens = decompose(ask, &[], answer).unwrap();
         assert_eq!(walk(ask, &tokens).answer(), Some(answer));
+    }
+
+    #[test]
+    fn a_blocker_with_capacity_two_can_choose_two_distinct_attackers() {
+        let a = ask(AskKind::DeclareBlockers {
+            eligible: vec![o(1)], attackers: vec![o(2), o(3)],
+            allowed: vec![(o(1), o(2)), (o(1), o(3))], required: vec![], most: 0,
+            min_blockers: vec![1, 1], max_blockers: vec![255, 255], capacities: vec![(o(1), 2)],
+        });
+        round_trip(&a, &FactoredAnswer::Block(vec![]));
+        round_trip(&a, &FactoredAnswer::Block(vec![(o(1), o(2))]));
+        round_trip(&a, &FactoredAnswer::Block(vec![(o(1), o(2)), (o(1), o(3))]));
+        let after_first = walk(&a, &[Token::of(Tok::Block, o(1), o(2), 0)]);
+        assert!(!legal(&after_first, Token::of(Tok::Block, o(1), o(2), 0)));
+        assert!(legal(&after_first, Token::of(Tok::Block, o(1), o(3), 1)));
+        assert!(legal(&after_first, Token::on(Tok::NoBlock, o(1))));
+        let ordinary = ask(AskKind::DeclareBlockers {
+            eligible: vec![o(1)], attackers: vec![o(2), o(3)],
+            allowed: vec![(o(1), o(2)), (o(1), o(3))], required: vec![], most: 0,
+            min_blockers: vec![1, 1], max_blockers: vec![255, 255], capacities: vec![],
+        });
+        round_trip(&ordinary, &FactoredAnswer::Block(vec![(o(1), o(2))]));
+        assert!(decompose(&ordinary, &[], &FactoredAnswer::Block(vec![(o(1), o(2)), (o(1), o(3))])).is_err());
     }
 
     #[test]
@@ -2002,6 +2147,8 @@ mod tests {
                 mana: None,
                 restriction: None,
                 pays_nothing: false,
+                snow: false,
+                pay_snow: false,
                 granted_by: None,
                 paid_by: None,
             };
@@ -2021,6 +2168,7 @@ mod tests {
                 total: Default::default(),
                 remaining: Default::default(),
                 options: options(inc),
+                mana_abilities: false,
                 announcing: true,
                 x,
                 x_most,

@@ -33,6 +33,7 @@ Bot1.Hand.Zoraline, Cosmos Caller.Cast
 Bot1.Pass
 Bot1.Pass
 Bot1.Battlefield.Mana Confluence.Activate(Color: White)
+Bot1.Choose(Tap Mana Confluence)
 ? Bot1.Life = 2
 Bot1.PayCost
 

@@ -1,0 +1,32 @@
+# Visions can target its caster: the player sees five specific cards before deciding to shuffle their own library
+# (CR 608.2h, 701.24a).
+[Bot1 Deck]
+Visions
+Mox Pearl
+Island x5
+Forest
+Plains
+Mountain
+Swamp
+Ornithopter
+Memnite
+Island x5
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Visions.Cast(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Looked = Forest; Plains; Mountain; Swamp; Ornithopter
+Bot1.Accept
+[Expect]
+Bot1.Looked = Forest; Plains; Mountain; Swamp; Ornithopter
+Bot1.Shuffles = 1
+Bot2.Shuffles = 0
+Bot1.Hand.Count = 5

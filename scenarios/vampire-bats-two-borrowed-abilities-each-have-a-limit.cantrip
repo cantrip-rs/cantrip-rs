@@ -1,0 +1,59 @@
+# Two Bats in graveyards give Necrotic Ooze two separately limited abilities (CR 602.5c).
+[Bot1 Deck]
+Vampire Bats
+Necrotic Ooze
+Mox Jet
+Black Lotus
+Black Lotus
+Black Lotus
+Island x20
+[Bot2 Deck]
+Vampire Bats
+Mox Jet
+Black Lotus
+Pyroclasm
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vampire Bats.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Vampire Bats.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Pyroclasm.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Necrotic Ooze.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Necrotic Ooze.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Necrotic Ooze.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Necrotic Ooze.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Necrotic Ooze.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Necrotic Ooze.Activate
+? Bot1.Mana = {B}{B}
+[Expect]
+Bot1.Battlefield.Necrotic Ooze.Power = 8
+Bot1.Battlefield.Necrotic Ooze.Toughness = 3

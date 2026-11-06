@@ -1,0 +1,39 @@
+# Two switches on the same creature restore its original power and toughness (CR 613.4d).
+[Bot1 Deck]
+Giver of Runes
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Gleemox
+Transmutation
+Transmutation
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Giver of Runes.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Transmutation.Cast(Bot1.Battlefield.Giver of Runes)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Giver of Runes.Power = 2
+? Bot1.Battlefield.Giver of Runes.Toughness = 1
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Transmutation.Cast(Bot1.Battlefield.Giver of Runes)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Giver of Runes.Power = 1
+Bot1.Battlefield.Giver of Runes.Toughness = 2

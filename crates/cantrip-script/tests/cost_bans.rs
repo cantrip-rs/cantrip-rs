@@ -189,6 +189,12 @@ fn play_holding(steps: &[(ActionKind, &str, u8)], held: Option<&str>) -> Game {
                 Some(pay) => Answer::Act(Action::of(pay)),
                 None => panic!("nothing pays the cost: {options:?}"),
             },
+            RequestKind::ChooseCostPayment { choices, .. } => {
+                let index = choices.iter().position(|choice| choice.label.starts_with("Pay 1 life"))
+                    .or_else(|| choices.iter().position(|choice| choice.label.starts_with("Sacrifice 1 permanent")))
+                    .expect("the resolution payment component is available");
+                Answer::CostPayment(index)
+            }
             RequestKind::UnlessPays { options, .. } => match options.iter().find(|o| o.kind == ActionKind::PayCost) {
                 Some(pay) => Answer::Act(Action::of(pay)),
                 None => panic!("the payment as the ability resolves is not offered"),

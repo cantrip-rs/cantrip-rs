@@ -1,0 +1,35 @@
+# Chalice does not trigger on itself, triggers for either player's artifact spell, and ignores nonartifact spells; payment and refusal give the corresponding life (CR 603.2, 118.3).
+[Bot1 Deck]
+Urza's Chalice
+Mox Sapphire
+Black Lotus
+Ornithopter
+Island x20
+[Bot2 Deck]
+Mox Pearl
+Savannah Lions
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Urza's Chalice.Cast
+? Bot1.Mana =
+? Stack = Urza's Chalice
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Ornithopter.Cast
+Bot1.PayCost
+? Bot1.Mana = {R}{R}
+? Bot1.Life = 21
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot1.Decline
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+? Stack = Savannah Lions
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 20

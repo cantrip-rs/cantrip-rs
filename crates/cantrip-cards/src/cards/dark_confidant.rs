@@ -6,7 +6,7 @@ use cantrip_oracle as oracle;
 /// mana value, read as it was revealed.
 fn reveal(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some((_, value)) = reveal_top_to_hand(g, item.controller) {
-        g.lose_life(item.controller, value as i32);
+        g.lose_life(item.controller,(value as i32) as i32);
     }
     Ok(())
 }

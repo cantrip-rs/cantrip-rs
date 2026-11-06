@@ -1,0 +1,63 @@
+# The graveyard mode returns one creature card from its controller's graveyard, excluding the opponent's card and a noncreature (CR 115.1).
+[Bot1 Deck]
+Triassic Egg
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Faithless Looting
+Grizzly Bears
+Forest
+Forest x20
+
+[Bot2 Deck]
+Mox Ruby
+Faithless Looting
+Llanowar Elves
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Triassic Egg.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Choose(Llanowar Elves; Island)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Grizzly Bears; Forest)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Triassic Egg.Activate(Ability: hatchling counter)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Triassic Egg.Activate(Ability: hatchling counter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Triassic Egg.Activate(Ability: Sacrifice)
+! Bot1.Modes(1; 2)
+Bot1.Modes(Return target creature)
+! Bot1.Target(Bot2.Graveyard.Llanowar Elves)
+! Bot1.Target(Bot1.Graveyard.Forest)
+Bot1.Target(Bot1.Graveyard.Grizzly Bears)
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Tapped = false
+Bot1.Graveyard.Triassic Egg.Colors =
+Bot2.Graveyard.Llanowar Elves.Colors = Green

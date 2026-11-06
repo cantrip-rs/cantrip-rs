@@ -1,0 +1,47 @@
+# Touch of Darkness makes four creatures on both sides black, including a multicolored creature; other permanents cannot be targeted and the color change expires (CR 115.1a, 611.2a).
+[Bot1 Deck]
+Touch of Darkness
+Mox Jet
+Mox Sapphire
+Ornithopter
+Baleful Strix
+Island x20
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Baleful Strix.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Baleful Strix.Colors = Black; Blue
+? Bot2.Battlefield.Llanowar Elves.Colors = Green
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Touch of Darkness.Cast
+! Bot1.Target(Count: 0)
+! Bot1.Target(Bot1.Battlefield.Mox Sapphire)
+Bot1.Target(Bot1.Battlefield.Ornithopter; Bot1.Battlefield.Baleful Strix; Bot2.Battlefield.Ornithopter; Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Colors = Black
+? Bot1.Battlefield.Baleful Strix.Colors = Black
+? Bot2.Battlefield.Ornithopter.Colors = Black
+? Bot2.Battlefield.Llanowar Elves.Colors = Black
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Baleful Strix.Colors = Black; Blue
+Bot2.Battlefield.Llanowar Elves.Colors = Green
+Bot1.Battlefield.Ornithopter.Colors = (absent)
+Bot2.Battlefield.Ornithopter.Colors = (absent)

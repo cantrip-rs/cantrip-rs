@@ -8,9 +8,7 @@ use cantrip_oracle as oracle;
 fn pump_untap(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let creatures = effects::pump_creatures_you_control(g, item, 1, 1);
     g.end_sentence();
-    for &creature in &creatures {
-        g.untap(creature);
-    }
+    g.untap_together(&creatures);
     Ok(())
 }
 

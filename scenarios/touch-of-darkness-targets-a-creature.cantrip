@@ -1,0 +1,23 @@
+# Touch of Darkness must allow targeting a creature and make it black until cleanup (CR 115.1a, 611.2a).
+[Bot1 Deck]
+Touch of Darkness
+Mox Jet
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Touch of Darkness.Cast
+! Bot1.Target(Count: 0)
+Bot1.Target(Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Colors = Black
+[T2 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Ornithopter.Colors = (absent)
+Bot1.Battlefield.Ornithopter.Tapped = false

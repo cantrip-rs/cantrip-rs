@@ -15,6 +15,7 @@ Island x19
 Bot1.Hand.Black Lotus.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: B)
 Bot1.Hand.Mudbutton Cursetosser.Cast
+Bot1.Modes(Pay {2})
 Bot1.Pass
 Bot2.Pass
 Bot1.Hand.Ornithopter.Cast

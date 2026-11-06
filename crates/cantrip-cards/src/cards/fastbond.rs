@@ -19,13 +19,8 @@ fn not_the_first(q: &dyn Query, asker: &Asker) -> bool {
     q.state().player(asker.controller).lands_played > 1
 }
 
-fn burn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.damage(item.object, Target::Player(item.controller), 1);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
-    abilities: &[triggered(when(EventMask::ZONE_CHANGE, you_play_a_land), burn, "Whenever you play a land, if it wasn't the first land you played this turn, this enchantment deals 1 damage to you.")
+    abilities: &[triggered(when(EventMask::ZONE_CHANGE, you_play_a_land), cantrip_mechanics::effects::source_deals_one_to_controller, "Whenever you play a land, if it wasn't the first land you played this turn, this enchantment deals 1 damage to you.")
         .condition(not_the_first)],
     play_rules: &[PlayRule::AnyNumberOfLandPlays],
     ..oracle::FASTBOND

@@ -27,7 +27,7 @@ fn target_specs(cards: &CardTable, state: &GameState, item: &StackItem) -> &'sta
         _ => match cards.ability(item.ability) {
             AbilityDef::Activated(a) => a.targets,
             AbilityDef::Triggered(t) => t.targets,
-            AbilityDef::Static(_) | AbilityDef::PlayRule(_) => &[],
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => &[],
         },
     }
 }
@@ -38,11 +38,11 @@ pub fn modal_of(cards: &CardTable, state: &GameState, item: &StackItem) -> Optio
         StackKind::Spell => cards.get(face(state, item.object)).modal,
         StackKind::Activated => match cards.ability(item.ability) {
             AbilityDef::Activated(a) => a.modal,
-            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) => None,
+            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => None,
         },
         StackKind::Triggered => match cards.ability(item.ability) {
             AbilityDef::Triggered(t) => t.modal,
-            AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) => None,
+            AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => None,
         },
     }
 }
@@ -209,7 +209,7 @@ pub fn target_legal(cards: &CardTable, state: &GameState, events: &[Record], ite
     };
     // Asked as the spell or ability it is (CR 607.5): one an effect gave its source reads only its own links.
     let by = Linked { object: item.object, text: cards.linked_card(item.ability.card), acquired: item.acquired };
-    let asker = Asker { source: item.object, controller: item.controller, by: Some(by).filter(|&by| by != cards.linked_to(state, item.object)), spell: item.kind == StackKind::Spell };
+    let asker = Asker { instance: None, source: item.object, controller: item.controller, by: Some(by).filter(|&by| by != cards.linked_to(state, item.object)), spell: item.kind == StackKind::Spell };
     if let Target::Object(id) = target
         && !live(state, id)
     {
@@ -271,6 +271,14 @@ pub struct Given<'a> {
 }
 
 impl Query for Given<'_> {
+    fn can_attach_to(&self, attachment: ObjectId, host: ObjectId) -> bool {
+        crate::attach::host_allows(self, attachment, host, true)
+    }
+
+    fn can_untap(&self, permanent: ObjectId) -> bool {
+        self.q.can_untap(permanent)
+    }
+
     fn linked_card(&self, card: CardId) -> CardId {
         self.q.linked_card(card)
     }
@@ -356,6 +364,14 @@ pub struct Reader<'a> {
 }
 
 impl Query for Reader<'_> {
+    fn can_attach_to(&self, attachment: ObjectId, host: ObjectId) -> bool {
+        crate::attach::host_allows(self, attachment, host, true)
+    }
+
+    fn can_untap(&self, permanent: ObjectId) -> bool {
+        crate::ops::can_untap(self, self.cards, permanent)
+    }
+
     fn linked_card(&self, card: CardId) -> CardId {
         self.cards.linked_card(card)
     }
@@ -665,7 +681,7 @@ pub fn resolve(cx: &mut Cx) -> R<Flow> {
                     AbilityDef::Activated(a) => (a.effect)(cx, &item),
                     AbilityDef::Triggered(TriggeredDef { modal: Some(modal), .. }) => run_modes(cx, &item, modal),
                     AbilityDef::Triggered(t) => (t.effect)(cx, &item),
-                    AbilityDef::Static(_) | AbilityDef::PlayRule(_) => unreachable!("a static ability is never on the stack"),
+                    AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => unreachable!("a static ability is never on the stack"),
                 })?;
                 // It has resolved (CR 608.2m: "the first time this ability has resolved this turn").
                 cx.record(Event::Resolved { source: item.object, ability: item.ability });

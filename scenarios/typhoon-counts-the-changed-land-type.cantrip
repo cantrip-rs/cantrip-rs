@@ -1,0 +1,39 @@
+# Magical Hack changes Island to Forest on the spell; the opponent's two Forests, not Island, is counted (CR 612.1).
+[Bot1 Deck]
+Typhoon
+Magical Hack
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Forest x20
+[Bot2 Deck]
+Island
+Forest
+Forest
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Typhoon.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Magical Hack.Cast(Stack.Typhoon)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Island)
+Bot1.Modes(Forest)
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18

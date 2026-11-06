@@ -28,8 +28,9 @@ Bot1.Hand.Scotty, Miracle Worker.Cast
 [T3 Bot1.Main1]
 Bot1.Hand.Mountain.Play
 Bot1.Graveyard.Lightning Bolt.Cast(Bot2; Ability: Beam me up)
-Bot1.Choose(Ornithopter)
 Bot1.Battlefield.Mountain.Activate
+Bot1.Choose(Return to hand 1 permanent)
+Bot1.Choose(Ornithopter)
 
 [Expect]
 Exile = Lightning Bolt

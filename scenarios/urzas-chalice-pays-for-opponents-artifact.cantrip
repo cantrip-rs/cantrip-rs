@@ -1,0 +1,28 @@
+# Its controller may decline their own artifact and pay one mana for an opponent's artifact, gaining the life themselves (CR 603.2, 118.1).
+[Bot1 Deck]
+Urza's Chalice
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Urza's Chalice.Cast
+? Bot1.Mana =
+Bot1.Hand.Mox Jet.Cast
+Bot1.Decline
+[T2 Bot2.Main1]
+? Bot1.Life = 20
+Bot2.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 20

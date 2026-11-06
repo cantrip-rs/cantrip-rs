@@ -13,6 +13,7 @@ Island x30
 [Bot1.Main1]
 Bot1.Hand.Lion's Eye Diamond.Cast
 Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Red)
+Bot1.Choose(Discard your hand)
 ? Stack.Count = 0
 ? Bot1.Mana = {R}{R}{R}
 Bot1.Graveyard.Faithless Looting.Cast(Ability: Flashback)

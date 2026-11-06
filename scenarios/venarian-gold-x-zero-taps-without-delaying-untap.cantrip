@@ -1,0 +1,28 @@
+# With X=0 the Aura still taps its controller's creature but puts no sleep counters on it, so it untaps normally (CR 502.3).
+[Bot1 Deck]
+Mox Sapphire
+Gleemox
+Venarian Gold
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Hand.Venarian Gold.Cast(Bot1.Battlefield.Ornithopter; X: 0)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Tapped = true
+? Bot1.Battlefield.Ornithopter.Counters.Sleep = (absent)
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Venarian Gold.AttachedTo = Ornithopter

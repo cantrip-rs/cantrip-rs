@@ -1,0 +1,43 @@
+# Two other Walls block a second attacker while Caltrops blocks alone; neither their blocks nor their Wall types trigger Caltrops (CR 603.2).
+[Bot1 Deck]
+Wall of Caltrops
+Steel Wall
+Fortified Rampart
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Hill Giant
+Memnite
+Black Lotus
+Mountain
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wall of Caltrops.Cast
+Bot1.Hand.Fortified Rampart.Cast
+Bot1.Hand.Steel Wall.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Hill Giant.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Hill Giant > Bot1; Memnite > Bot1)
+Bot1.Block(Wall of Caltrops > Hill Giant; Steel Wall > Memnite; Fortified Rampart > Memnite)
+? Stack.Count = 0
+? Bot1.Battlefield.Wall of Caltrops.Keywords = Defender
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Graveyard = Wall of Caltrops; Black Lotus

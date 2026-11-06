@@ -1,0 +1,23 @@
+# Looking at an empty library does not draw or lose the game, and its player can still be made to shuffle (CR 104.3c).
+[Bot1 Deck]
+Visions
+Mox Pearl
+Plains x20
+
+[Bot2 Deck]
+Island x7
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Visions.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[Expect]
+Bot2.Shuffles = 1
+Bot2.Library.Count = 0
+Bot2.Hand.Count = 7
+Result = InProgress

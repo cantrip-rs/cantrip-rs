@@ -33,9 +33,11 @@ Bot2.Pass
 [T7 Bot1.Main1]
 Bot1.Hand.Mountain.Play
 Bot1.Battlefield.Bullseye, Death Dealer.Activate(Bot2)
+Bot1.Modes(Discard a nonland card)
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Mountain.Activate
+Bot1.Choose(Discard 1 card)
 Bot1.Choose(Lightning Bolt)
 ? Bot1.Graveyard = Lightning Bolt
 Bot1.Pass

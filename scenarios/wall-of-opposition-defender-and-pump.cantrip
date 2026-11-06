@@ -1,0 +1,50 @@
+# The Wall's {1} ability gives +1/+0 until end of turn, and defender prevents attacking while an Ornithopter can attack (CR 611.2a, 702.3b).
+[Bot1 Deck]
+Wall of Opposition
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Jet
+Ornithopter
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wall of Opposition.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Wall of Opposition.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wall of Opposition.Power = 1
+? Bot1.Battlefield.Wall of Opposition.Toughness = 6
+! Bot1.Battlefield.Wall of Opposition.Activate(Mana: short)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Wall of Opposition.Power = 0
+? Bot1.Battlefield.Wall of Opposition.Toughness = 6
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Wall of Opposition.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wall of Opposition.Power = 1
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Wall of Opposition > Bot2)
+Bot1.Attack(Ornithopter > Bot2)
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Wall of Opposition.Power = 0

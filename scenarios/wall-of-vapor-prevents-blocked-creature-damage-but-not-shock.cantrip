@@ -1,0 +1,54 @@
+# Wall of Vapor cannot attack while Memnite can. It prevents the damage of a creature it blocks,
+# then Shock destroys it, showing that damage from another source is not prevented (CR 702.3b, 615.1).
+[Bot1 Deck]
+Wall of Vapor
+Memnite
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Memnite
+Shock
+Mox Ruby
+Mountain x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wall of Vapor.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Wall of Vapor > Bot2)
+Bot1.Attack(Memnite > Bot2)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Block(Wall of Vapor > Memnite)
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Wall of Vapor.Damage = 0
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Wall of Vapor)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Wall of Vapor = (absent)
+Bot1.Graveyard = Wall of Vapor
+Bot2.Graveyard = Shock

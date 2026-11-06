@@ -1,0 +1,28 @@
+# Vampire Bats needs black mana for its pump; blue mana alone is insufficient, while black pays exactly (CR 602.2b).
+[Bot1 Deck]
+Vampire Bats
+Mox Jet
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vampire Bats.Cast
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Vampire Bats.Activate(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Vampire Bats.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Vampire Bats.Power = 1
+Bot1.Battlefield.Vampire Bats.Toughness = 1

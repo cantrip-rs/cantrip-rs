@@ -1,0 +1,39 @@
+# A non-Wall blocker prevents the ability even when another Wall also blocks the attacker (CR 603.4).
+[Bot1 Deck]
+Wall of Caltrops
+Steel Wall
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Hill Giant
+Black Lotus
+Mountain
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Wall of Caltrops.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Steel Wall.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Hill Giant.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Hill Giant > Bot1)
+Bot1.Block(Wall of Caltrops > Hill Giant; Steel Wall > Hill Giant; Ornithopter > Hill Giant)
+? Stack.Count = 0
+? Bot1.Battlefield.Wall of Caltrops.Keywords = Defender
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 20

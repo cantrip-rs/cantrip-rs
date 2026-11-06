@@ -44,7 +44,7 @@ fn flips(cx: &Cx, player: PlayerId) -> Vec<CoinFlip> {
 fn coins_flipped_together_are_all_fixed_and_a_later_flip_is_not() {
     let mut game = game();
     let frame = game.state.agenda.len() - 1;
-    let mut cx = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let mut cx = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, damage: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
     assert_eq!(cantrip_api::Game::flip_coins_for_heads(&mut cx, YOU, 3), vec![true, true, true]);
     assert_eq!(flips(&cx, YOU), vec![CoinFlip::WonHeads; 3]);
     assert!(!cantrip_api::Game::flip_coin(&mut cx, YOU));
@@ -57,7 +57,7 @@ fn coins_flipped_together_are_all_fixed_and_a_later_flip_is_not() {
 fn a_fixed_flip_for_heads_is_won_and_an_opponents_flip_is_not_fixed() {
     let mut game = game();
     let frame = game.state.agenda.len() - 1;
-    let mut cx = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let mut cx = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, damage: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
     assert!(cantrip_api::Game::flip_coin_for_heads(&mut cx, YOU));
     let mine = flips(&cx, YOU);
     assert_eq!(mine, vec![CoinFlip::WonHeads]);

@@ -19,6 +19,26 @@ namespace Cantrip.Client.Tests;
 /// </summary>
 public sealed class AutoPlayPaymentTests
 {
+    [Fact]
+    public void Closes_mana_window_when_the_pool_covers_the_cost()
+    {
+        var prompt = new PayCostsPromptMessage
+        {
+            ManaAbilities = true,
+            HasX = true,
+            Total = "{1}",
+            RemainingGeneric = 0,
+            Options =
+            [
+                new ActionOptionMessage { Kind = ActionKindView.ActivateAbility, Source = new ViewHandle(2), Produces = [ManaTypeView.Green] },
+                new ActionOptionMessage { Kind = ActionKindView.ConfirmCasting },
+                new ActionOptionMessage { Kind = ActionKindView.CancelCasting },
+            ],
+        };
+        Assert.Equal(ActionKindView.ConfirmCasting, AutoPlay.Pay(prompt).Kind);
+        Assert.False(ManaOwed.Of(prompt)!.Any, "the announced X is already included in the cost");
+    }
+
     /// <summary>
     /// The announcement of X (CR 601.2b), which comes before the targets and offers nothing to pay with: the bot steps
     /// to the most the server says it could pay for, then announces it, and never answers with mana.

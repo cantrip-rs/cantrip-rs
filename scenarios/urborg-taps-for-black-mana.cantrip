@@ -1,0 +1,28 @@
+# Urborg's tap mana ability produces exactly black mana and cannot be used again while tapped (CR 605.1a).
+[Bot1 Deck]
+Urborg
+Duress
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Urborg.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Urborg.Activate(Ability: Add {B})
+? Bot1.Mana = {B}
+? Bot1.Battlefield.Urborg.Tapped = true
+! Bot1.Battlefield.Urborg.Activate(Ability: Add {B})
+Bot1.Hand.Duress.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Urborg.Activate(Ability: Target creature; Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(first strike)
+[Expect]
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.Urborg.Tapped = true
+Bot1.Graveyard = Duress

@@ -1,0 +1,42 @@
+# In response to Typhoon, the opponent returns their Tropical Island to pay Quirion Ranger's cost;
+# no Islands remain at resolution, so Typhoon deals no damage (CR 608.2h, 120.3a).
+[Bot1 Deck]
+Typhoon
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Forest x20
+
+[Bot2 Deck]
+Tropical Island
+Quirion Ranger
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Tropical Island.Play
+Bot2.Battlefield.Tropical Island.Activate(Ability: {G})
+Bot2.Hand.Quirion Ranger.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Typhoon.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Quirion Ranger.Activate(Bot2.Battlefield.Quirion Ranger)
+Bot2.Choose(Tropical Island)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Battlefield.Tropical Island = (absent)
+Bot2.Hand.Tropical Island.Colors =
+Bot2.Life = 20
+Bot1.Life = 20

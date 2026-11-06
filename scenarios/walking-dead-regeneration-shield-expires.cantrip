@@ -1,0 +1,31 @@
+# A regeneration shield made on turn one expires before lethal damage on turn two (CR 701.19a).
+[Bot1 Deck]
+Walking Dead
+Mox Jet
+Mox Jet
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Shock
+Mountain
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Walking Dead.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Walking Dead.Activate
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Walking Dead)
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Graveyard = Walking Dead

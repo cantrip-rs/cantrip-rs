@@ -20,7 +20,7 @@ fn exile_a_permanent_card(g: &mut dyn Game, item: &StackItem) -> Result<(), Susp
     let value = g.mana_value(chosen) as i32;
     g.exile_with(&[chosen], g.linked(item), false);
     if value > 0 {
-        g.gain_life(you, value);
+        g.gain_life(you,(value) as i32);
     }
     Ok(())
 }

@@ -52,6 +52,8 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Gix's Command.Cast
+! Bot1.Modes(1)
+! Bot1.Modes(1; 2; 4)
 Bot1.Modes(1; 4)
 Bot1.Pass
 Bot1.Accept

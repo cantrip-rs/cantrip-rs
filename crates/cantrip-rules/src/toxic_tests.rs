@@ -55,7 +55,7 @@ fn to_a_player(_: &dyn Query, _: &Asker, proposal: &Proposal) -> bool {
 
 fn keep<const KEEP: u32>(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
     if let Proposal::Damage(d) = proposal {
-        d.amount = d.amount.min(KEEP);
+        d.amount = d.amount.min(u32::from(KEEP));
     }
 }
 
@@ -94,7 +94,7 @@ fn put(g: &mut Game, def: &'static CardDef, controller: PlayerId) -> ObjectId {
 }
 
 fn cx(g: &mut Game) -> Cx<'_> {
-    Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// `source` deals `amount` damage to `target`, combat damage or not, as one event of its own.

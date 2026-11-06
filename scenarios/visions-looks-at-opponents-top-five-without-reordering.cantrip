@@ -1,0 +1,36 @@
+# Visions looks at exactly the opponent's top five, then its caster declines the shuffle; the library
+# remains in the same order and the target player does not draw (CR 608.2h).
+[Bot1 Deck]
+Visions
+Mox Pearl
+Memnite
+Plains x20
+
+[Bot2 Deck]
+Island x7
+Forest
+Plains
+Mountain
+Swamp
+Ornithopter
+Memnite
+Island x5
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+! Bot1.Hand.Visions.Cast(Bot1.Battlefield.Memnite)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Visions.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Looked = Forest; Plains; Mountain; Swamp; Ornithopter
+Bot1.Decline
+[Expect]
+Bot1.Looked = Forest; Plains; Mountain; Swamp; Ornithopter
+Bot2.Library = Forest; Plains; Mountain; Swamp; Ornithopter; Memnite; Island; Island; Island; Island; Island
+Bot2.Hand.Count = 7
+Bot2.Shuffles = 0

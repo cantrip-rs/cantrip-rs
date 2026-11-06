@@ -1,0 +1,27 @@
+# An available blue mana cannot pay the black regeneration cost; black mana does pay it (CR 107.4, 118.3).
+[Bot1 Deck]
+Walking Dead
+Mox Jet
+Mox Pearl
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Walking Dead.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Walking Dead.Activate(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Walking Dead.Activate
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield.Walking Dead.Power = 1

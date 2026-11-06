@@ -28,6 +28,8 @@ Bot1.Pass
 Bot1.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Gilded Goose.Activate(Ability: Sacrifice a Food; Sacrifice: Food Token; Color: U)
+Bot1.Choose(Tap Gilded Goose)
+Bot1.Choose(Food Token)
 ? Bot1.Mana = {U}
 Bot1.Hand.Elusive Otter.Cast
 Bot1.Pass
@@ -42,6 +44,8 @@ Bot1.Hand.Nutrient Block.Cast
 Bot1.Pass
 Bot1.Pass
 Bot1.Battlefield.Gilded Goose.Activate(Ability: Sacrifice a Food; Sacrifice: Nutrient Block; Color: B)
+Bot1.Choose(Tap Gilded Goose)
+Bot1.Choose(Nutrient Block)
 ? Bot1.Mana = {B}
 ? Bot1.Graveyard = Nutrient Block
 Bot1.Pass

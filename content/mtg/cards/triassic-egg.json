@@ -1,0 +1,6 @@
+{
+  "name": "Triassic Egg",
+  "manaCost": "{4}",
+  "type": "Artifact",
+  "oracleText": "{3}, {T}: Put a hatchling counter on this artifact.\nSacrifice this artifact: Choose one. Activate only if there are two or more hatchling counters on this artifact.\n• You may put a creature card from your hand onto the battlefield.\n• Return target creature card from your graveyard to the battlefield."
+}

@@ -163,7 +163,7 @@ fn put(game: &mut Game, table: &CardTable, def: &'static CardDef, zone: Zone) ->
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// The example under CR 712.13a: the Invader resolving at night as a copy of the daybound Admirer would enter with its
@@ -177,7 +177,7 @@ fn a_double_faced_spell_entering_at_night_as_a_copy_of_a_daybound_creature_with_
         let serial = game.state.stack.last().expect("the Invader").serial;
         game.state.frame_push(cantrip_state::Frame::new(cantrip_state::FrameKind::Resolve { serial }));
         let frame = game.state.agenda.len() - 1;
-        let mut cx = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
         crate::resolve::resolve(&mut cx).expect("nothing is asked");
         let new = cx.s().obj(invader).became.expect("it left the stack");
         assert_eq!(cx.s().obj(new).zone, if enters { Zone::BATTLEFIELD } else { Zone::graveyard(YOU) }, "{time:?}");

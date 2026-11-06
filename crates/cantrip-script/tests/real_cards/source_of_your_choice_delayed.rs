@@ -107,10 +107,10 @@ fn played(mox: &str, moxen: usize, name: &str, choose: impl Fn(&Game, &[ObjectId
                 offered = Some(cards.clone());
                 Answer::Cards(vec![choose(&game, cards, creature.expect("the creature Probe Doom killed"))])
             }
-            RequestKind::PayCosts { options, .. } => {
+            RequestKind::ChooseCostPayment { choices, .. } => Answer::CostPayment(choices.iter().position(|c| c.kind == CostPaymentKind::Mana).unwrap_or(0)),
+            RequestKind::PayCosts { options, remaining, mana_abilities, .. } => {
                 let mox = options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source.is_some_and(|s| game.name(s) == mox));
-                let confirm = options.iter().find(|o| o.kind == ActionKind::ConfirmCasting);
-                Answer::Act(Action::of(confirm.or(mox).expect("a Mox to pay with, or the payment to confirm")))
+                super::pay(options, remaining, *mana_abilities, mox)
             }
             RequestKind::DiscardToHandSize { count, hand } => Answer::Cards(hand.iter().copied().take(*count as usize).collect()),
             RequestKind::DeclareAttackers { .. } => Answer::Attack(Vec::new()),

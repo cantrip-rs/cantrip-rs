@@ -1,0 +1,46 @@
+# Choosing first strike lets the 3/3 Avenger kill a 2/2 blocker before it deals damage (CR 702.7b).
+[Bot1 Deck]
+Urza's Avenger
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Memnite
+Island x20
+[Bot2 Deck]
+Grizzly Bears
+Forest
+Mox Emerald
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Urza's Avenger.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Urza's Avenger.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Modes(first strike)
+? Bot1.Battlefield.Urza's Avenger.Power = 3
+? Bot1.Battlefield.Urza's Avenger.Toughness = 3
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Urza's Avenger)
+Bot2.Block(Grizzly Bears > Urza's Avenger)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Urza's Avenger.Damage = 0
+Bot2.Graveyard = Grizzly Bears

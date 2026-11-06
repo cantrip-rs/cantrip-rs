@@ -50,6 +50,7 @@ Bot1.Battlefield.Lodestone Needle#1.Activate(Ability: Craft)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Choose(craft materials)
 Bot1.Choose(Lodestone Needle)
 [T4 Bot2.Upkeep]
 ! Bot1.Battlefield.Guidestone Compass.Activate

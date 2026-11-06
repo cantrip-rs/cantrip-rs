@@ -32,6 +32,7 @@ Bot1.Battlefield.Flamebraider.Activate
 Bot1.Colors(Red; Green)
 ? Client.Bot1.Mana = 1 Red (elemental spells & abilities); 1 Green (elemental spells & abilities)
 Bot1.Battlefield.Bramble Familiar.Activate(Ability: Return; Spend: R ElementalSpellsOrAbilities, G ElementalSpellsOrAbilities)
+Bot1.Choose(Tap Bramble Familiar)
 Bot1.Choose(Island)
 Bot1.Pass
 Bot2.Pass

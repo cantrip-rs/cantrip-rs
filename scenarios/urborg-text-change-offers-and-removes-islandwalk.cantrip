@@ -1,0 +1,32 @@
+# Mind Bend changes Urborg's swampwalk choice to islandwalk, and choosing it removes islandwalk (CR 612.2).
+[Bot1 Deck]
+Urborg
+Mox Sapphire
+Mind Bend
+Grayscaled Gharial
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Urborg.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Grayscaled Gharial.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mind Bend.Cast(Bot1.Battlefield.Urborg)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Replace a basic land type)
+Bot1.Modes(Swamp)
+Bot1.Modes(Island)
+Bot1.Battlefield.Urborg.Activate(Bot1.Battlefield.Grayscaled Gharial; Ability: Target creature)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(islandwalk)
+? Bot1.Battlefield.Grayscaled Gharial.Keywords = (absent)
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Grayscaled Gharial.Keywords = Islandwalk

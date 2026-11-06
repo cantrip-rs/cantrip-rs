@@ -1,0 +1,6 @@
+{
+  "name": "Typhoon",
+  "manaCost": "{2}{G}",
+  "type": "Sorcery",
+  "oracleText": "Typhoon deals damage to each opponent equal to the number of Islands that player controls."
+}

@@ -1,0 +1,67 @@
+# Wall of Light cannot attack while Memnite can. A black spell cannot target the Wall but can destroy
+# Ornithopter; a red Shock can damage it, and blocking a black creature prevents that creature's damage (CR 702.3b, 702.16b, 702.16e).
+[Bot1 Deck]
+Wall of Light
+Memnite
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains x20
+
+[Bot2 Deck]
+Dregscape Zombie
+Ornithopter
+Infernal Grasp
+Shock
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wall of Light.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Dregscape Zombie.Cast
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Wall of Light > Bot2)
+Bot1.Attack(Memnite > Bot2)
+[T4 Bot2.Main1]
+! Bot2.Hand.Infernal Grasp.Cast(Bot1.Battlefield.Wall of Light)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Infernal Grasp.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Wall of Light)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Wall of Light.Damage = 2
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Dregscape Zombie > Bot1)
+Bot1.Block(Wall of Light > Dregscape Zombie)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Wall of Light.Damage = 2
+Bot1.Battlefield.Wall of Light.Power = 1
+Bot1.Battlefield.Wall of Light.Toughness = 5
+Bot2.Graveyard = Dregscape Zombie; Shock; Infernal Grasp; Ornithopter

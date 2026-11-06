@@ -67,10 +67,15 @@ pub fn model_identity(dir: &Path) -> Result<u64, EvalError> {
 
 /// The hello frame's payload for a model.
 pub fn hello(identity: u64, name: &str) -> Vec<u8> {
+    hello_encoding(identity, name, SCHEMA_VERSION, encoder_hash())
+}
+
+/// Negotiate the graph's honest input schema, including an explicitly adapted legacy graph.
+pub fn hello_encoding(identity: u64, name: &str, schema: u32, hash: u64) -> Vec<u8> {
     let mut out = MAGIC.to_vec();
     out.extend(PROTOCOL.to_le_bytes());
-    out.extend(SCHEMA_VERSION.to_le_bytes());
-    out.extend(encoder_hash().to_le_bytes());
+    out.extend(schema.to_le_bytes());
+    out.extend(hash.to_le_bytes());
     out.extend(identity.to_le_bytes());
     let name = &name.as_bytes()[..name.len().min(u16::MAX as usize)];
     out.extend((name.len() as u16).to_le_bytes());
@@ -475,7 +480,8 @@ impl RemoteEvaluator {
             .file_name()
             .map(|n| n.to_string_lossy().into_owned())
             .unwrap_or_default();
-        let hello = hello(model_identity(dir)?, &name);
+        let hash = u64::from_str_radix(&model.manifest.encoder_hash, 16).map_err(err)?;
+        let hello = hello_encoding(model_identity(dir)?, &name, model.manifest.schema, hash);
         let mut e = RemoteEvaluator {
             address: address.to_string(),
             model,
@@ -525,7 +531,9 @@ impl Evaluator for RemoteEvaluator {
         if batch.rows == 0 {
             return Ok(Outputs::default());
         }
-        let (payload, order) = request(batch, &self.model.remap)?;
+        let mut adapted = batch.clone();
+        self.model.input_compatibility().adapt(&mut adapted);
+        let (payload, order) = request(&adapted, &self.model.remap)?;
         let pooled = self.pool.lock().unwrap_or_else(|p| p.into_inner()).pop();
         let mut stream = match pooled {
             Some(s) => s,

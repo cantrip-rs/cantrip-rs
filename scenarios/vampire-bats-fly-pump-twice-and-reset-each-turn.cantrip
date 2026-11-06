@@ -1,0 +1,57 @@
+# Vampire Bats can pump twice for {B} each, but not a third time; flying prevents a ground block and the limit resets next turn (CR 602.5, 702.9b).
+[Bot1 Deck]
+Vampire Bats
+Mox Jet
+Gleemox
+Black Lotus
+Swamp
+Memnite
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vampire Bats.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Vampire Bats.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vampire Bats.Power = 1
+? Bot1.Battlefield.Vampire Bats.Toughness = 1
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Vampire Bats.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vampire Bats.Power = 2
+? Bot1.Battlefield.Vampire Bats.Toughness = 1
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+! Bot1.Battlefield.Vampire Bats.Activate
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Vampire Bats; Bot1.Battlefield.Memnite)
+! Bot2.Block(Bot2.Battlefield.Memnite > Vampire Bats)
+Bot2.Block(Bot2.Battlefield.Memnite > Bot1.Battlefield.Memnite)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Vampire Bats.Power = 0
+? Bot1.Battlefield.Vampire Bats.Toughness = 1
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Vampire Bats.Activate
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Vampire Bats.Power = 1
+Bot1.Battlefield.Vampire Bats.Toughness = 1

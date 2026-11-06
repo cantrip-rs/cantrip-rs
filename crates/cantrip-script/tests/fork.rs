@@ -107,8 +107,9 @@ fn pay(game: &mut Game) {
         let RequestKind::PayCosts { options, .. } = &request.kind else { return };
         let option = options
             .iter()
-            .find(|o| o.kind == ActionKind::ConfirmCasting)
-            .or_else(|| options.iter().find(|o| o.kind == ActionKind::ActivateAbility))
+            .find(|o| o.kind == ActionKind::ActivateAbility)
+            .or_else(|| options.iter().find(|o| o.kind == ActionKind::AssignMana))
+            .or_else(|| options.iter().find(|o| o.kind == ActionKind::ConfirmCasting))
             .expect("a way to pay");
         game.answer(request.id, request.player, Answer::Act(Action::of(option))).expect("legal");
     }

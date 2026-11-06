@@ -36,6 +36,7 @@ Bot1.Battlefield.Mountain.Activate
 Bot1.Hand.Recurring Nightmare.Cast
 Bot1.Pass
 Bot1.Battlefield.Recurring Nightmare.Activate(Bot1.Graveyard.Ragavan, Nimble Pilferer)
+Bot1.Choose(Sacrifice 1 permanent)
 Bot1.Choose(Cecil, Dark Knight)
 Bot1.Pass
 [Bot1.Main1]
