@@ -321,6 +321,10 @@ impl View<'_> {
             lands_played: pl.lands_played,
             mulligans: pl.mulligans,
             pool: pl.pool.0,
+            snow_pool: std::array::from_fn(|m| {
+                let total = s.mana_from_of(p).filter(|e| e.snow).fold(0u64, |total, e| total.saturating_add(u64::from(e.pool.0[m])));
+                total.min(u64::from(u32::MAX)) as u32
+            }),
             hand: s.zone(Zone::hand(p)).len() as u16,
             library: s.zone(library).len() as u16,
             monarch: pl.monarch,
@@ -392,7 +396,8 @@ impl View<'_> {
                 let e = &r.event;
                 let mut obs = EventObs {
                     turn: r.turn,
-                    kind: EventMask::of_history(e).0.trailing_zeros() as u8,
+                    // Zero has no bit index. Keep an explicit unknown kind instead of depending on the mask's width.
+                    kind: match EventMask::of_history(e).0 { 0 => 65, mask => mask.trailing_zeros() as u8 },
                     player: e.player().map(|p| p.0),
                     objects: Vec::new(),
                     from: None,
@@ -414,10 +419,11 @@ impl View<'_> {
                     Event::SpellCast { spell, .. } | Event::Countered { spell } => obs.objects = vec![o(spell)],
                     Event::Attacks { attacker, defender, .. } => obs.objects = vec![o(attacker), target_ref(defender, refs)],
                     Event::Blocks { blocker, attacker, .. } => obs.objects = vec![o(blocker), o(attacker)],
-                    Event::Tapped { permanent } | Event::TurnedFaceUp { permanent, .. } | Event::Transformed { object: permanent } => obs.objects = vec![o(permanent)],
+                    Event::BecameBlocked { attacker } => obs.objects = vec![o(attacker)],
+                    Event::Tapped { permanent } | Event::Untapped { permanent } | Event::TurnedFaceUp { permanent, .. } | Event::Transformed { object: permanent } => obs.objects = vec![o(permanent)],
                     Event::CountersPut { object, kind, amount, .. } => {
                         obs.objects = vec![o(object)];
-                        obs.amount = i32::from(amount) << 8 | kind as i32;
+                        obs.amount = amount << 8 | kind as i32;
                     }
                     Event::AbilityActivated { source, .. } | Event::Triggered { source, .. } | Event::Resolved { source, .. } => obs.objects = vec![o(source)],
                     _ => {}

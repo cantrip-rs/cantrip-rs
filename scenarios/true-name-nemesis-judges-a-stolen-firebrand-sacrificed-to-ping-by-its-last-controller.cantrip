@@ -43,6 +43,7 @@ Bot2.Battlefield.Mox Jet.Activate
 Bot2.Hand.Act of Treason.Cast(Bot1.Battlefield.Fanatical Firebrand)
 Bot2.Pass
 Bot2.Battlefield.Fanatical Firebrand.Activate(Bot2.Battlefield.True-Name Nemesis)
+Bot2.Choose(Tap Fanatical Firebrand)
 ? Bot1.Graveyard = Fanatical Firebrand
 ? Stack.Count = 1
 Bot2.Pass

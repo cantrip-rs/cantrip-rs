@@ -1,0 +1,6 @@
+{
+  "name": "Mind Warp",
+  "manaCost": "{X}{3}{B}",
+  "type": "Sorcery",
+  "oracleText": "Look at target player's hand and choose X cards from it. That player discards those cards."
+}

@@ -1,0 +1,48 @@
+# Marsh Gas gives each existing creature -2/-0 until cleanup; a creature entering later is unaffected, and a second cast applies on a later turn.
+[Bot1 Deck]
+Mox Jet
+Marsh Gas x2
+Ornithopter
+Memnite
+Island x15
+[Bot2 Deck]
+Ornithopter
+Island x19
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Marsh Gas.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = -2
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot2.Battlefield.Ornithopter.Power = -2
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Power = 0
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Marsh Gas.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = -1
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot2.Battlefield.Ornithopter.Power = -2
+[T6 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Power = 0

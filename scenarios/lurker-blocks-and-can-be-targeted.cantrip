@@ -1,0 +1,34 @@
+# Blocking also permits a spell to target Lurker that turn (CR 604.1).
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Lurker
+Giant Growth
+Island x15
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x19
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Lurker.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T4 Bot2.Attackers]
+Bot2.Attack(Llanowar Elves > Bot1)
+Bot1.Block(Lurker > Llanowar Elves)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Lurker)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Lurker.Power = 5
+Bot2.Graveyard = Llanowar Elves

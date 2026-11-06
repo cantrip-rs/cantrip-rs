@@ -3,6 +3,7 @@
 
 pub mod attacks;
 pub mod blocks;
+pub mod cost_receipt;
 pub mod decision;
 pub mod object;
 pub mod state;
@@ -11,6 +12,7 @@ pub mod vocab;
 
 pub use attacks::*;
 pub use blocks::*;
+pub use cost_receipt::*;
 pub use decision::*;
 pub use object::*;
 pub use state::*;

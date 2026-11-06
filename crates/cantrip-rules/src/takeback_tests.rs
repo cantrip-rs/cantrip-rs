@@ -43,6 +43,18 @@ static OGRE: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+static COSTED_OGRE: CardDef = CardDef {
+    name: "Takeback Test Costed Ogre", cost: mana("{R}{R}"), types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2), toughness: Some(2),
+    additional_cost: Some(Cost { life: 3, exile_from_graveyard: 1, ..Cost::NONE }), ..CardDef::BLANK
+};
+
+static CONVOKE_OGRE: CardDef = CardDef {
+    name: "Takeback Test Convoke Ogre", cost: mana("{1}{R}"), types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2), toughness: Some(2), pay_with: PayWith { convoke: true, ..PayWith::NONE },
+    additional_cost: Some(Cost { life: 3, exile_from_graveyard: 1, ..Cost::NONE }), ..CardDef::BLANK
+};
+
 fn red_and_draw(g: &mut dyn cantrip_api::Game, asker: &Asker, _: Option<Color>) -> Result<(), Suspend> {
     g.add_mana(asker.controller, Mana::R, 1);
     g.draw(asker.controller, 1);
@@ -54,6 +66,12 @@ static SPHERE: CardDef = CardDef {
     name: "Takeback Test Sphere",
     types: TypeSet::of(&[CardType::Artifact]),
     abilities: &[mana_ability(TAP.and(SACRIFICE_THIS), add(Mana::R).by(red_and_draw), "{T}, Sacrifice this artifact: Add {R}. Draw a card.")],
+    ..CardDef::BLANK
+};
+
+static LIFE_SPHERE: CardDef = CardDef {
+    name: "Takeback Test Life Sphere", types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[mana_ability(TAP.and(SACRIFICE_THIS).and(life(3)), add(Mana::R), "{T}, sacrifice this, pay 3 life: Add {R}.")],
     ..CardDef::BLANK
 };
 
@@ -169,9 +187,18 @@ static GIANT: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+fn any_creature(q: &dyn Query, _: &Asker, id: ObjectId) -> bool { q.chars(id).is(CardType::Creature) }
+fn giant_creature(q: &dyn Query, _: &Asker, id: ObjectId) -> bool { q.chars(id).name == "Takeback Test Giant" }
+static OVERLAP_OGRE: CardDef = CardDef {
+    name: "Takeback Test Overlap Ogre", cost: mana("{R}"), types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2), toughness: Some(2), additional_cost: Some(Cost::sacrifice(1, any_creature)),
+    optional_cost: Some(OptionalCost::new(Cost::sacrifice(1, giant_creature))),
+    labels: &["Without optional cost", "Sacrifice a giant"], ..CardDef::BLANK
+};
+
 fn game() -> Game {
     let table: &'static CardTable =
-        Box::leak(Box::new(CardTable::new([&FILLER, &MOUNTAIN, &FOREST, &OGRE, &SPHERE, &PAID_SPHERE, &BOUNCER, &DIAMOND, &GUIDE, &SIGHT, &GIANT, &DEAR_SPHERE, &FILTER, &TITAN, &FICKLE_SPHERE])));
+        Box::leak(Box::new(CardTable::new([&FILLER, &MOUNTAIN, &FOREST, &OGRE, &COSTED_OGRE, &CONVOKE_OGRE, &OVERLAP_OGRE, &SPHERE, &LIFE_SPHERE, &PAID_SPHERE, &BOUNCER, &DIAMOND, &GUIDE, &SIGHT, &GIANT, &DEAR_SPHERE, &FILTER, &TITAN, &FICKLE_SPHERE])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     g.verify = true;
@@ -222,9 +249,28 @@ fn options(r: &Request) -> Vec<ActionOption> {
 }
 
 fn choose(g: &mut Game, pick: impl Fn(&ActionOption) -> bool, what: &str) {
-    let r = next(g);
-    let o = options(&r).into_iter().find(|o| pick(o)).unwrap_or_else(|| panic!("{what} offered in {:?}", r.kind));
-    g.answer(r.id, r.player, Answer::Act(Action::of(&o))).expect("a legal answer");
+    loop {
+        let r = next(g);
+        if let RequestKind::ChooseCostPayment { choices, .. } = &r.kind {
+            let chosen = choices.iter().position(|c| c.kind == CostPaymentKind::Tap)
+                .or_else(|| choices.iter().position(|c| c.kind == CostPaymentKind::Mana))
+                .or_else(|| choices.iter().position(|c| c.kind != CostPaymentKind::Sacrifice)).unwrap_or(0);
+            g.answer(r.id, r.player, Answer::CostPayment(chosen)).expect("a legal cost order");
+            continue;
+        }
+        let offered = options(&r);
+        if let Some(o) = offered.iter().find(|o| pick(o)) {
+            g.answer(r.id, r.player, Answer::Act(Action::of(o))).expect("a legal answer");
+            return;
+        }
+        if matches!(r.kind, RequestKind::PayCosts { mana_abilities: true, .. })
+            && let Some(confirm) = offered.iter().find(|o| o.kind == ActionKind::ConfirmCasting)
+        {
+            g.answer(r.id, r.player, Answer::Act(Action::of(confirm))).expect("close the mana window");
+            continue;
+        }
+        panic!("{what} offered in {:?}", r.kind);
+    }
 }
 
 fn cast(g: &mut Game, card: ObjectId) {
@@ -234,6 +280,20 @@ fn cast(g: &mut Game, card: ObjectId) {
 /// Activates `source`'s mana ability while paying.
 fn tap(g: &mut Game, source: ObjectId) {
     choose(g, |o| o.kind == ActionKind::ActivateAbility && o.source == Some(source), "the mana ability");
+    loop {
+        let r = next(g);
+        let RequestKind::ChooseCostPayment { source: paying, choices } = &r.kind else { break };
+        if *paying != source { break; }
+        let chosen = choices.iter().position(|c| c.kind == CostPaymentKind::Tap)
+            .or_else(|| choices.iter().position(|c| c.kind == CostPaymentKind::Mana))
+            .or_else(|| choices.iter().position(|c| c.kind != CostPaymentKind::Sacrifice))
+            .unwrap_or(0);
+        g.answer(r.id, r.player, Answer::CostPayment(chosen)).unwrap();
+    }
+}
+
+fn close_mana_window(g: &mut Game) {
+    choose(g, |o| o.kind == ActionKind::ConfirmCasting, "closing the mana ability window");
 }
 
 fn cancel(g: &mut Game) {
@@ -252,6 +312,105 @@ fn in_zone(g: &Game, card: &'static CardDef, zone: Zone) -> usize {
 
 /// The owner's ruling: a mana ability that drew a card is not reversed with the cast it paid for. The card stays drawn,
 /// the artifact sacrificed, the mana in the pool; the spell goes back to the hand.
+#[test]
+fn kept_mana_ability_survives_rollback_after_partial_scheduled_costs() {
+    let mut g = game();
+    let ogre = put(&mut g, &COSTED_OGRE, Zone::hand(YOU));
+    let grave_card = put(&mut g, &FILLER, Zone::graveyard(YOU));
+    let sphere = put(&mut g, &SPHERE, Zone::BATTLEFIELD);
+    let mountain = put(&mut g, &MOUNTAIN, Zone::BATTLEFIELD);
+    let library = g.state.zone(Zone::library(YOU)).len();
+    cast(&mut g, ogre);
+    tap(&mut g, sphere);
+    close_mana_window(&mut g);
+    let r = next(&mut g);
+    let life = match &r.kind { RequestKind::ChooseCostPayment { choices, .. } => choices.iter().position(|c| c.kind == CostPaymentKind::Life).unwrap(), other => panic!("expected payment order, got {other:?}") };
+    g.answer(r.id, r.player, Answer::CostPayment(life)).unwrap();
+    let r = next(&mut g);
+    let exile = match &r.kind { RequestKind::ChooseCostPayment { choices, .. } => choices.iter().position(|c| c.kind == CostPaymentKind::Exile).unwrap(), other => panic!("expected payment order, got {other:?}") };
+    g.answer(r.id, r.player, Answer::CostPayment(exile)).unwrap();
+    let r = next(&mut g);
+    g.answer(r.id, r.player, Answer::Cards(vec![grave_card])).unwrap();
+    let r = next(&mut g);
+    assert!(matches!(r.kind, RequestKind::PayCosts { .. }), "one red mana is insufficient to finish");
+    cancel(&mut g);
+    assert_eq!(g.state.player(YOU).life, 20, "life payment was reversed");
+    assert!(g.state.zone(Zone::graveyard(YOU)).contains(&grave_card), "the cost exile was reversed");
+    assert!(g.state.zone(Zone::hand(YOU)).contains(&ogre));
+    assert_eq!(g.state.zone(Zone::library(YOU)).len(), library - 1, "the draw remains");
+    assert_eq!(in_zone(&g, &SPHERE, Zone::graveyard(YOU)), 1);
+    assert_eq!(pool(&g, Mana::R), 1, "mana from the kept ability remains available");
+    assert!(!g.state.obj(mountain).tapped);
+    assert!(!g.events().iter().any(|r| matches!(r.event, Event::CostObjectPaid { .. })));
+}
+
+#[test]
+fn partial_pool_spending_is_reversed_but_irreversible_mana_ability_remains() {
+    let mut g = game();
+    let ogre = put(&mut g, &COSTED_OGRE, Zone::hand(YOU));
+    let grave_card = put(&mut g, &FILLER, Zone::graveyard(YOU));
+    let sphere = put(&mut g, &SPHERE, Zone::BATTLEFIELD);
+    let mountain = put(&mut g, &MOUNTAIN, Zone::BATTLEFIELD);
+    let library = g.state.zone(Zone::library(YOU)).len();
+    cast(&mut g, ogre);
+    tap(&mut g, sphere);
+    tap(&mut g, mountain);
+    let r = next(&mut g);
+    let mana = match &r.kind { RequestKind::ChooseCostPayment { choices, .. } => choices.iter().position(|c| c.kind == CostPaymentKind::Mana).unwrap(), other => panic!("expected payment order, got {other:?}") };
+    g.answer(r.id, r.player, Answer::CostPayment(mana)).unwrap();
+    let r = next(&mut g);
+    assert_eq!(pool(&g, Mana::R), 1, "one of the two mana units was spent");
+    let life = match &r.kind { RequestKind::ChooseCostPayment { choices, .. } => choices.iter().position(|c| c.kind == CostPaymentKind::Life).unwrap(), other => panic!("expected payment order, got {other:?}") };
+    g.answer(r.id, r.player, Answer::CostPayment(life)).unwrap();
+    let r = next(&mut g);
+    assert_eq!(g.state.player(YOU).life, 17);
+    g.answer(r.id, r.player, Answer::Cancel).unwrap();
+    assert!(matches!(next(&mut g).kind, RequestKind::Priority { .. }));
+    assert_eq!(g.state.player(YOU).life, 20);
+    assert!(g.state.zone(Zone::hand(YOU)).contains(&ogre));
+    assert!(g.state.zone(Zone::graveyard(YOU)).contains(&grave_card));
+    assert_eq!(g.state.zone(Zone::library(YOU)).len(), library - 1, "the irreversible draw remains");
+    assert_eq!(in_zone(&g, &SPHERE, Zone::graveyard(YOU)), 1);
+    assert!(!g.state.obj(mountain).tapped, "the reversible mana ability was undone");
+    assert_eq!(pool(&g, Mana::R), 1, "the kept mana ability's mana is restored");
+    assert!(!g.events().iter().any(|r| matches!(r.event, Event::ManaSpent { .. })), "partial spent-mana receipts were reversed");
+}
+
+#[test]
+fn committed_convoke_is_reversed_while_an_irreversible_mana_ability_remains() {
+    let mut g = game();
+    let spell = put(&mut g, &CONVOKE_OGRE, Zone::hand(YOU));
+    let grave_card = put(&mut g, &FILLER, Zone::graveyard(YOU));
+    let sphere = put(&mut g, &SPHERE, Zone::BATTLEFIELD);
+    let giant = put(&mut g, &GIANT, Zone::BATTLEFIELD);
+    let library = g.state.zone(Zone::library(YOU)).len();
+    cast(&mut g, spell);
+    tap(&mut g, sphere);
+    let r = next(&mut g);
+    let mana = match &r.kind { RequestKind::ChooseCostPayment { choices, .. } => choices.iter().position(|c| c.kind == CostPaymentKind::Mana).unwrap(), other => panic!("expected payment order, got {other:?}") };
+    g.answer(r.id, r.player, Answer::CostPayment(mana)).unwrap();
+    let r = next(&mut g);
+    let tap = match &r.kind { RequestKind::PayCosts { options, .. } => options.iter().find(|o| o.kind == ActionKind::TapToPay && o.source == Some(giant)).unwrap().clone(), other => panic!("{other:?}") };
+    g.answer(r.id, r.player, Answer::Act(Action::of(&tap))).unwrap();
+    let r = next(&mut g);
+    let commit = match &r.kind { RequestKind::ChooseCostPayment { choices, .. } => choices.iter().position(|c| c.kind == CostPaymentKind::CommitHelpers).unwrap(), other => panic!("{other:?}") };
+    g.answer(r.id, r.player, Answer::CostPayment(commit)).unwrap();
+    let r = next(&mut g);
+    let life = match &r.kind { RequestKind::ChooseCostPayment { choices, .. } => choices.iter().position(|c| c.kind == CostPaymentKind::Life).unwrap(), other => panic!("{other:?}") };
+    g.answer(r.id, r.player, Answer::CostPayment(life)).unwrap();
+    let r = next(&mut g);
+    g.answer(r.id, r.player, Answer::Cancel).unwrap();
+    assert!(matches!(next(&mut g).kind, RequestKind::Priority { .. }));
+    assert_eq!(g.state.player(YOU).life, 20);
+    assert!(!g.state.obj(giant).tapped);
+    assert!(g.state.zone(Zone::hand(YOU)).contains(&spell));
+    assert!(g.state.zone(Zone::graveyard(YOU)).contains(&grave_card));
+    assert_eq!(g.state.zone(Zone::library(YOU)).len(), library - 1, "the draw remains");
+    assert_eq!(in_zone(&g, &SPHERE, Zone::graveyard(YOU)), 1);
+    assert_eq!(pool(&g, Mana::R), 1);
+    assert!(!g.events().iter().any(|r| matches!(r.event, Event::CostObjectPaid { receipt, .. } if g.state.cost_receipts[receipt].origin == Some(CostOrigin::ManaTotal))));
+}
+
 #[test]
 fn a_mana_ability_that_drew_is_not_taken_back_with_the_cast() {
     let mut g = game();
@@ -394,6 +553,7 @@ fn a_mana_ability_activated_within_a_kept_one_is_kept_with_it() {
     tap(&mut g, sphere);
     // The Sphere's {1}, from the Mountain activated for it.
     tap(&mut g, mountain);
+    close_mana_window(&mut g);
     cancel(&mut g);
     assert_eq!(in_zone(&g, &PAID_SPHERE, Zone::graveyard(YOU)), 1, "the Sphere stays sacrificed");
     assert!(g.state.obj(mountain).tapped, "the Mountain paid for it: it stays tapped");
@@ -440,6 +600,8 @@ fn what_paid_for_a_mana_ability_within_a_kept_one_is_kept() {
     tap(&mut g, forest);
     tap(&mut g, sphere);
     tap(&mut g, filter);
+    close_mana_window(&mut g);
+    close_mana_window(&mut g);
     cancel(&mut g);
     assert_eq!(in_zone(&g, &DEAR_SPHERE, Zone::graveyard(YOU)), 1, "the Sphere stays sacrificed");
     assert!(g.state.obj(filter).tapped, "the Filter paid for it");
@@ -514,7 +676,9 @@ fn a_kept_mana_ability_under_an_unkept_one_under_a_kept_one_is_activated_again_o
     tap(&mut g, sphere);
     tap(&mut g, filter);
     tap(&mut g, guide);
+    close_mana_window(&mut g);
     choose(&mut g, |o| o.kind == ActionKind::AssignMana && o.mana == Some(Mana::R), "an {R} for the Filter's {1}");
+    close_mana_window(&mut g);
     choose(&mut g, |o| o.kind == ActionKind::AssignMana && o.mana == Some(Mana::G), "the Forest's {G} for the Sphere's {1}");
     cancel(&mut g);
     assert_eq!(in_zone(&g, &GUIDE, Zone::exile(YOU)), 1, "the Guide stays exiled");
@@ -540,4 +704,70 @@ fn a_replay_that_does_something_else_is_refused() {
     cast(&mut g, ogre);
     tap(&mut g, sphere);
     choose(&mut g, |o| o.kind == ActionKind::CancelCasting, "taking the cast back");
+}
+
+#[test]
+fn irreversible_mana_is_kept_after_an_involuntary_failed_cast() {
+    let mut g = game();
+    let spell = put(&mut g, &OVERLAP_OGRE, Zone::hand(YOU));
+    let giant = put(&mut g, &GIANT, Zone::BATTLEFIELD);
+    let ogre = put(&mut g, &OGRE, Zone::BATTLEFIELD);
+    let sphere = put(&mut g, &SPHERE, Zone::BATTLEFIELD);
+    let library = g.state.zone(Zone::library(YOU)).len();
+    cast(&mut g, spell);
+    let r = next(&mut g);
+    g.answer(r.id, r.player, Answer::Modes(vec![1])).unwrap();
+    tap(&mut g, sphere);
+    let r = next(&mut g);
+    let printed = match &r.kind { RequestKind::ChooseCostPayment { choices, .. } => choices.iter().position(|c| c.label.contains("additional cost of")).unwrap(), other => panic!("expected payment order, got {other:?}") };
+    g.answer(r.id, r.player, Answer::CostPayment(printed)).unwrap();
+    let r = next(&mut g);
+    g.answer(r.id, r.player, Answer::Cards(vec![giant])).unwrap();
+    let r = next(&mut g);
+    assert!(matches!(r.kind, RequestKind::Priority { .. }), "the missing optional sacrifice reverses the cast: {:?}", r.kind);
+    assert!(g.state.zone(Zone::hand(YOU)).contains(&spell));
+    assert!(g.state.zone(Zone::BATTLEFIELD).contains(&giant));
+    assert!(g.state.zone(Zone::BATTLEFIELD).contains(&ogre));
+    assert_eq!(g.state.zone(Zone::library(YOU)).len(), library - 1);
+    assert_eq!(in_zone(&g, &SPHERE, Zone::graveyard(YOU)), 1);
+    assert_eq!(pool(&g, Mana::R), 1);
+    assert!(g.state.stack.is_empty());
+    assert!(!g.events().iter().any(|r| matches!(r.event, Event::CostObjectPaid { .. })));
+}
+
+#[test]
+fn mandatory_source_tap_precedes_its_own_sacrifice_without_an_order_question() {
+    let mut g = game();
+    let source = put(&mut g, &SPHERE, Zone::BATTLEFIELD);
+    let library = g.state.zone(Zone::library(YOU)).len();
+    let r = next(&mut g);
+    let ability = options(&r).into_iter().find(|o| o.source == Some(source) && o.kind == ActionKind::ActivateAbility).unwrap();
+    g.answer(r.id, r.player, Answer::Act(Action::of(&ability))).unwrap();
+    let r = next(&mut g);
+    assert!(matches!(r.kind, RequestKind::Priority { .. }), "only tap then sacrifice can finish: {:?}", r.kind);
+    assert!(g.state.obj(source).tapped);
+    assert!(g.state.obj(source).became.is_some_and(|id| g.state.obj(id).zone == Zone::graveyard(YOU)));
+    assert_eq!(g.state.zone(Zone::library(YOU)).len(), library - 1);
+    assert_eq!(pool(&g, Mana::R), 1);
+}
+
+#[test]
+fn source_tap_dependency_keeps_independent_life_payment_available() {
+    let mut g = game();
+    let source = put(&mut g, &LIFE_SPHERE, Zone::BATTLEFIELD);
+    let r = next(&mut g);
+    let ability = options(&r).into_iter().find(|o| o.source == Some(source) && o.kind == ActionKind::ActivateAbility).unwrap();
+    g.answer(r.id, r.player, Answer::Act(Action::of(&ability))).unwrap();
+    let r = next(&mut g);
+    let life = match &r.kind { RequestKind::ChooseCostPayment { choices, .. } => {
+        assert!(choices.iter().any(|c| c.kind == CostPaymentKind::Tap));
+        assert!(!choices.iter().any(|c| c.kind == CostPaymentKind::Sacrifice));
+        choices.iter().position(|c| c.kind == CostPaymentKind::Life).unwrap()
+    }, other => panic!("expected independent choices, got {other:?}") };
+    g.answer(r.id, r.player, Answer::CostPayment(life)).unwrap();
+    assert!(matches!(next(&mut g).kind, RequestKind::Priority { .. }));
+    assert_eq!(g.state.player(YOU).life, 17);
+    assert_eq!(pool(&g, Mana::R), 1);
+    assert!(g.state.obj(source).tapped);
+    assert!(g.state.obj(source).became.is_some_and(|id| g.state.obj(id).zone == Zone::graveyard(YOU)));
 }

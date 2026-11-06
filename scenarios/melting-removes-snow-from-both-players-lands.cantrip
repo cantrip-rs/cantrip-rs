@@ -1,0 +1,51 @@
+# Melting removes snow from both players' lands while preserving their basic supertype and a snow creature (CR 604.1, 613.1d).
+[Bot1 Deck]
+Melting
+Snow-Covered Forest
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Wall of Shards
+Mountain x20
+
+[Bot2 Deck]
+Snow-Covered Plains
+Island x20
+
+[Actions]
+Bot1.Hand.Snow-Covered Forest.Play
+? Bot1.Battlefield.Snow-Covered Forest.Supertypes = Basic; Snow
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Plains.Play
+? Bot2.Battlefield.Snow-Covered Plains.Supertypes = Basic; Snow
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Snow-Covered Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wall of Shards.Cast
+Bot1.Pass
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Melting.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Snow-Covered Forest.Supertypes = Basic
+Bot2.Battlefield.Snow-Covered Plains.Supertypes = Basic
+Bot1.Battlefield.Wall of Shards.Supertypes = Snow

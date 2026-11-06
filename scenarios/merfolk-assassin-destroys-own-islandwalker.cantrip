@@ -1,0 +1,34 @@
+# Merfolk Assassin may destroy its controller's own creature with islandwalk (CR 115.1c, 701.8a).
+
+[Bot1 Deck]
+Merfolk Assassin
+Grayscaled Gharial
+Mox Sapphire
+Gleemox
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Hand.Merfolk Assassin.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Grayscaled Gharial.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Merfolk Assassin.Activate(Bot1.Battlefield.Grayscaled Gharial)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grayscaled Gharial = (absent)
+Bot1.Graveyard.Grayscaled Gharial.Power = 1

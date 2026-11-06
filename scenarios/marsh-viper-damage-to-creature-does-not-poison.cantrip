@@ -1,0 +1,28 @@
+# Marsh Viper deals damage to the blocker rather than a player, so its ability gives no poison (CR 603.2).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Marsh Viper
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Marsh Viper.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Marsh Viper)
+Bot2.Block(Ornithopter > Marsh Viper)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Ornithopter.Damage = 1
+Bot2.Poison = 0
+Bot2.Life = 20

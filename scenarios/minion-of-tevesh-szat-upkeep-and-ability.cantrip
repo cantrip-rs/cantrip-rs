@@ -1,0 +1,64 @@
+# Minion's controller pays two black on one upkeep and takes two damage on another; its tap ability changes either creature until cleanup (CR 118.12a, 611.2a).
+[Bot1 Deck]
+Swamp
+Black Lotus
+Black Lotus
+Mox Pearl
+Mox Jet
+Minion of Tevesh Szat
+Swamp x20
+
+[Bot2 Deck]
+Black Lotus
+Hill Giant
+Mountain x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Minion of Tevesh Szat.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Hill Giant.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+? Bot1.Mana = {W}
+[T3 Bot1.Main1]
+? Bot1.Life = 20
+! Bot1.Battlefield.Minion of Tevesh Szat.Activate(Bot1.Battlefield.Mox Pearl)
+Bot1.Battlefield.Minion of Tevesh Szat.Activate(Bot1.Battlefield.Minion of Tevesh Szat)
+? Bot1.Battlefield.Minion of Tevesh Szat.Tapped = true
+! Bot1.Battlefield.Minion of Tevesh Szat.Activate(Bot1.Battlefield.Minion of Tevesh Szat)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Minion of Tevesh Szat.Power = 7
+? Bot1.Battlefield.Minion of Tevesh Szat.Toughness = 2
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Minion of Tevesh Szat.Power = 4
+? Bot1.Battlefield.Minion of Tevesh Szat.Toughness = 4
+[T5 Bot1.Main1]
+? Bot1.Life = 18
+Bot1.Battlefield.Minion of Tevesh Szat.Activate(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Hill Giant.Power = 6
+? Bot2.Battlefield.Hill Giant.Toughness = 1
+[T6 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Hill Giant.Power = 3
+Bot2.Battlefield.Hill Giant.Toughness = 3
+Bot1.Life = 18

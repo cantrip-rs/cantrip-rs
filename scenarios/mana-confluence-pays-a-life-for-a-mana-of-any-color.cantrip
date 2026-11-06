@@ -12,6 +12,7 @@ Island x20
 [Actions]
 Bot1.Hand.Mana Confluence.Play
 Bot1.Battlefield.Mana Confluence.Activate(Color: Blue)
+Bot1.Choose(Tap Mana Confluence)
 ? Bot1.Mana = {U}
 Bot1.Hand.Ancestral Recall.Cast(Bot1)
 [Bot1.Main2]

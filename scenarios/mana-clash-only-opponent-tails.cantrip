@@ -1,0 +1,23 @@
+# Only the opponent's tails deals damage; the next pair of heads ends the process (CR 705.1).
+[Bot1 Deck]
+Mana Clash
+Mox Ruby
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Dice]
+1; 2; 1; 1
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mana Clash.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19

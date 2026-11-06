@@ -1,0 +1,36 @@
+# A player with an empty hand discards nothing and takes three damage; the other can still discard (CR 701.9a, 120.3).
+[Bot1 Deck]
+Mind Bomb
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Mox Jet
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mind Bomb.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Island)
+[Expect]
+Bot1.Hand.Count = 0
+Bot1.Life = 17
+Bot2.Life = 18
+Bot2.Graveyard.Count = 1

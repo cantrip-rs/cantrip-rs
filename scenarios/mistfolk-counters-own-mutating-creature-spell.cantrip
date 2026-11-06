@@ -1,0 +1,39 @@
+# Mistfolk counters its controller's creature spell when that spell targets it through mutate (CR 702.140a, 701.6a).
+[Bot1 Deck]
+Mistfolk
+Cubwarden
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Gleemox
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Hand.Mistfolk.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cubwarden.Cast(Bot1.Battlefield.Mistfolk; Ability: Mutate)
+Bot1.Battlefield.Mistfolk.Activate(Stack.Cubwarden)
+Bot1.Battlefield.Island.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Cubwarden.Power = 3
+Bot1.Battlefield.Mistfolk.Power = 1
+Bot1.Battlefield.Mistfolk.Toughness = 2
+Bot1.Battlefield.Cubwarden = (absent)

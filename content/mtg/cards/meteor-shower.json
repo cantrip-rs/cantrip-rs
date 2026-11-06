@@ -1,0 +1,6 @@
+{
+  "name": "Meteor Shower",
+  "manaCost": "{X}{X}{R}",
+  "type": "Sorcery",
+  "oracleText": "Meteor Shower deals X plus 1 damage divided as you choose among any number of targets."
+}

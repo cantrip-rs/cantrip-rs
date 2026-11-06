@@ -41,7 +41,7 @@ static MANA_DOOR: CardDef = CardDef {
 static MANA_ROOM: CardDef = CardDef { name: "Plain Door // Mana Door", split: Some((&PLAIN_DOOR, &MANA_DOOR)), ..PLAIN_DOOR };
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// A Room with its state-trigger door unlocked triggers as soon as its state is true (CR 603.8), as an effect begins in the

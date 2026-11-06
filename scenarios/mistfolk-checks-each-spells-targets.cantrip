@@ -1,0 +1,43 @@
+# With two spells on the stack, Mistfolk checks each spell's own targets: Shock targets Ornithopter and Lightning Bolt targets Mistfolk (CR 115.1, 701.6a).
+[Bot1 Deck]
+Mistfolk
+Black Lotus
+Mox Sapphire
+Mox Jet
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Shock
+Lightning Bolt
+Mox Ruby
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mistfolk.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Mistfolk)
+Bot2.Pass
+! Bot1.Battlefield.Mistfolk.Activate(Stack.Shock)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mistfolk.Activate(Stack.Lightning Bolt)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Mistfolk.Toughness = 2
+Bot1.Battlefield.Mistfolk.Damage = 0
+Bot2.Graveyard.Count = 2
+Bot1.Battlefield.Ornithopter = (absent)

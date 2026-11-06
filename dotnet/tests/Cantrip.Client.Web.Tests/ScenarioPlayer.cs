@@ -343,6 +343,16 @@ public sealed class ScenarioPlayer
                 await TakeAsync(action, state, expected.Line);
                 return;
 
+            // Cost operation keys are the ordered prompt indices; click the corresponding offered operation.
+            case CostPaymentChosenAnswer payment:
+                if (!int.TryParse(payment.Key, out int paymentIndex) || paymentIndex < 0)
+                {
+                    throw new NotDrivenException($"Invalid cost payment key '{payment.Key}'", state);
+                }
+
+                await ClickDockAsync(paymentIndex);
+                return;
+
             // X, or the times kicked, stepped up from the 0 it is asked at on the dock's plus, which sends nothing, and announced
             // with Okay (CR 601.2b).
             case AnnounceAnswer when _planX is { } plan && _phone:
@@ -620,9 +630,8 @@ public sealed class ScenarioPlayer
                 // engine's division, and each share's − and + are named for it, "Less of Ox's damage to Bear (now 1)" (the
                 // player trampled over is "the defender"). Each share is stepped to what the answer gives it - none where the
                 // answer leaves it out - lowering every share first so there is room to raise; then Deal damage.
-                string NameOfHandle(ViewHandle handle) => state.Cards.FirstOrDefault(c => c.Handle == handle.Value)?.Name ?? string.Empty;
-                int Wanted(string source, string to) => assigned.Shares
-                    .Where(s => NameOfHandle(s.Source) == source && (to == "the defender" ? s.Creature.IsNone : !s.Creature.IsNone && NameOfHandle(s.Creature) == to))
+                int Wanted(int source, int to) => assigned.Shares
+                    .Where(s => s.Source.Value == source && s.Creature.Value == to)
                     .Sum(s => s.Amount);
 
                 foreach (bool lowering in new[] { true, false })
@@ -638,7 +647,7 @@ public sealed class ScenarioPlayer
                             string source = less.Label["Less of ".Length..of];
                             string to = less.Label[(of + "'s damage to ".Length)..at];
                             int share = int.Parse(less.Label[(at + " (now ".Length)..^1], System.Globalization.CultureInfo.InvariantCulture);
-                            int wanted = Wanted(source, to);
+                            int wanted = Wanted(less.DamageSource, less.DamageTarget);
                             if (lowering && share > wanted)
                             {
                                 step = less;

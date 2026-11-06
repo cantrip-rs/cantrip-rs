@@ -22,7 +22,7 @@ use cantrip_ai::remote::{
     self, RemoteEvaluator, model_identity, read_frame, read_hello, read_request, write_frame,
 };
 use cantrip_ai::{CardIndex, EvalError};
-use cantrip_obs::encode::{BUCKETS, CATS, Encoded, NUMS, PTRS, SCHEMA_VERSION, encoder_hash};
+use cantrip_obs::encode::{BUCKETS, CATS, Encoded, NUMS, PTRS};
 
 fn tiny() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/data/tiny")
@@ -95,8 +95,8 @@ fn serve(model: PathBuf, listener: TcpListener) {
             };
             let (protocol, schema, hash, id, _) = read_hello(&hello).unwrap();
             if protocol != remote::PROTOCOL
-                || schema != SCHEMA_VERSION
-                || hash != encoder_hash()
+                || schema != tract.model().manifest.schema
+                || hash != u64::from_str_radix(&tract.model().manifest.encoder_hash, 16).unwrap()
                 || id != identity
             {
                 let _ = write_frame(

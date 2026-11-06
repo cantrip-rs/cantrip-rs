@@ -30,6 +30,7 @@ Bot2.Pass
 ! Bot1.Battlefield.Rubble Rouser.Activate
 [T3 Bot1.Main1]
 Bot1.Battlefield.Rubble Rouser.Activate
+Bot1.Choose(Tap Rubble Rouser)
 Bot1.Choose(Memnite)
 ? Bot1.Mana = {R}
 Bot1.Hand.Lightning Bolt.Cast(Bot2)

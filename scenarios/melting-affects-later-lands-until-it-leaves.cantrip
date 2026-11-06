@@ -1,0 +1,41 @@
+# A snow land entering after Melting loses snow, then regains it when Melting is destroyed (CR 611.3a, 613.1d).
+[Bot1 Deck]
+Melting
+Disenchant
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Island
+Island x20
+[Bot2 Deck]
+Snow-Covered Plains
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Melting.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Plains.Play
+? Bot2.Battlefield.Snow-Covered Plains.Supertypes = Basic
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Disenchant.Cast(Melting)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Snow-Covered Plains.Supertypes = Basic; Snow
+Bot1.Graveyard.Melting.Colors = Red

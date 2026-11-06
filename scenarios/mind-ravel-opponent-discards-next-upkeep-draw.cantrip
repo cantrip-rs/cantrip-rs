@@ -1,0 +1,40 @@
+# Mind Ravel makes the targeted opponent choose one card to discard, then its caster draws at the next turn's upkeep only (CR 701.9a, 603.7b).
+[Bot1 Deck]
+Mind Ravel
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Memnite
+Swamp x20
+[Bot2 Deck]
+Forest
+Mountain
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Mind Ravel.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Mind Ravel.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+! Bot2.Choose()
+! Bot2.Choose(Forest; Mountain)
+Bot2.Choose(Forest)
+? Bot2.Graveyard = Forest
+? Bot1.Hand.Count = 3
+[T2 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Count = 4
+[T2 Bot2.Main1]
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Hand.Count = 5
+Bot2.Graveyard = Forest

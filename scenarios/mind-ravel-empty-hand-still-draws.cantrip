@@ -1,0 +1,38 @@
+# An empty-handed target discards nothing, but the caster still draws at the next upkeep (CR 609.3, 603.7b).
+[Bot1 Deck]
+Mind Ravel
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Swamp x20
+[Bot2 Deck]
+Memnite x8
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+? Bot2.Hand.Count = 0
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mind Ravel.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Hand.Count = 5
+Bot2.Graveyard.Count = 0

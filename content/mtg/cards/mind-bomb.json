@@ -1,0 +1,6 @@
+{
+  "name": "Mind Bomb",
+  "manaCost": "{U}",
+  "type": "Sorcery",
+  "oracleText": "Each player may discard up to three cards. Mind Bomb deals damage to each player equal to 3 minus the number of cards they discarded this way."
+}

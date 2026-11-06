@@ -1,0 +1,32 @@
+# Burrowing enchants an opponent's creature, and removing the Aura removes its mountainwalk (CR 303.4, 611.3b).
+[Bot1 Deck]
+Burrowing
+Mountain
+Island x20
+[Bot2 Deck]
+Memnite
+Black Lotus
+Disenchant
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Burrowing.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Keywords = Mountainwalk
+? Bot1.Battlefield.Burrowing.AttachedTo = Memnite
+[T4 Bot2.Main1]
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Burrowing)
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Battlefield.Memnite.Keywords = (absent)
+Bot1.Graveyard.Burrowing.Colors = Red

@@ -1,0 +1,8 @@
+{
+  "name": "Merfolk Assassin",
+  "manaCost": "{U}{U}",
+  "type": "Creature — Merfolk Assassin",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "{T}: Destroy target creature with islandwalk."
+}

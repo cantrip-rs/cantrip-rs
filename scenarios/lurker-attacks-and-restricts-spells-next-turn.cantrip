@@ -1,0 +1,43 @@
+# Lurker refuses both players' spells before attacking, accepts them after attacking, and is protected again next turn (CR 604.1).
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Lurker
+Giant Growth
+Forest
+Island x15
+
+[Bot2 Deck]
+Forest
+Giant Growth
+Giant Growth
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Lurker.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Hand.Giant Growth.Cast(Lurker)
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+! Bot2.Hand.Giant Growth.Cast(Lurker)
+[T3 Bot1.Attackers]
+Bot1.Attack(Lurker > Bot2)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Lurker)
+Bot1.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Giant Growth.Cast(Lurker)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Lurker.Power = 8
+[T4 Bot2.Main1]
+! Bot2.Hand.Giant Growth.Cast(Lurker)
+[Expect]
+Bot1.Battlefield.Lurker.Power = 2

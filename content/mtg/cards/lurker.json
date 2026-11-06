@@ -1,0 +1,8 @@
+{
+  "name": "Lurker",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Beast",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "This creature can't be the target of spells unless it attacked or blocked this turn."
+}

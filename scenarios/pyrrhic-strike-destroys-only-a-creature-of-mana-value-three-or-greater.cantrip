@@ -1,7 +1,7 @@
 # Pyrrhic Strike's second mode, chosen alone without blighting: "target creature with mana value 3 or greater" refuses
 # Bot2's Tarmogoyf (mana value 2) and takes Bot2's Endurance (mana value 3), which is destroyed; Tarmogoyf stays.
-# Bot1 controls no creature, so the blight is not on offer (CR 701.68b: a player who can't put the counters on a
-# creature can't choose to blight), though both modes have targets (Bot1's own Sol Ring is an artifact).
+# Bot1 controls no creature to blight. Announcing blight and choosing both legal targets reaches the
+# unpayable additional cost, so the cast is taken back; the subsequent unblighted cast succeeds.
 
 [Bot1 Deck]
 Mox Pearl
@@ -35,7 +35,18 @@ Bot2.Hand.Endurance.Cast
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Hand.Pyrrhic Strike.Cast
-! Bot1.Modes(Blight 2)
+Bot1.Modes(Blight 2)
+Bot1.Modes(1; 2)
+Bot1.Target(Bot1.Battlefield.Sol Ring)
+Bot1.Target(Endurance)
+? Bot1.Hand = Plains; Plains; Plains; Plains; Plains; Pyrrhic Strike
+? Bot1.Life = 20
+? Bot1.Graveyard.Count = 0
+? Bot2.Graveyard = Black Lotus
+? Bot1.Battlefield = Mox Pearl; Sol Ring
+? Bot2.Battlefield = Mox Pearl; Mox Emerald; Tarmogoyf; Endurance
+? Stack.Count = 0
+Bot1.Hand.Pyrrhic Strike.Cast
 Bot1.Modes(Cast without blighting)
 Bot1.Modes(Destroy target creature)
 ! Bot1.Target(Tarmogoyf)

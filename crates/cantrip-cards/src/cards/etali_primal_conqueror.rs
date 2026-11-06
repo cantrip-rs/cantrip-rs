@@ -14,13 +14,13 @@ fn exile_and_cast_free(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
 
 fn give_poison(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Target::Player(p) = item.subject {
-        g.give_poison(p, item.data[0]);
+        g.give_poison(p,(item.matched_damage_amount()) as u32);
     }
     Ok(())
 }
 
 pub static BACK: CardDef = CardDef {
-    abilities: &[triggered(cantrip_mechanics::triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT, give_poison, "Whenever Etali deals combat damage to a player, they get that many poison counters.")],
+    abilities: &[triggered(cantrip_mechanics::triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT, give_poison, "Whenever Etali deals combat damage to a player, they get that many poison counters.").damage_amount()],
     ..oracle::ETALI_PRIMAL_SICKNESS
 };
 

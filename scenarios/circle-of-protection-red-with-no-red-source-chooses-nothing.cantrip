@@ -1,6 +1,6 @@
 # Red and black mana cannot pay Circle of Protection: Red's {W} (CR 601.2h); with white it is cast. With no
 # red source anywhere - Ornithopter is colorless, the Circle white - its ability can still be activated and resolves
-# with nothing chosen (the ruling: "Can be used even when there is no damage to prevent"; CR 609.7a).
+# without asking for an empty choice (the ruling: "Can be used even when there is no damage to prevent"; CR 609.7a).
 
 [Bot1 Deck]
 Mox Ruby
@@ -33,6 +33,7 @@ Bot1.Battlefield.Circle of Protection: Red.Activate
 ? Stack.Count = 1
 Bot1.Pass
 Bot2.Pass
+! Bot1.Choose
 ? Stack.Count = 0
 
 [Expect]

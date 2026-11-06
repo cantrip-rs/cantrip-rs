@@ -1,0 +1,25 @@
+# Bot2's Viper deals one damage to Bot1, so Bot1 rather than its controller receives two poison counters (CR 603.2).
+[Bot1 Deck]
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Marsh Viper
+Island x20
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Marsh Viper.Cast
+? Bot2.Mana =
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Marsh Viper)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 19
+Bot1.Poison = 2
+Bot2.Poison = 0

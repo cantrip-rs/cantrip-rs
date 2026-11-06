@@ -1,0 +1,38 @@
+# Sacrificing the target in response leaves no permanent to untap and the mana unspent (CR 608.2b).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Mox Jet
+Mox Ruby
+Malachite Talisman
+Llanowar Elves
+Black Lotus
+Island x13
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Malachite Talisman.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Target(Bot1.Battlefield.Black Lotus)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Black Lotus
+Bot1.Mana = {W}{W}{W}

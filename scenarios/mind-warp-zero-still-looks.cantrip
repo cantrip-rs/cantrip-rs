@@ -1,0 +1,45 @@
+# With X zero Mind Warp still looks at the hand and discards no cards (CR 608.2, 701.9a).
+[Bot1 Deck]
+Mind Warp
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Ornithopter
+Swamp x20
+
+[Bot2 Deck]
+Forest
+Island
+Mountain
+Plains
+Swamp
+Grizzly Bears
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+! Bot1.Hand.Mind Warp.Cast(Bot1.Battlefield.Ornithopter; X: 0)
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mind Warp.Cast(Bot2; X: 0)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+! Bot1.Choose(Forest)
+Bot1.Choose()
+
+[Expect]
+Bot1.Looked.Count = 7
+Bot2.Hand.Count = 7
+Bot2.Graveyard.Count = 0

@@ -25,12 +25,18 @@ Bot1.Hand.Reckoner Bankbuster.Cast
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Reckoner Bankbuster.Activate(Ability: Draw a card)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Tap Reckoner Bankbuster)
 ? Bot1.Battlefield.Reckoner Bankbuster.Counters.Charge = 2
 [T3 Bot1.Main1]
 Bot1.Hand.Island.Play
 Bot1.Battlefield.Island#1.Activate
 Bot1.Battlefield.Island#2.Activate
 Bot1.Battlefield.Reckoner Bankbuster.Activate(Ability: Draw a card)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Tap Reckoner Bankbuster)
 ? Bot1.Battlefield.Reckoner Bankbuster.Counters.Charge = 1
 [T5 Bot1.Main1]
 Bot1.Hand.Island.Play

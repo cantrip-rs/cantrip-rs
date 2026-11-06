@@ -1,0 +1,25 @@
+# With no black mana sources remaining, the unpaid upkeep ability deals exactly two damage (CR 118.12a).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Minion of Tevesh Szat
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Minion of Tevesh Szat.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 18
+Bot1.Battlefield.Minion of Tevesh Szat.Power = 4

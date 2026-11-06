@@ -1,0 +1,41 @@
+# An opposing creature that already has first strike remains a legal target, and the caster draws during the next turn's upkeep (CR 702.7d, 603.7b).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Lightning Blow
+Island x20
+[Bot2 Deck]
+Plains
+Mox Pearl
+White Knight
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.White Knight.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Lightning Blow.Cast(Bot2.Battlefield.White Knight)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.White Knight.Keywords = FirstStrike
+? Bot1.Hand.Count = 4
+[T3 Bot1.Upkeep]
+? Bot1.Hand.Count = 4
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 5
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Hand.Count = 6
+Bot2.Battlefield.White Knight.Keywords = FirstStrike

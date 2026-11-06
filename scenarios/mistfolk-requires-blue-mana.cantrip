@@ -1,0 +1,42 @@
+# Mistfolk cannot pay its blue activation with black mana; the targeting Bolt resolves (CR 107.4a).
+[Bot1 Deck]
+Mistfolk
+Black Lotus
+Mox Jet
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Lightning Bolt
+Lightning Bolt
+Mox Ruby
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mistfolk.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Mistfolk)
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Mistfolk.Activate(Stack.Lightning Bolt; Mana: short)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Mistfolk = (absent)
+Bot1.Graveyard.Mistfolk.Power = 1
+Bot2.Graveyard.Count = 2

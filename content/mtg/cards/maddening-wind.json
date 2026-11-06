@@ -1,0 +1,6 @@
+{
+  "name": "Maddening Wind",
+  "manaCost": "{2}{G}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nCumulative upkeep {G} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nAt the beginning of the upkeep of enchanted creature's controller, this Aura deals 2 damage to that player."
+}

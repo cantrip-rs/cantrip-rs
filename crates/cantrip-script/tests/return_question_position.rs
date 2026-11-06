@@ -68,7 +68,7 @@ fn a_returning_auras_question_is_put_to_the_position_it_arises_in() {
     let bears = [put(&mut game, &BEAR, them, Zone::BATTLEFIELD), put(&mut game, &BEAR, them, Zone::BATTLEFIELD)];
     let charm = put(&mut game, &CHARM, them, Zone::exile(them));
     let text = game.state.obj(warden).card;
-    game.state.update_obj(charm, |o| o.exiled = Some(ExileLink { by: warden, text, acquired: Acquired::OWN, from: Zone::BATTLEFIELD, until_leaves: true, encoded: false }));
+    game.state.update_obj(charm, |o| o.exiled = Some(ExileLink { by: warden, text, acquired: Acquired::OWN, from: Zone::BATTLEFIELD, until_leaves: true, return_by: None, encoded: false }));
     let mut activated = false;
     let mut asked_host = None;
     for _ in 0..100 {

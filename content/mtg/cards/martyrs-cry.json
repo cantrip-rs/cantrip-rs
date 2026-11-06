@@ -1,0 +1,6 @@
+{
+  "name": "Martyr's Cry",
+  "manaCost": "{W}{W}",
+  "type": "Sorcery",
+  "oracleText": "Exile all white creatures. For each creature exiled this way, its controller draws a card."
+}

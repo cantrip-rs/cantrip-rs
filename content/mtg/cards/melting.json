@@ -1,0 +1,6 @@
+{
+  "name": "Melting",
+  "manaCost": "{3}{R}",
+  "type": "Enchantment",
+  "oracleText": "All lands are no longer snow."
+}

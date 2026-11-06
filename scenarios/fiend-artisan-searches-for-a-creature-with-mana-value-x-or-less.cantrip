@@ -41,6 +41,7 @@ Bot1.Hand.Dark Ritual.Cast
 Bot1.Battlefield.Swamp#1.Activate
 ! Bot1.Battlefield.Fiend Artisan.Activate
 Bot1.Battlefield.Fiend Artisan.Activate(X: 2)
+Bot1.Choose(Tap Fiend Artisan)
 Bot1.Choose(Ravine Raider)
 ? Bot1.Mana = 
 ! Bot1.Search(Hired Blade)

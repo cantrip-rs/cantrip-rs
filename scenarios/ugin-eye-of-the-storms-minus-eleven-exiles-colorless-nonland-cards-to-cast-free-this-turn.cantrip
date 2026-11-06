@@ -50,8 +50,10 @@ Bot1.Battlefield.Ugin, Eye of the Storms.Activate(Ability: +2)
 Bot1.Pass
 [T5 Bot1.Main1]
 Bot1.Battlefield.Ugin, Eye of the Storms.Activate(Ability: Search)
-! Bot1.Search(Lightning Bolt; Island)
+! Bot1.Search(Lightning Bolt)
+! Bot1.Search(Island)
 Bot1.Search(Sol Ring; Ornithopter; Mind Stone)
+? Bot1.Shuffles = 1
 Bot1.Pass
 Bot1.Exile.Sol Ring.Cast
 Bot1.Pass

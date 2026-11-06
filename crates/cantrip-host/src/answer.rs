@@ -87,11 +87,26 @@ pub fn translate(
     game: &Game,
 ) -> Result<Answer, Untranslatable> {
     Ok(match payload {
+        AnswerPayload::CostPaymentChosenAnswer(a) => {
+            let RequestKind::ChooseCostPayment { choices, .. } = &request.kind else {
+                return Err(Untranslatable::Illegal("this request is not a cost-payment choice".into()));
+            };
+            let index = a.key.parse::<usize>().map_err(|_| Untranslatable::Illegal("invalid cost-payment key".into()))?;
+            if index >= choices.len() || a.key != index.to_string() { return Err(Untranslatable::Illegal("not a cost payment offered".into())); }
+            Answer::CostPayment(index)
+        }
         AnswerPayload::PassAnswer(_) => Answer::Pass,
         AnswerPayload::CancelAnnouncementAnswer(_) => Answer::Cancel,
         AnswerPayload::AnnounceAnswer(a) => Answer::Announce(
             u32::try_from(a.value).map_err(|_| Untranslatable::Illegal(format!("{} cannot be announced (CR 107.1)", a.value)))?,
         ),
+        AnswerPayload::NumberChosenAnswer(a) => {
+            let RequestKind::ChooseNumber { least, most, .. } = &request.kind else {
+                return Err(Untranslatable::Illegal("this request is not a number choice".into()));
+            };
+            if !(*least..=*most).contains(&a.value) { return Err(Untranslatable::Illegal("not a number offered".into())); }
+            Answer::Announce(a.value)
+        }
         AnswerPayload::CardsChosenAnswer(a) => Answer::Cards(cards(handles, game, &a.cards)?),
         AnswerPayload::TakeActionAnswer(a) => {
             let kind = kind_of(a.kind)?;
@@ -105,6 +120,8 @@ pub fn translate(
                 color: a.color.map(color_of),
                 mana: a.mana.map(mana_of),
                 restriction: restriction_of(a.filter, a.effect, &a.spend_subtypes, a.spend_mana_value),
+                snow: a.snow,
+                pay_snow: a.pay_snow,
             };
             if let Some(s) = a.sacrifice {
                 action.targets.push(Target::Object(object(handles, game, s)?));
@@ -134,7 +151,8 @@ pub fn translate(
             if let RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. } | RequestKind::Priority { options } =
                 &request.kind
             {
-                let alike = |o: &&ActionOption| o.kind == action.kind && o.source == action.source && o.index == action.index;
+                let alike = |o: &&ActionOption| o.kind == action.kind && o.source == action.source && o.index == action.index
+                    && (action.kind != ActionKind::AssignMana || (o.mana, o.restriction, o.snow, o.pay_snow) == (action.mana, action.restriction, action.snow, action.pay_snow));
                 let taken = if a.option_id != 0 {
                     a.option_id
                         .checked_sub(1)
@@ -217,7 +235,7 @@ pub fn translate(
             } else if let RequestKind::ChooseNumber { least, most, .. } = &request.kind {
                 if a.modes.len() != 1 { return Err(Untranslatable::Illegal("choose exactly one number".into())); }
                 let index = u32::try_from(a.modes[0]).map_err(|_| Untranslatable::Illegal("not a number offered".into()))?;
-                let value = least.saturating_add(index);
+                let value = least.checked_add(index).ok_or_else(|| Untranslatable::Illegal("not a number offered".into()))?;
                 if value > *most { return Err(Untranslatable::Illegal("not a number offered".into())); }
                 Answer::Announce(value)
             } else {
@@ -272,8 +290,13 @@ fn wire_target(handles: &mut HandleSpace, t: Target) -> TargetMessage {
 /// is meant to answer (`Session::scenario`). Objects the seat has no handle for are given one.
 pub fn payload_of(answer: &Answer, request: &Request, handles: &mut HandleSpace, game: &Game) -> AnswerPayload {
     match answer {
+        Answer::CostPayment(index) => AnswerPayload::CostPaymentChosenAnswer(CostPaymentChosenAnswer { key: index.to_string() }),
         Answer::Pass => AnswerPayload::PassAnswer(PassAnswer {}),
         Answer::Cancel => AnswerPayload::CancelAnnouncementAnswer(CancelAnnouncementAnswer {}),
+        Answer::Announce(value) if matches!(request.kind, RequestKind::ChooseNumber { least, most, .. }
+            if most >= least && (most - least > 255 || *value > i32::MAX as u32)) => {
+            AnswerPayload::NumberChosenAnswer(NumberChosenAnswer { value: *value })
+        }
         Answer::Announce(value) => AnswerPayload::AnnounceAnswer(AnnounceAnswer { value: crate::prompt::wire(*value) }),
         Answer::Cards(ids) if crate::prompt::pile_selection(&request.kind) => AnswerPayload::TargetsChosenAnswer(TargetsChosenAnswer {
             targets: ids.iter().map(|&id| wire_target(handles, Target::Object(id))).collect(),
@@ -292,12 +315,15 @@ pub fn payload_of(answer: &Answer, request: &Request, handles: &mut HandleSpace,
                         && o.index == action.index
                         && o.granted_by == action.granted_by
                         && o.paid_by == action.paid_by
+                        && (action.kind != ActionKind::AssignMana || (o.mana, o.restriction, o.snow, o.pay_snow) == (action.mana, action.restriction, action.snow, action.pay_snow))
                 })
             {
                 a.option_id = i as i32 + 1;
             }
             a.color = action.color.map(color_view);
             a.mana = action.mana.map(mana_view);
+            a.snow = action.snow;
+            a.pay_snow = action.pay_snow;
             if let Some(restriction) = action.restriction {
                 (a.filter, a.effect, a.spend_subtypes, a.spend_mana_value) = restriction_view(restriction);
             }
@@ -391,6 +417,24 @@ mod option_id_tests {
         let second = ActionOption { granted_by: Some(Grant { object: ObjectId(1), ability: AbilityRef::default() }), ..first.clone() };
         let request = Request { id: 1, player: PlayerId(0), may_cancel: false, kind: RequestKind::Priority { options: vec![first, second] } };
         (game, request, handles, handle)
+    }
+
+    #[test]
+    fn cost_payment_keys_are_exact_and_unbounded_by_a_byte() {
+        let (game, mut request, mut handles, _) = fixture();
+        request.kind = RequestKind::ChooseCostPayment {
+            source: ObjectId(0),
+            choices: (0..300).map(|i| cantrip_engine::CostPaymentChoice { label: format!("Pay cost {i}"), objects: Vec::new(), kind: cantrip_engine::CostPaymentKind::Life }).collect(),
+        };
+        let given = AnswerPayload::CostPaymentChosenAnswer(CostPaymentChosenAnswer { key: "299".into() });
+        let Ok(answer) = translate(&given, &request, &handles, &game) else { panic!("the offered operation is accepted") };
+        assert!(matches!(answer, Answer::CostPayment(299)));
+        let AnswerPayload::CostPaymentChosenAnswer(back) = payload_of(&answer, &request, &mut handles, &game) else { panic!("a cost payment") };
+        assert_eq!(back.key, "299");
+        for key in ["300", "-1", "01", "not-a-number", "999999999999999999999999999999999999"] {
+            let answer = AnswerPayload::CostPaymentChosenAnswer(CostPaymentChosenAnswer { key: key.into() });
+            assert!(matches!(translate(&answer, &request, &handles, &game), Err(Untranslatable::Illegal(_))));
+        }
     }
 
     #[test]

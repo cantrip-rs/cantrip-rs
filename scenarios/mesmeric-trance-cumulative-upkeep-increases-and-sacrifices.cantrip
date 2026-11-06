@@ -1,0 +1,50 @@
+# The upkeep cost is one generic mana per age counter: pay one, then two, then decline and sacrifice (CR 702.24a).
+[Bot1 Deck]
+Mesmeric Trance
+Black Lotus
+Sol Ring
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Mesmeric Trance.Cast
+? Bot1.Mana = {C}
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mesmeric Trance.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Island)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+! Bot1.PayCost(X: 1)
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana = {C}
+? Bot1.Battlefield.Mesmeric Trance.Counters.Age = 1
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+! Bot1.PayCost
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Mesmeric Trance.Counters.Age = 2
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[Expect]
+Bot1.Battlefield.Mesmeric Trance = (absent)
+Bot1.Graveyard.Mesmeric Trance.Colors = Blue
