@@ -1,0 +1,48 @@
+# Both players’ creatures lose forestwalk only until end of turn; the ability requires tapping and targets creatures (CR 611.2a).
+[Bot1 Deck]
+Scarwood Hag
+Black Lotus x2
+Mox Emerald
+Cat Warriors
+Forest x25
+[Bot2 Deck]
+Black Lotus
+Cat Warriors
+Forest x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Scarwood Hag.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Cat Warriors.Cast
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Cat Warriors.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Scarwood Hag.Activate(Bot1.Battlefield.Mox Emerald; Ability: loses)
+Bot1.Battlefield.Scarwood Hag.Activate(Bot1.Battlefield.Cat Warriors; Ability: loses)
+? Bot1.Battlefield.Scarwood Hag.Tapped = true
+! Bot1.Battlefield.Scarwood Hag.Activate(Bot2.Battlefield.Cat Warriors; Ability: loses)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cat Warriors.Keywords = (absent)
+? Bot2.Battlefield.Cat Warriors.Keywords = Forestwalk
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Cat Warriors.Keywords = Forestwalk
+[T5 Bot1.Main1]
+Bot1.Battlefield.Scarwood Hag.Activate(Bot2.Battlefield.Cat Warriors; Ability: loses)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Cat Warriors.Keywords = (absent)
+[T6 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Cat Warriors.Keywords = Forestwalk

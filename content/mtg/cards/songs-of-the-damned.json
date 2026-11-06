@@ -1,0 +1,6 @@
+{
+  "name": "Songs of the Damned",
+  "manaCost": "{B}",
+  "type": "Instant",
+  "oracleText": "Add {B} for each creature card in your graveyard."
+}

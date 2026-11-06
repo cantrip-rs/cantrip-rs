@@ -1,0 +1,39 @@
+# Destroying the target controller's last Island in response makes the target illegal; a later legal target resolves (CR 608.2b).
+[Bot1 Deck]
+Island
+Black Lotus
+Strip Mine
+Seasinger
+Memnite
+Island x20
+[Bot2 Deck]
+Island
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Seasinger.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Strip Mine.Play
+Bot1.Battlefield.Seasinger.Activate(Bot2.Battlefield.Memnite)
+Bot1.Battlefield.Strip Mine.Activate(Ability: Destroy; Bot2.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Power = 1
+Bot1.Accept
+[T5 Bot1.Main1]
+Bot1.Battlefield.Seasinger.Activate(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Memnite.Power = 1

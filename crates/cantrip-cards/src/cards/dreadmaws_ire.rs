@@ -33,7 +33,7 @@ fn destroy_artifact(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     spell: spell(&[target(attacking_creature)], grant),
-    delayed: &[triggered(triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT, destroy_artifact, "Whenever this creature deals combat damage to a player, destroy target artifact that player controls.")
+    delayed: &[triggered(triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT, destroy_artifact, "Whenever this creature deals combat damage to a player, destroy target artifact that player controls.")
         .targets(&[target(artifact_that_player_controls)])],
     ..oracle::DREADMAWS_IRE
 };

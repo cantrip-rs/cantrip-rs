@@ -1,0 +1,6 @@
+{
+  "name": "Skull Catapult",
+  "manaCost": "{4}",
+  "type": "Artifact",
+  "oracleText": "{1}, {T}, Sacrifice a creature: This artifact deals 2 damage to any target."
+}

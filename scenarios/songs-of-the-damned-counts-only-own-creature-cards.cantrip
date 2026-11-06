@@ -1,0 +1,52 @@
+# With no creature cards Songs adds no mana; with two it adds exactly two black, ignoring a noncreature card, a creature on the battlefield and an opponent's graveyard creature.
+[Bot1 Deck]
+Songs of the Damned x3
+Mox Jet
+Walking Ballista x2
+Black Lotus
+Ornithopter
+Swamp
+Swamp x20
+[Bot2 Deck]
+Walking Ballista
+Swamp x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Songs of the Damned.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Walking Ballista#1.Cast
+Bot1.Pass
+Bot1.Hand.Walking Ballista.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Walking Ballista.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Walking Ballista; Walking Ballista; Black Lotus; Songs of the Damned
+? Bot2.Graveyard = Walking Ballista
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Songs of the Damned.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {B}{B}
+Bot1.Hand.Songs of the Damned.Cast
+? Bot1.Mana = {B}
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {B}{B}{B}
+[Expect]
+Bot1.Mana = {B}{B}{B}
+Bot2.Graveyard = Walking Ballista
+Bot1.Battlefield.Ornithopter.Power = 0

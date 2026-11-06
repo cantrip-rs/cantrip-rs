@@ -40,6 +40,7 @@ Bot2.Pass
 ? Bot2.Battlefield.Elvish Mystic.Power = 3
 ? Bot2.Battlefield.Elvish Mystic.Toughness = 3
 ? Bot1.Battlefield.Restless Vinestalk.Power = 5
+? Bot1.Battlefield.Restless Vinestalk.Toughness = 5
 [T3 Bot1.Main2]
 
 [Expect]

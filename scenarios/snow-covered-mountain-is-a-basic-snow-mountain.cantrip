@@ -1,0 +1,16 @@
+# Snow-Covered Mountain is a Basic Snow Mountain; its Mountain subtype supplies red mana (CR 205.4, 305.6).
+[Bot1 Deck]
+Snow-Covered Mountain
+Island x10
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Snow-Covered Mountain.Play
+Bot1.Battlefield.Snow-Covered Mountain.Activate
+? Bot1.Mana = {R}
+[T1 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Snow-Covered Mountain.Types = Land
+Bot1.Battlefield.Snow-Covered Mountain.Supertypes = Basic; Snow
+Bot1.Battlefield.Snow-Covered Mountain.Subtypes = Mountain
+Bot1.Battlefield.Snow-Covered Mountain.Tapped = true

@@ -1,0 +1,41 @@
+# A stolen Vehicle stays controlled after it stops being a creature; the duration checks Seasinger (CR 611.2b).
+[Bot1 Deck]
+Island
+Black Lotus
+Seasinger
+Island x20
+[Bot2 Deck]
+Island
+Memnite
+Mox Pearl
+Mox Ruby
+Smuggler's Copter
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Seasinger.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Smuggler's Copter.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Seasinger.Activate(Bot2.Battlefield.Smuggler's Copter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter.Types = Artifact; Creature
+Bot1.Decline
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Smuggler's Copter.Types = Artifact
+Bot1.Battlefield.Seasinger.Tapped = true

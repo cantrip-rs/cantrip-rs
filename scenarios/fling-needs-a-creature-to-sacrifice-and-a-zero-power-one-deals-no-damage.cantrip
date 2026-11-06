@@ -1,5 +1,5 @@
 # Fling's "As an additional cost to cast this spell, sacrifice a creature" (CR 118.8, 601.2h) must be paid: with no creature
-# Bot1 can't cast it at all (the ruling), though it has the mana - the refusal - and once Ornithopter is out it can (the
+# Bot1's attempted cast is reversed without a creature, though it has the mana; once Ornithopter is out it can cast it (the
 # positive control). The sacrificed Ornithopter's power was 0, and damage of 0 is no damage dealt (CR 120.8): Bot2 stays at 20
 # and nothing was prevented.
 
@@ -19,7 +19,17 @@ Island x15
 [Actions]
 Bot1.Hand.Mountain.Play
 Bot1.Hand.Mox Ruby.Cast
-! Bot1.Hand.Fling.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Fling.Cast(Bot2)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Hand = Fling; Ornithopter; Island; Island; Island
+? Bot1.Life = 20
+? Bot2.Life = 20
+? Stack.Count = 0
+? Bot1.Battlefield.Mountain.Tapped = false
+? Bot1.Battlefield.Mox Ruby.Tapped = false
 Bot1.Hand.Ornithopter.Cast
 Bot1.Pass
 Bot2.Pass

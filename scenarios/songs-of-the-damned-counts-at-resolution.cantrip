@@ -1,0 +1,29 @@
+# Entomb puts a creature into the graveyard in response, so Songs counts it when Songs resolves.
+[Bot1 Deck]
+Songs of the Damned
+Entomb
+Mox Jet
+Swamp
+Swamp x3
+Llanowar Elves
+Swamp x20
+[Bot2 Deck]
+Swamp x20
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Songs of the Damned.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard.Llanowar Elves.Colors = Green
+Bot1.Mana = {B}

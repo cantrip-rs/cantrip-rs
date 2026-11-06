@@ -22,7 +22,7 @@ fn put_many_vitality_counters_aura(
     g: &mut dyn Game,
     item: &StackItem,
 ) -> Result<(), Suspend> {
-    g.add_counters(item.object, CounterKind::Vitality, item.data[0] as i32);
+    g.add_counters(item.object, CounterKind::Vitality, item.matched_damage_amount() as i32);
     Ok(())
 }
 
@@ -48,6 +48,7 @@ pub static CARD: CardDef = CardDef {
                 put_many_vitality_counters_aura,
                 "Whenever you're dealt damage, put that many vitality counters on this Aura.",
             )
+            .damage_amount()
             .sums_per_subject(),
         triggered(
             triggers::YOUR_UPKEEP,
@@ -58,4 +59,3 @@ pub static CARD: CardDef = CardDef {
     enchant: Some(targets::ARTIFACT),
     ..oracle::LIVING_ARTIFACT
 };
-

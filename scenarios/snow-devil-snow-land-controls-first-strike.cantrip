@@ -1,0 +1,58 @@
+# An enchanted blocker gains first strike only while its Aura's controller controls a snow land; the opponent's snow land does not count (CR 109.5, 702.7b).
+[Bot1 Deck]
+Black Lotus
+Grizzly Bears
+Mox Sapphire
+Snow Devil
+Island
+Snow-Covered Forest
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Llanowar Elves
+Grizzly Bears
+Snow-Covered Forest
+Forest x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+! Bot1.Hand.Snow Devil.Cast(Bot1.Battlefield.Island)
+Bot1.Hand.Snow Devil.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = Flying
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T4 Bot2.BeginCombat]
+Bot2.Attack(Llanowar Elves > Bot1)
+Bot1.Block(Grizzly Bears > Llanowar Elves)
+? Bot1.Battlefield.Grizzly Bears.Keywords = Flying
+[T5 Bot1.Main1]
+Bot1.Hand.Snow-Covered Forest.Play
+? Bot1.Battlefield.Grizzly Bears.Keywords = Flying
+[T6 Bot2.BeginCombat]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Block(Grizzly Bears > Grizzly Bears)
+? Bot1.Battlefield.Grizzly Bears.Keywords = FirstStrike; Flying
+[T6 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Bot2.Graveyard = Grizzly Bears; Llanowar Elves; Black Lotus
+Bot1.Battlefield.Snow Devil.AttachedTo = Grizzly Bears

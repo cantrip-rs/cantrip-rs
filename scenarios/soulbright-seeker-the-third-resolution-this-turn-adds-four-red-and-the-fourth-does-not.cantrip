@@ -23,6 +23,7 @@ Bot1.Pass
 Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
 Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
 Bot1.Hand.Soulbright Seeker.Cast
+Bot1.Modes(2)
 Bot1.Pass
 Bot2.Pass
 ? Bot1.Mana = {R}{R}{R}

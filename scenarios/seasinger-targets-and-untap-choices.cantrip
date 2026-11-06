@@ -1,0 +1,48 @@
+# Seasinger can target its own creature but not a creature whose controller lacks an Island. Once the opponent plays an
+# Island it can take that creature; keeping Seasinger tapped retains control, and untapping returns it (CR 502.3, 611.2b).
+[Bot1 Deck]
+Island
+Seasinger
+Black Lotus
+Memnite
+Island x20
+[Bot2 Deck]
+Memnite
+Island
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Seasinger.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Seasinger.Activate(Bot2.Battlefield.Memnite)
+! Bot1.Battlefield.Seasinger.Activate(Bot1.Battlefield.Island)
+Bot1.Battlefield.Seasinger.Activate(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+? Bot1.Battlefield.Seasinger.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot1.Accept
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Seasinger.Tapped = false
+Bot1.Battlefield.Seasinger.Activate(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite#2.Power = 1
+Bot1.Decline
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Seasinger.Tapped = true
+? Bot1.Battlefield.Memnite#2.Power = 1
+Bot1.Accept
+[T9 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Seasinger.Tapped = false
+Bot2.Battlefield.Memnite.Power = 1

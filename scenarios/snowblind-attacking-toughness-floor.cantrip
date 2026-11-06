@@ -1,0 +1,33 @@
+# Two defending snow lands reduce an attacking 0/2's power by two but its toughness only by one.
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Snowblind
+Snow-Covered Forest x2
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Snowblind.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+[T4 Bot2.DeclareBlockers]
+? Bot2.Battlefield.Ornithopter.Power = -2
+? Bot2.Battlefield.Ornithopter.Toughness = 1
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Snowblind.AttachedTo = Ornithopter
+Bot2.Battlefield.Ornithopter.Toughness = 2

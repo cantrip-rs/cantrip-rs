@@ -1,0 +1,68 @@
+# Snowblind counts snow lands of the creature's controller, or of the defending player during an attack.
+# A 0/5 makes different counts visible in toughness; a second creature must remain unaffected.
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Snowblind
+Snow-Covered Forest
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island
+Aegis Turtle
+Snow-Covered Forest x5
+Island x20
+[Actions]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aegis Turtle.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Snowblind.Cast(Bot1.Battlefield.Mox Emerald)
+Bot1.Hand.Snowblind.Cast(Bot2.Battlefield.Aegis Turtle)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Aegis Turtle.Power = 0
+? Bot2.Battlefield.Aegis Turtle.Toughness = 5
+[T4 Bot2.Main1]
+Bot2.Hand.Snow-Covered Forest.Play
+? Bot2.Battlefield.Aegis Turtle.Power = -1
+? Bot2.Battlefield.Aegis Turtle.Toughness = 4
+[T6 Bot2.Main1]
+Bot2.Hand.Snow-Covered Forest.Play
+? Bot2.Battlefield.Aegis Turtle.Power = -2
+? Bot2.Battlefield.Aegis Turtle.Toughness = 3
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Aegis Turtle > Bot1)
+[T6 Bot2.DeclareBlockers]
+? Bot2.Battlefield.Aegis Turtle.Power = -1
+? Bot2.Battlefield.Aegis Turtle.Toughness = 4
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+[T6 Bot2.Main2]
+[T8 Bot2.Main1]
+Bot2.Hand.Snow-Covered Forest.Play
+? Bot2.Battlefield.Aegis Turtle.Power = -3
+? Bot2.Battlefield.Aegis Turtle.Toughness = 2
+[T10 Bot2.Main1]
+Bot2.Hand.Snow-Covered Forest.Play
+? Bot2.Battlefield.Aegis Turtle.Power = -4
+? Bot2.Battlefield.Aegis Turtle.Toughness = 1
+[T12 Bot2.Main1]
+Bot2.Hand.Snow-Covered Forest.Play
+? Bot2.Battlefield.Aegis Turtle.Power = -5
+? Bot2.Battlefield.Aegis Turtle.Toughness = 1
+[Expect]
+Bot1.Battlefield.Snowblind.AttachedTo = Aegis Turtle
+Bot2.Battlefield.Aegis Turtle.Power = -5
+Bot2.Battlefield.Aegis Turtle.Toughness = 1

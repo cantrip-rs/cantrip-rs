@@ -1,0 +1,41 @@
+# Only artifacts are legal targets, including an opponent's; the cost requires green mana (CR 115.1, 602.2b).
+[Bot1 Deck]
+Scavenger Folk
+Mox Emerald
+Mox Pearl
+Forest x20
+[Bot2 Deck]
+Memnite
+Forest x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Scavenger Folk.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Forest.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Scavenger Folk.Activate(Bot2.Battlefield.Memnite; Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Scavenger Folk.Activate(Bot2.Battlefield.Forest)
+Bot1.Battlefield.Scavenger Folk.Activate(Bot2.Battlefield.Memnite)
+Bot1.Choose(Pay mana)
+? Bot1.Mana = {W}
+Bot1.Choose(Tap Scavenger Folk)
+? Bot1.Graveyard = Scavenger Folk
+? LeftBattlefield = Scavenger Folk (tapped)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard = Memnite
+Bot2.Battlefield.Forest.Types = Land

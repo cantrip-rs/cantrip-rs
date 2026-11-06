@@ -1,0 +1,8 @@
+{
+  "name": "Scarwood Hag",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Hag",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{G}{G}{G}{G}, {T}: Target creature gains forestwalk until end of turn. (It can't be blocked as long as defending player controls a Forest.)\n{T}: Target creature loses forestwalk until end of turn."
+}

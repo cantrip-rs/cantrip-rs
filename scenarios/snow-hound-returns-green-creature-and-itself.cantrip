@@ -1,0 +1,54 @@
+# Snow Hound returns itself and a controlled green creature, but cannot target an opposing creature or a colorless one.
+[Bot1 Deck]
+Snow Hound
+Black Lotus
+Mox Emerald
+Mox Pearl
+Llanowar Elves
+Ornithopter
+Plains
+Plains x20
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Plains x5
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Snow Hound.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Snow Hound.Activate(Bot2.Battlefield.Llanowar Elves)
+! Bot1.Battlefield.Snow Hound.Activate(Bot1.Battlefield.Ornithopter)
+! Bot1.Battlefield.Snow Hound.Activate(Bot1.Battlefield.Snow Hound)
+Bot1.Battlefield.Snow Hound.Activate(Bot1.Battlefield.Llanowar Elves)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Snow Hound.Activate(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Hand = Llanowar Elves; Snow Hound; Plains; Plains
+Bot2.Battlefield.Llanowar Elves.Power = 1
+Bot1.Battlefield.Ornithopter.Power = 0

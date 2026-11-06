@@ -1,0 +1,21 @@
+# An opponent's Island does not prevent Seasinger's controller's state trigger from sacrificing it (CR 603.8).
+[Bot1 Deck]
+Seasinger
+Black Lotus
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Seasinger.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+[Expect]
+Bot1.Graveyard.Seasinger.Power = 0
+Bot2.Battlefield.Island.Tapped = false

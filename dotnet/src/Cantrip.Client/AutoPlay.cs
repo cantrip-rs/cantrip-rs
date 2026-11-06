@@ -406,6 +406,18 @@ public static class AutoPlay
             return Announce(prompt, AnnouncedValue(prompt));
         }
 
+        if (prompt.ManaAbilities)
+        {
+            if (!prompt.SpendsNoMana && Owing(prompt)
+                && Produce(prompt.Options, prompt.RemainingColored, prompt.RemainingGeneric, prompt.RemainingHybrid, prompt.RemainingColorless, prompt.RemainingSnow) is { } activate)
+            {
+                return activate;
+            }
+
+            return prompt.Options.FirstOrDefault(option => option.Kind == ActionKindView.ConfirmCasting) is { } done
+                ? Answer(done) : prompt.GiveUp();
+        }
+
         if (!prompt.HasX)
         {
             if (AssignChoice(prompt, client) is { } choice)
@@ -441,8 +453,8 @@ public static class AutoPlay
                 .GroupBy(option => option.Alternative)
                 .Sum(way => Math.Min(way.Count(), way.First().PaysUpTo));
             int genericForMana = Math.Max(0, prompt.RemainingGeneric - instead);
-            if ((genericForMana > 0 || prompt.RemainingColored.Count > 0 || prompt.RemainingHybrid.Count > 0 || prompt.RemainingColorless > 0)
-                && (Produce(prompt.Options, prompt.RemainingColored, genericForMana, prompt.RemainingHybrid, prompt.RemainingColorless)
+            if ((genericForMana > 0 || prompt.RemainingColored.Count > 0 || prompt.RemainingHybrid.Count > 0 || prompt.RemainingColorless > 0 || prompt.RemainingSnow > 0)
+                && (Produce(prompt.Options, prompt.RemainingColored, genericForMana, prompt.RemainingHybrid, prompt.RemainingColorless, prompt.RemainingSnow)
                     ?? (genericForMana > 0 ? Produce(prompt.Options, [], genericForMana) : null)) is { } first)
             {
                 return first;
@@ -461,7 +473,7 @@ public static class AutoPlay
                 return Answer(exiled);
             }
 
-            if (Produce(prompt.Options, prompt.RemainingColored, prompt.RemainingGeneric, prompt.RemainingHybrid, prompt.RemainingColorless) is { } produce)
+            if (Produce(prompt.Options, prompt.RemainingColored, prompt.RemainingGeneric, prompt.RemainingHybrid, prompt.RemainingColorless, prompt.RemainingSnow) is { } produce)
             {
                 return produce;
             }
@@ -585,7 +597,7 @@ public static class AutoPlay
 
         if (owing)
         {
-            if (Produce(prompt.Options, prompt.RemainingColored, prompt.RemainingGeneric, prompt.RemainingHybrid, prompt.RemainingColorless) is { } produce)
+            if (Produce(prompt.Options, prompt.RemainingColored, prompt.RemainingGeneric, prompt.RemainingHybrid, prompt.RemainingColorless, prompt.RemainingSnow) is { } produce)
             {
                 return produce;
             }
@@ -662,7 +674,7 @@ public static class AutoPlay
         foreach (ActionOptionMessage option in creatures)
         {
             List<ColorView> makes = [.. option.Produces.Where(type => type != ManaTypeView.Colorless).Select(type => (ColorView)(int)type)
-                .Concat(option.ColorChoices)];
+                .Concat(ChoosesColors(option) ? option.ColorChoices : [])];
             ColorView? owed = prompt.RemainingColored.Cast<ColorView?>().FirstOrDefault(color => makes.Contains(color!.Value));
             if (owed is not null || prompt.RemainingGeneric > 0)
             {
@@ -680,7 +692,7 @@ public static class AutoPlay
         return prompt.RemainingGeneric > 0
             || prompt.RemainingColored.Count > 0
             || prompt.RemainingHybrid.Count > 0
-            || prompt.RemainingColorless > 0;
+            || prompt.RemainingColorless > 0 || prompt.RemainingSnow > 0;
     }
 
     /// <summary>
@@ -694,6 +706,7 @@ public static class AutoPlay
         ArgumentNullException.ThrowIfNull(prompt);
         ArgumentNullException.ThrowIfNull(option);
 
+        if (option.PaySnow) { return option.Snow && prompt.RemainingSnow > 0; }
         return (prompt.RemainingGeneric > 0 && prompt.RemainingColored.Count == 0 && prompt.RemainingHybrid.Count == 0)
             || option.Produces.Any(type => prompt.RemainingColored.Contains((ColorView)(int)type))
             || option.Produces.Any(type => prompt.RemainingHybrid.Exists(symbol => symbol.Accepts((ColorView)(int)type)))
@@ -747,16 +760,7 @@ public static class AutoPlay
         return named.Length == 0 || spell.CardTypes.Exists(type => named.Contains(type.ToString().ToLowerInvariant()));
     }
 
-    public static TakeActionAnswer Assign(ActionOptionMessage option) => new()
-    {
-        Kind = option.Kind,
-        Source = option.Source,
-        Mana = option.Produces[0],
-        Filter = option.Filter,
-        Effect = option.Effect,
-        SpendSubtypes = option.SpendSubtypes,
-        SpendManaValue = option.SpendManaValue,
-    };
+    public static TakeActionAnswer Assign(ActionOptionMessage option) => TakeActionAnswer.Take(option);
 
     /// <summary>
     /// The mana ability that helps with what is still owed: a source of an owed color, then a source of any one color
@@ -776,7 +780,8 @@ public static class AutoPlay
         List<ColorView> owedColors,
         int owedGeneric,
         List<HybridSymbolView>? owedHybrid = null,
-        int owedColorless = 0)
+        int owedColorless = 0,
+        uint owedSnow = 0)
     {
         // Painless sources first, stably, so an Ancient Tomb is only tapped when nothing else will do; and among
         // equally painless ones, the source that could cover the fewest of the colors owed.
@@ -847,6 +852,12 @@ public static class AutoPlay
                 : null;
         }
 
+        if (owedSnow > 0)
+        {
+            ActionOptionMessage? snow = activations.FirstOrDefault(option => option.Snow);
+            return snow is null ? null : Answer(snow, ChoosesColors(snow) ? snow.ColorChoices.FirstOrDefault() : null);
+        }
+
         if (owedGeneric <= 0)
         {
             return null;
@@ -910,7 +921,7 @@ public static class AutoPlay
         // same activation is offered again for ever. An option with ProducesOfAnyOneColor set but nothing in
         // ColorChoices has no color to name at all — it is Squandered Resources's own candidate that could only add
         // colorless (CR 106.7), answered with Mana below instead.
-        Color = option.ProducesOfAnyOneColor > 0 && option.ColorChoices.Count > 0
+        Color = option.ProducesOfAnyColorEach == 0 && option.ColorChoices.Count > 0
             ? color is { } named && option.ColorChoices.Contains(named) ? named : option.ColorChoices[0]
             : null,
 
@@ -978,7 +989,7 @@ public static class AutoPlay
             return Answer(pay);
         }
 
-        return Produce(prompt.Options, prompt.RemainingColored, prompt.RemainingGeneric, prompt.RemainingHybrid)
+        return Produce(prompt.Options, prompt.RemainingColored, prompt.RemainingGeneric, prompt.RemainingHybrid, owedSnow: prompt.RemainingSnow)
             ?? Answer(prompt.Options.First(option => option.Kind == ActionKindView.DeclineCost));
     }
 

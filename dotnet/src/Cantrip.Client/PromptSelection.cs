@@ -40,8 +40,28 @@ public sealed class PromptSelection
     public Dictionary<(int Source, int Creature), int> DamageShares { get; } = [];
     /// <summary>A divided target's own share (CR 601.2d), keyed by candidate handle.</summary>
     public Dictionary<int, int> DividedShares { get; } = [];
-    /// <summary>A divided target player's own share (CR 601.2d: "among any number of targets"), keyed by seat.</summary>
+    /// <summary>Shares assigned to players, keyed by seat rather than object handle.</summary>
     public Dictionary<int, int> DividedPlayerShares { get; } = [];
+    /// <summary>Divided targets in the order they were selected, across players and objects.</summary>
+    public List<TargetMessage> DividedOrder { get; } = [];
+
+    public void SetDividedShare(TargetMessage target, int amount)
+    {
+        Dictionary<int, int> shares = target.IsPlayer ? DividedPlayerShares : DividedShares;
+        int key = target.IsPlayer ? target.Player : target.Object.Value;
+        bool Same(TargetMessage other) => target.IsPlayer == other.IsPlayer &&
+            (target.IsPlayer ? target.Player == other.Player : target.Object == other.Object);
+        if (amount <= 0)
+        {
+            shares.Remove(key);
+            DividedOrder.RemoveAll(Same);
+        }
+        else
+        {
+            if (!shares.ContainsKey(key)) DividedOrder.Add(target);
+            shares[key] = amount;
+        }
+    }
     /// <summary>The counters taken so far for a cost that removes them from among permanents (CR 118.3), by permanent and kind.</summary>
     public Dictionary<(int Object, string Counter), int> CounterRemovals { get; } = [];
     public ActionOptionMessage? Targeting { get; set; }
@@ -66,6 +86,8 @@ public sealed class PromptSelection
     /// nothing sent, and announced at once. Null until it is changed from the value the question was asked at.
     /// </summary>
     public int? Announced { get; set; }
+    /// <summary>A number being typed for a resolving choice, kept verbatim until it is valid and submitted.</summary>
+    public string? NumberTyped { get; set; }
     public List<List<int>>? Placements { get; set; }
     public bool CanPick(int limit) => Cards.Count < limit || limit == 1;
 
@@ -104,6 +126,7 @@ public sealed class PromptSelection
         DamageShares.Clear();
         DividedShares.Clear();
         DividedPlayerShares.Clear();
+        DividedOrder.Clear();
         CounterRemovals.Clear();
         Targeting = null;
         TargetingColor = null;
@@ -111,6 +134,7 @@ public sealed class PromptSelection
         CostChoice = null;
         NameTyped = string.Empty;
         Announced = null;
+        NumberTyped = null;
         Placements = null;
     }
 }

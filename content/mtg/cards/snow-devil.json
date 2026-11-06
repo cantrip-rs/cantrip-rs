@@ -1,0 +1,6 @@
+{
+  "name": "Snow Devil",
+  "manaCost": "{1}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature has flying.\nEnchanted creature has first strike as long as it's blocking and you control a snow land."
+}

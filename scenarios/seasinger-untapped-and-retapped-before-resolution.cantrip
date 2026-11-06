@@ -1,0 +1,53 @@
+# Untapping Seasinger ends the first ability's duration even if it is tapped again before that ability resolves (CR 611.2b).
+[Bot1 Deck]
+Seasinger
+Black Lotus
+Island
+Forest
+Quirion Ranger
+Mox Emerald
+Island x20
+[Bot2 Deck]
+Island
+Llanowar Elves
+Ornithopter
+Mox Emerald
+Forest
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Seasinger.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Quirion Ranger.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Seasinger.Activate(Bot2.Battlefield.Llanowar Elves)
+Bot1.Battlefield.Quirion Ranger.Activate(Bot1.Battlefield.Seasinger)
+Bot1.Choose(Forest)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Seasinger.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield = Island; Mox Emerald; Llanowar Elves
+Bot1.Battlefield.Ornithopter.Tapped = false

@@ -1,0 +1,8 @@
+{
+  "name": "Snow Hound",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Dog",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{1}, {T}: Return this creature and target green or blue creature you control to their owner's hand."
+}

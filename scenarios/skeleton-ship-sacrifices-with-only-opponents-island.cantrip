@@ -1,0 +1,30 @@
+# An opponent's Island does not stop the state trigger, which sacrifices Skeleton Ship (CR 603.8, 701.21a).
+[Bot1 Deck]
+Skeleton Ship
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Skeleton Ship.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+[Expect]
+Bot1.Graveyard = Skeleton Ship; Black Lotus
+Bot2.Battlefield.Island.Types = Land

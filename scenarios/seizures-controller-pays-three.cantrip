@@ -1,0 +1,40 @@
+# The enchanted creature's controller can pay exactly {3} to prevent Seizures' damage (CR 118.12).
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Seizures
+Island x20
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Mox Pearl
+Sol Ring
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Seizures.Cast(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Llanowar Elves.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.PayCost
+? Bot2.Mana =
+[Expect]
+Bot2.Life = 20

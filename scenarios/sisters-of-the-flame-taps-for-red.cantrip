@@ -1,0 +1,25 @@
+# Sisters of the Flame adds exactly one red mana by tapping, after summoning sickness ends (CR 605.1a, 302.6).
+[Bot1 Deck]
+Sisters of the Flame
+Black Lotus
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sisters of the Flame.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Battlefield.Sisters of the Flame.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sisters of the Flame.Activate
+? Bot1.Mana = {R}
+[T3 Bot1.Main2]
+! Bot1.Battlefield.Sisters of the Flame.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sisters of the Flame.Activate
+? Bot1.Mana = {R}
+[Expect]
+Bot1.Battlefield.Sisters of the Flame.Tapped = true

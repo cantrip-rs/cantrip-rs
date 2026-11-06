@@ -1,0 +1,40 @@
+# Snow Hound says target, not another: when Painter's Servant makes it blue it can target and return itself once.
+[Bot1 Deck]
+Snow Hound
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Painter's Servant
+Plains x2
+Plains x20
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Snow Hound.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Painter's Servant.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Blue)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Snow Hound.Activate(Bot1.Battlefield.Snow Hound)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Hand.Snow Hound.Power = 1
+Bot1.Battlefield.Snow Hound = (absent)
+Bot1.Battlefield.Painter's Servant.ChosenColor = Blue

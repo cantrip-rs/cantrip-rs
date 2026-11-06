@@ -33,7 +33,9 @@ Bot1.Hand.Mind Stone.Cast
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Blood Token.Activate
+Bot1.Choose(Discard 1 card)
 Bot1.Choose(Island)
+Bot1.Choose(Tap Blood Token)
 ? Bot1.Battlefield.Mox Ruby.Tapped = false
 ? Bot1.Battlefield.Mox Jet.Tapped = false
 Bot1.Battlefield.Mind Stone.Activate(Ability: Draw)

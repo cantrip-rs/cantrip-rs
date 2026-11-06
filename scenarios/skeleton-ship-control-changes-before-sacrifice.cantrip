@@ -1,0 +1,42 @@
+# The original controller cannot sacrifice the Ship after an opponent takes control in response to its state trigger (CR 701.21a, 113.7a).
+[Bot1 Deck]
+Skeleton Ship
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mountain x20
+[Bot2 Deck]
+Old Man of the Sea
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Old Man of the Sea.Cast
+? Bot2.Mana =
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Skeleton Ship.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Old Man of the Sea.Activate(Bot1.Battlefield.Skeleton Ship)
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.End]
+[Expect]
+Bot2.Battlefield.Skeleton Ship.Power = 0
+Bot2.Battlefield.Old Man of the Sea.Tapped = true
+Bot1.Graveyard = Black Lotus

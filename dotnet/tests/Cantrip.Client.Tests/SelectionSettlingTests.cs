@@ -389,6 +389,25 @@ public sealed class SelectionSettlingTests
     }
 
     [Fact]
+    public void Keeping_an_original_target_sends_an_empty_target_answer()
+    {
+        var transport = new Judging(_ => throw new InvalidOperationException("nothing is checked"));
+        var client = new GameClient(transport);
+        transport.Inbound.Enqueue(new PromptMessage
+        {
+            RequestId = 9,
+            Prompt = new ChooseTargetPromptMessage
+            {
+                Player = 1, Candidates = [Object(1)], Optional = true, Count = 1, KeepOriginal = true,
+            },
+        });
+        client.Pump();
+        client.Answer(new TargetsChosenAnswer { Targets = [] });
+        var sent = Assert.IsType<TargetsChosenAnswer>(transport.Sent.OfType<AnswerMessage>().Single().Answer);
+        Assert.Empty(sent.Targets);
+    }
+
+    [Fact]
     public void A_choice_of_targets_the_slot_does_not_judge_together_is_sent_as_it_is()
     {
         var transport = new Judging(_ => throw new InvalidOperationException("nothing is checked"));

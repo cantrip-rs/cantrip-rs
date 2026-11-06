@@ -1,0 +1,37 @@
+# Scarwood Bandits takes an opponent's artifact when they cannot pay {2}; the control lasts while it remains (CR 611.2a).
+[Bot1 Deck]
+Scarwood Bandits
+Black Lotus x2
+Mox Pearl
+Forest x20
+
+[Bot2 Deck]
+Mox Jet
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Scarwood Bandits.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Scarwood Bandits.Activate(Bot2.Battlefield.Mox Jet)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Battlefield.Scarwood Bandits.Tapped = true

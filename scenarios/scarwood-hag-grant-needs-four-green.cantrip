@@ -1,0 +1,48 @@
+# Three green is insufficient; four green pays the ability and grants forestwalk (CR 602.2b).
+[Bot1 Deck]
+Scarwood Hag
+Black Lotus x2
+Mox Sapphire
+Mox Emerald
+Grizzly Bears
+Mind Bend
+Black Lotus
+Island x20
+[Bot2 Deck]
+Grayscaled Gharial
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Scarwood Hag.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Grayscaled Gharial.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Emerald.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Battlefield.Scarwood Hag.Activate(Bot1.Battlefield.Grizzly Bears; Ability: gains; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Scarwood Hag.Activate(Bot1.Battlefield.Grizzly Bears; Ability: gains)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Keywords = Forestwalk

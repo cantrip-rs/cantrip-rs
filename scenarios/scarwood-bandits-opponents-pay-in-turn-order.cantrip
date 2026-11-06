@@ -1,0 +1,42 @@
+# In a three-player game, the active opponent has the first chance to pay (CR 101.4, 118.12a).
+[Bot1 Deck]
+Scarwood Bandits
+Black Lotus x2
+Mox Pearl
+Forest x20
+[Bot2 Deck]
+Sol Ring
+Island x20
+[Bot3 Deck]
+Sol Ring
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Scarwood Bandits.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Sol Ring.Cast
+[T3 Bot3.Main1]
+Bot3.Hand.Island.Play
+Bot3.Battlefield.Island.Activate
+Bot3.Hand.Sol Ring.Cast
+[T6 Bot3.Main1]
+Bot3.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Scarwood Bandits.Activate(Bot2.Battlefield.Sol Ring)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? PriorityPlayer = Bot3
+Bot3.Battlefield.Sol Ring.Activate
+Bot3.PayCost
+? Bot3.Mana =
+[T6 Bot3.Main2]
+[Expect]
+Bot2.Battlefield.Sol Ring.Tapped = false
+Bot3.Battlefield.Sol Ring.Tapped = true

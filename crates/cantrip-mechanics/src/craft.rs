@@ -21,7 +21,7 @@ fn return_transformed(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
     if cards.is_empty() {
         return Ok(());
     }
-    let materials = exiled_materials(g, item.object, item.ability);
+    let materials = exiled_materials(g, item.serial);
     // Only a double-faced card returns (CR 712.14a): the materials are linked to those, not to a card that stays in exile.
     let returning: Vec<ObjectId> = cards.into_iter().filter(|&c| g.card(g.obj(c).card).back.is_some()).collect();
     for card in returning {
@@ -34,30 +34,13 @@ fn return_transformed(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
     Ok(())
 }
 
-/// The cards the cost of `source`'s craft `ability` exiled as its materials (CR 702.167a), still in exile: asked of the
-/// history. The activation is recorded right after its cost was paid, and the core exiles a craft ability's source and
-/// then its materials together as the last of the cost (`Cost::materials`), so the exiles just before the activation,
-/// back to the source's own, are the materials. A token material ceased to exist (CR 111.7) and is none of them.
-fn exiled_materials(q: &dyn Query, source: ObjectId, ability: AbilityRef) -> Vec<ObjectId> {
-    let records = q.history().all();
-    let activated = records
-        .iter()
-        .rposition(|r| matches!(r.event, Event::AbilityActivated { source: s, ability: a, .. } if s == source && a == ability));
-    let Some(activated) = activated else { return Vec::new() };
-    let mut out = Vec::new();
-    for r in records[..activated].iter().rev() {
-        match r.event {
-            Event::ZoneChange { old, .. } if old == source => break,
-            Event::ZoneChange { new, to, reason: ZoneReason::Exile, .. } if to.is(ZoneKind::Exile) => {
-                if is_live(q, new) && q.obj(new).zone.is(ZoneKind::Exile) && !q.obj(new).token {
-                    out.push(new);
-                }
-            }
-            _ => {}
-        }
-    }
-    out.reverse();
-    out
+/// Materials paid for this activation (or the original of a copy), still in exile. Receipts identify the exact
+/// component even when another payment moves objects after craft was paid (CR 601.2h, 707.10).
+fn exiled_materials(g: &dyn Game, serial: u32) -> Vec<ObjectId> {
+    g.history().ability_cost_objects_of_part(serial, CostPart::CraftMaterial)
+        .flat_map(|object| g.found_all_after_move(object))
+        .filter(|&id| g.obj(id).zone.is(ZoneKind::Exile) && !g.obj(id).token)
+        .collect()
 }
 
 /// Craft with `materials` `mana` (CR 702.167a): the mana, the exile of this permanent and of the materials, at sorcery

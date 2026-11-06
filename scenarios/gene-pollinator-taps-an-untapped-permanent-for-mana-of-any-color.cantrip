@@ -26,6 +26,8 @@ Bot1.Pass
 Bot1.Hand.Ornithopter.Cast
 Bot1.Pass
 Bot1.Battlefield.Gene Pollinator.Activate(Tap: Ornithopter; Color: Red)
+Bot1.Choose(Tap Gene Pollinator)
+Bot1.Choose(Ornithopter)
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
 [T3 Bot1.Main2]
 

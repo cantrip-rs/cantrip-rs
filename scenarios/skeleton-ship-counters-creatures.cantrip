@@ -1,0 +1,40 @@
+# An Island keeps the Ship; its tap ability gives either player's creature one -1/-1 counter and rejects lands (CR 115.1, 122.1a).
+[Bot1 Deck]
+Skeleton Ship
+Black Lotus
+Mox Jet
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Skeleton Ship.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Battlefield.Skeleton Ship.Activate(Bot1.Battlefield.Skeleton Ship)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Skeleton Ship.Activate(Bot1.Battlefield.Island)
+Bot1.Battlefield.Skeleton Ship.Activate(Bot1.Battlefield.Skeleton Ship)
+? Bot1.Battlefield.Skeleton Ship.Tapped = true
+! Bot1.Battlefield.Skeleton Ship.Activate(Bot1.Battlefield.Skeleton Ship)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Skeleton Ship.Counters.MinusOneMinusOne = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Skeleton Ship.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Skeleton Ship.Counters.MinusOneMinusOne = 1
+Bot2.Battlefield.Ornithopter.Counters.MinusOneMinusOne = 1

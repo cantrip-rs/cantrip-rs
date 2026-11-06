@@ -39,6 +39,7 @@ Bot1.Hand.Forest.Play
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Close Encounter.Cast(Bot2.Battlefield.Aegis Turtle)
+Bot1.Choose(Choose creature you control or warped creature card you own in exile)
 Bot1.Choose(Mox Emerald)
 Bot1.Pass
 Bot2.Battlefield.Plains.Activate

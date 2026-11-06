@@ -1,0 +1,37 @@
+# The opponent destroys the last Island, then gains control of Seasinger before its former controller's state trigger
+# resolves. The former controller cannot sacrifice it (CR 603.8, 701.21a).
+[Bot1 Deck]
+Island
+Black Lotus
+Seasinger
+Mountain x20
+[Bot2 Deck]
+Island
+Strip Mine
+Black Lotus
+Old Man of the Sea
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Seasinger.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Old Man of the Sea.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Strip Mine.Play
+Bot2.Battlefield.Strip Mine.Activate(Ability: Destroy; Bot1.Battlefield.Island)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Old Man of the Sea.Activate(Bot1.Battlefield.Seasinger)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Battlefield.Seasinger.Power = 0
+Bot1.Graveyard.Island.Colors =
