@@ -104,7 +104,7 @@ static GIFT: CardDef = CardDef {
 };
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// Your main phase with priority, an empty stack and no mana.
@@ -210,7 +210,7 @@ fn a_cast_for_its_mana_cost_records_no_alternative() {
     let first = put(&mut g, &INSTANT, Zone::hand(YOU));
     let second = put(&mut g, &INSTANT, Zone::hand(YOU));
     let source = g.state.zone(Zone::library(YOU))[0];
-    g.state.add_mana(YOU, Mana::U, 1, source, None, ManaLasts::Step);
+    g.state.add_mana(YOU, Mana::U, 1, source, None, ManaLasts::Step, false);
     let r = next(&mut g);
     let RequestKind::Priority { options } = &r.kind else { panic!("expected priority") };
     let option = options.iter().find(|o| o.kind == ActionKind::CastSpell && o.source == Some(first) && o.paid_by.is_none()).expect("offered").clone();
@@ -294,7 +294,7 @@ fn a_lasting_alternative_is_used_up_by_a_spell_paid_for_and_not_by_one_it_is_not
     let first = put(&mut g, &INSTANT, Zone::hand(YOU));
     let second = put(&mut g, &INSTANT, Zone::hand(YOU));
     let source = g.state.zone(Zone::library(YOU))[0];
-    g.state.add_mana(YOU, Mana::U, 3, source, None, ManaLasts::Step);
+    g.state.add_mana(YOU, Mana::U, 3, source, None, ManaLasts::Step, false);
     let pay = |g: &mut Game, card: ObjectId| {
         let r = next(g);
         let RequestKind::Priority { options } = &r.kind else { panic!("expected priority") };

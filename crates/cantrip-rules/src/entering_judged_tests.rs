@@ -134,7 +134,7 @@ fn put(game: &mut Game, table: &CardTable, def: &'static CardDef, zone: Zone, co
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 fn entering(id: ObjectId, controller: PlayerId, tapped: bool) -> Entering {
@@ -225,6 +225,7 @@ fn it_is_judged_again_after_a_replacement_changes_how_it_enters() {
     assert!(!would.chars.is(CardType::Creature));
     cx.entering = Some(would);
     let change = |controller, to| ZoneChange {
+        put_by: None,
         object: relic,
         from: Zone::hand(P0),
         to,
@@ -250,6 +251,7 @@ fn it_is_judged_again_after_a_replacement_changes_how_it_enters() {
         rebounding: false,
         destroy: false,
         regenerated: false,
+            regeneration_shield: false,
         shielded: false,
         replaced: false,
     };

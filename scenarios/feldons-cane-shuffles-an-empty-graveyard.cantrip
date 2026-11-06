@@ -1,0 +1,25 @@
+# Even with an empty graveyard, the Cane's controller shuffles their library after exiling it as a cost (CR 701.24a).
+[Bot1 Deck]
+Feldon's Cane
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Feldon's Cane.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Feldon's Cane.Activate
+Bot1.Choose(Tap Feldon's Cane)
+? Exile = Feldon's Cane
+? LeftBattlefield = Feldon's Cane (tapped)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Shuffles = 1
+Bot2.Shuffles = 0
+Exile = Feldon's Cane

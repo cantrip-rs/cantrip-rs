@@ -121,7 +121,7 @@ fn a_player_who_concedes_as_their_triggers_go_on_the_stack_puts_none_of_them_the
         let echo = g.cards.id_of(&ECHO);
         for &id in &ids {
             let controller = g.state.obj(id).controller;
-            g.state.trigger_push(PendingTrigger {
+            g.state.trigger_push(PendingTrigger { event_amount: None,
                 source: id,
                 ability: AbilityRef { card: echo, index: 0 },
                 controller,

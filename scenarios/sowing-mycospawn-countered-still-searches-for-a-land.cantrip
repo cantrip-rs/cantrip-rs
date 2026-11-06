@@ -35,7 +35,7 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Sowing Mycospawn.Cast
 Bot2.Battlefield.Island.Activate
 Bot2.Battlefield.Mox Sapphire.Activate
-Bot2.Hand.Counterspell.Cast(Stack.Sowing Mycospawn)
+Bot2.Hand.Counterspell.Cast(Bot1.Stack.Sowing Mycospawn)
 Bot1.Pass
 Bot2.Pass
 Bot1.Search(Island)

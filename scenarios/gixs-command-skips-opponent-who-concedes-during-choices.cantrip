@@ -1,0 +1,45 @@
+# Bot3 concedes as Bot3 is asked to choose a greatest-power creature. Gix's Command skips Bot3 and Bot2 sacrifices its choice (CR 800.4a).
+[Bot1 Deck]
+Gix's Command
+Black Lotus
+Mox Jet
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Llanowar Elves
+Elvish Mystic
+Mox Emerald
+Island x20
+[Bot3 Deck]
+Llanowar Elves
+Elvish Mystic
+Mox Emerald
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot3.Main1]
+Bot3.Hand.Mox Emerald.Cast
+Bot3.Battlefield.Mox Emerald.Activate
+Bot3.Hand.Llanowar Elves.Cast
+[T4 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gix's Command.Cast
+Bot1.Modes(3; 4)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot2.Choose(Llanowar Elves)
+Bot3.Concede
+! Bot1.Choose
+[T4 Bot1.Main2]
+[Expect]
+Bot2.Graveyard = Llanowar Elves
+Bot1.Graveyard = Gix's Command; Black Lotus

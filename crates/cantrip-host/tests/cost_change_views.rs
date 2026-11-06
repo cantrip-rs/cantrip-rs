@@ -75,7 +75,7 @@ fn game(taxed: bool) -> Game {
         put(&TAXER);
     }
     let source = g.state.zone(Zone::library(YOU))[0];
-    g.state.add_mana(YOU, Mana::C, 4, source, None, ManaLasts::Step);
+    g.state.add_mana(YOU, Mana::C, 4, source, None, ManaLasts::Step, false);
     g.run();
     g
 }

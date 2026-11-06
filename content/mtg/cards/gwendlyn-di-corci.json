@@ -1,0 +1,8 @@
+{
+  "name": "Gwendlyn Di Corci",
+  "manaCost": "{U}{B}{B}{R}",
+  "type": "Legendary Creature — Human Rogue",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "{T}: Target player discards a card at random. Activate only during your turn."
+}

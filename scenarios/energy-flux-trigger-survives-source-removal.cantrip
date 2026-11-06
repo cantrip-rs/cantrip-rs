@@ -1,0 +1,29 @@
+# Removing Energy Flux in response does not remove an artifact's already-triggered upkeep ability (CR 113.7a).
+[Bot1 Deck]
+Black Lotus
+Energy Flux
+Memnite
+Island x17
+
+[Bot2 Deck]
+Black Lotus
+Disenchant
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Energy Flux.Cast
+? Bot1.Mana =
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Energy Flux)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Memnite; Energy Flux; Black Lotus
+Bot1.Battlefield =

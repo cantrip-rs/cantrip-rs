@@ -1,0 +1,42 @@
+# Feint taps both blockers but not an unrelated creature, and prevents their
+# and the attacker's damage; another attacker still deals damage (CR 615.1).
+[Bot1 Deck]
+Bofur, Reliable Guardian
+Memnite
+Feint
+Plains
+Mountain
+Island x20
+[Bot2 Deck]
+Memnite
+Memnite
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Bofur, Reliable Guardian.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Attack(Bofur, Reliable Guardian > Bot2; Memnite > Bot2)
+Bot2.Block(Memnite#1 > Bofur, Reliable Guardian; Memnite#2 > Bofur, Reliable Guardian)
+[T3 Bot1.Blockers]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Feint.Cast(Bot1.Battlefield.Bofur, Reliable Guardian)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite#1.Tapped = true
+? Bot2.Battlefield.Memnite#2.Tapped = true
+? Bot2.Battlefield.Ornithopter.Tapped = false
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Bofur, Reliable Guardian.Damage = 0
+Bot2.Battlefield.Memnite#1.Damage = 0
+Bot2.Battlefield.Memnite#2.Damage = 0
+Bot2.Life = 19

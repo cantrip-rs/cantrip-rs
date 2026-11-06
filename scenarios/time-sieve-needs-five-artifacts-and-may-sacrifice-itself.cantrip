@@ -1,5 +1,5 @@
 # "{T}, Sacrifice five artifacts": the Sieve is an artifact too and may be one of the five (CR 118.8 - the cost is paid with any artifacts
-# you control). With the Sieve and three Moxen (four artifacts) it is not offered, however (the refusal); a fourth Mox makes five, the
+# you control). With the Sieve and three Moxen (four artifacts) the attempted activation rolls back; a fourth Mox makes five, the
 # ability is activated and all five - the Sieve included - are sacrificed, for the extra turn (CR 500.7): turn 2 is Bot1's again.
 
 [Bot1 Deck]
@@ -22,10 +22,17 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Time Sieve.Cast
 Bot1.Hand.Mox Ruby.Cast
 Bot1.Pass
-! Bot1.Battlefield.Time Sieve.Activate
+Bot1.Battlefield.Time Sieve.Activate
+? Bot1.Battlefield.Time Sieve.Tapped = false
+? Bot1.Battlefield.Count = 4
+? Bot1.Hand.Mox Pearl.Colors =
+? Bot1.Life = 20
+? Bot1.Graveyard.Count = 0
+? Stack.Count = 0
 Bot1.Hand.Mox Pearl.Cast
 Bot1.Pass
 Bot1.Battlefield.Time Sieve.Activate
+Bot1.Choose(Tap Time Sieve)
 Bot1.Choose(Time Sieve; Mox Sapphire; Mox Jet; Mox Ruby; Mox Pearl)
 [T2 Bot1.Main1]
 ? ActivePlayer = Bot1

@@ -33,7 +33,28 @@ Bot2.Hand.Forest.Play
 Bot2.Battlefield.Forest.Activate
 Bot2.Hand.Llanowar Elves.Cast
 [T3 Bot1.Main1]
-! Bot1.Hand.Bone Shards.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Bone Shards.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Modes(Sacrifice a creature)
+? Bot1.Hand = Bone Shards
+? Bot1.Mana = {B}
+? Bot1.Life = 20
+? Bot1.Graveyard.Count = 0
+? Bot1.Battlefield = Black Lotus; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Swamp
+? Bot1.Battlefield.Swamp.Tapped = true
+? Bot2.Battlefield = Forest; Llanowar Elves
+? Stack.Count = 0
+? Exile.Count = 0
+Bot1.Hand.Bone Shards.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Modes(Discard a card)
+? Bot1.Hand = Bone Shards
+? Bot1.Mana = {B}
+? Bot1.Life = 20
+? Bot1.Graveyard.Count = 0
+? Bot1.Battlefield.Swamp.Tapped = true
+? Bot2.Battlefield = Forest; Llanowar Elves
+? Stack.Count = 0
+? Exile.Count = 0
 [T5 Bot1.Main1]
 Bot1.Hand.Ornithopter.Cast
 Bot1.Battlefield.Swamp.Activate

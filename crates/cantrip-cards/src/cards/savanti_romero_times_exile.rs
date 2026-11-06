@@ -11,7 +11,7 @@ fn grow_then_draw_and_lose(g: &mut dyn Game, item: &StackItem) -> Result<(), Sus
     g.end_sentence();
     let x = effects::counters_on(g, item.object);
     g.draw(item.controller, x);
-    g.lose_life(item.controller, x as i32);
+    g.lose_life(item.controller,(x as i32) as i32);
     Ok(())
 }
 

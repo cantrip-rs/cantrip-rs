@@ -1,0 +1,50 @@
+# Hazezon counts lands as its delayed ability resolves; Strip Mine removes two in response (CR 608.2h).
+[Bot1 Deck]
+Hazezon Tamar
+Mountain
+Forest
+Plains
+Mountain
+Mountain
+Mountain
+Strip Mine
+Swords to Plowshares
+Mox Pearl
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T11 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T13 Bot1.Main1]
+Bot1.Hand.Strip Mine.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Strip Mine.Activate(Ability: Add)
+Bot1.Hand.Hazezon Tamar.Cast
+? Bot1.Mana =
+[T14 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T15 Bot1.Upkeep]
+Bot1.Battlefield.Strip Mine.Activate(Ability: Destroy; Bot1.Battlefield.Mountain)
+[T15 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Count = 11
+Bot1.Battlefield.Sand Warrior Token#1.Power = 1
+Bot1.Graveyard = Mountain; Strip Mine

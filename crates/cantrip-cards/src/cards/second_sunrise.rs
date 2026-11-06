@@ -16,7 +16,7 @@ fn effect(g: &mut dyn Game, _: &StackItem) -> Result<(), Suspend> {
         }
     }
     if !back.is_empty() {
-        g.put_all_onto_battlefield(&back)?;
+        g.put_all_onto_battlefield_by(&back.into_iter().map(|(card, player)| (card, player, false, player)).collect::<Vec<_>>(), &[])?;
     }
     Ok(())
 }

@@ -1,0 +1,38 @@
+# The enchanted Sorcerer's noncombat ability and another creature's combat damage both still hurt the opponent (CR 615.1).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Prodigal Sorcerer
+Gaseous Form
+Memnite
+Island x20
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Prodigal Sorcerer.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gaseous Form.Cast(Prodigal Sorcerer)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Prodigal Sorcerer.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Gaseous Form.AttachedTo = Prodigal Sorcerer

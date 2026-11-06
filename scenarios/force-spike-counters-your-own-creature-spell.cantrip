@@ -1,0 +1,22 @@
+# Force Spike can target its controller's creature spell; its controller may decline and have it countered (CR 701.6a, 118.12).
+[Bot1 Deck]
+Mox Sapphire
+Force Spike
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Force Spike.Cast(Stack.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T1 Bot1.Main2]
+[Expect]
+Bot1.Graveyard.Ornithopter.Power = 0
+Bot1.Graveyard.Force Spike.Colors = Blue

@@ -1,0 +1,30 @@
+# Fishliver Oil can enchant an opponent's creature; that creature cannot be blocked while its defending player controls an Island (CR 303.4, 702.14c).
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Pearl
+Ornithopter
+Fishliver Oil
+Plains x20
+[Bot2 Deck]
+Memnite
+Plains x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fishliver Oil.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite)
+! Bot1.Block(Ornithopter > Memnite)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Fishliver Oil.AttachedTo = Memnite
+Bot1.Life = 19

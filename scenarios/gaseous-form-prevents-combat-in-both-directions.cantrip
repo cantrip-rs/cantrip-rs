@@ -1,0 +1,48 @@
+# The enchanted creature attacks and blocks: all combat damage to and from it is prevented (CR 615.1).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Grizzly Bears
+Gaseous Form
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Gaseous Form.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Gaseous Form.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Attackers]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Block(Grizzly Bears > Memnite)
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Grizzly Bears.Damage = 0
+? Bot2.Battlefield.Memnite.Damage = 0
+[T5 Bot1.Attackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+[T5 Bot1.Main2]
+? Bot2.Life = 20
+[T7 Bot1.Attackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Memnite > Grizzly Bears)
+[T7 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Bot2.Battlefield.Memnite.Damage = 0
+Bot1.Battlefield.Gaseous Form.AttachedTo = Grizzly Bears

@@ -1,5 +1,5 @@
-# CR 701.68b: a player who is given the choice to blight but controls no creature can't choose to. Bot1 has only a Mox Jet, so the choice to
-# pay the additional cost is not offered (! Bot1.Modes with the blight) and the Hex is cast plain: the Elves dies, no life is gained. The
+# CR 701.68b: Bot1 controls no creature, so an attempted blight cast cannot pay its additional cost and rolls back. The Hex is then
+# cast plain: the Elves dies, no life is gained. The
 # positive control is "...blighting-your-own-creature-puts-the-counter-on-it...", the same game with an Ornithopter to blight.
 
 [Bot1 Deck]
@@ -23,7 +23,16 @@ Bot2.Hand.Llanowar Elves.Cast
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Requiting Hex.Cast
-! Bot1.Modes(Blight 1)
+Bot1.Modes(Blight 1)
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Hand.Requiting Hex.Colors = Black
+? Bot1.Mana = {B}
+? Bot1.Graveyard.Count = 0
+? Bot1.Life = 20
+? Bot2.Battlefield.Llanowar Elves.Toughness = 1
+? Stack.Count = 0
+Bot1.Hand.Requiting Hex.Cast
+Bot1.Modes(Cast without blighting)
 Bot1.Target(Bot2.Battlefield.Llanowar Elves)
 [T3 Bot1.Main2]
 

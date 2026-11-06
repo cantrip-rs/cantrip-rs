@@ -14,8 +14,8 @@ fn gain_life_equal_sacrificed_creatures(
             .to_vec()
             .get(0)
             .copied()
-            .map_or(0, |o: ObjectId| i64::from(q.chars(o).toughness.unwrap_or(0)))
-            .max(0) as i32
+            .map_or(0, |o: ObjectId| q.chars(o).toughness.unwrap_or(0))
+            .max(0)
     };
     g.gain_life(item.controller, amount_0);
     Ok(())

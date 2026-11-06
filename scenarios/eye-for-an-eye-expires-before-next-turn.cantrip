@@ -1,0 +1,54 @@
+# Eye for an Eye (CR 614.1a, 611.2a): "this turn". Bot1 casts it on its own turn 3 and chooses Bot2's Fencing Ace, which deals no
+# damage that turn. The effect ends with the turn, so on turn 4 the Ace's double strike is dealt to Bot1 in full (2): Bot1 16 after its own Shock,
+# Bot2 untouched at 20, and nothing was prevented.
+
+[Bot1 Deck]
+Mox Pearl x2
+Mox Ruby
+Shock
+Eye for an Eye
+Island x25
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Fencing Ace
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Fencing Ace.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Eye for an Eye.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Fencing Ace)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+? Bot2.Life = 20
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Fencing Ace > Bot1)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 16
+Bot2.Life = 20
+Prevented = (absent)

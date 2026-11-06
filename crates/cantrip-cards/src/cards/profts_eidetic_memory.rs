@@ -15,7 +15,7 @@ fn grow(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if x > 0
         && let Some(creature) = targets::object(g, item, 0)
     {
-        g.add_counters(creature, CounterKind::PlusOne, x);
+        g.add_counters(creature, CounterKind::PlusOne,(x) as i32);
     }
     Ok(())
 }

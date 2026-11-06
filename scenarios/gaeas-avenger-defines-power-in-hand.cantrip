@@ -1,0 +1,35 @@
+# The Avenger's characteristic-defining ability counts opposing artifacts even while the card is in its owner's hand (CR 604.3).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Gaea's Avenger
+Forest x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Bot3 Deck]
+Mox Jet
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot3.Main1]
+Bot3.Hand.Mox Jet.Cast
+Bot3.Pass
+[T4 Bot1.Main1]
+? Bot1.Hand.Gaea's Avenger.Power = 3
+? Bot1.Hand.Gaea's Avenger.Toughness = 3
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Gaea's Avenger.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[Expect]
+Bot1.Battlefield.Gaea's Avenger.Power = 3
+Bot1.Battlefield.Gaea's Avenger.Toughness = 3

@@ -1,0 +1,8 @@
+{
+  "name": "Giant Turtle",
+  "manaCost": "{1}{G}{G}",
+  "type": "Creature — Turtle",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "This creature can't attack if it attacked during your last turn."
+}

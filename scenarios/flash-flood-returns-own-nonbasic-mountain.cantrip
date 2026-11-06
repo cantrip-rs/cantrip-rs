@@ -1,0 +1,29 @@
+# The Mountain mode returns a nonbasic Mountain its caster owns, while a Forest without that subtype is not legal (CR 205.3i, 400.3).
+[Bot1 Deck]
+Taiga
+Mox Sapphire
+Flash Flood
+Forest
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Taiga.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flash Flood.Cast
+Bot1.Modes(Return target Mountain)
+! Bot1.Target(Forest)
+Bot1.Target(Taiga)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Hand.Taiga.Colors = 
+Bot1.Battlefield.Forest.Tapped = false
+Bot1.Battlefield.Count = 2

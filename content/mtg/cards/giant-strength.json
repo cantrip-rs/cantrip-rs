@@ -1,0 +1,6 @@
+{
+  "name": "Giant Strength",
+  "manaCost": "{R}{R}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +2/+2."
+}

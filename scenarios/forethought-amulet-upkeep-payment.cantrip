@@ -1,0 +1,46 @@
+# The upkeep cost is exactly {3}: paying keeps the Amulet, while two mana on a later upkeep cannot pay and it is sacrificed (CR 118.12a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Forethought Amulet
+Island
+Island x15
+
+[Bot2 Deck]
+Strip Mine
+Island x19
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Forethought Amulet.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Strip Mine.Play
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Forethought Amulet.ManaValue = 5
+[T4 Bot2.Main1]
+Bot2.Battlefield.Strip Mine.Activate(Bot1.Battlefield.Island; Ability: Destroy target land)
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.PayCost
+Bot1.Decline
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Forethought Amulet; Island; Black Lotus

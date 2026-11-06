@@ -1,0 +1,33 @@
+# "This spell can't be countered" (CR 101.2, 701.6a): Bot2's Force Spike resolves on Bot1's Abrupt Decay, Bot1 pays nothing, and
+# the Decay is not countered: it destroys Bot2's Ornithopter anyway.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Abrupt Decay
+Island x17
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Ornithopter
+Force Spike
+Island x16
+
+[Actions]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Abrupt Decay.Cast(Ornithopter)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Force Spike.Cast(Stack.Abrupt Decay)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Ornithopter; Force Spike
+Bot1.Graveyard = Abrupt Decay

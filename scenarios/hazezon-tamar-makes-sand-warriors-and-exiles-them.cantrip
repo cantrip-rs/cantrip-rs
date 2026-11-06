@@ -1,0 +1,75 @@
+# Hazezon creates one 1/1 red, green, white Sand Warrior per land at the next upkeep; leaving exiles them and an opponent's changeling (CR 701.7, 702.73).
+# Staff gets one story counter for the seven tokens created together; the tokens enter untapped.
+[Bot1 Deck]
+Hazezon Tamar
+Mountain
+Forest
+Plains
+Mountain
+Mountain
+Mountain
+Mountain
+Swords to Plowshares
+Staff of the Storyteller
+Defiant Khenra
+Mountain x20
+
+[Bot2 Deck]
+Universal Automaton
+Island x20
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T11 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Staff of the Storyteller.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Defiant Khenra.Cast
+[T11 Bot1.Main2]
+? Bot1.Battlefield.Staff of the Storyteller.Counters.Story = 1
+[T13 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Hazezon Tamar.Cast
+? Bot1.Mana =
+[T14 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Universal Automaton.Cast
+[T14 Bot2.End]
+? Bot1.Battlefield.Sand Warrior Token = (absent)
+[T15 Bot1.Main1]
+? Bot1.Battlefield.Sand Warrior Token#1.Subtypes = Sand; Warrior
+? Bot1.Battlefield.Sand Warrior Token#1.Types = Creature
+? Bot1.Battlefield.Sand Warrior Token#1.Tapped = false
+? Bot1.Battlefield.Sand Warrior Token#1.Power = 1
+? Bot1.Battlefield.Sand Warrior Token#1.Toughness = 1
+? Bot1.Battlefield.Sand Warrior Token#1.Colors = Green; Red; White
+? Bot1.Battlefield.Count = 18
+? Bot1.Battlefield.Staff of the Storyteller.Counters.Story = 2
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Hazezon Tamar)
+[T15 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Count = 10
+Bot1.Battlefield.Sand Warrior Token = (absent)
+Bot1.Battlefield.Defiant Khenra.Power = 2
+Exile = Hazezon Tamar; Universal Automaton

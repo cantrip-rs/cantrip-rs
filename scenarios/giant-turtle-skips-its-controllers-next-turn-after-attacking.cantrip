@@ -1,0 +1,32 @@
+# Turtle attacks, cannot attack on its controller's next turn, then can attack again; another creature may attack during the skipped turn (CR 508.1c).
+
+[Bot1 Deck]
+Giant Turtle
+Black Lotus
+Ornithopter
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Giant Turtle.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Giant Turtle > Bot2)
+[T5 Bot1.DeclareAttackers]
+! Bot1.Attack(Giant Turtle > Bot2)
+Bot1.Attack(Ornithopter > Bot2)
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Giant Turtle > Bot2)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Giant Turtle.Tapped = true

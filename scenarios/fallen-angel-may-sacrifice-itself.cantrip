@@ -1,0 +1,31 @@
+# Fallen Angel can sacrifice itself to pay its own ability's cost (CR 701.21a, 602.2b).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Fallen Angel
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fallen Angel.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Fallen Angel.Activate
+Bot1.Choose(Fallen Angel)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard.Fallen Angel.Power = 3
+Bot1.Battlefield.Count = 2

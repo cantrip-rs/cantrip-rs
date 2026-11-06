@@ -1,0 +1,28 @@
+# The opponent cannot pay the one mana after using its only source, so Force Spike counters the spell (CR 701.6a).
+[Bot1 Deck]
+Island
+Force Spike
+Island x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Force Spike.Cast(Lightning Bolt)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Decline
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard = Force Spike
+Bot2.Graveyard = Lightning Bolt

@@ -1,0 +1,52 @@
+# Fire Sprites cannot be blocked by a ground creature, but can be blocked by a flier; it later pays green to add red (CR 702.9b, 605.1a).
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Pearl
+Fire Sprites
+Shock
+Island x16
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fire Sprites.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Attackers]
+Bot1.Attack(Fire Sprites > Bot2)
+! Bot2.Block(Memnite > Fire Sprites)
+Bot2.Block(Ornithopter > Fire Sprites)
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Ornithopter.Damage = 1
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Fire Sprites.Activate(Mana: short)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Fire Sprites.Activate
+Bot1.Choose(Pay mana)
+? Bot1.Mana = {W}{R}
+! Bot1.Battlefield.Fire Sprites.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+? Bot1.Mana = {W}
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Fire Sprites.Tapped = true
+Bot2.Life = 18

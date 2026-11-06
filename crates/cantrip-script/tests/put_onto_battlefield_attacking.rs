@@ -28,6 +28,7 @@ Bot1.Attack(Ornithopter)
 [T3 Bot1.Blockers]
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Moon-Circuit Hacker.Activate(Ability: Ninjutsu)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot1.Pass

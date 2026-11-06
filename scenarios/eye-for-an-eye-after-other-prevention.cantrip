@@ -1,0 +1,50 @@
+# Healing Salve prevents one of Lightning Bolt’s damage before Eye for an Eye applies, so two damage reaches each player (CR 616.1).
+
+[Bot1 Deck]
+Mox Pearl x3
+Healing Salve
+Eye for an Eye
+Island x25
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Shock
+Lightning Bolt
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Prevent the next 3 damage)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Prevented = 2 Shock > Bot1 by Healing Salve
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Eye for an Eye.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Stack.Lightning Bolt)
+Bot1.Replace(Healing Salve)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
+Prevented = 2 Shock > Bot1 by Healing Salve; 1 Lightning Bolt > Bot1 by Healing Salve
