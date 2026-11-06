@@ -1,0 +1,55 @@
+# Fanatical Fever can target either player's creature, granting +3/+0 and trample until end of turn (CR 611.2a, 702.19b).
+# Bot1's 4/1 Memnite deals lethal damage to a 1/1 blocker and three excess to Bot2; a noncreature is not a legal target.
+[Bot1 Deck]
+Black Lotus x2
+Mox Emerald x2
+Fanatical Fever x2
+Memnite
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Bot1.Battlefield.Memnite > Bot2)
+Bot2.Block(Bot2.Battlefield.Memnite > Bot1.Battlefield.Memnite)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+! Bot1.Hand.Fanatical Fever.Cast(Bot1.Battlefield.Mox Emerald#2)
+Bot1.Hand.Fanatical Fever.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 4
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Memnite.Keywords = Trample
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Graveyard = Memnite; Fanatical Fever; Black Lotus
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Fanatical Fever.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 3
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+? Bot2.Battlefield.Ornithopter.Keywords = Flying; Trample
+[T6 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Ornithopter.Keywords = Flying
+Bot2.Life = 17

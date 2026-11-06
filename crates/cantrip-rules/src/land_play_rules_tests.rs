@@ -79,7 +79,7 @@ fn put(game: &mut Game, table: &CardTable, def: &'static CardDef, owner: PlayerI
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// The land plays `player` is offered of `land`, by way number (0 the card itself, `WAY_BACK_FACE` its back face).
@@ -189,7 +189,7 @@ fn a_land_an_effect_would_play_from_a_graveyard_is_forbidden_too() {
     let serial = game.state.stack.last().expect("the caster").serial;
     game.state.frame_push(cantrip_state::Frame::new(cantrip_state::FrameKind::Resolve { serial }));
     let frame = game.state.agenda.len() - 1;
-    let resolving = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let resolving = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     assert!(!could_play_land_during_resolution(&resolving, in_graveyard));
     assert!(could_play_land_during_resolution(&resolving, in_hand));
 }

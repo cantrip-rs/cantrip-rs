@@ -35,6 +35,7 @@ Bot2.Hand.Mountain.Play
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Rust Harvester.Activate(Bot2)
+Bot1.Choose(Tap Rust Harvester)
 Bot1.Choose(Mishra's Bauble)
 Bot1.Pass
 Bot2.Battlefield.Mountain.Activate

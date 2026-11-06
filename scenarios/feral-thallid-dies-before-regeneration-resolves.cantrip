@@ -1,0 +1,41 @@
+# Destroying Feral Thallid before its regeneration ability resolves leaves its new graveyard object unprotected (CR 400.7, 701.19a).
+[Bot1 Deck]
+Feral Thallid
+Black Lotus x2
+Forest x25
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Feral Thallid.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+! Bot1.Battlefield.Feral Thallid.Activate
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Feral Thallid.Counters.Spore = 1
+! Bot1.Battlefield.Feral Thallid.Activate
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Feral Thallid.Counters.Spore = 1
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Feral Thallid.Counters.Spore = 2
+! Bot1.Battlefield.Feral Thallid.Activate
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Feral Thallid.Counters.Spore = 2
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Feral Thallid.Counters.Spore = 3
+Bot1.Battlefield.Feral Thallid.Activate
+? Bot1.Battlefield.Feral Thallid.Counters.Spore = (absent)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Feral Thallid)
+[T7 Bot1.Main2]
+[Expect]
+Bot1.Graveyard.Feral Thallid.Power = 6

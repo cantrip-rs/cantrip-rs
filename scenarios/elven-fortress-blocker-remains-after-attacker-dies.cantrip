@@ -1,0 +1,53 @@
+# Shock destroys the attacker after blocking; the blocker remains blocking and the pending ability still applies (CR 509.1g).
+[Bot1 Deck]
+Elven Fortress
+Mox Emerald x2
+Mox Sapphire x2
+Memnite x2
+Island x20
+[Bot2 Deck]
+Memnite x2
+Mountain
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Elven Fortress.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite#1 > Bot2)
+Bot2.Block(Memnite#1 > Bot1.Battlefield.Memnite#1)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+! Bot1.Battlefield.Elven Fortress.Activate(Bot1.Battlefield.Memnite#1)
+! Bot1.Battlefield.Elven Fortress.Activate(Bot2.Battlefield.Memnite#2)
+Bot1.Battlefield.Elven Fortress.Activate(Bot2.Battlefield.Memnite#1)
+? Bot1.Mana =
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite#1.Toughness = 2
+[Expect]
+Bot2.Battlefield.Memnite#1.Toughness = 2

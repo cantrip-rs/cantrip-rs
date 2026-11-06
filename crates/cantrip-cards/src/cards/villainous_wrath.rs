@@ -8,7 +8,7 @@ use cantrip_oracle as oracle;
 fn drain_then_wrath(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(opponent) = targets::player(g, item, 0) else { return Ok(()) };
     let creatures = creatures_you_control(g, opponent);
-    g.lose_life(opponent, creatures as i32);
+    g.lose_life(opponent,(creatures) as i32);
     g.end_sentence();
     effects::destroy_all_creatures(g, item)
 }

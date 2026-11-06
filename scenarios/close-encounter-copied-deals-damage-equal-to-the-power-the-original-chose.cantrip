@@ -25,6 +25,7 @@ Bot1.Hand.Ornithopter.Cast
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Close Encounter.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Choose creature you control or warped creature card you own in exile)
 Bot1.Choose(Memnite)
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Hand.Choreographed Sparks.Cast

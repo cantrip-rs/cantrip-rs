@@ -65,7 +65,7 @@ fn put(game: &mut Game, table: &CardTable, def: &'static CardDef, zone: Zone) ->
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// An instant card put onto the battlefield, by every way that puts a card there, stays where it is; a creature card put
@@ -160,7 +160,7 @@ fn a_permanent_spell_turned_over_to_a_sorcery_face_as_it_resolves_goes_to_the_gr
         game.state.frame_push(cantrip_state::Frame::new(cantrip_state::FrameKind::Resolve { serial }));
         game.state.update_turn(|t| t.day_night = time);
         let frame = game.state.agenda.len() - 1;
-        let mut cx = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
         crate::resolve::resolve(&mut cx).expect("nothing is asked");
         let new = cx.s().obj(wolf).became.expect("it left the stack");
         assert!(cx.s().stack.is_empty());

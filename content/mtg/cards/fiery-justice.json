@@ -1,0 +1,6 @@
+{
+  "name": "Fiery Justice",
+  "manaCost": "{R}{G}{W}",
+  "type": "Sorcery",
+  "oracleText": "Fiery Justice deals 5 damage divided as you choose among any number of targets. Target opponent gains 5 life."
+}

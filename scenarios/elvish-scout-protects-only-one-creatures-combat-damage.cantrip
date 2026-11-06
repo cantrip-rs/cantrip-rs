@@ -1,0 +1,42 @@
+# The protected Sorcerer can still deal noncombat damage, and a different attacker still deals combat damage (CR 615.1).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Elvish Scout
+Prodigal Sorcerer
+Grizzly Bears
+Forest x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Elvish Scout.Cast
+Bot1.Pass
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Prodigal Sorcerer.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Prodigal Sorcerer; Grizzly Bears)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Elvish Scout.Activate(Bot1.Battlefield.Prodigal Sorcerer)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Prodigal Sorcerer.Tapped = false
+Bot1.Battlefield.Prodigal Sorcerer.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Grizzly Bears.Tapped = true

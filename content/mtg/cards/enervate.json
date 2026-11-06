@@ -1,0 +1,6 @@
+{
+  "name": "Enervate",
+  "manaCost": "{1}{U}",
+  "type": "Instant",
+  "oracleText": "Tap target artifact, creature, or land.\nDraw a card at the beginning of the next turn's upkeep."
+}

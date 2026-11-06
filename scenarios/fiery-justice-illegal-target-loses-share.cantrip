@@ -1,0 +1,55 @@
+# When one damage target leaves, its two damage are lost and the opponent takes only the original three before gaining five.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Ornithopter
+Fiery Justice x2
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Unsummon
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fiery Justice#1.Cast
+Bot1.Divide(Bot1.Battlefield.Ornithopter: 2; Bot2: 3)
+Bot1.Target(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Unsummon.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 22
+? Bot1.Hand.Ornithopter.Colors =
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fiery Justice.Cast
+Bot1.Divide(Bot1: 2; Bot2: 3)
+Bot1.Target(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 24

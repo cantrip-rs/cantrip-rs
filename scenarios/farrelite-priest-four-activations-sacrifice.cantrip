@@ -1,0 +1,33 @@
+# Each {1} becomes {W}; the fourth activation schedules sacrifice at the
+# next end step, while three activations do not (CR 605.3a, 603.7).
+[Bot1 Deck]
+Farrelite Priest
+Black Lotus
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Farrelite Priest.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Farrelite Priest.Activate(Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Farrelite Priest.Activate
+? Bot1.Mana = {W}
+Bot1.Battlefield.Farrelite Priest.Activate
+? Bot1.Mana = {W}
+Bot1.Battlefield.Farrelite Priest.Activate
+? Bot1.Mana = {W}
+? Delayed.Count = 0
+Bot1.Battlefield.Farrelite Priest.Activate
+? Bot1.Mana = {W}
+? Delayed.Count = 1
+[T2 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Farrelite Priest = (absent)
+Bot1.Graveyard = Farrelite Priest; Black Lotus

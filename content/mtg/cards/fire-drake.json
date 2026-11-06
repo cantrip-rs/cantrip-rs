@@ -1,0 +1,11 @@
+{
+  "name": "Fire Drake",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Drake",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying\n{R}: This creature gets +1/+0 until end of turn. Activate only once each turn.",
+  "keywords": [
+    "Flying"
+  ]
+}

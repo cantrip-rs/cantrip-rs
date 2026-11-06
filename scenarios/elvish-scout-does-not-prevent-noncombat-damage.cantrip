@@ -1,0 +1,52 @@
+# Elvish Scout prevents combat damage to its attacker, but Shock still deals noncombat damage to that creature (CR 615.1).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Mox Ruby
+Elvish Scout
+Kraken Hatchling
+Shock
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Elvish Scout.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Kraken Hatchling.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Kraken Hatchling)
+Bot2.Block(Grizzly Bears > Kraken Hatchling)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Elvish Scout.Activate(Bot1.Battlefield.Kraken Hatchling)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Kraken Hatchling)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kraken Hatchling.Damage = 2
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Kraken Hatchling.Damage = 2
+Bot1.Battlefield.Kraken Hatchling.Toughness = 4
+Bot2.Battlefield.Grizzly Bears.Toughness = 2

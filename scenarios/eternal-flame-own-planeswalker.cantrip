@@ -1,0 +1,46 @@
+# Eternal Flame may target its caster's planeswalker; two Mountains deal two damage to it and one to the caster.
+
+[Bot1 Deck]
+Mountain x2
+Black Lotus x2
+Mox Sapphire
+Mox Pearl
+Teferi, Time Raveler
+Eternal Flame
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain#1.Play
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Teferi, Time Raveler.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Eternal Flame.Cast(Bot1.Battlefield.Teferi, Time Raveler)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 20
+Bot1.Battlefield.Teferi, Time Raveler.Counters.Loyalty = 2

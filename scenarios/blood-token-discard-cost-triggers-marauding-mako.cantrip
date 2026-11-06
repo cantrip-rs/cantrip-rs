@@ -28,6 +28,8 @@ Bot1.Hand.Marauding Mako.Cast
 Bot1.Pass
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Blood Token.Activate
+Bot1.Choose(Tap Blood Token)
+Bot1.Choose(Discard 1 card)
 Bot1.Choose(Lightning Bolt)
 [T3 Bot1.Main2]
 

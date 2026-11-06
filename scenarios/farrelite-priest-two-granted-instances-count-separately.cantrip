@@ -1,0 +1,53 @@
+# Two graveyard Priests grant the Ooze separate abilities; three activations of
+# one and one of the other do not combine, but the fourth of either does (CR 113.2c).
+[Bot1 Deck]
+Entomb
+Entomb
+Necrotic Ooze
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Farrelite Priest
+Farrelite Priest
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Farrelite Priest)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Farrelite Priest)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Necrotic Ooze.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Necrotic Ooze.Activate(Ability: #1)
+Bot1.Battlefield.Necrotic Ooze.Activate(Ability: #1)
+Bot1.Battlefield.Necrotic Ooze.Activate(Ability: #1)
+Bot1.Battlefield.Necrotic Ooze.Activate(Ability: #2)
+? Delayed.Count = 0
+Bot1.Battlefield.Necrotic Ooze.Activate(Ability: #2)
+Bot1.Battlefield.Necrotic Ooze.Activate(Ability: #2)
+? Delayed.Count = 0
+Bot1.Battlefield.Necrotic Ooze.Activate(Ability: #2)
+? Delayed.Count = 1
+Bot1.Battlefield.Necrotic Ooze.Activate(Ability: #1)
+? Delayed.Count = 2
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Graveyard.Necrotic Ooze.Power = 4

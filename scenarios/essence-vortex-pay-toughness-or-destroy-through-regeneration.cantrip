@@ -1,0 +1,49 @@
+# The target's controller may pay life equal to toughness to save it; declining destroys it even through a regeneration shield (CR 119.4, 701.19c).
+# The spell accepts either player's creature but refuses an artifact that is not a creature.
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Ornithopter
+Essence Vortex x2
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Welding Jar
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Essence Vortex.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Essence Vortex.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Life = 18
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Welding Jar.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Essence Vortex.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot2.Battlefield.Welding Jar.Activate(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Decline
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter; Welding Jar
+Bot1.Battlefield.Ornithopter.Toughness = 2

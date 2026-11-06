@@ -1,0 +1,41 @@
+# Damage and life can go to different opponents in a three-player game.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Fiery Justice
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fiery Justice.Cast
+Bot1.Divide(Bot2: 5)
+! Bot1.Target(Bot1)
+Bot1.Target(Bot3)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 15
+Bot3.Life = 25

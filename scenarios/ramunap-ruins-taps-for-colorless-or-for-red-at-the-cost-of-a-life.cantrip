@@ -15,6 +15,7 @@ Bot1.Battlefield.Ramunap Ruins.Activate(Ability: {T}: Add {C})
 ? Bot1.Life = 20
 [T3 Bot1.Main1]
 Bot1.Battlefield.Ramunap Ruins.Activate(Ability: Pay 1 life)
+Bot1.Choose(Tap Ramunap Ruins)
 ? Bot1.Mana = {R}
 ? Bot1.Life = 19
 

@@ -55,6 +55,7 @@ Bot1.Battlefield.Mountain#2.Activate
 Bot1.Battlefield.Mountain#3.Activate
 Bot1.Battlefield.Mountain#4.Activate
 Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Choose(craft materials)
 Bot1.Choose(Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt)
 [T9 Bot1.Main1]
 ? Exile.Count = 4

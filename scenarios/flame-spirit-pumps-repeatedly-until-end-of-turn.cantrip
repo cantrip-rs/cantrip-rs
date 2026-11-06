@@ -1,0 +1,57 @@
+# Flame Spirit needs red to activate, gains +1/+0 for each activation, and loses those bonuses at cleanup (CR 107.4a, 611.2a).
+[Bot1 Deck]
+Flame Spirit
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Black Lotus
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Flame Spirit.Cast
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Ruby.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Flame Spirit.Activate(Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Flame Spirit.Activate
+? Bot1.Mana = {U}{R}{R}
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Flame Spirit.Power = 3
+? Bot1.Battlefield.Flame Spirit.Toughness = 3
+Bot1.Battlefield.Flame Spirit.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Flame Spirit.Power = 4
+? Bot1.Battlefield.Flame Spirit.Toughness = 3
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Flame Spirit.Power = 2
+? Bot1.Battlefield.Flame Spirit.Toughness = 3
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Flame Spirit.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Flame Spirit.Power = 3
+Bot1.Battlefield.Flame Spirit.Toughness = 3

@@ -1,0 +1,29 @@
+# Flare damages an opponent for exactly 1, then its controller draws at the next turn's upkeep once (CR 120.3, 603.7).
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Flare
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Flare.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Flare.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Hand.Count = 3
+[T2 Bot2.Main1]
+? Bot1.Hand.Count = 4
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 5
+[Expect]
+Bot2.Life = 19

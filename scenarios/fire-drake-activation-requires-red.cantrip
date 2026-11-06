@@ -1,0 +1,32 @@
+# Fire Drake's activation requires red mana: blue alone cannot pay, while red can (CR 602.2b, 107.4a).
+[Bot1 Deck]
+Fire Drake
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Fire Drake.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Fire Drake.Activate(Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Fire Drake.Activate
+? Bot1.Mana = {U}
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Fire Drake.Power = 2
+Bot1.Battlefield.Fire Drake.Toughness = 2

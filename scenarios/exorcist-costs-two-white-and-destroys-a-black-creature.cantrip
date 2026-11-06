@@ -1,0 +1,33 @@
+# Exorcist costs {W}{W}; its activated ability accepts two white mana for {1}{W} and destroys a black creature (CR 602.2b, 701.8a).
+[Bot1 Deck]
+Mox Pearl x2
+Mox Jet
+Exorcist
+Vampire of the Dire Moon
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Exorcist.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vampire of the Dire Moon.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Exorcist.Activate(Bot1.Battlefield.Vampire of the Dire Moon)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Vampire of the Dire Moon
+Bot1.Battlefield.Exorcist.Tapped = true

@@ -1,0 +1,33 @@
+# The player who activated the ability cannot sacrifice the Priest after an
+# opponent gains control of it before the delayed trigger resolves (CR 701.21a).
+[Bot1 Deck]
+Farrelite Priest
+Black Lotus
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Mountain
+Claim the Firstborn
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Farrelite Priest.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Farrelite Priest.Activate
+Bot1.Battlefield.Farrelite Priest.Activate
+Bot1.Battlefield.Farrelite Priest.Activate
+Bot1.Battlefield.Farrelite Priest.Activate
+? Delayed.Count = 1
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Claim the Firstborn.Cast(Bot1.Battlefield.Farrelite Priest)
+[T2 Bot2.Main2]
+? Bot2.Battlefield.Farrelite Priest.Power = 1
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Farrelite Priest.Power = 1
+Bot1.Graveyard = Black Lotus

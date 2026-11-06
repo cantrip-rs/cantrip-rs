@@ -1,0 +1,40 @@
+# A green creature receives a two-point shield; Lightning Bolt leaves exactly one damage on it (CR 615.1).
+[Bot1 Deck]
+Elvish Healer
+Black Lotus
+Mox Ruby
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Grizzly Bears
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Elvish Healer.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Elvish Healer.Activate(Bot1.Battlefield.Mox Ruby)
+Bot1.Battlefield.Elvish Healer.Activate(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Battlefield.Elvish Healer.Tapped = true
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Elvish Healer.Activate(Bot1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Grizzly Bears.Damage = 1
+Bot2.Battlefield.Grizzly Bears.Toughness = 2

@@ -193,9 +193,9 @@ fn a_spell_of_mana_value_260_is_cast_with_mana_value_260() {
         RequestKind::PayCosts { options, .. } => {
             let option = options
                 .iter()
-                .find(|o| o.kind == ActionKind::ConfirmCasting)
-                .or_else(|| options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source == Some(well)))
-                .or_else(|| options.iter().find(|o| o.kind == ActionKind::AssignMana));
+                .find(|o| o.kind == ActionKind::ActivateAbility && o.source == Some(well))
+                .or_else(|| options.iter().find(|o| o.kind == ActionKind::AssignMana))
+                .or_else(|| options.iter().find(|o| o.kind == ActionKind::ConfirmCasting));
             Some(Answer::Act(Action::of(option.unwrap_or_else(|| panic!("the mana to pay with: {request:?}")))))
         }
         _ => None,
@@ -240,6 +240,10 @@ fn put(game: &mut Game, name: &str) -> ObjectId {
 /// Announces 300 for X and pays with the Probe Wells' mana: each Well tapped, then the pool's mana one at a time.
 fn announce_300_and_pay(request: &Request) -> Option<Answer> {
     match &request.kind {
+        RequestKind::ChooseCostPayment { choices, .. } => {
+            assert!(choices.iter().all(|choice| matches!(choice.kind, CostPaymentKind::Tap | CostPaymentKind::Mana)));
+            Some(Answer::CostPayment(choices.iter().position(|choice| choice.kind == CostPaymentKind::Tap).unwrap_or(0)))
+        }
         RequestKind::PayCosts { announcing: true, most, .. } => {
             assert!(*most >= 300, "an X of 300 may be announced with 520 mana: {most}");
             Some(Answer::Announce(300))
@@ -247,9 +251,9 @@ fn announce_300_and_pay(request: &Request) -> Option<Answer> {
         RequestKind::PayCosts { options, .. } => Some(Answer::Act(Action::of(
             options
                 .iter()
-                .find(|o| o.kind == ActionKind::ConfirmCasting)
-                .or_else(|| options.iter().find(|o| o.kind == ActionKind::ActivateAbility))
+                .find(|o| o.kind == ActionKind::ActivateAbility)
                 .or_else(|| options.iter().find(|o| o.kind == ActionKind::AssignMana))
+                .or_else(|| options.iter().find(|o| o.kind == ActionKind::ConfirmCasting))
                 .unwrap_or_else(|| panic!("the mana to pay with: {request:?}")),
         ))),
         _ => None,

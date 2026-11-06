@@ -1,0 +1,40 @@
+# The shield prevents one damage to a player, while an unused shield expires at cleanup (CR 615.1, 514.2).
+[Bot1 Deck]
+Elvish Healer
+Black Lotus
+Island x20
+[Bot2 Deck]
+Lightning Bolt x2
+Mox Ruby
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Elvish Healer.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Elvish Healer.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 18
+[T5 Bot1.Main1]
+Bot1.Battlefield.Elvish Healer.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 18

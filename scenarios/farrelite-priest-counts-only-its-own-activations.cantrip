@@ -1,0 +1,32 @@
+# Two Priests count their own mana ability activations separately: three on
+# one and one on the other do not schedule sacrifice (CR 603.7).
+[Bot1 Deck]
+Farrelite Priest
+Farrelite Priest
+Black Lotus
+Black Lotus
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Farrelite Priest.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Farrelite Priest.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Farrelite Priest#1.Activate
+Bot1.Battlefield.Farrelite Priest#1.Activate
+Bot1.Battlefield.Farrelite Priest#1.Activate
+Bot1.Battlefield.Farrelite Priest#2.Activate
+? Bot1.Mana = {W}
+? Delayed.Count = 0
+[T2 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Farrelite Priest#1.Power = 1
+Bot1.Battlefield.Farrelite Priest#2.Power = 1

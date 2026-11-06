@@ -1,0 +1,8 @@
+{
+  "name": "Elvish Farmer",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Elf",
+  "power": 0,
+  "toughness": 2,
+  "oracleText": "At the beginning of your upkeep, put a spore counter on this creature.\nRemove three spore counters from this creature: Create a 1/1 green Saproling creature token.\nSacrifice a Saproling: You gain 2 life."
+}

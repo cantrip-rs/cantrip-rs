@@ -1,0 +1,57 @@
+# A controller at one life cannot pay the creature's two toughness, so the creature is destroyed (CR 119.4, 701.8a).
+# Channel gives Bot2 a deterministic way to pay nineteen life before Essence Vortex resolves.
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Essence Vortex
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Channel
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Channel.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Channel.Activate
+Bot2.Channel.Activate
+Bot2.Channel.Activate
+Bot2.Channel.Activate
+Bot2.Channel.Activate
+Bot2.Channel.Activate
+Bot2.Channel.Activate
+Bot2.Channel.Activate
+Bot2.Channel.Activate
+Bot2.Channel.Activate
+Bot2.Channel.Activate
+Bot2.Channel.Activate
+Bot2.Channel.Activate
+Bot2.Channel.Activate
+Bot2.Channel.Activate
+Bot2.Channel.Activate
+Bot2.Channel.Activate
+Bot2.Channel.Activate
+Bot2.Channel.Activate
+? Bot2.Life = 1
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Essence Vortex.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Life = 1
+Bot2.Graveyard = Ornithopter; Channel; Black Lotus

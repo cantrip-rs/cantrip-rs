@@ -27,8 +27,8 @@ Bot1.Hand.Island.Play
 Bot1.Attack(Ornithopter > Bot3)
 [T4 Bot1.DeclareBlockers]
 Bot1.Hand.Leonardo, Cutting Edge.Cast(Ability: Sneak)
-Bot1.Choose(Ornithopter)
 Bot1.Battlefield.Plains.Activate
+Bot1.Choose(Ornithopter)
 Bot1.Hand.Ancestral Recall.Cast(Bot3)
 Bot1.Battlefield.Island.Activate
 Bot1.Pass

@@ -1,0 +1,40 @@
+# One shield prevents only the first of two damage events from the chosen red permanent (CR 615.8).
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Circle of Protection: Red
+Island x20
+[Bot2 Deck]
+Black Lotus
+Goblin Bombardment
+Raging Goblin
+Ornithopter
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Circle of Protection: Red.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Goblin Bombardment.Cast
+Bot2.Hand.Raging Goblin.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Circle of Protection: Red.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Goblin Bombardment)
+Bot2.Battlefield.Goblin Bombardment.Activate(Bot1; Sacrifice: Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Goblin Bombardment.Activate(Bot1; Sacrifice: Ornithopter)
+[T3 Bot1.BeginCombat]
+[Expect]
+Bot1.Life = 19

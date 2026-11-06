@@ -1,0 +1,8 @@
+{
+  "name": "Flame Spirit",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Elemental Spirit",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "{R}: This creature gets +1/+0 until end of turn."
+}

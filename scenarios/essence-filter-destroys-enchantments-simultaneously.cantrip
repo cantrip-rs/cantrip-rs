@@ -1,0 +1,47 @@
+# Fecundity sees both enchantment creatures die with it, letting each player draw (CR 603.6c, 701.8a).
+[Bot1 Deck]
+Fecundity
+Essence Filter
+Black Lotus x2
+Mox Emerald
+Fang of Shigeki
+Forest
+Forest x20
+[Bot2 Deck]
+Fang of Shigeki
+Mox Emerald
+Forest x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Fecundity.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Fang of Shigeki.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Fang of Shigeki.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Essence Filter.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(1)
+Bot2.Accept
+Bot1.Accept
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Essence Filter; Fang of Shigeki; Fecundity; Black Lotus; Black Lotus
+Bot2.Graveyard = Fang of Shigeki
+Bot1.Hand.Count = 3
+Bot2.Hand.Count = 7

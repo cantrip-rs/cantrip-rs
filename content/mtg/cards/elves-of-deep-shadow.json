@@ -1,0 +1,8 @@
+{
+  "name": "Elves of Deep Shadow",
+  "manaCost": "{G}",
+  "type": "Creature — Elf Druid",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}: Add {B}. This creature deals 1 damage to you."
+}

@@ -64,7 +64,7 @@ fn exile_until(game: &mut Game, table: &CardTable, owner: PlayerId, by: ObjectId
     let id = game.state.push_obj(Obj::new(table.id_of(&CAPTIVE), owner, Zone::exile(owner)));
     game.state.zone_push(Zone::exile(owner), id);
     let text = game.state.obj(by).card;
-    game.state.update_obj(id, |o| o.exiled = Some(ExileLink { by, text, acquired: Acquired::OWN, from: Zone::BATTLEFIELD, until_leaves: true, encoded: false }));
+    game.state.update_obj(id, |o| o.exiled = Some(ExileLink { by, text, acquired: Acquired::OWN, from: Zone::BATTLEFIELD, until_leaves: true, return_by: None, encoded: false }));
     id
 }
 
@@ -72,7 +72,7 @@ fn exile_until(game: &mut Game, table: &CardTable, owner: PlayerId, by: ObjectId
 fn state_based_actions(game: &mut Game) {
     game.state.frame_push(Frame::new(FrameKind::Settle));
     let frame = game.state.agenda.len() - 1;
-    let mut cx = Cx { g: game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let mut cx = Cx { g: game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     assert!(crate::settle::state_based_actions_alone(&mut cx).expect("nothing is asked"));
 }
 

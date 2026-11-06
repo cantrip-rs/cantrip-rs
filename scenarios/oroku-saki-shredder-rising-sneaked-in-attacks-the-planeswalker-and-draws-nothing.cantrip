@@ -30,9 +30,9 @@ Bot2.Pass
 Bot1.Attack(Ornithopter > Bot2.Battlefield.Liliana of the Veil)
 [T3 Bot1.DeclareBlockers]
 Bot1.Hand.Oroku Saki, Shredder Rising.Cast(Ability: Sneak)
-Bot1.Choose(Ornithopter)
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass
 Bot1.Pass

@@ -1,0 +1,39 @@
+# A green planeswalker is not a creature, so Lightning Bolt has only one damage prevented (CR 615.1).
+[Bot1 Deck]
+Elvish Healer
+Black Lotus
+Mox Ruby
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Kiora, Behemoth Beckoner
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Elvish Healer.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Kiora, Behemoth Beckoner.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Elvish Healer.Activate(Bot1.Battlefield.Mox Ruby)
+Bot1.Battlefield.Elvish Healer.Activate(Bot2.Battlefield.Kiora, Behemoth Beckoner)
+? Bot1.Battlefield.Elvish Healer.Tapped = true
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Elvish Healer.Activate(Bot1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Kiora, Behemoth Beckoner)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Kiora, Behemoth Beckoner.Counters.Loyalty = 5

@@ -1,0 +1,6 @@
+{
+  "name": "Essence Vortex",
+  "manaCost": "{1}{U}{B}",
+  "type": "Instant",
+  "oracleText": "Destroy target creature unless its controller pays life equal to its toughness. A creature destroyed this way can't be regenerated."
+}
