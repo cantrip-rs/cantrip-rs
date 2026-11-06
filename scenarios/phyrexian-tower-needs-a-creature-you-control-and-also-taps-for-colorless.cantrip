@@ -1,6 +1,6 @@
 # "Sacrifice a creature" is a cost, and only your own creatures can be paid: with Bot2's Ornithopter the only creature, the
-# sacrifice ability is not offered (the refusal). Bot1 casts its own Ornithopter - summoning sick, which a sacrifice cost does not
-# mind - and the same ability is then offered (the positive control): {B}{B}. On turn five the Tower taps for {C} alone.
+# attempted sacrifice ability rolls back. Bot1 casts its own Ornithopter - summoning sick, which a sacrifice cost does not
+# mind - and the same ability then succeeds: {B}{B}. On turn five the Tower taps for {C} alone.
 
 [Bot1 Deck]
 Phyrexian Tower
@@ -16,9 +16,17 @@ Bot1.Hand.Phyrexian Tower.Play
 [T2 Bot2.Main1]
 Bot2.Hand.Ornithopter.Cast
 [T3 Bot1.Main1]
-! Bot1.Battlefield.Phyrexian Tower.Activate(Ability: Sacrifice)
-Bot1.Hand.Ornithopter.Cast
 Bot1.Battlefield.Phyrexian Tower.Activate(Ability: Sacrifice)
+? Bot1.Battlefield.Phyrexian Tower.Tapped = false
+? Bot2.Battlefield = Ornithopter
+? Bot1.Mana =
+? Bot1.Graveyard.Count = 0
+? Stack.Count = 0
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Phyrexian Tower.Activate(Ability: Sacrifice)
+Bot1.Choose(Tap Phyrexian Tower)
+Bot1.Choose(Bot1.Battlefield.Ornithopter)
 ? Bot1.Mana = {B}{B}
 [T5 Bot1.Main1]
 Bot1.Battlefield.Phyrexian Tower.Activate(Ability: {C})

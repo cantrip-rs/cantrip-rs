@@ -32,10 +32,10 @@ fn pillage_the_bog_with_128_lands_looks_at_256_cards_and_takes_one() {
                 .find(|o| o.kind == ActionKind::CastSpell && o.source.is_some_and(|c| game.name(c) == "Pillage the Bog"))
                 .map_or(Answer::Pass, |o| Answer::Act(Action::of(o))),
             RequestKind::Priority { .. } => Answer::Pass,
-            RequestKind::PayCosts { options, .. } => {
-                let confirm = options.iter().find(|o| o.kind == ActionKind::ConfirmCasting);
+            RequestKind::ChooseCostPayment { choices, .. } => Answer::CostPayment(choices.iter().position(|c| c.kind == CostPaymentKind::Mana).unwrap_or(0)),
+            RequestKind::PayCosts { options, remaining, mana_abilities, .. } => {
                 let land = options.iter().find(|o| o.kind == ActionKind::ActivateAbility);
-                Answer::Act(Action::of(confirm.or(land).expect("mana to pay with")))
+                super::pay(options, remaining, *mana_abilities, land)
             }
             RequestKind::DistributeCards { cards, destinations, .. } => {
                 looked = Some((cards.len(), destinations[0].min, destinations[0].max));

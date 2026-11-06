@@ -98,6 +98,8 @@ struct Run<'s> {
     cursor: usize,
     since: u32,
     casting: Option<Casting>,
+    /// An implicit mana operation is being finished before a post-action check.
+    implicit_cost_mana: bool,
     /// The payment of the player assisting with another's spell (CR 702.132a), from the `PayCost(X: n)` line that announced
     /// how much they pay: what its `Spend:` says.
     assisting: Option<Casting>,
@@ -276,6 +278,7 @@ impl<'s> Run<'s> {
             cursor: 0,
             since: 1,
             casting: None,
+            implicit_cost_mana: false,
             assisting: None,
             trace: Vec::new(),
             handed_over: false,
@@ -372,7 +375,7 @@ fn answers(verb: ScriptVerb, kind: &RequestKind) -> bool {
         V::PayCost => matches!(kind, RequestKind::PayCosts { .. }),
         V::Undo => matches!(kind, RequestKind::Priority { .. } | RequestKind::PayCosts { .. }),
         V::Accept | V::Decline => matches!(kind, RequestKind::May { .. } | RequestKind::UnlessPays { .. }),
-        V::Choose => matches!(kind, RequestKind::ChooseCards { .. } | RequestKind::TapForPower { .. } | RequestKind::CollectEvidence { .. } | RequestKind::Craft { .. }),
+        V::Choose => matches!(kind, RequestKind::ChooseCostPayment { .. } | RequestKind::ChooseCards { .. } | RequestKind::TapForPower { .. } | RequestKind::CollectEvidence { .. } | RequestKind::Craft { .. }),
         V::ChoosePlayer => matches!(kind, RequestKind::ChoosePlayer { .. }),
         V::Discard => matches!(kind, RequestKind::DiscardToHandSize { .. }),
         V::Attack => matches!(kind, RequestKind::DeclareAttackers { .. }),
@@ -397,6 +400,7 @@ fn answers(verb: ScriptVerb, kind: &RequestKind) -> bool {
 
 fn kind_name(kind: &RequestKind) -> &'static str {
     match kind {
+        RequestKind::ChooseCostPayment { .. } => "ChooseCostPayment",
         RequestKind::Priority { .. } => "Priority",
         RequestKind::PayCosts { .. } => "PayCosts",
         RequestKind::UnlessPays { .. } => "UnlessPays",
@@ -470,7 +474,11 @@ impl<'s> Run<'s> {
                         format!("{:?} {src} #{} {desc}{}", o.kind, o.index, o.mana.map(|m| format!(" {m:?}")).unwrap_or_default())
                     })
                     .collect();
-                format!("{} [{}]", kind_name(&r.kind), list.join(" | "))
+                let detail = match &r.kind {
+                    RequestKind::PayCosts { mana_abilities, announcing, .. } => format!(" mana_abilities={mana_abilities} announcing={announcing}"),
+                    _ => String::new(),
+                };
+                format!("{}{detail} [{}]", kind_name(&r.kind), list.join(" | "))
             }
             RequestKind::ChooseCards { rule, .. } => {
                 let words: String = rule.words(&|id| self.game.cards.get(CardId(id as u16)).name.to_string()).iter().map(|w| format!(" {w}")).collect();
@@ -515,9 +523,8 @@ impl<'s> Run<'s> {
         self.before = self.window();
         match self.game.answer(request.id, request.player, answer.clone()) {
             Ok(()) => {
-                if self.undo.may_take_back(&self.game, &noted) {
-                    self.undo.push(noted, ());
-                }
+                let kept = noted.is_mana().then_some(());
+                self.undo.track(&self.game, noted, kept);
                 Ok(())
             }
             Err(Rejected(why)) => match step {
@@ -539,8 +546,14 @@ impl<'s> Run<'s> {
     fn play_until(&mut self, driven: &[PlayerId]) -> R<Stop<'s>> {
         let mut asks = 0;
         loop {
-            if let Some(check) = self.run_checks(!driven.is_empty())? {
-                return Ok(Stop::Check(check));
+            // Ordinary casts finish their already-funded, automatic payment before a post-action assertion.
+            // An explicitly scripted mana window keeps its intermediate checks and activations under script control.
+            let completing_mana = self.game.pending().is_some_and(|r| self.completes_mana_window(r));
+            let completing_cost_mana = self.game.pending().is_some_and(|r| self.completes_cost_mana(r));
+            if !completing_mana && !completing_cost_mana {
+                if let Some(check) = self.run_checks(!driven.is_empty())? {
+                    return Ok(Stop::Check(check));
+                }
             }
             // A refusal's window opens where the game stood before the answer that brought the cursor to it - or, written
             // straight after another refusal (checks between), where that one's opened: they are judged together.
@@ -616,7 +629,7 @@ impl<'s> Run<'s> {
             // `! Bot1.Accept`, `! Bot1.Choose`, a bare `! Bot1.Target` or `! Bot2.Block`...: the player is not asked that kind of question
             // before their next priority (a bare Block: no block is possible, so the declaration is never asked for).
             if let Some(ScriptStep::Refused { action, line, text }) = self.current()
-                && ((action.verb.is_question() && !(matches!(action.verb, ScriptVerb::Choose | ScriptVerb::ChoosePlayer | ScriptVerb::Colors | ScriptVerb::Name) && action.positional().next().is_some())
+                && ((action.verb.is_question() && !(matches!(action.verb, ScriptVerb::Choose | ScriptVerb::ChoosePlayer | ScriptVerb::Colors | ScriptVerb::Name | ScriptVerb::Number) && action.positional().next().is_some())
                     && !(matches!(action.verb, ScriptVerb::Choose) && action.text.contains('('))
                     && !(matches!(action.verb, ScriptVerb::Arrange) && !action.raw_arguments.trim().is_empty()))
                     || (matches!(action.verb, ScriptVerb::Target | ScriptVerb::Modes | ScriptVerb::Block | ScriptVerb::Attack)
@@ -625,6 +638,9 @@ impl<'s> Run<'s> {
                         && !(action.verb == ScriptVerb::Attack && action.text.contains('('))
                         && action.named("Count").is_none()))
                 && request.player == player_of(action.bot)
+                && !(action.verb == ScriptVerb::Choose && action.named("Cost").is_none()
+                    && action.positional().next().is_none() && !action.text.contains('(')
+                    && matches!(request.kind, RequestKind::ChooseCostPayment { .. }))
             {
                 // Judged at the player's next priority, or at the question to them the line after it answers (a sacrifice
                 // chosen in the resolution whose "may" the refusal says is not asked), whichever comes first.
@@ -701,10 +717,13 @@ impl<'s> Run<'s> {
             if let Some(ScriptStep::Action(step)) = self.current()
                 && step.verb == ScriptVerb::PayCost
                 && request.player == player_of(step.bot)
-                && let RequestKind::UnlessPays { x: Some(_), times, .. } = &request.kind
+                && let RequestKind::UnlessPays { x, times, .. } = &request.kind
                 && (x_of(step)?.is_some() || times_of(step)?.is_some())
             {
                 let (line, text) = (step.line, step.text.clone());
+                if x.is_none() {
+                    return fail(format!("line {line}: {text}: the question does not choose {}", if step.named("Times").is_some() { "a number of times" } else { "X" }));
+                }
                 if step.named("Times").is_some() != times.is_some() {
                     return fail(format!(
                         "line {line}: {text}: the question chooses {}",
@@ -747,6 +766,24 @@ impl<'s> Run<'s> {
                 continue;
             }
 
+            // `! Bot1.PayCost(X: 1)`: that X cannot be chosen at this payment. A fixed cost offers no X choice even when
+            // paying it is offered. Probe the actual increment/decrement options on a fork, leaving this question intact.
+            if let Some(ScriptStep::Refused { action, line, text }) = self.current()
+                && matches!(action.verb, ScriptVerb::PayCost)
+                && request.player == player_of(action.bot)
+                && let RequestKind::UnlessPays { times, .. } = &request.kind
+                && let Some(wanted) = x_of(action)?
+            {
+                if times.is_some() {
+                    return fail(format!("line {line}: {text}: the question chooses a number of times, not X"));
+                }
+                if payment_x_can_be_chosen(&self.game, wanted)? {
+                    return fail(format!("line {line} says {text} must not be allowed, but X can be chosen as {wanted}"));
+                }
+                self.next();
+                continue;
+            }
+
             // `! Bot1.PayCost`: at the player's next "unless pays" question, paying is not among the options.
             if let Some(ScriptStep::Refused { action, line, text }) = self.current()
                 && matches!(action.verb, ScriptVerb::PayCost)
@@ -758,6 +795,31 @@ impl<'s> Run<'s> {
                 }
                 self.next();
                 continue;
+            }
+
+            // A refusal naming a cost operation tests the actual component menu, not an effect's object question.
+            if let Some(ScriptStep::Refused { action, line, text }) = self.current()
+                && action.verb == ScriptVerb::Choose && request.player == player_of(action.bot)
+                && let RequestKind::ChooseCostPayment { choices, .. } = &request.kind
+                && let Some(number) = action.named("Cost")
+            {
+                let index = number.parse::<usize>().ok().and_then(|n| n.checked_sub(1))
+                    .ok_or_else(|| Fail(format!("line {line}: Cost must be a positive cost number")))?;
+                if index < choices.len() {
+                    return fail(format!("line {line} says {text} must not be offered, but it is"));
+                }
+                self.next();
+                continue;
+            }
+
+            if let Some(ScriptStep::Refused { action, line, text }) = self.current()
+                && action.verb == ScriptVerb::Choose && request.player == player_of(action.bot)
+                && let RequestKind::ChooseCostPayment { choices, .. } = &request.kind
+                && let Some(spec) = action.positional().next()
+                && choices.iter().any(|choice| choice.label.eq_ignore_ascii_case(spec)
+                    || choice.label.split(" — ").next().is_some_and(|label| label.eq_ignore_ascii_case(spec)))
+            {
+                return fail(format!("line {line} says {text} must not be offered, but it is"));
             }
 
             // `! Bot1.Undo`: at the player's next priority or payment, there is no mana ability to take back.
@@ -776,6 +838,9 @@ impl<'s> Run<'s> {
             if let Some(ScriptStep::Refused { action, line, text }) = self.current()
                 && request.player == player_of(action.bot)
                 && (answers(action.verb, &request.kind) || self.refused_at_payment(action, &request.kind))
+                && !(action.verb == ScriptVerb::Choose && action.named("Cost").is_none()
+                    && action.positional().next().is_none() && !action.text.contains('(')
+                    && matches!(request.kind, RequestKind::ChooseCostPayment { .. }))
             {
                 if let RequestKind::Priority { options } | RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. } = &request.kind {
                     if !self.refused_offered(action, *line, text, options)?.is_empty() {
@@ -790,10 +855,11 @@ impl<'s> Run<'s> {
                             Some(v) if v.trim().eq_ignore_ascii_case("short") => true,
                             Some(v) => return fail(format!("line {line}: {text}: `Mana: {v}` - the only value is `Mana: short`")),
                         };
-                        // At a payment the options with mana to spare are the payment's: the mana abilities that may be
-                        // activated while paying (CR 605.3a), not what priority would offer.
+                        // Mana to spare changes affordability, not timing: after 601.2g the payer cannot activate
+                        // another mana ability, even if it would be affordable with a larger pool.
                         let with_spare = match request.kind {
                             RequestKind::Priority { .. } => options_with_mana_to_spare(&self.game, request.player),
+                            RequestKind::PayCosts { mana_abilities: false, .. } => Vec::new(),
                             _ => payment_mana_options_with_mana_to_spare(&self.game, request.player),
                         };
                         let spare = !self.refused_offered(action, *line, text, &with_spare)?.is_empty();
@@ -816,6 +882,7 @@ impl<'s> Run<'s> {
             self.fail_if_stuck()?;
 
             if let Some(ScriptStep::Wait(w)) = self.current()
+                && !completing_mana && !completing_cost_mana
                 && self.reached(w)
             {
                 // A line written under a step header waits from the step's beginning (or the latest answer, if later): what
@@ -996,9 +1063,126 @@ impl<'s> Run<'s> {
         self.carry_out(request, decision)
     }
 
+    /// A routine, already-funded cast completes before its following checks or actions. Writing a close-window,
+    /// cancellation or undo explicitly keeps the preceding mana-window steps under script control instead.
+    /// This is the script's payment plan; the engine still offers the full CR 601.2g opportunity to a real player.
+    fn completes_mana_window(&self, request: &Request) -> bool {
+        let RequestKind::PayCosts { mana_abilities: true, announcing: false, remaining, assist: AssistStep::None, .. } = &request.kind else {
+            return false;
+        };
+        if !remaining.is_zero() || self.casting.as_ref().is_some_and(|c| c.player != request.player)
+            || matches!(self.current(), Some(ScriptStep::Refused { .. }))
+        {
+            return false;
+        }
+        let mut saw_check = false;
+        for step in &self.script.steps[self.cursor..] {
+            match step {
+                ScriptStep::Check { .. } => saw_check = true,
+                ScriptStep::Handover(h) => {
+                    if self.waiting(h, request) { return false; }
+                    break;
+                }
+                ScriptStep::Wait(_) => break,
+                ScriptStep::Refused { action, .. } => {
+                    if saw_check { continue; }
+                    if action.verb == ScriptVerb::Activate && self.names_only_mana_abilities(action) {
+                        return false;
+                    }
+                }
+                ScriptStep::Action(action) => {
+                    if player_of(action.bot) != request.player { break; }
+                    match action.verb {
+                        ScriptVerb::Choose if action.positional().next().is_some_and(|s| s.eq_ignore_ascii_case("Close mana window") || s.eq_ignore_ascii_case("Pay mana") || s.eq_ignore_ascii_case("Assign mana")) => return false,
+                        ScriptVerb::Cancel | ScriptVerb::Undo => return false,
+                        ScriptVerb::Activate if self.names_only_mana_abilities(action) => {}
+                        ScriptVerb::Play | ScriptVerb::Cast | ScriptVerb::Activate | ScriptVerb::Pass
+                        | ScriptVerb::Attack | ScriptVerb::Block | ScriptVerb::Foretell | ScriptVerb::Suspend
+                        | ScriptVerb::TakeCompanion | ScriptVerb::Concede => break,
+                        _ => {}
+                    }
+                }
+            }
+        }
+        true
+    }
+
+    /// A post-action check follows the historical default of paying mana first. An explicit component
+    /// choice or handover retains control, and only one offered mana operation can be inferred.
+    fn completes_cost_mana(&self, request: &Request) -> bool {
+        if !matches!(self.current(), Some(ScriptStep::Check { .. }))
+            || self.casting.as_ref().is_some_and(|c| c.player != request.player)
+        {
+            return false;
+        }
+        if self.script.steps[..self.cursor].iter().rev().find(|s| !matches!(s, ScriptStep::Check { .. }))
+            .is_some_and(|s| matches!(s, ScriptStep::Action(a) if matches!(a.verb, ScriptVerb::Choose | ScriptVerb::Undo | ScriptVerb::Cancel)))
+        {
+            return false;
+        }
+        if self.script.steps[self.cursor..].iter().find(|s| !matches!(s, ScriptStep::Check { .. }))
+            .is_some_and(|s| matches!(s, ScriptStep::Handover(h) if self.waiting(h, request))
+                || matches!(s, ScriptStep::Action(a) if matches!(a.verb, ScriptVerb::Choose | ScriptVerb::Undo | ScriptVerb::Cancel)))
+        {
+            return false;
+        }
+        match &request.kind {
+            RequestKind::ChooseCostPayment { choices, .. } => choices.iter().filter(|c| c.kind == CostPaymentKind::Mana).count() == 1,
+            RequestKind::PayCosts { mana_abilities: false, announcing: false, options, .. } if self.implicit_cost_mana =>
+                options.iter().any(|o| matches!(o.kind, ActionKind::AssignMana | ActionKind::ConfirmCasting)),
+            _ => false,
+        }
+    }
+
+    /// A named object answer may be for the question after mana has been paid. Honor a matching
+    /// component label or source first, and infer mana only when exactly one mana operation is offered.
+    fn implicit_mana_for_named_choice(&self, request: &Request) -> Option<usize> {
+        let RequestKind::ChooseCostPayment { choices, .. } = &request.kind else { return None };
+        let step = match self.current() {
+            Some(ScriptStep::Action(step)) => step,
+            Some(ScriptStep::Refused { action: step, .. }) if !step.text.contains('(') => step,
+            _ => return None,
+        };
+        if step.verb != ScriptVerb::Choose || step.named("Cost").is_some() || request.player != player_of(step.bot) { return None; }
+        if let Some(spec) = step.positional().next() {
+            if matches!(self.current(), Some(ScriptStep::Refused { .. })) { return None; }
+            let needle = spec.to_lowercase();
+            if choices.iter().any(|c| c.label.eq_ignore_ascii_case(spec)
+                || c.label.split(" — ").next().is_some_and(|label| label.to_lowercase().contains(&needle))) { return None; }
+            // Consecutive explicit choices can name a cost's source and then its selected object.
+            if matches!(self.script.steps.get(self.cursor + 1), Some(ScriptStep::Action(next)) if next.verb == ScriptVerb::Choose)
+                && choices.iter().any(|c| c.label.to_lowercase().contains(&needle)) { return None; }
+            // A source name may intentionally disambiguate two cost components from different grants.
+            if choices.iter().filter(|c| c.kind != CostPaymentKind::Mana).count() != 1 { return None; }
+            let pool: Vec<ObjectId> = choices.iter().flat_map(|c| c.objects.iter().copied()).collect();
+            if !spec.eq_ignore_ascii_case("Assign mana") && !self.objects(step, spec, &pool).ok()?.is_empty() { return None; }
+        }
+        let mut mana = choices.iter().enumerate().filter(|(_, c)| c.kind == CostPaymentKind::Mana);
+        let (i, _) = mana.next()?;
+        mana.next().is_none().then_some(i)
+    }
+
     /// What the script means the asked player to answer: the line under the cursor if it applies, else the payment the
     /// line in progress implies, else the default. Called once per question: it moves the payment in progress on.
     fn intend(&mut self, request: &Request) -> R<Decision<'s>> {
+        if let Some(index) = self.implicit_mana_for_named_choice(request) {
+            self.implicit_cost_mana = true;
+            return Ok(Decision { intent: Intent::Answer(Answer::CostPayment(index)), line: None });
+        }
+        if self.completes_cost_mana(request)
+            && let RequestKind::ChooseCostPayment { choices, .. } = &request.kind
+        {
+            let index = choices.iter().position(|c| c.kind == CostPaymentKind::Mana).expect("one mana operation");
+            self.implicit_cost_mana = true;
+            return Ok(Decision { intent: Intent::Answer(Answer::CostPayment(index)), line: None });
+        }
+        if !matches!(request.kind, RequestKind::PayCosts { mana_abilities: false, .. }) {
+            self.implicit_cost_mana = false;
+        }
+        if self.completes_mana_window(request) {
+            let answer = self.auto_pay(request)?.ok_or_else(|| Fail("a covered mana window must be closable".into()))?;
+            return Ok(Decision { intent: Intent::Answer(answer), line: None });
+        }
         // `Bot1.Undo`: the latest mana ability the player activated is taken back, and they are asked again.
         if let Some(ScriptStep::Action(step)) = self.current()
             && matches!(step.verb, ScriptVerb::Undo)
@@ -1019,10 +1203,39 @@ impl<'s> Run<'s> {
                 self.assisting = None;
             }
         } else {
+            // Explicitly finish the planned X announcement before a following state check. Intermediate increments are
+            // still driven by the cast's X plan; only the final announcement consumes this script line.
+            let confirm_x = matches!(&request.kind, RequestKind::PayCosts { announcing: true, .. })
+                && matches!(self.current(), Some(ScriptStep::Action(step)) if step.verb == ScriptVerb::Choose
+                    && request.player == player_of(step.bot)
+                    && step.positional().next().is_some_and(|s| s.eq_ignore_ascii_case("Confirm X")));
+            if confirm_x {
+                let Some(answer) = self.auto_pay(request)? else {
+                    return fail(format!("{} cannot confirm X", bot(request.player)));
+                };
+                let done = matches!(&answer, Answer::Announce(_))
+                    || matches!(&answer, Answer::Act(action) if action.kind == ActionKind::ConfirmCasting);
+                let line = if done { let Some(ScriptStep::Action(step)) = self.current() else { unreachable!() }; Some(step) } else { None };
+                return Ok(Decision { intent: Intent::Answer(answer), line });
+            }
+            // An explicit payment line can advance one mana assignment after the mana window, so subsequent checks
+            // observe the paid state. The ordinary payment plan still selects the unit, including any Spend: choices.
+            let explicit_mana = matches!(&request.kind, RequestKind::PayCosts { mana_abilities: false, announcing: false, .. })
+                && matches!(self.current(), Some(ScriptStep::Action(step)) if step.verb == ScriptVerb::Choose
+                    && request.player == player_of(step.bot)
+                    && step.positional().next().is_some_and(|s| s.eq_ignore_ascii_case("Assign mana")));
+            if explicit_mana {
+                let answer = self.auto_pay(request)?;
+                if let Some(Answer::Act(action)) = answer && action.kind == ActionKind::AssignMana {
+                    let Some(ScriptStep::Action(step)) = self.current() else { unreachable!() };
+                    return Ok(Decision { intent: Intent::Answer(Answer::Act(action)), line: Some(step) });
+                }
+                return fail(format!("{} has no mana assignment available", bot(request.player)));
+            }
             // A mana ability the line under the cursor activates is activated while paying (CR 601.2g), before the pool
             // pays: what it does - a source it sacrifices, a type it takes away - may change what the pool's mana pays for.
             if let Some(ScriptStep::Action(step)) = self.current()
-                && matches!(step.verb, ScriptVerb::Activate)
+                && (matches!(step.verb, ScriptVerb::Activate | ScriptVerb::Cancel) || (matches!(step.verb, ScriptVerb::Choose) && step.positional().next().is_some_and(|s| s.eq_ignore_ascii_case("Close mana window"))))
                 && request.player == player_of(step.bot)
                 && let Some(answer) = self.matches(step, request)?
             {
@@ -1129,6 +1342,7 @@ impl<'s> Run<'s> {
 
     fn default(&mut self, request: &Request) -> R<Answer> {
         Ok(match &request.kind {
+            RequestKind::ChooseCostPayment { .. } => Answer::CostPayment(0),
             RequestKind::Priority { .. } => Answer::Pass,
             // Paying for a spell with assist (CR 702.132a), where no line says more: a window for mana abilities is closed,
             // the player assisting pays nothing, and what they announced is paid from their pool as their line's `Spend:` says.
@@ -1326,6 +1540,31 @@ impl<'s> Run<'s> {
                 options.iter().find(|o| o.kind == ActionKind::CancelCasting).map(|o| Answer::Act(Action::of(o)))
             }
             (V::Cancel, _) if request.may_cancel => Some(Answer::Cancel),
+            (V::Choose, RequestKind::PayCosts { mana_abilities: true, options, .. }) if step.positional().next().is_some_and(|s| s.eq_ignore_ascii_case("Close mana window")) => {
+                options.iter().find(|o| o.kind == ActionKind::ConfirmCasting).map(|o| Answer::Act(Action::of(o)))
+            }
+            (V::Choose, RequestKind::ChooseCostPayment { choices, .. }) => {
+                if let Some(number) = step.named("Cost") {
+                    let index = number.parse::<usize>().ok().and_then(|n| n.checked_sub(1));
+                    return match index.filter(|&i| i < choices.len()) {
+                        Some(i) => Ok(Some(Answer::CostPayment(i))),
+                        None => fail(format!("line {}: Cost must name an offered cost number", step.line)),
+                    };
+                }
+                let Some(spec) = step.positional().next() else { return fail(format!("line {}: Choose needs a cost label or object", step.line)) };
+                let mut found: Vec<usize> = choices.iter().enumerate().filter_map(|(i, c)| c.label.eq_ignore_ascii_case(spec).then_some(i)).collect();
+                if found.is_empty() {
+                    let needle = spec.to_lowercase();
+                    found = choices.iter().enumerate().filter_map(|(i, c)| c.label.to_lowercase().contains(&needle).then_some(i)).collect();
+                }
+                if found.is_empty() {
+                    let pool: Vec<ObjectId> = choices.iter().flat_map(|c| c.objects.iter().copied()).collect();
+                    let objects = self.objects(step, spec, &pool)?;
+                    found = choices.iter().enumerate().filter_map(|(i, c)| c.objects.iter().any(|id| objects.contains(id)).then_some(i)).collect();
+                }
+                if found.len() != 1 { return fail(format!("line {}: {spec} does not identify exactly one payment", step.line)); }
+                Some(Answer::CostPayment(found[0]))
+            }
             (V::Choose, RequestKind::ChooseCards { .. }) => Some(self.pick_by_rule(step, request)?),
             // Harmonize's creature is up to one (CR 702.180a): unless the script taps one, none is.
             (V::Choose, RequestKind::TapForPower { purpose: Purpose::TapToReduce, cards, .. }) => Some(self.pick(step, cards, 1, false)?),
@@ -1361,8 +1600,17 @@ impl<'s> Run<'s> {
                 };
                 Some(Answer::Announce(value))
             }
-            (V::Target, RequestKind::ChooseTarget { candidates, least, count, .. }) => {
-                self.choose_target(step, candidates, *least, *count)?
+            (V::Target, RequestKind::ChooseTarget { candidates, least, count, replacing, .. }) => {
+                // A script may name the original target to keep it. The wire answer is
+                // empty, so the old target is never offered as a new candidate (115.7d).
+                let named: Vec<&str> = step.positional().collect();
+                if let (Some((_, original)), [spec]) = (replacing, named.as_slice())
+                    && self.target(step, spec, &[*original])?.is_some()
+                {
+                    Some(Answer::Targets(Vec::new()))
+                } else {
+                    self.choose_target(step, candidates, *least, *count)?
+                }
             }
             (V::Divide, RequestKind::ChooseDividedTargets { candidates, .. }) => Some(self.divide(step, candidates)?),
             (V::RemoveCounters, RequestKind::RemoveCounters { pools, total, up_to, .. }) => Some(self.remove_counters(step, pools, *total, *up_to)?),
@@ -1448,11 +1696,9 @@ impl<'s> Run<'s> {
             .collect()
     }
 
-    /// Whether a refused `Activate` is checked at this payment rather than left for the player's next priority: the payment
-    /// asks for mana, so mana abilities may be activated during it (CR 605.3a) - a spell's or ability's cost, a cost to
-    /// attack, an "unless pays" cost with mana in it - and the line names only mana abilities. A payment of life alone (a
-    /// shock land's 2 life) is no chance to activate one, and a non-mana ability is activated only with priority (CR
-    /// 602.2), so either refusal waits for priority.
+    /// Check a refused mana activation at the actual payment, including after its 601.2g window closed. A mana
+    /// ability cannot be activated after 601.2h begins, even if its source is untapped (CR 601.2g-h, 605.3a).
+    /// A life-only payment is no mana window, and a non-mana ability instead waits for priority (CR 602.2).
     fn refused_at_payment(&self, step: &ActionStep, kind: &RequestKind) -> bool {
         let asks_mana = match kind {
             RequestKind::PayCosts { total, announcing: false, .. } | RequestKind::UnlessPays { total, .. } => !total.is_zero(),
@@ -1575,22 +1821,9 @@ impl<'s> Run<'s> {
             let p = player_of(b);
             return Ok(candidates.iter().copied().find(|&t| t == Target::Player(p)));
         }
-        // An ability on the stack is named for its source, as `Stack.Name`: the topmost of that name, or with `#n` the nth
-        // from the top (`Stack.Name#2`, the one under it).
-        if let Some((zone, name)) = spec.split_once('.')
-            && zone.eq_ignore_ascii_case("Stack")
-        {
-            let (name, nth) = match name.rsplit_once('#') {
-                Some((n, k)) if k.trim().parse::<usize>().is_ok_and(|k| k > 0) => (n, k.trim().parse::<usize>().unwrap() - 1),
-                _ => (name, 0),
-            };
-            let stack = &self.game.state.stack;
-            let found = candidates.iter().copied().filter(|t| matches!(t, Target::Ability(_))).rev().filter(|t| {
-                matches!(t, Target::Ability(n) if stack.iter().any(|i| i.serial == *n && self.game.known_name(i.object).eq_ignore_ascii_case(name.trim())))
-            }).nth(nth);
-            if found.is_some() {
-                return Ok(found);
-            }
+        // A stack ability's identity and ordinal are independent of this question's candidates.
+        if let Some(ability) = self.stack_ability(spec) {
+            return Ok(ability.filter(|ability| candidates.contains(ability)));
         }
         let pool: Vec<ObjectId> = candidates.iter().filter_map(|t| t.object()).collect();
         let found = self.objects(step, spec, &pool)?;
@@ -1600,6 +1833,20 @@ impl<'s> Run<'s> {
             return fail(format!("line {}: {spec} could be more than one card; write the one meant", step.line));
         }
         Ok(Some(Target::Object(first)))
+    }
+
+    /// `None` means no ability has this source name; `Some(None)` means the name exists but that ordinal does not.
+    fn stack_ability(&self, spec: &str) -> Option<Option<Target>> {
+        let (zone, name) = spec.split_once('.')?;
+        if !zone.eq_ignore_ascii_case("Stack") { return None; }
+        let (name, nth) = match name.rsplit_once('#') {
+            Some((n, k)) if k.trim().parse::<usize>().is_ok_and(|k| k > 0) => (n, k.trim().parse::<usize>().unwrap() - 1),
+            _ => (name, 0),
+        };
+        let abilities: Vec<Target> = self.game.state.stack.iter().rev()
+            .filter(|i| i.kind != StackKind::Spell && self.game.known_name(i.object).eq_ignore_ascii_case(name.trim()))
+            .map(|i| Target::Ability(i.serial)).collect();
+        (!abilities.is_empty()).then(|| abilities.get(nth).copied())
     }
 
     /// The cards a `Choose(..)` or `Search(..)` line names for a choice of cards or a library search, judged by the question's
@@ -1685,6 +1932,17 @@ impl<'s> Run<'s> {
     /// proves nothing.
     fn check_refused_declaration(&self, action: &ActionStep, line: usize, text: &str, request: &Request) -> R<()> {
         match &request.kind {
+            // A bare Number refuses the question; Number(n) refuses only that
+            // answer, leaving this very question for the next scripted line.
+            RequestKind::ChooseNumber { least, most, .. } => {
+                let spec = action.positional().next().unwrap_or("").trim();
+                let Ok(value) = spec.parse::<u32>() else {
+                    return fail(format!("line {line}: {spec} is not a number"));
+                };
+                if check_answer(&self.game, request, &Answer::Announce(value)).is_ok() {
+                    return fail(format!("line {line} says {text} must not be allowed, but a number from {least} to {most} may be chosen"));
+                }
+            }
             // `! Bot1.ChoosePlayer(Bot1)`: that player is no answer the question accepts - not among its candidates (Shinryu,
             // Transcendent Rival's "choose an opponent" leaves its controller out), judged by the rules' own check of the answer.
             RequestKind::ChoosePlayer { .. } => {
@@ -1697,6 +1955,7 @@ impl<'s> Run<'s> {
                 }
                 if check_answer(&self.game, request, &Answer::Player(p)).is_ok() {
                     return fail(format!("line {line} says {text} must not be choosable, but it is"));
+
                 }
             }
             RequestKind::DeclareBlockers { eligible, attackers, allowed, requirements } => {
@@ -1947,6 +2206,18 @@ impl<'s> Run<'s> {
                     return Ok(());
                 }
                 for spec in action.positional() {
+                    // Resolve a named stack ability against the stack itself, not only the offered
+                    // candidates. Its source may be on the battlefield or have left the game.
+                    // Prefer that ability over a same-named spell, as target() does when offered.
+                    if let Some(ability) = self.stack_ability(spec.trim()) {
+                        let Some(ability) = ability else {
+                            return fail(format!("line {line}: {text} proves nothing: no such ability is on the stack"));
+                        };
+                        if candidates.contains(&ability) {
+                            return fail(format!("line {line} says {text} must not be a legal target, but it is"));
+                        }
+                        continue;
+                    }
                     if bot_id(spec).is_none() && self.objects(action, spec.trim(), &everything)?.is_empty() {
                         return fail(format!("line {line}: {text} proves nothing: no such card is in the game"));
                     }
@@ -2669,6 +2940,7 @@ impl<'s> Run<'s> {
                     }
                     chosen
                 }
+                [] if option.targets_optional => Vec::new(),
                 [] if option.target_candidates.len() == option.targets_required as usize => option.target_candidates.clone(),
                 [] => {
                     return fail(format!(
@@ -2758,6 +3030,41 @@ fn x_of(step: &ActionStep) -> R<Option<u32>> {
     }
 }
 
+/// Whether the payment's actual picker can reach this X (regardless of whether the pool could then pay it). No picker
+/// means no X choice. Only offered steps are taken, on a fork; neither a failed answer nor an unexpected new question
+/// counts as proof that the original payment refused X.
+fn payment_x_can_be_chosen(game: &Game, wanted: u32) -> R<bool> {
+    let Some(request) = game.pending() else { return fail("no payment question to probe") };
+    let RequestKind::UnlessPays { x, times: None, source, subject, .. } = &request.kind else {
+        return fail("the payment probe requires an X question, not a number of times");
+    };
+    let Some(mut current) = *x else { return Ok(false) };
+    if current == wanted {
+        return Ok(true);
+    }
+    let (player, source, subject) = (request.player, *source, *subject);
+    let mut probe = game.fork_for_search();
+    while current != wanted {
+        let request = probe.pending().cloned().ok_or_else(|| Fail("the X probe lost its payment question".into()))?;
+        let RequestKind::UnlessPays { options, .. } = &request.kind else { return fail("the X probe changed question") };
+        let direction = if current < wanted { ActionKind::IncreaseX } else { ActionKind::DecreaseX };
+        let Some(option) = options.iter().find(|o| o.kind == direction) else { return Ok(false) };
+        probe.answer(request.id, request.player, Answer::Act(Action::of(option)))
+            .map_err(|why| Fail(format!("the engine refused its offered X step: {why:?}")))?;
+        probe.run();
+        let next = probe.pending().ok_or_else(|| Fail("the X probe ended its payment question".into()))?;
+        let RequestKind::UnlessPays { x: Some(n), times: None, source: next_source, subject: next_subject, .. } = &next.kind else {
+            return fail("the X probe changed question");
+        };
+        let expected = if direction == ActionKind::IncreaseX { current + 1 } else { current - 1 };
+        if next.player != player || *next_source != source || *next_subject != subject || *n != expected {
+            return fail("the X probe did not take exactly one step of the same payment");
+        }
+        current = *n;
+    }
+    Ok(true)
+}
+
 /// The comma-separated names a line's key lists (`Convoke: Llanowar Elves, Birds of Paradise`).
 fn names_of(step: &ActionStep, key: &str) -> VecDeque<String> {
     step.named(key).map(|t| t.split(',').map(|n| n.trim().to_string()).filter(|n| !n.is_empty()).collect()).unwrap_or_default()
@@ -2806,6 +3113,17 @@ fn spend_of(step: &ActionStep) -> R<VecDeque<Spend>> {
                 }
                 None => None,
             };
+            let mut snow = None;
+            rest.retain(|word| {
+                if word.eq_ignore_ascii_case("Snow") { snow = Some(true); false }
+                else if word.eq_ignore_ascii_case("NonSnow") { snow = Some(false); false }
+                else { true }
+            });
+            let mut pay_snow = None;
+            if let Some(at) = rest.iter().position(|word| word.eq_ignore_ascii_case("for")) {
+                pay_snow = match rest.get(at + 1).copied() { Some("{S}") => Some(true), Some("mana") => Some(false), _ => return fail(format!("line {}: Spend: {piece} must say for {{S}} or for mana", step.line)) };
+                rest.drain(at..at + 2);
+            }
             let restriction = if rest.is_empty() {
                 None
             } else {
@@ -2814,7 +3132,7 @@ fn spend_of(step: &ActionStep) -> R<VecDeque<Spend>> {
                     None => return fail(format!("line {}: Spend: {piece} names something that is not a mana restriction", step.line)),
                 }
             };
-            out.push_back((mana, restriction, from));
+            out.push_back((mana, restriction, from, snow, pay_snow));
         }
     }
     Ok(out)
@@ -2824,30 +3142,30 @@ fn spend_of(step: &ActionStep) -> R<VecDeque<Spend>> {
 /// halves by name, the fused cast of a fuse card, its modes, its own ways of being cast and alternative costs, and the
 /// labels its card names. What a refusal of an absent mode (`! Bot1.Modes(Fuse)`) is checked against, so that a mode
 /// the source never could offer is a typo, not a refusal that holds.
-fn modes_the_source_could_offer(game: &Game, source: ObjectId) -> Vec<&'static str> {
+fn modes_the_source_could_offer(game: &Game, source: ObjectId) -> Vec<String> {
     if source.0 as usize >= game.state.objects.len() {
         return Vec::new();
     }
     let def = game.cards.get(game.state.obj(source).card);
-    let mut out = vec![def.name];
+    let mut out = vec![def.name.to_string()];
     if let Some((left, right)) = def.split {
-        out.extend([left.name, right.name]);
+        out.extend([left.name.to_string(), right.name.to_string()]);
     }
     if def.fuse {
-        out.push(label_text(&Label::Fused(game.state.obj(source).card)));
+        out.push(label_text(&Label::Fused(game.state.obj(source).card)).into_owned());
     }
-    out.extend(def.inset_faces().map(|(_, f)| f.name));
-    out.extend(def.back.map(|b| b.name));
+    out.extend(def.inset_faces().map(|(_, f)| f.name.to_string()));
+    out.extend(def.back.map(|b| b.name.to_string()));
     let faces = std::iter::once(def).chain(def.split.into_iter().flat_map(|(l, r)| [l, r])).chain(def.inset_faces().map(|(_, f)| f)).chain(def.back);
     for face in faces {
-        out.extend(face.modal.iter().flat_map(|m| m.modes.iter().map(|mode| mode.text)));
-        out.extend(face.ways.iter().map(|w| w.text));
-        out.extend(face.spell_alternatives.iter().map(|a| a.text));
-        out.extend(face.labels.iter().copied());
+        out.extend(face.modal.iter().flat_map(|m| m.modes.iter().map(|mode| mode.text.to_string())));
+        out.extend(face.ways.iter().map(|w| w.text.to_string()));
+        out.extend(face.spell_alternatives.iter().map(|a| a.text.to_string()));
+        out.extend(face.labels.iter().map(|text| text.to_string()));
     }
     // The alternative costs resolved spells and abilities gave a player's next spell (CR 611.2c), whatever card it is.
     out.extend(game.state.effects.iter().filter_map(|e| match e.kind {
-        EffectKind::SpellAlternative { card, index, .. } => game.cards.get(card).lasting_spell_alternatives.get(index as usize).map(|a| a.text),
+        EffectKind::SpellAlternative { card, index, .. } => game.cards.get(card).lasting_spell_alternatives.get(index as usize).map(|a| a.text.to_string()),
         _ => None,
     }));
     out

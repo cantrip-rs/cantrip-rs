@@ -34,6 +34,7 @@ pub mod cipher;
 pub mod chosen_type;
 pub mod hand;
 pub mod players;
+pub mod poison;
 pub mod history;
 pub mod library;
 pub mod impending;
@@ -167,6 +168,7 @@ pub mod increment;
 pub mod ingest;
 pub mod provoke;
 pub mod flanking;
+pub mod rampage;
 pub mod dethrone;
 pub mod devour;
 pub mod sunburst;
@@ -294,18 +296,20 @@ pub fn discard_two_unless_discarding(
     Ok(g.discard_paying(&chosen, &paying))
 }
 
-/// "[Player] discards `count` cards at random" (CR 701.9b; Hymn to Tourach, Mind Twist): the hand put in a random order
-/// (Fisher-Yates, as the C# engine's `Randomize`) and the first `count` taken; a smaller hand is discarded whole. They
-/// leave together, as one discard (CR 701.9a).
+/// "[Player] discards `count` cards at random" (CR 701.9b; Hymn to Tourach, Mind Twist): select uniformly without
+/// replacement through the engine's recorded random-choice API. A hand no larger than `count` leaves whole without
+/// a random choice. All selected cards leave together, as one discard (CR 701.9a).
 pub fn discard_at_random(g: &mut dyn Game, player: PlayerId, count: usize) {
     let mut hand = g.state().zone(Zone::hand(player)).to_vec();
     let count = hand.len().min(count);
     if count == 0 {
         return;
     }
-    for i in (1..hand.len()).rev() {
-        let j = g.random(i as u32 + 1) as usize;
-        hand.swap(i, j);
+    if count < hand.len() {
+        for i in 0..count {
+            let j = i + g.choose_at_random(hand.len() - i);
+            hand.swap(i, j);
+        }
     }
     g.discard_together(&hand[..count]);
 }

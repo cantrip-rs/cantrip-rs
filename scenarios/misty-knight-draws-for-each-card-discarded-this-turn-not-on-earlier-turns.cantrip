@@ -52,6 +52,7 @@ Bot1.Choose(Island; Island)
 Bot1.Battlefield.Mox Ruby#1.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Misty Knight, Hero for Hire.Activate
+Bot1.Choose(Tap Misty Knight, Hero for Hire)
 Bot1.Choose(Island)
 Bot1.Pass
 

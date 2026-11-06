@@ -94,11 +94,11 @@ fn play(hush: bool) -> (Game, usize) {
                 _ => Answer::Pass,
             },
             RequestKind::Priority { .. } => Answer::Pass,
-            RequestKind::PayCosts { options, .. } => {
+            RequestKind::ChooseCostPayment { choices, .. } => Answer::CostPayment(choices.iter().position(|c| c.kind == CostPaymentKind::Mana).unwrap_or(0)),
+            RequestKind::PayCosts { options, remaining, mana_abilities, .. } => {
                 let lotus = options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source.is_some_and(|s| game.name(s) == "Black Lotus"));
                 let mox = options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source.is_some_and(|s| game.name(s) == "Mox Pearl"));
-                let confirm = options.iter().find(|o| o.kind == ActionKind::ConfirmCasting);
-                let mut action = Action::of(confirm.or(lotus).or(mox).expect("mana to pay with, or the payment to confirm"));
+                let Answer::Act(mut action) = super::pay(options, remaining, *mana_abilities, lotus.or(mox)) else { unreachable!() };
                 if action.source.is_some_and(|s| game.name(s) == "Black Lotus") {
                     action.color = Some(Color::White);
                 }

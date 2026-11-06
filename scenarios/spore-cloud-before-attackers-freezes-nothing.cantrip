@@ -1,0 +1,52 @@
+# Cast before attackers, Spore Cloud prevents combat damage but freezes neither the later attackers nor blockers.
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Llanowar Elves
+Memnite
+Spore Cloud
+Island x20
+[Bot2 Deck]
+Black Lotus
+Llanowar Elves
+Elvish Mystic
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Spore Cloud.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Llanowar Elves > Bot2; Memnite > Bot2)
+Bot2.Block(Llanowar Elves > Llanowar Elves; Elvish Mystic > Memnite)
+? Bot2.Battlefield.Llanowar Elves.Tapped = false
+? Bot2.Battlefield.Elvish Mystic.Tapped = false
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Llanowar Elves.Damage = 0
+? Bot1.Battlefield.Memnite.Damage = 0
+? Bot2.Battlefield.Llanowar Elves.Damage = 0
+? Bot2.Battlefield.Elvish Mystic.Damage = 0
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Llanowar Elves.Tapped = false
+? Bot2.Battlefield.Elvish Mystic.Tapped = false
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Llanowar Elves.Tapped = false
+? Bot1.Battlefield.Memnite.Tapped = false
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Llanowar Elves.Tapped = false
+? Bot2.Battlefield.Elvish Mystic.Tapped = false
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Tapped = false
+Bot1.Battlefield.Memnite.Tapped = false

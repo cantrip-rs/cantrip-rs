@@ -263,12 +263,13 @@ pub fn all_of_subtype<const SUBTYPE: u16>(q: &dyn LayerQuery, source: ObjectId, 
 }
 
 /// "Other [subtype]s" (CR 613.1f): all other permanents of the text's type, under either controller.
-/// Lord of Atlantis and Zombie Master use this with Merfolk and Zombie respectively.
+/// Goblin King, Lord of Atlantis and Zombie Master name Goblin, Merfolk and Zombie respectively.
 pub fn other_of_subtype<const SUBTYPE: u16>(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
     affected != source && subtype_word(q, source, SUBTYPE).is_some_and(|word| so_far.has_subtype(word))
 }
 
-/// "Have [basic land type]walk" (CR 702.14, 612.2): Lord of Atlantis and Zombie Master name Island and Swamp.
+/// Grant the landwalk named in the source's text (CR 702.14, 612.2).
+/// Goblin King, Lord of Atlantis and Zombie Master name Mountain, Island and Swamp respectively.
 pub fn have_landwalk<const SUBTYPE: u16>(q: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
     if let Some(walk) = subtype_word(q, source, SUBTYPE).and_then(Keyword::landwalk) {
         chars.keywords = chars.keywords.with(walk);
@@ -706,6 +707,13 @@ pub fn plus_pt<const P: i32, const T: i32>(_: &dyn LayerQuery, _: ObjectId, char
     chars.toughness = chars.toughness.map(|v| v + T);
 }
 
+/// A layer 7c power/toughness adjustment with the existing i32 boundary behavior (CR 613.4c, RX-5).
+/// Orcish Oriflamme, Audacity and Cartouche of Solidarity use this operation.
+pub fn plus_pt_saturating<const P: i32, const T: i32>(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
+    chars.power = chars.power.map(|v| v.saturating_add(P));
+    chars.toughness = chars.toughness.map(|v| v.saturating_add(T));
+}
+
 /// "Creatures you control get +1/+1." (CR 613.4c, layer 7c): every creature its controller controls, itself among them once
 /// it is one (an Opalescence-animated Glorious Anthem pumps itself), judged on what the earlier layers made each object.
 /// Glorious Anthem, Warleader's Call and Cosmium Kiln (Clay-Fired Bricks' back face) print it.
@@ -785,14 +793,22 @@ pub fn chosen_name_activations_barred(q: &dyn Query, asker: &Asker, source: Obje
 /// abilities (CR 602.5c). Agatha's Soul Cauldron (the creature cards exiled with it) and Locus of Enlightenment (the exiled
 /// cards used to craft it) grant them.
 pub fn grant_activated_abilities_of(view: &dyn LayerQuery, cards: &[CardId], chars: &mut Chars) {
-    for &card in cards {
+    grant_activated_from(view, cards.iter().map(|&card| (ObjectId::NONE, card)), chars);
+}
+
+/// Activated abilities of particular cards. Unlike a list of definitions, physical donors retain their identity
+/// when a different donor leaves and the abilities move into earlier slots (CR 113.2c, 602.5c).
+pub fn grant_activated_abilities_from(view: &dyn LayerQuery, cards: &[(ObjectId, CardId)], chars: &mut Chars) {
+    grant_activated_from(view, cards.iter().copied(), chars);
+}
+
+fn grant_activated_from(view: &dyn LayerQuery, cards: impl Iterator<Item = (ObjectId, CardId)>, chars: &mut Chars) {
+    for (origin, card) in cards {
         for (index, ability) in view.cards().get(card).abilities.iter().enumerate() {
             if !matches!(ability, AbilityDef::Activated(a) if !a.special_action) {
                 continue;
             }
-            if let Some(slot) = chars.abilities.iter().position(|a| a.is_none()) {
-                chars.abilities[slot] = Some(AbilityRef { card, index: index as u8 });
-            }
+            chars.grant_ability_from(AbilityRef { card, index: index as u8 }, origin);
         }
     }
 }

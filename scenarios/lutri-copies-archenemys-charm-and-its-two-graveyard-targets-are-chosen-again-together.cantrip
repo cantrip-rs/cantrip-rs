@@ -1,7 +1,7 @@
 # Lutri, the Spellchaser copies Bot1's Archenemy's Charm, cast with "Return one or two target creature and/or planeswalker
 # cards from your graveyard to your hand" at Ornithopter and Chandra, Torch of Defiance. The copy has the same mode
-# (CR 707.10c) and Bot1 may choose new targets for it, as many as the original chose: the mode's two targets are one choice of
-# two (CR 115.7d, 601.2c). Faithless Looting (not a creature card), three targets, or Llanowar Elves twice are refused (CR 115.3);
+# (CR 707.10c) and Bot1 may choose new targets for it, as many as the original chose, one occurrence at a time
+# (CR 115.7d, 601.2c). Faithless Looting and choosing a target twice are refused (CR 115.3);
 # Bot1 takes Chandra and Llanowar Elves. The copy resolves first and returns Chandra and Llanowar Elves; the original then returns
 # Ornithopter (its Chandra target has left the graveyard, CR 608.2b). Left on its old targets, the copy would leave Llanowar Elves in
 # the graveyard. Llanowar Elves gets there by a Lightning Bolt; Ornithopter and Chandra by Faithless Looting.
@@ -57,9 +57,10 @@ Bot1.Hand.Lutri, the Spellchaser.Cast
 Bot1.Pass
 Bot1.Pass
 ! Bot1.Target(Faithless Looting)
-! Bot1.Target(Ornithopter; Chandra, Torch of Defiance; Llanowar Elves)
-! Bot1.Target(Llanowar Elves; Llanowar Elves)
-Bot1.Target(Bot1.Graveyard.Chandra, Torch of Defiance; Bot1.Graveyard.Llanowar Elves)
+! Bot1.Target(Count: 2)
+Bot1.Target(Bot1.Graveyard.Chandra, Torch of Defiance)
+! Bot1.Target(Bot1.Graveyard.Chandra, Torch of Defiance)
+Bot1.Target(Bot1.Graveyard.Llanowar Elves)
 ? Stack.Count = 2
 Bot1.Pass
 Bot2.Pass

@@ -1,0 +1,48 @@
+# A blocker remains blocking when its attacker is returned; Spore Cloud taps it and prevents its next untap (CR 509.1g).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Llanowar Elves
+Memnite
+Spore Cloud
+Mox Sapphire
+Unsummon
+Island x20
+[Bot2 Deck]
+Black Lotus
+Llanowar Elves
+Elvish Mystic
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Llanowar Elves > Bot2; Memnite > Bot2)
+Bot2.Block(Llanowar Elves > Llanowar Elves; Elvish Mystic > Memnite)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unsummon.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Combat.Blockers.Count = 2
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Spore Cloud.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+? Bot2.Battlefield.Elvish Mystic.Tapped = true
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+? Bot2.Battlefield.Elvish Mystic.Tapped = true
+[T6 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Tapped = false
+Bot2.Battlefield.Elvish Mystic.Tapped = false

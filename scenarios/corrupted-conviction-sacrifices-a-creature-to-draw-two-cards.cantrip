@@ -14,8 +14,11 @@ Island x16
 [Actions]
 Bot1.Hand.Mox Jet.Cast
 Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Corrupted Conviction.Cast
+Bot1.Choose(additional cost of Corrupted Conviction)
+Bot1.Choose(Ornithopter)
 [T2 Bot2.Main1]
 
 [Expect]

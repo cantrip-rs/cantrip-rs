@@ -1,0 +1,57 @@
+# Browser
+# Circle of Protection: Blue prevents the chosen blue source's next damage this turn (CR 615.1).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Circle of Protection: Blue
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Ruby
+Fugitive Wizard
+Fugitive Wizard
+Raging Goblin
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Circle of Protection: Blue.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Hand.Fugitive Wizard.Cast
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Hand.Fugitive Wizard.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Raging Goblin.Cast
+[T4 Bot2.BeginCombat]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Circle of Protection: Blue.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Client.Bot1.Prompt.Title = Circle of Protection: Blue: choose a blue source of damage
+! Bot1.Choose(Ornithopter)
+! Bot1.Choose(Fugitive Wizard#1; Fugitive Wizard#2)
+Bot1.Choose(Fugitive Wizard#1)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Fugitive Wizard#1; Fugitive Wizard#2; Raging Goblin > Bot1)
+[T4 Bot2.Main2]
+? Bot1.Life = 18
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Fugitive Wizard#1; Fugitive Wizard#2; Raging Goblin > Bot1)
+[T6 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 15
