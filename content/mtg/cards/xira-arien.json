@@ -1,0 +1,11 @@
+{
+  "name": "Xira Arien",
+  "manaCost": "{B}{R}{G}",
+  "type": "Legendary Creature — Insect Wizard",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying\n{B}{R}{G}, {T}: Target player draws a card.",
+  "keywords": [
+    "Flying"
+  ]
+}

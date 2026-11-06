@@ -1,0 +1,41 @@
+# Weakstone reduces only attacking creatures' power, for both players, and stops after combat (CR 604.1).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Weakstone
+Memnite
+Ornithopter
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Weakstone.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Memnite > Bot2)
+? Bot1.Battlefield.Memnite.Power = 0
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Memnite.Power = 1
+[T4 Bot2.BeginCombat]
+Bot2.Attack(Grizzly Bears > Bot1)
+? Bot2.Battlefield.Grizzly Bears.Power = 1
+? Bot2.Battlefield.Grizzly Bears.Toughness = 2
+? Bot1.Battlefield.Memnite.Power = 1
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Battlefield.Grizzly Bears.Power = 2

@@ -1,0 +1,51 @@
+# An Elf attacks and becomes tapped; it gains flying in response to Winter Blast; Winter Blast still deals 2 to it, while tapping the ground Bear without damage (CR 608.2b, 608.2c).
+[Bot1 Deck]
+Black Lotus
+Grizzly Bears
+Mox Emerald
+Mox Sapphire
+Winter Blast
+Forest
+Island x15
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Mox Pearl
+Hamato Guardian Stance
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T4 Bot2.BeginCombat]
+Bot2.Attack(Llanowar Elves > Bot1)
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Winter Blast.Cast(X: 2)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears; Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Hamato Guardian Stance.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Tapped = true
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot2.Battlefield.Llanowar Elves.Damage = 2

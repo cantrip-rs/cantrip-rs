@@ -1,0 +1,66 @@
+# The attacker’s own snow land does not count: a defending player without a snow land prevents activation, but after they play one the Sleigh can grant an opposing creature vigilance during combat but not during the main phase (CR 506.2, 611.2a).
+[Bot1 Deck]
+Arcum's Sleigh
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Snow-Covered Forest
+Island x19
+
+[Bot2 Deck]
+Plains
+Snow-Covered Plains
+Ornithopter
+Mox Pearl
+Wall of Shards
+Island x17
+
+[Actions]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Arcum's Sleigh.Cast
+? Bot1.Mana =
+[T1 Bot1.BeginCombat]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Arcum's Sleigh.Activate(Bot1.Battlefield.Ornithopter)
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Wall of Shards.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Arcum's Sleigh.Activate(Bot2.Battlefield.Ornithopter)
+[T4 Bot2.Main1]
+Bot2.Hand.Snow-Covered Plains.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Arcum's Sleigh.Activate(Bot2.Battlefield.Ornithopter)
+[T5 Bot1.BeginCombat]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Arcum's Sleigh.Activate(Bot2.Battlefield.Snow-Covered Plains)
+Bot1.Battlefield.Arcum's Sleigh.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Keywords = Flying; Vigilance
+? Bot1.Battlefield.Arcum's Sleigh.Tapped = true
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+[Expect]
+Bot2.Battlefield.Ornithopter.Keywords = Flying

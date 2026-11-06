@@ -39,6 +39,11 @@ fn attached_to_any(s: &GameState, list: &[ObjectId], hosts: &[ObjectId], only: i
 /// it has already left (CR 610.4b; Oubliette's ruling), and what does phases in only once it has (`phase_in_returning`),
 /// tapped if `tapped_as_it_returns`.
 pub fn phase_out(cx: &mut Cx, permanents: &[ObjectId], until_leaves: Option<ObjectId>, tapped_as_it_returns: bool) {
+    // Expiring effects, moving every permanent and settling control form one phasing instruction.
+    cx.instruction(|cx| phase_out_event(cx, permanents, until_leaves, tapped_as_it_returns), |_| true);
+}
+
+fn phase_out_event(cx: &mut Cx, permanents: &[ObjectId], until_leaves: Option<ObjectId>, tapped_as_it_returns: bool) {
     if until_leaves.is_some_and(|by| !still_on_battlefield(cx.s(), by)) {
         return;
     }
@@ -100,6 +105,8 @@ pub fn phase_out(cx: &mut Cx, permanents: &[ObjectId], until_leaves: Option<Obje
     if cx.s().permissions.iter().any(|p| p.grant.expiry.controlled().is_some_and(leaving)) {
         cx.st().end_lapsed_permissions();
     }
+    // Phasing records history but does not emit an event; the completed board can satisfy a state trigger.
+    cx.state_changed();
 }
 
 /// Phases in, all at once (CR 702.26c), each of `permanents` that phased out directly, and with each everything that phased
@@ -183,8 +190,12 @@ pub fn untap_step(cx: &mut Cx, active: PlayerId) {
             s.obj(id).marks.phased.is_some_and(|p| !p.indirect && p.until_leaves.is_none() && (p.under == active || would_have_begun(p.under)))
         })
         .collect();
-    phase_in(cx, &due);
-    phase_out(cx, &phasing, None, false);
+    // Phasing in and out are simultaneous turn-based actions. Defer no-event state checks until both are done.
+    cx.instruction(|cx| {
+        phase_in(cx, &due);
+        phase_out(cx, &phasing, None, false);
+        if !due.is_empty() { cx.state_changed(); }
+    }, |_| true);
 }
 
 /// CR 610.4: a permanent phased out "until [a permanent] leaves the battlefield" phases in, as a one-shot effect that
@@ -205,6 +216,9 @@ pub fn phase_in_returning(cx: &mut Cx) -> bool {
         return false;
     }
     phase_in(cx, &due);
+    // Phasing in records history without emitting an event. The returned board can make a state trigger true during
+    // an ongoing resolution, before its next instruction changes that board again (CR 603.8, 610.4).
+    cx.state_changed();
     true
 }
 
@@ -240,10 +254,82 @@ mod tests {
     }
 
     fn cx(game: &mut Game) -> Cx<'_> {
-        Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+        Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
     }
 
     static PHASER: CardDef = CardDef { name: "Phasing Test Phaser", keywords: Keywords::of(&[Keyword::Phasing]), ..BEAR };
+
+    // A minimal core regression for the checkpoint; the separate printed-card Jihad/Oubliette scenario is the rules witness.
+    fn two_phasers(q: &dyn Query, _: &Asker) -> bool {
+        q.state().battlefield().iter().filter(|&&id| q.chars(id).has(Keyword::Phasing)).count() == 2
+    }
+    fn nothing(_: &mut dyn cantrip_api::Game, _: &StackItem) -> Result<(), Suspend> { Ok(()) }
+    static WATCH: CardDef = CardDef { name: "Phasing Checkpoint Watch", abilities: &[state_triggered(two_phasers, nothing, "When two creatures have phasing, do nothing.")], ..CardDef::BLANK };
+
+    #[test]
+    fn phase_in_and_phase_out_in_one_untap_step_are_checked_together() {
+        let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&PHASER, &WATCH])));
+        let mut game = Game::new(table, &crate::Setup { decks: vec![Vec::new(), Vec::new()], ..Default::default() });
+        let mut put = |def: &'static CardDef| { let id = game.state.push_obj(Obj::new(table.id_of(def), PlayerId(0), Zone::BATTLEFIELD)); game.state.zone_push(Zone::BATTLEFIELD, id); id };
+        let first = put(&PHASER); let second = put(&PHASER); put(&WATCH);
+        let mut cx = cx(&mut game);
+        phase_out(&mut cx, &[first], None, false);
+        assert!(cx.s().triggers.is_empty());
+        untap_step(&mut cx, PlayerId(0));
+        assert!(cx.s().obj(first).zone.is(ZoneKind::Battlefield));
+        assert!(cx.s().obj(second).zone.is(ZoneKind::PhasedOut));
+        assert!(cx.s().triggers.is_empty(), "the temporary two-phaser board is not a game state");
+    }
+
+    fn unbuffed_phaser_is_present(q: &dyn Query, _: &Asker) -> bool {
+        q.state().battlefield().iter().any(|&id| { let c = q.chars(id); c.has(Keyword::Phasing) && c.power == Some(2) })
+    }
+    static WATCH_EXPIRY: CardDef = CardDef { name: "Phasing Expiry Watch", abilities: &[state_triggered(unbuffed_phaser_is_present, nothing, "When an unbuffed phaser is present, do nothing.")], ..CardDef::BLANK };
+
+    #[test]
+    fn expiring_effect_is_not_observed_before_the_permanent_phases_out() {
+        let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&PHASER, &WATCH_EXPIRY])));
+        let mut game = Game::new(table, &crate::Setup { decks: vec![Vec::new(), Vec::new()], ..Default::default() });
+        let phaser = game.state.push_obj(Obj::new(table.id_of(&PHASER), PlayerId(0), Zone::BATTLEFIELD));
+        game.state.zone_push(Zone::BATTLEFIELD, phaser);
+        let watcher = game.state.push_obj(Obj::new(table.id_of(&WATCH_EXPIRY), PlayerId(0), Zone::BATTLEFIELD));
+        game.state.zone_push(Zone::BATTLEFIELD, watcher);
+        game.state.update_obj(phaser, |o| o.tapped = true);
+        let timestamp = game.state.timestamp();
+        game.state.effect_push(ContinuousEffect { source: phaser, controller: PlayerId(0), timestamp,
+            affected: phaser, kind: EffectKind::Pump(1, 1), duration: Duration::WhileTapped, words: Words::NONE });
+        let mut cx = cx(&mut game);
+        phase_out(&mut cx, &[phaser], None, false);
+        assert!(cx.s().triggers.is_empty(), "a state true only before the phasing move must not trigger");
+    }
+
+    #[test]
+    fn phasing_out_with_an_expiring_effect_is_one_instruction() {
+        let (mut game, bear, _, _) = game();
+        game.verify = true;
+        game.state.update_obj(bear, |o| o.tapped = true);
+        let timestamp = game.state.timestamp();
+        game.state.effect_push(ContinuousEffect { source: bear, controller: PlayerId(0), timestamp,
+            affected: bear, kind: EffectKind::Pump(1, 1), duration: Duration::WhileTapped, words: Words::NONE });
+        game.check = crate::StateCheck { depth: 1, resolving: Some(bear), ..crate::StateCheck::NONE };
+        let mut cx = cx(&mut game);
+        phase_out(&mut cx, &[bear], None, false);
+        assert!(cx.s().obj(bear).zone.is(ZoneKind::PhasedOut));
+        assert!(cx.g.check.due, "the completed phasing instruction needs a state check");
+    }
+
+    #[test]
+    fn returning_during_resolution_marks_the_new_board_for_a_sentence_check() {
+        let (mut game, bear, _, warden) = game();
+        let mut cx = cx(&mut game);
+        phase_out(&mut cx, &[bear], Some(warden), false);
+        crate::ops::move_to(&mut cx, warden, Zone::graveyard(PlayerId(0)));
+        cx.g.check = crate::StateCheck { depth: 1, resolving: Some(warden), ..crate::StateCheck::NONE };
+        assert!(phase_in_returning(&mut cx));
+        assert!(cx.g.check.due, "the returned board must be checked at the instruction boundary");
+        cantrip_api::Game::end_sentence(&mut cx);
+        assert!(!cx.g.check.due);
+    }
 
     /// CR 702.26a: a phased-in permanent with phasing phases out in its controller's untap step, phases in in the next, and
     /// does not phase out again as it phases in; another player's untap step does nothing to it. Its Aura goes with it
@@ -543,7 +629,7 @@ mod tests {
         assert_eq!(Query::chars(&context, bear).colors, ColorSet::of(Color::Red));
         assert!(crate::layers::chars(context.cards(), context.s(), &context.g.log, warden).protection.has(Color::Red));
         assert_eq!(crate::ops::protection_prevents(&context, bear, Target::Object(warden), false), Some(warden));
-        assert!(!crate::layers::can_target(context.cards(), context.s(), &context.g.log, &Asker { source: bear, controller: PlayerId(0), by: None, spell: false }, Target::Object(warden)));
+        assert!(!crate::layers::can_target(context.cards(), context.s(), &context.g.log, &Asker { instance: None, source: bear, controller: PlayerId(0), by: None, spell: false }, Target::Object(warden)));
         assert_eq!(crate::ops::damage(&mut context, bear, Target::Object(warden), 1, false), 0);
         assert_eq!(context.s().obj(warden).damage, 0);
         phase_in(&mut context, &[bear]);

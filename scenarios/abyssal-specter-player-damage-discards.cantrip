@@ -1,0 +1,41 @@
+# Flying prevents a ground creature from blocking; combat damage to the player makes that player choose exactly one card to discard (CR 702.9b, 603.2, 701.9a).
+[Bot1 Deck]
+Abyssal Specter
+Black Lotus
+Mox Pearl
+Swamp x20
+[Bot2 Deck]
+Memnite
+Forest
+Mountain
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Abyssal Specter.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Abyssal Specter > Bot2)
+! Bot2.Block(Memnite > Abyssal Specter)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+! Bot2.Choose()
+! Bot2.Choose(Forest; Mountain)
+Bot2.Choose(Mountain)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 18
+Bot2.Graveyard = Mountain
+Bot2.Hand.Count = 6
+Bot1.Graveyard = Black Lotus

@@ -1,5 +1,5 @@
 # Gene Pollinator's second cost needs an untapped permanent besides the one its {T} taps: on turn 3, with the Mox Emerald
-# (its only other permanent) tapped for mana, the ability is not offered, though Gene Pollinator itself is untapped and
+# (its only other permanent) tapped for mana, the attempted activation is reversed, though Gene Pollinator itself is untapped and
 # no longer summoning sick (it could not pay both costs with itself). The positive control is turn 5 here: the Mox Emerald has untapped, and Gene Pollinator taps it and itself for red mana.
 
 [Bot1 Deck]
@@ -23,9 +23,20 @@ Bot1.Hand.Gene Pollinator.Cast
 Bot1.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Emerald.Activate
-! Bot1.Battlefield.Gene Pollinator.Activate
+Bot1.Battlefield.Gene Pollinator.Activate(Color: Red)
+? Bot1.Battlefield.Gene Pollinator.Tapped = false
+? Bot1.Battlefield.Mox Emerald.Tapped = true
+? Bot1.Battlefield = Gene Pollinator; Mox Emerald
+? Bot1.Hand = Forest; Forest; Forest; Forest; Forest; Forest
+? Bot1.Life = 20
+? Bot1.Mana = {G}
+? Bot1.Graveyard.Count = 0
+? Stack.Count = 0
+? Exile.Count = 0
 [T5 Bot1.Main1]
 Bot1.Battlefield.Gene Pollinator.Activate(Tap: Mox Emerald; Color: Red)
+Bot1.Choose(Tap Gene Pollinator)
+Bot1.Choose(Mox Emerald)
 ? Bot1.Mana = {R}
 [T5 Bot1.Main2]
 

@@ -1,0 +1,34 @@
+# Five mana with only one blue cannot pay {3}{U}{U}; a legal enchantment spell is on the stack.
+# The companion counter scenarios supply two blue and show the same ability succeeds.
+[Bot1 Deck]
+Arenson's Aura
+Black Lotus x2
+Mox Pearl
+Island x16
+[Bot2 Deck]
+Memnite
+Holy Strength
+Plains x18
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Arenson's Aura.Cast
+? Bot1.Mana =
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Holy Strength.Cast(Memnite)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island.Activate
+? Bot1.Mana = {W}{U}{B}{B}{B}
+! Bot1.Battlefield.Arenson's Aura.Activate(Stack.Holy Strength; Ability: Counter; Mana: short)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Memnite.Power = 2

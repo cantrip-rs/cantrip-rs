@@ -33,7 +33,10 @@ Bot1.Library.Ornithopter.Cast
 Bot1.Library.Ornithopter.Cast
 Bot1.Library.Ornithopter.Cast
 Bot1.Library.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
 Bot1.Battlefield.Bolas's Citadel.Activate
+Bot1.Choose(Tap Bolas's Citadel)
 [Bot1.Main2]
 
 [Expect]

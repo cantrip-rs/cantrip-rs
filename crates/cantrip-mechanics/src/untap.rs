@@ -8,8 +8,7 @@ use cantrip_api::*;
 /// Dominaria two.
 pub fn up_to_lands(g: &mut dyn Game, source: ObjectId, controller: PlayerId, count: u8) -> Result<(), Suspend> {
     let lands: Vec<ObjectId> = g.state().battlefield().iter().copied().filter(|&id| g.chars(id).is(CardType::Land)).collect();
-    for land in choose::cards(g, controller, source, Purpose::Untap, lands, u32::from(count), true)? {
-        g.untap(land);
-    }
+    let chosen = choose::cards(g, controller, source, Purpose::Untap, lands, u32::from(count), true)?;
+    g.untap_together(&chosen);
     Ok(())
 }

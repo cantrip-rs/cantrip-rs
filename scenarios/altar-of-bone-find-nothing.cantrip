@@ -1,0 +1,30 @@
+# Altar of Bone can find no creature even when one is available and still shuffles (CR 701.23b, 701.24a).
+
+[Bot1 Deck]
+Altar of Bone
+Mox Emerald
+Mox Pearl
+Ornithopter
+Island x3
+Grizzly Bears
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Altar of Bone.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Search()
+
+[Expect]
+Bot1.Library.Grizzly Bears.Power = 2
+Bot1.Hand.Grizzly Bears = (absent)
+Bot1.Shuffles = 1

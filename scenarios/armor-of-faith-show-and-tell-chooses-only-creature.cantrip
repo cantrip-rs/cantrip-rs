@@ -1,0 +1,30 @@
+# An Aura put onto the battlefield by Show and Tell can attach to a creature but not an artifact that is not a creature (CR 303.4f).
+
+[Bot1 Deck]
+Armor of Faith
+Show and Tell
+Black Lotus
+Ornithopter
+Memnite
+Mox Pearl
+Island x20
+
+[Bot2 Deck]
+Lightning Bolt x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+? Bot1.Mana =
+Bot1.Choose(Armor of Faith)
+! Bot1.Target(Mox Pearl)
+Bot1.Target(Ornithopter)
+
+[Expect]
+Bot1.Battlefield.Armor of Faith.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3

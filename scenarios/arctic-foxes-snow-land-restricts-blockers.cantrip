@@ -1,0 +1,43 @@
+# With a snow land under the defending player's control, a 2-power Bear cannot block Arctic Foxes but a 1-power Elf can (CR 509.1b).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Memnite
+Arctic Foxes
+Island x24
+[Bot2 Deck]
+Snow-Covered Forest
+Black Lotus
+Grizzly Bears
+Llanowar Elves
+Island x23
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Arctic Foxes.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Arctic Foxes > Bot2; Memnite > Bot2)
+[T3 Bot1.DeclareBlockers]
+! Bot2.Block(Grizzly Bears > Arctic Foxes)
+Bot2.Block(Llanowar Elves > Arctic Foxes; Grizzly Bears > Memnite)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard.Arctic Foxes.Power = 1
+Bot2.Graveyard.Llanowar Elves.Power = 1
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot2.Battlefield.Grizzly Bears.Damage = 1
+Bot1.Graveyard.Memnite.Power = 1
+Bot2.Life = 20

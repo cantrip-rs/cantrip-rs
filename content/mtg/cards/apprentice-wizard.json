@@ -1,0 +1,8 @@
+{
+  "name": "Apprentice Wizard",
+  "manaCost": "{1}{U}{U}",
+  "type": "Creature — Human Wizard",
+  "power": 0,
+  "toughness": 1,
+  "oracleText": "{U}, {T}: Add {C}{C}{C}."
+}

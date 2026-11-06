@@ -1,0 +1,46 @@
+# Anarchy destroys both players' white permanents, including a multicolored creature and an enchantment, while a red creature survives (CR 701.8a).
+[Bot1 Deck]
+Anarchy
+Black Lotus
+Mox Ruby
+Mox Pearl
+Cerodon Yearling
+Raging Goblin
+Mountain
+Mountain x20
+
+[Bot2 Deck]
+Plains
+Savannah Lions
+Mox Pearl
+Authority of the Consuls
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Raging Goblin.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cerodon Yearling.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Authority of the Consuls.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Anarchy.Cast
+? Bot1.Mana =
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Anarchy; Cerodon Yearling; Black Lotus
+Bot2.Graveyard = Savannah Lions; Authority of the Consuls
+Bot1.Battlefield.Raging Goblin.Types = Creature

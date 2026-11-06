@@ -1,0 +1,6 @@
+{
+  "name": "Amnesia",
+  "manaCost": "{3}{U}{U}{U}",
+  "type": "Sorcery",
+  "oracleText": "Target player reveals their hand and discards all nonland cards."
+}

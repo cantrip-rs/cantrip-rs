@@ -1,6 +1,6 @@
-# Springleaf Drum's cost, "Tap an untapped creature you control": with no creature of Bot1's own it is not offered on turn 1, nor
+# Springleaf Drum's cost, "Tap an untapped creature you control": attempts with no creature of Bot1's own roll back on turn 1 and
 # on turn 3 while Bot2 has an untapped Ornithopter (a creature, not Bot1's), and once Bot1 casts its own Ornithopter the first Drum
-# taps it (the positive control) and the second Drum, with the only creature now tapped, is refused.
+# taps it (the positive control) and an attempt with the second Drum and only a tapped creature rolls back (CR 733).
 
 [Bot1 Deck]
 Mox Jet
@@ -21,15 +21,29 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Springleaf Drum.Cast
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Springleaf Drum.Cast
-! Bot1.Battlefield.Springleaf Drum.Activate
+Bot1.Pass
+Bot1.Battlefield.Springleaf Drum.Activate(Color: Blue)
+? Bot1.Battlefield.Springleaf Drum#1.Tapped = false
+? Bot1.Life = 20
+? Bot1.Mana =
+? Stack.Count = 0
 [T2 Bot2.Main1]
 Bot2.Hand.Ornithopter.Cast
 [T3 Bot1.Main1]
-! Bot1.Battlefield.Springleaf Drum.Activate
+Bot1.Battlefield.Springleaf Drum.Activate(Color: Blue)
+? Bot1.Battlefield.Springleaf Drum#1.Tapped = false
+? Bot1.Life = 20
+? Bot1.Mana =
+? Stack.Count = 0
 Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
 Bot1.Battlefield.Springleaf Drum.Activate(Tap: Ornithopter; Color: Blue)
+Bot1.Choose(Tap Springleaf Drum)
+Bot1.Choose(Ornithopter)
 ? Bot1.Mana = {U}
-! Bot1.Battlefield.Springleaf Drum#2.Activate
+Bot1.Battlefield.Springleaf Drum#2.Activate(Color: Blue)
+? Bot1.Mana = {U}
+? Stack.Count = 0
 
 [Expect]
 Bot1.Battlefield.Ornithopter.Tapped = true

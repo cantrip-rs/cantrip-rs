@@ -584,6 +584,6 @@ public sealed record CardState(
 public sealed record MentionState(string Name, bool Visible, float X, float Y, float W, float H);
 
 /// <summary>A control on the page: <c>button</c>, <c>toggle</c>, <c>dropdown</c> (by its caption), <c>textbox</c> (by its placeholder) or <c>item</c> (a menu row).</summary>
-public sealed record ControlState(string Kind, string Label, float X, float Y, float W, float H, int Ability = -1, int OptionId = 0);
+public sealed record ControlState(string Kind, string Label, float X, float Y, float W, float H, int Ability = -1, int OptionId = 0, bool Enabled = true, int DamageSource = 0, int DamageTarget = 0);
 
 public sealed record Spot(float X, float Y);

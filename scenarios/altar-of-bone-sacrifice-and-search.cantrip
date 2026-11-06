@@ -1,0 +1,59 @@
+# Altar of Bone requires one creature as a cost, then finds at most one creature and puts it into its controller's hand before shuffling (CR 601.2h, 701.23a, 701.24a).
+
+[Bot1 Deck]
+Altar of Bone
+Mox Emerald
+Mox Pearl
+Ornithopter
+Ornithopter
+Island
+Island
+Grizzly Bears
+Hill Giant
+Forest
+Island x20
+
+[Bot2 Deck]
+Grizzly Bears
+Island x6
+Hill Giant
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Altar of Bone.Cast
+? Bot1.Hand = Altar of Bone; Island; Island; Ornithopter; Ornithopter
+? Bot1.Mana = {W}{G}
+? Bot1.Life = 20
+? Bot1.Battlefield = Mox Emerald; Mox Pearl
+? Bot1.Graveyard.Count = 0
+? Exile.Count = 0
+? Stack.Count = 0
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Altar of Bone.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+! Bot1.Choose(Ornithopter#1; Ornithopter#2)
+Bot1.Choose(Ornithopter#1)
+? Bot1.Mana =
+? Bot1.Graveyard.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.ManaValue = 0
+Bot1.Pass
+Bot2.Pass
+? Bot1.Shuffles = 0
+! Bot1.Search(Forest)
+! Bot1.Search(Grizzly Bears; Hill Giant)
+Bot1.Search(Grizzly Bears)
+
+[Expect]
+Bot1.Hand.Grizzly Bears.Power = 2
+Bot1.Library.Grizzly Bears = (absent)
+Bot1.Revealed = Grizzly Bears
+Bot1.Shuffles = 1
+Bot2.Hand.Grizzly Bears.Power = 2
+Bot2.Library.Hill Giant.Power = 3
+Bot2.Shuffles = 0

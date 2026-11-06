@@ -16,6 +16,7 @@ Bot1.Battlefield.Mountain.Activate
 Bot1.Hand.Fanatical Firebrand.Cast
 Bot1.Pass
 Bot1.Battlefield.Fanatical Firebrand.Activate(Bot2)
+Bot1.Choose(Tap Fanatical Firebrand)
 ? Bot1.Graveyard = Fanatical Firebrand
 ? Stack.Count = 1
 ? Bot2.Life = 20

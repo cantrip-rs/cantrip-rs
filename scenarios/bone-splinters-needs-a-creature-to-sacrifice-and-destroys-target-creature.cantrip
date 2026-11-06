@@ -1,5 +1,5 @@
 # Bone Splinters: "As an additional cost to cast this spell, sacrifice a creature" (CR 118.8, 601.2h) is owed whatever it
-# targets, so with Bot2's Hired Blade to target but no creature of its own Bot1 can't cast it (the refusal, the ruling); with
+# targets, so an attempted cast with no creature of its own cannot pay and reverses; with
 # Ornithopter out it can (the positive control), and "Destroy target creature" (CR 701.8) puts the Blade in Bot2's graveyard
 # and the sacrificed Ornithopter in Bot1's.
 
@@ -31,7 +31,17 @@ Bot2.Battlefield.Swamp.Activate
 Bot2.Battlefield.Mox Jet.Activate
 Bot2.Battlefield.Mox Pearl.Activate
 [T3 Bot1.Main1]
-! Bot1.Hand.Bone Splinters.Cast
+Bot1.Hand.Bone Splinters.Cast(Bot2.Battlefield.Hired Blade)
+Bot1.Battlefield.Swamp.Activate
+? Bot1.Hand = Bone Splinters; Island; Island; Island; Island; Island; Ornithopter
+? Bot1.Mana =
+? Bot1.Life = 20
+? Bot1.Battlefield = Swamp
+? Bot1.Battlefield.Swamp.Tapped = false
+? Bot1.Graveyard.Count = 0
+? Bot2.Battlefield = Swamp; Mox Jet; Mox Pearl; Hired Blade
+? Bot2.Graveyard.Count = 0
+? Stack.Count = 0
 Bot1.Hand.Ornithopter.Cast
 Bot1.Pass
 Bot2.Pass

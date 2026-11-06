@@ -7,7 +7,7 @@ fn draw_then_lose_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
     g.draw(player, 1);
     let cards = g.state().zone(Zone::hand(player)).len() as i32;
     if cards > 0 {
-        g.lose_life(player, cards);
+        g.lose_life(player,(cards) as i32);
     }
     Ok(())
 }

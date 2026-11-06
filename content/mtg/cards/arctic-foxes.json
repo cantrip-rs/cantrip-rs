@@ -1,0 +1,8 @@
+{
+  "name": "Arctic Foxes",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Fox",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "This creature can't be blocked by creatures with power 2 or greater as long as defending player controls a snow land."
+}

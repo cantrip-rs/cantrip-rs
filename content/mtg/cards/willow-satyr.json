@@ -1,0 +1,8 @@
+{
+  "name": "Willow Satyr",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Satyr",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "You may choose not to untap this creature during your untap step.\n{T}: Gain control of target legendary creature for as long as you control this creature and this creature remains tapped."
+}

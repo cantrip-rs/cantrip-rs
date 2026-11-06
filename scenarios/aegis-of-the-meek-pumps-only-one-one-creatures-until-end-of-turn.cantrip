@@ -1,0 +1,64 @@
+# Aegis of the Meek targets either player's 1/1, rejects a 0/2, 1/2 and 2/1, and gives exactly +1/+2 until cleanup (CR 611.2a).
+# The artifact is cast with exactly three mana; its ability spends exactly one and taps it.
+
+[Bot1 Deck]
+Aegis of the Meek
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Memnite
+Ornithopter
+Giver of Runes
+Elite Vanguard
+Plains x15
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Giver of Runes.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Aegis of the Meek.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Elite Vanguard.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Aegis of the Meek.Activate(Ornithopter)
+! Bot1.Battlefield.Aegis of the Meek.Activate(Giver of Runes)
+! Bot1.Battlefield.Aegis of the Meek.Activate(Elite Vanguard)
+Bot1.Battlefield.Aegis of the Meek.Activate(Bot1.Battlefield.Memnite)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 3
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Aegis of the Meek.Activate(Bot2.Battlefield.Memnite)
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Aegis of the Meek.Activate(Bot2.Battlefield.Memnite)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Power = 2
+? Bot2.Battlefield.Memnite.Toughness = 3
+
+[Expect]
+Bot1.Battlefield.Aegis of the Meek.Tapped = true

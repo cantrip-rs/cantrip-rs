@@ -1,0 +1,29 @@
+# The Ornithopter attacks and is tapped before being targeted; Winter Blast still deals 2 damage to it (CR 701.26a).
+[Bot1 Deck]
+Ornithopter
+Mox Emerald
+Mox Sapphire
+Winter Blast
+Forest x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Winter Blast.Cast(X: 1)
+Bot1.Target(Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Ornithopter; Winter Blast

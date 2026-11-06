@@ -9,9 +9,8 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.draw(item.controller, 2);
     discard_chosen(g, item.controller, item.object, 2)?;
     let lands: Vec<ObjectId> = g.state().battlefield().iter().copied().filter(|&id| g.chars(id).is(CardType::Land)).collect();
-    for land in choose::cards(g, item.controller, item.object, Purpose::Untap, lands, 3, true)? {
-        g.untap(land);
-    }
+    let chosen = choose::cards(g, item.controller, item.object, Purpose::Untap, lands, 3, true)?;
+    g.untap_together(&chosen);
     Ok(())
 }
 

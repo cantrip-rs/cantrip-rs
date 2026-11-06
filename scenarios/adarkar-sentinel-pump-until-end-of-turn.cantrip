@@ -1,0 +1,37 @@
+# Adarkar Sentinel pays {1} to get +0/+1 until end of turn (CR 611.2a).
+
+[Bot1 Deck]
+Adarkar Sentinel
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Adarkar Sentinel.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Adarkar Sentinel.Activate(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Adarkar Sentinel.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Adarkar Sentinel.Power = 3
+? Bot1.Battlefield.Adarkar Sentinel.Toughness = 4
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Adarkar Sentinel.Power = 3
+Bot1.Battlefield.Adarkar Sentinel.Toughness = 3

@@ -1,0 +1,57 @@
+# If Willow Satyr untaps before its ability resolves, the effect never begins even if it is tapped again (CR 611.2b).
+# Quirion Ranger untaps it in response, then a second activation takes Rona while the first cannot take Isamaru.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Willow Satyr
+Forest
+Quirion Ranger
+Forest x20
+
+[Bot2 Deck]
+Mox Sapphire
+Isamaru, Hound of Konda
+Mox Pearl
+Rona, Herald of Invasion
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Willow Satyr.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Quirion Ranger.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Isamaru, Hound of Konda.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Rona, Herald of Invasion.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Willow Satyr.Activate(Bot2.Battlefield.Isamaru, Hound of Konda)
+Bot1.Battlefield.Quirion Ranger.Activate(Bot1.Battlefield.Willow Satyr)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Willow Satyr.Activate(Bot2.Battlefield.Rona, Herald of Invasion)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Rona, Herald of Invasion.Tapped = false
+Bot2.Battlefield.Isamaru, Hound of Konda.Tapped = false

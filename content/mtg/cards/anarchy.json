@@ -1,0 +1,6 @@
+{
+  "name": "Anarchy",
+  "manaCost": "{2}{R}{R}",
+  "type": "Sorcery",
+  "oracleText": "Destroy all white permanents."
+}

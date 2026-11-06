@@ -1,0 +1,52 @@
+# Winter Blast with X=2 taps and deals exactly 2 damage to flying creatures controlled by both players (CR 608.2c, 120.3).
+[Bot1 Deck]
+Black Lotus
+Wall of Air
+Mox Emerald
+Mox Sapphire
+Winter Blast
+Forest
+Island
+Island x15
+
+[Bot2 Deck]
+Black Lotus
+Wall of Air
+Forest
+Llanowar Elves
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Wall of Air.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wall of Air.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Winter Blast.Cast(X: 2)
+! Bot1.Target(Bot2.Battlefield.Forest)
+! Bot1.Target(Count: 1)
+! Bot1.Target(Count: 3)
+Bot1.Target(Bot1.Battlefield.Wall of Air; Bot2.Battlefield.Wall of Air)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Wall of Air.Tapped = true
+Bot1.Battlefield.Wall of Air.Damage = 2
+Bot2.Battlefield.Wall of Air.Tapped = true
+Bot2.Battlefield.Wall of Air.Damage = 2
+Bot2.Battlefield.Llanowar Elves.Tapped = false
+Bot2.Battlefield.Llanowar Elves.Damage = 0

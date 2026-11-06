@@ -1,0 +1,38 @@
+# Burrowing enchants a creature; the same blocker is legal without a Mountain and illegal after the defender plays one (CR 702.14c).
+
+[Bot1 Deck]
+Mox Ruby
+Ornithopter
+Burrowing
+Island x20
+
+[Bot2 Deck]
+Mountain
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Burrowing.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Hand.Burrowing.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter)
+Bot2.Block(Bot2.Battlefield.Ornithopter > Bot1.Battlefield.Ornithopter)
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter)
+! Bot2.Block(Bot2.Battlefield.Ornithopter > Bot1.Battlefield.Ornithopter)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Burrowing.AttachedTo = Ornithopter

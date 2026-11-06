@@ -1,0 +1,6 @@
+{
+  "name": "Altar of Bone",
+  "manaCost": "{G}{W}",
+  "type": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, sacrifice a creature.\nSearch your library for a creature card, reveal it, put it into your hand, then shuffle."
+}

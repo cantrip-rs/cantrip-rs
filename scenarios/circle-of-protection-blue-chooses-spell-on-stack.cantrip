@@ -1,0 +1,34 @@
+# A blue spell on the stack is an eligible source; its damage is prevented (CR 609.7a).
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Circle of Protection: Blue
+Island x20
+[Bot2 Deck]
+Black Lotus
+Psionic Blast
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Circle of Protection: Blue.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Psionic Blast.Cast(Bot1)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Circle of Protection: Blue.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Stack.Psionic Blast)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18
+Prevented = 4 Psionic Blast > Bot1 by Circle of Protection: Blue

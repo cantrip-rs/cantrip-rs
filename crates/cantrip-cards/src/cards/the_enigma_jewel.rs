@@ -17,8 +17,8 @@ static FOUR_OR_MORE: Materials = craft::materials(4, true, nonland_with_activate
 /// cards still in exile, each ability Locus's own, so Locus is its source and an ability that names its card means Locus
 /// (the card's ruling).
 fn crafted_abilities(view: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
-    let cards: Vec<CardId> = craft::used_to_craft(view.state(), source).into_iter().map(|c| view.state().obj(c).card).collect();
-    statics::grant_activated_abilities_of(view, &cards, chars);
+    let cards: Vec<_> = craft::used_to_craft(view.state(), source).into_iter().map(|c| (c, view.state().obj(c).card)).collect();
+    statics::grant_activated_abilities_from(view, &cards, chars);
 }
 
 /// "You may activate each of those abilities only once each turn" (CR 602.5b): Locus has one instance of `ability` for each

@@ -40,7 +40,7 @@ fn target_player_draws_cards_equal(
             .max(0) as i32
     };
     if let Some(player) = players_0 {
-        g.lose_life(player, amount_1);
+        g.lose_life(player,(amount_1) as i32);
     }
     Ok(())
 }

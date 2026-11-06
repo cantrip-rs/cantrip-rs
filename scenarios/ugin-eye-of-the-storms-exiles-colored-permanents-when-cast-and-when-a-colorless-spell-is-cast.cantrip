@@ -45,6 +45,7 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Hand.Ugin, Eye of the Storms.Cast
+! Bot1.Target(Bot1.Battlefield.Mox Pearl)
 Bot1.Target(Bot2.Battlefield.Llanowar Elves)
 Bot1.Pass
 Bot1.Battlefield.Ugin, Eye of the Storms.Activate(Ability: +2)
@@ -57,6 +58,10 @@ Bot2.Battlefield.Forest.Activate
 Bot2.Hand.Elvish Mystic.Cast
 [T5 Bot1.Main1]
 Bot1.Battlefield.Ugin, Eye of the Storms.Activate(Ability: Add)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {C}{C}{C}
+? Bot1.Battlefield.Ugin, Eye of the Storms.Counters.Loyalty = 9
 Bot1.Hand.Sol Ring.Cast
 Bot1.Target(Bot2.Battlefield.Elvish Mystic)
 

@@ -16,7 +16,7 @@ fn destroy_tapped_creatures(g: &mut dyn Game, item: &StackItem) -> Result<(), Su
         .filter(|&id| g.obj(id).tapped && g.chars(id).is(CardType::Creature))
         .collect();
     let destroyed = g.destroy_all(&tapped);
-    g.gain_life(you, destroyed.len() as i32);
+    g.gain_life(you,(destroyed.len() as i32) as i32);
     Ok(())
 }
 

@@ -52,6 +52,7 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Forest#1.Activate
 Bot1.Battlefield.Forest#2.Activate
+Bot1.Choose(craft materials)
 Bot1.Choose(Graveyard.Embereth Shieldbreaker)
 [T7 Bot1.Main2]
 

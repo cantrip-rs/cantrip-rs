@@ -41,6 +41,33 @@ const fn creature(name: &'static str, keywords: Keywords) -> CardDef {
     CardDef { name, types: TypeSet::of(&[CardType::Creature]), power: Some(2), toughness: Some(2), keywords, ..CardDef::BLANK }
 }
 static BEAR: CardDef = creature("Must Block Test Bear", Keywords::NONE);
+// Printed callers: Foriysian Brigade and Palace Guard; Brave the Sands and High Ground impose a separate rule.
+static TWO_BLOCKS: CardDef = CardDef { abilities: &[block_allowance(1, "This creature can block an additional creature each combat.")], ..creature("Block Test Two", Keywords::NONE) };
+fn dynamic_blocks(q: &dyn Query, asker: &Asker) -> u32 { u32::from(q.state().obj(asker.source).damage > 0) }
+static DYNAMIC_BLOCKS: CardDef = CardDef { abilities: &[block_allowance_by(dynamic_blocks, "Can block an additional creature while damaged.")], ..creature("Dynamic Block Test", Keywords::NONE) };
+static ANY_BLOCKS: CardDef = CardDef { abilities: &[block_allowance(u32::MAX, "This creature can block any number of creatures.")], ..creature("Block Test Any", Keywords::NONE) };
+static GOBLIN_ATTACKER: CardDef = CardDef { subtypes: SubtypeSet::of(&[Subtype::Goblin]), ..creature("Block Test Goblin", Keywords::NONE) };
+fn whenever_blocks(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    match event { Event::Blocks { blocker, declared: true, .. } if *blocker == source => Fired::PLAIN, _ => None }
+}
+fn blocks_goblin(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    match event { Event::Blocks { blocker, attacker, .. } if *blocker == source && q.chars(*attacker).has_subtype(Subtype::Goblin) => Fired::PLAIN, _ => None }
+}
+fn no_effect(_: &mut dyn cantrip_api::Game, _: &StackItem) -> Result<(), Suspend> { Ok(()) }
+static BLOCK_WITNESS: CardDef = CardDef { abilities: &[
+    block_allowance(1, "This creature can block an additional creature each combat."),
+    triggered(when(EventMask::BLOCKS, whenever_blocks), no_effect, "Whenever this creature blocks."),
+    triggered(when(EventMask::BLOCKS, blocks_goblin), no_effect, "Whenever this creature blocks a Goblin."),
+], ..creature("Block Test Witness", Keywords::NONE) };
+
+fn one_more_you_control(q: &dyn Query, source: ObjectId, blocker: ObjectId) -> u32 {
+    u32::from(q.controller(source) == q.controller(blocker))
+}
+static SHARED_BLOCKS: CardDef = CardDef { name: "Block Test Shared", types: TypeSet::of(&[CardType::Enchantment]), additional_blocks: &[one_more_you_control], ..CardDef::BLANK };
+static GRANT_BLOCKS: CardDef = CardDef { name: "Block Test Grant", delayed: &[block_allowance(1, "This creature can block an additional creature each combat.")], ..CardDef::BLANK };
+fn affected_creatures(q: &dyn Query, _: &Asker, _: Target, id: ObjectId) -> bool { q.chars(id).is(CardType::Creature) }
+static RULE_BLOCKS: CardDef = CardDef { name: "Block Test Rule", lasting_rules: &[LastingRule { text: "Creatures can block an additional creature this turn.", rule: LastingRuleKind::AdditionalBlocks(1), applies: affected_creatures }], ..CardDef::BLANK };
+
 static MENACE: CardDef = creature("Must Block Test Menace", Keywords::of(&[Keyword::Menace]));
 static FLYER: CardDef = creature("Must Block Test Flyer", Keywords::of(&[Keyword::Flying]));
 static LONE: CardDef = creature("Must Block Test Lone", Keywords::of(&[Keyword::CantBeBlockedByMoreThanOne]));
@@ -59,7 +86,7 @@ static RESTRICTING: CardDef = CardDef {
 };
 
 fn table() -> &'static CardTable {
-    Box::leak(Box::new(CardTable::new([&FILLER, &PROVOKE, &BEAR, &MENACE, &FLYER, &LONE, &LURE, &BAIT, &MENACE_BAIT, &UNBLOCKABLE, &HASTY, &RESTRICTING])))
+    Box::leak(Box::new(CardTable::new([&FILLER, &PROVOKE, &BEAR, &TWO_BLOCKS, &ANY_BLOCKS, &DYNAMIC_BLOCKS, &GOBLIN_ATTACKER, &BLOCK_WITNESS, &SHARED_BLOCKS, &GRANT_BLOCKS, &RULE_BLOCKS, &MENACE, &FLYER, &LONE, &LURE, &BAIT, &MENACE_BAIT, &UNBLOCKABLE, &HASTY, &RESTRICTING])))
 }
 
 /// A game of two on turn 1, P0's deck starting with three Provokes, and `permanents` on the battlefield.
@@ -369,4 +396,80 @@ fn two_attackers_that_must_be_blocked_with_one_blocker_obey_the_most_possible() 
     assert_eq!(rules(&ask).most, 1);
     assert!(!legal(&g, &ask, &[]));
     assert!(legal(&g, &ask, &[(x, a)]) && legal(&g, &ask, &[(x, b)]));
+}
+
+fn put_block_effect(g: &mut Game, source: ObjectId, affected: ObjectId, kind: EffectKind) {
+    let timestamp = g.state.timestamp();
+    g.state.effect_push(ContinuousEffect { source, controller: P1, timestamp, affected, kind, duration: Duration::EndOfTurn, words: Words::NONE });
+}
+
+#[test]
+fn printed_block_allowances_are_additive_and_unlimited() {
+    for (def, expected) in [(&BEAR, 1), (&TWO_BLOCKS, 2), (&ANY_BLOCKS, u32::MAX)] {
+        let (mut g, ids) = game(&[(&BEAR, P0), (&BEAR, P0), (&BEAR, P0), (def, P1)]);
+        let ask = declare(&mut g, &[], &ids[..3]);
+        assert_eq!(rules(&ask).capacity_of(ids[3]), expected);
+        assert_eq!(legal(&g, &ask, &[(ids[3], ids[0]), (ids[3], ids[1])]), expected >= 2);
+        assert_eq!(legal(&g, &ask, &[(ids[3], ids[0]), (ids[3], ids[1]), (ids[3], ids[2])]), expected >= 3);
+    }
+    let (mut g, ids) = game(&[(&BEAR, P0), (&BEAR, P0), (&BEAR, P0), (&TWO_BLOCKS, P1), (&SHARED_BLOCKS, P1)]);
+    let ask = declare(&mut g, &[], &ids[..3]);
+    assert_eq!(rules(&ask).capacity_of(ids[3]), 3);
+    assert!(legal(&g, &ask, &[(ids[3], ids[0]), (ids[3], ids[1]), (ids[3], ids[2])]));
+}
+
+#[test]
+fn dynamic_allowance_reads_current_holder_and_is_lost_with_its_ability() {
+    for (damage, copied, lost, expected) in [(0, false, false, 1), (1, false, false, 2), (1, true, false, 2), (1, true, true, 1)] {
+        let def = if copied { &BEAR } else { &DYNAMIC_BLOCKS };
+        let (mut g, ids) = game(&[(&BEAR, P0), (&BEAR, P0), (def, P1)]);
+        let holder = ids[2];
+        if copied { let card = g.cards.id_of(&DYNAMIC_BLOCKS); g.state.update_obj(holder, |o| o.copy = Some(Copiable::of(card))); }
+        g.state.update_obj(holder, |o| o.damage = damage);
+        if lost { put_block_effect(&mut g, holder, holder, EffectKind::LoseAllAbilities); }
+        let ask = declare(&mut g, &[], &ids[..2]);
+        assert_eq!(rules(&ask).capacity_of(holder), expected, "damage={damage}, copied={copied}, lost={lost}");
+    }
+}
+
+#[test]
+fn abilities_and_separate_rules_respond_differently_to_ability_loss_and_copy() {
+    for (mode, expected) in [("lost", 1), ("copied", 2), ("gained", 2), ("gained_lost", 1), ("lost_gained", 2), ("independent", 2), ("source_lost", 1), ("rule", 2)] {
+        let (mut g, ids) = game(&[(&BEAR, P0), (&BEAR, P0), (if mode == "lost" { &TWO_BLOCKS } else { &BEAR }, P1), (if matches!(mode, "independent" | "source_lost") { &SHARED_BLOCKS } else { &BEAR }, P1)]);
+        let (blocker, source) = (ids[2], ids[3]);
+        match mode {
+            "lost" => put_block_effect(&mut g, blocker, blocker, EffectKind::LoseAllAbilities),
+            "copied" => { let card = g.cards.id_of(&TWO_BLOCKS); g.state.update_obj(blocker, |o| o.copy = Some(Copiable::of(card))); },
+            "gained" => { let card = g.cards.id_of(&GRANT_BLOCKS); put_block_effect(&mut g, blocker, blocker, EffectKind::AddAbility(AbilityRef::delayed(card, 0))); },
+            "gained_lost" | "lost_gained" => {
+                let card = g.cards.id_of(&GRANT_BLOCKS);
+                let gain = EffectKind::AddAbility(AbilityRef::delayed(card, 0));
+                if mode == "gained_lost" { put_block_effect(&mut g, blocker, blocker, gain); put_block_effect(&mut g, blocker, blocker, EffectKind::LoseAllAbilities); }
+                else { put_block_effect(&mut g, blocker, blocker, EffectKind::LoseAllAbilities); put_block_effect(&mut g, blocker, blocker, gain); }
+            },
+            "independent" => put_block_effect(&mut g, blocker, blocker, EffectKind::LoseAllAbilities),
+            "source_lost" => put_block_effect(&mut g, source, source, EffectKind::LoseAllAbilities),
+            "rule" => { let card = g.cards.id_of(&RULE_BLOCKS); put_block_effect(&mut g, source, source, EffectKind::LastingRule { card, index: 0, about: Target::None }); put_block_effect(&mut g, blocker, blocker, EffectKind::LoseAllAbilities); },
+            _ => unreachable!(),
+        }
+        let ask = declare(&mut g, &[], &ids[..2]);
+        assert_eq!(rules(&ask).capacity_of(blocker), expected, "{mode}");
+    }
+}
+
+#[test]
+fn blocking_two_creatures_produces_one_blocks_and_two_blocks_a_creature_events() {
+    let (mut g, ids) = game(&[(&BEAR, P0), (&GOBLIN_ATTACKER, P0), (&BLOCK_WITNESS, P1)]);
+    let ask = declare(&mut g, &[], &ids[..2]);
+    g.answer(ask.id, P1, Answer::Block(vec![(ids[2], ids[0]), (ids[2], ids[1])])).unwrap();
+    g.run();
+    if let Some(request) = g.pending().cloned()
+        && let RequestKind::OrderTriggers { sources, .. } = &request.kind
+    {
+        g.answer(request.id, request.player, Answer::Order((0..sources.len() as u32).collect())).unwrap();
+        g.run();
+    }
+    assert_eq!(g.state.stack.len(), 2, "the unqualified block trigger and the second, Goblin-specific trigger both fire");
+    let events: Vec<_> = g.log.iter().filter_map(|r| match r.event { Event::Blocks { blocker, attacker, declared } if blocker == ids[2] => Some((attacker, declared)), _ => None }).collect();
+    assert_eq!(events, vec![(ids[0], true), (ids[1], false)]);
 }

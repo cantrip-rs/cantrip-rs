@@ -1,0 +1,63 @@
+# Each Mob counts only opposing Swamps on its controller's turn; trample assigns excess combat damage past a blocker (CR 604.1, 702.19b).
+[Bot1 Deck]
+Angry Mob
+Black Lotus
+Mox Pearl
+Swamp x2
+Plains x20
+[Bot2 Deck]
+Angry Mob
+Black Lotus
+Mox Pearl
+Swamp
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Angry Mob.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl.Activate
+? Bot2.Hand.Angry Mob.Power = 3
+? Bot2.Hand.Angry Mob.Toughness = 3
+Bot2.Hand.Angry Mob.Cast
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Angry Mob.Power = 2
+? Bot1.Battlefield.Angry Mob.Toughness = 2
+? Bot2.Battlefield.Angry Mob.Power = 3
+? Bot2.Battlefield.Angry Mob.Toughness = 3
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+? Bot1.Battlefield.Angry Mob.Power = 3
+? Bot1.Battlefield.Angry Mob.Toughness = 3
+? Bot2.Battlefield.Angry Mob.Power = 2
+? Bot2.Battlefield.Angry Mob.Toughness = 2
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Angry Mob > Bot2)
+Bot2.Block(Memnite > Angry Mob)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 18
+Bot2.Graveyard = Memnite; Black Lotus
+Bot1.Battlefield.Angry Mob.Power = 3
+Bot1.Battlefield.Angry Mob.Toughness = 3
+Bot1.Battlefield.Angry Mob.Keywords = Trample
