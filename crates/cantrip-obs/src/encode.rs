@@ -29,7 +29,7 @@ use crate::factor::{Machine, Step, Tok, Token};
 use crate::*;
 
 /// Bumped whenever the layout or the meaning of a number changes (and with it `encoder_hash`).
-pub const SCHEMA_VERSION: u32 = 1;
+pub const SCHEMA_VERSION: u32 = 4;
 pub const BUCKETS: [usize; 3] = [32, 64, 128];
 pub const MAX_TOKENS: usize = 128;
 pub const NUMS: usize = 96;
@@ -98,7 +98,7 @@ pub mod cat {
         ("controller", 1 + super::MAX_PLAYERS),
         ("step", 13),
         ("ask", 1 + super::ASK_KINDS.len()),
-        ("event", 66),
+        ("event", 67),
         ("from", 10),
         ("tok", 1 + super::TOKS.len()),
         ("action", 13),
@@ -190,6 +190,8 @@ features! {
         SEEN = 23, 1, 16;
         /// Decklist mode: the cards of their decklist the seat has not seen.
         POOL_LEFT = 24, 1, 64;
+        /// Captured snow-source mana, W U B R G C (also included in the ordinary pool).
+        SNOW_POOL = 25, 6, 8;
     }
 }
 
@@ -217,6 +219,8 @@ features! {
         OBJECTS = 28, 1, 64;
         CAP_HIT = 29, 1, 1;
         EVENTS = 30, 1, 32;
+        SNOW_COST = 31, 1, 8;
+        MANA_ABILITIES = 32, 1, 1;
     }
 }
 
@@ -254,6 +258,14 @@ features! {
         MANA = 21, 6, 1;
         RESTRICTED = 27, 1, 1;
         PAYS_NOTHING = 28, 1, 1;
+        SNOW = 29, 1, 1;
+        PAY_SNOW = 30, 1, 1;
+        /// Proportion of each kind of cost operation behind a cost-index digit, in semantic kind order.
+        COST_OPERATION_KINDS = 31, 15, 1;
+        /// Reserved for additional cost-operation kinds during the unpublished schema-4 integration.
+        RESERVED_COST_OPERATION_KINDS = 46, 34, 1;
+        /// Number of attackers this blocker may be declared against when greater than one, bounded to those offered.
+        BLOCK_CAPACITY = 80, 1, 16;
     }
 }
 
@@ -273,7 +285,7 @@ pub const POINTERS: [(&str, [&str; PTRS]); 6] = [
     ("card", ["attached", "attacking", "blocking", "target"]),
     ("ability", ["source", "", "", "target"]),
     ("event", ["object", "object2", "player", ""]),
-    ("option", ["a", "b", "", ""]),
+    ("option", ["a", "b", "cost_object", "cost_object2"]),
     ("pool_card", ["", "", "", ""]),
 ];
 
@@ -302,7 +314,7 @@ pub const ZONES: [&str; 9] = [
     "command",
 ];
 
-pub const ASK_KINDS: [&str; 26] = [
+pub const ASK_KINDS: [&str; 27] = [
     "Priority",
     "PayCosts",
     "UnlessPays",
@@ -329,10 +341,11 @@ pub const ASK_KINDS: [&str; 26] = [
     "DistributeCards",
     "SearchLibrary",
     "ChooseReplacement",
+    "ChooseCostPayment",
 ];
 
 /// Every `Tok`, by its number.
-pub const TOKS: [Tok; 28] = [
+pub const TOKS: [Tok; 29] = [
     Tok::Cancel,
     Tok::Done,
     Tok::Pass,
@@ -361,6 +374,7 @@ pub const TOKS: [Tok; 28] = [
     Tok::Shuffle,
     Tok::Next,
     Tok::Index,
+    Tok::CostDigit,
 ];
 
 pub const ACTIONS: [&str; 12] = [
@@ -533,6 +547,12 @@ pub fn ask_numbers(kind: &AskKind) -> (usize, [u32; 6]) {
     let l = |n: usize| n as u32;
     let b = |x: bool| if x { 8 } else { 0 };
     match kind {
+        K::ChooseCostPayment { choices } => (26, [u32::try_from(choices.len()).unwrap_or(u32::MAX), 0, 0, 0, 0, 0]),
+        K::ChooseNumber { least, most } => {
+            let low = least.to_be_bytes(); let high = most.to_be_bytes();
+            // The existing generic-choice category and numeric slots retain the encoded model layout.
+            (5, [low[0].into(), low[1].into(), low[2].into(), low[3].into(), high[0].into(), high[1].into()])
+        }
         K::Priority { options } => (0, [0, 0, 0, l(options.len()), 0, 0]),
         K::PayCosts {
             options,
@@ -817,6 +837,7 @@ pub fn encode(
     let room = MAX_TOKENS - 1 - n.min(MAX_TOKENS - 1);
     let options = step.tokens.len().min(room - places.len().min(room));
     cap_hit |= options < step.tokens.len();
+    let all_chosen = chosen;
     let chosen_from = chosen.len().saturating_sub(MAX_CHOSEN.min(room - options));
     cap_hit |= chosen.len() - chosen_from < chosen.len().min(MAX_CHOSEN);
     let chosen = &chosen[chosen_from..];
@@ -837,6 +858,11 @@ pub fn encode(
     }
     if let Some(a) = ask {
         pin(a.source);
+        if let AskKind::ChooseCostPayment { choices } = &a.kind {
+            for object in choices.iter().flat_map(|choice| choice.objects.iter().take(2)) {
+                pin(*object);
+            }
+        }
     }
     let mut pooled: Vec<bool> = obs
         .objects
@@ -981,6 +1007,7 @@ pub fn encode(
         }
         let cost = |g: &mut Row, c: &CostObs| {
             g.set(game::COST, c.generic as f32, 8.0);
+            g.set(game::SNOW_COST, c.snow as f32, 8.0);
             for (i, &s) in c.symbols.iter().enumerate() {
                 g.set(game::COST + 1 + i, s as f32, 8.0);
             }
@@ -992,8 +1019,13 @@ pub fn encode(
             );
         };
         match &a.kind {
+            AskKind::ChooseNumber { most, .. } => {
+                let high = most.to_be_bytes();
+                g.set(game::X, high[2] as f32, 8.0); g.set(game::X_MOST, high[3] as f32, 8.0);
+            }
             AskKind::PayCosts {
                 remaining,
+                mana_abilities,
                 announcing,
                 x,
                 x_most,
@@ -1004,6 +1036,7 @@ pub fn encode(
                 g.set(game::X, *x as f32, 8.0);
                 g.set(game::X_MOST, *x_most as f32, 8.0);
                 g.nums[game::ANNOUNCING] = *announcing as u8 as f32;
+                g.nums[game::MANA_ABILITIES] = *mana_abilities as u8 as f32;
                 g.nums[game::LOYALTY] = *loyalty as u8 as f32;
             }
             AskKind::UnlessPays {
@@ -1054,6 +1087,9 @@ pub fn encode(
         };
         row.set(player::SEEN, sum(obs.seen.get(p)), 16.0);
         row.set(player::POOL_LEFT, sum(obs.pools.get(p)), 64.0);
+        for (i, &n) in obs.players[p].snow_pool.iter().enumerate() {
+            row.set(player::SNOW_POOL + i, n as f32, 8.0);
+        }
         rows.push(row);
     }
 
@@ -1107,7 +1143,9 @@ pub fn encode(
     let first_event = obs.events.len() - events.len();
     for (k, e) in events.iter().enumerate() {
         let mut row = Row::new(kind::EVENT, Origin::Event(first_event + k));
-        row.cats[cat::EVENT] = 1 + e.kind.min(64);
+        // Existing kinds 0..63 keep categories 1..64 and unknown stays 65. Untapped (bit 64) appends
+        // category 66; its new raw kind must not alias the old unknown category.
+        row.cats[cat::EVENT] = if e.kind == 64 { 66 } else { 1 + e.kind.min(64) };
         if let Some(to) = e.to {
             row.cats[cat::ZONE] = 1 + to.zone as u8;
         }
@@ -1132,12 +1170,44 @@ pub fn encode(
     }
 
     let option_row = |t: &Token, origin: Origin| {
+        let is_option = matches!(&origin, Origin::Option(_));
         let mut row = Row::new(kind::OPTION, origin);
         row.cats[cat::TOK] = 1 + t.kind as u8;
         row.ptrs[0] = t.a;
         row.ptrs[1] = t.b;
         row.set(option::N, t.n as f32, 64.0);
         match t.kind {
+            Tok::CostDigit if is_option => {
+                if let Some(Ask { kind: AskKind::ChooseCostPayment { choices }, .. }) = ask {
+                    let digits = all_chosen.iter().filter(|token| token.kind == Tok::CostDigit);
+                    let count = digits.clone().count();
+                    let prefix = digits.fold(0usize, |n, token| (n << 4) | token.n as usize);
+                    let remaining = usize::BITS as usize / 4 - count - 1;
+                    let shift = remaining * 4;
+                    let low = ((prefix << 4) | t.n as usize) << shift;
+                    let width = if shift == 0 { 1 } else { 1usize << shift };
+                    let end = low.saturating_add(width).min(choices.len());
+                    if low < end {
+                        let mut kinds = [0usize; 15];
+                        for choice in &choices[low..end] {
+                            let kind = match choice.kind {
+                                CostPaymentKindObs::Life => 0, CostPaymentKindObs::Tap => 1,
+                                CostPaymentKindObs::Sacrifice => 2, CostPaymentKindObs::Return => 3,
+                                CostPaymentKindObs::Exile => 4, CostPaymentKindObs::Mana => 5, CostPaymentKindObs::Energy => 6, CostPaymentKindObs::Counters => 7, CostPaymentKindObs::Discard => 8, CostPaymentKindObs::Behold => 9, CostPaymentKindObs::Exert => 10, CostPaymentKindObs::Unattach => 11, CostPaymentKindObs::Library => 12, CostPaymentKindObs::CommitHelpers => 13, CostPaymentKindObs::Choose => 14,
+                            };
+                            kinds[kind] += 1;
+                        }
+                        for (kind, count) in kinds.into_iter().enumerate() {
+                            row.nums[option::COST_OPERATION_KINDS + kind] = count as f32 / (end - low) as f32;
+                        }
+                        if end - low == 1 {
+                            // The first two slots identify the factored token and must round-trip unchanged.
+                            row.ptrs[2] = choices[low].objects.first().copied().unwrap_or(Ref::None);
+                            row.ptrs[3] = choices[low].objects.get(1).copied().unwrap_or(Ref::None);
+                        }
+                    }
+                }
+            }
             Tok::X => row.set(option::X, t.n as f32, 8.0),
             Tok::Color => row.nums[option::COLOR + (t.n as usize).min(6)] = 1.0,
             Tok::Name => {
@@ -1146,6 +1216,14 @@ pub fn encode(
                     .map_or(UNKNOWN_CARD, |s| cards.row(s))
             }
             Tok::Player => row.cats[cat::OWNER] = r(t.n as u8),
+            Tok::Block | Tok::NoBlock => {
+                if let Some(Ask { kind: AskKind::DeclareBlockers { eligible, attackers, capacities, .. }, .. }) = ask
+                    && let Some(i) = eligible.iter().position(|&blocker| blocker == t.a)
+                {
+                    let capacity = capacities.iter().find(|pair| pair.0 == eligible[i]).map_or(1, |pair| pair.1).min(attackers.len() as u32);
+                    if capacity > 1 { row.set(option::BLOCK_CAPACITY, capacity as f32, 16.0); }
+                }
+            }
             Tok::Option => {
                 if let Some(o) = ask.and_then(|a| ask_options(&a.kind).get(t.n as usize)) {
                     row.cats[cat::ACTION] = 1 + o.kind.min(11);
@@ -1160,6 +1238,8 @@ pub fn encode(
                     }
                     row.nums[option::RESTRICTED] = o.restriction.is_some() as u8 as f32;
                     row.nums[option::PAYS_NOTHING] = o.pays_nothing as u8 as f32;
+                    row.nums[option::SNOW] = o.snow as u8 as f32;
+                    row.nums[option::PAY_SNOW] = o.pay_snow as u8 as f32;
                 }
             }
             _ => {}
@@ -1266,7 +1346,8 @@ fn object_row(
             row.bits(object::TYPES, 9, c.types as u64);
             row.bits(object::SUPERTYPES, 3, c.supertypes as u64);
             row.bits(object::COLORS, 5, c.colors as u64);
-            row.bits(object::KEYWORDS, 48, c.keywords);
+            // The fixed schema-1 model layout represents bits 0..47 only; the raw schema-3 observation keeps all 128.
+            row.bits(object::KEYWORDS, 48, c.keywords as u64);
             row.set(object::DAMAGE, v.damage as f32, 8.0);
             for &(k, n) in &v.counters {
                 let at = match k {
@@ -1541,6 +1622,16 @@ pub fn to_compact(e: &Encoded) -> Vec<u8> {
 
 /// A position from its compact form (without `origin`). `None` for another schema or bytes that are not one.
 pub fn from_compact(bytes: &[u8]) -> Option<Encoded> {
+    compact_schema(bytes, SCHEMA_VERSION)
+}
+
+/// Explicit decoder for stored schema-2 model parity references. Their provenance stays schema 2;
+/// the new per-kind snow cells were absent and decode to zero. This does not accept other schemas.
+pub fn from_compact_legacy_snow_v2(bytes: &[u8]) -> Option<Encoded> {
+    compact_schema(bytes, 2)
+}
+
+fn compact_schema(bytes: &[u8], schema: u32) -> Option<Encoded> {
     let mut at = 0;
     let mut take = |n: usize| -> Option<&[u8]> {
         let s = bytes.get(at..at + n)?;
@@ -1548,7 +1639,7 @@ pub fn from_compact(bytes: &[u8]) -> Option<Encoded> {
         Some(s)
     };
     let h = take(6)?;
-    if h[0] as u32 != SCHEMA_VERSION {
+    if h[0] as u32 != schema {
         return None;
     }
     let (bucket, len, first_option, options, cap_hit) = (
@@ -1789,6 +1880,175 @@ pub fn dump(e: &Encoded) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn cost_objects_do_not_replace_the_digit_token_identity() {
+        let mut obs = crate::tests::sample();
+        if let ObjectObs::Hidden { position, .. } = &mut obs.objects[1] {
+            *position = Some(99);
+        }
+        let ask = Ask { may_cancel: false, source: Ref::None,
+            kind: AskKind::ChooseCostPayment { choices: vec![CostPaymentObs {
+                label: "Move these cards".into(),
+                objects: vec![Ref::Object(1), Ref::Object(2)],
+                kind: CostPaymentKindObs::Exile,
+            }] } };
+        obs.request.as_mut().unwrap().ask = Some(ask.clone());
+        let mut machine = Machine::new(&ask, &[]);
+        for _ in 1..usize::BITS / 4 {
+            assert!(machine.choose_token(Token::of(Tok::CostDigit, Ref::None, Ref::None, 0)));
+        }
+        let encoded = encode_machine(&obs, &machine, &|_: &str| 0);
+        assert!(!encoded.cap_hit);
+        let row = encoded.first_option;
+        assert_eq!(&encoded.ptrs_of(row)[..2], &[NO_POINTER, NO_POINTER]);
+        for (slot, object) in [(2, 1), (3, 2)] {
+            assert_eq!(encoded.origin[encoded.ptrs_of(row)[slot] as usize], Origin::Object(object));
+        }
+        let decoded = decode(&encoded);
+        assert_eq!(decoded.options[0], (Tok::CostDigit, Pointee::None, Pointee::None, 0));
+        assert!(decoded.options.iter().all(|(_, a, b, _)| *a == Pointee::None && *b == Pointee::None));
+        let compact = from_compact(&to_compact(&encoded)).expect("compact encoding round trip");
+        assert_eq!(compact.ptrs_of(row), encoded.ptrs_of(row));
+    }
+
+    #[test]
+    fn cost_digit_options_expose_the_operations_they_select() {
+        let mut obs = crate::tests::sample();
+        let ask = Ask { may_cancel: false, source: Ref::None, kind: AskKind::ChooseCostPayment { choices: vec![
+            CostPaymentObs { label: "Pay 3 life".into(), objects: vec![], kind: CostPaymentKindObs::Life },
+            CostPaymentObs { label: "Sacrifice a creature".into(), objects: vec![], kind: CostPaymentKindObs::Sacrifice },
+            CostPaymentObs { label: "Pay mana".into(), objects: vec![], kind: CostPaymentKindObs::Mana },
+            CostPaymentObs { label: "Pay energy".into(), objects: vec![], kind: CostPaymentKindObs::Energy },
+            CostPaymentObs { label: "Remove counters".into(), objects: vec![], kind: CostPaymentKindObs::Counters },
+            CostPaymentObs { label: "Discard a card".into(), objects: vec![], kind: CostPaymentKindObs::Discard },
+            CostPaymentObs { label: "Behold a creature".into(), objects: vec![], kind: CostPaymentKindObs::Behold },
+            CostPaymentObs { label: "Exert a permanent".into(), objects: vec![], kind: CostPaymentKindObs::Exert },
+            CostPaymentObs { label: "Unattach a permanent".into(), objects: vec![], kind: CostPaymentKindObs::Unattach },
+            CostPaymentObs { label: "Put into library".into(), objects: vec![], kind: CostPaymentKindObs::Library },
+            CostPaymentObs { label: "Commit helper payments".into(), objects: vec![], kind: CostPaymentKindObs::CommitHelpers },
+            CostPaymentObs { label: "Choose an object".into(), objects: vec![], kind: CostPaymentKindObs::Choose },
+        ] } };
+        obs.request.as_mut().unwrap().ask = Some(ask.clone());
+        let mut machine = Machine::new(&ask, &[]);
+        for _ in 1..usize::BITS / 4 { assert!(machine.choose_token(Token::of(Tok::CostDigit, Ref::None, Ref::None, 0))); }
+        let encoded = encode_machine(&obs, &machine, &|_: &str| 0);
+        assert!(!encoded.cap_hit);
+        let life = encoded.first_option;
+        let sacrifice = life + 1;
+        assert_eq!(encoded.cats_of(life)[cat::TOK], 1 + Tok::CostDigit as u8);
+        assert_eq!(encoded.nums_of(life)[option::COST_OPERATION_KINDS], 1.0);
+        assert_eq!(encoded.nums_of(sacrifice)[option::COST_OPERATION_KINDS + 2], 1.0);
+        assert_eq!(encoded.nums_of(sacrifice)[option::COST_OPERATION_KINDS], 0.0);
+        assert_eq!(encoded.nums_of(sacrifice + 1)[option::COST_OPERATION_KINDS + 5], 1.0);
+        assert_eq!(encoded.nums_of(sacrifice + 2)[option::COST_OPERATION_KINDS + 6], 1.0);
+        assert_eq!(encoded.nums_of(sacrifice + 3)[option::COST_OPERATION_KINDS + 7], 1.0);
+        assert_eq!(encoded.nums_of(sacrifice + 4)[option::COST_OPERATION_KINDS + 8], 1.0);
+        assert_eq!(encoded.nums_of(sacrifice + 5)[option::COST_OPERATION_KINDS + 9], 1.0);
+        assert_eq!(encoded.nums_of(sacrifice + 6)[option::COST_OPERATION_KINDS + 10], 1.0);
+        assert_eq!(encoded.nums_of(sacrifice + 7)[option::COST_OPERATION_KINDS + 11], 1.0);
+        assert_eq!(encoded.nums_of(sacrifice + 8)[option::COST_OPERATION_KINDS + 12], 1.0);
+        assert_eq!(encoded.nums_of(sacrifice + 9)[option::COST_OPERATION_KINDS + 13], 1.0);
+        assert_eq!(encoded.nums_of(sacrifice + 10)[option::COST_OPERATION_KINDS + 14], 1.0);
+    }
+
+    #[test]
+    fn blocker_options_encode_the_available_multiple_block_capacity() {
+        let mut obs = crate::tests::sample();
+        let ask = Ask { may_cancel: false, source: Ref::None, kind: AskKind::DeclareBlockers {
+            eligible: vec![Ref::Object(2)], attackers: vec![Ref::Object(1), Ref::Object(3)],
+            allowed: vec![(Ref::Object(2), Ref::Object(1)), (Ref::Object(2), Ref::Object(3))],
+            required: vec![], most: 0, min_blockers: vec![1, 1], max_blockers: vec![255, 255],
+            capacities: vec![(Ref::Object(2), 2)],
+        }};
+        obs.request.as_mut().unwrap().ask = Some(ask.clone());
+        let machine = Machine::new(&ask, &[]);
+        let encoded = encode_machine(&obs, &machine, &|_: &str| 0);
+        assert!(encoded.options >= 2);
+        for row in encoded.first_option..encoded.first_option + encoded.options {
+            assert_eq!(encoded.nums_of(row)[option::BLOCK_CAPACITY] * 16.0, 2.0);
+        }
+    }
+
+    #[test]
+    fn wide_number_legacy_encoding_snapshot() {
+        let obs = crate::tests::sample();
+        let machine = Machine::new(obs.request.as_ref().unwrap().ask.as_ref().unwrap(), &[]);
+        let encoded = encode_machine(&obs, &machine, &|_: &str| 0);
+        let bytes = to_compact(&encoded);
+        assert_eq!(bytes[0], 4, "the native cost-operation header is schema 4");
+        // Compare the unchanged non-snow payload against the historical schema-2 golden using its original header.
+        // This test does not retag a stored model or alter the native serialization.
+        let hash = std::iter::once(2u8).chain(bytes.iter().skip(1).copied())
+            .fold(0xcbf29ce484222325u64, |h, b| (h ^ u64::from(b)).wrapping_mul(0x100000001b3));
+        assert_eq!(hash, 0xce448f742172302a, "the non-snow legacy feature payload remains unchanged");
+        if let Some(folder) = std::env::var_os("CANTRIP_NUMBER_PROOF") {
+            let folder = std::path::Path::new(&folder);
+            std::fs::write(folder.join(format!("native-encoded-{}.bin", crate::SCHEMA_VERSION)), bytes).unwrap();
+            std::fs::write(folder.join(format!("encoder-layout-{}.json", crate::SCHEMA_VERSION)), layout_json()).unwrap();
+        }
+    }
+
+    #[test]
+    fn wide_number_bounds_and_every_digit_fit_existing_features_without_truncation() {
+        let mut obs = crate::tests::sample();
+        let ask = Ask { may_cancel: false, source: Ref::None, kind: AskKind::ChooseNumber { least: 0xdeadbeef, most: u32::MAX } };
+        obs.request.as_mut().unwrap().ask = Some(ask.clone());
+        let mut machine = Machine::new(&ask, &[]);
+        let tokens = crate::factor::decompose(&ask, &[], &crate::factor::FactoredAnswer::Number(u32::MAX)).unwrap();
+        for token in tokens {
+            let encoded = encode_machine(&obs, &machine, &|_: &str| 0);
+            assert_eq!(encoded.options, machine.step().unwrap().tokens.len());
+            let nums = encoded.nums_of(0);
+            let bounds = [game::ASK, game::ASK+1, game::ASK+2, game::ASK+3, game::ASK+4, game::ASK+5, game::X, game::X_MOST];
+            let expected = [0xde, 0xad, 0xbe, 0xef, 0xff, 0xff, 0xff, 0xff];
+            for (slot, value) in bounds.into_iter().zip(expected) { assert_eq!(nums[slot] * 8.0, value as f32); }
+            assert!(machine.choose_token(token));
+        }
+        assert_eq!(SCHEMA_VERSION, 4); assert_eq!((MAX_TOKENS, NUMS, CATS, PTRS), (128, 96, 9, 4));
+    }
+
+    #[test]
+    fn wide_number_encoded_history_preserves_digit_prefix_and_position_without_aliasing() {
+        let mut obs = crate::tests::sample();
+        let ask = Ask { may_cancel: false, source: Ref::None, kind: AskKind::ChooseNumber { least: 0, most: u32::MAX } };
+        obs.request.as_mut().unwrap().ask = Some(ask.clone());
+        // Every depth, leading zeroes, digit extremes and equal-depth permutations. With identical bounds all
+        // unfinished prefixes offer the same sixteen digits; their only distinction is encoded history.
+        let mut prefixes = std::collections::BTreeSet::from([vec![0, 1], vec![1, 0]]);
+        for depth in 0..=8 { for digit in [0, 1, 15] { prefixes.insert(vec![digit; depth]); } }
+        let mut encodings = std::collections::BTreeSet::new();
+        for prefix in prefixes {
+            let mut machine = Machine::new(&ask, &[]);
+            for &digit in &prefix { assert!(machine.choose_token(Token::of(Tok::X, Ref::None, Ref::None, digit))); }
+            let encoded = encode_machine(&obs, &machine, &|_: &str| 0);
+            let bytes = to_compact(&encoded);
+            assert!(encodings.insert(bytes.clone()), "distinct digit prefixes and positions must not alias");
+            let compact = from_compact(&bytes).unwrap();
+            assert!(!compact.cap_hit);
+            assert_eq!(compact.nums_of(0)[game::CHOSEN] * 16.0, prefix.len() as f32);
+            let rows: Vec<_> = (0..compact.len).filter(|&at| compact.kind[at] == kind::OPTION && compact.nums_of(at)[option::CHOSEN] == 1.0).collect();
+            assert_eq!(rows.len(), prefix.len());
+            for (position, (row, digit)) in rows.into_iter().zip(prefix).enumerate() {
+                assert_eq!(compact.cats_of(row)[cat::TOK], 1 + Tok::X as u8);
+                assert_eq!(compact.nums_of(row)[option::ORDER] * 16.0, position as f32);
+                assert_eq!(compact.nums_of(row)[option::X] * 8.0, digit as f32);
+            }
+        }
+    }
+
+    #[test]
+    fn untapped_appends_a_category_without_reassigning_old_event_or_unknown_categories() {
+        let mut obs = crate::tests::sample();
+        let sample = obs.events[0].clone();
+        obs.events = [29, 64, 65, 128].into_iter().map(|kind| EventObs { kind, ..sample.clone() }).collect();
+        let encoded = encode(&obs, &Step::default(), &[], &[], &row);
+        let categories: Vec<_> = (0..encoded.len).filter(|&at| encoded.kind[at] == kind::EVENT).map(|at| encoded.cats_of(at)[cat::EVENT]).collect();
+        assert_eq!(categories, [30, 66, 65, 65]);
+        assert_eq!(cat::NAMES[cat::EVENT], ("event", 67));
+        let round_trip = from_compact(&to_compact(&encoded)).unwrap();
+        assert!(same_tensors(&encoded, &round_trip));
+    }
 
     #[test]
     fn features_fit_and_do_not_overlap() {
@@ -2095,6 +2355,6 @@ mod tests {
     #[test]
     fn the_layout_hash_is_stable_for_the_layout() {
         assert_eq!(encoder_hash(), fnv1a64(layout_json().as_bytes()));
-        assert!(layout_json().contains("\"schema\": 1"));
+        assert!(layout_json().contains("\"schema\": 4"));
     }
 }

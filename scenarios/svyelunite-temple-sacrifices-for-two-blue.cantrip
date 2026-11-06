@@ -1,0 +1,16 @@
+# The Temple taps and is sacrificed for exactly two blue mana, immediately available (CR 605.1a, 701.21a).
+[Bot1 Deck]
+Svyelunite Temple
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Svyelunite Temple.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Svyelunite Temple.Activate(Ability: Sacrifice)
+? Bot1.Mana = {U}{U}
+? Bot1.Battlefield.Svyelunite Temple = (absent)
+[Expect]
+Bot1.Graveyard = Svyelunite Temple
+Bot1.Mana = {U}{U}
+Stack.Count = 0

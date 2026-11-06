@@ -40,6 +40,7 @@ Bot1.Hand.Wistfulness.Cast
 Bot1.Battlefield.Mountain.Activate
 Bot1.Graveyard.Wild Ride.Cast(Bot1.Battlefield.Ornithopter; Ability: Harmonize)
 Bot1.Choose(Wistfulness)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Pass
 [T5 Bot1.Main2]

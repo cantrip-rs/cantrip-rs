@@ -1,0 +1,61 @@
+# Spore Flower gains one counter on each of its controller's upkeeps, requires three to activate,
+# prevents combat damage to both creatures that turn, but not Lightning Bolt (CR 602.2, 615.1).
+[Bot1 Deck]
+Spore Flower
+Mox Emerald
+Gleemox
+Grizzly Bears
+Mox Ruby
+Lightning Bolt
+Forest x20
+
+[Bot2 Deck]
+Grizzly Bears
+Mox Emerald
+Gleemox
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Spore Flower.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Gleemox.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Gleemox.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Spore Flower.Counters.Spore = 1
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+! Bot1.Battlefield.Spore Flower.Activate
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Spore Flower.Counters.Spore = 2
+! Bot1.Battlefield.Spore Flower.Activate
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Spore Flower.Counters.Spore = 3
+Bot1.Battlefield.Spore Flower.Activate
+? Bot1.Battlefield.Spore Flower.Counters.Spore = (absent)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T7 Bot1.Attackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Grizzly Bears > Grizzly Bears)
+[T7 Bot1.Main2]
+? Bot1.Battlefield.Grizzly Bears.Damage = 0
+? Bot2.Battlefield.Grizzly Bears.Damage = 0
+[T8 Bot2.Attackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+[T8 Bot2.Main2]
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 17

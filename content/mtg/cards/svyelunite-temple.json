@@ -1,0 +1,5 @@
+{
+  "name": "Svyelunite Temple",
+  "type": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {U}.\n{T}, Sacrifice this land: Add {U}{U}."
+}

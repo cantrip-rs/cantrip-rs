@@ -1,0 +1,6 @@
+{
+  "name": "Soul Kiss",
+  "manaCost": "{2}{B}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\n{B}, Pay 1 life: Enchanted creature gets +2/+2 until end of turn. Activate no more than three times each turn."
+}

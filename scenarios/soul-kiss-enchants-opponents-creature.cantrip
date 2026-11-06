@@ -1,0 +1,33 @@
+# The Aura's controller pays life and boosts an opponent's enchanted creature (CR 109.5, 303.4a).
+[Bot1 Deck]
+Soul Kiss
+Black Lotus
+Mox Jet
+Swamp x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Soul Kiss.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Soul Kiss.Activate
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Life = 19
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 2
+Bot2.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Soul Kiss.AttachedTo = Ornithopter
+Bot2.Life = 20

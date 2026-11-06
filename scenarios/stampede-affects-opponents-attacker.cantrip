@@ -1,0 +1,27 @@
+# Stampede affects an opponent's attacking creature too, even though the defending player casts the spell (CR 611.2c).
+[Bot1 Deck]
+Black Lotus
+Stampede
+Forest x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.BeginCombat]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Stampede.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Power = 2
+? Bot2.Battlefield.Memnite.Toughness = 1
+? Bot2.Battlefield.Memnite.Keywords = Trample
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 18

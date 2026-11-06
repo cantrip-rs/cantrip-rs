@@ -1,0 +1,50 @@
+# Soul Barrier ignores its controller's creature and an opponent's noncreature spell. An opponent's artifact and enchantment creature spells trigger it; paying {2} prevents damage, and declining on the next one causes two damage (CR 603.2, 118.12a).
+[Bot1 Deck]
+Soul Barrier
+Black Lotus
+Ornithopter
+Island x20
+[Bot2 Deck]
+Sol Ring
+Island
+Ornithopter x2
+Black Lotus
+Nyxborn Courser
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Soul Barrier.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+? Bot1.Life = 20
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+? Bot2.Life = 20
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.PayCost
+? Bot2.Mana =
+? Bot2.Life = 20
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T2 Bot2.Main2]
+? Bot2.Life = 18
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Nyxborn Courser.Cast
+? Bot2.Mana =
+Bot2.Pass
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 16
+Bot2.Battlefield.Ornithopter#1.Types = Artifact; Creature

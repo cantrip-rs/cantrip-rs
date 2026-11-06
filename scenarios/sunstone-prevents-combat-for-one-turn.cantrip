@@ -1,0 +1,67 @@
+# Sunstone requires a snow land, prevents both creatures’ combat damage this turn, and leaves noncombat damage alone; the same combat deals damage next turn (CR 615.1, 514.2).
+[Bot1 Deck]
+Black Lotus
+Sunstone
+Sol Ring
+Snow-Covered Forest
+Memnite
+Island
+Phyrexian Soulgorger
+Mox Jet
+Island x13
+
+[Bot2 Deck]
+Memnite
+Mountain
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sunstone.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Snow-Covered Forest.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Phyrexian Soulgorger.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Memnite > Memnite)
+Bot1.Battlefield.Snow-Covered Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sunstone.Activate
+! Bot1.Choose(Island)
+! Bot1.Choose(Phyrexian Soulgorger)
+! Bot1.Choose()
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Snow-Covered Forest)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[T3 Bot1.Main2]
+? Bot1.Life = 17
+? Bot1.Battlefield.Memnite.Damage = 0
+? Bot2.Battlefield.Memnite.Damage = 0
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Sunstone.Activate
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Memnite > Memnite)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Memnite; Phyrexian Soulgorger; Snow-Covered Forest; Black Lotus
+Bot2.Graveyard = Memnite; Lightning Bolt

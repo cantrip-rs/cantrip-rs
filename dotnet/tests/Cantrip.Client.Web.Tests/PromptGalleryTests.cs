@@ -13,6 +13,189 @@ namespace Cantrip.Client.Web.Tests;
 public sealed class PromptGalleryTests(WebClient web)
 {
     [Fact]
+    public async Task Ordered_library_top_names_the_destination_for_graveyard_and_library_cards()
+    {
+        await using TablePage table = await TablePage.OpenAsync(web, "prompt=arrange-opponent-library", WebClient.Pictures(nameof(PromptGalleryTests)));
+        TableState opponent = await table.SettledAsync(state => state.Fixture == "arrange-opponent-library");
+        Assert.Equal("Natural Selection: put all 3 cards on top of the library in any order", opponent.Title);
+        await table.Page.EvaluateAsync("name => location.hash = name", "arrange-opponent-library-one");
+        TableState single = await table.SettledAsync(state => state.Fixture == "arrange-opponent-library-one");
+        Assert.Equal("Natural Selection: put the card on top of the library", single.Title);
+        await table.Page.EvaluateAsync("name => location.hash = name", "arrange-graveyard-on-library");
+        TableState graveyard = await table.SettledAsync(state => state.Fixture == "arrange-graveyard-on-library");
+        Assert.Equal("Drafna's Restoration: put all 2 cards on top of the library in any order", graveyard.Title);
+        await table.Page.EvaluateAsync("name => location.hash = name", "arrange-library-on-library");
+        TableState library = await table.SettledAsync(state => state.Fixture == "arrange-library-on-library");
+        Assert.Equal("Ponder: put all 2 cards on top of the library in any order", library.Title);
+        Assert.Empty(table.Errors);
+    }
+
+    [Fact]
+    public async Task Pending_delayed_text_is_shown_only_on_the_affected_permanent()
+    {
+        await using TablePage table = await TablePage.OpenAsync(web, "prompt=delayed-carried-object", WebClient.Pictures(nameof(PromptGalleryTests)));
+        TableState state = await table.SettledAsync(s => s.Fixture == "delayed-carried-object");
+        CardState[] walls = [.. state.Cards.Where(c => c.Visible && c.Name == "Steel Wall" && c.Place is "battlefield" or "opponent-battlefield")];
+        Assert.Equal(2, walls.Length);
+        CardState marked = Assert.Single(walls, c => c.Rules.Contains("Pending delayed ability", StringComparison.Ordinal));
+        Assert.Contains("next end step", marked.Rules, StringComparison.Ordinal);
+        Assert.Contains("Destroy it", marked.Rules, StringComparison.Ordinal);
+        Assert.DoesNotContain("Pending delayed ability", Assert.Single(walls, c => c.Handle != marked.Handle).Rules, StringComparison.Ordinal);
+        Assert.Empty(table.Errors);
+    }
+
+    [Fact]
+    public async Task Divided_targets_include_players_and_submit_their_shares()
+    {
+        await using TablePage table = await TablePage.OpenAsync(web, "prompt=divide-targets-players", WebClient.Pictures(nameof(PromptGalleryTests)));
+        await table.SettledAsync(state => state.Fixture == "divide-targets-players");
+        await table.ClickAsync("More to you (seat 1, now 0)", "button");
+        await table.ClickAsync("More to Bot 2 (seat 2, now 0)", "button");
+        await table.ClickAsync("More to Bot 2 (seat 2, now 1)", "button");
+        await table.SettledAsync(state => state.Controls.Any(c => c.Label == "Divide" && c.Enabled));
+        await table.ClickAsync("Divide", "button");
+        TableState answered = await table.SettledAsync(state => state.Answered.Length > 0);
+        Assert.Equal("TargetsDividedAnswer player 1 1; player 2 2", answered.Answered);
+        Assert.Empty(table.Errors);
+    }
+
+    [Fact]
+    public async Task Cost_payment_choices_show_the_action_and_send_its_opaque_key()
+    {
+        await using TablePage table = await TablePage.OpenAsync(web, "prompt=cost-payment-order", WebClient.Pictures(nameof(PromptGalleryTests)));
+        TableState opened = await table.SettledAsync(state => state.Fixture == "cost-payment-order");
+        Assert.Equal("Choose a cost to pay next", opened.Title);
+        Assert.Contains(opened.Controls, c => c.Label == "Sacrifice Grizzly Bears for Fling");
+        await table.PictureAsync("cost-payment-order");
+        await table.ClickAsync("Sacrifice Captain Jean-Luc Picard for casualty", "button");
+        TableState chosen = await table.SettledAsync(state => state.Answered.Length > 0);
+        Assert.Equal("CostPaymentChosenAnswer 1", chosen.Answered);
+    }
+
+    [Fact]
+    public async Task Wide_numbers_are_typed_and_submitted_exactly_with_safe_endpoint_steps()
+    {
+        await using TablePage table = await TablePage.OpenAsync(web, "prompt=number-wide", WebClient.Pictures(nameof(PromptGalleryTests)));
+        TableState opened = await table.SettledAsync(state => state.Fixture == "number-wide");
+        Assert.Equal("Put counters", opened.Title);
+        Assert.Contains("65535", opened.Detail, StringComparison.Ordinal);
+        Assert.Contains(opened.Controls, c => c.Label == "−" && !c.Enabled);
+        await table.ClickAsync("+", "button");
+        await table.SettledAsync(state => state.Controls.Any(c => c.Label == "Choose 1"));
+        await table.ClickAsync("−", "button");
+        await table.SettledAsync(state => state.Controls.Any(c => c.Label == "Choose 0"));
+        await table.ClickAsync("Number", "textbox");
+        await table.Page.Keyboard.PressAsync("Control+A");
+        await table.Page.Keyboard.TypeAsync("65536");
+        TableState invalid = await table.SettledAsync(state => state.Controls.Any(c => c.Label == "Choose number"));
+        Assert.Contains(invalid.Controls, c => c.Label == "Choose number" && !c.Enabled);
+        await table.Page.Keyboard.PressAsync("Backspace");
+        await table.SettledAsync(state => state.Controls.Any(c => c.Label == "Choose 6553" && c.Enabled));
+        await table.Page.Keyboard.TypeAsync("5");
+        await table.SettledAsync(state => state.Controls.Any(c => c.Label == "Choose 65535" && c.Enabled));
+        await table.PictureAsync("number-wide-65535");
+        await table.ClickAsync("Choose 65535", "button");
+        TableState chosen = await table.SettledAsync(state => state.Answered.Length > 0);
+        Assert.Equal("NumberChosenAnswer 65535", chosen.Answered);
+
+        await table.Page.EvaluateAsync("name => location.hash = name", "number-maximum");
+        await table.SettledAsync(state => state.Fixture == "number-maximum" && state.Answered.Length == 0);
+        await table.ClickAsync("Number", "textbox");
+        await table.Page.Keyboard.PressAsync("Control+A");
+        await table.Page.Keyboard.TypeAsync(uint.MaxValue.ToString());
+        TableState maximum = await table.SettledAsync(state => state.Controls.Any(c => c.Label == $"Choose {uint.MaxValue}"));
+        Assert.Contains(maximum.Controls, c => c.Kind == "button" && c.Label == "+" && !c.Enabled);
+        await table.PictureAsync("number-maximum");
+        await table.Page.Keyboard.PressAsync("Enter");
+        chosen = await table.SettledAsync(state => state.Answered.Length > 0);
+        Assert.Equal($"NumberChosenAnswer {uint.MaxValue}", chosen.Answered);
+        Assert.Empty(table.Errors);
+    }
+
+    [Fact]
+    public async Task Snow_pool_chip_offers_both_symbol_allocations_and_sends_the_choice()
+    {
+        await using TablePage table = await TablePage.OpenAsync(web, "prompt=paying-snow", WebClient.Pictures(nameof(PromptGalleryTests)));
+        TableState opened = await table.SettledAsync(state => state.Fixture == "paying-snow");
+        await table.PictureAsync("snow-pool");
+        // The pool chip is a real mouse target; the standard action menu chooses its allocation.
+        ManaChipState chip = Assert.Single(opened.Players!.SelectMany(p => p.Mana), mana => mana.Caption == "snow");
+        Assert.True(chip.Clickable);
+        await table.Page.Mouse.ClickAsync(chip.X, chip.Y);
+        await table.SettledAsync(state => state.Controls.Any(c => c.Label == "Pay {S} with snow {U}"));
+        await table.PictureAsync("snow-allocation");
+        await table.ClickAsync("Pay {S} with snow {U}", "item");
+        TableState paid = await table.SettledAsync(state => state.Answered.Length > 0);
+        Assert.Contains("snow=True paySnow=True", paid.Answered, StringComparison.Ordinal);
+        Assert.Empty(table.Errors);
+    }
+
+    [Fact]
+    public async Task Searching_an_opponents_library_names_the_opponents_hand()
+    {
+        await using TablePage table = await TablePage.OpenAsync(
+            web, "prompt=search-opponents-hand", WebClient.Pictures(nameof(PromptGalleryTests)));
+        TableState other = await table.SettledAsync(state => state.Fixture == "search-opponents-hand");
+        Assert.Equal("Search Bot 2's library", other.Title);
+        Assert.Contains("to put into Bot 2's hand", other.Detail, StringComparison.Ordinal);
+        await table.Page.Locator(".uno-loader").WaitForAsync(new()
+        {
+            State = Microsoft.Playwright.WaitForSelectorState.Hidden,
+        });
+        await table.PictureAsync("search-opponents-hand");
+        await table.Page.EvaluateAsync("name => location.hash = name", "search");
+        TableState own = await table.SettledAsync(state => state.Fixture == "search");
+        Assert.Equal("Search your library", own.Title);
+        Assert.Contains("to put into your hand", own.Detail, StringComparison.Ordinal);
+        Assert.Empty(table.Errors);
+    }
+
+    [Fact]
+    public async Task Resolved_regeneration_effects_are_drawn_and_disappear_when_they_end()
+    {
+        await using TablePage table = await TablePage.OpenAsync(
+            web, "prompt=regeneration-effects", WebClient.Pictures(nameof(PromptGalleryTests)));
+        TableState active = await table.SettledAsync(state => state.Fixture == "regeneration-effects");
+        foreach (string name in new[] { "Gurmag Angler", "Savannah Lions" })
+        {
+            CardState card = Assert.Single(active.Cards, card => card.Visible && card.Name == name
+                && card.Place is "battlefield" or "opponent-battlefield");
+            Assert.Contains("Regenerate instead of the next destruction this turn.", card.Rules, StringComparison.Ordinal);
+            Assert.Contains("Can't be regenerated this combat.", card.Rules, StringComparison.Ordinal);
+        }
+        await table.Page.Locator(".uno-loader").WaitForAsync(new()
+        {
+            State = Microsoft.Playwright.WaitForSelectorState.Hidden,
+        });
+        await table.PictureAsync("regeneration-effects");
+        await table.Page.EvaluateAsync("name => location.hash = name", "regeneration-effects-ended");
+        TableState ended = await table.SettledAsync(state => state.Fixture == "regeneration-effects-ended");
+        foreach (string name in new[] { "Gurmag Angler", "Savannah Lions" })
+        {
+            CardState card = Assert.Single(ended.Cards, card => card.Visible && card.Name == name
+                && card.Place is "battlefield" or "opponent-battlefield");
+            Assert.DoesNotContain("Regenerate instead of", card.Rules, StringComparison.Ordinal);
+            Assert.DoesNotContain("Can't be regenerated", card.Rules, StringComparison.Ordinal);
+        }
+        Assert.Empty(table.Errors);
+    }
+
+    [Fact]
+    public async Task A_copy_can_keep_its_original_target_without_picking_a_candidate()
+    {
+        await using TablePage table = await TablePage.OpenAsync(
+            web, "prompt=choose-new-target-keep", WebClient.Pictures(nameof(PromptGalleryTests)));
+        TableState opened = await table.SettledAsync(state => state.Fixture == "choose-new-target-keep");
+        Assert.Contains("Target 1 (Sea Sprite)", opened.Detail, StringComparison.Ordinal);
+        Assert.Contains("none to keep the current one", opened.Detail, StringComparison.Ordinal);
+        await table.PictureAsync("choose-new-target-keep");
+        await table.ClickAsync("Keep current target", "button");
+        TableState answered = await table.SettledAsync(state => state.Answered.Length > 0);
+        Assert.StartsWith("TargetsChosenAnswer", answered.Answered, StringComparison.Ordinal);
+        Assert.Empty(table.Errors);
+    }
+
+    [Fact]
     public async Task Every_prompt_dock_is_drawn()
     {
         IReadOnlyList<string> names = PromptFixtures.Names;

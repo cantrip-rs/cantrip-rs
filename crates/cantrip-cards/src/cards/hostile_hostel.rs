@@ -34,8 +34,8 @@ fn exile_and_drain(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     }
     g.end_sentence();
     let x = g.exiled_with(g.linked(item)).into_iter().filter(|&card| g.chars(card).is(CardType::Creature)).count() as i32;
-    g.each_opponent_loses_life(you, x);
-    g.gain_life(you, x);
+    g.each_opponent_loses_life(you,(x) as i32);
+    g.gain_life(you,(x) as i32);
     Ok(())
 }
 

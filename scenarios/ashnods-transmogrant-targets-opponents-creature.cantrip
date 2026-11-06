@@ -15,6 +15,7 @@ Bot1.Hand.Ashnod's Transmogrant.Cast
 Bot2.Hand.Dryad Arbor.Play
 [T3 Bot1.Main1]
 Bot1.Battlefield.Ashnod's Transmogrant.Activate(Bot2.Battlefield.Dryad Arbor)
+Bot1.Choose(Tap Ashnod's Transmogrant)
 ? Bot1.Graveyard = Ashnod's Transmogrant
 Bot1.Pass
 Bot2.Pass

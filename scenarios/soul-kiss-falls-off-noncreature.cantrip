@@ -1,0 +1,28 @@
+# Soul Kiss falls off when the enchanted permanent stops being a creature (CR 704.5m).
+[Bot1 Deck]
+Soul Kiss
+Swift Reconfiguration
+Black Lotus
+Mox Pearl
+Ornithopter
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Soul Kiss.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swift Reconfiguration.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Soul Kiss; Black Lotus
+Bot1.Battlefield.Ornithopter.Types = Artifact
+Bot1.Battlefield.Swift Reconfiguration.AttachedTo = Ornithopter

@@ -34,6 +34,7 @@ Bot1.Hand.Mox Emerald.Cast
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Ruby#1.Activate
 Bot1.Hand.Close Encounter.Cast(Bot1.Battlefield.Tannuk, Steadfast Second)
+Bot1.Choose(Choose creature you control or warped creature card you own in exile)
 Bot1.Choose(Hill Giant)
 [T5 Bot1.Main2]
 

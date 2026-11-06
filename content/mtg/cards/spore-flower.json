@@ -1,0 +1,8 @@
+{
+  "name": "Spore Flower",
+  "manaCost": "{G}{G}",
+  "type": "Creature — Fungus",
+  "power": 0,
+  "toughness": 1,
+  "oracleText": "At the beginning of your upkeep, put a spore counter on this creature.\nRemove three spore counters from this creature: Prevent all combat damage that would be dealt this turn."
+}

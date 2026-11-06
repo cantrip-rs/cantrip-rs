@@ -1,0 +1,39 @@
+# Stunted Growth makes the targeted opponent choose exactly three cards and order them on their library (CR 608.2c).
+[Bot1 Deck]
+Stunted Growth
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Forest x20
+
+[Bot2 Deck]
+Island
+Mountain
+Swamp
+Plains
+Forest
+Grizzly Bears
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stunted Growth.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+! Bot2.Choose()
+! Bot2.Choose(Island; Mountain)
+! Bot2.Choose(Island; Mountain; Swamp; Plains)
+Bot2.Choose(Island; Mountain; Swamp)
+
+[Expect]
+Bot2.Hand.Count = 4
+Bot2.Library = Swamp; Mountain; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island

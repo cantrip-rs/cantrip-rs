@@ -1,0 +1,33 @@
+# With no artifact or creature cards in the target opponent's graveyard, Spoils adds no mana
+# and gains no life. The opponent's graveyard is empty when the spell resolves.
+
+[Bot1 Deck]
+Spoils of Evil
+Mox Jet
+Mox Pearl
+Mox Ruby
+Swamp x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Spoils of Evil.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Life = 20
+
+[Expect]
+Bot1.Life = 20
+Bot2.Graveyard.Count = 0

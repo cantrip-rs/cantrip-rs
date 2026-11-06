@@ -1,0 +1,8 @@
+{
+  "name": "Stromgald Cabal",
+  "manaCost": "{1}{B}{B}",
+  "type": "Creature — Human Knight",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{T}, Pay 1 life: Counter target white spell."
+}

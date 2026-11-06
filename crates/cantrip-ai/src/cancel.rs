@@ -74,6 +74,7 @@ fn request_source(request: &Request) -> Option<ObjectId> {
         RequestKind::ChooseCards { source, .. }
         | RequestKind::ChooseTarget { source, .. }
         | RequestKind::ChooseModes { source, .. }
+        | RequestKind::ChooseCostPayment { source, .. }
         | RequestKind::PayCosts { source, .. }
         | RequestKind::UnlessPays { source, .. }
         | RequestKind::ChooseColors { source, .. }
@@ -489,7 +490,7 @@ mod tests {
     use super::*;
 
     fn item() -> StackItem {
-        StackItem {
+        StackItem { event_amount: None,
             kind: StackKind::Spell,
             object: ObjectId(1),
             ability: AbilityRef {
@@ -517,10 +518,11 @@ mod tests {
             exile_instead: ExileInstead::Never,
             flashback: false,
             attacking: false,
-            since: 0,
+            since: 0, tapped_since: 0,
             copied: false,
             cast_known: u32::MAX,
             acquired: Acquired::OWN,
+            instance: AbilityAcquisition::OWN,
             words: Words::NONE,
         }
     }

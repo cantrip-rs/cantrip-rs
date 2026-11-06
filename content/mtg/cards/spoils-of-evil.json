@@ -1,0 +1,6 @@
+{
+  "name": "Spoils of Evil",
+  "manaCost": "{2}{B}",
+  "type": "Instant",
+  "oracleText": "For each artifact or creature card in target opponent's graveyard, add {C} and you gain 1 life."
+}

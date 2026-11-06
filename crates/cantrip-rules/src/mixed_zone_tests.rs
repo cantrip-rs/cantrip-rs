@@ -46,7 +46,7 @@ fn cards_moved_to_a_hand_and_a_graveyard_together_are_replaced_by_the_state_befo
     game.state.zone_push(Zone::library(P0), grave_card);
     game.state.see_statics();
 
-    let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     let moved = cx.move_together(&[(hand_card, Zone::hand(P0)), (grave_card, Zone::graveyard(P0))], MoveReason::Other);
     assert_eq!(moved.len(), 2);
     assert_eq!(cx.obj(moved[0]).zone, Zone::hand(P0));

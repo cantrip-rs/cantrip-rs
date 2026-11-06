@@ -28,9 +28,9 @@ Bot1.Hand.Karai's Technique.Cast(Ability: Sneak)
 Bot1.Modes(1; 2)
 Bot1.Target(Memnite)
 Bot1.Target(Bot2.Battlefield.Ornithopter)
-Bot1.Choose(Ornithopter)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(Ornithopter)
 [T3 Bot1.Main2]
 ? Bot1.Battlefield.Memnite.Power = 4
 ? Bot1.Battlefield.Memnite.Toughness = 4

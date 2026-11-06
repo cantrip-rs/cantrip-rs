@@ -1,0 +1,32 @@
+# Stampede affects attacking creatures, not a creature left back, and its pump and trample expire at cleanup (CR 611.2a, 611.2c).
+[Bot1 Deck]
+Ornithopter
+Memnite
+Black Lotus
+Stampede
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Stampede.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Trample
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Ornithopter.Keywords = Flying

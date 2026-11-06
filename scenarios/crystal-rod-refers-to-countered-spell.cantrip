@@ -1,0 +1,43 @@
+# The cast trigger refers to the blue spell even after Pyroblast counters it; Deflecting Palm can choose it as a source (CR 609.7a).
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Ruby
+Black Lotus
+Crystal Rod
+Pyroblast
+Deflecting Palm
+Island x20
+[Bot2 Deck]
+Black Lotus
+Wind Drake
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Crystal Rod.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wind Drake.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Pyroblast.Cast
+Bot1.Modes(1)
+Bot1.Target(Stack.Wind Drake)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Deflecting Palm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Wind Drake)
+Bot1.Decline
+[Expect]
+Bot1.Life = 20

@@ -1,0 +1,75 @@
+# The Priest grants shroud to either player's creature only in its controller's upkeep, until cleanup (CR 602.5, 702.18, 514.2).
+[Bot1 Deck]
+Svyelunite Priest
+Mox Sapphire
+Mox Pearl
+Island
+Island
+Ornithopter
+Island x20
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Svyelunite Priest.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Svyelunite Priest.Activate(Bot1.Battlefield.Ornithopter)
+[T2 Bot2.Upkeep]
+Bot2.Pass
+! Bot1.Battlefield.Svyelunite Priest.Activate(Bot1.Battlefield.Ornithopter)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Svyelunite Priest.Activate(Bot1.Battlefield.Ornithopter; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+! Bot1.Battlefield.Svyelunite Priest.Activate(Bot1.Battlefield.Ornithopter)
+[T4 Bot2.Upkeep]
+Bot2.Pass
+! Bot1.Battlefield.Svyelunite Priest.Activate(Bot1.Battlefield.Ornithopter)
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Svyelunite Priest.Activate(Bot1.Battlefield.Island)
+Bot1.Battlefield.Svyelunite Priest.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Battlefield.Svyelunite Priest.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Shroud
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+[T7 Bot1.Upkeep]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Svyelunite Priest.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Ornithopter.Keywords = Flying; Shroud

@@ -1,0 +1,8 @@
+{
+  "name": "Svyelunite Priest",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Merfolk Cleric",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{U}{U}, {T}: Target creature gains shroud until end of turn. Activate only during your upkeep. (It can't be the target of spells or abilities.)"
+}

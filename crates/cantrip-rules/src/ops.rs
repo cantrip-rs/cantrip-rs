@@ -59,11 +59,28 @@ pub(crate) fn became_targets(cx: &mut Cx, targets: impl IntoIterator<Item = Targ
 }
 
 /// One object about to move, and how it arrives if it is entering the battlefield.
+#[derive(Clone, Copy, Default)]
+pub enum PutBy {
+    /// The player performing this action or resolving effect, if any.
+    #[default]
+    Current,
+    Player(PlayerId),
+    /// A rules-created action without a player; never inherit an enclosing spell's player.
+    Rules,
+}
+
+impl PutBy {
+    fn player(self, cx: &Cx) -> Option<PlayerId> {
+        match self { Self::Current => cx.acting_player(), Self::Player(p) => Some(p), Self::Rules => None }
+    }
+}
+
 #[derive(Clone, Copy)]
 pub struct Moving {
     pub id: ObjectId,
     pub to: Zone,
     pub entering: Option<Entering>,
+    pub put_by: PutBy,
     /// Why this move happens when it is not why the rest of the batch does: a sacrifice and a return made at once (CR 101.4).
     pub reason: Option<ZoneReason>,
     /// The instruction moving it is the one that reveals it ("reveal it and put it into your hand", CR 701.20a): it is a
@@ -84,11 +101,13 @@ pub struct Moving {
     /// The move is a destruction a regeneration shield may replace (`ZoneChange::destroy`): lethal damage's (CR 704.5g-h).
     /// A move made for `ZoneReason::Destroy` is one whatever this says.
     pub destroy: bool,
+    /// Set only by the unattached-Aura SBA (CR 704.5m), for the old enchanted permanent that already left (400.7f).
+    pub aura_host_left: Option<ObjectId>,
 }
 
 impl Moving {
     pub fn to(id: ObjectId, to: Zone) -> Moving {
-        Moving { id, to, entering: None, reason: None, revealed: false, pays_characteristic: false, flashback: false, exile_instead: ExileInstead::Never, adventure: false, omen: false, rebound: false, destroy: false }
+        Moving { id, to, entering: None, put_by: PutBy::Current, reason: None, revealed: false, pays_characteristic: false, flashback: false, exile_instead: ExileInstead::Never, adventure: false, omen: false, rebound: false, destroy: false, aura_host_left: None }
     }
 }
 
@@ -228,7 +247,7 @@ pub(crate) fn verify_reveal_carried(cx: &Cx, id: ObjectId) {
                  `move_together_revealed`, `bring_into_hand_revealed`, `discard_revealed`; CR 701.20a, 603.10a)",
                 cx.g.name(id)
             ),
-            Event::Resolved { source, ability } if cause == (Cause::Ability { source, ability }) => return,
+            Event::Resolved { source, ability } if matches!(cause, Cause::Ability { source: s, ability: a, .. } if source == s && ability == a) => return,
             _ => {}
         }
     }
@@ -250,6 +269,12 @@ fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec
 
 /// An instruction can name the defender of the arriving creatures (CR 508.4).
 fn move_together_entering(cx: &mut Cx, moves: &[Moving], reason: ZoneReason, attacking: Option<Target>) -> (Vec<ObjectId>, Vec<ObjectId>) {
+    // A simultaneous move, including its replacement bookkeeping, is one rules
+    // instruction (CR 614.6, 603.2c), not one instruction per saved permanent.
+    cx.instruction(|cx| move_together_entering_event(cx, moves, reason, attacking), |_| true)
+}
+
+fn move_together_entering_event(cx: &mut Cx, moves: &[Moving], reason: ZoneReason, attacking: Option<Target>) -> (Vec<ObjectId>, Vec<ObjectId>) {
     // An object moves once however many times the batch names it: a permanent a spell targets twice ("destroy target
     // artifact and target creature" at an artifact creature, CR 115.3) is destroyed once (CR 400.7). The first move kept.
     // And an object that has changed zones or ceased to exist since it was named is not moved at all: it became a new
@@ -298,7 +323,7 @@ fn move_together_entering(cx: &mut Cx, moves: &[Moving], reason: ZoneReason, att
     // entering with Gev gets none of his counters) and those leaving together still see one another - and only then do
     // they all move. The last-known information of each permanent leaving is taken before any of them leaves (CR 603.10a).
     let mut plans: Vec<Plan> = Vec::with_capacity(moves.len());
-    let mut regenerating: Vec<ObjectId> = Vec::new();
+    let mut regenerating: Vec<(ObjectId, bool)> = Vec::new();
     let mut shielded: Vec<ObjectId> = Vec::new();
     let mut replaced: Vec<ObjectId> = Vec::new();
     let together = moves.iter().any(|m| m.entering.is_some()) && moves.iter().any(|m| cx.s().obj(m.id).zone.is(ZoneKind::Battlefield));
@@ -333,6 +358,7 @@ fn move_together_entering(cx: &mut Cx, moves: &[Moving], reason: ZoneReason, att
             to,
             reason,
             controller: entry.map_or(old.controller, |e| e.controller),
+            put_by: to.is(ZoneKind::Battlefield).then(|| m.put_by.player(cx)).flatten(),
             tapped: entry.is_some_and(|e| e.tapped),
             attacking: false,
             counters: [0; CounterKind::COUNT],
@@ -353,6 +379,7 @@ fn move_together_entering(cx: &mut Cx, moves: &[Moving], reason: ZoneReason, att
             rebounding: false,
             destroy: m.destroy || reason == ZoneReason::Destroy,
             regenerated: false,
+            regeneration_shield: false,
             shielded: false,
             replaced: false,
         };
@@ -370,7 +397,7 @@ fn move_together_entering(cx: &mut Cx, moves: &[Moving], reason: ZoneReason, att
         // A regeneration shield replaced the destruction (CR 701.19a, 614.8): it never happens (CR 614.6), and the permanent
         // is regenerated instead, once every move is worked out.
         if change.regenerated {
-            regenerating.push(m.id);
+            regenerating.push((m.id, change.regeneration_shield));
             continue;
         }
         // A shield counter replaced the destruction (CR 122.1c, 614.6): it never happens, and a shield counter is removed from the
@@ -454,7 +481,7 @@ fn move_together_entering(cx: &mut Cx, moves: &[Moving], reason: ZoneReason, att
         let mut counts_by = change.counters_by;
         if let Some(e) = m.entering.filter(|_| entering) {
             for (n, with) in counts.iter_mut().zip(e.counters) {
-                *n += with;
+                *n = n.saturating_add(with);
             }
             // Under the player its replacements left it entering under ("enters under your control instead", CR 614.1c).
             new.controller = change.controller;
@@ -547,6 +574,16 @@ fn move_together_entering(cx: &mut Cx, moves: &[Moving], reason: ZoneReason, att
     let mut separated: Vec<ObjectId> = Vec::new();
     // The components put into one library together, the owner's to order (CR 730.3a).
     let mut into_library: Vec<(PlayerId, Vec<ObjectId>)> = Vec::new();
+    // CR 400.7f follows only Auras that actually reach their owner's graveyard, and only a host that actually leaves
+    // in this simultaneous batch (not one whose destruction was regenerated/replaced). Preserve that relation in the
+    // history: adjacent same-cause records alone cannot distinguish separate instructions from simultaneous moves.
+    let aura_hosts: Vec<(ObjectId, ObjectId)> = plans.iter().filter_map(|p| {
+        if !p.from.is(ZoneKind::Battlefield) || p.to != Zone::graveyard(p.old.owner)
+            || !p.last_known.subtypes.has(Subtype::Aura) { return None; }
+        let host = p.old.attached_to?;
+        let together = plans.iter().any(|h| h.m.id == host && h.from.is(ZoneKind::Battlefield) && !h.to.is(ZoneKind::Battlefield));
+        (together || p.m.aura_host_left == Some(host)).then_some((p.m.id, host))
+    }).collect();
     let turn = cx.s().turn.number;
     for Plan { m, reason, old, from, to, requested_to, change, madness, entering, mut new, counts, counts_by, last_known, components, .. } in plans {
         let m = &m;
@@ -624,7 +661,7 @@ fn move_together_entering(cx: &mut Cx, moves: &[Moving], reason: ZoneReason, att
                 if to_c.is(ZoneKind::Graveyard) && !c.token {
                     binned.push((to_c.player, part_id));
                 }
-                part_events.push(Event::ZoneChange { old: m.id, new: part_id, from: Zone::GONE, to: to_c, reason, part: true });
+                part_events.push(Event::ZoneChange { old: m.id, new: part_id, from: Zone::GONE, to: to_c, reason, part: true, put_by: None, enchanted_left: None });
                 if c.face_down {
                     part_events.push(Event::Revealed { player: old.owner, card: part_id });
                 }
@@ -657,7 +694,7 @@ fn move_together_entering(cx: &mut Cx, moves: &[Moving], reason: ZoneReason, att
         }
         if madness {
             // "When you do" (CR 702.35a, 603.12): a reflexive trigger of the exiled card, its owner's.
-            cx.st().trigger_push(PendingTrigger {
+            cx.st().trigger_push(PendingTrigger { event_amount: None,
                 source: new_id,
                 ability: AbilityRef::madness(old.card),
                 controller: old.owner,
@@ -675,7 +712,7 @@ fn move_together_entering(cx: &mut Cx, moves: &[Moving], reason: ZoneReason, att
         if from.is(ZoneKind::Battlefield) {
             remove_from_combat(cx, &[m.id]);
         }
-        events.push(Event::ZoneChange { old: m.id, new: new_id, from, to, reason, part: false });
+        events.push(Event::ZoneChange { old: m.id, new: new_id, from, to, reason, part: false, put_by: change.put_by.filter(|_| to.is(ZoneKind::Battlefield)), enchanted_left: aura_hosts.iter().find_map(|&(a, h)| (a == m.id).then_some(h)) });
         events.extend(melded);
         events.append(&mut part_events);
         // CR 708.9: a face-down permanent or spell that moves to any other zone is revealed to all players by its owner as
@@ -890,6 +927,7 @@ pub fn exile_with(cx: &mut Cx, cards: &[ObjectId], by: Linked, until_leaves: boo
         return Vec::new();
     }
     // Only what is still the object it was is exiled (CR 400.7), so each new object is read with the zone it came from.
+    let return_by = cx.acting_player();
     let cards = live_ones(cx, cards);
     let from: Vec<Zone> = cards.iter().map(|&c| cx.s().obj(c).zone).collect();
     let moves: Vec<Moving> = cards.iter().map(|&c| Moving::to(c, Zone::exile(cx.s().obj(c).owner))).collect();
@@ -898,7 +936,7 @@ pub fn exile_with(cx: &mut Cx, cards: &[ObjectId], by: Linked, until_leaves: boo
     for (&card, from) in cards.iter().zip(from) {
         for n in Query::became_all(&*cx, card) {
             if cx.s().obj(n).zone.is(ZoneKind::Exile) {
-                cx.st().update_obj(n, |o| o.exiled = Some(ExileLink::new(by, from, until_leaves)));
+                cx.st().update_obj(n, |o| o.exiled = Some(ExileLink { return_by: until_leaves.then_some(return_by).flatten(), ..ExileLink::new(by, from, until_leaves) }));
             }
         }
     }
@@ -1139,7 +1177,8 @@ pub fn return_exiled(cx: &mut Cx) -> R<bool> {
         .map(|&(id, l)| Moving::to(id, Zone::new(l.from.kind(), owner(cx, id))))
         .collect();
     // One move (CR 610.3d): the cards going back to a hand or a graveyard and the permanents entering arrive together.
-    put_onto_battlefield_along(cx, elsewhere, &to_battlefield, ZoneReason::Other, &[], None)?;
+    let actors: Vec<_> = due.iter().map(|&(id, link)| (id, link.return_by.map_or(PutBy::Rules, PutBy::Player))).collect();
+    put_onto_battlefield_into(cx, elsewhere, &to_battlefield, ZoneReason::Other, &[], None, None, &actors)?;
     // The return is one one-shot effect, created once (CR 610.3): the duration is over whether or not the card got where
     // it went. One that could not - an Aura with nothing to enchant (CR 303.4g), a move a replacement left in exile - stays
     // there as a card exiled with that permanent and nothing more, never returned again. Cleared once the moves are done,
@@ -1577,6 +1616,9 @@ pub(crate) struct WouldExist {
     /// How it enters, as the replacements applied so far have made it: what it is judged again from when one changes it.
     pub entering: Entering,
     pub chars: Chars,
+    /// Read before the hypothetical battlefield object is reverted: face,
+    /// copy, unlocked Room doors and off-stack X all belong to that object.
+    pub mana_value: u32,
     /// It would have lost all its abilities there (CR 613.1f), or a land the abilities of its rules text (CR 305.7).
     pub lost: bool,
 }
@@ -1627,7 +1669,7 @@ pub(crate) fn as_it_would_exist(cx: &mut Cx, entering: &Entering) -> WouldExist 
     // It arrives as a new object (CR 400.7): of the effects on it where it is, only those a permanent spell carries to the
     // permanent it becomes (CR 400.7a, `carry_effects`) would apply to it there.
     if cx.s().effects.iter().any(|e| e.affected == id) {
-        let carried = |e: &cantrip_state::ContinuousEffect| from.is(ZoneKind::Stack) && matches!(e.kind, EffectKind::ChangeText { .. });
+        let carried = |e: &cantrip_state::ContinuousEffect| cantrip_api::text_change_carries(from, e.kind);
         let keep: Vec<bool> = cx.s().effects.iter().map(|e| e.affected != id || carried(e)).collect();
         // Taken back below with the rest: no point of the game, so nothing for the state triggers.
         cx.st().effects_keep(&keep);
@@ -1642,9 +1684,10 @@ pub(crate) fn as_it_would_exist(cx: &mut Cx, entering: &Entering) -> WouldExist 
     }
     note_statics(cx, id);
     let chars = layers::chars(cx.cards(), cx.s(), &cx.g.log, id);
+    let mana_value = cantrip_api::mana_value_as_permanent(&|c| cx.card(c), cx.s().obj(id), &chars);
     let lost = layers::lost_all_abilities(cx.cards(), cx.s(), &cx.g.log, id);
     cx.st().revert(mark);
-    WouldExist { object: id, entering: *entering, chars, lost }
+    WouldExist { object: id, entering: *entering, chars, mana_value, lost }
 }
 
 /// Runs `f` with `card` judged as the spell it would be, cast by `player` as `face` (its own card's face where `None`): a
@@ -1778,9 +1821,9 @@ pub fn put_onto_battlefield(cx: &mut Cx, objects: &[(ObjectId, PlayerId, bool)],
 
 /// The counters an effect says a permanent enters with (CR 122.6, 614.1c): "return it with a -1/-1 counter on it".
 pub fn entry_counters(with: &[(CounterKind, i32)]) -> [i32; CounterKind::COUNT] {
-    let mut counters = [0; CounterKind::COUNT];
+    let mut counters = [0i32; CounterKind::COUNT];
     for &(kind, n) in with {
-        counters[kind as usize] += n;
+        counters[kind as usize] = counters[kind as usize].saturating_add(n);
     }
     counters
 }
@@ -1800,7 +1843,14 @@ pub fn put_onto_battlefield_along(
     with: &[(CounterKind, i32)],
     becomes: Option<Becomes>,
 ) -> R<Vec<ObjectId>> {
-    put_onto_battlefield_into(cx, moves, objects, reason, with, becomes, None)
+    put_onto_battlefield_into(cx, moves, objects, reason, with, becomes, None, &[])
+}
+
+/// A named player, separately from its entering controller, performs each put (CR 110.2a, 608.2c).
+pub fn put_onto_battlefield_by(cx: &mut Cx, objects: &[(ObjectId, PlayerId, bool, PlayerId)], with: &[(CounterKind, i32)]) -> R<Vec<ObjectId>> {
+    let rows: Vec<_> = objects.iter().map(|&(id, controller, tapped, _)| (id, controller, tapped)).collect();
+    let actors: Vec<_> = objects.iter().map(|&(id, _, _, by)| (id, PutBy::Player(by))).collect();
+    put_onto_battlefield_into(cx, Vec::new(), &rows, ZoneReason::Other, with, None, None, &actors)
 }
 
 fn put_onto_battlefield_into(
@@ -1811,6 +1861,7 @@ fn put_onto_battlefield_into(
     with: &[(CounterKind, i32)],
     becomes: Option<Becomes>,
     attacking: Option<Target>,
+    putters: &[(ObjectId, PutBy)],
 ) -> R<Vec<ObjectId>> {
 
     // What leaves the battlefield in this move is gone as each entering permanent is judged (CR 101.4, 614.12).
@@ -1819,6 +1870,11 @@ fn put_onto_battlefield_into(
     let prepared = prepare_entries(cx, &mut moves, objects, with, becomes);
     *cx.s().leaving_together.borrow_mut() = outer_leaving;
     prepared?;
+    if !putters.is_empty() {
+        for moving in &mut moves {
+            if let Some((_, by)) = putters.iter().find(|(id, _)| *id == moving.id) { moving.put_by = *by; }
+        }
+    }
     crate::attach::choose_aura_hosts(cx, &mut moves)?;
     Ok(move_together_entering(cx, &moves, reason, attacking).0)
 }
@@ -2182,8 +2238,9 @@ fn entering_attached(cx: &Cx, bans: &[(ObjectId, PlayerId, &'static CardDef, Opt
 /// the question asked before it (`could_enter_attached`).
 pub(crate) fn attached_entry(cx: &mut Cx, entering: &Entering, entering_ids: &[ObjectId]) -> AttachedEntry {
     let Some(host) = entering.attach else { return AttachedEntry::Unattached };
-    let it = as_it_would_exist(cx, entering).chars;
-    let attachable = crate::attach::enters_attachable(cx, entering.object, &it, entering.controller, host, entering_ids);
+    let prospective = as_it_would_exist(cx, entering);
+    let it = prospective.chars;
+    let attachable = crate::attach::enters_attachable(cx, entering.object, &it, entering.controller, prospective.mana_value, host, entering_ids);
     match (attachable, it.has_subtype(Subtype::Aura)) {
         (true, _) => AttachedEntry::Attached,
         (false, true) => AttachedEntry::Stays,
@@ -2238,7 +2295,7 @@ pub fn transform(cx: &mut Cx, id: ObjectId, by: Option<&StackItem>) -> R<()> {
 fn transformed_since(cx: &Cx, item: &StackItem, id: ObjectId) -> bool {
     item.kind != StackKind::Spell
         && item.object == id
-        && History::new(&cx.g.log, cx.s().turn.number).all()[(item.since as usize).min(cx.g.log.len())..]
+        && History::with_receipts(&cx.g.log, cx.s().turn.number, &cx.s().cost_receipts).all()[(item.since as usize).min(cx.g.log.len())..]
             .iter()
             .any(|r| matches!(r.event, Event::Transformed { object } if object == id))
 }
@@ -2286,7 +2343,7 @@ pub fn turn_over(cx: &mut Cx, id: ObjectId) -> R<bool> {
             && !cx.lost_all_abilities(id)
         {
             let controller = cx.s().obj(id).controller;
-            as_transforms(cx, &Asker { source: id, controller, by, spell: false })?;
+            as_transforms(cx, &Asker { instance: None, source: id, controller, by, spell: false })?;
         }
     }
     cx.emit(Event::Transformed { object: id });
@@ -2408,8 +2465,9 @@ pub fn cease_together(cx: &mut Cx, objects: &[(Zone, ObjectId)]) {
 /// changed zones, whatever zone it left, or ceased to exist. Its characteristics and words (CR 612) are what an ability of
 /// it, or a delayed ability it created, reads after (High Tide whose "Island" Magical Hack made "Swamp" watches Swamps;
 /// CR 603.7d). Nothing hidden reaches a player through it: it is read only where the rules read the object itself.
-pub fn last_known_of(cx: &Cx, id: ObjectId) -> LastKnown {
-    last_known_from(cx, id, &layers::source_chars(cx.cards(), cx.s(), &cx.g.log, id))
+pub fn last_known_of(cx: &mut Cx, id: ObjectId) -> LastKnown {
+    let chars = layers::source_chars(cx.cards(), cx.s(), &cx.g.log, id);
+    last_known_from(cx, id, &chars)
 }
 
 /// The history's record of `permanent` as it entered (CR 603.6a, 614.12), asked once every permanent entering with it is
@@ -2424,7 +2482,22 @@ fn entered_event(cx: &mut Cx, permanent: ObjectId) -> Event {
 }
 
 /// `last_known_of` with `id`'s characteristics `c` already worked out.
-pub fn last_known_from(cx: &Cx, id: ObjectId, c: &Chars) -> LastKnown {
+pub fn last_known_from(cx: &mut Cx, id: ObjectId, c: &Chars) -> LastKnown {
+    // Every leaving object's row is prepared before the simultaneous move erases any pairs (CR 603.10a).
+    // The member arena is journalled and cloned with the position, unlike a pointer into the undo journal.
+    let known = cx.s().last_known(id).or_else(|| cx.s().phased_last_known(id))
+        .map(|last| (last.blocked_creatures, last.blocking_creatures));
+    let (blocked_creatures, blocking_creatures) = if let Some(known) = known {
+        // A departed source can deal damage later (CR 113.7a). Its event snapshot must retain the same source LKI.
+        known
+    } else if cx.s().blocks.is_empty() {
+        // Normal casting and noncombat events pay no arena writes or allocations.
+        (Default::default(), Default::default())
+    } else {
+        let blocked: Vec<_> = cx.s().blocks.iter().filter(|b| b.blocker == id).map(|b| b.attacker).collect();
+        let blocking: Vec<_> = cx.s().blocks.iter().filter(|b| b.attacker == id).map(|b| b.blocker).collect();
+        (cx.st().members_push(&blocked), cx.st().members_push(&blocking))
+    };
     LastKnown {
         id,
         commander_ids: crate::merge::commander_ids(cx.s(), id),
@@ -2455,6 +2528,8 @@ pub fn last_known_from(cx: &Cx, id: ObjectId, c: &Chars) -> LastKnown {
         hexproof_from: c.hexproof_from,
         must_attack: c.must_attack,
         attacking: cx.s().attackers.iter().any(|a| a.id == id),
+        blocked_creatures,
+        blocking_creatures,
         mana_value: cantrip_api::mana_value_of(&|card| cx.cards().get(card), cx.s(), id, c),
         abilities: c.abilities,
         words: cantrip_api::words(cx.s(), id),
@@ -2589,8 +2664,8 @@ pub fn create_token_attached(cx: &mut Cx, card: CardId, controller: PlayerId, ho
 
 /// `create_tokens_worded`, each token an effect says is created attached to `host` entering so (CR 303.4): an Aura only
 /// if it could legally enchant `host` as it enters, and not created otherwise (CR 303.4i); an Equipment if it could
-/// equip it, and unattached otherwise (CR 301.5e); anything else unattached (CR 303.4h). No Fortification token exists
-/// to be made so (CR 301.6). The choice is the effect's, not a target (hexproof does not matter).
+/// equip it, and unattached otherwise (CR 301.5e); a Fortification follows the same rule for a land (CR 301.6);
+/// anything else enters unattached (CR 303.4h). The choice is the effect's, not a target (hexproof does not matter).
 #[allow(clippy::too_many_arguments)]
 fn create_tokens_onto(
     cx: &mut Cx,
@@ -2622,7 +2697,7 @@ fn create_tokens_onto(
     let mut attacking: Vec<ObjectId> = Vec::new();
     // CR 614.12, 101.4: tokens created together enter together. Each one's entering choices and replacements are worked
     // out before any of them is on the battlefield, so none sees another (Giada counts the Angels already there).
-    let mut arriving: Vec<(ObjectId, PlayerId, Entering)> = Vec::with_capacity(tokens.len());
+    let mut arriving: Vec<(ObjectId, PlayerId, Entering, Option<PlayerId>)> = Vec::with_capacity(tokens.len());
     for &(card, copy, controller) in tokens {
         let (card, copy, back_up, one_face) = token_faces(cx.cards(), card, copy);
         let turn = cx.s().turn.number;
@@ -2655,14 +2730,18 @@ fn create_tokens_onto(
         // "Create a token attached to [a permanent]" (CR 303.4h-i, 301.5e): an Aura that could not enchant it is not
         // created; an Equipment that could not equip it is created unattached; anything else enters unattached.
         if let Some(host) = host {
-            let chars = cx.chars(id);
-            let allowed = cx.s().obj(host).zone.is(ZoneKind::Battlefield) && crate::attach::host_allows(&*cx, id, host, true);
+            // CR 614.12: attachment legality is determined as the token would
+            // exist on the battlefield, including entry changes and continuous effects.
+            let prospective = as_it_would_exist(cx, &entering);
+            let chars = prospective.chars;
+            let allowed = cx.s().obj(host).zone.is(ZoneKind::Battlefield)
+                && crate::attach::host_allows_as(&*cx, id, &chars, entering.controller, prospective.mana_value, host, true);
             if chars.has_subtype(Subtype::Aura) {
                 if !allowed {
                     continue;
                 }
                 entering.attach = Some(host);
-            } else if chars.has_subtype(Subtype::Equipment) && allowed {
+            } else if (chars.has_subtype(Subtype::Equipment) || chars.has_subtype(Subtype::Fortification)) && allowed {
                 entering.attach = Some(host);
             }
         }
@@ -2674,6 +2753,7 @@ fn create_tokens_onto(
             to: Zone::BATTLEFIELD,
             reason: if spell.is_some() { ZoneReason::Resolve } else { ZoneReason::Created },
             controller,
+            put_by: Some(spell.map_or(controller, |spell| spell.controller)),
             tapped: entering.tapped,
             attacking: false,
             counters: [0; CounterKind::COUNT],
@@ -2694,6 +2774,7 @@ fn create_tokens_onto(
             rebounding: false,
             destroy: false,
             regenerated: false,
+            regeneration_shield: false,
             shielded: false,
             replaced: false,
         };
@@ -2708,7 +2789,7 @@ fn create_tokens_onto(
         entering.controller = change.controller;
         let controller = change.controller;
         for (n, with) in entering.counters.iter_mut().zip(change.counters) {
-            *n += with;
+            *n = n.saturating_add(with);
         }
         // A token copy of a planeswalker, a battle or a Saga enters with its loyalty, defense or lore counters too
         // (CR 306.5b, 310.4b, 714.3a), put on by its controller like the rest (CR 122.6a).
@@ -2720,9 +2801,9 @@ fn create_tokens_onto(
         if change.attacking {
             attacking.push(id);
         }
-        arriving.push((id, controller, entering));
+        arriving.push((id, controller, entering, change.put_by));
     }
-    for (id, controller, entering) in arriving {
+    for (id, controller, entering, put_by) in arriving {
         let chosen = keep_chosen(cx, &entering);
         cx.st().update_obj(id, |o| {
             o.zone = Zone::BATTLEFIELD;
@@ -2748,8 +2829,8 @@ fn create_tokens_onto(
         cx.st().zone_push(Zone::BATTLEFIELD, id);
         emblem_as_it_arrives(cx, &entering, id);
         events.push(match spell {
-            Some(spell) => Event::ZoneChange { old: spell.object, new: id, from: Zone::STACK, to: Zone::BATTLEFIELD, part: false, reason: ZoneReason::Resolve },
-            None => Event::ZoneChange { old: id, new: id, from: Zone::GONE, to: Zone::BATTLEFIELD, part: false, reason: ZoneReason::Created },
+            Some(spell) => Event::ZoneChange { old: spell.object, new: id, from: Zone::STACK, to: Zone::BATTLEFIELD, part: false, reason: ZoneReason::Resolve, put_by, enchanted_left: None },
+            None => Event::ZoneChange { old: id, new: id, from: Zone::GONE, to: Zone::BATTLEFIELD, part: false, reason: ZoneReason::Created, put_by, enchanted_left: None },
         });
         // CR 303.4f, 301.5e: created attached to something, it became attached to it.
         events.extend(entered_attached(cx, id));
@@ -2856,12 +2937,10 @@ pub fn prepared_copy(cx: &mut Cx, permanent: ObjectId) {
     cx.st().zone_push(Zone::exile(controller), copy);
 }
 
-/// Copies the spell on the stack (CR 707.10): the copy is a new spell object under `copier`, put onto the stack above
-/// everything with the original's targets, modes, X and kicks. It is not cast (CR 707.10), so nothing that watches
-/// casts sees it, and it ceases to exist when it leaves the stack. With `new_targets` the copier may choose new
-/// targets (CR 707.10c), slot by slot, each offered every legal choice (the old target among them); a slot with
-/// nothing else it could be is not asked, and an answer that is not legal leaves the old target. Every target of the
-/// copy, kept or new, becomes a target of it. Nothing if the spell was never on the stack or `copier` has left the game.
+/// Copies a spell (CR 707.10): its modes, targets, X and costs are copied, and with `new_targets` the copier may keep
+/// or change each target before the copy is put on the stack (CR 707.10c, 115.7d-e). It is not cast, so nothing that
+/// watches casts sees it; it ceases to exist when it leaves the stack. Every target of the copy, kept or new, becomes
+/// a target of it. Nothing if the spell has no stack or last-known stack record, or `copier` has left the game.
 /// A copy of a permanent spell becomes a token as it resolves (CR 707.10f): `resolve_copy_as_token`.
 pub fn copy_spell(cx: &mut Cx, spell: ObjectId, copier: PlayerId, new_targets: bool) -> R<Option<ObjectId>> {
     copy_spell_as(cx, spell, copier, new_targets, None)
@@ -2924,7 +3003,6 @@ pub fn copy_spell_as(cx: &mut Cx, spell: ObjectId, copier: PlayerId, new_targets
         obj.copy = Some(values);
     }
     let copy = cx.st().push_obj(obj);
-    cx.st().zone_push(Zone::STACK, copy);
     item.object = copy;
     item.controller = copier;
     item.serial = 0;
@@ -2932,12 +3010,14 @@ pub fn copy_spell_as(cx: &mut Cx, spell: ObjectId, copier: PlayerId, new_targets
     item.since = cx.g.log.len() as u32;
     // A copy is not cast (CR 707.10).
     item.cast_known = u32::MAX;
-    cx.st().stack_push(item);
-    let top = cx.s().stack.len() - 1;
-
     if new_targets {
-        item = retarget(cx, top, copy, spell, copier)?;
+        item = retarget(cx, item, spell, copier)?;
     }
+    // The copy is put onto the stack only after its targets are chosen (CR 707.10c).
+    item.since = cx.g.log.len() as u32;
+    cx.st().zone_push(Zone::STACK, copy);
+    cx.st().stack_push(item);
+    let item = *cx.s().stack.last().expect("the copy was just put on the stack");
     let targets = cx.s().targets(&item).to_vec();
     became_targets(cx, targets, copy, copier, false);
     cx.emit(Event::Copied { copy, original: spell, player: copier });
@@ -2977,90 +3057,98 @@ pub fn copy_ability(cx: &mut Cx, ability: Target, copier: PlayerId, new_targets:
     item.copied = true;
     // A copy is put onto the stack as it is created (CR 707.10).
     item.since = cx.g.log.len() as u32;
-    cx.st().stack_push(item);
-    let top = cx.s().stack.len() - 1;
+    item.tapped_since = item.since;
+    // Reserve the copy's identity without putting an incompletely retargeted item on the stack. Cost queries made
+    // while choosing targets follow the original activation, and the original ability remains a distinct candidate.
+    item.serial = cx.st().timestamp();
+    cx.record(Event::AbilityCopied { copy: item.serial, original: serial });
+
     if new_targets {
-        item = retarget(cx, top, item.object, item.object, copier)?;
+        item = retarget(cx, item, item.object, copier)?;
     }
+    item.since = cx.g.log.len() as u32;
+    item.tapped_since = item.since;
+    cx.st().stack_push(item);
+    let item = *cx.s().stack.last().expect("the ability copy was just put on the stack");
     // Each object or player it targets becomes a target once, however many of its slots name it (CR 115.2).
     let targets = cx.s().targets(&item).to_vec();
     became_targets(cx, targets, item.object, copier, true);
-    Ok(Some(cx.s().stack[top].serial))
+    Ok(Some(item.serial))
 }
 
-/// "You may choose new targets" (CR 115.7d, 707.10c) for the item at `top` of the stack: each slot it was announced with
-/// is offered every legal choice it has now, the one it has among them; a slot with nothing else it could be is not
-/// asked, and an answer that is not legal leaves the old target. `object` is the spell whose slots they are and
-/// `asked_about` what the question names. Returns the item as it now is.
-fn retarget(cx: &mut Cx, top: usize, object: ObjectId, asked_about: ObjectId, chooser: PlayerId) -> R<StackItem> {
-    let mut item = cx.s().stack[top];
-    // The specs its targets were chosen for (`resolve::spell_specs`): a modal spell's are its modes', which a copy keeps
-    // and does not choose again (CR 707.10c, 700.2); an instant's or sorcery's, or a permanent spell's (an Aura's enchant
-    // ability, CR 303.4a); the face's it is on the stack as, not its card's (CR 715.3b, 720.3b, 709.3b).
+/// "You may choose new targets" (CR 115.7d-e, 707.10c): for each target occurrence, either keep its original
+/// identity or choose a different target. The completed set, not an intermediate set, must be legal; an original
+/// target that was already illegal may remain unchanged. `asked_about` names the original object in the prompt.
+/// Copies are not put on the stack until this returns; an existing spell is updated only after it returns.
+fn retarget(cx: &mut Cx, mut item: StackItem, asked_about: ObjectId, chooser: PlayerId) -> R<StackItem> {
     let specs = crate::resolve::spell_specs(cx.cards(), cx.s(), &item);
-    let asker = Asker { source: object, controller: chooser, by: None, spell: item.kind == StackKind::Spell };
-    let mut targets = cx.s().targets(&item).to_vec();
-    let mut changed = false;
-    for (at, spec) in specs.iter().enumerate() {
-        // The targets chosen for this slot, as `target_legal` reads them (`StackItem::spec_of`).
-        let run = cx.s().spec_targets(&item, at);
-        // A slot of one target for each opponent (`TargetSpec::EACH_OPPONENT`) is a slot for each, in seat order, each
-        // asked on its own with the opponent it is for (`resolve::expand_specs`); any other is asked whole.
-        let parts: Vec<(std::ops::Range<usize>, TargetSpec, Option<PlayerId>)> = if spec.max == TargetSpec::EACH_OPPONENT {
-            let each = TargetSpec { min: 0, max: 1, ..*spec };
-            let opponents: Vec<PlayerId> = cx.s().seats().filter(|&p| p != item.controller).collect();
-            run.clone().zip(opponents).map(|(t, p)| (t..t + 1, each, Some(p))).collect()
-        } else {
-            vec![(run, *spec, None)]
-        };
-        for (run, spec, slot_player) in parts {
-            let current: Vec<Target> = targets[run.clone()].to_vec();
-            // A slot that chose no target (CR 601.2c) has none to change (CR 115.7d); the copy keeps the number of
-            // targets the original chose for it.
-            if current.iter().all(|&t| t == Target::None) {
-                continue;
-            }
-            // A slot sees what the slots before it now target (CR 601.2c: "another target creature").
-            let earlier = if item.target_count > 1 { &targets[..run.start] } else { &[][..] };
-            // Judged by the item's own text: an ability's as it was put on the stack (CR 113.7a), a copy's the same (CR 707.10).
-            let candidates = crate::actions::item_target_candidates(cx, &asker, &spec, earlier, &item, slot_player);
-            // The rule of the slot's targets together holds of the new targets (CR 115.7d, 601.2c), X as it was.
-            let own = crate::resolve::as_item(cx, &item);
-            let (candidates, together) = crate::actions::within_together(&own, &asker, &spec, u32::from(item.counted), candidates);
-            if candidates.len() <= current.len() && candidates.iter().all(|c| current.contains(c)) {
-                continue;
-            }
-            // No as many targets the rule allows together: nothing could be chosen anew, and the targets stay.
-            if !crate::actions::enough_together(&own, &asker, &together, &candidates, cantrip_state::count_u32(current.len())) {
-                continue;
-            }
-            let ask = RequestKind::ChooseTarget { label: spec.label, slot_player,
-                source: asked_about,
-                purpose: Purpose::Targets,
-                candidates: candidates.clone(),
-                optional: false,
-                least: cantrip_state::count_u32(current.len()),
-                count: cantrip_state::count_u32(current.len()),
-                any_number: false,
-                together: together.clone(),
-            };
-            // Each target of a slot is a different object or player (CR 115.3), and a legal one (CR 115.7d).
-            if let Answer::Targets(chosen) = cx.ask_core(chooser, ask, false)?
-                && chosen.len() == current.len()
-                && chosen.iter().all(|t| candidates.contains(t))
-                && chosen.iter().enumerate().all(|(i, t)| !chosen[..i].contains(t))
-                && select::targets_together(&crate::resolve::as_item(cx, &item), together.as_slice(), asker.controller, asker.source, &chosen)
-            {
-                targets[run].copy_from_slice(&chosen);
-                changed = true;
+    // The chooser decides; the spell or ability's controller supplies "you"
+    // and determines whose hexproof is relevant (CR 115.7d).
+    let asker = cx.item_asker(&item, item.controller);
+    let original = cx.s().targets(&item).to_vec();
+    let originally_legal: Vec<bool> = (0..original.len())
+        .map(|at| crate::resolve::target_legal(cx.cards(), cx.s(), &cx.g.log, &item, at))
+        .collect();
+    let (of, shares) = (cx.s().spec_of(&item).to_vec(), cx.s().shares(&item).to_vec());
+    // Each empty answer retains that occurrence, including an illegal or gone
+    // object. Never put such an object into a target-candidate UI (CR 115.7d).
+    let mut retry = false;
+    loop {
+        let mut targets = original.clone();
+        for (at, spec) in specs.iter().enumerate() {
+            let run = cx.s().spec_targets(&item, at);
+            let parts: Vec<(std::ops::Range<usize>, TargetSpec, Option<PlayerId>)> = if spec.max == TargetSpec::EACH_OPPONENT {
+                let each = TargetSpec { min: 0, max: 1, ..*spec };
+                let opponents: Vec<PlayerId> = cx.s().seats().filter(|&p| p != item.controller).collect();
+                run.clone().zip(opponents).map(|(t, p)| (t..t + 1, each, Some(p))).collect()
+            } else { vec![(run, *spec, None)] };
+            for (run, spec, slot_player) in parts {
+                for index in run.clone() {
+                    let current = original[index];
+                    if current == Target::None { continue; }
+                    let earlier = if item.target_count > 1 { &targets[..run.start] } else { &[][..] };
+                    let mut candidates = crate::actions::item_target_candidates(cx, &asker, &spec, earlier, &item, slot_player);
+                    candidates.retain(|candidate| *candidate != current && !targets[run.start..index].contains(candidate));
+                    if candidates.is_empty() { continue; }
+                    let label = if retry {
+                        "Those targets can't be chosen together. Choose a new target or none to keep the current one."
+                    } else {
+                        "Choose a new target or none to keep the current one."
+                    };
+                    let ask = RequestKind::ChooseTarget { replacing: Some((index as u32, current)), label, slot_player, source: asked_about,
+                        purpose: Purpose::Targets, candidates, optional: true, least: 0, count: 1,
+                        any_number: false, together: None };
+                    if let Answer::Targets(chosen) = cx.ask_core(chooser, ask, false)?
+                        && let Some(&target) = chosen.first()
+                    {
+                        targets[index] = target;
+                    }
+                }
             }
         }
+        if targets == original { break; }
+        // Only the completed assignment is judged (CR 115.7e). The changed
+        // targets must be legal; an unchanged target already illegal may stay,
+        // but one that was legal may not become illegal because of a change.
+        let mark = cx.s().mark();
+        let mut trial = item;
+        cx.st().set_item_targets(&mut trial, &targets, &of, &shares);
+        let distinct = (0..targets.len()).all(|at| targets[at] == Target::None ||
+            (0..at).all(|other| of[other] != of[at] || targets[other] != targets[at]));
+        let legal = distinct && (0..targets.len()).all(|at| {
+            targets[at] == Target::None ||
+                (targets[at] == original[at] && !originally_legal[at]) ||
+                crate::resolve::target_legal(cx.cards(), cx.s(), &cx.g.log, &trial, at)
+        });
+        cx.st().revert(mark);
+        if legal {
+            cx.st().set_item_targets(&mut item, &targets, &of, &shares);
+            break;
+        }
+        // The player can always leave every original target alone. Ask again
+        // when the chosen final combination cannot legally coexist.
+        retry = true;
     }
-    if changed {
-        let (of, shares) = (cx.s().spec_of(&item).to_vec(), cx.s().shares(&item).to_vec());
-        cx.st().set_item_targets(&mut item, &targets, &of, &shares);
-    }
-    cx.st().stack_set(top, item);
     Ok(item)
 }
 
@@ -3084,7 +3172,8 @@ pub fn choose_new_targets(cx: &mut Cx, spell: ObjectId, chooser: PlayerId) -> R<
         return Ok(());
     };
     let before = cx.s().targets(&cx.s().stack[at]).to_vec();
-    let after = retarget(cx, at, spell, spell, chooser)?;
+    let after = retarget(cx, cx.s().stack[at], spell, chooser)?;
+    cx.st().stack_set(at, after);
     let new: Vec<Target> = cx.s().targets(&after).iter().copied().filter(|t| !before.contains(t)).collect();
     became_targets(cx, new, spell, after.controller, false);
     Ok(())
@@ -3138,7 +3227,7 @@ pub fn change_target(cx: &mut Cx, of: Target, chooser: PlayerId) -> R<()> {
         let new = if others.len() == 1 {
             others[0]
         } else {
-            let ask = RequestKind::ChooseTarget { label: "", slot_player: None, together: None,
+            let ask = RequestKind::ChooseTarget { replacing: None, label: "", slot_player: None, together: None,
                 source: item.object,
                 purpose: Purpose::Targets,
                 candidates: others.clone(),
@@ -3232,7 +3321,7 @@ pub fn change_a_target_to(cx: &mut Cx, of: Target, to: ObjectId, chooser: Player
             }
         }
         _ => {
-            let ask = RequestKind::ChooseTarget {
+            let ask = RequestKind::ChooseTarget { replacing: None,
                 label: "The target to change to this creature",
                 slot_player: None,
                 together: None,
@@ -3354,7 +3443,7 @@ pub fn draw(cx: &mut Cx, player: PlayerId) {
         {
             cx.emit(Event::Revealed { player, card });
             let ability = AbilityRef::miracle(cx.s().obj(card).card);
-            cx.st().trigger_push(PendingTrigger {
+            cx.st().trigger_push(PendingTrigger { event_amount: None,
                 source: card,
                 ability,
                 controller: player,
@@ -3527,45 +3616,76 @@ fn mill_counted(cx: &mut Cx, counts: &[(PlayerId, u32)]) -> Vec<ObjectId> {
 /// Deals damage (CR 120): marked on a creature, removed as loyalty from a planeswalker, lost as life by a player.
 /// Protection prevents damage from sources of its colors (CR 702.16e).
 pub fn damage(cx: &mut Cx, source: ObjectId, target: Target, amount: u32, combat: bool) -> u32 {
-    damage_result(cx, source, target, amount, combat).map_or(0, |result| result.amount)
+    cx.instruction(|cx| damage_result_event(cx, source, target, amount, combat), |_| true).amount
 }
 
 /// Damage's final recipient and actual excess (CR 120.10), not the amount proposed before prevention or redirection.
 pub fn damage_result(cx: &mut Cx, source: ObjectId, target: Target, amount: u32, combat: bool) -> Option<DamageResult> {
-    let mut batch = DamageBatch::default();
-    let event = deal_damage_with(cx, source, target, amount, combat, &mut batch);
-    let mut events: Vec<Event> = event.into_iter().collect();
-    batch.finish(cx, &mut events);
-    let result = events.iter().find_map(|event| match *event {
-        Event::Damage { target, amount, recipient_excess, .. } => Some(DamageResult { target, amount, excess: recipient_excess }),
-        _ => None,
-    });
+    cx.instruction(|cx| damage_result_event(cx, source, target, amount, combat), |_| true).result
+}
+
+fn damage_result_event(cx: &mut Cx, source: ObjectId, target: Target, amount: u32, combat: bool) -> DamageOutcome {
+    let (mut results, _, mut batch) = damage_batch(cx, &[(source, target, amount)], combat);
     batch.rest_of_preventions(cx);
-    result
+    results.remove(0)
 }
 
 /// Deals damage to several recipients at once (CR 120.2, 603.2c): announced as one batch, as combat damage is. How much
 /// each was dealt, in order.
 pub fn damage_together(cx: &mut Cx, hits: &[(ObjectId, Target, u32)]) -> Vec<u32> {
+    cx.instruction(|cx| damage_together_event(cx, hits), |_| true)
+}
+
+fn damage_together_event(cx: &mut Cx, hits: &[(ObjectId, Target, u32)]) -> Vec<u32> {
+    let (results, _, mut batch) = damage_batch(cx, hits, false);
+    batch.rest_of_preventions(cx);
+    results.into_iter().map(|r| r.amount).collect()
+}
+
+/// Forms every original and replacement-introduced component before processing
+/// any damage into results (CR 120.4b-d). Combat and spells share this procedure.
+/// Each original assignment retains its own return value; added components are
+/// announced in the same batch, with their own source and damage characteristics.
+pub(crate) struct DamageOutcome { pub amount: u32, pub result: Option<DamageResult> }
+
+pub(crate) fn damage_batch(cx: &mut Cx, hits: &[(ObjectId, Target, u32)], combat: bool) -> (Vec<DamageOutcome>, Vec<Event>, DamageBatch) {
     let mut batch = DamageBatch::new(cx, hits);
-    let mut events = Vec::with_capacity(hits.len());
-    let mut dealt = vec![0; hits.len()];
-    for i in order_for_shields(cx, hits, false) {
-        let (source, target, amount) = hits[i];
-        match deal_damage_with(cx, source, target, amount, false, &mut batch) {
-            Some(event) => {
-                dealt[i] = match event {
-                    Event::Damage { amount, .. } => amount,
-                    _ => 0,
-                };
-                events.push(event);
+    let proposed: Vec<_> = hits.iter().map(|&(source, target, amount)| DamageEvent { source, target, amount, combat, heal_marked: false, shielded: None }).collect();
+    let parts = replace::damage_event(cx, &proposed, &mut batch.prevented, &mut batch.shielded);
+    // Damage characteristics are those of the event before any of its results,
+    // including a life-dependent infect rule or a source's changed controller.
+    for part in &parts {
+        if part.event.amount > 0 && let Target::Player(p) = part.event.target { batch.as_though_infect(cx, p); }
+    }
+    let viewed: Vec<_> = parts.into_iter().map(|part| { let view = damage_view(cx, &part.event); (part, view) }).collect();
+    let mut slots = vec![Vec::new(); hits.len()];
+    let mut events = Vec::new();
+    for (part, view) in viewed {
+        if let Some(event) = apply_damage_with(cx, part.event, view, &mut batch) {
+            let mut attributed: Vec<(usize, u32)> = Vec::new();
+            for (origin, amount) in part.origins {
+                let amount = amount.clamp(0, i64::from(u32::MAX)) as u32;
+                if let Some(i) = origin && amount > 0 {
+                    if let Some((_, n)) = attributed.iter_mut().find(|(origin, _)| *origin == i) {
+                        *n = n.saturating_add(amount);
+                    } else { attributed.push((i, amount)); }
+                }
             }
-            None => {}
+            for (i, amount) in attributed { slots[i].push((events.len(), amount)); }
+            events.push(event);
         }
     }
     batch.finish(cx, &mut events);
-    batch.rest_of_preventions(cx);
-    dealt
+    let results = slots.into_iter().map(|slots| {
+        let mut outcome = DamageOutcome { amount: 0, result: None };
+        for (at, attributed) in slots {
+            let Event::Damage { target, recipient_excess, .. } = events[at] else { unreachable!("the original assignment's damage") };
+            outcome.amount = outcome.amount.saturating_add(attributed);
+            outcome.result.get_or_insert(DamageResult { target, amount: attributed, excess: recipient_excess });
+        }
+        outcome
+    }).collect();
+    (results, events, batch)
 }
 
 /// Heals all damage marked on a permanent (CR 701.69a). A phased-out or new-zone object is not affected.
@@ -3593,18 +3713,51 @@ pub fn heal(cx: &mut Cx, permanent: ObjectId) {
 /// prevents" (CR 615.7). For each recipient a shield would not cover in full, its player or controller chooses a source
 /// whose damage the shield prevents first, then the next while some is left; the damage of the others is dealt normally
 /// once it is used up. Everything else keeps its order. Players with such choices make them in APNAP order (CR 616.1).
+#[cfg(test)]
 pub fn order_for_shields(cx: &mut Cx, hits: &[(ObjectId, Target, u32)], combat: bool) -> Vec<usize> {
+    let events: Vec<_> = hits.iter().map(|&(source, target, amount)| DamageEvent { source, target, amount, combat, heal_marked: false, shielded: None }).collect();
+    order_for_shield_events(cx, &events)
+}
+
+#[cfg(test)]
+pub(crate) fn order_for_shield_events(cx: &mut Cx, hits: &[DamageEvent]) -> Vec<usize> {
+    damage_source_order(cx, hits).order
+}
+
+/// Indices whose relative order was chosen (or immaterial because all remaining damage was covered). An unasked suffix
+/// may need a later choice if another prevention effect leaves more of the numbered shield available (CR 615.7).
+pub(crate) struct DamageSourceOrder {
+    pub order: Vec<usize>,
+    pub established: Vec<usize>,
+}
+pub(crate) fn damage_source_order(cx: &mut Cx, hits: &[DamageEvent]) -> DamageSourceOrder {
     let mut order: Vec<usize> = (0..hits.len())
-        .filter(|&i| !matches!(hits[i].1, Target::Player(p) if !cx.s().in_game(p)))
+        .filter(|&i| !matches!(hits[i].target, Target::Player(p) if !cx.s().in_game(p)))
         .collect();
-    if hits.len() < 2 || !cx.s().effects.iter().any(|e| matches!(e.kind, EffectKind::Prevention { shield: Shield::Next(_), .. })) {
-        return order;
+    let mut established = order.clone();
+    if hits.len() < 2
+        || !cx.s().effects.iter().any(|e| {
+            matches!(
+                e.kind,
+                EffectKind::Prevention {
+                    shield: Shield::Next(_),
+                    ..
+                }
+            )
+        })
+    {
+        return DamageSourceOrder { order, established };
     }
     let mut recipients: Vec<(PlayerId, Target)> = Vec::new();
-    for &(_, to, _) in hits {
+    for d in hits {
+        let to = d.target;
         let chooser = match to {
             Target::Player(p) if cx.s().in_game(p) => p,
-            Target::Object(id) if live(cx.s(), id) && cx.s().obj(id).zone.is(ZoneKind::Battlefield) => cx.s().obj(id).controller,
+            Target::Object(id)
+                if live(cx.s(), id) && cx.s().obj(id).zone.is(ZoneKind::Battlefield) =>
+            {
+                cx.s().obj(id).controller
+            }
             _ => continue,
         };
         if !recipients.iter().any(|&(_, t)| t == to) {
@@ -3617,11 +3770,12 @@ pub fn order_for_shields(cx: &mut Cx, hits: &[(ObjectId, Target, u32)], combat: 
         // The assignments to it that a shield applies to, and what the shields have left between them.
         let mut shielded: Vec<usize> = Vec::new();
         let (mut by, mut left) = (ObjectId(0), 0u32);
-        for (i, &(source, target, amount)) in hits.iter().enumerate() {
+        for (i, d) in hits.iter().enumerate() {
+            let (target, amount) = (d.target, d.amount);
             if target != to || amount == 0 {
                 continue;
             }
-            if let Some((s, n)) = replace::shields(cx, &DamageEvent { source, target, amount, combat, heal_marked: false, shielded: None }) {
+            if let Some((s, n)) = replace::shields(cx, d) {
                 if shielded.is_empty() {
                     by = s;
                 }
@@ -3633,42 +3787,74 @@ pub fn order_for_shields(cx: &mut Cx, hits: &[(ObjectId, Target, u32)], combat: 
         // the shield might not cover them after all, or have more left than they say, so the choice is asked whatever they
         // are, for as long as two or more sources are left.
         let may_change = replace::damage_may_change(cx);
-        let total = |rest: &[usize]| rest.iter().map(|&i| hits[i].2 as u32).sum::<u32>();
+        let exceeds = |rest: &[usize], mut remaining: u32| {
+            for &i in rest {
+                if hits[i].amount > remaining {
+                    return true;
+                }
+                remaining -= hits[i].amount;
+            }
+            false
+        };
         let mut rest = shielded.clone();
         let mut chosen = Vec::new();
-        while may_change || (left > 0 && total(&rest) > left) {
-
+        while may_change || (left > 0 && exceeds(&rest, left)) {
             let mut sources: Vec<ObjectId> = Vec::new();
             for &i in &rest {
-                if !sources.contains(&hits[i].0) {
-                    sources.push(hits[i].0);
+                if !sources.contains(&hits[i].source) {
+                    sources.push(hits[i].source);
                 }
             }
             if sources.len() < 2 {
                 break;
             }
-            let ask = RequestKind::choose_cards(by, Purpose::PreventDamageFrom(left), sources.clone(), sources, 1, false, "");
+            let ask = RequestKind::choose_cards(
+                by,
+                Purpose::PreventDamageFrom(left),
+                sources.clone(),
+                sources,
+                1,
+                false,
+                "",
+            );
             // Unanswered yet, the run goes on with the first and is replayed with the answer (`Cx::ask_core`).
             let pick = match cx.ask_core(chooser, ask, false) {
-                Ok(Answer::Cards(c)) if c.len() == 1 => rest.iter().position(|&i| hits[i].0 == c[0]).unwrap_or(0),
+                Ok(Answer::Cards(c)) if c.len() == 1 => rest
+                    .iter()
+                    .position(|&i| hits[i].source == c[0])
+                    .unwrap_or(0),
                 _ => 0,
             };
             let i = rest.remove(pick);
-            left = left.saturating_sub(u32::from(hits[i].2));
+            left -= hits[i].amount.min(left);
             chosen.push(i);
+        }
+        if !may_change && left == 0 {
+            let mut sources = Vec::new();
+            for &i in &rest {
+                if !sources.contains(&hits[i].source) {
+                    sources.push(hits[i].source);
+                }
+            }
+            if sources.len() > 1 {
+                established.retain(|i| !rest.contains(i));
+            }
         }
         if chosen.is_empty() {
             continue;
         }
         chosen.extend(rest);
         // The shielded assignments take their places in the order chosen.
-        let mut slots: Vec<usize> = shielded.iter().map(|i| order.iter().position(|o| o == i).expect("in the order")).collect();
+        let mut slots: Vec<usize> = shielded
+            .iter()
+            .map(|i| order.iter().position(|o| o == i).expect("in the order"))
+            .collect();
         slots.sort_unstable();
         for (slot, i) in slots.into_iter().zip(chosen) {
             order[slot] = i;
         }
     }
-    order
+    DamageSourceOrder { order, established }
 }
 
 /// What one simultaneous damage event (CR 120.2, 510.2) has done so far, across its assignments.
@@ -3679,10 +3865,10 @@ pub struct DamageBatch {
     dealt: Vec<DamageRecipient>,
     /// The life lost to noninfect player damage (CR 120.3a), prepared only once all damage replacements have applied.
     /// Losses to one player are combined; gains remain distinct from them (CR 120.4c-d).
-    life: Vec<(PlayerId, i32)>,
+    life: Vec<(PlayerId, i64)>,
     /// What each source with lifelink has dealt, and who controls it: one life gain event per source, however many
-    /// recipients it dealt damage to (CR 120.3f, 702.15e; Angel of Vitality's and Leyline of Hope's rulings).
-    lifelink: Vec<(ObjectId, PlayerId, i32)>,
+    /// recipients it dealt damage to (CR 120.3f; Angel of Vitality's and Leyline of Hope's rulings).
+    lifelink: Vec<(ObjectId, PlayerId, i64)>,
     /// For each player dealt damage in it, whether the damage is dealt as though its source had infect (Phyrexian Unlife's "as
     /// long as you have 0 or less life"): judged once, as the event begins for that player, since all of it is dealt at once
     /// (CR 120.2, 510.2) - a life total the event itself takes to 0 makes none of it poison.
@@ -3717,11 +3903,11 @@ struct DamageRecipient {
 impl DamageRecipient {
     fn excess(&self) -> u32 {
         let creature = self.creature_toughness.map(|toughness| {
-            let lethal = toughness.saturating_sub(self.prior_marked as u32);
+            let lethal = toughness.saturating_sub(self.prior_marked).max(0);
             if self.deathtouch { lethal.min(1) } else { lethal }
         });
         let lethal = creature.into_iter().chain(self.other_lethal).min();
-        lethal.map_or(0, |lethal| self.amount.saturating_sub(lethal))
+        lethal.map_or(0, |lethal| self.amount.saturating_sub(lethal).max(0))
     }
 }
 
@@ -3834,7 +4020,7 @@ impl DamageBatch {
                     if recipient.heal_marked {
                         o.damage = 0;
                     }
-                    o.damage += recipient.marked;
+                    o.damage = o.damage.saturating_add(recipient.marked);
                     o.deathtouched |= recipient.touched;
                 });
             }
@@ -3872,51 +4058,44 @@ fn dealer_known(cx: &mut Cx, source: ObjectId, chars: &Chars) -> u32 {
     cx.st().last_known_push(row)
 }
 
-/// Damage as `damage` deals it, as one assignment of a simultaneous event, `batch`. Its life losses, lifelink gains and
-/// creature counters are results prepared by `DamageBatch::finish` after every damage replacement has applied.
-pub fn deal_damage_with(
-    cx: &mut Cx,
-    source: ObjectId,
-    target: Target,
-    amount: u32,
-    combat: bool,
-    batch: &mut DamageBatch,
-) -> Option<Event> {
-    // CR 102.1, 120.1, 800.4a: a departed player receives no damage, nor replacements or prevention of that damage.
-    if amount == 0 || matches!(target, Target::Player(p) if !cx.s().in_game(p)) {
-        return None;
-    }
-    // CR 614.1a, 614.6: the replacement effects may change whom the damage is dealt to ("is dealt to this creature
-    // instead") as well as how much; what is left is dealt to whomever they leave it with, by the same source. Protection,
-    // infect, lifelink, deathtouch, loyalty and defense are judged against that recipient.
-    let shielded = batch.shielded.iter().copied().find(|&id| target == Target::Object(id));
-    let event = replace::damage(cx, DamageEvent { source, target, amount, combat, heal_marked: false, shielded }, &mut batch.prevented);
-    if let Some(id) = event.shielded
-        && !batch.shielded.contains(&id)
-    {
-        batch.shielded.push(id);
-    }
-    let (target, amount, heal_marked) = (event.target, event.amount, event.heal_marked);
-    if amount == 0 || matches!(target, Target::Player(p) if !cx.s().in_game(p)) {
-        return None;
-    }
-    // Protection prevents the damage (CR 702.16e, 702.16j, 702.16k) unless it can't be prevented (CR 615.12), and the
-    // prevention is recorded (CR 615.6). Where replacement or other prevention effects applied, protection was ordered with them
-    // (CR 616.1) and has prevented it already if it applies.
-    let source_chars = layers::source_chars(cx.cards(), cx.s(), &cx.g.log, source);
-    let prevented = |cx: &mut Cx, by: ObjectId| -> Option<Event> {
-        cx.emit(Event::DamagePrevented { source, target, amount, combat, by });
-        None
+/// The characteristics of a damage component at the damage-dealt stage, before
+/// any simultaneous component is processed into life loss, counters or marks.
+struct DamageView { source: Chars, target: Option<Chars>, controller: PlayerId, known: u32 }
+fn damage_view(cx: &mut Cx, event: &DamageEvent) -> Option<DamageView> {
+    if event.amount <= 0 { return None; }
+    let target = match event.target {
+        Target::Player(p) if cx.s().in_game(p) => None,
+        Target::Object(id) if live(cx.s(), id) && cx.s().obj(id).zone.is(ZoneKind::Battlefield) => Some(layers::chars(cx.cards(), cx.s(), &cx.g.log, id)),
+        _ => return None,
     };
+    let source = layers::source_chars(cx.cards(), cx.s(), &cx.g.log, event.source);
+    let controller = cx.controller(event.source);
+    let known = dealer_known(cx, event.source, &source);
+    Some(DamageView { source, target, controller, known })
+}
+
+/// A focused test may exercise one prepared assignment directly; production
+/// damage always forms the whole event through `damage_batch`.
+#[cfg(test)]
+pub fn deal_damage_with(cx: &mut Cx, source: ObjectId, target: Target, amount: u32, combat: bool, batch: &mut DamageBatch) -> Option<Event> {
+    let shielded = batch.shielded.iter().copied().find(|&id| target == Target::Object(id));
+    let mut event = replace::damage(cx, DamageEvent { source, target, amount, combat, heal_marked: false, shielded }, &mut batch.prevented);
+    if let Some(id) = event.shielded && !batch.shielded.contains(&id) { batch.shielded.push(id); }
+    if event.amount > 0 && let Some(by) = protection_prevents(cx, event.source, event.target, event.combat) {
+        cx.emit(Event::DamagePrevented { source: event.source, target: event.target, amount: event.amount, combat: event.combat, by });
+        event.amount = 0;
+    }
+    let view = damage_view(cx, &event);
+    apply_damage_with(cx, event, view, batch)
+}
+
+fn apply_damage_with(cx: &mut Cx, event: DamageEvent, view: Option<DamageView>, batch: &mut DamageBatch) -> Option<Event> {
+    let Some(view) = view else { return None };
+    let (source, target, amount, combat, heal_marked) = (event.source, event.target, event.amount, event.combat, event.heal_marked);
+    let DamageView { source: source_chars, target: target_chars, controller: source_controller, known } = view;
     match target {
         Target::None | Target::Ability(_) => None,
         Target::Player(p) => {
-            if let Some(by) = layers::player_protection(cx.cards(), cx.s(), &cx.g.log, p, cx.controller(source))
-                && damage_can_be_prevented(cx, source, combat)
-            {
-                return prevented(cx, by);
-            }
-
             // Damage from a source with infect is dealt to a player as that many poison counters (CR 702.90b, 120.3b), and
             // so is damage dealt "as though its source had infect" (Phyrexian Unlife).
             let infect = source_chars.has(Keyword::Infect) || batch.as_though_infect(cx, p);
@@ -3927,31 +4106,27 @@ pub fn deal_damage_with(
                 // All of this event's noninfect damage to one player causes one loss (CR 120.3a); keep it distinct
                 // from every source-level lifelink gain, including a gain later replaced with a loss.
                 match batch.life.iter_mut().find(|(player, _)| *player == p) {
-                    Some((_, loss)) => *loss -= amount as i32,
-                    None => batch.life.push((p, -(amount as i32))),
+                    Some((_, loss)) => *loss = loss.saturating_sub(i64::from(amount)),
+                    None => batch.life.push((p, -i64::from(amount))),
                 }
             }
             let poison = (if infect { amount } else { 0 } + u32::from(toxic)).min(u32::from(u16::MAX)) as u16;
             if poison > 0 {
                 // "That source's controller" (CR 120.3b) and "that creature's controller" (CR 702.164c) gives them, at once
                 // as results of the one damage, so "if you would put one or more counters" is theirs.
-                let by = cx.controller(source);
+                let by = source_controller;
                 batch.counters.push_player(counters::PlayerPlacement {
                     player: p, counts: counters::PlayerCounts { poison, ..Default::default() }, by,
                 });
             }
-            lifelink(cx, source, &source_chars, amount, batch);
-            Some(Event::Damage { source, target, amount, kind: DamageKind::new(combat, source_chars.colors), controller: cx.controller(source), recipient_excess: 0, known: dealer_known(cx, source, &source_chars) })
+            lifelink(source, source_controller, &source_chars, amount, batch);
+            Some(Event::Damage { source, target, amount, kind: DamageKind::new(combat, source_chars.colors), controller: source_controller, recipient_excess: 0, known })
         }
         Target::Object(id) => {
             if !live(cx.s(), id) || !cx.s().obj(id).zone.is(ZoneKind::Battlefield) {
                 return None;
             }
-            let target_chars = layers::chars(cx.cards(), cx.s(), &cx.g.log, id);
-            let source_controller = cx.controller(source);
-            if target_chars.protected_from_by(&source_chars, || cantrip_api::mana_value_of(&|card| cx.card(card), cx.s(), source, &source_chars), source_controller) && damage_can_be_prevented(cx, source, combat) {
-                return prevented(cx, id);
-            }
+            let target_chars = target_chars.expect("a permanent damage recipient");
             let deathtouch = source_chars.has(Keyword::Deathtouch);
             // The recipient's characteristics and counters are read before this event deals it damage. Later hits in
             // the same event must not see loyalty already removed or toughness reduced by that event's infect damage.
@@ -3962,7 +4137,7 @@ pub fn deal_damage_with(
             if heal_marked {
                 batch.dealt[at].prior_marked = 0;
             }
-            batch.dealt[at].amount += amount as u32;
+            batch.dealt[at].amount = batch.dealt[at].amount.saturating_add(amount);
             // CR 120.4a: any damage beyond 1 dealt to a creature by a source with deathtouch is excess, combat or not.
             batch.dealt[at].deathtouch |= deathtouch;
             if target_chars.is(CardType::Creature) {
@@ -3973,25 +4148,25 @@ pub fn deal_damage_with(
                     // 702.90a, 702.80a), static abilities create effects (CR 609.1), and it is their effect, not the turn-based action dealing
                     // combat damage, that puts the counters (CR 120.3d) - so "if an effect would put counters" applies.
                     let mut counts = [0; CounterKind::COUNT];
-                    counts[CounterKind::MinusOne as usize] = amount as i32;
+                    counts[CounterKind::MinusOne as usize] = amount.min(i32::MAX as u32) as i32;
                     batch.counters.push(counters::Placement { object: id, counts, by: source_controller });
                 } else {
                     // CR 614.1a: healing removes the marks from before this event, never this event's own marks.
                     batch.dealt[at].heal_marked |= heal_marked;
-                    batch.dealt[at].marked += amount;
+                    batch.dealt[at].marked = batch.dealt[at].marked.saturating_add(amount);
                 }
                 batch.dealt[at].touched |= deathtouch;
             }
             // Loyalty and defense removal are also results, not updates made while damage replacements or another
             // player's result choices are still pending (CR 120.3c, 120.3h, 120.4c-d).
             if target_chars.is(CardType::Battle) {
-                batch.dealt[at].defense += amount;
+                batch.dealt[at].defense = batch.dealt[at].defense.saturating_add(amount);
             }
             if target_chars.is(CardType::Planeswalker) {
-                batch.dealt[at].loyalty += amount;
+                batch.dealt[at].loyalty = batch.dealt[at].loyalty.saturating_add(amount);
             }
-            lifelink(cx, source, &source_chars, amount, batch);
-            Some(Event::Damage { source, target, amount, kind: DamageKind::new(combat, source_chars.colors), controller: cx.controller(source), recipient_excess: 0, known: dealer_known(cx, source, &source_chars) })
+            lifelink(source, source_controller, &source_chars, amount, batch);
+            Some(Event::Damage { source, target, amount, kind: DamageKind::new(combat, source_chars.colors), controller: source_controller, recipient_excess: 0, known })
         }
     }
 }
@@ -4031,12 +4206,11 @@ pub(crate) fn damage_can_be_prevented(cx: &Cx, source: ObjectId, combat: bool) -
 
 /// Damage dealt by a source with lifelink also causes its controller to gain that much life (CR 702.15b), as part of
 /// the damage event, not a trigger: added to what the source has dealt in this event, gained once it is all dealt.
-fn lifelink(cx: &mut Cx, source: ObjectId, chars: &Chars, amount: u32, batch: &mut DamageBatch) {
+fn lifelink(source: ObjectId, controller: PlayerId, chars: &Chars, amount: u32, batch: &mut DamageBatch) {
     if chars.has(Keyword::Lifelink) {
-        let controller = cx.controller(source);
         match batch.lifelink.iter_mut().find(|(s, _, _)| *s == source) {
-            Some(entry) => entry.2 += amount as i32,
-            None => batch.lifelink.push((source, controller, amount as i32)),
+            Some(entry) => entry.2 = entry.2.saturating_add(i64::from(amount)),
+            None => batch.lifelink.push((source, controller, amount as i64)),
         }
     }
 }
@@ -4071,8 +4245,8 @@ fn prepare_life_changes(cx: &mut Cx, changes: &[(PlayerId, i32)]) -> Vec<(Player
         return prepared;
     }
     for player in cx.s().apnap() {
-        let loss: i32 = changes.iter().filter(|&&(p, n)| p == player && n < 0).map(|&(_, n)| n).sum();
-        let gains = changes.iter().filter(|&&(p, n)| p == player && n > 0).map(|&(_, n)| n);
+        let loss: i64 = changes.iter().filter(|&&(p, n)| p == player && n < 0).map(|&(_, n)| i64::from(n)).sum();
+        let gains = changes.iter().filter(|&&(p, n)| p == player && n > 0).map(|&(_, n)| i64::from(n));
         for amount in std::iter::once(loss).chain(gains) {
             let delta = prepare_life_change(cx, player, amount);
             if delta != 0 {
@@ -4093,15 +4267,15 @@ fn retain_life_changes(cx: &Cx, changes: &mut Vec<(PlayerId, i32)>) {
 /// announcements with the caller. Damage announces them with its other results, an explicit loss instruction on its own
 /// (CR 603.2c). No replacement or prohibition is judged against a partially applied simultaneous event.
 fn apply_life_changes(cx: &mut Cx, changes: Vec<(PlayerId, i32)>, events: &mut Vec<Event>) -> i32 {
-    let mut total = 0;
+    let mut total = 0i64;
     for (player, delta) in changes {
-        cx.st().update_player(player, |p| p.life += delta);
+        cx.st().update_player(player, |p| p.life = p.life.saturating_add(delta));
         if delta < 0 {
-            total -= delta;
+            total -= i64::from(delta);
         }
         events.push(Event::LifeChange { player, delta });
     }
-    total
+    total.clamp(i64::from(i32::MIN), i64::from(i32::MAX)) as i32
 }
 
 /// Whether `player`'s life total can't change (CR 119.7, 119.8): a resolved effect says so (`EffectKind::LifeTotalCantChange`).
@@ -4112,12 +4286,12 @@ pub fn life_total_cant_change(s: &GameState, player: PlayerId) -> bool {
 /// `player`'s life total goes up or down by `delta` (CR 119.3): an effect's, a cost's (CR 119.4), or a life total set to a
 /// number (CR 119.5). Simultaneous losses and damage results use the same preparation through `prepare_life_changes`,
 /// deferring their updates and announcement until every player's change is prepared.
-pub fn change_life(cx: &mut Cx, player: PlayerId, delta: i32) {
+pub fn change_life(cx: &mut Cx, player: PlayerId, delta: impl Into<i64>) {
     let delta = prepare_life_change(cx, player, delta);
     if delta == 0 {
         return;
     }
-    cx.st().update_player(player, |p| p.life += delta);
+    cx.st().update_player(player, |p| p.life = p.life.saturating_add(delta));
     // CR 702.179d: an opponent losing life during the turn of a player with speed triggers its inherent ability
     // (`designations::inherent_triggers`).
     cx.emit(Event::LifeChange { player, delta });
@@ -4125,7 +4299,8 @@ pub fn change_life(cx: &mut Cx, player: PlayerId, delta: i32) {
 
 /// The shared life-change pipeline before its update: single-player changes apply it at once; simultaneous losses and
 /// damage results prepare every player's changes first (CR 101.4, 120.4c, 614.1a, 616.1).
-fn prepare_life_change(cx: &mut Cx, player: PlayerId, delta: i32) -> i32 {
+fn prepare_life_change(cx: &mut Cx, player: PlayerId, delta: impl Into<i64>) -> i32 {
+    let delta = delta.into().clamp(i64::from(i32::MIN), i64::from(i32::MAX)) as i32;
     if delta == 0 || !cx.s().in_game(player) {
         return 0;
     }
@@ -4159,23 +4334,26 @@ fn blocked(cx: &Cx, player: PlayerId, delta: i32) -> bool {
     }
 }
 
-/// Regeneration (CR 701.19a): each permanent with a shield uses one up; it is tapped, all damage is removed from it and
-/// it is removed from combat instead of being destroyed. The permanents that did.
-pub fn regenerate_instead(cx: &mut Cx, ids: &[ObjectId]) -> Vec<ObjectId> {
+/// Regeneration (CR 701.19a-b): tap, heal and remove from combat. Only those
+/// whose replacement came from a shield use one up; a static ability consumes
+/// no shield. The replacement was judged before the simultaneous moves.
+pub fn regenerate_instead(cx: &mut Cx, ids: &[(ObjectId, bool)]) -> Vec<ObjectId> {
     let mut saved = Vec::new();
-    for &id in ids {
+    for &(id, shield) in ids {
         if !live(cx.s(), id) || !cx.s().obj(id).zone.is(ZoneKind::Battlefield) {
             continue;
         }
-        let Some(at) = cx.s().effects.iter().position(|e| e.kind == EffectKind::RegenerationShield && e.affected == id) else {
-            continue;
-        };
-        let keep: Vec<bool> = (0..cx.s().effects.len()).map(|i| i != at).collect();
-        let effects_before = cx.s().effects.len();
-        cx.st().effects_keep(&keep);
-        // An effect that ends changes the game with no event (CR 603.8).
-        if cx.s().effects.len() < effects_before {
-            cx.state_changed();
+        if shield {
+            let Some(at) = cx.s().effects.iter().position(|e| e.kind == EffectKind::RegenerationShield && e.affected == id) else {
+                continue;
+            };
+            let keep: Vec<bool> = (0..cx.s().effects.len()).map(|i| i != at).collect();
+            let effects_before = cx.s().effects.len();
+            cx.st().effects_keep(&keep);
+            // An effect that ends changes the game with no event (CR 603.8).
+            if cx.s().effects.len() < effects_before {
+                cx.state_changed();
+            }
         }
         cx.st().update_obj(id, |o| {
             o.damage = 0;
@@ -4184,7 +4362,7 @@ pub fn regenerate_instead(cx: &mut Cx, ids: &[ObjectId]) -> Vec<ObjectId> {
         tap(cx, id);
         // An attacking or blocking creature that regenerates is removed from combat (CR 506.4) - a planeswalker being attacked
         // that is one too with it; one that is neither is not.
-        if cx.s().attackers.iter().any(|a| a.id == id) || cx.s().blocks.iter().any(|b| b.blocker == id) {
+        if cx.s().attackers.iter().any(|a| a.id == id) || cx.s().blockers.contains(&id) {
             remove_from_combat(cx, &[id]);
         }
         saved.push(id);
@@ -4428,6 +4606,10 @@ fn bring_into_hand_inner(cx: &mut Cx, ids: &[ObjectId], revealed: bool, companio
 /// being true: called wherever a counter is taken off an object, or a permanent untaps, so a condition made true again
 /// later never brings such an effect back.
 pub fn end_lapsed_durations(cx: &mut Cx, id: ObjectId) {
+    if cx.s().settle_held.get() > 0 {
+        // A simultaneous instruction settles every conditional duration after all its changes.
+        return;
+    }
     let obj = *cx.s().obj(id);
     if cx.s().effects.iter().any(|e| e.affected == id && !e.duration.holds_for(&obj)) {
         let control = cx.s().effects.iter().any(|e| e.affected == id && !e.duration.holds_for(&obj) && matches!(e.kind, EffectKind::Control(_)));
@@ -4501,7 +4683,7 @@ pub fn proliferate(cx: &mut Cx, player: PlayerId, source: ObjectId) -> R<()> {
     if candidates.is_empty() {
         return Ok(());
     }
-    let ask = RequestKind::ChooseTarget { label: "", slot_player: None, together: None,
+    let ask = RequestKind::ChooseTarget { replacing: None, label: "", slot_player: None, together: None,
         source,
         purpose: Purpose::Targets,
         count: cantrip_state::count_u32(candidates.len()),
@@ -4586,23 +4768,49 @@ pub(crate) fn note_statics(cx: &mut Cx, id: ObjectId) {
     }
 }
 
-/// Untaps a permanent (CR 701.26b). A permanent that can't become untapped (`CardDef::cant_become_untapped`) stays tapped,
-/// and a stun counter on it stays too: nothing would untap it for the counter to replace (CR 101.2, 122.1d). A permanent
-/// with a stun counter on it that would become untapped has a stun counter removed from it instead (CR 122.1d): one counter
-/// for each untap, whatever their number.
+/// Whether untapping is possible before replacement effects (CR 118.3, 101.2, 701.26b). Stun replaces a payable
+/// action rather than prohibiting it (CR 118.11, 122.1d). Shared by effects and the public cost-payability query.
+pub fn can_untap(q: &dyn Query, cards: &CardTable, id: ObjectId) -> bool {
+    live(q.state(), id)
+        && q.obj(id).zone.is(ZoneKind::Battlefield)
+        && q.obj(id).tapped
+        && !crate::static_rules::cant_become_untapped(q, cards, id)
+}
+
+/// Untaps a permanent (CR 701.26b), through the same authority as a simultaneous untap.
 pub fn untap(cx: &mut Cx, id: ObjectId) {
-    if !live(cx.s(), id) || !cx.s().obj(id).zone.is(ZoneKind::Battlefield) || !cx.s().obj(id).tapped {
+    untap_together(cx, &[id]);
+}
+
+/// Untaps permanents simultaneously (CR 502.3, 701.26b, 603.2c): all prohibitions and stun replacements are decided
+/// against the same pre-event state (CR 101.2, 614.6, 122.1d). Removing a stun counter instead does not untap, so cannot
+/// end a tapped duration or produce an Untapped event. Only after every status/counter changes do durations/control
+/// settle and triggers see one batch. Magnetic Mountain and Intruder Alarm need this same simultaneous instruction.
+pub fn untap_together(cx: &mut Cx, ids: &[ObjectId]) {
+    let mut plan = Vec::new();
+    for &id in ids {
+        if !plan.iter().any(|&(other, _)| other == id) && can_untap(cx, cx.cards(), id) {
+            plan.push((id, cx.s().obj(id).counters(CounterKind::Stun) > 0));
+        }
+    }
+    if plan.is_empty() {
         return;
     }
-    if crate::static_rules::cant_become_untapped(cx, cx.cards(), id) {
-        return;
+    // No intermediate status or duration change can affect another member of this event. In particular, removing a
+    // stun counter may end a control duration, which must not change the remaining prohibitions or replacements.
+    as_one_instruction(cx, |cx| {
+        for &(id, stun) in &plan {
+            if stun {
+                counters::remove(cx, id, CounterKind::Stun, 1);
+            } else {
+                cx.st().update_obj(id, |o| o.tapped = false);
+            }
+        }
+    });
+    let events: Vec<Event> = plan.into_iter().filter(|&(_, stun)| !stun).map(|(permanent, _)| Event::Untapped { permanent }).collect();
+    if !events.is_empty() {
+        cx.emit_batch(&events, None);
     }
-    if cx.s().obj(id).counters(CounterKind::Stun) > 0 {
-        counters::remove(cx, id, CounterKind::Stun, 1);
-        return;
-    }
-    cx.st().update_obj(id, |o| o.tapped = false);
-    end_lapsed_durations(cx, id);
 }
 
 /// Exerts a permanent (CR 701.43a): it won't untap during its controller's next untap step.
@@ -4694,7 +4902,7 @@ pub fn attack_with_tokens(cx: &mut Cx, created: &[ObjectId], defender: Target) {
 pub fn put_onto_battlefield_attacking(cx: &mut Cx, object: ObjectId, controller: PlayerId, defender: Target, counters: &[(CounterKind, i32)]) -> R<ObjectId> {
     // Thousand-Faced Shadow and Fallen Shinobi use this ninjutsu path.
     // It is attacking before its arrival is observed (CR 603.6a, 508.4).
-    let new = put_onto_battlefield_into(cx, Vec::new(), &[(object, controller, true)], ZoneReason::Other, counters, None, Some(defender))?
+    let new = put_onto_battlefield_into(cx, Vec::new(), &[(object, controller, true)], ZoneReason::Other, counters, None, Some(defender), &[])?
         .first().copied().unwrap_or(object);
     Ok(new)
 }
@@ -4770,7 +4978,7 @@ fn enter_attacking_by_choice(cx: &mut Cx, entered: &[ObjectId]) {
             [] => continue,
             [only] => only,
             _ => {
-                let ask = RequestKind::ChooseTarget {
+                let ask = RequestKind::ChooseTarget { replacing: None,
                     label: "Choose what it attacks as it enters attacking: a player, a planeswalker or a battle.",
                     slot_player: None,
                     together: None,
@@ -4836,22 +5044,72 @@ fn write_controller(cx: &mut Cx, id: ObjectId, controller: PlayerId, by_effect: 
 /// Whether the condition of an effect's "for as long as" duration (`Duration::AsLongAs`, CR 611.2b) is still true: the
 /// card's own condition, asked of the effect. Any other duration holds as far as this goes.
 pub fn lasting_holds(cx: &Cx, e: &cantrip_state::ContinuousEffect) -> bool {
+    if !e.duration.holds_for(cx.s().obj(e.affected)) {
+        return false;
+    }
     match e.duration {
         Duration::AsLongAs(card, index) => cx.card(card).lasting.get(index as usize).is_none_or(|l| (l.holds)(cx, e)),
+        Duration::WhileSourceTapped | Duration::WhileSourceTappedAndControlled => {
+            live(cx.s(), e.source)
+                && cx.s().obj(e.source).zone.is(ZoneKind::Battlefield)
+                && cx.s().obj(e.source).tapped
+                && (e.duration != Duration::WhileSourceTappedAndControlled || cx.s().obj(e.source).controller == e.controller)
+        }
         _ => true,
     }
 }
 
-/// Whether an effect's duration has begun as the effect would first apply (CR 611.2b): "for as long as [its source]
-/// remains on the battlefield" with the source gone, "for as long as it has a [kind] counter on it" (or is tapped) already
-/// false, or a card's own "for as long as" condition already false never starts, and the effect does nothing. Asked by
-/// whatever creates a continuous effect (`Game::add_effect`, `become_copy`).
-pub fn duration_begins(cx: &Cx, e: &cantrip_state::ContinuousEffect) -> bool {
-    let s = cx.s();
-    if source_departed(s, e) {
-        return false;
+/// Whether this duration has a condition that can end without a zone change (CR 611.2b).
+fn conditional(duration: Duration) -> bool {
+    matches!(duration, Duration::AsLongAs(..) | Duration::WhileSourceTapped | Duration::WhileSourceTappedAndControlled | Duration::WhileTapped | Duration::WhileCounter(_))
+}
+
+/// The common source-tapped durations' uninterrupted interval (CR 611.2b). The event history is the authority for a
+/// break before resolution; current tapped/control state alone cannot distinguish an untap followed by a retap. A
+/// complete condition may start again DURING this resolution: since it currently holds, its last affirmative
+/// transition after its last lapse is exactly the beginning of the current full interval, including a conjunction.
+/// Custom AsLongAs predicates are not reconstructed here: they still own their current-state condition only.
+fn source_interval_begins(cx: &Cx, e: &cantrip_state::ContinuousEffect) -> bool {
+    if !matches!(e.duration, Duration::WhileSourceTapped | Duration::WhileSourceTappedAndControlled) {
+        return true;
     }
-    e.duration.holds_for(s.obj(e.affected)) && lasting_holds(cx, e)
+    // An immediate mana ability has its own declaration/cost/resolution boundaries. A nested activation must
+    // never borrow the enclosing stack item's interval, or hide a lapse while paying its own costs (CR 605.3).
+    let (since, tapped_since, resolution) = if cx.mana_source.is_some() {
+        let Some(interval) = cx.g.mana_interval.as_ref().filter(|i| i.source == e.source) else { return true };
+        (interval.since, interval.tapped_since, interval.resolution)
+    } else {
+        let Some(item) = cx.resolving().filter(|i| i.object == e.source) else { return true };
+        (item.since, item.tapped_since, cx.s().agenda[cx.frame].log_mark)
+    };
+    // Core readers of the raw log must notify loop detection/layer caches just as Query::history does.
+    cantrip_api::history::note_read();
+    let controlled = e.duration == Duration::WhileSourceTappedAndControlled;
+    let mut lapsed = None;
+    let mut began = None;
+    for record in cx.g.log.iter().skip(since as usize) {
+        let transition = match record.event {
+            Event::Untapped { permanent } if permanent == e.source && record.serial >= tapped_since => Some(false),
+            Event::Tapped { permanent } if permanent == e.source && record.serial >= tapped_since => Some(true),
+            Event::ControlChanged { permanent, controller, .. } if permanent == e.source && controlled => Some(controller == e.controller),
+            Event::PhasedOut { permanent, .. } if permanent == e.source && (controlled || record.serial >= tapped_since) => Some(false),
+            Event::PhasedIn { permanent } if permanent == e.source && (controlled || record.serial >= tapped_since) => Some(true),
+            Event::ZoneChange { old, from, .. } if old == e.source && from.is(ZoneKind::Battlefield) => Some(false),
+            _ => None,
+        };
+        match transition {
+            Some(false) => lapsed = Some(record.serial),
+            Some(true) => began = Some(record.serial),
+            None => {}
+        }
+    }
+    lapsed.is_none_or(|end| began.is_some_and(|start| start > end && start >= resolution))
+}
+
+/// Whether an effect's duration begins as it would first apply (CR 611.2b). Source-tapped durations additionally ask
+/// the history: an interval ended before resolution does not revive merely because the source has been retapped.
+pub fn duration_begins(cx: &Cx, e: &cantrip_state::ContinuousEffect) -> bool {
+    !source_departed(cx.s(), e) && lasting_holds(cx, e) && source_interval_begins(cx, e)
 }
 
 /// Whether any control-changing effect could apply, or have applied: the guard of `settle_control`, free in nearly every
@@ -4891,6 +5149,29 @@ pub(crate) fn remove_from_combat(cx: &mut Cx, permanents: &[ObjectId]) {
     if cx.s().blocks.iter().any(|b| removed(b.blocker) || removed(b.attacker)) {
         let blocks = cx.s().blocks.iter().copied().filter(|b| !removed(b.blocker) && !removed(b.attacker)).collect();
         cx.st().set_blocks(blocks);
+    }
+    if cx.s().blockers.iter().any(|&id| removed(id)) {
+        let blockers = cx.s().blockers.iter().copied().filter(|&id| !removed(id)).collect();
+        cx.st().set_blockers(blockers);
+    }
+}
+
+/// An effect makes an attacking creature blocked (CR 509.1h, 509.3c). No creature becomes a blocker, so this
+/// emits the transition alone, not a per-blocker event. Dazzling Beauty and Curtain of Light print it.
+pub(crate) fn set_blocked(cx: &mut Cx, attacker: ObjectId, blocked: bool) {
+    if !cx.s().attackers.iter().any(|a| a.id == attacker && a.blocked != blocked) {
+        return;
+    }
+    let mut attackers = cx.s().attackers.clone();
+    for a in &mut attackers {
+        if a.id == attacker { a.blocked = blocked; }
+    }
+    cx.st().set_attackers(attackers);
+    if blocked {
+        cx.emit(Event::BecameBlocked { attacker });
+    } else {
+        // Not the declare-blockers event: "attacks and isn't blocked" does not trigger (CR 509.3g).
+        cx.state_changed();
     }
 }
 
@@ -4939,7 +5220,7 @@ fn attacked_as_now(cx: &Cx, id: ObjectId, was: TypeSet) -> Option<TypeSet> {
 /// event (`Cx::state_changed`). Free while nothing attacks.
 pub(crate) fn settle_combat(cx: &mut Cx) {
     let s = cx.s();
-    if s.attackers.is_empty() {
+    if s.attackers.is_empty() && s.blockers.is_empty() {
         return;
     }
     let creature = |id: ObjectId| cx.chars(id).is(CardType::Creature);
@@ -4962,11 +5243,15 @@ pub(crate) fn settle_combat(cx: &mut Cx) {
     }
     let kept = |b: &&Block| attackers.iter().any(|a| a.id == b.attacker) && creature(b.blocker);
     let blocks: Option<Vec<Block>> = (s.blocks.iter().filter(kept).count() != s.blocks.len()).then(|| s.blocks.iter().filter(kept).copied().collect());
+    let blockers: Option<Vec<ObjectId>> = s.blockers.iter().any(|&id| !creature(id)).then(|| s.blockers.iter().copied().filter(|&id| creature(id)).collect());
     if changed {
         cx.st().set_attackers(attackers);
     }
     if let Some(blocks) = blocks {
         cx.st().set_blocks(blocks);
+    }
+    if let Some(blockers) = blockers {
+        cx.st().set_blockers(blockers);
     }
 }
 
@@ -4990,7 +5275,7 @@ pub fn settle_lasting_and_control(cx: &mut Cx) -> bool {
     let mut changed = end_departed_sources(cx);
     // Each round that goes on ended an effect; there are no more rounds than effects, and one to see nothing more changes.
     for _ in 0..=cx.s().effects.len() {
-        let lasting = cx.s().effects.iter().any(|e| matches!(e.duration, Duration::AsLongAs(..)));
+        let lasting = cx.s().effects.iter().any(|e| conditional(e.duration));
         let ended = lasting && end_lapsed_conditions(cx);
         let moved = control_may_change(cx) && settle_control(cx);
         changed |= ended || moved;
@@ -5049,7 +5334,7 @@ pub fn end_departed_sources(cx: &mut Cx) -> bool {
 /// condition become true again. A control-changing effect that ends gives its permanent back with the next
 /// `settle_control`. Whether any ended.
 pub fn end_lapsed_conditions(cx: &mut Cx) -> bool {
-    if !cx.s().effects.iter().any(|e| matches!(e.duration, Duration::AsLongAs(..))) {
+    if !cx.s().effects.iter().any(|e| conditional(e.duration)) {
         return false;
     }
     let keep: Vec<bool> = cx.s().effects.iter().map(|e| lasting_holds(cx, e)).collect();
@@ -5357,7 +5642,7 @@ pub fn leave_game(cx: &mut Cx, player: PlayerId) {
     }
     let gone = |id: ObjectId| cx.s().obj(id).zone.is(ZoneKind::Gone);
     let in_combat = cx.s().attackers.iter().flat_map(|a| [a.id].into_iter().chain(a.target.object()));
-    let departed: Vec<ObjectId> = in_combat.chain(cx.s().blocks.iter().map(|b| b.blocker)).filter(|&id| gone(id)).collect();
+    let departed: Vec<ObjectId> = in_combat.chain(cx.s().blockers.iter().copied()).filter(|&id| gone(id)).collect();
     remove_from_combat(cx, &departed);
     // What they still control is exiled (CR 800.4a), a phased-out permanent included (CR 702.26n) once the effects that
     // gave them control of it have ended; one that goes back to another player phases in later (`phasing::untap_step`).
@@ -5487,7 +5772,7 @@ mod tests {
     fn entering_counters(on_battlefield: &[&'static CardDef]) -> Vec<(&'static str, i32)> {
         let (mut game, held) = game_with(on_battlefield);
         let hand = Zone::hand(PlayerId(0));
-        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
         let mut out = Vec::new();
         for &id in &held {
             let mut entering = entering(id);
@@ -5529,7 +5814,7 @@ mod tests {
         let relic = held[1];
         let row = *game.state.obj(relic);
         let battlefield = game.state.battlefield().to_vec();
-        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
         let would = as_it_would_exist(&mut cx, &entering(relic));
         assert!(would.chars.is(CardType::Creature) && would.chars.is(CardType::Artifact) && would.lost);
         assert!(*cx.s().obj(relic) == row && cx.s().battlefield() == battlefield.as_slice());
@@ -5546,7 +5831,7 @@ mod tests {
     fn a_name_an_effect_set_is_the_last_known_name_of_a_permanent_that_left() {
         let (mut game, _) = game_with(&[&ANIMATOR]);
         let animator = game.state.battlefield()[0];
-        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
         cantrip_api::Game::add_effect(&mut cx, animator, animator, EffectKind::SetName("Everflame"), Duration::Indefinite);
         assert_eq!(cx.chars(animator).name, "Everflame");
         let card = move_to(&mut cx, animator, Zone::graveyard(PlayerId(0)));
@@ -5573,7 +5858,7 @@ mod tests {
     /// it" (persist's words, CR 702.79a), `on_battlefield` there first.
     fn minus_counters(on_battlefield: &[&'static CardDef]) -> Vec<(&'static str, i32)> {
         let (mut game, held) = game_with(on_battlefield);
-        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
         let mut out = Vec::new();
         for &id in &held {
             let new = put_onto_battlefield_with(&mut cx, &[(id, PlayerId(0), false)], ZoneReason::Other, &[(CounterKind::MinusOne, 1)]).expect("nothing is asked")[0];
@@ -5606,7 +5891,7 @@ mod tests {
         // The object left its zone before the effect resolves: its old reference no longer moves anything, but the
         // owner's library is still shuffled.
         let (mut game, source) = game_with_library();
-        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
         put_into_graveyard(&mut cx, &[source]);
         let rng = cx.s().rng;
         put_into_library(&mut cx, &[source], LibraryPlace::ShuffledIn);
@@ -5626,7 +5911,7 @@ mod tests {
         });
         game.state.zone_push(Zone::BATTLEFIELD, source);
         game.state.see_statics();
-        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
         let rng = cx.s().rng;
         let moved = put_into_library(&mut cx, &[source], LibraryPlace::ShuffledIn);
         assert_eq!(cx.s().obj(moved[0]).zone, Zone::exile(PlayerId(0)));
@@ -5638,7 +5923,7 @@ mod tests {
         game.state.zone_remove(hand, source);
         game.state.update_obj(source, |o| o.zone = Zone::PHASED_OUT);
         game.state.zone_push(Zone::PHASED_OUT, source);
-        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
         let rng = cx.s().rng;
         put_into_library(&mut cx, &[source], LibraryPlace::ShuffledIn);
         assert_eq!(cx.s().obj(source).zone, Zone::PHASED_OUT);
@@ -5652,7 +5937,7 @@ mod tests {
     fn tap_only_changes_a_live_untapped_permanent_on_the_battlefield() {
         let (mut game, held) = game_with(&[&ANIMATOR]);
         let permanent = game.state.battlefield()[0];
-        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
         cantrip_api::Game::tap(&mut cx, permanent);
         assert!(cx.s().obj(permanent).tapped);
         assert_eq!(cx.g.log.iter().filter(|r| matches!(r.event, Event::Tapped { permanent: id } if id == permanent)).count(), 1);

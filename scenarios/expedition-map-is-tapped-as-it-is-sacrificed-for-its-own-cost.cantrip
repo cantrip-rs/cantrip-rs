@@ -28,6 +28,9 @@ Bot1.Hand.Island.Play
 Bot1.Battlefield.Island#1.Activate
 Bot1.Battlefield.Island#2.Activate
 Bot1.Battlefield.Expedition Map.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Tap Expedition Map)
+Bot1.Choose(Pay mana)
 ? LeftBattlefield = Expedition Map (tapped)
 Bot1.Search(Mountain)
 

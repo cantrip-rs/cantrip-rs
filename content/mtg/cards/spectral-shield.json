@@ -1,0 +1,6 @@
+{
+  "name": "Spectral Shield",
+  "manaCost": "{1}{W}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +0/+2 and can't be the target of spells."
+}

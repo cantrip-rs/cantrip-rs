@@ -1,0 +1,41 @@
+# Declining while the Slug blocks gives first strike only to the creature it blocks, not unrelated attackers, blockers, or artifacts (CR 509.1h, 611.2a).
+[Bot1 Deck]
+Spitting Slug
+Black Lotus
+Ornithopter
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Ornithopter
+Memnite x2
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Spitting Slug.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T4 Bot2.Attackers]
+Bot2.Attack(Memnite#1 > Bot1; Memnite#2 > Bot1; Ornithopter > Bot1)
+Bot1.Block(Spitting Slug > Memnite#1; Bot1.Battlefield.Ornithopter > Memnite#2)
+Bot1.Decline
+? Bot2.Battlefield.Memnite#1.Keywords = FirstStrike
+? Bot2.Battlefield.Memnite#2.Keywords = (absent)
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+? Bot1.Battlefield.Mox Pearl.Keywords = (absent)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Spitting Slug.Damage = 1
+Bot2.Battlefield.Ornithopter.Keywords = Flying

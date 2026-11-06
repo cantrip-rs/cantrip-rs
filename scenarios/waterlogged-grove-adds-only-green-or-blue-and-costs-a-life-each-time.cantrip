@@ -16,10 +16,12 @@ Bot1.Hand.Waterlogged Grove.Play
 ! Bot1.Battlefield.Waterlogged Grove.Activate(Color: Red)
 ! Bot1.Battlefield.Waterlogged Grove.Activate(Color: Colorless)
 Bot1.Battlefield.Waterlogged Grove.Activate(Ability: Add; Color: Green)
+Bot1.Choose(Tap Waterlogged Grove)
 ? Bot1.Mana = {G}
 ? Bot1.Life = 19
 [T3 Bot1.Main1]
 Bot1.Battlefield.Waterlogged Grove.Activate(Ability: Add; Color: Green)
+Bot1.Choose(Tap Waterlogged Grove)
 ? Bot1.Life = 18
 
 [Expect]

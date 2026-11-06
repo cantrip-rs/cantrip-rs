@@ -1,0 +1,8 @@
+{
+  "name": "Spitting Slug",
+  "manaCost": "{1}{G}{G}",
+  "type": "Creature — Slug",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Whenever this creature blocks or becomes blocked, you may pay {1}{G}. If you do, this creature gains first strike until end of turn. Otherwise, each creature blocking or blocked by this creature gains first strike until end of turn."
+}

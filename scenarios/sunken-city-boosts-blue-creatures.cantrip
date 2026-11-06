@@ -1,0 +1,44 @@
+# Sunken City boosts blue creatures on both sides, including multicolored ones, but not other creatures (CR 604.1).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Sunken City
+Merfolk of the Pearl Trident
+Ornithopter
+Island x20
+[Bot2 Deck]
+Mox Sapphire
+Black Lotus
+Baleful Strix
+Merfolk of the Pearl Trident
+Island
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sunken City.Cast
+? Bot1.Mana = {U}
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Baleful Strix.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Merfolk of the Pearl Trident.Cast
+[Expect]
+Bot1.Battlefield.Merfolk of the Pearl Trident.Power = 2
+Bot1.Battlefield.Merfolk of the Pearl Trident.Toughness = 2
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Baleful Strix.Power = 2
+Bot2.Battlefield.Baleful Strix.Toughness = 2
+Bot2.Battlefield.Merfolk of the Pearl Trident.Power = 2
+Bot2.Battlefield.Merfolk of the Pearl Trident.Toughness = 2

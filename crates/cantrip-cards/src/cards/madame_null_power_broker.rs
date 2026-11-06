@@ -14,7 +14,7 @@ fn pay_life_for_counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspe
     let power = targets::power_or_last_known(g, entering).max(0);
     let cost = Cost { life: power as u32, ..Cost::NONE };
     if g.may_pay(item.controller, item.object, entering, cost, &ASK)? && g.is_on_battlefield(entering) {
-        g.add_counters(entering, CounterKind::PlusOne, power);
+        g.add_counters(entering, CounterKind::PlusOne,(power) as i32);
     }
     Ok(())
 }

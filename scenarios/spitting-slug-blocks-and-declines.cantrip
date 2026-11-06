@@ -1,0 +1,37 @@
+# When the Slug blocks and its controller declines, the attacker gains first strike, deals damage before the Slug (CR 702.7b).
+[Bot1 Deck]
+Spitting Slug
+Black Lotus
+Forest
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Grizzly Bears
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Spitting Slug.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T4 Bot2.Attackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Block(Spitting Slug > Grizzly Bears)
+Bot1.Decline
+? Bot2.Battlefield.Grizzly Bears.Keywords = FirstStrike
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Spitting Slug.Damage = 2
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Spitting Slug.Keywords = (absent)
+Bot2.Graveyard = Grizzly Bears; Black Lotus

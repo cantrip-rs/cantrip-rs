@@ -40,6 +40,7 @@ Bot2.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Key to the Side-Door.Activate(Ability: Discard)
+Bot1.Choose(Tap Key to the Side-Door)
 ! Bot1.Choose(Mox Amber)
 ! Bot1.Choose(Ornithopter)
 Bot1.Choose(Glamdring, Foe-hammer)

@@ -6,10 +6,11 @@ use cantrip_oracle as oracle;
 const ASK: Question = Question::new("Damage", "have Requiem Monolith deal 1 damage to this creature?", "It draws you cards equal to the damage", "Deal 1 damage", "Don't");
 
 /// "Whenever this creature is dealt damage, you draw that many cards and lose that much life" (CR 120.2, 603.2c): "that many" is
-/// the damage dealt at once, the trigger's `data[0]`; "you" is the creature's controller.
+/// the exact matched damage dealt at once; "you" is the creature's controller.
 fn draw_that_many_and_lose_that_much(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.draw(item.controller, item.data[0]);
-    g.lose_life(item.controller, item.data[0] as i32);
+    let amount = item.matched_damage_amount();
+    g.draw(item.controller, u32::try_from(amount).unwrap_or(u32::MAX));
+    g.lose_life(item.controller, amount as i32);
     Ok(())
 }
 
@@ -34,6 +35,6 @@ pub static CARD: CardDef = CardDef {
     abilities: &[ability(TAP, grant_and_ping, "{T}: Until end of turn, target creature gains \"Whenever this creature is dealt damage, you draw that many cards and lose that much life.\" That creature's controller may have this artifact deal 1 damage to it. Activate only as a sorcery.")
         .sorcery_speed()
         .targets(&[targets::CREATURE])],
-    delayed: &[triggered(triggers::THIS_DEALT_DAMAGE, draw_that_many_and_lose_that_much, "Whenever this creature is dealt damage, you draw that many cards and lose that much life.").sums_per_subject()],
+    delayed: &[triggered(triggers::THIS_DEALT_DAMAGE, draw_that_many_and_lose_that_much, "Whenever this creature is dealt damage, you draw that many cards and lose that much life.").sums_per_subject().damage_amount()],
     ..oracle::REQUIEM_MONOLITH
 };

@@ -1,0 +1,11 @@
+{
+  "name": "Storm Spirit",
+  "manaCost": "{3}{G}{W}{U}",
+  "type": "Creature — Elemental Spirit",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\n{T}: This creature deals 2 damage to target creature.",
+  "keywords": [
+    "Flying"
+  ]
+}
