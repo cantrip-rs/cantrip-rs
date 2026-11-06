@@ -2,20 +2,22 @@
 
 use cantrip_api::*;
 
-/// Regenerate a permanent (CR 701.19a): create its shield until end of turn if it is still the same permanent.
-/// Regeneration, Golgari Grave-Troll, Welding Jar and Yavimaya Hollow use this keyword action.
+/// Regenerate a permanent (CR 701.19a): create its shield until end of turn if it is still the same permanent (CR 400.7).
+/// Regeneration, The Brute, Golgari Grave-Troll, Welding Jar and Yavimaya Hollow use this keyword action.
 pub fn permanent(g: &mut dyn Game, source: ObjectId, object: ObjectId) {
     if crate::targets::permanent(g, object) {
         g.add_effect(source, object, EffectKind::RegenerationShield, Duration::EndOfTurn);
     }
 }
 
-/// "Regenerate this creature" (CR 701.19a): the ability's source. Golgari Grave-Troll prints it.
+/// "Regenerate this creature" (CR 701.19a): the ability's source, if it remains the same permanent (CR 400.7).
+/// Golgari Grave-Troll, River Boa and Drudge Skeletons print it.
 pub fn this(g: &mut dyn Game, item: &StackItem) {
     permanent(g, item.object, item.object);
 }
 
-/// "Regenerate this creature" as a whole ability effect (CR 701.19a): Scavenging Ghoul and Golgari Grave-Troll.
+/// "Regenerate this creature" as a whole ability effect (CR 701.19a).
+/// Scavenging Ghoul, Golgari Grave-Troll, Sedge Troll and Walking Dead print it.
 pub fn this_effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     this(g, item);
     Ok(())

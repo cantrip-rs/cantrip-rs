@@ -23,12 +23,13 @@ fn enchanted_creature_deals_damage_equal_to_its_power(g: &mut dyn Game, item: &S
     Ok(())
 }
 
+
 /// "It deals that much damage to each opponent" (CR 120.3, 608.2h): the enchanted creature, as the trigger saw it, deals the
 /// amount - all damage dealt to it at once, however many sources - to every opponent still in the game together. The creature may
 /// be gone by now; it deals the damage as it last existed (CR 113.7a), so a lifelinking creature still gains life.
 fn it_deals_that_much_damage_to_each_opponent(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Target::Object(creature) = item.subject else { return Ok(()) };
-    let amount = item.data[0];
+    let amount = item.matched_damage_amount();
     let hits: Vec<(ObjectId, Target, u32)> = g.state().opponents(item.controller).map(|p| (creature, Target::Player(p), amount)).collect();
     g.damage_together(&hits);
     Ok(())
@@ -47,7 +48,7 @@ pub static CARD: CardDef = CardDef {
             it_deals_that_much_damage_to_each_opponent,
             "Whenever enchanted creature is dealt damage, it deals that much damage to each opponent.",
         )
-        .sums_per_subject(),
+        .sums_per_subject().damage_amount(),
     ],
     enchant: Some(targets::CREATURE_YOU_CONTROL),
     ..oracle::PAIN_FOR_ALL

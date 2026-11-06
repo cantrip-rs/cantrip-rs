@@ -29,6 +29,7 @@ Bot1.Pass
 Bot2.Pass
 ! Bot1.Battlefield.Memorial Vault.Activate(Sacrifice: Memorial Vault)
 Bot1.Battlefield.Memorial Vault.Activate
+Bot1.Choose(Tap Memorial Vault)
 Bot1.Choose(Mox Ruby)
 Bot1.Pass
 Bot2.Pass

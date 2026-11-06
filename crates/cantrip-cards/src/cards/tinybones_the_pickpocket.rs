@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT;
+use cantrip_mechanics::triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT;
 use cantrip_mechanics::{effects, targets};
 use cantrip_oracle as oracle;
 
@@ -25,7 +25,7 @@ fn cast_it(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 }
 
 pub static CARD: CardDef = CardDef {
-    abilities: &[triggered(DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT, cast_it, "Whenever Tinybones deals combat damage to a player, you may cast target nonland permanent card from that player's graveyard, and mana of any type can be spent to cast that spell.")
+    abilities: &[triggered(DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT, cast_it, "Whenever Tinybones deals combat damage to a player, you may cast target nonland permanent card from that player's graveyard, and mana of any type can be spent to cast that spell.")
         .targets(&[target(nonland_permanent_card_in_that_players_graveyard)])],
     ..oracle::TINYBONES_THE_PICKPOCKET
 };

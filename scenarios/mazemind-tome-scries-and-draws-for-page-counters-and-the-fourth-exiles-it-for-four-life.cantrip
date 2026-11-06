@@ -45,6 +45,7 @@ Bot1.Arrange(Island | )
 ? Stack.Count = 0
 [T7 Bot1.Main1]
 Bot1.Battlefield.Mazemind Tome.Activate(Ability: Scry 1)
+Bot1.Choose(Tap Mazemind Tome)
 ? Stack.Count = 2
 ? Bot1.Battlefield.Mazemind Tome.Counters.Page = 4
 Bot1.Pass

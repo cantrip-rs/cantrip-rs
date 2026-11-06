@@ -16,7 +16,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let value = g.mana_value(target) as i32;
     g.destroy(target);
     if value > 0 {
-        g.lose_life(item.controller, value);
+        g.lose_life(item.controller,(value) as i32);
     }
     Ok(())
 }

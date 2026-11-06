@@ -22,9 +22,9 @@ Bot1.Hand.Ornithopter.Cast
 Bot1.Attack(Ornithopter > Bot2)
 [T3 Bot1.DeclareBlockers]
 Bot1.Hand.Donatello, Gadget Master.Cast(Ability: Sneak)
-Bot1.Choose(Ornithopter)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass
 [T3 Bot1.CombatDamage]

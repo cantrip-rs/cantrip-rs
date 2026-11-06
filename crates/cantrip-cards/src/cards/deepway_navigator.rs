@@ -10,9 +10,7 @@ fn untap_other_merfolk(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
     let merfolk = g.words(item.object).subtype(Subtype::Merfolk);
     let others: Vec<ObjectId> =
         g.permanents_of(item.controller).into_iter().filter(|&id| id != item.object && g.chars(id).has_subtype(merfolk)).collect();
-    for id in others {
-        g.untap(id);
-    }
+    g.untap_together(&others);
     Ok(())
 }
 

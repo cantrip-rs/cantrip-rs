@@ -38,6 +38,7 @@ Bot2.Pass
 [T3 Bot1.Main1]
 Bot1.Attack(Masked Meower > Bot2)
 Bot1.Battlefield.Masked Meower.Activate
+Bot1.Choose(Discard 1 card)
 Bot1.Choose(Island)
 [T5 Bot1.Upkeep]
 

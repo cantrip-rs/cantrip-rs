@@ -57,13 +57,12 @@ fn split(choose: Vec<u8>) -> (Vec<String>, String) {
                 options = modes.iter().map(|m| label_text(m).to_string()).collect();
                 Answer::Modes(choose.clone())
             }
-            RequestKind::PayCosts { options, total: owed, .. } => {
+            RequestKind::ChooseCostPayment { choices, .. } => Answer::CostPayment(choices.iter().position(|c| c.kind == CostPaymentKind::Mana).unwrap_or(0)),
+            RequestKind::PayCosts { options, total: owed, remaining, mana_abilities, .. } => {
                 if total.is_empty() {
                     total = owed.to_string();
                 }
-                Answer::Act(Action::of(
-                options.iter().find(|o| o.kind == ActionKind::ConfirmCasting).or_else(|| options.iter().find(|o| o.kind == ActionKind::ActivateAbility)).expect("a way to pay"),
-                ))
+                super::pay(options, remaining, *mana_abilities, options.iter().find(|o| o.kind == ActionKind::ActivateAbility))
             }
             other => panic!("unexpected question {other:?}"),
         };

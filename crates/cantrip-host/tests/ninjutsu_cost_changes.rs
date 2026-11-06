@@ -155,6 +155,7 @@ fn the_reduction_makes_the_activation_affordable_and_is_what_is_paid() {
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Island.Activate
+Bot1.Choose(Return to hand 1 permanent)
 Bot1.Choose(Ornithopter)
 Bot1.Pass"
         ),
@@ -179,6 +180,7 @@ fn increases_apply_before_the_reduction() {
         &format!(
             "Bot1.Hand.{HACKER}.Activate(Ability: Ninjutsu)
 Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Choose(Return to hand 1 permanent)
 Bot1.Choose(Ornithopter)
 Bot1.Pass"
         ),

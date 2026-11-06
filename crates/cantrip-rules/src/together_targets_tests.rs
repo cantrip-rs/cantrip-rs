@@ -283,7 +283,7 @@ fn board(spell: &'static CardDef, mana: u32) -> (Game, ObjectId, [ObjectId; 4]) 
     let cards = [put(&mut g, &ONE, graveyard), put(&mut g, &OTHER_ONE, graveyard), put(&mut g, &TWO, graveyard), put(&mut g, &THREE, graveyard)];
     let card = put(&mut g, spell, Zone::hand(YOU));
     if mana > 0 {
-        g.state.add_mana(YOU, Mana::C, mana, ObjectId(0), None, ManaLasts::Step);
+        g.state.add_mana(YOU, Mana::C, mana, ObjectId(0), None, ManaLasts::Step, false);
     }
     (g, card, cards)
 }
@@ -434,7 +434,7 @@ fn a_target_gone_is_still_judged_with_the_others_as_it_last_was() {
     assert!(legal(&g, 0) && legal(&g, 1), "total mana value 3");
     // One leaves the graveyard: it is illegal, and Two, with One as it last was, still within 3 (Run Away Together's ruling).
     {
-        let mut cx = crate::Cx { g: &mut g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+        let mut cx = crate::Cx { g: &mut g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
         crate::ops::move_to_for(&mut cx, one, Zone::exile(YOU), ZoneReason::Other);
     }
     assert!(!legal(&g, 0) && legal(&g, 1));
@@ -485,7 +485,7 @@ fn a_target_that_loses_a_quality_of_its_own_is_illegal_alone() {
     let two = put(&mut g, &TWO, graveyard);
     let gather = put(&mut g, &GATHER, Zone::hand(YOU));
     let draw = put(&mut g, &DRAW, Zone::hand(YOU));
-    g.state.add_mana(YOU, Mana::C, 1, ObjectId(0), None, ManaLasts::Step);
+    g.state.add_mana(YOU, Mana::C, 1, ObjectId(0), None, ManaLasts::Step, false);
     let r = cast(&mut g, gather, Some(1));
     // The Star's power is 1 (the Draw in hand), Two's 1: both have power X 1 or less, and different mana values.
     answer(&mut g, &r, Answer::Targets(objects(&[star, two])));
@@ -514,7 +514,7 @@ fn whether_a_count_can_be_reached_together_is_found_at_once_among_many_cards() {
             }
         }
         let rest = put(&mut g, &REST, Zone::hand(YOU));
-        g.state.add_mana(YOU, Mana::C, x, ObjectId(0), None, ManaLasts::Step);
+        g.state.add_mana(YOU, Mana::C, x, ObjectId(0), None, ManaLasts::Step, false);
         let r = cast(&mut g, rest, Some(x));
         if reachable {
             let RequestKind::ChooseTarget { candidates, least, .. } = &r.kind else { panic!("expected the targets, got {:?}", r.kind) };
@@ -551,10 +551,18 @@ fn new_targets_for_a_spell_are_judged_together_with_the_count_it_was_cast_with()
         answer(&mut g, &r, Answer::Pass);
         r = next(&mut g);
     }
-    let RequestKind::ChooseTarget { together, .. } = &r.kind else { unreachable!() };
-    assert_eq!(together.map(|p| p.n), Some(3));
-    assert!(g.answer(r.id, r.player, Answer::Targets(objects(&[three, one]))).is_err(), "total 4, over X 3");
-    answer(&mut g, &r, Answer::Targets(objects(&[other_one, two])));
+    // Choose each occurrence, retaining it with an empty answer. An invalid completed
+    // set (3 + 1 > X 3) is rejected as a whole, then the player can choose again.
+    answer(&mut g, &r, Answer::Targets(objects(&[three])));
+    r = next(&mut g);
+    answer(&mut g, &r, Answer::Targets(objects(&[one])));
+    r = next(&mut g);
+    let RequestKind::ChooseTarget { label, .. } = &r.kind else { panic!("the invalid set must be retried") };
+    assert!(label.contains("can't be chosen together"));
+    assert_eq!(g.state.targets(&g.state.stack[0]), objects(&[one, two]), "the invalid set never changes the spell");
+    answer(&mut g, &r, Answer::Targets(objects(&[other_one])));
+    r = next(&mut g);
+    answer(&mut g, &r, Answer::Targets(vec![]));
     let r = next(&mut g);
     pass_until_resolved(&mut g, r);
     assert_eq!((zone_of(&g, other_one), zone_of(&g, two)), (ZoneKind::Battlefield, ZoneKind::Battlefield));

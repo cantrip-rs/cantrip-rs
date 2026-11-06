@@ -119,7 +119,7 @@ fn is_division(k: &RequestKind) -> bool {
 fn a_divided_trigger_says_its_text_before_it_is_on_the_stack() {
     let mut g = game();
     let source = g.state.zone(Zone::library(YOU))[0];
-    g.state.add_mana(YOU, Mana::C, 1, source, None, ManaLasts::Step);
+    g.state.add_mana(YOU, Mana::C, 1, source, None, ManaLasts::Step, false);
     let elf = put(&mut g, &TRIGGERED, Zone::hand(YOU));
     drive(&mut g, elf, is_division);
     assert!(g.state.stack.last().is_none_or(|i| i.kind != StackKind::Triggered), "asked before the trigger is on the stack (CR 603.3d)");
@@ -155,7 +155,7 @@ fn a_divided_activated_ability_says_the_words_its_item_announces() {
 fn a_divided_spell_says_the_words_its_object_has() {
     let mut g = game();
     let source = g.state.zone(Zone::library(YOU))[0];
-    g.state.add_mana(YOU, Mana::C, 1, source, None, ManaLasts::Step);
+    g.state.add_mana(YOU, Mana::C, 1, source, None, ManaLasts::Step, false);
     put(&mut g, &TRIGGERED, Zone::BATTLEFIELD);
     let bolt = put(&mut g, &SPELL, Zone::hand(YOU));
     drive(&mut g, bolt, is_division);

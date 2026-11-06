@@ -36,7 +36,7 @@ pub static CARD: CardDef = CardDef {
         PreventionDef {
             hint: "prevents all combat damage that would be dealt to this creature by Walls",
             applies: all_walls_able_block_creature_applies,
-            amount: None,
+            amount: PreventionAmount::All,
         },
     ],
     block_requirements: &[all_walls_able_block_creature_rule],

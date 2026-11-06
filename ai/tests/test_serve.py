@@ -310,3 +310,32 @@ class Running(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class LegacySnowInputTests(unittest.TestCase):
+    def test_manifest_provenance_and_per_kind_mask(self):
+        from types import SimpleNamespace
+        for hash_value in serve.LEGACY_SNOW_V2_HASHES:
+            self.assertEqual(serve.input_compatibility(dict(schema=2, encoder_hash=hash_value)), "LegacySnowInputV2")
+        with self.assertRaises(ValueError):
+            serve.input_compatibility(dict(schema=2, encoder_hash="0123456789abcdef"))
+        self.assertEqual(serve.input_compatibility(dict(schema=model.LAYOUT["schema"], encoder_hash=dataset.encoder_hash())), "Native")
+        # Dense wire inputs exercise the sparse server path too; old meanings on card/event rows stay intact.
+        kind = np.zeros((1, 32), np.uint8)
+        kind[0, :5] = [1, 2, 7, 3, 6]
+        nums = np.zeros((1, 32, serve.NUMS), np.float32)
+        nums[0, :5, 25:32] = 7
+        card = np.zeros((1, 32), np.int32)
+        cats = np.zeros((1, 32, serve.CATS), np.uint8)
+        ptrs = np.full((1, 32, serve.PTRS), 255, np.uint8)
+        legal = np.zeros((1, 32), bool)
+        decoded = serve.decode(serve.encode(kind, card, cats, ptrs, nums, legal))
+        conn = SimpleNamespace(model=SimpleNamespace(input_compatibility="LegacySnowInputV2"))
+        req = serve.request(conn, decoded)
+        chunk = req.chunks[0]
+        dense = np.zeros((len(chunk.kind), serve.NUMS), np.float32)
+        dense[chunk.ntok, chunk.nfeat] = chunk.nval
+        self.assertEqual(dense[0, 31], 0)
+        np.testing.assert_array_equal(dense[1, 25:31], 0)
+        np.testing.assert_array_equal(dense[2, 29:31], 0)
+        np.testing.assert_array_equal(dense[3:5, 25:32], 7)
