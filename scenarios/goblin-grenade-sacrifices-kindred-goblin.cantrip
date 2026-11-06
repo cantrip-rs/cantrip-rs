@@ -1,0 +1,51 @@
+# Goblin Grenade requires exactly one Goblin as an additional cost, including a noncreature kindred permanent;
+# sacrificing happens before resolution and deals exactly five to an opponent (CR 601.2h, 120.3).
+[Bot1 Deck]
+Mox Ruby
+Black Lotus
+Boggart Mischief
+Goblin Grenade
+Ornithopter
+Mountain
+Raging Goblin
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Grenade.Cast(Bot2)
+? Bot1.Hand = Goblin Grenade; Boggart Mischief; Raging Goblin
+? Bot1.Life = 20
+? Bot1.Mana = {R}
+? Bot1.Battlefield = Black Lotus; Mountain; Mox Ruby; Ornithopter
+? Bot1.Graveyard.Count = 0
+? Stack.Count = 0
+? Exile.Count = 0
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Boggart Mischief.Cast
+Bot1.Decline
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Raging Goblin.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Grenade.Cast(Bot2)
+Bot1.Choose(Pay mana)
+! Bot1.Choose()
+! Bot1.Choose(Boggart Mischief; Raging Goblin)
+! Bot1.Choose(Ornithopter)
+Bot1.Choose(Boggart Mischief)
+? Bot1.Mana =
+? Bot1.Graveyard.Boggart Mischief.Colors = Black
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Raging Goblin.Power = 1
+Bot1.Graveyard.Goblin Grenade.Colors = Red

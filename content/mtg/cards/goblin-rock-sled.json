@@ -1,0 +1,11 @@
+{
+  "name": "Goblin Rock Sled",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Trample\nThis creature doesn't untap during your untap step if it attacked during your last turn.\nThis creature can't attack unless defending player controls a Mountain.",
+  "keywords": [
+    "Trample"
+  ]
+}

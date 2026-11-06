@@ -1,0 +1,33 @@
+# A basic land that is not a Mountain can be enchanted but does not boost Goblins (CR 604.1).
+[Bot1 Deck]
+Island
+Mox Ruby
+Mox Pearl
+Goblin Assailant
+Black Lotus
+Goblin Shrine
+Island
+Island x15
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Assailant.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Shrine.Cast(Bot1.Battlefield.Island)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Goblin Assailant.Power = 2
+Bot1.Battlefield.Goblin Assailant.Toughness = 2
+Bot1.Battlefield.Goblin Shrine.AttachedTo = Island

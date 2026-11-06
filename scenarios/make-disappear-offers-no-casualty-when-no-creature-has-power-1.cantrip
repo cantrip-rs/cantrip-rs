@@ -1,6 +1,6 @@
 # Casualty 1 needs a creature with power 1 or greater (CR 702.153a): Bot1's only creature is Ornithopter (power 0), so
-# the casualty payment is refused (! Bot1.Modes(Casualty 1)) while Make Disappear is cast at Bot2's Lightning Bolt. The
-# spell is cast without it and makes no copy. The paired scenario with a power-1 creature shows the option offered.
+# an attempted casualty payment is reversed while Make Disappear is cast at Bot2's Lightning Bolt. The
+# spell is then cast without casualty and makes no copy. The paired scenario with a power-1 creature shows the option offered.
 
 [Bot1 Deck]
 Mox Sapphire
@@ -28,7 +28,14 @@ Bot2.Hand.Lightning Bolt.Cast(Bot1)
 Bot1.Battlefield.Mox Sapphire#1.Activate
 Bot1.Battlefield.Mox Sapphire#2.Activate
 Bot1.Hand.Make Disappear.Cast(Stack.Lightning Bolt)
-! Bot1.Modes(Casualty 1)
+Bot1.Modes(Casualty 1)
+? Bot1.Hand = Make Disappear; Island; Island; Island
+? Bot1.Mana = {U}{U}
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Life = 20
+? Stack.Count = 1
+Bot1.Hand.Make Disappear.Cast(Stack.Lightning Bolt)
+Bot1.Modes(Cast without)
 Bot1.Pass
 Bot2.Decline
 

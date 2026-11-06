@@ -1,0 +1,21 @@
+# The state trigger also fires if a Dwarf is already controlled when the Goblins enter (CR 603.8).
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Goblins of the Flarg
+Dwarven Trader
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Dwarven Trader.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblins of the Flarg.Cast
+? Bot1.Mana =
+[T1 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Goblins of the Flarg
+Bot1.Battlefield.Dwarven Trader.Damage = 0

@@ -1,0 +1,28 @@
+# A Mountain controlled by the attacker does not let the Sled attack a player with no Mountain; Ornithopter can attack that player (CR 508.1c).
+[Bot1 Deck]
+Goblin Rock Sled
+Mox Ruby
+Mox Pearl
+Mountain
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Rock Sled.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Goblin Rock Sled > Bot2)
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Goblin Rock Sled.Tapped = false

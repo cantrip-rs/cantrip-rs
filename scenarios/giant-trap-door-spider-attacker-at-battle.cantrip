@@ -1,0 +1,55 @@
+# The Spider cannot target a creature attacking a battle its controller protects, but can target a creature attacking the controller (CR 508.5, 115.1c).
+[Bot1 Deck]
+Giant Trap Door Spider
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Forest x20
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Ornithopter
+Memnite
+Invasion of Ixalan
+Black Lotus
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Giant Trap Door Spider.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Invasion of Ixalan.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot2.Battlefield.Invasion of Ixalan; Memnite > Bot1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Giant Trap Door Spider.Activate(Bot2.Battlefield.Grizzly Bears)
+Bot1.Battlefield.Giant Trap Door Spider.Activate(Bot2.Battlefield.Memnite)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Giant Trap Door Spider.Tapped = true
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Exile = Giant Trap Door Spider; Memnite
+Bot2.Battlefield.Ornithopter.Keywords = Flying

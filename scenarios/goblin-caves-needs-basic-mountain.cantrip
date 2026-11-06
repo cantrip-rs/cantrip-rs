@@ -1,0 +1,40 @@
+# A nonbasic Mountain and a basic Island each fail one part of the condition, so neither Aura boosts the Goblin.
+[Bot1 Deck]
+Plateau
+Black Lotus
+Black Lotus
+Mox Ruby
+Goblin Caves
+Goblin Caves
+Mons's Goblin Raiders
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Plateau.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mons's Goblin Raiders.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Caves.Cast(Bot1.Battlefield.Plateau)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mons's Goblin Raiders.Toughness = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Caves.Cast(Bot1.Battlefield.Island)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Mons's Goblin Raiders.Power = 1
+Bot1.Battlefield.Mons's Goblin Raiders.Toughness = 1

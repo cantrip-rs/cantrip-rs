@@ -1,0 +1,23 @@
+# Without a Mountain on the defending side, mountainwalk does not stop Memnite from blocking the Goblins (CR 702.14c).
+[Bot1 Deck]
+Mountain
+Goblins of the Flarg
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Goblins of the Flarg.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Goblins of the Flarg > Bot2)
+Bot2.Block(Memnite > Goblins of the Flarg)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Goblins of the Flarg
+Bot2.Graveyard = Memnite
+Bot2.Life = 20

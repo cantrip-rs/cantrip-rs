@@ -1,0 +1,44 @@
+# Targets are chosen before the Goblin is sacrificed: the chosen Goblin can be the target, so the spell fails to resolve
+# when it leaves. Another Grenade can target its own controller but not a land (CR 601.2c, 601.2h, 608.2b, 115.4).
+[Bot1 Deck]
+Mox Ruby
+Mountain
+Raging Goblin
+Mons's Goblin Raiders
+Goblin Grenade
+Goblin Grenade
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Raging Goblin.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Mons's Goblin Raiders.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Grenade.Cast(Bot1.Battlefield.Mons's Goblin Raiders)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Mons's Goblin Raiders)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Mons's Goblin Raiders.Power = 1
+? Bot1.Battlefield.Raging Goblin.Power = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Goblin Grenade.Cast(Bot1.Battlefield.Mountain)
+Bot1.Hand.Goblin Grenade.Cast(Bot1)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Raging Goblin)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 15
+Bot1.Graveyard.Raging Goblin.Power = 1
+Bot2.Life = 20

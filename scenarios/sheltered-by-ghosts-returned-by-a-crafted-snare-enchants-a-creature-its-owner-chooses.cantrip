@@ -67,6 +67,7 @@ Bot2.Pass
 Bot1.Battlefield.Island#2.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Braided Net.Activate(Ability: Craft)
+Bot1.Choose(craft materials)
 Bot1.Choose(Perilous Snare)
 Bot2.Target(Doomed Traveler)
 ? Bot2.Battlefield.Sheltered by Ghosts.AttachedTo = Doomed Traveler

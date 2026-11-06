@@ -1,0 +1,43 @@
+# The tap ability can put one Goblin permanent from its controller's hand onto the battlefield, not two or a non-Goblin (CR 602.2, 608.2).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Goblin Wizard
+Goblin Piker
+Goblin Chariot
+Ornithopter
+Mountain
+Mountain x15
+
+[Bot2 Deck]
+Goblin Piker
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Wizard.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Goblin Wizard.Activate(Ability: {T})
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Goblin Piker; Goblin Chariot)
+! Bot1.Choose(Ornithopter)
+Bot1.Choose(Goblin Piker)
+! Bot1.Battlefield.Goblin Wizard.Activate(Ability: {T})
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Goblin Wizard.Tapped = true
+Bot1.Battlefield.Goblin Piker.Power = 2
+Bot1.Battlefield.Goblin Piker.Tapped = false
+Bot1.Hand.Goblin Chariot.Power = 2
+Bot1.Hand.Ornithopter.Power = 0
+Bot2.Hand.Goblin Piker.Power = 2

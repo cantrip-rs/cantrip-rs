@@ -1,0 +1,11 @@
+{
+  "name": "Goblin Mutant",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Goblin Mutant",
+  "power": 5,
+  "toughness": 3,
+  "oracleText": "Trample\nThis creature can't attack if defending player controls an untapped creature with power 3 or greater.\nThis creature can't block creatures with power 3 or greater.",
+  "keywords": [
+    "Trample"
+  ]
+}

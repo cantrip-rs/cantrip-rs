@@ -1,0 +1,8 @@
+{
+  "name": "Giant Shark",
+  "manaCost": "{5}{U}",
+  "type": "Creature — Shark",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "This creature can't attack unless defending player controls an Island.\nWhenever this creature blocks or becomes blocked by a creature that has been dealt damage this turn, this creature gets +2/+0 and gains trample until end of turn.\nWhen you control no Islands, sacrifice this creature."
+}

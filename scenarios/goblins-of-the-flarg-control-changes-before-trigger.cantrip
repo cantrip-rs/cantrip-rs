@@ -1,0 +1,34 @@
+# If an opponent gains control in response to the Dwarf state trigger, its original controller cannot sacrifice the Goblins (CR 701.21a, 113.7a).
+[Bot1 Deck]
+Mountain
+Goblins of the Flarg
+Dwarven Trader
+Island x20
+[Bot2 Deck]
+Black Lotus
+Old Man of the Sea
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Goblins of the Flarg.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Old Man of the Sea.Cast
+? Bot2.Mana =
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Dwarven Trader.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Old Man of the Sea.Activate(Goblins of the Flarg)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Goblins of the Flarg.Power = 1
+Bot1.Battlefield.Dwarven Trader.Power = 1
+Bot1.Graveyard.Count = 0

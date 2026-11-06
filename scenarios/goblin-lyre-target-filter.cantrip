@@ -1,0 +1,33 @@
+# The Lyre refuses its controller and a creature as targets, but can target its controller's planeswalker. Narset pays two loyalty for her ability; the Lyre refuses that ability as a target, then a won flip removes one more loyalty (CR 115.1c).
+[Bot1 Deck]
+Goblin Lyre
+Black Lotus
+Black Lotus
+Narset, Parter of Veils
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Dice]
+1
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Narset, Parter of Veils.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Goblin Lyre.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Goblin Lyre.Activate(Bot1)
+! Bot1.Battlefield.Goblin Lyre.Activate(Ornithopter)
+Bot1.Battlefield.Narset, Parter of Veils.Activate
+! Bot1.Battlefield.Goblin Lyre.Activate(Stack.Narset, Parter of Veils)
+Bot1.Battlefield.Goblin Lyre.Activate(Bot1.Battlefield.Narset, Parter of Veils)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Narset, Parter of Veils.Counters.Loyalty = 2
+Bot1.Life = 20

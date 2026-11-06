@@ -24,6 +24,7 @@ Bot2.Hand.Lightning Bolt.Cast(Bot1)
 ? Stack = Lightning Bolt
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Hindering Light.Cast(Bot2)
 Bot1.Hand.Hindering Light.Cast(Lightning Bolt)
 ? Stack = Hindering Light; Lightning Bolt
 

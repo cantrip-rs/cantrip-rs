@@ -1,0 +1,41 @@
+# Both players' Mountains become Plains and produce white; paying {W}{U} keeps Glaciers, declining later ends the effect (CR 613.1d, 118.12a).
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Glaciers
+Island x20
+[Bot2 Deck]
+Badlands
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Glaciers.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Badlands.Play
+? Bot1.Battlefield.Mountain.Subtypes = Plains
+? Bot2.Battlefield.Badlands.Subtypes = Plains
+Bot2.Battlefield.Badlands.Activate
+? Bot2.Mana = {W}
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.PayCost
+? Bot1.Mana =
+? Bot1.Battlefield.Glaciers.Types = Enchantment
+[T5 Bot1.Upkeep]
+Bot1.Decline
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Graveyard = Glaciers; Black Lotus
+Bot1.Battlefield.Mountain.Subtypes = Mountain
+Bot2.Battlefield.Badlands.Subtypes = Mountain; Swamp

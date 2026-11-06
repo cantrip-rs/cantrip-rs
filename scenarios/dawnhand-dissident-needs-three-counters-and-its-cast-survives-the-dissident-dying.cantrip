@@ -45,6 +45,7 @@ Bot2.Hand.Walking Ballista.Cast(X: 1)
 [T3 Bot1.Main1]
 Bot1.Hand.Forest.Play
 Bot1.Battlefield.Dawnhand Dissident.Activate(Ability: Surveil)
+Bot1.Choose(Tap Dawnhand Dissident)
 Bot1.Choose(Walking Ballista)
 ? Bot1.Graveyard.Count = 2
 Bot1.Pass
@@ -52,13 +53,22 @@ Bot2.Pass
 Bot1.Arrange( | Llanowar Elves)
 [T5 Bot1.Main1]
 Bot1.Battlefield.Dawnhand Dissident.Activate(Bot1.Graveyard.Llanowar Elves; Ability: Exile target)
+Bot1.Choose(Tap Dawnhand Dissident)
 Bot1.Choose(Sylvan Caryatid)
 Bot1.Pass
 Bot2.Pass
 ? Exile = Llanowar Elves
-! Bot1.Exile.Llanowar Elves.Cast
+Bot1.Exile.Llanowar Elves.Cast
+Bot1.Battlefield.Forest#1.Activate
+? Bot1.Battlefield.Forest#1.Tapped = false
+? Bot1.Mana =
+? Exile = Llanowar Elves
+? Bot1.Battlefield.Sylvan Caryatid.Counters.MinusOneMinusOne = 2
+? Bot1.Life = 20
+? Stack.Count = 0
 [T7 Bot1.Main1]
 Bot1.Battlefield.Dawnhand Dissident.Activate(Ability: Surveil)
+Bot1.Choose(Tap Dawnhand Dissident)
 Bot1.Choose(Dawnhand Dissident)
 Bot1.Pass
 Bot2.Pass

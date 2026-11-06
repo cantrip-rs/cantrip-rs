@@ -1,0 +1,46 @@
+# An opponent's snow Mountain and your own non-snow Mountain do not satisfy the condition; your own snow Mountain does (CR 602.1).
+[Bot1 Deck]
+Goblin Ski Patrol
+Mox Ruby
+Mox Pearl
+Black Lotus
+Prismatic Omen
+Mountain
+Snow-Covered Forest
+Mountain x20
+[Bot2 Deck]
+Snow-Covered Forest
+Black Lotus
+Prismatic Omen
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Ski Patrol.Cast
+? Bot1.Mana =
+Bot1.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Prismatic Omen.Cast
+Bot2.Hand.Snow-Covered Forest.Play
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Goblin Ski Patrol.Activate
+Bot1.Hand.Snow-Covered Forest.Play
+! Bot1.Battlefield.Goblin Ski Patrol.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Prismatic Omen.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Goblin Ski Patrol.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Ski Patrol.Power = 3
+[Expect]
+Bot1.Battlefield.Goblin Ski Patrol.Toughness = 1

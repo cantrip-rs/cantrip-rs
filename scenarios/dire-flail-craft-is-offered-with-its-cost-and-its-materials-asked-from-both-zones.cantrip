@@ -33,6 +33,7 @@ Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Mox Ruby#1.Activate
 Bot1.Battlefield.Sol Ring.Activate
 ? Client.Bot1.Prompt.Title = Dire Flail: craft - choose an artifact you control or an artifact card from your graveyard to exile
+Bot1.Choose(craft materials)
 Bot1.Choose(Graveyard.Black Lotus)
 ? Client.Bot1.Confirm = Exile it
 [T1 Bot1.Main2]

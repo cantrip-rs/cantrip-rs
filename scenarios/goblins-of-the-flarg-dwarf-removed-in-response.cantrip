@@ -1,0 +1,28 @@
+# Once the state trigger is on the stack, removing the Dwarf does not stop it sacrificing the Goblins (CR 603.8, 113.7a).
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Goblins of the Flarg
+Dwarven Trader
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Goblins of the Flarg.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Dwarven Trader.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Dwarven Trader)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Goblins of the Flarg; Dwarven Trader; Lightning Bolt

@@ -1,0 +1,52 @@
+# Enchant land accepts a nonbasic Mountain, but it gives no boost; a basic Mountain gives Goblins +1/+0, not other creatures (CR 702.5a, 604.1).
+[Bot1 Deck]
+Taiga
+Black Lotus
+Goblin Shrine
+Goblin Assailant
+Mox Ruby
+Mox Pearl
+Grizzly Bears
+Mountain
+Goblin Shrine
+Black Lotus
+Island x15
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Taiga.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Assailant.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+! Bot1.Hand.Goblin Shrine.Cast(Bot1.Battlefield.Goblin Assailant)
+Bot1.Hand.Goblin Shrine.Cast(Bot1.Battlefield.Taiga)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Assailant.Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Taiga.Activate(Ability: {G})
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Shrine.Cast(Bot1.Battlefield.Mountain)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Assailant.Power = 3
+? Bot1.Battlefield.Goblin Assailant.Toughness = 2
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+? Bot1.Battlefield.Grizzly Bears.Toughness = 2
+[Expect]
+Bot1.Battlefield.Count = 8

@@ -1,0 +1,48 @@
+# A creature owned by the Spider's controller can be targeted if an opponent steals it and attacks that controller (CR 109.5, 115.1c).
+[Bot1 Deck]
+Giant Trap Door Spider
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Grizzly Bears
+Black Lotus
+Forest x20
+
+[Bot2 Deck]
+Black Lotus
+Act of Treason
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Giant Trap Door Spider.Cast
+? Bot1.Mana =
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Act of Treason.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Giant Trap Door Spider.Activate(Bot2.Battlefield.Grizzly Bears)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Exile = Giant Trap Door Spider; Grizzly Bears

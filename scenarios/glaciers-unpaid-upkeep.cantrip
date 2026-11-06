@@ -1,0 +1,22 @@
+# With white mana but no blue source, Glaciers cannot be kept at its controller's upkeep (CR 118.12a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Glaciers
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Glaciers.Cast
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.PayCost
+Bot1.Decline
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Graveyard = Glaciers; Black Lotus

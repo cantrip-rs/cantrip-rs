@@ -1,0 +1,40 @@
+# The defending player of a battle is its protector; without a Mountain, that player cannot be attacked by the Sled through the Siege (CR 508.5). Ornithopter can attack it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Goblin Rock Sled
+Ornithopter
+Invasion of Gobakhan
+Plains
+Island
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Rock Sled.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Invasion of Gobakhan.Cast
+Bot1.Pass
+Bot1.Pass
+! Bot1.Attack(Goblin Rock Sled > Bot1.Battlefield.Invasion of Gobakhan)
+Bot1.Attack(Ornithopter > Bot1.Battlefield.Invasion of Gobakhan)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Invasion of Gobakhan.Counters.Defense = 3

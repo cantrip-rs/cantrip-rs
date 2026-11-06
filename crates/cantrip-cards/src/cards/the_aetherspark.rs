@@ -32,15 +32,15 @@ fn equipped_creature_deals_combat_damage(q: &dyn Query, source: ObjectId, event:
         Event::Damage { source: from, amount, kind, .. }
             if kind.is_combat() && *amount > 0 && q.attached_to(source) == Some(*from) && q.state().turn.active == q.controller(source) =>
         {
-            Some(Fired { subject: Target::Object(*from), data: [*amount as u32, 0] })
+            Some(Fired { subject: Target::Object(*from), data: [0, 0] })
         }
         _ => None,
     }
 }
 
 fn put_loyalty(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if is_live(g, item.object) && g.is_on_battlefield(item.object) && item.data[0] > 0 {
-        g.add_counters(item.object, CounterKind::Loyalty, item.data[0] as i32);
+    if is_live(g, item.object) && g.is_on_battlefield(item.object) && item.matched_damage_amount() > 0 {
+        g.add_counters(item.object, CounterKind::Loyalty, item.matched_damage_amount() as i32);
     }
     Ok(())
 }
@@ -68,7 +68,7 @@ pub static CARD: CardDef = CardDef {
         ability(loyalty(-5), |g, item| effects::draw(g, item, 2), "\u{2212}5: Draw two cards."),
         ability(loyalty(-10), minus_ten, "\u{2212}10: Add ten mana of any one color."),
     ],
-    delayed: &[triggered(when(EventMask::DAMAGE, equipped_creature_deals_combat_damage), put_loyalty, "Whenever equipped creature deals combat damage during your turn, put that many loyalty counters on The Aetherspark.")
+    delayed: &[triggered(when(EventMask::DAMAGE, equipped_creature_deals_combat_damage), put_loyalty, "Whenever equipped creature deals combat damage during your turn, put that many loyalty counters on The Aetherspark.").damage_amount()
         .sums_per_subject()],
     statics: &[static_ability(Layer::Ability, while_attached_to_a_creature, grant, "As long as The Aetherspark is attached to a creature, The Aetherspark can't be attacked and has \"Whenever equipped creature deals combat damage during your turn, put that many loyalty counters on The Aetherspark.\"")],
     ..oracle::THE_AETHERSPARK

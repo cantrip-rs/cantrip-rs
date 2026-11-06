@@ -1,0 +1,6 @@
+{
+  "name": "Glacial Crevasses",
+  "manaCost": "{2}{R}",
+  "type": "Enchantment",
+  "oracleText": "Sacrifice a snow Mountain: Prevent all combat damage that would be dealt this turn."
+}

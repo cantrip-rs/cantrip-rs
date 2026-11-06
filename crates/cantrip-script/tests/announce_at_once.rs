@@ -95,9 +95,9 @@ fn x_is_announced_at_once_up_to_the_most_and_refused_past_it() {
             RequestKind::PayCosts { options, .. } => Answer::Act(Action::of(
                 options
                     .iter()
-                    .find(|o| o.kind == ActionKind::ConfirmCasting)
-                    .or_else(|| options.iter().find(|o| o.kind == ActionKind::ActivateAbility))
+                    .find(|o| o.kind == ActionKind::ActivateAbility)
                     .or_else(|| options.iter().find(|o| o.kind == ActionKind::AssignMana))
+                    .or_else(|| options.iter().find(|o| o.kind == ActionKind::ConfirmCasting))
                     .unwrap_or_else(|| panic!("the mana to pay with: {request:?}")),
             )),
             RequestKind::ChooseTarget { candidates, count, .. } => Answer::Targets(candidates[..*count as usize].to_vec()),

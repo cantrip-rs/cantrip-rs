@@ -16,22 +16,33 @@ type Card = Map<String, Value>;
 
 const TYPES: [&str; 9] = ["Artifact", "Creature", "Enchantment", "Instant", "Land", "Planeswalker", "Sorcery", "Battle", "Kindred"];
 const BASIC_LAND: [(&str, &str); 5] = [("Plains", "W"), ("Island", "U"), ("Swamp", "B"), ("Mountain", "R"), ("Forest", "G")];
-const KEYWORDS: [&str; 44] = [
+const KEYWORDS: [&str; 51] = [
     "Flying", "Haste", "Vigilance", "Trample", "FirstStrike", "DoubleStrike", "Deathtouch", "Lifelink", "Reach", "Defender",
     "Flash", "Hexproof", "Indestructible", "Menace", "Infect", "Shadow", "Shroud", "CantBeBlocked", "CantBeCountered",
     "CantSpendManaToCast", "CastFromYourGraveyard", "Daybound", "Nightbound", "Changeling", "Decayed",
     "CantBeBlockedByMoreThanOne", "Islandwalk", "Plainswalk", "Swampwalk", "Mountainwalk", "Forestwalk", "Banding",
     "CrewsAsThoughPowerTwoGreater", "SaddlesAsThoughPowerTwoGreater", "Horsemanship", "Fear", "Intimidate", "Skulk",
     "NonbasicLandwalk", "LegendaryLandwalk", "Wither", "Phasing",
-    "CantBeCopied", "ReadAhead",
+    "CantBeCopied", "ReadAhead", "SnowPlainswalk", "SnowIslandwalk", "SnowSwampwalk", "SnowMountainwalk",
+    "SnowForestwalk", "SnowLandwalk", "Desertwalk",
+];
+/// Exact standalone Oracle landwalk abilities (CR 702.14a), independent of broad external keyword tags.
+const LANDWALK_WORDS: [(&str, &str); 14] = [
+    ("plainswalk", "Plainswalk"), ("islandwalk", "Islandwalk"), ("swampwalk", "Swampwalk"),
+    ("mountainwalk", "Mountainwalk"), ("forestwalk", "Forestwalk"), ("nonbasic landwalk", "NonbasicLandwalk"),
+    ("legendary landwalk", "LegendaryLandwalk"), ("snow plainswalk", "SnowPlainswalk"),
+    ("snow islandwalk", "SnowIslandwalk"), ("snow swampwalk", "SnowSwampwalk"),
+    ("snow mountainwalk", "SnowMountainwalk"), ("snow forestwalk", "SnowForestwalk"),
+    ("snow landwalk", "SnowLandwalk"), ("desertwalk", "Desertwalk"),
 ];
 const COLORS: &str = "WUBRG";
 const COLOR_NAMES: [&str; 5] = ["White", "Blue", "Black", "Red", "Green"];
 /// The Oracle words of the core keywords a card can have and still need no file of its own.
-const KEYWORD_WORDS: [&str; 34] = [
+const KEYWORD_WORDS: [&str; 41] = [
     "flying", "haste", "vigilance", "trample", "first strike", "double strike", "deathtouch", "lifelink", "reach", "defender",
     "flash", "hexproof", "indestructible", "menace", "infect", "shadow", "shroud", "changeling", "decayed", "islandwalk", "plainswalk", "swampwalk", "mountainwalk", "forestwalk", "banding",
-    "horsemanship", "fear", "intimidate", "skulk", "nonbasic landwalk", "legendary landwalk", "wither", "phasing", "riot",
+    "horsemanship", "fear", "intimidate", "skulk", "nonbasic landwalk", "legendary landwalk", "wither", "phasing",
+    "snow plainswalk", "snow islandwalk", "snow swampwalk", "snow mountainwalk", "snow forestwalk", "snow landwalk", "desertwalk", "riot",
 ];
 
 fn main() {
@@ -264,6 +275,7 @@ fn cost(text: &str) -> Result<String, String> {
     let (mut generic, mut x) = (0u32, 0u32);
     let mut symbols = [0u32; 6];
     let mut hybrid: Vec<(char, char)> = Vec::new();
+    let mut snow = 0u32;
     let mut phyrexian = [0u32; 5];
     let mut twobrid = [0u32; 5];
     let mut rest = text;
@@ -275,6 +287,8 @@ fn cost(text: &str) -> Result<String, String> {
         let color = |c: char| COLORS.find(c);
         if !sym.is_empty() && sym.chars().all(|c| c.is_ascii_digit()) {
             generic += sym.parse::<u32>().unwrap();
+        } else if sym == "S" {
+            snow += 1;
         } else if sym == "X" {
             x += 1;
         } else if cs.len() == 1 && color(cs[0]).is_some() {
@@ -299,7 +313,7 @@ fn cost(text: &str) -> Result<String, String> {
     let mut slots: Vec<String> = hybrid.iter().map(|(a, b)| format!("Some((Mana::{a}, Mana::{b}))")).collect();
     slots.resize(6, "None".into());
     Ok(format!(
-        "ManaCost {{ generic: {generic}, symbols: {symbols:?}, hybrid: [{}], twobrid: {twobrid:?}, phyrexian: {phyrexian:?}, x: {x} }}",
+        "ManaCost {{ generic: {generic}, snow: {snow}, symbols: {symbols:?}, hybrid: [{}], twobrid: {twobrid:?}, phyrexian: {phyrexian:?}, x: {x} }}",
         slots.join(", ")
     ))
 }
@@ -396,7 +410,7 @@ fn face_fields(card: &Card, is_back: bool, source: &str, known: &HashSet<String>
     }
     let types: Vec<String> = words.iter().filter(|w| TYPES.contains(&w.as_str())).map(|t| format!("CardType::{t}")).collect();
     let has = |w: &str| words.iter().any(|x| x == w);
-    let keywords: Vec<String> = card
+    let mut keywords: Vec<String> = card
         .get("keywords")
         .and_then(Value::as_array)
         .into_iter()
@@ -405,6 +419,14 @@ fn face_fields(card: &Card, is_back: bool, source: &str, known: &HashSet<String>
         .filter(|k| KEYWORDS.contains(k))
         .map(|k| format!("Keyword::{k}"))
         .collect();
+    // Scryfall's keyword list can say only "Landwalk". Read the actual standalone printed ability, not a reference
+    // such as Merfolk Assassin's "target creature with islandwalk" or a grant such as Lord of Atlantis's.
+    for part in without_reminder(&str_of(card, "oracleText")).split(['\n', ',', ';']).map(str::trim) {
+        if let Some((_, keyword)) = LANDWALK_WORDS.iter().find(|(words, _)| part.eq_ignore_ascii_case(words)) {
+            let keyword = format!("Keyword::{keyword}");
+            if !keywords.contains(&keyword) { keywords.push(keyword); }
+        }
+    }
     let mut fields = vec![format!("    name: {},", rust_str(&name))];
     match mana {
         Some(m) => fields.push(format!("    cost: {m},")),
@@ -524,4 +546,45 @@ fn face_fields(card: &Card, is_back: bool, source: &str, known: &HashSet<String>
     }
     fields.push(format!("    text: {},", rust_str(&str_of(card, "oracleText"))));
     Ok(fields)
+}
+
+#[cfg(test)]
+mod landwalk_tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn exact_printed_landwalk_is_emitted_even_when_external_metadata_only_says_landwalk() {
+        // These expected Oracle phrases and native names do not come from the emitter's mapping table.
+        for (words, keyword) in [
+            ("plainswalk", "Plainswalk"), ("islandwalk", "Islandwalk"), ("swampwalk", "Swampwalk"),
+            ("mountainwalk", "Mountainwalk"), ("forestwalk", "Forestwalk"),
+            ("nonbasic landwalk", "NonbasicLandwalk"), ("legendary landwalk", "LegendaryLandwalk"),
+            ("snow plainswalk", "SnowPlainswalk"), ("snow islandwalk", "SnowIslandwalk"),
+            ("snow swampwalk", "SnowSwampwalk"), ("snow mountainwalk", "SnowMountainwalk"),
+            ("snow forestwalk", "SnowForestwalk"), ("snow landwalk", "SnowLandwalk"), ("desertwalk", "Desertwalk"),
+        ] {
+            let card = json!({"name": "Landwalk metadata probe", "type": "Creature", "keywords": ["Landwalk"],
+                "oracleText": format!("{words} (This reminder mentions ordinary islandwalk.)")});
+            let fields = face_fields(card.as_object().unwrap(), false, "probe", &HashSet::new()).unwrap();
+            assert!(fields.contains(&format!("    keywords: Keywords::of(&[Keyword::{keyword}]),")), "{fields:?}");
+            assert!(is_plain(card.as_object().unwrap()));
+        }
+    }
+
+    #[test]
+    fn references_and_grants_do_not_give_the_source_landwalk() {
+        for text in ["{T}: Destroy target creature with islandwalk.", "Other Merfolk creatures have islandwalk.",
+            "Creatures with snow forestwalk get +1/+1."] {
+            let card = json!({"name": "Reference probe", "type": "Creature", "oracleText": text, "keywords": ["Landwalk"]});
+            let fields = face_fields(card.as_object().unwrap(), false, "probe", &HashSet::new()).unwrap();
+            assert!(!fields.iter().any(|field| field.starts_with("    keywords:")));
+            assert!(!is_plain(card.as_object().unwrap()));
+        }
+        let card = json!({"name": "Desert Nomads", "type": "Creature", "oracleText":
+            "Desertwalk\nPrevent all damage that would be dealt to this creature by Deserts.", "keywords": ["Landwalk"]});
+        let fields = face_fields(card.as_object().unwrap(), false, "probe", &HashSet::new()).unwrap();
+        assert!(fields.contains(&"    keywords: Keywords::of(&[Keyword::Desertwalk]),".into()));
+        assert!(!is_plain(card.as_object().unwrap()), "the prevention still needs card behavior");
+    }
 }

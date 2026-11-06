@@ -19,7 +19,7 @@ const LABEL: &str = "Myriad: create a token copy tapped and attacking {player} o
 /// defending player, in turn order, before any token is made.
 fn choose_for(g: &mut dyn Game, you: PlayerId, source: ObjectId, opponent: PlayerId) -> Result<Option<Target>, Suspend> {
     let candidates = player_or_their_planeswalkers(g, opponent);
-    let ask = RequestKind::ChooseTarget {
+    let ask = RequestKind::ChooseTarget { replacing: None,
         source,
         purpose: Purpose::EnterAttacking,
         candidates,

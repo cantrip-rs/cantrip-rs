@@ -1,0 +1,44 @@
+# Goblin Kites gives a creature with toughness 2 flying until cleanup; a won flip leaves it alive.
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Goblin Kites
+Grizzly Bears
+Mox Emerald
+Mountain
+Steel Wall
+Mountain x13
+[Bot2 Deck]
+Ornithopter
+Island x19
+[Dice]
+1
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Goblin Kites.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Goblin Kites.Activate(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = Flying
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Keywords = (absent)

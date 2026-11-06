@@ -1,0 +1,53 @@
+# The protection ability can target a Goblin enchantment and prevents a white spell targeting it until cleanup (CR 205.3m, 702.16b).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Goblin Wizard
+Boggart Mischief
+Grub's Command
+Disenchant
+Mountain
+Mox Ruby
+Mountain x15
+
+[Bot2 Deck]
+Goblin Piker
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Wizard.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Goblin Wizard.Activate(Ability: {T})
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Grub's Command)
+Bot1.Choose(Boggart Mischief)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Goblin Wizard.Activate(Ability: gains protection; Bot1.Battlefield.Boggart Mischief)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Boggart Mischief)
+[T4 Bot2.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Boggart Mischief)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Goblin Wizard.Tapped = true
+Bot1.Graveyard.Boggart Mischief.Colors = Black
+Bot1.Hand.Grub's Command.Colors = Black; Red
+Bot2.Hand.Goblin Piker.Power = 2

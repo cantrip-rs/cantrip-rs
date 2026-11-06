@@ -13,9 +13,7 @@ fn creature_enters(q: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
 fn untap_all(g: &mut dyn Game, _: &StackItem) -> Result<(), Suspend> {
     let creatures: Vec<ObjectId> =
         g.state().battlefield().iter().copied().filter(|&id| g.chars(id).is(CardType::Creature)).collect();
-    for id in creatures {
-        g.untap(id);
-    }
+    g.untap_together(&creatures);
     Ok(())
 }
 

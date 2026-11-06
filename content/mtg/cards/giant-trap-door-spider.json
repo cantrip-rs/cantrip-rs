@@ -1,0 +1,8 @@
+{
+  "name": "Giant Trap Door Spider",
+  "manaCost": "{1}{R}{G}",
+  "type": "Creature — Spider",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "{1}{R}{G}, {T}: Exile this creature and target creature without flying that's attacking you."
+}

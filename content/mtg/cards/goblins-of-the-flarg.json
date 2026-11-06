@@ -1,0 +1,11 @@
+{
+  "name": "Goblins of the Flarg",
+  "manaCost": "{R}",
+  "type": "Creature — Goblin Warrior",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Mountainwalk (This creature can't be blocked as long as defending player controls a Mountain.)\nWhen you control a Dwarf, sacrifice this creature.",
+  "keywords": [
+    "Mountainwalk"
+  ]
+}

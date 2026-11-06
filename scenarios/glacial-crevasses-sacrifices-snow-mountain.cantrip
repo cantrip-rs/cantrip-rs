@@ -1,0 +1,29 @@
+# Blood Moon makes the snow land Dark Depths a Mountain, without giving it the other basic land types (CR 701.21a).
+[Bot1 Deck]
+Glacial Crevasses
+Black Lotus x2
+Blood Moon
+Dark Depths
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Glacial Crevasses.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Blood Moon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Dark Depths.Play
+Bot1.Battlefield.Glacial Crevasses.Activate(Sacrifice: Dark Depths)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard.Dark Depths.Colors =
+Bot1.Battlefield.Glacial Crevasses.Colors = Red

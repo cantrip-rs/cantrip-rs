@@ -1,0 +1,39 @@
+# A chosen green source becomes blue before dealing damage, so the shield does not apply (CR 609.7b).
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Island
+Circle of Protection: Green
+Turn to Frog
+Island x20
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Circle of Protection: Green.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T4 Bot2.BeginCombat]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Circle of Protection: Green.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Llanowar Elves)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Turn to Frog.Cast(Llanowar Elves)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Llanowar Elves > Bot1)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 19

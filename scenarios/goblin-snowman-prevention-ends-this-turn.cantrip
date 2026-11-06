@@ -1,0 +1,36 @@
+# The blocking trigger prevents combat damage in both directions on turn 4, but the next turn Snowman attacks and takes damage normally (CR 611.2a).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Goblin Snowman
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Snowman.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Block(Goblin Snowman > Grizzly Bears)
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Goblin Snowman.Damage = 0
+? Bot2.Battlefield.Grizzly Bears.Damage = 0
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Goblin Snowman > Bot2)
+Bot2.Block(Memnite > Goblin Snowman)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Goblin Snowman; Black Lotus
+Bot2.Graveyard = Memnite; Black Lotus

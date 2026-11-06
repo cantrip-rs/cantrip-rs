@@ -6,9 +6,7 @@ use cantrip_oracle as oracle;
 fn untap_nonland(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let nonland: Vec<ObjectId> =
         g.permanents_of(item.controller).into_iter().filter(|&id| !g.chars(id).is(CardType::Land)).collect();
-    for id in nonland {
-        g.untap(id);
-    }
+    g.untap_together(&nonland);
     Ok(())
 }
 

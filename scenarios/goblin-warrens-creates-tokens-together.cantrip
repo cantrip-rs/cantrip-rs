@@ -1,0 +1,59 @@
+# Creating all three tokens at once triggers Staff of the Storyteller once, not three times (CR 701.7a, 603.2).
+[Bot1 Deck]
+Black Lotus
+Goblin Warrens
+Mox Ruby
+Mountain
+Mons's Goblin Raiders
+Mons's Goblin Raiders
+Black Lotus
+Mox Pearl
+Staff of the Storyteller
+Island x20
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Warrens.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mons's Goblin Raiders.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Mons's Goblin Raiders.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Staff of the Storyteller.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Staff of the Storyteller.Counters.Story = 1
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Goblin Warrens.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Mons's Goblin Raiders; Mons's Goblin Raiders)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Staff of the Storyteller.Counters.Story = 2
+Bot1.Battlefield.Goblin Token#3.Token = true

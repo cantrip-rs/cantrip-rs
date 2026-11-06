@@ -1,0 +1,6 @@
+{
+  "name": "Goblin Caves",
+  "manaCost": "{1}{R}{R}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant land\nAs long as enchanted land is a basic Mountain, Goblin creatures get +0/+2."
+}

@@ -1,0 +1,67 @@
+# Warrens sacrifices two Goblins as a cost and creates three 1/1 red Goblin creature tokens; two of those tokens can pay it again (CR 602.2b, 701.7a).
+[Bot1 Deck]
+Black Lotus
+Goblin Warrens
+Mox Ruby
+Mountain
+Mons's Goblin Raiders
+Mons's Goblin Raiders
+Black Lotus
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Warrens.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mons's Goblin Raiders.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Mons's Goblin Raiders.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Goblin Warrens.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+! Bot1.Choose()
+! Bot1.Choose(Mountain)
+Bot1.Choose(Mons's Goblin Raiders; Mons's Goblin Raiders)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Token#1.Power = 1
+? Bot1.Battlefield.Goblin Token#1.Toughness = 1
+? Bot1.Battlefield.Goblin Token#1.Colors = Red
+? Bot1.Battlefield.Goblin Token#1.Subtypes = Goblin
+? Bot1.Battlefield.Goblin Token#1.Types = Creature
+? Bot1.Battlefield.Goblin Token#1.Token = true
+? Bot1.Battlefield.Goblin Token#3.Token = true
+? Bot1.Battlefield.Count = 6
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Goblin Warrens.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+! Bot1.Choose(Goblin Token; Goblin Token; Goblin Token)
+Bot1.Choose(Goblin Token; Goblin Token)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Count = 7
+Bot1.Battlefield.Goblin Token#4.Token = true
+Bot1.Battlefield.Goblin Token#4.Tapped = false

@@ -1,0 +1,61 @@
+# Glacial Crevasses requires a snow Mountain (Prismatic Omen gives the snow Forest that type), prevents both creatures' combat damage for one turn, and does not
+# prevent a Lightning Bolt; the next combat deals damage normally (CR 615.1, 611.2a, 701.21a).
+[Bot1 Deck]
+Glacial Crevasses
+Black Lotus
+Memnite
+Mountain
+Snow-Covered Forest
+Prismatic Omen
+Mox Emerald
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Glacial Crevasses.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Snow-Covered Forest.Play
+! Bot1.Battlefield.Glacial Crevasses.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Snow-Covered Forest.Activate
+Bot1.Hand.Prismatic Omen.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Glacial Crevasses.Activate(Sacrifice: Mountain)
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Grizzly Bears > Memnite)
+[T5 Bot1.Blockers]
+Bot1.Battlefield.Glacial Crevasses.Activate(Sacrifice: Snow-Covered Forest)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate(Ability: {R})
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T5 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Battlefield.Memnite.Damage = 0
+? Bot2.Battlefield.Grizzly Bears.Damage = 0
+? Bot1.Graveyard.Snow-Covered Forest.Colors =
+[T7 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Grizzly Bears > Memnite)
+[T7 Bot1.Main2]
+[Expect]
+Bot1.Graveyard.Memnite.Power = 1
+Bot2.Battlefield.Grizzly Bears.Damage = 1

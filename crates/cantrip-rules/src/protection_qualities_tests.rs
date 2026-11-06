@@ -89,7 +89,7 @@ fn a_dragon_equipment_can_not_equip_a_creature_with_protection_from_dragons_but_
     let host = put(&mut game, &DRAGON_WARDED, 0);
     let dragon = put(&mut game, &DRAGON_EQUIPMENT, 1);
     let plain = put(&mut game, &PLAIN_EQUIPMENT, 1);
-    let q: &dyn Query = &crate::Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let q: &dyn Query = &crate::Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     assert!(q.chars(host).protection_subtypes.has(Subtype::Dragon));
     assert!(!crate::attach::host_allows(q, dragon, host, true), "a Dragon can't equip it (CR 702.16d)");
     assert!(crate::attach::host_allows(q, plain, host, true), "a non-Dragon Equipment can");
@@ -101,7 +101,7 @@ fn an_equipment_of_mana_value_three_can_not_equip_a_creature_with_protection_fro
     let host = put(&mut game, &VALUE_WARDED, 0);
     let costly = put(&mut game, &COSTLY_EQUIPMENT, 1);
     let cheap = put(&mut game, &CHEAP_EQUIPMENT, 1);
-    let q: &dyn Query = &crate::Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let q: &dyn Query = &crate::Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     assert_eq!(q.chars(host).protection_mana_value, Some(3));
     assert!(!crate::attach::host_allows(q, costly, host, true), "mana value 3 is covered (CR 702.16d)");
     assert!(crate::attach::host_allows(q, cheap, host, true), "mana value 2 is not");
@@ -116,7 +116,7 @@ fn damage_targeting_and_blocking_read_the_same_judgment_of_a_source_by_type_and_
     let plain = put(&mut game, &PLAIN_EQUIPMENT, 1);
     let costly = put(&mut game, &COSTLY_EQUIPMENT, 1);
     let cheap = put(&mut game, &CHEAP_EQUIPMENT, 1);
-    let cx = crate::Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let cx = crate::Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     let q: &dyn Query = &cx;
     let judged = |host: ObjectId, source: ObjectId| q.chars(host).protected_from_by(&q.chars(source), || q.mana_value(source), PlayerId(1));
     assert!(judged(dragon_host, dragon) && !judged(dragon_host, plain), "a Dragon source is covered, another type is not");

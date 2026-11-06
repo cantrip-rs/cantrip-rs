@@ -5,7 +5,7 @@ using Cantrip.Protocol;
 namespace Cantrip.Client.Llm;
 
 /// <summary>
-/// Every question the server can ask a seat, turned into keyed multiple choice and back again.
+/// Every question the server can ask a seat, turned into keyed choices or a bounded numeric question and back again.
 /// <para>
 /// One rule runs through all of it: a choice is only ever built out of something the prompt itself offered — an
 /// eligible attacker, an allowed blocker pair, a candidate target, an option in the list — and the answer is the
@@ -142,6 +142,7 @@ public sealed class Decisions
             ChooseDividedTargetsPromptMessage divided => Divided(client, divided),
             RemoveCountersPromptMessage remove => RemoveCounters(client, remove),
             ChooseModesPromptMessage modes => Modes(client, modes),
+            ChooseNumberPromptMessage number => Number(client, number),
             ChooseCardsPromptMessage cards => Cards(client, cards),
             SearchLibraryPromptMessage search => Search(client, search),
             DiscardPromptMessage discard => Discard(client, discard),
@@ -283,7 +284,7 @@ public sealed class Decisions
 
     /// <summary>Whether an ability adds mana, either of stated types or of colors its answer would name (CR 106.1b).</summary>
     private static bool MakesMana(ActionOptionMessage option) =>
-        option.Produces.Count > 0 || option.ProducesOfAnyOneColor > 0 || option.ProducesOfAnyColorEach > 0;
+        option.Produces.Count > 0 || option.ProducesOfAnyOneColor > 0 || option.ProducesOfAnyColorEach > 0 || option.ColorChoices.Count > 0;
 
     /// <summary>One offered action, written so it can be chosen without reading anything else.</summary>
     private static string Action(GameClient client, ActionOptionMessage option)
@@ -506,6 +507,11 @@ public sealed class Decisions
             return AutoPlay.Announce(prompt, _targetX);
         }
 
+        if (prompt.ManaAbilities)
+        {
+            return AutoPlay.Pay(prompt, client);
+        }
+
         // Web-slinging (or Urban Retreat) returns a creature tapped as the cost is paid: with none tapped, one of its own pays first.
         if (_tappedAfterMana && AutoPlay.TappedCreatureMana(client, prompt) is { } creature)
         {
@@ -535,7 +541,7 @@ public sealed class Decisions
         if (owing)
         {
             if (AutoPlay.Produce(
-                    prompt.Options, prompt.RemainingColored, prompt.RemainingGeneric, prompt.RemainingHybrid, prompt.RemainingColorless)
+                    prompt.Options, prompt.RemainingColored, prompt.RemainingGeneric, prompt.RemainingHybrid, prompt.RemainingColorless, prompt.RemainingSnow)
                 is { } produce)
             {
                 return produce;
@@ -1250,6 +1256,21 @@ public sealed class Decisions
         Removals = [.. Enumerable.Range(0, prompt.Pools.Count).Where(p => taken[p] > 0).Select(p =>
             new CounterPoolMessage { Object = prompt.Pools[p].Object, Counter = prompt.Pools[p].Counter, Count = taken[p] })],
     };
+
+    private AnswerPayload Number(GameClient client, ChooseNumberPromptMessage prompt)
+    {
+        if (prompt.Least > prompt.Most) throw new NoChoiceException("The numeric range is empty.");
+        if (prompt.Least == prompt.Most) return new NumberChosenAnswer { Value = prompt.Least };
+        _asked++;
+        uint value = _chooser.ChooseNumber(new NumberQuestion
+        {
+            Heading = prompt.Heading.Length > 0 ? $"{prompt.Heading} ({GameText.Named(client, prompt.Source)})"
+                : $"Choose a number for {GameText.Named(client, prompt.Source)}.",
+            Least = prompt.Least, Most = prompt.Most,
+        });
+        if (value < prompt.Least || value > prompt.Most) throw new NoChoiceException("The number was outside the offered range.");
+        return new NumberChosenAnswer { Value = value };
+    }
 
     private AnswerPayload Modes(GameClient client, ChooseModesPromptMessage prompt)
     {

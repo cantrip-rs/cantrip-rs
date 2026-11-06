@@ -52,7 +52,7 @@ static RECURSION: CardDef = CardDef {
 };
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// Your main phase with priority and an empty stack.
@@ -80,7 +80,7 @@ fn put(g: &mut Game, def: &'static CardDef, zone: Zone) -> ObjectId {
 
 fn add(g: &mut Game, mana: Mana, n: u32) {
     let source = g.state.zone(Zone::library(YOU))[0];
-    g.state.add_mana(YOU, mana, n, source, None, ManaLasts::Step);
+    g.state.add_mana(YOU, mana, n, source, None, ManaLasts::Step, false);
     if let Some(at) = g.state.agenda.len().checked_sub(1)
         && g.state.agenda[at].pending.as_ref().is_some_and(|r| matches!(r.kind, RequestKind::Priority { .. }))
     {
