@@ -1,0 +1,41 @@
+# The cast trigger refers to the spell even after it is countered, so Deflecting Palm may choose it (CR 609.7a).
+[Bot1 Deck]
+Iron Star
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Mox Ruby
+Counterspell
+Deflecting Palm
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Iron Star.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+Bot1.Hand.Counterspell.Cast(Stack.Shock)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Shock
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Deflecting Palm.Cast
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Shock)
+[Expect]
+Bot1.Life = 20

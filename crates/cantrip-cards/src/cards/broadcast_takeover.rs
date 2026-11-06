@@ -21,9 +21,7 @@ fn take_over(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         }
     });
     g.end_sentence();
-    for &artifact in &artifacts {
-        g.untap(artifact);
-    }
+    g.untap_together(&artifacts);
     g.end_sentence();
     instruction(g, |g| {
         for &artifact in &artifacts {

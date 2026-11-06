@@ -7,8 +7,8 @@ use cantrip_oracle as oracle;
 /// 608.2h): X is worked out once, as the ability resolves, the Shimmercreep itself counted.
 fn drain_for_each_color(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let x = vivid::count(g, item.controller) as i32;
-    g.each_opponent_loses_life(item.controller, x);
-    g.gain_life(item.controller, x);
+    g.each_opponent_loses_life(item.controller,(x) as i32);
+    g.gain_life(item.controller,(x) as i32);
     Ok(())
 }
 

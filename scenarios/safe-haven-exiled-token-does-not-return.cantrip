@@ -1,0 +1,43 @@
+# A token exiled by Safe Haven ceases to exist and is not returned when the land is sacrificed.
+[Bot1 Deck]
+Safe Haven
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Jet
+Assembly Specialist
+Plains
+Plains x20
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Safe Haven.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Assembly Specialist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Safe Haven.Activate(Bot1.Battlefield.Borg Token; Spend: B, R)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {W}
+? Exile.Count = 0
+[T3 Bot1.Upkeep]
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Borg Token = (absent)
+Exile.Count = 0
+Bot1.Graveyard = Safe Haven; Black Lotus

@@ -35,6 +35,7 @@ Bot2.Hand.Faithless Looting.Cast
 Bot2.Choose(Lightning Bolt; Mountain)
 [T5 Bot1.Main1]
 Bot1.Battlefield.Dauthi Voidwalker.Activate
+Bot1.Choose(Tap Dauthi Voidwalker)
 Bot1.Choose(Lightning Bolt)
 Bot1.Pass
 Bot2.Pass

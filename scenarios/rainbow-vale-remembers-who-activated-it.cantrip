@@ -1,0 +1,37 @@
+# Iroh gives away Rainbow Vale before its end-step trigger; the player who used it still chooses their opponent (CR 603.7e).
+[Bot1 Deck]
+Rainbow Vale
+Iroh, Tea Master
+Black Lotus
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Rainbow Vale.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Iroh, Tea Master.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Rainbow Vale.Activate(Color: Blue)
+? Bot1.Mana = {W}{U}
+[T1 Bot1.BeginCombat]
+Bot1.Target(Bot2)
+Bot1.Target(Bot1.Battlefield.Rainbow Vale)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot2.Battlefield.Rainbow Vale.Tapped = true
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+Bot1.ChoosePlayer(Bot2)
+
+[Expect]
+Bot2.Battlefield.Rainbow Vale.Tapped = true
+Bot1.Battlefield.Rainbow Vale = (absent)

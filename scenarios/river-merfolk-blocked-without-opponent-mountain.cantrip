@@ -1,0 +1,53 @@
+# Mountainwalk does not stop a blocker when the defending player controls no Mountain (CR 702.14c).
+[Bot1 Deck]
+River Merfolk
+Island
+Island
+Island
+Mox Ruby
+Memnite
+Island
+Island x20
+[Bot2 Deck]
+Island
+Memnite
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.River Merfolk.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.River Merfolk.Activate(Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#3.Activate
+Bot1.Battlefield.River Merfolk.Activate
+? Bot1.Mana = {R}
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(River Merfolk > Bot2)
+Bot2.Block(Ornithopter > River Merfolk)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.River Merfolk.Damage = 0
+Bot2.Battlefield.Ornithopter = (absent)
+Bot2.Life = 20

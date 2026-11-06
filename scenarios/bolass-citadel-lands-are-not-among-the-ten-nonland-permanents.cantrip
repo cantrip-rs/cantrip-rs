@@ -1,6 +1,6 @@
 # Lands don't count toward "ten nonland permanents". Bot1 builds the Citadel as in the sacrifice-ten scenario but plays
 # a Swamp off the top of the library as well as three Ornithopters: that is nine nonland permanents (five Moxen, the Citadel,
-# three Ornithopters) and a land, so the ability is not offered (the refusal). A fourth Ornithopter makes ten and the same
+# three Ornithopters) and a land, so the attempted activation is reversed. A fourth Ornithopter makes ten and the same
 # ability is offered and used (the positive control); the Swamp is not sacrificed.
 
 [Bot1 Deck]
@@ -36,9 +36,19 @@ Bot1.Library.Ornithopter.Cast
 Bot1.Library.Ornithopter.Cast
 Bot1.Library.Swamp.Play
 Bot1.Pass
-! Bot1.Battlefield.Bolas's Citadel.Activate
-Bot1.Library.Ornithopter.Cast
 Bot1.Battlefield.Bolas's Citadel.Activate
+? Bot1.Battlefield = Bolas's Citadel; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter; Ornithopter; Ornithopter; Swamp
+? Bot1.Hand.Count = 0
+? Bot1.Graveyard = Black Lotus
+? Bot1.Life = 20
+? Bot1.Mana =
+? Stack.Count = 0
+? Exile.Count = 0
+Bot1.Library.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Bolas's Citadel.Activate
+Bot1.Choose(Tap Bolas's Citadel)
 [Bot1.Main2]
 
 [Expect]

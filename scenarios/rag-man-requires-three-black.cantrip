@@ -1,0 +1,35 @@
+# Two black and one white cannot pay {B}{B}{B}; with three more black the ability takes exactly three (CR 118.1).
+[Bot1 Deck]
+Black Lotus x2
+Mox Jet x2
+Mox Pearl
+Rag Man
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Rag Man.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Rag Man.Activate(Bot2; Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Rag Man.Activate(Bot2)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana = {W}{B}{B}
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Graveyard.Memnite.Power = 1

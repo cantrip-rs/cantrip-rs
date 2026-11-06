@@ -1,0 +1,25 @@
+# The mana ability's controller chooses which opponent receives Rainbow Vale when the delayed ability resolves (CR 603.7b, 608.2d).
+[Bot1 Deck]
+Rainbow Vale
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Rainbow Vale.Play
+Bot1.Battlefield.Rainbow Vale.Activate(Color: Green)
+? Bot1.Mana = {G}
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.ChoosePlayer(Bot3)
+
+[Expect]
+Bot3.Battlefield.Rainbow Vale.Tapped = true
+Bot2.Battlefield.Rainbow Vale = (absent)
+Bot1.Battlefield.Rainbow Vale = (absent)

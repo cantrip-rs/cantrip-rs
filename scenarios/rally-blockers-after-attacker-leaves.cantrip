@@ -1,0 +1,54 @@
+# Blockers remain blocking after their attacker is returned, and Rally boosts them until cleanup (CR 509.1g).
+[Bot1 Deck]
+Rally
+Unsummon
+Black Lotus
+Mox Pearl
+Gleemox
+Memnite
+Island x20
+[Bot2 Deck]
+Ornithopter x2
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Ornithopter#1 > Memnite; Ornithopter#2 > Memnite)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Unsummon.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Combat.Blockers.Count = 2
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Rally.Cast
+? Bot1.Mana = {U}{U}
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter#1.Power = 1
+? Bot2.Battlefield.Ornithopter#1.Toughness = 3
+? Bot2.Battlefield.Ornithopter#2.Power = 1
+? Bot2.Battlefield.Ornithopter#2.Toughness = 3
+? Bot2.Battlefield.Memnite.Power = 1
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Ornithopter#1.Power = 0
+Bot2.Battlefield.Ornithopter#2.Power = 0
+Bot2.Battlefield.Ornithopter#1.Toughness = 2
+Bot2.Battlefield.Ornithopter#2.Toughness = 2

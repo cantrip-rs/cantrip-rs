@@ -91,8 +91,10 @@ checksum = "fc652a48c352aef3ea3aed32080501cf3ef6ed5da78602a020c991775b0aff04"
 name = "cantrip-ai"
 version = "0.1.0"
 dependencies = [
+ "cantrip-api",
  "cantrip-bench",
  "cantrip-engine",
+ "cantrip-mechanics",
  "cantrip-obs",
  "cantrip-script",
  "foldhash",
@@ -139,8 +141,10 @@ name = "cantrip-cards"
 version = "0.1.0"
 dependencies = [
  "cantrip-api",
+ "cantrip-engine",
  "cantrip-mechanics",
  "cantrip-oracle",
+ "cantrip-state",
  "serde_json",
 ]
 
@@ -165,6 +169,7 @@ dependencies = [
  "cantrip-obs",
  "cantrip-oracle",
  "cantrip-script",
+ "cantrip-state",
  "serde",
  "serde_json",
 ]
@@ -174,6 +179,9 @@ name = "cantrip-mechanics"
 version = "0.1.0"
 dependencies = [
  "cantrip-api",
+ "cantrip-oracle",
+ "cantrip-rules",
+ "cantrip-state",
 ]
 
 [[package]]
@@ -182,6 +190,7 @@ version = "0.1.0"
 dependencies = [
  "postcard",
  "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -197,6 +206,7 @@ name = "cantrip-rules"
 version = "0.1.0"
 dependencies = [
  "cantrip-api",
+ "cantrip-cards",
  "cantrip-mechanics",
  "cantrip-state",
 ]

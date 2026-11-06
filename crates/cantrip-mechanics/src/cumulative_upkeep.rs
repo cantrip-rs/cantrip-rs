@@ -143,14 +143,17 @@ fn pay(g: &mut dyn Game, item: &StackItem, payment: Payment, age: u32) -> Result
             if (age > 0 && opposing_creatures(g, payer).is_empty()) || !may(g, &COUNTER_ON_OPPOSING)? {
                 return Ok(false);
             }
+            let mut placements = Vec::new();
             for _ in 0..age {
                 let candidates = opposing_creatures(g, payer);
                 let purpose = Purpose::PutCounters(CounterKind::PlusOne, 1);
                 if let Some(&creature) = choose::cards_from_kind(g, payer, this, purpose, "creature", candidates.clone(), candidates, 1, false)?.first() {
-                    g.add_counters(creature, CounterKind::PlusOne, 1);
+                    placements.push((creature, CounterKind::PlusOne, 1));
+                } else {
+                    return Ok(false);
                 }
             }
-            Ok(true)
+            Ok(g.pay_counter_cost(payer, &placements))
         }
         Payment::OpponentGainsLife(life) => {
             let can = |g: &dyn Game| g.state().opponents(payer).filter(|&p| g.can_gain_life(p)).collect::<Vec<_>>();

@@ -1,0 +1,42 @@
+# A blue Aura with no damage ability is still a legal source choice (CR 609.7a).
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Circle of Protection: Blue
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mondo Gecko
+Quicksilver Dagger
+Hidden Strings
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Circle of Protection: Blue.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Mondo Gecko.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Quicksilver Dagger.Cast(Mondo Gecko)
+[T4 Bot2.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Circle of Protection: Blue.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Quicksilver Dagger)
+[Expect]
+Bot1.Life = 20

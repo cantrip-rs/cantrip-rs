@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{effects, targets};
+use cantrip_mechanics::effects;
 use cantrip_oracle as oracle;
 
 /// {4}: Put a +1/+1 counter on this creature.
@@ -14,8 +14,7 @@ pub static CARD: CardDef = CardDef {
     enters: Some(cantrip_mechanics::effects::enters_with_x_counters::<{ CounterKind::PlusOne as usize }>),
     abilities: &[
         ability(cost("{4}"), grow, "{4}: Put a +1/+1 counter on this creature."),
-        ability(remove_counters(CounterKind::PlusOne, 1), effects::damage_first_target::<1>, "Remove a +1/+1 counter from this creature: It deals 1 damage to any target.")
-            .targets(&[targets::ANY]),
+        effects::REMOVE_PLUS_ONE_TO_DEAL_ONE,
     ],
     ..oracle::WALKING_BALLISTA
 };

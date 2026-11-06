@@ -1,0 +1,6 @@
+{
+  "name": "Ring of Renewal",
+  "manaCost": "{5}",
+  "type": "Artifact",
+  "oracleText": "{5}, {T}: Discard a card at random, then draw two cards."
+}

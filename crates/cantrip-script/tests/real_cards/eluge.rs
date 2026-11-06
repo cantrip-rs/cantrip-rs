@@ -172,11 +172,11 @@ fn play(hands: [&[&str]; 2], steps: Vec<Step>, until: u32, mut watch: impl FnMut
                     None => Answer::Pass,
                 }
             }
-            RequestKind::PayCosts { options, .. } => {
+            RequestKind::ChooseCostPayment { choices, .. } => Answer::CostPayment(choices.iter().position(|c| c.kind == CostPaymentKind::Mana).unwrap_or(0)),
+            RequestKind::PayCosts { options, remaining, mana_abilities, .. } => {
                 let mox = options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source.is_some_and(|s| game.name(s).starts_with("Mox")));
                 let land = options.iter().find(|o| o.kind == ActionKind::ActivateAbility);
-                let confirm = options.iter().find(|o| o.kind == ActionKind::ConfirmCasting);
-                Answer::Act(Action::of(confirm.or(mox).or(land).expect("mana to pay with, or the payment to confirm")))
+                super::pay(options, remaining, *mana_abilities, mox.or(land))
             }
             RequestKind::ChooseTarget { candidates, .. } => Answer::Targets(vec![candidates[0]]),
             RequestKind::OrderTriggers { sources, .. } => Answer::Order((0..count_u32(sources.len())).collect()),
@@ -314,9 +314,9 @@ fn eluges_reduction_past_255_flooded_lands_takes_generic_mana_and_hybrid_symbols
                 .find(|o| o.kind == ActionKind::CastSpell && o.source.is_some_and(|c| game.name(c) == "Probe Flood All"))
                 .map_or(Answer::Pass, |o| Answer::Act(Action::of(o))),
             RequestKind::Priority { .. } => Answer::Pass,
-            RequestKind::PayCosts { options, .. } => Answer::Act(Action::of(
-                options.iter().find(|o| o.kind == ActionKind::ConfirmCasting).or(options.first()).expect("a way to pay"),
-            )),
+            RequestKind::ChooseCostPayment { choices, .. } => Answer::CostPayment(choices.iter().position(|c| c.kind == CostPaymentKind::Mana).unwrap_or(0)),
+            RequestKind::PayCosts { options, remaining, mana_abilities, .. } => super::pay(options, remaining, *mana_abilities,
+                options.iter().find(|o| o.kind == ActionKind::ActivateAbility)),
             RequestKind::DiscardToHandSize { count, hand } => Answer::Cards(hand.iter().rev().copied().take(*count as usize).collect()),
             RequestKind::DeclareAttackers { .. } => Answer::Attack(Vec::new()),
             RequestKind::DeclareBlockers { .. } => Answer::Block(Vec::new()),
@@ -365,18 +365,14 @@ fn announced(card: &str, choose: Vec<u8>) -> (Vec<String>, Vec<String>) {
                 Answer::Modes(choose.clone())
             }
             // The Mox of the color still owed.
-            RequestKind::PayCosts { options, remaining, .. } => {
+            RequestKind::ChooseCostPayment { choices, .. } => Answer::CostPayment(choices.iter().position(|c| c.kind == CostPaymentKind::Mana).unwrap_or(0)),
+            RequestKind::PayCosts { options, remaining, mana_abilities, .. } => {
                 let mox = [(Mana::U, "Mox Sapphire"), (Mana::B, "Mox Jet"), (Mana::R, "Mox Ruby")]
                     .into_iter()
                     .find(|&(m, _)| remaining.symbols[m as usize] > 0)
                     .map(|(_, name)| name);
-                Answer::Act(Action::of(
-                    options
-                        .iter()
-                        .find(|o| o.kind == ActionKind::ConfirmCasting)
-                        .or_else(|| options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source.is_some_and(|s| Some(game.name(s)) == mox)))
-                        .expect("a way to pay"),
-                ))
+                let chosen = options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source.is_some_and(|s| Some(game.name(s)) == mox));
+                super::pay(options, remaining, *mana_abilities, chosen)
             }
             RequestKind::DiscardToHandSize { count, hand } => Answer::Cards(hand.iter().rev().copied().take(*count as usize).collect()),
             RequestKind::DeclareAttackers { .. } => Answer::Attack(Vec::new()),

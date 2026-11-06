@@ -42,6 +42,7 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Sylvan Caryatid.Cast
 Bot1.Pass
 Bot1.Battlefield.Dawnhand Dissident.Activate(Bot1.Graveyard.Llanowar Elves; Ability: Exile target)
+Bot1.Choose(Tap Dawnhand Dissident)
 ? Client.Bot1.Prompt.Title = Dawnhand Dissident: choose a creature you control to blight (it gets -1/-1 counters)
 Bot1.Choose(Sylvan Caryatid)
 Bot1.Pass

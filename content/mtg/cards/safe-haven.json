@@ -1,0 +1,5 @@
+{
+  "name": "Safe Haven",
+  "type": "Land",
+  "oracleText": "{2}, {T}: Exile target creature you control.\nAt the beginning of your upkeep, you may sacrifice this land. If you do, return each card exiled with this land to the battlefield under its owner's control."
+}

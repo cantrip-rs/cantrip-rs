@@ -43,7 +43,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     }
     let life = g.state().player(who).life;
     if life > 0 {
-        g.lose_life(who, (life + 1) / 2);
+        g.lose_life(who,((life + 1) / 2) as i32);
     }
     Ok(())
 }

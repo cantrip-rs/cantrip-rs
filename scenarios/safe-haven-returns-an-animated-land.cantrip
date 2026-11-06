@@ -1,0 +1,43 @@
+# A land exiled while it is a creature returns even though it is no longer a creature in exile.
+[Bot1 Deck]
+Safe Haven
+Mishra's Factory
+Mox Pearl
+Mox Ruby
+Mox Jet
+Plains x2
+Plains x20
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Safe Haven.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Hand.Mishra's Factory.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mishra's Factory.Activate(Ability: becomes)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Safe Haven.Activate(Bot1.Battlefield.Mishra's Factory)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Exile = Mishra's Factory
+[T5 Bot1.Upkeep]
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Mishra's Factory.Types = Land
+Exile.Count = 0

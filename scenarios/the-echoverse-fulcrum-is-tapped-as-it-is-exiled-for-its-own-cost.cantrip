@@ -48,6 +48,12 @@ Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.The Echoverse Fulcrum.Activate
 ? Stack.Count = 1
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Tap The Echoverse Fulcrum)
 ? LeftBattlefield = The Echoverse Fulcrum (tapped)
 Bot1.Pass
 [T3 Bot1.Main2]

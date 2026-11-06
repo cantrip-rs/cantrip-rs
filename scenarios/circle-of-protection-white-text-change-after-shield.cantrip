@@ -1,0 +1,43 @@
+# The shield keeps the color word of the resolved ability even if the Circle's text changes afterward (CR 113.7a, 609.7b).
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Circle of Protection: White
+Sleight of Mind
+Island x20
+[Bot2 Deck]
+Mox Pearl
+Eager Cadet
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Circle of Protection: White.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Eager Cadet.Cast
+[T4 Bot2.BeginCombat]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Circle of Protection: White.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Eager Cadet)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleight of Mind.Cast(Circle of Protection: White)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(White)
+Bot1.Colors(Red)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Eager Cadet > Bot1)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 20
+Prevented = 1 Eager Cadet > Bot1 by Circle of Protection: White

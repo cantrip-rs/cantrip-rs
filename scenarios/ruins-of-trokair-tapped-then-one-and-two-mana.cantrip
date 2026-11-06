@@ -1,0 +1,31 @@
+# Ruins enters tapped, later taps for one white, and on a later turn taps and sacrifices for two white (CR 614.1d, 605.3b).
+[Bot1 Deck]
+Ruins of Trokair
+White Knight
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ruins of Trokair.Play
+? Bot1.Battlefield.Ruins of Trokair.Tapped = true
+! Bot1.Battlefield.Ruins of Trokair.Activate(Ability: Add {W}.)
+! Bot1.Battlefield.Ruins of Trokair.Activate(Ability: Sacrifice)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Ruins of Trokair.Activate(Ability: Add {W}.)
+? Bot1.Mana = {W}
+? Bot1.Battlefield.Ruins of Trokair.Tapped = true
+! Bot1.Battlefield.Ruins of Trokair.Activate(Ability: Sacrifice)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Ruins of Trokair.Activate(Ability: Sacrifice)
+? Bot1.Mana = {W}{W}
+? Bot1.Battlefield.Ruins of Trokair = (absent)
+Bot1.Hand.White Knight.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.White Knight.Power = 2
+Bot1.Graveyard = Ruins of Trokair

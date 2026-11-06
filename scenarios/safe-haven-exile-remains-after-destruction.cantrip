@@ -1,0 +1,37 @@
+# A creature exiled with Safe Haven remains exiled when the land is destroyed without its upkeep ability.
+[Bot1 Deck]
+Safe Haven
+Mox Pearl
+Mox Ruby
+Ornithopter
+Plains x3
+Plains x20
+[Bot2 Deck]
+Strip Mine
+Plains x20
+[Actions]
+Bot1.Hand.Safe Haven.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Safe Haven.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+[T2 Bot2.Main1]
+Bot2.Hand.Strip Mine.Play
+Bot2.Battlefield.Strip Mine.Activate(Ability: Destroy; Bot1.Battlefield.Safe Haven)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Exile = Ornithopter
+Bot1.Battlefield.Ornithopter = (absent)
+Bot1.Graveyard = Safe Haven

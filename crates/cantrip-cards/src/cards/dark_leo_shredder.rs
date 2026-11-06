@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::tokens::{self, NINJA};
-use cantrip_mechanics::triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT;
+use cantrip_mechanics::triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT;
 use cantrip_mechanics::{effects, lands, sneak, statics};
 use cantrip_oracle as oracle;
 
@@ -34,7 +34,7 @@ fn make_a_ninja_then_drain_half(g: &mut dyn Game, item: &StackItem) -> Result<()
 pub static CARD: CardDef = CardDef {
     statics: &[static_ability(Layer::Ability, attacking_ninjas_you_control, statics::have_deathtouch, "Attacking Ninjas you control have deathtouch.")],
     abilities: &[triggered(
-        DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT,
+        DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT,
         make_a_ninja_then_drain_half,
         "Whenever Dark Leo & Shredder deal combat damage to a player, create a 1/1 black Ninja creature token. Then if you control five or more Ninjas, that player loses half their life, rounded up.",
     )],

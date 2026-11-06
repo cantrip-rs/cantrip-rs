@@ -18,6 +18,7 @@ Island x15
 Bot1.Hand.Swamp.Play
 Bot1.Hand.Mox Jet.Cast
 Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
 Bot1.Battlefield.Swamp.Activate
 Bot1.Hand.Village Rites.Cast
 Bot1.Choose(Ornithopter)

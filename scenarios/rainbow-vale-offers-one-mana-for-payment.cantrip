@@ -1,0 +1,22 @@
+# Rainbow Vale alone can pay for a one-mana green spell but cannot pay a two-mana green spell (CR 601.2h, 106.3).
+[Bot1 Deck]
+Rainbow Vale
+Llanowar Elves
+Grizzly Bears
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Rainbow Vale.Play
+! Bot1.Hand.Grizzly Bears.Cast(Mana: short)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Rainbow Vale.Activate(Color: Green)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Hand.Grizzly Bears.Power = 2

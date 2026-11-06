@@ -1,0 +1,81 @@
+# Safe Haven exiles creatures owned by both players while its controller controls them, then returns each to its owner simultaneously, so Rampaging Ferocidon sees the other enter.
+[Bot1 Deck]
+Safe Haven
+Mox Sapphire
+Mox Pearl
+Black Lotus
+Control Magic
+Ornithopter
+Mox Ruby
+Plains x20
+[Bot2 Deck]
+Rampaging Ferocidon
+Mox Ruby
+Black Lotus
+Plains x20
+[Actions]
+Bot1.Hand.Safe Haven.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Rampaging Ferocidon.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Safe Haven.Activate(Bot2.Battlefield.Rampaging Ferocidon)
+! Bot1.Battlefield.Safe Haven.Activate(Bot1.Battlefield.Mox Pearl)
+[T3 Bot1.Upkeep]
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Control Magic.Cast(Bot2.Battlefield.Rampaging Ferocidon)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Safe Haven.Activate(Bot1.Battlefield.Rampaging Ferocidon)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Exile = Rampaging Ferocidon
+[T5 Bot1.Upkeep]
+Bot1.Decline
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Safe Haven.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 2
+[T7 Bot1.Upkeep]
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Rampaging Ferocidon.Power = 3
+Bot1.Life = 19
+Bot1.Graveyard = Safe Haven; Control Magic; Black Lotus
+Exile.Count = 0

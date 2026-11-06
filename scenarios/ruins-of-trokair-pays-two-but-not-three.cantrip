@@ -1,0 +1,24 @@
+# Ruins can fund a two-white spell by sacrificing itself, but cannot fund a three-white spell (CR 601.2h).
+[Bot1 Deck]
+Ruins of Trokair
+White Knight
+Keepers of the Faith
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ruins of Trokair.Play
+[T3 Bot1.Main1]
+! Bot1.Hand.Keepers of the Faith.Cast(Mana: short)
+Bot1.Hand.White Knight.Cast
+Bot1.Battlefield.Ruins of Trokair.Activate(Ability: Sacrifice)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.White Knight.Power = 2
+Bot1.Hand.Keepers of the Faith.Power = 2
+Bot1.Graveyard = Ruins of Trokair

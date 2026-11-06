@@ -1,0 +1,19 @@
+# An untapped River Delta alone can pay for Duress but cannot pay two black mana for Hymn to Tourach (CR 601.2h, 605.3a).
+[Bot1 Deck]
+River Delta
+Duress
+Hymn to Tourach
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.River Delta.Play
+! Bot1.Hand.Hymn to Tourach.Cast(Bot2; Mana: short)
+Bot1.Hand.Duress.Cast(Bot2)
+Bot1.Battlefield.River Delta.Activate(Color: Black)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard.Duress.Colors = Black
+Bot1.Battlefield.River Delta.Counters.Depletion = 1

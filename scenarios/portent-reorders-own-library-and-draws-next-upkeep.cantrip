@@ -1,0 +1,33 @@
+# Portent reorders exactly the top three cards, declines the shuffle, and draws in the next turn's upkeep.
+[Bot1 Deck]
+Portent
+Mox Sapphire
+Island x5
+Plains
+Swamp
+Mountain
+Forest
+Island x10
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Portent.Cast(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Looked = Plains; Swamp; Mountain
+Bot1.Arrange(Mountain; Plains; Swamp)
+? Bot1.Library = Mountain; Plains; Swamp; Forest; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island
+? Bot1.Hand.Count = 5
+Bot1.Decline
+[T2 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand = Island; Island; Island; Island; Island; Mountain
+[T3 Bot1.Upkeep]
+[Expect]
+Bot1.Hand = Island; Island; Island; Island; Island; Mountain
+Bot1.Shuffles = 0

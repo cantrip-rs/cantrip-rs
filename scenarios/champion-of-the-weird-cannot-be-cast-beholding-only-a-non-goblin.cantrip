@@ -1,5 +1,5 @@
 # Champion of the Weird (CR 601.2b, 701.4a): the additional cost beholds a Goblin, and Hill Giant in the hand is not one, nor is a
-# Mox on the battlefield, so with the {3}{B} paid for in full the Champion cannot be cast.
+# Mox on the battlefield, so the announced cast cannot pay its behold cost; the full attempt reverses under CR 733.1.
 
 [Bot1 Deck]
 Black Lotus
@@ -16,7 +16,14 @@ Bot1.Hand.Mox Jet.Cast
 Bot1.Hand.Black Lotus.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: B)
 Bot1.Battlefield.Mox Jet.Activate
-! Bot1.Hand.Champion of the Weird.Cast
+Bot1.Hand.Champion of the Weird.Cast
+? Bot1.Hand = Champion of the Weird; Hill Giant; Island; Island; Island
+? Bot1.Mana = {B}{B}{B}{B}
+? Bot1.Life = 20
+? Bot1.Battlefield = Mox Jet
+? Bot1.Battlefield.Mox Jet.Tapped = true
+? Bot1.Graveyard = Black Lotus
+? Stack.Count = 0
 
 [Expect]
 Exile.Count = 0

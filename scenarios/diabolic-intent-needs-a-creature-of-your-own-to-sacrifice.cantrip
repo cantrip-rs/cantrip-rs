@@ -1,5 +1,5 @@
 # Diabolic Intent: "As an additional cost to cast this spell, sacrifice a creature" - one Bot1 controls. With no creature of
-# its own (Bot2's Ornithopter cannot be sacrificed by Bot1) the spell is not offered (! Cast), though its mana is there;
+# its own (Bot2's Ornithopter cannot be sacrificed by Bot1) an attempted cast cannot pay and reverses its mana abilities;
 # once Bot1 casts its own Ornithopter the same Diabolic Intent is castable (the positive control), and finds nothing when
 # Bot1 answers the search with no card (CR 701.23b): the Ornithopter is gone all the same.
 
@@ -23,7 +23,18 @@ Bot1.Hand.Mox Jet.Cast
 [T2 Bot2.Main1]
 Bot2.Hand.Ornithopter.Cast
 [T3 Bot1.Main1]
-! Bot1.Hand.Diabolic Intent.Cast
+Bot1.Hand.Diabolic Intent.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Hand = Diabolic Intent; Ornithopter; Swamp; Swamp; Swamp; Swamp
+? Bot1.Mana =
+? Bot1.Life = 20
+? Bot1.Battlefield = Swamp; Mox Jet
+? Bot1.Battlefield.Swamp.Tapped = false
+? Bot1.Battlefield.Mox Jet.Tapped = false
+? Bot1.Graveyard.Count = 0
+? Bot2.Battlefield = Ornithopter
+? Stack.Count = 0
 Bot1.Hand.Ornithopter.Cast
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Mox Jet.Activate

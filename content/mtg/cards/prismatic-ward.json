@@ -1,0 +1,6 @@
+{
+  "name": "Prismatic Ward",
+  "manaCost": "{1}{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nAs this Aura enters, choose a color.\nPrevent all damage that would be dealt to enchanted creature by sources of the chosen color."
+}

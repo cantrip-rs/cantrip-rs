@@ -27,10 +27,10 @@ fn damage_for_counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
 /// Reach and trample are core keywords.
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
-        triggers::THIS_DEALT_DAMAGE,
+        triggers::THIS_TAKES_DAMAGE,
         counter_then_reflex,
         "Enrage \u{2014} Whenever Red Hulk is dealt damage, put a +1/+1 counter on him. When you do, he deals damage equal to the number of +1/+1 counters on him to any other target.",
-    )
+    ).damage_amount()
     .sums_per_subject()],
     delayed: &[delayed_trigger(
         damage_for_counters,

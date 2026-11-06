@@ -38,7 +38,7 @@ pub static CARD: CardDef = CardDef {
         PreventionDef {
             hint: "prevents all damage that would be dealt to this creature by artifact creatures",
             applies: creature_cant_be_blocked_by_applies,
-            amount: None,
+            amount: PreventionAmount::All,
         },
     ],
     block_rules: &[creature_cant_be_blocked_by_rule],

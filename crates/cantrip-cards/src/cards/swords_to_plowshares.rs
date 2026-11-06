@@ -10,7 +10,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let controller = g.controller(creature);
     g.exile(creature);
     if power > 0 {
-        g.gain_life(controller, power as i32);
+        g.gain_life(controller,(power as i32) as i32);
     }
     Ok(())
 }

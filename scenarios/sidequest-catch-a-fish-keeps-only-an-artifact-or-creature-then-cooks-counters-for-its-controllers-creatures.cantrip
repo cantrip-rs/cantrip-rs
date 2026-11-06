@@ -68,6 +68,7 @@ Bot1.Battlefield.Cooking Campsite.Activate(Ability: Sacrifice an artifact)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Choose(Tap Cooking Campsite)
 Bot1.Choose(Food Token)
 ? Bot1.Mana = 
 Bot1.Pass

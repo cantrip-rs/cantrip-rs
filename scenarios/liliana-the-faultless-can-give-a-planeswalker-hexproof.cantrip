@@ -31,6 +31,7 @@ Bot1.Hand.Teferi, Time Raveler.Cast
 Bot1.Pass
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Liliana the Faultless.Activate(Bot1.Battlefield.Teferi, Time Raveler)
+Bot1.Choose(Tap Liliana the Faultless)
 Bot1.Choose(Plains)
 Bot1.Pass
 Bot2.Pass

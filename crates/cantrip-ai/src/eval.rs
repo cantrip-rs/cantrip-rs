@@ -4,7 +4,9 @@
 //! `ai/cantrip_ai/export.py` writes it: one ONNX graph per token bucket, `manifest.json` and the card index the model
 //! was trained with (`cards.json`).
 //!
-//! Loading checks the manifest against this build: a model of another encoding schema or encoder hash is refused. A
+//! Loading checks the manifest against this build: native graphs use the current schema/hash; exact documented
+//! schema-2 graphs use LegacySnowInputV2, and the exact previous schema-3 layout uses LegacyCostInputV3, without
+//! retagging their provenance. Other encodings are refused. A
 //! model trained with another card index is accepted: the runtime's rows are mapped to the model's by name, and a
 //! card the model never saw is the unknown card (row 0).
 
@@ -179,6 +181,83 @@ pub struct Manifest {
     pub data: serde_json::Value,
 }
 
+/// Versioned input contract of a graph. Legacy graphs retain their manifest and weights;
+/// only categories and cells assigned after their schema are hidden from their inputs.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum InputCompatibility {
+    Native,
+    LegacySnowInputV2,
+    LegacyCostInputV3,
+}
+
+impl InputCompatibility {
+    pub fn category(self, slot: usize, value: u8) -> u8 {
+        use cantrip_obs::encode::cat;
+        if matches!(self, Self::LegacySnowInputV2 | Self::LegacyCostInputV3) && ((slot == cat::ASK && value == 27) || (slot == cat::TOK && value == 29)) { 0 } else { value }
+    }
+    /// Newly assigned numeric cells for the model's token kinds.
+    pub fn masks(self, kind: u8, feature: usize) -> bool {
+        use cantrip_obs::encode::{game, kind as k, option, player};
+        let snow = self == Self::LegacySnowInputV2 && match kind {
+            k::PLAYER => (player::SNOW_POOL..player::SNOW_POOL + 6).contains(&feature),
+            k::GAME => feature == game::SNOW_COST,
+            k::OPTION => feature == option::SNOW || feature == option::PAY_SNOW,
+            _ => false,
+        };
+        let old_cost = matches!(self, Self::LegacySnowInputV2 | Self::LegacyCostInputV3) && ((kind == k::OPTION
+            && ((option::COST_OPERATION_KINDS..option::COST_OPERATION_KINDS + 15).contains(&feature)
+                || feature == option::BLOCK_CAPACITY))
+            || (kind == k::GAME && feature == game::MANA_ABILITIES));
+        snow || old_cost
+    }
+
+    pub fn adapt(self, batch: &mut FeatureBatch) {
+        if self == Self::Native { return; }
+        for (token, &kind) in batch.kind.iter().enumerate() {
+            use cantrip_obs::encode::cat;
+            // Cost-choice provenance is separate from the digit token's identity. These slots were unused
+            // by older layouts and must remain absent for their graphs.
+            if kind == i64::from(cantrip_obs::encode::kind::OPTION) {
+                for slot in 2..PTRS {
+                    if let Some(pointer) = batch.ptrs.get_mut(token * PTRS + slot) {
+                        *pointer = i64::from(NO_POINTER);
+                    }
+                }
+            }
+            // Older embeddings have no rows for the new ask or its index digits. Unknown (zero) keeps every old
+            // category untouched and avoids asking a legacy graph for an out-of-range embedding.
+            let ask = token * CATS + cat::ASK;
+            let tok = token * CATS + cat::TOK;
+            if let Some(value) = batch.cats.get_mut(ask) { *value = i64::from(self.category(cat::ASK, *value as u8)); }
+            if let Some(value) = batch.cats.get_mut(tok) { *value = i64::from(self.category(cat::TOK, *value as u8)); }
+            for feature in 0..NUMS {
+                if self.masks(kind as u8, feature) {
+                    batch.nums[token * NUMS + feature] = 0.0;
+                }
+            }
+        }
+    }
+}
+
+/// Exact schema-2 layout hashes whose dimensions, categorical vocabularies, and established
+/// feature meanings are unchanged. Raw schema 3 and raw schema 4 respectively.
+pub const LEGACY_SNOW_V2_HASHES: [&str; 2] = ["ac26dc68cba342fb", "6c8e810d37df2b8e"];
+
+pub fn input_compatibility(manifest: &Manifest) -> Result<InputCompatibility, EvalError> {
+    let ours = format!("{:016x}", encoder_hash());
+    if manifest.schema == SCHEMA_VERSION && manifest.encoder_hash == ours {
+        return Ok(InputCompatibility::Native);
+    }
+    if manifest.schema == 2 && LEGACY_SNOW_V2_HASHES.contains(&manifest.encoder_hash.as_str()) {
+        return Ok(InputCompatibility::LegacySnowInputV2);
+    }
+    if manifest.schema == 3 && manifest.encoder_hash == "018b410d06b12950" {
+        return Ok(InputCompatibility::LegacyCostInputV3);
+    }
+    Err(err(format!("unsupported encoding schema {} / encoder hash {}; this build {SCHEMA_VERSION} / {ours}",
+        manifest.schema, manifest.encoder_hash)))
+}
+
 /// A model directory, checked against this build: its manifest, its graphs' paths by token count, and the map from
 /// the runtime's card rows to the model's (empty when they are the same index).
 #[derive(Clone, Debug)]
@@ -190,6 +269,10 @@ pub struct Model {
 }
 
 impl Model {
+    pub fn input_compatibility(&self) -> InputCompatibility {
+        input_compatibility(&self.manifest).expect("validated model manifest")
+    }
+
     /// The model in `dir`, its card rows mapped from `table`'s.
     pub fn load(dir: &Path, table: &CardIndex) -> Result<Model, EvalError> {
         let text = std::fs::read_to_string(dir.join("manifest.json"))
@@ -256,22 +339,9 @@ pub fn check(
         .collect())
 }
 
-/// The manifest's encoding against this build's: another schema or encoder hash is refused.
+/// Validate the native encoding or an explicitly supported legacy input adapter; unknown encodings are refused.
 pub fn check_encoding(manifest: &Manifest) -> Result<(), EvalError> {
-    if manifest.schema != SCHEMA_VERSION {
-        return Err(err(format!(
-            "the model is of encoding schema {}, this build {SCHEMA_VERSION}",
-            manifest.schema
-        )));
-    }
-    let ours = format!("{:016x}", encoder_hash());
-    if manifest.encoder_hash != ours {
-        return Err(err(format!(
-            "the model's encoder hash {} is not this build's {ours}",
-            manifest.encoder_hash
-        )));
-    }
-    Ok(())
+    input_compatibility(manifest).map(|_| ())
 }
 
 /// The batch sizes a plan is made for: a batch is padded up to the next.
@@ -364,7 +434,8 @@ impl Evaluator for TractEvaluator {
             rebucket(batch, tokens)
         };
         let rows = batch_size(b.rows);
-        let x = b.padded(rows, &self.model.remap);
+        let mut x = b.padded(rows, &self.model.remap);
+        self.model.input_compatibility().adapt(&mut x);
         let plan = self.plan(tokens, rows)?;
         let t = tokens;
         let run = || -> TractResult<TVec<TValue>> {
@@ -403,7 +474,8 @@ impl TractEvaluator {
             .ok_or_else(|| err(format!("{} tokens", batch.tokens)))?;
         let b = if tokens == batch.tokens { batch.clone() } else { rebucket(&batch, tokens) };
         let rows = batch_size(b.rows);
-        let x = b.padded(rows, &self.model.remap);
+        let mut x = b.padded(rows, &self.model.remap);
+        self.model.input_compatibility().adapt(&mut x);
         let plan = self.plan(tokens, rows)?;
         let t = tokens;
         let out = (|| -> TractResult<TVec<TValue>> {
@@ -537,7 +609,8 @@ mod ort_backend {
                 rebucket(batch, tokens)
             };
             let (n, t) = (b.rows, tokens);
-            let x = b.padded(n, &self.model.remap);
+            let mut x = b.padded(n, &self.model.remap);
+            self.model.input_compatibility().adapt(&mut x);
             let mut session = self.sessions[&t].lock().unwrap();
             let out = session
                 .run(ort::inputs![
@@ -565,7 +638,7 @@ mod ort_backend {
 pub mod reference {
     use std::path::Path;
 
-    use cantrip_obs::encode::{Encoded, fnv1a64, from_compact};
+    use cantrip_obs::encode::{Encoded, fnv1a64, from_compact, from_compact_legacy_snow_v2};
 
     use super::{EvalError, Evaluator, FeatureBatch, err};
 
@@ -638,7 +711,7 @@ pub mod reference {
                 .map_err(|e| err(format!("positions.bin: {e}")))?;
             let positions = read_positions(&raw)?
                 .iter()
-                .map(|p| from_compact(p).ok_or_else(|| err("a position from_compact cannot read")))
+                .map(|p| (if p.first() == Some(&2) { from_compact_legacy_snow_v2(p) } else { from_compact(p) }).ok_or_else(|| err("a position from_compact cannot read")))
                 .collect::<Result<Vec<_>, _>>()?;
             let value = floats(&dir.join("value.f32"))?;
             let aux = floats(&dir.join("auxiliary.f32"))?

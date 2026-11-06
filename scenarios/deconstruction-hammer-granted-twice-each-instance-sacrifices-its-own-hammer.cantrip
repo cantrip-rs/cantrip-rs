@@ -47,6 +47,7 @@ Bot1.Battlefield.Sol Ring.Activate
 ? Bot1.Battlefield.Ornithopter.Power = 2
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Ornithopter.Activate(Bot2.Battlefield.Mox Sapphire; Ability: #2)
+Bot1.Choose(Tap Ornithopter)
 ! Bot1.Choose
 Bot1.Pass
 [T3 Bot1.Main2]

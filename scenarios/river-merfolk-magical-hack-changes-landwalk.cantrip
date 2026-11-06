@@ -1,0 +1,29 @@
+# Magical Hack changes mountainwalk to islandwalk before activation (CR 612.2).
+[Bot1 Deck]
+River Merfolk
+Magical Hack
+Mox Sapphire
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.River Merfolk.Cast
+? Bot1.Mana = {U}
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Magical Hack.Cast(Bot1.Battlefield.River Merfolk)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Mountain)
+Bot1.Modes(Island)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.River Merfolk.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.River Merfolk.Keywords = Islandwalk

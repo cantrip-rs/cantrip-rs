@@ -1,0 +1,31 @@
+# Rainbow Vale stays with its controller when unused; tapping it adds one chosen mana and transfers the tapped land at the next end step (CR 603.7b, 611.2a).
+[Bot1 Deck]
+Rainbow Vale
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Rainbow Vale.Play
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Rainbow Vale.Tapped = false
+Bot1.Battlefield.Rainbow Vale.Activate(Color: Blue)
+? Bot1.Mana = {U}
+! Bot1.Battlefield.Rainbow Vale.Activate
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+Bot1.ChoosePlayer(Bot2)
+? Bot2.Battlefield.Rainbow Vale.Tapped = true
+[T4 Bot2.Main1]
+Bot2.Battlefield.Rainbow Vale.Activate(Color: Red)
+? Bot2.Mana = {R}
+[T4 Bot2.End]
+Bot2.Pass
+Bot1.Pass
+Bot2.ChoosePlayer(Bot1)
+
+[Expect]
+Bot1.Battlefield.Rainbow Vale.Tapped = true
+Bot2.Battlefield.Rainbow Vale = (absent)
