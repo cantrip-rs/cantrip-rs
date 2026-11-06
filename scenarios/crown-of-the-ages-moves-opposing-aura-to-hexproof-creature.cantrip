@@ -1,0 +1,62 @@
+# Crown targets the Aura, not either creature, so it can move an opponent's Aura onto a hexproof creature (CR 702.11b, 701.3a).
+# A land Aura is not an Aura attached to a creature and cannot be targeted.
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Crown of the Ages
+Forest
+Gladecover Scout
+Island x20
+
+[Bot2 Deck]
+Forest
+Black Lotus
+Holy Strength
+Wild Growth
+Ornithopter
+Gladecover Scout
+Mox Pearl
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Crown of the Ages.Cast
+? Bot1.Mana =
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Gladecover Scout.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Gladecover Scout.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Wild Growth.Cast(Bot2.Battlefield.Forest)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Holy Strength.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Crown of the Ages.Activate(Bot2.Battlefield.Wild Growth)
+Bot1.Battlefield.Crown of the Ages.Activate(Bot2.Battlefield.Holy Strength)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Crown of the Ages.Tapped = true
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Bot2.Battlefield.Gladecover Scout)
+[Expect]
+Bot2.Battlefield.Holy Strength.AttachedTo = Gladecover Scout
+Bot2.Battlefield.Gladecover Scout.Power = 2
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Wild Growth.AttachedTo = Forest

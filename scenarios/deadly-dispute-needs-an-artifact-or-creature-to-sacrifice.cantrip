@@ -1,5 +1,5 @@
-# The additional cost is mandatory: with only lands in play Deadly Dispute is refused even with its {1}{B} on offer (CR 601.2b,
-# 118.3: a player can't pay a cost they can't pay). Once an Ornithopter is in play the same cast is legal (the control) and
+# The additional cost is mandatory: with only lands in play Deadly Dispute cannot complete payment even with {1}{B} available (CR 601.2b,
+# 118.3 and 733: the failed attempt rolls back). Once an Ornithopter is in play the same cast is legal (the control) and
 # sacrifices it: two cards are drawn and a Treasure token is made.
 
 [Bot1 Deck]
@@ -15,12 +15,19 @@ Island x20
 [Actions]
 Bot1.Hand.Swamp.Play
 Bot1.Battlefield.Swamp.Activate
-! Bot1.Hand.Deadly Dispute.Cast
+! Bot1.Hand.Deadly Dispute.Cast(Mana: short)
 [T3 Bot1.Main1]
 Bot1.Hand.Swamp.Play
-Bot1.Hand.Ornithopter.Cast
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Deadly Dispute.Cast
+? Bot1.Hand.Deadly Dispute.Colors = Black
+? Bot1.Mana = {B}{B}
+? Bot1.Life = 20
+? Bot1.Graveyard.Count = 0
+? Stack.Count = 0
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
 Bot1.Hand.Deadly Dispute.Cast
 Bot1.Choose(Ornithopter)
 [T3 Bot1.Main2]

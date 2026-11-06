@@ -1,0 +1,47 @@
+# The ability accepts an opponent's land Aura, but refuses a land and an Aura on a creature (CR 115.1, 602.2b).
+[Bot1 Deck]
+Savaen Elves
+Mox Emerald
+Forest x20
+[Bot2 Deck]
+Wild Growth
+Rancor
+Memnite
+Mox Emerald
+Forest x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Savaen Elves.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Rancor.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Wild Growth.Cast(Bot2.Battlefield.Forest)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Savaen Elves.Activate(Bot2.Battlefield.Wild Growth; Mana: short)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+! Bot1.Battlefield.Savaen Elves.Activate(Bot2.Battlefield.Forest)
+! Bot1.Battlefield.Savaen Elves.Activate(Bot2.Battlefield.Rancor)
+Bot1.Battlefield.Savaen Elves.Activate(Bot2.Battlefield.Wild Growth)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard = Wild Growth
+Bot2.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.Savaen Elves.Tapped = true

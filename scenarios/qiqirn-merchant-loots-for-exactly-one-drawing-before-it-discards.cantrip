@@ -31,6 +31,7 @@ Bot1.Hand.Mox Sapphire.Cast
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Qiqirn Merchant.Activate(Ability: Draw a card)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Choose(Memnite)
 [Bot1.Main2]

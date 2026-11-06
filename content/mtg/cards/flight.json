@@ -1,0 +1,6 @@
+{
+  "name": "Flight",
+  "manaCost": "{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature has flying."
+}

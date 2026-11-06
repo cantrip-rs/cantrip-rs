@@ -1,0 +1,52 @@
+# Breath of Dreams charges its controller {U} and grants each green creature cumulative upkeep {1}, but not colorless creatures or green noncreatures (CR 702.24a).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Breath of Dreams
+Llanowar Elves
+Island
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Wild Growth
+Forest
+Ornithopter
+Island x24
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Breath of Dreams.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Forest.Play
+Bot2.Hand.Wild Growth.Cast(Bot2.Battlefield.Forest)
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+? Bot1.Mana =
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.PayCost
+? Bot1.Mana =
+Bot1.Pass
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Counters.Age = 1
+Bot1.Battlefield.Breath of Dreams.Counters.Age = 1
+Bot2.Graveyard.Grizzly Bears.Power = 2
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Wild Growth.Types = Enchantment

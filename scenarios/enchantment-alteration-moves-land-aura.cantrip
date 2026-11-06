@@ -1,0 +1,26 @@
+# An Aura on a land moves to another land, chosen on resolution (CR 701.3a, 608.2d).
+[Bot1 Deck]
+Forest
+Island
+Mox Emerald
+Mox Sapphire
+Wild Growth
+Enchantment Alteration
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wild Growth.Cast(Bot1.Battlefield.Forest)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Enchantment Alteration.Cast(Bot1.Battlefield.Wild Growth)
+? Bot1.Mana =
+! Bot1.Choose(Bot1.Battlefield.Forest)
+Bot1.Choose(Bot1.Battlefield.Island)
+[Expect]
+Bot1.Battlefield.Wild Growth.AttachedTo = Island

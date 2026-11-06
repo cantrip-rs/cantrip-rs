@@ -1,0 +1,6 @@
+{
+  "name": "Pit Trap",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "{2}, {T}, Sacrifice this artifact: Destroy target attacking creature without flying. It can't be regenerated."
+}

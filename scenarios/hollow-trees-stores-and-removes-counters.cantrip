@@ -1,0 +1,24 @@
+# Hollow Trees enters tapped, may stay tapped for two upkeeps, then untaps and removes one of two counters for one green (CR 502.3, 603.4, 605.1a).
+[Bot1 Deck]
+Hollow Trees
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Hollow Trees.Play
+? Bot1.Battlefield.Hollow Trees.Tapped = true
+Bot1.Decline
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Hollow Trees.Counters.Storage = 1
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Hollow Trees.Counters.Storage = 2
+Bot1.Accept
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Hollow Trees.Tapped = false
+Bot1.Battlefield.Hollow Trees.Activate(X: 1)
+Bot1.Pass
+? Bot1.Mana = {G}
+[Expect]
+Bot1.Battlefield.Hollow Trees.Tapped = true
+Bot1.Battlefield.Hollow Trees.Counters.Storage = 1

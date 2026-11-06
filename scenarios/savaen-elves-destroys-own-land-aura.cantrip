@@ -1,0 +1,31 @@
+# Savaen Elves destroys its controller's Aura attached to a land, paying GG and tapping (CR 115.1, 701.8a).
+[Bot1 Deck]
+Savaen Elves
+Wild Growth
+Mox Emerald
+Forest x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Savaen Elves.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Wild Growth.Cast(Bot1.Battlefield.Forest)
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Savaen Elves.Activate(Bot1.Battlefield.Wild Growth)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Wild Growth
+Bot1.Battlefield.Savaen Elves.Tapped = true

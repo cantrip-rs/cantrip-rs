@@ -86,6 +86,7 @@ Bot1.Battlefield.Forest.Activate
 Bot1.Hand.Giant Growth.Cast(Avacyn's Pilgrim)
 Bot1.Modes(Conspire:)
 Bot1.Modes(Conspire:)
+Bot1.Choose(Cost: 1)
 Bot1.Choose(Llanowar Elves; Elvish Mystic)
 ! Bot1.Choose(Llanowar Elves)
 Bot1.Choose(Noble Hierarch; Avacyn's Pilgrim)

@@ -1,0 +1,6 @@
+{
+  "name": "Enchantment Alteration",
+  "manaCost": "{U}",
+  "type": "Instant",
+  "oracleText": "Attach target Aura attached to a creature or land to another permanent of that type."
+}

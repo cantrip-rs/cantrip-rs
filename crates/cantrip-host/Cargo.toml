@@ -37,3 +37,4 @@ serde_json = "1"
 cantrip-api.workspace = true
 # `THIS_ENTERS`, the trigger of a test card whose division is asked as it is put on the stack.
 cantrip-mechanics.workspace = true
+cantrip-state.workspace = true

@@ -1,0 +1,25 @@
+# Purelace can target a noncreature spell; the blue Aura becomes white on the
+# stack and remains white when it enters (CR 400.7a, 611.2a).
+[Bot1 Deck]
+Purelace
+Flight
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flight.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Purelace.Cast(Stack.Flight)
+? Bot1.Mana =
+[T1 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Flight.Colors = White
+Bot1.Battlefield.Flight.AttachedTo = Ornithopter

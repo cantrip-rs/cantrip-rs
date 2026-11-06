@@ -1,0 +1,59 @@
+# Word of Undoing returns the opponent's creature and all of the caster's white Auras on it, including a multicolored Aura; other Auras go to their owners' graveyards (CR 608.2c, 704.5m).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Holy Strength
+Strength of the Harvest
+Flight
+Word of Undoing
+Ornithopter
+Sentinel's Eyes
+Island x20
+[Bot2 Deck]
+Mox Pearl
+Ornithopter
+Holy Strength
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Holy Strength.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Strength of the Harvest.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Holy Strength.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flight.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sentinel's Eyes.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Word of Undoing.Cast(Bot1.Battlefield.Mox Sapphire)
+Bot1.Hand.Word of Undoing.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Hand.Ornithopter.Power = 0
+Bot1.Hand.Holy Strength.Colors = White
+Bot1.Hand.Strength of the Harvest.Colors = Green; White
+Bot1.Graveyard.Flight.Colors = Blue
+Bot2.Graveyard.Holy Strength.Colors = White
+Bot1.Battlefield.Sentinel's Eyes.AttachedTo = Ornithopter

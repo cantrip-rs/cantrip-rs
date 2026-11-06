@@ -10,7 +10,7 @@ use cantrip_oracle as oracle;
 fn put_its_plus_one_counters_on_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
     let counters = g.obj(item.object).counters(CounterKind::PlusOne);
-    g.add_counters(creature, CounterKind::PlusOne, counters);
+    g.add_counters(creature, CounterKind::PlusOne,(counters) as i32);
     Ok(())
 }
 

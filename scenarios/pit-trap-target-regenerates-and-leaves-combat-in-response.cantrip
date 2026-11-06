@@ -1,0 +1,48 @@
+# A regeneration shield replaces Shock's destruction and removes the attacker from combat; Pit Trap then has an illegal target (CR 506.4, 608.2b, 701.19a).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Pit Trap
+Shock
+Island x20
+[Bot2 Deck]
+Swamp
+Mox Jet
+Drudge Skeletons
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Pit Trap.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Drudge Skeletons.Cast
+Bot2.Pass
+[T4 Bot2.Attackers]
+Bot2.Attack(Drudge Skeletons > Bot1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Pit Trap.Activate(Drudge Skeletons)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Drudge Skeletons)
+Bot1.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Drudge Skeletons.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Battlefield.Drudge Skeletons.Power = 1
+Bot2.Battlefield.Drudge Skeletons.Tapped = true
+Bot1.Graveyard.Pit Trap.Colors =
+Bot1.Life = 20

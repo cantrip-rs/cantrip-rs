@@ -1,0 +1,42 @@
+# Gaining flying after Ice Floe resolves does not end the restriction; releasing Ice Floe later does.
+[Bot1 Deck]
+Ice Floe
+Island x20
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Mox Sapphire
+Flight
+Island x20
+[Actions]
+Bot1.Hand.Ice Floe.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Llanowar Elves > Bot1)
+Bot1.Battlefield.Ice Floe.Activate(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Battlefield.Ice Floe.Tapped = true
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Flight.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Llanowar Elves.Keywords = Flying
+? Bot1.Life = 19
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ice Floe.Tapped = true
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Accept
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Ice Floe.Tapped = false
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+[T8 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Tapped = false

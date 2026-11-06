@@ -20,7 +20,7 @@ pub static CARD: CardDef = CardDef {
     preventions: &[PreventionDef {
         hint: "prevents all combat damage that would be dealt to this creature",
         applies: prevents_combat_damage_to_this,
-        amount: None,
+        amount: PreventionAmount::All,
     }],
     ..oracle::DIAMOND_WEAPON
 };

@@ -40,6 +40,8 @@ Bot2.Pass
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Spiral into Solitude.Activate
+Bot1.Choose(Blight 1)
+Bot1.Choose(Savannah Lions)
 Bot1.Battlefield.Black Lotus.Activate(Color: R)
 Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Savannah Lions)
 Bot1.Pass

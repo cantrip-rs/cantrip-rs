@@ -1,0 +1,46 @@
+# Jump grants flying to either player's creature through the turn, preventing a ground block before it expires (CR 702.9b, 611.2a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Grizzly Bears
+Jump x2
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+! Bot1.Hand.Jump.Cast(Bot1.Battlefield.Mox Sapphire#2)
+Bot1.Hand.Jump.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = Flying
+Bot1.Attack(Grizzly Bears > Bot2)
+! Bot2.Block(Grizzly Bears > Grizzly Bears)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Jump.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Keywords = Flying
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+Bot2.Battlefield.Grizzly Bears.Keywords = (absent)

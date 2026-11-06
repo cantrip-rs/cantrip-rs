@@ -38,10 +38,20 @@ Bot2.Pass
 Bot1.Target(Bot2.Battlefield.Ornithopter)
 Bot1.Pass
 Bot2.Pass
-! Bot1.Battlefield.Legion Extruder.Activate
+! Bot1.Battlefield.Legion Extruder.Activate(Mana: short)
 [T5 Bot1.Main1]
 Bot1.Hand.Mountain.Play
+# With enough mana but no other artifact, the attempted activation rolls back (CR 733).
+Bot1.Battlefield.Legion Extruder.Activate
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+? Bot1.Battlefield.Legion Extruder.Tapped = false
+? Bot1.Battlefield.Mountain#1.Tapped = false
+? Bot1.Battlefield.Mountain#2.Tapped = false
+? Bot1.Mana =
+? Stack.Count = 0
 Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
 Bot1.Battlefield.Legion Extruder.Activate
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Mountain.Activate

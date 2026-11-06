@@ -1,0 +1,8 @@
+{
+  "name": "Savaen Elves",
+  "manaCost": "{G}",
+  "type": "Creature — Elf",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{G}{G}, {T}: Destroy target Aura attached to a land."
+}

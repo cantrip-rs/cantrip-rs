@@ -1,0 +1,5 @@
+{
+  "name": "Hollow Trees",
+  "type": "Land",
+  "oracleText": "This land enters tapped.\nYou may choose not to untap this land during your untap step.\nAt the beginning of your upkeep, if this land is tapped, put a storage counter on it.\n{T}, Remove any number of storage counters from this land: Add {G} for each storage counter removed this way."
+}

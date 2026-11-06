@@ -28,8 +28,8 @@ Bot2.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mountain.Activate
 Bot1.Exile.Craft with Pride.Cast
-? Bot1.Mana =
 Bot1.Pass
+? Bot1.Mana =
 Bot2.Pass
 
 [Expect]

@@ -1,0 +1,40 @@
+# Ice Floe targets a tapped ground attacker but not a flyer or a nonattacker; it keeps the attacker tapped until its controller chooses to untap the land.
+[Bot1 Deck]
+Ice Floe
+Island x20
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Ornithopter
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Ice Floe.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Llanowar Elves > Bot1; Ornithopter > Bot1)
+! Bot1.Battlefield.Ice Floe.Activate(Bot2.Battlefield.Ornithopter)
+! Bot1.Battlefield.Ice Floe.Activate(Bot2.Battlefield.Memnite)
+Bot1.Battlefield.Ice Floe.Activate(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Battlefield.Ice Floe.Tapped = true
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+? Bot1.Life = 19
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ice Floe.Tapped = true
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Accept
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Ice Floe.Tapped = false
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+[T8 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Tapped = false

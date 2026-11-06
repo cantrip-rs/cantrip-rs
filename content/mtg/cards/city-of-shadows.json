@@ -1,0 +1,5 @@
+{
+  "name": "City of Shadows",
+  "type": "Land",
+  "oracleText": "{T}, Exile a creature you control: Put a storage counter on this land.\n{T}: Add {C} for each storage counter on this land."
+}

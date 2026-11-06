@@ -13,7 +13,8 @@ pub fn life_totals(g: &mut dyn Game, a: PlayerId, b: PlayerId) -> u32 {
     if !g.can_gain_life(gainer) || !g.can_lose_life(loser) {
         return 0;
     }
-    g.lose_life(loser, (before_a - before_b).abs());
-    g.gain_life(gainer, (before_a - before_b).abs());
+    let difference = (before_a - before_b).abs();
+    g.lose_life(loser, difference);
+    g.gain_life(gainer, difference);
     (before_a - g.state().player(a).life).max(0).unsigned_abs()
 }

@@ -1,0 +1,6 @@
+{
+  "name": "Jump",
+  "manaCost": "{U}",
+  "type": "Instant",
+  "oracleText": "Target creature gains flying until end of turn."
+}

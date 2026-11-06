@@ -191,7 +191,7 @@ fn put(g: &mut Game, def: &'static CardDef) -> ObjectId {
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// Taps `source` for its mana from priority, naming `color` where it names one, and answers each order of replacement
@@ -211,6 +211,11 @@ fn tap(g: &mut Game, source: ObjectId, color: Option<Color>, first: &[ObjectId])
     loop {
         g.run();
         let Some(r) = g.pending().cloned() else { break };
+        if let RequestKind::ChooseCostPayment { choices, .. } = &r.kind {
+            let chosen = choices.iter().position(|c| c.kind == CostPaymentKind::Tap).unwrap_or(0);
+            g.answer(r.id, r.player, Answer::CostPayment(chosen)).expect("a legal cost order");
+            continue;
+        }
         let RequestKind::ChooseReplacement { sources, .. } = &r.kind else { break };
         assert_eq!(r.player, YOU, "the player who tapped it orders the effects (CR 616.1)");
         let pick = sources.iter().position(|s| first.contains(s)).expect("an effect to apply first");

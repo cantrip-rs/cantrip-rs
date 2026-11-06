@@ -1,0 +1,17 @@
+# A land with no counters may untap and activate for zero counters, tapping for no mana (CR 107.1c, 605.1a).
+[Bot1 Deck]
+Hollow Trees
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Hollow Trees.Play
+Bot1.Accept
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Hollow Trees.Counters.Storage = (absent)
+Bot1.Battlefield.Hollow Trees.Activate(X: 0)
+Bot1.Pass
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield.Hollow Trees.Tapped = true
+Bot1.Battlefield.Hollow Trees.Counters.Storage = (absent)

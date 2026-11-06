@@ -1,0 +1,33 @@
+# Zero counters produce no mana and do not trigger Wild Growth; one counter does (CR 106.12).
+[Bot1 Deck]
+City of Shadows
+Wild Growth
+Mox Emerald
+Memnite
+Forest x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.City of Shadows.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wild Growth.Cast(City of Shadows)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.City of Shadows.Activate(Ability: Add)
+? Bot1.Mana =
+? Stack.Count = 0
+[T3 Bot1.Main1]
+Bot1.Battlefield.City of Shadows.Activate(Ability: Exile)
+Bot1.Choose(Tap City of Shadows)
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.City of Shadows.Activate(Ability: Add)
+? Bot1.Mana = {G}{C}
+[Expect]
+Bot1.Battlefield.City of Shadows.Counters.Storage = 1

@@ -1,0 +1,29 @@
+# Purelace targets an opponent's green-white permanent and replaces both
+# colors with white; a player is not a legal target (CR 105.3, 115.1a).
+[Bot1 Deck]
+Purelace
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Gaddock Teeg
+Mox Pearl
+Mox Emerald
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Gaddock Teeg.Cast
+? Bot2.Mana =
+[T3 Bot1.Main1]
+! Bot1.Hand.Purelace.Cast(Bot2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Purelace.Cast(Bot2.Battlefield.Gaddock Teeg)
+? Bot1.Mana =
+[T5 Bot1.Main1]
+[Expect]
+Bot2.Battlefield.Gaddock Teeg.Colors = White
+Bot2.Battlefield.Gaddock Teeg.Colors.Count = 1

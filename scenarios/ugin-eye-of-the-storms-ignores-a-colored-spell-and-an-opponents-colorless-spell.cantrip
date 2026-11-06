@@ -42,10 +42,12 @@ Bot2.Hand.Llanowar Elves.Cast
 Bot2.Pass
 Bot2.Hand.Mox Pearl.Cast
 Bot2.Pass
+? Stack.Count = 1
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
 Bot1.Pass
+? Stack.Count = 1
 [T3 Bot1.Main2]
 
 [Expect]

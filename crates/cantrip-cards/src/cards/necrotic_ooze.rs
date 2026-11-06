@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::graveyards;
-use cantrip_mechanics::statics::{grant_activated_abilities_of, itself};
+use cantrip_mechanics::statics::{grant_activated_abilities_from, itself};
 use cantrip_oracle as oracle;
 
 /// "As long as this creature is on the battlefield, it has all activated abilities of all creature cards in all
@@ -13,12 +13,12 @@ use cantrip_oracle as oracle;
 /// gave (CR 613.8a).
 fn graveyard_abilities(view: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
     let s = view.state();
-    let cards: Vec<CardId> = graveyards::cards_in_graveyards(s)
-        .map(|card| view.chars(card))
-        .filter(|card| card.is(CardType::Creature))
-        .map(|card| card.card)
+    let cards: Vec<_> = graveyards::cards_in_graveyards(s)
+        .map(|id| (id, view.chars(id)))
+        .filter(|(_, card)| card.is(CardType::Creature))
+        .map(|(id, card)| (id, card.card))
         .collect();
-    grant_activated_abilities_of(view, &cards, chars);
+    grant_activated_abilities_from(view, &cards, chars);
 }
 
 pub static CARD: CardDef = CardDef {

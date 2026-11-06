@@ -1,0 +1,32 @@
+# Ice Floe can target its controller's stolen creature attacking them; after control returns, it remains tapped in its new controller's untap step.
+[Bot1 Deck]
+Ice Floe
+Mox Emerald
+Llanowar Elves
+Island x20
+[Bot2 Deck]
+Black Lotus
+Act of Treason
+Island x20
+[Actions]
+Bot1.Hand.Ice Floe.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Act of Treason.Cast(Bot1.Battlefield.Llanowar Elves)
+[T2 Bot2.DeclareAttackers]
+Bot2.Attack(Llanowar Elves > Bot1)
+Bot1.Battlefield.Ice Floe.Activate(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+? Bot1.Life = 19
+Bot1.Decline
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Ice Floe.Tapped = true
+Bot1.Battlefield.Llanowar Elves.Tapped = true

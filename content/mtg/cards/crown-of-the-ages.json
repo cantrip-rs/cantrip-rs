@@ -1,0 +1,6 @@
+{
+  "name": "Crown of the Ages",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "{4}, {T}: Attach target Aura attached to a creature to another creature."
+}

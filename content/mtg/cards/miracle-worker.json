@@ -1,0 +1,8 @@
+{
+  "name": "Miracle Worker",
+  "manaCost": "{W}",
+  "type": "Creature — Human Cleric",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}: Destroy target Aura attached to a creature you control."
+}

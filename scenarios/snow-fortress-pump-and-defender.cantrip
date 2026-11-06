@@ -1,0 +1,63 @@
+# Defender prevents attack; each one-mana ability changes only its stated statistic until cleanup (CR 702.3b, 611.2a).
+[Bot1 Deck]
+Snow Fortress
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Snow Fortress.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Snow Fortress.Activate(Ability: +1/+0)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Snow Fortress.Power = 1
+? Bot1.Battlefield.Snow Fortress.Toughness = 4
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Snow Fortress.Activate(Ability: +0/+1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Snow Fortress.Power = 1
+? Bot1.Battlefield.Snow Fortress.Toughness = 5
+! Bot1.Battlefield.Snow Fortress.Activate(Ability: +1/+0; Mana: short)
+! Bot1.Battlefield.Snow Fortress.Activate(Ability: +0/+1; Mana: short)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Snow Fortress.Power = 0
+? Bot1.Battlefield.Snow Fortress.Toughness = 4
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Snow Fortress.Activate(Ability: +1/+0)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Snow Fortress.Activate(Ability: +0/+1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Snow Fortress.Power = 1
+? Bot1.Battlefield.Snow Fortress.Toughness = 5
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Snow Fortress > Bot2)
+Bot1.Attack(Ornithopter > Bot2)
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Snow Fortress.Power = 0
+Bot1.Battlefield.Snow Fortress.Toughness = 4

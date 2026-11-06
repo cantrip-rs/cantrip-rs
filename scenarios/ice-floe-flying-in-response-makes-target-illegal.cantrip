@@ -1,0 +1,39 @@
+# Gaining flying in response makes the target illegal; a later activation on the same creature resolves normally.
+[Bot1 Deck]
+Ice Floe
+Island x20
+[Bot2 Deck]
+Forest
+Mox Sapphire
+Llanowar Elves
+Jump
+Island x20
+[Actions]
+Bot1.Hand.Ice Floe.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Llanowar Elves > Bot1)
+Bot1.Battlefield.Ice Floe.Activate(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Jump.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+? Bot2.Battlefield.Llanowar Elves.DoesntUntap = (absent)
+Bot1.Accept
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Llanowar Elves > Bot1)
+Bot1.Battlefield.Ice Floe.Activate(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T8 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Tapped = true

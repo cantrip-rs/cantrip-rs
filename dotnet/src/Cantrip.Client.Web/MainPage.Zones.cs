@@ -619,9 +619,10 @@ public sealed partial class MainPage
                     [],
                     0,
                     restricted.Amount,
-                    $"from {from}",
-                    $"Mana {from} produced, kept apart because {from} cares whether it is spent",
-                    restricted.Source));
+                    restricted.Snow ? $"snow · from {from}" : $"from {from}",
+                    restricted.Snow ? "Mana produced by a snow source; may also pay {S}" : $"Mana {from} produced, kept apart because {from} cares whether it is spent",
+                    restricted.Source,
+                    restricted.Snow));
                 continue;
             }
 
@@ -632,8 +633,9 @@ public sealed partial class MainPage
                 restricted.SpendSubtypes,
                 restricted.SpendManaValue,
                 restricted.Amount,
-                RestrictionCaption(restricted.Filter, restricted.Effect, restricted.SpendSubtypes, restricted.SpendManaValue),
-                RestrictionTooltip(restricted.Filter, restricted.Effect, restricted.SpendSubtypes, restricted.SpendManaValue)));
+                restricted.Snow ? (restricted.Filter == ManaSpendFilterView.None && restricted.Effect == ManaSpendEffectView.None ? "snow" : $"snow · {RestrictionCaption(restricted.Filter, restricted.Effect, restricted.SpendSubtypes, restricted.SpendManaValue)}") : RestrictionCaption(restricted.Filter, restricted.Effect, restricted.SpendSubtypes, restricted.SpendManaValue),
+                restricted.Snow ? "Mana produced by a snow source; may also pay {S}" : RestrictionTooltip(restricted.Filter, restricted.Effect, restricted.SpendSubtypes, restricted.SpendManaValue),
+                snow: restricted.Snow));
         }
 
         // The player's own mana abilities (CR 611.2a), which no card on the table offers: beside the pool they add to,
@@ -661,7 +663,7 @@ public sealed partial class MainPage
 
         return chips;
 
-        PlayerRail.ManaChipSpec Chip(ManaTypeView type, ManaSpendFilterView filter, ManaSpendEffectView effect, List<string> subtypes, int manaValue, int count, string? caption, string? tooltip, ViewHandle source = default)
+        PlayerRail.ManaChipSpec Chip(ManaTypeView type, ManaSpendFilterView filter, ManaSpendEffectView effect, List<string> subtypes, int manaValue, int count, string? caption, string? tooltip, ViewHandle source = default, bool snow = false)
         {
             if (paying is null)
             {
@@ -669,22 +671,24 @@ public sealed partial class MainPage
             }
 
             int committed = paying.Committed
-                .Where(c => c.Type == type && c.Filter == filter && c.Effect == effect && c.SpendSubtypes.SequenceEqual(subtypes) && c.SpendManaValue == manaValue && c.Source == source)
+                .Where(c => c.Type == type && c.Filter == filter && c.Effect == effect && c.SpendSubtypes.SequenceEqual(subtypes) && c.SpendManaValue == manaValue && c.Source == source && c.Snow == snow)
                 .Sum(c => c.Amount);
 
             string spokenFor = committed == 0 ? string.Empty : $"{committed} to spell";
             string full = caption is null ? spokenFor : spokenFor.Length == 0 ? caption : $"{caption} · {spokenFor}";
 
-            if (_actions.AssignFor(type, filter, effect, subtypes, manaValue, source) is not { } assign)
+            IReadOnlyList<ActionOptionMessage> assignments = _actions.AssignmentsFor(type, filter, effect, subtypes, manaValue, source, snow);
+            if (assignments.Count == 0)
             {
                 return new PlayerRail.ManaChipSpec(type, count, full.Length == 0 ? null : full, tooltip, null);
             }
 
             return new PlayerRail.ManaChipSpec(type, count, full.Length == 0 ? null : full, "Put one towards the spell", () =>
             {
-                Send(client, AnswerFor(assign));
+                if (assignments.Count == 1) { Send(client, AnswerFor(assignments[0])); }
+                else { Choose(client, assignments); }
                 RedrawNow();
-            }, Assign: assign);
+            }, Assign: assignments.Count == 1 ? assignments[0] : null);
         }
     }
 

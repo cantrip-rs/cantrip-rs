@@ -1,0 +1,6 @@
+{
+  "name": "Flood",
+  "manaCost": "{U}",
+  "type": "Enchantment",
+  "oracleText": "{U}{U}: Tap target creature without flying."
+}

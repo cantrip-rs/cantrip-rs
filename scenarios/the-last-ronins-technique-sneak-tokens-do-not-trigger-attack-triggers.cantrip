@@ -25,9 +25,9 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Attack(Ornithopter > Bot2)
 [T3 Bot1.DeclareBlockers]
 Bot1.Hand.The Last Ronin's Technique.Cast(Ability: Sneak)
-Bot1.Choose(Ornithopter)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Plains.Activate
+Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot1.Pass
 [T3 Bot1.Main2]

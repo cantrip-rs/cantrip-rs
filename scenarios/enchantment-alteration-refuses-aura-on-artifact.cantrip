@@ -1,0 +1,31 @@
+# An Aura on a noncreature artifact is not a legal target, while an Aura on a creature is (CR 115.1a).
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Ornithopter
+Memnite
+Marooned
+Rancor
+Enchantment Alteration
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Marooned.Cast(Bot1.Battlefield.Mox Emerald)
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rancor.Cast(Bot1.Battlefield.Ornithopter)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Enchantment Alteration.Cast(Bot1.Battlefield.Marooned)
+Bot1.Hand.Enchantment Alteration.Cast(Bot1.Battlefield.Rancor)
+? Bot1.Mana =
+Bot1.Choose(Bot1.Battlefield.Memnite)
+[Expect]
+Bot1.Battlefield.Rancor.AttachedTo = Memnite
+Bot1.Battlefield.Marooned.AttachedTo = Mox Emerald
