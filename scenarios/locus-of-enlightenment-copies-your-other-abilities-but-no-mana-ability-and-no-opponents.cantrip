@@ -56,6 +56,7 @@ Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Choose(Exile The Enigma Jewel and craft materials)
 Bot1.Choose(Graveyard.Walking Ballista; Goblin Bombardment; Mox Ruby; Mox Jet)
 [T8 Bot2.Main1]
 Bot2.Hand.Swamp.Play

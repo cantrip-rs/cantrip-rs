@@ -1,0 +1,44 @@
+# Defender prevents attacking, and a paid regeneration shield replaces destruction (CR 702.3b, 701.19a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Wall of Brambles
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Go for the Throat
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Wall of Brambles.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Wall of Brambles.Activate(Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Wall of Brambles.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Go for the Throat.Cast(Bot1.Battlefield.Wall of Brambles)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Wall of Brambles.Tapped = true
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Wall of Brambles > Bot2)
+Bot1.Attack(Ornithopter > Bot2)
+
+[Expect]
+Bot1.Battlefield.Wall of Brambles.Tapped = false
+Bot2.Graveyard = Go for the Throat; Black Lotus

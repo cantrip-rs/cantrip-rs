@@ -1,0 +1,65 @@
+# Righteousness gives a blocking creature +7/+7 until end of turn, whether either player controls it (CR 509.1g, 611.2a).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Black Lotus
+Grizzly Bears
+Grizzly Bears
+Righteousness
+Righteousness
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears#1 > Bot2)
+Bot2.Block(Grizzly Bears > Grizzly Bears#1)
+Bot1.Battlefield.Mox Pearl#2.Activate
+! Bot1.Hand.Righteousness.Cast(Bot1.Battlefield.Grizzly Bears#1)
+Bot1.Hand.Righteousness.Cast(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Power = 9
+? Bot2.Battlefield.Grizzly Bears.Toughness = 9
+[T4 Bot2.DeclareAttackers]
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Block(Grizzly Bears > Grizzly Bears)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Righteousness.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 9
+? Bot1.Battlefield.Grizzly Bears.Toughness = 9
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot2.Graveyard = Grizzly Bears; Black Lotus

@@ -1,0 +1,8 @@
+{
+  "name": "Sea Serpent",
+  "manaCost": "{5}{U}",
+  "type": "Creature — Serpent",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "This creature can't attack unless defending player controls an Island.\nWhen you control no Islands, sacrifice this creature."
+}

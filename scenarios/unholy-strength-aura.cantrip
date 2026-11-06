@@ -1,0 +1,25 @@
+# The Aura enchants a creature and gives only it +2/+1 (CR 702.5a, 613.4c).
+[Bot1 Deck]
+Mox Jet
+Ornithopter
+Ornithopter
+Unholy Strength
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Unholy Strength.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Unholy Strength.Cast(Bot1.Battlefield.Ornithopter#1)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Unholy Strength.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter#1.Power = 2
+Bot1.Battlefield.Ornithopter#1.Toughness = 3
+Bot1.Battlefield.Ornithopter#2.Power = 0
+Bot1.Battlefield.Ornithopter#2.Toughness = 2

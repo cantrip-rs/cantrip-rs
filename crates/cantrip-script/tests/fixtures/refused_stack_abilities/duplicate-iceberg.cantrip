@@ -1,0 +1,28 @@
+[Bot1 Deck]
+Black Lotus x3
+Mox Pearl
+Aang's Iceberg x2
+Tishana's Tidebinder
+Plains x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Aang's Iceberg.Cast
+Bot1.Pass
+Bot1.Target(Mox Pearl)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Aang's Iceberg.Cast
+? Stack.Count = 2
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Tishana's Tidebinder.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Stack.Aang's Iceberg)
+[Expect]

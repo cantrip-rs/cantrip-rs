@@ -94,7 +94,7 @@ pub fn jace(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
 /// have one and want to (CR 701.4a); a card from the hand is revealed to every player. Whether they beheld. Nobody is
 /// asked when there is nothing to behold.
 fn behold_one(g: &mut dyn Game, player: PlayerId, source: ObjectId, except: Option<ObjectId>, filter: ObjectFilter, quality: &'static str) -> Result<bool, Suspend> {
-    let asker = Asker { source, controller: player, by: None, spell: false };
+    let asker = Asker { instance: None, source, controller: player, by: None, spell: false };
     let mut eligible = g.permanents_of(player);
     eligible.extend(g.state().zone(Zone::hand(player)).iter().copied());
     eligible.retain(|&id| Some(id) != except && filter(&*g, &asker, id));

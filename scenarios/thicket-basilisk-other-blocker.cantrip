@@ -1,0 +1,35 @@
+# A different creature blocking does not trigger the Basilisk (CR 603.2, 511.1).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Thicket Basilisk
+Ornithopter
+Island x20
+[Bot2 Deck]
+Mox Sapphire
+Kraken Hatchling
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Thicket Basilisk.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Kraken Hatchling.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Kraken Hatchling > Bot1)
+Bot1.Block(Ornithopter > Kraken Hatchling)
+[T4 Bot2.EndCombat]
+? Bot2.Battlefield.Kraken Hatchling.Damage = 0
+Bot2.Pass
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Battlefield.Kraken Hatchling.Toughness = 4

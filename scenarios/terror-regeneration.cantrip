@@ -1,0 +1,31 @@
+# Terror destroys your nonblack nonartifact creature even with a regeneration shield (CR 701.8a, 701.19c).
+[Bot1 Deck]
+Yavimaya Hollow
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Black Lotus
+Grizzly Bears
+Terror
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Yavimaya Hollow.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Yavimaya Hollow.Activate(Bot1.Battlefield.Grizzly Bears; Ability: Regenerate)
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Terror.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Grizzly Bears = (absent)
+Bot1.Graveyard = Terror; Grizzly Bears; Black Lotus

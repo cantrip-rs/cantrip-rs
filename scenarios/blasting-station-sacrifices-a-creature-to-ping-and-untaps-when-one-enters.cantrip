@@ -25,7 +25,9 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Blasting Station.Cast
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Llanowar Elves.Cast
+Bot1.Decline
 Bot1.Battlefield.Blasting Station.Activate(Bot2)
+Bot1.Choose(Tap Blasting Station)
 Bot1.Choose(Llanowar Elves)
 Bot1.Pass
 Bot1.Hand.Ornithopter.Cast

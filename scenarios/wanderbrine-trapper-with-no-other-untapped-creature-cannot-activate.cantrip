@@ -1,5 +1,5 @@
 # The Trapper's cost taps "another untapped creature you control" (CR 118.3): with only the Trapper, which is tapped by its own {T}, there is
-# none, so the ability is refused although Mox Ruby's {1} and a target (Bot2's Ornithopter) are there. The positive control is
+# none, so attempting the ability rolls back although Mox Ruby's {1} and a target (Bot2's Ornithopter) are there. The positive control is
 # wanderbrine-trapper-taps-an-opponents-creature-by-tapping-a-summoning-sick-creature-of-yours.
 
 [Bot1 Deck]
@@ -25,7 +25,14 @@ Bot2.Hand.Ornithopter.Cast
 Bot2.Pass
 Bot1.Pass
 [T3 Bot1.Main1]
-! Bot1.Battlefield.Wanderbrine Trapper.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Wanderbrine Trapper.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Tap Wanderbrine Trapper)
+? Bot1.Mana = {R}
+? Bot1.ManaFrom = {R} Mox Ruby
+? Bot1.Life = 20
+? Bot1.Graveyard.Count = 0
+? Stack.Count = 0
 
 [Expect]
 Bot2.Battlefield.Ornithopter.Tapped = false

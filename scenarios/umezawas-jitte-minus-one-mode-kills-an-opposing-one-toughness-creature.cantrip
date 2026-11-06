@@ -1,4 +1,4 @@
-# The Jitte's second mode: a charge counter makes Bot2's Basking Rootwalla a 0/0, which dies as a state-based action.
+# Jitte's second mode kills a 1/1 and gives a surviving 2/2 exactly -1/-1 until end of turn.
 
 [Bot1 Deck]
 Forest
@@ -13,6 +13,8 @@ Forest x12
 [Bot2 Deck]
 Forest
 Basking Rootwalla
+Black Lotus
+Grizzly Bears
 Forest x15
 
 [Actions]
@@ -28,6 +30,9 @@ Bot1.Hand.Umezawa's Jitte.Cast
 Bot2.Hand.Forest.Play
 Bot2.Battlefield.Forest.Activate
 Bot2.Hand.Basking Rootwalla.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
 [T3 Bot1.Main1]
 Bot1.Hand.Forest.Play
 Bot1.Battlefield.Forest.Activate
@@ -38,9 +43,19 @@ Bot1.Attack(Basking Rootwalla > Bot2)
 Bot1.Battlefield.Umezawa's Jitte.Activate(Ability: Remove)
 Bot1.Modes(Target creature gets -1/-1)
 Bot1.Target(Bot2.Battlefield.Basking Rootwalla)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Umezawa's Jitte.Counters.Charge = 1
+Bot1.Battlefield.Umezawa's Jitte.Activate(Ability: Remove)
+Bot1.Modes(Target creature gets -1/-1)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Power = 1
+? Bot2.Battlefield.Grizzly Bears.Toughness = 1
 
 [Expect]
-Bot2.Battlefield = Forest
-Bot2.Graveyard = Basking Rootwalla
+Bot2.Battlefield = Forest; Grizzly Bears
+Bot2.Graveyard = Basking Rootwalla; Black Lotus
 Bot2.Life = 19
-Bot1.Battlefield.Umezawa's Jitte.Counters.Charge = 1
+Bot1.Battlefield.Umezawa's Jitte.Counters.Charge = (absent)

@@ -1,0 +1,31 @@
+# Simulacrum, not the red Shock that hurt its caster, deals the new damage: protection from red does not save Silver Knight (CR 702.16e).
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Ruby
+Mox Jet
+Silver Knight
+Simulacrum
+Shock
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Silver Knight.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1)
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Simulacrum.Cast(Bot1.Battlefield.Silver Knight)
+Bot1.Pass
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard = Silver Knight; Simulacrum; Shock

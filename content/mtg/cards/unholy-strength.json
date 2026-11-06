@@ -1,0 +1,6 @@
+{
+  "name": "Unholy Strength",
+  "manaCost": "{B}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +2/+1."
+}

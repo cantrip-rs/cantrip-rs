@@ -1,0 +1,32 @@
+# Wanderlust enchants a creature and damages its controller at that player's upkeep (CR 702.5a, 603.2).
+
+[Bot1 Deck]
+Black Lotus
+Wanderlust
+Ornithopter
+Island
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Hand.Wanderlust.Cast(Bot1.Battlefield.Island)
+Bot1.Hand.Wanderlust.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wanderlust.AttachedTo = Ornithopter
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19

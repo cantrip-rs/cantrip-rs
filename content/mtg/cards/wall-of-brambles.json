@@ -1,0 +1,11 @@
+{
+  "name": "Wall of Brambles",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Plant Wall",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Defender (This creature can't attack.)\n{G}: Regenerate this creature.",
+  "keywords": [
+    "Defender"
+  ]
+}

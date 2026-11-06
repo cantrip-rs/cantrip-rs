@@ -1,6 +1,6 @@
-# Natural Order cannot be cast with no green creature to sacrifice: Bot1 controls only a colorless Ornithopter and the refusal
-# holds although it has the mana. A Llanowar Elves arrives (a mana ability is no help here; Bot1 has the mana from a Black Lotus) and the same
-# spell is then castable - the positive control - sacrificing the Elves and not the Ornithopter.
+# Natural Order cannot be paid with no green creature to sacrifice: attempting the cast and activating mana
+# abilities rolls the game back. A Llanowar Elves then arrives and the same spell succeeds, sacrificing
+# the Elves and not the Ornithopter.
 
 [Bot1 Deck]
 Mox Emerald
@@ -23,12 +23,25 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Hand.Ornithopter.Cast
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Pass
-! Bot1.Hand.Natural Order.Cast
+Bot1.Hand.Natural Order.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Choose(Assign mana)
+? Bot1.Hand = Island; Llanowar Elves; Natural Order
+? Bot1.Battlefield = Black Lotus; Mox Emerald; Mox Ruby; Ornithopter
+? Bot1.Mana = {R}
+? Bot1.ManaFrom = {R} Mox Ruby
+? Bot1.Life = 20
+? Bot1.Battlefield.Mox Emerald.Tapped = false
+? Bot1.Battlefield.Black Lotus.Tapped = false
+? Bot1.Graveyard.Count = 0
+? Stack.Count = 0
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Llanowar Elves.Cast
 Bot1.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: Green)
 Bot1.Hand.Natural Order.Cast
+Bot1.Choose(Sacrifice 1 permanent)
 Bot1.Choose(Llanowar Elves)
 Bot1.Search(Questing Beast)
 [T1 Bot1.Main2]

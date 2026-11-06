@@ -1,0 +1,6 @@
+{
+  "name": "The Hive",
+  "manaCost": "{5}",
+  "type": "Artifact",
+  "oracleText": "{5}, {T}: Create a 1/1 colorless Insect artifact creature token with flying named Wasp. (It can't be blocked except by creatures with flying or reach.)"
+}

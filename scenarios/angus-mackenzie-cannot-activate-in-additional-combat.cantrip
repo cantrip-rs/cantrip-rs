@@ -1,0 +1,55 @@
+# Angus can be activated before the first combat damage step, but not in Aurelia's additional combat (CR 506.8d, 506.8g).
+[Bot1 Deck]
+Angus Mackenzie
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Aurelia, the Warleader
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Angus Mackenzie.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Aurelia, the Warleader.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Aurelia, the Warleader > Bot1)
+[T4 Bot2.BeginCombat]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Angus Mackenzie.Activate
+? Bot1.Battlefield.Angus Mackenzie.Tapped = false
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Angus Mackenzie.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Angus Mackenzie.Tapped = true
+Bot1.Life = 17

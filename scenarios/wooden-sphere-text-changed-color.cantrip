@@ -1,0 +1,34 @@
+# Sleight of Mind changes green to red, so an opponent's red Shock triggers the Sphere (CR 612.2).
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Pearl
+Wooden Sphere
+Sleight of Mind
+Island x20
+[Bot2 Deck]
+Mountain
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Wooden Sphere.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleight of Mind.Cast(Bot1.Battlefield.Wooden Sphere)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Green)
+Bot1.Colors(Red)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot1.PayCost
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Life = 19

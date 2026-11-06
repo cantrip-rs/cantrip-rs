@@ -1,0 +1,29 @@
+# A Mishra's Factory animated into a creature has mana value zero, so sacrificing it adds no mana (CR 202.3a, 613.1d).
+[Bot1 Deck]
+Mishra's Factory
+Mox Pearl
+Mox Jet
+Sacrifice
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mishra's Factory.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mishra's Factory.Activate(Ability: {1})
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mishra's Factory.Types = Land; Artifact; Creature
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sacrifice.Cast
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Mana =
+Bot1.Graveyard = Sacrifice; Mishra's Factory

@@ -1,0 +1,39 @@
+# Two creatures block Abu Ja'far; his death destroys both, including the one with a regeneration shield, while a
+# nonblocking creature survives (CR 701.8a, 701.19c).
+[Bot1 Deck]
+Abu Ja'far
+Mox Pearl
+Plains x20
+[Bot2 Deck]
+Forest
+Yavimaya Hollow
+Mox Pearl
+Savannah Lions
+Ornithopter
+Memnite
+Plains x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Abu Ja'far.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Yavimaya Hollow.Play
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Abu Ja'far > Bot2)
+Bot2.Block(Savannah Lions > Abu Ja'far; Ornithopter > Abu Ja'far)
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Yavimaya Hollow.Activate(Bot2.Battlefield.Ornithopter; Ability: Regenerate)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Graveyard.Abu Ja'far.Power = 0
+Bot2.Graveyard.Savannah Lions.Power = 2
+Bot2.Graveyard.Ornithopter.Power = 0
+Bot2.Battlefield.Memnite.Power = 1

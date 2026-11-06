@@ -1,0 +1,59 @@
+# Black mana cannot replace any one of the three colored mana symbols; all three colors pay the ability exactly (CR 602.2b).
+[Bot1 Deck]
+Angus Mackenzie
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Angus Mackenzie.Cast
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Emerald.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Angus Mackenzie.Activate(Mana: short)
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Angus Mackenzie.Activate(Mana: short)
+[T7 Bot1.Upkeep]
+Bot1.Battlefield.Mox Sapphire.Activate
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Angus Mackenzie.Activate(Mana: short)
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Angus Mackenzie.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Angus Mackenzie.Tapped = true
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Angus Mackenzie.Tapped = true

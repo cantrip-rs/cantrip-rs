@@ -1,0 +1,44 @@
+# A hasty creature entering after Siren's Call must attack, but if tapped before combat it is spared at
+# the next end step because its controller did not control it since the turn began.
+[Bot1 Deck]
+Siren's Call
+Rapier Wit
+Mox Sapphire
+Mox Pearl
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Mountain
+Raging Goblin
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Siren's Call.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Raging Goblin.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rapier Wit.Cast(Bot2.Battlefield.Raging Goblin)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+[Expect]
+Bot2.Battlefield.Raging Goblin.Power = 1
+Bot2.Battlefield.Ornithopter.Power = 0

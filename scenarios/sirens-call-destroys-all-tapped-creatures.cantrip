@@ -1,0 +1,50 @@
+# Two tapped creatures are destroyed together at the next end step, giving Chainsaw one rev counter;
+# an attacker survives (CR 701.8a, 603.2c).
+[Bot1 Deck]
+Siren's Call
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Chainsaw
+Island x20
+
+[Bot2 Deck]
+Llanowar Elves
+Llanowar Elves
+Ornithopter
+Black Lotus
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Chainsaw.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Llanowar Elves.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Llanowar Elves.Activate
+Bot2.Battlefield.Llanowar Elves.Activate
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Siren's Call.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Chainsaw.Counters.Rev = 1
+Bot2.Graveyard = Llanowar Elves; Llanowar Elves; Black Lotus
+Bot2.Battlefield.Ornithopter.Power = 0

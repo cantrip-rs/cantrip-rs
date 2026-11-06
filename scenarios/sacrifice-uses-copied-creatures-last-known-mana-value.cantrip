@@ -1,0 +1,33 @@
+# Clone copying Ornithopter has mana value zero as it leaves, although Clone in the graveyard has mana value four (CR 608.2h, 707.2).
+# Sacrifice therefore adds no mana.
+[Bot1 Deck]
+Ornithopter
+Black Lotus
+Mox Sapphire
+Clone
+Mox Jet
+Sacrifice
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Clone.Cast
+Bot1.Accept
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sacrifice.Cast
+Bot1.Choose(Sacrifice 1 permanent)
+Bot1.Choose(Bot1.Battlefield.Ornithopter#2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Mana =
+Bot1.Graveyard = Sacrifice; Clone; Black Lotus

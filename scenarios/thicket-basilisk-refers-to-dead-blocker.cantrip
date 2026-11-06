@@ -1,0 +1,48 @@
+# The pending Basilisk ability refers to its blocker, so Deflecting Palm can choose it after it dies (CR 609.7a).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald x2
+Thicket Basilisk
+Mox Ruby
+Mox Pearl
+Deflecting Palm
+Island x20
+[Bot2 Deck]
+Mox Sapphire
+Phyrexian Walker
+Mox Ruby
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Thicket Basilisk.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Phyrexian Walker.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Thicket Basilisk > Bot2)
+Bot2.Block(Phyrexian Walker > Thicket Basilisk)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Phyrexian Walker)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Deflecting Palm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Phyrexian Walker)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Phyrexian Walker = (absent)
+Bot1.Battlefield.Thicket Basilisk.Toughness = 4

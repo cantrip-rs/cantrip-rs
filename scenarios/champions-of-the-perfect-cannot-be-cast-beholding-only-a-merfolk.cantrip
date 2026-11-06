@@ -1,5 +1,5 @@
 # Champions of the Perfect (CR 601.2b, 701.4a): the additional cost beholds an Elf, and Coral Merfolk in the hand is not one, nor is a Mox on the
-# battlefield, so with the {3}{G} paid for in full the Champions cannot be cast.
+# battlefield, so the full attempted cast cannot pay its behold cost and is reversed (CR 601.2h, 733.1).
 
 [Bot1 Deck]
 Forest
@@ -23,7 +23,17 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Forest.Activate
-! Bot1.Hand.Champions of the Perfect.Cast
+Bot1.Hand.Champions of the Perfect.Cast
+? Bot1.Hand = Champions of the Perfect; Coral Merfolk; Forest
+? Bot1.Mana = {U}{B}{R}{G}
+? Bot1.Life = 20
+? Bot1.Battlefield = Forest; Mox Jet; Mox Ruby; Mox Sapphire
+? Bot1.Battlefield.Forest.Tapped = true
+? Bot1.Battlefield.Mox Jet.Tapped = true
+? Bot1.Battlefield.Mox Ruby.Tapped = true
+? Bot1.Battlefield.Mox Sapphire.Tapped = true
+? Bot1.Graveyard.Count = 0
+? Stack.Count = 0
 
 [Expect]
 Exile.Count = 0

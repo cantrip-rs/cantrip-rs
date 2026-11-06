@@ -1,0 +1,36 @@
+# Sleight of Mind changes Terror's "nonblack" to "nongreen" before it resolves; its green target is no longer legal (CR 612.1, 608.2b).
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Sapphire
+Terror
+Sleight of Mind
+Island x20
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Terror.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Sleight of Mind.Cast(Stack.Terror)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Black)
+Bot1.Colors(Green)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Power = 1
+Bot1.Graveyard = Terror; Sleight of Mind
+Stack.Count = 0

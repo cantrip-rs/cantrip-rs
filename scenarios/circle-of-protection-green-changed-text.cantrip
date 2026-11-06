@@ -1,0 +1,49 @@
+# Sleight of Mind changes green to red in the Circle's ability: it chooses and prevents the Goblin, not the Elf (CR 612.1).
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Circle of Protection: Green
+Sleight of Mind
+Island x20
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Llanowar Elves
+Raging Goblin
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Circle of Protection: Green.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Raging Goblin.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleight of Mind.Cast(Circle of Protection: Green)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Green)
+Bot1.Colors(Red)
+[T4 Bot2.BeginCombat]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Circle of Protection: Green.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Llanowar Elves)
+Bot1.Choose(Raging Goblin)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Llanowar Elves; Raging Goblin > Bot1)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 19

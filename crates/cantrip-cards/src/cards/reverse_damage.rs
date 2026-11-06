@@ -11,7 +11,7 @@ fn reverse(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// Gain life equal to the damage actually prevented (CR 615.5).
 fn gain_prevented(g: &mut dyn Game, asker: &Asker, _: ObjectId, parts: &[Prevented]) {
     let amount = Prevented::total(parts) as i32;
-    g.gain_life(asker.controller, amount);
+    g.gain_life(asker.controller,(amount) as i32);
 }
 
 pub static CARD: CardDef = CardDef {

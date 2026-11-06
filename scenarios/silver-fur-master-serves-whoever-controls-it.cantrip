@@ -60,6 +60,7 @@ Bot2.Battlefield.Mox Jet.Activate
 Bot2.Battlefield.Mox Emerald.Activate
 Bot2.Battlefield.Mox Sapphire.Activate
 Bot2.Hand.Dokuchi Shadow-Walker.Activate(Ability: Ninjutsu)
+Bot2.Choose(Return to hand 1 permanent)
 Bot2.Choose(Ornithopter)
 ? Bot2.Mana =
 Bot2.Pass

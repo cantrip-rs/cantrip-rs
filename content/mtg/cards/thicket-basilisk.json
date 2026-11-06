@@ -1,0 +1,8 @@
+{
+  "name": "Thicket Basilisk",
+  "manaCost": "{3}{G}{G}",
+  "type": "Creature — Basilisk",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Whenever this creature blocks or becomes blocked by a non-Wall creature, destroy that creature at end of combat."
+}

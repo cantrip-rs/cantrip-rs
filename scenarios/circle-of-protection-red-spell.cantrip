@@ -1,0 +1,35 @@
+# The Circle can choose a red spell on the stack and prevent its damage (CR 609.7a).
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Circle of Protection: Red
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Raging Goblin
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Circle of Protection: Red.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Raging Goblin.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Circle of Protection: Red.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Stack.Shock)
+[T4 Bot2.BeginCombat]
+[Expect]
+Bot1.Life = 20

@@ -1,0 +1,39 @@
+# Browser
+# A multicolored green spell triggers Wooden Sphere and paying one mana gains one life (CR 603.2, 119.3).
+
+[Bot1 Deck]
+Island
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Wooden Sphere
+Voice of Resurgence
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Wooden Sphere.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Voice of Resurgence.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Client.Bot1.Prompt.Title = Wooden Sphere: pay {1} to gain 1 life?
+Bot1.PayCost
+? Bot1.Mana =
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 20

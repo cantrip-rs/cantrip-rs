@@ -1,0 +1,75 @@
+# The Gear boosts only your creature while tapped; its controller may keep it tapped or untap it (CR 502.3, 611.2b).
+[Bot1 Deck]
+Ashnod's Battle Gear
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Steel Wall
+Memnite
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ashnod's Battle Gear.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Steel Wall.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Ashnod's Battle Gear.Activate(Bot2.Battlefield.Memnite)
+! Bot1.Battlefield.Ashnod's Battle Gear.Activate(Bot1.Battlefield.Mox Jet)
+Bot1.Battlefield.Ashnod's Battle Gear.Activate(Bot1.Battlefield.Steel Wall)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ashnod's Battle Gear.Tapped = true
+? Bot1.Battlefield.Steel Wall.Power = 2
+? Bot1.Battlefield.Steel Wall.Toughness = 2
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ashnod's Battle Gear.Tapped = true
+? Bot1.Battlefield.Steel Wall.Power = 2
+? Bot1.Battlefield.Steel Wall.Toughness = 2
+Bot1.Accept
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Ashnod's Battle Gear.Tapped = false
+? Bot1.Battlefield.Steel Wall.Power = 0
+? Bot1.Battlefield.Steel Wall.Toughness = 4
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Ashnod's Battle Gear.Activate(Bot1.Battlefield.Memnite)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ashnod's Battle Gear.Tapped = true
+Bot1.Graveyard = Memnite
+Bot1.Battlefield.Steel Wall.Power = 0
+Bot1.Battlefield.Steel Wall.Toughness = 4
+Bot2.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Memnite.Toughness = 1

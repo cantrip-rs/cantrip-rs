@@ -1,5 +1,5 @@
 # "As an additional cost to cast this spell, sacrifice a land" (CR 601.2b, 118.8): Mox Emerald makes {G} but is not a land, so with no land on the battlefield
-# Crop Rotation can't be cast (the refusal). After Bot1 plays a Forest it can (the positive control), sacrificing that Forest.
+# An attempted Crop Rotation cannot pay and is reversed. After Bot1 plays a Forest the cast succeeds, sacrificing that Forest.
 
 [Bot1 Deck]
 Mox Emerald
@@ -14,7 +14,14 @@ Island x15
 [Actions]
 Bot1.Hand.Mox Emerald.Cast
 Bot1.Battlefield.Mox Emerald.Activate
-! Bot1.Hand.Crop Rotation.Cast
+Bot1.Hand.Crop Rotation.Cast
+? Bot1.Hand = Crop Rotation; Forest; Plains; Plains; Plains; Plains
+? Bot1.Mana = {G}
+? Bot1.Life = 20
+? Bot1.Battlefield = Mox Emerald
+? Bot1.Battlefield.Mox Emerald.Tapped = true
+? Bot1.Graveyard.Count = 0
+? Stack.Count = 0
 Bot1.Hand.Forest.Play
 Bot1.Hand.Crop Rotation.Cast
 Bot1.Search(Plains)

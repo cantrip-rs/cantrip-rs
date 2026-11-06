@@ -25,7 +25,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
             }
         }
     }
-    g.put_all_onto_battlefield(&returning)?;
+    g.put_all_onto_battlefield_by(&returning.into_iter().map(|(card, player)| (card, player, false, player)).collect::<Vec<_>>(), &[])?;
     Ok(())
 }
 

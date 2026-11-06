@@ -1,0 +1,32 @@
+# Abu Ja'far dies to its blocker in combat; its death trigger destroys that blocker (CR 603.6c, 701.8).
+[Bot1 Deck]
+Mox Pearl
+Abu Ja'far
+Plains x20
+
+[Bot2 Deck]
+Mox Pearl
+Savannah Lions
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Abu Ja'far.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Abu Ja'far > Bot2)
+Bot2.Block(Savannah Lions > Abu Ja'far)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Abu Ja'far
+Bot2.Graveyard = Savannah Lions

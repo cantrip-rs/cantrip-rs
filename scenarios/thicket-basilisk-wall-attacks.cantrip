@@ -1,0 +1,38 @@
+# A Wall that can attack is not destroyed by the Basilisk's blocking ability (CR 603.2).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Thicket Basilisk
+Ornithopter
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Demon Wall
+Snakeskin Veil
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Thicket Basilisk.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Demon Wall.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Snakeskin Veil.Cast(Bot2.Battlefield.Demon Wall)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Demon Wall > Bot1)
+Bot1.Block(Thicket Basilisk > Demon Wall; Ornithopter > Demon Wall)
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Battlefield.Demon Wall.Toughness = 4
