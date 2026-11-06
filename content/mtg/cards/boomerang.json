@@ -1,0 +1,6 @@
+{
+  "name": "Boomerang",
+  "manaCost": "{U}{U}",
+  "type": "Instant",
+  "oracleText": "Return target permanent to its owner's hand."
+}

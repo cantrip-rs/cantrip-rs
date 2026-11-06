@@ -1,0 +1,8 @@
+{
+  "name": "Elven Riders",
+  "manaCost": "{3}{G}{G}",
+  "type": "Creature — Elf",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "This creature can't be blocked except by Walls and/or creatures with flying."
+}

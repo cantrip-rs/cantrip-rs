@@ -1,0 +1,42 @@
+# Horse cannot target an opponent’s attacker, though that creature is attacking (CR 115.1, 109.5).
+[Bot1 Deck]
+Black Lotus
+Ebony Horse
+Mox Emerald
+Mox Pearl
+Forest
+Grizzly Bears
+Sol Ring
+Forest x20
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Grizzly Bears
+Forest x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Ebony Horse.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+! Bot1.Battlefield.Ebony Horse.Activate(Bot2.Battlefield.Grizzly Bears)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 18

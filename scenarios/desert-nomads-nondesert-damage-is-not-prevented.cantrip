@@ -1,0 +1,27 @@
+# A red Shock is not a Desert source, so its two damage kills Desert Nomads (CR 615.1).
+[Bot1 Deck]
+Desert Nomads
+Black Lotus
+Mountain x20
+
+[Bot2 Deck]
+Mox Ruby
+Shock
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Desert Nomads.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Desert Nomads)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Desert Nomads; Black Lotus
+Prevented = (absent)

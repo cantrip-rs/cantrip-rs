@@ -1,0 +1,42 @@
+# The enchanted Walking Ballista's activated ability still deals noncombat damage while the Aura remains attached.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Demonic Torment
+Swamp x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Walking Ballista
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Walking Ballista.Cast(X: 2)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Demonic Torment.Cast(Bot2.Battlefield.Walking Ballista)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Walking Ballista.Activate(Bot1; Ability: Remove)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Demonic Torment.AttachedTo = Walking Ballista
+Bot2.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 1

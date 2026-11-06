@@ -45,7 +45,7 @@ fn check(game: &mut Game) -> bool {
         game.state.frame_push(Frame::new(FrameKind::Settle));
     }
     let frame = game.state.agenda.len() - 1;
-    let mut cx = Cx { g: game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let mut cx = Cx { g: game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     crate::settle::state_based_actions(&mut cx).expect("nothing is asked")
 }
 

@@ -1,0 +1,37 @@
+# Regaining an Island after the state trigger is on the stack does not cancel the sacrifice (CR 603.8).
+[Bot1 Deck]
+Island
+Mox Sapphire
+Dandân
+Forest
+Mox Emerald
+Crop Rotation
+Island x20
+[Bot2 Deck]
+Island
+Strip Mine
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dandân.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Strip Mine.Play
+Bot2.Battlefield.Strip Mine.Activate(Bot1.Battlefield.Island; Ability: Destroy target land)
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Crop Rotation.Cast
+Bot1.Search(Island)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Graveyard.Dandân.Power = 4
+Bot1.Battlefield.Island.Types = Land

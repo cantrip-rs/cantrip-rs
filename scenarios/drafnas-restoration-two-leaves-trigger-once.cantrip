@@ -1,0 +1,41 @@
+# Two cards leave the same graveyard in one instruction; Spirit Mascot triggers once (CR 603.2c).
+[Bot1 Deck]
+Island
+Drafna's Restoration
+Island x18
+
+[Bot2 Deck]
+Mountain
+Mox Pearl
+Mox Ruby
+Spirit Mascot
+Faithless Looting
+Ornithopter
+Memnite
+Island x16
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Spirit Mascot.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot2.Choose(Ornithopter; Memnite)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Drafna's Restoration.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Ornithopter; Memnite)
+Bot2.Arrange(Memnite; Ornithopter)
+[T3 Bot1.Main2]
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Graveyard = Faithless Looting
+Bot2.Battlefield.Spirit Mascot.Counters.PlusOnePlusOne = 1

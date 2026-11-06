@@ -517,7 +517,7 @@ public sealed partial class MainPage
             return null;
         }
 
-        ColorView? color = picked.Option.ProducesOfAnyOneColor > 0 ? picked.Color : null;
+        ColorView? color = picked.Option.ProducesOfAnyColorEach == 0 && picked.Option.ColorChoices.Count > 0 ? picked.Color : null;
         List<ColorView> combination = picked.Option.ProducesOfAnyColorEach > 0 && picked.Color is { } each
             ? [.. Enumerable.Repeat(each, picked.Option.ProducesOfAnyColorEach)]
             : [];
@@ -765,6 +765,8 @@ public sealed partial class MainPage
         Effect = option.Effect,
         SpendSubtypes = option.SpendSubtypes,
         SpendManaValue = option.SpendManaValue,
+        Snow = option.Snow,
+        PaySnow = option.PaySnow,
     };
 
     private void Send(GameClient client, AnswerPayload answer)

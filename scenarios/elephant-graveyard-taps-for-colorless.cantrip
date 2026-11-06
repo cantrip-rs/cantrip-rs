@@ -1,0 +1,14 @@
+# The land's mana ability taps for one colorless mana, and cannot be activated again while tapped (CR 605.3b, 107.5).
+[Bot1 Deck]
+Elephant Graveyard
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Elephant Graveyard.Play
+Bot1.Battlefield.Elephant Graveyard.Activate(Ability: Add {C})
+? Bot1.Mana = {C}
+? Bot1.Battlefield.Elephant Graveyard.Tapped = true
+! Bot1.Battlefield.Elephant Graveyard.Activate(Ability: Add {C})
+[Expect]
+Bot1.Mana = {C}

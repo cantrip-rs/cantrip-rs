@@ -11,7 +11,7 @@ fn gain_life_equal_devotion_green(
         let q: &dyn Query = g;
         i64::from(devotion::devotion(q, item.controller, Color::Green)) as i32
     };
-    g.gain_life(item.controller, amount_0);
+    g.gain_life(item.controller,(amount_0) as i32);
     Ok(())
 }
 

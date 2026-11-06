@@ -1,0 +1,36 @@
+# The chosen Time Walk dealt no damage, even though the same player also cast a damaging Firebolt this turn.
+[Bot1 Deck]
+Backdraft
+Mox Ruby
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Firebolt
+Time Walk
+Mox Ruby
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Firebolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Time Walk.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Backdraft.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Time Walk)
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 20

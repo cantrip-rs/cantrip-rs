@@ -1,0 +1,6 @@
+{
+  "name": "Demonic Torment",
+  "manaCost": "{2}{B}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature can't attack.\nPrevent all combat damage that would be dealt by enchanted creature."
+}

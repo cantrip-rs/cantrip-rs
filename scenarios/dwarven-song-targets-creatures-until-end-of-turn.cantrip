@@ -1,0 +1,48 @@
+# Dwarven Song targets creatures controlled by either player, makes them red, and ends at cleanup (CR 115.1a, 611.2a).
+# A land cannot be targeted and choosing zero creatures is refused; two creatures may be chosen.
+
+[Bot1 Deck]
+Mountain
+Ornithopter
+Dwarven Song
+Dwarven Song
+Mountain x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+! Bot1.Hand.Dwarven Song.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T2 Bot2.End]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Dwarven Song.Cast
+! Bot1.Target(Count: 0)
+! Bot1.Target(Bot1.Battlefield.Ornithopter; Bot1.Battlefield.Ornithopter)
+! Bot1.Target(Bot1.Battlefield.Mountain)
+Bot1.Target(Bot1.Battlefield.Ornithopter; Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Colors = Red
+? Bot2.Battlefield.Ornithopter.Colors = Red
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Colors = (absent)
+? Bot2.Battlefield.Ornithopter.Colors = (absent)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Dwarven Song.Cast
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Colors = Red
+? Bot2.Battlefield.Ornithopter.Colors = (absent)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Colors = (absent)
+Bot2.Battlefield.Ornithopter.Colors = (absent)

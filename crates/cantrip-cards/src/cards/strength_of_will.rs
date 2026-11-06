@@ -16,10 +16,10 @@ fn grant(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 }
 
 /// "Whenever this creature is dealt damage, put that many +1/+1 counters on it." (CR 120.2, 122.1) "That many" is the damage
-/// dealt at once, the trigger's `data[0]`; it counts even when the damage is lethal, indestructible having kept the creature. A
+/// dealt at once, the trigger's matched damage amount; it counts even when the damage is lethal, indestructible having kept the creature. A
 /// creature that is no longer on the battlefield gets none.
 fn counters_equal_to_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.add_counters(item.object, CounterKind::PlusOne, item.data[0] as i32);
+    g.add_counters(item.object, CounterKind::PlusOne, item.matched_damage_amount() as i32);
     Ok(())
 }
 
@@ -31,6 +31,6 @@ pub static CARD: CardDef = CardDef {
         counters_equal_to_damage,
         "Whenever this creature is dealt damage, put that many +1/+1 counters on it.",
     )
-    .sums_per_subject()],
+    .sums_per_subject().damage_amount()],
     ..oracle::STRENGTH_OF_WILL
 };

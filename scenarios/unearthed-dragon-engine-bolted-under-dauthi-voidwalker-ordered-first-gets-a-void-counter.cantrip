@@ -52,6 +52,7 @@ Bot1.Replace(Dauthi Voidwalker)
 ? Bot1.Graveyard = Faithless Looting; Mountain
 [T4 Bot2.Main1]
 Bot2.Battlefield.Dauthi Voidwalker.Activate
+Bot2.Choose(Tap Dauthi Voidwalker)
 Bot2.Choose(Phyrexian Dragon Engine)
 Bot2.Pass
 Bot1.Pass

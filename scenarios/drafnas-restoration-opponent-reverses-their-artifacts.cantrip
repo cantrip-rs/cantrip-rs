@@ -1,0 +1,35 @@
+# The owner orders multiple cards put on their library (CR 401.4): Bot2 chooses the order of their two artifacts.
+[Bot1 Deck]
+Island
+Drafna's Restoration
+Island x18
+
+[Bot2 Deck]
+Mountain
+Faithless Looting
+Ornithopter
+Memnite
+Island x16
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot2.Choose(Ornithopter; Memnite)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Drafna's Restoration.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Ornithopter; Memnite)
+? Bot1.Mana =
+Bot2.Arrange(Ornithopter; Memnite)
+[T3 Bot1.Main2]
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Graveyard = Faithless Looting
+Bot2.Hand = Island; Island; Island; Island; Island; Island; Ornithopter
+Bot2.Library = Memnite; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island

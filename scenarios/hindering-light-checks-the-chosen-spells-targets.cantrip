@@ -1,0 +1,33 @@
+# Hindering Light checks the chosen spell, not another spell targeting its controller (CR 115.1).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Ruby
+Hindering Light
+Shock
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Shock.Cast(Bot1)
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Hindering Light.Cast(Stack.Lightning Bolt)
+Bot1.Hand.Hindering Light.Cast(Stack.Shock)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 20
+Bot2.Graveyard = Ornithopter

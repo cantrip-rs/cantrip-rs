@@ -96,8 +96,9 @@ fn a_foreign_graveyard_cast_needs_the_right_permission_and_its_normal_mana() {
             RequestKind::PayCosts { options, total, .. } => {
                 assert_eq!(total.to_string(), "{1}{G}");
                 saw_cost = true;
-                let option = options.iter().find(|o| o.kind == ActionKind::ConfirmCasting)
-                    .or_else(|| options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source == Some(bank)))
+                let option = options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source == Some(bank))
+                    .or_else(|| options.iter().find(|o| o.kind == ActionKind::AssignMana))
+                    .or_else(|| options.iter().find(|o| o.kind == ActionKind::ConfirmCasting))
                     .expect("pay with the two green mana");
                 Answer::Act(Action::of(option))
             }

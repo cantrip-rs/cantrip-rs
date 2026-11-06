@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{effects, triggers::this_dealt_damage};
+use cantrip_mechanics::{effects, triggers::this_takes_damage};
 use cantrip_oracle as oracle;
 
 /// "Draw X cards" (CR 107.3a, 121.1): X is the one announced for the ability, whose cost counted it twice ({X}{X}, CR 107.3).
@@ -24,10 +24,10 @@ fn enrage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static BACK: CardDef = CardDef {
     abilities: &[triggered(
-        when(EventMask::DAMAGE, this_dealt_damage),
+        when(EventMask::DAMAGE, this_takes_damage),
         enrage,
         "Enrage \u{2014} Whenever The Incredible Hulk is dealt damage, put a +1/+1 counter on him. If he's attacking, untap him and there is an additional combat phase after this phase.",
-    )
+    ).damage_amount()
     .sums_per_subject()],
     ..oracle::THE_INCREDIBLE_HULK
 };

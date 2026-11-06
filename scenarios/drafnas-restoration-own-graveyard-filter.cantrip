@@ -1,0 +1,33 @@
+# The spell accepts your artifact card but refuses a nonartifact in the same graveyard (CR 115.1a).
+[Bot1 Deck]
+Island
+Mountain
+Mox Ruby
+Faithless Looting
+Ornithopter
+Elvish Mystic
+Drafna's Restoration
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Ornithopter; Elvish Mystic)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Drafna's Restoration.Cast
+Bot1.Target(Bot1)
+! Bot1.Target(Elvish Mystic)
+Bot1.Target(Ornithopter)
+? Bot1.Mana =
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Drafna's Restoration; Faithless Looting; Elvish Mystic
+Bot1.Hand = Mountain; Island; Island; Ornithopter

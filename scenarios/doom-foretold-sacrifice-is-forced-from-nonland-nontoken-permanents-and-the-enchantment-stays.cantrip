@@ -46,7 +46,7 @@ Bot2.Hand.Retrofitter Foundry.Cast
 Bot2.Pass
 Bot2.Battlefield.Mox Pearl.Activate
 Bot2.Battlefield.Mox Jet.Activate
-Bot2.Battlefield.Retrofitter Foundry.Activate(Ability: Create)
+Bot2.Battlefield.Retrofitter Foundry.Activate(Ability: Create a 1/1 colorless Servo)
 Bot2.Pass
 Bot1.Pass
 ? Bot2.Battlefield.Servo Token.Power = 1

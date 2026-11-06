@@ -1,0 +1,8 @@
+{
+  "name": "El-Hajjâj",
+  "manaCost": "{1}{B}{B}",
+  "type": "Creature — Human Wizard",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Whenever this creature deals damage, you gain that much life."
+}

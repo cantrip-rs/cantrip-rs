@@ -74,6 +74,7 @@ Bot1.Battlefield.Mox Jet.Activate
 ? Bot2.Battlefield.Count = 8
 Bot1.Battlefield.Solitary Cell.Activate
 ! Bot1.Choose(Mountain)
+Bot1.Choose(Tap Solitary Cell)
 Bot1.Choose(Smaug the Magnificent)
 [Bot1.Main2]
 

@@ -1,0 +1,46 @@
+# A 0/4 and a 0/5 each become 4/1, using -3 and -4 respectively; both effects end at cleanup (CR 611.2a).
+[Bot1 Deck]
+Blood Lust x2
+Mox Ruby x2
+Mox Pearl x2
+Ornithopter
+Island x20
+[Bot2 Deck]
+Black Lotus
+Steel Wall
+Wall of Mist
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Steel Wall.Cast
+Bot2.Hand.Wall of Mist.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+! Bot1.Hand.Blood Lust.Cast(Bot1.Battlefield.Mox Pearl#1)
+Bot1.Hand.Blood Lust.Cast(Bot2.Battlefield.Steel Wall)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Steel Wall.Power = 4
+? Bot2.Battlefield.Steel Wall.Toughness = 1
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Blood Lust.Cast(Bot2.Battlefield.Wall of Mist)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Wall of Mist.Power = 4
+? Bot2.Battlefield.Wall of Mist.Toughness = 1
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Steel Wall.Toughness = 4
+Bot2.Battlefield.Wall of Mist.Toughness = 5
+Bot2.Battlefield.Wall of Mist.Power = 0

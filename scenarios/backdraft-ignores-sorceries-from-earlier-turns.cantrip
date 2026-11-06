@@ -1,0 +1,33 @@
+# Bot2's prior-turn sorcery is ineligible; Bot1's Firebolt this turn makes Bot1 the chosen player (CR 608.2d).
+[Bot1 Deck]
+Backdraft
+Firebolt
+Mox Ruby x2
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Chain Lightning
+Mox Ruby
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Chain Lightning.Cast(Bot1)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Firebolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Backdraft.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 16
+Bot2.Life = 18

@@ -83,6 +83,8 @@ Bot2.Search(Forest)
 ? Bot2.Life = 21
 Bot2.Battlefield.Forest.Activate
 Bot2.Battlefield.Mind Stone.Activate(Ability: Draw)
+Bot2.Choose(Pay mana)
+Bot2.Choose(Tap Mind Stone)
 ? Stack.Count = 2
 ? Bot2.Graveyard = Mind Stone; Generous Ent
 Bot2.Pass

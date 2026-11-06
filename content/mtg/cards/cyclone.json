@@ -1,0 +1,6 @@
+{
+  "name": "Cyclone",
+  "manaCost": "{2}{G}{G}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of your upkeep, put a wind counter on this enchantment, then sacrifice this enchantment unless you pay {G} for each wind counter on it. If you pay, this enchantment deals damage equal to the number of wind counters on it to each creature and each player."
+}

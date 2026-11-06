@@ -37,6 +37,7 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Crabomination.Cast(Ability: Emerge)
 Bot1.Choose(Mind Stone)
+Bot1.Choose(Sacrifice Mind Stone)
 Bot1.Choose(Exile.Guerrilla Gorilla)
 [T5 Bot1.Main2]
 

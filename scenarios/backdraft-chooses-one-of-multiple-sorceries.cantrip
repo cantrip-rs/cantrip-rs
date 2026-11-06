@@ -1,0 +1,44 @@
+# Of two sorceries cast by the same player, choosing Flame Slash uses its four damage, not Firebolt's two (CR 608.2d).
+[Bot1 Deck]
+Backdraft
+Mox Ruby
+Mox Pearl
+Steel Wall
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Firebolt
+Flame Slash
+Mox Ruby x2
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Steel Wall.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Firebolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Flame Slash.Cast(Bot1.Battlefield.Steel Wall)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Backdraft.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Firebolt; Flame Slash)
+! Bot1.Choose()
+Bot1.Choose(Flame Slash)
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
+Bot1.Graveyard = Backdraft; Steel Wall

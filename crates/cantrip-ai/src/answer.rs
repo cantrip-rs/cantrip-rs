@@ -4,9 +4,9 @@
 //! permutations from the ask's sorted lists back to the engine's (`ask::Perms`) - and checks the result with the
 //! engine's validator before it is sent. A refused answer is a `Rejection`, for the caller to mask and backtrack.
 //!
-//! Payment is no policy step: `AutoPay`, and paying an "unless pays" cost, are made by `pay::pay` one engine answer at a
+//! Ordinary payment is no policy step: `AutoPay`, and paying an "unless pays" cost, are made by `pay::pay` one engine answer at a
 //! time (the request comes back while there is more to pay), as is X, raised or lowered a step at a time to the bucket
-//! chosen.
+//! chosen. Snow-sensitive payment windows instead expose each offered action through the existing Option/Act factoring.
 
 use std::collections::HashMap;
 
@@ -182,15 +182,19 @@ impl Answering {
         };
         Ok(match (&request.kind, answer) {
             (_, F::Cancel) => cancel(),
+            (RequestKind::ChooseCostPayment { choices, .. }, F::CostPayment(index)) if *index < choices.len() => Answer::CostPayment(*index),
             (RequestKind::Priority { .. }, F::Pass) => Answer::Pass,
             (
-                RequestKind::Priority { options },
+                RequestKind::Priority { options }
+                | RequestKind::PayCosts { options, .. }
+                | RequestKind::UnlessPays { options, .. },
                 F::Act {
                     option,
                     targets,
                     color,
                 },
-            ) => {
+            ) if matches!(&request.kind, RequestKind::Priority { .. })
+                || cantrip_obs::factor::snow_payment(&self.ask.kind) => {
                 let o = &options[*self
                     .perms
                     .options
@@ -234,7 +238,7 @@ impl Answering {
                     announcing: false, ..
                 },
                 F::AutoPay,
-            ) => match pay::pay(game, request, None) {
+            ) if !factor::snow_payment(&self.ask.kind) => match pay::pay(game, request, None) {
                 Some(a) => a,
                 None if self.ask.may_cancel || offered(ActionKind::CancelCasting).is_some() => {
                     cancel()
@@ -257,6 +261,10 @@ impl Answering {
                     .collect::<Result<_, _>>()?,
             ),
             (_, F::Refs(refs)) => Answer::Cards(ids(refs)?),
+            (RequestKind::ChooseNumber { least, most, .. }, F::Number(value)) => {
+                if !(*least..=*most).contains(value) { return Err("number is outside the offered range".into()); }
+                Answer::Announce(*value)
+            }
             (RequestKind::ChooseNumber { least, most, .. }, F::Modes(m)) => {
                 if m.len() != 1 { return Err("choose exactly one number".into()); }
                 let value = least.checked_add(u32::from(m[0])).ok_or("number is outside the offered range")?;
@@ -379,19 +387,26 @@ impl Answering {
             return Some(F::Cancel);
         }
         Some(match (&request.kind, answer, &self.ask.kind) {
+            (RequestKind::ChooseCostPayment { choices, .. }, Answer::CostPayment(index), AskKind::ChooseCostPayment { .. }) if *index < choices.len() => F::CostPayment(*index),
             (RequestKind::Priority { .. }, Answer::Pass, _) => F::Pass,
             (
-                RequestKind::Priority { options },
+                RequestKind::Priority { options }
+                | RequestKind::PayCosts { options, .. }
+                | RequestKind::UnlessPays { options, .. },
                 Answer::Act(a),
-                AskKind::Priority { options: canonical },
-            ) => {
+                AskKind::Priority { options: canonical }
+                | AskKind::PayCosts { options: canonical, .. }
+                | AskKind::UnlessPays { options: canonical, .. },
+            ) if matches!(&request.kind, RequestKind::Priority { .. })
+                || cantrip_obs::factor::snow_payment(&self.ask.kind) => {
                 let engine = options.iter().position(|o| {
                     o.kind == a.kind
                         && o.source == a.source
                         && o.index == a.index
                         && (o.granted_by, o.paid_by) == (a.granted_by, a.paid_by)
                         && (o.kind != ActionKind::AssignMana
-                            || (o.mana, o.restriction) == (a.mana, a.restriction))
+                            || (o.mana, o.restriction, o.snow, o.pay_snow)
+                                == (a.mana, a.restriction, a.snow, a.pay_snow))
                 })?;
                 let option = self.perms.options.iter().position(|&e| e == engine)?;
                 let o = &canonical[option];
@@ -431,7 +446,7 @@ impl Answering {
             (_, Answer::Cards(ids), _) => F::Refs(all(ids.iter().map(|&id| self.r(id)).collect())?),
             (_, Answer::Targets(ts), _) => F::Refs(all(ts.iter().map(|&t| self.t(t)).collect())?),
             (RequestKind::ChooseNumber { least, most, .. }, Answer::Announce(n), _) if (*least..=*most).contains(n) => {
-                F::Modes(vec![u8::try_from(n - least).expect("ChooseNumber range is bounded by the mechanic")])
+                if matches!(self.ask.kind, AskKind::ChooseNumber { .. }) { F::Number(*n) } else { F::Modes(vec![(n - least) as u8]) }
             }
             (_, Answer::Modes(m), _) => F::Modes(m.clone()),
             (_, Answer::Colors(c), _) => F::Colors(c.iter().map(|&c| c as u8).collect()),
@@ -457,15 +472,31 @@ impl Answering {
                     })
                     .collect::<Option<_>>()?,
             ),
-            (_, Answer::Shares(shares), _) => F::Shares(
-                shares
-                    .iter()
-                    .map(|&(s, c, n)| {
-                        let c = c.map(|c| self.r(c));
-                        (self.r(s) != Ref::None && c != Some(Ref::None)).then(|| (self.r(s), c, n))
-                    })
-                    .collect::<Option<_>>()?,
-            ),
+            (RequestKind::AssignCombatDamage { divisions }, Answer::Shares(shares), _) => {
+                // Zero is no damage, but the validator still requires its source and recipient to be legal.
+                // Do not erase an invalid entry and accidentally turn a refused answer into a legal one.
+                for &(source, target, amount) in shares {
+                    if amount == 0 {
+                        let matching = || divisions.iter().filter(|d| d.source == source);
+                        if matching().next().is_none() || !matching().all(|d| match target {
+                            Some(c) => d.creatures.contains(&c),
+                            None => d.may_assign_to_defender,
+                        }) {
+                            return None;
+                        }
+                    }
+                }
+                F::Shares(
+                    shares
+                        .iter()
+                        .filter(|s| s.2 != 0)
+                        .map(|&(s, c, n)| {
+                            let c = c.map(|c| self.r(c));
+                            (self.r(s) != Ref::None && c != Some(Ref::None)).then(|| (self.r(s), c, n))
+                        })
+                        .collect::<Option<_>>()?,
+                )
+            },
             (
                 _,
                 Answer::Placements { shuffle: true, .. },

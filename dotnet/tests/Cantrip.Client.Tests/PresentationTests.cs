@@ -142,7 +142,11 @@ public sealed class PromptPresentationTests
         {
             var roundTrip = Assert.IsType<DistributeCardsPromptMessage>(remote.Prompt!.Prompt);
             Assert.Null(roundTrip.Problem((CardsDistributedAnswer)distribution.Default()));
-            Assert.Equal(local.Prompt.Presentation!.Origins.Count, remote.Prompt.Presentation!.Origins.Count);
+            Assert.Equal(distribution.Cards, roundTrip.Cards);
+            Assert.Equal(
+                distribution.Destinations.Select(d => (d.Kind, d.Owner, d.Min, d.Max, d.Ordered, d.Randomized)),
+                roundTrip.Destinations.Select(d => (d.Kind, d.Owner, d.Min, d.Max, d.Ordered, d.Randomized)));
+            Assert.Equal(local.Prompt.Presentation?.Origins.Count, remote.Prompt.Presentation?.Origins.Count);
         }
     }
 
@@ -448,6 +452,25 @@ public sealed class PromptPresentationTests
     }
 
     [Fact]
+    public void Divided_target_order_distinguishes_players_and_objects_and_reselection()
+    {
+        var state = new PromptSelection();
+        var player = new TargetMessage { Player = 1 };
+        var permanent = new TargetMessage { Object = new ViewHandle(1) };
+        state.SetDividedShare(player, 1);
+        state.SetDividedShare(permanent, 2);
+        state.SetDividedShare(player, 0);
+        state.SetDividedShare(player, 1);
+        Assert.Equal([permanent, player], state.DividedOrder);
+        Assert.Equal(2, state.DividedShares[1]);
+        Assert.Equal(1, state.DividedPlayerShares[1]);
+        state.Clear();
+        Assert.Empty(state.DividedOrder);
+        Assert.Empty(state.DividedShares);
+        Assert.Empty(state.DividedPlayerShares);
+    }
+
+    [Fact]
     public void Selection_limits_replacement_toggling_and_new_prompt_reset_are_local_state()
     {
         var state = new PromptSelection();
@@ -576,6 +599,55 @@ public sealed class PromptPresentationTests
     /// mana type — or a player could never take the {C} the card allows.
     /// </summary>
     [Fact]
+    public void A_color_choice_remains_selectable_when_every_choice_adds_the_same_mana()
+    {
+        GameClient client = Client("priority-sacrifice-for-mana");
+        var option = new ActionOptionMessage
+        {
+            Kind = ActionKindView.ActivateAbility,
+            Produces = [ManaTypeView.Colorless],
+            ColorChoices = [ColorView.White, ColorView.Blue, ColorView.Red],
+            Description = "{T}: Add three mana of any one color. (can add {C} now)",
+        };
+        var rows = CardActions.ManaRows([option]);
+        Assert.Equal(3, rows.Count);
+        var red = Assert.Single(rows, row => row.Color == ColorView.Red);
+        Assert.StartsWith("Choose {R} → {C}", CardActions.Describe(client, option, red.Color));
+        Assert.Equal(ColorView.Red, AutoPlay.Answer(option, ColorView.Red).Color);
+        Assert.Equal(ColorView.White, AutoPlay.Answer(option).Color);
+
+        option.Produces.Clear();
+        Assert.Equal(3, CardActions.ManaRows([option]).Count);
+        Assert.StartsWith("Choose {R} → no mana", CardActions.Describe(client, option, ColorView.Red));
+        Assert.Equal(ColorView.Red, AutoPlay.Answer(option, ColorView.Red).Color);
+        Assert.False(CardActions.IsIrreversibleActivation(option));
+        Assert.False(AutoPass.CanAct(new PriorityPromptMessage { Options = [option] }));
+        option.Description = string.Empty;
+        option.CostText = "{T}";
+        Assert.Equal("{T}: Choose {R} → no mana", CardActions.Describe(client, option, ColorView.Red));
+    }
+
+    [Fact]
+    public void Mana_action_shows_the_abilitys_additional_effect()
+    {
+        GameClient client = Client("priority-sacrifice-for-mana");
+        var option = new ActionOptionMessage
+        {
+            Kind = ActionKindView.ActivateAbility,
+            Produces = [ManaTypeView.Black],
+            CostText = "{T}",
+            Description = "{T}: Add {B}. This creature deals 1 damage to you.",
+        };
+        Assert.Contains("deals 1 damage to you", CardActions.Describe(client, option));
+        option.Description += " (can add {C} now)";
+        option.Produces = [ManaTypeView.Colorless];
+        option.Filter = ManaSpendFilterView.NotNonartifactSpells;
+        string replaced = CardActions.Describe(client, option);
+        Assert.Contains("can add {C} now", replaced);
+        Assert.Contains("can't be spent on nonartifact spells", replaced);
+    }
+
+    [Fact]
     public void A_mana_ability_the_player_has_of_their_own_is_theirs_and_not_a_cards()
     {
         GameClient client = Client("priority-sacrifice-for-mana");
@@ -613,8 +685,7 @@ public sealed class PromptPresentationTests
         Assert.True(CardActions.ChoosesColorless(colorless.Option));
         Assert.StartsWith(
             "{C}",
-            CardActions.Describe(client, colorless.Option, colorless.Color, colorless.Combination, "Strip Mine")
-                .Split(": Add ").Last());
+            CardActions.Describe(client, colorless.Option, colorless.Color, colorless.Combination, "Strip Mine"));
 
         var black = Assert.Single(rows, row => row.Color == ColorView.Black);
         Assert.False(CardActions.ChoosesColorless(black.Option));

@@ -1,0 +1,5 @@
+{
+  "name": "Elephant Graveyard",
+  "type": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}: Regenerate target Elephant."
+}

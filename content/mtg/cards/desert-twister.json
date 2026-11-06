@@ -1,0 +1,6 @@
+{
+  "name": "Desert Twister",
+  "manaCost": "{4}{G}{G}",
+  "type": "Sorcery",
+  "oracleText": "Destroy target permanent."
+}

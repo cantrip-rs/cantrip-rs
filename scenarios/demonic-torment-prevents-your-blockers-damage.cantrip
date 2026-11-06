@@ -1,0 +1,35 @@
+# An Aura on your own creature prevents the damage it deals while blocking an opponent's creature; incoming damage
+# is not prevented, so the enchanted Memnite dies while the attacking Memnite survives.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Memnite
+Demonic Torment
+Swamp x15
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Demonic Torment.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Block(Memnite > Memnite)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Demonic Torment; Memnite
+Bot2.Battlefield.Memnite.Damage = 0

@@ -16,9 +16,12 @@ Island x20
 Bot1.Hand.Black Lotus.Cast
 Bot1.Hand.Mox Pearl.Cast
 Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.The Needs of the Many.Cast
+Bot1.Choose(Sacrifice 1 permanent)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass

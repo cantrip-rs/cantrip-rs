@@ -1,0 +1,41 @@
+# The Aura can enchant an opponent's creature and its bonus ends when the Aura is destroyed (CR 303.4, 611.3b).
+[Bot1 Deck]
+Divine Transformation
+Black Lotus
+Mox Pearl
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Disenchant
+Mox Pearl
+Plains
+Island x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Divine Transformation.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 3
+? Bot2.Battlefield.Ornithopter.Toughness = 5
+[T4 Bot2.Main1]
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Divine Transformation)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Graveyard.Divine Transformation.Colors = White

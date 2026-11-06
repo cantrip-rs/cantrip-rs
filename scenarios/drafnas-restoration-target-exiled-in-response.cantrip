@@ -1,0 +1,47 @@
+# A target exiled in response is not moved; the other legal target still goes on top (CR 608.2b).
+[Bot1 Deck]
+Faithless Looting
+Mox Ruby
+Island
+Ornithopter
+Memnite
+Drafna's Restoration
+Island x18
+[Bot2 Deck]
+Forest
+Mox Emerald
+Gleemox
+Scavenging Ooze
+Island x18
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Ornithopter; Memnite)
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Gleemox.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Scavenging Ooze.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Drafna's Restoration.Cast
+Bot1.Target(Bot1)
+Bot1.Target(Ornithopter; Memnite)
+? Bot1.Mana =
+Bot2.Battlefield.Gleemox.Activate(Color: Green)
+Bot2.Battlefield.Scavenging Ooze.Activate(Bot1.Graveyard.Memnite)
+Bot1.Pass
+[T5 Bot1.Main1]
+[Expect]
+Exile = Memnite
+Bot1.Graveyard = Drafna's Restoration; Faithless Looting
+Bot1.Hand = Island; Island; Island; Island; Ornithopter

@@ -1,0 +1,24 @@
+# An opponent's Island does not satisfy Dandân's state trigger, so its controller sacrifices it (CR 603.8).
+[Bot1 Deck]
+Dandân
+Mox Sapphire
+Gleemox
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Hand.Dandân.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard.Dandân.Power = 4
+Bot2.Battlefield.Island.Types = Land

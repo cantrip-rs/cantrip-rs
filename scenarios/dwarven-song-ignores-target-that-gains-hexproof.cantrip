@@ -1,0 +1,40 @@
+# A target that gains hexproof in response stays colorless while another legal target becomes red (CR 608.2b).
+[Bot1 Deck]
+Mox Ruby
+Ornithopter
+Dwarven Song
+Island
+Island
+Island
+Island
+Island x20
+[Bot2 Deck]
+Mox Emerald
+Memnite
+Blossoming Defense
+Island
+Island
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dwarven Song.Cast
+Bot1.Target(Bot1.Battlefield.Ornithopter; Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Blossoming Defense.Cast(Bot2.Battlefield.Memnite)
+? Bot2.Mana =
+[T2 Bot2.End]
+[Expect]
+Bot1.Battlefield.Ornithopter.Colors = Red
+Bot2.Battlefield.Memnite.Colors = (absent)
+Bot2.Battlefield.Memnite.Power = 3

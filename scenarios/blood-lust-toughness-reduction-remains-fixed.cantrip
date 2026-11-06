@@ -1,0 +1,36 @@
+# Mirkwood Pathmaker is 3/3 with three lands; Blood Lust makes it 7/1, then sacrificing a land makes it 6/0 and it dies (CR 608.2h, 704.5f).
+[Bot1 Deck]
+Mirkwood Pathmaker
+Black Lotus
+Mox Ruby
+Mox Pearl
+Blood Lust
+Forest x2
+Evolving Wilds
+Forest x20
+[Bot2 Deck]
+Island x24
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Mirkwood Pathmaker.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Evolving Wilds.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Blood Lust.Cast(Bot1.Battlefield.Mirkwood Pathmaker)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mirkwood Pathmaker.Power = 7
+? Bot1.Battlefield.Mirkwood Pathmaker.Toughness = 1
+Bot1.Battlefield.Evolving Wilds.Activate
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Mirkwood Pathmaker; Evolving Wilds; Blood Lust; Black Lotus

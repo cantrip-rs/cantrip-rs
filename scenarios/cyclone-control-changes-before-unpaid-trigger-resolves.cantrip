@@ -1,0 +1,57 @@
+# Opalescence makes Cyclone a creature; Old Man takes it in response to the upkeep trigger. Its former controller cannot sacrifice it when declining payment (CR 701.21a, 113.7a).
+[Bot1 Deck]
+Cyclone
+Opalescence
+Black Lotus x2
+Mox Emerald
+Mox Pearl
+Forest x20
+[Bot2 Deck]
+Old Man of the Sea
+Black Lotus
+Mox Pearl x3
+Bloodforged Battle-Axe
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Cyclone.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Opalescence.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Old Man of the Sea.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Hand.Bloodforged Battle-Axe.Cast
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Battlefield.Mox Pearl#3.Activate
+Bot2.Battlefield.Bloodforged Battle-Axe.Activate(Bot2.Battlefield.Old Man of the Sea)
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.PayCost
+[T5 Bot1.Upkeep]
+? Bot1.Battlefield.Cyclone.Power = 4
+? Bot2.Battlefield.Old Man of the Sea.Power = 4
+Bot1.Pass
+Bot2.Battlefield.Old Man of the Sea.Activate(Bot1.Battlefield.Cyclone)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Cyclone.Power = 4
+Bot2.Pass
+Bot1.Decline
+[T5 Bot1.Main1]
+[Expect]
+Bot2.Battlefield.Cyclone.Counters.Wind = 2
+Bot1.Life = 19
+Bot2.Life = 19

@@ -14,7 +14,7 @@ fn exile_and_compensate(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspen
         let controller = g.controller(creature);
         g.exile(creature);
         if power > 0 {
-            g.gain_life(controller, power);
+            g.gain_life(controller,(power) as i32);
         }
     }
     Ok(())

@@ -1,0 +1,24 @@
+# Giant Growth raises El-Hajjâj's power to four, so its combat damage gains four life (CR 603.2, 119.3).
+[Bot1 Deck]
+El-Hajjâj
+Black Lotus
+Forest
+Giant Growth
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.El-Hajjâj.Cast
+? Bot1.Mana =
+Bot1.Hand.Forest.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(El-Hajjâj)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.El-Hajjâj)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 24
+Bot2.Life = 16

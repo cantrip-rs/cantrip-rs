@@ -32,6 +32,8 @@ Bot1.Battlefield.Orcish Artillery.Activate(Bot2)
 [T5 Bot1.Main2]
 ? Bot1.Life = 17
 ? Bot2.Life = 18
+? Bot1.Battlefield.Orcish Artillery.Tapped = true
+! Bot1.Battlefield.Orcish Artillery.Activate(Bot2)
 [T7 Bot1.Main1]
 Bot1.Battlefield.Orcish Artillery.Activate(Bot1)
 [T7 Bot1.Main2]
