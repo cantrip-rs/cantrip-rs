@@ -1,0 +1,47 @@
+# Book of Rass costs six mana to cast, then pays two mana and two life to draw exactly one card (CR 602.2b, 121.1).
+# The life is paid before the ability resolves, and the untapped Book can be activated again on a later turn.
+[Bot1 Deck]
+Book of Rass
+Black Lotus x2
+Mox Pearl
+Mox Sapphire
+Island x15
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Book of Rass.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Book of Rass.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Life = 18
+? Bot1.Hand.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Book of Rass.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Life = 16
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 5
+[Expect]
+Bot1.Battlefield.Book of Rass.Tapped = false
+Bot2.Life = 20

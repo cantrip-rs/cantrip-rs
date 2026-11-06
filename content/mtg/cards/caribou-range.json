@@ -1,0 +1,6 @@
+{
+  "name": "Caribou Range",
+  "manaCost": "{2}{W}{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant land you control\nEnchanted land has \"{W}{W}, {T}: Create a 0/1 white Caribou creature token.\"\nSacrifice a Caribou token: You gain 1 life."
+}

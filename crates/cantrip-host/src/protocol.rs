@@ -493,6 +493,9 @@ pub struct RestrictedManaView {
     /// The permanent that produced it, for ordinary mana a rule tells apart by its source (CR 106.3: "mana produced by
     /// Barracks of the Thousand"), which `AssignMana` options name as their `Source`; none otherwise.
     pub source: ViewHandle,
+    /// Captured snow-source quality (CR 107.4h), independent of type and restriction.
+    #[serde(default)]
+    pub snow: bool,
 }
 
 /// One object the viewer can see. Characteristics are computed, never printed.
@@ -813,6 +816,10 @@ pub struct ActionOptionMessage {
     /// toughness; `description` is the keyword line ("Prototype {2}{R} — 3/2").
     #[serde(default)]
     pub cast_prototyped: bool,
+    #[serde(default)]
+    pub snow: bool,
+    #[serde(default)]
+    pub pay_snow: bool,
 }
 
 impl ActionOptionMessage {
@@ -852,6 +859,8 @@ impl ActionOptionMessage {
             pays_nothing: false,
             cast_face_down: false,
             cast_prototyped: false,
+            snow: false,
+            pay_snow: false,
         }
     }
 }
@@ -985,6 +994,7 @@ pub struct DamageShareMessage {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(tag = "$type")]
 pub enum PromptPayload {
+    ChooseCostPaymentPromptMessage(ChooseCostPaymentPrompt),
     PriorityPromptMessage(PriorityPrompt),
     DiscardPromptMessage(DiscardPrompt),
     DeclareAttackersPromptMessage(DeclareAttackersPrompt),
@@ -1007,6 +1017,7 @@ pub enum PromptPayload {
     RemoveCountersPromptMessage(RemoveCountersPrompt),
     ChooseStartingPlayerPromptMessage(ChooseStartingPlayerPrompt),
     MulliganPromptMessage(MulliganPrompt),
+    ChooseNumberPromptMessage(ChooseNumberPrompt),
 }
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
@@ -1246,9 +1257,14 @@ pub struct PayCostsPrompt {
     /// it from their pool), "CasterPays" (the caster pays the rest, no mana ability offered). Empty for any other payment.
     #[serde(default)]
     pub assist_step: String,
+    /// Confirming closes the mana ability window without paying the cost (CR 601.2g).
+    #[serde(default)]
+    pub mana_abilities: bool,
     /// The mana other players have paid towards this spell's cost as it is cast: the assisting player's (CR 702.132a).
     #[serde(default)]
     pub assisted: i32,
+    #[serde(default)]
+    pub remaining_snow: u32,
 }
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
@@ -1300,6 +1316,8 @@ pub struct ChooseCardsPrompt {
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct UnlessPaysPrompt {
+    #[serde(default)]
+    pub remaining_snow: u32,
     pub player: i32,
     pub source: ViewHandle,
     pub subject: ViewHandle,
@@ -1372,6 +1390,9 @@ pub struct ChooseTargetPrompt {
     /// is an answer, and which object candidates may be picked first. Every pick after is asked of the host (`Check`), as a
     /// choice of cards is. None for a slot that asks nothing of its targets together.
     pub verdict: Option<SelectionVerdictView>,
+    /// An empty answer keeps the named original target (CR 115.7d).
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub keep_original: bool,
 }
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
@@ -1413,6 +1434,34 @@ pub struct ChooseModesPrompt {
     pub detail: String,
     pub extra_modes_cost: bool,
     pub texts: Vec<String>,
+}
+
+/// A bounded scalar choice, used when enumerating every number would exceed the small modes presentation.
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
+#[serde(rename_all = "PascalCase")]
+pub struct ChooseNumberPrompt {
+    pub player: i32,
+    pub source: ViewHandle,
+    pub least: u32,
+    pub most: u32,
+    pub heading: String,
+}
+
+/// One selectable operation of a total cost. The decimal key is an opaque, lossless native ordinal.
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
+#[serde(rename_all = "PascalCase")]
+pub struct CostPaymentChoiceView {
+    pub key: String,
+    pub label: String,
+    pub objects: Vec<ViewHandle>,
+}
+
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
+#[serde(rename_all = "PascalCase")]
+pub struct ChooseCostPaymentPrompt {
+    pub player: i32,
+    pub source: ViewHandle,
+    pub choices: Vec<CostPaymentChoiceView>,
 }
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
@@ -1548,6 +1597,7 @@ pub struct MulliganPrompt {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(tag = "$type")]
 pub enum AnswerPayload {
+    CostPaymentChosenAnswer(CostPaymentChosenAnswer),
     PassAnswer(PassAnswer),
     CardsChosenAnswer(CardsChosenAnswer),
     TakeActionAnswer(TakeActionAnswer),
@@ -1567,6 +1617,7 @@ pub enum AnswerPayload {
     TargetsDividedAnswer(TargetsDividedAnswer),
     CountersRemovedAnswer(CountersRemovedAnswer),
     AnnounceAnswer(AnnounceAnswer),
+    NumberChosenAnswer(NumberChosenAnswer),
 }
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
@@ -1583,6 +1634,12 @@ pub struct CancelAnnouncementAnswer {}
 #[serde(rename_all = "PascalCase")]
 pub struct AnnounceAnswer {
     pub value: i32,
+}
+
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
+#[serde(rename_all = "PascalCase")]
+pub struct NumberChosenAnswer {
+    pub value: u32,
 }
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
@@ -1613,6 +1670,10 @@ pub struct TakeActionAnswer {
     pub spend_subtypes: Vec<String>,
     /// The mana value `filter` names, as `RestrictedManaView::spend_mana_value`.
     pub spend_mana_value: i32,
+    #[serde(default)]
+    pub snow: bool,
+    #[serde(default)]
+    pub pay_snow: bool,
 }
 
 impl TakeActionAnswer {
@@ -1632,6 +1693,8 @@ impl TakeActionAnswer {
             effect: ManaSpendEffectView::None,
             spend_subtypes: Vec::new(),
             spend_mana_value: 0,
+            snow: false,
+            pay_snow: false,
         }
     }
 
@@ -1645,6 +1708,9 @@ impl TakeActionAnswer {
         answer.effect = option.effect;
         answer.spend_subtypes = option.spend_subtypes.clone();
         answer.spend_mana_value = option.spend_mana_value;
+        answer.snow = option.snow;
+        answer.pay_snow = option.pay_snow;
+        if option.kind == ActionKindView::AssignMana { answer.mana = option.produces.first().copied(); }
         answer
     }
 }
@@ -1690,6 +1756,12 @@ pub struct MayChosenAnswer {
 #[serde(rename_all = "PascalCase")]
 pub struct ModesChosenAnswer {
     pub modes: Vec<i32>,
+}
+
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
+#[serde(rename_all = "PascalCase")]
+pub struct CostPaymentChosenAnswer {
+    pub key: String,
 }
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
@@ -1754,6 +1826,7 @@ impl PromptPayload {
     /// The seat being asked.
     pub fn player(&self) -> i32 {
         match self {
+            PromptPayload::ChooseCostPaymentPromptMessage(p) => p.player,
             PromptPayload::PriorityPromptMessage(p) => p.player,
             PromptPayload::DiscardPromptMessage(p) => p.player,
             PromptPayload::DeclareAttackersPromptMessage(p) => p.player,
@@ -1767,6 +1840,7 @@ impl PromptPayload {
             PromptPayload::ChooseTargetPromptMessage(p) => p.player,
             PromptPayload::MayPromptMessage(p) => p.player,
             PromptPayload::ChooseModesPromptMessage(p) => p.player,
+            PromptPayload::ChooseNumberPromptMessage(p) => p.player,
             PromptPayload::ChooseReplacementPromptMessage(p) => p.player,
             PromptPayload::OrderTriggersPromptMessage(p) => p.player,
             PromptPayload::NameCardPromptMessage(p) => p.player,
@@ -1782,6 +1856,7 @@ impl PromptPayload {
     /// The C# class name, which is also the `$type` tag.
     pub fn kind_name(&self) -> &'static str {
         match self {
+            PromptPayload::ChooseCostPaymentPromptMessage(_) => "ChooseCostPaymentPromptMessage",
             PromptPayload::PriorityPromptMessage(_) => "PriorityPromptMessage",
             PromptPayload::DiscardPromptMessage(_) => "DiscardPromptMessage",
             PromptPayload::DeclareAttackersPromptMessage(_) => "DeclareAttackersPromptMessage",
@@ -1795,6 +1870,7 @@ impl PromptPayload {
             PromptPayload::ChooseTargetPromptMessage(_) => "ChooseTargetPromptMessage",
             PromptPayload::MayPromptMessage(_) => "MayPromptMessage",
             PromptPayload::ChooseModesPromptMessage(_) => "ChooseModesPromptMessage",
+            PromptPayload::ChooseNumberPromptMessage(_) => "ChooseNumberPromptMessage",
             PromptPayload::ChooseReplacementPromptMessage(_) => "ChooseReplacementPromptMessage",
             PromptPayload::OrderTriggersPromptMessage(_) => "OrderTriggersPromptMessage",
             PromptPayload::NameCardPromptMessage(_) => "NameCardPromptMessage",
@@ -1901,6 +1977,7 @@ impl PromptPayload {
                 },
             }),
             PromptPayload::MayPromptMessage(_) => AnswerPayload::MayChosenAnswer(MayChosenAnswer { accept: false }),
+            PromptPayload::ChooseNumberPromptMessage(p) => AnswerPayload::NumberChosenAnswer(NumberChosenAnswer { value: p.least }),
             PromptPayload::ChooseModesPromptMessage(p) => {
                 let count = p.count.max(0) as usize;
                 let modes = if p.may_repeat {
@@ -1913,6 +1990,7 @@ impl PromptPayload {
                 };
                 AnswerPayload::ModesChosenAnswer(ModesChosenAnswer { modes })
             }
+            PromptPayload::ChooseCostPaymentPromptMessage(p) => AnswerPayload::CostPaymentChosenAnswer(CostPaymentChosenAnswer { key: p.choices.first().map_or_else(String::new, |c| c.key.clone()) }),
             PromptPayload::ChooseReplacementPromptMessage(_) => AnswerPayload::ReplacementChosenAnswer(ReplacementChosenAnswer { index: 0 }),
             PromptPayload::OrderTriggersPromptMessage(p) => AnswerPayload::TriggersOrderedAnswer(TriggersOrderedAnswer {
                 order: (0..p.sources.len() as i32).collect(),
@@ -2277,6 +2355,19 @@ pub struct HandKeptEvent {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn damage_and_life_quantities_roundtrip_bounded_values() {
+        for json in [
+            r#"{"$type":"LifeChangedEvent","Player":2,"Delta":-3,"NewTotal":17}"#,
+            r#"{"$type":"DamageMarkedEvent","Object":5,"Amount":2}"#,
+            r#"{"$type":"LifeChangedEvent","Player":2,"Delta":-2147483648,"NewTotal":-2147483648}"#,
+            r#"{"$type":"DamageMarkedEvent","Object":5,"Amount":65535}"#,
+        ] {
+            let event: GameEventView = serde_json::from_str(json).unwrap();
+            assert_eq!(serde_json::to_string(&event).unwrap(), json);
+        }
+    }
 
     #[test]
     fn prompts_are_tagged_with_the_csharp_class_name() {

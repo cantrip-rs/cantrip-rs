@@ -1,0 +1,33 @@
+# Caribou Range can target your land, but not an opponent's land (CR 303.4).
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Caribou Range
+Island x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Caribou Range.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Caribou Range.Cast(Bot1.Battlefield.Plains)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Caribou Range.AttachedTo = Plains

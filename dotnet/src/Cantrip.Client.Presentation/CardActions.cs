@@ -143,13 +143,18 @@ public sealed class CardActions
     /// of a mana value or greater by that mana value. Ordinary mana a rule tells apart by the permanent that produced it
     /// (CR 106.3) is offered as that permanent's (<paramref name="source"/>), apart from the rest of its kind.
     /// </summary>
-    public ActionOptionMessage? AssignFor(ManaTypeView type, ManaSpendFilterView filter, ManaSpendEffectView effect, IReadOnlyList<string>? subtypes = null, int manaValue = 0, ViewHandle source = default) =>
-        Assignable.FirstOrDefault(option =>
-            option.Produces.Count == 1 && option.Produces[0] == type
-            && option.Filter == filter && option.Effect == effect
-            && option.SpendSubtypes.SequenceEqual(subtypes ?? [])
-            && option.SpendManaValue == manaValue
-            && option.Source == source);
+    public ActionOptionMessage? AssignFor(ManaTypeView type, ManaSpendFilterView filter, ManaSpendEffectView effect, IReadOnlyList<string>? subtypes = null, int manaValue = 0, ViewHandle source = default, bool snow = false) =>
+        Assignable.FirstOrDefault(option => AssignmentMatches(option, type, filter, effect, subtypes, manaValue, source, snow));
+
+    /// <summary>Every allocation offered for this pool chip, including choosing whether snow mana pays {S}.</summary>
+    public IReadOnlyList<ActionOptionMessage> AssignmentsFor(ManaTypeView type, ManaSpendFilterView filter, ManaSpendEffectView effect, IReadOnlyList<string>? subtypes = null, int manaValue = 0, ViewHandle source = default, bool snow = false) =>
+        [.. Assignable.Where(option => AssignmentMatches(option, type, filter, effect, subtypes, manaValue, source, snow))];
+
+    private static bool AssignmentMatches(ActionOptionMessage option, ManaTypeView type, ManaSpendFilterView filter, ManaSpendEffectView effect, IReadOnlyList<string>? subtypes, int manaValue, ViewHandle source, bool snow) =>
+        option.Produces.Count == 1 && option.Produces[0] == type
+        && option.Filter == filter && option.Effect == effect
+        && option.SpendSubtypes.SequenceEqual(subtypes ?? [])
+        && option.SpendManaValue == manaValue && option.Source == source && option.Snow == snow;
 
     public IReadOnlyList<ActionOptionMessage> For(ViewHandle handle) =>
         _bySource.TryGetValue(handle.Value, out List<ActionOptionMessage>? options) ? options : None;
@@ -182,6 +187,11 @@ public sealed class CardActions
     {
         ArgumentNullException.ThrowIfNull(client);
         ArgumentNullException.ThrowIfNull(option);
+
+        if (option.Kind == ActionKindView.AssignMana)
+        {
+            return option.Description.Length > 0 ? option.Description : option.PaySnow ? "Pay {S} with snow mana" : "Spend this pool mana";
+        }
 
         string name = option.GrantedBy.Length > 0 ? option.GrantedBy : client.Object(option.Source)?.Name ?? "this";
 
@@ -230,8 +240,30 @@ public sealed class CardActions
                     + string.Join("/", option.ColorChoices.Select(c => $"{{{Symbol(c)}}}"));
             }
 
-            if (adds.Length > 0)
+            if (adds.Length > 0 || (color is not null && option.ColorChoices.Count > 0 && option.ProducesOfAnyColorEach == 0))
             {
+                // The ability's own words can contain more than the mana it adds (Ancient Tomb, Adarkar Wastes).
+                // Keep them, and distinguish rows that choose a color or a permanent for the cost.
+                string? fullDescription = null;
+                if (option.Description.Length > 0)
+                {
+                    string description = option.Description.TrimEnd('.');
+                    if (color is not null || combination is { Count: > 0 } || ChoosesColorless(option))
+                    {
+                        description = color is { } chosenColor && option.ProducesOfAnyOneColor == 0
+                            ? $"Choose {{{Symbol(chosenColor)}}} → {(adds.Length == 0 ? "no mana" : adds)} — {description}"
+                            : $"{adds} — {description}";
+                    }
+                    if (sacrificed.Length > 0)
+                    {
+                        description += $" ({sacrificed})";
+                    }
+                    if (option.Tap is { } chosenTap && !anyPermanent)
+                    {
+                        description += $" ({client.Object(chosenTap)?.Name ?? "permanent"})";
+                    }
+                    fullDescription = description;
+                }
                 // With more than one permanent able to pay the sacrifice, the cost line names the one this row would
                 // take: "Sacrifice a Forest" is the same sentence on every row and says nothing about which.
                 string cost = sacrificed.Length > 0 ? $"{option.CostText} ({sacrificed})" : option.CostText;
@@ -239,7 +271,11 @@ public sealed class CardActions
                 {
                     cost += $" ({client.Object(tapped)?.Name ?? "permanent"})";
                 }
-                string text = cost.Length > 0 ? $"{cost}: Add {adds}" : $"{name}: add {adds}";
+                string text = fullDescription ?? (cost.Length > 0 ? $"{cost}: Add {adds}" : $"{name}: add {adds}");
+                if (fullDescription is null && color is { } named && option.ProducesOfAnyOneColor == 0)
+                {
+                    text = $"{(cost.Length > 0 ? cost : name)}: Choose {{{Symbol(named)}}} → {(adds.Length == 0 ? "no mana" : adds)}";
+                }
 
                 List<string> notes = [];
                 if (option.Filter != ManaSpendFilterView.None)
@@ -490,7 +526,7 @@ public sealed class CardActions
         List<(ActionOptionMessage Option, ColorView? Color, List<ColorView> Combination, ViewHandle? Sacrifice)> rows = [];
         foreach (ActionOptionMessage option in offered)
         {
-            List<(ColorView? Color, List<ColorView> Combination)> mana = option.ProducesOfAnyOneColor > 0
+            List<(ColorView? Color, List<ColorView> Combination)> mana = option.ProducesOfAnyOneColor > 0 || (option.ColorChoices.Count > 0 && option.ProducesOfAnyColorEach == 0)
                 ? ChoosesColorless(option)
                     ? [(null, [])]
                     : [.. option.ColorChoices.Select(color => ((ColorView?)color, new List<ColorView>()))]
@@ -579,7 +615,8 @@ public sealed class CardActions
         return option.Kind == ActionKindView.ActivateAbility
             && option.Produces.Count == 0
             && option.ProducesOfAnyOneColor == 0
-            && option.ProducesOfAnyColorEach == 0;
+            && option.ProducesOfAnyColorEach == 0
+            && option.ColorChoices.Count == 0;
     }
 
     /// <summary>

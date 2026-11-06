@@ -1,0 +1,51 @@
+# Breeding Pit makes a 0/1 black Thrull on its controller's end step, not the opponent's (CR 603.2).
+# Paying exactly {B}{B} at upkeep keeps it for a second token; declining later sacrifices it.
+[Bot1 Deck]
+Breeding Pit
+Black Lotus
+Mox Pearl
+Mox Jet
+Swamp x16
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Breeding Pit.Cast
+? Bot1.Mana =
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thrull Token.Power = 0
+? Bot1.Battlefield.Thrull Token.Toughness = 1
+? Bot1.Battlefield.Thrull Token.Colors = Black
+? Bot1.Battlefield.Thrull Token.Subtypes = Thrull
+? Bot1.Battlefield.Thrull Token.Types = Creature
+? Bot1.Battlefield.Thrull Token.Token = true
+? Bot1.Battlefield.Thrull Token.Tapped = false
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Count = 5
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Breeding Pit.Types = Enchantment
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thrull Token#2.Power = 0
+[T5 Bot1.Upkeep]
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Graveyard = Breeding Pit; Black Lotus
+[T5 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Count = 5

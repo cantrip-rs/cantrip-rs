@@ -41,7 +41,7 @@ fn untap_step_of_yours(game: &mut Game) {
         t.active = YOU;
         t.set_step(Step::Untap);
     });
-    let mut cx = Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let mut cx = Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     untap_step(&mut cx, YOU).expect("nothing is asked");
 }
 

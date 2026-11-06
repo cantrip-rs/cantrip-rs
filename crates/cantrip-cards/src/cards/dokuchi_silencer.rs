@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{effects, select, targets, ninjutsu, triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT};
+use cantrip_mechanics::{effects, select, targets, ninjutsu, triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT};
 use cantrip_oracle as oracle;
 
 /// "Whenever this creature deals combat damage to a player, you may discard a creature card. When you do, destroy target
@@ -25,7 +25,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         ninjutsu::ninjutsu(mana("{1}{B}"), "Ninjutsu {1}{B} ({1}{B}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)"),
         triggered(
-            DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT,
+            DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT,
             discard_a_creature_card,
             "Whenever this creature deals combat damage to a player, you may discard a creature card. When you do, destroy target creature or planeswalker that player controls.",
         ),

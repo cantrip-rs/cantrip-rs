@@ -1,0 +1,25 @@
+# Clairvoyance looks at a player's hand and draws once at the next
+# turn's upkeep, even when that turn belongs to the opponent (CR 115.1a, 603.7b).
+[Bot1 Deck]
+Clairvoyance
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Memnite
+Forest x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Clairvoyance.Cast(Bot1.Battlefield.Mox Sapphire)
+Bot1.Hand.Clairvoyance.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Looked = Memnite; Forest; Forest; Forest; Forest; Forest; Forest
+? Bot1.Hand.Count = 5
+[T2 Bot2.Main1]
+? Bot1.Hand.Count = 6
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 7
+[Expect]
+Turn = 3

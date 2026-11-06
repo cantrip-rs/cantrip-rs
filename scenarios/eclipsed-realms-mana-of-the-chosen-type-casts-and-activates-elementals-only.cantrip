@@ -46,6 +46,7 @@ Bot1.Battlefield.Eclipsed Realms.Activate(Ability: any color; Color: Green)
 Bot1.Battlefield.Eclipsed Realms.Activate(Ability: any color; Color: Green)
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Bramble Familiar.Activate(Ability: Return; Spend: G ElementalSpellsOrAbilities, G)
+Bot1.Choose(Tap Bramble Familiar)
 Bot1.Choose(Island)
 Bot1.Pass
 Bot2.Pass

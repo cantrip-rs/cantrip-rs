@@ -30,7 +30,7 @@ static OGRE: CardDef =
     CardDef { name: "Reveal Test Ogre", cost: generic(3), types: TypeSet::of(&[CardType::Creature]), power: Some(3), toughness: Some(3), ..CardDef::BLANK };
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// A game of `players`, `active`'s main phase with priority and an empty stack.
@@ -71,7 +71,7 @@ fn face_down_spell(g: &mut Game) -> ObjectId {
     let caster = g.state.turn.active;
     let card = put(g, &SKYWARDEN, caster, Zone::hand(caster));
     let source = g.state.zone(Zone::library(caster))[0];
-    g.state.add_mana(caster, Mana::C, 3, source, None, ManaLasts::Step);
+    g.state.add_mana(caster, Mana::C, 3, source, None, ManaLasts::Step, false);
     if let Some(at) = g.state.agenda.len().checked_sub(1) {
         g.state.update_frame(at, |f| f.pending = None);
     }

@@ -26,6 +26,7 @@ Bot1.Hand.Mox Jet.Cast
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Island.Play
 Bot1.Battlefield.Slagdrill Scrapper.Activate
+Bot1.Choose(Tap Slagdrill Scrapper)
 Bot1.Choose(Island)
 Bot1.Pass
 Bot2.Pass

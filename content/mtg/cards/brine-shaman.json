@@ -1,0 +1,8 @@
+{
+  "name": "Brine Shaman",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Human Cleric Shaman",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}, Sacrifice a creature: Target creature gets +2/+2 until end of turn.\n{1}{U}{U}, Sacrifice a creature: Counter target creature spell."
+}

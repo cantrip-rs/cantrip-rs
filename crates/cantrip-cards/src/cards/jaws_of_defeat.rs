@@ -23,7 +23,7 @@ fn drain(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let chars = g.chars(creature);
     let difference = (chars.power.unwrap_or(0) as i32 - chars.toughness.unwrap_or(0) as i32).abs();
     if difference > 0 {
-        g.lose_life(opponent, difference);
+        g.lose_life(opponent,(difference) as i32);
     }
     Ok(())
 }

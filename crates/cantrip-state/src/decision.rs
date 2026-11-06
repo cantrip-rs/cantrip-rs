@@ -221,6 +221,10 @@ pub struct ActionOption {
     /// For `AssignMana`: the restriction on the mana (CR 106.6), if it has one. For a mana ability: the restriction on
     /// the mana it adds.
     pub restriction: Option<ManaRestriction>,
+    /// For AssignMana, the captured source quality; for a mana ability, its current source quality as advice.
+    /// `pay_snow` chooses whether an assigned unit pays a {S} symbol.
+    pub snow: bool,
+    pub pay_snow: bool,
     /// For a mana ability offered while a cost is paid: the mana it adds is restricted so that none of it may pay this
     /// cost (CR 106.6). Activating it is still a choice the player has (CR 601.2g, 605.3a); it only fills the pool.
     pub pays_nothing: bool,
@@ -241,6 +245,8 @@ impl ActionOption {
             names_nothing: false,
             mana: None,
             restriction: None,
+            snow: false,
+            pay_snow: false,
             pays_nothing: false,
         }
     }
@@ -262,6 +268,10 @@ pub struct Action {
     pub color: Option<Color>,
     pub mana: Option<Mana>,
     pub restriction: Option<ManaRestriction>,
+    /// For AssignMana, the captured source quality; for a mana ability, its current source quality as advice.
+    /// `pay_snow` chooses whether an assigned unit pays a {S} symbol.
+    pub snow: bool,
+    pub pay_snow: bool,
 }
 
 impl Action {
@@ -276,6 +286,8 @@ impl Action {
             color: None,
             mana: option.mana,
             restriction: option.restriction,
+            snow: option.snow,
+            pay_snow: option.pay_snow,
         }
     }
 }
@@ -351,8 +363,23 @@ pub enum StandIn {
     Chosen { controller: PlayerId, source: ObjectId, candidates: Vec<PlayerId> },
 }
 
+/// One currently payable operation of a total cost (CR 601.2h). The label describes the actual cost to the player;
+/// objects are the real objects involved, never stand-ins for non-object costs.
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+pub struct CostPaymentChoice {
+    pub label: String,
+    pub objects: Vec<ObjectId>,
+    pub kind: CostPaymentKind,
+}
+
+/// The kind of operation, independently of its position in an unbounded list.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub enum CostPaymentKind { Life, Tap, Sacrifice, Return, Exile, Mana, Energy, Counters, Discard, Behold, Exert, Unattach, Library, CommitHelpers, Choose }
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub enum RequestKind {
+    /// Choose which currently payable operation of a cost to pay next (CR 601.2h).
+    ChooseCostPayment { source: ObjectId, choices: Vec<CostPaymentChoice> },
     /// Act or pass (CR 117). Passing is always legal.
     Priority { options: Vec<ActionOption> },
     /// Pay what is still owed on a spell or ability (CR 601.2g-h): activate a mana ability, put pool mana towards it,
@@ -362,6 +389,8 @@ pub enum RequestKind {
         total: ManaCost,
         remaining: ManaCost,
         options: Vec<ActionOption>,
+        /// The CR 601.2g mana ability window; confirming closes the window without spending mana.
+        mana_abilities: bool,
         /// Announcing X or how many times it is kicked (CR 601.2b), with the value so far, rather than paying.
         announcing: bool,
         x: u32,
@@ -433,7 +462,14 @@ pub enum RequestKind {
     /// values"), its number read (`TargetSpec::COUNTED` as the slot's count), none for a slot that asks
     /// nothing of them together: `cantrip_api::select::judge_targets` judges a choice by it, the core refuses one it does not
     /// call complete, and a client asks it which candidates may be added as the player picks (the host's `Check`).
-    ChooseTarget { source: ObjectId, purpose: Purpose, candidates: Vec<Target>, optional: bool, least: u32, count: u32, any_number: bool, label: &'static str, slot_player: Option<PlayerId>, together: Option<Part> },
+    ChooseTarget {
+        source: ObjectId, purpose: Purpose, candidates: Vec<Target>, optional: bool,
+        least: u32, count: u32, any_number: bool, label: &'static str,
+        slot_player: Option<PlayerId>, together: Option<Part>,
+        /// The original target occurrence; an empty answer keeps it, even if illegal (CR 115.7d).
+        /// It is display context, not a candidate or a newly chosen target.
+        replacing: Option<(u32, Target)>,
+    },
     /// One or more of these labelled options (a pile, a mode), by index.
     /// `count` to `at_most` of them when `at_most` is more than `count` (zero `count` is "up to"). `affordable` is
     /// the eligible modes whose own cost the chooser could pay as well, advice for a default; `additional_cost`
@@ -568,7 +604,8 @@ impl RequestKind {
     pub fn source(&self) -> Option<ObjectId> {
         use RequestKind as K;
         match self {
-            K::PayCosts { source, .. }
+            K::ChooseCostPayment { source, .. }
+            | K::PayCosts { source, .. }
             | K::UnlessPays { source, .. }
             | K::ChooseCards { source, .. }
             | K::ChooseTarget { source, .. }
@@ -604,7 +641,8 @@ impl RequestKind {
     pub fn is_cost(&self) -> bool {
         matches!(
             self,
-            RequestKind::PayCosts { .. }
+            RequestKind::ChooseCostPayment { .. }
+                | RequestKind::PayCosts { .. }
                 | RequestKind::UnlessPays { .. }
                 | RequestKind::TapForPower { .. }
                 | RequestKind::CollectEvidence { .. }
@@ -625,6 +663,10 @@ impl RequestKind {
             }
         }
         match self {
+            RequestKind::ChooseCostPayment { source, choices } => {
+                add(&[*source]);
+                for choice in choices { add(&choice.objects); }
+            }
             RequestKind::Priority { options: o } => options(&mut add, o),
             RequestKind::UnlessPays { options: o, source, subject, .. } => {
                 options(&mut add, o);
@@ -878,13 +920,13 @@ pub enum BlockCapacity {
 
 impl BlockCapacity {
     /// How many creatures a creature under `capacities` can block (CR 509.1a): one, and each additional one; `u32::MAX` for
-    /// any number. The additional ones are what cards print (seven, ninety-nine), a handful at once, so their sum is plain.
+    /// any number. Counts saturate at the number that represents any number, including generated dynamic allowances.
     pub fn total(capacities: impl IntoIterator<Item = BlockCapacity>) -> u32 {
-        let mut total = 1;
+        let mut total = 1u32;
         for c in capacities {
             match c {
                 BlockCapacity::AnyNumber => return u32::MAX,
-                BlockCapacity::Additional(n) => total += n,
+                BlockCapacity::Additional(n) => total = total.saturating_add(n),
             }
         }
         total
@@ -1565,6 +1607,25 @@ pub enum Label {
     /// Where a mutating creature spell is put as it merges with the creature it targets (CR 702.140c): on top of it, or
     /// under it.
     Mutate { on_top: bool },
+    /// A card label in the captured words of the text offering it (CR 612).
+    /// The card and printed index remain the option's identity.
+    WordedCard(CardId, u8, Words),
+    /// An `Option` in its captured words, including the prospective copy's
+    /// words for a choice made before a permanent enters (CR 614.12).
+    WordedOption(CardId, u8, Words),
+}
+
+impl Label {
+    /// Capture the text offering a printed label. An already captured label
+    /// keeps its own context; names, modes and other typed choices are unchanged.
+    pub fn with_words(self, words: Words) -> Self {
+        if words.is_printed() { return self; }
+        match self {
+            Self::Card(card, index) => Self::WordedCard(card, index, words),
+            Self::Option(card, index) => Self::WordedOption(card, index, words),
+            other => other,
+        }
+    }
 }
 
 /// One miracle ability of a card (CR 702.94a), named without the object, which a question asked as the card is drawn may not
@@ -1588,6 +1649,8 @@ impl MiracleOf {
 /// An answer to a request.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub enum Answer {
+    /// The exact ordinal of one currently offered cost payment operation.
+    CostPayment(usize),
     Pass,
     Act(Action),
     Cards(Vec<ObjectId>),

@@ -1,0 +1,41 @@
+# The tap ability targets either player's flying creature, deals exactly 1 damage,
+# and cannot target a creature without flying (CR 115.1c, 602.2b, 120.3).
+[Bot1 Deck]
+Centaur Archer
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Ornithopter
+Memnite
+Mountain x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Centaur Archer.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Centaur Archer.Activate(Bot1.Battlefield.Memnite)
+Bot1.Battlefield.Centaur Archer.Activate(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Ornithopter.Damage = 1
+? Bot1.Battlefield.Centaur Archer.Tapped = true
+! Bot1.Battlefield.Centaur Archer.Activate(Bot1.Battlefield.Ornithopter)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Centaur Archer.Activate(Bot1.Battlefield.Ornithopter)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Ornithopter.Damage = 1
+Bot1.Battlefield.Centaur Archer.Tapped = true
+Bot1.Battlefield.Memnite.Damage = 0

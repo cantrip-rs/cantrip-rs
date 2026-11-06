@@ -41,6 +41,7 @@ Bot1.Modes(Casualty X)
 ? Client.Bot1.Prompt.Title = Choose X for Ob Nixilis, the Adversary
 ? Client.Bot1.Prompt.Detail = X is the least power of the creature you sacrifice  ·  {1}{B}{R} in all  ·  targets and paying come next
 ! Bot1.Choose(Dryad Arbor)
+Bot1.Choose(optional cost of Ob Nixilis)
 Bot1.Choose(Woodland Changeling)
 Bot1.Pass
 Bot2.Pass

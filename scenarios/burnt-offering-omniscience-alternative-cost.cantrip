@@ -1,0 +1,28 @@
+# Omniscience waives the mana cost but not the creature sacrifice (CR 118.9d); Burnt Offering uses that creature's mana value.
+[Bot1 Deck]
+Black Lotus
+Show and Tell
+Omniscience
+Grizzly Bears
+Burnt Offering
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Omniscience)
+Bot1.Hand.Grizzly Bears.Cast(Ability: Without paying)
+Bot1.Pass
+Bot1.Hand.Burnt Offering.Cast(Ability: Without paying)
+Bot1.Choose(Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Red; Red)
+[Expect]
+Bot1.Mana = {R}{R}
+Bot1.Graveyard = Burnt Offering; Grizzly Bears; Show and Tell; Black Lotus

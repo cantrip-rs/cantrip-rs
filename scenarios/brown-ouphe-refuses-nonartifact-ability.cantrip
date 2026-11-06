@@ -1,0 +1,48 @@
+# With both abilities on the stack, Brown Ouphe refuses a creature's ability and counters the artifact ability (CR 115.1, 701.6a).
+[Bot1 Deck]
+Brown Ouphe
+Mox Emerald
+Mox Sapphire
+Tormod's Crypt
+Forest x20
+[Bot2 Deck]
+Black Lotus
+Mother of Runes
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Brown Ouphe.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Mother of Runes.Cast
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mother of Runes.Activate(Bot2.Battlefield.Mother of Runes)
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot2)
+! Bot1.Battlefield.Brown Ouphe.Activate(Stack.Mother of Runes)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Brown Ouphe.Activate(Bot2)
+! Bot1.Battlefield.Brown Ouphe.Activate(Bot1.Battlefield.Mox Sapphire)
+Bot1.Battlefield.Brown Ouphe.Activate(Stack.Tormod's Crypt)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Colors(Red)
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Graveyard = Black Lotus
+Bot2.Battlefield.Mother of Runes.ProtectionFrom = Red

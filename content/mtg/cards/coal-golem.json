@@ -1,0 +1,8 @@
+{
+  "name": "Coal Golem",
+  "manaCost": "{5}",
+  "type": "Artifact Creature — Golem",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "{3}, Sacrifice this creature: Add {R}{R}{R}."
+}

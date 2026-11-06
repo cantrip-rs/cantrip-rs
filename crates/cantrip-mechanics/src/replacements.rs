@@ -232,10 +232,13 @@ pub const OPPONENTS_CREATURES_EXILED_INSTEAD_OF_DYING: ReplacementDef = replacem
     "exiles a creature an opponent controls instead of letting it die",
 );
 
-fn exile_instead_of_dying_applies(q: &dyn Query, _: &Asker, affected: ObjectId, proposal: &Proposal) -> bool {
+fn exile_instead_of_dying_applies(_: &dyn Query, _: &Asker, affected: ObjectId, proposal: &Proposal) -> bool {
     matches!(proposal, Proposal::ZoneChange(z)
-        if z.object == affected && z.from.is(ZoneKind::Battlefield) && z.to.is(ZoneKind::Graveyard)
-            && { let c = q.chars(affected); c.is(CardType::Creature) || c.is(CardType::Planeswalker) })
+        if z.object == affected && z.from.is(ZoneKind::Battlefield) && z.to.is(ZoneKind::Graveyard))
+}
+
+fn creature_exile_instead_of_dying_applies(q: &dyn Query, asker: &Asker, affected: ObjectId, proposal: &Proposal) -> bool {
+    exile_instead_of_dying_applies(q, asker, affected, proposal) && q.chars(affected).is(CardType::Creature)
 }
 
 /// `exile_instead_apply` as the `apply` of a `granted_replacement`, which is also told the object it is about. Suplex, Mawloc
@@ -245,14 +248,20 @@ pub fn exile_instead_apply_granted(q: &dyn Query, asker: &Asker, _: ObjectId, pr
 }
 
 /// "If that creature would die this turn, exile it instead" (CR 614.1a, 700.4, 611.2c): a replacement effect the spell or
-/// ability makes about one object for the turn, not an ability the creature gains. Only a creature or planeswalker moving
-/// from the battlefield to a graveyard "dies" (CR 700.4), so one returned to its hand goes there, and one that has stopped
-/// being a creature or planeswalker (Lion Sash made an Equipment) is put into the graveyard as an ordinary permanent. List it among a card's `granted_replacements`
+/// ability makes about one object for the turn, not an ability the creature gains. "Dies" means a move from the battlefield
+/// to a graveyard (CR 700.4); the bound object remains covered after losing its creature type, but not when returned to hand.
+/// List it among a card's `granted_replacements`
 /// and make the effect with `exile_if_it_would_die` before anything can kill the creature. Suplex and Mawloc print it.
 pub const EXILE_INSTEAD_OF_DYING: GrantedReplacementDef =
     granted_replacement(ReplacementKind::ZoneChange, exile_instead_of_dying_applies, exile_instead_apply_granted, "exiled instead of dying");
 
-/// Makes `EXILE_INSTEAD_OF_DYING` (the resolving spell or ability's card's replacement number `index`) about `creature` until
+/// "If a creature dealt damage this way would die this turn, exile it instead" (CR 614.1a, 700.4): the caller records the
+/// actual damaged permanent, and this open creature restriction is checked when it would die. Anger of the Gods,
+/// Red Sun's Zenith and Yamabushi's Flame print it. A damaged planeswalker that becomes a creature can qualify later.
+pub const CREATURE_EXILED_INSTEAD_OF_DYING: GrantedReplacementDef =
+    granted_replacement(ReplacementKind::ZoneChange, creature_exile_instead_of_dying_applies, exile_instead_apply_granted, "exiles a damaged creature instead of letting it die");
+
+/// Makes the caller's granted exile replacement (the resolving spell or ability's card's replacement number `index`) about `creature` until
 /// end of turn. It names the object, so it does not follow the creature if it leaves and returns as a new object (CR 400.7).
 pub fn exile_if_it_would_die(g: &mut dyn Game, item: &StackItem, index: u8, creature: ObjectId) {
     g.add_effect(item.object, creature, EffectKind::Replacement { card: item.ability.card, index }, Duration::EndOfTurn);
@@ -286,7 +295,7 @@ fn permanents_enter_tapped_applies<const WHICH: u8>(q: &dyn Query, _: &Asker, pr
     untapped_entry_of_kind::<WHICH>(q, proposal).is_some()
 }
 
-fn opponents_enter_tapped_apply(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
+pub fn opponents_enter_tapped_apply(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
     if let Proposal::ZoneChange(z) = proposal {
         z.tapped = true;
     }
@@ -443,7 +452,7 @@ fn damage_to_you_and_your_other_permanents(q: &dyn Query, asker: &Asker, proposa
 }
 
 /// "... is dealt to this creature instead."
-fn dealt_to_this_creature_instead(_: &dyn Query, asker: &Asker, proposal: &mut Proposal) {
+pub fn dealt_to_this_creature_instead(_: &dyn Query, asker: &Asker, proposal: &mut Proposal) {
     if let Proposal::Damage(d) = proposal {
         d.target = Target::Object(asker.source);
     }

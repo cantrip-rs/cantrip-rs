@@ -28,6 +28,7 @@ Bot1.Battlefield.Mox Ruby#1.Activate
 Bot1.Battlefield.Mox Ruby#2.Activate
 Bot1.Battlefield.Scavenger Grounds.Activate(Ability: Exile)
 ! Bot1.Choose(Mox Ruby#1)
+Bot1.Choose(Tap Scavenger Grounds)
 Bot1.Choose(Scavenger Grounds)
 ? Bot1.Mana =
 Bot1.Pass

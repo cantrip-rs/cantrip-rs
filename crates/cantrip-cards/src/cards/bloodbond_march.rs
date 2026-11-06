@@ -22,7 +22,7 @@ fn return_same_name(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         }
     }
     if !returning.is_empty() {
-        g.put_all_onto_battlefield(&returning)?;
+        g.put_all_onto_battlefield_by(&returning.into_iter().map(|(card, player)| (card, player, false, player)).collect::<Vec<_>>(), &[])?;
     }
     Ok(())
 }

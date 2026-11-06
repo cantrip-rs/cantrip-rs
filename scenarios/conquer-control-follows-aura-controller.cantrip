@@ -1,0 +1,41 @@
+# Giving Conquer to an opponent makes that player control the enchanted land, even when the caster owns it (CR 109.5, 613.1b).
+[Bot1 Deck]
+Forest
+Black Lotus
+Black Lotus
+Mox Ruby
+Mox Pearl
+Conquer
+Harmless Offering
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Conquer.Cast(Bot1.Battlefield.Forest)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest.Types = Land
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Bot1.Battlefield.Conquer)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Conquer.AttachedTo = Forest
+Bot2.Battlefield.Forest.Types = Land
+Bot1.Battlefield.Forest = (absent)

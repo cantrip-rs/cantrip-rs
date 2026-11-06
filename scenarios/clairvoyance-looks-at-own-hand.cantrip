@@ -1,0 +1,26 @@
+# Clairvoyance may target its controller, who looks at their remaining hand;
+# cast on the opponent's turn, it draws at the controller's next upkeep (CR 115.1a, 603.7b).
+[Bot1 Deck]
+Clairvoyance
+Mox Sapphire
+Memnite
+Island x20
+[Bot2 Deck]
+Forest x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Clairvoyance.Cast(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Looked = Memnite; Island; Island; Island; Island
+? Bot1.Hand.Count = 5
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 6
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Hand.Count = 7

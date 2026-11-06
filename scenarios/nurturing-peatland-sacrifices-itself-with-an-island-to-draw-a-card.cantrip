@@ -12,6 +12,7 @@ Swamp x15
 [Actions]
 Bot1.Hand.Nurturing Peatland.Play
 Bot1.Battlefield.Nurturing Peatland.Activate(Ability: Add; Color: Black)
+Bot1.Choose(Tap Nurturing Peatland)
 ? Bot1.Mana = {B}
 ? Bot1.Life = 19
 [T3 Bot1.Main1]

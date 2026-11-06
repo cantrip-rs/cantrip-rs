@@ -1,0 +1,77 @@
+# Laelia sees Ugin exile multiple cards as one event and gets one counter (CR 603.2c).
+# Ugin, Eye of the Storms, -11: "Search your library for any number of colorless nonland cards, exile them, then shuffle. Until end of turn,
+# you may cast those cards without paying their mana costs." Ugin comes down on turn 1 (a Black Lotus and four Moxen), +2 on turns 1 and 3
+# takes his loyalty from 7 to 11, and on turn 5 he uses the -11. The library holds a Lightning Bolt (colored) and an Island (a land), which
+# are not on offer (the refusal), and a Sol Ring, an Ornithopter and a Mind Stone (colorless nonland), of which Bot1 takes three. The
+# Sol Ring and the Ornithopter are cast for free that turn; the Mind Stone is not, and on turn 7 the permission has ended (the refusal).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Black Lotus
+Ugin, Eye of the Storms
+Laelia, the Blade Reforged
+Island
+Island
+Island
+Island
+Lightning Bolt
+Sol Ring
+Ornithopter
+Mind Stone
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ugin, Eye of the Storms.Cast
+Bot1.Pass
+Bot1.Battlefield.Ugin, Eye of the Storms.Activate(Ability: +2)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Laelia, the Blade Reforged.Cast
+Bot1.Pass
+Bot1.Battlefield.Ugin, Eye of the Storms.Activate(Ability: +2)
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Ugin, Eye of the Storms.Activate(Ability: Search)
+! Bot1.Search(Lightning Bolt)
+! Bot1.Search(Island)
+Bot1.Search(Sol Ring; Ornithopter; Mind Stone)
+? Bot1.Shuffles = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Exile.Sol Ring.Cast
+Bot1.Pass
+Bot1.Exile.Ornithopter.Cast
+Bot1.Pass
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Laelia, the Blade Reforged.Counters.PlusOnePlusOne = 1
+! Bot1.Exile.Mind Stone.Cast
+
+[Expect]
+Exile = Mind Stone
+Bot1.Battlefield.Count = 7
+Bot1.Graveyard.Count = 2

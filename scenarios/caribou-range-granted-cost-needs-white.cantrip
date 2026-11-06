@@ -1,0 +1,29 @@
+# One white and two blue mana cannot pay the granted ability's two white symbols (CR 602.2b).
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Sapphire
+Caribou Range
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Caribou Range.Cast(Bot1.Battlefield.Plains)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+! Bot1.Battlefield.Plains.Activate(Ability: Create a 0/1; Mana: short)
+[Expect]
+Bot1.Battlefield.Plains.Tapped = false

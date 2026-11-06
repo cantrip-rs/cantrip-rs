@@ -29,6 +29,7 @@ Bot1.Hand.Mox Pearl.Cast
 Bot1.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Time Sieve.Activate
+Bot1.Choose(Tap Time Sieve)
 Bot1.Choose(Time Sieve; Mox Sapphire; Mox Jet; Mox Ruby; Mox Pearl)
 ? LeftBattlefield = Time Sieve (tapped); Mox Sapphire; Mox Jet; Mox Ruby; Mox Pearl
 [T4 Bot1.Main1]

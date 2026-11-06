@@ -1,6 +1,6 @@
 # "Exile a creature you control" is part of the cost (CR 118.3): with no creature, the harness ability can't be activated though
-# the mana ({6}{B}, from three Black Lotuses) and the Stone itself are there (the refusal). The control is the scenario where an
-# Ornithopter is on the battlefield: the same ability is then activated and exiles it.
+# the mana ({6}{B}, from three Black Lotuses) and the Stone itself are there. The attempted activation rolls back, then an
+# Ornithopter enters and the same ability succeeds, exiling it.
 
 [Bot1 Deck]
 Black Lotus
@@ -23,9 +23,16 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 Bot1.Hand.Black Lotus.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 Bot1.Hand.The Soul Stone.Cast
-! Bot1.Battlefield.The Soul Stone.Activate(Ability: Harness)
-Bot1.Hand.Ornithopter.Cast
 Bot1.Battlefield.The Soul Stone.Activate(Ability: Harness)
+? Bot1.Battlefield.The Soul Stone.Tapped = false
+? Bot1.Graveyard.Count = 3
+? Bot1.Mana = {B}{B}{B}{B}{B}{B}{B}
+? Stack.Count = 0
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.The Soul Stone.Activate(Ability: Harness)
+Bot1.Choose(Tap The Soul Stone)
+Bot1.Choose(Ornithopter)
 
 [Expect]
 Exile = Ornithopter

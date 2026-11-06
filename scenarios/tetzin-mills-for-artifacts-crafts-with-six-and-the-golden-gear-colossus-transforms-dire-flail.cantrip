@@ -48,6 +48,7 @@ Bot1.Hand.Ornithopter.Cast
 Bot1.Battlefield.Tetzin, Gnome Champion.Activate(Ability: Craft)
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(craft materials)
 Bot1.Choose(Mox Sapphire; Mox Pearl; Mox Ruby; Bot1.Battlefield.Ornithopter; Graveyard.Ornithopter#1; Graveyard.Ornithopter#2)
 Bot1.Target(Dire Flail)
 [T3 Bot1.Main2]

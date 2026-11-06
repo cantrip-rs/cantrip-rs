@@ -34,7 +34,7 @@ fn may_gain_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         return Ok(());
     }
     g.note_done(item.object, item.ability, item.controller);
-    g.gain_life(item.controller, item.data[0] as i32);
+    g.gain_life(item.controller,(item.data[0] as i32) as i32);
     Ok(())
 }
 

@@ -1,0 +1,50 @@
+# Brown Ouphe counters an opponent's artifact ability after its source is sacrificed (CR 113.7a, 701.6a).
+[Bot1 Deck]
+Brown Ouphe
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Forest
+Forest x20
+[Bot2 Deck]
+Aether Spellbomb
+Ornithopter
+Mox Sapphire
+Mox Pearl
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Brown Ouphe.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Aether Spellbomb.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Aether Spellbomb.Activate(Ornithopter; Ability: Return target creature)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Brown Ouphe.Activate(Stack.Aether Spellbomb)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Brown Ouphe.Tapped = true

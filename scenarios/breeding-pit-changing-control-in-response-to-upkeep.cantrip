@@ -1,0 +1,54 @@
+# A player cannot sacrifice a Pit controlled by an opponent when its upkeep ability resolves (CR 701.21a).
+# Opalescence makes the Pit a 4/4 creature, and Giant Growth lets Old Man of the Sea take control in response.
+[Bot1 Deck]
+Breeding Pit
+Opalescence
+Black Lotus x2
+Mox Jet
+Mox Pearl
+Swamp x15
+[Bot2 Deck]
+Old Man of the Sea
+Black Lotus
+Mox Emerald
+Giant Growth
+Island x16
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Breeding Pit.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Opalescence.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Old Man of the Sea.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Giant Growth.Cast(Old Man of the Sea)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Old Man of the Sea.Activate(Bot1.Battlefield.Breeding Pit)
+Bot2.Pass
+Bot1.Pass
+Bot1.Decline
+[T5 Bot1.Main1]
+[Expect]
+Bot2.Battlefield.Breeding Pit.Power = 4
+Bot1.Graveyard = Black Lotus; Black Lotus

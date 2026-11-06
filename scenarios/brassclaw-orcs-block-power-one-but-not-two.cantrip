@@ -1,0 +1,41 @@
+# Brassclaw Orcs cannot block a 2-power attacker, while they can block a 1-power attacker and another creature can block the 2-power attacker (CR 509.1b).
+[Bot1 Deck]
+Grizzly Bears
+Black Lotus
+Memnite
+Island x20
+[Bot2 Deck]
+Brassclaw Orcs
+Black Lotus
+Memnite
+Mountain x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Brassclaw Orcs.Cast
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2; Memnite > Bot2)
+! Bot2.Block(Brassclaw Orcs > Grizzly Bears)
+Bot2.Block(Brassclaw Orcs > Bot1.Battlefield.Memnite; Bot2.Battlefield.Memnite > Grizzly Bears)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 20
+Bot2.Battlefield.Brassclaw Orcs.Power = 3
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Graveyard = Memnite; Black Lotus
+Bot2.Graveyard = Memnite; Black Lotus

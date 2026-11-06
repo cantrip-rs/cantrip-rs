@@ -52,11 +52,11 @@ Bot1.Pass
 Bot1.Attack(Memnite > Bot2)
 [T3 Bot1.DeclareBlockers]
 Bot1.Hand.Foot Ninjas.Cast(Ability: Sneak)
-Bot1.Choose(Memnite)
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Choose(Memnite)
 Bot1.Pass
 Bot2.Pass
 Bot1.Pass

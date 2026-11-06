@@ -1,0 +1,8 @@
+{
+  "name": "Brothers of Fire",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Human Shaman",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{1}{R}{R}: This creature deals 1 damage to any target and 1 damage to you."
+}

@@ -122,7 +122,7 @@ fn game_with(hand: &'static CardDef, permanents: &[&'static CardDef], active: Pl
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// Whether you are offered to cast the bear with priority.
@@ -141,7 +141,7 @@ fn castable_during_resolution(permanents: &[&'static CardDef]) -> bool {
     let serial = game.state.stack.last().expect("the caster").serial;
     game.state.frame_push(cantrip_state::Frame::new(cantrip_state::FrameKind::Resolve { serial }));
     let frame = game.state.agenda.len() - 1;
-    let mut resolving = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let mut resolving = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     !cast_ways_during_resolution(&mut resolving, bear, YOU).is_empty()
 }
 

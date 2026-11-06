@@ -1,0 +1,54 @@
+# Sleight of Mind changes the Aura’s white token instruction to blue, including its granted land ability (CR 612.2).
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Mox Pearl
+Caribou Range
+Sleight of Mind
+Island x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl#1.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl#1.Activate
+! Bot1.Hand.Caribou Range.Cast(Bot1.Battlefield.Mox Pearl#2)
+Bot1.Hand.Caribou Range.Cast(Bot1.Battlefield.Plains)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#2.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sleight of Mind.Cast(Bot1.Battlefield.Caribou Range)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(White)
+Bot1.Colors(Blue)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Plains.Activate(Ability: Create a 0/1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Caribou Token.Tapped = false
+? Bot1.Battlefield.Caribou Token.Power = 0
+? Bot1.Battlefield.Caribou Token.Toughness = 1
+? Bot1.Battlefield.Caribou Token.Colors = Blue
+? Bot1.Battlefield.Caribou Token.Subtypes = Caribou
+? Bot1.Battlefield.Caribou Token.Token = true
+[Expect]
+Bot1.Battlefield.Caribou Token.Colors = Blue

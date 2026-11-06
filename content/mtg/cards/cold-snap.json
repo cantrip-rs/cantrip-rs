@@ -1,0 +1,6 @@
+{
+  "name": "Cold Snap",
+  "manaCost": "{2}{W}",
+  "type": "Enchantment",
+  "oracleText": "Cumulative upkeep {2} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nAt the beginning of each player's upkeep, this enchantment deals damage to that player equal to the number of snow lands they control."
+}

@@ -1,0 +1,46 @@
+# Burnt Offering requires exactly one creature as an additional cost, paid before opponents get priority (CR 601.2h, 601.2i).
+# A two-mana creature produces exactly two mana, chosen as one black and one red (CR 106.1b).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Burnt Offering
+Grizzly Bears
+Ornithopter
+Swamp
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Burnt Offering.Cast
+? Bot1.Hand = Burnt Offering; Grizzly Bears; Island; Ornithopter; Swamp
+? Bot1.Mana = {B}
+? Bot1.Life = 20
+? Bot1.Battlefield = Black Lotus; Mox Jet
+? Bot1.Graveyard.Count = 0
+? Stack.Count = 0
+? Exile.Count = 0
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Burnt Offering.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Choose(Pay mana)
+! Bot1.Choose()
+! Bot1.Choose(Grizzly Bears; Ornithopter)
+Bot1.Choose(Grizzly Bears)
+? Bot1.Mana = {G}{G}
+? Bot1.Graveyard = Grizzly Bears; Black Lotus
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.Colors(White)
+Bot1.Colors(Black; Red)
+[Expect]
+Bot1.Mana = {B}{R}{G}{G}
+Bot1.Battlefield = Mox Jet; Ornithopter; Swamp

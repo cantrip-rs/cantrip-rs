@@ -32,8 +32,8 @@ Bot1.Hand.Mountain.Play
 Bot1.Attack(Ornithopter > Liliana of the Veil)
 [T3 Bot1.DeclareBlockers]
 Bot1.Hand.Leonardo, Cutting Edge.Cast(Ability: Sneak)
-Bot1.Choose(Ornithopter)
 Bot1.Battlefield.Plains.Activate
+Bot1.Choose(Ornithopter)
 Bot1.Hand.Lightning Bolt.Cast(Liliana of the Veil)
 Bot1.Battlefield.Mountain.Activate
 ? Stack = Lightning Bolt; Leonardo, Cutting Edge

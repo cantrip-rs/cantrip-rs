@@ -18,17 +18,20 @@ Bot1.Hand.Gemstone Mine.Play
 ? Bot1.Battlefield.Gemstone Mine.Counters.Mining = 3
 ? Bot1.Battlefield.Gemstone Mine.Tapped = false
 Bot1.Battlefield.Gemstone Mine.Activate(Color: Red)
+Bot1.Choose(Tap Gemstone Mine)
 ? Bot1.Mana = {R}
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
 ? Bot1.Battlefield.Gemstone Mine.Counters.Mining = 2
 
 [T3 Bot1.Main1]
 Bot1.Battlefield.Gemstone Mine.Activate(Color: Red)
+Bot1.Choose(Tap Gemstone Mine)
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
 ? Bot1.Battlefield.Gemstone Mine.Counters.Mining = 1
 
 [T5 Bot1.Main1]
 Bot1.Battlefield.Gemstone Mine.Activate(Color: Red)
+Bot1.Choose(Tap Gemstone Mine)
 ? Bot1.Mana = {R}
 ? Bot1.Graveyard = Gemstone Mine; Lightning Bolt; Lightning Bolt
 Bot1.Hand.Lightning Bolt.Cast(Bot2)

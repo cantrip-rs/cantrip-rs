@@ -15,7 +15,9 @@ is refused (`--no-check` skips it).
 
 The wire protocol is `crates/cantrip-ai/src/remote.rs`'s: TCP, length-prefixed frames, a hello that names the model by
 its manifest's FNV-1a 64 and carries the client's encoding schema and encoder hash, which must be the model's and
-`ai/encoding.json`'s. A client sends a batch's real tokens (narrow types, the numbers sparse as f16), and gets back the
+`ai/encoding.json`'s for native graphs. Exact known schema-2 graphs use the explicit LegacySnowInputV2 adapter,
+masking only the newly assigned snow cells by token kind without retagging the manifest or modifying weights.
+A client sends a batch's real tokens (narrow types, the numbers sparse as f16), and gets back the
 value, aux and the logits at the legal tokens.
 
 **Batching.** Rows from every connection are queued per model and token bucket; a row goes to the smallest bucket that
@@ -234,6 +236,12 @@ def decode(p: bytes) -> dict:
 
 def request(conn, d: dict) -> Request:
     """A decoded frame as a request: its rows split by the smallest bucket that holds each."""
+    if getattr(getattr(conn, "model", None), "input_compatibility", "Native") == "LegacySnowInputV2":
+        # A projection column is shared across token kinds. Preserve every old card/event meaning.
+        kinds = d["kind"][d["ntok"]]
+        f = d["nfeat"]
+        mask = ((kinds == 2) & (f >= 25) & (f < 31)) | ((kinds == 1) & (f == 31)) | ((kinds == 7) & ((f == 29) | (f == 30)))
+        d = dict(d, nval=np.where(mask, np.float32(0), d["nval"]))
     rows, lengths = d["rows"], d["lengths"]
     starts = np.zeros(rows, np.int64)
     np.cumsum(lengths[:-1], out=starts[1:])
@@ -455,6 +463,18 @@ class Runner:
         return slot
 
 
+LEGACY_SNOW_V2_HASHES = {"ac26dc68cba342fb", "6c8e810d37df2b8e"}
+
+
+def input_compatibility(manifest: dict) -> str:
+    """No weights or manifest retagging: schema-2 graphs receive their old per-kind inputs."""
+    if manifest.get("schema") == model.LAYOUT["schema"] and manifest.get("encoder_hash") == dataset.encoder_hash():
+        return "Native"
+    if manifest.get("schema") == 2 and manifest.get("encoder_hash") in LEGACY_SNOW_V2_HASHES:
+        return "LegacySnowInputV2"
+    raise ValueError(f"unsupported encoding ({manifest.get('schema')}, {manifest.get('encoder_hash')})")
+
+
 class Served:
     """A model directory loaded for serving."""
 
@@ -464,9 +484,10 @@ class Served:
         manifest_bytes = (self.dir / "manifest.json").read_bytes()
         self.identity = fnv1a64(manifest_bytes)
         self.manifest = json.loads(manifest_bytes)
-        if self.manifest.get("schema") != model.LAYOUT["schema"] or self.manifest.get("encoder_hash") != dataset.encoder_hash():
-            raise SystemExit(f"{self.dir}: encoding ({self.manifest.get('schema')}, {self.manifest.get('encoder_hash')}) "
-                             f"is not ai/encoding.json's ({model.LAYOUT['schema']}, {dataset.encoder_hash()})")
+        try:
+            self.input_compatibility = input_compatibility(self.manifest)
+        except ValueError as e:
+            raise SystemExit(f"{self.dir}: {e}") from e
         path = self.dir / "model.pt"
         if not path.exists():
             raise SystemExit(f"{path} is missing: export the model again, or write it with `python -m cantrip_ai.export "
@@ -690,17 +711,19 @@ class Server:
         why = None
         if protocol != PROTOCOL:
             why = f"protocol {protocol}; this server speaks {PROTOCOL}"
-        elif schema != model.LAYOUT["schema"] or encoder != ours:
-            why = f"encoding ({schema}, {encoder:016x}); this server's is ({model.LAYOUT['schema']}, {ours:016x})"
         elif identity not in self.models:
             why = (f"no model {name} with that manifest here; this server has "
                    + ", ".join(f"{m.name} ({m.dir})" for m in self.models.values()))
         if why:
             conn.send(status(False, why))
             return False
-        conn.model = self.models[identity]
+        selected = self.models[identity]
+        if schema != selected.manifest["schema"] or encoder != int(selected.manifest["encoder_hash"], 16):
+            conn.send(status(False, "encoding differs from the model manifest"))
+            return False
+        conn.model = selected
         gpu = torch.cuda.get_device_name(self.device) if self.device.type == "cuda" else "cpu"
-        conn.send(status(True, f"{conn.model.name} on {self.device} ({gpu})"))
+        conn.send(status(True, f"{conn.model.name} on {self.device} ({gpu}); input {conn.model.input_compatibility}"))
         with self.lock:
             self.connections += 1
         return True

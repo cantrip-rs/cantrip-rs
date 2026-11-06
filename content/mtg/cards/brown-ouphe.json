@@ -1,0 +1,8 @@
+{
+  "name": "Brown Ouphe",
+  "manaCost": "{G}",
+  "type": "Creature — Ouphe",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{1}{G}, {T}: Counter target activated ability from an artifact source. (Mana abilities can't be targeted.)"
+}

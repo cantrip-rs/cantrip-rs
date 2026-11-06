@@ -1,0 +1,48 @@
+# Brainwash requires the enchanted creature's controller to pay {3} when declaring attackers; another creature attacks for free (CR 508.1h).
+
+[Bot1 Deck]
+Brainwash
+Mox Pearl
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Brainwash.Cast(Bot2.Battlefield.Mox Jet)
+Bot1.Hand.Brainwash.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1; Ornithopter > Bot1)
+? Combat.AttackCost = {3}
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+? Bot2.Mana = {B}{R}
+Bot2.Cancel
+Bot2.Attack(Memnite > Bot1; Ornithopter > Bot1)
+? Combat.AttackCost = {3}
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+? Bot2.Mana =
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Brainwash.AttachedTo = Memnite
+Bot1.Life = 19
+Bot2.Battlefield.Memnite.Tapped = true
+Bot2.Battlefield.Ornithopter.Tapped = true

@@ -1,0 +1,8 @@
+{
+  "name": "Centaur Archer",
+  "manaCost": "{1}{R}{G}",
+  "type": "Creature — Centaur Archer",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "{T}: This creature deals 1 damage to target creature with flying."
+}

@@ -1,0 +1,48 @@
+# Cooperation enchants a creature and lets it band with another attacker; the band shares a blocker and its controller assigns that blocker's damage (CR 702.22c, 702.22h, 702.22k).
+[Bot1 Deck]
+Cooperation
+Black Lotus
+Memnite
+Ornithopter
+Island x20
+[Bot2 Deck]
+Forest
+Black Lotus
+Ulvenwald Oddity
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+! Bot1.Hand.Cooperation.Cast(Bot1.Battlefield.Island)
+Bot1.Hand.Cooperation.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cooperation.AttachedTo = Memnite
+? Bot1.Battlefield.Memnite.Keywords = Banding
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Ulvenwald Oddity.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2; Ornithopter > Bot2)
+Bot1.Choose(Ornithopter)
+? Combat.Attackers = Memnite > Bot2 (band 1); Ornithopter > Bot2 (band 1)
+Bot2.Block(Ulvenwald Oddity > Memnite)
+[T3 Bot1.Blockers]
+? Combat.Blocks = Ulvenwald Oddity > Memnite; Ulvenwald Oddity > Ornithopter
+Bot1.AssignDamage(Ulvenwald Oddity > Memnite: 4)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Cooperation; Memnite; Black Lotus
+Bot1.Battlefield.Ornithopter.Damage = 0

@@ -67,11 +67,11 @@ Bot2.Pass
 Bot1.Attack(Ornithopter > Bot2)
 [T5 Bot1.DeclareBlockers]
 Bot1.Graveyard.Sage of the Skies.Cast(Ability: Sneak {3}{B})
-Bot1.Choose(Ornithopter)
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Swamp.Activate
+Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass
 Bot1.Pass

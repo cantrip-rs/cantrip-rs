@@ -18,7 +18,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         && item.target_count > 1
         && let Some(creature) = targets::object(g, item, 1)
     {
-        g.add_counters(creature, CounterKind::PlusOne, x);
+        g.add_counters(creature, CounterKind::PlusOne,(x) as i32);
     }
     Ok(())
 }

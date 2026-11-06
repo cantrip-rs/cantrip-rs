@@ -1,0 +1,33 @@
+# Coal Golem can be sacrificed for red mana while paying for a spell, even on the turn it entered (CR 605.3a).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Coal Golem
+Hulking Bugbear
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Coal Golem.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Hulking Bugbear.Cast
+Bot1.Battlefield.Coal Golem.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield.Hulking Bugbear.Power = 3
+Bot1.Graveyard = Coal Golem; Black Lotus; Black Lotus

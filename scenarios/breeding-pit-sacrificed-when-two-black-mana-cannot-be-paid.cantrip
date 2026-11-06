@@ -1,0 +1,36 @@
+# Breeding Pit is sacrificed if its upkeep cannot be paid, even with three mana when only one is black (CR 118.12a).
+# Its earlier end step makes one Thrull; without the Pit there is no later end-step trigger.
+[Bot1 Deck]
+Breeding Pit
+Black Lotus
+Mox Pearl
+Mox Jet
+Plains x16
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Breeding Pit.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Thrull Token.Power = 0
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+? Bot1.Mana = {W}{W}{B}
+! Bot1.PayCost
+Bot1.Decline
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Breeding Pit; Black Lotus
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Count = 4
+Bot1.Battlefield.Thrull Token.Token = true

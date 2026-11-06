@@ -86,7 +86,7 @@ fn cast_with(restriction: ManaRestriction) -> (Game, ObjectId) {
     let mut g = game();
     let card = in_hand(&mut g, &LEGEND);
     let source = g.state.zone(Zone::library(YOU))[0];
-    g.state.add_mana(YOU, Mana::G, 1, source, Some(restriction), ManaLasts::Step);
+    g.state.add_mana(YOU, Mana::G, 1, source, Some(restriction), ManaLasts::Step, false);
     let option = cast_option(&mut g, card).expect("the mana casts a legendary spell");
     let r = next(&mut g);
     g.answer(r.id, r.player, Answer::Act(Action::of(&option))).expect("a legal answer");
@@ -121,7 +121,7 @@ fn it_does_not_cast_a_spell_that_is_not_legendary() {
     let mut g = game();
     let commoner = in_hand(&mut g, &COMMONER);
     let source = g.state.zone(Zone::library(YOU))[0];
-    g.state.add_mana(YOU, Mana::G, 1, source, Some(ManaRestriction::LegendarySpells), ManaLasts::Step);
+    g.state.add_mana(YOU, Mana::G, 1, source, Some(ManaRestriction::LegendarySpells), ManaLasts::Step, false);
     assert!(cast_option(&mut g, commoner).is_none());
 }
 
@@ -132,7 +132,7 @@ const UNCOUNTERABLE: ManaRestriction = ManaRestriction::LegendaryUncounterable;
 fn float(g: &mut Game, floating: &[(Mana, Option<ManaRestriction>)]) {
     let source = g.state.zone(Zone::library(YOU))[0];
     for &(kind, restriction) in floating {
-        g.state.add_mana(YOU, kind, 1, source, restriction, ManaLasts::Step);
+        g.state.add_mana(YOU, kind, 1, source, restriction, ManaLasts::Step, false);
     }
 }
 

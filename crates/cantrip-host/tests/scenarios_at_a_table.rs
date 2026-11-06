@@ -59,6 +59,199 @@ fn fields(value: &Value, key: &str, source: Option<&Value>, out: &mut Vec<(Strin
     }
 }
 
+fn activation_rows(value: &Value, source: &Value, out: &mut Vec<Value>) {
+    match value {
+        Value::Object(fields) => {
+            if fields.get("Kind").and_then(Value::as_str) == Some("ActivateAbility") && fields.get("Source") == Some(source) {
+                out.push(value.clone());
+            }
+            for v in fields.values() { activation_rows(v, source, out); }
+        }
+        Value::Array(values) => values.iter().for_each(|v| activation_rows(v, source, out)),
+        _ => {}
+    }
+}
+
+/// A mana action's description retains its complete ability and its structured yield (Ancient Tomb, Adarkar Wastes).
+#[test]
+fn a_mana_action_retains_its_ability_text_and_yield() {
+    let mut seen = false;
+    play_looking("ancient-tomb-taps-for-two-colorless-mana-and-deals-two-damage-to-its-controller", |_, views, step| {
+        if let Some(card) = views[0].objects.iter().find(|o| o.name == "Ancient Tomb") {
+            let mut rows = Vec::new();
+            activation_rows(&step["Requests"], &serde_json::to_value(card.handle).unwrap(), &mut rows);
+            for row in rows {
+                assert!(row["Description"].as_str().unwrap().contains("deals 2 damage to you"), "{row}");
+                assert_eq!(row["Produces"], serde_json::json!(["Colorless", "Colorless"]));
+                seen = true;
+            }
+        }
+        false
+    });
+    assert!(seen, "the mana ability was never offered");
+}
+
+/// A replacement changing the mana yield is said alongside the original ability, including its nonmana effect.
+#[test]
+fn a_replaced_mana_yield_is_explained_beside_the_original_ability() {
+    let (mut original, mut replaced) = (false, false);
+    play_looking("damping-sphere-makes-a-land-tapped-for-two-or-more-mana-produce-one-colorless", |_, views, step| {
+        if let Some(card) = views[0].objects.iter().find(|o| o.name == "Ancient Tomb") {
+            let mut rows = Vec::new();
+            activation_rows(&step["Requests"], &serde_json::to_value(card.handle).unwrap(), &mut rows);
+            let sphere = views[0].objects.iter().any(|o| o.name == "Damping Sphere" && o.zone == Some(cantrip_host::protocol::ZoneKindView::Battlefield));
+            for row in rows {
+                let description = row["Description"].as_str().unwrap();
+                assert!(description.contains("deals 2 damage to you"), "{row}");
+                if sphere {
+                    assert_eq!(row["Produces"], serde_json::json!(["Colorless"]));
+                    assert!(description.contains("can add {C} now"), "{description}");
+                    replaced = true;
+                } else {
+                    assert_eq!(row["Produces"], serde_json::json!(["Colorless", "Colorless"]));
+                    original = true;
+                }
+            }
+        }
+        false
+    });
+    assert!(original && replaced, "both the original and replaced yields must be offered");
+}
+
+/// A replacement can make every named color yield the same fixed mana; naming the color is still required.
+#[test]
+fn a_replacement_that_collapses_all_color_choices_shows_the_fixed_yield() {
+    let mut seen = false;
+    play_looking("lotus-field-replaced-yield-keeps-the-color-choice-presentation", |_, views, step| {
+        if let Some(card) = views[0].objects.iter().find(|o| o.name == "Lotus Field") {
+            let mut rows = Vec::new();
+            activation_rows(&step["Requests"], &serde_json::to_value(card.handle).unwrap(), &mut rows);
+            for row in rows {
+                assert_eq!(row["Produces"], serde_json::json!(["Colorless"]), "{row}");
+                assert_eq!(row["ProducesOfAnyOneColor"], 0, "{row}");
+                assert_eq!(row["ColorChoices"].as_array().unwrap().len(), 5, "{row}");
+                assert!(row["Description"].as_str().unwrap().contains("can add {C} now"), "{row}");
+                seen = true;
+            }
+        }
+        false
+    });
+    assert!(seen, "the replaced Lotus Field ability was never offered");
+}
+
+/// An ability's cost words follow text changes, including a changed basic land type (CR 612.1).
+#[test]
+fn a_mana_action_uses_the_abilitys_current_words() {
+    let mut seen = false;
+    play_looking("orcish-lumberjack-reads-the-land-type-its-text-names-now", |_, views, step| {
+        if let Some(card) = views[0].objects.iter().find(|o| o.name == "Orcish Lumberjack" && o.oracle_text.contains("Island")) {
+            let mut rows = Vec::new();
+            activation_rows(&step["Requests"], &serde_json::to_value(card.handle).unwrap(), &mut rows);
+            for row in rows {
+                let text = row["Description"].as_str().unwrap();
+                assert!(text.contains("Island") && !text.contains("Forest"), "{text}");
+                seen = true;
+            }
+        }
+        false
+    });
+    assert!(seen, "the changed ability was never offered");
+}
+
+/// A carried object is marked on both seats' views, not another permanent with the same name, until the delayed ability triggers.
+#[test]
+fn delayed_abilities_identify_their_carried_permanents() {
+    let mut affected = [None, None];
+    let mut saw_later = [false, false];
+    let mut saw_stack = [false, false];
+    play_looking("glyph-of-destruction-pumps-protects-and-destroys-blocking-wall", |session, views, _| {
+        for viewer in 0..2 {
+            let walls: Vec<_> = views[viewer].objects.iter().filter(|o| o.name == "Steel Wall" && o.zone == Some(cantrip_host::protocol::ZoneKindView::Battlefield)).collect();
+            let pending = views[viewer].players[0].pending_effects.iter().any(|text| text.contains("Glyph of Destruction"));
+            if pending && affected[viewer].is_none() {
+                if let Some(wall) = walls.iter().find(|wall| wall.power == Some(10)) {
+                    affected[viewer] = Some(wall.handle);
+                }
+            }
+            if pending && let Some(handle) = affected[viewer] {
+                for wall in &walls {
+                    let shown = wall.granted_abilities.iter().any(|a| a.text.contains("Pending delayed ability") && a.text.contains("Destroy it"));
+                    assert_eq!(shown, wall.handle == handle, "wrong wall: {:?}", wall.handle);
+                    if wall.handle == handle && wall.power == Some(0) { saw_later[viewer] = true; }
+                }
+            }
+            if !pending {
+                assert!(walls.iter().all(|wall| !wall.granted_abilities.iter().any(|a| a.text.contains("Pending delayed ability"))), "a finished ability remains on a wall");
+                if session.game().state.stack.iter().any(|item| item.ability.is_delayed()) && let Some(handle) = affected[viewer] {
+                    for wall in &walls {
+                        let shown = wall.granted_abilities.iter().any(|a| a.text.contains("Delayed ability on the stack") && a.text.contains("Destroy it"));
+                        assert_eq!(shown, wall.handle == handle, "wrong wall on stack: {:?}", wall.handle);
+                        if shown { saw_stack[viewer] = true; }
+                    }
+                }
+            }
+        }
+        false
+    });
+    assert!(affected.iter().all(Option::is_some) && saw_later.iter().all(|&seen| seen) && saw_stack.iter().all(|&seen| seen), "the carried wall must be shown after combat and while the ability is on the stack, to both seats");
+}
+
+/// A delayed effect whose printed text omits its trigger still says when it will trigger (Old Hob).
+#[test]
+fn a_carried_permanent_names_the_step_of_its_delayed_ability() {
+    let mut seen = [false, false];
+    play_looking("old-hob-alleycat-blues-makes-a-hasty-mutant-each-combat-and-destroys-it-at-the-end-step", |_, views, _| {
+        for viewer in 0..2 {
+            for token in views[viewer].objects.iter().filter(|o| o.name == "Mutant Token" && o.zone == Some(cantrip_host::protocol::ZoneKindView::Battlefield)) {
+                if token.granted_abilities.iter().any(|a| a.text.contains("Pending delayed ability") && a.text.contains("next end step") && a.text.contains("Destroy it")) {
+                    seen[viewer] = true;
+                }
+            }
+        }
+        false
+    });
+    assert!(seen.iter().all(|&s| s), "both seats must see the delayed destruction and its timing");
+}
+
+/// One delayed ability can carry several same-named objects, without carrying their original (myriad, CR 702.116a).
+#[test]
+fn one_delayed_ability_marks_each_carried_copy_but_not_the_original() {
+    let mut original = [None, None];
+    let mut seen = [false, false];
+    play_looking("myriad-in-four-players-asks-for-each-other-opponent-and-makes-their-tokens-together", |session, views, _| {
+        let pending = session.game().state.delayed.iter().any(|d| session.game().state.members(d.members).len() >= 2);
+        for viewer in 0..2 {
+            let patrols: Vec<_> = views[viewer].objects.iter().filter(|o| o.name == "Wyrm's Crossing Patrol" && o.zone == Some(cantrip_host::protocol::ZoneKindView::Battlefield)).collect();
+            if patrols.len() == 1 && original[viewer].is_none() { original[viewer] = Some(patrols[0].handle); }
+            if pending && patrols.len() == 3 && let Some(original) = original[viewer] {
+                for patrol in &patrols {
+                    let marked = patrol.granted_abilities.iter().any(|a| a.text.contains("Pending delayed ability") && a.text.contains("end of combat"));
+                    assert_eq!(marked, patrol.handle != original, "wrong patrol: {:?}", patrol.handle);
+                }
+                seen[viewer] = true;
+            }
+        }
+        false
+    });
+    assert!(seen.iter().all(|&s| s), "both viewers must see the two carried tokens");
+}
+
+/// A permanent spell can carry an attack destination while on the stack; it is not a delayed ability.
+#[test]
+fn a_sneak_spell_with_a_carried_attack_destination_is_not_a_delayed_ability() {
+    let mut seen = false;
+    play_looking("leonardo-cutting-edge-sneaked-in-attacks-the-planeswalker-the-returned-creature-attacked", |_, views, _| {
+        if views[0].objects.iter().any(|o| o.name == "Leonardo, Cutting Edge" && o.zone == Some(cantrip_host::protocol::ZoneKindView::Stack)) {
+            if let Some(walker) = views[0].objects.iter().find(|o| o.name == "Liliana of the Veil" && o.zone == Some(cantrip_host::protocol::ZoneKindView::Battlefield)) {
+                assert!(walker.granted_abilities.iter().all(|a| !a.text.contains("Delayed ability on the stack")));
+                seen = true;
+            }
+        }
+        false
+    });
+    assert!(seen, "the sneak spell and its destination must both be shown");
+}
+
 /// Web-slinging returns a tapped creature, chosen once the mana is paid (CR 702.188a, 601.2g-h): its cast row says so, the
 /// card's ordinary cast row does not.
 #[test]
@@ -335,6 +528,17 @@ fn judge_waiting_delayed_ability(name: &str, words: &str, source: &str) {
     }
     assert!(shown > 0, "the waiting ability was never shown");
     assert!(gone_after, "the waiting ability was still shown after it lapsed");
+}
+
+#[test]
+fn waiting_next_turn_upkeep_draws_are_visible_to_both_players_until_they_trigger() {
+    judge_waiting_delayed_ability("mishras-bauble-draws-at-the-next-upkeep-whoever-it-looked-at", "Draw a card.", "Mishra's Bauble");
+    judge_waiting_delayed_ability("urzas-bauble-sacrifices-to-draw-at-the-next-upkeep", "Draw a card.", "Urza's Bauble");
+}
+
+#[test]
+fn waiting_next_step_abilities_are_also_visible_until_they_trigger() {
+    judge_waiting_delayed_ability("flickerwisp-exiles-a-tapped-permanent-and-returns-it-untapped-at-the-end-step", "Return that card to the battlefield", "Flickerwisp");
 }
 
 /// "Whenever you attack this turn" (Dalkovan Encampment's activated ability) is shown from the moment it is set up until the

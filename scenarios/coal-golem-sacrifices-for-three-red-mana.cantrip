@@ -1,0 +1,39 @@
+# Coal Golem costs five to cast; its mana ability costs three and sacrifices it to add exactly three red mana (CR 605.1a, 605.3b).
+# With two mana and no untapped sources it cannot be activated; a Mox supplies the third, and the ability resolves immediately.
+[Bot1 Deck]
+Coal Golem
+Black Lotus x2
+Sol Ring
+Mox Pearl
+Delver of Secrets
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Coal Golem.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Delver of Secrets.Cast
+? Bot1.Mana = {U}{U}
+! Bot1.Battlefield.Coal Golem.Activate(Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Coal Golem.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana = {R}{R}{R}
+? Stack.Count = 0
+[Expect]
+Bot1.Mana = {R}{R}{R}
+Bot1.Graveyard = Coal Golem; Black Lotus; Black Lotus

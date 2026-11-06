@@ -1,0 +1,28 @@
+# A creature with mana value one yields exactly one mana, chosen black or red (CR 106.3, 202.3).
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Llanowar Elves
+Burnt Offering
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Burnt Offering.Cast
+Bot1.Choose(additional cost of Burnt Offering)
+Bot1.Choose(Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Red)
+[Expect]
+Bot1.Mana = {R}
+Bot1.Graveyard = Burnt Offering; Llanowar Elves
