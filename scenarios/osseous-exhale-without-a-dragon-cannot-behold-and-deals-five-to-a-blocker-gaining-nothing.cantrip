@@ -1,4 +1,4 @@
-# Osseous Exhale without a Dragon: Bot1 has no Dragon to choose and none in hand, so beholding is not offered (CR 701.4a) and no life
+# Osseous Exhale without a Dragon: Bot1 has no Dragon to choose and none in hand, so an attempted behold payment rolls back (CR 701.4a, 733) and no life
 # is gained. It targets a blocking creature (CR 506.3): Bot1 attacks with Memnite on turn 3, Bot2's Ornithopter blocks, and the
 # Ornithopter takes 5 and dies. Bot2's idle Memnite and Bot2 itself are no legal targets.
 
@@ -28,7 +28,15 @@ Bot2.Block(Ornithopter > Memnite)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Osseous Exhale.Cast
-! Bot1.Modes(Behold a Dragon)
+Bot1.Modes(Behold a Dragon)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+? Stack.Count = 0
+? Bot1.Mana = {W}{R}
+? Bot1.Graveyard.Count = 0
+? Bot1.Life = 20
+? Bot1.Revealed = (absent)
+Bot1.Hand.Osseous Exhale.Cast
+Bot1.Modes(Cast without beholding)
 ! Bot1.Target(Bot2.Battlefield.Memnite)
 ! Bot1.Target(Bot2)
 Bot1.Target(Bot2.Battlefield.Ornithopter)

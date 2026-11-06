@@ -1,0 +1,8 @@
+{
+  "name": "Orcish Veteran",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Orc",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "This creature can't block white creatures with power 2 or greater.\n{R}: This creature gains first strike until end of turn."
+}

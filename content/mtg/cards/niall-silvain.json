@@ -1,0 +1,8 @@
+{
+  "name": "Niall Silvain",
+  "manaCost": "{G}{G}{G}",
+  "type": "Creature — Ouphe",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{G}{G}{G}{G}, {T}: Regenerate target creature."
+}

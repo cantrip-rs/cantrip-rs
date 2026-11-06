@@ -1,0 +1,41 @@
+# Only the unblocked attacking Dwellers gets +2/+0, and the bonus ends after combat (CR 509.1h, 611.2a).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Murk Dwellers
+Murk Dwellers
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Murk Dwellers.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Murk Dwellers.Cast
+? Bot1.Mana =
+Bot1.Attack(Murk Dwellers#1 > Bot2)
+[T3 Bot1.Damage]
+? Bot1.Battlefield.Murk Dwellers#1.Power = 4
+? Bot1.Battlefield.Murk Dwellers#1.Toughness = 2
+? Bot1.Battlefield.Murk Dwellers#2.Power = 2
+[T3 Bot1.EndCombat]
+? Bot1.Battlefield.Murk Dwellers#1.Power = 4
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Murk Dwellers#1.Power = 2
+Bot1.Battlefield.Murk Dwellers#1.Toughness = 2
+Bot2.Life = 16

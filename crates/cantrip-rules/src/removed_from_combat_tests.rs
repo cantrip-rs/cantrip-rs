@@ -82,7 +82,7 @@ fn put(game: &mut RulesGame, def: &'static CardDef, controller: PlayerId) -> Obj
 }
 
 fn cx(game: &mut RulesGame) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// Ten counters of `kind` on `on`, what a planeswalker or battle enters with (CR 306.5b, 310.4b): its controller's doing, as
@@ -104,7 +104,7 @@ fn damage_to(cx: &mut Cx, attacked: ObjectId) -> u32 {
     cx.g.log
         .iter()
         .filter_map(|r| match r.event {
-            Event::Damage { kind, target: Target::Object(id), amount, .. } if kind.is_combat() && id == attacked => Some(u32::from(amount)),
+            Event::Damage { kind, target: Target::Object(id), amount, .. } if kind.is_combat() && id == attacked => Some(amount),
             _ => None,
         })
         .sum()

@@ -37,6 +37,8 @@ pub(crate) struct Activation {
     pub color: Option<Color>,
     pub colorless: bool,
     pub targets: Vec<Target>,
+    /// The player-granting effect as it was selected, not its transient position among a player's grants.
+    pub player_grant: Option<ContinuousEffect>,
 }
 
 /// One thing a mana ability's payment of its own mana cost did (CR 605.3a, 601.2g-h), in order.
@@ -45,7 +47,7 @@ pub(crate) enum Step {
     /// Another mana ability was activated to pay it.
     Activate(Activation),
     /// Mana of the pool was spent on it: `n` of `mana` that `source` produced, of this restriction or none.
-    Spend { restriction: Option<ManaRestriction>, mana: Mana, n: u32, source: ObjectId },
+    Spend { restriction: Option<ManaRestriction>, mana: Mana, n: u32, source: ObjectId, snow: bool },
 }
 
 /// A mana ability's activation as the run made it.
@@ -391,6 +393,7 @@ pub(crate) fn take_back(cx: &mut Cx, mark: Mark, log_mark: usize, since: Since) 
     let script = if outermost.is_empty() { None } else { Some(script(&cx.g.takeback.trail, &outermost)) };
     let runs: Vec<(Activation, (usize, usize))> = outermost.iter().map(|&r| (cx.g.takeback.trail.runs[r].act.clone(), cx.g.takeback.trail.runs[r].objects)).collect();
     // What each did, event by event, for the replay to be held to.
+    let original_receipts = if outermost.is_empty() { Vec::new() } else { cx.s().cost_receipts.clone() };
     let did: Vec<Vec<Event>> = outermost
         .iter()
         .map(|&r| {
@@ -429,9 +432,9 @@ pub(crate) fn take_back(cx: &mut Cx, mark: Mark, log_mark: usize, since: Since) 
         }
         let from = cx.g.log.len();
         ok = cx.s().objects.len() == objects.0
-            && crate::actions::activate_mana(cx, act.player, act.source, act.index, act.color, act.colorless, &act.targets).is_ok()
+            && crate::actions::activate_recorded_mana(cx, act).is_ok()
             && cx.s().objects.len() == objects.1
-            && same_events(&cx.g.log[from..], did);
+            && same_events(&cx.g.log[from..], did, &cx.s().cost_receipts, &original_receipts);
         if !ok {
             break;
         }
@@ -460,7 +463,7 @@ pub(crate) fn take_back(cx: &mut Cx, mark: Mark, log_mark: usize, since: Since) 
 /// Whether a replay did what the activation did, event by event: the same objects (the ids are the same, `take_back`'s
 /// stand-ins see to it), the same cards drawn, moved, revealed. A last-known row's place (`Entered::known`,
 /// `Attacks::known`) is not what happened, and the action's own rows came before it.
-fn same_events(replayed: &[Record], did: &[Event]) -> bool {
+fn same_events(replayed: &[Record], did: &[Event], new_receipts: &[cantrip_state::CostReceiptDetails], old_receipts: &[cantrip_state::CostReceiptDetails]) -> bool {
     fn plain(e: Event) -> Event {
         match e {
             Event::Entered { permanent, controller, types, .. } => Event::Entered { permanent, controller, types, known: 0 },
@@ -468,7 +471,45 @@ fn same_events(replayed: &[Record], did: &[Event]) -> bool {
             e => e,
         }
     }
-    replayed.len() == did.len() && replayed.iter().zip(did).all(|(r, &e)| plain(r.event) == plain(e))
+    if replayed.len() != did.len() { return false; }
+    // Resolution payment ids are journal positions: removing an earlier reversible activation shifts them on replay.
+    // Match each new id to its original and check all of its receipts against the same mapping.
+    let mut payments = Vec::new();
+    replayed.iter().zip(did).all(|(r, &e)| match (r.event, e) {
+        (Event::ResolutionPaymentBegan { payment: new, source: a, payer: b, resolving: ra }, Event::ResolutionPaymentBegan { payment: old, source: c, payer: d, resolving: rb }) => {
+            if a != c || b != d || ra != rb || payments.iter().any(|&(n, o)| n == new || o == old) { return false; }
+            payments.push((new, old));
+            true
+        }
+        (Event::ResolutionCostObjectPaid { payment: new, source: a, payer: b, object: c, receipt: d },
+         Event::ResolutionCostObjectPaid { payment: old, source: f, payer: g, object: h, receipt: i }) => {
+            payments.contains(&(new, old)) && (a, b, c) == (f, g, h)
+                && new_receipts.get(d).zip(old_receipts.get(i)).is_some_and(|(x, y)| x == y)
+        }
+        (Event::CostObjectPaid { spell: a, object: b, receipt: c }, Event::CostObjectPaid { spell: d, object: e, receipt: f }) => {
+            (a, b) == (d, e) && new_receipts.get(c).zip(old_receipts.get(f)).is_some_and(|(x, y)| x == y)
+        }
+        (Event::AbilityCostObjectPaid { serial: a, object: b, receipt: c }, Event::AbilityCostObjectPaid { serial: d, object: e, receipt: f }) => {
+            (a, b) == (d, e) && new_receipts.get(c).zip(old_receipts.get(f)).is_some_and(|(x, y)| x == y)
+        }
+        (new, old) => plain(new) == plain(old),
+    })
+}
+
+#[cfg(test)]
+mod receipt_rebinding_tests {
+    use super::*;
+
+    #[test]
+    fn replay_compares_receipt_values_when_arena_indices_change() {
+        let detail = cantrip_state::CostReceiptDetails { origin: Some(CostOrigin::AdditionalChoice(700)), component: 900, part: CostPart::Discard(1000) };
+        let different = cantrip_state::CostReceiptDetails { part: CostPart::Discard(1001), ..detail };
+        let event = Event::CostObjectPaid { spell: ObjectId(1), object: ObjectId(2), receipt: 0 };
+        let record = Record { serial: 0, turn: 1, step: cantrip_state::Step::Upkeep, active: PlayerId(0), cause: cantrip_api::Cause::Rules,
+            event: Event::CostObjectPaid { spell: ObjectId(1), object: ObjectId(2), receipt: 1 } };
+        assert!(same_events(&[record], &[event], &[different, detail], &[detail]));
+        assert!(!same_events(&[record], &[event], &[detail, different], &[detail]));
+    }
 }
 
 fn truncate(g: &mut Game, since: Since) {
@@ -490,14 +531,14 @@ pub(crate) fn spend(
     mana: Mana,
     n: u32,
     pick: ManaPick,
-    taken: &mut Vec<(ObjectId, Mana, u32)>,
+    taken: &mut Vec<(ObjectId, Mana, u32, bool)>,
     record: bool,
 ) -> u32 {
     let from = taken.len();
     let got = cx.st().spend_mana(player, restriction, mana, n, pick, taken);
     if record {
-        for &(source, mana, n) in &taken[from..] {
-            step(cx.g, Step::Spend { restriction, mana, n, source });
+        for &(source, mana, n, snow) in &taken[from..] {
+            step(cx.g, Step::Spend { restriction, mana, n, source, snow });
         }
     }
     got

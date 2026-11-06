@@ -33,6 +33,7 @@ Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Sapphire#2.Activate
 Bot1.Hand.Countersculpt.Cast
+Bot1.Modes(Pay {1})
 Bot1.Target(Stack.Abrupt Decay)
 Bot2.Pass
 ? Bot1.Battlefield.Jace Token.Counters.Loyalty = 1

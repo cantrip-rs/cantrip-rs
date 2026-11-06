@@ -33,6 +33,7 @@ Bot1.Pass
 ! Bot1.Battlefield.Champion of the Weird.Activate(Bot2)
 [T3 Bot1.Main1]
 Bot1.Battlefield.Champion of the Weird.Activate(Bot2)
+Bot1.Choose(Pay 1 life)
 Bot1.Choose(Champion of the Weird)
 Bot1.Pass
 Bot2.Pass

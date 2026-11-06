@@ -1,0 +1,64 @@
+# A white 1/1 can be blocked; paying {R} grants first strike for one turn so a later 1/1 dies before dealing damage (CR 509.1b, 702.7b).
+[Bot1 Deck]
+Orcish Veteran
+Black Lotus
+Mox Ruby
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Eager Cadet x3
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Orcish Veteran.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Eager Cadet.Cast
+Bot2.Pass
+Bot2.Hand.Eager Cadet.Cast
+Bot2.Pass
+Bot2.Hand.Eager Cadet.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Ruby.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Orcish Veteran.Activate(Mana: short)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Eager Cadet#1 > Bot1)
+Bot1.Block(Orcish Veteran > Eager Cadet#1)
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Orcish Veteran.Damage = 1
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Eager Cadet#1 > Bot1)
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Orcish Veteran.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Block(Orcish Veteran > Eager Cadet#1)
+[T6 Bot2.Main2]
+? Bot1.Battlefield.Orcish Veteran.Damage = 0
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Orcish Veteran.Keywords = (absent)
+[T8 Bot2.DeclareAttackers]
+Bot2.Attack(Eager Cadet > Bot1)
+Bot1.Block(Orcish Veteran > Eager Cadet)
+[T8 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Orcish Veteran.Damage = 1
+Bot2.Graveyard.Eager Cadet#1.Power = 1
+Bot2.Graveyard.Eager Cadet#2.Power = 1
+Bot2.Graveyard.Eager Cadet#3.Power = 1

@@ -1,0 +1,53 @@
+# Remora charges one then two mana for cumulative upkeep and is sacrificed when declined; its controller's own noncreature spells do not trigger it (CR 702.24a, 603.2).
+[Bot1 Deck]
+Mystic Remora
+Mox Sapphire
+Mox Pearl
+Island
+Island
+Island
+Island
+Island x20
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mystic Remora.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+Bot1.Hand.Island.Play
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.PayCost(X: 1)
+Bot1.PayCost(Spend: U)
+Bot1.Pass
+? Bot1.Mana = {W}
+? Bot1.Battlefield.Mystic Remora.Counters.Age = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Mystic Remora.Counters.Age = 2
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[Expect]
+Bot1.Battlefield.Mystic Remora = (absent)
+Bot1.Graveyard.Mystic Remora.Colors = Blue

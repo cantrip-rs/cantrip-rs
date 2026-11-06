@@ -24,7 +24,7 @@ fn reveal(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     }
     let (creature, rest) = library::reveal_until(g, who, &|q, card| q.chars(card).is(CardType::Creature));
     if let Some(card) = creature {
-        g.put_onto_battlefield(card, who, false)?;
+        g.put_onto_battlefield_by(card, who, false, who)?;
     }
     let buried: Vec<(ObjectId, Zone)> = rest.into_iter().map(|c| (c, Zone::graveyard(who))).collect();
     if !buried.is_empty() {

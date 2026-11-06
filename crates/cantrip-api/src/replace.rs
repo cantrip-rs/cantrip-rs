@@ -22,6 +22,10 @@ pub struct ZoneChange {
     /// For an object entering the battlefield, the player it enters under (CR 110.2a): the affected player, and the
     /// "you" of an effect about what enters under your control. The object's controller otherwise.
     pub controller: PlayerId,
+    /// The player putting it onto the battlefield (CR 110.2a, 608.2c), independent of its entering controller. None
+    /// outside a battlefield arrival or for actorless rules/setup. A replacement redirecting a move to the battlefield
+    /// names its own instructed player, or the core supplies that replacement's controller (CR 609.1).
+    pub put_by: Option<PlayerId>,
     /// It enters the battlefield tapped (CR 614.1c).
     pub tapped: bool,
     /// It is put onto the battlefield attacking (CR 614.1c, 508.4), as "instead it enters tapped and attacking" says. Such
@@ -84,10 +88,16 @@ pub struct ZoneChange {
     pub rebounding: bool,
     /// The move is a destruction (CR 701.8a) that a regeneration shield may replace (CR 701.19a, 614.8): by an effect that
     /// destroys, or by lethal damage (CR 704.5g-h), and not one that says it can't be regenerated (CR 701.19c). Set by the
-    /// move.
+    /// move. Continuous regeneration prohibitions are checked by the core when
+    /// a shield or a static replacement would regenerate it.
     pub destroy: bool,
-    /// A regeneration shield replaced the destruction (CR 701.19a): the permanent does not move, and is regenerated instead.
+    /// Regeneration replaced the destruction (CR 701.19a-b): the permanent does
+    /// not move, and is regenerated instead, by a shield or a static ability.
     pub regenerated: bool,
+    /// The regeneration came from a shield (CR 701.19a), which must be consumed.
+    /// A static ability's regeneration (701.19b) consumes no unrelated shield.
+    /// Set by the core's shield replacement; card replacements leave it false.
+    pub regeneration_shield: bool,
     /// A shield counter replaced destruction due to an effect (CR 122.1c): "if this permanent would be destroyed as the
     /// result of an effect, instead remove a shield counter from it". Not a regeneration (the rulings), and not for state-based destruction.
     pub shielded: bool,
@@ -321,6 +331,27 @@ pub type ReplacementApply = fn(&dyn Query, &Asker, &mut Proposal);
 /// returns there, doing nothing more.
 pub type ReplacementThen = fn(&mut dyn Game, &Asker, &Proposal, &Proposal);
 
+/// Additional damage components of the modified damage event (CR 120.4b-d, 614.6),
+/// formed after `apply` and before damage has any results. Eye for an Eye adds
+/// damage by a second source; Harm's Way and Captain's Maneuver split damage to
+/// another recipient. These components inherit the effects already applied to
+/// their parent (CR 614.5), and meet remaining replacement and prevention effects.
+/// They are dealt simultaneously with every original component. An ordinary
+/// `then` that calls `Game::damage` instead deals a separate event.
+pub type ReplacementDamage = fn(&dyn Query, &Asker, &DamageEvent, &DamageEvent) -> Vec<DamageComponent>;
+
+/// A component introduced while replacing damage (CR 614.6, 614.9).
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum DamageComponent {
+    /// Damage by an additional source, such as Eye for an Eye. This is not damage
+    /// dealt by the original assignment for `Game::damage`'s return value.
+    Additional(DamageEvent),
+    /// Part of the original damage redirected to another recipient. It retains
+    /// the original source, combat status and return-value identity; the reshaped
+    /// original proposal contains the amount remaining at its first recipient.
+    Redirected { target: Target, amount: u32 },
+}
+
 /// A replacement effect of a static ability (CR 614.1, 604).
 #[derive(Clone, Copy)]
 pub struct ReplacementDef {
@@ -335,6 +366,8 @@ pub struct ReplacementDef {
     pub apply: ReplacementApply,
     /// Game operations the effect performs as it applies (see [`ReplacementThen`]).
     pub then: Option<ReplacementThen>,
+    /// Additional components of a damage event; see [`ReplacementDamage`].
+    pub damage: Option<ReplacementDamage>,
     /// "You may ... instead" (CR 614.1a): the effect's "you", its source's controller (CR 109.5), is asked this as the effect would apply, and declining it
     /// leaves the event as it was, for the other effects (CR 616.1). Dredge's and Abundance's.
     pub optional: Option<&'static Question>,
@@ -355,6 +388,9 @@ pub type GrantedApply = fn(&dyn Query, &Asker, ObjectId, &mut Proposal);
 /// [`ReplacementThen`], also told the object the effect is about.
 pub type GrantedThen = fn(&mut dyn Game, &Asker, ObjectId, &Proposal, &Proposal);
 
+/// [`ReplacementDamage`] for an effect made about an object.
+pub type GrantedDamage = fn(&dyn Query, &Asker, ObjectId, &DamageEvent, &DamageEvent) -> Vec<DamageComponent>;
+
 /// A replacement effect (CR 614) that a resolving spell or ability makes for a duration (CR 611.2), as opposed to a static
 /// ability's (`ReplacementDef`): it is not a card's standing ability, but a continuous effect that lasts, and it is
 /// about the object it was made for.
@@ -367,6 +403,8 @@ pub struct GrantedReplacementDef {
     pub apply: GrantedApply,
     /// Game operations the effect performs as it applies (see [`GrantedThen`]).
     pub then: Option<GrantedThen>,
+    /// Additional components of a damage event; see [`ReplacementDamage`].
+    pub damage: Option<GrantedDamage>,
     /// "The next time [an event] would happen this turn, ... instead" (CR 614.1a): the effect is used up by the one event it
     /// replaces, and ends as it applies; a second such effect waits for the next event.
     pub once: bool,
@@ -384,7 +422,21 @@ pub type PreventionApplies = fn(&dyn Query, &Asker, &DamageEvent) -> bool;
 
 /// How much of the damage a prevention effect prevents (CR 615.1), judged on the damage as the effects applied so far have
 /// left it (CR 616.1f): "prevent half that damage, rounded up". More than the damage is all of it.
-pub type PreventionAmount = fn(&dyn Query, &Asker, &DamageEvent) -> u32;
+pub type PreventionAmountFn = fn(&dyn Query, &Asker, &DamageEvent) -> u32;
+
+/// What the printed prevention quantity means (CR 615.1, 615.10), not just its evaluated number.
+#[derive(Clone, Copy)]
+pub enum PreventionAmount {
+    /// Prevent all applicable damage.
+    All,
+    /// A specific allowance per source/recipient damage event (615.10), computed when it first applies and then
+    /// consumed without refill. It may depend on game state, but not on the changing damage quantity: Urza's Armor's 1,
+    /// for example. A fresh native damage event computes a fresh capacity.
+    Specific(PreventionAmountFn),
+    /// A quantity relative to the event as modified so far (616.1f): Gisela's half, rounded up.
+    /// Its opportunity follows the applicable damage lineage; it is not a fixed allowance.
+    Relative(PreventionAmountFn),
+}
 
 /// A prevention effect of a static ability (CR 615, 604): "Prevent all damage that would be dealt to Black Panther". It
 /// functions while its source is on the battlefield, and prevents all of the damage it applies to, or as much as `amount`
@@ -395,9 +447,9 @@ pub struct PreventionDef {
     /// What it does, in a few words: shown beside its source when a player orders several (CR 616.1).
     pub hint: &'static str,
     pub applies: PreventionApplies,
-    /// How much it prevents, where it prevents only part of the damage (Gisela, Blade of Goldnight's "prevent half that
-    /// damage, rounded up"); None for all of it.
-    pub amount: Option<PreventionAmount>,
+    /// The printed quantity contract: all damage, a specific source-event allowance, or an event-relative portion.
+    /// Gisela's existing partial-amount callback is `Relative`, never reinterpreted as a specific allowance.
+    pub amount: PreventionAmount,
 }
 
 /// Whether a prevention effect a spell or ability made applies to this damage (CR 615.1), judged as `PreventionApplies` is,
@@ -458,7 +510,7 @@ pub type PreventionThen = fn(&mut dyn Game, &Asker, ObjectId, &[Prevented]);
 impl Prevented {
     /// How much the effect prevented in all, of these parts: "that much damage".
     pub fn total(parts: &[Prevented]) -> u32 {
-        parts.iter().map(|p| u32::from(p.amount)).sum()
+        parts.iter().map(|p| p.amount).fold(0u32, u32::saturating_add)
     }
 }
 
@@ -477,6 +529,7 @@ impl ReplacementDef {
         applies: never,
         apply: nothing,
         then: None,
+        damage: None,
         optional: None,
         in_graveyard: false,
     };

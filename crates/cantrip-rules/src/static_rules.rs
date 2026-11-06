@@ -38,7 +38,7 @@ pub fn extra_power_up_activations(cx: &Cx, player: PlayerId) -> u32 {
 pub fn mana_kept(cx: &Cx) -> Vec<(PlayerId, [bool; 6])> {
     let mut kept: Vec<(PlayerId, [bool; 6])> = Vec::new();
     for (id, controller, def, by) in sources(cx, |d| !d.mana_kept.is_empty()) {
-        let asker = Asker { source: id, controller, by, spell: false };
+        let asker = Asker { instance: None, source: id, controller, by, spell: false };
         for player in cx.s().seats() {
             for mana in Mana::ALL {
                 if def.mana_kept.iter().any(|rule| rule(cx, &asker, player, mana)) {
@@ -90,7 +90,7 @@ pub fn mana_told_apart(q: &dyn Query, cards: &'static CardTable, player: PlayerI
         return Vec::new();
     }
     from.retain(|&source| {
-        rules.iter().any(|&(id, controller, def, by)| def.mana_told_apart.iter().any(|rule| rule(q, &Asker { source: id, controller, by, spell: false }, source)))
+        rules.iter().any(|&(id, controller, def, by)| def.mana_told_apart.iter().any(|rule| rule(q, &Asker { instance: None, source: id, controller, by, spell: false }, source)))
     });
     from
 }
@@ -109,7 +109,7 @@ pub fn cast_barred(cx: &Cx, player: PlayerId) -> ZoneKinds {
         }
     }
     for (id, controller, def, by) in sources(cx, |d| !d.cast_rules.is_empty()) {
-        let asker = Asker { source: id, controller, by, spell: false };
+        let asker = Asker { instance: None, source: id, controller, by, spell: false };
         for from in ZoneKinds::CAST_FROM {
             if !barred.contains(from) && def.cast_rules.iter().any(|rule| !rule(cx, &asker, player, from)) {
                 barred = barred.with(from);
@@ -169,7 +169,7 @@ pub fn legendary_instant_or_sorcery(chars: &Chars) -> bool {
 /// face it would be cast as (CR 601.3e), or the spell on the stack once its proposal is complete (CR 601.6).
 pub fn spell_forbidden(q: &dyn Query, bans: &SpellBans, player: PlayerId, spell: ObjectId) -> bool {
     (bans.legendless && legendary_instant_or_sorcery(&q.chars(spell)))
-        || bans.forbidders.iter().any(|&(id, controller, def, by)| def.spell_rules.iter().any(|rule| !rule(q, &Asker { source: id, controller, by, spell: false }, player, spell)))
+        || bans.forbidders.iter().any(|&(id, controller, def, by)| def.spell_rules.iter().any(|rule| !rule(q, &Asker { instance: None, source: id, controller, by, spell: false }, player, spell)))
 }
 
 /// The permanents on the battlefield with a static ability that keeps cards in some zones from entering the battlefield
@@ -183,7 +183,7 @@ pub fn enter_bans(cx: &Cx) -> Vec<(ObjectId, PlayerId, &'static CardDef, Option<
 /// names, so it is not asked.
 pub fn enter_banned(q: &dyn Query, bans: &[(ObjectId, PlayerId, &'static CardDef, Option<Linked>)], card: ObjectId) -> bool {
     !q.obj(card).zone.is(ZoneKind::Stack)
-        && bans.iter().any(|&(id, controller, def, by)| def.enter_rules.iter().any(|rule| !rule(q, &Asker { source: id, controller, by, spell: false }, card)))
+        && bans.iter().any(|&(id, controller, def, by)| def.enter_rules.iter().any(|rule| !rule(q, &Asker { instance: None, source: id, controller, by, spell: false }, card)))
 }
 
 /// The permanents on the battlefield with a static ability that keeps some land plays from being made: one that keeps cards
@@ -199,7 +199,7 @@ pub fn land_play_bans(cx: &Cx) -> Vec<(ObjectId, PlayerId, &'static CardDef, Opt
 /// enter the battlefield from there is `enter_banned`'s, over the same list.
 pub fn land_play_forbidden(q: &dyn Query, bans: &[(ObjectId, PlayerId, &'static CardDef, Option<Linked>)], player: PlayerId, land: ObjectId, face: CardId) -> bool {
     bans.iter().any(|&(id, controller, def, by)| {
-        def.land_play_rules.iter().any(|rule| !rule(q, &Asker { source: id, controller, by, spell: false }, player, land, face))
+        def.land_play_rules.iter().any(|rule| !rule(q, &Asker { instance: None, source: id, controller, by, spell: false }, player, land, face))
     })
 }
 
@@ -214,7 +214,7 @@ pub fn cant_enter(cx: &Cx, card: ObjectId) -> bool {
 /// protection would prevent it, which is rare, so the battlefield is searched then.
 pub fn damage_cant_be_prevented(cx: &Cx, source: ObjectId, combat: bool) -> bool {
     for (id, controller, def, by) in sources(cx, |d| !d.unpreventable_damage.is_empty()) {
-        let asker = Asker { source: id, controller, by, spell: false };
+        let asker = Asker { instance: None, source: id, controller, by, spell: false };
         if def.unpreventable_damage.iter().any(|rule| rule(cx, &asker, source, combat)) {
             return true;
         }
@@ -227,7 +227,7 @@ pub fn damage_cant_be_prevented(cx: &Cx, source: ObjectId, combat: bool) -> bool
 /// battlefield is searched then.
 pub fn ability_cant_be_countered(cx: &Cx, item: &StackItem) -> bool {
     sources(cx, |d| !d.uncounterable_abilities.is_empty()).any(|(id, controller, def, by)| {
-        let asker = Asker { source: id, controller, by, spell: false };
+        let asker = Asker { instance: None, source: id, controller, by, spell: false };
         def.uncounterable_abilities.iter().any(|rule| rule(cx, &asker, item))
     })
 }
@@ -245,7 +245,7 @@ pub fn damage_stays(cx: &Cx, damaged: &[ObjectId]) -> Vec<ObjectId> {
         .copied()
         .filter(|&object| {
             rules.iter().any(|&(id, controller, def, by)| {
-                let asker = Asker { source: id, controller, by, spell: false };
+                let asker = Asker { instance: None, source: id, controller, by, spell: false };
                 def.damage_stays.iter().any(|rule| rule(cx, &asker, object))
             })
         })
@@ -258,7 +258,7 @@ pub fn damage_stays(cx: &Cx, damaged: &[ObjectId]) -> Vec<ObjectId> {
 /// searched then.
 pub fn zero_loyalty_stays(cx: &Cx, planeswalker: ObjectId) -> bool {
     sources(cx, |d| !d.zero_loyalty_stays.is_empty()).any(|(id, controller, def, by)| {
-        let asker = Asker { source: id, controller, by, spell: false };
+        let asker = Asker { instance: None, source: id, controller, by, spell: false };
         def.zero_loyalty_stays.iter().any(|rule| rule(cx, &asker, planeswalker))
     })
 }
@@ -277,7 +277,7 @@ pub fn attack_limits(cx: &Cx, targets: &[Target]) -> Vec<(Target, u32)> {
         .filter_map(|&target| {
             let mut limit = None;
             for &(id, controller, def, by) in &rules {
-                let asker = Asker { source: id, controller, by, spell: false };
+                let asker = Asker { instance: None, source: id, controller, by, spell: false };
                 for rule in def.attack_limits {
                     if let Some(n) = rule(cx, &asker, target) {
                         limit = Some(limit.map_or(n, |most: u32| most.min(n)));
@@ -295,7 +295,7 @@ pub fn attack_limits(cx: &Cx, targets: &[Target]) -> Vec<(Target, u32)> {
 /// permanent, so the battlefield is searched then.
 pub fn legend_rule_exempt(cx: &Cx, legend: ObjectId) -> bool {
     sources(cx, |d| !d.legend_rule_exempt.is_empty()).any(|(id, controller, def, by)| {
-        let asker = Asker { source: id, controller, by, spell: false };
+        let asker = Asker { instance: None, source: id, controller, by, spell: false };
         def.legend_rule_exempt.iter().any(|rule| rule(cx, &asker, legend))
     })
 }
@@ -313,7 +313,7 @@ pub fn cant_gain_life(q: &dyn Query, cards: &'static CardTable, player: PlayerId
         let obj = s.obj(id);
         cards.texts_linked(s, id).map(|(c, by)| (cards.get(c), by)).any(|(def, by)| {
             !def.cant_gain_life.is_empty() && !q.lost_all_abilities(id) && {
-                let asker = Asker { source: id, controller: obj.controller, by, spell: false };
+                let asker = Asker { instance: None, source: id, controller: obj.controller, by, spell: false };
                 def.cant_gain_life.iter().any(|rule| rule(q, &asker, player))
             }
         })
@@ -343,7 +343,7 @@ pub fn may_attack_despite_defender(q: &dyn Query, cards: &'static CardTable, cre
         let obj = s.obj(id);
         cards.texts_linked(s, id).map(|(c, by)| (cards.get(c), by)).any(|(def, by)| {
             !def.attacks_despite_defender.is_empty() && !q.lost_all_abilities(id) && {
-                let asker = Asker { source: id, controller: obj.controller, by, spell: false };
+                let asker = Asker { instance: None, source: id, controller: obj.controller, by, spell: false };
                 def.attacks_despite_defender.iter().any(|rule| rule(q, &asker, creature))
             }
         })
@@ -366,7 +366,7 @@ pub fn attack_costs(cx: &Cx, eligible: &[ObjectId], targets: &[Target]) -> Vec<A
             let mut total = ManaCost::ZERO;
             let mut first = None;
             for &(id, controller, def, by) in &taxes {
-                let asker = Asker { source: id, controller, by, spell: false };
+                let asker = Asker { instance: None, source: id, controller, by, spell: false };
                 for rule in def.attack_costs {
                     if let Some(cost) = rule(cx, &asker, attacker, target)
                         && !cost.is_zero()
@@ -409,14 +409,14 @@ pub fn any_color_spenders(cx: &Cx) -> Vec<(ObjectId, PlayerId, &'static CardDef,
 pub fn lets_spend_any_color(q: &dyn Query, spenders: &[(ObjectId, PlayerId, &'static CardDef, Option<Linked>)], spending: &Spending) -> bool {
     spenders
         .iter()
-        .any(|&(id, controller, def, by)| def.spend_any_color.iter().any(|rule| rule(q, &Asker { source: id, controller, by, spell: false }, spending)))
+        .any(|&(id, controller, def, by)| def.spend_any_color.iter().any(|rule| rule(q, &Asker { instance: None, source: id, controller, by, spell: false }, spending)))
 }
 
 /// Whether `player` may activate the abilities of `creature` as though it had haste (CR 302.6): a static ability of a
 /// permanent `player` controls says so.
 pub fn activates_as_though_haste(cx: &Cx, player: PlayerId, creature: ObjectId) -> bool {
     sources(cx, |d| !d.activate_as_though_haste.is_empty()).any(|(id, controller, def, by)| {
-        controller == player && def.activate_as_though_haste.iter().any(|rule| rule(cx, &Asker { source: id, controller, by, spell: false }, creature))
+        controller == player && def.activate_as_though_haste.iter().any(|rule| rule(cx, &Asker { instance: None, source: id, controller, by, spell: false }, creature))
     })
 }
 
@@ -425,7 +425,7 @@ pub fn activates_as_though_haste(cx: &Cx, player: PlayerId, creature: ObjectId) 
 /// creature as it last existed on the battlefield if it has left.
 pub fn stations_by_toughness(cx: &Cx, creature: ObjectId) -> bool {
     sources(cx, |d| !d.stations_by_toughness.is_empty()).any(|(id, controller, def, by)| {
-        let asker = Asker { source: id, controller, by, spell: false };
+        let asker = Asker { instance: None, source: id, controller, by, spell: false };
         def.stations_by_toughness.iter().any(|rule| rule(cx, &asker, creature))
     })
 }
@@ -438,7 +438,7 @@ pub fn stations_by_toughness(cx: &Cx, creature: ObjectId) -> bool {
 pub fn combat_damage_of(cx: &Cx, creature: ObjectId) -> u32 {
     let c = cx.chars(creature);
     let by_toughness = c.has(Keyword::AssignsDamageByToughness) || sources(cx, |d| !d.damage_by_toughness.is_empty()).any(|(id, controller, def, by)| {
-        let asker = Asker { source: id, controller, by, spell: false };
+        let asker = Asker { instance: None, source: id, controller, by, spell: false };
         def.damage_by_toughness.iter().any(|rule| rule(cx, &asker, creature))
     }) || (c.toughness.unwrap_or(0) > c.power.unwrap_or(0)
         && cx.s().effects.iter().any(|e| e.kind == EffectKind::CreaturesAssignDamageByToughness && e.controller == cx.s().obj(creature).controller));
@@ -447,7 +447,7 @@ pub fn combat_damage_of(cx: &Cx, creature: ObjectId) -> u32 {
     }
     let power = c.power.unwrap_or(0);
     if power < 0 && sources(cx, |d| !d.damage_by_absolute_power.is_empty()).any(|(id, controller, def, by)| {
-        let asker = Asker { source: id, controller, by, spell: false };
+        let asker = Asker { instance: None, source: id, controller, by, spell: false };
         def.damage_by_absolute_power.iter().any(|rule| rule(cx, &asker, creature))
     }) {
         return power.unsigned_abs();
@@ -479,7 +479,7 @@ pub fn flash_granters(cx: &Cx) -> Vec<(ObjectId, PlayerId, &'static CardDef, Opt
 /// 702.8), asked of the spell it would be on the stack under `player` (CR 601.3e, `actions::SpellsAsCast`).
 pub fn grants_flash(q: &dyn Query, granters: &[(ObjectId, PlayerId, &'static CardDef, Option<Linked>)], player: PlayerId, spell: ObjectId) -> bool {
     granters.iter().any(|&(id, controller, def, by)| {
-        let asker = Asker { source: id, controller, by, spell: false };
+        let asker = Asker { instance: None, source: id, controller, by, spell: false };
         def.flash_rules.iter().any(|rule| rule(q, &asker, spell, player))
     })
 }
@@ -503,7 +503,7 @@ pub fn activation_alternatives(
 ) -> Vec<(Grant, ManaCost)> {
     let mut all = Vec::new();
     for &(id, controller, card, by) in alternative_sources {
-        let asker = Asker { source: id, controller, by, spell: false };
+        let asker = Asker { instance: None, source: id, controller, by, spell: false };
         let card_id = cx.card_id(card);
         for (k, rule) in card.ability_alternatives.iter().enumerate() {
             if let Some(cost) = rule(cx, &asker, player, permanent, def) {
@@ -525,13 +525,13 @@ pub fn named_activation_alternative(q: &dyn Query, grant: Grant, player: PlayerI
     }
     // Asked as the card it is printed on: a merged permanent's component's by its own link (CR 607.1, 702.140e).
     let by = q.state().merge_of(grant.object).map(|_| Linked { object: grant.object, text: q.linked_card(grant.ability.card), acquired: Acquired::OWN }).filter(|&l| l != q.text_linked(grant.object));
-    rule(q, &Asker { source: grant.object, controller: obj.controller, by, spell: false }, player, permanent, def)
+    rule(q, &Asker { instance: None, source: grant.object, controller: obj.controller, by, spell: false }, player, permanent, def)
 }
 
 /// Whether a static ability lets `player` activate this sorcery-speed ability whenever they could cast an instant.
 pub fn instant_activation(cx: &Cx, player: PlayerId, source: ObjectId, index: u8) -> bool {
     for (id, controller, def, by) in sources(cx, |d| !d.instant_activation.is_empty()) {
-        let asker = Asker { source: id, controller, by, spell: false };
+        let asker = Asker { instance: None, source: id, controller, by, spell: false };
         if def.instant_activation.iter().any(|rule| rule(cx, &asker, source, index, player)) {
             return true;
         }
@@ -588,7 +588,7 @@ pub fn activation_barred(cx: &Cx, forbidders: &[ObjectId], source: ObjectId, def
     forbidders.iter().any(|&id| {
         let obj = cx.s().obj(id);
         cx.cards().texts_linked(cx.s(), id).any(|(c, by)| {
-            let asker = Asker { source: id, controller: obj.controller, by, spell: false };
+            let asker = Asker { instance: None, source: id, controller: obj.controller, by, spell: false };
             cx.card(c).activation_rules.iter().any(|rule| !rule(cx, &asker, source, def))
         })
     })
@@ -605,7 +605,7 @@ fn attack_restrictors(q: &dyn Query, cards: &CardTable) -> Vec<(Asker, &'static 
             cards
                 .texts_linked(q.state(), id)
                 .filter(move |(card, _)| cards.attack_rules[card.0 as usize] && !q.lost_all_abilities(id))
-                .map(move |(card, by)| (Asker { source: id, controller: obj.controller, by, spell: false }, cards.get(card)))
+                .map(move |(card, by)| (Asker { instance: None, source: id, controller: obj.controller, by, spell: false }, cards.get(card)))
         })
         .collect()
 }
@@ -622,7 +622,7 @@ pub fn attacks_alone_barred(q: &dyn Query, cards: &CardTable, creatures: &[Objec
             cards
                 .texts_linked(q.state(), id)
                 .filter(move |(card, _)| cards.attack_alone_rules[card.0 as usize] && !q.lost_all_abilities(id))
-                .map(move |(card, by)| (Asker { source: id, controller: obj.controller, by, spell: false }, cards.get(card)))
+                .map(move |(card, by)| (Asker { instance: None, source: id, controller: obj.controller, by, spell: false }, cards.get(card)))
         })
         .collect();
     creatures
@@ -704,7 +704,7 @@ pub fn block_requirements(cx: &Cx, allowed: &[(ObjectId, ObjectId)]) -> Vec<Requ
 /// Whether a static ability of a permanent with its abilities (CR 613.1f), or an emblem in the command zone
 /// (CR 114.4), says `test` of its own rules. Gideon of the Trials and Platinum Angel both forbid losing and winning.
 /// Asked only when the rules need the answer: losing or winning, damage, or counters about to be put.
-fn any_static<R: Copy + 'static>(q: &dyn Query, cards: &'static CardTable, rules: fn(&CardDef) -> &'static [R], test: impl Fn(R, &Asker) -> bool) -> bool {
+fn any_static<R: Copy + 'static>(q: &dyn Query, cards: &CardTable, rules: fn(&CardDef) -> &'static [R], test: impl Fn(R, &Asker) -> bool) -> bool {
     let s = q.state();
     // As in `actions::given`, commanders have no functioning abilities here (CR 113.6); emblems have no types.
     let emblems = s.zone(Zone::COMMAND).iter().filter(|&&id| cards.get(cards.current(s.obj(id))).types == TypeSet::NONE);
@@ -713,7 +713,7 @@ fn any_static<R: Copy + 'static>(q: &dyn Query, cards: &'static CardTable, rules
         cards.texts_linked(s, id).any(|(card, by)| {
             let list = rules(cards.get(card));
             !list.is_empty() && !q.lost_all_abilities(id) && {
-                let asker = Asker { source: id, controller: obj.controller, by, spell: false };
+                let asker = Asker { instance: None, source: id, controller: obj.controller, by, spell: false };
                 list.iter().any(|&rule| test(rule, &asker))
             }
         })
@@ -740,7 +740,7 @@ pub fn miracles(q: &dyn Query, cards: &'static CardTable, card: ObjectId) -> Vec
             if def.granted_miracles.is_empty() || q.lost_all_abilities(id) {
                 continue;
             }
-            let asker = Asker { source: id, controller: o.controller, by, spell: false };
+            let asker = Asker { instance: None, source: id, controller: o.controller, by, spell: false };
             for (i, grant) in def.granted_miracles.iter().enumerate() {
                 if (grant.has)(q, &asker, card) {
                     all.push(Miracle { granter: Some((granter, i as u8)), cost: (grant.cost)(q, q.obj(card).card).map(|c| reduced_by(c, u32::from(grant.less)).0) });
@@ -844,7 +844,7 @@ pub fn untap_step_skips(q: &dyn Query, cards: &'static CardTable, id: ObjectId, 
 /// (`EffectKind::CantBecomeUntapped`: Spider-Woman, Secret Agent), or a static ability of a permanent with its abilities, or
 /// of an emblem, does (`CardDef::cant_become_untapped`: Frozen in Ice, Blossombind). No ability of `id`'s, so it holds
 /// whatever abilities `id` has lost (CR 613.1f). Asked only where a tapped permanent would untap.
-pub fn cant_become_untapped(q: &dyn Query, cards: &'static CardTable, id: ObjectId) -> bool {
+pub fn cant_become_untapped(q: &dyn Query, cards: &CardTable, id: ObjectId) -> bool {
     q.state().effects.iter().any(|e| e.affected == id && e.kind == EffectKind::CantBecomeUntapped)
         || any_static(q, cards, |d| d.cant_become_untapped, |rule, asker| rule(q, asker, id))
 }
@@ -867,4 +867,23 @@ pub fn cant_be_sacrificed(q: &dyn Query, cards: &'static CardTable, id: ObjectId
     q.chars(id).has(Keyword::CantBeSacrificed)
         || q.state().effects.iter().any(|e| e.affected == id && e.kind == EffectKind::CantBeSacrificed)
         || any_static(q, cards, |d| d.sacrifice_bans, |rule, asker| rule(q, asker, id))
+}
+
+/// Whether a continuous effect or a functioning static ability forbids
+/// regenerating `id` (CR 101.2, 701.19b-c). Asked when destruction would be
+/// replaced, not when a spell or ability creates a regeneration shield.
+pub fn cant_be_regenerated(q: &dyn Query, cards: &'static CardTable, id: ObjectId) -> bool {
+    q.state().effects.iter().any(|e| e.affected == id && e.kind == EffectKind::CantBeRegenerated)
+        || any_static(q, cards, |d| d.regeneration_bans, |rule, asker| rule(q, asker, id))
+        // A granted ability has the holder as its source, and the layer-6
+        // result decides whether it survived a later loss of abilities. Do not
+        // reject all grants merely because the holder lost its printed ones.
+        || q.state().battlefield().iter().any(|&source| {
+            q.chars(source).abilities.into_iter().flatten().filter(|a| a.is_delayed()).any(|ability| {
+                match cards.ability(ability) {
+                    AbilityDef::RegenerationBan(ban) => (ban.rule)(q, &Asker::new(source, q.controller(source)), id),
+                    _ => false,
+                }
+            })
+        })
 }

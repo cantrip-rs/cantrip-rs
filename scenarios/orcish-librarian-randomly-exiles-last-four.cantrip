@@ -1,0 +1,44 @@
+# Librarian looks at eight, exiles four random cards, then orders the remaining four on top (CR 401.4, 701.13a).
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Orcish Librarian
+Mountain x5
+Island
+Forest
+Plains
+Swamp
+Mountain
+Sol Ring
+Ornithopter
+Dark Ritual
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Dice]
+8; 7; 6; 5
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Orcish Librarian.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Orcish Librarian.Activate
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Orcish Librarian.Tapped = true
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Swamp; Plains; Forest; Island)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Looked = Island; Forest; Plains; Swamp; Mountain; Sol Ring; Ornithopter; Dark Ritual
+Exile = Mountain; Sol Ring; Ornithopter; Dark Ritual
+Bot1.Library = Swamp; Plains; Forest; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island
+Bot2.Library.Count = 12

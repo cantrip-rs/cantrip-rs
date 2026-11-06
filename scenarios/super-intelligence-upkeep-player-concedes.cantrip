@@ -1,0 +1,33 @@
+# Super Intelligence's upkeep player leaves while the ability remains on the stack.
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Chains of Mephistopheles x2
+Super Intelligence
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Bot3 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Chains of Mephistopheles.Cast
+Bot1.Hand.Chains of Mephistopheles.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Super Intelligence.Cast(Bot2.Battlefield.Ornithopter)
+[T5 Bot2.Upkeep]
+? Stack.Count = 1
+Bot2.Concede
+[T6 Bot3.Main1]
+[Expect]
+Bot2.Status = Lost
+Bot1.Battlefield.Super Intelligence = (absent)

@@ -1,0 +1,6 @@
+{
+  "name": "Panic",
+  "manaCost": "{R}",
+  "type": "Instant",
+  "oracleText": "Cast this spell only during combat before blockers are declared.\nTarget creature can't block this turn.\nDraw a card at the beginning of the next turn's upkeep."
+}

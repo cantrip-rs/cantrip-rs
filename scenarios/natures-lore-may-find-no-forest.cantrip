@@ -1,0 +1,27 @@
+# A search for a Forest card may find nothing even when one is present, and the library is shuffled anyway (CR 701.23b).
+[Bot1 Deck]
+Nature's Lore
+Mox Emerald
+Mox Pearl
+Plains x4
+Forest
+Island x12
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nature's Lore.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Search()
+[T1 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Forest = (absent)
+Bot1.Library.Forest.Colors =
+Bot1.Shuffles = 1

@@ -1,5 +1,5 @@
 # Laughing Mad: flashback uses "its flashback cost and any additional costs" (CR 702.34a, 601.2b, 118.8). With the hand empty there is
-# no card to discard, so the flashback is refused though Black Lotus and a Mountain would pay {3}{R}; the card stays in the graveyard.
+# no card to discard, so a flashback attempt cannot finish and rolls back (CR 733) even though its mana is available.
 
 [Bot1 Deck]
 Mox Ruby
@@ -34,7 +34,15 @@ Bot1.Hand.Mox Emerald.Cast
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 ? Bot1.Hand.Count = 0
-! Bot1.Graveyard.Laughing Mad.Cast(Ability: Flashback)
+? Stack = Mox Emerald
+Bot1.Graveyard.Laughing Mad.Cast(Ability: Flashback)
+? Bot1.Hand.Count = 0
+? Bot1.Graveyard = Black Lotus; Laughing Mad; Memnite
+? Bot1.Mana = {R}{R}{R}{R}
+? Bot1.Battlefield.Mountain.Tapped = true
+? Bot1.Life = 20
+? Exile.Count = 0
+? Stack = Mox Emerald
 
 [Expect]
 Bot1.Graveyard = Black Lotus; Laughing Mad; Memnite

@@ -1,6 +1,6 @@
 # "Return a creature you control to its owner's hand" is a cost, so with no creature of your own the Ruse cannot be cast:
 # on turn two Bot2 casts an Ornithopter and then a Mox Jet with an Island and a Mox Sapphire open on Bot1's side but no Bot1 creature, and the
-# Ruse is refused against the Mox Jet (a spell, with Bot2's Ornithopter on the battlefield - an opponent's creature does
+# attempted Ruse is reversed against the Mox Jet (a spell, with Bot2's Ornithopter on the battlefield - an opponent's creature does
 # not do). On turn three Bot1 casts its own Ornithopter; on turn four the Ruse, with the same mana, returns it to
 # counter Bot2's second Ornithopter - any spell, a creature spell here, can be countered.
 
@@ -26,7 +26,19 @@ Bot1.Hand.Mox Sapphire.Cast
 [T2 Bot2.Main1]
 Bot2.Hand.Ornithopter.Cast
 Bot2.Hand.Mox Jet.Cast
-! Bot1.Hand.Familiar's Ruse.Cast(Stack.Mox Jet)
+Bot1.Hand.Familiar's Ruse.Cast(Stack.Mox Jet)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Hand = Familiar's Ruse; Island; Island; Island; Ornithopter
+? Bot1.Life = 20
+? Bot1.Mana =
+? Bot1.Battlefield = Island; Mox Sapphire
+? Bot1.Battlefield.Island.Tapped = false
+? Bot1.Battlefield.Mox Sapphire.Tapped = false
+? Bot1.Graveyard.Count = 0
+? Bot2.Battlefield = Ornithopter
+? Exile.Count = 0
+? Stack = Mox Jet
 [T3 Bot1.Main1]
 Bot1.Hand.Island.Play
 Bot1.Hand.Ornithopter.Cast

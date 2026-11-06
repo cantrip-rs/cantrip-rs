@@ -1,0 +1,8 @@
+{
+  "name": "People of the Woods",
+  "manaCost": "{G}{G}",
+  "type": "Creature — Human",
+  "power": 1,
+  "toughness": "*",
+  "oracleText": "People of the Woods's toughness is equal to the number of Forests you control."
+}

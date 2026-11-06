@@ -156,7 +156,7 @@ fn untap_step_of(g: &mut Game, player: PlayerId) {
         t.active = player;
         t.set_step(Step::Untap);
     });
-    let mut cx = Cx { g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let mut cx = Cx { g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     untap_step(&mut cx, player).expect("nothing is asked");
 }
 
@@ -201,7 +201,7 @@ fn doesnt_untap_during_its_controllers_next_untap_step_follows_a_change_of_contr
     let other = tapped(&mut g, &BEAR, P0);
     effect(&mut g, bear, EffectKind::DoesntUntap, Duration::DuringItsControllersNextUntapStep);
     {
-        let mut cx = Cx { g: &mut g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
         cantrip_api::Game::add_effect(&mut cx, bear, bear, EffectKind::Control(P0), Duration::Indefinite);
     }
     assert_eq!(g.state.obj(bear).controller, P0);

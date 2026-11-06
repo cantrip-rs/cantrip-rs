@@ -58,6 +58,7 @@ Bot1.Arrange(Island | )
 Bot2.Hand.Island.Play
 [T7 Bot1.Main1]
 Bot1.Battlefield.Mazemind Tome.Activate(Ability: Scry 1)
+Bot1.Choose(Tap Mazemind Tome)
 ? Stack.Count = 2
 Bot1.Pass
 Bot2.Battlefield.Island#1.Activate

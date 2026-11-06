@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::targets;
+use cantrip_mechanics::{effects, targets};
 use cantrip_mechanics::triggers;
 use cantrip_mechanics::lands;
 use cantrip_oracle as oracle;
@@ -10,22 +10,12 @@ fn becomes_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// It has base power and toughness 3/3 until end of turn (CR 613.4b).
-fn three_three(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if item.target_count > 0
-        && let Some(creature) = targets::object(g, item, 0)
-    {
-        g.add_effect(item.object, creature, EffectKind::SetPt(3, 3), Duration::EndOfTurn);
-    }
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     enters: Some(cantrip_mechanics::mana::enters_tapped),
     abilities: &[
         mana_ability(TAP, add_one_of(&[Color::Green, Color::Blue]), "{T}: Add {G} or {U}."),
         ability(cost("{3}{U}{G}"), becomes_creature, "{3}{G}{U}: Until end of turn, this land becomes a 5/5 green and blue Plant creature with trample. It's still a land."),
-        triggered(triggers::THIS_ATTACKS, three_three, "Whenever this land attacks, up to one other target creature has base power and toughness 3/3 until end of turn.")
+        triggered(triggers::THIS_ATTACKS, effects::set_first_target_base_pt::<3, 3>, "Whenever this land attacks, up to one other target creature has base power and toughness 3/3 until end of turn.")
             .targets(&[up_to_one(targets::other_creature_filter)]),
     ],
     ..oracle::RESTLESS_VINESTALK

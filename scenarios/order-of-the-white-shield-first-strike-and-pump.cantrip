@@ -1,0 +1,85 @@
+# Protection rejects a black spell; paid first strike kills a blocker before combat damage, and the +1/+0 boost and first strike expire at cleanup (CR 702.16b, 702.7b, 514.2).
+[Bot1 Deck]
+Order of the White Shield
+Mox Pearl
+Gleemox
+Plains
+Mox Pearl
+Island
+Island
+Plains x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Mox Jet
+Stab
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl#1.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Order of the White Shield.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+! Bot2.Hand.Stab.Cast(Bot1.Battlefield.Order of the White Shield)
+Bot2.Hand.Stab.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Order of the White Shield.Activate(Ability: first strike)
+? Bot1.Mana = {U}
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Order of the White Shield.Activate(Ability: first strike; Mana: short)
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+! Bot1.Battlefield.Order of the White Shield.Activate(Ability: +1/+0; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Order of the White Shield.Activate(Ability: +1/+0)
+? Bot1.Mana = {U}
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Order of the White Shield.Power = 3
+? Bot1.Battlefield.Order of the White Shield.Toughness = 1
+Bot1.Attack(Order of the White Shield > Bot2)
+Bot2.Block(Memnite > Order of the White Shield)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Order of the White Shield.Damage = 0
+? Bot2.Battlefield.Memnite = (absent)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Order of the White Shield.Power = 2
+? Bot1.Battlefield.Order of the White Shield.Toughness = 1
+? Bot1.Battlefield.Order of the White Shield.Keywords = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Order of the White Shield.Activate(Ability: first strike)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Order of the White Shield.Keywords = FirstStrike
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Order of the White Shield.Activate(Ability: +1/+0)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Order of the White Shield.Power = 3
+Bot1.Battlefield.Order of the White Shield.Toughness = 1
+Bot1.Battlefield.Order of the White Shield.Keywords = FirstStrike
+Bot2.Graveyard.Memnite.Colors =

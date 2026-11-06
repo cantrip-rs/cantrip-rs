@@ -1,0 +1,38 @@
+# If the sole target leaves before resolution, the ability does not resolve and deals no damage; a later activation against a player still works (CR 608.2b).
+[Bot1 Deck]
+Black Lotus
+Orcish Cannoneers
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Orcish Cannoneers.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Orcish Cannoneers.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 20
+[T5 Bot1.Main1]
+Bot1.Battlefield.Orcish Cannoneers.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 18
+Bot2.Graveyard.Ornithopter.Power = 0

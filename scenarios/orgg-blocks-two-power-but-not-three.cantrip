@@ -1,0 +1,45 @@
+# Orgg may block a 2/2 but cannot block a 3/3 attacker (CR 509.1b).
+[Bot1 Deck]
+Hill Giant
+Grizzly Bears
+Black Lotus x2
+Island x20
+[Bot2 Deck]
+Orgg
+Black Lotus
+Mox Ruby
+Mox Pearl
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Orgg.Cast
+? Bot2.Mana =
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Hill Giant > Bot2; Grizzly Bears > Bot2)
+! Bot2.Block(Orgg > Hill Giant)
+Bot2.Block(Orgg > Grizzly Bears)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 17
+Bot2.Battlefield.Orgg.Damage = 2
+Bot1.Graveyard.Grizzly Bears.Power = 2

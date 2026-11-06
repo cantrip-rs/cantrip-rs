@@ -1,0 +1,11 @@
+{
+  "name": "Orgg",
+  "manaCost": "{3}{R}{R}",
+  "type": "Creature — Orgg",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Trample\nThis creature can't attack if defending player controls an untapped creature with power 3 or greater.\nThis creature can't block creatures with power 3 or greater.",
+  "keywords": [
+    "Trample"
+  ]
+}

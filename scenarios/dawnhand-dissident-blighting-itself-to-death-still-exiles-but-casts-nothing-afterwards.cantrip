@@ -37,6 +37,7 @@ Bot2.Battlefield.Mountain.Activate
 Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Llanowar Elves)
 [T3 Bot1.Main1]
 Bot1.Battlefield.Dawnhand Dissident.Activate(Bot1.Graveyard.Llanowar Elves; Ability: Exile target)
+Bot1.Choose(Tap Dawnhand Dissident)
 Bot1.Choose(Dawnhand Dissident)
 Bot1.Pass
 Bot2.Pass

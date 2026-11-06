@@ -1,0 +1,32 @@
+# Protection from black still permits a white spell to target the Knight (CR 702.16b).
+[Bot1 Deck]
+Order of the White Shield
+Black Lotus
+Swords to Plowshares
+Mox Pearl
+Plains x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Order of the White Shield.Cast
+? Bot1.Mana = {W}
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Order of the White Shield.Activate(Ability: first strike)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Order of the White Shield)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Order of the White Shield = (absent)
+Exile = Order of the White Shield
+Bot1.Life = 22

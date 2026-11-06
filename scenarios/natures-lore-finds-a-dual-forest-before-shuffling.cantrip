@@ -1,0 +1,33 @@
+# Nature's Lore finds a nonbasic Forest in its controller's library, puts it onto the battlefield before shuffling, and leaves the opponent's Forest in their library (CR 701.23, 701.24).
+[Bot1 Deck]
+Nature's Lore
+Mox Emerald
+Mox Pearl
+Plains x4
+Stomping Ground
+Island x12
+[Bot2 Deck]
+Island x7
+Forest
+Island x12
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nature's Lore.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Island)
+Bot1.Search(Stomping Ground)
+? Bot1.Shuffles = 0
+Bot1.PayCost
+[T1 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Stomping Ground.Tapped = false
+Bot1.Life = 18
+Bot1.Shuffles = 1
+Bot2.Library.Forest.Colors =

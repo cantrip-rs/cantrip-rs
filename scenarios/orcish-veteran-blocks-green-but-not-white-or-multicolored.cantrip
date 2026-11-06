@@ -1,0 +1,49 @@
+# Orcish Veteran cannot block a white 2-power attacker or a white-red one, but can block a green 2-power creature (CR 509.1b).
+[Bot1 Deck]
+Orcish Veteran
+Ornithopter
+Black Lotus
+Island x20
+[Bot2 Deck]
+Savannah Lions
+Cerodon Yearling
+Grizzly Bears
+Black Lotus x2
+Mox Ruby
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Orcish Veteran.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Cerodon Yearling.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Savannah Lions > Bot1; Cerodon Yearling > Bot1; Grizzly Bears > Bot1)
+! Bot1.Block(Orcish Veteran > Savannah Lions)
+! Bot1.Block(Orcish Veteran > Cerodon Yearling)
+Bot1.Block(Orcish Veteran > Grizzly Bears; Ornithopter > Savannah Lions)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 18
+Bot1.Graveyard.Ornithopter.Power = 0
+Bot1.Graveyard.Orcish Veteran.Power = 2
+Bot2.Graveyard.Grizzly Bears.Power = 2

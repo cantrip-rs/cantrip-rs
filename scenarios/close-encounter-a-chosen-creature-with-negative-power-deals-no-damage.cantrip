@@ -37,6 +37,7 @@ Bot2.Pass
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Close Encounter.Cast(Bot2.Battlefield.Aegis Turtle)
+Bot1.Choose(Choose creature you control or warped creature card you own in exile)
 Bot1.Choose(Grizzly Bears)
 [T3 Bot1.Main2]
 

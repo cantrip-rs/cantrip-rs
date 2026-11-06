@@ -6,12 +6,12 @@ use cantrip_oracle as oracle;
 /// to target creature (CR 603.10a, 608.2h, 120.7).
 fn death_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(target) = targets::object(g, item, 0) else { return Ok(()) };
-    let amount = 3 + g.history().this_turn().iter().filter_map(|record| {
+    let amount = g.history().this_turn().iter().filter_map(|record| {
         let Event::Damage { source, target, amount, kind, controller, known, .. } = record.event else { return None };
         let dealt = DamageDealt { source, target, amount, combat: kind.is_combat(), controller, known };
         (source != item.object && target == Target::Object(item.object) && dealt.chars(g).name == "Blazing Effigy")
             .then_some(amount)
-    }).sum::<u32>();
+    }).fold(3u32, u32::saturating_add);
     g.damage(item.object, Target::Object(target), amount);
     Ok(())
 }

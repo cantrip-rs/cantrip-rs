@@ -1,0 +1,39 @@
+# Panic may be cast before blockers in an additional combat phase, not just the first (CR 500.8, 601.3).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Raph & Leo, Sibling Rivals
+Panic
+Island x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Raph & Leo, Sibling Rivals.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Raph & Leo, Sibling Rivals > Bot2)
+Bot1.Target(Raph & Leo, Sibling Rivals)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.EndCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Panic.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Raph & Leo, Sibling Rivals > Bot2)
+! Bot2.Block(Memnite > Raph & Leo, Sibling Rivals)
+Bot2.Block(Ornithopter > Raph & Leo, Sibling Rivals)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Memnite.Power = 1
+Bot1.Graveyard.Panic.Colors = Red

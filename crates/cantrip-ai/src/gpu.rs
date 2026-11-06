@@ -655,6 +655,9 @@ pub struct Served {
     pub dir: std::path::PathBuf,
     /// FNV-1a 64 of its `manifest.json` (`remote::model_identity`).
     pub identity: u64,
+    pub schema: u32,
+    pub encoder_hash: u64,
+    pub input_compatibility: crate::eval::InputCompatibility,
 }
 
 struct Shared {
@@ -1062,6 +1065,9 @@ impl Engine {
                     .unwrap_or_default(),
                 dir: dir.to_path_buf(),
                 identity: crate::remote::model_identity(dir)?,
+                schema: manifest.schema,
+                encoder_hash: u64::from_str_radix(&manifest.encoder_hash, 16).map_err(err)?,
+                input_compatibility: crate::eval::input_compatibility(&manifest)?,
             });
         }
         let mut seen = std::collections::HashSet::new();
@@ -1228,7 +1234,7 @@ impl Drop for Client {
     }
 }
 
-fn evaluate(shared: &Shared, model: usize, rows: Rows) -> Result<RowOutputs, EvalError> {
+fn evaluate(shared: &Shared, model: usize, mut rows: Rows) -> Result<RowOutputs, EvalError> {
     let n = rows.rows();
     if model >= shared.models.len() {
         return Err(err(format!("no model {model}")));
@@ -1245,6 +1251,18 @@ fn evaluate(shared: &Shared, model: usize, rows: Rows) -> Result<RowOutputs, Eva
     }
     if at != rows.tokens() || rows.num_start.len() != at + 1 {
         return Err(err("rows whose arrays disagree"));
+    }
+    let compatibility = shared.models[model].input_compatibility;
+    for (token, &kind) in rows.kind.iter().enumerate() {
+        for slot in 0..CATS {
+            let at = token * CATS + slot;
+            rows.cats[at] = compatibility.category(slot, rows.cats[at]);
+        }
+        for at in rows.num_start[token] as usize..rows.num_start[token + 1] as usize {
+            if compatibility.masks(kind, rows.num_feature[at] as usize) {
+                rows.num_value[at] = 0.0;
+            }
+        }
     }
     let tokens = at;
     let mut by_bucket: [Vec<usize>; 3] = Default::default();

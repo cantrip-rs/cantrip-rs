@@ -1,0 +1,48 @@
+# Sleight of Mind changes white to green in the Veteran's restriction: green is forbidden, white can be blocked (CR 612.2).
+[Bot1 Deck]
+Orcish Veteran
+Black Lotus
+Mox Sapphire
+Sleight of Mind
+Island x20
+[Bot2 Deck]
+Savannah Lions
+Grizzly Bears
+Black Lotus x2
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Orcish Veteran.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleight of Mind.Cast(Orcish Veteran)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(White)
+Bot1.Colors(Green)
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Savannah Lions > Bot1; Grizzly Bears > Bot1)
+! Bot1.Block(Orcish Veteran > Grizzly Bears)
+Bot1.Block(Orcish Veteran > Savannah Lions)
+[T6 Bot2.Main2]
+[Expect]
+Bot1.Life = 18
+Bot1.Graveyard.Orcish Veteran.Power = 2
+Bot2.Graveyard.Savannah Lions.Power = 2

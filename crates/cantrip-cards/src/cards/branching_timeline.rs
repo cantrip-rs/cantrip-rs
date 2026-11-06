@@ -57,6 +57,8 @@ mod tests {
     }
 
     impl Query for QueryWithRoomLands {
+        fn can_attach_to(&self, _: ObjectId, _: ObjectId) -> bool { unreachable!() }
+        fn can_untap(&self, _: ObjectId) -> bool { unreachable!() }
         fn state(&self) -> &GameState {
             &self.state
         }
@@ -72,7 +74,7 @@ mod tests {
                 2 => "B",
                 _ => "A // B",
             };
-            Chars {
+            Chars { ability_origins: [ObjectId::NONE; MAX_ABILITIES],
                 card: CardId(0),
                 name,
                 types: TypeSet::of(&[CardType::Land]),

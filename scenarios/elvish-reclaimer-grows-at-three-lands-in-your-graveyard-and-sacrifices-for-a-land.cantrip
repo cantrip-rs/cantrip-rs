@@ -44,6 +44,9 @@ Bot1.Hand.Forest.Play
 Bot1.Battlefield.Elvish Reclaimer.Activate(Ability: Sacrifice a land)
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Tap Elvish Reclaimer)
 ? Bot1.Mana =
 ! Bot1.Choose(Mox Jet)
 Bot1.Choose(Forest)
@@ -58,6 +61,7 @@ Bot1.Hand.Forest.Play
 Bot1.Battlefield.Elvish Reclaimer.Activate(Ability: Sacrifice a land)
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(Tap Elvish Reclaimer)
 Bot1.Choose(Forest)
 Bot1.Search(Mountain)
 Bot1.Pass
@@ -68,6 +72,7 @@ Bot1.Hand.Forest.Play
 Bot1.Battlefield.Elvish Reclaimer.Activate(Ability: Sacrifice a land)
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(Tap Elvish Reclaimer)
 Bot1.Choose(Forest)
 Bot1.Search(Mountain)
 Bot1.Pass

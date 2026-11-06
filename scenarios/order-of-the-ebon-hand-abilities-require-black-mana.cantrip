@@ -1,0 +1,41 @@
+# Both activated abilities require their printed black mana: white mana cannot replace either missing black symbol (CR 118.1).
+[Bot1 Deck]
+Mox Jet
+Gleemox
+Order of the Ebon Hand
+Swamp
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Order of the Ebon Hand.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Battlefield.Order of the Ebon Hand.Activate(Ability: gains first strike)
+? Bot1.Mana = {W}{B}
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Order of the Ebon Hand.Activate(Ability: gets +1; Mana: short)
+Bot1.Battlefield.Order of the Ebon Hand.Activate(Ability: gains first strike)
+? Bot1.Mana = {W}
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Order of the Ebon Hand.Activate(Ability: gains first strike; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Order of the Ebon Hand.Activate(Ability: gets +1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Order of the Ebon Hand.Power = 3
+Bot1.Battlefield.Order of the Ebon Hand.Toughness = 1

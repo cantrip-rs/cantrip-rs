@@ -1,0 +1,46 @@
+# Its toughness follows its controller's Forests, not an opponent's, as the battlefield changes (CR 604.3, 613.4a).
+[Bot1 Deck]
+Forest
+Forest
+Mox Emerald
+People of the Woods
+Island x20
+
+[Bot2 Deck]
+Forest
+Forest
+Mox Jet
+Mox Jet
+Sinkhole
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+? Bot1.Hand.People of the Woods.Toughness = 1
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.People of the Woods.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.People of the Woods.Toughness = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.People of the Woods.Toughness = 1
+Bot1.Hand.Forest.Play
+? Bot1.Battlefield.People of the Woods.Toughness = 2
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+? Bot1.Battlefield.People of the Woods.Toughness = 2
+Bot2.Battlefield.Mox Jet#1.Activate
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Hand.Sinkhole.Cast(Bot1.Battlefield.Forest#1)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.People of the Woods.Toughness = 1
+Bot1.Battlefield.People of the Woods.Power = 1

@@ -1,0 +1,53 @@
+# The target is chosen on activation; if it leaves before resolution, no coin is flipped, so the next activation uses the winning face (CR 608.2b).
+[Bot1 Deck]
+Orcish Captain
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mountain x20
+
+[Bot2 Deck]
+Black Lotus
+Orcish Artillery
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Dice]
+1; 2
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Orcish Captain.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Orcish Artillery.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Orcish Captain.Activate(Bot2.Battlefield.Orcish Artillery)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Orcish Artillery)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Orcish Artillery = (absent)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Orcish Captain.Activate(Bot1.Battlefield.Orcish Captain)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Orcish Captain.Power = 3
+Bot1.Battlefield.Orcish Captain.Toughness = 1
+Bot2.Graveyard.Orcish Artillery.Power = 1

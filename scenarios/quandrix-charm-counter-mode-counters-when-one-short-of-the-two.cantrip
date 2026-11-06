@@ -1,5 +1,5 @@
 # Quandrix Charm, mode one: Bot2 has only one untapped Mox ({1} of the {2}), so it cannot pay (CR 118.12) and the Ornithopter is
-# countered; the one Mox it could spend stays untapped.
+# countered even when its one available mana has been floated.
 
 [Bot1 Deck]
 Quandrix Charm
@@ -27,7 +27,9 @@ Bot1.Hand.Quandrix Charm.Cast
 Bot1.Modes(Counter target spell)
 Bot1.Target(Ornithopter)
 Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+! Bot2.PayCost
 
 [Expect]
 Bot2.Graveyard = Ornithopter
-Bot2.Battlefield.Mox Jet.Tapped = false
+Bot2.Battlefield.Mox Jet.Tapped = true

@@ -1,0 +1,34 @@
+# Declining with three mana available leaves the permanent tapped (CR 118.12).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Nacre Talisman
+Savannah Lions
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Nacre Talisman.Cast
+? Bot1.Mana = {R}
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+! Bot1.Target(Bot2)
+Bot1.Target(Mox Pearl)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Decline
+? Bot1.Mana = {U}{B}{R}
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Mox Pearl.Tapped = true

@@ -39,12 +39,14 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Sylvan Caryatid.Activate(Color: Green)
 Bot1.Hand.Sylvan Caryatid.Cast
 Bot1.Battlefield.Dawnhand Dissident.Activate(Ability: Surveil)
+Bot1.Choose(Tap Dawnhand Dissident)
 Bot1.Choose(Sylvan Caryatid#1)
 Bot1.Pass
 Bot2.Pass
 Bot1.Arrange( | Walking Ballista)
 [T5 Bot1.Main1]
 Bot1.Battlefield.Dawnhand Dissident.Activate(Bot1.Graveyard.Walking Ballista; Ability: Exile target)
+Bot1.Choose(Tap Dawnhand Dissident)
 Bot1.Choose(Sylvan Caryatid#2)
 Bot1.Pass
 Bot2.Pass

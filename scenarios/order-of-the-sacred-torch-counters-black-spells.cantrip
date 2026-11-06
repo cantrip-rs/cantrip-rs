@@ -1,0 +1,60 @@
+# The Order taps and pays one life to counter an opponent's black multicolored spell and its controller's black spell, but not a red spell (CR 701.6a).
+[Bot1 Deck]
+Order of the Sacred Torch
+Black Lotus
+Mox Jet
+Dark Ritual
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mountain
+Lightning Bolt
+Spike Jester
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Order of the Sacred Torch.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+! Bot1.Battlefield.Order of the Sacred Torch.Activate(Stack.Lightning Bolt)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Spike Jester.Cast
+Bot2.Pass
+Bot1.Battlefield.Order of the Sacred Torch.Activate(Stack.Spike Jester)
+Bot1.Choose(Tap Order of the Sacred Torch)
+? Bot1.Life = 19
+? Bot1.Battlefield.Order of the Sacred Torch.Tapped = true
+! Bot1.Battlefield.Order of the Sacred Torch.Activate(Stack.Spike Jester)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Battlefield.Order of the Sacred Torch.Activate(Stack.Dark Ritual)
+Bot1.Choose(Tap Order of the Sacred Torch)
+? Bot1.Life = 18
+? Bot1.Battlefield.Order of the Sacred Torch.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Order of the Sacred Torch.Power = 2
+Bot1.Graveyard.Dark Ritual.Colors = Black
+Bot2.Graveyard.Spike Jester.Colors = Black; Red
+Bot2.Life = 17
+Bot2.Battlefield.Spike Jester = (absent)

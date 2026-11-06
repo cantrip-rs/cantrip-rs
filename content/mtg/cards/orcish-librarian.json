@@ -1,0 +1,8 @@
+{
+  "name": "Orcish Librarian",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Orc",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{R}, {T}: Look at the top eight cards of your library. Exile four of them at random, then put the rest on top of your library in any order."
+}
