@@ -1,0 +1,19 @@
+# A zero-mana-value Ornithopter gets no toughness increase from Subdue (CR 202.3, 611.2a).
+[Bot1 Deck]
+Ornithopter
+Forest
+Subdue
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Subdue.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2

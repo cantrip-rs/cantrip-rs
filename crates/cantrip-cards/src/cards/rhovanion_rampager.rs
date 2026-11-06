@@ -15,7 +15,7 @@ fn sacrifice_for_counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Susp
     g.end_sentence();
     let power = history::power_of_sacrificed_permanent(g, sacrificed);
     if power > 0 {
-        g.add_counters(item.object, CounterKind::PlusOne, power);
+        g.add_counters(item.object, CounterKind::PlusOne,(power) as i32);
     }
     Ok(())
 }

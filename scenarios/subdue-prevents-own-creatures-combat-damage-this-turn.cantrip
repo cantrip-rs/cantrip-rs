@@ -1,0 +1,50 @@
+# Subdue gives the chosen creature +0/+2 and prevents its combat damage; the blocker still deals damage, and both effects expire (CR 615.1, 611.2a).
+[Bot1 Deck]
+Guerrilla Gorilla
+Mox Emerald
+Mox Ruby
+Subdue
+Forest
+Island x20
+[Bot2 Deck]
+Grizzly Bears
+Forest
+Mox Emerald
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Guerrilla Gorilla.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+! Bot1.Hand.Subdue.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Hand.Subdue.Cast(Bot1.Battlefield.Guerrilla Gorilla)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Guerrilla Gorilla.Power = 2
+? Bot1.Battlefield.Guerrilla Gorilla.Toughness = 4
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Guerrilla Gorilla)
+Bot2.Block(Grizzly Bears > Guerrilla Gorilla)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Guerrilla Gorilla.Damage = 2
+? Bot2.Battlefield.Grizzly Bears.Damage = 0
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Guerrilla Gorilla.Toughness = 2
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Guerrilla Gorilla)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Guerrilla Gorilla.Power = 2
+Bot1.Battlefield.Guerrilla Gorilla.Toughness = 2

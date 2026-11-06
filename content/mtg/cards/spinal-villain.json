@@ -1,0 +1,8 @@
+{
+  "name": "Spinal Villain",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Beast",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "{T}: Destroy target blue creature."
+}

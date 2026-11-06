@@ -1,0 +1,44 @@
+# Tetsuo can destroy its controller's tapped creature, but not an untapped nonblocking creature or a noncreature (CR 115.1, 701.8a).
+[Bot1 Deck]
+Tetsuo Umezawa
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Gleemox
+Ornithopter
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tetsuo Umezawa.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Tetsuo Umezawa.Activate(Bot2.Battlefield.Memnite)
+! Bot1.Battlefield.Tetsuo Umezawa.Activate(Bot1.Battlefield.Mox Jet)
+Bot1.Battlefield.Tetsuo Umezawa.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Ornithopter
+Bot1.Battlefield.Tetsuo Umezawa.Tapped = true
+Bot2.Battlefield.Memnite.Power = 1

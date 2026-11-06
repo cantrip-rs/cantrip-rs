@@ -52,7 +52,7 @@ Bot1.Pass
 Bot1.Battlefield.Ugin, Eye of the Storms.Activate(Ability: Search)
 Bot1.Pass
 ? Client.Bot1.Prompt.Title = Search your library
-? Client.Bot1.Prompt.Detail = Choose any number of cards to exile  ·  0 chosen
+? Client.Bot1.Prompt.Detail = Choose any number of colorless nonland cards to exile  ·  0 chosen
 Bot1.Search(Sol Ring; Ornithopter)
 [T5 Bot1.Main2]
 

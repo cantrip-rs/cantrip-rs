@@ -1,0 +1,34 @@
+# Giving The Rack to the chosen opponent does not change the chosen player; it damages its new controller on that player's upkeep (CR 614.1c).
+[Bot1 Deck]
+The Rack
+Mox Sapphire
+Black Lotus
+Harmless Offering
+Island x20
+[Bot2 Deck]
+Mox Ruby x8
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Rack.Cast
+? Bot1.Mana =
+Bot1.ChoosePlayer(Bot2)
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(The Rack)
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19
+Bot2.Battlefield.The Rack.ChosenPlayer = 2

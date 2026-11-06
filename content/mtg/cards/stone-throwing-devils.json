@@ -1,0 +1,11 @@
+{
+  "name": "Stone-Throwing Devils",
+  "manaCost": "{B}",
+  "type": "Creature — Devil",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "First strike",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

@@ -29,9 +29,7 @@ fn pump_untap(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         }
     });
     g.end_sentence();
-    for &id in &chosen {
-        g.untap(id);
-    }
+    g.untap_together(&chosen);
     Ok(())
 }
 

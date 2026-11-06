@@ -1,0 +1,36 @@
+# Subdue on an opposing attacker prevents its damage but not another attacker's, and raises its toughness by its mana value (CR 615.1).
+[Bot1 Deck]
+Forest
+Subdue
+Island x20
+[Bot2 Deck]
+Grizzly Bears
+Forest
+Mox Emerald
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears; Memnite)
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Subdue.Cast(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+? Bot2.Battlefield.Grizzly Bears.Toughness = 4
+? Bot2.Battlefield.Memnite.Toughness = 1
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 19
+Bot2.Battlefield.Grizzly Bears.Toughness = 4
+Prevented = 2 Grizzly Bears > Bot1 by Subdue

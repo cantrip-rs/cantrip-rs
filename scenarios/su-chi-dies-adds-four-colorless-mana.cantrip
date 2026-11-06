@@ -1,0 +1,35 @@
+# Su-Chi's death gives its controller exactly four colorless mana, which cannot pay for blue and empties at the step's end (CR 106.4).
+[Bot1 Deck]
+Su-Chi
+Black Lotus
+Mox Pearl
+Opt
+Island x20
+[Bot2 Deck]
+Mountain
+Vandalblast
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Su-Chi.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Vandalblast.Cast(Bot1.Battlefield.Su-Chi)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Mana = {C}{C}{C}{C}
+! Bot1.Hand.Opt.Cast(Mana: short)
+[T2 Bot2.BeginCombat]
+? Bot1.Mana =
+[Expect]
+Bot1.Graveyard = Su-Chi; Black Lotus
+Bot2.Graveyard = Vandalblast

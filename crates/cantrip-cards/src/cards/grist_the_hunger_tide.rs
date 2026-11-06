@@ -71,7 +71,7 @@ fn minus_five(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let player = item.controller;
     let count = cantrip_mechanics::creature_cards_in_graveyard(g, player);
     if count > 0 {
-        g.each_opponent_loses_life(player, count as i32);
+        g.each_opponent_loses_life(player,(count as i32) as i32);
     }
     Ok(())
 }

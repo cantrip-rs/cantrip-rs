@@ -39,7 +39,7 @@ fn lose_all_abilities(game: &mut Game, id: ObjectId) {
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 fn untap_step_of_yours(game: &mut Game) {

@@ -76,6 +76,10 @@ fn play(first: &[&str], steps: &[(ActionKind, &str, u8)]) -> Game {
                 }
             }
             RequestKind::Priority { .. } => Answer::Pass,
+            RequestKind::ChooseCostPayment { choices, .. } => {
+                assert!(choices.iter().all(|choice| matches!(choice.kind, CostPaymentKind::Tap | CostPaymentKind::Life)));
+                Answer::CostPayment(choices.iter().position(|choice| choice.kind == CostPaymentKind::Tap).unwrap_or(0))
+            }
             other => panic!("unexpected question {other:?}"),
         };
         game.answer(request.id, request.player, answer).unwrap();

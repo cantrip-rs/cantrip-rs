@@ -1,0 +1,69 @@
+# The Brute enchants a creature, gives it +1/+0, and a {R}{R}{R} activation creates a shield that
+# replaces lethal destruction, tapping the creature and removing damage (CR 702.5, 701.19a).
+[Bot1 Deck]
+The Brute
+Ornithopter
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Pearl
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.The Brute.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.The Brute.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.The Brute.AttachedTo = Ornithopter
+! Bot1.Battlefield.The Brute.Activate(Mana: short)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.The Brute.Activate(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.The Brute.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Ornithopter.Damage = 0
+Bot1.Battlefield.The Brute.AttachedTo = Ornithopter
+Bot2.Graveyard = Lightning Bolt; Island

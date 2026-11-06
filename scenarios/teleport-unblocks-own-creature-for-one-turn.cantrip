@@ -1,0 +1,41 @@
+# Teleport can be cast after attackers are declared, prevents blocking that turn, and expires before the next attack (CR 509.1b, 611.2a).
+[Bot1 Deck]
+Teleport
+Black Lotus
+Memnite
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Teleport.Cast(Bot1.Battlefield.Memnite)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+! Bot1.Hand.Teleport.Cast(Bot1.Battlefield.Mox Sapphire)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Teleport.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot2.Block(Ornithopter > Memnite)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Ornithopter > Memnite)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Graveyard.Teleport.Colors = Blue

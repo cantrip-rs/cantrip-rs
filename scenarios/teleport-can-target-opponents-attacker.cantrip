@@ -1,0 +1,31 @@
+# Teleport can target an opponent's attacker during their declare attackers step, preventing its block (CR 115.1, 509.1b).
+[Bot1 Deck]
+Teleport
+Black Lotus
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Teleport.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Block(Ornithopter > Memnite)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot2.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 2

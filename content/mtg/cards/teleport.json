@@ -1,0 +1,6 @@
+{
+  "name": "Teleport",
+  "manaCost": "{U}{U}{U}",
+  "type": "Instant",
+  "oracleText": "Cast this spell only during the declare attackers step.\nTarget creature can't be blocked this turn."
+}

@@ -1,0 +1,69 @@
+# The Wand makes a 2-power creature unblockable for this turn, rejects a 3-power creature and noncreature, and expires before a later combat (CR 509.1).
+[Bot1 Deck]
+Tawnos's Wand
+Black Lotus
+Mox Pearl
+Mox Emerald
+Grizzly Bears
+Forest x20
+
+[Bot2 Deck]
+Hill Giant
+Black Lotus
+Mox Ruby
+Mox Emerald
+Llanowar Elves
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tawnos's Wand.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Emerald.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Tawnos's Wand.Activate(Bot1.Battlefield.Grizzly Bears; Mana: short)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Tawnos's Wand.Activate(Bot2.Battlefield.Hill Giant)
+! Bot1.Battlefield.Tawnos's Wand.Activate(Bot1.Battlefield.Forest)
+Bot1.Battlefield.Tawnos's Wand.Activate(Bot1.Battlefield.Grizzly Bears)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Tawnos's Wand.Tapped = true
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Grizzly Bears > Bot2)
+! Bot2.Block(Llanowar Elves > Grizzly Bears)
+[T7 Bot1.Main2]
+? Bot2.Life = 18
+[T9 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Hill Giant > Grizzly Bears)
+[T9 Bot1.Main2]
+[Expect]
+Bot1.Graveyard.Grizzly Bears.Colors = Green
+Bot2.Battlefield.Hill Giant.Damage = 2

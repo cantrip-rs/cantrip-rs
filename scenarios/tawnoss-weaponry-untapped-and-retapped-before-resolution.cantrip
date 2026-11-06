@@ -1,0 +1,63 @@
+# Untapping Weaponry ends the first ability's duration, even if it is tapped for a second activation
+# before the first resolves; only the second target gets +1/+1 (CR 611.2b).
+[Bot1 Deck]
+Tawnos's Weaponry
+Voltaic Key
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ornithopter
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Voltaic Key.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tawnos's Weaponry.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Tawnos's Weaponry.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Voltaic Key.Activate(Bot1.Battlefield.Tawnos's Weaponry)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Tawnos's Weaponry.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Ornithopter.Power = 1
+Bot2.Battlefield.Ornithopter.Toughness = 3

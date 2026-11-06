@@ -1,0 +1,25 @@
+# A controlled artifact dying triggers Tablet: pay exactly one mana for one life, or decline the next trigger (CR 603.2, 118.3).
+[Bot1 Deck]
+Tablet of Epityr
+Mox Sapphire
+Black Lotus
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tablet of Epityr.Cast
+? Bot1.Mana =
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.PayCost
+? Bot1.Mana = {B}{B}
+? Bot1.Life = 21
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Decline
+[Expect]
+Bot1.Life = 21
+Bot1.Battlefield = Mox Sapphire; Tablet of Epityr

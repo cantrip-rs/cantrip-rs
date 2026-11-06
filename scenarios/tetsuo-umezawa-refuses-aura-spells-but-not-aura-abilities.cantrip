@@ -1,0 +1,53 @@
+# Tetsuo cannot be targeted by either player's Aura spells, but an Aura's triggered ability can target it (CR 115.1b, 115.1d).
+[Bot1 Deck]
+Tetsuo Umezawa
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ornithopter
+Rancor
+Mox Emerald
+Cartouche of Zeal
+Royal Treatment
+Island x20
+[Bot2 Deck]
+Memnite
+Forest
+Rancor
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tetsuo Umezawa.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+! Bot2.Hand.Rancor.Cast(Bot1.Battlefield.Tetsuo Umezawa)
+Bot2.Hand.Rancor.Cast(Bot2.Battlefield.Memnite)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Rancor.Cast(Bot1.Battlefield.Tetsuo Umezawa)
+Bot1.Hand.Rancor.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cartouche of Zeal.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot1.Target(Bot1.Battlefield.Tetsuo Umezawa)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Royal Treatment.Cast(Bot1.Battlefield.Tetsuo Umezawa)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Royal.AttachedTo = Tetsuo Umezawa
+Bot1.Battlefield.Cartouche of Zeal.AttachedTo = Ornithopter
+Bot1.Battlefield.Rancor.AttachedTo = Ornithopter
+Bot2.Battlefield.Rancor.AttachedTo = Memnite

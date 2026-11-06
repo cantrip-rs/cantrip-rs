@@ -1,0 +1,30 @@
+# In a three-player game The Rack chooses Bot3 rather than Bot2, and remains after that chosen player loses (CR 800.4a).
+[Life]
+Bot3: 2
+[Bot1 Deck]
+The Rack
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Island x20
+[Bot3 Deck]
+Mountain
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Rack.Cast
+? Bot1.Mana =
+Bot1.ChoosePlayer(Bot3)
+[T3 Bot3.Main1]
+? Bot1.Battlefield.The Rack.ChosenPlayer = 3
+Bot3.Hand.Mountain.Play
+Bot3.Battlefield.Mountain.Activate
+Bot3.Hand.Shock.Cast(Bot3)
+[T5 Bot2.Main1]
+[Expect]
+Result = InProgress
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Battlefield.The Rack.ChosenPlayer = 3

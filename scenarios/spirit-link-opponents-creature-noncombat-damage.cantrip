@@ -1,0 +1,47 @@
+# The opponent's enchanted Sorcerer triggers Spirit Link on noncombat damage; an unrelated Lightning Bolt does not (CR 603.2).
+[Bot1 Deck]
+Plains
+Spirit Link
+Island x20
+[Bot2 Deck]
+Island
+Black Lotus
+Prodigal Sorcerer
+Mox Ruby
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Prodigal Sorcerer.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+! Bot1.Hand.Spirit Link.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Spirit Link.Cast(Bot2.Battlefield.Prodigal Sorcerer)
+? Bot1.Mana =
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+Bot2.Battlefield.Prodigal Sorcerer.Activate(Bot2)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 19
+? Bot1.Life = 17
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 19
+Bot1.Battlefield.Spirit Link.AttachedTo = Prodigal Sorcerer

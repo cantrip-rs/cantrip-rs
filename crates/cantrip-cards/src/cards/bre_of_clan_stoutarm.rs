@@ -22,7 +22,7 @@ fn exile_and_cast_or_take(g: &mut dyn Game, item: &StackItem) -> Result<(), Susp
     let gained = g.history().life_gained(you);
     let (_, hit) = library::exile_until_nonland(g, you, None, &|_, _| true);
     let Some(card) = hit else { return Ok(()) };
-    discover::cast_free_if_at_most_else_hand(g, you, card, gained)?;
+    discover::cast_free_if_at_most_else_hand(g, you, card, u32::try_from(gained).unwrap_or(u32::MAX))?;
     Ok(())
 }
 

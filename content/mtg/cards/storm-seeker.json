@@ -1,0 +1,6 @@
+{
+  "name": "Storm Seeker",
+  "manaCost": "{3}{G}",
+  "type": "Instant",
+  "oracleText": "Storm Seeker deals damage to target player equal to the number of cards in that player's hand."
+}

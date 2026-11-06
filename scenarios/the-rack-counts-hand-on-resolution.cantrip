@@ -1,0 +1,30 @@
+# The Rack counts the chosen player's hand on resolution, after a Lightning Bolt cast in response reduces it from three cards to two (CR 608.2h).
+[Bot1 Deck]
+The Rack
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Mox Ruby x7
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Rack.Cast
+? Bot1.Mana =
+Bot1.ChoosePlayer(Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T4 Bot2.Upkeep]
+? Bot2.Hand.Count = 3
+? Stack.Count = 1
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 19

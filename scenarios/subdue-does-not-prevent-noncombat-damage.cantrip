@@ -1,0 +1,33 @@
+# Subdue prevents combat damage only; the chosen Sorcerer's activated ability still deals noncombat damage (CR 615.1).
+[Bot1 Deck]
+Prodigal Sorcerer
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Forest
+Subdue
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Prodigal Sorcerer.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Subdue.Cast(Bot1.Battlefield.Prodigal Sorcerer)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Prodigal Sorcerer.Power = 1
+? Bot1.Battlefield.Prodigal Sorcerer.Toughness = 4
+Bot1.Battlefield.Prodigal Sorcerer.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Life = 19

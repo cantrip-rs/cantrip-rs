@@ -15,6 +15,7 @@ Bot1.Battlefield.Ipnu Rivulet.Activate(Ability: {T}: Add {C})
 ? Bot1.Life = 20
 [T3 Bot1.Main1]
 Bot1.Battlefield.Ipnu Rivulet.Activate(Ability: Pay 1 life)
+Bot1.Choose(Tap Ipnu Rivulet)
 ? Bot1.Mana = {U}
 ? Bot1.Life = 19
 

@@ -1,0 +1,6 @@
+{
+  "name": "Spiritual Sanctuary",
+  "manaCost": "{2}{W}{W}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of each player's upkeep, if that player controls a Plains, they gain 1 life."
+}

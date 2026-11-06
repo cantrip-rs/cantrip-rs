@@ -35,7 +35,7 @@ pub static CARD: CardDef = CardDef {
         static_ability(
                 Layer::PtModify,
                 attach::attached_object,
-                cantrip_mechanics::statics::plus_pt::<2, 0>,
+                cantrip_mechanics::statics::plus_pt_saturating::<2, 0>,
                 "Enchanted creature gets +2/+0 and has trample.",
             )
             .continues(),

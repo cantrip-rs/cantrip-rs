@@ -28,7 +28,7 @@ fn treasures_for_type(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(cantrip_mechanics::triggers::EQUIPPED_CREATURE_DEALS_COMBAT_DAMAGE_TO_PLAYER, treasures_for_type, "Whenever equipped creature deals combat damage to a player, choose a creature type. Create a Treasure token for each creature you control of that type."),
+        triggered(cantrip_mechanics::triggers::EQUIPPED_CREATURE_DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT, treasures_for_type, "Whenever equipped creature deals combat damage to a player, choose a creature type. Create a Treasure token for each creature you control of that type."),
         equip(mana("{3}"), "Equip {3}"),
     ],
     statics: &[

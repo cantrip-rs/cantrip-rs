@@ -52,6 +52,7 @@ Bot1.Battlefield.Swamp#4.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 ! Bot1.Choose(Bot1.Battlefield.Ornithopter)
+Bot1.Choose(craft materials)
 Bot1.Choose(Bot1.Battlefield.Ornithopter; Bot1.Graveyard.Ornithopter)
 Bot1.Accept
 [T7 Bot1.Main2]

@@ -1,0 +1,56 @@
+# A regeneration shield that was unused expires at cleanup, so lethal damage next turn destroys the creature (CR 701.19a, 514.2).
+[Bot1 Deck]
+The Brute
+Ornithopter
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Pearl
+Island x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.The Brute.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.The Brute.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.The Brute.AttachedTo = Ornithopter
+! Bot1.Battlefield.The Brute.Activate(Mana: short)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.The Brute.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter = (absent)
+Bot1.Graveyard = The Brute; Ornithopter
+Bot2.Graveyard = Lightning Bolt

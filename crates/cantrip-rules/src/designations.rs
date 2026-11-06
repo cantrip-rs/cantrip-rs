@@ -12,7 +12,7 @@ use crate::{Cx, R};
 /// `subject`. Its source is a new object in no zone: it ceases to matter once the ability resolves. The source.
 pub(crate) fn queue(cx: &mut Cx, card: CardId, index: u8, controller: PlayerId, subject: Target) -> ObjectId {
     let source = cx.st().push_obj(Obj::new(card, controller, Zone::GONE));
-    cx.st().trigger_push(PendingTrigger {
+    cx.st().trigger_push(PendingTrigger { event_amount: None,
         source,
         ability: AbilityRef { card, index },
         controller,

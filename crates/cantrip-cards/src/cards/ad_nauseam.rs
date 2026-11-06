@@ -10,7 +10,7 @@ const ASK: Question = Question::new("RevealAgain", "reveal another card?", "Put 
 fn reveal(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let player = item.controller;
     while let Some((_, value)) = reveal_top_to_hand(g, player) {
-        g.lose_life(player, value as i32);
+        g.lose_life(player,(value as i32) as i32);
         if g.state().zone(Zone::library(player)).is_empty() {
             return Ok(());
         }

@@ -1,0 +1,8 @@
+{
+  "name": "Su-Chi",
+  "manaCost": "{4}",
+  "type": "Artifact Creature — Construct",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "When this creature dies, add {C}{C}{C}{C}."
+}

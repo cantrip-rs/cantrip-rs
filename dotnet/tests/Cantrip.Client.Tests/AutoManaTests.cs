@@ -14,6 +14,19 @@ namespace Cantrip.Client.Tests;
 public sealed class AutoManaTests
 {
     [Fact]
+    public void A_named_color_replaced_by_colorless_does_not_pay_that_color()
+    {
+        var option = new ActionOptionMessage
+        {
+            Kind = ActionKindView.ActivateAbility,
+            Source = new ViewHandle(99),
+            Produces = [ManaTypeView.Colorless],
+            ColorChoices = [ColorView.Red, ColorView.Blue],
+        };
+        Assert.Null(AutoMana.Pick([(option, ColorView.Red), (option, ColorView.Blue)], [option], Owed(generic: 0, ColorView.Red)));
+        Assert.NotNull(AutoMana.Pick([(option, ColorView.Red), (option, ColorView.Blue)], [option], Owed(generic: 1)));
+    }
+    [Fact]
     public void A_dual_land_pays_the_colour_the_rest_of_the_board_cannot()
     {
         // 1 Tundra and 3 Islands, casting {2}{U}{W}. Nothing else makes white, so the Tundra is the white.

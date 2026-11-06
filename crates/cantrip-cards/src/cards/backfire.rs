@@ -8,10 +8,10 @@ fn when_enchanted_creature_deals_damage(
     asker: &Asker,
     event: &Event,
 ) -> Option<Fired> {
-    let Event::Damage { source, target, amount, .. } = event else { return None };
-    let (source, amount) = (*source, *amount);
+    let Event::Damage { source, target, .. } = event else { return None };
+    let source = *source;
     let subject = Target::Object(source);
-    let data = [u32::from(amount), 0];
+    let data = [0, 0];
     if q.attached_to(asker.source) == Some(source)
         && matches!(* target, Target::Player(p) if asker.controller == p)
     {
@@ -25,7 +25,7 @@ fn aura_deals_much_damage_creatures(
     g: &mut dyn Game,
     item: &StackItem,
 ) -> Result<(), Suspend> {
-    let amount_0 = i64::from(item.data[0]) as u32;
+    let amount_0 = item.matched_damage_amount();
     let recipients_0 = {
         let q: &dyn Query = g;
         item.subject
@@ -49,7 +49,7 @@ pub static CARD: CardDef = CardDef {
             when_asked(EventMask::DAMAGE, when_enchanted_creature_deals_damage),
             aura_deals_much_damage_creatures,
             "Whenever enchanted creature deals damage to you, this Aura deals that much damage to that creature's controller.",
-        ),
+        ).damage_amount(),
     ],
     enchant: Some(targets::CREATURE),
     ..oracle::BACKFIRE

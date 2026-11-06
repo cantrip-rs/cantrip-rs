@@ -1,0 +1,6 @@
+{
+  "name": "Sylvan Paradise",
+  "manaCost": "{G}",
+  "type": "Instant",
+  "oracleText": "One or more target creatures become green until end of turn."
+}

@@ -1,0 +1,26 @@
+# Exactly three cards in the chosen opponent's hand produce zero damage (CR 107.1b).
+[Bot1 Deck]
+The Rack
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Mox Ruby x8
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Rack.Cast
+? Bot1.Mana =
+Bot1.ChoosePlayer(Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T4 Bot2.Upkeep]
+? Bot2.Hand.Count = 3
+? Stack.Count = 1
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Life = 20

@@ -1,0 +1,6 @@
+{
+  "name": "The Brute",
+  "manaCost": "{1}{R}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +1/+0.\n{R}{R}{R}: Regenerate enchanted creature."
+}
