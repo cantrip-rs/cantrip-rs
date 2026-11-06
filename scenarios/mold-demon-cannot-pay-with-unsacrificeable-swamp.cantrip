@@ -1,0 +1,74 @@
+# Hithlain Rope becomes a Swamp via Animate Artifact, Arcane Adaptation, Life and Limb,
+# and Urborg. Unsummon removes the Demon (also a Swamp here) before its trigger resolves;
+# the Rope cannot be sacrificed, so it and the remaining ordinary Swamp cannot pay (CR 701.21a).
+[Bot1 Deck]
+Sol Ring
+Black Lotus
+Hithlain Rope
+Animate Artifact
+Arcane Adaptation
+Life and Limb
+Island
+Swamp
+Mox Sapphire
+Mold Demon
+Black Lotus
+Unsummon
+Black Lotus x10
+Island x20
+[Bot2 Deck]
+Urborg, Tomb of Yawgmoth
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Hithlain Rope.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Arcane Adaptation.Cast
+Bot1.Pass
+Bot1.Modes(Saproling)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Animate Artifact.Cast(Bot1.Battlefield.Hithlain Rope)
+[T9 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Life and Limb.Cast
+Bot1.Pass
+Bot2.Pass
+[T12 Bot2.Main1]
+Bot2.Hand.Urborg, Tomb of Yawgmoth.Play
+[T13 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Hithlain Rope.Activate(Ability: Add {B})
+Bot1.Hand.Mold Demon.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unsummon.Cast(Bot1.Battlefield.Mold Demon)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Decline
+[T13 Bot1.Main2]
+[Expect]
+Bot1.Hand.Mold Demon.Power = 6
+Bot1.Battlefield.Hithlain Rope.Power = 1
+Bot1.Battlefield.Hithlain Rope.Subtypes = Forest; Saproling; Swamp
+Bot1.Battlefield.Hithlain Rope.Keywords = CantBeSacrificed
+Bot1.Battlefield.Swamp.Tapped = true

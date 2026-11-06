@@ -24,7 +24,7 @@ fn another_angel_enters_under_you(q: &dyn Query, asker: &Asker, proposal: &Propo
 fn add_a_counter_for_each_angel(q: &dyn Query, asker: &Asker, proposal: &mut Proposal) {
     let more = angels_already_controlled(q, asker);
     if let Proposal::ZoneChange(z) = proposal {
-        z.counters[CounterKind::PlusOne as usize] += more;
+        z.counters[CounterKind::PlusOne as usize] += more as i32;
     }
 }
 

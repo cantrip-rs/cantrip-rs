@@ -1,0 +1,88 @@
+# Cards exiled under each controller remain linked to the same Vault; when it is destroyed, both owners' cards go to their graveyards (CR 607.2a, 603.6c).
+
+[Bot1 Deck]
+Knowledge Vault
+Black Lotus
+Mox Pearl
+Sol Ring
+Island
+Disenchant
+Plains
+Memnite
+Forest x20
+
+[Bot2 Deck]
+Thieving Skydiver
+Black Lotus
+Mox Sapphire
+Mox Jet
+Island
+Sol Ring
+Plains
+Mountain
+Ornithopter
+Forest
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Knowledge Vault.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Knowledge Vault.Activate(Ability: Exile the top)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Exile = (face down)
+? Exile.Count = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Hand.Thieving Skydiver.Cast(Kicked: 4)
+Bot2.Pass
+Bot1.Pass
+Bot2.Target(Bot1.Battlefield.Knowledge Vault)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Battlefield.Knowledge Vault.Activate(Ability: Exile the top)
+Bot2.Choose(Pay mana)
+Bot2.Choose(Pay mana)
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+? Exile.Count = 2
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Disenchant.Cast(Bot2.Battlefield.Knowledge Vault)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Memnite.Power = 1
+Bot2.Graveyard.Forest.Colors =
+Exile.Count = 0

@@ -1,0 +1,37 @@
+# A single multicolored creature becomes only white; an untargeted creature keeps its color, and the target's colors return at cleanup (CR 105.3, 611.2a).
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Slippery Bogle
+Grizzly Bears
+Black Lotus
+Heaven's Gate
+Plains x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Slippery Bogle.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+? Bot1.Battlefield.Slippery Bogle.Colors = Blue; Green
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Heaven's Gate.Cast
+Bot1.Target(Bot1.Battlefield.Slippery Bogle)
+? Bot1.Mana = {G}
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Slippery Bogle.Colors = White
+? Bot1.Battlefield.Grizzly Bears.Colors = Green
+[T2 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Slippery Bogle.Colors = Blue; Green
+Bot1.Battlefield.Grizzly Bears.Colors = Green

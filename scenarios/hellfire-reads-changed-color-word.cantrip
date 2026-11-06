@@ -1,0 +1,43 @@
+# Sleight of Mind changes Hellfire's nonblack restriction to nongreen (CR 612.1).
+[Bot1 Deck]
+Muck Rats
+Mox Jet
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Sapphire
+Hellfire
+Sleight of Mind
+Swamp x20
+[Bot2 Deck]
+Llanowar Elves
+Mox Emerald
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Muck Rats.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Hellfire.Cast
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Sleight of Mind.Cast(Stack.Hellfire)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Black)
+Bot1.Colors(Green)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard.Muck Rats.Power = 1
+Bot2.Battlefield.Llanowar Elves.Power = 1
+Bot1.Life = 16

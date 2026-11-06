@@ -1,0 +1,38 @@
+# Lady Evangela's activation needs black mana even with two other mana available;
+# adding the missing color permits the same activation (CR 602.2b).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Mox Pearl
+Lady Evangela
+Swamp
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Lady Evangela.Cast
+? Bot1.Mana = {B}{B}
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+! Bot1.Battlefield.Lady Evangela.Activate(Bot1.Battlefield.Lady Evangela; Mana: short)
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Lady Evangela.Activate(Bot1.Battlefield.Lady Evangela)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Battlefield.Lady Evangela.Tapped = true
+
+[Expect]
+Bot1.Battlefield.Lady Evangela.Tapped = true

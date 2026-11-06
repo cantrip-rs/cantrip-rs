@@ -1,0 +1,24 @@
+# Flash reduces Hill Giant's {3}{R} by exactly {2}: of three red mana, two pay {1}{R} and one remains (CR 118.7a).
+[Bot1 Deck]
+Island
+Mox Sapphire
+Black Lotus
+Flash
+Hill Giant
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flash.Cast
+Bot1.Choose(Hill Giant)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.PayCost
+? Bot1.Mana = {R}
+[Expect]
+Bot1.Battlefield.Hill Giant.Power = 3

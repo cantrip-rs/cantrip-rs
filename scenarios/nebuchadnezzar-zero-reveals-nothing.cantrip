@@ -1,0 +1,50 @@
+# X=0 reveals and discards nothing even when the named card is in the opponent’s hand (CR 701.20).
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Nebuchadnezzar
+Island
+Island x20
+[Bot2 Deck]
+Forest
+Forest
+Mountain
+Forest
+Island
+Island
+Island
+Swamp
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Nebuchadnezzar.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+! Bot1.Battlefield.Nebuchadnezzar.Activate(Bot2; X: 0)
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Nebuchadnezzar.Activate(Bot2; X: 0)
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Nebuchadnezzar.Tapped = true
+Bot2.Pass
+? Bot2.Revealed = (absent)
+Bot1.Name(Forest)
+[T3 Bot1.Main1]
+[Expect]
+Bot2.Revealed = (absent)
+Bot2.Graveyard.Count = 1
+Bot2.Hand.Forest#1.Colors =
+Bot2.Hand.Forest#2.Colors =
+Bot2.Hand.Forest#3.Colors =

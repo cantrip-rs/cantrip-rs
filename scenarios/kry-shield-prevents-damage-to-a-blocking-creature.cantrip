@@ -1,0 +1,43 @@
+# Kry Shield prevents the chosen creature's damage to a blocker, while the blocker's damage is still dealt (CR 615.1).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Grizzly Bears
+Kry Shield
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kry Shield.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Kry Shield.Activate(Grizzly Bears)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+? Bot1.Battlefield.Grizzly Bears.Toughness = 4
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Memnite > Grizzly Bears)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Memnite.Damage = 0
+Bot1.Battlefield.Grizzly Bears.Damage = 1
+Bot2.Life = 20

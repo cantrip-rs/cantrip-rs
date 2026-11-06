@@ -25,6 +25,7 @@ Bot2.Pass
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Ipnu Rivulet.Activate(Ability: Sacrifice a Desert; Bot1)
+Bot1.Choose(Tap Ipnu Rivulet)
 ! Bot1.Choose(Plains)
 Bot1.Choose(Shefet Dunes)
 Bot1.Pass

@@ -1,0 +1,44 @@
+# Sleight of Mind changes both uses of blue to green: green creatures stay tapped and are eligible; blue creatures untap normally (CR 612.1).
+[Bot1 Deck]
+Black Lotus
+Magnetic Mountain
+Mox Sapphire
+Mox Emerald
+Merfolk of the Pearl Trident
+Llanowar Elves
+Sleight of Mind
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Magnetic Mountain.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sleight of Mind.Cast(Bot1.Battlefield.Magnetic Mountain)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Blue)
+Bot1.Colors(Green)
+Bot1.Attack(Merfolk of the Pearl Trident; Llanowar Elves > Bot2)
+[T5 Bot1.Upkeep]
+? Bot1.Battlefield.Merfolk of the Pearl Trident.Tapped = false
+? Bot1.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Merfolk of the Pearl Trident)
+Bot1.Choose(Llanowar Elves)
+Bot1.Decline
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Tapped = true

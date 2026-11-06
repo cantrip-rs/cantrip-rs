@@ -1,0 +1,8 @@
+{
+  "name": "Martyrs of Korlis",
+  "manaCost": "{3}{W}{W}",
+  "type": "Creature — Human",
+  "power": 1,
+  "toughness": 6,
+  "oracleText": "As long as this creature is untapped, all damage that would be dealt to you by artifacts is dealt to this creature instead."
+}

@@ -1,0 +1,50 @@
+# If another player takes the Efreet while its upkeep trigger is on the stack,
+# its former controller cannot sacrifice it on declining payment (CR 701.21a).
+[Bot1 Deck]
+Black Lotus
+Junún Efreet
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Island
+Old Man of the Sea
+Mox Emerald
+Giant Growth
+Island x14
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Old Man of the Sea.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Junún Efreet.Cast
+? Bot1.Mana =
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Giant Growth.Cast(Bot2.Battlefield.Old Man of the Sea)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Battlefield.Old Man of the Sea.Activate(Bot1.Battlefield.Junún Efreet)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Junún Efreet.Power = 3
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Stack.Count = 0
+? Bot2.Battlefield.Junún Efreet.Power = 3
+[Expect]
+Bot1.Graveyard = Black Lotus

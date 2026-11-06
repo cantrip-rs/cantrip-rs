@@ -1,0 +1,47 @@
+# Returning cards exiled with the Vault leaves an unrelated exiled creature in exile (CR 607.2a).
+[Bot1 Deck]
+Knowledge Vault
+Black Lotus
+Mox Pearl
+Sol Ring
+Island
+Ornithopter
+Island
+Memnite
+Forest x20
+
+[Bot2 Deck]
+Black Lotus
+Swords to Plowshares
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Knowledge Vault.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Knowledge Vault.Activate(Ability: Exile the top)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Knowledge Vault.Activate(Ability: Sacrifice)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Hand = Memnite
+Exile = Ornithopter

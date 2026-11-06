@@ -1,0 +1,39 @@
+# Browser
+# A replacement turns every color choice into one colorless mana (CR 106.12b); the color must still be named.
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Damping Sphere
+Forest
+Mountain
+Island
+Lotus Field
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Damping Sphere.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Lotus Field.Play
+Bot1.Choose(Forest; Island)
+[T9 Bot1.Main1]
+Bot1.Battlefield.Lotus Field.Activate(Color: R)
+? Bot1.Mana = {C}
+? Client.Bot1.Mana = 1 Colorless
+
+[Expect]
+Bot1.Battlefield.Lotus Field.Tapped = true
+Bot1.Mana = {C}

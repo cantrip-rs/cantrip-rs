@@ -452,11 +452,11 @@ fn put(g: &mut Game, def: &'static CardDef, owner: PlayerId, zone: Zone) -> Obje
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 fn add_mana(g: &mut Game, n: u32) {
-    g.state.add_mana(YOU, Mana::C, n, ObjectId(0), None, ManaLasts::Step);
+    g.state.add_mana(YOU, Mana::C, n, ObjectId(0), None, ManaLasts::Step, false);
 }
 
 fn next(g: &mut Game) -> Request {

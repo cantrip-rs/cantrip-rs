@@ -1,0 +1,33 @@
+# An X creature spell's mana value includes X on the stack; its caster pays two for X=1 (CR 202.3e).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Invoke Prejudice
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Walking Ballista
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Invoke Prejudice.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Walking Ballista.Cast(X: 1)
+Bot2.Pass
+? Bot2.Mana = {U}
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.PayCost
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 1

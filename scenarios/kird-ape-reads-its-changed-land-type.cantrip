@@ -1,0 +1,33 @@
+# Mind Bend changes the Forest word to Island, moving the Ape's condition (CR 612.1).
+[Bot1 Deck]
+Mountain
+Forest
+Kird Ape
+Mox Sapphire
+Mind Bend
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Kird Ape.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+? Bot1.Battlefield.Kird Ape.Power = 2
+? Bot1.Battlefield.Kird Ape.Toughness = 3
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mind Bend.Cast(Kird Ape)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Replace a basic land type)
+Bot1.Modes(Forest)
+Bot1.Modes(Island)
+? Bot1.Battlefield.Kird Ape.Power = 1
+? Bot1.Battlefield.Kird Ape.Toughness = 1
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[Expect]
+Bot1.Battlefield.Kird Ape.Power = 2
+Bot1.Battlefield.Kird Ape.Toughness = 3

@@ -1,0 +1,57 @@
+# Untapped Martyrs redirects damage from its controller's Talisman and the opponent's sacrificed
+# Pyrite Spellbomb to itself instead of its controller (CR 614.1a).
+[Bot1 Deck]
+Martyrs of Korlis
+Black Lotus
+Mox Pearl
+Mox Ruby
+Talisman of Conviction
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mountain
+Pyrite Spellbomb
+Mountain
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Martyrs of Korlis.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Pyrite Spellbomb.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Talisman of Conviction.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Talisman of Conviction.Activate(Ability: Add {R} or {W}; Color: White)
+? Bot1.Life = 20
+? Bot1.Battlefield.Martyrs of Korlis.Damage = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Battlefield.Pyrite Spellbomb.Activate(Bot1; Ability: deals 2 damage)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 20
+? Bot1.Battlefield.Martyrs of Korlis.Damage = 2
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Martyrs of Korlis.Damage = 2
+Bot2.Graveyard = Pyrite Spellbomb

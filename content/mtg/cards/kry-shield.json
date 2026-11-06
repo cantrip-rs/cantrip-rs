@@ -1,0 +1,6 @@
+{
+  "name": "Kry Shield",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "{2}, {T}: Prevent all damage that would be dealt this turn by target creature you control. That creature gets +0/+X until end of turn, where X is its mana value."
+}

@@ -167,7 +167,7 @@ fn one_damage(_: &dyn Query, _: &Asker, _: &DamageEvent) -> u32 {
 static ARMOR: CardDef = CardDef {
     name: "Damage Life Urza's Armor",
     types: TypeSet::of(&[CardType::Artifact]),
-    preventions: &[PreventionDef { hint: "prevent 1 damage", applies: to_you, amount: Some(one_damage) }],
+    preventions: &[PreventionDef { hint: "prevent 1 damage", applies: to_you, amount: PreventionAmount::Specific(one_damage) }],
     ..CardDef::BLANK
 };
 
@@ -514,7 +514,7 @@ fn put(g: &mut Game, def: &'static CardDef, controller: PlayerId) -> ObjectId {
 }
 
 fn cx(g: &mut Game) -> Cx<'_> {
-    Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 fn changes(g: &Game) -> Vec<(PlayerId, i32)> {

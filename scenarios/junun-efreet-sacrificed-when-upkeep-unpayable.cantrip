@@ -1,0 +1,19 @@
+# At its controller's upkeep the Efreet is sacrificed if {B}{B} cannot be paid (CR 603.1, 701.21a).
+[Bot1 Deck]
+Black Lotus
+Junún Efreet
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Junún Efreet.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Junún Efreet; Black Lotus
+Bot1.Battlefield.Count = 0

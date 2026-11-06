@@ -1,0 +1,40 @@
+# Paying exactly {B}{B} in Junún Efreet's upkeep keeps it; flying prevents a ground
+# creature from blocking it while the same blocker can block Memnite (CR 702.9b).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Junún Efreet
+Memnite
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Junún Efreet.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Junún Efreet > Bot2; Bot1.Battlefield.Memnite > Bot2)
+! Bot2.Block(Bot2.Battlefield.Memnite > Junún Efreet)
+Bot2.Block(Bot2.Battlefield.Memnite > Bot1.Battlefield.Memnite)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Junún Efreet.Power = 3
+Bot2.Life = 17
+Bot1.Graveyard = Memnite; Black Lotus
+Bot2.Graveyard = Memnite

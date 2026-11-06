@@ -1,0 +1,57 @@
+# The Caretaker can sacrifice itself to return its own creature card; neither an opponent's creature card nor a noncreature is a legal target (CR 601.2c, 701.21a).
+[Bot1 Deck]
+Hell's Caretaker
+Black Lotus
+Mox Pearl
+Ornithopter
+Swamp x20
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Mountain
+Shock
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hell's Caretaker.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Upkeep]
+! Bot1.Battlefield.Hell's Caretaker.Activate(Bot2.Graveyard.Ornithopter)
+! Bot1.Battlefield.Hell's Caretaker.Activate(Bot1.Graveyard.Black Lotus)
+! Bot1.Battlefield.Hell's Caretaker.Activate(Bot1.Battlefield.Hell's Caretaker)
+Bot1.Battlefield.Hell's Caretaker.Activate(Bot1.Graveyard.Ornithopter)
+Bot1.Choose(Tap Hell's Caretaker)
+! Bot1.Choose()
+! Bot1.Choose(Mox Pearl)
+Bot1.Choose(Hell's Caretaker)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Hell's Caretaker = (absent)
+Bot1.Graveyard.Hell's Caretaker.Colors = Black
+Bot2.Graveyard.Ornithopter.Colors =

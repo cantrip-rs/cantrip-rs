@@ -1,0 +1,61 @@
+# If the Vault leaves before its {0} ability resolves, that ability cannot sacrifice it and does not discard; the leaves trigger puts the exiled card in its owner's graveyard (CR 608.2c).
+
+[Bot1 Deck]
+Knowledge Vault
+Black Lotus
+Mox Pearl
+Sol Ring
+Island
+Island
+Island
+Memnite
+Forest x20
+
+[Bot2 Deck]
+Mox Ruby
+Island
+Abrade
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Knowledge Vault.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Knowledge Vault.Activate(Ability: Exile the top)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Knowledge Vault.Activate(Ability: Sacrifice)
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Abrade.Cast
+Bot2.Modes(Destroy target artifact)
+Bot2.Target(Bot1.Battlefield.Knowledge Vault)
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Hand = Island; Island
+Bot1.Graveyard.Memnite.Power = 1
+Bot1.Graveyard.Knowledge Vault.Colors =
+Exile.Count = 0

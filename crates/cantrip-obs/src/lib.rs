@@ -31,6 +31,17 @@ pub fn from_bytes(bytes: &[u8]) -> Option<Observation> {
 mod tests {
     use super::*;
 
+    #[test]
+    fn cost_payment_observation_preserves_operation_kind_and_objects() {
+        let mut observation = sample();
+        observation.request.as_mut().unwrap().ask = Some(Ask { may_cancel: true, source: Ref::Object(0),
+            kind: AskKind::ChooseCostPayment { choices: vec![CostPaymentObs { label: "Sacrifice a creature".into(),
+                objects: vec![Ref::Object(1)], kind: CostPaymentKindObs::Sacrifice }] } });
+        assert_eq!(from_bytes(&to_bytes(&observation)), Some(observation.clone()));
+        let json = serde_json::to_string(&observation).unwrap();
+        assert_eq!(serde_json::from_str::<Observation>(&json).unwrap(), observation);
+    }
+
     pub(crate) fn sample() -> Observation {
         let bear = CharsObs {
             types: 1 << 1,
@@ -48,8 +59,8 @@ mod tests {
             seat: 0,
             turn: TurnObs { number: 3, active: 1, step: 5, priority: 0, starting: 1 },
             players: vec![
-                PlayerObs { life: 20, poison: 0, energy: 0, lost: false, lands_played: 0, mulligans: 0, pool: [0, 0, 0, 1, 0, 0], hand: 1, library: 2, monarch: false, speed: None, library_known: vec![] },
-                PlayerObs { life: 17, poison: 1, energy: 2, lost: false, lands_played: 1, mulligans: 1, pool: [0; 6], hand: 1, library: 30, monarch: true, speed: Some(2), library_known: vec!["Shock".into()] },
+                PlayerObs { snow_pool: [0; 6], life: 20, poison: 0, energy: 0, lost: false, lands_played: 0, mulligans: 0, pool: [0, 0, 0, 1, 0, 0], hand: 1, library: 2, monarch: false, speed: None, library_known: vec![] },
+                PlayerObs { snow_pool: [0; 6], life: 17, poison: 1, energy: 2, lost: false, lands_played: 1, mulligans: 1, pool: [0; 6], hand: 1, library: 30, monarch: true, speed: Some(2), library_known: vec!["Shock".into()] },
             ],
             objects: vec![
                 ObjectObs::Hidden { place: Place { zone: ZoneObs::Library, player: 0 }, owner: 0, position: Some(0), identity: Some("Forest".into()), face_down: false },
@@ -84,6 +95,33 @@ mod tests {
     }
 
     #[test]
+    fn bounded_quantities_keep_legacy_encoded_bytes_and_roundtrip_boundaries() {
+        let mut observation = sample();
+        let machine = factor::Machine::new(observation.request.as_ref().unwrap().ask.as_ref().unwrap(), &[]);
+        let encoded = encode::to_compact(&encode::encode_machine(&observation, &machine, &|_: &str| 0));
+        assert_eq!(encoded[0], 4, "the native cost-operation encoding has its schema-4 header");
+        // The historical schema-2 golden checks the same non-snow payload with its original header.
+        // Compare in memory; never retag the serialized observation or a stored model.
+        let hash = std::iter::once(2u8).chain(encoded.iter().skip(1).copied())
+            .fold(0xcbf29ce484222325u64, |h, b| (h ^ u64::from(b)).wrapping_mul(0x100000001b3));
+        assert_eq!(encoded.len(), 477);
+        assert_eq!(hash, 0xce448f742172302a);
+        if let Ok(folder) = std::env::var("CANTRIP_DAMAGE_PROOF") {
+            std::fs::write(std::path::Path::new(&folder).join(format!("legacy-encoded-{}.bin", SCHEMA_VERSION)), &encoded).unwrap();
+        }
+        observation.events[0].amount = i32::MAX;
+        observation.request.as_mut().unwrap().ask.as_mut().unwrap().kind = AskKind::ChooseReplacement {
+            subject: Ref::None, life: Some(i32::MIN), sources: vec![], hints: vec![], damage: Some((Ref::Object(0), Ref::Player(1), u32::MAX)), turn: false, counters: vec![(0, i32::MAX)], draw: false,
+        };
+        assert_eq!(from_bytes(&to_bytes(&observation)), Some(observation.clone()));
+        let json = serde_json::to_string(&observation).unwrap();
+        assert_eq!(serde_json::from_str::<Observation>(&json).unwrap(), observation);
+        let AskKind::ChooseReplacement { .. } = &observation.request.as_ref().unwrap().ask.as_ref().unwrap().kind else { unreachable!() };
+        let (_, numbers) = encode::ask_numbers(&observation.request.as_ref().unwrap().ask.as_ref().unwrap().kind);
+        assert_eq!(numbers[4], 1u32 << 31);
+    }
+
+    #[test]
     fn round_trips_through_postcard() {
         let observation = sample();
         let bytes = to_bytes(&observation);
@@ -92,8 +130,22 @@ mod tests {
     }
 
     #[test]
+    fn high_keyword_bits_round_trip_exactly_in_postcard_and_json() {
+        let mut observation = sample();
+        let ObjectObs::Visible(object) = &mut observation.objects[2] else { panic!("visible sample object") };
+        object.chars.keywords = (1u128 << 64) | (1u128 << 66) | (1u128 << 35);
+        assert_eq!(from_bytes(&to_bytes(&observation)), Some(observation.clone()));
+        let json = serde_json::to_string(&observation).unwrap();
+        assert_eq!(serde_json::from_str::<Observation>(&json).unwrap(), observation);
+    }
+
+    #[test]
     fn refuses_another_schema() {
         let mut observation = sample();
+        // Schema 4 used private counter IDs that collide with the published counter table.
+        // The bytes still deserialize, so the version check must reject their old meaning.
+        observation.schema = 4;
+        assert_eq!(from_bytes(&to_bytes(&observation)), None);
         observation.schema = SCHEMA_VERSION + 1;
         assert_eq!(from_bytes(&to_bytes(&observation)), None);
         assert_eq!(from_bytes(&[]), None);

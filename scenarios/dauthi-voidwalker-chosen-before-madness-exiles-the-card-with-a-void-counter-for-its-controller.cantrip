@@ -34,6 +34,7 @@ Bot2.Replace(Dauthi Voidwalker)
 ? Stack.Count = 0
 [T3 Bot1.Main1]
 Bot1.Battlefield.Dauthi Voidwalker.Activate
+Bot1.Choose(Tap Dauthi Voidwalker)
 Bot1.Choose(Basking Rootwalla)
 Bot1.Pass
 Bot2.Pass

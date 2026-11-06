@@ -1,0 +1,11 @@
+{
+  "name": "Junún Efreet",
+  "manaCost": "{1}{B}{B}",
+  "type": "Creature — Efreet",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\nAt the beginning of your upkeep, sacrifice this creature unless you pay {B}{B}.",
+  "keywords": [
+    "Flying"
+  ]
+}

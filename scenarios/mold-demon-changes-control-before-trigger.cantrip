@@ -1,0 +1,46 @@
+# If Mold Demon changes control in response to its entry trigger, its original controller
+# cannot sacrifice it on resolution (CR 701.21a).
+[Bot1 Deck]
+Black Lotus x2
+Mox Jet
+Mold Demon
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Emerald x2
+Old Man of the Sea
+Giant Growth x2
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Old Man of the Sea.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mold Demon.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Hand.Giant Growth.Cast(Bot2.Battlefield.Old Man of the Sea)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Hand.Giant Growth.Cast(Bot2.Battlefield.Old Man of the Sea)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Old Man of the Sea.Activate(Bot1.Battlefield.Mold Demon)
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Mold Demon.Power = 6

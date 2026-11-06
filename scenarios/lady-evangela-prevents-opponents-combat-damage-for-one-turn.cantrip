@@ -1,0 +1,43 @@
+# Lady Evangela prevents the chosen opposing creature's combat damage this turn,
+# while another creature deals damage, and both deal damage normally in a later turn (CR 615.1, 514.2).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Lady Evangela
+Island x20
+
+[Bot2 Deck]
+Memnite x2
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lady Evangela.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite#1 > Bot1; Memnite#2 > Bot1)
+[T4 Bot2.Blockers]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Lady Evangela.Activate(Bot2.Battlefield.Memnite#1)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Lady Evangela.Tapped = true
+[T4 Bot2.Main2]
+? Bot1.Life = 19
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite#1 > Bot1; Memnite#2 > Bot1)
+[T6 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17

@@ -1,0 +1,64 @@
+# Another artifact leaving must not trigger the Vault; its face-down card remains linked and is returned when the Vault is sacrificed (CR 603.6c, 607.2a).
+
+[Bot1 Deck]
+Knowledge Vault
+Black Lotus
+Mox Pearl
+Sol Ring
+Island
+Island
+Island
+Memnite
+Forest x20
+
+[Bot2 Deck]
+Island
+Mox Ruby
+Abrade
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Knowledge Vault.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Knowledge Vault.Activate(Ability: Exile the top)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Exile = (face down)
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Abrade.Cast
+Bot2.Modes(Destroy target artifact)
+Bot2.Target(Bot1.Battlefield.Sol Ring)
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot1.Graveyard.Sol Ring.Colors =
+? Exile = (face down)
+Bot1.Battlefield.Knowledge Vault.Activate(Ability: Sacrifice)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Memnite
+Exile.Count = 0

@@ -1,0 +1,57 @@
+# With no creature sharing its color, an opponent's creature spell is countered unless its controller pays its mana value (CR 603.2, 118.12).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Invoke Prejudice
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Ruby
+Savannah Lions x3
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Invoke Prejudice.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard.Savannah Lions.Power = 2
+Bot2.Hand.Mox Ruby.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.PayCost(X: 1)
+Bot2.PayCost
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Savannah Lions.Power = 2
+[T6 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Pass
+Bot2.Decline
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Battlefield.Savannah Lions.Power = 2
+Bot2.Graveyard.Count = 2

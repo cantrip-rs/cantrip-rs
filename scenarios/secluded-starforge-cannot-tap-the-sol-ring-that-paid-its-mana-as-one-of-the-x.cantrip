@@ -23,6 +23,7 @@ Bot1.Hand.Memnite.Cast
 Bot1.Battlefield.Secluded Starforge.Activate(Ability: Target creature; X: 1; Target: Bot1.Battlefield.Memnite)
 Bot1.Battlefield.Sol Ring.Activate
 ! Bot1.Choose(Sol Ring)
+Bot1.Choose(Tap Secluded Starforge)
 Bot1.Choose(Memnite)
 ? Bot1.Mana =
 ? Bot1.Battlefield.Sol Ring.Tapped = true

@@ -36,7 +36,7 @@ fn resolve(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     }
     g.end_sentence();
     exiled.retain(|&(card, _)| library::is_still_exiled(g, card));
-    g.put_all_onto_battlefield(&exiled)?;
+    g.put_all_onto_battlefield_by(&exiled.into_iter().map(|(card, player)| (card, player, false, player)).collect::<Vec<_>>(), &[])?;
     for player in revealers {
         g.shuffle(player);
     }

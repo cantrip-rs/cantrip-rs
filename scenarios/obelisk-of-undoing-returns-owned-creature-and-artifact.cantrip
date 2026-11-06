@@ -1,0 +1,72 @@
+# Obelisk returns a creature its controller owns and controls, refusing the opponent's creature;
+# on a later turn it returns itself, a noncreature artifact, to its owner's hand (CR 110.1).
+[Bot1 Deck]
+Obelisk of Undoing
+Mox Pearl
+Black Lotus
+Black Lotus
+Ornithopter
+Black Lotus
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Obelisk of Undoing.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+! Bot1.Battlefield.Obelisk of Undoing.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Obelisk of Undoing.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Obelisk of Undoing.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Types = Artifact; Creature
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Obelisk of Undoing.Activate(Bot1.Battlefield.Obelisk of Undoing)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Obelisk of Undoing.Colors =
+Bot1.Hand.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Types = Artifact; Creature

@@ -1,0 +1,39 @@
+# A creature that gains hexproof in response remains green; another legal target still becomes white (CR 608.2b, 702.11b).
+[Bot1 Deck]
+Mox Pearl
+Ornithopter
+Heaven's Gate
+Island x20
+[Bot2 Deck]
+Mox Emerald
+Mox Emerald
+Llanowar Elves
+Snakeskin Veil
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Heaven's Gate.Cast
+Bot1.Target(Bot1.Battlefield.Ornithopter; Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Hand.Snakeskin Veil.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Llanowar Elves.Keywords = Hexproof
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Colors = White
+Bot2.Battlefield.Llanowar Elves.Colors = Green

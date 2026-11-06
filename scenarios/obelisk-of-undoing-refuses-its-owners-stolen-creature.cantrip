@@ -1,0 +1,54 @@
+# A creature its controller owns becomes ineligible when an opponent steals it, despite still being
+# owned by the Obelisk's controller. The Obelisk can target itself at the same priority (CR 108.3).
+[Bot1 Deck]
+Obelisk of Undoing
+Mox Pearl
+Black Lotus
+Black Lotus
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Mountain
+Claim the Firstborn
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Obelisk of Undoing.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Claim the Firstborn.Cast(Bot1.Battlefield.Ornithopter)
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+! Bot1.Battlefield.Obelisk of Undoing.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Obelisk of Undoing.Activate(Bot1.Battlefield.Obelisk of Undoing)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Obelisk of Undoing.Colors =
+Bot2.Battlefield.Ornithopter.Power = 0

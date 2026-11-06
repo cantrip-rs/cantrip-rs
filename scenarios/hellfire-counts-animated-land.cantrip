@@ -1,0 +1,31 @@
+# An animated Mishra's Factory is a creature when destroyed and counts as a death even though its card is a land (CR 700.4, 608.2h).
+[Bot1 Deck]
+Mishra's Factory
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Hellfire
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mishra's Factory.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mishra's Factory.Activate(Ability: becomes a 2/2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mishra's Factory.Power = 2
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mishra's Factory.Activate(Ability: Add)
+Bot1.Hand.Hellfire.Cast
+? Bot1.Mana =
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Hellfire; Mishra's Factory; Black Lotus
+Bot1.Life = 16

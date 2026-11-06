@@ -1,7 +1,6 @@
 # Celestial Reunion's additional cost needs two creatures of one type to behold (CR 601.2b-c): Bot1 holds an Elvish Mystic, a
 # Birds of Paradise and a Nameless Inversion (a Kindred Instant with changeling, so every creature type, and an Elf), with the mana
-# for X = 1 in the pool, and no two creatures share a type: the Nameless Inversion is no creature (a ruling), so the option of
-# the cost is refused, and Reunion cast without it is allowed.
+# for X = 1 in the pool, and no two creatures share a type: the Nameless Inversion is no creature (a ruling), so the attempted cost cannot be paid and its cast is reversed. Reunion can then be cast without it.
 
 [Bot1 Deck]
 Mox Emerald
@@ -25,7 +24,18 @@ Bot1.Pass
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Celestial Reunion.Cast(X: 1)
-! Bot1.Modes(Choose a creature type and behold two creatures of that type)
+Bot1.Modes(Choose a creature type and behold two creatures of that type)
+Bot1.Choose(Confirm X)
+? Bot1.Hand = Celestial Reunion; Elvish Mystic; Birds of Paradise; Nameless Inversion; Forest
+? Bot1.Life = 20
+? Bot1.Mana = {B}{G}
+? Bot1.Graveyard.Count = 0
+? Bot1.Battlefield = Mox Emerald; Mox Jet
+? Bot1.Battlefield.Mox Emerald.Tapped = true
+? Bot1.Battlefield.Mox Jet.Tapped = true
+? Stack.Count = 0
+? Exile.Count = 0
+Bot1.Hand.Celestial Reunion.Cast(X: 1)
 Bot1.Modes(Cast without choosing a type)
 Bot1.Pass
 Bot2.Pass
