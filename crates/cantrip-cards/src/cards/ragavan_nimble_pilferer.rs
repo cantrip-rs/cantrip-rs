@@ -15,7 +15,7 @@ fn treasure_and_steal(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
 }
 
 pub static CARD: CardDef = CardDef {
-    abilities: &[triggered(triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT, treasure_and_steal, "Whenever Ragavan deals combat damage to a player, create a Treasure token and exile the top card of that player's library. Until end of turn, you may cast that card.")],
+    abilities: &[triggered(triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT, treasure_and_steal, "Whenever Ragavan deals combat damage to a player, create a Treasure token and exile the top card of that player's library. Until end of turn, you may cast that card.")],
     ways: &[dash::way(mana("{1}{R}"), "Dash {1}{R}")],
     end_step_riders: dash::RIDERS,
     delayed: &[dash::RETURN],

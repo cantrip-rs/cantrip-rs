@@ -26,6 +26,7 @@ Bot2.Battlefield.Mountain.Activate
 Bot2.Hand.Lightning Bolt.Cast(Bot1)
 Bot1.Hand.Spider-Sense.Cast(Stack.Lightning Bolt; Ability: Web-slinging)
 Bot1.Battlefield.Springleaf Drum.Activate(Tap: Ornithopter; Color: Blue)
+Bot1.Choose(Tap Springleaf Drum)
 Bot1.Choose(Ornithopter)
 [T2 Bot2.Main2]
 

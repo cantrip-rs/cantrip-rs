@@ -41,6 +41,7 @@ Bot1.Colors(Red; Green)
 ! Bot1.Hand.Lightning Bolt.Cast(Mana: short)
 ! Bot1.Battlefield.Blazing Rootwalla.Activate(Mana: short)
 Bot1.Battlefield.Bramble Familiar.Activate(Ability: Return; Spend: R ElementalSpellsOrAbilities, G ElementalSpellsOrAbilities)
+Bot1.Choose(Tap Bramble Familiar)
 Bot1.Choose(Island)
 Bot1.Pass
 Bot2.Pass

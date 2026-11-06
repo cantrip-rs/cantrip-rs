@@ -26,8 +26,8 @@ Bot1.Attack(Ornithopter > Bot2)
 [T3 Bot1.DeclareBlockers]
 ? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
 Bot1.Hand.Leonardo, Cutting Edge.Cast(Ability: Sneak)
-Bot1.Choose(Ornithopter)
 Bot1.Battlefield.Plains.Activate
+Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass
 ? Combat.Attackers = Leonardo, Cutting Edge > Bot2

@@ -535,3 +535,77 @@ fn a_control_changing_reach_that_reads_a_third_permanents_stored_controller_is_f
     assert_eq!(breaches.len(), 1, "{}", breaches.join("\n"));
     assert!(breaches[0].starts_with("Probe Bad Keeper"));
 }
+
+/// These probes model an Aura whose value depends on its controller's Forests, so its target and the lands must coexist.
+fn controlled_forests(q: &dyn LayerQuery, source: ObjectId) -> usize {
+    q.state().battlefield().iter().filter(|&&id| q.controller(id) == q.controller(source) && q.chars(id).has_subtype(Subtype::Forest)).count()
+}
+fn forest_bonus(q: &dyn LayerQuery, source: ObjectId, c: &mut Chars) {
+    let n = controlled_forests(q, source) as i32;
+    c.power = c.power.map(|p| p.saturating_add(n / 2));
+    c.toughness = c.toughness.map(|t| t.saturating_add((n + 1) / 2));
+}
+fn bad_forest_bonus(q: &dyn LayerQuery, source: ObjectId, c: &mut Chars) {
+    if controlled_forests(q, source) >= 2 {
+        c.power = c.power.map(|p| p.saturating_add(p));
+    }
+}
+static FOREST_AURA: CardDef = CardDef {
+    name: "Probe Forest Aura",
+    types: TypeSet::of(&[CardType::Enchantment]),
+    statics: &[static_ability(Layer::PtModify, attached_object, forest_bonus, "Enchanted creature gets a bonus for Forests.")],
+    ..CardDef::BLANK
+};
+static BAD_FOREST_AURA: CardDef = CardDef {
+    name: "Probe Bad Forest Aura",
+    types: TypeSet::of(&[CardType::Enchantment]),
+    statics: &[static_ability(Layer::PtModify, attached_object, bad_forest_bonus, "Enchanted creature doubles its power with two Forests.")],
+    ..CardDef::BLANK
+};
+
+#[test]
+fn forest_dependent_aura_is_exercised_and_illegal_object_dependent_effect_is_detected() {
+    static TABLE: OnceLock<CardTable> = OnceLock::new();
+    let table = TABLE.get_or_init(|| CardTable::new(cantrip_cards::all().into_iter().chain([&FOREST_AURA, &BAD_FOREST_AURA])));
+    let found = apply_contract_check(table);
+    assert!(!found.inert.iter().any(|s| s.starts_with("Probe Forest Aura")), "{}", found.inert.join("\n"));
+    assert!(found.breaches.iter().any(|s| s.starts_with("Probe Bad Forest Aura")), "{}", found.breaches.join("\n"));
+}
+
+/// Snow-dependent Auras need a creature and a controlled snow land in the same synthetic position.
+fn controlled_snow_lands(q: &dyn LayerQuery, source: ObjectId) -> usize {
+    q.state().battlefield().iter().filter(|&&id| {
+        let c = q.chars(id);
+        q.controller(id) == q.controller(source) && c.supertypes.snow && c.is(CardType::Land)
+    }).count()
+}
+fn snow_land_bonus(q: &dyn LayerQuery, source: ObjectId, c: &mut Chars) {
+    let count = controlled_snow_lands(q, source) as i32;
+    c.power = c.power.map(|p| p.saturating_add(count));
+}
+fn bad_snow_land_bonus(q: &dyn LayerQuery, source: ObjectId, c: &mut Chars) {
+    if controlled_snow_lands(q, source) > 0 {
+        c.power = c.power.map(|p| p.saturating_add(p));
+    }
+}
+static SNOW_LAND_AURA: CardDef = CardDef {
+    name: "Probe Snow Land Aura",
+    types: TypeSet::of(&[CardType::Enchantment]),
+    statics: &[static_ability(Layer::PtModify, attached_object, snow_land_bonus, "Enchanted creature gets a bonus for snow lands.")],
+    ..CardDef::BLANK
+};
+static BAD_SNOW_LAND_AURA: CardDef = CardDef {
+    name: "Probe Bad Snow Land Aura",
+    types: TypeSet::of(&[CardType::Enchantment]),
+    statics: &[static_ability(Layer::PtModify, attached_object, bad_snow_land_bonus, "Enchanted creature doubles its power with a snow land.")],
+    ..CardDef::BLANK
+};
+
+#[test]
+fn snow_land_dependent_aura_is_exercised_and_illegal_object_dependent_effect_is_detected() {
+    static TABLE: OnceLock<CardTable> = OnceLock::new();
+    let table = TABLE.get_or_init(|| CardTable::new(cantrip_cards::all().into_iter().chain([&SNOW_LAND_AURA, &BAD_SNOW_LAND_AURA])));
+    let found = apply_contract_check(table);
+    assert!(!found.inert.iter().any(|s| s.starts_with("Probe Snow Land Aura")), "{}", found.inert.join("\n"));
+    assert!(found.breaches.iter().any(|s| s.starts_with("Probe Bad Snow Land Aura")), "{}", found.breaches.join("\n"));
+}

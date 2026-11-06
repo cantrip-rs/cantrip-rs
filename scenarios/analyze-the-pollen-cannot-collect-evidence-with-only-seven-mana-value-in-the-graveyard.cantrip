@@ -1,6 +1,6 @@
 # Analyze the Pollen: "you may collect evidence 8" - Bot1's graveyard holds Hero of Bladehold (mana value 4), Thieving Skydiver
-# (2) and the Faithless Looting just cast (1), total 7, less than 8, so the option is not offered (CR 701.59a; the ruling: "If you can't exile enough cards to meet or
-# exceed the required mana value, you can't choose to collect evidence at all"). The spell is cast without it, so only a basic
+# (2) and the Faithless Looting just cast (1), total 7, less than 8. An attempt to collect evidence cannot be paid, so the cast is reversed (CR 701.59a, 733.1).
+# The spell is then cast without it, so only a basic
 # land may be found: the Llanowar Elves are refused (a creature would need the evidence), the Overgrown Tomb (nonbasic) too, and
 # the Forest is found. The positive control, eight mana value from two cards, is the next scenario.
 
@@ -31,7 +31,15 @@ Bot1.Pass
 Bot1.Choose(Hero of Bladehold; Thieving Skydiver)
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Analyze the Pollen.Cast
-! Bot1.Modes(Collect evidence)
+Bot1.Modes(Collect evidence)
+? Bot1.Life = 20
+? Bot1.Mana = {G}
+? Bot1.Hand = Analyze the Pollen; Swamp; Swamp; Swamp
+? Bot1.Graveyard = Faithless Looting; Thieving Skydiver; Hero of Bladehold
+? Bot1.Battlefield = Mox Emerald; Mox Ruby
+? Exile.Count = 0
+? Stack.Count = 0
+Bot1.Hand.Analyze the Pollen.Cast
 Bot1.Modes(Cast without)
 ! Bot1.Search(Llanowar Elves)
 ! Bot1.Search(Overgrown Tomb)

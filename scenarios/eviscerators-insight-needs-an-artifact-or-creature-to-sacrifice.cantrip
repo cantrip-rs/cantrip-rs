@@ -1,4 +1,4 @@
-# "As an additional cost ... sacrifice an artifact or creature": on turn 3 Bot1 has two Swamps tapped for {B}{B} and nothing to sacrifice - a land is neither - so the Insight is not offered (refusal). Mox Jet, cast then,
+# "As an additional cost ... sacrifice an artifact or creature": on turn 3 Bot1 has two Swamps tapped for {B}{B} and nothing to sacrifice - a land is neither - so the attempted cast cannot pay and is reversed (CR 601.2h, 733.1). Mox Jet, cast then,
 # is an artifact: the Insight is offered and cast sacrificing it (the positive control), drawing two cards.
 
 [Bot1 Deck]
@@ -17,7 +17,15 @@ Bot1.Hand.Swamp.Play
 Bot1.Hand.Swamp.Play
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp#2.Activate
-! Bot1.Hand.Eviscerator's Insight.Cast
+Bot1.Hand.Eviscerator's Insight.Cast
+? Bot1.Hand = Eviscerator's Insight; Mox Jet; Swamp; Swamp; Swamp; Swamp
+? Bot1.Mana = {B}{B}
+? Bot1.Life = 20
+? Bot1.Battlefield = Swamp; Swamp
+? Bot1.Battlefield.Swamp#1.Tapped = true
+? Bot1.Battlefield.Swamp#2.Tapped = true
+? Bot1.Graveyard.Count = 0
+? Stack.Count = 0
 Bot1.Hand.Mox Jet.Cast
 Bot1.Pass
 Bot1.Hand.Eviscerator's Insight.Cast

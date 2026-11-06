@@ -26,7 +26,7 @@ static SHIELD: CardDef = CardDef {
 };
 
 fn cx(game: &mut RulesGame) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// Two shields of 40,000 on the opponent: what they have left between them is 80,000, so of 40,000 and 30,000 damage from two

@@ -4,9 +4,7 @@ use cantrip_oracle as oracle;
 
 /// "Target player gains twice X life." (CR 608.2, 119.3, 107.3).
 fn target_player_gains_twice_x_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(player) = targets::player(g, item, 0) else { return Ok(()) };
-    g.gain_life(player, 2 * item.x as i32);
-    Ok(())
+    effects::target_player_gains_life(g, item, 2 * item.x as i32)
 }
 
 static MODES: ModalDef = modes(&[

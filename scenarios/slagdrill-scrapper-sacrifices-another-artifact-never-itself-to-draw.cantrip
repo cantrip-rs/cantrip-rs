@@ -26,6 +26,7 @@ Bot1.Battlefield.Mountain#1.Activate
 Bot1.Battlefield.Mountain#2.Activate
 Bot1.Battlefield.Slagdrill Scrapper.Activate
 ! Bot1.Choose(Slagdrill Scrapper)
+Bot1.Choose(Tap Slagdrill Scrapper)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass

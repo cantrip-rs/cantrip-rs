@@ -29,7 +29,7 @@ fn put(g: &mut Game, def: &'static CardDef, player: PlayerId, zone: Zone) -> Obj
     id
 }
 fn cx(g: &mut Game) -> Cx<'_> {
-    Cx { g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 #[test]

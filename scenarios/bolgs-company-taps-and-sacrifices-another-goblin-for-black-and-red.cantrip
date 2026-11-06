@@ -1,5 +1,5 @@
 # Bolg's Company: "{T}, Sacrifice another Goblin: Add {B}{R}." On turn 3 Bot1 controls only the Company, which cannot pay with
-# itself (refused). Once a Goblin Assailant and a Swab Goblin are there the ability is offered; the Company is not among the Goblins
+# itself (the attempted payment is reversed). Once a Goblin Assailant and a Swab Goblin are there the ability is offered; the Company is not among the Goblins
 # it may sacrifice (refused), and sacrificing the Swab Goblin adds exactly {B}{R} and taps the Company. Mana abilities use no stack.
 
 [Bot1 Deck]
@@ -29,7 +29,14 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Bolg's Company.Cast
 Bot1.Pass
 [T3 Bot1.Main1]
-! Bot1.Battlefield.Bolg's Company.Activate
+Bot1.Battlefield.Bolg's Company.Activate
+? Bot1.Life = 20
+? Bot1.Mana =
+? Bot1.Battlefield.Bolg's Company.Tapped = false
+? Bot1.Graveyard.Count = 0
+? Bot1.Hand = Goblin Assailant; Swab Goblin; Swamp
+? Bot1.Battlefield = Black Lotus; Bolg's Company; Mox Emerald; Mox Jet; Mox Ruby
+? Stack.Count = 0
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Goblin Assailant.Cast
@@ -39,6 +46,8 @@ Bot1.Pass
 ? Bot1.Mana =
 ! Bot1.Battlefield.Bolg's Company.Activate(Sacrifice: Bolg's Company)
 Bot1.Battlefield.Bolg's Company.Activate(Sacrifice: Swab Goblin)
+Bot1.Choose(Sacrifice 1 permanent)
+Bot1.Choose(Swab Goblin)
 ? Bot1.Mana = {B}{R}
 
 [Expect]

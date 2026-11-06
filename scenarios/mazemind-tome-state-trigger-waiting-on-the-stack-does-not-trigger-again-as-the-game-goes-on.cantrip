@@ -43,6 +43,7 @@ Bot2.Pass
 Bot1.Arrange(Island | )
 [T7 Bot1.Main1]
 Bot1.Battlefield.Mazemind Tome.Activate(Ability: Scry 1)
+Bot1.Choose(Tap Mazemind Tome)
 ? Stack.Count = 2
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot2)

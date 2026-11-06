@@ -96,6 +96,15 @@ pub fn this_turn(g: &mut dyn Game, item: &StackItem, source: ObjectId) {
     g.delayed_trigger(DelayedWhen::ThisTurn, source, item.controller, AbilityRef::delayed(this, 0), Target::None);
 }
 
+/// Watch a particular object for events this turn while keeping the creating spell or ability as the source
+/// (CR 603.7b, 603.7d-e). A Good Day to Die and End Blaze Epiphany both watch a creature dying this turn.
+/// The trigger receives its event's `Fired` payload; when it supplies no subject, the watched object is the subject.
+/// The captured words belong to the creating ability.
+pub fn this_turn_watching(g: &mut dyn Game, item: &StackItem, watched: ObjectId) {
+    let card = ability_card(g, item);
+    g.delayed_trigger(DelayedWhen::ThisTurnWatching(watched), item.object, item.controller, AbilityRef::delayed(card, 0), Target::None);
+}
+
 /// Sets up the card's delayed ability number `ability` to trigger "when you next [event] this turn" (CR 603.7b): once, the
 /// first time its `listens`/`matches` accept an event this turn, controlled by the resolving ability's controller; it ends
 /// with the turn if it never does. `source` is the object its `matches` is asked of, as for `this_turn`. Each call is a
