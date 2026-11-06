@@ -1,0 +1,35 @@
+# Land Cap makes white or blue and adds depletion; a counter prevents untapping, its upkeep trigger removes one, and with no counter it untaps normally.
+[Bot1 Deck]
+Land Cap
+Island x19
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Land Cap.Play
+! Bot1.Battlefield.Land Cap.Activate(Color: Red)
+Bot1.Battlefield.Land Cap.Activate(Color: White)
+? Bot1.Mana = {W}
+? Bot1.Battlefield.Land Cap.Tapped = true
+? Bot1.Battlefield.Land Cap.Counters.Depletion = 1
+! Bot1.Battlefield.Land Cap.Activate(Color: Blue)
+[T3 Bot1.Upkeep]
+? Bot1.Battlefield.Land Cap.Tapped = true
+? Bot1.Battlefield.Land Cap.Counters.Depletion = 1
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Land Cap.Counters.Depletion = (absent)
+? Bot1.Battlefield.Land Cap.Tapped = true
+[T5 Bot1.Upkeep]
+? Bot1.Battlefield.Land Cap.Tapped = false
+? Stack.Count = 1
+Bot1.Battlefield.Land Cap.Activate(Color: Blue)
+? Bot1.Mana = {U}
+? Bot1.Battlefield.Land Cap.Counters.Depletion = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Land Cap.Counters.Depletion = (absent)
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Land Cap.Tapped = false
+Bot1.Battlefield.Land Cap.Counters.Depletion = (absent)

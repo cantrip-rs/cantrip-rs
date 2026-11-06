@@ -46,10 +46,10 @@ Bot1.Hand.Swamp.Play
 Bot1.Attack(Savannah Lions > Bot2)
 [T3 Bot1.DeclareBlockers]
 Bot1.Hand.Elektra, Daughter of the Hand.Cast(Ability: Sneak)
-Bot1.Choose(Savannah Lions)
 Bot1.Battlefield.Swamp#1.Activate
 Bot1.Battlefield.Swamp#2.Activate
 Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(Savannah Lions)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

@@ -15,6 +15,7 @@ fn tax(q: &dyn Query, source: ObjectId, player: PlayerId, costed: Costed, _: &[T
         Costed::Spell(id) => (id, true),
         Costed::Ability(_, ability, _) if q.activated_ability(ability).is_none_or(|d| d.is_mana_ability()) => return CostDelta::NONE,
         Costed::Ability(id, ..) => (id, false),
+        Costed::PlayerAbility(..) => return CostDelta::NONE,
         // Plotting and the other special actions are no activated abilities (CR 116.1).
         Costed::SpecialAction(..) => return CostDelta::NONE,
     };

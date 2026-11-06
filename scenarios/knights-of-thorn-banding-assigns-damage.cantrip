@@ -1,0 +1,43 @@
+# Knights bands with Gorilla; blocking the Gorilla blocks the entire band, and the attacking player assigns all the blocker's damage to the Knights (CR 702.22h, 702.22k).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Knights of Thorn
+Guerrilla Gorilla
+Island x20
+[Bot2 Deck]
+Forest
+Black Lotus
+Ulvenwald Oddity
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Knights of Thorn.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Guerrilla Gorilla.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Ulvenwald Oddity.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Knights of Thorn > Bot2; Guerrilla Gorilla > Bot2)
+Bot1.Choose(Guerrilla Gorilla)
+? Combat.Attackers = Knights of Thorn > Bot2 (band 1); Guerrilla Gorilla > Bot2 (band 1)
+Bot2.Block(Ulvenwald Oddity > Guerrilla Gorilla)
+[T3 Bot1.Blockers]
+? Combat.Blocks = Ulvenwald Oddity > Knights of Thorn; Ulvenwald Oddity > Guerrilla Gorilla
+Bot1.AssignDamage(Ulvenwald Oddity > Knights of Thorn: 4)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Guerrilla Gorilla.Damage = 0
+Bot1.Graveyard = Knights of Thorn; Black Lotus; Black Lotus
+Bot2.Graveyard = Ulvenwald Oddity; Black Lotus
+Bot2.Life = 20

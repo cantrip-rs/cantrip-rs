@@ -45,6 +45,8 @@ Bot1.Hand.Bloodtithe Harvester.Cast
 Bot1.Battlefield.Bloodtithe Harvester.Activate(Adeline, Resplendent Cathar)
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Blood Token.Activate
+Bot1.Choose(Tap Blood Token)
+Bot1.Choose(Discard 1 card)
 Bot1.Choose(Lightning Bolt)
 
 [Expect]

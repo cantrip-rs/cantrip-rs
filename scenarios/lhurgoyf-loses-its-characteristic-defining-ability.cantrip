@@ -1,0 +1,51 @@
+# Removing Lhurgoyf's characteristic-defining ability leaves its printed */1+* as 0/1; the creature card in a graveyard first makes it 1/2 (CR 604.3, 208.2a, 208.5).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Lhurgoyf
+Ornithopter
+Shock
+Island x20
+[Bot2 Deck]
+Island
+Mox Sapphire
+Mox Jet
+The Wondrous Wasp
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lhurgoyf.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lhurgoyf.Power = 1
+? Bot1.Battlefield.Lhurgoyf.Toughness = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.The Wondrous Wasp.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Target(Lhurgoyf)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Lhurgoyf.Power = 0
+Bot1.Battlefield.Lhurgoyf.Toughness = 1

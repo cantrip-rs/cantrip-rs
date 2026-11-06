@@ -8,7 +8,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(card) = targets::object(g, item, 0) else { return Ok(()) };
     let value = g.mana_value(card) as i32;
     g.put_onto_battlefield(card, item.controller, false)?;
-    g.lose_life(item.controller, value);
+    g.lose_life(item.controller,(value) as i32);
     Ok(())
 }
 

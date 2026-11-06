@@ -1,0 +1,61 @@
+# The first target is killed in response, so the ability does nothing; a second activation resolves and sacrifices its target (CR 608.2b).
+[Bot1 Deck]
+Mox Jet
+Gleemox
+Mox Sapphire
+Island
+Krovikan Elementalist
+Memnite
+Memnite
+Island x20
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Krovikan Elementalist.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Krovikan Elementalist.Activate(Memnite#1; Ability: gains flying)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite#1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Krovikan Elementalist.Activate(Memnite; Ability: gains flying)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Flying
+[T5 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard.Memnite#2.Power = 1

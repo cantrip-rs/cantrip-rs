@@ -1,0 +1,8 @@
+{
+  "name": "Kelsinko Ranger",
+  "manaCost": "{W}",
+  "type": "Creature — Human Ranger",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{1}{W}: Target green creature gains first strike until end of turn."
+}

@@ -1,6 +1,6 @@
 # Bankrupt in Blood: "As an additional cost to cast this spell, sacrifice two creatures" (CR 118.8, 601.2b-h). The cost
-# can only be paid with creatures its caster controls, so it is not castable with one creature of its own - a noncreature
-# Mox and an opponent's creature do not count - and is castable the moment a second creature of its own arrives
+# can only be paid with creatures its caster controls, so an attempt with one creature of its own is reversed - a noncreature
+# Mox and an opponent's creature do not count - and succeeds once a second creature of its own arrives
 # (the positive control, on turn 3). The opponent's Ornithopter is never offered for the sacrifice and stays.
 
 [Bot1 Deck]
@@ -22,12 +22,33 @@ Bot1.Hand.Swamp.Play
 Bot1.Hand.Mox Jet.Cast
 Bot1.Hand.Ornithopter.Cast
 [Bot1.Main1]
-! Bot1.Hand.Bankrupt in Blood.Cast
+Bot1.Hand.Bankrupt in Blood.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Hand = Bankrupt in Blood; Swamp; Swamp; Swamp
+? Bot1.Mana =
+? Bot1.Life = 20
+? Bot1.Battlefield = Swamp; Mox Jet; Ornithopter
+? Bot1.Battlefield.Swamp.Tapped = false
+? Bot1.Battlefield.Mox Jet.Tapped = false
+? Bot1.Graveyard.Count = 0
+? Stack.Count = 0
 [T2 Bot2.Main1]
 Bot2.Hand.Island.Play
 Bot2.Hand.Ornithopter.Cast
 [T3 Bot1.Main1]
-! Bot1.Hand.Bankrupt in Blood.Cast
+Bot1.Hand.Bankrupt in Blood.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Hand = Bankrupt in Blood; Ornithopter; Swamp; Swamp; Swamp
+? Bot1.Mana =
+? Bot1.Life = 20
+? Bot1.Battlefield = Swamp; Mox Jet; Ornithopter
+? Bot1.Battlefield.Swamp.Tapped = false
+? Bot1.Battlefield.Mox Jet.Tapped = false
+? Bot1.Graveyard.Count = 0
+? Bot2.Battlefield = Island; Ornithopter
+? Stack.Count = 0
 Bot1.Hand.Ornithopter.Cast
 Bot1.Hand.Bankrupt in Blood.Cast
 Bot1.Battlefield.Swamp.Activate

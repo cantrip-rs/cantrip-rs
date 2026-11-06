@@ -1,0 +1,56 @@
+# The Aura may enchant an opposing creature, gives only it +1/+1, and draws its controller a card at the next upkeep (CR 303.4, 603.7b).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Krovikan Fetish
+Memnite
+Island
+Island
+Island
+Forest
+Plains
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Hand.Krovikan Fetish.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Hand.Krovikan Fetish.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Krovikan Fetish.AttachedTo = Ornithopter
+? Bot2.Battlefield.Ornithopter.Power = 1
+? Bot2.Battlefield.Ornithopter.Toughness = 3
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+[T4 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Plains.Colors =
+? Bot1.Hand.Count = 5
+[T5 Bot1.Main1]
+? Bot1.Hand.Count = 6
+[T6 Bot2.Main1]
+
+[Expect]
+Bot1.Hand.Count = 6
+Bot1.Battlefield.Krovikan Fetish.AttachedTo = Ornithopter
+Bot2.Battlefield.Ornithopter.Power = 1
+Bot2.Battlefield.Ornithopter.Toughness = 3

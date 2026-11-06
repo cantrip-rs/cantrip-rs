@@ -29,6 +29,7 @@ Bot1.Hand.Ornithopter#1.Cast
 Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Supportive Parents.Activate(Tap: Supportive Parents; Tap: Ornithopter; Color: Red)
+Bot1.Choose(Supportive Parents; Ornithopter)
 ? Bot1.Mana = {R}
 ? Client.Bot1.Mana = 1 Red
 Bot1.Hand.Lightning Bolt#1.Cast(Bot2)
@@ -43,6 +44,7 @@ Bot2.Pass
 Bot1.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Supportive Parents.Activate(Tap: Supportive Parents; Tap: Ornithopter; Color: Red)
+Bot1.Choose(Supportive Parents; Ornithopter)
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
 Bot1.Pass
 Bot2.Pass

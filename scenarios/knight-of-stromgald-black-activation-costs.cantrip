@@ -1,0 +1,40 @@
+# White mana cannot pay either black activation cost; one black plus one white still cannot pay {B}{B}.
+[Bot1 Deck]
+Mox Jet x2
+Mox Pearl
+Knight of Stromgald
+Swamp
+Island x15
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Knight of Stromgald.Cast
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Swamp.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Knight of Stromgald.Activate(Ability: first strike; Mana: short)
+! Bot1.Battlefield.Knight of Stromgald.Activate(Ability: +1/+0; Mana: short)
+? Bot1.Mana = {W}
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Swamp.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+! Bot1.Battlefield.Knight of Stromgald.Activate(Ability: +1/+0; Mana: short)
+Bot1.Battlefield.Knight of Stromgald.Activate(Ability: first strike)
+? Bot1.Mana = {W}
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Knight of Stromgald.Keywords = FirstStrike

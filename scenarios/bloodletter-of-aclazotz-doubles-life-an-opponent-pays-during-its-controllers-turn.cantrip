@@ -32,12 +32,16 @@ Bot2.Hand.Marsh Flats.Play
 [T3 Bot1.Main1]
 Bot1.Pass
 Bot2.Battlefield.Marsh Flats.Activate
+Bot2.Choose(Tap Marsh Flats)
+Bot2.Choose(Pay 1 life)
 ? Bot2.Life = 18
 Bot2.Pass
 Bot2.Search(Swamp)
 [T4 Bot2.Main1]
 Bot2.Hand.Polluted Delta.Play
 Bot2.Battlefield.Polluted Delta.Activate
+Bot2.Choose(Tap Polluted Delta)
+Bot2.Choose(Pay 1 life)
 ? Bot2.Life = 17
 Bot2.Pass
 Bot2.Search(Swamp)

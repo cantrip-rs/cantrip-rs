@@ -1,0 +1,45 @@
+# March makes Hithlain Rope a creature that cannot be sacrificed; another creature must be sacrificed instead (CR 101.2, 701.21a).
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Hithlain Rope
+Black Lotus
+March of the Machines
+Memnite
+Kjeldoran Dead
+Swamp
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hithlain Rope.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.March of the Machines.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hithlain Rope.Power = 2
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Kjeldoran Dead.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Hithlain Rope)
+Bot1.Choose(Memnite)
+[Expect]
+Bot1.Battlefield.Hithlain Rope.Power = 2
+Bot1.Graveyard.Memnite.Power = 1
+Bot1.Battlefield.Kjeldoran Dead.Power = 3

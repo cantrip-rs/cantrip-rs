@@ -1,0 +1,58 @@
+# Destroying the Aura in response to its enters trigger removes the bonus, but does not stop the next-upkeep draw (CR 113.7a, 611.3b).
+[Bot1 Deck]
+Black Lotus
+Krovikan Fetish
+Memnite
+Island
+Island
+Island
+Island
+Forest
+Plains
+Island x15
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Disenchant
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl#1.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Krovikan Fetish.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack = Krovikan Fetish
+? Bot1.Battlefield.Memnite.Power = 2
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Krovikan Fetish)
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+Bot1.Pass
+Bot2.Pass
+? Delayed.Count = 1
+[T4 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Plains.Colors =
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Hand.Plains.Colors =
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Graveyard.Krovikan Fetish.Colors = Black

@@ -99,6 +99,7 @@ fn a_granted_ninjutsu_ability_is_one_of_the_class_a_cost_change_names() {
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Island.Activate
+Bot1.Choose(Return to hand 1 permanent)
 Bot1.Choose(Ornithopter)
 Bot1.Pass",
         "Bot1.Battlefield.Grizzly Bears.Tapped = true\nBot1.Mana = ",

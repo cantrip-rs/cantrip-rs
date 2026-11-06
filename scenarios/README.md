@@ -227,7 +227,7 @@ game goes back to before it and Bot1 is asked again. It is offered while that ac
 tapped, sacrificed from the battlefield, removed counters, added mana or cost life (a land, Black Lotus, Lotus Petal,
 Pentad Prism, a Treasure); never for an ability whose cost discards (Lion's Eye Diamond) or one that triggered
 anything (Chromatic Star). Any other answer clears it, a pass or a cast spell included, so tap after the spell you
-want to pay with has resolved. `! Bot1.Undo` says nothing may be taken back at Bot1's next priority or payment. `! Bot1.PayCost` says Bot1's next "unless pays" question does not offer paying (the mana they hold cannot pay it); `! Bot1.PayCost(Times: 4)` says the next question to pay a cost a number of times does not allow that many (past "up to three").
+want to pay with has resolved. `! Bot1.Undo` says nothing may be taken back at Bot1's next priority or payment. `! Bot1.PayCost` says Bot1's next "unless pays" question does not offer paying (the mana they hold cannot pay it); `! Bot1.PayCost(Times: 4)` says the next question to pay a cost a number of times does not allow that many (past "up to three"). `! Bot1.PayCost(X: 1)` instead says that X cannot be chosen at the next payment: a fixed cost has no X choice, even when paying it is offered. On an X question it tests the actual picker on an isolated fork, including its limits, without changing the real question. This asserts the choice of X, independently of whether the current pool could pay that amount. An explicit `X:` on an ordinary positive `PayCost` fails rather than being ignored.
 
 The script ends when every line is played and the stack is empty. A line that isn't possible within 4 turns fails.
 The failure report shows what each player was last offered, written as script lines, followed by a trace and a full
@@ -269,6 +269,11 @@ default declines, so a scenario that does not care about such a card need say no
 | `Bot1.PayCost(Convoke: Memnite, Ornithopter)` | the artifacts and creatures tapped to pay a waterbend cost (CR 701.67a-b) that is paid as a spell or ability resolves ("unless you waterbend {2}", ward--waterbend), one per question in the order given, as for a cast; what the cost still owes is paid from the pool |
 | `Bot1.Accept` · `Bot1.Decline` | a "you may" choice, such as Path to Exile's search (default: decline); `Accept` also pays a payment of life alone (a shockland's 2 life, ward's), which has no mana to make first |
 | `Bot1.Choose(Lightning Bolt; Island)` | Duress, Brainstorm (last chosen ends on top) |
+| `Bot1.Choose(Close mana window)` | close the pre-cost mana ability window without spending floating mana; subsequent `Choose` lines order the costs |
+| `Bot1.Choose(Silverquill, the Disputant)` | choose a cost operation by a unique part of its label; the next `Choose` selects objects for that operation |
+| `Bot1.Choose(Cost: 1)` | choose the first cost operation when labels are identical; the number is one-based |
+| `Bot1.Choose(Assign mana)` | explicitly assign the next planned mana unit once the mana window is closed |
+| `Bot1.Choose(Confirm X)` | finish the cast's planned X announcement before a following check |
 | `Bot1.Choose(Burst Lightning; Kicked: 1)` | the card chosen to be cast as an effect resolves ("you may cast a spell from your hand without paying its mana cost", Buster Sword) announces that X or those kicks, paid from the pool like any cast's additional cost (CR 118.9d); unsaid, X is 0 and it is unkicked |
 | `Bot1.Choose(Dragonhawk, Fate's Tempest)` | "a source of your choice" (CR 609.7a) may be an object that has since become another (a permanent that died while its delayed ability waits): named by its name when no object of that name now in play may be chosen |
 | `Bot1.Choose(Graveyard.Black Lotus)` | craft's materials (CR 702.167a), permanents and graveyard cards in one question: qualify the zone where a name is in both (default: the fewest it takes, the first offered); a refusal `! Bot1.Choose(Ornithopter)` holds when no such material may be chosen, and one naming only choosable materials holds when that is no answer the question accepts (one of "two creatures") |
@@ -281,11 +286,12 @@ default declines, so a scenario that does not care about such a card need say no
 | `Bot1.Divide(Grizzly Bears: 2; Bot2.Battlefield.Hill Giant: 1)` · `Bot1.Divide()` | a divided slot's targets and each one's share, chosen together as the spell or ability is announced (CR 601.2d): Fire Covenant's damage, Court of Garenbrig's counters; the shares add up to the total, and an empty line chooses no target where the slot says "up to" (default: the whole total on the first candidate) |
 | `Bot1.RemoveCounters(Sylvan Caryatid: 2; Walking Ballista: 1)` · `Bot1.RemoveCounters(Sylvan Caryatid: Flying 1; Dawnhand Dissident: 1)` | counters removed from among permanents as a cost (CR 118.3: the casts Dawnhand Dissident permits, "removing three counters from among creatures you control"): each permanent with how many come off it, and the kind as the dump spells it (`PlusOnePlusOne`, `MinusOneMinusOne`, `Flying`) where it has more than one kind; the amounts add up to the total (default: as many as there are from each kind on each permanent in turn, the first offered first). For an effect's "remove up to N counters" (CR 608.2d: Heartless Act), the amounts add up to N or fewer, and `Bot1.RemoveCounters()` removes none |
 | `Bot1.Target(Sol Ring)` · `Bot1.Target()` | a triggered ability's target as it goes on the stack, or a chosen mode's as a modal spell is cast; `Target()` chooses none for "up to one" (default: none if optional, else the first candidate) |
+| `Bot1.Target()` | when choosing a new target, keep the original, even if it became illegal; naming the current target also means keep |
 | `Bot1.Target(Island; Mountain)` | a slot that takes several — "Untap X target lands", asked once the mana is paid — takes exactly that many, and they must be different permanents; "up to two target creatures" takes as many as the line gives, at most two |
 | `Bot1.Modes(1; 4)` · `Bot1.Modes(Destroy target artifact)` | a modal spell's modes as it is cast, or a modal triggered ability's as it goes on the stack, by number from 1 or part of their text (default: the first eligible); also the next room of a dungeon when there are two, `Bot1.Modes(Lost Well)` |
 | `Bot1.Name(Lightning Bolt)` | a card name, chosen as a permanent enters (Anointed Peacekeeper) or as a spell or ability resolves (Petrified Hamlet's land card name); any card the game knows of the kind asked for (default: the name the card suggests, such as the costliest nonland card in the hand looked at) |
 | `Bot1.Colors(Red; Green)` | colors chosen as a spell or ability resolves (CR 202.2b), by name and in the order asked for; a color repeats where the ability allows it, as Coalition Relic's one mana per charge counter does (default: the first on offer) |
-| `Bot1.Number(7)` | a number chosen between the least and the most offered, both included (CR 107.1, 614.12a: Nyota Uhura's "choose a number between 0 and 10"); `! Bot1.Number`, bare, says the player is not asked a number (default: the least) |
+| `Bot1.Number(7)` | a number chosen between the least and the most offered, both included (CR 107.1, 614.12a: Nyota Uhura's "choose a number between 0 and 10"); `! Bot1.Number(7)` checks that 7 is refused by the current number question, which still needs an answer; `! Bot1.Number`, bare, says the player is not asked a number (default: the least) |
 | `Bot1.Replace(Archon of Emeria)` | which of two applicable replacement effects applies first (CR 616.1), by its source card's name or part of its hint (default: the first offered) |
 | `Bot1.ChoosePlayer(Bot2)` | a player chosen without targeting (CR 608.2d, 614.12a), as True-Name Nemesis asks as it enters (default: the first in turn order) |
 
@@ -445,6 +451,7 @@ object named twice, `! Bot1.Target(Ornithopter#1; Ornithopter#1)`, as many as th
 refused (CR 115.3), or targets whose mana values add up to more than the slot's total allows (CR 601.2c). The engine's own check of the answer decides (`check_answer`).
 A lone name that is a legal target is one answer too when the slot takes at least two, and is refused as too few:
 `! Bot1.Target(Bot2.Battlefield.Memnite)` for Kitsune's "two other target creatures" (CR 601.2c, 115.1).
+A stack ability can also be refused by its source name, for example `! Bot1.Target(Stack.Thraben Inspector)`; the ability must actually be on the stack. `Stack.Name` identifies the same ability for a positive or negative target, even when that ability is not offered, and `#n` counts all same-named abilities on the stack. If a same-named spell is also there, use `Bot1.Stack.Name` or `Bot2.Stack.Name` to name that spell.
 `! Bot1.Target(Count: N)` fails instead if the question takes N targets, and proves nothing when it has fewer candidates than
 that; `Count: 0` is choosing none, which no answer naming targets can say. It shows a slot takes at least one target (The Eagles Are Coming! unkicked, where kicked it takes any number).
 
@@ -549,6 +556,8 @@ kind, place it where the action could otherwise be taken, with a wait or `BotN.P
 - `Stack`, `Exile`, `Combat.Attackers`, `Combat.Blocks`, each with `.Count`: an attacker as `Grizzly Bears > Bot2`, one in an
   attacking band (CR 702.22c) as `Benalish Hero > Bot2 (band 1)`, bands numbered in the order announced; a block as
   `Blocker > Attacker`, one for each member of a band a creature blocks (CR 702.22h)
+- `Combat.Blockers`, with `.Count`: the blocking creatures by name, including a surviving blocker whose attacker left
+  combat (CR 509.1g). Its `Combat.Blocks` relationship is gone, but it remains blocking until removed or combat ends.
 - `Stack.<Name>.ManaValue` for each spell on the stack (CR 202.3e: its X counted as announced) and `Stack.<Name>.X`, the X it
   was cast with, absent where there was none; named and numbered as `Stack` lists them, top first. A spell cast face down
   (morph, disguise: CR 708.4) has no name, so it is listed as an empty name and keyed `Stack..ManaValue` (`Stack.#2.ManaValue`
@@ -711,3 +720,5 @@ four turns like any other line.
 
 Expectations then describe the position mid-game rather than a finished one, which is the point: `Step = Damage`,
 `Combat.Blocks = ...`, and every `.Damage` still `0` says the division is outstanding and not already answered.
+
+Snow source mana (CR 107.4h) retains its production-time quality. `Spend:` items may qualify a mana symbol with `Snow` or `NonSnow`, and with `for {S}` or `for mana` to choose which demand a snow unit pays; for example `Spend: {U} Snow for {S}`. Unqualified items retain the existing payment behavior.

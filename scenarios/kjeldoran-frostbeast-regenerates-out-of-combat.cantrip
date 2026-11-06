@@ -1,0 +1,43 @@
+# A regeneration shield saves Frostbeast from lethal combat damage and removes it from combat; its end-of-combat trigger leaves the attacker alive.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Kjeldoran Frostbeast
+Death Ward
+Island x16
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Craw Wurm
+Island x17
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Kjeldoran Frostbeast.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Craw Wurm.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Craw Wurm > Bot1)
+Bot1.Block(Kjeldoran Frostbeast > Craw Wurm)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Death Ward.Cast(Bot1.Battlefield.Kjeldoran Frostbeast)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.EndCombat]
+? Stack.Count = 1
+? Bot1.Battlefield.Kjeldoran Frostbeast.Tapped = true
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Battlefield.Craw Wurm.Toughness = 4
+Bot1.Battlefield.Kjeldoran Frostbeast.Damage = 0

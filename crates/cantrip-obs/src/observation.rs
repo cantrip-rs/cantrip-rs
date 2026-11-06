@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Bumped whenever the shape or the meaning of an observation changes: a model is trained on one version.
-pub const SCHEMA_VERSION: u32 = 2;
+pub const SCHEMA_VERSION: u32 = 7;
 
 /// How much of the hidden game the seat is told.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -63,6 +63,9 @@ pub struct PlayerObs {
     pub mulligans: u8,
     /// Mana in the pool, W U B R G C.
     pub pool: [u32; 6],
+    /// Mana from snow sources, including restricted pools, as captured at production.
+    /// Each aggregate includes multiple independently stored u32 pools, saturated at u32::MAX.
+    pub snow_pool: [u32; 6],
     /// How many cards are in their hand and library.
     pub hand: u16,
     pub library: u16,
@@ -161,7 +164,7 @@ pub struct CharsObs {
     pub subtypes: Vec<u16>,
     pub power: Option<i32>,
     pub toughness: Option<i32>,
-    pub keywords: u64,
+    pub keywords: u128,
     pub mana_value: u32,
 }
 
@@ -213,6 +216,7 @@ pub struct Ask {
 #[derive(Clone, Debug, Default, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 pub struct CostObs {
     pub generic: u32,
+    pub snow: u32,
     pub symbols: [u32; 6],
     pub hybrid: Vec<(u8, u8)>,
     pub phyrexian: [u32; 5],
@@ -254,6 +258,8 @@ pub struct OptionObs {
     pub mana: Option<u8>,
     /// The mana's restriction (CR 106.6), by the engine's name for it.
     pub restriction: Option<String>,
+    pub snow: bool,
+    pub pay_snow: bool,
     pub pays_nothing: bool,
     /// The permission a cast or land play is made by (`ActionOption::granted_by`) and the alternative cost another object
     /// gives (`paid_by`): the grant's object and the index of its ability. They tell apart options that are otherwise the
@@ -304,13 +310,24 @@ pub struct DestinationObs {
     pub eligible: Vec<bool>,
 }
 
+/// A distinct operation in a cost payment, retaining its player-facing description and real object references.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct CostPaymentObs {
+    pub label: String,
+    pub objects: Vec<Ref>,
+    pub kind: CostPaymentKindObs,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub enum CostPaymentKindObs { Life, Tap, Sacrifice, Return, Exile, Mana, Energy, Counters, Discard, Behold, Exert, Unattach, Library, CommitHelpers, Choose }
+
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum AskKind {
     /// Act or pass; options sorted canonically.
     Priority { options: Vec<OptionObs> },
     /// Paying what is owed, or announcing X (`announcing`): `x` so far, `x_most` the most X the seat could pay as far as
     /// it can tell (the loyalty a "−X" may remove; 1 for a kicker without "any number of times").
-    PayCosts { total: CostObs, remaining: CostObs, options: Vec<OptionObs>, announcing: bool, x: u32, x_most: u32, loyalty: bool, attackers: Vec<Ref>, life: u32 },
+    PayCosts { total: CostObs, remaining: CostObs, options: Vec<OptionObs>, mana_abilities: bool, announcing: bool, x: u32, x_most: u32, loyalty: bool, attackers: Vec<Ref>, life: u32 },
     /// "Unless pays" / "may pay" as it resolves: pay the whole cost or decline. `x` the X chosen so far where the payer
     /// chooses it.
     UnlessPays { subject: Ref, total: CostObs, remaining: CostObs, life: u8, life_payable: bool, verb: String, options: Vec<OptionObs>, x: Option<u32>, x_most: u32 },
@@ -386,4 +403,8 @@ pub enum AskKind {
     SearchLibrary { library: Vec<Ref>, eligible: Vec<Ref>, count: u8, optional: bool, destination: u8 },
     /// Which replacement effect applies first: `sources` sorted (with their hints), the event's facts.
     ChooseReplacement { subject: Ref, life: Option<i32>, sources: Vec<Ref>, hints: Vec<String>, damage: Option<(Ref, Ref, u32)>, turn: bool, counters: Vec<(u16, i32)>, draw: bool },
+    /// An inclusive numeric range, represented without enumerating its values.
+    ChooseNumber { least: u32, most: u32 },
+    /// Operations are in engine order; the answer is an exact, unrestricted index into this list.
+    ChooseCostPayment { choices: Vec<CostPaymentObs> },
 }

@@ -1,0 +1,8 @@
+{
+  "name": "Lhurgoyf",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Lhurgoyf",
+  "power": "*",
+  "toughness": "1+*",
+  "oracleText": "Lhurgoyf's power is equal to the number of creature cards in all graveyards and its toughness is equal to that number plus 1."
+}

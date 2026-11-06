@@ -1,0 +1,41 @@
+# First strike kills a 2/2 blocker before it can damage the Phalanx (CR 702.7b).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Kjeldoran Phalanx
+Island
+Island
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Kjeldoran Phalanx.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Kjeldoran Phalanx > Bot2)
+Bot2.Block(Grizzly Bears > Kjeldoran Phalanx)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Kjeldoran Phalanx.Damage = 0
+Bot2.Graveyard.Grizzly Bears.Power = 2
+Bot2.Life = 20

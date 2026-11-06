@@ -1,4 +1,4 @@
-# "As an additional cost to cast this spell, sacrifice a creature." With no creature, Corrupted Conviction cannot be cast (refusal, even with {B} available); with an Ornithopter and a Haywire Mite it can, and Bot1 chooses to
+# "As an additional cost to cast this spell, sacrifice a creature." With no creature, the attempted Corrupted Conviction cast cannot pay and is reversed (even with {B} available); with an Ornithopter and a Haywire Mite it can, and Bot1 chooses to
 # sacrifice the Mite (the positive control), which gains Bot1 2 life as it dies; the Ornithopter stays and two cards are drawn.
 
 [Bot1 Deck]
@@ -16,7 +16,14 @@ Island x15
 Bot1.Hand.Mox Jet.Cast
 Bot1.Pass
 Bot1.Battlefield.Mox Jet.Activate
-! Bot1.Hand.Corrupted Conviction.Cast
+Bot1.Hand.Corrupted Conviction.Cast
+? Bot1.Hand = Corrupted Conviction; Haywire Mite; Island; Island; Mox Jet; Ornithopter
+? Bot1.Mana = {B}
+? Bot1.Life = 20
+? Bot1.Battlefield = Mox Jet
+? Bot1.Battlefield.Mox Jet.Tapped = true
+? Bot1.Graveyard.Count = 0
+? Stack.Count = 0
 Bot1.Hand.Ornithopter.Cast
 Bot1.Hand.Mox Jet.Cast
 Bot1.Pass

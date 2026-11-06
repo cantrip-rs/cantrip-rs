@@ -13,9 +13,7 @@ fn untap(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     } else {
         choose::card(g, you, item.object, Purpose::Untap, creatures)?.into_iter().collect()
     };
-    for creature in chosen {
-        g.untap(creature);
-    }
+    g.untap_together(&chosen);
     Ok(())
 }
 

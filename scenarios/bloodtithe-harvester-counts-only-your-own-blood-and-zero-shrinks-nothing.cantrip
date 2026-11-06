@@ -40,6 +40,8 @@ Bot2.Hand.Elvish Mystic.Cast
 Bot1.Battlefield.Bloodtithe Harvester.Activate(Bot2.Battlefield.Elvish Mystic)
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Blood Token.Activate
+Bot1.Choose(Tap Blood Token)
+Bot1.Choose(Discard 1 card)
 Bot1.Choose(Swamp)
 Bot1.Pass
 [T5 Bot1.Main2]

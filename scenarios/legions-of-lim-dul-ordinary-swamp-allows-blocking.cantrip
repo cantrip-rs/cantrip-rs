@@ -1,0 +1,25 @@
+# A defending player's Swamp alone is not a snow Swamp, so the defender can block Legions (CR 702.14c).
+[Bot1 Deck]
+Legions of Lim-Dûl
+Black Lotus
+Swamp x20
+[Bot2 Deck]
+Swamp
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Legions of Lim-Dûl.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Legions of Lim-Dûl > Bot2)
+Bot2.Block(Ornithopter > Legions of Lim-Dûl)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Legions of Lim-Dûl.Tapped = true

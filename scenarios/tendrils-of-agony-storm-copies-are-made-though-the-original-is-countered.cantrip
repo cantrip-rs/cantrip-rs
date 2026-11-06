@@ -36,7 +36,7 @@ Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 Bot1.Hand.Tendrils of Agony.Cast(Bot2)
 Bot1.Pass
-Bot2.Hand.Counterspell.Cast(Stack.Tendrils of Agony)
+Bot2.Hand.Counterspell.Cast(Bot1.Stack.Tendrils of Agony)
 Bot2.Battlefield.Island.Activate
 Bot2.Battlefield.Mox Sapphire.Activate
 Bot2.Pass

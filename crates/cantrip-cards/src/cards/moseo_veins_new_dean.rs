@@ -9,7 +9,7 @@ use cantrip_oracle as oracle;
 /// ability resolves (CR 608.2b).
 fn creature_card_with_mana_value_at_most_life_gained(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     let gained = q.history().life_gained(asker.controller);
-    targets::card_in_your_graveyard_with_mana_value_at_most(q, asker, t, &[CardType::Creature], gained)
+    targets::card_in_your_graveyard_with_mana_value_at_most(q, asker, t, &[CardType::Creature], u32::try_from(gained).unwrap_or(u32::MAX))
 }
 
 /// "Return up to one target creature card ... from your graveyard to the battlefield."

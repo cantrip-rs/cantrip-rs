@@ -1,0 +1,26 @@
+# The ability can resolve when no blue source exists (CR 609.7a).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Circle of Protection: Blue
+Island x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Circle of Protection: Blue.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Circle of Protection: Blue.Activate
+? Bot1.Mana =
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 20

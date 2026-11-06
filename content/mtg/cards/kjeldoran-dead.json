@@ -1,0 +1,8 @@
+{
+  "name": "Kjeldoran Dead",
+  "manaCost": "{B}",
+  "type": "Creature — Skeleton",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "When this creature enters, sacrifice a creature.\n{B}: Regenerate this creature."
+}

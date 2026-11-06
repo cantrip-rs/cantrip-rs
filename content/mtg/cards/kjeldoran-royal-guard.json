@@ -1,0 +1,8 @@
+{
+  "name": "Kjeldoran Royal Guard",
+  "manaCost": "{3}{W}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "{T}: All combat damage that would be dealt to you by unblocked creatures this turn is dealt to this creature instead."
+}

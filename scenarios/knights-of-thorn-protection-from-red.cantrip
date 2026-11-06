@@ -1,0 +1,35 @@
+# Red Goblin cannot block Knights of Thorn, but can block the other attacker; a colorless Memnite can block the Knights (CR 702.16f).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Knights of Thorn
+Memnite
+Island x20
+[Bot2 Deck]
+Mountain
+Raging Goblin
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Knights of Thorn.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Raging Goblin.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Knights of Thorn > Bot2; Memnite > Bot2)
+Bot1.Choose()
+! Bot2.Block(Raging Goblin > Knights of Thorn)
+Bot2.Block(Raging Goblin > Bot1.Battlefield.Memnite; Bot2.Battlefield.Memnite > Knights of Thorn)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Knights of Thorn.Damage = 1
+Bot1.Graveyard = Memnite; Black Lotus
+Bot2.Graveyard.Count = 2

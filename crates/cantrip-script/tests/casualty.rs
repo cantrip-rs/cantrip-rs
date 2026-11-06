@@ -239,6 +239,12 @@ fn play(game: &mut Game, casts: &[&str], plan: Plan) -> Seen {
                     )),
                 }
             }
+            RequestKind::ChooseCostPayment { choices, .. } => {
+                let choice = choices.iter().position(|c| c.label.starts_with("Sacrifice"))
+                    .or_else(|| choices.iter().position(|c| c.label.starts_with("Pay mana")))
+                    .expect("a casualty or mana payment is offered");
+                Answer::CostPayment(choice)
+            }
             RequestKind::ChooseCards { cards, purpose: Purpose::SacrificeCost, .. } => {
                 seen.sacrificable.push(cards.iter().map(|&c| game.name(c)).collect());
                 let pick = cards.iter().copied().find(|&c| game.name(c) == plan.victim).unwrap_or_else(|| panic!("{} may not be sacrificed", plan.victim));

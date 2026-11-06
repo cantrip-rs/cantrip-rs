@@ -1,0 +1,49 @@
+# A ground creature cannot block Skycaptain, and its flying 1/1 blocker dies before it can deal damage (CR 702.9b, 702.7b).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Kjeldoran Skycaptain
+Island
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Mox Pearl
+Suntail Hawk
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kjeldoran Skycaptain.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Suntail Hawk.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Kjeldoran Skycaptain > Bot2)
+! Bot2.Block(Memnite > Kjeldoran Skycaptain)
+Bot2.Block(Suntail Hawk > Kjeldoran Skycaptain)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Kjeldoran Skycaptain.Damage = 0
+Bot2.Graveyard.Suntail Hawk.Power = 1
+Bot2.Battlefield.Memnite.Power = 1
+Bot2.Life = 20

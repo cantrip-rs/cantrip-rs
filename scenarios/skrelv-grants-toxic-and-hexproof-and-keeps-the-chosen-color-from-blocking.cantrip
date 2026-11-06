@@ -34,7 +34,7 @@ Bot1.Hand.Plains.Play
 Bot1.Battlefield.Skrelv, Defector Mite.Activate(Bot1.Battlefield.Memnite)
 Bot1.Battlefield.Plains.Activate
 Bot1.Colors(White)
-? Bot1.Mana = 
+? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass
 ? Bot1.Battlefield.Memnite.Toxic = 1

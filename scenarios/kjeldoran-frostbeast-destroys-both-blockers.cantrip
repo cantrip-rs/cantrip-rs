@@ -1,0 +1,46 @@
+# Both creatures blocking Frostbeast survive combat damage but are destroyed together at end of combat; a creature not blocking it survives.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Kjeldoran Frostbeast
+Island x16
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Wall of Wood
+Steel Wall
+Ornithopter
+Island x15
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Kjeldoran Frostbeast.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Wall of Wood.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Steel Wall.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Kjeldoran Frostbeast > Bot2)
+Bot2.Block(Wall of Wood > Kjeldoran Frostbeast; Steel Wall > Kjeldoran Frostbeast)
+[T3 Bot1.EndCombat]
+? Stack.Count = 1
+? Bot2.Battlefield.Wall of Wood.Toughness = 3
+? Bot2.Battlefield.Steel Wall.Toughness = 4
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Graveyard.Wall of Wood.Power = 0
+Bot2.Graveyard.Steel Wall.Power = 0
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Kjeldoran Frostbeast.Toughness = 4

@@ -1,0 +1,8 @@
+{
+  "name": "Karplusan Giant",
+  "manaCost": "{6}{R}",
+  "type": "Creature — Giant",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Tap an untapped snow land you control: This creature gets +1/+1 until end of turn."
+}

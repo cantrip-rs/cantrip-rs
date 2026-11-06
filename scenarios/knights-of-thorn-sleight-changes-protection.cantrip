@@ -1,0 +1,31 @@
+# Sleight changes the Knights' protection from red to blue (CR 612.2).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Knights of Thorn
+Sleight of Mind
+Island x20
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Knights of Thorn.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Knights of Thorn.ProtectionFrom = Red
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleight of Mind.Cast(Bot1.Battlefield.Knights of Thorn)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Red)
+Bot1.Colors(Blue)
+[Expect]
+Bot1.Battlefield.Knights of Thorn.ProtectionFrom = Blue

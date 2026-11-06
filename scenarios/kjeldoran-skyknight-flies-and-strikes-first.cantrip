@@ -1,0 +1,37 @@
+# A ground creature cannot block the Skyknight; a 1/1 flier can, but dies to first strike before dealing damage (CR 702.9b, 702.7b).
+[Bot1 Deck]
+Kjeldoran Skyknight
+Mox Pearl
+Mox Ruby
+Mox Jet
+Island x20
+[Bot2 Deck]
+Grizzly Bears
+Aven Skirmisher
+Black Lotus
+Mox Pearl
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kjeldoran Skyknight.Cast
+? Bot1.Mana =
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Aven Skirmisher.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Kjeldoran Skyknight > Bot2)
+! Bot2.Block(Grizzly Bears > Kjeldoran Skyknight)
+Bot2.Block(Aven Skirmisher > Kjeldoran Skyknight)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Kjeldoran Skyknight.Damage = 0
+Bot2.Graveyard = Aven Skirmisher; Black Lotus
+Bot2.Life = 20

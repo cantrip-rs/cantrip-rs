@@ -1,0 +1,69 @@
+# The enters trigger requires one controlled creature, not the opponent's, and a black regeneration shield saves Kjeldoran Dead from a Bolt (CR 603.3, 701.21, 701.19).
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Kjeldoran Dead
+Memnite
+Ornithopter
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kjeldoran Dead.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack = Kjeldoran Dead
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Kjeldoran Dead.Power = 3
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose()
+! Bot1.Choose(Memnite; Bot1.Battlefield.Ornithopter)
+! Bot1.Choose(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Memnite)
+? Bot1.Graveyard.Memnite.Power = 1
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Kjeldoran Dead.Activate(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Kjeldoran Dead)
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Kjeldoran Dead.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Kjeldoran Dead.Tapped = true
+Bot1.Battlefield.Kjeldoran Dead.Damage = 0
+Bot1.Graveyard.Memnite.Power = 1
+Bot2.Graveyard.Lightning Bolt.Colors = Red

@@ -1,0 +1,11 @@
+{
+  "name": "Legions of Lim-Dûl",
+  "manaCost": "{1}{B}{B}",
+  "type": "Creature — Zombie",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Snow swampwalk (This creature can't be blocked as long as defending player controls a snow Swamp.)",
+  "keywords": [
+    "SnowSwampwalk"
+  ]
+}

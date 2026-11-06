@@ -1,0 +1,54 @@
+# The red ability pumps either player's creature +1/+0 and expires at cleanup; a noncreature is not a legal target (CR 611.2a, 115.1c).
+[Bot1 Deck]
+Mox Jet
+Gleemox
+Krovikan Elementalist
+Memnite
+Black Lotus
+Black Lotus
+Island
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Krovikan Elementalist.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+! Bot1.Battlefield.Krovikan Elementalist.Activate(Bot1.Battlefield.Mox Jet; Ability: Target creature gets)
+Bot1.Battlefield.Krovikan Elementalist.Activate(Bot2.Battlefield.Ornithopter; Ability: Target creature gets)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 1
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Power = 0
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Krovikan Elementalist.Activate(Bot1.Battlefield.Memnite; Ability: Target creature gets)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 1
+[T6 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
