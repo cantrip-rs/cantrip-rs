@@ -1,0 +1,29 @@
+# An unused regeneration shield expires at cleanup; Shock on the following turn destroys the Gnats (CR 701.19a, 514.2).
+[Bot1 Deck]
+Black Lotus
+Yavimaya Gnats
+Forest
+Island x25
+[Bot2 Deck]
+Mox Ruby
+Shock
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Yavimaya Gnats.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Yavimaya Gnats.Activate
+? Bot1.Mana =
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Yavimaya Gnats)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Graveyard.Yavimaya Gnats.Power = 0
+Bot1.Battlefield.Yavimaya Gnats = (absent)

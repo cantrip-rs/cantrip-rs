@@ -1,0 +1,75 @@
+# Flying prevents a ground blocker; attacking removes one counter at end of combat, even with zero remaining.
+# The upkeep ability adds a chosen number up to X and its four-counter ceiling (CR 702.9b, 603.4).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Clockwork Avian
+Island x30
+[Bot2 Deck]
+Memnite
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Clockwork Avian.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clockwork Avian.Counters.Plus1Plus0 = 4
+? Bot1.Battlefield.Clockwork Avian.Power = 4
+? Bot1.Battlefield.Clockwork Avian.Toughness = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Clockwork Avian.Activate
+Bot1.Attack(Clockwork Avian > Bot2)
+! Bot2.Block(Memnite > Clockwork Avian)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Clockwork Avian.Counters.Plus1Plus0 = 3
+? Bot1.Battlefield.Clockwork Avian.Power = 3
+? Bot1.Battlefield.Clockwork Avian.Toughness = 4
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Clockwork Avian > Bot2)
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Clockwork Avian.Counters.Plus1Plus0 = 2
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Clockwork Avian > Bot2)
+[T7 Bot1.Main2]
+? Bot1.Battlefield.Clockwork Avian.Counters.Plus1Plus0 = 1
+[T9 Bot1.DeclareAttackers]
+Bot1.Attack(Clockwork Avian > Bot2)
+[T9 Bot1.Main2]
+? Bot1.Battlefield.Clockwork Avian.Counters.Plus1Plus0 = (absent)
+[T11 Bot1.DeclareAttackers]
+Bot1.Attack(Clockwork Avian > Bot2)
+[T11 Bot1.Main2]
+? Bot1.Battlefield.Clockwork Avian.Power = 0
+[T13 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Clockwork Avian.Activate(X: 2)
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Clockwork Avian.Tapped = true
+Bot2.Pass
+Bot1.Number(2)
+[T13 Bot1.Main1]
+? Bot1.Battlefield.Clockwork Avian.Counters.Plus1Plus0 = 2
+? Bot1.Battlefield.Clockwork Avian.Power = 2
+? Bot1.Battlefield.Clockwork Avian.Toughness = 4
+[T15 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Clockwork Avian.Activate(X: 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Number(2)
+[T15 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Clockwork Avian.Counters.Plus1Plus0 = 4
+Bot1.Battlefield.Clockwork Avian.Toughness = 4

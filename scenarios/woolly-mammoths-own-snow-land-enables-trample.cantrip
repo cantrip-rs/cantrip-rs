@@ -1,0 +1,51 @@
+# Woolly Mammoths gains trample only while its controller has a snow land; an opposing snow land and its controller's snow creature do not suffice (CR 604.1, 702.19b).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Woolly Mammoths
+Phyrexian Soulgorger
+Forest
+Snow-Covered Forest
+Island x20
+[Bot2 Deck]
+Snow-Covered Forest
+Strip Mine
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Woolly Mammoths.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Phyrexian Soulgorger.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Forest.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+? Bot1.Battlefield.Woolly Mammoths.Keywords = (absent)
+[T3 Bot1.Upkeep]
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Hand.Snow-Covered Forest.Play
+? Bot1.Battlefield.Woolly Mammoths.Keywords = Trample
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Woolly Mammoths)
+Bot2.Block(Ornithopter > Woolly Mammoths)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+[T4 Bot2.Main1]
+Bot2.Hand.Strip Mine.Play
+Bot2.Battlefield.Strip Mine.Activate(Bot1.Battlefield.Snow-Covered Forest; Ability: Destroy target land)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Woolly Mammoths.Keywords = (absent)
+Bot1.Graveyard.Snow-Covered Forest.Colors =
+Bot2.Life = 19

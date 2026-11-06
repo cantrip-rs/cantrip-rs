@@ -1,0 +1,31 @@
+# One blocker gives Wolverine Pack no Rampage bonus (CR 702.23a).
+[Bot1 Deck]
+Wolverine Pack
+Black Lotus
+Mox Pearl
+Forest x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wolverine Pack.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Wolverine Pack > Bot2)
+Bot2.Block(Ornithopter > Wolverine Pack)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wolverine Pack.Power = 2
+? Bot1.Battlefield.Wolverine Pack.Toughness = 4
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Wolverine Pack.Power = 2
+Bot1.Battlefield.Wolverine Pack.Toughness = 4

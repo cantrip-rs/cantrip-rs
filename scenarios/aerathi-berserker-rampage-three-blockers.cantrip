@@ -1,0 +1,36 @@
+# Three blockers give rampage 3 twice, making the Berserker 8/10 for that turn before cleanup (CR 702.23a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Aerathi Berserker
+Mountain x25
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Ornithopter
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aerathi Berserker.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Aerathi Berserker > Bot2)
+Bot2.Block(Ornithopter#1 > Aerathi Berserker; Ornithopter#2 > Aerathi Berserker; Ornithopter#3 > Aerathi Berserker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Aerathi Berserker.Power = 8
+? Bot1.Battlefield.Aerathi Berserker.Toughness = 10
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Aerathi Berserker.Power = 2
+Bot1.Battlefield.Aerathi Berserker.Toughness = 4

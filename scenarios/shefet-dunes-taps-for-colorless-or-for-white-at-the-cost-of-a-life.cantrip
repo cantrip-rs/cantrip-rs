@@ -15,6 +15,7 @@ Bot1.Battlefield.Shefet Dunes.Activate(Ability: {T}: Add {C})
 ? Bot1.Life = 20
 [T3 Bot1.Main1]
 Bot1.Battlefield.Shefet Dunes.Activate(Ability: Pay 1 life)
+Bot1.Choose(Tap Shefet Dunes)
 ? Bot1.Mana = {W}
 ? Bot1.Life = 19
 

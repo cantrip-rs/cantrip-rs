@@ -21,7 +21,7 @@ fn a_player_who_cant_gain_life_could_not_pay_a_cost_that_has_them_gain_it() {
     let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&KNIGHT])));
     let mut game = Game::new(table, &Setup { decks: vec![Vec::new(), Vec::new()], ..Default::default() });
     let id = game.state.push_obj(Obj::new(table.id_of(&KNIGHT), YOU, Zone::BATTLEFIELD));
-    let cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     assert!(cantrip_api::Game::can_gain_life(&cx, THEM));
     cx.g.state.zone_push(Zone::BATTLEFIELD, id);
     cx.g.state.see_statics();
@@ -43,7 +43,7 @@ fn a_player_who_cant_lose_life_could_not_pay_a_cost_that_has_them_pay_it() {
     let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&STASIS])));
     let mut game = Game::new(table, &Setup { decks: vec![Vec::new(), Vec::new()], ..Default::default() });
     let id = game.state.push_obj(Obj::new(table.id_of(&STASIS), YOU, Zone::BATTLEFIELD));
-    let cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     assert!(cantrip_api::Game::can_lose_life(&cx, YOU));
     cx.g.state.zone_push(Zone::BATTLEFIELD, id);
     cx.g.state.see_statics();

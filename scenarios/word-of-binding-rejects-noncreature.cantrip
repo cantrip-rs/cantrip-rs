@@ -1,0 +1,23 @@
+# X=1 refuses a noncreature artifact while accepting a creature with sufficient mana (CR 115.1a).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Word of Binding
+Memnite
+Swamp x25
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Word of Binding.Cast(X: 1)
+! Bot1.Target(Bot1.Battlefield.Mox Jet)
+Bot1.Target(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+[T1 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Memnite.Tapped = true
+Bot1.Battlefield.Mox Jet.Tapped = false

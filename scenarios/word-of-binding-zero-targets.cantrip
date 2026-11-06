@@ -1,0 +1,22 @@
+# X=0 costs only {B}{B}, selects no targets and leaves an available creature untapped (CR 107.3a).
+[Bot1 Deck]
+Mox Jet
+Gleemox
+Word of Binding
+Memnite
+Swamp x25
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Word of Binding.Cast(X: 0)
+Bot1.Pass
+? Bot1.Mana =
+[T1 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Graveyard.Word of Binding.Colors = Black

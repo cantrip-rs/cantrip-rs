@@ -42,6 +42,7 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Sylvan Caryatid.Cast
 Bot1.Pass
 Bot1.Battlefield.Dawnhand Dissident.Activate(Bot1.Graveyard.Llanowar Elves; Ability: Exile target)
+Bot1.Choose(Tap Dawnhand Dissident)
 Bot1.Choose(Sylvan Caryatid)
 ? Bot1.Battlefield.Sylvan Caryatid.Toughness = 1
 Bot1.Pass

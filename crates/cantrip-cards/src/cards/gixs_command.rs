@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::choose;
+use cantrip_mechanics::{choose, select};
 use cantrip_mechanics::targets;
 use cantrip_oracle as oracle;
 
@@ -10,7 +10,7 @@ fn creatures(g: &dyn Query) -> Vec<ObjectId> {
 }
 
 /// Put two +1/+1 counters on up to one creature. It gains lifelink until end of turn. No target: with a creature on
-/// the battlefield its controller is asked whether to, and then which (a lone creature is taken without asking).
+/// the battlefield its controller is asked whether to, and then which creature.
 fn counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let candidates = creatures(g);
     if candidates.is_empty() {
@@ -19,23 +19,8 @@ fn counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if !cantrip_mechanics::effects::ask_may(g, item.controller, item.object, Purpose::Ask(&ASK))? {
         return Ok(());
     }
-    let chosen = if candidates.len() == 1 {
-        candidates[0]
-    } else {
-        let ask = RequestKind::ChooseTarget { label: "", slot_player: None, together: None,
-            source: item.object,
-            purpose: Purpose::Targets,
-            candidates: candidates.iter().map(|&id| Target::Object(id)).collect(),
-            optional: false,
-            least: 1,
-            count: 1,
-            any_number: false,
-        };
-        match g.ask(item.controller, ask)? {
-            Answer::Targets(t) => t.first().and_then(|t| t.object()).unwrap_or(candidates[0]),
-            _ => candidates[0],
-        }
-    };
+    let Some(Target::Object(chosen)) = choose::one_target(g, item.controller, item.object,
+        candidates.iter().copied().map(Target::Object).collect(), "Choose a creature")? else { return Ok(()) };
     if targets::permanent(g, chosen) {
         g.add_counters(chosen, CounterKind::PlusOne, 2);
         cantrip_mechanics::effects::gain_lifelink_until_end_of_turn(g, item.object, chosen);
@@ -55,8 +40,10 @@ fn return_creatures(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let player = item.controller;
     let mut graveyard: Vec<ObjectId> = g.state().zone(Zone::graveyard(player)).to_vec();
     graveyard.reverse();
-    let eligible: Vec<ObjectId> = graveyard.iter().copied().filter(|&c| g.chars(c).is(CardType::Creature)).collect();
-    let taken = choose::cards_from(g, player, item.object, Purpose::PutIntoHand, graveyard, eligible, 2, true)?;
+    if !graveyard.iter().any(|&card| g.chars(card).is(CardType::Creature)) {
+        return Ok(());
+    }
+    let taken = choose::select(g, player, item.object, Purpose::PutIntoHand, graveyard, select::creature_cards(select::up_to(2)))?;
     g.return_to_hand(&taken);
     Ok(())
 }
@@ -74,15 +61,12 @@ fn sacrifice_greatest(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
             .permanents_of(who)
             .into_iter()
             .filter(|&id| g.chars(id).is(CardType::Creature))
-            .map(|id| (id, g.chars(id).power.unwrap_or(0)))
+            .map(|id| (id, targets::power_or_last_known(g, id)))
             .collect();
         let Some(greatest) = mine.iter().map(|&(_, p)| p).max() else { continue };
         let eligible: Vec<ObjectId> = mine.iter().filter(|&&(_, p)| p == greatest).map(|&(id, _)| id).collect();
-        if eligible.len() == 1 {
-            doomed.push((who, eligible[0]));
-            continue;
-        }
-        if let Some(card) = choose::card(g, who, item.object, Purpose::Sacrifice, eligible)? {
+        let picked = choose::select(g, who, item.object, Purpose::Sacrifice, eligible, select::Selection::new(select::Count::Exactly(1)))?;
+        if let Some(&card) = picked.first() {
             doomed.push((who, card));
         }
     }

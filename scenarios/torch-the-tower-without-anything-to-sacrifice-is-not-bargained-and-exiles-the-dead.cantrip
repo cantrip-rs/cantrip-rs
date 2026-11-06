@@ -1,5 +1,5 @@
-# With no artifact, enchantment or token to sacrifice (Bot1 controls only a Mountain), bargain cannot be paid, so it is not
-# offered (`! Bot1.Modes(Bargain:)`) and the spell is cast unbargained: 2 damage, no scry. It kills Llanowar Elves, which is
+# With no artifact, enchantment or token to sacrifice (Bot1 controls only a Mountain), the attempted bargain rolls back,
+# then the spell is cast unbargained: 2 damage, no scry. It kills Llanowar Elves, which is
 # exiled instead of dying (CR 614.1a). The positive control for bargain is the bargained scenario.
 
 [Bot1 Deck]
@@ -19,7 +19,16 @@ Bot2.Hand.Llanowar Elves.Cast
 Bot2.Battlefield.Forest.Activate
 [T3 Bot1.Main1]
 Bot1.Hand.Torch the Tower.Cast(Bot2.Battlefield.Llanowar Elves)
-! Bot1.Modes(Bargain:)
+Bot1.Modes(Bargain:)
+Bot1.Battlefield.Mountain.Activate
+? Bot1.Hand.Torch the Tower.Colors = Red
+? Bot1.Battlefield.Mountain.Tapped = false
+? Bot1.Mana =
+? Bot1.Graveyard.Count = 0
+? Bot2.Battlefield.Llanowar Elves.Toughness = 1
+? Stack.Count = 0
+Bot1.Hand.Torch the Tower.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Modes(Cast without bargain)
 Bot1.Battlefield.Mountain.Activate
 [T3 Bot1.Main2]
 

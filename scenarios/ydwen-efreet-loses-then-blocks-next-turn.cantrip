@@ -1,0 +1,38 @@
+# Losing removes Ydwen and prevents another block that turn; on the next attack a won flip leaves Ydwen blocking, and its attacker remains blocked (CR 509.1h, 510.1b, 510.1d).
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Grizzly Bears
+Island x17
+[Bot2 Deck]
+Black Lotus
+Ydwen Efreet
+Island x18
+[Dice]
+2; 1
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Ydwen Efreet.Cast
+? Bot2.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Ydwen Efreet > Grizzly Bears)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+? Bot2.Battlefield.Ydwen Efreet.Damage = 0
+? Bot1.Battlefield.Grizzly Bears.Damage = 0
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Ydwen Efreet > Grizzly Bears)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield.Ydwen Efreet.Damage = 2
+Bot1.Graveyard = Grizzly Bears

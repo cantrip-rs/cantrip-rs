@@ -1,0 +1,31 @@
+# Blocking, even on the opponent's turn, removes one counter at end of combat (CR 603.4).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Clockwork Avian
+Ornithopter
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Clockwork Avian.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Block(Clockwork Avian > Memnite; Ornithopter > Memnite)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Clockwork Avian.Counters.Plus1Plus0 = 3
+Bot1.Battlefield.Clockwork Avian.Power = 3
+Bot1.Battlefield.Clockwork Avian.Toughness = 4

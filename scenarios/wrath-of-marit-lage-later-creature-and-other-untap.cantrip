@@ -1,0 +1,56 @@
+# A later red creature enters untapped, stays tapped at untap, can be untapped by a spell, and untaps normally after the enchantment leaves (CR 502.3, 701.26b).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Wrath of Marit Lage
+Sewer-veillance Cam
+Disenchant
+Island x13
+[Bot2 Deck]
+Mox Ruby
+Mountain Bandit
+Island x18
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wrath of Marit Lage.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Mountain Bandit.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Mountain Bandit.Tapped = false
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Mountain Bandit > Bot1)
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Mountain Bandit.Tapped = true
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sewer-veillance Cam.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Untap)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Mountain Bandit.Tapped = false
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Mountain Bandit > Bot1)
+[T8 Bot2.Main1]
+? Bot2.Battlefield.Mountain Bandit.Tapped = true
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Disenchant.Cast(Wrath of Marit Lage)
+[T10 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Mountain Bandit.Tapped = false
+Bot1.Graveyard = Disenchant; Wrath of Marit Lage; Black Lotus

@@ -84,7 +84,7 @@ fn game() -> Game {
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, damage: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
 }
 
 fn enter(game: &mut Game, def: &'static CardDef) -> ObjectId {

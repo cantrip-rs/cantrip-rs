@@ -1,0 +1,42 @@
+# An attacker blocked by Ydwen and another creature stays blocked after the other blocker dies and Ydwen loses the flip (CR 509.1h).
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Grizzly Bears
+Memnite
+Lightning Bolt
+Island x15
+[Bot2 Deck]
+Black Lotus
+Ydwen Efreet
+Ornithopter x2
+Island x17
+[Dice]
+2
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Ydwen Efreet.Cast
+? Bot2.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2; Memnite > Bot2)
+Bot2.Block(Ornithopter#1 > Memnite; Ydwen Efreet > Grizzly Bears; Ornithopter#2 > Grizzly Bears)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Ornithopter#2)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter; Black Lotus
+Bot2.Battlefield.Ydwen Efreet.Damage = 0
+Bot1.Battlefield.Grizzly Bears.Damage = 0

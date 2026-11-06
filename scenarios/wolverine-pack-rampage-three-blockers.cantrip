@@ -1,0 +1,33 @@
+# Rampage 2 gives Wolverine Pack +4/+4 when three creatures block it, and the bonus ends at cleanup (CR 702.23a, 514.2).
+[Bot1 Deck]
+Wolverine Pack
+Black Lotus
+Mox Pearl
+Forest x20
+[Bot2 Deck]
+Ornithopter x3
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wolverine Pack.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Wolverine Pack > Bot2)
+Bot2.Block(Ornithopter#1 > Wolverine Pack; Ornithopter#2 > Wolverine Pack; Ornithopter#3 > Wolverine Pack)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wolverine Pack.Power = 6
+? Bot1.Battlefield.Wolverine Pack.Toughness = 8
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Wolverine Pack.Power = 2
+Bot1.Battlefield.Wolverine Pack.Toughness = 4

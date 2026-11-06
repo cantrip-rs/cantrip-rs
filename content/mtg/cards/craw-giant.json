@@ -1,0 +1,11 @@
+{
+  "name": "Craw Giant",
+  "manaCost": "{3}{G}{G}{G}{G}",
+  "type": "Creature — Giant",
+  "power": 6,
+  "toughness": 4,
+  "oracleText": "Trample\nRampage 2 (Whenever this creature becomes blocked, it gets +2/+2 until end of turn for each creature blocking it beyond the first.)",
+  "keywords": [
+    "Trample"
+  ]
+}

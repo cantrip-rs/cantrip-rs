@@ -57,6 +57,7 @@ Bot2.Pass
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Kavaron, Memorial World.Activate(Ability: Create a 2/2)
+Bot1.Choose(Tap Kavaron, Memorial World)
 Bot1.Choose(Kavaron, Memorial World)
 Bot1.Pass
 Bot2.Pass

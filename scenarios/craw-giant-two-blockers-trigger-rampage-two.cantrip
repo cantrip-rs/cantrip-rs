@@ -1,0 +1,33 @@
+# Two blockers add exactly +2/+2, and four of the resulting eight damage tramples over them (CR 702.23a, 702.19b).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Craw Giant
+Island x16
+[Bot2 Deck]
+Ornithopter x2
+Island x18
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Craw Giant.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Craw Giant > Bot2)
+Bot2.Block(Ornithopter#1 > Craw Giant; Ornithopter#2 > Craw Giant)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Craw Giant.Power = 8
+? Bot1.Battlefield.Craw Giant.Toughness = 6
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 16
+Bot2.Graveyard = Ornithopter; Ornithopter

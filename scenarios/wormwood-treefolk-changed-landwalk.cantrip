@@ -1,0 +1,57 @@
+# Magical Hack changes forestwalk to islandwalk before activation (CR 612.2, 702.14c).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Mox Emerald
+Wormwood Treefolk
+Magical Hack
+Forest x20
+[Bot2 Deck]
+Island
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Wormwood Treefolk.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Magical Hack.Cast(Bot1.Battlefield.Wormwood Treefolk)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Forest)
+Bot1.Modes(Island)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Wormwood Treefolk.Activate(Ability: forestwalk)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wormwood Treefolk.Keywords = Islandwalk
+? Bot1.Life = 18
+? Bot2.Life = 20
+Bot1.Attack(Wormwood Treefolk > Bot2)
+! Bot2.Block(Ornithopter > Wormwood Treefolk)
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Wormwood Treefolk.Keywords = (absent)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Wormwood Treefolk > Bot2)
+Bot2.Block(Ornithopter > Wormwood Treefolk)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 16
+Bot2.Graveyard = Ornithopter

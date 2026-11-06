@@ -1,0 +1,47 @@
+# Yasharn forbids sacrificing the Thrull to activate abilities; once Yasharn leaves, the same target can receive a counter (CR 602.2b).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Armor Thrull
+Yasharn, Implacable Earth
+Mox Pearl
+Mox Pearl
+Swords to Plowshares
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Armor Thrull.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Yasharn, Implacable Earth.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Armor Thrull.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Yasharn, Implacable Earth)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Armor Thrull.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Tap Armor Thrull)
+? Bot1.Graveyard = Armor Thrull; Swords to Plowshares; Black Lotus; Black Lotus
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Ornithopter.Counters.Plus1Plus2 = 1
+Bot2.Battlefield.Ornithopter.Toughness = 4

@@ -1,0 +1,45 @@
+# Zuran Spellcaster can deal one damage to a planeswalker and a battle, removing one loyalty or defense counter (CR 120.3c, 120.3h).
+[Bot1 Deck]
+Black Lotus
+Zuran Spellcaster
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Mox Pearl
+Liliana of the Veil
+Invasion of Gobakhan
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Zuran Spellcaster.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Liliana of the Veil.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Invasion of Gobakhan.Cast
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Liliana of the Veil.Counters.Loyalty = 3
+? Bot2.Battlefield.Invasion of Gobakhan.Counters.Defense = 3
+Bot1.Battlefield.Zuran Spellcaster.Activate(Bot2.Battlefield.Liliana of the Veil)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Liliana of the Veil.Counters.Loyalty = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Zuran Spellcaster.Activate(Bot2.Battlefield.Invasion of Gobakhan)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Invasion of Gobakhan.Counters.Defense = 2
+Bot2.Battlefield.Liliana of the Veil.Counters.Loyalty = 2

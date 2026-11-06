@@ -132,7 +132,7 @@ fn put(g: &mut Game, def: &'static CardDef, owner: PlayerId, zone: Zone) -> Obje
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 fn next(g: &mut Game) -> Request {
@@ -233,7 +233,7 @@ fn a_fixed_total_above_its_targets_goes_whole_to_one_and_is_asked_before_the_man
     let mut g = game();
     let theirs = put(&mut g, &BEAR, THEM, Zone::BATTLEFIELD);
     let arc = put(&mut g, &ARC, YOU, Zone::BATTLEFIELD);
-    g.state.add_mana(YOU, Mana::C, 1, ObjectId(0), None, ManaLasts::Step);
+    g.state.add_mana(YOU, Mana::C, 1, ObjectId(0), None, ManaLasts::Step, false);
     let divide = activate(&mut g, arc);
     let RequestKind::ChooseDividedTargets { total, max_targets, optional, candidates, .. } = &divide.kind else {
         panic!("the division is asked first: {:?}", divide.kind)
@@ -254,7 +254,7 @@ fn a_target_gone_illegal_loses_its_share_and_the_rest_is_dealt() {
     let mut g = game();
     let theirs = put(&mut g, &BEAR, THEM, Zone::BATTLEFIELD);
     let arc = put(&mut g, &ARC, YOU, Zone::BATTLEFIELD);
-    g.state.add_mana(YOU, Mana::C, 1, ObjectId(0), None, ManaLasts::Step);
+    g.state.add_mana(YOU, Mana::C, 1, ObjectId(0), None, ManaLasts::Step, false);
     let life = g.state.player(THEM).life;
     let divide = activate(&mut g, arc);
     answer(&mut g, &divide, Answer::Divided(vec![(Target::Object(theirs), 2), (Target::Player(THEM), 1)]));
@@ -317,7 +317,7 @@ fn a_copy_keeps_the_division_and_its_new_targets_take_the_shares_in_turn() {
     let yours = put(&mut g, &BEAR, YOU, Zone::BATTLEFIELD);
     let arc = put(&mut g, &ARC, YOU, Zone::BATTLEFIELD);
     let echo = put(&mut g, &ECHO, YOU, Zone::hand(YOU));
-    g.state.add_mana(YOU, Mana::C, 1, ObjectId(0), None, ManaLasts::Step);
+    g.state.add_mana(YOU, Mana::C, 1, ObjectId(0), None, ManaLasts::Step, false);
     let life = g.state.player(THEM).life;
     let divide = activate(&mut g, arc);
     answer(&mut g, &divide, Answer::Divided(vec![(Target::Object(theirs), 2), (Target::Player(THEM), 1)]));
@@ -341,7 +341,15 @@ fn a_copy_keeps_the_division_and_its_new_targets_take_the_shares_in_turn() {
     let mut r = next(&mut g);
     loop {
         match &r.kind {
-            RequestKind::ChooseTarget { .. } => answer(&mut g, &r, Answer::Targets(vec![Target::Object(yours), Target::Player(THEM)])),
+            RequestKind::ChooseTarget { replacing: Some((index, original)), .. } => {
+                let choices = match (*index, *original) {
+                    (0, Target::Object(id)) if id == theirs => vec![Target::Object(yours)],
+                    (1, Target::Player(player)) if player == THEM => Vec::new(),
+                    other => panic!("unexpected retarget occurrence {other:?}"),
+                };
+                answer(&mut g, &r, Answer::Targets(choices));
+            }
+            RequestKind::ChooseTarget { .. } => panic!("copy retarget should ask for one occurrence at a time"),
             RequestKind::May { .. } => answer(&mut g, &r, Answer::Yes),
             RequestKind::Priority { .. } if !g.state.stack.is_empty() => answer(&mut g, &r, Answer::Pass),
             RequestKind::Priority { .. } => break,

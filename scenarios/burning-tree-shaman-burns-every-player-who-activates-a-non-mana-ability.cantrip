@@ -76,6 +76,7 @@ Bot2.Pass
 Bot2.Hand.Forest.Play
 Bot2.Battlefield.Forest.Activate
 Bot2.Hand.Generous Ent.Activate(Ability: Forestcycling)
+Bot2.Choose(Discard Generous Ent)
 ? Stack.Count = 2
 Bot2.Pass
 Bot1.Pass

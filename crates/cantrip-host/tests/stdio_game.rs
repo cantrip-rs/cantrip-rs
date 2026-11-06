@@ -77,13 +77,13 @@ fn choose(prompt: &PromptPayload) -> AnswerPayload {
         }
         PromptPayload::PayCostsPromptMessage(p) => {
             let pick = |kind: ActionKindView| p.options.iter().find(|o| o.kind == kind);
-            if let Some(o) = pick(ActionKindView::ConfirmCasting) {
-                return AnswerPayload::TakeActionAnswer(TakeActionAnswer::take(o));
-            }
-            if let Some(o) = p.options.iter().find(|o| o.kind == ActionKindView::ActivateAbility && !o.produces.is_empty()) {
+            if let Some(o) = p.options.iter().find(|o| o.kind == ActionKindView::ActivateAbility && o.source != p.spell && (!o.produces.is_empty() || o.produces_of_any_one_color > 0)) {
                 let mut answer = TakeActionAnswer::take(o);
                 answer.color = o.color_choices.first().copied();
                 return AnswerPayload::TakeActionAnswer(answer);
+            }
+            if let Some(o) = pick(ActionKindView::ConfirmCasting) {
+                return AnswerPayload::TakeActionAnswer(TakeActionAnswer::take(o));
             }
             if let Some(o) = pick(ActionKindView::AssignMana) {
                 return AnswerPayload::TakeActionAnswer(TakeActionAnswer::take(o));

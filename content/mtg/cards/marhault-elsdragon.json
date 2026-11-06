@@ -1,0 +1,8 @@
+{
+  "name": "Marhault Elsdragon",
+  "manaCost": "{3}{R}{R}{G}",
+  "type": "Legendary Creature — Elf Warrior",
+  "power": 4,
+  "toughness": 6,
+  "oracleText": "Rampage 1 (Whenever this creature becomes blocked, it gets +1/+1 until end of turn for each creature blocking it beyond the first.)"
+}

@@ -1,0 +1,32 @@
+# Exiling the blocking Efreet before its trigger resolves leaves its last-known blocking relationship relevant (CR 608.2h).
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Grizzly Bears
+Swords to Plowshares
+Island x20
+[Bot2 Deck]
+Black Lotus
+Ydwen Efreet
+Island x20
+[Dice]
+2
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Ydwen Efreet.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Ydwen Efreet > Grizzly Bears)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot2.Battlefield.Ydwen Efreet)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 21
+Bot1.Battlefield.Grizzly Bears.Damage = 0

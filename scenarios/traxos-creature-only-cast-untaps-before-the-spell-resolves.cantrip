@@ -31,6 +31,8 @@ Bot1.Battlefield.Sol Ring.Activate
 Bot1.Hand.Traxos, Scourge Eternal.Cast
 Bot1.Pass
 Bot1.Battlefield.Springleaf Drum.Activate(Tap: Traxos, Scourge Eternal; Color: Green)
+Bot1.Choose(Tap Springleaf Drum)
+Bot1.Choose(Traxos, Scourge Eternal)
 ? Bot1.Battlefield.Traxos, Scourge Eternal.Tapped = true
 Bot1.Hand.Elvish Mystic.Cast
 ? Stack = Traxos, Scourge Eternal; Elvish Mystic

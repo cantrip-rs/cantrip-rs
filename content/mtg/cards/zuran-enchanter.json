@@ -1,0 +1,8 @@
+{
+  "name": "Zuran Enchanter",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Human Wizard",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{2}{B}, {T}: Target player discards a card. Activate only during your turn."
+}

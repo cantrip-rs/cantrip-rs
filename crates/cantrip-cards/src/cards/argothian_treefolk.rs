@@ -23,7 +23,7 @@ pub static CARD: CardDef = CardDef {
         PreventionDef {
             hint: "prevents all damage that would be dealt to this creature by artifact sources",
             applies: prevent_all_damage_would_be_applies,
-            amount: None,
+            amount: PreventionAmount::All,
         },
     ],
     ..oracle::ARGOTHIAN_TREEFOLK

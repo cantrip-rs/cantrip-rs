@@ -1,0 +1,8 @@
+{
+  "name": "Woolly Mammoths",
+  "manaCost": "{1}{G}{G}",
+  "type": "Creature — Elephant",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "This creature has trample as long as you control a snow land."
+}

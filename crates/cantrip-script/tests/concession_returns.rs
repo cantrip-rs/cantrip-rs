@@ -95,7 +95,7 @@ fn a_card_exiled_until_a_concessions_permanent_left_returns_before_the_next_chec
     game.state.update_obj(shell, |o| o.damage = 1);
     let captive = put(&mut game, &CAPTIVE, them, Zone::exile(them));
     let text = game.state.obj(warden).card;
-    game.state.update_obj(captive, |o| o.exiled = Some(ExileLink { by: warden, text, acquired: Acquired::OWN, from: Zone::BATTLEFIELD, until_leaves: true, encoded: false }));
+    game.state.update_obj(captive, |o| o.exiled = Some(ExileLink { by: warden, text, acquired: Acquired::OWN, from: Zone::BATTLEFIELD, until_leaves: true, return_by: None, encoded: false }));
     let mut conceded = false;
     for _ in 0..100 {
         game.run();

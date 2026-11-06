@@ -1,0 +1,8 @@
+{
+  "name": "Frost Giant",
+  "manaCost": "{3}{R}{R}{R}",
+  "type": "Creature — Giant",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Rampage 2 (Whenever this creature becomes blocked, it gets +2/+2 until end of turn for each creature blocking it beyond the first.)"
+}

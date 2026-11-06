@@ -1,0 +1,56 @@
+# Word destroys either player's Wall through regeneration and damages its controller by the Wall's mana value (CR 701.8a, 701.19c, 608.2h).
+[Bot1 Deck]
+Yavimaya Hollow
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Wall of Wood
+Word of Blasting x2
+Island x20
+[Bot2 Deck]
+Black Lotus
+Wall of Ice
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Yavimaya Hollow.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wall of Wood.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Wall of Ice.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Yavimaya Hollow.Activate(Bot1.Battlefield.Wall of Wood; Ability: Regenerate)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Word of Blasting.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Hand.Word of Blasting.Cast(Bot1.Battlefield.Wall of Wood)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Wall of Wood.Power = 0
+? Bot1.Life = 19
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Word of Blasting.Cast(Bot2.Battlefield.Wall of Ice)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard.Wall of Ice.Power = 0
+Bot2.Life = 17
+Bot1.Life = 19
+Bot2.Battlefield.Ornithopter.Power = 0

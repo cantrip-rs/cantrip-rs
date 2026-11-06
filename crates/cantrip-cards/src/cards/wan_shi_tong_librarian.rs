@@ -8,7 +8,7 @@ use cantrip_oracle as oracle;
 fn enters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let x = g.obj(item.object).x as i32;
     if x > 0 && g.is_on_battlefield(item.object) {
-        g.add_counters(item.object, CounterKind::PlusOne, x);
+        g.add_counters(item.object, CounterKind::PlusOne,(x) as i32);
     }
     if x / 2 > 0 {
         g.draw(item.controller, (x / 2) as u32);

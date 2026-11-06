@@ -1,0 +1,11 @@
+{
+  "name": "Yavimaya Gnats",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Insect",
+  "power": 0,
+  "toughness": 1,
+  "oracleText": "Flying\n{G}: Regenerate this creature.",
+  "keywords": [
+    "Flying"
+  ]
+}
