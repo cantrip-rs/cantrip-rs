@@ -1,0 +1,27 @@
+# The untapped attacker can deal noncombat damage with its activated ability; Foxfire prevents only combat damage (CR 615.1).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Prodigal Sorcerer
+Foxfire
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Prodigal Sorcerer.Cast
+[T3 Bot1.Attackers]
+Bot1.Attack(Prodigal Sorcerer > Bot2)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Foxfire.Cast(Bot1.Battlefield.Prodigal Sorcerer)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Prodigal Sorcerer.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 19

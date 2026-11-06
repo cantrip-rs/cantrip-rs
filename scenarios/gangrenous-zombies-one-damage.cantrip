@@ -1,0 +1,39 @@
+# A controlled non-snow Swamp and an opponent's snow Swamp do not increase the damage; sacrificing the Zombies deals 1 to both players and creatures (CR 701.21a, 120.3).
+[Bot1 Deck]
+Black Lotus
+Gangrenous Zombies
+Ornithopter
+Swamp x20
+[Bot2 Deck]
+Snow-Covered Forest
+Ornithopter
+Black Lotus
+Prismatic Omen
+Swamp x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Gangrenous Zombies.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Gangrenous Zombies.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Prismatic Omen.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Gangrenous Zombies.Activate
+Bot1.Choose(Tap Gangrenous Zombies)
+? Bot1.Graveyard = Gangrenous Zombies; Black Lotus
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
+Bot1.Battlefield.Ornithopter.Damage = 1
+Bot2.Battlefield.Ornithopter.Damage = 1

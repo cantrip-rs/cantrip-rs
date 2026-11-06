@@ -1,0 +1,8 @@
+{
+  "name": "Fyndhorn Elder",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Elf Druid",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}: Add {G}{G}."
+}

@@ -1,0 +1,37 @@
+# An opponent unable to pay loses their spell; Force Void's controller draws on the next turn’s upkeep, once (CR 701.6a, 603.7).
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Force Void
+Island x20
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+! Bot1.Hand.Force Void.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Force Void.Cast(Stack.Lightning Bolt)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Decline
+? Bot2.Graveyard = Lightning Bolt
+? Bot1.Life = 20
+? Bot1.Hand.Count = 3
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 5
+[T4 Bot2.Main1]
+? Bot1.Hand.Count = 5
+[Expect]
+Bot1.Life = 20
+Bot2.Graveyard = Lightning Bolt

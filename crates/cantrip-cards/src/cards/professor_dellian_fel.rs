@@ -27,7 +27,7 @@ fn emblem(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// (CR 608.2b).
 fn target_opponent_loses_that_much(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some(opponent) = targets::player(g, item, 0) {
-        g.lose_life(opponent, item.data[0] as i32);
+        g.lose_life(opponent,(item.data[0] as i32) as i32);
     }
     Ok(())
 }

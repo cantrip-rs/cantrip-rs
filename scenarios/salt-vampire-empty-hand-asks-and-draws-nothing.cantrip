@@ -15,6 +15,7 @@ Island x20
 Bot2.Hand.Lion's Eye Diamond.Cast
 Bot2.Pass
 Bot2.Battlefield.Lion's Eye Diamond.Activate(Color: Black)
+Bot2.Choose(Discard your hand)
 ? Bot2.Hand.Count = 0
 [T3 Bot1.Main1]
 Bot1.Hand.Mox Jet.Cast

@@ -1,0 +1,38 @@
+# Magical Hack changes the named Forest to Island; only a basic Island can be put onto the battlefield (CR 612.2).
+[Bot1 Deck]
+Gaea's Touch
+Magical Hack
+Mox Emerald
+Gleemox
+Mox Sapphire
+Forest
+Island
+Forest x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Gaea's Touch.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Magical Hack.Cast(Bot1.Battlefield.Gaea's Touch)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Forest)
+Bot1.Modes(Island)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gaea's Touch.Activate(Ability: {0})
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Forest)
+Bot1.Choose(Island)
+[Expect]
+Bot1.Battlefield.Island.Tapped = false
+Bot1.Hand.Forest.Colors =
+Bot1.LandsPlayed = 0

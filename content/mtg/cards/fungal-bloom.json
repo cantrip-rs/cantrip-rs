@@ -1,0 +1,6 @@
+{
+  "name": "Fungal Bloom",
+  "manaCost": "{G}{G}",
+  "type": "Enchantment",
+  "oracleText": "{G}{G}: Put a spore counter on target Fungus."
+}

@@ -1,0 +1,53 @@
+# Fungal Bloom puts one spore counter on either player's Fungus, rejects non-Fungi and requires two green mana (CR 115.1c, 602.2, 122.1).
+[Bot1 Deck]
+Black Lotus
+Fungal Bloom
+Insidious Fungus
+Mox Emerald
+Mox Pearl
+Forest
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Forest
+Insidious Fungus
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Insidious Fungus.Cast
+Bot1.Hand.Fungal Bloom.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Insidious Fungus.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Fungal Bloom.Activate(Bot1.Battlefield.Insidious Fungus; Mana: short)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+! Bot1.Battlefield.Fungal Bloom.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Fungal Bloom.Activate(Bot1.Battlefield.Insidious Fungus)
+? Bot1.Mana = {W}
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Insidious Fungus.Counters.Spore = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Fungal Bloom.Activate(Bot2.Battlefield.Insidious Fungus)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Insidious Fungus.Counters.Spore = 1
+Bot2.Battlefield.Insidious Fungus.Counters.Spore = 1

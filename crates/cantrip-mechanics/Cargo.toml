@@ -8,3 +8,8 @@ license.workspace = true
 
 [dependencies]
 cantrip-api.workspace = true
+
+[dev-dependencies]
+cantrip-oracle.workspace = true
+cantrip-rules.workspace = true
+cantrip-state.workspace = true

@@ -1,0 +1,31 @@
+# Fountain of Youth costs two mana and taps to give its controller exactly one life (CR 602.2, 119.3).
+[Bot1 Deck]
+Fountain of Youth
+Island x24
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Fountain of Youth.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Fountain of Youth.Activate(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Fountain of Youth.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 20
+Bot1.Battlefield.Fountain of Youth.Tapped = true

@@ -1,0 +1,52 @@
+# An ability whose sole target dies in response does nothing; another activation then puts a counter on a legal Fungus (CR 608.2b).
+[Bot1 Deck]
+Black Lotus
+Fungal Bloom
+Insidious Fungus
+Mox Emerald
+Mox Ruby
+Lightning Bolt
+Forest
+Island x20
+
+[Bot2 Deck]
+Forest
+Insidious Fungus
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Insidious Fungus.Cast
+Bot1.Hand.Fungal Bloom.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Insidious Fungus.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Fungal Bloom.Activate(Bot1.Battlefield.Insidious Fungus)
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Insidious Fungus)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Insidious Fungus.Counters.Spore = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Fungal Bloom.Activate(Bot2.Battlefield.Insidious Fungus)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Insidious Fungus.Counters.Spore = 1

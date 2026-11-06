@@ -40,6 +40,7 @@ Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Graveyard.Federation Resupply.Cast(Ability: Beam me up)
+Bot1.Choose(Return to hand 1 permanent)
 Bot1.Choose(Bot1.Battlefield.Ornithopter)
 ? Bot1.Mana =
 Bot1.Pass

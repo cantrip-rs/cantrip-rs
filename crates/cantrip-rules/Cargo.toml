@@ -11,4 +11,5 @@ cantrip-state.workspace = true
 cantrip-api.workspace = true
 
 [dev-dependencies]
+cantrip-cards.workspace = true
 cantrip-mechanics.workspace = true

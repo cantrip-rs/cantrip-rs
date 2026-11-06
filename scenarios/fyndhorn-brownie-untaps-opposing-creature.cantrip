@@ -1,0 +1,37 @@
+# Brownie can untap an opponent's attacking creature, but remains tapped from its activation cost (CR 602.2b).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Fyndhorn Brownie
+Forest x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Forest x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Fyndhorn Brownie.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T4 Bot2.Attackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Fyndhorn Brownie.Activate(Bot2.Battlefield.Grizzly Bears)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Tapped = false
+? Bot1.Battlefield.Fyndhorn Brownie.Tapped = true
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 18
+Bot2.Battlefield.Grizzly Bears.Tapped = false

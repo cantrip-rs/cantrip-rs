@@ -57,6 +57,7 @@ Bot2.Battlefield.Mountain.Activate
 Bot2.Hand.Faithless Looting.Cast
 Bot2.Choose(Llanowar Elves; Mountain)
 Bot1.Battlefield.Dauthi Voidwalker.Activate
+Bot1.Choose(Tap Dauthi Voidwalker)
 Bot1.Choose(Llanowar Elves)
 Bot1.Pass
 Bot2.Pass

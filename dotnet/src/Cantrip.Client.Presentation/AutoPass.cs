@@ -130,7 +130,7 @@ public static class AutoPass
             ActionKindView.PlayLand => true,
             ActionKindView.CastSpell => option.Affordable,
             ActionKindView.ActivateAbility => option.Produces.Count == 0 && option.ProducesOfAnyOneColor == 0
-                && option.ProducesOfAnyColorEach == 0 && option.Affordable,
+                && option.ProducesOfAnyColorEach == 0 && option.ColorChoices.Count == 0 && option.Affordable,
             ActionKindView.TurnFaceUp => option.Affordable,
             ActionKindView.TakeCompanion => option.Affordable,
             ActionKindView.Plot => option.Affordable,

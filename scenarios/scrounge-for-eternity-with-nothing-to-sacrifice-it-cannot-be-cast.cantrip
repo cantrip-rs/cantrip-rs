@@ -31,7 +31,13 @@ Bot1.Hand.Swamp.Play
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp.Activate
-! Bot1.Hand.Scrounge for Eternity.Cast(Bot1.Graveyard.Memnite)
+# Announcing is offered, but the unpaid sacrifice immediately rolls back to priority (CR 733).
+Bot1.Hand.Scrounge for Eternity.Cast(Bot1.Graveyard.Memnite)
+? Bot1.Hand = Island; Island; Island; Island; Memnite; Scrounge for Eternity
+? Stack.Count = 0
+? Bot1.Mana = {B}{B}{B}
+Bot1.Pass
+? Bot1.Mana = {B}{B}{B}
 
 [Expect]
 Bot1.Graveyard = Hymn of the Faller; Memnite

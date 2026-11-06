@@ -1,0 +1,8 @@
+{
+  "name": "Fyndhorn Brownie",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Ouphe",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{2}{G}, {T}: Untap target creature."
+}

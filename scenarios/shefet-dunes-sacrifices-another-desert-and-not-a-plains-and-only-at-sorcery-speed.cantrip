@@ -40,6 +40,7 @@ Bot1.Battlefield.Mox Pearl#3.Activate
 Bot1.Battlefield.Mox Pearl#4.Activate
 Bot1.Battlefield.Shefet Dunes#1.Activate(Ability: Sacrifice a Desert)
 ! Bot1.Choose(Plains)
+Bot1.Choose(Tap Shefet Dunes)
 Bot1.Choose(Shefet Dunes#2)
 Bot1.Pass
 Bot2.Pass

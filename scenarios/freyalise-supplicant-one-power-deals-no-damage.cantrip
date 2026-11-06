@@ -1,0 +1,30 @@
+# A sacrificed red creature with power 1 deals no damage when its power is halved and rounded down (CR 107.1b, 120.8).
+[Bot1 Deck]
+Freyalise Supplicant
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Mons's Goblin Raiders
+Forest x22
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Freyalise Supplicant.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mons's Goblin Raiders.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Freyalise Supplicant.Activate(Bot2; Sacrifice: Mons's Goblin Raiders)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Mons's Goblin Raiders
+Bot1.Battlefield.Freyalise Supplicant.Tapped = true

@@ -28,12 +28,14 @@ Bot2.Hand.Elvish Mystic.Cast
 Bot1.Hand.Dismember.Cast(Elvish Mystic)
 Bot1.Modes(1; 2)
 Bot1.Battlefield.Mana Confluence.Activate(Color: Black)
+Bot1.Choose(Tap Mana Confluence)
 ? Bot1.Hand.Count = 6
 ? Bot1.Life = 4
 ? Stack.Count = 0
 Bot1.Hand.Dismember.Cast(Elvish Mystic)
 Bot1.Modes(1)
 Bot1.Battlefield.Mana Confluence.Activate(Color: Black)
+Bot1.Choose(Tap Mana Confluence)
 Bot1.Battlefield.Mox Jet.Activate
 [T3 Bot1.Main2]
 

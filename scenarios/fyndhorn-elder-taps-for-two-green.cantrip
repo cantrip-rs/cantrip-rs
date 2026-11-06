@@ -1,0 +1,34 @@
+# Fyndhorn Elder cannot tap while summoning sick; later it taps for exactly two green and cannot tap again until untapped (CR 302.6, 605.1a, 107.4a).
+[Bot1 Deck]
+Fyndhorn Elder
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+! Bot1.Hand.Fyndhorn Elder.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fyndhorn Elder.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Fyndhorn Elder.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Fyndhorn Elder.Activate
+? Bot1.Mana = {G}{G}
+? Bot1.Battlefield.Fyndhorn Elder.Tapped = true
+! Bot1.Battlefield.Fyndhorn Elder.Activate
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Fyndhorn Elder.Tapped = true

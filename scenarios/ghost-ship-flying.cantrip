@@ -1,0 +1,40 @@
+# A ground creature cannot block Ghost Ship; an Ornithopter can block it in the same combat.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Ghost Ship
+Mox Sapphire x3
+Island x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ghost Ship.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Battlefield.Ghost Ship.Activate
+? Bot1.Mana =
+Bot1.Attack(Ghost Ship > Bot2)
+! Bot2.Block(Memnite > Ghost Ship)
+Bot2.Block(Ornithopter > Ghost Ship)
+? Combat.Blocks.Count = 1
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard.Ornithopter.Colors =

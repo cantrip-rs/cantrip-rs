@@ -111,7 +111,7 @@ fn crewing_twice_names_both_crews_and_a_creature_that_died_still_counts() {
     let (mut game, van, _, [a, b, c]) = game();
     activate(&mut game, van, &[a]);
     activate(&mut game, van, &[c]);
-    cantrip_api::Game::destroy(&mut Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }, a);
+    cantrip_api::Game::destroy(&mut Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }, a);
     assert!(game.state.obj(a).became.is_some(), "the Bear died");
     assert_eq!(crewed(&game, van), [a, c]);
     assert!(!crewed(&game, van).contains(&b));

@@ -130,9 +130,9 @@ fn play(card: &str) -> (Option<u32>, usize) {
             RequestKind::PayCosts { options, .. } => {
                 let option = options
                     .iter()
-                    .find(|o| o.kind == ActionKind::ConfirmCasting)
-                    .or_else(|| options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source == Some(spring)))
-                    .or_else(|| options.iter().find(|o| o.kind == ActionKind::AssignMana));
+                    .find(|o| o.kind == ActionKind::ActivateAbility && o.source == Some(spring))
+                    .or_else(|| options.iter().find(|o| o.kind == ActionKind::AssignMana))
+                    .or_else(|| options.iter().find(|o| o.kind == ActionKind::ConfirmCasting));
                 Answer::Act(Action::of(option.unwrap_or_else(|| panic!("the mana to pay with: {request:?}"))))
             }
             RequestKind::ChooseModes { .. } => Answer::Modes(vec![0]),

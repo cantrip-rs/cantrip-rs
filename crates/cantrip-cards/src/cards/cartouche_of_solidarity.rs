@@ -39,7 +39,7 @@ pub static CARD: CardDef = CardDef {
         static_ability(
                 Layer::PtModify,
                 attach::attached_object,
-                cantrip_mechanics::statics::plus_pt::<1, 1>,
+                cantrip_mechanics::statics::plus_pt_saturating::<1, 1>,
                 "Enchanted creature gets +1/+1 and has first strike.",
             )
             .continues(),

@@ -747,6 +747,7 @@ fn craft_returns_the_craft_card_of_a_merged_permanent_transformed() {
     let steps = [cast("Probe Portal"), cast("Probe Mutant").mutating("Tithing Blade"), cast("Probe Ritual")];
     let mut crafted = false;
     let mut hook = |g: &Game, r: &Request| match &r.kind {
+        RequestKind::ChooseCostPayment { choices, .. } => Some(Answer::CostPayment(choices.iter().position(|c| c.label.starts_with("Pay mana")).expect("mana can be paid before craft"))),
         RequestKind::Craft { cards, .. } => Some(Answer::Cards(cards.clone())),
         RequestKind::Priority { options } if r.player == YOU && g.state.stack.is_empty() && !crafted && count(g, Zone::graveyard(YOU), "Probe Ritual") == 1 => {
             let craft = options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source.is_some_and(|s| g.name(s) == "Probe Mutant")).expect("the merged permanent can craft");

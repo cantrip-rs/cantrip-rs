@@ -1,0 +1,6 @@
+{
+  "name": "Fyndhorn Bow",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "{3}, {T}: Target creature gains first strike until end of turn."
+}

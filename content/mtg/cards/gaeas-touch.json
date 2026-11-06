@@ -1,0 +1,6 @@
+{
+  "name": "Gaea's Touch",
+  "manaCost": "{G}{G}",
+  "type": "Enchantment",
+  "oracleText": "{0}: You may put a basic Forest card from your hand onto the battlefield. Activate only as a sorcery and only once each turn.\nSacrifice this enchantment: Add {G}{G}."
+}

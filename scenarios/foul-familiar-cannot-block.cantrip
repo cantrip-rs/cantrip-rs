@@ -1,0 +1,33 @@
+# Foul Familiar cannot block the attacking Mystic; Ornithopter blocks it in the same combat as a positive control.
+[Bot1 Deck]
+Black Lotus
+Foul Familiar
+Ornithopter
+Swamp x20
+[Bot2 Deck]
+Mox Emerald
+Elvish Mystic
+Swamp x22
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Foul Familiar.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Elvish Mystic > Bot1)
+! Bot1.Block(Foul Familiar > Elvish Mystic)
+Bot1.Block(Ornithopter > Elvish Mystic)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield = Foul Familiar; Ornithopter

@@ -21,8 +21,10 @@ Bot2.Hand.Swamp.Play
 Bot2.Battlefield.Swamp.Activate
 Bot2.Hand.Duress.Cast(Bot1)
 Bot1.Hand.Force of Will.Cast(Duress; Ability: exile a blue card)
+Bot1.Choose(Pay 1 life)
 Bot1.Choose(Traumatic Critique)
 Bot2.Hand.Force of Will.Cast(Stack.Force of Will; Ability: exile a blue card)
+Bot2.Choose(Pay 1 life)
 Bot2.Choose(Brainstorm)
 [Bot2.Main2]
 

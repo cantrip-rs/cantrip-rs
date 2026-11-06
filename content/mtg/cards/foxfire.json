@@ -1,0 +1,6 @@
+{
+  "name": "Foxfire",
+  "manaCost": "{2}{G}",
+  "type": "Instant",
+  "oracleText": "Untap target attacking creature. Prevent all combat damage that would be dealt to and dealt by that creature this turn.\nDraw a card at the beginning of the next turn's upkeep."
+}

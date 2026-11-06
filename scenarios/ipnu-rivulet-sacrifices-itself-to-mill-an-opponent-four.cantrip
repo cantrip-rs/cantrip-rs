@@ -23,6 +23,7 @@ Bot2.Pass
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Ipnu Rivulet.Activate(Ability: Sacrifice a Desert; Bot2)
+Bot1.Choose(Tap Ipnu Rivulet)
 Bot1.Pass
 ? Bot1.Mana = 
 Bot2.Pass

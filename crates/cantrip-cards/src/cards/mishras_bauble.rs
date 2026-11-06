@@ -9,7 +9,7 @@ use cantrip_oracle as oracle;
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let card = g.obj(item.object).card;
     g.delayed_trigger(
-        DelayedWhen::Step { step: Step::Upkeep, on_turn_of: None },
+        DelayedWhen::StepOfNextTurn { step: Step::Upkeep, of: None },
         item.object,
         item.controller,
         AbilityRef::delayed(card, 0),

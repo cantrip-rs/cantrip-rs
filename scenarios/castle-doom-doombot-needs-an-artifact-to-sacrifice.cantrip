@@ -1,4 +1,4 @@
-# "Sacrifice an artifact" is a cost (CR 602.2b, 118.3): with no artifact on the battlefield Bot1 cannot pay it and the third ability is not offered, though the {3} is there -
+# "Sacrifice an artifact" is a cost (CR 602.2b, 118.3): with no artifact on the battlefield Bot1 cannot pay it and an attempted activation is reversed, though the {3} is there -
 # Bot1 holds BBB from Dark Ritual (a Swamp's {B}), and the Castle is untapped. Once Bot1 casts Mox Pearl, an artifact, the very same activation is offered (the positive
 # control) and sacrifices it: the Doombot comes in, and the Pearl is in the graveyard with Dark Ritual.
 
@@ -21,7 +21,15 @@ Bot1.Hand.Dark Ritual.Cast
 Bot1.Pass
 Bot2.Pass
 ? Bot1.Mana = {B}{B}{B}
-! Bot1.Battlefield.Castle Doom.Activate(Ability: Doombot)
+Bot1.Battlefield.Castle Doom.Activate(Ability: Doombot)
+? Bot1.Battlefield.Castle Doom.Tapped = false
+? Bot1.Battlefield = Castle Doom; Swamp
+? Bot1.Hand = Island; Island; Island; Island; Mox Pearl
+? Bot1.Graveyard = Dark Ritual
+? Bot1.Life = 20
+? Bot1.Mana = {B}{B}{B}
+? Stack.Count = 0
+? Exile.Count = 0
 Bot1.Hand.Mox Pearl.Cast
 Bot1.Pass
 Bot2.Pass
