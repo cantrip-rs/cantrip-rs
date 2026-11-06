@@ -62,9 +62,9 @@ Bot1.Hand.Swamp.Play
 Bot1.Attack(Ornithopter > Bot2)
 [T7 Bot1.DeclareBlockers]
 Bot1.Graveyard.Oroku Saki, Shredder Rising.Cast(Ability: Sneak (own cost))
-Bot1.Choose(Ornithopter)
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass
 Bot1.Pass

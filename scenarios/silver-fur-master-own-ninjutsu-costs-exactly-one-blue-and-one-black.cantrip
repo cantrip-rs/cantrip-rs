@@ -39,6 +39,7 @@ Bot1.Attack(Ornithopter > Bot2)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Silver-Fur Master.Activate(Ability: Ninjutsu)
+Bot1.Choose(Return to hand 1 permanent)
 Bot1.Choose(Ornithopter)
 ? Bot1.Mana =
 Bot1.Pass

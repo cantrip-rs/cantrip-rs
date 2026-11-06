@@ -1,0 +1,31 @@
+# Artifact damage dealt to the opponent does not contribute to your life gain (CR 109.5).
+[Bot1 Deck]
+Reverse Polarity
+Mox Pearl
+Gleemox
+Plains x20
+
+[Bot2 Deck]
+Talisman of Conviction
+Black Lotus
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Talisman of Conviction.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Talisman of Conviction.Activate(Ability: Add {R} or {W}; Color: White)
+? Bot2.Life = 19
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Reverse Polarity.Cast
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19

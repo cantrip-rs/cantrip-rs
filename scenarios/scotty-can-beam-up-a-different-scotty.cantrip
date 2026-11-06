@@ -31,9 +31,10 @@ Bot1.Accept
 [T3 Bot1.Main1]
 Bot1.Hand.Mountain.Play
 Bot1.Graveyard.Lightning Bolt.Cast(Bot2; Ability: Beam me up)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Choose(Return to hand 1 permanent)
 ! Bot1.Choose(Scotty, Miracle Worker#1)
 Bot1.Choose(Scotty, Miracle Worker#2)
-Bot1.Battlefield.Mountain.Activate
 [Expect]
 Bot1.Hand = Spark Double
 Bot1.Battlefield = Mox Sapphire; Mountain; Scotty, Miracle Worker

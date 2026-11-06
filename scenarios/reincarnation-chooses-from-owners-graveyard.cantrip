@@ -1,0 +1,38 @@
+# The caster chooses a different creature in the dead creature owner's graveyard when the delayed trigger resolves; it enters under that owner's control (CR 603.7d).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Reincarnation
+Lightning Bolt
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Reincarnation.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite)
+[Expect]
+Bot2.Battlefield.Memnite.Power = 1
+Bot2.Graveyard = Ornithopter

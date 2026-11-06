@@ -1,0 +1,30 @@
+# Sage cannot activate without an artifact to sacrifice; an untapped Sage with a creature and a land is not enough (CR 602.2b).
+[Bot1 Deck]
+Black Lotus
+Sage of Lat-Nam
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sage of Lat-Nam.Cast
+? Bot1.Mana = {U}
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sage of Lat-Nam.Activate
+Bot1.Choose(Tap Sage of Lat-Nam)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sage of Lat-Nam.Activate
+? Bot1.Battlefield.Sage of Lat-Nam.Tapped = false
+? Bot1.Life = 20
+? Bot1.Mana =
+? Stack.Count = 0
+[Expect]
+Bot1.Battlefield.Sage of Lat-Nam.Tapped = false
+Bot1.Graveyard = Ornithopter; Black Lotus

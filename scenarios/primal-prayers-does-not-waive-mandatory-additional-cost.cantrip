@@ -1,4 +1,4 @@
-# CR 118.9d, 601.2f: Abhorrent Oculus still needs six cards exiled from the graveyard. The energy cast is refused before that and offered once six are present.
+# CR 118.9d, 601.2f: Abhorrent Oculus still needs six cards exiled from the graveyard. An energy cast attempt before that rolls back (CR 733), and payment succeeds once six are present.
 
 [Bot1 Deck]
 Island
@@ -23,7 +23,12 @@ Bot1.Hand.Show and Tell.Cast
 Bot1.Choose(Primal Prayers)
 Bot1.Pass
 Bot2.Pass
-! Bot1.Hand.Abhorrent Oculus.Cast(Ability: Pay {E})
+Bot1.Hand.Abhorrent Oculus.Cast(Ability: Pay {E})
+? Bot1.Hand.Abhorrent Oculus.Colors = Blue
+? Bot1.Energy = 2
+? Bot1.Life = 20
+? Exile.Count = 0
+? Stack.Count = 0
 Bot1.Hand.Walking Ballista.Cast
 Bot1.Pass
 Bot2.Pass

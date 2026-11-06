@@ -1,0 +1,53 @@
+# An Aura owned by the caster but controlled by the opponent stays attached to a nonattacking opposing creature.
+[Bot1 Deck]
+Remove Enchantments
+Iroh, Tea Master
+Mox Pearl
+Mox Ruby
+Mox Jet
+Escape Velocity
+Plains
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Iroh, Tea Master.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Escape Velocity.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Escape Velocity)
+Bot1.Accept
+[T4 Bot2.Main1]
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Remove Enchantments.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Escape Velocity.AttachedTo = Memnite
+Bot2.Battlefield.Memnite.Power = 2

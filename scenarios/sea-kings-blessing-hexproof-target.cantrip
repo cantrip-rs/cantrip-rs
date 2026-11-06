@@ -1,0 +1,35 @@
+# A target that gains hexproof before resolution stays colorless while the other target becomes blue (CR 608.2b, 702.11b).
+[Bot1 Deck]
+Sea Kings' Blessing
+Mox Sapphire
+Ornithopter
+Island x20
+[Bot2 Deck]
+Memnite
+Island
+Shore Up
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sea Kings' Blessing.Cast
+Bot1.Target(Bot1.Battlefield.Ornithopter; Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Shore Up.Cast(Bot2.Battlefield.Memnite)
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Colors = Blue
+Bot2.Battlefield.Memnite.Colors = (absent)
+Bot2.Battlefield.Memnite.Keywords = Hexproof

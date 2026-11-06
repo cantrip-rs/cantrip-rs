@@ -1,0 +1,61 @@
+# Two Nets net each other, then Mirrorform turns them into Islands. Reset ends both while-tapped effects in one instruction (CR 608.2c, 603.8).
+[Bot1 Deck]
+Braided Net
+Braided Net
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Jet
+Reset
+Mirrorform
+Black Lotus
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Braided Net.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Braided Net.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Braided Net#1.Activate(Bot1.Battlefield.Braided Net#2; Ability: Tap another)
+Bot1.Battlefield.Braided Net#2.Activate(Bot1.Battlefield.Braided Net#1; Ability: Tap another)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Braided Net#1.Tapped = true
+? Bot1.Battlefield.Braided Net#2.Tapped = true
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mirrorform.Cast(Bot2.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+[T8 Bot2.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Reset.Cast
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Island#1.Tapped = false
+Bot1.Battlefield.Island#2.Tapped = false
+Bot1.Battlefield.Island#3.Tapped = false
+Bot1.Battlefield.Island#4.Tapped = false

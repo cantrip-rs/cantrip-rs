@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{exile_target, library};
+use cantrip_mechanics::{exile_target, library, select};
 use cantrip_oracle as oracle;
 
 /// "Permanent that's one or more colors": checked as it is chosen and again as the ability resolves (CR 115.1, 608.2b).
@@ -33,20 +33,20 @@ fn plus_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// 0: Add {C}{C}{C}.
-fn zero(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.add_mana(item.controller, Mana::C, 3);
-    Ok(())
+fn colorless_nonland(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
+    Verdict::each(choice, |card| { let c = q.chars(card); c.colors.is_empty() && !c.is(CardType::Land) })
 }
 
 /// -11: Search your library for any number of colorless nonland cards, exile them, then shuffle. Until end of turn, you
 /// may cast those cards without paying their mana costs.
 fn minus_eleven(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let player = item.controller;
-    let exiled = library::search_to_exile(g, player, player, item.object, library::Find::ONE.up_to(cantrip_mechanics::ANY_NUMBER), &[], |q, c| {
-        let chars = q.chars(c);
-        !chars.is(CardType::Land) && chars.colors.is_empty()
-    })?;
+    let rule = select::cards(select::ANY_NUMBER)
+        .with(select::part(&(colorless_nonland as SelectFn), 0, ""))
+        .called("colorless nonland");
+    let found = library::search(g, player, player, item.object, SearchDestination::Exile, rule)?;
+    let exiled = g.exile_all(&found);
+    g.shuffle(player);
     for card in exiled {
         if g.obj(card).zone.is(ZoneKind::Exile) {
             g.allow_play(
@@ -66,7 +66,7 @@ pub static CARD: CardDef = CardDef {
         triggered(when(EventMask::SPELL_CAST, colorless_spell_you_cast), exile_colored, "Whenever you cast a colorless spell, exile up to one target permanent that's one or more colors.")
             .targets(&[up_to_one(colored_permanent)]),
         ability(loyalty(2), plus_two, "+2: You gain 3 life and draw a card."),
-        ability(loyalty(0), zero, "0: Add {C}{C}{C}."),
+        ability(loyalty(0), cantrip_mechanics::effects::add_colorless::<3>, "0: Add {C}{C}{C}."),
         ability(loyalty(-11), minus_eleven, "\u{2212}11: Search your library for any number of colorless nonland cards, exile them, then shuffle. Until end of turn, you may cast those cards without paying their mana costs."),
     ],
     ..oracle::UGIN_EYE_OF_THE_STORMS

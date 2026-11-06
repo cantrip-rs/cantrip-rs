@@ -25,6 +25,7 @@ Bot1.Battlefield.Castle Doom.Activate(Ability: Doombot)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(Tap Castle Doom)
 ! Bot1.Choose(Castle Doom)
 Bot1.Choose(Ornithopter)
 Bot1.Pass

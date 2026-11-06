@@ -1,0 +1,31 @@
+# Remove Soul refuses an artifact spell without creature type, then counters an artifact creature spell (CR 115.1a, 701.6a).
+[Bot1 Deck]
+Island
+Mox Sapphire
+Remove Soul
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Ornithopter
+Swamp x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+? Stack = Mox Jet
+! Bot1.Hand.Remove Soul.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Remove Soul.Cast(Ornithopter)
+? Bot1.Mana =
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Remove Soul
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield = Mox Jet

@@ -1,0 +1,6 @@
+{
+  "name": "Reconstruction",
+  "manaCost": "{U}",
+  "type": "Sorcery",
+  "oracleText": "Return target artifact card from your graveyard to your hand."
+}

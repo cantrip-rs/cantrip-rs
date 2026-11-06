@@ -16,7 +16,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         }
         let this = g.card_id(&CARD);
         g.delayed_trigger(
-            DelayedWhen::Step { step: Step::Upkeep, on_turn_of: None },
+            DelayedWhen::StepOfNextTurn { step: Step::Upkeep, of: None },
             item.object,
             item.controller,
             AbilityRef::delayed(this, 0),

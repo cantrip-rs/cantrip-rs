@@ -1,0 +1,40 @@
+# Damage dealt by an artifact before it phases out still happened this turn (CR 702.26d).
+[Bot1 Deck]
+Reverse Polarity
+Walking Ballista
+Black Lotus
+Mox Ruby
+Mox Pearl
+Gleemox
+Talon Gates of Madara
+Plains x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Walking Ballista.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Walking Ballista.Activate(Bot1; Ability: Remove)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+Bot1.Hand.Talon Gates of Madara.Play
+Bot1.Target(Walking Ballista)
+Bot1.Pass
+Bot1.Pass
+? Bot1.PhasedOut.Count = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Reverse Polarity.Cast
+
+[Expect]
+Bot1.Life = 21

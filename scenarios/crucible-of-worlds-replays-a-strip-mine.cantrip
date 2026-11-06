@@ -20,6 +20,7 @@ Bot1.Hand.Crucible of Worlds.Cast
 Bot2.Hand.Island.Play
 [T3 Bot1.Main1]
 Bot1.Battlefield.Strip Mine.Activate(Bot2.Battlefield.Island; Ability: Destroy)
+Bot1.Choose(Tap Strip Mine)
 ? Bot1.Graveyard = Strip Mine; Black Lotus
 Bot1.Graveyard.Strip Mine.Play
 

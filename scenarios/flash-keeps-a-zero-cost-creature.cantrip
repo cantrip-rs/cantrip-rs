@@ -1,0 +1,21 @@
+# Flash can pay Ornithopter's {0} mana cost reduced by {2}; it remains on the battlefield (CR 118.6).
+[Bot1 Deck]
+Island
+Mox Sapphire
+Flash
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flash.Cast
+Bot1.Choose(Ornithopter)
+Bot1.PayCost
+[Expect]
+Bot1.Battlefield = Island; Mox Sapphire; Ornithopter
+Bot1.Graveyard = Flash

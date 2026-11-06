@@ -1,0 +1,36 @@
+# Rust cannot target Mother of Runes' activated ability, but can counter an artifact ability on the same stack (CR 115.1a).
+[Bot1 Deck]
+Aether Spellbomb
+Ornithopter
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Rust
+Mother of Runes
+Forest
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mother of Runes.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Aether Spellbomb.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Aether Spellbomb.Activate(Ornithopter; Ability: Return target creature)
+Bot1.Battlefield.Mother of Runes.Activate(Ornithopter)
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Rust.Cast(Stack.Mother of Runes)
+Bot1.Hand.Rust.Cast(Stack.Aether Spellbomb)
+? Bot1.Mana =
+Bot1.Colors(White)
+[Expect]
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Graveyard = Rust; Aether Spellbomb

@@ -1,0 +1,34 @@
+# When one of two targets leaves in response, the remaining legal target still becomes blue (CR 608.2b).
+[Bot1 Deck]
+Sea Kings' Blessing
+Mox Sapphire
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Memnite
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sea Kings' Blessing.Cast
+Bot1.Target(Ornithopter; Memnite)
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Colors = Blue
+Bot1.Graveyard.Memnite.Power = 1

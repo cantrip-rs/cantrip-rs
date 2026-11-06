@@ -68,7 +68,7 @@ static WATCH: CardDef = CardDef {
 };
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 fn refresh_priority(game: &mut Game) {
@@ -125,12 +125,24 @@ fn action(game: &mut Game, kind: ActionKind, source: ObjectId) {
     game.answer(r.id, r.player, Answer::Act(Action::of(option))).unwrap();
 }
 
+fn pay_mana_first(game: &mut Game) {
+    let mut paid = false;
+    while let Some(r) = game.pending().cloned() {
+        let RequestKind::ChooseCostPayment { choices, .. } = &r.kind else { break };
+        let mana = choices.iter().position(|c| c.kind == CostPaymentKind::Mana).expect("mana payment is offered");
+        game.answer(r.id, r.player, Answer::CostPayment(mana)).unwrap();
+        paid = true;
+    }
+    assert!(paid, "payment order was asked");
+}
+
 fn finish_payment(game: &mut Game, source: ObjectId, land: ObjectId) {
     assert!(game.state.obj(source).prepared);
     action(game, ActionKind::ActivateAbility, source);
     assert!(game.state.obj(source).prepared, "still prepared after first mana ability");
     action(game, ActionKind::ActivateAbility, land);
     assert!(game.state.obj(source).prepared, "still prepared when the additional discard is chosen");
+    pay_mana_first(game);
     let r = game.pending().cloned().unwrap();
     let RequestKind::ChooseCards { cards, .. } = &r.kind else { panic!("discard not asked: {:?}", r.kind) };
     game.answer(r.id, r.player, Answer::Cards(vec![cards[0]])).unwrap();
@@ -174,6 +186,7 @@ fn cancelling_the_additional_cost_after_mana_is_paid_keeps_preparation() {
     action(&mut g, ActionKind::CastSpell, copy);
     action(&mut g, ActionKind::ActivateAbility, source);
     action(&mut g, ActionKind::ActivateAbility, land);
+    pay_mana_first(&mut g);
     let r = g.pending().cloned().unwrap();
     assert!(matches!(r.kind, RequestKind::ChooseCards { .. }));
     assert!(g.state.obj(source).prepared);
@@ -207,9 +220,10 @@ fn current_controller_casts_and_consumes_the_original_linked_copy_despite_abilit
     // The old exile zone still belongs to the creator, but the current permanent controller has the permission.
     assert_eq!(g.state.obj(copy).owner, YOU);
     assert!(g.state.obj(source).prepared);
-    g.state.add_mana(THEM, Mana::U, 2, land, None, ManaLasts::Step);
+    g.state.add_mana(THEM, Mana::U, 2, land, None, ManaLasts::Step, false);
     refresh_priority(&mut g);
     action(&mut g, ActionKind::CastSpell, copy);
+    pay_mana_first(&mut g);
     let r = g.pending().cloned().unwrap();
     let RequestKind::ChooseCards { cards, .. } = &r.kind else { panic!("{:?}", r.kind) };
     g.answer(r.id, THEM, Answer::Cards(vec![cards[0]])).unwrap();

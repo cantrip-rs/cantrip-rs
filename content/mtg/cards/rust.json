@@ -1,0 +1,6 @@
+{
+  "name": "Rust",
+  "manaCost": "{G}",
+  "type": "Instant",
+  "oracleText": "Counter target activated ability from an artifact source. (Mana abilities can't be targeted.)"
+}

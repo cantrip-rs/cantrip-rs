@@ -1,0 +1,29 @@
+# Reverberation redirects an opponent's sorcery damage to its controller instead of its original target (CR 614.1a).
+[Bot1 Deck]
+Reverberation
+Black Lotus
+Mox Pearl
+Island x20
+
+[Bot2 Deck]
+Mountain
+Chain Lightning
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Chain Lightning.Cast(Bot1)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Reverberation.Cast(Chain Lightning)
+? Bot1.Mana =
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 17
+Bot1.Graveyard = Reverberation; Black Lotus
+Bot2.Graveyard = Chain Lightning

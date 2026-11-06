@@ -17,7 +17,7 @@ fn change_hands(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let n = item.data[0];
     g.draw(item.controller, n);
     tokens::create_by_rule(g, item.controller, &tokens::TREASURE, n as u32, true)?;
-    g.lose_life(item.controller, n as i32);
+    g.lose_life(item.controller,(n) as i32);
     Ok(())
 }
 

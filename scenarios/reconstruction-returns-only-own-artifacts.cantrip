@@ -1,0 +1,37 @@
+# Reconstruction returns an artifact card from its controller's graveyard to their hand (CR 115.1a).
+[Bot1 Deck]
+Reconstruction
+Reconstruction
+Black Lotus
+Island x20
+[Bot2 Deck]
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Reconstruction.Cast(Bot1.Graveyard.Black Lotus)
+? Bot1.Mana = {U}{U}
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+! Bot1.Hand.Reconstruction.Cast(Bot2.Graveyard.Black Lotus)
+! Bot1.Hand.Reconstruction.Cast(Bot1.Graveyard.Reconstruction)
+Bot1.Hand.Reconstruction.Cast(Bot1.Graveyard.Black Lotus)
+? Bot1.Mana = {U}{U}
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Hand = Black Lotus; Island; Island; Island; Island
+Bot1.Graveyard = Reconstruction; Reconstruction
+Bot2.Graveyard = Black Lotus

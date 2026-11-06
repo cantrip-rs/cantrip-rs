@@ -1,0 +1,32 @@
+# Rust can target the Spellbomb's activated ability but not a Shock spell on the same stack (CR 115.1a, 602.1).
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Aether Spellbomb
+Rust
+Shock
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Aether Spellbomb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Aether Spellbomb.Activate(Ability: Draw a card)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Rust.Cast(Stack.Shock)
+Bot1.Hand.Rust.Cast(Stack.Aether Spellbomb)
+[T1 Bot1.Main2]
+[Expect]
+Bot2.Life = 18
+Bot1.Hand.Count = 0

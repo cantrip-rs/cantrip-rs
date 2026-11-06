@@ -1,0 +1,31 @@
+# Riven Turnbull cannot tap while newly controlled, then taps for exactly one black mana and cannot tap again that turn (CR 302.6, 605.1a).
+[Bot1 Deck]
+Riven Turnbull
+Black Lotus x2
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Riven Turnbull.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Riven Turnbull.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Riven Turnbull.Activate
+? Bot1.Mana = {B}
+? Bot1.Battlefield.Riven Turnbull.Tapped = true
+! Bot1.Battlefield.Riven Turnbull.Activate
+[Expect]
+Bot1.Mana = {B}
+Bot1.Battlefield.Riven Turnbull.Tapped = true

@@ -37,6 +37,8 @@ Bot2.Pass
 [T2 Bot2.Main1]
 Bot2.Hand.Wooded Foothills.Play
 Bot2.Battlefield.Wooded Foothills.Activate
+Bot2.Choose(Tap Wooded Foothills)
+Bot2.Choose(Pay 1 life)
 ? Stack.Count = 2
 ? Bot2.Life = 19
 Bot2.Pass

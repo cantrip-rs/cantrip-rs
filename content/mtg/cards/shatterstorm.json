@@ -1,0 +1,6 @@
+{
+  "name": "Shatterstorm",
+  "manaCost": "{2}{R}{R}",
+  "type": "Sorcery",
+  "oracleText": "Destroy all artifacts. They can't be regenerated."
+}

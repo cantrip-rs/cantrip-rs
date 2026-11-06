@@ -24,6 +24,7 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Black Lotus.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: B)
 Bot1.Hand.Bogslither's Embrace.Cast(Bot2.Battlefield.Memnite)
+Bot1.Modes(Pay {3})
 Bot1.Pass
 Bot2.Pass
 

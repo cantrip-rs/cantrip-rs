@@ -1,0 +1,6 @@
+{
+  "name": "Sea Kings' Blessing",
+  "manaCost": "{U}",
+  "type": "Instant",
+  "oracleText": "One or more target creatures become blue until end of turn."
+}

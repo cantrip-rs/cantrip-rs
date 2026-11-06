@@ -1,0 +1,32 @@
+# Swift Reconfiguration makes Fanatical Firebrand an artifact; after it sacrifices itself, Rust reads the source's
+# last known artifact type, rather than the creature card in the graveyard (CR 113.7a).
+[Bot1 Deck]
+Fanatical Firebrand
+Swift Reconfiguration
+Rust
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swift Reconfiguration.Cast(Fanatical Firebrand)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fanatical Firebrand.Types = Artifact
+Bot1.Battlefield.Fanatical Firebrand.Activate(Bot2)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rust.Cast(Stack.Fanatical Firebrand)
+[T1 Bot1.Main2]
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard.Fanatical Firebrand.Power = 1

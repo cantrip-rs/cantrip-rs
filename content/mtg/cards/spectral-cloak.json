@@ -1,0 +1,6 @@
+{
+  "name": "Spectral Cloak",
+  "manaCost": "{U}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature has shroud as long as it's untapped. (It can't be the target of spells or abilities.)"
+}

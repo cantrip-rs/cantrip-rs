@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT;
+use cantrip_mechanics::triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT;
 use cantrip_mechanics::{sneak, targets};
 use cantrip_oracle as oracle;
 
@@ -15,7 +15,7 @@ fn reanimate_attacking(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
 pub static CARD: CardDef = CardDef {
     ways: &[sneak::way(mana("{3}{B}{B}"), "Sneak {3}{B}{B}")],
     abilities: &[triggered(
-        DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT,
+        DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT,
         reanimate_attacking,
         "Whenever Shark Shredder deals combat damage to a player, put up to one target creature card from that player's graveyard onto the battlefield under your control. It enters tapped and attacking that player.",
     )

@@ -1,0 +1,6 @@
+{
+  "name": "Seeker",
+  "manaCost": "{2}{W}{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature can't be blocked except by artifact creatures and/or white creatures."
+}

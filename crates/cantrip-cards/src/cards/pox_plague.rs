@@ -16,7 +16,7 @@ fn pox_plague(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     instruction(g, |g| {
         for &player in &players {
             let life = g.state().player(player).life;
-            g.lose_life(player, life.max(0) / 2);
+            g.lose_life(player,(life.max(0) / 2) as i32);
         }
     });
     let mut discarding = Vec::new();

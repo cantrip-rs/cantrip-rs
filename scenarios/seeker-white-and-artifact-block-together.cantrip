@@ -1,0 +1,53 @@
+# A white creature and an artifact creature can block the enchanted creature together (CR 509.1b).
+[Bot1 Deck]
+Forest
+Mox Emerald
+Black Lotus
+Mox Pearl
+Grizzly Bears
+Seeker
+Island
+Island x15
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Mox Pearl
+Figure of Destiny
+Ornithopter
+Island x15
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Seeker.Cast(Bot1.Battlefield.Mox Emerald)
+Bot1.Hand.Seeker.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Figure of Destiny.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears)
+! Bot2.Block(Llanowar Elves > Grizzly Bears)
+Bot2.Block(Figure of Destiny > Grizzly Bears; Ornithopter > Grizzly Bears)
+? Combat.Blocks = Figure of Destiny > Grizzly Bears; Ornithopter > Grizzly Bears
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Seeker.AttachedTo = Grizzly Bears

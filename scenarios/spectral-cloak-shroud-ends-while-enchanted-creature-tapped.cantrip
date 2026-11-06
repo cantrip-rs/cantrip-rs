@@ -1,0 +1,53 @@
+# Spectral Cloak grants shroud only while the enchanted creature is untapped; an existing Aura stays attached (CR 702.18a).
+[Bot1 Deck]
+Llanowar Elves
+Rancor
+Spectral Cloak
+Black Lotus
+Mox Sapphire
+Gleemox
+Giant Growth
+Giant Growth
+Forest x15
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot1.Hand.Rancor.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+! Bot1.Hand.Spectral Cloak.Cast(Bot1.Battlefield.Mox Sapphire)
+Bot1.Hand.Spectral Cloak.Cast(Bot1.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Shock.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main1]
+! Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Llanowar Elves)
+? Bot1.Battlefield.Rancor.AttachedTo = Llanowar Elves
+? Bot1.Battlefield.Llanowar Elves.Keywords = Shroud; Trample
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Spectral Cloak.AttachedTo = Llanowar Elves
+Bot1.Battlefield.Rancor.AttachedTo = Llanowar Elves
+Bot1.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Battlefield.Llanowar Elves.Keywords = Trample
+Bot1.Battlefield.Llanowar Elves.Power = 6
+Bot1.Battlefield.Llanowar Elves.Toughness = 4

@@ -1,0 +1,58 @@
+# Serpent Generator creates one colorless 1/1 Snake; its combat damage gives the damaged player one poison counter (CR 603.2, 701.7a).
+[Bot1 Deck]
+Serpent Generator
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Island
+Island x15
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Serpent Generator.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Serpent Generator.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+? Bot1.Battlefield.Serpent Generator.Tapped = true
+[T3 Bot1.End]
+? Bot1.Battlefield.Snake Token.Tapped = false
+[T5 Bot1.DeclareAttackers]
+? Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Serpent Generator; Snake Token
+Bot1.Attack(Snake Token)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Snake Token.Power = 1
+Bot1.Battlefield.Snake Token.Toughness = 1
+Bot1.Battlefield.Snake Token.Types = Artifact; Creature
+Bot1.Battlefield.Snake Token.Subtypes = Snake
+Bot1.Battlefield.Snake Token.Colors = (absent)
+Bot1.Battlefield.Snake Token.Token = true
+Bot2.Life = 19
+Bot2.Poison = 1

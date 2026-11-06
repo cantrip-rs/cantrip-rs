@@ -37,6 +37,7 @@ Bot2.Pass
 Bot1.Battlefield.Mox Jet.Activate(Ability: Add)
 Bot1.Battlefield.Ragost, Deft Gastronaut.Activate(Ability: Sacrifice a Food)
 ! Bot1.Choose(Ragost, Deft Gastronaut)
+Bot1.Choose(Tap Ragost, Deft Gastronaut)
 Bot1.Choose(Mox Emerald)
 ? Bot1.Mana =
 Bot1.Pass

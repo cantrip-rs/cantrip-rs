@@ -1,0 +1,34 @@
+# A countered activation never resolves, so it deals no damage and creates no delayed destruction (CR 608.2).
+[Bot1 Deck]
+Rocket Launcher
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Stifle
+Mox Sapphire
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rocket Launcher.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Rocket Launcher.Activate(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Stifle.Cast(Stack.Rocket Launcher)
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Rocket Launcher.Types = Artifact
+Bot1.Graveyard = Black Lotus

@@ -235,7 +235,7 @@ fn an_own_enters_out_of_its_tier_stops_a_verifying_run() {
             melded: None,
         };
         let mut after = before;
-        let mut c = crate::Cx { g: &mut g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+        let mut c = crate::Cx { g: &mut g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
         let stopped = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| crate::ops::apply_own_entering(&mut c, &mut after, YOU, false))).is_err();
         assert_eq!(stopped, out_of_tier && crate::layers::verifying(), "{}", def.name);
         let mut copied = before;

@@ -1,0 +1,26 @@
+# Sea Kings' Blessing changes a colorless creature to blue until end of turn (CR 613.1e, 611.2a).
+[Bot1 Deck]
+Sea Kings' Blessing
+Mox Sapphire
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sea Kings' Blessing.Cast
+! Bot1.Target(Count: 0)
+Bot1.Target(Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Colors = Blue
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Colors = (absent)
+Bot1.Battlefield.Ornithopter.Tapped = false

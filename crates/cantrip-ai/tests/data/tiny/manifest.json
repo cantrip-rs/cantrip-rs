@@ -1,6 +1,6 @@
 {
- "schema": 1,
- "encoder_hash": "6fed5023a1c55ffc",
+ "schema": 2,
+ "encoder_hash": "6c8e810d37df2b8e",
  "text_hash": "787620e6729aea28",
  "commit": "b29861551363fc3db53d5ffe4d41bd2f44449245-dirty",
  "data": {
@@ -63,7 +63,7 @@
   "Where"
  ],
  "torch": "2.11.0",
- "parameters": 10421,
+ "parameters": 10437,
  "config": {
   "width": 16,
   "layers": 1,
@@ -110,5 +110,10 @@
    "policy": 2.384185791015625e-07,
    "same_argmax": 1.0
   }
+ },
+ "layout_migration": {
+  "from_schema": 1,
+  "from_encoder_hash": "6fed5023a1c55ffc",
+  "operation": "Append Untapped category cloned from unknown; shift later categorical offsets; preserve all original learned weights and all 48 original parity outputs. No training."
  }
 }

@@ -1,0 +1,37 @@
+# Another creature dying does not trigger Reincarnation, and the chosen creature returning to hand is not dying (CR 700.4).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Reincarnation
+Ornithopter
+Memnite
+Lightning Bolt
+Unsummon
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Reincarnation.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Memnite; Lightning Bolt; Reincarnation; Black Lotus
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unsummon.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Unsummon; Memnite; Lightning Bolt; Reincarnation; Black Lotus
+Bot1.Hand.Ornithopter.Power = 0

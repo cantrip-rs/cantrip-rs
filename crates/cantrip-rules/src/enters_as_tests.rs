@@ -157,7 +157,7 @@ fn put(g: &mut Game, def: &'static CardDef, owner: PlayerId, zone: Zone) -> Obje
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// The Troll's ability returning the Troll card `card` from YOU's graveyard as the Aura.
@@ -404,10 +404,11 @@ fn an_aura_with_no_enchant_ability_may_enchant_anything() {
         melded: None,
     };
     let mut c = cx(&mut g);
-    let chars = crate::ops::as_it_would_exist(&mut c, &entering).chars;
+    let prospective = crate::ops::as_it_would_exist(&mut c, &entering);
+    let chars = prospective.chars;
     assert!(chars.has_subtype(Subtype::Aura) && !chars.is(CardType::Creature));
     assert!(!chars.abilities().any(|a| a.is_enchant()), "Bear gives no enchant ability");
-    let hosts = crate::attach::aura_hosts(&c, card, &chars, YOU, &[card]);
+    let hosts = crate::attach::aura_hosts(&c, card, &chars, YOU, prospective.mana_value, &[card]);
     assert_eq!(hosts, vec![Target::Object(forest), Target::Object(theirs), Target::Player(YOU), Target::Player(THEM)]);
 }
 

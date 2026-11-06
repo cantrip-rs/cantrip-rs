@@ -1,6 +1,6 @@
 # "As an additional cost to cast this spell, exile six cards from your graveyard" (CR 118.8). On turn 1 a Wheel of
 # Fortune off Black Lotus leaves Bot1's graveyard at five cards (Black Lotus, Wheel of Fortune, three Islands), and
-# Sol Ring and Mox Sapphire could pay {2}{U}: the Oculus is not offered. On turn 3 a Lightning Bolt cast with the
+# Sol Ring and Mox Sapphire can pay {2}{U}, but the attempted cast cannot pay its exile cost and is reversed. On turn 3 a Lightning Bolt cast with the
 # Mountain is the sixth card, and the very same mana now casts the Oculus - the positive control for the refusal.
 
 [Bot1 Deck]
@@ -27,7 +27,13 @@ Bot1.Battlefield.Mountain.Activate
 Bot1.Hand.Sol Ring.Cast
 [T1 Bot1.Main2]
 ? Bot1.Graveyard.Count = 5
-! Bot1.Hand.Abhorrent Oculus.Cast
+Bot1.Hand.Abhorrent Oculus.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Graveyard.Count = 5
+? Stack.Count = 0
+? Bot1.Battlefield.Sol Ring.Tapped = false
+? Bot1.Battlefield.Mox Sapphire.Tapped = false
 [T3 Bot1.Main1]
 Bot1.Hand.Island.Play
 Bot1.Battlefield.Mountain.Activate
@@ -37,6 +43,7 @@ Bot1.Hand.Lightning Bolt.Cast(Bot2)
 Bot1.Hand.Abhorrent Oculus.Cast
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Choose(Exile 6 cards from graveyard)
 Bot1.Choose(Island; Island; Island; Black Lotus; Wheel of Fortune; Lightning Bolt)
 [T3 Bot1.End]
 

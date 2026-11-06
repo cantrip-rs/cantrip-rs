@@ -32,6 +32,7 @@ Bot1.Search(Mox Jet)
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Goblin Engineer.Activate(Ability: Return target artifact; Bot1.Graveyard.Mox Jet)
+Bot1.Choose(Tap Goblin Engineer)
 Bot1.Choose(Gleemox)
 Bot1.Pass
 

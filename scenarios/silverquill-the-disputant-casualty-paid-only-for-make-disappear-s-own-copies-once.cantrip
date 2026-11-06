@@ -53,6 +53,7 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Make Disappear.Cast(Stack.Lightning Bolt)
 Bot1.Modes(Casualty 1)
 Bot1.Modes(1)
+Bot1.Choose(optional cost of Make Disappear)
 Bot1.Choose(Llanowar Elves)
 ? Stack.Count = 3
 Bot1.Pass

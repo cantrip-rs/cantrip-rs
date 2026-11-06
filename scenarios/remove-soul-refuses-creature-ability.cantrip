@@ -1,0 +1,35 @@
+# A creature's activated ability is not a creature spell (CR 113.1c); Remove Soul
+# refuses it, then counters a creature spell with the same mana available.
+[Bot1 Deck]
+Plains
+Mother of Runes
+Swamp x20
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Remove Soul
+Ornithopter
+Swamp x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Mother of Runes.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Battlefield.Mother of Runes.Activate(Mother of Runes)
+! Bot2.Hand.Remove Soul.Cast(Stack.Mother of Runes)
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Remove Soul.Cast(Ornithopter)
+? Bot2.Mana =
+
+[Expect]
+Bot2.Graveyard = Remove Soul; Ornithopter
+Bot1.Battlefield.Mother of Runes.Tapped = true

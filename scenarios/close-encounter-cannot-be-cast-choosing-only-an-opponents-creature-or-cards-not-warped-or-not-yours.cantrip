@@ -1,5 +1,5 @@
 # Close Encounter's additional cost, "choose a creature you control or a warped creature card you own in exile", can't be paid
-# with nothing to choose (CR 601.2h), so the spell can't be cast though its mana is there. On turn 3 Bot1 controls no creature.
+# with nothing to choose (CR 601.2h), so the attempted cast rolls back though its mana is there (CR 733.1). On turn 3 Bot1 controls no creature.
 # Its own Ornithopter and Memnite are in exile but not warped (CR 702.185b): Oblivion Ring's triggered ability exiled the one,
 # Bot2's Swords to Plowshares the other. Bot2's Timeline Culler is a warped creature card in exile, but Bot2 owns it. And
 # Bot2's Memnite is a creature Bot1 doesn't control.
@@ -45,7 +45,16 @@ Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Memnite)
 ? Exile = Memnite; Ornithopter; Timeline Culler
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Mox Emerald.Activate
-! Bot1.Hand.Close Encounter.Cast(Bot2.Battlefield.Memnite)
+Bot1.Hand.Close Encounter.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Hand = Close Encounter; Plains
+? Bot1.Battlefield = Forest; Mox Emerald; Mox Pearl; Oblivion Ring
+? Bot1.Graveyard.Count = 0
+? Bot1.Mana = {G}{G}
+? Bot1.ManaFrom = {G} Forest; {G} Mox Emerald
+? Bot1.Life = 21
+? Exile = Memnite; Ornithopter; Timeline Culler
+? Bot2.Battlefield = Memnite; Mox Pearl; Swamp
+? Stack.Count = 0
 
 [Expect]
 Bot2.Battlefield = Memnite; Mox Pearl; Swamp

@@ -1,5 +1,5 @@
 # "As an additional cost to cast this spell, sacrifice a creature" (CR 118.8): with Mox Jet untapped for the {B} but no
-# creature on the battlefield, Culling the Weak is not offered (main phase, empty stack); once an Ornithopter is cast the very
+# creature on the battlefield, the attempted Culling the Weak is reversed; once an Ornithopter is cast the very
 # same card is cast and the four black mana arrive (the positive control).
 
 [Bot1 Deck]
@@ -13,8 +13,21 @@ Island x16
 
 [Actions]
 Bot1.Hand.Mox Jet.Cast
-! Bot1.Hand.Culling the Weak.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Culling the Weak.Cast
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Hand = Culling the Weak; Island; Island; Island; Island; Ornithopter
+? Bot1.Life = 20
+? Bot1.Mana =
+? Bot1.Battlefield = Mox Jet
+? Bot1.Battlefield.Mox Jet.Tapped = false
+? Bot1.Graveyard.Count = 0
+? Stack.Count = 0
+? Exile.Count = 0
 Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Culling the Weak.Cast
 Bot1.Pass
