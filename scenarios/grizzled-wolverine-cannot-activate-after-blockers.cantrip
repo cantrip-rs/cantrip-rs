@@ -1,0 +1,27 @@
+# Wolverine was blocked, but its ability cannot be activated after the declare blockers step (CR 509.1).
+[Bot1 Deck]
+Black Lotus
+Grizzled Wolverine
+Mountain
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Grizzled Wolverine.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzled Wolverine > Bot2)
+Bot2.Block(Ornithopter > Grizzled Wolverine)
+[T3 Bot1.Main2]
+! Bot1.Battlefield.Grizzled Wolverine.Activate
+[Expect]
+Bot1.Battlefield.Grizzled Wolverine.Power = 2

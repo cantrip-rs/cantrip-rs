@@ -48,10 +48,10 @@ Bot2.Pass
 ? Exile.Count = 0
 [T5 Bot1.DeclareBlockers]
 Bot1.Hand.Raphael, the Nightwatcher.Cast(Ability: Sneak)
-Bot1.Choose(Ornithopter)
 Bot1.Battlefield.Mountain#1.Activate
 Bot1.Battlefield.Mountain#2.Activate
 Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass
 Bot1.Pass

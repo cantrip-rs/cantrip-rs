@@ -1,0 +1,21 @@
+# The opponent's Forest does not satisfy the controller's state trigger (CR 603.8).
+[Bot1 Deck]
+Gorilla Pack
+Black Lotus
+Mountain x20
+[Bot2 Deck]
+Forest x20
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Gorilla Pack.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+[Expect]
+Bot1.Graveyard.Gorilla Pack.Colors = Green
+Bot2.Battlefield.Forest.Tapped = false

@@ -1,0 +1,52 @@
+# An animated Hithlain Rope is a creature but cannot be sacrificed; three other creatures cannot pay four, so Hecatomb is sacrificed without offering a payment choice.
+[Bot1 Deck]
+Memnite x3
+Black Lotus
+Hithlain Rope
+Mox Sapphire
+Hecatomb
+Mox Jet
+Mox Pearl
+Black Lotus
+Mind Transfer Protocol
+Island x20
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Hithlain Rope.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+[T7 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+[T9 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Hecatomb.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mind Transfer Protocol.Cast(Bot1.Battlefield.Hithlain Rope)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hithlain Rope.Power = 4
+? Bot1.Battlefield.Hithlain Rope.Toughness = 5
+Bot1.Pass
+Bot2.Pass
+! Bot1.Decline
+[Expect]
+Bot1.Graveyard.Hecatomb.Colors = Black
+Bot1.Battlefield.Hithlain Rope.Power = 4
+Bot1.Battlefield.Memnite#1.Power = 1
+Bot1.Battlefield.Memnite#2.Power = 1
+Bot1.Battlefield.Memnite#3.Power = 1

@@ -1,0 +1,8 @@
+{
+  "name": "Hyalopterous Lemure",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Spirit",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "{0}: This creature gets -1/-0 and gains flying until end of turn."
+}

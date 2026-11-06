@@ -1,0 +1,59 @@
+# Forestwalk does not stop a block when the defender has no Forest; a red-and-green creature has forestwalk once the defender plays one (CR 702.14c).
+[Bot1 Deck]
+Forest
+Llanowar Elves
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Hidden Path
+Mountain
+Scarwood Goblins
+Island x20
+[Bot2 Deck]
+Island
+Ornithopter
+Forest
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hidden Path.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Llanowar Elves > Bot2)
+Bot2.Block(Ornithopter > Llanowar Elves)
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Scarwood Goblins.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Scarwood Goblins > Bot2)
+! Bot2.Block(Ornithopter > Scarwood Goblins)
+[T7 Bot1.Main2]
+[Expect]
+Bot2.Life = 18

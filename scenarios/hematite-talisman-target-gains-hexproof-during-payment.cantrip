@@ -1,0 +1,57 @@
+# A target legal when resolution begins gains hexproof during payment; the Talisman still untaps it (CR 608.2b).
+[Bot1 Deck]
+Black Lotus x4
+Ashnod's Altar
+Opalescence
+Humility
+Mox Pearl
+Sol Ring
+Hematite Talisman
+Mox Ruby
+Shock
+Island x20
+[Bot2 Deck]
+Black Lotus
+Gladecover Scout
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Ashnod's Altar.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus#2.Activate(Color: White)
+Bot1.Hand.Opalescence.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Humility.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Gladecover Scout.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+[T7 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Hematite Talisman.Cast
+[T9 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+[T10 Bot2.DeclareAttackers]
+Bot2.Attack(Gladecover Scout > Bot1)
+[T11 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Target(Bot2.Battlefield.Gladecover Scout)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ashnod's Altar.Activate(Sacrifice: Humility)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.PayCost
+? Bot2.Battlefield.Gladecover Scout.Keywords = Hexproof
+? Bot2.Battlefield.Gladecover Scout.Tapped = false
+[Expect]
+Bot1.Battlefield.Humility = (absent)

@@ -1,0 +1,68 @@
+# Each free activation reduces power by one without changing toughness and grants flying; the effects end at cleanup and can be used again next turn.
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Hyalopterous Lemure
+Memnite
+Swamp x13
+[Bot2 Deck]
+Memnite
+Island x19
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hyalopterous Lemure.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Hyalopterous Lemure.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hyalopterous Lemure.Power = 3
+? Bot1.Battlefield.Hyalopterous Lemure.Toughness = 3
+Bot1.Battlefield.Hyalopterous Lemure.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hyalopterous Lemure.Power = 2
+? Bot1.Battlefield.Hyalopterous Lemure.Toughness = 3
+Bot1.Attack(Hyalopterous Lemure; Memnite > Bot2)
+! Bot2.Block(Memnite > Hyalopterous Lemure)
+Bot2.Block(Memnite > Memnite)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Hyalopterous Lemure.Power = 4
+? Bot1.Battlefield.Hyalopterous Lemure.Toughness = 3
+? Bot1.Battlefield.Hyalopterous Lemure.Keywords = (absent)
+Bot2.Pass
+Bot1.Battlefield.Hyalopterous Lemure.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hyalopterous Lemure.Power = 3
+? Bot1.Battlefield.Hyalopterous Lemure.Toughness = 3
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Hyalopterous Lemure.Power = 4
+Bot1.Battlefield.Hyalopterous Lemure.Toughness = 3
+Bot1.Battlefield.Hyalopterous Lemure.Keywords = (absent)
+Bot2.Life = 18

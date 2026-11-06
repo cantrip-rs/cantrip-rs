@@ -1,0 +1,6 @@
+{
+  "name": "Hematite Talisman",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "Whenever a player casts a red spell, you may pay {3}. If you do, untap target permanent."
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Hidden Path",
+  "manaCost": "{2}{G}{G}{G}{G}",
+  "type": "Enchantment",
+  "oracleText": "Green creatures have forestwalk. (They can't be blocked as long as defending player controls a Forest.)"
+}

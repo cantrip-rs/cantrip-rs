@@ -1,0 +1,55 @@
+# Each Homarid enters with one tide counter; only its controller's upkeep adds a counter, and its stats cycle through one, two, three and zero counters (CR 603.8, 122.6).
+[Bot1 Deck]
+Black Lotus
+Homarid
+Island x20
+[Bot2 Deck]
+Black Lotus
+Homarid
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Homarid.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Homarid.Counters.Tide = 1
+? Bot1.Battlefield.Homarid.Power = 1
+? Bot1.Battlefield.Homarid.Toughness = 1
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Homarid.Counters.Tide = 1
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Homarid.Cast
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Homarid.Counters.Tide = 1
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Homarid.Counters.Tide = 2
+? Bot1.Battlefield.Homarid.Power = 2
+? Bot1.Battlefield.Homarid.Toughness = 2
+? Bot2.Battlefield.Homarid.Counters.Tide = 1
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Homarid.Counters.Tide = 3
+? Bot1.Battlefield.Homarid.Power = 3
+? Bot1.Battlefield.Homarid.Toughness = 3
+? Bot2.Battlefield.Homarid.Counters.Tide = 2
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Homarid.Counters.Tide = 4
+? Bot1.Battlefield.Homarid.Power = 2
+? Bot1.Battlefield.Homarid.Toughness = 2
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Homarid.Counters.Tide = (absent)
+? Bot1.Battlefield.Homarid.Power = 2
+? Bot1.Battlefield.Homarid.Toughness = 2
+[T8 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Homarid.Counters.Tide = (absent)
+Bot2.Battlefield.Homarid.Power = 2
+Bot2.Battlefield.Homarid.Toughness = 2

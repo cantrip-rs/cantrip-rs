@@ -1,0 +1,37 @@
+# Hecatomb's enters ability waits on the stack; four creatures can be sacrificed to keep it, and tapping a Swamp deals one damage.
+[Bot1 Deck]
+Memnite x4
+Black Lotus
+Hecatomb
+Swamp
+Swamp x13
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Hecatomb.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Battlefield.Memnite#1.Power = 1
+Bot1.Battlefield.Hecatomb.Activate(Bot2)
+Bot1.Choose(Swamp)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+Bot1.Choose(Memnite#1; Memnite#2; Memnite#3; Memnite#4)
+[Expect]
+Bot1.Graveyard.Count = 5
+Bot1.Battlefield.Hecatomb.Tapped = false
+Bot1.Battlefield.Swamp.Tapped = true
+Bot2.Life = 19

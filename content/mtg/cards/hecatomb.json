@@ -1,0 +1,6 @@
+{
+  "name": "Hecatomb",
+  "manaCost": "{1}{B}{B}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, sacrifice this enchantment unless you sacrifice four creatures.\nTap an untapped Swamp you control: This enchantment deals 1 damage to any target."
+}

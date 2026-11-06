@@ -1,0 +1,6 @@
+{
+  "name": "Hydroblast",
+  "manaCost": "{U}",
+  "type": "Instant",
+  "oracleText": "Choose one —\n• Counter target spell if it's red.\n• Destroy target permanent if it's red."
+}

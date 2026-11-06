@@ -81,10 +81,12 @@ fn another_encoding_is_refused() {
     let names = || -> Result<Vec<String>, EvalError> { Ok(index.names.clone()) };
     assert_eq!(check(&manifest(), &index, names), Ok(Vec::new()));
 
-    let mut m = manifest();
-    m.schema = SCHEMA_VERSION + 1;
-    let e = check(&m, &index, names).unwrap_err();
-    assert!(e.0.contains("schema"), "{e}");
+    for schema in [1, SCHEMA_VERSION + 1] {
+        let mut m = manifest();
+        m.schema = schema;
+        let e = check(&m, &index, names).unwrap_err();
+        assert!(e.0.contains("schema"), "{e}");
+    }
 
     let mut m = manifest();
     m.encoder_hash = "0123456789abcdef".into();
@@ -105,7 +107,7 @@ fn another_encoding_is_refused() {
         std::fs::copy(tiny().join(f), dir.join(f)).unwrap();
     }
     let text = std::fs::read_to_string(dir.join("manifest.json")).unwrap();
-    let ours = format!("{:016x}", cantrip_obs::encode::encoder_hash());
+    let ours = manifest().encoder_hash;
     assert!(text.contains(&ours));
     std::fs::write(
         dir.join("manifest.json"),
@@ -367,5 +369,122 @@ fn model_parity() {
             assert!(p.same_argmax >= 0.995, "{name}: {p:?}");
             assert_eq!(p.illegal_argmax, 0);
         }
+    }
+}
+
+#[test]
+fn legacy_snow_input_masks_only_new_cells_and_preserves_all_reference_outputs() {
+    use cantrip_ai::eval::{FeatureBatch, InputCompatibility, input_compatibility};
+    use cantrip_obs::encode::{NUMS, kind};
+    let evaluator = TractEvaluator::load(&tiny(), &own(&tiny())).unwrap();
+    assert_eq!(evaluator.model().input_compatibility(), InputCompatibility::LegacySnowInputV2);
+    assert_eq!(evaluator.model().manifest.schema, 2);
+    let refs = Reference::load(&tiny().join("reference")).unwrap();
+    #[cfg(feature = "ort")]
+    let ort = cantrip_ai::eval::OrtEvaluator::load(&tiny(), &own(&tiny()), 1).unwrap();
+    #[allow(unused_mut)]
+    let mut evaluators: Vec<&dyn Evaluator> = vec![&evaluator];
+    #[cfg(feature = "ort")]
+    evaluators.push(&ort);
+    for position in &refs.positions {
+        let original = FeatureBatch::new(&[position]);
+        let mut snow = original.clone();
+        for (t, &k) in snow.kind.iter().enumerate() {
+            for f in 0..NUMS {
+                if InputCompatibility::LegacySnowInputV2.masks(k as u8, f) {
+                    snow.nums[t * NUMS + f] = 19.0;
+                }
+            }
+        }
+        // Same graph, exact old logits, on every one of the 48 saved positions.
+        for evaluator in &evaluators {
+            assert_eq!(evaluator.evaluate(&original).unwrap(), evaluator.evaluate(&snow).unwrap());
+        }
+        InputCompatibility::LegacySnowInputV2.adapt(&mut snow);
+        assert_eq!(original.nums, snow.nums);
+    }
+    // An old graph has no embeddings for the new ask/token. It receives unknown categories and zeroed new features,
+    // while the existing parts of the same encoded position still produce exactly the old graph's output.
+    let position = refs.positions.iter().find(|p| p.kind.iter().any(|&k| k == kind::OPTION)).unwrap();
+    let mut neutral = FeatureBatch::new(&[position]);
+    let game = neutral.kind.iter().position(|&k| k == kind::GAME as i64).unwrap();
+    let option = neutral.kind.iter().position(|&k| k == kind::OPTION as i64).unwrap();
+    neutral.cats[game * cantrip_obs::encode::CATS + cantrip_obs::encode::cat::ASK] = 0;
+    neutral.cats[option * cantrip_obs::encode::CATS + cantrip_obs::encode::cat::TOK] = 0;
+    let mut cost = neutral.clone();
+    cost.cats[game * cantrip_obs::encode::CATS + cantrip_obs::encode::cat::ASK] = 27;
+    cost.cats[option * cantrip_obs::encode::CATS + cantrip_obs::encode::cat::TOK] = 29;
+    cost.nums[game * NUMS + cantrip_obs::encode::game::MANA_ABILITIES] = 1.0;
+    cost.nums[option * NUMS + cantrip_obs::encode::option::COST_OPERATION_KINDS] = 1.0;
+    cost.nums[option * NUMS + cantrip_obs::encode::option::BLOCK_CAPACITY] = 2.0 / 16.0;
+    cost.ptrs[option * cantrip_obs::encode::PTRS + 2] = 0;
+    cost.ptrs[option * cantrip_obs::encode::PTRS + 3] = 1;
+    assert_eq!(evaluator.evaluate(&neutral).unwrap(), evaluator.evaluate(&cost).unwrap());
+    let mut batch = FeatureBatch { rows: 1, tokens: 4, kind: vec![kind::GAME as i64, kind::PLAYER as i64, kind::OPTION as i64, kind::CARD as i64], nums: vec![7.0; 4 * NUMS], ..Default::default() };
+    let native = batch.clone();
+    InputCompatibility::Native.adapt(&mut batch);
+    assert_eq!(native.nums, batch.nums);
+    InputCompatibility::LegacySnowInputV2.adapt(&mut batch);
+    assert_eq!(&batch.nums[3 * NUMS..], &[7.0; NUMS]);
+    assert_eq!(batch.nums[31], 0.0);
+    assert_eq!(&batch.nums[NUMS + 25..NUMS + 31], &[0.0; 6]);
+    assert_eq!(&batch.nums[2 * NUMS + 29..2 * NUMS + 31], &[0.0; 2]);
+    let mut current = manifest();
+    current.schema = SCHEMA_VERSION;
+    current.encoder_hash = format!("{:016x}", cantrip_obs::encode::encoder_hash());
+    assert_eq!(input_compatibility(&current).unwrap(), InputCompatibility::Native);
+    for hash in cantrip_ai::eval::LEGACY_SNOW_V2_HASHES {
+        current.schema = 2;
+        current.encoder_hash = hash.into();
+        assert_eq!(input_compatibility(&current).unwrap(), InputCompatibility::LegacySnowInputV2);
+    }
+    current.schema = 3;
+    current.encoder_hash = "018b410d06b12950".into();
+    assert_eq!(input_compatibility(&current).unwrap(), InputCompatibility::LegacyCostInputV3);
+    let mut new_cost = FeatureBatch { rows: 1, tokens: 2, kind: vec![kind::GAME as i64, kind::OPTION as i64],
+        cats: vec![0; 2 * cantrip_obs::encode::CATS], nums: vec![0.0; 2 * NUMS], ..Default::default() };
+    new_cost.cats[cantrip_obs::encode::cat::ASK] = 27;
+    new_cost.cats[cantrip_obs::encode::CATS + cantrip_obs::encode::cat::TOK] = 29;
+    new_cost.nums[NUMS + cantrip_obs::encode::option::COST_OPERATION_KINDS] = 1.0;
+    new_cost.nums[NUMS + cantrip_obs::encode::option::COST_OPERATION_KINDS + 10] = 1.0;
+    new_cost.nums[NUMS + cantrip_obs::encode::option::COST_OPERATION_KINDS + 11] = 1.0;
+    new_cost.nums[NUMS + cantrip_obs::encode::option::COST_OPERATION_KINDS + 12] = 1.0;
+    new_cost.nums[NUMS + cantrip_obs::encode::option::COST_OPERATION_KINDS + 13] = 1.0;
+    new_cost.nums[NUMS + cantrip_obs::encode::option::BLOCK_CAPACITY] = 2.0 / 16.0;
+    new_cost.nums[cantrip_obs::encode::game::MANA_ABILITIES] = 1.0;
+    new_cost.ptrs = vec![0; 2 * cantrip_obs::encode::PTRS];
+    let mut native_cost = new_cost.clone();
+    InputCompatibility::Native.adapt(&mut native_cost);
+    assert_eq!(native_cost.ptrs, new_cost.ptrs);
+    InputCompatibility::LegacyCostInputV3.adapt(&mut new_cost);
+    assert_eq!(&new_cost.ptrs[..cantrip_obs::encode::PTRS], &[0; cantrip_obs::encode::PTRS]);
+    assert_eq!(&new_cost.ptrs[cantrip_obs::encode::PTRS..],
+        &[0, 0, i64::from(cantrip_obs::encode::NO_POINTER), i64::from(cantrip_obs::encode::NO_POINTER)]);
+    assert_eq!(new_cost.cats[cantrip_obs::encode::cat::ASK], 0);
+    assert_eq!(new_cost.cats[cantrip_obs::encode::CATS + cantrip_obs::encode::cat::TOK], 0);
+    assert_eq!(new_cost.nums[NUMS + cantrip_obs::encode::option::COST_OPERATION_KINDS], 0.0);
+    assert_eq!(new_cost.nums[NUMS + cantrip_obs::encode::option::COST_OPERATION_KINDS + 10], 0.0);
+    assert_eq!(new_cost.nums[NUMS + cantrip_obs::encode::option::COST_OPERATION_KINDS + 11], 0.0);
+    assert_eq!(new_cost.nums[NUMS + cantrip_obs::encode::option::COST_OPERATION_KINDS + 12], 0.0);
+    assert_eq!(new_cost.nums[NUMS + cantrip_obs::encode::option::COST_OPERATION_KINDS + 13], 0.0);
+    assert_eq!(new_cost.nums[NUMS + cantrip_obs::encode::option::BLOCK_CAPACITY], 0.0);
+    assert_eq!(new_cost.nums[cantrip_obs::encode::game::MANA_ABILITIES], 0.0);
+    current.encoder_hash = "0123456789abcdef".into();
+    assert!(input_compatibility(&current).is_err());
+}
+
+#[test]
+fn cost_choose_slot_is_native_only_for_legacy_input_adapters() {
+    use cantrip_ai::eval::{FeatureBatch, InputCompatibility};
+    use cantrip_obs::encode::{kind, option, NUMS};
+    let slot = option::COST_OPERATION_KINDS + 14;
+    assert_eq!(slot, 45);
+    let input = FeatureBatch { rows: 1, tokens: 1, kind: vec![kind::OPTION as i64], nums: {
+        let mut nums = vec![0.0; NUMS]; nums[slot] = 1.0; nums
+    }, ..Default::default() };
+    for (adapter, expected) in [(InputCompatibility::Native, 1.0), (InputCompatibility::LegacySnowInputV2, 0.0), (InputCompatibility::LegacyCostInputV3, 0.0)] {
+        let mut batch = input.clone();
+        adapter.adapt(&mut batch);
+        assert_eq!(batch.nums[slot], expected, "{adapter:?}");
     }
 }

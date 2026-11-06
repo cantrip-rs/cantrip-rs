@@ -24,7 +24,7 @@ use cantrip_ai::eval::{Evaluator, FeatureBatch, reference};
 use cantrip_ai::gpu::{self, Engine, Options, Precision, Rows};
 use cantrip_ai::remote::{PROTOCOL, read_frame, read_hello, status, write_frame};
 use cantrip_ai::{CardIndex, RemoteEvaluator};
-use cantrip_obs::encode::{BUCKETS, SCHEMA_VERSION, encoder_hash, from_compact};
+use cantrip_obs::encode::{BUCKETS, from_compact};
 
 const USAGE: &str = "usage: cantrip-infer [serve] --model DIR [--model DIR ...] [--host H] [--port N] [--precision fp32|tf32|fp16] [--batch N|32:N,64:N,128:N] [--flush-ms MS] [--pipelines N] [--device N] [--no-check] [--ready-file PATH] [--log-every S] [--priority high|normal] [--ort-dylib PATH] [--cuda-libs DIR]
        cantrip-infer bench --model DIR [--clients N] [--rows N] [--seconds S] [engine options]
@@ -206,11 +206,6 @@ fn connection(engine: &Engine, stream: TcpStream) -> Result<(), String> {
     };
     let model = if protocol != PROTOCOL {
         return refuse(&mut writer, format!("protocol {protocol}; this server speaks {PROTOCOL}"));
-    } else if schema != SCHEMA_VERSION || hash != encoder_hash() {
-        return refuse(
-            &mut writer,
-            format!("encoding ({schema}, {hash:016x}); this server's is ({SCHEMA_VERSION}, {:016x})", encoder_hash()),
-        );
     } else if let Some(k) = engine.model(identity) {
         k
     } else {
@@ -225,15 +220,19 @@ fn connection(engine: &Engine, stream: TcpStream) -> Result<(), String> {
         );
     };
     let m = &engine.models()[model];
+    if schema != m.schema || hash != m.encoder_hash {
+        return refuse(&mut writer, format!("encoding ({schema}, {hash:016x}); model's is ({}, {:016x})", m.schema, m.encoder_hash));
+    }
     write_frame(
         &mut writer,
         &status(
             true,
             &format!(
-                "{} on cuda:{} (cantrip-infer, onnxruntime CUDA, {})",
+                "{} on cuda:{} (cantrip-infer, onnxruntime CUDA, {}); input {:?}",
                 m.name,
                 engine.options().device,
-                engine.options().precision.name()
+                engine.options().precision.name(),
+                m.input_compatibility
             ),
         ),
     )

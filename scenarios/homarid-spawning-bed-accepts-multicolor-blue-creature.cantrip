@@ -1,0 +1,75 @@
+# A blue-and-black creature is blue, so a Clone copying Baleful Strix is a legal sacrifice and yields two Camarids (CR 105.2b, 608.2h).
+[Bot1 Deck]
+Island
+Mox Sapphire
+Homarid Spawning Bed
+Clone
+Black Lotus
+Black Lotus
+Ornithopter
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island
+Black Lotus
+Baleful Strix
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Homarid Spawning Bed.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Baleful Strix.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Clone.Cast
+Bot1.Accept
+Bot1.Target(Bot2.Battlefield.Baleful Strix)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Baleful Strix.ManaValue = 2
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Homarid Spawning Bed.Activate(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Homarid Spawning Bed.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+! Bot1.Choose(Ornithopter)
+! Bot1.Choose(Bot2.Battlefield.Baleful Strix)
+Bot1.Choose(Bot1.Battlefield.Baleful Strix)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Camarid Token#1.Power = 1
+Bot1.Battlefield.Camarid Token#1.Toughness = 1
+Bot1.Battlefield.Camarid Token#1.Colors = Blue
+Bot1.Battlefield.Camarid Token#1.Subtypes = Camarid
+Bot1.Battlefield.Camarid Token#1.Token = true
+Bot1.Battlefield.Camarid Token#1.Tapped = false
+Bot1.Battlefield.Count = 6
+Bot1.Graveyard.Clone.Colors = Blue
+Bot1.Battlefield.Camarid Token#2.Token = true

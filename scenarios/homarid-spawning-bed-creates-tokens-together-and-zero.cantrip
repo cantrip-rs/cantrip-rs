@@ -1,0 +1,73 @@
+# A two-mana blue creature makes two tokens in one event, triggering Staff once; sacrificing a zero-mana Camarid makes none (CR 701.7a, 603.2).
+[Bot1 Deck]
+Island
+Mox Sapphire
+Homarid Spawning Bed
+Black Lotus
+Mox Pearl
+Staff of the Storyteller
+Lord of Atlantis
+Black Lotus
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Homarid Spawning Bed.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Staff of the Storyteller.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Staff of the Storyteller.Counters.Story = 1
+Bot1.Hand.Lord of Atlantis.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Homarid Spawning Bed.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Lord of Atlantis)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Staff of the Storyteller.Counters.Story = 2
+? Bot1.Battlefield.Camarid Token#2.Token = true
+? Bot1.Battlefield.Count = 8
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Homarid Spawning Bed.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Camarid Token)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Staff of the Storyteller.Counters.Story = 2
+Bot1.Battlefield.Camarid Token.Token = true
+Bot1.Battlefield.Count = 7

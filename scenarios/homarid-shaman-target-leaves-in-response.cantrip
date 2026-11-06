@@ -1,0 +1,65 @@
+# Returning the target in response makes the ability fail to resolve; a second activation taps a legal target (CR 608.2b).
+[Bot1 Deck]
+Homarid Shaman
+Black Lotus
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Mox Sapphire
+Llanowar Elves
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Prismatic Omen
+Watchwolf
+Ornithopter
+Mox Sapphire
+Unsummon
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Homarid Shaman.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Prismatic Omen.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Watchwolf.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Homarid Shaman.Activate(Bot2.Battlefield.Watchwolf; Mana: short)
+! Bot1.Battlefield.Homarid Shaman.Activate(Bot2.Battlefield.Ornithopter)
+! Bot1.Battlefield.Homarid Shaman.Activate(Bot2.Battlefield.Prismatic Omen)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Homarid Shaman.Activate(Bot2.Battlefield.Watchwolf)
+? Bot1.Mana =
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Unsummon.Cast(Bot2.Battlefield.Watchwolf)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Hand.Watchwolf.Colors = Green; White
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Homarid Shaman.Activate(Bot1.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Tapped = true
+Bot2.Battlefield.Watchwolf = (absent)

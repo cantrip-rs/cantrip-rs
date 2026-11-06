@@ -1,4 +1,8 @@
 # The Shark incubates the mana value of a noncreature spell, including X, and flying prevents a ground blocker (CR 202.3e, 702.9b).
+# Fix Mind Twist's two random selections to Islands, keeping the Lotus and ground blocker needed below.
+
+[Dice]
+3; 3
 
 [Bot1 Deck]
 Black Lotus
@@ -25,6 +29,8 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 Bot1.Hand.Mind Twist.Cast(Bot2; X: 2)
 Bot1.Pass
 [T2 Bot2.Main1]
+? Bot2.Graveyard.Count = 2
+? Bot2.Hand.Grizzly Bears.Power = 2
 Bot2.Hand.Black Lotus.Cast
 Bot2.Pass
 Bot2.Battlefield.Black Lotus.Activate(Color: Green)

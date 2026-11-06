@@ -1,0 +1,40 @@
+# A land given to Hallowed Ground's controller returns to its owner, not its current controller.
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Sapphire
+Hallowed Ground
+Plains x16
+[Bot2 Deck]
+Mountain
+Black Lotus
+Harmless Offering
+Island x17
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hallowed Ground.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Harmless Offering.Cast
+Bot2.Target(Bot1)
+Bot2.Target(Bot2.Battlefield.Mountain)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Mountain.Tapped = false
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Hallowed Ground.Activate(Bot1.Battlefield.Mountain)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Mountain = (absent)
+Bot2.Hand.Mountain.Colors =

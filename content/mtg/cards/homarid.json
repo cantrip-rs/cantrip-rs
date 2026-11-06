@@ -1,0 +1,8 @@
+{
+  "name": "Homarid",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Homarid",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "This creature enters with a tide counter on it.\nAt the beginning of your upkeep, put a tide counter on this creature.\nAs long as there is exactly one tide counter on this creature, it gets -1/-1.\nAs long as there are exactly three tide counters on this creature, it gets +1/+1.\nWhenever there are four or more tide counters on this creature, remove all tide counters from it."
+}

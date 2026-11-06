@@ -1,0 +1,59 @@
+# Teferi permits Harmless Offering in response to Hecatomb's trigger; its original controller may decline to sacrifice creatures even after giving Hecatomb away.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Teferi, Time Raveler
+Memnite x3
+Hecatomb
+Memnite
+Mox Jet x2
+Black Lotus
+Harmless Offering
+Island x15
+[Bot2 Deck]
+Island x28
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Teferi, Time Raveler.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+[T7 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+[T9 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+[T11 Bot1.Main1]
+Bot1.Battlefield.Teferi, Time Raveler.Activate(Ability: +1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hecatomb.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Bot1.Battlefield.Hecatomb)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Hecatomb.Tapped = false
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[Expect]
+Bot2.Battlefield.Hecatomb.Tapped = false
+Bot1.Battlefield.Memnite#1.Power = 1
+Bot1.Battlefield.Memnite#2.Power = 1
+Bot1.Battlefield.Memnite#3.Power = 1
+Bot1.Battlefield.Memnite#4.Power = 1

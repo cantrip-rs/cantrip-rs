@@ -1,0 +1,8 @@
+{
+  "name": "Grave Robbers",
+  "manaCost": "{1}{B}{B}",
+  "type": "Creature — Human Rogue",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{B}, {T}: Exile target artifact card from a graveyard. You gain 2 life."
+}

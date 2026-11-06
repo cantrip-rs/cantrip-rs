@@ -1,0 +1,41 @@
+# An unused shield ends at cleanup, so a Bolt on the following turn deals three damage (CR 615.7, 514.2).
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Pearl
+Hot Springs
+Island
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hot Springs.Cast(Bot1.Battlefield.Forest)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate(Ability: Prevent; Bot1)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17
+Prevented = (absent)
+Bot1.Battlefield.Hot Springs.AttachedTo = Forest

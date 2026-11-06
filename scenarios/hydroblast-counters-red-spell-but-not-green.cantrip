@@ -1,0 +1,48 @@
+# Hydroblast can target a nonred spell without countering it and counters a red-blue creature spell (CR 608.2b, 105.2b).
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Hydroblast
+Hydroblast
+Island x20
+[Bot2 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Ruby
+Llanowar Elves
+Third Path Iconoclast
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Hydroblast.Cast
+! Bot1.Modes(Count: 0)
+! Bot1.Modes(1; 2)
+Bot1.Modes(1)
+! Bot1.Target(Bot2.Battlefield.Mox Ruby)
+Bot1.Target(Stack.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Llanowar Elves.Power = 1
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Third Path Iconoclast.Cast
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Hydroblast.Cast
+Bot1.Modes(1)
+Bot1.Target(Stack.Third Path Iconoclast)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard = Third Path Iconoclast
+Bot2.Battlefield.Llanowar Elves.Power = 1

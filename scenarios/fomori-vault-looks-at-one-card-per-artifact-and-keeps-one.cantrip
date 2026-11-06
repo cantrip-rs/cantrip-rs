@@ -28,6 +28,7 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Fomori Vault.Activate(Ability: Look)
+Bot1.Choose(Tap Fomori Vault)
 Bot1.Choose(Plains)
 Bot1.Arrange(Lightning Bolt | Island; Island)
 

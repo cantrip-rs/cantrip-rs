@@ -1,0 +1,48 @@
+# Hallowed Ground returns a controlled nonsnow land; snow lands, nonlands and an opponent's land are illegal targets, and the activation costs exactly {W}{W}.
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Sapphire
+Hallowed Ground
+Snow-Covered Plains
+Mountain
+Ornithopter
+Plains x13
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Snow-Covered Plains.Play
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hallowed Ground.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Snow-Covered Plains.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mountain.Activate
+! Bot1.Battlefield.Hallowed Ground.Activate(Bot1.Battlefield.Mountain; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+! Bot1.Battlefield.Hallowed Ground.Activate(Bot1.Battlefield.Snow-Covered Plains)
+! Bot1.Battlefield.Hallowed Ground.Activate(Bot1.Battlefield.Ornithopter)
+! Bot1.Battlefield.Hallowed Ground.Activate(Bot2.Battlefield.Plains)
+Bot1.Battlefield.Hallowed Ground.Activate(Bot1.Battlefield.Mountain)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Hand.Mountain.Colors =
+Bot1.Battlefield.Mountain = (absent)
+Bot1.Battlefield.Snow-Covered Plains.Tapped = false
+Bot2.Battlefield.Plains.Tapped = false

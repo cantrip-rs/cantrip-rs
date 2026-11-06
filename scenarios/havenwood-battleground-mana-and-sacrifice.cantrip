@@ -1,0 +1,22 @@
+# Havenwood Battleground enters tapped, taps for one green, and can later tap and sacrifice for two green (CR 614.1d, 605.3b).
+[Bot1 Deck]
+Havenwood Battleground
+Forest x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Havenwood Battleground.Play
+? Bot1.Battlefield.Havenwood Battleground.Tapped = true
+! Bot1.Battlefield.Havenwood Battleground.Activate(Ability: Add {G}.)
+! Bot1.Battlefield.Havenwood Battleground.Activate(Ability: Sacrifice)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Havenwood Battleground.Activate(Ability: Add {G}.)
+? Bot1.Mana = {G}
+? Bot1.Battlefield.Havenwood Battleground.Tapped = true
+! Bot1.Battlefield.Havenwood Battleground.Activate(Ability: Sacrifice)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Havenwood Battleground.Activate(Ability: Sacrifice)
+? Bot1.Mana = {G}{G}
+? Bot1.Graveyard = Havenwood Battleground
+[Expect]
+Bot1.Battlefield.Havenwood Battleground = (absent)

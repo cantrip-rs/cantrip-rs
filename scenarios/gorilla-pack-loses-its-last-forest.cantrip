@@ -1,0 +1,24 @@
+# Destroying its controller's last Forest triggers a sacrifice of a Pack already on the battlefield (CR 603.8).
+[Bot1 Deck]
+Forest
+Gorilla Pack
+Black Lotus
+Island x20
+[Bot2 Deck]
+Black Lotus
+Stone Rain
+Mountain x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Gorilla Pack.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Stone Rain.Cast(Bot1.Battlefield.Forest)
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Graveyard.Gorilla Pack.Colors = Green
+Bot1.Graveyard.Forest.Colors =

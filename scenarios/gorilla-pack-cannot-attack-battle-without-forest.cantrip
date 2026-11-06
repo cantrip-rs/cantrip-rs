@@ -1,0 +1,41 @@
+# A Siege's protector is the defending player (CR 508.5); Gorilla Pack cannot attack it when that player controls no Forest.
+[Bot1 Deck]
+Forest
+Gorilla Pack
+Black Lotus
+Mox Sapphire
+Black Lotus
+Invasion of Gobakhan
+Ornithopter
+Plains x15
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Gorilla Pack.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Invasion of Gobakhan.Cast
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Gorilla Pack > Bot1.Battlefield.Invasion of Gobakhan)
+! Bot1.Attack(Gorilla Pack > Bot2)
+Bot1.Attack(Ornithopter > Bot1.Battlefield.Invasion of Gobakhan)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Invasion of Gobakhan.Counters.Defense = 3
+Bot2.Life = 20

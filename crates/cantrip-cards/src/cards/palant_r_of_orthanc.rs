@@ -29,7 +29,7 @@ fn offer(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let milled = g.mill(you, influence);
     let total: u32 = milled.iter().map(|&card| g.mana_value(card)).sum();
     if total > 0 {
-        g.lose_life(them, total as i32);
+        g.lose_life(them,(total as i32) as i32);
     }
     Ok(())
 }

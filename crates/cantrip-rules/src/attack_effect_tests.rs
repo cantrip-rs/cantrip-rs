@@ -139,7 +139,7 @@ fn a_requirement_during_its_controllers_next_turn_is_spent_with_that_turn_whoeve
     let bear = g.state.push_obj(Obj::new(table.id_of(&HASTY), P2, Zone::BATTLEFIELD));
     g.state.zone_push(Zone::BATTLEFIELD, bear);
     {
-        let mut cx = crate::Cx { g: &mut g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+        let mut cx = crate::Cx { g: &mut g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
         cantrip_api::Game::add_effect(&mut cx, bear, bear, EffectKind::Control(P1), Duration::UntilNextTurnOf(P2));
     }
     let timestamp = g.state.timestamp();
@@ -181,7 +181,7 @@ fn a_requirement_during_its_controllers_next_turn_moves_to_a_new_controller_whos
     let bear = g.state.push_obj(Obj::new(table.id_of(&BEAR), P1, Zone::BATTLEFIELD));
     g.state.zone_push(Zone::BATTLEFIELD, bear);
     {
-        let mut cx = crate::Cx { g: &mut g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+        let mut cx = crate::Cx { g: &mut g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
         cantrip_api::Game::add_effect(&mut cx, bear, bear, EffectKind::Control(P2), Duration::UntilNextTurnOf(P2));
     }
     let timestamp = g.state.timestamp();

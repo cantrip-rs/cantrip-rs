@@ -28,7 +28,7 @@ fn game(players: usize) -> (Game, ObjectId, usize) {
 }
 
 fn cx(game: &mut Game, frame: usize) -> Cx<'_> {
-    Cx { g: game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// "Choose a card": what the Trinket asks.

@@ -1,0 +1,40 @@
+# An unused shield expires at cleanup, but Heal still draws at the next upkeep before a Bolt deals three (CR 615.7, 603.7b).
+[Bot1 Deck]
+Heal
+Mox Pearl
+Island
+Island
+Island
+Island
+Island
+Forest
+Island x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Heal.Cast(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 5
+[T2 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Forest.Colors =
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Hand.Forest.Colors =
+Prevented = (absent)

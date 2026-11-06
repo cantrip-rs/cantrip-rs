@@ -13,11 +13,13 @@ Island x16
 [Actions]
 Bot1.Hand.Gemstone Mine.Play
 Bot1.Battlefield.Gemstone Mine.Activate(Color: Blue)
+Bot1.Choose(Tap Gemstone Mine)
 ? Bot1.Mana = {U}
 ! Bot1.Battlefield.Gemstone Mine.Activate
 [T3 Bot1.Main1]
 ? Bot1.Battlefield.Gemstone Mine.Counters.Mining = 2
 Bot1.Battlefield.Gemstone Mine.Activate(Color: Green)
+Bot1.Choose(Tap Gemstone Mine)
 ? Bot1.Mana = {G}
 [T3 Bot1.Main2]
 

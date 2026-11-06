@@ -1,0 +1,48 @@
+# Black mana gives Hoar Shade +1/+1 for the turn; the increase expires and can be bought again, but blue mana cannot pay (CR 611.2a).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Swamp
+Island
+Hoar Shade
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hoar Shade.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Hoar Shade.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hoar Shade.Power = 2
+? Bot1.Battlefield.Hoar Shade.Toughness = 3
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Hoar Shade.Power = 1
+? Bot1.Battlefield.Hoar Shade.Toughness = 2
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Hoar Shade.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hoar Shade.Power = 2
+? Bot1.Battlefield.Hoar Shade.Toughness = 3
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Hoar Shade.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hoar Shade.Power = 3
+? Bot1.Battlefield.Hoar Shade.Toughness = 4
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Hoar Shade.Activate(Mana: short)
+[Expect]
+Bot1.Battlefield.Hoar Shade.Power = 3
+Bot1.Battlefield.Hoar Shade.Toughness = 4

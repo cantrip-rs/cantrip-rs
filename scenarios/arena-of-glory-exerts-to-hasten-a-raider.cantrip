@@ -18,6 +18,8 @@ Bot1.Hand.Arena of Glory.Play
 ? Bot1.Battlefield.Arena of Glory.Tapped = false
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Arena of Glory.Activate(Ability: Exert)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Tap Arena of Glory)
 ? Bot1.Battlefield.Arena of Glory.Exerted = true
 ? Bot1.Mana = {R}{R} (GainsHaste)
 Bot1.Hand.Embereth Shieldbreaker.Cast

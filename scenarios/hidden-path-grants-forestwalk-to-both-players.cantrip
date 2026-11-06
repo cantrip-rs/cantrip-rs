@@ -1,0 +1,63 @@
+# Both players' green creatures gain forestwalk. A defender with a Forest cannot block them, while a colorless creature can be blocked (CR 702.14c).
+[Bot1 Deck]
+Forest
+Llanowar Elves
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Hidden Path
+Ornithopter
+Ornithopter
+Island x20
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hidden Path.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hidden Path.Keywords = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Attack(Llanowar Elves > Bot2; Ornithopter#1 > Bot2)
+! Bot2.Block(Ornithopter > Llanowar Elves)
+Bot2.Block(Bot2.Battlefield.Ornithopter > Bot1.Battlefield.Ornithopter#1)
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Llanowar Elves > Bot1)
+! Bot1.Block(Ornithopter#2 > Llanowar Elves)
+[T6 Bot2.Main2]
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
+Bot1.Battlefield.Ornithopter#1.Keywords = Flying

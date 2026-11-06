@@ -182,6 +182,23 @@ fn spells_you_cast(_: &dyn Query, asker: &Asker, _: ObjectId, player: PlayerId) 
     player == asker.controller
 }
 
+fn route_sacrifice_filter(q: &dyn Query, _: &Asker, id: ObjectId) -> bool { q.chars(id).name == "Route Sacrifice Material" }
+fn route_return_filter(q: &dyn Query, _: &Asker, id: ObjectId) -> bool { q.chars(id).name == "Route Return Material" }
+static ROUTE_SACRIFICE_MATERIAL: CardDef = CardDef { name: "Route Sacrifice Material", types: TypeSet::of(&[CardType::Artifact]), ..CardDef::BLANK };
+static ROUTE_RETURN_MATERIAL: CardDef = CardDef { name: "Route Return Material", types: TypeSet::of(&[CardType::Artifact]), ..CardDef::BLANK };
+static ROUTE_COMPOSED_WAY: WayDef = WayDef { text: "Sacrifice a material", cost: Cost::sacrifice(1, route_sacrifice_filter), ..HAND_WAY };
+static ROUTE_COMPOSED_SPELL: CardDef = CardDef { name: "Route Composed Spell", ways: &[ROUTE_COMPOSED_WAY], ..PROBE_SPELL };
+static ROUTE_DISCARD_WAY: WayDef = WayDef { text: "Discard a material", cost: Cost { discard: Discards::one(1, Some(route_sacrifice_filter)), ..Cost::NONE }, ..HAND_WAY };
+static ROUTE_DISCARD_SPELL: CardDef = CardDef { name: "Route Discard Spell", ways: &[ROUTE_DISCARD_WAY], ..PROBE_SPELL };
+static ROUTE_GRAVEYARD_PERMISSION: CardDef = CardDef {
+    name: "Route Graveyard Permission", types: TypeSet::of(&[CardType::Artifact]),
+    exile_casts: &[ExileCast { text: "Cast with graveyard exile", from: ZoneKind::Exile, allows: any_card, additional: Cost { exile_from_graveyard: 1, ..Cost::NONE }, any_type: false, any_color: false, lands: false, life_for_mana_value: false, instead: None }], ..CardDef::BLANK
+};
+static ROUTE_COMPOSED_PERMISSION: CardDef = CardDef {
+    name: "Route Composed Permission", types: TypeSet::of(&[CardType::Artifact]),
+    exile_casts: &[ExileCast { text: "Cast with a return cost", from: ZoneKind::Exile, allows: any_card, additional: Cost::return_to_hand(1, route_return_filter), any_type: false, any_color: false, lands: false, life_for_mana_value: false, instead: None }],
+    ..CardDef::BLANK
+};
 static EXILE_PERMISSION: CardDef = CardDef {
     name: "Route Exile Permission",
     types: TypeSet::of(&[CardType::Artifact]),
@@ -442,6 +459,7 @@ fn table() -> &'static CardTable {
             &GRANTOR_7,
             &GRANTOR_8,
             &EXILE_PERMISSION,
+            &ROUTE_COMPOSED_PERMISSION, &ROUTE_COMPOSED_SPELL, &ROUTE_DISCARD_SPELL, &ROUTE_GRAVEYARD_PERMISSION, &ROUTE_SACRIFICE_MATERIAL, &ROUTE_RETURN_MATERIAL,
             &SELF_EXILE_PROBE,
             &FREE_ALTERNATIVE,
             &FREE_EMBLEM,
@@ -916,6 +934,12 @@ fn an_energy_cost_is_judged_again_after_the_mana_abilities() {
         for _ in 0..8 {
             game.run();
             let request = game.pending().cloned().expect("asked");
+            if let RequestKind::ChooseCostPayment { choices, .. } = &request.kind {
+                let pick = choices.iter().position(|c| c.kind == CostPaymentKind::Energy)
+                    .or_else(|| choices.iter().position(|c| c.kind == CostPaymentKind::Mana)).expect("a payment operation");
+                game.answer(request.id, request.player, Answer::CostPayment(pick)).unwrap();
+                continue;
+            }
             let RequestKind::PayCosts { options, .. } = &request.kind else { break };
             let pick = options
                 .iter()
@@ -1240,4 +1264,51 @@ fn a_fuse_card_with_an_x_half_is_refused() {
 #[should_panic(expected = "Route Fuse With Modes: its half Route Fused Modal Half has modes")]
 fn a_fuse_card_with_a_modal_half_is_refused() {
     let _ = CardTable::new([&FUSE_WITH_MODES, &FUSED_MODAL_HALF, &FUSED_PLAIN_HALF]);
+}
+
+#[test]
+fn alternate_way_and_permission_keep_distinct_permanent_costs() {
+    let (mut game, spell) = game_with("Route Composed Spell", Zone::exile, 0);
+    let giver = put(&mut game, "Route Composed Permission", ME);
+    let sacrifice = put(&mut game, "Route Sacrifice Material", ME);
+    let returned = put(&mut game, "Route Return Material", ME);
+    game.run();
+    let option = casts_of(&game, spell).into_iter().find(|o| by(o) == Some(giver) && o.index == 1).expect("the composed way is offered");
+    take(&mut game, &option);
+    let request = { game.run(); game.pending().unwrap().clone() };
+    let selected = match &request.kind { RequestKind::ChooseCostPayment { choices, .. } => choices.iter().position(|c| c.kind == CostPaymentKind::Return).unwrap(), other => panic!("expected ordering, got {other:?}") };
+    game.answer(request.id, request.player, Answer::CostPayment(selected)).unwrap();
+    let request = { game.run(); game.pending().unwrap().clone() };
+    game.answer(request.id, request.player, Answer::Cards(vec![returned])).unwrap();
+    let request = { game.run(); game.pending().unwrap().clone() };
+    game.answer(request.id, request.player, Answer::Cards(vec![sacrifice])).unwrap();
+    game.run();
+    assert!(game.state.obj(returned).became.is_some_and(|id| game.state.obj(id).zone == Zone::hand(ME)));
+    assert!(game.state.obj(sacrifice).became.is_some_and(|id| game.state.obj(id).zone == Zone::graveyard(ME)));
+    let item = game.state.stack.last().expect("the spell was cast");
+    assert_eq!(item.kind, StackKind::Spell);
+    assert_eq!(game.history().spell_cost_objects(item.object, CostOrigin::CastingWay, 0, CostPart::Permanents).collect::<Vec<_>>(), vec![sacrifice]);
+    assert_eq!(game.history().spell_cost_objects(item.object, CostOrigin::PermissionAdditional, 0, CostPart::Permanents).collect::<Vec<_>>(), vec![returned]);
+}
+
+#[test]
+fn alternate_way_discard_can_feed_permission_graveyard_exile() {
+    let (mut game, spell) = game_with("Route Discard Spell", Zone::exile, 0);
+    let giver = put(&mut game, "Route Graveyard Permission", ME);
+    let card = put(&mut game, "Route Sacrifice Material", ME);
+    move_to(&mut game, card, Zone::hand(ME));
+    game.run();
+    let option = casts_of(&game, spell).into_iter().find(|o| by(o) == Some(giver) && o.index == 1).expect("discarding first makes the permission cost payable");
+    take(&mut game, &option);
+    let request = { game.run(); game.pending().unwrap().clone() };
+    assert!(matches!(request.kind, RequestKind::ChooseCards { purpose: Purpose::Discard, .. }));
+    game.answer(request.id, request.player, Answer::Cards(vec![card])).unwrap();
+    let discarded = game.state.obj(card).became.expect("discard made a graveyard object");
+    let request = { game.run(); game.pending().unwrap().clone() };
+    game.answer(request.id, request.player, Answer::Cards(vec![discarded])).unwrap();
+    game.run();
+    let item = game.state.stack.last().expect("the spell was cast");
+    assert_eq!(item.kind, StackKind::Spell);
+    assert_eq!(game.history().spell_cost_objects(item.object, CostOrigin::CastingWay, 0, CostPart::Discard(0)).collect::<Vec<_>>(), vec![card]);
+    assert_eq!(game.history().spell_cost_objects(item.object, CostOrigin::PermissionAdditional, 0, CostPart::GraveyardExile).collect::<Vec<_>>(), vec![discarded]);
 }

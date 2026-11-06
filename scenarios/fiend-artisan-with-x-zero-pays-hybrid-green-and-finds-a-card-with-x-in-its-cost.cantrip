@@ -33,12 +33,19 @@ Bot1.Battlefield.Swamp.Activate
 Bot1.Pass
 [T3 Bot1.Main1]
 Bot1.Hand.Swamp.Play
-! Bot1.Battlefield.Fiend Artisan.Activate
+# No other creature can be sacrificed: the attempted activation rolls back (CR 733).
+Bot1.Battlefield.Fiend Artisan.Activate(X: 0)
+Bot1.Battlefield.Mox Emerald.Activate
+? Bot1.Battlefield.Mox Emerald.Tapped = false
+? Bot1.Battlefield.Fiend Artisan.Tapped = false
+? Bot1.Mana =
+? Stack.Count = 0
 Bot1.Hand.Ravine Raider.Cast
 Bot1.Battlefield.Swamp#1.Activate
 Bot1.Pass
 Bot1.Battlefield.Fiend Artisan.Activate(X: 0)
 Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Choose(Tap Fiend Artisan)
 Bot1.Choose(Ravine Raider)
 ? Bot1.Mana =
 ! Bot1.Search(Misshapen Fiend)

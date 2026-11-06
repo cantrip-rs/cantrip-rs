@@ -1,0 +1,55 @@
+# Tam proliferates twice in response to the upkeep trigger, taking three counters to five at once; Homarid removes all five before its upkeep adds one (CR 603.8).
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Jet
+Homarid
+Tam, the Possibility
+Ajani Resolute
+Island
+Narset, Parter of Veils
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Homarid.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tam, the Possibility.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ajani Resolute.Cast
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Narset, Parter of Veils.Cast
+[T15 Bot1.Upkeep]
+? Bot1.Battlefield.Homarid.Counters.Tide = 3
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Tam, the Possibility.Activate
+Bot1.Target(Bot1.Battlefield.Homarid)
+Bot1.Target(Bot1.Battlefield.Homarid)
+? Bot1.Battlefield.Homarid.Counters.Tide = 5
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Homarid.Counters.Tide = 1
+Bot1.Battlefield.Homarid.Power = 1
+Bot1.Battlefield.Homarid.Toughness = 1

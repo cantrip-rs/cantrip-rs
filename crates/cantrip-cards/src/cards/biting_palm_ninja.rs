@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{effects, hand::exile_chosen_nonland_from_revealed_hand, ninjutsu, triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT};
+use cantrip_mechanics::{effects, hand::exile_chosen_nonland_from_revealed_hand, ninjutsu, triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT};
 use cantrip_oracle as oracle;
 
 const ASK: Question = Question::new(
@@ -41,7 +41,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         ninjutsu::ninjutsu(mana("{2}{B}"), "Ninjutsu {2}{B} ({2}{B}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)"),
         triggered(
-            DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT,
+            DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT,
             remove_menace_counter,
             "Whenever this creature deals combat damage to a player, you may remove a menace counter from it. When you do, that player reveals their hand and you choose a nonland card from it. Exile that card.",
         ),

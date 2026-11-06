@@ -69,15 +69,11 @@ public sealed class ModelChooser : IChooser
     {
         ArgumentNullException.ThrowIfNull(question);
 
-        string asked = Asked(question);
+        string asked = Asked(question.ToString());
 
         for (int attempt = 1; attempt <= Attempts; attempt++)
         {
-            Sending?.Invoke(asked);
-            _conversation.Add(new ChatTurn(ChatRole.User, asked));
-            string reply = _model.Continue(_conversation);
-            _conversation.Add(new ChatTurn(ChatRole.Assistant, Short(reply)));
-            Trim();
+            string reply = Reply(asked);
 
             if (Read(question, reply) is { } picks)
             {
@@ -98,16 +94,50 @@ public sealed class ModelChooser : IChooser
     }
 
     /// <summary>The question as it goes out: the position, once, and then what is being asked.</summary>
-    private string Asked(Question question)
+    private string Asked(string question)
     {
         if (Position.Length == 0)
         {
-            return question.ToString();
+            return question;
         }
 
         string preamble = Position;
         Position = string.Empty;
         return preamble + "\n\n" + question;
+    }
+
+    public uint ChooseNumber(NumberQuestion question)
+    {
+        ArgumentNullException.ThrowIfNull(question);
+        if (question.Least > question.Most) throw new NoChoiceException("The numeric range is empty.");
+        if (question.Least == question.Most) return question.Least;
+        string asked = Asked(question.ToString());
+        for (int attempt = 1; attempt <= Attempts; attempt++)
+        {
+            string reply = Reply(asked);
+            string last = reply.ReplaceLineEndings("\n").Split('\n').LastOrDefault(line => !string.IsNullOrWhiteSpace(line)) ?? string.Empty;
+            if (uint.TryParse(Clean(last), NumberStyles.None, CultureInfo.InvariantCulture, out uint value)
+                && value >= question.Least && value <= question.Most)
+            {
+                Watching?.Invoke(question.ToString(), $"{value.ToString(CultureInfo.InvariantCulture)}\n      [it said: {Short(reply)}]");
+                return value;
+            }
+            _model.Usage.Retried();
+            asked = $"That reply did not give a whole number from {question.Least} to {question.Most}. Answer again with only the whole number.";
+        }
+        Watching?.Invoke(question.ToString(), "(no answer — falling back to the game's own default)");
+        throw new NoChoiceException($"No valid number came back after {Attempts} attempts.");
+    }
+
+    /// <summary>One bounded conversation exchange, shared by keyed and scalar questions.</summary>
+    private string Reply(string asked)
+    {
+        Sending?.Invoke(asked);
+        _conversation.Add(new ChatTurn(ChatRole.User, asked));
+        string reply = _model.Continue(_conversation);
+        _conversation.Add(new ChatTurn(ChatRole.Assistant, Short(reply)));
+        Trim();
+        return reply;
     }
 
     /// <summary>

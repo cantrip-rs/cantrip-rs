@@ -1,0 +1,8 @@
+{
+  "name": "Hoar Shade",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Shade",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "{B}: This creature gets +1/+1 until end of turn."
+}

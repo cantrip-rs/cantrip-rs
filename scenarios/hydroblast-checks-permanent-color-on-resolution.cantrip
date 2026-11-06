@@ -1,0 +1,54 @@
+# Hydroblast checks color on resolution: a red creature made blue survives, and a green creature made red is destroyed (CR 608.2h).
+[Bot1 Deck]
+Hydroblast
+Hydroblast
+Thoughtlace
+Chaoslace
+Mox Sapphire
+Mox Sapphire
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Mountain Bandit
+Llanowar Elves
+Mox Ruby
+Mox Emerald
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Mountain Bandit.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Hydroblast.Cast
+Bot1.Modes(2)
+Bot1.Target(Mountain Bandit)
+? Bot1.Mana =
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Thoughtlace.Cast(Mountain Bandit)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Mountain Bandit.Colors = Blue
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Hydroblast.Cast
+Bot1.Modes(2)
+Bot1.Target(Llanowar Elves)
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Chaoslace.Cast(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard = Llanowar Elves
+Bot2.Battlefield.Mountain Bandit.Colors = Blue

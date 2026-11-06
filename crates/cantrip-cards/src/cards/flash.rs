@@ -11,13 +11,14 @@ const KEEP: Question = Question::new("Sacrificed", "pay {cost}, or {subject} is 
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let player = item.controller;
     let Some(entered) = hand::may_put_onto_battlefield(g, player, item.object, |c| c.is(CardType::Creature))? else { return Ok(()) };
-    let def = g.card(g.obj(entered).card);
     if !targets::permanent(g, entered) {
         return Ok(());
     }
-    let mut cost = def.cost;
+    let chars = g.chars(entered);
+    let mut cost = g.mana_cost(entered);
     cost.generic = cost.generic.saturating_sub(2);
-    if !def.has_cost || !g.may_pay(player, item.object, entered, of_mana(cost), &KEEP)? {
+    cost.x = 0; // X in the mana cost is zero (CR 107.3g).
+    if chars.no_cost || !g.card(chars.card).has_cost || !g.may_pay(player, item.object, entered, of_mana(cost), &KEEP)? {
         g.sacrifice(player, &[entered]);
     }
     Ok(())

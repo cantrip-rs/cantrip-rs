@@ -24,7 +24,7 @@ fn creature(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
 }
 
 fn other_artifacts(g: &dyn Rules, item: &StackItem) -> Vec<ObjectId> {
-    let asker = Asker { source: item.object, controller: item.controller, by: None, spell: false };
+    let asker = Asker { instance: None, source: item.object, controller: item.controller, by: None, spell: false };
     g.permanents_of(item.controller).into_iter().filter(|&id| other_artifact(g, &asker, id)).collect()
 }
 

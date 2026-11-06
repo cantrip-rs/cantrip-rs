@@ -46,6 +46,7 @@ Bot2.Battlefield.Lion's Eye Diamond.Activate(Color: U)
 ? Bot1.Battlefield.Knight of the Reliquary.Power = 2
 Bot1.Hand.Plains.Play
 Bot1.Battlefield.Knight of the Reliquary.Activate
+Bot1.Choose(Tap Knight of the Reliquary)
 ! Bot1.Choose(Mox Sapphire)
 Bot1.Choose(Forest)
 ! Bot1.Search(Llanowar Elves)
@@ -57,6 +58,7 @@ Bot1.Pass
 ? Bot1.Battlefield.Knight of the Reliquary.Tapped = true
 [T5 Bot1.Main1]
 Bot1.Battlefield.Knight of the Reliquary.Activate
+Bot1.Choose(Tap Knight of the Reliquary)
 ! Bot1.Choose(Mountain)
 Bot1.Choose(Plains)
 Bot1.Search(Forest)
