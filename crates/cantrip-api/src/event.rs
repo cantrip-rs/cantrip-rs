@@ -59,6 +59,8 @@ pub struct DamageResult {
     pub excess: u32,
 }
 
+pub use cantrip_state::{CostOrigin, CostPart};
+
 /// A player's mill (CR 701.17) as it was carried out: `cards` are the new objects `Game::mill` returns, and `count` is the
 /// number the instruction became once the effects that change it applied (CR 614.1a, 614.6: The Water Crystal's "that
 /// many cards plus four instead"), which the library may not have held all of (CR 701.17b). "When you do" reads both.
@@ -72,6 +74,16 @@ pub struct MillResult {
 /// one it became (CR 400.7).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Event {
+    /// An object paid a distinct spell cost component; its identity is the one before any zone change.
+    CostObjectPaid { spell: ObjectId, object: ObjectId, receipt: usize },
+    /// An old permanent paid one specific component of a stack activation.
+    AbilityCostObjectPaid { serial: u32, object: ObjectId, receipt: usize },
+    /// A distinct payment requested by a resolving spell or ability; its identity is its journal position.
+    ResolutionPaymentBegan { payment: usize, source: ObjectId, payer: PlayerId, resolving: Option<u32> },
+    /// An object paid one component of that resolution payment, identified before any zone change.
+    ResolutionCostObjectPaid { payment: usize, source: ObjectId, payer: PlayerId, object: ObjectId, receipt: usize },
+    /// An ability copy's serial and the serial it copied, including copies of copies.
+    AbilityCopied { copy: u32, original: u32 },
     /// A spell became cast (CR 601.2i), with how many spells its caster has cast this turn, this one included. `options` has a
     /// bit for each optional cost its abilities offer as it becomes cast (`TriggeredDef::cast_option`), in the order it has them,
     /// set where that cost was paid: the "when you cast this spell, if its cost was paid" of each instance reads its own (CR
@@ -87,7 +99,15 @@ pub enum Event {
     /// Its `from` is `Zone::GONE`, so what asks what left the battlefield sees the permanent once (the release notes: "one
     /// creature died, three cards were put into the graveyard"); what asks where a card was put from asks
     /// `Event::moved_from`, which says the battlefield.
-    ZoneChange { old: ObjectId, new: ObjectId, from: Zone, to: Zone, reason: ZoneReason, part: bool },
+    ZoneChange { old: ObjectId, new: ObjectId, from: Zone, to: Zone, reason: ZoneReason, part: bool,
+        /// For an arrival on the battlefield, the player instructed to put it there (CR 110.2a, 608.2c), independently of
+        /// its owner or entering controller. None for other moves or an actorless rules/setup action. Thelon's Chant and
+        /// Tourach's Chant name this player; entry replacements changing only control do not change who put it there.
+        put_by: Option<PlayerId>,
+        /// The old permanent this Aura enchanted when it left the battlefield (CR 400.7f): it left in this same move
+        /// batch, or the Aura followed it to its owner's graveyard by the unattached-Aura state-based action (704.5m).
+        /// Rules-derived from the actual moves after replacement, never inferred from a later unrelated move.
+        enchanted_left: Option<ObjectId> },
     /// Damage was dealt. `controller` and `kind.colors()` are the source's as it dealt it (CR 120.3, 609.7): "damage red sources
     /// you controlled dealt this turn" counts a source that has since changed controller or color, or left (Temple of
     /// Power's ruling), and a spell's or an ability's source by what it was on the stack or the battlefield then.
@@ -122,7 +142,9 @@ pub enum Event {
     /// An ability was activated (CR 602.2, 605.3): `ability` of `source`, by `player`; `by` names the other object whose effect
     /// gave the source that ability (CR 113.2c, 613.1f: Chromatic Lantern's mana ability on a land, an Equipment's ability on
     /// the creature), with the ability, or is `Grant::NONE` for one of the source's own (`Grant::some` reads it).
-    AbilityActivated { source: ObjectId, ability: AbilityRef, player: PlayerId, by: Grant },
+    /// `instance` is captured before paying costs and distinguishes independent identical acquisitions; it is not the
+    /// mutable slot offered to the player, nor the CR607 group of linked abilities.
+    AbilityActivated { source: ObjectId, ability: AbilityRef, player: PlayerId, by: Grant, instance: AbilityAcquisition },
     /// A creature was declared as an attacker (CR 508.1). `known` is the last-known row (`GameState::last_known`) that keeps
     /// its characteristics as it was declared, which "you attacked with a Rogue" asks of it once it has changed, left or
     /// changed controllers (`history::Attacked::chars`). `defending` is its defending player as it attacked (CR 508.5,
@@ -148,6 +170,10 @@ pub enum Event {
     /// `player` searched the library of `library` (CR 701.23, 701.23f): their own, or another player's.
     Searched { player: PlayerId, library: PlayerId },
     Tapped { permanent: ObjectId },
+    /// A tapped permanent became untapped (CR 701.26b). Never emitted for a prohibited untap, an already untapped
+    /// permanent, or an untap replaced by removing a stun counter (CR 122.1d). Wake Thrasher and Mesmeric Orb listen
+    /// for this event; a simultaneous untap announces all its events in one batch (CR 603.2c).
+    Untapped { permanent: ObjectId },
     /// A permanent was tapped for mana (CR 106.12, 605.1b): a mana ability with {T} in its cost was activated by `player` and
     /// resolved. `produced` is the mana that ability added (CR 106.12a), of any restriction - not what the triggered mana
     /// abilities it triggers add: "one mana of any type that land produced" reads it. Recorded for the history; the
@@ -159,7 +185,7 @@ pub enum Event {
     /// of it, or a payment as something resolves. One record for each source a payment took mana from, recorded as the
     /// payment is made, so a spell's come before its `Cast`: "using mana produced by [this]", "mana from a Treasure was spent
     /// to cast it" (`History::mana_spent_to_cast`). Only recorded.
-    ManaSpent { player: PlayerId, source: ObjectId, on: ObjectId, cast: bool, mana: ManaTally },
+    ManaSpent { player: PlayerId, source: ObjectId, on: ObjectId, cast: bool, mana: ManaTally, snow: u32 },
     /// `creature` convoked `spell` (CR 702.51c): it was tapped to pay for mana in the spell's total cost (CR 702.51a,
     /// 601.2h) as the spell was cast. Recorded as it is tapped, right after its `Tapped`, so a spell's come before its
     /// `Cast`; a tap for mana or for improvise is no convoke. It names the creature and copies nothing out of it: what it
@@ -192,6 +218,9 @@ pub enum Event {
     /// once however many it blocks; "whenever it blocks a creature" (CR 509.3b) and "becomes blocked by a creature" (CR 509.3d)
     /// read each.
     Blocks { blocker: ObjectId, attacker: ObjectId, declared: bool },
+    /// An unblocked attacking creature became blocked (CR 509.3c): once for the creature, however many blockers
+    /// were declared, or when an effect makes it blocked. Further blockers do not repeat the transition.
+    BecameBlocked { attacker: ObjectId },
     /// An attacking creature was not blocked (CR 509.1h): decided as the declare blockers step's blocks are made.
     Unblocked { attacker: ObjectId, defender: Target },
     /// A permanent became monstrous (CR 701.37a).
@@ -465,6 +494,11 @@ impl Event {
         match *self {
             Event::SpellCast { spell, .. } | Event::Countered { spell } => spell == object,
             Event::Cast(c) => c.spell == object,
+            Event::CostObjectPaid { spell, object: paid, .. } => spell == object || paid == object,
+            Event::AbilityCostObjectPaid { object: paid, .. } => paid == object,
+            Event::ResolutionPaymentBegan { source, .. } => source == object,
+            Event::ResolutionCostObjectPaid { source, object: paid, .. } => source == object || paid == object,
+            Event::AbilityCopied { .. } => false,
             Event::PaidAlternative { spell, .. } => spell == object,
             Event::LandPlayed { land, .. } => land == object,
             Event::Copied { copy, original, .. } => copy == object || original == object,
@@ -481,7 +515,7 @@ impl Event {
             | Event::ModesChosen { source, .. }
             | Event::Done { source, .. } => source == object,
             Event::CrimeCommitted { by, .. } => by == object,
-            Event::Attacks { attacker, .. } | Event::Unblocked { attacker, .. } => attacker == object,
+            Event::Attacks { attacker, .. } | Event::Unblocked { attacker, .. } | Event::BecameBlocked { attacker } => attacker == object,
             Event::PaidToAttack { attacker, tapped, .. } => attacker == object || tapped == object,
             Event::Blocks { blocker, attacker, .. } => blocker == object || attacker == object,
             Event::ClassLevel { object: o, .. }
@@ -489,6 +523,7 @@ impl Event {
             | Event::CountersRemoved { object: o, .. }
             | Event::Transformed { object: o } => o == object,
             Event::Tapped { permanent }
+            | Event::Untapped { permanent }
             | Event::TappedForMana { permanent, .. }
             | Event::Monstrous { permanent }
             | Event::Solved { permanent }
@@ -515,7 +550,7 @@ impl Event {
 /// The kinds of event, as a bitset, so a triggered ability names what it listens for and an event is checked only
 /// against the abilities that could match it.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Default)]
-pub struct EventMask(pub u64);
+pub struct EventMask(pub u128);
 
 impl EventMask {
     pub const SPELL_CAST: EventMask = EventMask(1 << 0);
@@ -536,6 +571,8 @@ impl EventMask {
     pub const TRANSFORMED: EventMask = EventMask(1 << 15);
     pub const UNATTACHED: EventMask = EventMask(1 << 30);
     pub const TAPPED: EventMask = EventMask(1 << 29);
+    /// Becoming untapped is distinct from tapping, including for mask-only history queries.
+    pub const UNTAPPED: EventMask = EventMask(1 << 64);
     pub const LIFE_CHANGE: EventMask = EventMask(1 << 16);
     pub const REVEALED: EventMask = EventMask(1 << 17);
     pub const COUNTERED: EventMask = EventMask(1 << 18);
@@ -546,6 +583,8 @@ impl EventMask {
     pub const TRIGGERED: EventMask = EventMask(1 << 22);
     pub const DONE: EventMask = EventMask(1 << 23);
     pub const BLOCKS: EventMask = EventMask(1 << 24);
+    /// A transition to blocked (CR 509.3c). Shares the blocks bit: matchers distinguish the event variants.
+    pub const BECAME_BLOCKED: EventMask = EventMask::BLOCKS;
     pub const COPIED: EventMask = EventMask(1 << 25);
     pub const BECAME_MONARCH: EventMask = EventMask(1 << 26);
     pub const COIN_FLIPPED: EventMask = EventMask(1 << 27);
@@ -601,8 +640,8 @@ impl EventMask {
     pub const ENTERED: EventMask = EventMask(1 << 62);
     /// A creature crewed a Vehicle (CR 702.122b): recorded only, for the history.
     pub const CREWED: EventMask = EventMask(1 << 63);
-    /// A spell merged with a permanent (CR 702.140d): it shares transforming's bit, every one of the 64 being taken, so an
-    /// ability listening for either is asked of both kinds, and tells them apart by the event.
+    /// A spell merged with a permanent (CR 702.140d). Kept at its existing coarse trigger bit for compatibility:
+    /// transform and mutate matchers distinguish their event variants.
     pub const MUTATED: EventMask = EventMask::TRANSFORMED;
     /// A meld card's counterpart melded with it (CR 701.42a): recorded only, sharing transforming's bit as mutating does.
     pub const MELDED: EventMask = EventMask::TRANSFORMED;
@@ -666,6 +705,7 @@ impl EventMask {
             Event::AttackersDeclared { .. } => EventMask::ATTACKERS_DECLARED,
             Event::Unblocked { .. } => EventMask::UNBLOCKED,
             Event::Blocks { .. } => EventMask::BLOCKS,
+            Event::BecameBlocked { .. } => EventMask::BECAME_BLOCKED,
             Event::Monstrous { .. } => EventMask::MONSTROUS,
             Event::Solved { .. } => EventMask::SOLVED,
             Event::Suspected { .. } => EventMask::SUSPECTED,
@@ -678,6 +718,7 @@ impl EventMask {
             Event::Unattached { .. } => EventMask::UNATTACHED,
             Event::Attached { .. } => EventMask::ATTACHED,
             Event::Tapped { .. } => EventMask::TAPPED,
+            Event::Untapped { .. } => EventMask::UNTAPPED,
             Event::TappedForTeamwork { .. } => EventMask::TAPPED_FOR_TEAMWORK,
             Event::Crewed { .. } => EventMask::CREWED,
             Event::BecameMonarch { .. } => EventMask::BECAME_MONARCH,
@@ -734,13 +775,11 @@ mod tests {
         assert_eq!(std::mem::size_of::<DamageKind>(), 1);
     }
 
-    /// The history holds an `Event` for everything since the game began, so its size is every record's: the mana in one
-    /// is a `ManaTally` (a `u8` a kind), never a pool's `u32` counts, and a cast's mana value is in its last-known row
-    /// (`Cast::value`). 28 since a damage event names the last-known row of its source as it dealt it (`Event::Damage::known`,
-    /// freerunning's "at the time it dealt that damage", CR 702.173a): the four bytes of a row's index, which no reshuffle of
-    /// the damage event's other fields could find room for.
+    /// History retains every event; independently acquired activations retain their grant and donor.
+    /// Damage and snow spending use the published u32 domain.
+    /// The composed 64-bit Record includes the acquisition-aware Cause and measures 72 bytes.
     #[test]
     fn an_event_stays_small() {
-        assert!(std::mem::size_of::<Event>() <= 28, "Event is {} bytes", std::mem::size_of::<Event>());
+        assert!(std::mem::size_of::<Event>() <= 40, "Event is {} bytes", std::mem::size_of::<Event>());
     }
 }

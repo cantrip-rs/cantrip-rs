@@ -1,0 +1,6 @@
+{
+  "name": "Despotic Scepter",
+  "manaCost": "{1}",
+  "type": "Artifact",
+  "oracleText": "{T}: Destroy target permanent you own. It can't be regenerated."
+}

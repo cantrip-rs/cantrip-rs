@@ -1,0 +1,35 @@
+# The fifth card can be chosen, exactly one must be taken, and the other four
+# are put back in a chosen order on top of the library (CR 401.4, 608.2c).
+[Bot1 Deck]
+Diabolic Vision
+Mox Sapphire
+Mox Jet
+Plains x4
+Island
+Swamp
+Mountain
+Forest
+Memnite
+Ornithopter
+Plains x10
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Diabolic Vision.Cast
+? Bot1.Mana =
+! Bot1.Choose()
+! Bot1.Choose(Island; Swamp)
+Bot1.Choose(Memnite)
+? Bot1.Hand.Memnite.Power = 1
+Bot1.Arrange(Forest; Mountain; Swamp; Island)
+[Expect]
+Bot1.Looked = Island; Swamp; Mountain; Forest; Memnite
+Bot1.Hand = Memnite; Plains; Plains; Plains; Plains
+Bot1.Library = Forest; Mountain; Swamp; Island; Ornithopter; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains
+Bot2.Hand.Memnite.Power = 1
+Bot2.Library.Count = 14

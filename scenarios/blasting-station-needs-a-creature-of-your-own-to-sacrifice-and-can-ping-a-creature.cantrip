@@ -1,5 +1,5 @@
 # The cost sacrifices "a creature" you control (CR 118.3): with only Bot2's Ornithopter on the battlefield the untapped
-# Station cannot be activated, and once Bot1 has an Ornithopter of its own it can, pinging Bot2's creature ("any
+# Station cannot pay an attempted activation, which reverses its tap; once Bot1 has an Ornithopter of its own it can, pinging Bot2's creature ("any
 # target": a creature, 1 damage on a 0/2).
 
 [Bot1 Deck]
@@ -25,10 +25,19 @@ Bot1.Hand.Blasting Station.Cast
 [T2 Bot2.Main1]
 Bot2.Hand.Ornithopter.Cast
 [T3 Bot1.Main1]
-! Bot1.Battlefield.Blasting Station.Activate
+Bot1.Battlefield.Blasting Station.Activate(Bot2.Battlefield.Ornithopter)
+? Bot1.Hand = Ornithopter; Plains; Plains; Plains
+? Bot1.Mana =
+? Bot1.Life = 20
+? Bot1.Battlefield.Blasting Station.Tapped = false
+? Bot1.Graveyard.Count = 0
+? Bot2.Battlefield = Ornithopter
+? Bot2.Battlefield.Ornithopter.Damage = 0
+? Stack.Count = 0
 Bot1.Hand.Ornithopter.Cast
 Bot1.Decline
 Bot1.Battlefield.Blasting Station.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Tap Blasting Station)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 [T3 Bot1.Main2]

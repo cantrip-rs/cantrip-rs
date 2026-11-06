@@ -39,7 +39,10 @@ Bot2.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Battlefield.Mind Stone.Activate(Ability: Draw)
 Bot1.Battlefield.Peter Parker's Camera.Activate(Stack.Mind Stone)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
+Bot1.Choose(Tap Peter Parker's Camera)
 ? Bot1.Battlefield.Peter Parker's Camera.Tapped = true
 ? Bot1.Battlefield.Peter Parker's Camera.Counters.Film = 2
 Bot1.Pass

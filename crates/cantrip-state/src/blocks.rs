@@ -52,6 +52,9 @@ fn creatures(n: u32) -> String {
     if n == 1 { format!("{number} creature") } else { format!("{number} creatures") }
 }
 
+#[cfg(test)]
+thread_local! { static MULTI_SEARCH_NODES: std::cell::Cell<usize> = const { std::cell::Cell::new(0) }; }
+
 impl BlockRequirements {
     /// What the rules make of `blocks`, a declaration among the `allowed` blocks (CR 509.1a-d); with `addable`, which blocks
     /// may be added on the way to a legal one too. Without it the verdict is a walk over the blocks, cheap enough to check
@@ -312,6 +315,7 @@ impl BlockRequirements {
             }
 
             fn go(&mut self, i: usize, obeyed: u32) {
+                #[cfg(test)] MULTI_SEARCH_NODES.with(|nodes| nodes.set(nodes.get() + 1));
                 // An attacker blocked by fewer than it may be needs that many more of the creatures still to come.
                 if self.counts.iter().zip(self.limits).enumerate().any(|(t, (&n, &(least, _)))| n > 0 && n < least && self.able_after[i][t] < least - n) {
                     return;
@@ -339,6 +343,7 @@ impl BlockRequirements {
             /// Blocker `i`'s blocks: each of its options from `from` on, with up to `left` more after it, then no more (with
             /// `first`, no block at all) - each set of attackers it can block once, in the order of its options.
             fn pick(&mut self, i: usize, from: usize, left: u32, first: bool, obeyed: u32) {
+                #[cfg(test)] MULTI_SEARCH_NODES.with(|nodes| nodes.set(nodes.get() + 1));
                 let blockers = self.blockers;
                 let blocker = &blockers[i];
                 for k in from..blocker.options.len() {
@@ -399,6 +404,8 @@ impl BlockRequirements {
         declaration.extend(chosen.into_iter().map(|(i, t)| (blockers[i].id, targets[t])));
         Some((obeyed + fixed_gain, declaration))
     }
+
+
 }
 
 /// A creature `solve` may have block, with what its blocks could obey.
@@ -424,6 +431,123 @@ mod tests {
 
     fn blocks(blocker: ObjectId) -> RequiredBlock {
         RequiredBlock { blocker: Some(blocker), attacker: None }
+    }
+
+    #[test]
+    fn an_additional_block_allowance_allows_two_distinct_attackers() {
+        let allowed = [(X, A), (X, B)];
+        let r = BlockRequirements { capacities: vec![(X, 2)], ..Default::default() };
+        assert!(r.judge(&allowed, &allowed, false).complete);
+        assert_eq!(r.judge(&allowed, &[(X, A)], true).addable, [(X, B)]);
+        assert!(!r.judge(&allowed, &[(X, A), (X, A)], false).complete);
+        assert!(!BlockRequirements::default().judge(&allowed, &allowed, false).complete);
+    }
+
+    #[test]
+    fn one_blocker_can_obey_two_different_lures_without_counting_one_requirement_twice() {
+        let allowed = [(X, A), (X, B)];
+        let mut r = BlockRequirements { capacities: vec![(X, 2)],
+            required: vec![blocks(X), lure(X, A), lure(X, B)], ..Default::default() };
+        let (most, suggested) = r.solve(&allowed, &[], None, true).unwrap();
+        assert_eq!(most, 3);
+        assert_eq!(r.obeyed(&suggested), 3);
+        r.most = most;
+        assert!(!r.judge(&allowed, &[(X, A)], false).complete);
+        assert_eq!(r.judge(&allowed, &[(X, A)], true).addable, [(X, B)]);
+        assert!(r.judge(&allowed, &allowed, false).complete);
+    }
+
+    #[test]
+    fn additional_blocks_still_need_distinct_creatures_to_satisfy_menace() {
+        let allowed = [(X, A), (X, B), (Y, A), (Y, B)];
+        let mut r = BlockRequirements { capacities: vec![(X, 2), (Y, 2)],
+            required: vec![RequiredBlock { blocker: None, attacker: Some(A) },
+                RequiredBlock { blocker: None, attacker: Some(B) }],
+            limits: vec![(A, 2, 2), (B, 2, 2)], ..Default::default() };
+        let (most, suggested) = r.solve(&allowed, &[], None, true).unwrap();
+        assert_eq!(most, 2);
+        assert_eq!(suggested.len(), 4);
+        r.most = most;
+        assert!(!r.judge(&allowed, &[(X, A), (X, B)], false).complete);
+        assert!(r.judge(&allowed, &[(X, A)], true).addable.contains(&(X, B)));
+        assert!(r.judge(&allowed, &allowed, false).complete);
+    }
+
+    #[test]
+    fn blocking_a_band_expands_requirements_without_consuming_extra_declarations() {
+        let allowed = [(X, A), (X, B)];
+        let mut r = BlockRequirements { capacities: vec![(X, 2)], bands: vec![(A, 1), (B, 1)],
+            required: vec![lure(X, A), lure(X, B)], ..Default::default() };
+        let (most, _) = r.solve(&allowed, &[], None, true).unwrap();
+        assert_eq!(most, 2);
+        r.most = most;
+        assert!(r.judge(&allowed, &[(X, A)], false).complete);
+    }
+
+    #[test]
+    fn dense_lures_with_finite_multiple_blockers_finish() {
+        let attackers: Vec<_> = (0..8).map(|n| ObjectId(100 + n)).collect();
+        let blockers: Vec<_> = (0..8).map(|n| ObjectId(200 + n)).collect();
+        let allowed: Vec<_> = blockers.iter().flat_map(|&b| attackers.iter().map(move |&a| (b, a))).collect();
+        let required = allowed.iter().map(|&(b, a)| lure(b, a)).collect();
+        let r = BlockRequirements { capacities: blockers.iter().map(|&b| (b, 2)).collect(), required, ..Default::default() };
+        MULTI_SEARCH_NODES.with(|nodes| nodes.set(0));
+        let (score, chosen) = r.solve(&allowed, &[], None, true).unwrap();
+        let nodes = MULTI_SEARCH_NODES.with(|nodes| nodes.get());
+        assert!(nodes <= 256, "dense declaration visited {nodes} search nodes");
+        eprintln!("dense finite declaration: {nodes} search nodes");
+        assert_eq!(score, 16);
+        assert_eq!(chosen.len(), 16);
+        assert_eq!(r.obeyed(&chosen), 16);
+    }
+
+    #[test]
+    fn multiple_block_completion_matches_exhaustive_small_declarations() {
+        let all = [(X, A), (X, B), (Y, A), (Y, B)];
+        let required = [vec![blocks(X)], vec![lure(X, A), lure(X, B)],
+            vec![RequiredBlock { blocker: None, attacker: Some(A) }, RequiredBlock { blocker: None, attacker: Some(B) }],
+            vec![blocks(X), blocks(X), lure(Y, B)]];
+        for allowed_mask in 0u32..16 {
+            let allowed: Vec<_> = all.iter().enumerate().filter(|(i, _)| allowed_mask & (1 << i) != 0).map(|(_, p)| *p).collect();
+            for (cx, cy) in [(1, 1), (2, 1), (1, 2), (2, 2), (0, 2)] {
+                for (ma, mb) in [(1, 1), (2, 1), (1, 2), (2, 2)] {
+                    for needs in &required {
+                        for paid in [false, true] {
+                            let mut r = BlockRequirements { capacities: vec![(X, cx), (Y, cy)],
+                                limits: vec![(A, ma, 2), (B, mb, 2)], required: needs.clone(), ..Default::default() };
+                            if paid { r.costs.push(BlockCost { blocker: X, attacker: A,
+                                cost: ManaCost { generic: 1, ..ManaCost::ZERO }, source: A }); }
+                            let declarations: Vec<Vec<_>> = (0..16).map(|mask| all.iter().enumerate()
+                                .filter(|(i, _)| mask & (1 << i) != 0).map(|(_, p)| *p).collect()).collect();
+                            let valid = |decl: &Vec<(ObjectId, ObjectId)>| {
+                                decl.iter().all(|p| allowed.contains(p))
+                                    && [(X, cx), (Y, cy)].iter().all(|&(b, cap)| decl.iter().filter(|p| p.0 == b).count() <= cap as usize)
+                                    && [(A, ma), (B, mb)].iter().all(|&(a, min)| {
+                                        let n = decl.iter().filter(|p| p.1 == a).count(); n == 0 || n >= min as usize
+                                    })
+                            };
+                            // This oracle checks requirements directly instead of using solve or judge.
+                            let score = |decl: &Vec<(ObjectId, ObjectId)>| needs.iter().filter(|need| decl.iter()
+                                .any(|&(b, a)| need.blocker.is_none_or(|id| id == b) && need.attacker.is_none_or(|id| id == a))).count() as u32;
+                            let best = declarations.iter().filter(|d| valid(d) && (!paid || !d.contains(&(X, A))))
+                                .map(score).max().unwrap();
+                            let found = r.solve(&allowed, &[], None, true).unwrap();
+                            assert_eq!(found.0, best, "allowed={allowed_mask} caps={cx},{cy} minimum={ma},{mb} needs={needs:?} paid={paid}");
+                            assert!(valid(&found.1));
+                            r.most = best;
+                            for partial in &declarations {
+                                let judged = r.judge(&allowed, partial, true);
+                                assert_eq!(judged.complete, valid(partial) && score(partial) >= best);
+                                let expected: Vec<_> = allowed.iter().copied().filter(|p| !partial.contains(p)
+                                    && declarations.iter().any(|d| valid(d) && score(d) >= best
+                                        && partial.iter().all(|p| d.contains(p)) && d.contains(p))).collect();
+                                assert_eq!(judged.addable, expected, "partial={partial:?} caps={cx},{cy} needs={needs:?}");
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     fn lure(blocker: ObjectId, attacker: ObjectId) -> RequiredBlock {

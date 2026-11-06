@@ -1,0 +1,8 @@
+{
+  "name": "Dwarven Soldier",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Dwarf Soldier",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Whenever this creature blocks or becomes blocked by one or more Orcs, this creature gets +0/+2 until end of turn."
+}

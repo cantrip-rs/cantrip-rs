@@ -1,0 +1,24 @@
+# With X=0 and no opposing creatures the spell resolves without damage or division by zero.
+
+[Bot1 Deck]
+Mox Ruby
+Dwarven Catapult
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dwarven Catapult.Cast(Bot2; X: 0)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Dwarven Catapult
+Bot1.Life = 20
+Bot2.Life = 20

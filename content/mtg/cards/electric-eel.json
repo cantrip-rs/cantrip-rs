@@ -1,0 +1,8 @@
+{
+  "name": "Electric Eel",
+  "manaCost": "{U}",
+  "type": "Creature — Fish",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "When this creature enters, it deals 1 damage to you.\n{R}{R}: This creature gets +2/+0 until end of turn and deals 1 damage to you."
+}

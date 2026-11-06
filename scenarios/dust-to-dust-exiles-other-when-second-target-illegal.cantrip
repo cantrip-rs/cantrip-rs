@@ -1,0 +1,36 @@
+# Giving the second target hexproof in response leaves the first target legal, so only that artifact is exiled (CR 608.2b).
+[Bot1 Deck]
+Dust to Dust
+Black Lotus
+Plains x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Mox Emerald
+Blossoming Defense
+Forest x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Dust to Dust.Cast
+Bot1.Target(Bot2.Battlefield.Ornithopter; Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Blossoming Defense.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Memnite.Keywords = Hexproof
+Exile = Ornithopter
+Bot2.Graveyard = Blossoming Defense

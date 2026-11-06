@@ -24,6 +24,7 @@ Bot1.Pass
 Bot1.Hand.Karn, Argent Defender.Cast
 Bot1.Pass
 Bot1.Battlefield.Witch's Oven.Activate
+Bot1.Choose(Tap Witch's Oven)
 Bot1.Choose(Karn, Argent Defender)
 Bot1.Pass
 [Bot1.Main2]

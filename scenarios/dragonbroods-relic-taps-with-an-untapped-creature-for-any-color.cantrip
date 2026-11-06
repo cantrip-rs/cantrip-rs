@@ -20,7 +20,10 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Dragonbroods' Relic.Cast
 Bot1.Pass
 Bot2.Pass
-! Bot1.Battlefield.Dragonbroods' Relic.Activate(Color: Red)
+Bot1.Battlefield.Dragonbroods' Relic.Activate(Color: Red)
+? Bot1.Battlefield.Dragonbroods' Relic.Tapped = false
+? Bot1.Mana =
+? Stack.Count = 0
 Bot1.Hand.Ornithopter.Cast
 Bot1.Pass
 Bot2.Pass

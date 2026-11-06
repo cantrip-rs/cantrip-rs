@@ -1,0 +1,28 @@
+# A land gained after Deep Water resolves is affected, and its two mana remain
+# two mana with both colorless mana changed to blue (CR 614.1a, 611.2a).
+[Bot1 Deck]
+Deep Water
+Mox Sapphire
+Gleemox
+City of Traitors
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Hand.Deep Water.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Deep Water.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.City of Traitors.Play
+Bot1.Battlefield.City of Traitors.Activate
+? Bot1.Mana = {U}{U}
+[Expect]
+Bot1.Battlefield.City of Traitors.Tapped = true

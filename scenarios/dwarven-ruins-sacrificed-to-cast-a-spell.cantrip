@@ -1,0 +1,15 @@
+# The sacrifice ability can be activated while paying for a spell, supplying both mana immediately (CR 605.3a).
+[Bot1 Deck]
+Dwarven Ruins
+Pyroclasm
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Dwarven Ruins.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Pyroclasm.Cast
+Bot1.Battlefield.Dwarven Ruins.Activate(Ability: #2)
+? Bot1.Mana =
+[Expect]
+Bot1.Graveyard = Pyroclasm; Dwarven Ruins

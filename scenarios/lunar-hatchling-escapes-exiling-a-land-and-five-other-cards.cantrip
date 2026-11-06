@@ -52,6 +52,7 @@ Bot1.Battlefield.Mana Crypt.Activate
 ! Bot1.Graveyard.Lunar Hatchling.Cast(Ability: Escape)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Graveyard.Lunar Hatchling.Cast(Ability: Escape; Spend: C, C, R, G, G, U)
+Bot1.Choose(Exile 1 permanent)
 ! Bot1.Choose(Mox Emerald)
 Bot1.Choose(Forest#2)
 Bot1.Choose(Black Lotus; Lightning Bolt#1; Lightning Bolt#2; Plains; Faithless Looting)

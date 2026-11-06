@@ -1,0 +1,22 @@
+# With an empty library, looking and putting a card into hand do as much as
+# possible without drawing from the empty library (CR 609.3).
+[Bot1 Deck]
+Diabolic Vision
+Mox Sapphire
+Mox Jet
+Plains x4
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Diabolic Vision.Cast
+? Bot1.Mana =
+[Bot1.Main2]
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains
+Bot1.Library.Count = 0
+Bot1.Graveyard = Diabolic Vision
+Result = InProgress

@@ -1,0 +1,50 @@
+# Dark Heart sacrifices one Forest controlled by its activator as a cost, then gains 3 life on resolution; Bayou is also a Forest (CR 601.2h, 701.21a, 119.3).
+[Bot1 Deck]
+Dark Heart of the Wood
+Mox Jet
+Mox Emerald
+Forest
+Bayou
+Swamp
+Island x20
+[Bot2 Deck]
+Forest
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Dark Heart of the Wood.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Bayou.Play
+Bot1.Battlefield.Dark Heart of the Wood.Activate
+! Bot1.Choose()
+! Bot1.Choose(Bot1.Battlefield.Forest; Bayou)
+! Bot1.Choose(Bot2.Battlefield.Forest)
+! Bot1.Choose(Bot1.Battlefield.Mox Jet)
+Bot1.Choose(Bot1.Battlefield.Forest)
+? Bot1.Graveyard.Forest.Colors =
+? Bot1.Life = 20
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Bot2.Life = 20
+Bot1.Battlefield.Dark Heart of the Wood.Activate
+Bot1.Choose(Bayou)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 26
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+! Bot1.Battlefield.Dark Heart of the Wood.Activate
+[Expect]
+Bot1.Graveyard.Bayou.Colors =
+Bot2.Battlefield.Forest.Tapped = false

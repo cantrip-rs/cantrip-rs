@@ -5,9 +5,7 @@ use cantrip_oracle as oracle;
 /// Untap all creatures you control (CR 701.26a). After this phase, there is an additional combat phase (CR 500.8).
 fn untap_and_extra_combat(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let creatures: Vec<ObjectId> = g.permanents_of(item.controller).into_iter().filter(|&id| g.chars(id).is(CardType::Creature)).collect();
-    for creature in creatures {
-        g.untap(creature);
-    }
+    g.untap_together(&creatures);
     g.add_combat_phase();
     Ok(())
 }

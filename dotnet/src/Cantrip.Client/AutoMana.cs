@@ -15,12 +15,14 @@ public sealed class ManaOwed
         int generic,
         IReadOnlyList<ColorView> colored,
         IReadOnlyList<HybridSymbolView> hybrid,
-        int colorless)
+        int colorless,
+        uint snow = 0)
     {
         Generic = generic;
         Colored = colored;
         Hybrid = hybrid;
         Colorless = colorless;
+        Snow = snow;
     }
 
     /// <summary>Generic mana still owed. Any mana at all pays it.</summary>
@@ -38,8 +40,11 @@ public sealed class ManaOwed
     /// </summary>
     public int Colorless { get; }
 
+    /// <summary>Snow symbols require mana produced by a snow source, of any type.</summary>
+    public uint Snow { get; }
+
     /// <summary>Whether anything is owed at all.</summary>
-    public bool Any => Generic > 0 || Colored.Count > 0 || Hybrid.Count > 0 || Colorless > 0;
+    public bool Any => Generic > 0 || Colored.Count > 0 || Hybrid.Count > 0 || Colorless > 0 || Snow > 0;
 
     /// <summary>
     /// What the prompt on the board still owes, or null when the prompt is not one that mana is being paid to.
@@ -52,19 +57,19 @@ public sealed class ManaOwed
     {
         // The announcement of X (CR 601.2b) is not a payment: nothing is paid until the targets are chosen.
         PayCostsPromptMessage { AnnouncesXOrKicks: false } pay => new ManaOwed(
-            pay.RemainingGeneric + (pay.HasX
+            pay.RemainingGeneric + (pay.HasX && !pay.ManaAbilities
                 && pay.RemainingGeneric == 0
                 && pay.RemainingColored.Count == 0
                 && pay.RemainingHybrid.Count == 0
-                && pay.RemainingColorless == 0 ? 1 : 0),
+                && pay.RemainingColorless == 0 && pay.RemainingSnow == 0 ? 1 : 0),
             pay.RemainingColored,
             pay.RemainingHybrid,
-            pay.RemainingColorless),
+            pay.RemainingColorless, pay.RemainingSnow),
         UnlessPaysPromptMessage unless => new ManaOwed(
             unless.RemainingGeneric,
             unless.RemainingColored,
             unless.RemainingHybrid,
-            colorless: 0),
+            colorless: 0, snow: unless.RemainingSnow),
         _ => null,
     };
 
@@ -234,6 +239,14 @@ public static class AutoMana
             return (0, costly, 0, others - owed.Colorless, (int)ManaTypeView.Colorless);
         }
 
+        if (owed.Snow > 0 && option.Snow)
+        {
+            int others = offered.Where(other => IsManaAbility(other) && other.Snow
+                && !other.PaysNothing && !clicked.Contains(other.Source.Value))
+                .Select(other => other.Source.Value).Distinct().Count();
+            return (0, costly, 0, others - (int)Math.Min(owed.Snow, int.MaxValue), 6);
+        }
+
         // Every source in play pays generic, so it is only ever the last resort of a row that fits nothing better.
         return owed.Generic > 0
             ? (0, costly, 1, Sources(offered, clicked, color: null) - owed.Generic, 0)
@@ -344,7 +357,7 @@ public static class AutoMana
             }
         }
 
-        if (color is { } chosen)
+        if (color is { } chosen && (option.ProducesOfAnyOneColor > 0 || option.ProducesOfAnyColorEach > 0))
         {
             yield return chosen;
         }

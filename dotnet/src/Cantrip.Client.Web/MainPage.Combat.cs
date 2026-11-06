@@ -69,7 +69,7 @@ public sealed partial class MainPage
                 share > 0,
                 room,
                 counters,
-                delta => _dividedShares[handle] = Math.Max(0, _dividedShares.GetValueOrDefault(handle) + delta));
+                delta => _selection.SetDividedShare(candidate, _dividedShares.GetValueOrDefault(handle) + delta));
         }
     }
 

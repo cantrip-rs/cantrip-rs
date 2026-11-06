@@ -23,7 +23,7 @@ fn an_object_that_has_left_is_not_on_the_battlefield() {
     let bear = game.state.push_obj(Obj::new(table.id_of(&BEAR), YOU, Zone::BATTLEFIELD));
     game.state.zone_push(Zone::BATTLEFIELD, bear);
     assert!(game.is_on_battlefield(bear));
-    let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     cantrip_api::Game::exile(&mut cx, bear);
     let exiled = game.state.obj(bear).became.expect("a new object in exile");
     assert!(game.state.obj(bear).zone.is(ZoneKind::Battlefield), "the old object keeps the zone it left from");

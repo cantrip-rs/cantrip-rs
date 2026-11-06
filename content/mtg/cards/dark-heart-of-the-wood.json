@@ -1,0 +1,6 @@
+{
+  "name": "Dark Heart of the Wood",
+  "manaCost": "{B}{G}",
+  "type": "Enchantment",
+  "oracleText": "Sacrifice a Forest: You gain 3 life."
+}

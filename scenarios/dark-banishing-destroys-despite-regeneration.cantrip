@@ -1,0 +1,41 @@
+# A regeneration shield made in response cannot save the opponent's nonblack Llanowar Elves (CR 701.19c).
+[Bot1 Deck]
+Dark Banishing
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Swamp x20
+[Bot2 Deck]
+Yavimaya Hollow
+Mox Emerald
+Mox Emerald
+Llanowar Elves
+Forest x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Yavimaya Hollow.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dark Banishing.Cast(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot2.Battlefield.Yavimaya Hollow.Activate(Bot2.Battlefield.Llanowar Elves; Ability: Regenerate)
+Bot2.Battlefield.Mox Emerald.Activate
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Graveyard = Llanowar Elves
+Bot1.Graveyard = Dark Banishing

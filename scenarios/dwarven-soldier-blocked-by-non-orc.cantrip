@@ -1,0 +1,33 @@
+# A non-Orc blocker does not trigger Dwarven Soldier's ability (CR 603.2).
+[Bot1 Deck]
+Dwarven Soldier
+Mox Ruby
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dwarven Soldier.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Dwarven Soldier > Bot2)
+Bot2.Block(Ornithopter > Dwarven Soldier)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dwarven Soldier.Power = 2
+? Bot1.Battlefield.Dwarven Soldier.Toughness = 1
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Dwarven Soldier.Toughness = 1
+Bot2.Graveyard.Ornithopter.Power = 0

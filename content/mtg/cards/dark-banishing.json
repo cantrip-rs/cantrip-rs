@@ -1,0 +1,6 @@
+{
+  "name": "Dark Banishing",
+  "manaCost": "{2}{B}",
+  "type": "Instant",
+  "oracleText": "Destroy target nonblack creature. It can't be regenerated."
+}

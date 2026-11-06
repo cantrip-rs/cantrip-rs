@@ -18,6 +18,8 @@ Bot1.Hand.Avacyn's Pilgrim.Cast
 [T3 Bot1.Main1]
 Bot1.Hand.Phyrexian Tower.Play
 Bot1.Battlefield.Phyrexian Tower.Activate(Ability: Sacrifice)
+Bot1.Choose(Tap Phyrexian Tower)
+Bot1.Choose(Avacyn's Pilgrim)
 ? Bot1.Mana = {B}{B}
 
 [Expect]

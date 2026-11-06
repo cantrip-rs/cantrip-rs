@@ -1,0 +1,31 @@
+# The activated ability still deals damage if its source is destroyed in response (CR 113.7a, 608.2h).
+[Bot1 Deck]
+Electric Eel
+Black Lotus x2
+Mox Ruby
+Shock
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Electric Eel.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Electric Eel.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Electric Eel)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 18
+Bot1.Battlefield.Electric Eel = (absent)

@@ -1,0 +1,41 @@
+# Two Orcs blocking Dwarven Soldier cause one +0/+2 trigger, not one per blocker; it ends at cleanup (CR 603.2, 611.2a).
+[Bot1 Deck]
+Dwarven Soldier
+Mox Ruby
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Orcish Lumberjack x2
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dwarven Soldier.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Orcish Lumberjack.Cast
+Bot2.Pass
+Bot2.Hand.Orcish Lumberjack.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Dwarven Soldier > Bot2)
+Bot2.Block(Orcish Lumberjack#1 > Dwarven Soldier; Orcish Lumberjack#2 > Dwarven Soldier)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dwarven Soldier.Power = 2
+? Bot1.Battlefield.Dwarven Soldier.Toughness = 3
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Dwarven Soldier.Power = 2
+Bot1.Battlefield.Dwarven Soldier.Toughness = 1

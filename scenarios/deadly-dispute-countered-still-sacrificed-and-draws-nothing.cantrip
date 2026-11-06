@@ -22,6 +22,7 @@ Bot2.Hand.Mox Sapphire.Cast
 [T3 Bot1.Main1]
 Bot1.Hand.Swamp.Play
 Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp#2.Activate
 Bot1.Hand.Deadly Dispute.Cast

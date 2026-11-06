@@ -1,0 +1,58 @@
+# The entry trigger taps both players' Islands, including a dual land, but not
+# other lands; they remain tapped in their controllers' untap steps until the
+# enchantment leaves the battlefield (CR 603.6a, 502.3).
+[Bot1 Deck]
+Curse of Marit Lage
+Island
+Mountain
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Disenchant
+Plains x20
+[Bot2 Deck]
+Tundra
+Island
+Forest x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Tundra.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Curse of Marit Lage.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Island.Tapped = true
+? Bot2.Battlefield.Tundra.Tapped = true
+? Bot1.Battlefield.Mountain.Tapped = false
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Tundra.Tapped = true
+Bot2.Hand.Island.Play
+? Bot2.Battlefield.Island.Tapped = false
+Bot2.Battlefield.Island.Activate
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Island.Tapped = true
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Tundra.Tapped = true
+? Bot2.Battlefield.Island.Tapped = true
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Curse of Marit Lage)
+[T8 Bot2.Main1]
+? Bot2.Battlefield.Tundra.Tapped = false
+? Bot2.Battlefield.Island.Tapped = false
+[T9 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Island.Tapped = false
+Bot1.Battlefield.Mountain.Tapped = false

@@ -67,6 +67,7 @@ Bot2.Pass
 Bot1.Battlefield.Island#2.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Braided Net.Activate(Ability: Craft)
+Bot1.Choose(craft materials)
 Bot1.Choose(Perilous Snare)
 ? Exile = Sheltered by Ghosts; Ornithopter; Braided Net; Perilous Snare
 Bot1.Pass

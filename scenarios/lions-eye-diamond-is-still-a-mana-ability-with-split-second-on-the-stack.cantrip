@@ -22,6 +22,7 @@ Bot2.Hand.Black Lotus.Cast
 Bot2.Battlefield.Black Lotus.Activate(Color: Green)
 Bot2.Hand.Krosan Grip.Cast(Sol Ring)
 Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Red)
+Bot1.Choose(Discard your hand)
 ? Stack = Krosan Grip
 ? Bot1.Mana = {R}{R}{R}
 [T2 Bot2.Main2]

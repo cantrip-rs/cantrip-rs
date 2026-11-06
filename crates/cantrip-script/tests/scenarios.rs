@@ -163,39 +163,31 @@ fn a_creature_blocking_a_band_blocks_each_member() {
     assert_eq!(blocks, vec![("Smuggler's Copter", "Benalish Hero", true), ("Smuggler's Copter", "Guerrilla Gorilla", false)]);
 }
 
-/// A driven seat paying for Fireball may spend the {R} its first scripted Mountain made before it taps the next Mountain
-/// the script names (the page pays floating mana as soon as it can): that is accepted, the named activation stays the
-/// next line, and the game ends as the script means.
+/// A driven seat may activate every scripted mana ability in the mana window before the cost is paid (CR 601.2g-h).
+/// The same final game results whether the script runs alone or each seat supplies its planned answers.
 #[test]
-fn a_driven_seat_may_spend_floating_mana_before_the_next_scripted_mana_activation() {
-    use cantrip_engine::{Action, ActionKind, Answer, PlayerId, RequestKind};
+fn a_driven_seat_activates_planned_mana_before_payment() {
+    use cantrip_engine::{ActionKind, Answer, PlayerId, RequestKind};
     use cantrip_script::{Advance, Intent, Scripted};
     let name = "fireball-x-announced-on-the-page-and-paid-with-the-lands-planned-for-it-in-the-browser";
     let script = GameScript::load(&scripts().join(format!("{name}.cantrip"))).unwrap();
     let alone = run(&script).map(|r| r.dump.render()).unwrap();
     let mut table = Scripted::deal(script).unwrap();
-    let mut early = 0;
+    let mut activations = 0;
     let through = loop {
         match table.advance(&[PlayerId(0), PlayerId(1)]).unwrap() {
             Advance::Ask(expected) => {
-                let floating = match (&expected.request.kind, &expected.intent) {
-                    (RequestKind::PayCosts { options, .. }, Intent::Answer(Answer::Act(meant))) if meant.kind == ActionKind::ActivateAbility => {
-                        options.iter().find(|o| o.kind == ActionKind::AssignMana).cloned()
-                    }
-                    _ => None,
-                };
-                match floating {
-                    Some(option) => {
-                        early += 1;
-                        table.answered(Intent::Answer(Answer::Act(Action::of(&option)))).unwrap();
-                    }
-                    None => table.answered(expected.intent).unwrap(),
+                if let (RequestKind::PayCosts { options, .. }, Intent::Answer(Answer::Act(meant))) = (&expected.request.kind, &expected.intent)
+                    && meant.kind == ActionKind::ActivateAbility {
+                    activations += 1;
+                    assert!(!options.iter().any(|o| o.kind == ActionKind::AssignMana), "mana is not spent while mana abilities are still being activated");
                 }
+                table.answered(expected.intent).unwrap();
             }
             Advance::Check(_) => {}
             Advance::Done => break table.verdict().unwrap().render(),
         }
     };
-    assert!(early > 0, "no floating mana was ever spent ahead of a scripted activation");
+    assert!(activations >= 3, "all three planned mana activations must be driven");
     assert_eq!(through, alone);
 }

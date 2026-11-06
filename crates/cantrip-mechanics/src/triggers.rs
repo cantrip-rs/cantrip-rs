@@ -447,16 +447,21 @@ pub fn this_attacks(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fi
 }
 
 /// "Whenever this creature is dealt damage" (CR 120.2, 603.2c): the damage it is dealt at once, even if it is lethal, as
-/// the trigger's `data[0]` ("that much"); damage of zero is not dealt. The ability is `.sums_per_subject()`, which adds up
+/// `data[0]` bounded to u32, or the bounded frozen payload with `.damage_amount()` ("that much"); damage of zero is not dealt. The ability is `.sums_per_subject()`, which adds up
 /// the events of one combat that hurt it from several sources. Screaming Nemesis and Hexhaven Invigorator print it. The
 /// `listens` mask is `EventMask::DAMAGE`.
 pub fn this_dealt_damage(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
     match event {
         Event::Damage { target: Target::Object(hurt), amount, .. } if *hurt == source && *amount > 0 => {
-            Some(Fired { subject: Target::None, data: [*amount as u32, 0] })
+            Some(Fired { subject: Target::None, data: [*amount, 0] })
         }
         _ => None,
     }
+}
+
+/// Compatibility name for `this_dealt_damage`; `.damage_amount()` carries the bounded matched damage quantity.
+pub fn this_takes_damage(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    this_dealt_damage(q, source, event)
 }
 
 /// "Whenever a source deals damage to this [permanent]" (CR 120.2, 603.2): any source, creature or not, whoever controls it,
@@ -548,19 +553,27 @@ pub fn attached_creature_attacks_subject(q: &dyn Query, source: ObjectId, event:
     }
 }
 
+/// The original Equipment-specific name has the same attached-creature subject contract.
+pub use attached_creature_attacks_subject as equipped_creature_attacks_subject;
+
 /// "Whenever equipped creature deals combat damage to a player" (CR 510.2, 603.2c): the creature this Equipment is attached to
 /// dealing more than 0 combat damage to a player; each such event is one player and one trigger. The player is the trigger's
-/// subject and the amount of damage its `data[0]` ("that damage"). Bloodforged Battle-Axe, Orcrist, Goblin Cleaver and Buster
+/// subject, with the amount in bounded `data[0]`; `.damage_amount()` freezes the bounded amount ("that damage"). Bloodforged Battle-Axe, Orcrist, Goblin Cleaver and Buster
 /// Sword print it.
 pub fn equipped_creature_deals_combat_damage_to_player(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
     match event {
         Event::Damage { source: dealer, target: Target::Player(p), amount, kind, .. }
             if kind.is_combat() && *amount > 0 && q.attached_to(source) == Some(*dealer) =>
         {
-            Some(Fired { subject: Target::Player(*p), data: [*amount as u32, 0] })
+            Some(Fired { subject: Target::Player(*p), data: [*amount, 0] })
         }
         _ => None,
     }
+}
+
+/// Compatibility name for `equipped_creature_deals_combat_damage_to_player`; `.damage_amount()` carries the bounded matched damage quantity.
+pub fn equipped_creature_deals_combat_damage_to_player_event(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    equipped_creature_deals_combat_damage_to_player(q, source, event)
 }
 
 /// "Whenever this Equipment becomes attached to a creature" (CR 701.3a, 301.5, 603.2): this Equipment (or Aura) became
@@ -1167,9 +1180,10 @@ pub fn noncreature_spell_you_cast_about_it(q: &dyn Query, me: &Asker, event: &Ev
 /// "Whenever a player casts a [color] spell" (CR 603.2, 601.2i): any player's, this permanent's controller's own included,
 /// judged on the spell as it stands on the stack once cast. `COLOR` is a `Color` as `u8`, a word of this permanent's own text
 /// (CR 612.2). Kor Firewalker (red) and Ivory Cup (white) print it.
+/// It refers to the spell even after it leaves the stack, for choosing damage sources (CR 609.7a).
 pub fn a_player_casts_a_spell_of_color<const COLOR: u8>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
-        Event::SpellCast { spell, .. } if q.chars(*spell).colors.has(q.words(me.source).color(Color::ALL[COLOR as usize])) => Fired::PLAIN,
+        Event::SpellCast { spell, .. } if q.chars(*spell).colors.has(q.words(me.source).color(Color::ALL[COLOR as usize])) => Fired::about(Target::Object(*spell)),
         _ => None,
     }
 }
@@ -1507,17 +1521,29 @@ pub fn each_end_step(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired>
     }
 }
 
-/// The upkeep of the enchanted permanent's controller (CR 503.1a, 303.4), with that player as the subject. Super Intelligence
-/// enchants a creature, Cursed Land a land, and Warp Artifact an artifact; the enchant ability restricts the host.
-pub fn enchanted_permanents_controllers_upkeep(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+fn enchanted_controllers_upkeep(q: &dyn Query, source: ObjectId, event: &Event) -> Option<(ObjectId, PlayerId)> {
     match event {
         Event::StepBegan { step: Step::Upkeep } => {
             let host = q.obj(source).attached_to?;
             let active = q.state().turn.active;
-            if q.controller(host) == active { Fired::about(Target::Player(active)) } else { None }
+            (q.controller(host) == active).then_some((host, active))
         }
         _ => None,
     }
+}
+
+/// The upkeep of the enchanted permanent's controller (CR 503.1a, 303.4), with that player as the subject. Super Intelligence
+/// enchants a creature, Cursed Land a land, and Warp Artifact an artifact; the enchant ability restricts the host.
+pub fn enchanted_permanents_controllers_upkeep(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    let (_, player) = enchanted_controllers_upkeep(q, source, event)?;
+    Fired::about(Target::Player(player))
+}
+
+/// The same upkeep with the enchanted host as subject and the upkeep player frozen in data[0]. Paralyze and the shared
+/// enchanted-permanent upkeep-damage recipe use this contract even if control or attachment changes before resolution.
+pub fn enchanted_permanents_controllers_upkeep_host(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    let (host, player) = enchanted_controllers_upkeep(q, source, event)?;
+    Some(Fired { subject: Target::Object(host), data: [u32::from(player.0), 0] })
 }
 
 /// "At the beginning of each upkeep" (CR 503.1a): any player's upkeep step began. Command the Stage and Ginger, Queen of
@@ -1919,14 +1945,19 @@ pub fn artifact_spell_you_cast(q: &dyn Query, me: &Asker, event: &Event) -> Opti
 }
 
 /// `deals_combat_damage_to_player` for an ability about the damaged player or the damage: the player is the trigger's
-/// subject and the amount of damage its `data[0]`. Etali, Primal Conqueror and Fallen Shinobi print it.
+/// subject, with the amount in bounded `data[0]`; `.damage_amount()` freezes the bounded amount. Etali, Primal Conqueror and Fallen Shinobi print it.
 pub fn deals_combat_damage_to_player_subject(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
     match event {
         Event::Damage { source: from, target: Target::Player(p), amount, kind, .. } if kind.is_combat() && *from == source && *amount > 0 => {
-            Some(Fired { subject: Target::Player(*p), data: [*amount as u32, 0] })
+            Some(Fired { subject: Target::Player(*p), data: [*amount, 0] })
         }
         _ => None,
     }
+}
+
+/// Compatibility name for `deals_combat_damage_to_player_subject`; `.damage_amount()` carries the bounded matched damage quantity.
+pub fn deals_combat_damage_to_player_event(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    deals_combat_damage_to_player_subject(q, source, event)
 }
 
 /// "Whenever this creature deals combat damage to a player" (CR 510.2, 603.2): its own damage, greater than zero.
@@ -2227,7 +2258,8 @@ fn put_into_your_graveyard_from_your_library(q: &dyn Query, source: ObjectId, ev
 pub const MAGECRAFT: Trigger = when_asked(EventMask(EventMask::SPELL_CAST.0 | EventMask::COPIED.0), you_cast_or_copy_instant_or_sorcery);
 pub const THIS_ATTACKS_OR_BLOCKS: Trigger = when(EventMask(EventMask::ATTACKS.0 | EventMask::BLOCKS.0), this_attacks_or_blocks);
 pub const A_SOURCE_DEALS_DAMAGE_TO_THIS: Trigger = when(EventMask::DAMAGE, a_source_deals_damage_to_this);
-pub const THIS_DEALT_DAMAGE: Trigger = when(EventMask::DAMAGE, this_dealt_damage);
+pub const THIS_TAKES_DAMAGE: Trigger = when(EventMask::DAMAGE, this_takes_damage);
+pub const THIS_DEALT_DAMAGE: Trigger = THIS_TAKES_DAMAGE;
 pub const DEALS_COMBAT_DAMAGE_TO_A_CREATURE: Trigger = when(EventMask::DAMAGE, deals_combat_damage_to_a_creature);
 pub const THIS_ATTACKS: Trigger = when(EventMask::ATTACKS, this_attacks);
 pub const THIS_ATTACKS_ALONE: Trigger = when(EventMask::ATTACKS, this_attacks_alone);
@@ -2254,8 +2286,10 @@ pub const THIS_ENTERS_OR_ATTACKS: Trigger = when(EventMask(EventMask::ZONE_CHANG
 pub const THIS_ATTACKS_DEFENDER: Trigger = when(EventMask::ATTACKS, this_attacks_defender);
 pub const EQUIPPED_CREATURE_ATTACKS: Trigger = when(EventMask::ATTACKS, equipped_creature_attacks);
 pub const ATTACHED_CREATURE_ATTACKS_SUBJECT: Trigger = when(EventMask::ATTACKS, attached_creature_attacks_subject);
-pub const EQUIPPED_CREATURE_DEALS_COMBAT_DAMAGE_TO_PLAYER: Trigger =
-    when(EventMask::DAMAGE, equipped_creature_deals_combat_damage_to_player);
+pub const EQUIPPED_CREATURE_ATTACKS_SUBJECT: Trigger = ATTACHED_CREATURE_ATTACKS_SUBJECT;
+pub const EQUIPPED_CREATURE_DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT: Trigger =
+    when(EventMask::DAMAGE, equipped_creature_deals_combat_damage_to_player_event);
+pub const EQUIPPED_CREATURE_DEALS_COMBAT_DAMAGE_TO_PLAYER: Trigger = EQUIPPED_CREATURE_DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT;
 pub const ENCHANTED_PLAYER_ATTACKED: Trigger = when(EventMask::ATTACKS, enchanted_player_attacked);
 pub const YOU_ATTACK: Trigger = when_asked(EventMask::ATTACKERS_DECLARED, you_attack);
 pub const INSTANT_OR_SORCERY_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST, you_cast_instant_or_sorcery);
@@ -2296,6 +2330,7 @@ pub const EACH_OPPONENTS_UPKEEP: Trigger = when_asked(EventMask::STEP_BEGAN, eac
 pub const BEGINNING_OF_YOUR_COMBAT: Trigger = when_asked(EventMask::STEP_BEGAN, beginning_of_your_combat);
 pub const YOUR_END_STEP: Trigger = when_asked(EventMask::STEP_BEGAN, your_end_step);
 pub const ENCHANTED_PERMANENTS_CONTROLLERS_UPKEEP: Trigger = when(EventMask::STEP_BEGAN, enchanted_permanents_controllers_upkeep);
+pub const ENCHANTED_PERMANENTS_CONTROLLERS_UPKEEP_HOST: Trigger = when(EventMask::STEP_BEGAN, enchanted_permanents_controllers_upkeep_host);
 pub const EACH_UPKEEP: Trigger = when(EventMask::STEP_BEGAN, each_upkeep);
 pub const EACH_PLAYERS_UPKEEP: Trigger = when(EventMask::STEP_BEGAN, each_players_upkeep);
 pub const EACH_PLAYERS_DRAW_STEP: Trigger = when(EventMask::STEP_BEGAN, each_players_draw_step);
@@ -2335,7 +2370,8 @@ pub const ENCHANTMENT_SPELL_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST
 pub const ARTIFACT_SPELL_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST, artifact_spell_you_cast);
 pub const LEGENDARY_SPELL_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST, legendary_spell_you_cast);
 pub const CREATURE_SPELL_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST, creature_spell_you_cast);
-pub const DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT: Trigger = when(EventMask::DAMAGE, deals_combat_damage_to_player_subject);
+pub const DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT: Trigger = when(EventMask::DAMAGE, deals_combat_damage_to_player_event);
+pub const DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT: Trigger = DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT;
 pub const DEALS_COMBAT_DAMAGE_TO_PLAYER: Trigger = when(EventMask::DAMAGE, deals_combat_damage_to_player);
 pub const OPPONENT_ACTIVATES_ABILITY_OF_ARTIFACT_CREATURE_OR_LAND: Trigger =
     when_asked(EventMask::ABILITY_ACTIVATED, opponent_activates_ability_of_artifact_creature_or_land);
@@ -2386,17 +2422,43 @@ pub fn deals_combat_damage_to_player_or_planeswalker(q: &dyn Query, source: Obje
 pub const DEALS_COMBAT_DAMAGE_TO_PLAYER_OR_PLANESWALKER: Trigger =
     when(EventMask::DAMAGE, deals_combat_damage_to_player_or_planeswalker);
 
-/// "Whenever enchanted creature is dealt damage" (CR 120.2, 603.2): the creature this Aura is attached to as the damage is dealt
-/// (the trigger's subject, for "it"), and the amount dealt, which is not zero (CR 120.8), as data. Damage that is lethal triggers it
-/// too (the creature is still on the battlefield as the event is seen, before state-based actions). Pain for All and Sleep Magic
-/// print it, both `.sums_per_subject()`.
-pub fn enchanted_creature_dealt_damage(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+/// "When enchanted creature dies" (CR 603.6c, 603.10a): inspect the attachment and creature on the board before
+/// the zone change. Return both the last battlefield object and the new graveyard object: Creature Bond needs the
+/// former's last characteristics and controller; Ferocity of the Hunt returns the latter.
+pub fn enchanted_creature_died(q: &dyn Query, source: ObjectId, event: &Event) -> Option<(ObjectId, ObjectId)> {
     match event {
-        Event::Damage { target: Target::Object(hurt), amount, .. } if q.obj(source).attached_to == Some(*hurt) => {
-            Some(Fired { subject: Target::Object(*hurt), data: [*amount as u32, 0] })
-        }
+        Event::ZoneChange { old, new, from, to, .. }
+            if from.is(ZoneKind::Battlefield) && to.is(ZoneKind::Graveyard)
+                && q.obj(source).attached_to == Some(*old) && q.chars(*old).is(CardType::Creature) => Some((*old, *new)),
+
         _ => None,
     }
 }
 
+/// The enchanted creature when damage is dealt. Legacy data carries the amount bounded to its u32 domain;
+/// `.damage_amount()` independently captures the bounded matched amount for an effect that needs it.
+pub fn enchanted_creature_dealt_damage(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    match event {
+        Event::Damage { target: Target::Object(hurt), amount, .. } if q.obj(source).attached_to == Some(*hurt) => {
+            Some(Fired { subject: Target::Object(*hurt), data: [u32::try_from((*amount).max(0)).unwrap_or(u32::MAX), 0] })
+        },
+        _ => None,
+    }
+}
 pub const ENCHANTED_CREATURE_DEALT_DAMAGE: Trigger = when(EventMask::DAMAGE, enchanted_creature_dealt_damage);
+
+
+
+/// Whenever a permanent of card type TYPE you control is put into a graveyard from the battlefield
+/// (CR 603.10a): use its last battlefield characteristics and controller. Tablet of Epityr and
+/// Titania, Protector of Argoth print this for artifacts and lands respectively.
+pub fn type_you_control_to_graveyard<const TYPE: u8>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::ZoneChange { old, from, to, .. }
+            if from.is(ZoneKind::Battlefield)
+                && to.is(ZoneKind::Graveyard)
+                && q.chars(*old).types.0 & (1 << TYPE) != 0
+                && q.controller(*old) == me.controller => Fired::PLAIN,
+        _ => None,
+    }
+}

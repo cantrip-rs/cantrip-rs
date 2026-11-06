@@ -1,0 +1,35 @@
+# An unchosen artifact slot is not a target: Deflection can redirect Urgent Necropsy's sole creature target (CR 115.7a).
+[Bot1 Deck]
+Memnite
+Ornithopter
+Black Lotus x2
+Mox Emerald
+Mox Sapphire
+Urgent Necropsy
+Deflection
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Urgent Necropsy.Cast
+Bot1.Target()
+Bot1.Target(Memnite)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Deflection.Cast(Stack.Urgent Necropsy)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Ornithopter = (absent)

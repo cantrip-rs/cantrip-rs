@@ -1,0 +1,5 @@
+{
+  "name": "Ebon Stronghold",
+  "type": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {B}.\n{T}, Sacrifice this land: Add {B}{B}."
+}

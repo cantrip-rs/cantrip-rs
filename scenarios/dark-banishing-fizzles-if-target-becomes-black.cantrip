@@ -1,0 +1,47 @@
+# A creature made black in response is no longer legal, so Dark Banishing does nothing; a second copy destroys the other creature (CR 608.2b).
+[Bot1 Deck]
+Dark Banishing x2
+Mox Jet x2
+Mox Pearl
+Mox Sapphire
+Deathlace
+Swamp x20
+[Bot2 Deck]
+Ornithopter x2
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dark Banishing.Cast(Bot2.Battlefield.Ornithopter#1)
+? Bot1.Mana =
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Deathlace.Cast(Bot2.Battlefield.Ornithopter#1)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Ornithopter#1.Colors = Black
+? Bot2.Battlefield.Count = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dark Banishing.Cast(Bot2.Battlefield.Ornithopter#2)
+? Bot1.Mana =
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Ornithopter.Colors = Black
+Bot2.Graveyard = Ornithopter

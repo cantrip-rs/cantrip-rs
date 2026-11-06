@@ -1,0 +1,8 @@
+{
+  "name": "Diabolic Machine",
+  "manaCost": "{7}",
+  "type": "Artifact Creature — Construct",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "{3}: Regenerate this creature."
+}

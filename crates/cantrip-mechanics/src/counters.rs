@@ -3,6 +3,30 @@
 use crate::{choose, select};
 use cantrip_api::*;
 
+/// "Unless that player puts a counter on a creature they control" (Thelon's Chant and Tourach's Chant, CR 118.12a).
+/// The caller supplies the printed population; this recipe asks whether to pay and which one receives the counters.
+/// Unlike an effect, a cost cannot choose an object forbidden from receiving its counters (CR 118.3). The original
+/// ability remains the question's source, the selected object is its recipient, and `payer` puts the counters as a cost.
+/// A replacement reducing the placement to zero still pays (CR 118.11). This does not perform the blight keyword action.
+pub fn may_pay_on_one(
+    g: &mut dyn Game, payer: PlayerId, source: ObjectId, kind: CounterKind, n: i32,
+    candidates: Vec<ObjectId>, question: &'static Question,
+) -> Result<Option<ObjectId>, Suspend> {
+    if n < 0 || g.state().player(payer).lost { return Ok(None) }
+    let eligible: Vec<_> = candidates.into_iter().filter(|&id| {
+        let object = g.state().obj(id);
+        object.became.is_none() && !object.zone.is(ZoneKind::PhasedOut)
+            && (n == 0 || !object.zone.is(ZoneKind::Battlefield) || !g.counters_banned(id, g.controller(id), kind))
+    }).collect();
+    if eligible.is_empty() || !crate::effects::ask_may(g, payer, source, Purpose::Ask(question))? {
+        return Ok(None);
+    }
+    let purpose = Purpose::PutCounters(kind, u8::try_from(n).unwrap_or(u8::MAX));
+    let chosen = choose::cards_from_kind(g, payer, source, purpose, "permanent", eligible.clone(), eligible, 1, false)?;
+    let Some(&object) = chosen.first() else { return Ok(None) };
+    Ok(g.pay_counter_cost(payer, &[(object, kind, n)]).then_some(object))
+}
+
 /// "Put `n` `kind` counters on a creature you control" (CR 122.1, 608.2d): the creature is chosen by the ability's controller as
 /// it resolves, not targeted, from the creatures they control then. A lone creature is taken without a question, and with none
 /// the instruction does nothing. A creature that cannot have counters is still a legal choice; the counters just aren't put

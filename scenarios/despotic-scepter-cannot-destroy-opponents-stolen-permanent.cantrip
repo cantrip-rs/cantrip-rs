@@ -1,0 +1,39 @@
+# Controlling an opponent's creature does not make its controller the owner, so the Scepter cannot target it (CR 108.3, 108.4).
+# The same Scepter can target its controller's own artifact.
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Despotic Scepter
+Control Magic
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Despotic Scepter.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Control Magic.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+! Bot1.Battlefield.Despotic Scepter.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Despotic Scepter.Activate(Bot1.Battlefield.Mox Pearl)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Mox Pearl; Black Lotus
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Control Magic.AttachedTo = Ornithopter

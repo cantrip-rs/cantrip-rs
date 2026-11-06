@@ -1,0 +1,35 @@
+# Blocking a non-Orc does not grant a toughness bonus (CR 603.2).
+[Bot1 Deck]
+Dwarven Soldier
+Mox Ruby
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Memnite
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dwarven Soldier.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Block(Dwarven Soldier > Memnite)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Graveyard.Dwarven Soldier.Power = 2
+Bot2.Graveyard.Memnite.Power = 1

@@ -1,0 +1,8 @@
+{
+  "name": "Dwarven Lieutenant",
+  "manaCost": "{R}{R}",
+  "type": "Creature — Dwarf Soldier",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "{1}{R}: Target Dwarf creature gets +1/+0 until end of turn."
+}

@@ -17,7 +17,7 @@ fn edict_or_discard(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// "You gain life equal to your speed" (CR 702.179f): 0 for a player with no speed.
 fn gain_life_equal_to_speed(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let life = i32::from(speed(g.state(), item.controller));
-    g.gain_life(item.controller, life);
+    g.gain_life(item.controller,(life) as i32);
     Ok(())
 }
 

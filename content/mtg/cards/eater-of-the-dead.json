@@ -1,0 +1,8 @@
+{
+  "name": "Eater of the Dead",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Horror",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "{0}: If this creature is tapped, exile target creature card from a graveyard and untap this creature."
+}

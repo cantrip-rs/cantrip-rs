@@ -1,0 +1,42 @@
+# A black creature is an illegal target, while the caster's colorless creature is legal and is destroyed (CR 115.1a, 105.4).
+[Bot1 Deck]
+Dark Banishing
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Swamp x20
+[Bot2 Deck]
+Swamp
+Mox Jet
+Dark Confidant
+Swamp x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Dark Confidant.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Dark Banishing.Cast(Bot2.Battlefield.Dark Confidant)
+! Bot1.Hand.Dark Banishing.Cast(Bot2.Battlefield.Swamp)
+Bot1.Hand.Dark Banishing.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Dark Banishing; Ornithopter
+Bot2.Battlefield.Dark Confidant.Toughness = 1
