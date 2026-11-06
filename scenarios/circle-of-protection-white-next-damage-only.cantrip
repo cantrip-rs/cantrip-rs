@@ -1,0 +1,35 @@
+# Fencing Ace deals damage twice in one combat; the Circle prevents only the first event (CR 615.8).
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Circle of Protection: White
+Island x25
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Fencing Ace
+Island x25
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Circle of Protection: White.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Fencing Ace.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Fencing Ace > Bot1)
+[T4 Bot2.DeclareBlockers]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Circle of Protection: White.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Fencing Ace)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 19
+Prevented = 1 Fencing Ace > Bot1 by Circle of Protection: White

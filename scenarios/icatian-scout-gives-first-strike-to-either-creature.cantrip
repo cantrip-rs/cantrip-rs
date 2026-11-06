@@ -1,0 +1,53 @@
+# Icatian Scout pays {1} and taps to grant first strike to either player's creature until cleanup; in combat it lets the 1/1 kill a blocker before taking damage.
+[Bot1 Deck]
+Mox Pearl
+Icatian Scout
+Memnite
+Plains x17
+[Bot2 Deck]
+Memnite
+Island x19
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Icatian Scout.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Icatian Scout.Activate(Bot1.Battlefield.Memnite; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Icatian Scout.Activate(Bot1.Battlefield.Mox Pearl)
+Bot1.Battlefield.Icatian Scout.Activate(Bot2.Battlefield.Memnite)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Icatian Scout.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Keywords = FirstStrike
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+! Bot1.Battlefield.Icatian Scout.Activate(Bot1.Battlefield.Memnite)
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Memnite.Keywords = (absent)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Icatian Scout.Activate(Bot1.Battlefield.Memnite)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Memnite > Memnite)
+[T7 Bot1.Main2]
+? Bot1.Battlefield.Memnite.Damage = 0
+? Bot2.Graveyard.Memnite.Power = 1
+[T8 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Battlefield.Memnite.Power = 1
+Bot2.Graveyard.Memnite.Power = 1

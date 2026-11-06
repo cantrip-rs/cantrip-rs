@@ -25,6 +25,7 @@ Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Thought Scour.Cast(Bot1)
 Bot1.Hand.Lion's Eye Diamond.Cast
 Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Blue)
+Bot1.Choose(Discard your hand)
 ? Stack.Count = 1
 
 [Expect]

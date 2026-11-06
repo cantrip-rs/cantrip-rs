@@ -1,0 +1,31 @@
+# Infuse untaps its controller's tapped artifact and draws in the next player's upkeep, not immediately or again later (CR 603.7b).
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Infuse
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Infuse.Cast(Mox Sapphire)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Sapphire.Tapped = false
+? Bot1.Library.Count = 17
+[T2 Bot2.Upkeep]
+? Bot1.Library.Count = 17
+Bot2.Pass
+Bot1.Pass
+? Bot1.Library.Count = 16
+[T4 Bot2.Upkeep]
+[Expect]
+Bot1.Library.Count = 15
+Bot1.Graveyard = Infuse

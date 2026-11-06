@@ -1,0 +1,21 @@
+# When Inquisition targets its controller, that entire hand is revealed and its two white cards, including a multicolored card, deal two damage to that player.
+[Bot1 Deck]
+Black Lotus
+Inquisition
+Isamaru, Hound of Konda
+Voice of Resurgence
+Lightning Bolt
+Island x15
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Inquisition.Cast(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 20
+Bot1.Revealed = Isamaru, Hound of Konda; Island; Island; Lightning Bolt; Voice of Resurgence

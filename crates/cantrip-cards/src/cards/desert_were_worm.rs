@@ -41,9 +41,7 @@ fn attack_with_total_power_for_the_first_time_each_turn(q: &dyn Query, me: &Aske
 /// Untap all attacking creatures (CR 701.26b). After this phase, there is an additional combat phase (CR 500.8).
 fn untap_attackers_and_extra_combat(g: &mut dyn Game, _: &StackItem) -> Result<(), Suspend> {
     let attacking: Vec<ObjectId> = g.state().attackers.iter().map(|a| a.id).collect();
-    for creature in attacking {
-        g.untap(creature);
-    }
+    g.untap_together(&attacking);
     g.add_combat_phase();
     Ok(())
 }

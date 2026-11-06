@@ -1,5 +1,5 @@
-# Repurposing Bay: "Sacrifice another artifact" is part of the cost (CR 118.3), so the ability is not offered while the Bay is the only
-# artifact (! Bot1.Battlefield.Repurposing Bay.Activate in turn 7, beside the positive control once Mox Jet is cast). Sacrificing Mox
+# Repurposing Bay: "Sacrifice another artifact" is part of the cost (CR 118.3), so attempting the ability while the Bay is the only
+# artifact rolls back, followed by a positive control once Mox Jet is cast. Sacrificing Mox
 # Jet (mana value 0) searches for a mana value 1 artifact; the library holds only Mind Stone (mana value 2) and an Ornithopter (0), so
 # the search finds nothing (CR 701.23b) and nothing arrives: Mox Jet is simply sacrificed, and Bot1's battlefield gains nothing.
 
@@ -31,12 +31,24 @@ Bot1.Hand.Repurposing Bay.Cast
 Bot1.Pass
 [T7 Bot1.Main1]
 Bot1.Hand.Island.Play
-! Bot1.Battlefield.Repurposing Bay.Activate
+Bot1.Battlefield.Repurposing Bay.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Choose(Tap Repurposing Bay)
+? Bot1.Battlefield.Repurposing Bay.Tapped = false
+? Bot1.Battlefield.Island#1.Tapped = false
+? Bot1.Battlefield.Island#2.Tapped = false
+? Bot1.Life = 20
+? Bot1.Mana =
+? Bot1.Graveyard.Count = 0
+? Stack.Count = 0
 Bot1.Hand.Mox Jet.Cast
 Bot1.Pass
 Bot1.Battlefield.Island#1.Activate
 Bot1.Battlefield.Island#2.Activate
 Bot1.Battlefield.Repurposing Bay.Activate
+Bot1.Choose(Tap Repurposing Bay)
+Bot1.Choose(Sacrifice 1 permanent)
 Bot1.Choose(Mox Jet)
 Bot1.Pass
 [T7 Bot1.Main2]

@@ -45,7 +45,7 @@ fn commander_setup_sets_life_and_designates_a_physical_command_zone_card() {
 fn commander_damage_counts_only_actual_combat_damage_by_that_commander() {
     let mut game = game();
     let commander = game.state.zone(Zone::COMMAND)[0];
-    let known = crate::ops::last_known_of(&Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }, commander);
+    let known = crate::ops::last_known_of(&mut Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }, commander);
     let known = game.state.last_known_push(known);
     let damage = |amount, combat| Event::Damage {
         source: commander,
@@ -62,7 +62,7 @@ fn commander_damage_counts_only_actual_combat_damage_by_that_commander() {
     assert_eq!(game.commander_damage(commander, THEM), 21);
     assert_eq!(game.commander_damage(commander, YOU), 0);
     game.state.update_player(THEM, |player| player.drew_from_empty = false);
-    let cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     assert_eq!(crate::ops::loses_to_state_based_actions(&cx, THEM), Some(LossReason::CommanderDamage));
 }
 
@@ -78,10 +78,10 @@ fn ordinary_outside_game_access_is_blocked_but_companion_special_action_remains_
     });
     let sideboard = game.state.zone(Zone::sideboard(YOU))[0];
     assert!(Query::outside_the_game(&game, YOU).is_empty());
-    let moved = crate::ops::bring_into_hand(&mut Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }, &[sideboard]);
+    let moved = crate::ops::bring_into_hand(&mut Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }, &[sideboard]);
     assert!(moved.is_empty());
     assert_eq!(game.state.obj(sideboard).zone, Zone::sideboard(YOU));
-    let moved = crate::ops::bring_companion_into_hand(&mut Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }, sideboard);
+    let moved = crate::ops::bring_companion_into_hand(&mut Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }, sideboard);
     assert_eq!(moved.len(), 1);
     assert_eq!(game.state.obj(moved[0]).zone, Zone::hand(YOU));
 }
@@ -97,7 +97,7 @@ fn spell_copies_do_not_inherit_commander_identity() {
     });
     game.state.zone_push(Zone::STACK, spell);
     game.state.stack_push(crate::actions::stack_item(StackKind::Spell, spell, AbilityRef { card: game.state.obj(spell).card, index: 0 }, YOU, &[]));
-    let copy = crate::ops::copy_spell(&mut Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }, spell, YOU, false)
+    let copy = crate::ops::copy_spell(&mut Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }, spell, YOU, false)
         .expect("copy does not ask").expect("copy created");
     assert!(game.state.obj(spell).commander);
     assert!(!game.state.obj(copy).commander);
@@ -135,7 +135,7 @@ fn merged_commander_game(answer: Answer) -> (Game, ObjectId, ObjectId) {
 fn merged_commander_replacement_orders_per_component_and_does_not_misroute_the_top() {
     let (mut game, permanent, commander) = merged_commander_game(Answer::Yes);
     let frame = 0;
-    let result = crate::ops::move_to(&mut Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }, permanent, Zone::hand(YOU));
+    let result = crate::ops::move_to(&mut Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }, permanent, Zone::hand(YOU));
     assert_ne!(result, permanent);
     assert_eq!(game.state.zone(Zone::COMMAND).len(), 1, "the command zone contains exactly the returned physical commander");
     let command_piece = game.state.zone(Zone::COMMAND)[0];
@@ -146,7 +146,7 @@ fn merged_commander_replacement_orders_per_component_and_does_not_misroute_the_t
 
     let (mut game, permanent, commander) = merged_commander_game(Answer::No);
     let frame = 0;
-    crate::ops::move_to(&mut Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }, permanent, Zone::hand(YOU));
+    crate::ops::move_to(&mut Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }, permanent, Zone::hand(YOU));
     assert!(game.state.zone(Zone::COMMAND).is_empty(), "declining sends the physical commander with the rest of the merged permanent");
     assert_eq!(game.state.zone(Zone::exile(YOU)).len(), 2, "declining lets the competing replacement exile both components");
     assert!(game.state.zone(Zone::exile(YOU)).iter().any(|&id| game.state.obj(id).commander_id == Some(commander)));
@@ -159,7 +159,7 @@ fn commander_identity_under_a_merged_top_is_snapshotted_for_damage_and_component
     let card = game.state.obj(commander).card;
     let permanent = game.state.push_obj(Obj::new(card, YOU, Zone::BATTLEFIELD));
     game.state.zone_push(Zone::BATTLEFIELD, permanent);
-    let before = crate::ops::last_known_of(&Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }, permanent);
+    let before = crate::ops::last_known_of(&mut Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }, permanent);
     let before_index = game.state.last_known_push(before);
     game.log.push(Record {
         serial: 0, turn: 1, step: Step::CombatDamage, active: YOU, cause: Cause::Turn,
@@ -175,10 +175,10 @@ fn commander_identity_under_a_merged_top_is_snapshotted_for_damage_and_component
     };
     game.state.set_merge(permanent, merge);
     game.state.update_obj(permanent, |obj| obj.commander = true);
-    let components = crate::merge::components(&Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }, permanent)
+    let components = crate::merge::components(&Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }, permanent)
         .expect("merged components");
     assert_eq!(components.iter().find(|c| !c.top).unwrap().commander_id, Some(commander));
-    let known = crate::ops::last_known_of(&Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }, permanent);
+    let known = crate::ops::last_known_of(&mut Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }, permanent);
     assert!(known.commander_ids.contains(&commander));
     let after_index = game.state.last_known_push(known);
     game.log.push(Record {

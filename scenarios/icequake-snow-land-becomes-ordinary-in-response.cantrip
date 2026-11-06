@@ -1,0 +1,39 @@
+# A snow land that becomes a copy of an ordinary land before resolution causes no damage (CR 608.2h).
+[Bot1 Deck]
+Icequake
+Black Lotus
+Swamp
+Swamp x20
+[Bot2 Deck]
+Thespian's Stage
+Snow-Covered Forest
+Mox Pearl
+Mox Sapphire
+Island x20
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Thespian's Stage.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Snow-Covered Forest.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Thespian's Stage.Activate(Bot2.Battlefield.Snow-Covered Forest; Ability: becomes a copy)
+Bot2.Pass
+Bot1.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Icequake.Cast(Bot2.Battlefield.Snow-Covered Forest#1)
+? Bot1.Mana =
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Snow-Covered Forest#1.Activate(Bot1.Battlefield.Swamp; Ability: becomes a copy)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Thespian's Stage

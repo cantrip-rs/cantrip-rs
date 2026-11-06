@@ -1,5 +1,5 @@
 # Champion of the Clachan (CR 601.2b, 701.4a): the additional cost beholds a Kithkin, and Coral Merfolk in the hand is not one, nor is a Mox on the battlefield, so with
-# the {3}{W} paid for in full the Champion cannot be cast.
+# the full attempted cast cannot pay its behold cost and is reversed (CR 601.2h, 733.1).
 
 [Bot1 Deck]
 Plains
@@ -23,7 +23,17 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Plains.Activate
-! Bot1.Hand.Champion of the Clachan.Cast
+Bot1.Hand.Champion of the Clachan.Cast
+? Bot1.Hand = Champion of the Clachan; Coral Merfolk; Plains
+? Bot1.Mana = {W}{U}{B}{R}
+? Bot1.Life = 20
+? Bot1.Battlefield = Plains; Mox Jet; Mox Ruby; Mox Sapphire
+? Bot1.Battlefield.Plains.Tapped = true
+? Bot1.Battlefield.Mox Jet.Tapped = true
+? Bot1.Battlefield.Mox Ruby.Tapped = true
+? Bot1.Battlefield.Mox Sapphire.Tapped = true
+? Bot1.Graveyard.Count = 0
+? Stack.Count = 0
 
 [Expect]
 Exile.Count = 0

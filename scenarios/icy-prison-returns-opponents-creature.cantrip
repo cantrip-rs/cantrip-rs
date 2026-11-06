@@ -1,0 +1,40 @@
+# Exiling an opponent's creature and failing the upkeep payment returns it under its owner's control.
+[Bot1 Deck]
+Mox Sapphire
+Gleemox
+Memnite
+Icy Prison
+Island x16
+[Bot2 Deck]
+Ornithopter
+Island x19
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Hand.Icy Prison.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+! Bot1.PayCost
+Bot1.Decline
+! Bot2.PayCost
+Bot2.Decline
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = false
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Graveyard.Icy Prison.Colors = Blue
+Exile =

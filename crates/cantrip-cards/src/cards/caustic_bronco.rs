@@ -8,9 +8,9 @@ use cantrip_oracle as oracle;
 fn reveal_and_bleed(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some((_, value)) = reveal_top_to_hand(g, item.controller) else { return Ok(()) };
     if g.is_saddled(item.object) {
-        g.each_opponent_loses_life(item.controller, value as i32);
+        g.each_opponent_loses_life(item.controller,(value as i32) as i32);
     } else {
-        g.lose_life(item.controller, value as i32);
+        g.lose_life(item.controller,(value as i32) as i32);
     }
     Ok(())
 }

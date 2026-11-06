@@ -1,0 +1,55 @@
+# Javelineers enters with one javelin; it can shoot either player, cannot shoot a land or fire after its counter is spent, and gets a fresh counter on reentry (CR 614.1c, 115.4).
+[Bot1 Deck]
+Plains
+Icatian Javelineers
+Mox Sapphire
+Mox Pearl
+Aether Spellbomb
+Island
+Island
+Island x20
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Icatian Javelineers.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Icatian Javelineers.Counters.Javelin = 1
+! Bot1.Battlefield.Icatian Javelineers.Activate(Bot1.Battlefield.Plains)
+Bot1.Battlefield.Icatian Javelineers.Activate(Bot2)
+Bot1.Choose(Tap Icatian Javelineers)
+? Bot1.Battlefield.Icatian Javelineers.Counters.Javelin = (absent)
+? Bot1.Battlefield.Icatian Javelineers.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Icatian Javelineers.Tapped = false
+! Bot1.Battlefield.Icatian Javelineers.Activate(Bot2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Aether Spellbomb.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Aether Spellbomb.Activate(Bot1.Battlefield.Icatian Javelineers; Ability: Return target creature)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Icatian Javelineers.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Icatian Javelineers.Counters.Javelin = 1
+[T7 Bot1.Main1]
+Bot1.Battlefield.Icatian Javelineers.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
+Bot1.Battlefield.Icatian Javelineers.Counters.Javelin = (absent)

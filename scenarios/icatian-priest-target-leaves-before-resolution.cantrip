@@ -1,0 +1,57 @@
+# An activation whose only target is destroyed in response does nothing; a second activation resolves on the Priest (CR 608.2b).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Icatian Priest
+Ornithopter
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Icatian Priest.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Icatian Priest.Activate(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard.Ornithopter.Power = 0
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Icatian Priest.Activate(Bot1.Battlefield.Icatian Priest)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Icatian Priest.Power = 2
+? Bot1.Battlefield.Icatian Priest.Toughness = 2
+
+[Expect]
+Bot1.Battlefield.Icatian Priest.Power = 2
+Bot1.Battlefield.Icatian Priest.Toughness = 2
+Bot1.Graveyard.Ornithopter.Power = 0

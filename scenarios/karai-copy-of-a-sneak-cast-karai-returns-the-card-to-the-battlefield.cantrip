@@ -32,12 +32,13 @@ Bot1.Hand.Mountain.Play
 Bot1.Attack(Ornithopter > Bot2)
 [T3 Bot1.DeclareBlockers]
 Bot1.Hand.Karai, Future of the Foot.Cast(Ability: Sneak)
-Bot1.Choose(Ornithopter)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Mountain#2.Activate
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Ornithopter)
 Bot1.Hand.Choreographed Sparks.Cast
 Bot1.Modes(2)
 Bot1.Target(Stack.Karai, Future of the Foot)

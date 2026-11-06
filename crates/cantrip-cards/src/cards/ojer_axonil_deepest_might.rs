@@ -32,13 +32,13 @@ fn equal_to_power(q: &dyn Query, asker: &Asker, p: &mut Proposal) {
 /// changed control still counts), to any player or permanent, added up across sources.
 fn red_sources_dealt_four_noncombat_damage(q: &dyn Query, asker: &Asker) -> bool {
     let red = q.words(asker.source).color(Color::Red);
-    let dealt: u32 = q
+    let dealt: i64 = q
         .history()
         .this_turn()
         .iter()
         .filter_map(|r| match r.event {
             Event::Damage { amount, kind, controller, .. } if !kind.is_combat() && controller == asker.controller && kind.colors().has(red) => {
-                Some(u32::from(amount))
+                Some(i64::from(amount))
             }
             _ => None,
         })

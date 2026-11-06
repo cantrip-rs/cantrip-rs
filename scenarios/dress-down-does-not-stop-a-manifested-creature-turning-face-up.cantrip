@@ -56,6 +56,7 @@ Bot2.Pass
 Bot1.Battlefield.#1.Activate
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Choose(Assign mana)
 ? Bot1.Battlefield = Abhorrent Oculus; Dress Down; Island; Mountain; Mox Pearl; Mox Sapphire; Snapcaster Mage; Sol Ring
 ? Bot1.Battlefield.Snapcaster Mage.FaceDown = (absent)
 [T3 Bot1.End]

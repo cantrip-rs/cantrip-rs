@@ -31,7 +31,9 @@ Bot1.Modes(1; 2; 3)
 Bot1.Target(Bot2)
 Bot1.Target(Llanowar Elves)
 Bot1.Target(Bot2)
-Bot1.Choose(Demonic Tutor; Mountain)
+Bot1.Choose(Cost: 1)
+Bot1.Choose(Demonic Tutor)
+Bot1.Choose(Mountain)
 Bot1.Choose(Lightning Bolt)
 [T3 Bot1.Main2]
 

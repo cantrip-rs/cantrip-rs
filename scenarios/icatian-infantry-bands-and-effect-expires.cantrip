@@ -1,0 +1,69 @@
+# The Infantry gains banding, bands with Gorilla, and directs all the blocker's damage to Gorilla; the gained keyword expires before a later attack (CR 702.22c, 702.22k, 514.2).
+[Bot1 Deck]
+Plains
+Mox Emerald
+Mox Ruby
+Icatian Infantry
+Guerrilla Gorilla
+Memnite
+Island
+Island x15
+
+[Bot2 Deck]
+Forest
+Black Lotus
+Ulvenwald Oddity
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Icatian Infantry.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Guerrilla Gorilla.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Icatian Infantry.Activate(Ability: banding; Mana: short)
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Ulvenwald Oddity.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Icatian Infantry.Activate(Ability: banding)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Icatian Infantry > Bot2; Guerrilla Gorilla > Bot2)
+Bot1.Choose(Guerrilla Gorilla)
+? Combat.Attackers = Icatian Infantry > Bot2 (band 1); Guerrilla Gorilla > Bot2 (band 1)
+Bot2.Block(Ulvenwald Oddity > Icatian Infantry)
+[T3 Bot1.Blockers]
+? Combat.Blocks = Ulvenwald Oddity > Icatian Infantry; Ulvenwald Oddity > Guerrilla Gorilla
+Bot1.AssignDamage(Ulvenwald Oddity > Guerrilla Gorilla: 4)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Icatian Infantry.Damage = 0
+? Bot1.Graveyard.Guerrilla Gorilla.Power = 2
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Icatian Infantry.Keywords = (absent)
+Bot1.Attack(Icatian Infantry > Bot2; Memnite > Bot2)
+? Combat.Attackers = Icatian Infantry > Bot2; Memnite > Bot2
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Icatian Infantry.Power = 1
+Bot2.Life = 18

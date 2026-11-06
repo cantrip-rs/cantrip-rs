@@ -34,7 +34,7 @@ fn enter_as_copy_with_counters(g: &mut dyn Game, entry: &mut Entering) -> Result
     for kind in CounterKind::ALL {
         let count = g.obj(chosen).counters(kind);
         if count > 0 {
-            entry.counters[kind as usize] += count;
+            entry.counters[kind as usize] += count as i32;
         }
     }
     Ok(())

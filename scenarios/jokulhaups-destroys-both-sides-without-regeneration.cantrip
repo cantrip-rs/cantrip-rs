@@ -1,0 +1,83 @@
+# Jokulhaups destroys both players' artifacts, creatures and lands despite regeneration, but leaves an enchantment and an indestructible creature (CR 701.8, 701.19c, 702.12b).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Jokulhaups
+Ornithopter
+Military Intelligence
+Mountain
+Island x15
+
+[Bot2 Deck]
+Black Lotus
+Darksteel Myr
+Ornithopter
+Mox Pearl
+Yavimaya Hollow
+Mox Emerald
+Island
+Scryb Sprites
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Military Intelligence.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Yavimaya Hollow.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Scryb Sprites.Cast
+Bot2.Hand.Darksteel Myr.Cast
+? Bot2.Mana =
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Jokulhaups.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Yavimaya Hollow.Activate(Bot2.Battlefield.Ornithopter; Ability: Regenerate)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Military Intelligence.Types = Enchantment
+Bot1.Battlefield.Count = 1
+Bot2.Battlefield.Darksteel Myr.Power = 0
+Bot2.Battlefield.Count = 1
+Bot1.Graveyard.Ornithopter.Power = 0
+Bot1.Graveyard.Mountain.Colors =
+Bot2.Graveyard.Ornithopter.Power = 0
+Bot2.Graveyard.Scryb Sprites.Power = 1
+Bot2.Graveyard.Mox Pearl.Colors =
+Bot2.Graveyard.Yavimaya Hollow.Colors =

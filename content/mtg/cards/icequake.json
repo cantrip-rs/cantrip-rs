@@ -1,0 +1,6 @@
+{
+  "name": "Icequake",
+  "manaCost": "{1}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "Destroy target land. If that land was a snow land, Icequake deals 1 damage to that land's controller."
+}

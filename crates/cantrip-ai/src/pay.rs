@@ -462,6 +462,7 @@ fn better(a: &Way, b: &Way) -> std::cmp::Ordering {
 /// best class first: what the
 /// search splits a cast by where the plan does not settle it (`search::Config::pay_split`).
 pub fn classes(game: &Game, options: &[ActionOption], cost: &ManaCost, follow: &[(ManaCost, f32)]) -> Vec<(Vec<ObjectId>, f32, u64)> {
+    if cost.snow > 0 { return Vec::new(); } // Snow allocations are explicit policy decisions, not autotapper classes.
     let mana: Vec<ActionOption> = options.iter().filter(|o| crate::atomic::is_mana_ability(game, o)).cloned().collect();
     let (_, ways) = ways(game, &mana, cost, follow);
     let mut best: Vec<&Way> = Vec::new();
@@ -658,6 +659,14 @@ pub fn with_classic<T>(classic: bool, run: impl FnOnce() -> T) -> T {
 /// pool covers it, a mana ability while it does not. `None` where it cannot pay: the caller cancels or declines.
 pub fn pay(game: &Game, request: &Request, x: Option<u32>) -> Option<Answer> {
     match &request.kind {
+        RequestKind::PayCosts { mana_abilities: true, remaining, options, .. } => {
+            // This window closes separately from spending. Make useful mana only while the pool falls short; if
+            // none is available, close it so non-mana methods such as convoke can still pay the cost.
+            if !remaining.is_zero() && let Some(action) = tap(game, options, remaining) {
+                return Some(Answer::Act(action));
+            }
+            options.iter().find(|o| o.kind == ActionKind::ConfirmCasting).map(|o| Answer::Act(Action::of(o)))
+        }
         RequestKind::PayCosts {
             remaining, options, ..
         } => {

@@ -1,0 +1,8 @@
+{
+  "name": "Juniper Order Druid",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Human Cleric Druid",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}: Untap target land."
+}

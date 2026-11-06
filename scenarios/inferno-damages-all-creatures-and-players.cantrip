@@ -1,0 +1,44 @@
+# Inferno deals six damage to each player and each player's indestructible creature; the Myr survive with damage marked (CR 120.3, 702.12b).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Ruby
+Inferno
+Darksteel Myr
+Memnite
+Island x20
+[Bot2 Deck]
+Black Lotus
+Darksteel Myr
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Darksteel Myr.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Darksteel Myr.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Inferno.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 14
+Bot2.Life = 14
+Bot1.Battlefield.Darksteel Myr.Damage = 6
+Bot2.Battlefield.Darksteel Myr.Damage = 6
+Bot1.Battlefield.Mox Ruby.Tapped = true
+Bot1.Graveyard = Memnite; Inferno; Black Lotus; Black Lotus; Black Lotus
+Bot2.Graveyard = Memnite; Black Lotus

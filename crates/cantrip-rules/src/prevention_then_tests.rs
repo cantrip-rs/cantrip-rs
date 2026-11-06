@@ -36,7 +36,7 @@ fn to_them(g: &mut dyn cantrip_api::Game, asker: &Asker, _: ObjectId, prevented:
 
 /// The parts it was told of, as life its controller gains: one for each part, so a test can count them.
 fn count_parts(g: &mut dyn cantrip_api::Game, asker: &Asker, _: ObjectId, prevented: &[Prevented]) {
-    g.gain_life(asker.controller, prevented.len() as i32);
+    g.gain_life(asker.controller, prevented.len().min(i32::MAX as usize) as i32);
 }
 
 static PALM: CardDef = CardDef {
@@ -120,7 +120,7 @@ fn table() -> Table {
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// A frame to ask questions in, its answers given in advance: what the run reads back as it asks (`Cx::ask_core`).

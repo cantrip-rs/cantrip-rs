@@ -1,0 +1,6 @@
+{
+  "name": "Jester's Mask",
+  "manaCost": "{5}",
+  "type": "Artifact",
+  "oracleText": "This artifact enters tapped.\n{1}, {T}, Sacrifice this artifact: Target opponent puts the cards from their hand on top of their library. Search that player's library for that many cards. That player puts those cards into their hand, then shuffles."
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Icatian Town",
+  "manaCost": "{5}{W}",
+  "type": "Sorcery",
+  "oracleText": "Create four 1/1 white Citizen creature tokens."
+}

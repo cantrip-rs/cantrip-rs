@@ -1,0 +1,44 @@
+# A snow Forest animated by Living Lands is stolen, then Icequake damages its last controller, not its owner (CR 608.2h).
+[Bot1 Deck]
+Icequake
+Living Lands
+Control Magic
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Snow-Covered Forest
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot2.Hand.Snow-Covered Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Living Lands.Cast
+? Bot1.Mana =
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Control Magic.Cast(Bot2.Battlefield.Snow-Covered Forest)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Snow-Covered Forest.Power = 1
+[T7 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Icequake.Cast(Bot1.Battlefield.Snow-Covered Forest)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 20
+Bot2.Graveyard = Snow-Covered Forest; Island; Island

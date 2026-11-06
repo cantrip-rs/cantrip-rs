@@ -26,9 +26,7 @@ fn team_pump_and_untap(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
         }
     });
     g.end_sentence();
-    for creature in creatures {
-        g.untap(creature);
-    }
+    g.untap_together(&creatures);
     Ok(())
 }
 

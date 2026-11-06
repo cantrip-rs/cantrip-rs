@@ -1,0 +1,63 @@
+# A red attacker causes Justice damage to its controller while a green attacker does not; Justice is kept for {W}{W} then sacrificed when the white mana is short (CR 603.2, 118.12a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Plains
+Justice
+Island x20
+[Bot2 Deck]
+Forest
+Mox Ruby
+Llanowar Elves
+Mons's Goblin Raiders
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Justice.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Mons's Goblin Raiders.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Justice.Colors = White
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Llanowar Elves > Bot1; Mons's Goblin Raiders > Bot1)
+[T4 Bot2.Main2]
+? Bot1.Life = 18
+? Bot2.Life = 19
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.PayCost
+Bot1.Decline
+[Expect]
+Bot1.Graveyard = Justice; Black Lotus
+Bot1.Life = 18
+Bot2.Life = 19

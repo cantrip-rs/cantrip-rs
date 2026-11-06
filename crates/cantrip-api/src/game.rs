@@ -107,7 +107,7 @@ pub fn may_cause(q: &dyn Query, causer: PlayerId, player: PlayerId, kind: CauseK
         if def.cause_rules.is_empty() || q.lost_all_abilities(id) {
             continue;
         }
-        let asker = Asker { source: id, controller: o.controller, by: None, spell: false };
+        let asker = Asker { instance: None, source: id, controller: o.controller, by: None, spell: false };
         if def.cause_rules.iter().any(|rule| !rule(q, &asker, causer, player, kind)) {
             return false;
         }
@@ -130,6 +130,29 @@ pub fn mana_cost_of(card: &dyn Fn(CardId) -> &'static CardDef, obj: &Obj, c: &Ch
 /// An object's mana value (CR 202.3) as its characteristics `c` give it (`Query::mana_value`, `LayerQuery::mana_value`).
 pub fn mana_value_of(card: &dyn Fn(CardId) -> &'static CardDef, state: &GameState, id: ObjectId, c: &Chars) -> u32 {
     let obj = state.obj(id);
+    // CR 712.8g, 202.3c: a melded permanent with its combined back face's characteristics has the sum of its cards' front
+    // faces' mana values; a copy of it has its values' alone, 0 - another permanent, or the melded permanent itself once a
+    // copy effect applied after it melded (`EffectKind::RestoreCopy`, later in timestamp order) makes its copiable values,
+    // even a copy of a melded permanent (CR 707.2, 613.2a).
+    if let Some(merge) = state.merge_of(id).filter(|m| m.own_face == c.card)
+        && let Some(part) = merge.parts.iter().find(|p| p.melded)
+        && !state.effects.iter().any(|e| e.affected == id && e.timestamp > part.timestamp && matches!(e.kind, EffectKind::RestoreCopy(_)))
+    {
+        return card(obj.card).cost.mana_value() + card(part.card).cost.mana_value();
+    }
+    let x = if obj.zone.is(ZoneKind::Stack) { obj.x } else { state.left_stack(id).map_or(0, |item| item.x) };
+    mana_value_with_x(card, obj, c, x as u32)
+}
+
+/// A prospective permanent's mana value, with its hypothetical battlefield
+/// object and characteristics (CR 202.3, 614.12). X is zero off the stack;
+/// the departing spell's saved stack item is not this new permanent.
+pub fn mana_value_as_permanent(card: &dyn Fn(CardId) -> &'static CardDef, obj: &Obj, c: &Chars) -> u32 {
+    debug_assert!(obj.zone.is(ZoneKind::Battlefield));
+    mana_value_with_x(card, obj, c, 0)
+}
+
+fn mana_value_with_x(card: &dyn Fn(CardId) -> &'static CardDef, obj: &Obj, c: &Chars, x: u32) -> u32 {
     let front = card(obj.card);
     // CR 202.3b, 712.8c, 712.8e: a nonmodal double-faced permanent with its back face up, or a spell of one cast transformed (its
     // own back face as the face it is on the stack as, not a copy of one: `card_copy`), has its front face's mana cost for its
@@ -143,18 +166,7 @@ pub fn mana_value_of(card: &dyn Fn(CardId) -> &'static CardDef, state: &GameStat
         }
         _ => mana_cost_of(card, obj, c),
     };
-    // CR 712.8g, 202.3c: a melded permanent with its combined back face's characteristics has the sum of its cards' front
-    // faces' mana values; a copy of it has its values' alone, 0 - another permanent, or the melded permanent itself once a
-    // copy effect applied after it melded (`EffectKind::RestoreCopy`, later in timestamp order) makes its copiable values,
-    // even a copy of a melded permanent (CR 707.2, 613.2a).
-    if let Some(merge) = state.merge_of(id).filter(|m| m.own_face == c.card)
-        && let Some(part) = merge.parts.iter().find(|p| p.melded)
-        && !state.effects.iter().any(|e| e.affected == id && e.timestamp > part.timestamp && matches!(e.kind, EffectKind::RestoreCopy(_)))
-    {
-        return front.cost.mana_value() + card(part.card).cost.mana_value();
-    }
-    let x = if obj.zone.is(ZoneKind::Stack) { obj.x } else { state.left_stack(id).map_or(0, |item| item.x) };
-    cost.mana_value() + cost.x as u32 * x as u32
+    cost.mana_value() + cost.x as u32 * x
 }
 
 /// Reading the game.
@@ -240,6 +252,14 @@ pub trait Query {
         crate::words(self.state(), id)
     }
 
+    /// The words of a prospective entering permanent (CR 614.12, 707.5),
+    /// including `Entering::copy`, and only the old-zone changes that carry
+    /// from a permanent spell (CR 400.7a). Independent of a resolving ability's
+    /// captured text: an entry choice reads the permanent's own text.
+    fn words_as_enters(&self, entering: &Entering) -> Words {
+        crate::words_for_entry(self.state(), entering)
+    }
+
     /// The id of a definition in the card table (a token's, an exception's).
     fn card_id(&self, def: &'static CardDef) -> CardId;
 
@@ -248,7 +268,7 @@ pub trait Query {
 
     /// The game's event history, for any question about what has happened (`crate::history`).
     fn history(&self) -> History<'_> {
-        History::new(self.events(), self.state().turn.number)
+        History::with_receipts(self.events(), self.state().turn.number, &self.state().cost_receipts)
     }
 
     /// The objects of the batch a "one or more" ability (`TriggeredDef::once_per_batch`) was triggered by
@@ -427,6 +447,17 @@ pub trait Query {
         None
     }
 
+    /// Objects paid to a specific component and part of the immediate mana ability currently resolving
+    /// (CR 605.3, 608.2h), as they were paid. Empty outside its callback.
+    fn mana_ability_cost_objects(&self, _component: usize, _part: crate::CostPart) -> Vec<ObjectId> { Vec::new() }
+
+    /// The X announced for the mana ability currently being activated (CR 107.3k, 605.3). This is that activation's
+    /// value, including a variable counter-removal cost, even after paying a cost moves its source. None outside it;
+    /// the permanent's original casting X is unchanged.
+    fn mana_ability_x(&self) -> Option<u32> {
+        None
+    }
+
     /// The cards in exile that were exiled with `by` (CR 607.2a): what an ability linked to the one that exiled them refers
     /// to - an ability of the same object printed in the same text (`Linked`), so cards exiled by an ability of another text
     /// the object has (a copy effect's, a granted one's) are not among them (CR 607.5). A permanent that left and came back
@@ -478,7 +509,7 @@ pub trait Query {
     /// it makes as it resolves is asked with.
     fn item_asker(&self, item: &StackItem, controller: PlayerId) -> Asker {
         let by = self.linked(item);
-        Asker { source: item.object, controller, by: (by != self.text_linked(item.object)).then_some(by), spell: item.kind == StackKind::Spell }
+        Asker { instance: None, source: item.object, controller, by: (by != self.text_linked(item.object)).then_some(by), spell: item.kind == StackKind::Spell }
     }
 
     /// The object `left` became when it moved to a public zone, if that object is still where the move put it (CR 400.7e):
@@ -486,6 +517,20 @@ pub trait Query {
     /// nothing once that card has moved again (a new object, CR 400.7). Persist, earthbend, Enduring Innocence and Enduring Curiosity return it.
     fn found_after_move(&self, left: ObjectId) -> Option<ObjectId> {
         self.obj(left).became.filter(|&new| self.obj(new).became.is_none() && !self.obj(new).zone.is(ZoneKind::Gone))
+    }
+
+    /// The first card `aura` became in its owner's graveyard, for an ability that triggered when the permanent `host`
+    /// it enchanted left the battlefield (CR 400.7f). Finds only a simultaneous Aura departure or its subsequent
+    /// unattached-Aura SBA, as the move records; a later unrelated first move does not qualify. Never follows the card
+    /// through another zone change, even if it has returned to that graveyard (CR 400.7).
+    /// `aura` and `host` are the original battlefield identities, not the new objects the moves made.
+    fn found_aura_after_enchanted_left(&self, aura: ObjectId, host: ObjectId) -> Option<ObjectId> {
+        let new = self.found_after_move(aura)?;
+        (self.obj(new).zone == Zone::graveyard(self.obj(aura).owner)
+            && self.events().iter().any(|r| matches!(r.event,
+                Event::ZoneChange { old, new: arrived, enchanted_left: Some(left), .. }
+                    if old == aura && arrived == new && left == host)))
+            .then_some(new)
     }
 
     /// Every new object `left` became as it moved (CR 400.7), wherever each went: the one its `became` names and, for a
@@ -541,6 +586,43 @@ pub trait Query {
     /// attacking (CR 508.4), and not removed from combat since.
     fn is_attacking(&self, id: ObjectId) -> bool {
         self.state().attackers.iter().any(|a| a.id == id)
+    }
+
+    /// Whether a creature is blocking (CR 509.1g), even after all creatures it blocked have left combat.
+    fn is_blocking(&self, id: ObjectId) -> bool {
+        self.state().blockers.contains(&id)
+    }
+
+    /// The exact creatures `source` is blocking (CR 509.1g), or was blocking as it last existed on the battlefield
+    /// if it has left or phased out (CR 608.2b,h, 113.7a). Tinder Wall's source can be sacrificed while paying its cost;
+    /// Ydwen Efreet's source can leave before its trigger resolves. This is source information, not a historical union
+    /// of everything it blocked this combat. A live source removed from combat returns an empty list. Referenced creatures
+    /// retain their original incarnation IDs, even if they have since left; rules actions and target legality decide
+    /// whether they can still be affected. `is_blocking` continues to ask current status only.
+    fn creatures_blocked_by(&self, source: ObjectId) -> Vec<ObjectId> {
+        let s = self.state();
+        if source.index() >= s.objects.len() { return Vec::new(); }
+        if let Some(known) = s.last_known(source).or_else(|| s.phased_last_known(source)) {
+            crate::history::note_read();
+            s.members(known.blocked_creatures).to_vec()
+        } else {
+            s.blocks.iter().filter(|b| b.blocker == source).map(|b| b.attacker).collect()
+        }
+    }
+
+    /// The exact creatures blocking `source` (CR 509.1h), using its last-known battlefield relationships after it
+    /// leaves or phases out (CR 608.2h). Abu Ja'far's death ability needs this half of the same relationship that Tinder
+    /// Wall and Ydwen Efreet ask in the other direction. Current status and stale referenced creatures follow the same
+    /// contract as `creatures_blocked_by`; an earlier combat removal is never revived by a subsequent zone change.
+    fn creatures_blocking(&self, source: ObjectId) -> Vec<ObjectId> {
+        let s = self.state();
+        if source.index() >= s.objects.len() { return Vec::new(); }
+        if let Some(known) = s.last_known(source).or_else(|| s.phased_last_known(source)) {
+            crate::history::note_read();
+            s.members(known.blocking_creatures).to_vec()
+        } else {
+            s.blocks.iter().filter(|b| b.attacker == source).map(|b| b.blocker).collect()
+        }
     }
 
     /// Whether a creature `attacking` controls can be attacking `defender` as it is put onto the battlefield attacking or
@@ -611,6 +693,18 @@ pub trait Query {
     /// Whether `target` could be chosen by `asker` for a spell or ability: hexproof and protection (CR 702.11,
     /// 702.16b). The slot's own filter is the card's; this is the rules'.
     fn can_target(&self, asker: &Asker, target: Target) -> bool;
+
+    /// Whether the attachment's current characteristics allow `host` as an object host (CR 701.3b,
+    /// 702.5, 702.16c-d), without targeting: hexproof is irrelevant, protection and every enchant
+    /// ability still apply. This judges the host, not movement, timing or a choice's "another" clause.
+    /// Crown of the Ages and Aura Graft use this before offering destinations.
+    fn can_attach_to(&self, attachment: ObjectId, host: ObjectId) -> bool;
+
+    /// Whether untapping this permanent is a payable action (CR 118.3, 701.26b): it is live, tapped and on the
+    /// battlefield, and no rule prohibits it from becoming untapped (CR 101.2). A stun counter does not make the cost
+    /// unpayable: removing one replaces the untap and still pays it (CR 118.11, 122.1d). Restrictions on the untap step
+    /// alone do not prohibit untapping as a cost. Soldevi Golem and Pili-Pala's untap costs use this authority.
+    fn can_untap(&self, permanent: ObjectId) -> bool;
 }
 
 /// Changing the game.
@@ -693,11 +787,14 @@ pub trait Game: Query {
     fn mill_together(&mut self, mills: &[(PlayerId, u32)]) -> Vec<ObjectId>;
     /// Deals damage (CR 120.3) from `source` to `target`: marked on a creature, removed as loyalty from a planeswalker,
     /// lost as life by a player, each after prevention and replacement. How much was dealt, which is none when the damage
-    /// was prevented or the target is gone.
+    /// was prevented or the target is gone. Original damage split among recipients
+    /// by a redirection is totalled; damage introduced by an additional component is not, even if its source is the same.
     fn damage(&mut self, source: ObjectId, target: Target, amount: u32) -> u32;
     /// Deals damage as `damage` does, returning its actual recipient, amount and excess (CR 120.10), or none if no
     /// damage was dealt. Violent Echoes reads the excess after dealing damage; damage triggers such as Toralf's and
     /// Aegar's can read the same rules information from `Event::Damage::recipient_excess`.
+    /// If replacement splits the original damage, this reports its first actual
+    /// component; `damage` totals the original components and history records each.
     fn damage_result(&mut self, source: ObjectId, target: Target, amount: u32) -> Option<DamageResult>;
     /// Deals damage to several recipients at once (CR 120.2, 603.2c): "N damage to each creature and each opponent" is one
     /// event, so "whenever this deals damage" triggers once. Each entry is a source, a recipient and an amount; an effect
@@ -795,6 +892,13 @@ pub trait Game: Query {
     fn move_together_revealed(&mut self, moves: &[(ObjectId, Zone)], reason: MoveReason) -> Vec<ObjectId>;
     /// Puts an object onto the battlefield under `controller` (CR 110.2a), its entering replacements applied.
     fn put_onto_battlefield(&mut self, object: ObjectId, controller: PlayerId, tapped: bool) -> Result<ObjectId, Suspend>;
+    /// A player explicitly instructed to put a permanent onto the battlefield (CR 110.2a, 608.2c). `by` performs the
+    /// action; `controller` is who it enters under, and replacement effects may change the latter independently.
+    fn put_onto_battlefield_by(&mut self, object: ObjectId, controller: PlayerId, tapped: bool, by: PlayerId) -> Result<ObjectId, Suspend>;
+    /// Players explicitly instructed to put permanents onto the battlefield simultaneously (CR 101.4, 110.2a).
+    /// Each row is (object, entering controller, tapped, player putting it there); the counters apply to all arrivals.
+    /// Different actors share one simultaneous move. Show and Tell and shared search/put recipes use this authority.
+    fn put_all_onto_battlefield_by(&mut self, objects: &[(ObjectId, PlayerId, bool, PlayerId)], counters: &[(CounterKind, i32)]) -> Result<Vec<ObjectId>, Suspend>;
     /// `put_onto_battlefield`, the object entering with these counters as well (CR 122.6, 614.1c): persist's and undying's
     /// "return it with a counter on it". They are part of how it enters, so a replacement of counters applies (CR 614.1).
     fn put_onto_battlefield_with_counters(&mut self, object: ObjectId, controller: PlayerId, tapped: bool, counters: &[(CounterKind, i32)]) -> Result<ObjectId, Suspend>;
@@ -919,6 +1023,15 @@ pub trait Game: Query {
     /// (`create_tokens_attacking`'s limits: no combat, not a creature, a defender that can't be attacked) only stays where it
     /// is. A copy that enters attacking is made by `create_token_copies_attacking` instead, so that it is attacking as its entry is matched.
     fn enter_attacking(&mut self, entered: &[ObjectId], defender: Target);
+    /// Makes an attacking creature blocked (CR 509.1h, 509.3c), without adding a blocking creature.
+    /// Dazzling Beauty and Curtain of Light print this operation. A creature already blocked causes no new trigger.
+    fn become_blocked(&mut self, attacker: ObjectId);
+    /// Removes a permanent from combat (CR 506.4), leaving its attackers blocked even if their last blocker leaves.
+    /// Disharmony, Imprison, Mijae Djinn and Ydwen Efreet print this operation.
+    fn remove_from_combat(&mut self, permanent: ObjectId);
+    /// Makes an attacking creature unblocked by an effect (CR 509.1h), rather than by declaring no blockers.
+    /// This does not trigger "attacks and isn't blocked" (CR 509.3g). False Orders and Imprison use it.
+    fn become_unblocked(&mut self, attacker: ObjectId);
     /// Creates token copies entering attacking (CR 508.4, 707.2), tapped only when `tapped`. If `defender` is absent,
     /// each token's controller chooses what it attacks as it enters. Attacking state is visible to ETB abilities.
     fn create_token_copies_attacking(&mut self, values: Copiable, controller: PlayerId, count: u32, tapped: bool, defender: Option<Target>) -> Result<Vec<ObjectId>, Suspend>;
@@ -949,6 +1062,11 @@ pub trait Game: Query {
     /// `delayed_trigger`, carrying the objects the ability is about to the moment it triggers (`event_objects` of its
     /// stack item): every Warrior a mobilize ability created, which it sacrifices together (CR 603.7c).
     fn delayed_trigger_about(&mut self, when: DelayedWhen, source: ObjectId, controller: PlayerId, ability: AbilityRef, objects: &[ObjectId]);
+    /// Creates a step-delayed triggered ability (CR 603.7c-e), retaining both an independent singular `subject` and
+    /// the real objects its instructions refer to (`event_objects`). Infinite Authority carries its first creature
+    /// separately from the opposing creature; Gift of Immortality and Next of Kin carry a host and an Aura card.
+    /// `when` must be a step variant, not an event variant. Event-delayed capture follows its existing separate rules.
+    fn delayed_trigger_with(&mut self, when: DelayedWhen, source: ObjectId, controller: PlayerId, ability: AbilityRef, subject: Target, objects: &[ObjectId]);
     /// Copies a spell on the stack (CR 707.10) for `copier`, not cast; with `new_targets` the copier may choose new
     /// targets (CR 707.10c). The copy, or nothing if the spell is not on the stack.
     fn copy_spell(&mut self, spell: ObjectId, copier: PlayerId, new_targets: bool) -> Result<Option<ObjectId>, Suspend>;
@@ -1176,8 +1294,11 @@ pub trait Game: Query {
     /// tapped, then what watches them sees them become tapped together (CR 603.2c), so a "whenever one or more creatures
     /// become tapped" ability triggers once. For "tap X target creatures", "tap five untapped artifacts".
     fn tap_together(&mut self, permanents: &[ObjectId]);
-    /// Untaps a permanent (CR 701.26a). One with a stun counter on it has one removed instead (CR 122.1d).
+    /// Untaps a permanent (CR 701.26b). One with a stun counter on it has one removed instead (CR 122.1d).
     fn untap(&mut self, permanent: ObjectId);
+    /// Untaps permanents simultaneously (CR 701.26b, 603.2c). Prohibitions and stun replacements are determined before
+    /// any changes; durations and control settle after all changes, and triggers see one batch. Repeated ids untap once.
+    fn untap_together(&mut self, permanents: &[ObjectId]);
     /// Exerts a permanent (CR 701.43a): it won't untap during its controller's next untap step.
     fn exert(&mut self, permanent: ObjectId);
     /// Monstrosity N (CR 701.37a): if the permanent is not monstrous, it gets N +1/+1 counters and becomes monstrous,
@@ -1286,12 +1407,15 @@ pub trait Game: Query {
     /// Whether `player` could gain life now (CR 119.7): not while an effect says they can't gain life, nor while their life
     /// total can't change. "A cost that involves having that player gain life can't be paid" while it is false.
     fn can_gain_life(&self, player: PlayerId) -> bool;
+
     /// Whether `player` could lose life now (CR 119.8): not while a static ability says they can't lose life, nor while their life
     /// total can't change (CR 119.7). "A cost that involves having that player pay life can't be paid" while it is false.
     fn can_lose_life(&self, player: PlayerId) -> bool;
     /// Whether `creature` stations permanents using its toughness rather than its power (CR 702.184c), by a static ability
     /// on the battlefield now (`CardDef::stations_by_toughness`); asked of the creature as it last existed if it has left.
     fn stations_using_toughness(&self, creature: ObjectId) -> bool;
+
+
     fn lose_life(&mut self, player: PlayerId, amount: i32);
     /// The life losses of one instruction, simultaneously (CR 101.4, 119.3): each pair is a player and the amount they
     /// lose, determined before this call (CR 608.2h). Positive amounts for the same player are added; none or fewer do
@@ -1317,6 +1441,9 @@ pub trait Game: Query {
     /// effect applying, or the player doing the action - and through the replacement effects of counters being put
     /// (CR 614.1a). A negative `amount` takes that many off instead (`remove_counters`).
     fn add_counters(&mut self, object: ObjectId, kind: CounterKind, amount: i32);
+    /// Put counters through replacements, then enforce this effect's maximum resulting total before placement (CR 101.2).
+    /// The maximum restricts only this placement and never removes counters already on the object above it.
+    fn add_counters_with_limit(&mut self, object: ObjectId, kind: CounterKind, amount: i32, maximum_total: i32);
     /// Puts counters on several objects, or of several kinds on one, as one instruction of the effect being carried out does
     /// (CR 608.2, 101.4, 122.6): one simultaneous event, which "whenever one or more counters are put on one or more ..." sees
     /// once (CR 603.2c). Each entry is `amount` counters of a kind on an object; entries for one object are one placement on
@@ -1330,6 +1457,15 @@ pub trait Game: Query {
     /// in every replacement effect (Innkeeper's Talent's and Vorinclex's "if you would put") and trigger ("whenever you put
     /// one or more counters") that asks who put them; everything else the effect does stays its controller's.
     fn add_counters_by(&mut self, by: PlayerId, object: ObjectId, kind: CounterKind, amount: i32);
+    /// Pays a resolving counter cost on already chosen objects (CR 118.3, 118.11, 118.12a). Thelon's Chant and Tourach's
+    /// Chant put a -1/-1 counter on a creature the payer chooses; Sheltering Ancient's cumulative upkeep puts +1/+1
+    /// counters on chosen opposing creatures. Selection and the choice whether to pay belong to the caller, using the
+    /// resolving ability's original source; neither the payer nor an object's controller becomes that source.
+    /// Each row is one placement/cost component, including repeated recipients. Every positive placement must be legal
+    /// before any is paid; negative amounts, stale/phased recipients and counter bans make the whole payment fail.
+    /// Zero amounts do nothing. Replacements apply as to a cost, and a replacement leaving no counters still pays it.
+    /// This is not the blight keyword action. Whether the cost was paid, independently of its final counter quantities.
+    fn pay_counter_cost(&mut self, payer: PlayerId, puts: &[(ObjectId, CounterKind, i32)]) -> bool;
     /// `add_counters_together` where each entry names the player who puts its counters (CR 122.6, 101.4): "each player puts
     /// ...", "each opponent blights 1". One simultaneous event; entries for one object by one player are one placement on it.
     fn add_counters_together_by(&mut self, counters: &[(PlayerId, ObjectId, CounterKind, i32)]);

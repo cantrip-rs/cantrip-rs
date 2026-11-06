@@ -176,7 +176,7 @@ fn put(g: &mut Game, def: &'static CardDef, owner: PlayerId, zone: Zone) -> Obje
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 fn put_attached(g: &mut Game, card: ObjectId, host: ObjectId) -> Option<ObjectId> {
@@ -192,7 +192,7 @@ fn put_all_attached(g: &mut Game, entries: &[(ObjectId, ObjectId)]) -> Vec<Optio
 fn state_based_actions(g: &mut Game) {
     g.state.frame_push(Frame::new(FrameKind::Settle));
     let frame = g.state.agenda.len() - 1;
-    let mut cx = Cx { g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let mut cx = Cx { g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     crate::settle::state_based_actions_alone(&mut cx).expect("nothing is asked");
 }
 

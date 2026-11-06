@@ -1,0 +1,66 @@
+# Illusions gains 20 on entry; its upkeep costs two per age counter and declining sacrifices it, losing 20 life (CR 702.24a, 603.2).
+[Bot1 Deck]
+Illusions of Grandeur
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Island
+Island
+Island
+Island x20
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Illusions of Grandeur.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 40
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.PayCost(X: 1)
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana = {U}
+? Bot1.Battlefield.Illusions of Grandeur.Counters.Age = 1
+? Bot1.Life = 40
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island#1.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Island#2.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Illusions of Grandeur.Counters.Age = 2
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Graveyard = Illusions of Grandeur; Black Lotus

@@ -1,0 +1,8 @@
+{
+  "name": "Icatian Javelineers",
+  "manaCost": "{W}",
+  "type": "Creature — Human Soldier",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "This creature enters with a javelin counter on it.\n{T}, Remove a javelin counter from this creature: It deals 1 damage to any target."
+}

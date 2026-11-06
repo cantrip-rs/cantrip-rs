@@ -62,10 +62,10 @@ fn play(lands: &[&str]) -> (Game, Vec<Vec<String>>) {
                 }
             }
             RequestKind::Priority { .. } => Answer::Pass,
-            RequestKind::PayCosts { options, .. } => {
+            RequestKind::ChooseCostPayment { choices, .. } => Answer::CostPayment(choices.iter().position(|c| c.kind == CostPaymentKind::Mana).unwrap_or(0)),
+            RequestKind::PayCosts { options, remaining, mana_abilities, .. } => {
                 let mox = options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source.is_some_and(|s| game.name(s).starts_with("Mox")));
-                let confirm = options.iter().find(|o| o.kind == ActionKind::ConfirmCasting);
-                Answer::Act(Action::of(confirm.or(mox).expect("a Mox to pay with, or the payment to confirm")))
+                super::pay(options, remaining, *mana_abilities, mox)
             }
             RequestKind::ChooseCards { cards, rule, purpose: Purpose::Sacrifice, .. } => {
                 let choosable: Vec<ObjectId> = cards.iter().copied().filter(|&c| rule.listed_card(c) && game.chars(c).is(CardType::Land)).collect();

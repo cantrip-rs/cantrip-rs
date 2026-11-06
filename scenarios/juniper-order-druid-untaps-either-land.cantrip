@@ -1,0 +1,48 @@
+# Juniper Order Druid taps to untap lands controlled by either player, including an already untapped land (CR 602.2b, 602.2a).
+
+[Bot1 Deck]
+Island
+Black Lotus
+Mox Pearl
+Juniper Order Druid
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Juniper Order Druid.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Juniper Order Druid.Activate(Bot1.Battlefield.Island)
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Juniper Order Druid.Activate(Bot1.Battlefield.Mox Pearl)
+Bot1.Battlefield.Juniper Order Druid.Activate(Bot1.Battlefield.Island)
+? Bot1.Battlefield.Juniper Order Druid.Tapped = true
+? Bot1.Mana = {U}
+! Bot1.Battlefield.Juniper Order Druid.Activate(Bot1.Battlefield.Island)
+? Stack = Juniper Order Druid
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Island.Tapped = false
+[T4 Bot2.Main1]
+Bot2.Battlefield.Island.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Juniper Order Druid.Activate(Bot2.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Island.Tapped = false
+[T7 Bot1.Main1]
+Bot1.Battlefield.Juniper Order Druid.Activate(Bot2.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Island.Tapped = false

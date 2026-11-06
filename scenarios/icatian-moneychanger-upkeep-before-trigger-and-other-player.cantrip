@@ -1,0 +1,36 @@
+# Sacrificing in response to the upkeep trigger counts the three existing counters; the other player's later upkeep adds a counter before their sacrifice (CR 113.7a).
+[Bot1 Deck]
+Icatian Moneychanger
+Mox Pearl
+Plains x20
+[Bot2 Deck]
+Icatian Moneychanger
+Mox Pearl
+Plains x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Icatian Moneychanger.Cast
+? Bot1.Mana =
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Icatian Moneychanger.Cast
+? Bot2.Mana =
+[T3 Bot1.Upkeep]
+? Bot1.Battlefield.Icatian Moneychanger.Counters.Credit = 3
+Bot1.Battlefield.Icatian Moneychanger.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+[T4 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Icatian Moneychanger.Counters.Credit = 4
+Bot2.Battlefield.Icatian Moneychanger.Activate
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 21
+Bot1.Graveyard = Icatian Moneychanger
+Bot2.Graveyard = Icatian Moneychanger

@@ -66,7 +66,7 @@ fn put(game: &mut Game, table: &CardTable, def: &'static CardDef, zone: Zone) ->
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// A creature card in a graveyard put onto the battlefield as an enchantment can't enter: it is a creature card where it is.
@@ -116,7 +116,7 @@ fn a_land_that_cannot_enter_cannot_be_played_as_an_effect_resolves() {
     let serial = game.state.stack.last().expect("the caster").serial;
     game.state.frame_push(cantrip_state::Frame::new(cantrip_state::FrameKind::Resolve { serial }));
     let frame = game.state.agenda.len() - 1;
-    let resolving = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let resolving = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     assert!(!could_play_land_during_resolution(&resolving, arbor));
     assert!(could_play_land_during_resolution(&resolving, waste));
 }

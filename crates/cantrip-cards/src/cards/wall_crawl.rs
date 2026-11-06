@@ -12,8 +12,8 @@ fn spider_then_life_for_each(g: &mut dyn Game, item: &StackItem) -> Result<(), S
     // A sentence ends (CR 608.2c): what the token did is judged before the count is made.
     g.end_sentence();
     let spider = g.words(item.object).subtype(Subtype::Spider);
-    let spiders = g.permanents_of(item.controller).into_iter().filter(|&id| g.chars(id).has_subtype(spider)).count() as i32;
-    g.gain_life(item.controller, spiders);
+    let spiders = g.permanents_of(item.controller).into_iter().filter(|&id| g.chars(id).has_subtype(spider)).count();
+    g.gain_life(item.controller,(spiders) as i32);
     Ok(())
 }
 

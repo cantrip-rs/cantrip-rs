@@ -216,7 +216,7 @@ fn put_from_hand(
     let Some(card) = choose_from_hand(g, player, source, eligible)? else {
         return Ok(None);
     };
-    Ok(Some(g.put_onto_battlefield(card, player, tapped)?))
+    Ok(Some(g.put_onto_battlefield_by(card, player, tapped, player)?))
 }
 
 fn choose_from_hand(

@@ -1,0 +1,8 @@
+{
+  "name": "Icatian Lieutenant",
+  "manaCost": "{W}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "{1}{W}: Target Soldier creature gets +1/+0 until end of turn."
+}

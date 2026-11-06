@@ -1,0 +1,40 @@
+# Icequake destroys a snow land and damages its controller for one, then destroys the caster's ordinary land without damage (CR 701.8a, 608.2h).
+[Bot1 Deck]
+Icequake
+Icequake
+Black Lotus
+Black Lotus
+Swamp
+Mox Ruby
+Mox Pearl
+Swamp x20
+[Bot2 Deck]
+Snow-Covered Forest
+Forest x20
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot2.Hand.Snow-Covered Forest.Play
+[T3 Bot1.Main1]
+! Bot1.Hand.Icequake.Cast(Bot1.Battlefield.Mox Ruby)
+! Bot1.Hand.Icequake.Cast(Bot2.Battlefield.Snow-Covered Forest; Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Icequake.Cast(Bot2.Battlefield.Snow-Covered Forest)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot2.Graveyard = Snow-Covered Forest
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Icequake.Cast(Bot1.Battlefield.Swamp)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19
+Bot1.Graveyard = Icequake; Swamp; Black Lotus; Icequake; Black Lotus

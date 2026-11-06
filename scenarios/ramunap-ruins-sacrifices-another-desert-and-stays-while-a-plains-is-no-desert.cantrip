@@ -26,6 +26,7 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Ramunap Ruins#1.Activate(Ability: Sacrifice a Desert)
 ! Bot1.Choose(Plains)
+Bot1.Choose(Tap Ramunap Ruins)
 Bot1.Choose(Ramunap Ruins#2)
 Bot1.Pass
 Bot2.Pass

@@ -1,0 +1,62 @@
+# The opponent orders their hand on top before the Mask controller searches it (CR 401.4).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Jester's Mask
+Darksteel Myr
+Island x20
+[Bot2 Deck]
+Mountain
+Plains
+Swamp
+Island
+Forest
+Memnite
+Ornithopter
+Forest x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Jester's Mask.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Jester's Mask.Tapped = true
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Jester's Mask.Activate(Bot2)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Jester's Mask.Activate(Bot1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Darksteel Myr.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Jester's Mask.Activate(Bot2; Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Jester's Mask.Activate(Bot2)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Arrange(Ornithopter; Memnite; Forest; Island; Swamp; Plains; Mountain)
+? Bot2.Library = Ornithopter; Memnite; Forest; Island; Swamp; Plains; Mountain; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest
+? Bot2.Hand.Count = 0
+? Bot2.Shuffles = 0
+! Bot1.Search()
+! Bot1.Search(Mountain; Forest; Forest; Forest; Forest; Forest; Forest; Forest)
+Bot1.Search(Mountain; Forest; Forest; Forest; Forest; Forest; Forest)
+[Expect]
+Bot2.Hand.Count = 7
+Bot2.Hand.Mountain.Colors =
+Bot2.Shuffles = 1
+Bot1.Graveyard = Jester's Mask; Black Lotus
+LeftBattlefield = Black Lotus (tapped); Jester's Mask (tapped)

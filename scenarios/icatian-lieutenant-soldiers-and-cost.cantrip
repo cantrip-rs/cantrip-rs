@@ -1,0 +1,65 @@
+# Lieutenant boosts either player's Soldier by +1/+0 until cleanup, refuses non-Soldiers and needs white mana (CR 115.1c, 611.2a).
+[Bot1 Deck]
+Mox Pearl
+Gleemox
+Mox Sapphire
+Icatian Lieutenant
+Memnite
+Plains
+Ancestral Recall
+Island x20
+[Bot2 Deck]
+Plains
+Staunch Shieldmate
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Icatian Lieutenant.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+! Bot1.Battlefield.Icatian Lieutenant.Activate(Icatian Lieutenant; Mana: short)
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Staunch Shieldmate.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+! Bot1.Battlefield.Icatian Lieutenant.Activate(Memnite)
+Bot1.Battlefield.Icatian Lieutenant.Activate(Icatian Lieutenant)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Icatian Lieutenant.Power = 2
+? Bot1.Battlefield.Icatian Lieutenant.Toughness = 2
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Icatian Lieutenant.Power = 1
+? Bot1.Battlefield.Icatian Lieutenant.Toughness = 2
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Icatian Lieutenant.Activate(Staunch Shieldmate)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Staunch Shieldmate.Power = 2
+? Bot2.Battlefield.Staunch Shieldmate.Toughness = 3
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Icatian Lieutenant.Activate(Staunch Shieldmate; Mana: short)
+[Expect]
+Bot2.Battlefield.Staunch Shieldmate.Power = 2
+Bot2.Battlefield.Staunch Shieldmate.Toughness = 3
