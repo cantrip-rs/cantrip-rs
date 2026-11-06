@@ -28,6 +28,7 @@ Bot1.Hand.Mox Ruby.Cast
 [T3 Bot1.Main1]
 Bot1.Hand.Mountain.Play
 Bot1.Hand.Lightning Axe.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Modes(Pay {5})
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Mountain#2.Activate
 Bot1.Battlefield.Mox Ruby#1.Activate

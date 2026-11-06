@@ -1,0 +1,37 @@
+# Defender prevents attacking until a Merfolk pays for permission; that permission ends at cleanup (CR 702.3, 611.2a).
+
+[Bot1 Deck]
+Black Lotus
+Vodalian War Machine
+Mox Sapphire
+Merfolk of the Pearl Trident
+Island x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Vodalian War Machine.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+[T3 Bot1.Attackers]
+! Bot1.Attack(Vodalian War Machine > Bot2)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Vodalian War Machine.Activate(Ability: can attack)
+Bot1.Choose(Merfolk of the Pearl Trident)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Vodalian War Machine > Bot2)
+[T7 Bot1.Attackers]
+! Bot1.Attack(Vodalian War Machine > Bot2)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20

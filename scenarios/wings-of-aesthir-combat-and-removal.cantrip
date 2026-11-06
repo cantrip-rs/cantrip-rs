@@ -1,0 +1,49 @@
+# The Aura gives +1/+0, flying and first strike: a ground blocker is refused, a flying blocker dies before dealing damage, and removing the Aura removes its bonuses (CR 702.9b, 702.7b).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Wings of Aesthir
+Memnite
+Island x25
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Aven Skirmisher
+Memnite
+Disenchant
+Island x25
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Wings of Aesthir.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Wings of Aesthir.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Wings of Aesthir.AttachedTo = Memnite
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 1
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Aven Skirmisher.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+! Bot2.Block(Memnite > Bot1.Battlefield.Memnite)
+Bot2.Block(Aven Skirmisher > Bot1.Battlefield.Memnite)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Memnite.Damage = 0
+? Bot2.Graveyard.Aven Skirmisher.Power = 1
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Wings of Aesthir)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Graveyard.Wings of Aesthir.Colors = Blue; White

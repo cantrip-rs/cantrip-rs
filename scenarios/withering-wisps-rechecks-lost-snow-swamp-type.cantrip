@@ -1,0 +1,55 @@
+# Losing Urborg removes Swamp from a snow Forest, reducing the current activation limit immediately; a later Urborg restores it (CR 602.5).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Withering Wisps
+Urborg, Tomb of Yawgmoth
+Snow-Covered Forest
+Ornithopter
+Urborg, Tomb of Yawgmoth
+Island x20
+[Bot2 Deck]
+Strip Mine
+Island
+Island
+Island
+Island
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Urborg, Tomb of Yawgmoth.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Withering Wisps.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Strip Mine.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Withering Wisps.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+Bot2.Battlefield.Strip Mine.Activate(Bot1.Battlefield.Urborg, Tomb of Yawgmoth; Ability: Destroy target land)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Snow-Covered Forest.Subtypes = Forest
+! Bot1.Battlefield.Withering Wisps.Activate
+[T5 Bot1.Main1]
+Bot1.Hand.Urborg, Tomb of Yawgmoth.Play
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Withering Wisps.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18

@@ -1,0 +1,52 @@
+# Knights cannot attack a player without an Island, win combat by first strike, and later fly over a ground blocker for {U} (CR 702.7b, 702.9b).
+[Bot1 Deck]
+Black Lotus
+Island
+Vodalian Knights
+Memnite
+Mox Ruby
+Island x25
+[Bot2 Deck]
+Memnite
+Memnite
+Island
+Island x25
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Vodalian Knights.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Vodalian Knights > Bot2)
+Bot1.Attack()
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.BeginCombat]
+Bot1.Battlefield.Island.Activate
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Vodalian Knights > Bot2)
+Bot2.Block(Memnite#1 > Vodalian Knights)
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Vodalian Knights.Damage = 0
+? Bot2.Graveyard.Memnite.Power = 1
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Vodalian Knights.Activate(Mana: short)
+[T7 Bot1.BeginCombat]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Vodalian Knights.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vodalian Knights.Keywords = FirstStrike; Flying
+Bot1.Attack(Vodalian Knights > Bot2)
+! Bot2.Block(Memnite > Vodalian Knights)
+[T8 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Vodalian Knights.Keywords = FirstStrike
+Bot2.Life = 18

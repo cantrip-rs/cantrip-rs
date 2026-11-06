@@ -1,0 +1,31 @@
+# Crystal Grotto opens its mana window, and Island produces the mana for its cost inside the activation.
+# Taking back Grotto returns to before the entire activation, including the nested Island activation.
+
+[Bot1 Deck]
+Crystal Grotto
+Island x6
+Lightning Bolt
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Crystal Grotto.Play
+Bot1.Arrange(Lightning Bolt | )
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Crystal Grotto.Activate(Ability: any color; Color: Red)
+Bot1.Battlefield.Island.Activate
+Bot1.Choose(Pay mana)
+? Bot1.Mana = {R}
+Bot1.Undo
+? Bot1.Mana =
+? Bot1.Battlefield.Crystal Grotto.Tapped = false
+? Bot1.Battlefield.Island.Tapped = false
+! Bot1.Undo
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Crystal Grotto.Tapped = false
+Bot1.Battlefield.Island.Tapped = false

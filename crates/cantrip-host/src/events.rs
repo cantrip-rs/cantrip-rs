@@ -160,7 +160,7 @@ impl Tracker {
                 self.last_turn = turn;
                 out.push(Proto::Step { turn: turn.0, step, active: turn.1 });
             }
-            Event::ZoneChange { old, new, from, to, reason, part } => {
+            Event::ZoneChange { old, new, from, to, reason, part, .. } => {
                 if to.is(ZoneKind::Gone) {
                     return;
                 }
@@ -185,6 +185,7 @@ impl Tracker {
                 out.push(Proto::Damage { object, amount: amount as i32 });
             }
             Event::Tapped { permanent } => out.push(Proto::Tap { object: permanent, tapped: true }),
+            Event::Untapped { permanent } => out.push(Proto::Tap { object: permanent, tapped: false }),
             Event::SpellCast { spell, player, .. } => {
                 let (targets, x, modes, kicked, gift) = spell_facts(game, spell);
                 out.push(Proto::Cast { spell, controller: player, targets, x, modes, kicked, gift });
@@ -257,7 +258,7 @@ impl Tracker {
                 if let Some(seen) = resolved.and_then(|serial| self.stack.remove(&serial).map(|seen| (serial, seen))) {
                     let (serial, seen) = seen;
                     let first = match self.run {
-                        Some((Cause::Ability { source: s, ability: a }, first)) if s == source && a == ability => first,
+                        Some((Cause::Ability { source: s, ability: a, .. }, first)) if s == source && a == ability => first,
                         _ => next + out.len() as u64,
                     };
                     out.push(Proto::AbilityResolved { serial, source: seen.source, controller: seen.controller, targets: seen.targets, first });

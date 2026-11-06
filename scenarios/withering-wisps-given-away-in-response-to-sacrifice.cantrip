@@ -1,0 +1,38 @@
+# The old controller cannot sacrifice Withering Wisps after giving it away in response to its end-step trigger (CR 701.21a).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Sapphire
+Teferi, Time Raveler
+Withering Wisps
+Harmless Offering
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Teferi, Time Raveler.Cast
+Bot1.Pass
+Bot1.Battlefield.Teferi, Time Raveler.Activate(Ability: +1)
+[T1 Bot1.Main2]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Withering Wisps.Cast
+? Bot1.Mana =
+[T1 Bot1.End]
+? Stack.Count = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Withering Wisps)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Withering Wisps.Types = Enchantment
+Bot1.Battlefield.Withering Wisps = (absent)

@@ -1,0 +1,39 @@
+# A Wall that loses defender can attack; Venom on its blocker does not destroy the Wall (CR 702.3b, 603.2).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Kraken Hatchling
+Venom
+Island x20
+[Bot2 Deck]
+Black Lotus
+Steel Wall
+Fresh Start
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kraken Hatchling.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Venom.Cast(Bot1.Battlefield.Kraken Hatchling)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Steel Wall.Cast
+Bot2.Pass
+Bot2.Hand.Fresh Start.Cast(Bot2.Battlefield.Steel Wall)
+? Bot2.Mana =
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Steel Wall)
+Bot1.Block(Kraken Hatchling > Steel Wall)
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Battlefield.Steel Wall.Toughness = 4
+Bot1.Battlefield.Kraken Hatchling.Toughness = 4
+Bot1.Battlefield.Venom.AttachedTo = Kraken Hatchling

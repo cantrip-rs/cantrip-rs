@@ -1,0 +1,27 @@
+# A Siege's protector is the defending player; Knights cannot attack it when that player controls no Island (CR 506.2).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Island
+Vodalian Knights
+Invasion of Gobakhan
+Memnite
+Island x25
+[Bot2 Deck]
+Mountain x25
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Vodalian Knights.Cast
+? Bot1.Mana =
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Invasion of Gobakhan.Cast
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Vodalian Knights > Bot1.Battlefield.Invasion of Gobakhan)
+Bot1.Attack(Memnite > Bot1.Battlefield.Invasion of Gobakhan)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Invasion of Gobakhan.Counters.Defense = 2

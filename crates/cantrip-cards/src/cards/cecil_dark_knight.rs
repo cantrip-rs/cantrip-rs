@@ -7,7 +7,7 @@ use cantrip_oracle as oracle;
 fn cecil_deals_damage(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
     match event {
         Event::Damage { source: from, amount, .. } if *from == source && *amount > 0 => {
-            Some(Fired { subject: Target::None, data: [*amount as u32, 0] })
+            Some(Fired { subject: Target::None, data: [0, 0] })
         }
         _ => None,
     }
@@ -17,7 +17,7 @@ fn cecil_deals_damage(_: &dyn Query, source: ObjectId, event: &Event) -> Option<
 /// Cecil and transform it."
 fn darkness(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let you = item.controller;
-    g.lose_life(you, item.data[0] as i32);
+    g.lose_life(you, item.matched_damage_amount() as i32);
     let player = *g.state().player(you);
     if player.life as i64 * 2 <= player.starting_life as i64 {
         g.untap(item.object);
@@ -49,7 +49,7 @@ pub static BACK: CardDef = CardDef {
 };
 
 pub static CARD: CardDef = CardDef {
-    abilities: &[triggered(when(EventMask::DAMAGE, cecil_deals_damage), darkness, "Darkness \u{2014} Whenever Cecil deals damage, you lose that much life. Then if your life total is less than or equal to half your starting life total, untap Cecil and transform it.")
+    abilities: &[triggered(when(EventMask::DAMAGE, cecil_deals_damage), darkness, "Darkness \u{2014} Whenever Cecil deals damage, you lose that much life. Then if your life total is less than or equal to half your starting life total, untap Cecil and transform it.").damage_amount()
         .sums_per_subject()],
     back: Some(&BACK),
     ..oracle::CECIL_DARK_KNIGHT

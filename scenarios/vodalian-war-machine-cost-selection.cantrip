@@ -1,0 +1,56 @@
+# Each ability requires an untapped Merfolk its controller controls; the choice is paid immediately (CR 602.2b).
+
+[Bot1 Deck]
+Black Lotus
+Vodalian War Machine
+Mox Sapphire
+Merfolk of the Pearl Trident
+Memnite
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Triton Shorethief
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Vodalian War Machine.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Triton Shorethief.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Vodalian War Machine.Activate(Ability: can attack)
+! Bot1.Choose(Triton Shorethief)
+! Bot1.Choose(Memnite)
+! Bot1.Choose()
+Bot1.Choose(Merfolk of the Pearl Trident)
+? Bot1.Battlefield.Merfolk of the Pearl Trident.Tapped = true
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Vodalian War Machine.Activate(Ability: gets +2/+1)
+! Bot1.Battlefield.Vodalian War Machine.Activate(Ability: can attack)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Vodalian War Machine.Activate(Ability: gets +2/+1)
+! Bot1.Choose(Triton Shorethief)
+! Bot1.Choose(Memnite)
+Bot1.Choose(Merfolk of the Pearl Trident)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vodalian War Machine.Power = 2
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Triton Shorethief.Tapped = false

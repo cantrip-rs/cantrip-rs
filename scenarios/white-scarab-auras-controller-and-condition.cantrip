@@ -1,0 +1,43 @@
+# On an opponent's creature, the Aura still checks its own controller's opponents. A green permanent does not qualify; a white creature makes the bonus appear and its destruction removes it (CR 109.5, 611.3a).
+[Bot1 Deck]
+Mountain
+Mox Pearl
+White Scarab
+Lightning Bolt
+Island x16
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Mox Pearl
+Bofur, Reliable Guardian
+Island x16
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.White Scarab.Cast(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+? Bot2.Battlefield.Grizzly Bears.Toughness = 2
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Bofur, Reliable Guardian.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Grizzly Bears.Power = 4
+? Bot2.Battlefield.Grizzly Bears.Toughness = 4
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bofur, Reliable Guardian)
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot2.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Battlefield.White Scarab.AttachedTo = Grizzly Bears

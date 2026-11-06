@@ -1,0 +1,40 @@
+# Warning prevents the attacker's combat damage but not its activated noncombat damage (CR 615.1).
+[Bot1 Deck]
+Warning
+Plains
+Island x20
+[Bot2 Deck]
+Prodigal Sorcerer
+Quirion Ranger
+Forest
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Quirion Ranger.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Prodigal Sorcerer.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Prodigal Sorcerer > Bot1)
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Warning.Cast(Bot2.Battlefield.Prodigal Sorcerer)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Quirion Ranger.Activate(Bot2.Battlefield.Prodigal Sorcerer)
+Bot2.Choose(Forest)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Prodigal Sorcerer.Activate(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 19
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 19

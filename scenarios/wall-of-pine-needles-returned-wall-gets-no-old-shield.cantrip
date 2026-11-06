@@ -1,0 +1,40 @@
+# Blinking the Wall in response makes a new object; the old Wall's ability cannot shield it (CR 400.7).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Wall of Pine Needles
+Ephemerate
+Island x14
+[Bot2 Deck]
+Black Lotus
+Go for the Throat
+Island x18
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Wall of Pine Needles.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Wall of Pine Needles.Activate
+? Bot1.Mana =
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ephemerate.Cast(Wall of Pine Needles)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Go for the Throat.Cast(Wall of Pine Needles)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Wall of Pine Needles; Black Lotus

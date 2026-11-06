@@ -1,0 +1,45 @@
+# The Aura's own white permanent does not satisfy its opponent condition; a white-green opposing creature does. That creature cannot block the enchanted creature but can block another; a green creature can block the enchanted one (CR 509.1b, 109.5).
+[Bot1 Deck]
+Mox Pearl
+White Scarab
+Memnite
+Memnite
+Island x16
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Watchwolf
+Elvish Mystic
+Island x16
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+? Stack.Count = 0
+! Bot1.Hand.White Scarab.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.White Scarab.Cast(Bot1.Battlefield.Memnite#1)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Memnite#1.Power = 1
+? Bot1.Battlefield.Memnite#1.Toughness = 1
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Watchwolf.Cast
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Memnite#1.Power = 3
+? Bot1.Battlefield.Memnite#1.Toughness = 3
+Bot1.Attack(Memnite#1 > Bot2; Memnite#2 > Bot2)
+! Bot2.Block(Watchwolf > Memnite#1)
+Bot2.Block(Watchwolf > Memnite#2; Elvish Mystic > Memnite#1)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Memnite.Damage = 1
+Bot2.Battlefield.Watchwolf.Damage = 1
+Bot2.Graveyard = Elvish Mystic; Black Lotus
+Bot2.Life = 20

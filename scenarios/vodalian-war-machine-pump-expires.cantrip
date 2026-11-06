@@ -1,0 +1,35 @@
+# The pump is +2/+1 and lasts only through the turn (CR 611.2a).
+
+[Bot1 Deck]
+Black Lotus
+Vodalian War Machine
+Mox Sapphire
+Merfolk of the Pearl Trident
+Island x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Vodalian War Machine.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Pass
+Bot1.Battlefield.Vodalian War Machine.Activate(Ability: gets +2/+1)
+Bot1.Choose(Merfolk of the Pearl Trident)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vodalian War Machine.Power = 2
+? Bot1.Battlefield.Vodalian War Machine.Toughness = 5
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Vodalian War Machine.Power = 0
+Bot1.Battlefield.Vodalian War Machine.Toughness = 4

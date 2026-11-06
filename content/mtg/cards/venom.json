@@ -1,0 +1,6 @@
+{
+  "name": "Venom",
+  "manaCost": "{1}{G}{G}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nWhenever enchanted creature blocks or becomes blocked by a non-Wall creature, destroy the other creature at end of combat."
+}

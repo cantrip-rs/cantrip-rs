@@ -11,7 +11,7 @@ fn draw_for_greatest(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
     let before = g.history().drawn(item.controller);
     g.draw(item.controller, greatest);
     let drawn = g.history().drawn(item.controller) - before;
-    g.lose_life(item.controller, drawn as i32);
+    g.lose_life(item.controller,(drawn as i32) as i32);
     Ok(())
 }
 

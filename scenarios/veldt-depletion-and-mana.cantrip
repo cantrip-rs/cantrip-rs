@@ -1,0 +1,26 @@
+# Veldt adds green or white and a depletion counter, skips its next untap, loses the counter at upkeep, and untaps normally the following turn (CR 502.3, 603.2).
+[Bot1 Deck]
+Veldt
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Veldt.Play
+! Bot1.Battlefield.Veldt.Activate(Color: Blue)
+Bot1.Battlefield.Veldt.Activate(Color: Green)
+? Bot1.Mana = {G}
+? Bot1.Battlefield.Veldt.Tapped = true
+? Bot1.Battlefield.Veldt.Counters.Depletion = 1
+! Bot1.Battlefield.Veldt.Activate(Color: Green)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Veldt.Counters.Depletion = 1
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Veldt.Tapped = true
+? Bot1.Battlefield.Veldt.Counters.Depletion = (absent)
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Veldt.Tapped = false
+Bot1.Battlefield.Veldt.Activate(Color: White)
+? Bot1.Mana = {W}
+[Expect]
+Bot1.Battlefield.Veldt.Tapped = true
+Bot1.Battlefield.Veldt.Counters.Depletion = 1

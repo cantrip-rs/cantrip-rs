@@ -23,7 +23,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
             entering.push((card, player));
         }
     }
-    g.put_all_onto_battlefield(&entering)?;
+    g.put_all_onto_battlefield_by(&entering.into_iter().map(|(card, player)| (card, player, false, player)).collect::<Vec<_>>(), &[])?;
     g.return_to_hand(&exiled);
     g.exile(item.object);
     Ok(())

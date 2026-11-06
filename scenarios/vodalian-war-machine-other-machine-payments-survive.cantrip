@@ -1,0 +1,47 @@
+# A Merfolk paid for a different War Machine is not destroyed by this Machine's death (CR 400.7).
+[Bot1 Deck]
+Black Lotus
+Vodalian War Machine
+Mox Sapphire
+Merfolk of the Pearl Trident
+Black Lotus
+Vodalian War Machine
+Triton Shorethief
+Black Lotus
+Bilbo's Deadly Slice
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Vodalian War Machine.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Vodalian War Machine.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Triton Shorethief.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Vodalian War Machine#1.Activate(Ability: gets +2/+1)
+Bot1.Choose(Merfolk of the Pearl Trident)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Vodalian War Machine#2.Activate(Ability: gets +2/+1)
+Bot1.Choose(Triton Shorethief)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Bilbo's Deadly Slice.Cast(Bot1.Battlefield.Vodalian War Machine#1)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Triton Shorethief.Tapped = true
+Bot1.Battlefield.Merfolk of the Pearl Trident = (absent)

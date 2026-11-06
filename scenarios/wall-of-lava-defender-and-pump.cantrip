@@ -1,0 +1,57 @@
+# The Wall cannot attack; each {R} activation gives +1/+1 through the turn, and nonred mana cannot pay (CR 702.3b, 611.2a).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Wall of Lava
+Memnite
+Mountain
+Island x25
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wall of Lava.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Wall of Lava.Activate(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Wall of Lava.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wall of Lava.Power = 2
+? Bot1.Battlefield.Wall of Lava.Toughness = 4
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Wall of Lava.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wall of Lava.Power = 3
+? Bot1.Battlefield.Wall of Lava.Toughness = 5
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Wall of Lava > Bot2)
+Bot1.Attack(Memnite > Bot2)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Wall of Lava.Power = 1
+? Bot1.Battlefield.Wall of Lava.Toughness = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Wall of Lava.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wall of Lava.Power = 2
+? Bot1.Battlefield.Wall of Lava.Toughness = 4
+[T6 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Wall of Lava.Power = 1
+Bot1.Battlefield.Wall of Lava.Toughness = 3
+Bot2.Life = 19

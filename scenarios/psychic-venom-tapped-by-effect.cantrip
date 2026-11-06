@@ -1,0 +1,34 @@
+# Psychic Venom triggers when Icy Manipulator taps the enchanted land, not only when it taps for mana.
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Icy Manipulator
+Psychic Venom
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Icy Manipulator.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Psychic Venom.Cast(Bot2.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Icy Manipulator.Activate(Bot2.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Island.Tapped = true
+Bot1.Life = 20
+Bot2.Life = 18

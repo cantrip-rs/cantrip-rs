@@ -1,5 +1,5 @@
-# Alien Symbiosis: the discard is owed on every cast from the graveyard (CR 118.8, 601.2f), so with an empty hand it is
-# not offered there (CR 118.3: a cost can't be paid without the resources to pay it fully). Faithless Looting draws two
+# Alien Symbiosis: the discard is owed on every cast from the graveyard (CR 118.8, 601.2f), so with an empty hand
+# the attempted cast is rolled back (CR 118.3, 733.1) when payment cannot be completed. Faithless Looting draws two
 # Swamps and discards Alien Symbiosis and one Swamp; the other Swamp is played, leaving no card in hand. Mox Jet, Mox
 # Pearl and the Swamp could pay {1}{B}, it is Bot1's main phase with the stack empty and Ornithopter is a creature to
 # enchant, so only the discard keeps it from being cast.
@@ -32,7 +32,16 @@ Bot2.Pass
 Bot1.Choose(Alien Symbiosis; Swamp)
 Bot1.Hand.Swamp.Play
 ? Bot1.Hand.Count = 0
-! Bot1.Graveyard.Alien Symbiosis.Cast(Ornithopter)
+Bot1.Graveyard.Alien Symbiosis.Cast(Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Hand.Count = 0
+? Bot1.Mana =
+? Bot1.Life = 20
+? Bot1.Battlefield.Mox Jet.Tapped = false
+? Bot1.Battlefield.Mox Pearl.Tapped = false
+? Bot1.Graveyard = Faithless Looting; Swamp; Alien Symbiosis
+? Stack.Count = 0
 
 [Expect]
 Bot1.Graveyard = Faithless Looting; Swamp; Alien Symbiosis

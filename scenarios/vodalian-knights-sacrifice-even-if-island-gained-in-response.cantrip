@@ -1,0 +1,27 @@
+# The state trigger has no intervening condition: gaining an Island in response does not stop its sacrifice (CR 603.8).
+[Bot1 Deck]
+Vodalian Knights
+Black Lotus
+Evolving Wilds
+Mountain x4
+Island
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Evolving Wilds.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Vodalian Knights.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Evolving Wilds.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Island)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard.Vodalian Knights.Power = 2
+Bot1.Battlefield.Island.Tapped = true

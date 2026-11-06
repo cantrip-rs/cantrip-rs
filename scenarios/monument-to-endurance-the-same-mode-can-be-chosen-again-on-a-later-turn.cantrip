@@ -25,6 +25,7 @@ Bot1.Hand.Mountain.Play
 Bot1.Hand.Masked Meower.Cast
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Masked Meower.Activate
+Bot1.Choose(Discard 1 card)
 Bot1.Choose(Island)
 Bot1.Modes(Create a Treasure)
 Bot1.Pass
@@ -33,6 +34,7 @@ Bot2.Pass
 Bot1.Hand.Masked Meower.Cast
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Masked Meower.Activate
+Bot1.Choose(Discard 1 card)
 Bot1.Choose(Island)
 Bot1.Modes(Create a Treasure)
 Bot1.Pass

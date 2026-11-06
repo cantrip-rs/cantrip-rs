@@ -38,6 +38,7 @@ Bot1.Search(Forest)
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Repurposing Bay.Activate
+Bot1.Choose(Tap Repurposing Bay)
 Bot1.Choose(Mox Jet)
 Bot1.Search(Sol Ring)
 [T3 Bot1.Main2]

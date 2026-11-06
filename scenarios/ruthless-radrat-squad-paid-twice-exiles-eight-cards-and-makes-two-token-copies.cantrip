@@ -43,8 +43,12 @@ Bot1.Hand.Ruthless Radrat.Cast(Kicked: 2)
 Bot1.Battlefield.Blasted Landscape.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Choose(Cost: 1)
+! Bot1.Choose(Lightning Bolt; Lightning Bolt; Lightning Bolt)
 ! Bot1.Choose(Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt)
-Bot1.Choose(Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt)
+Bot1.Choose(Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt)
+! Bot1.Choose(Lightning Bolt; Lightning Bolt; Lightning Bolt)
+Bot1.Choose(Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt)
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

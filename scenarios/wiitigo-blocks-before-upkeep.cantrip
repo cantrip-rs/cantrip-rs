@@ -1,0 +1,35 @@
+# Wiitigo blocks a hasty attacker before its controller's first upkeep, gains a counter there, and loses one at the next upkeep without a new block (CR 509.1, 603.2).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Wiitigo
+Forest x20
+[Bot2 Deck]
+Mountain
+Raging Goblin
+Mountain x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wiitigo.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Raging Goblin.Cast
+Bot2.Attack(Raging Goblin > Bot1)
+Bot1.Block(Wiitigo > Raging Goblin)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Wiitigo.Counters.PlusOnePlusOne = 7
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Wiitigo.Counters.PlusOnePlusOne = 6
+Bot1.Battlefield.Wiitigo.Power = 6

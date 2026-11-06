@@ -1,0 +1,11 @@
+{
+  "name": "Wall of Lava",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Wall",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Defender (This creature can't attack.)\n{R}: This creature gets +1/+1 until end of turn.",
+  "keywords": [
+    "Defender"
+  ]
+}

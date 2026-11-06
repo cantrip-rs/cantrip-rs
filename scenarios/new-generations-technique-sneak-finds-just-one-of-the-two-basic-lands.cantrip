@@ -27,10 +27,10 @@ Bot1.Hand.Ornithopter.Cast
 Bot1.Attack(Ornithopter > Bot2)
 [T3 Bot1.DeclareBlockers]
 Bot1.Hand.New Generation's Technique.Cast(Ability: Sneak)
-Bot1.Choose(Ornithopter)
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass
 Bot1.Search(Forest)

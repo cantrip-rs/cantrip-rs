@@ -1,0 +1,79 @@
+# The chosen source must still be blue when it deals damage (CR 609.7b). Red damage does not use the shield;
+# the same Gecko becomes blue again and its next damage is prevented.
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Circle of Protection: Blue
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mondo Gecko
+Quicksilver Dagger
+Hidden Strings
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Circle of Protection: Blue.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Mondo Gecko.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Quicksilver Dagger.Cast(Mondo Gecko)
+[T4 Bot2.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Circle of Protection: Blue.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mondo Gecko)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mondo Gecko.Activate(Ability: Discard a card)
+Bot2.Choose(Pay mana)
+Bot2.Choose(Island)
+Bot2.Colors(Red)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Mondo Gecko.Colors = Red
+Bot2.Battlefield.Mondo Gecko.Activate(Ability: This creature deals; Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 19
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Hidden Strings.Cast
+Bot2.Target(Bot2.Battlefield.Mondo Gecko)
+Bot2.Target(Bot2.Battlefield.Mox Jet)
+Bot2.Pass
+Bot1.Pass
+Bot2.Modes(Untap)
+? Bot2.Battlefield.Mondo Gecko.Tapped = false
+Bot2.Modes(Do nothing)
+Bot2.Choose()
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mondo Gecko.Activate(Ability: Discard a card)
+Bot2.Choose(Pay mana)
+Bot2.Choose(Island)
+Bot2.Colors(Blue)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Mondo Gecko.Colors = Blue
+Bot2.Battlefield.Mondo Gecko.Activate(Ability: This creature deals; Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 19
+[Expect]
+Bot1.Life = 19

@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::effects::draw_two_then_discard;
-use cantrip_mechanics::statics::{grant_activated_abilities_of, itself};
+use cantrip_mechanics::statics::{grant_activated_abilities_from, itself};
 use cantrip_oracle as oracle;
 
 /// "Thranduil has all activated abilities of all Elf cards in your graveyard." A static ability of Thranduil about himself (CR 604.1,
@@ -11,9 +11,9 @@ use cantrip_oracle as oracle;
 fn graveyard_elf_abilities(view: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
     let s = view.state();
     let elf = view.words(source).subtype(Subtype::Elf);
-    let cards: Vec<CardId> =
-        s.zone(Zone::graveyard(s.obj(source).controller)).iter().map(|&card| view.chars(card)).filter(|card| card.has_subtype(elf)).map(|card| card.card).collect();
-    grant_activated_abilities_of(view, &cards, chars);
+    let cards: Vec<_> =
+        s.zone(Zone::graveyard(s.obj(source).controller)).iter().map(|&id| (id, view.chars(id))).filter(|(_, card)| card.has_subtype(elf)).map(|(id, card)| (id, card.card)).collect();
+    grant_activated_abilities_from(view, &cards, chars);
 }
 
 /// "Whenever another legendary Elf you control enters" (CR 603.6a): a permanent other than this one that is legendary and an Elf as

@@ -25,7 +25,7 @@ fn look_top_card_library_reveal(g: &mut dyn Game, item: &StackItem) -> Result<()
     g.end_sentence();
     if let Some(&card) = in_hand.first() {
         let life = g.mana_value(card) as i32;
-        g.lose_life(item.controller, life);
+        g.lose_life(item.controller,(life) as i32);
     }
     Ok(())
 }

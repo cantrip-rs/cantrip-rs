@@ -205,6 +205,8 @@ Bot1.Hand.Underworld Breach.Cast
 Bot1.Pass
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Graveyard.Esper Origins.Cast(Ability: Escape)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 Bot1.Choose(Lightning Bolt; Island; Black Lotus)
 Bot1.Pass
 Bot1.Arrange(Forest; Llanowar Elves |)

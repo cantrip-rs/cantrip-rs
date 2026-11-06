@@ -1,0 +1,33 @@
+# After five quiet upkeeps, Snakeskin Veil adds a counter; Wiitigo removes one of the two indistinguishable counters at the next upkeep (CR 122.1).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Wiitigo
+Snakeskin Veil
+Forest x20
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wiitigo.Cast
+? Bot1.Mana =
+[T11 Bot1.Main1]
+? Bot1.Battlefield.Wiitigo.Counters.PlusOnePlusOne = 1
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Snakeskin Veil.Cast(Bot1.Battlefield.Wiitigo)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wiitigo.Counters.PlusOnePlusOne = 2
+[T13 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Wiitigo.Counters.PlusOnePlusOne = 1

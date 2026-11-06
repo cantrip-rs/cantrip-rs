@@ -40,6 +40,7 @@ Bot1.Battlefield.Gleemox.Activate(Color: Black)
 Bot1.Hand.Gix's Command.Cast
 Bot1.Modes(2; 3)
 Bot1.Pass
+! Bot1.Choose(Ornithopter#1; Ornithopter#2; Ornithopter#3)
 Bot1.Choose(Ornithopter; Ornithopter)
 [T1 Bot1.Main2]
 

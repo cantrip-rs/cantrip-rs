@@ -1,0 +1,81 @@
+# Only your snow Swamps set the per-turn activation limit; each activation damages both players and their creatures (CR 602.5, 120.3).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Arboreal Grazer
+Withering Wisps
+Urborg, Tomb of Yawgmoth
+Snow-Covered Forest
+Ornithopter
+Snow-Covered Forest
+Island x20
+[Bot2 Deck]
+Snow-Covered Forest
+Ornithopter
+Island
+Island
+Island
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Urborg, Tomb of Yawgmoth.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Withering Wisps.Cast
+? Bot1.Mana =
+! Bot1.Battlefield.Withering Wisps.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Forest.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+! Bot1.Battlefield.Withering Wisps.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Withering Wisps.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+? Bot2.Life = 19
+? Bot1.Battlefield.Ornithopter.Damage = 1
+? Bot2.Battlefield.Ornithopter.Damage = 1
+! Bot1.Battlefield.Withering Wisps.Activate
+Bot1.Battlefield.Snow-Covered Forest.Activate(Ability: {G})
+Bot1.Hand.Arboreal Grazer.Cast
+? Bot1.Mana =
+Bot1.Choose(Snow-Covered Forest)
+? Bot1.Battlefield.Snow-Covered Forest#2.Tapped = true
+Bot1.Battlefield.Urborg, Tomb of Yawgmoth.Activate(Ability: {B})
+Bot1.Battlefield.Withering Wisps.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+? Bot2.Life = 18
+! Bot1.Battlefield.Withering Wisps.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Withering Wisps.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+? Bot2.Life = 17
+Bot1.Battlefield.Urborg, Tomb of Yawgmoth.Activate(Ability: {B})
+Bot1.Battlefield.Withering Wisps.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Withering Wisps.Activate
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Life = 16
+Bot2.Life = 16
+Bot1.Battlefield.Ornithopter = (absent)
+Bot2.Battlefield.Ornithopter = (absent)
+Bot1.Battlefield.Withering Wisps.Types = Enchantment

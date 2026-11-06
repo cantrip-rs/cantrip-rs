@@ -1,0 +1,50 @@
+# Vodalian Mage cannot target an activated ability, but counters a creature spell when its controller has no mana to pay (CR 115.1, 701.6a).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Vodalian Mage
+Island
+Island
+Island
+Island
+Island x20
+[Bot2 Deck]
+Forest
+Mox Emerald
+Basking Rootwalla
+Memnite
+Island
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Vodalian Mage.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Basking Rootwalla.Cast
+? Bot2.Mana =
+[T4 Bot2.Main1]
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Basking Rootwalla.Activate
+? Bot2.Mana =
+Bot2.Pass
+! Bot1.Battlefield.Vodalian Mage.Activate
+Bot2.Hand.Memnite.Cast
+? Bot2.Battlefield.Basking Rootwalla.Power = 3
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Vodalian Mage.Activate(Stack.Memnite)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Vodalian Mage.Tapped = true
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Graveyard = Memnite
+Bot2.Battlefield.Memnite = (absent)

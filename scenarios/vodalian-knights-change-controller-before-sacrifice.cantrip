@@ -1,0 +1,40 @@
+# The player who controlled the Knights when the state trigger fired cannot sacrifice them after an opponent gains control (CR 701.21a, 113.8).
+[Bot1 Deck]
+Vodalian Knights
+Black Lotus
+Mountain x20
+[Bot2 Deck]
+Island
+Sigarda's Aid
+Control Magic
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Sigarda's Aid.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Vodalian Knights.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Control Magic.Cast(Bot1.Battlefield.Vodalian Knights)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Vodalian Knights.Power = 2
+Bot2.Battlefield.Control Magic.AttachedTo = Vodalian Knights
+Bot1.Graveyard.Vodalian Knights = (absent)

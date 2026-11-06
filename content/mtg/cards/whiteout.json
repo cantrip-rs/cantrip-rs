@@ -1,0 +1,6 @@
+{
+  "name": "Whiteout",
+  "manaCost": "{1}{G}",
+  "type": "Instant",
+  "oracleText": "All creatures lose flying until end of turn.\nSacrifice a snow land: Return this card from your graveyard to your hand."
+}

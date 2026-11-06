@@ -1,0 +1,11 @@
+{
+  "name": "Wall of Pine Needles",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Plant Wall",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Defender (This creature can't attack.)\n{G}: Regenerate this creature.",
+  "keywords": [
+    "Defender"
+  ]
+}

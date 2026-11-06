@@ -1,0 +1,48 @@
+# Witch Hunter pays {1}{W}{W} and taps to return an opponent's creature, not its controller's creature or a land (CR 602.2, 400.3).
+[Bot1 Deck]
+Witch Hunter
+Black Lotus
+Mox Pearl
+Mox Jet
+Ornithopter
+Plains
+Plains x20
+[Bot2 Deck]
+Memnite
+Island
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Witch Hunter.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Witch Hunter.Activate(Bot2.Battlefield.Memnite; Ability: Return; Mana: short)
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+! Bot1.Battlefield.Witch Hunter.Activate(Bot1.Battlefield.Ornithopter; Ability: Return)
+! Bot1.Battlefield.Witch Hunter.Activate(Bot2.Battlefield.Island; Ability: Return)
+Bot1.Battlefield.Witch Hunter.Activate(Bot2.Battlefield.Memnite; Ability: Return)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Witch Hunter.Tapped = true
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Hand.Memnite.Power = 1
+Bot1.Battlefield.Ornithopter.Power = 0

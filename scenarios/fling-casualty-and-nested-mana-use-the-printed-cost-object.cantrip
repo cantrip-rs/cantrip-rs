@@ -1,0 +1,80 @@
+# The Altar sacrifices Memnite for mana while Fling is cast; Fling's printed cost sacrifices Grizzly Bears, and
+# casualty sacrifices Llanowar Elves. Both original and copy use the Bear's power (CR 601.2g-h, 707.10).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Silverquill, the Disputant
+Grizzly Bears
+Llanowar Elves
+Ashnod's Altar
+Memnite
+Fling
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silverquill, the Disputant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ashnod's Altar.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main1]
+Bot1.Hand.Fling.Cast(Bot2)
+Bot1.Modes(Casualty 1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Ashnod's Altar.Activate(Sacrifice: Memnite)
+Bot1.Choose(additional cost of Fling)
+Bot1.Choose(Grizzly Bears)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Silverquill, the Disputant)
+Bot1.Choose(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 16
+Stack.Count = 0

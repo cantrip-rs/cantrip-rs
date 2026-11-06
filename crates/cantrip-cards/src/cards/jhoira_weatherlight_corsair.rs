@@ -25,7 +25,7 @@ fn reveal_and_take(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         let permanent = g.put_onto_battlefield(card, you, false)?;
         if g.is_on_battlefield(permanent) {
             let mana_value = g.mana_value(permanent);
-            g.lose_life(you, mana_value as i32);
+            g.lose_life(you,(mana_value as i32) as i32);
         }
     }
     g.bottom_in_random_order(opponent, &rest);

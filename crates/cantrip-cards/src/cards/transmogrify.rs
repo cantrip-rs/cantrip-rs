@@ -60,11 +60,11 @@ fn exile_target_creature_creatures_controller(
         .filter(|&o: &ObjectId| !g.state().obj(o).token)
         .collect::<Vec<ObjectId>>();
     {
-        let rows_2: Vec<(ObjectId, PlayerId, bool)> = objects_2
+        let rows_2: Vec<(ObjectId, PlayerId, bool, PlayerId)> = objects_2
             .iter()
-            .map(|&o| (o, player_2, false))
+            .map(|&o| (o, player_2, false, player_2))
             .collect();
-        g.put_all_onto_battlefield_as(&rows_2)?;
+        g.put_all_onto_battlefield_by(&rows_2, &[])?;
     };
     for player in {
         let q: &dyn Query = g;

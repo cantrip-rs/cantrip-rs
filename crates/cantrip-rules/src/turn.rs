@@ -62,7 +62,7 @@ pub fn next_step(game: &mut Game) {
         };
         // Except what a static ability keeps (CR 500.5: Electro, Assaulting Battery), asked as the step ends.
         let kept = {
-            let cx = Cx { g: &mut *game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+            let cx = Cx { g: &mut *game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
             crate::static_rules::mana_kept(&cx)
         };
         let s = &mut game.state;
@@ -81,6 +81,7 @@ pub fn next_step(game: &mut Game) {
         }
         s.set_attackers(Vec::new());
         s.set_blocks(Vec::new());
+        s.set_blockers(Vec::new());
         s.update_turn(|t| {
             t.attacked = false;
             t.damage_round = 0;
@@ -229,7 +230,8 @@ fn turn_would_have_begun(s: &mut GameState, p: PlayerId) {
         s.effects_retain(|e| !waits(e));
     }
     for at in (0..s.delayed.len()).rev() {
-        if matches!(s.delayed[at].when, DelayedWhen::UntilNextTurnOf(q) | DelayedWhen::NextTurnStep { player: q, .. } if q == p) {
+        if matches!(s.delayed[at].when, DelayedWhen::UntilNextTurnOf(q) | DelayedWhen::NextTurnStep { player: q, .. } if q == p)
+            || matches!(s.delayed[at].when, DelayedWhen::StepOfNextTurn { of: Some(player), .. } if player == p) {
             s.delayed_remove(at);
         }
     }
@@ -332,14 +334,14 @@ pub fn opening(cx: &mut Cx) -> R<Flow> {
                 break;
             }
             let Some(action) = cx.card(cx.s().obj(card).card).opening_hand else { continue };
-            if !(action.condition)(cx, &Asker { source: card, controller: p, by: None, spell: false }) {
+            if !(action.condition)(cx, &Asker { instance: None, source: card, controller: p, by: None, spell: false }) {
                 continue;
             }
             if !matches!(cx.ask_rule(p, RequestKind::May { source: card, purpose: Purpose::Ask(&BEGIN_ON_BATTLEFIELD) })?, Some(Answer::Yes)) {
                 continue;
             }
-            let with: Vec<(CounterKind, i32)> = action.counter.map(|(k, n)| (k, n as i32)).into_iter().collect();
-            ops::put_onto_battlefield_with(cx, &[(card, p, false)], ZoneReason::Other, &with)?;
+            let with: Vec<(CounterKind, i32)> = action.counter.map(|(k, n)| (k, i32::from(n))).into_iter().collect();
+            ops::put_onto_battlefield_by(cx, &[(card, p, false, p)], &with)?;
             let hand = cx.s().zone(Zone::hand(p)).to_vec();
             if action.exile_from_hand > 0 && !hand.is_empty() {
                 let count = u32::from(action.exile_from_hand).min(u32::try_from(hand.len()).unwrap_or(u32::MAX));
@@ -542,7 +544,7 @@ fn skip_turn(cx: &mut Cx, player: PlayerId) -> R<bool> {
             continue;
         }
         for (card, by) in texts {
-            let asker = Asker { source: id, controller: player, by, spell: false };
+            let asker = Asker { instance: None, source: id, controller: player, by, spell: false };
             for rule in cx.card(card).turn_begin {
                 if (rule.applies)(&*cx, &asker, player) {
                     optional.push((id, rule));
@@ -554,7 +556,7 @@ fn skip_turn(cx: &mut Cx, player: PlayerId) -> R<bool> {
         for (id, rule) in optional {
             if cx.ask_rule(player, RequestKind::May { source: id, purpose: Purpose::Ask(rule.question) })? == Some(Answer::Yes) {
                 // A replacement effect's own doing, its controller's (CR 609.1, 614.10).
-                cx.acting_as(player, |cx| (rule.on_skip)(cx, &Asker { source: id, controller: player, by: None, spell: false }))?;
+                cx.acting_as(player, |cx| (rule.on_skip)(cx, &Asker { instance: None, source: id, controller: player, by: None, spell: false }))?;
                 return Ok(true);
             }
         }
@@ -573,7 +575,7 @@ fn skip_turn(cx: &mut Cx, player: PlayerId) -> R<bool> {
             && let Some(&(id, rule)) = optional.get(i as usize - 1)
         {
             // A replacement effect's own doing, its controller's (CR 609.1, 614.10).
-            cx.acting_as(player, |cx| (rule.on_skip)(cx, &Asker { source: id, controller: player, by: None, spell: false }))?;
+            cx.acting_as(player, |cx| (rule.on_skip)(cx, &Asker { instance: None, source: id, controller: player, by: None, spell: false }))?;
             return Ok(true);
         }
     }
@@ -636,16 +638,14 @@ pub(crate) fn untap_step(cx: &mut Cx, active: PlayerId) -> R<()> {
                 continue;
             }
             if others.iter().any(|&(source, controller, def, by)| {
-                let asker = Asker { source, controller, by, spell: false };
+                let asker = Asker { instance: None, source, controller, by, spell: false };
                 def.untap_in_others_untap_steps.iter().any(|rule| rule(&*cx, &asker, id))
             }) {
                 untapping.push(id);
             }
         }
     }
-    for id in untapping {
-        ops::untap(cx, id);
-    }
+    ops::untap_together(cx, &untapping);
     // "During its controller's next untap step" and "during [this player's] next untap step" end with this untap step,
     // whatever it untapped (CR 611.2a; the Frost Titan ruling): the first is over for each permanent the active player
     // controls now, whoever controlled it as the effect began (the Tamiyo, the Moon Sage ruling).
@@ -853,7 +853,8 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
     // Rogue" asks what it was then, not what it has become or who has taken it since.
     let mut events: Vec<Event> = Vec::with_capacity(attackers.len() + options.len() + 1);
     for a in &attackers {
-        let known = ops::last_known_from(cx, a.id, &cx.chars(a.id));
+        let chars = cx.chars(a.id);
+        let known = ops::last_known_from(cx, a.id, &chars);
         let known = cx.st().last_known_push(known);
         events.push(Event::Attacks { attacker: a.id, defender: a.target, known, defending: a.defending });
     }
@@ -1045,28 +1046,23 @@ fn can_block(cx: &Cx, blocker: ObjectId, attacker: ObjectId, rule_sources: &[Obj
     if a.has(Keyword::CantBeBlockedByPowerTwoOrLess) && b.power.is_none_or(|p| p <= 2) {
         return false;
     }
-    // Landwalk (CR 702.14c): not while the defending player - the blocker's controller - controls a land of its type (a basic
-    // landwalk), without the supertype basic (nonbasic landwalk) or with the supertype legendary (legendary landwalk), as the
-    // layers have that land now. A creature with landwalk of its own is no exception (CR 702.14d).
-    let defending = cx.s().obj(blocker).controller;
-    let defending_controls = |land_is: &dyn Fn(&Chars) -> bool| {
-        cx.s().battlefield().iter().any(|&id| {
-            cx.s().obj(id).controller == defending && {
-                let land = cx.chars(id);
-                land.is(CardType::Land) && land_is(&land)
-            }
-        })
-    };
-    for (walk, land_type) in Keyword::LANDWALKS {
-        if a.has(walk) && defending_controls(&|land| land.has_subtype(land_type)) {
-            return false;
-        }
-    }
-    if a.has(Keyword::NonbasicLandwalk) && defending_controls(&|land| !land.supertypes.basic) {
-        return false;
-    }
-    if a.has(Keyword::LegendaryLandwalk) && defending_controls(&|land| land.supertypes.legendary) {
-        return false;
+    // CR 702.14c: only a defending player's current lands qualify. Raw membership is exact: snow islandwalk
+    // does not confer ordinary islandwalk and cannot evade blockers through a non-snow Island.
+    if a.keywords.has_landwalk() {
+        let defending = cx.s().obj(blocker).controller;
+        let walked = cx.s().battlefield().iter().any(|&id| {
+            if cx.s().obj(id).controller != defending { return false; }
+            let land = cx.chars(id);
+            land.is(CardType::Land) && (
+                Keyword::LANDWALKS.iter().any(|&(walk, ty)| a.has(walk) && land.has_subtype(ty))
+                || (land.supertypes.snow && Keyword::SNOW_LANDWALKS.iter().any(|&(walk, ty)| a.has(walk) && land.has_subtype(ty)))
+                || (a.has(Keyword::SnowLandwalk) && land.supertypes.snow)
+                || (a.has(Keyword::Desertwalk) && land.has_subtype(Subtype::Desert))
+                || (a.has(Keyword::NonbasicLandwalk) && !land.supertypes.basic)
+                || (a.has(Keyword::LegendaryLandwalk) && land.supertypes.legendary)
+            )
+        });
+        if walked { return false; }
     }
     // CR 509.1b: a static ability that limits who may block whom, of the blocker, of the attacker, or of another permanent
     // ("creatures you control with power 2 or less can't be blocked by ...", Delney, Streetwise Lookout).
@@ -1109,7 +1105,25 @@ fn block_capacity(cx: &Cx, blocker: ObjectId, rule_sources: &[ObjectId]) -> u32 
             .texts(cx.s(), cx.s().obj(id))
             .flat_map(move |card| cx.card(card).block_capacities.iter().filter_map(move |rule| rule(cx, id, blocker)))
     });
-    BlockCapacity::total(resolved.chain(statics))
+    let chars = cx.chars(blocker);
+    let abilities = chars.abilities().filter_map(|ability| {
+        if let AbilityDef::BlockAllowance(def) = cx.cards().ability(ability) {
+            let asker = Asker::new(blocker, cx.controller(blocker));
+            Some(BlockCapacity::Additional(def.additional_by.map_or(def.additional, |amount| amount(cx, &asker))))
+        } else { None }
+    });
+    let generated = rule_sources.iter().flat_map(|&source| {
+        cx.cards().texts(cx.s(), cx.s().obj(source)).flat_map(move |card| {
+            cx.card(card).additional_blocks.iter().map(move |rule| BlockCapacity::Additional(rule(cx, source, blocker)))
+        })
+    });
+    let lasting = cx.s().effects.iter().filter_map(|effect| {
+        let EffectKind::LastingRule { card, index, about } = effect.kind else { return None };
+        let rule = cx.card(card).lasting_rules.get(index as usize)?;
+        let LastingRuleKind::AdditionalBlocks(amount) = rule.rule else { return None };
+        (rule.applies)(cx, &Asker::new(effect.source, effect.controller), about, blocker).then_some(BlockCapacity::Additional(amount))
+    });
+    BlockCapacity::total(resolved.chain(statics).chain(abilities).chain(generated).chain(lasting))
 }
 
 /// The requirements on a declaration of attackers by `eligible` among `targets` (CR 508.1d), one for each source: each
@@ -1178,7 +1192,7 @@ fn in_force(cx: &Cx, e: &ContinuousEffect) -> bool {
     if s.turn.active != controller || now <= since {
         return false;
     }
-    let history = History::new(&cx.g.log, now);
+    let history = History::with_receipts(&cx.g.log, now, &cx.s().cost_receipts);
     !history
         .all()
         .iter()
@@ -1275,15 +1289,21 @@ fn declare_blockers(cx: &mut Cx) -> R<()> {
             let mut attackers = cx.s().attackers.clone();
             for (blocker, attacker) in blocks {
                 // CR 702.22h: a creature blocking a member of an attacking band blocks each other member of it too, a block of
-                // each (CR 509.3b, 509.3d) though only the declared one is its "blocks" (CR 509.3a).
+                // each (CR 509.3b, 509.3d), including any it blocks automatically through banding.
                 let band = attackers.iter().find(|a| a.id == attacker).map_or(0, |a| a.band);
                 let mut blocked = vec![attacker];
                 blocked.extend(attackers.iter().filter(|a| band != 0 && a.band == band && a.id != attacker).map(|a| a.id));
-                let first = !list.iter().any(|b| b.blocker == blocker);
-                events.extend(blocked.iter().map(|&a| Event::Blocks { blocker, attacker: a, declared: first && a == attacker }));
                 for attacker in blocked {
+                    // A blocker declared against two members of one band still blocks each member only once. Its
+                    // unqualified "blocks" trigger is once for the whole declaration, not once per attacked creature.
+                    if list.iter().any(|b: &Block| b.blocker == blocker && b.attacker == attacker) { continue; }
+                    let first = !list.iter().any(|b: &Block| b.blocker == blocker);
+                    events.push(Event::Blocks { blocker, attacker, declared: first });
                     list.push(Block { blocker, attacker, first_strike: false });
                     if let Some(a) = attackers.iter_mut().find(|a| a.id == attacker) {
+                        if !a.blocked {
+                            events.push(Event::BecameBlocked { attacker });
+                        }
                         a.blocked = true;
                     }
                 }
@@ -1354,7 +1374,7 @@ fn block_rules(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)]
     // The creatures that can block more than one attacker (CR 509.1a): none without a static ability that limits or widens
     // blocking or a resolved effect that widens it.
     let mut capacities: Vec<(ObjectId, u32)> = Vec::new();
-    if !rule_sources.is_empty() || cx.s().effects.iter().any(|e| matches!(e.kind, EffectKind::BlockCapacity(_))) {
+    {
         for &(b, _) in allowed {
             if !capacities.iter().any(|c| c.0 == b) {
                 capacities.push((b, block_capacity(cx, b, rule_sources)));
@@ -1386,7 +1406,7 @@ fn combat_damage(cx: &mut Cx) -> R<()> {
     // CR 510.4: with a first or double striker in combat as the step begins, there is a first-strike damage step before
     // the regular one.
     let in_combat: Vec<ObjectId> =
-        cx.s().attackers.iter().map(|a| a.id).chain(cx.s().blocks.iter().map(|b| b.blocker)).collect();
+        cx.s().attackers.iter().map(|a| a.id).chain(cx.s().blockers.iter().copied()).collect();
     let round = cx.s().turn.damage_round;
     let first_strike_step = round == 0 && in_combat.iter().any(|&id| live(cx.s(), id) && strikes_first(cx, id));
     cx.st().update_turn(|t| t.damage_round = if first_strike_step { 1 } else { 2 });
@@ -1448,16 +1468,10 @@ fn combat_damage(cx: &mut Cx) -> R<()> {
     let assignments = combat_assignments(cx, &attackers, &blockers, &chosen);
     // CR 510.2: all of it is dealt at once, and announced at once (CR 603.2c). A prevention shield two or more sources would
     // deal damage to prevents whose damage its player or controller chooses (CR 615.7).
-    let mut batch = ops::DamageBatch::new(cx, &assignments);
-    let mut events: Vec<Event> = ops::order_for_shields(cx, &assignments, true)
-        .into_iter()
-        .filter_map(|i| {
-            let (source, target, amount) = assignments[i];
-            ops::deal_damage_with(cx, source, target, amount, true, &mut batch)
-        })
-        .collect();
-    batch.finish(cx, &mut events);
-    batch.rest_of_preventions(cx);
+    cx.instruction(|cx| {
+        let (_, _, mut batch) = ops::damage_batch(cx, &assignments, true);
+        batch.rest_of_preventions(cx);
+    }, |_| true);
     Ok(())
 }
 
@@ -1700,7 +1714,13 @@ pub(crate) fn cleanup(cx: &mut Cx) -> R<()> {
     // ruling: "whether it's because the 'until end of turn' duration ended or ..."), and its trigger gives the active
     // player priority in this cleanup step and another one follows (CR 514.3a).
     for at in (0..cx.s().delayed.len()).rev() {
-        if matches!(cx.s().delayed[at].when, DelayedWhen::ThisTurn | DelayedWhen::NextThisTurn) {
+        let delayed = cx.s().delayed[at];
+        let expires = match delayed.when {
+            DelayedWhen::ThisTurn | DelayedWhen::ThisTurnWatching(_) | DelayedWhen::NextThisTurn => true,
+            DelayedWhen::StepOfNextTurn { of, .. } => crate::settle::delayed_turn(cx, delayed.since, of) != crate::settle::DelayedTurn::Waiting,
+            _ => false,
+        };
+        if expires {
             cx.st().delayed_remove(at);
         }
     }
@@ -1848,3 +1868,7 @@ pub fn priority(cx: &mut Cx) -> R<Flow> {
 fn _unused(cx: &Cx) -> bool {
     layers::live(cx.s(), ObjectId(0))
 }
+
+#[cfg(test)]
+#[path = "landwalk_tests.rs"]
+mod landwalk_tests;

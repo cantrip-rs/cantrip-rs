@@ -1,0 +1,19 @@
+# The opponent's Island does not satisfy the Knights' state trigger: their controller sacrifices them (CR 603.8).
+[Bot1 Deck]
+Black Lotus
+Vodalian Knights
+Mountain x25
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Vodalian Knights.Cast
+? Bot1.Mana =
+[T3 Bot1.End]
+[Expect]
+Bot1.Graveyard.Vodalian Knights.Power = 2
+Bot2.Battlefield.Island.Tapped = false

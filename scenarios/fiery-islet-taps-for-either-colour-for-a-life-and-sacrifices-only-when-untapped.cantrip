@@ -23,6 +23,7 @@ Bot1.Battlefield.Mox Jet.Activate
 [T3 Bot1.Main1]
 Bot1.Hand.Fiery Islet.Play
 Bot1.Battlefield.Fiery Islet#2.Activate(Ability: Add; Color: Blue)
+Bot1.Choose(Tap Fiery Islet)
 ? Bot1.Mana = {U}
 ? Bot1.Life = 18
 Bot1.Battlefield.Mox Jet.Activate

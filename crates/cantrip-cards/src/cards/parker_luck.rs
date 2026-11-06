@@ -21,7 +21,7 @@ fn reveal_and_trade(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     instruction(g, |g| {
         for (i, &player) in players.iter().enumerate() {
             if let Some((_, value)) = revealed.get(1 - i).copied().flatten() {
-                g.lose_life(player, value as i32);
+                g.lose_life(player,(value) as i32);
             }
         }
     });

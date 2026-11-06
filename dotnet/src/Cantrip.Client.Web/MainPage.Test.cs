@@ -692,13 +692,18 @@ public sealed partial class MainPage
             null => string.Empty,
             ModesChosenAnswer modes => $"{nameof(ModesChosenAnswer)} {string.Join(",", modes.Modes)}",
             AnnounceAnswer announced => $"{nameof(AnnounceAnswer)} {announced.Value}",
+            NumberChosenAnswer number => $"{nameof(NumberChosenAnswer)} {number.Value}",
+            CostPaymentChosenAnswer payment => $"{nameof(CostPaymentChosenAnswer)} {payment.Key}",
             // A taken action's targets and colour, where it has them: "TakeActionAnswer ActivateAbility 4 > 4,27 Green".
             TakeActionAnswer action => $"{nameof(TakeActionAnswer)} {action.Kind} {action.Source.Value}"
                 + (action.Targets.Count > 0 ? $" > {string.Join(",", action.Targets.Select(t => t.IsPlayer ? $"p{t.Player}" : $"{t.Object.Value}"))}" : string.Empty)
-                + (action.Color is { } color ? $" {color}" : string.Empty),
+                + (action.Color is { } color ? $" {color}" : string.Empty)
+                + (action.Snow ? $" snow={action.Snow} paySnow={action.PaySnow}" : string.Empty),
             BlockersDeclaredAnswer blocks => $"{nameof(BlockersDeclaredAnswer)} {string.Join(",", blocks.Blocks.Select(b => $"{b.Blocker.Value}>{b.Attacker.Value}"))}".TrimEnd(),
             CountersRemovedAnswer removed =>
                 $"{nameof(CountersRemovedAnswer)} {string.Join("; ", removed.Removals.Select(r => $"{r.Object.Value} {r.Counter} {r.Count}"))}".TrimEnd(),
+            TargetsDividedAnswer divided =>
+                $"{nameof(TargetsDividedAnswer)} {string.Join("; ", divided.Shares.Select(s => $"{(s.Target.IsPlayer ? $"player {s.Target.Player}" : $"object {s.Target.Object.Value}")} {s.Amount}"))}".TrimEnd(),
             { } answer => answer.GetType().Name,
         };
 
@@ -844,8 +849,11 @@ public sealed partial class MainPage
                 json.WriteStartObject();
                 json.WriteString("kind", kind);
                 json.WriteString("label", label);
+                json.WriteBoolean("enabled", child is DockButton button ? button.Enabled : child is not Control control || control.IsEnabled);
                 json.WriteNumber("ability", kind == "item" && child.Tag is CardMenu.RowIdentity identity ? identity.Ability : -1);
                 json.WriteNumber("optionId", kind == "item" && child.Tag is CardMenu.RowIdentity row ? row.OptionId : 0);
+                json.WriteNumber("damageSource", child.Tag is DamageShareControl damage ? damage.Source : 0);
+                json.WriteNumber("damageTarget", child.Tag is DamageShareControl targetDamage ? targetDamage.Creature : 0);
                 WriteBox(json, target.TransformToVisual(Root).TransformBounds(new Rect(0, 0, target.ActualWidth, target.ActualHeight)));
                 json.WriteEndObject();
 

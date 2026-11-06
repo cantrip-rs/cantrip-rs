@@ -1,0 +1,11 @@
+{
+  "name": "Vodalian Knights",
+  "manaCost": "{1}{U}{U}",
+  "type": "Creature — Merfolk Knight",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "First strike\nThis creature can't attack unless defending player controls an Island.\nWhen you control no Islands, sacrifice this creature.\n{U}: This creature gains flying until end of turn.",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

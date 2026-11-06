@@ -1,0 +1,29 @@
+# Changing the Island word to Mountain changes which opposing lands grant the bonus (CR 612.1).
+[Bot1 Deck]
+Island
+Water Wurm
+Mox Sapphire
+Magical Hack
+Island x20
+[Bot2 Deck]
+Mountain
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Water Wurm.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+? Bot1.Battlefield.Water Wurm.Toughness = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Magical Hack.Cast(Bot1.Battlefield.Water Wurm)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Island)
+Bot1.Modes(Mountain)
+[Expect]
+Bot1.Battlefield.Water Wurm.Power = 1
+Bot1.Battlefield.Water Wurm.Toughness = 2
