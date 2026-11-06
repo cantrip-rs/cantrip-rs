@@ -62,9 +62,14 @@ fn play() -> (Game, Vec<Vec<String>>) {
                 }
             }
             RequestKind::Priority { .. } => Answer::Pass,
-            RequestKind::PayCosts { options, .. } => {
+            RequestKind::PayCosts { options, mana_abilities, .. } => {
                 let find = |kind| options.iter().find(|o| o.kind == kind);
-                let pay = find(ActionKind::ConfirmCasting).or(find(ActionKind::AssignMana)).or(find(ActionKind::ActivateAbility));
+                // Mana abilities precede payment. ConfirmCasting closes that window even when the pool is empty.
+                let pay = if *mana_abilities {
+                    find(ActionKind::ActivateAbility).or(find(ActionKind::ConfirmCasting))
+                } else {
+                    find(ActionKind::AssignMana).or(find(ActionKind::ConfirmCasting))
+                };
                 Answer::Act(Action::of(pay.unwrap_or_else(|| panic!("nothing pays: {options:?}"))))
             }
             RequestKind::UnlessPays { options, .. } => {

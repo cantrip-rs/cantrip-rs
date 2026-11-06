@@ -1,8 +1,9 @@
 //! A resolving ability reads its own text as it was put on the stack (CR 113.7a, `Cx::own_text`), and nothing else does: what
 //! the engine asks of the source's other abilities in the middle of the resolution - what triggers, what replaces or prevents
-//! an event, a state trigger, a triggered mana ability - is each one's own text, the source's now. Over a test card whose
+//! an event, a state trigger, a triggered mana ability - is each one's own text. Printed abilities read the source's now;
+//! resolved effects retain their creation text. Over a test card whose
 //! text says "Goblin" and has been changed to say "Elf" since its ability went on the stack: each hook notes the word it
-//! read, and each must read "Elf". No printed card has an ability that makes its own source's other word-reading ability
+//! read; printed abilities read "Elf" while the resolved shield retains "Goblin". No printed card has an ability that makes its own source's other word-reading ability
 //! look in the middle of its resolution, so these are the guards' only tests.
 
 use crate::actions::stack_item;
@@ -161,7 +162,7 @@ fn resolving() -> (Game, ObjectId, usize) {
 /// The resolving ability's own text is read: its source says Goblin to it, though it says Elf now.
 fn own(g: &mut Game, frame: usize) -> Cx<'_> {
     g.own_text.set(true);
-    Cx { g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 fn reads_its_own_text(cx: &Cx, id: ObjectId) {
@@ -236,7 +237,7 @@ fn the_outcomes_of_a_production_are_judged_by_the_text_now() {
 }
 
 #[test]
-fn a_prevention_shield_is_judged_by_the_text_now() {
+fn a_resolved_prevention_keeps_its_creation_text_while_other_abilities_read_theirs() {
     let (mut g, id, frame) = resolving();
     let card = g.cards.id_of(&SOURCE);
     let timestamp = g.state.timestamp();
@@ -252,7 +253,7 @@ fn a_prevention_shield_is_judged_by_the_text_now() {
     let cx = own(&mut g, frame);
     let damage = DamageEvent { source: id, target: Target::Player(YOU), amount: 2, combat: false, heal_marked: false, shielded: None };
     let shields = crate::replace::shields(&cx, &damage);
-    assert_eq!(seen("shield"), Some(Subtype::Elf), "{shields:?}");
+    assert_eq!(seen("shield"), Some(Subtype::Goblin), "the resolved effect has its own unchanged text: {shields:?}");
     reads_its_own_text(&cx, id);
 }
 

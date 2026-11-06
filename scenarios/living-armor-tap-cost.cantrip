@@ -1,0 +1,47 @@
+# A tapped Living Armor cannot pay its tap-and-sacrifice cost; after it untaps the ability is available (CR 602.2b, 118.3).
+[Bot1 Deck]
+Living Armor
+Icy Manipulator
+Black Lotus
+Black Lotus
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Alpine Grizzly
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Living Armor.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Alpine Grizzly.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Icy Manipulator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Icy Manipulator.Activate(Bot1.Battlefield.Living Armor)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Living Armor.Tapped = true
+! Bot1.Battlefield.Living Armor.Activate(Bot2.Battlefield.Alpine Grizzly)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Living Armor.Activate(Bot2.Battlefield.Alpine Grizzly)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Alpine Grizzly.Counters.Plus0Plus1 = 3
+Bot1.Graveyard = Living Armor; Black Lotus; Black Lotus

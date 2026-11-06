@@ -1,0 +1,6 @@
+{
+  "name": "Dwarven Armory",
+  "manaCost": "{2}{R}{R}",
+  "type": "Enchantment",
+  "oracleText": "{2}, Sacrifice a land: Put a +2/+2 counter on target creature. Activate only during any upkeep step."
+}

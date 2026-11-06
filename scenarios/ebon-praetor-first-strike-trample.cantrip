@@ -1,0 +1,46 @@
+# A 3/3 Praetor kills a 2/2 blocker in first strike and tramples one damage to its controller.
+[Bot1 Deck]
+Ebon Praetor
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Swamp x20
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ebon Praetor.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Ebon Praetor > Bot2)
+Bot2.Block(Grizzly Bears > Ebon Praetor)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Ebon Praetor.Damage = 0
+Bot2.Graveyard = Grizzly Bears

@@ -1,6 +1,6 @@
 # Raiding Schemes: conspire taps "two untapped creatures you control that share a color with it" (CR 702.78a). Bot1 casts the
 # Schemes and a Goblin Champion (red) on turn 1 and a Llanowar Elves (green) on turn 3. On turn 5 Lightning Bolt, a red spell, has
-# two untapped creatures, but the Elves share no color with it: conspire can only be declined (! Bot1.Modes(Conspire:)). The Bolt resolves, Bot2
+# two untapped creatures, but the Elves share no color with it: an attempted conspire cast rolls back. The Bolt is then cast without conspire, Bot2
 # loses 3, and nothing is copied or tapped.
 
 [Bot1 Deck]
@@ -49,7 +49,14 @@ Bot2.Pass
 [T5 Bot1.Main1]
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
-! Bot1.Modes(Conspire:)
+Bot1.Modes(Conspire:)
+? Bot1.Hand.Lightning Bolt.Colors = Red
+? Bot1.Battlefield.Goblin Champion.Tapped = false
+? Bot1.Battlefield.Llanowar Elves.Tapped = false
+? Bot1.Mana = {R}
+? Bot2.Life = 20
+? Stack.Count = 0
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
 Bot1.Modes(1)
 Bot1.Pass
 Bot2.Pass

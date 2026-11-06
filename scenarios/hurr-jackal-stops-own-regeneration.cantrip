@@ -1,0 +1,38 @@
+# A regeneration shield cannot save the Jackal controller's own creature this turn (CR 701.19c).
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Hurr Jackal
+Drudge Skeletons
+Shock
+Island x20
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hurr Jackal.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Drudge Skeletons.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Hurr Jackal.Activate(Bot1.Battlefield.Drudge Skeletons)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Drudge Skeletons.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Hurr Jackal.Activate(Bot1.Battlefield.Drudge Skeletons)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Drudge Skeletons)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Drudge Skeletons = (absent)
+Bot1.Graveyard.Drudge Skeletons.Power = 1

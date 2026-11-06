@@ -22,7 +22,7 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
 Bot1.Hand.Narset's Reversal.Cast(Stack.Lightning Bolt)
 Bot1.Pass
-Bot1.Target(Bot2)
+Bot1.Target()
 Bot1.Pass
 [T1 Bot1.Main2]
 

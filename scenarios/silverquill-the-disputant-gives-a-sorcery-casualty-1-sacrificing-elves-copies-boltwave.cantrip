@@ -41,6 +41,7 @@ Bot2.Pass
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Boltwave.Cast
 Bot1.Modes(Casualty 1)
+Bot1.Choose(Silverquill, the Disputant)
 Bot1.Choose(Llanowar Elves)
 ? Stack.Count = 2
 Bot1.Pass

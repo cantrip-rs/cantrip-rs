@@ -1,0 +1,8 @@
+{
+  "name": "Hurr Jackal",
+  "manaCost": "{R}",
+  "type": "Creature — Jackal",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}: Target creature can't be regenerated this turn."
+}

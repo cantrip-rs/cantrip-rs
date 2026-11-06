@@ -53,6 +53,7 @@ Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Llanowar Elves)
 Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Dawnhand Dissident.Activate(Bot2.Graveyard.Llanowar Elves; Ability: Exile target)
+Bot1.Choose(Tap Dawnhand Dissident)
 Bot1.Choose(Sylvan Caryatid)
 Bot1.Pass
 Bot2.Pass
@@ -69,6 +70,7 @@ Bot2.Pass
 Bot1.Pass
 Bot2.Choose()
 Bot2.Battlefield.Dawnhand Dissident.Activate(Ability: Surveil)
+Bot2.Choose(Tap Dawnhand Dissident)
 Bot2.Choose(Dawnhand Dissident)
 Bot2.Pass
 Bot1.Pass

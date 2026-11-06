@@ -257,7 +257,9 @@ public sealed partial class MainPage
 
         return prompt.Destinations.Select(destination => destination.Kind).ToList() switch
         {
-            [CardDestinationKindView.LibraryTop] => $"{source}: put the top {count} back in any order",
+            [CardDestinationKindView.LibraryTop] => count == 1
+                ? $"{source}: put the card on top of the library"
+                : $"{source}: put all {count} cards on top of the library in any order",
             [CardDestinationKindView.LibraryBottom] => $"{source}: put {(count == 1 ? "it" : $"all {count}")} on the bottom in any order",
             [CardDestinationKindView.LibraryTop, CardDestinationKindView.LibraryBottom] => $"{source}: scry {count}",
             [CardDestinationKindView.LibraryTop, CardDestinationKindView.Graveyard] => $"{source}: surveil {count}",

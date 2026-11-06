@@ -1,0 +1,31 @@
+# Removing zero adds no mana, so Mana Flare adds nothing; removing one later makes {B} and Mana Flare adds a second (CR 106.12a).
+[Bot1 Deck]
+Bottomless Vault
+Black Lotus
+Mana Flare
+Island x25
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Mana Flare.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Bottomless Vault.Play
+Bot1.Accept
+[T3 Bot1.Main1]
+Bot1.Battlefield.Bottomless Vault.Activate(X: 0)
+Bot1.Pass
+? Bot1.Mana =
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Bottomless Vault.Counters.Storage = 1
+Bot1.Accept
+[T7 Bot1.Main1]
+Bot1.Battlefield.Bottomless Vault.Activate(X: 1)
+Bot1.Pass
+? Bot1.Mana = {B}{B}
+[Expect]
+Bot1.Battlefield.Bottomless Vault.Counters.Storage = (absent)

@@ -1,0 +1,36 @@
+# Blood Moon changes the Vault into a Mountain and removes its abilities, but its storage counter remains after the Moon leaves (CR 305.7).
+[Bot1 Deck]
+Bottomless Vault
+Black Lotus
+Blood Moon
+Mox Pearl
+Mox Sapphire
+Disenchant
+Island x25
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Bottomless Vault.Play
+Bot1.Decline
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Bottomless Vault.Counters.Storage = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Blood Moon.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bottomless Vault.Counters.Storage = 1
+? Bot1.Battlefield.Bottomless Vault.Subtypes = Mountain
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Blood Moon)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Bottomless Vault.Counters.Storage = 1
+Bot1.Battlefield.Bottomless Vault.Subtypes = (absent)

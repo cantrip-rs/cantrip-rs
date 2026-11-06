@@ -1,0 +1,37 @@
+# A tapped artifact remains locked while Gremlins stays tapped, including the untap step in which Gremlins untaps (CR 502.3, 611.2b).
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Phyrexian Gremlins
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Phyrexian Gremlins.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Phyrexian Gremlins.Activate(Bot1.Battlefield.Phyrexian Gremlins)
+Bot1.Battlefield.Phyrexian Gremlins.Activate(Bot1.Battlefield.Mox Pearl)
+? Bot1.Battlefield.Phyrexian Gremlins.Tapped = true
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Phyrexian Gremlins.Activate(Bot1.Battlefield.Mox Jet)
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Phyrexian Gremlins.Tapped = true
+? Bot1.Battlefield.Mox Pearl.Tapped = true
+Bot1.Accept
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Phyrexian Gremlins.Tapped = false
+? Bot1.Battlefield.Mox Pearl.Tapped = true
+[T9 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Mox Pearl.Tapped = false

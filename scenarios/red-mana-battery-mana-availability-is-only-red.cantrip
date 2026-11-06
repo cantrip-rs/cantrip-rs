@@ -1,0 +1,30 @@
+# An uncharged Battery makes red but cannot pay for a white, blue, black, or green spell (CR 106.4).
+[Bot1 Deck]
+Red Mana Battery
+Black Lotus
+Mox Pearl
+Savannah Lions
+Merfolk of the Pearl Trident
+Dark Ritual
+Llanowar Elves
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Red Mana Battery.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Savannah Lions.Cast(Mana: short)
+! Bot1.Hand.Merfolk of the Pearl Trident.Cast(Mana: short)
+! Bot1.Hand.Dark Ritual.Cast(Mana: short)
+! Bot1.Hand.Llanowar Elves.Cast(Mana: short)
+Bot1.Battlefield.Red Mana Battery.Activate(Ability: Remove any number; X: 0)
+Bot1.Pass
+? Bot1.Mana = {R}
+[Expect]
+Bot1.Battlefield.Red Mana Battery.Tapped = true

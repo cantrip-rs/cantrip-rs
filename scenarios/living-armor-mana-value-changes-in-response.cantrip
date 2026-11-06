@@ -1,0 +1,45 @@
+# A creature copies Ornithopter in response, so its mana value is zero when Living Armor resolves (CR 608.2h, 707.2).
+[Bot1 Deck]
+Living Armor
+Black Lotus
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Alpine Grizzly
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mirrorweave
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Living Armor.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Hand.Alpine Grizzly.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Living Armor.Activate(Bot2.Battlefield.Alpine Grizzly)
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Mirrorweave.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Ornithopter#1.Counters.Plus0Plus1 = (absent)
+Bot2.Battlefield.Ornithopter#2.Counters.Plus0Plus1 = (absent)
+Bot2.Battlefield.Ornithopter#1.ManaValue = 0
+Bot2.Battlefield.Ornithopter#2.ManaValue = 0

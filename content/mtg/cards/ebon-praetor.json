@@ -1,0 +1,12 @@
+{
+  "name": "Ebon Praetor",
+  "manaCost": "{4}{B}{B}",
+  "type": "Creature — Avatar Praetor",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "First strike, trample\nAt the beginning of your upkeep, put a -2/-2 counter on this creature.\nSacrifice a creature: Remove a -2/-2 counter from this creature. If the sacrificed creature was a Thrull, put a +1/+0 counter on this creature. Activate only during your upkeep and only once each turn.",
+  "keywords": [
+    "FirstStrike",
+    "Trample"
+  ]
+}

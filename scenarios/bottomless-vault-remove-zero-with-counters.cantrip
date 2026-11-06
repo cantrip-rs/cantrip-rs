@@ -1,0 +1,24 @@
+# The controller may remove zero even with two storage counters present, tapping the Vault and keeping them (CR 118.3).
+[Bot1 Deck]
+Bottomless Vault
+Island x25
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Bottomless Vault.Play
+? Bot1.Battlefield.Bottomless Vault.Tapped = true
+Bot1.Decline
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Bottomless Vault.Counters.Storage = 1
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Bottomless Vault.Counters.Storage = 2
+Bot1.Accept
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Bottomless Vault.Counters.Storage = 2
+Bot1.Battlefield.Bottomless Vault.Activate(X: 0)
+Bot1.Pass
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield.Bottomless Vault.Tapped = true
+Bot1.Battlefield.Bottomless Vault.Counters.Storage = 2

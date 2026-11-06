@@ -1,0 +1,38 @@
+# Gravebind targets its caster's creature; on the next turn a regeneration shield saves it from lethal damage.
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Ruby
+Will-o'-the-Wisp
+Gravebind
+Lightning Bolt
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Will-o'-the-Wisp.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Gravebind.Cast(Bot1.Battlefield.Will-o'-the-Wisp)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Will-o'-the-Wisp.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Will-o'-the-Wisp)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Will-o'-the-Wisp.Tapped = true
+Bot1.Battlefield.Will-o'-the-Wisp.Damage = 0

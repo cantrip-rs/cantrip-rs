@@ -1,0 +1,40 @@
+# The restriction covers untap steps, so Mana Vault can untap during upkeep by its own ability (CR 502.3).
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Phyrexian Gremlins
+Island x20
+[Bot2 Deck]
+Mana Vault
+Mox Pearl
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Phyrexian Gremlins.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Mana Vault.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Phyrexian Gremlins.Activate(Bot2.Battlefield.Mana Vault)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.PayCost
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Mana Vault.Tapped = false
+Bot1.Battlefield.Phyrexian Gremlins.Tapped = true

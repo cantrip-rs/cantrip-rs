@@ -1,0 +1,8 @@
+{
+  "name": "Orcish Healer",
+  "manaCost": "{R}{R}",
+  "type": "Creature — Orc Cleric",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{R}{R}, {T}: Target creature can't be regenerated this turn.\n{B}{B}{R}, {T}: Regenerate target black or green creature.\n{R}{G}{G}, {T}: Regenerate target black or green creature."
+}

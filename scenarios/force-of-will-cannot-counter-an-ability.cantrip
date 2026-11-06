@@ -24,6 +24,7 @@ Bot2.Search(Swamp)
 Bot2.Battlefield.Swamp.Activate
 Bot2.Hand.Duress.Cast(Bot1)
 Bot1.Hand.Force of Will.Cast(Duress; Ability: exile a blue card)
+Bot1.Choose(Pay 1 life)
 Bot1.Choose(Brainstorm)
 
 [Expect]

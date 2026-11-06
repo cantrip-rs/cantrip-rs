@@ -1,0 +1,32 @@
+# Gremlins taps an opponent's artifact and keeps it tapped until Gremlins untaps (CR 611.2b).
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Phyrexian Gremlins
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Phyrexian Gremlins.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Phyrexian Gremlins.Activate(Bot2.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Mox Ruby.Tapped = true
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Mox Ruby.Tapped = true
+Bot1.Accept
+[T6 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Mox Ruby.Tapped = false

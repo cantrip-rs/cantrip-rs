@@ -1,0 +1,31 @@
+# A creature you control with mana value one gets exactly one +0/+1 counter (CR 122.1a).
+[Bot1 Deck]
+Living Armor
+Black Lotus
+Mox Pearl
+Savannah Lions
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Living Armor.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Living Armor.Activate(Bot1.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Savannah Lions.Counters.Plus0Plus1 = 1
+Bot1.Battlefield.Savannah Lions.Power = 2
+Bot1.Battlefield.Savannah Lions.Toughness = 2

@@ -12,7 +12,7 @@ fn protect_you(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 fn lose_life_for_burden(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let burdens = g.obj(item.object).counters(CounterKind::Burden);
     if burdens > 0 {
-        g.lose_life(item.controller, burdens as i32);
+        g.lose_life(item.controller,(burdens as i32) as i32);
     }
     Ok(())
 }

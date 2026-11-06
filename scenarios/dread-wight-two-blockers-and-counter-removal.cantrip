@@ -1,0 +1,62 @@
+# Both blockers receive counters and stay tapped; paying {4} removes a counter and allows the next untap (CR 603.2, 502.3).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Dread Wight
+Memnite
+Island x20
+[Bot2 Deck]
+Black Lotus x2
+Mox Sapphire
+Mox Pearl
+Memnite
+Wall of Mist
+Murmuring Phantasm
+Mox Ruby
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dread Wight.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Wall of Mist.Cast
+Bot2.Hand.Murmuring Phantasm.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Dread Wight > Bot2)
+Bot2.Block(Wall of Mist > Dread Wight; Murmuring Phantasm > Dread Wight)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Memnite.Counters.Paralyzation = (absent)
+? Bot2.Battlefield.Memnite.Counters.Paralyzation = (absent)
+? Bot2.Battlefield.Wall of Mist.Counters.Paralyzation = 1
+? Bot2.Battlefield.Murmuring Phantasm.Counters.Paralyzation = 1
+? Bot2.Battlefield.Wall of Mist.Tapped = true
+? Bot2.Battlefield.Murmuring Phantasm.Tapped = true
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Wall of Mist.Tapped = true
+? Bot2.Battlefield.Murmuring Phantasm.Tapped = true
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Wall of Mist.Activate(Ability: Remove a paralyzation)
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Wall of Mist.Counters.Paralyzation = (absent)
+[T6 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Wall of Mist.Tapped = false
+Bot2.Battlefield.Murmuring Phantasm.Tapped = true

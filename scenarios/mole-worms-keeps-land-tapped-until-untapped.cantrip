@@ -1,0 +1,45 @@
+# Mole Worms taps an opponent's land, holds it through untap while kept tapped, then releases it on untapping (CR 502.3, 611.2b).
+[Bot1 Deck]
+Mole Worms
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Island
+Island x20
+[Bot2 Deck]
+Forest
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mole Worms.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Mole Worms.Activate(Bot1.Battlefield.Mox Jet)
+Bot1.Battlefield.Mole Worms.Activate(Bot2.Battlefield.Forest)
+? Bot1.Battlefield.Mole Worms.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Forest.Tapped = true
+! Bot1.Battlefield.Mole Worms.Activate(Bot2.Battlefield.Forest)
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Forest.Tapped = true
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Mole Worms.Tapped = true
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Forest.Tapped = true
+Bot1.Accept
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Mole Worms.Tapped = false
+[T8 Bot2.Main1]
+? Bot2.Battlefield.Forest.Tapped = false
+[Expect]
+Bot2.Battlefield.Forest.Tapped = false

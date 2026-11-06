@@ -44,6 +44,7 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Waterbending Scroll.Activate
+Bot1.Choose(Tap Waterbending Scroll)
 ? Bot1.Mana =
 ? Bot1.Battlefield.Island.Tapped = false
 Bot1.Pass
@@ -58,6 +59,7 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Waterbending Scroll.Activate
+Bot1.Choose(Tap Waterbending Scroll)
 ? Bot1.Mana =
 ? Bot1.Battlefield.Mox Emerald.Tapped = false
 ? Bot1.Battlefield.Tundra.Tapped = false

@@ -37,6 +37,7 @@ Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Dokuchi Shadow-Walker.Activate(Ability: Ninjutsu)
+Bot1.Choose(Return to hand 1 permanent)
 Bot1.Choose(Fanatical Firebrand)
 Bot1.Pass
 Bot1.Pass

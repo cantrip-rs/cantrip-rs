@@ -70,6 +70,8 @@ Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Susur Secundi, Void Altar.Activate(Ability: {1}{B})
+Bot1.Choose(Tap Susur Secundi, Void Altar)
+Bot1.Choose(Pay 2 life)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot2.Pass

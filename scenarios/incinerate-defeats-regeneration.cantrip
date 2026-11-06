@@ -1,0 +1,30 @@
+# A regeneration shield already on the creature cannot save it from Incinerate's lethal damage (CR 701.19c).
+[Bot1 Deck]
+Incinerate
+Mountain
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Ornithopter
+Welding Jar
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Welding Jar.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.Incinerate.Cast(Bot1.Battlefield.Mountain)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Incinerate.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Welding Jar.Activate(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard = Ornithopter; Welding Jar

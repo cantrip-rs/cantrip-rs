@@ -1,0 +1,54 @@
+# The {R}{G}{G} ability shields a green creature; lethal damage consumes the shield and taps it (CR 701.19a).
+[Bot1 Deck]
+Orcish Healer
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Emerald
+Grizzly Bears
+Lightning Bolt
+Mox Emerald
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Orcish Healer.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Grizzly Bears.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+! Bot1.Battlefield.Orcish Healer.Activate(Ability: {R}{G}{G}; Bot1.Battlefield.Grizzly Bears; Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#2.Activate
+! Bot1.Battlefield.Orcish Healer.Activate(Ability: {R}{G}{G}; Bot1.Battlefield.Orcish Healer)
+Bot1.Battlefield.Orcish Healer.Activate(Ability: {R}{G}{G}; Bot1.Battlefield.Grizzly Bears)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Tapped = true
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Graveyard = Lightning Bolt

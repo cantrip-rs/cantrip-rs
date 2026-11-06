@@ -1,0 +1,43 @@
+# A stolen creature skips its new controller's next untap step, not its former controller's (CR 611.2a).
+[Bot1 Deck]
+Barl's Cage
+Control Magic
+Black Lotus x3
+Mox Sapphire
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Grizzly Bears
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Barl's Cage.Cast
+? Bot1.Mana =
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Barl's Cage.Activate(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Control Magic.Cast(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Grizzly Bears.Tapped = true
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Grizzly Bears.Tapped = true
+[T9 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Tapped = false

@@ -1,0 +1,19 @@
+# Untapping the Vault means no upkeep trigger; tapping it afterward with zero counters adds no mana (CR 603.4, 605.1a).
+[Bot1 Deck]
+Bottomless Vault
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Bottomless Vault.Play
+Bot1.Accept
+[T3 Bot1.Upkeep]
+? Stack.Count = 0
+? Bot1.Battlefield.Bottomless Vault.Tapped = false
+Bot1.Battlefield.Bottomless Vault.Activate(X: 0)
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Bottomless Vault.Tapped = true
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Bottomless Vault.Counters.Storage = (absent)

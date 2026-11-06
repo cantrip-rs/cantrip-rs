@@ -1,0 +1,40 @@
+# The Jackal prevents an opponent's creature from using a regeneration shield this turn (CR 701.19c).
+[Bot1 Deck]
+Mox Ruby
+Hurr Jackal
+Shock
+Island x20
+[Bot2 Deck]
+Mox Jet x2
+Mox Pearl
+Drudge Skeletons
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hurr Jackal.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Jet#1.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Drudge Skeletons.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Hurr Jackal.Activate(Bot1.Battlefield.Mox Ruby)
+Bot1.Battlefield.Hurr Jackal.Activate(Bot2.Battlefield.Drudge Skeletons)
+? Bot1.Battlefield.Hurr Jackal.Tapped = true
+Bot1.Pass
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Battlefield.Drudge Skeletons.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Drudge Skeletons)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Drudge Skeletons = (absent)
+Bot2.Graveyard.Drudge Skeletons.Power = 1
