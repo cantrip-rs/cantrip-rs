@@ -1,0 +1,42 @@
+# Triskelion enters with three counters; each activation removes one, deals one damage, and a fourth is unavailable (CR 122.6, 602.2b).
+[Bot1 Deck]
+Triskelion
+Black Lotus
+Black Lotus
+Ornithopter
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Triskelion.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Triskelion.Counters.PlusOnePlusOne = 3
+? Bot1.Battlefield.Triskelion.Power = 4
+! Bot1.Battlefield.Triskelion.Activate(Mox Pearl)
+Bot1.Battlefield.Triskelion.Activate(Bot2)
+? Bot1.Battlefield.Triskelion.Counters.PlusOnePlusOne = 2
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+Bot1.Battlefield.Triskelion.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+Bot1.Battlefield.Triskelion.Activate(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Triskelion.Activate(Bot2)
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
+Bot1.Battlefield.Triskelion.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Ornithopter.Damage = 1

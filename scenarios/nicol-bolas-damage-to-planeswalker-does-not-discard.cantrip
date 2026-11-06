@@ -1,0 +1,58 @@
+# Combat damage to an opponent’s planeswalker does not make that opponent discard (CR 120.3c).
+[Bot1 Deck]
+Nicol Bolas
+Black Lotus
+Mox Jet
+Gleemox
+Mox Ruby
+Lotus Petal
+Mox Pearl
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Liliana of the Veil
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Lotus Petal.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nicol Bolas.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Liliana of the Veil.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Nicol Bolas > Bot2.Battlefield.Liliana of the Veil)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Hand.Count = 6
+Bot2.Graveyard = Liliana of the Veil; Black Lotus
+Bot2.Life = 20

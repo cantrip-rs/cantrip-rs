@@ -1,0 +1,50 @@
+# The Wall survives combat; on the next turn its regeneration shield saves it from lethal damage.
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Lim-Dûl's Cohort
+Lightning Bolt
+Shock
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Wall of Bone
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Lim-Dûl's Cohort.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Wall of Bone.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lim-Dûl's Cohort > Bot2)
+Bot2.Block(Wall of Bone > Lim-Dûl's Cohort)
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Wall of Bone.Damage = 2
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Wall of Bone.Activate
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Wall of Bone)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Wall of Bone)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Wall of Bone.Tapped = true
+Bot2.Battlefield.Wall of Bone.Damage = 0

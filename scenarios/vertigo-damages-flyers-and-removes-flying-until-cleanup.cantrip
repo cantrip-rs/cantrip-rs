@@ -1,0 +1,62 @@
+# Vertigo deals exactly two damage to either player's flyer and removes flying until cleanup; nonflying creatures and noncreatures are illegal targets (CR 115.1, 611.2a).
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Ruby
+Concordia Pegasus
+Vertigo
+Vertigo
+Memnite
+Island x20
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Concordia Pegasus
+Island
+Island
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Concordia Pegasus.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Concordia Pegasus.Cast
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Vertigo.Cast(Bot1.Battlefield.Memnite)
+! Bot1.Hand.Vertigo.Cast(Bot1.Battlefield.Mox Pearl#1)
+Bot1.Hand.Vertigo.Cast(Bot2.Battlefield.Concordia Pegasus)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Concordia Pegasus.Damage = 2
+? Bot2.Battlefield.Concordia Pegasus.Keywords = (absent)
+? Bot1.Battlefield.Concordia Pegasus.Keywords = Flying
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Concordia Pegasus.Keywords = Flying
+? Bot2.Battlefield.Concordia Pegasus.Damage = 0
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Vertigo.Cast(Bot1.Battlefield.Concordia Pegasus)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Concordia Pegasus.Damage = 2
+? Bot1.Battlefield.Concordia Pegasus.Keywords = (absent)
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Concordia Pegasus.Keywords = Flying
+Bot1.Battlefield.Concordia Pegasus.Damage = 0

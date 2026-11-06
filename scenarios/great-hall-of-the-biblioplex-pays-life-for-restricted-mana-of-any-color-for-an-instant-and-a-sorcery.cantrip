@@ -16,6 +16,7 @@ Island x20
 [Actions]
 Bot1.Hand.Great Hall of the Biblioplex.Play
 Bot1.Battlefield.Great Hall of the Biblioplex.Activate(Ability: Pay 1 life; Color: U)
+Bot1.Choose(Tap Great Hall of the Biblioplex)
 ? Bot1.Mana = {U} (InstantOrSorcerySpells)
 ? Bot1.Life = 19
 Bot1.Hand.Brainstorm.Cast
@@ -24,6 +25,7 @@ Bot2.Pass
 Bot1.Choose(Island; Island)
 [T3 Bot1.Main1]
 Bot1.Battlefield.Great Hall of the Biblioplex.Activate(Ability: Pay 1 life; Color: R)
+Bot1.Choose(Tap Great Hall of the Biblioplex)
 ? Bot1.Mana = {R} (InstantOrSorcerySpells)
 Bot1.Hand.Chain Lightning.Cast(Bot2)
 Bot1.Pass

@@ -1,0 +1,6 @@
+{
+  "name": "Vertigo",
+  "manaCost": "{R}",
+  "type": "Instant",
+  "oracleText": "Vertigo deals 2 damage to target creature with flying. That creature loses flying until end of turn."
+}

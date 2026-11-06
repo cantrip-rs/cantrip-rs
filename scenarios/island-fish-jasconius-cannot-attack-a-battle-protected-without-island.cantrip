@@ -1,0 +1,49 @@
+# A Siege's protector is the defending player (CR 508.1c); Memnite is a legal attacker and positive control.
+# Cast the Fish on turn 3 and leave it untapped so its optional UUU upkeep payment is unnecessary.
+[Bot1 Deck]
+Island
+Black Lotus
+Mox Ruby
+Mox Pearl
+Memnite
+Island Fish Jasconius
+Invasion of Gobakhan
+Island x20
+
+[Bot2 Deck]
+Mountain
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Invasion of Gobakhan.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Island Fish Jasconius.Cast
+? Bot1.Mana =
+[T5 Bot1.DeclareAttackers]
+! Bot1.Attack(Island Fish Jasconius > Bot2)
+! Bot1.Attack(Island Fish Jasconius > Bot1.Battlefield.Invasion of Gobakhan)
+Bot1.Attack(Memnite > Bot1.Battlefield.Invasion of Gobakhan)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Island Fish Jasconius.Tapped = false

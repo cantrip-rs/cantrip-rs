@@ -17,6 +17,7 @@ Bot1.Pass
 ! Bot1.Battlefield.Mana Confluence.Activate
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mana Confluence.Activate(Color: Green)
+Bot1.Choose(Tap Mana Confluence)
 ? Bot1.Mana = {G}
 ? Bot1.Life = 18
 

@@ -1,0 +1,43 @@
+# A Forest that is already a creature retains its Dryad subtype when animated (CR 205.1b).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Thelonite Druid
+Dryad Arbor
+Plains
+Forest x20
+[Bot2 Deck]
+Forest
+Island x20
+[Actions]
+Bot1.Hand.Dryad Arbor.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thelonite Druid.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Dryad Arbor.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Thelonite Druid.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Tap Thelonite Druid)
+Bot1.Choose(Thelonite Druid)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dryad Arbor.Types = Land; Creature
+? Bot1.Battlefield.Dryad Arbor.Subtypes = Dryad; Forest
+? Bot1.Battlefield.Dryad Arbor.Power = 2
+? Bot1.Battlefield.Dryad Arbor.Toughness = 3
+? Bot1.Battlefield.Plains.Types = Land
+? Bot2.Battlefield.Forest.Types = Land
+? Bot1.Graveyard = Thelonite Druid; Black Lotus
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Dryad Arbor.Types = Land; Creature
+Bot2.Battlefield.Forest.Types = Land

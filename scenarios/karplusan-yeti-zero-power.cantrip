@@ -1,0 +1,38 @@
+# Sorceress Queen makes the Yeti 0/2; neither it nor a 0/2 Ornithopter deals damage when the Yeti targets it (CR 120.8).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Jet
+Karplusan Yeti
+Sorceress Queen
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Karplusan Yeti.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Sorceress Queen.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Sorceress Queen.Activate(Karplusan Yeti)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Karplusan Yeti.Power = 0
+Bot1.Battlefield.Karplusan Yeti.Activate(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Karplusan Yeti.Damage = 0
+Bot1.Battlefield.Ornithopter.Damage = 0

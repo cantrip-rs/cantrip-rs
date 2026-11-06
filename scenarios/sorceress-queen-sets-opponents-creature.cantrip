@@ -1,0 +1,37 @@
+# Sorceress Queen cannot target herself, but taps to set an opponent's creature's base power and toughness to 0/2 until end of turn (CR 613.4b).
+[Bot1 Deck]
+Sorceress Queen
+Black Lotus
+Swamp x20
+
+[Bot2 Deck]
+Grizzly Bears
+Mox Emerald
+Forest
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Sorceress Queen.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Sorceress Queen.Activate(Bot1.Battlefield.Sorceress Queen)
+! Bot1.Battlefield.Sorceress Queen.Activate(Bot2.Battlefield.Forest)
+Bot1.Battlefield.Sorceress Queen.Activate(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sorceress Queen.Tapped = true
+? Bot2.Battlefield.Grizzly Bears.Power = 0
+? Bot2.Battlefield.Grizzly Bears.Toughness = 2
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot2.Battlefield.Grizzly Bears.Toughness = 2

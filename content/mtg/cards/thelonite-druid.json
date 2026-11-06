@@ -1,0 +1,8 @@
+{
+  "name": "Thelonite Druid",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Human Cleric Druid",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{1}{G}, {T}, Sacrifice a creature: Forests you control become 2/3 creatures until end of turn. They're still lands."
+}

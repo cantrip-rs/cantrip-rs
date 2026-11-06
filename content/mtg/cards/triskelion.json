@@ -1,0 +1,8 @@
+{
+  "name": "Triskelion",
+  "manaCost": "{6}",
+  "type": "Artifact Creature — Construct",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "This creature enters with three +1/+1 counters on it.\nRemove a +1/+1 counter from this creature: It deals 1 damage to any target."
+}

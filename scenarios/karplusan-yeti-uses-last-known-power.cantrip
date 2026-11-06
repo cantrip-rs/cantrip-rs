@@ -1,0 +1,46 @@
+# A pumped Yeti returned to hand in response still deals damage using its last known power (CR 113.7a, 608.2h).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Karplusan Yeti
+Giant Growth
+Unsummon
+Island x20
+[Bot2 Deck]
+Black Lotus
+Darksteel Myr
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Karplusan Yeti.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Darksteel Myr.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Karplusan Yeti)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Karplusan Yeti.Power = 6
+Bot1.Battlefield.Karplusan Yeti.Activate(Darksteel Myr)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unsummon.Cast(Karplusan Yeti)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Darksteel Myr.Damage = 6
+Bot1.Hand.Karplusan Yeti.Power = 3

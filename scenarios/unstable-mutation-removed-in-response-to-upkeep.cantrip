@@ -1,0 +1,32 @@
+# The upkeep ability still puts its counter on the creature whose controller's upkeep caused it to trigger after the Aura is destroyed (CR 113.7a).
+[Bot1 Deck]
+Unstable Mutation
+Mox Sapphire
+Ornithopter
+Island x20
+[Bot2 Deck]
+Disenchant
+Mox Pearl
+Plains
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unstable Mutation.Cast(Ornithopter)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Plains.Play
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Disenchant.Cast(Unstable Mutation)
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Graveyard = Unstable Mutation
+Bot1.Battlefield.Ornithopter.Counters.MinusOneMinusOne = 1
+Bot1.Battlefield.Ornithopter.Power = -1
+Bot1.Battlefield.Ornithopter.Toughness = 1

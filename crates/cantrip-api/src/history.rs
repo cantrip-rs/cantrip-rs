@@ -174,7 +174,7 @@ pub enum Cause {
     /// A spell resolving.
     Spell(ObjectId),
     /// An activated or triggered ability resolving.
-    Ability { source: ObjectId, ability: AbilityRef },
+    Ability { source: ObjectId, ability: AbilityRef, acquired: Acquired },
 }
 
 /// One thing that happened, as the history keeps it.
@@ -318,13 +318,20 @@ pub struct History<'a> {
     pub records: &'a [Record],
     /// The turn being played.
     pub turn: u32,
+    pub receipts: &'a [cantrip_state::CostReceiptDetails],
 }
 
 impl<'a> History<'a> {
     /// The history of a game, `records` its every record and `turn` the turn being played: a read of it (`note_read`).
     pub fn new(records: &'a [Record], turn: u32) -> History<'a> {
         note_read();
-        History { records, turn }
+        History { records, turn, receipts: &[] }
+    }
+
+    /// A history backed by the state arena that owns its cost receipt details.
+    pub fn with_receipts(records: &'a [Record], turn: u32, receipts: &'a [cantrip_state::CostReceiptDetails]) -> History<'a> {
+        note_read();
+        History { records, turn, receipts }
     }
 
     /// Every record since the game began, oldest first.
@@ -417,6 +424,14 @@ impl<'a> History<'a> {
         })
     }
 
+    /// Mana from snow sources spent to cast this spell, captured when produced (CR 107.4h), regardless of the sources'
+    /// later characteristics or zones. Icehide Troll and Rime Transfusion use snow payment; Blood on the Snow reads it.
+    pub fn snow_mana_spent_to_cast(&self, spell: ObjectId) -> u32 {
+        self.this_turn().iter().filter_map(|r| match r.event {
+            Event::ManaSpent { on, cast: true, snow, .. } if on == spell => Some(snow), _ => None,
+        }).fold(0u32, u32::saturating_add)
+    }
+
     /// Whether mana `source` produced was spent to cast `spell` (CR 106.3, 601.2h): "whenever you cast a spell using mana
     /// produced by [this]". `source` is the object as it produced the mana: one that has left and come back is another (CR
     /// 400.7).
@@ -435,6 +450,64 @@ impl<'a> History<'a> {
             spell = original;
         }
         spell
+    }
+
+    /// The old permanents paid to one identified component of a spell's cost (CR 601.2h, 608.2h).
+    /// Copies, including copies of copies, use the objects that paid the original spell (CR 707.10).
+    pub fn spell_cost_objects(&self, spell: ObjectId, origin: crate::CostOrigin, component: usize, part: crate::CostPart) -> impl Iterator<Item = ObjectId> + 'a {
+        let spell = self.original_spell(spell);
+        let receipts = self.receipts;
+        self.records.iter().filter_map(move |r| match r.event {
+            Event::CostObjectPaid { spell: paid, object, receipt }
+                if paid == spell && { let d = &receipts[receipt]; d.origin == Some(origin) && d.component == component && d.part == part } => Some(object),
+            _ => None,
+        })
+    }
+
+    /// Objects paid for one component of an activated ability. Copies use the activation they ultimately copied
+    /// (CR 707.10), and each activation of the same source has its own stack serial (CR 602.2).
+    pub fn ability_cost_objects(&self, mut serial: u32, component: usize, part: crate::CostPart) -> impl Iterator<Item = ObjectId> + 'a {
+        while let Some(original) = self.records.iter().rev().find_map(|r| match r.event {
+            Event::AbilityCopied { copy, original } if copy == serial && copy != original => Some(original),
+            _ => None,
+        }) { serial = original; }
+        let receipts = self.receipts;
+        self.records.iter().filter_map(move |r| match r.event {
+            Event::AbilityCostObjectPaid { serial: paid, object, receipt }
+                if paid == serial && { let d = &receipts[receipt]; d.component == component && d.part == part } => Some(object),
+            _ => None,
+        })
+    }
+
+    /// Objects paid for a particular cost operation across all components of this activation or its original.
+    pub fn ability_cost_objects_of_part(&self, mut serial: u32, part: crate::CostPart) -> impl Iterator<Item = ObjectId> + 'a {
+        while let Some(original) = self.records.iter().rev().find_map(|r| match r.event {
+            Event::AbilityCopied { copy, original } if copy == serial && copy != original => Some(original),
+            _ => None,
+        }) { serial = original; }
+        let receipts = self.receipts;
+        self.records.iter().filter_map(move |r| match r.event {
+            Event::AbilityCostObjectPaid { serial: paid, object, receipt } if paid == serial && receipts[receipt].part == part => Some(object),
+            _ => None,
+        })
+    }
+
+    /// Objects paid to a particular resolution payment and component, using their pre-move identities.
+    pub fn resolution_cost_objects(&self, payment: usize, component: usize, part: crate::CostPart) -> impl Iterator<Item = ObjectId> + 'a {
+        let receipts = self.receipts;
+        self.records.iter().filter_map(move |r| match r.event {
+            Event::ResolutionCostObjectPaid { payment: paid, object, receipt, .. }
+                if paid == payment && { let d = &receipts[receipt]; d.component == component && d.part == part } => Some(object),
+            _ => None,
+        })
+    }
+
+    /// The individual payments made while this particular stack item resolved, in their recorded order.
+    pub fn resolution_payments(&self, serial: u32) -> impl Iterator<Item = usize> + 'a {
+        self.records.iter().filter_map(move |r| match r.event {
+            Event::ResolutionPaymentBegan { payment, resolving: Some(which), .. } if which == serial => Some(payment),
+            _ => None,
+        })
     }
 
     /// The creatures that convoked `object` (CR 702.51c), in the order they were tapped: `object` is a spell on the stack, or
@@ -622,5 +695,21 @@ impl<'a> History<'a> {
     pub fn entered_this_turn(&self, permanent: ObjectId) -> bool {
         self.select(EventQuery::kind(EventMask::ZONE_CHANGE).to(ZoneKind::Battlefield).this_turn())
             .any(|r| matches!(r.event, Event::ZoneChange { new, .. } if new == permanent))
+    }
+}
+
+#[cfg(test)]
+mod receipt_arena_tests {
+    use super::*;
+    use cantrip_state::{CostOrigin, CostPart, CostReceiptDetails, ObjectId, PlayerId, Step};
+
+    #[test]
+    fn full_receipt_identity_is_read_from_owning_arena() {
+        let details = [CostReceiptDetails { origin: Some(CostOrigin::AdditionalChoice(700)), component: 900, part: CostPart::Discard(1000) }];
+        let event = Event::CostObjectPaid { spell: ObjectId(1), object: ObjectId(2), receipt: 0 };
+        let records = [Record { serial: 0, turn: 1, step: Step::Upkeep, active: PlayerId(0), cause: Cause::Rules, event }];
+        let history = History::with_receipts(&records, 1, &details);
+        assert_eq!(history.spell_cost_objects(ObjectId(1), CostOrigin::AdditionalChoice(700), 900, CostPart::Discard(1000)).collect::<Vec<_>>(), vec![ObjectId(2)]);
+        assert_eq!(history.spell_cost_objects(ObjectId(1), CostOrigin::AdditionalChoice(700), 900, CostPart::Discard(1001)).count(), 0);
     }
 }

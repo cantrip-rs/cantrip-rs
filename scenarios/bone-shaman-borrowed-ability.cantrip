@@ -1,0 +1,58 @@
+# The Cauldron lends Bone Shaman's ability to Grizzly Bears, which denies regeneration to a creature it damaged.
+[Bot1 Deck]
+Black Lotus
+Mountain
+Mox Sapphire
+Mox Ruby
+Grizzly Bears
+Agatha's Soul Cauldron
+Faithless Looting
+Bone Shaman
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Black Lotus
+Wall of Bone
+Swamp
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Agatha's Soul Cauldron.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Wall of Bone.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Bone Shaman; Island)
+Bot1.Battlefield.Agatha's Soul Cauldron.Activate(Bot1.Graveyard.Bone Shaman)
+Bot1.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Grizzly Bears.Activate(Ability: Creatures dealt damage)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Wall of Bone > Grizzly Bears)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Wall of Bone)
+Bot1.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Wall of Bone.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Graveyard = Wall of Bone; Black Lotus

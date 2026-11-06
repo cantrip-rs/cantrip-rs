@@ -1,0 +1,53 @@
+# The attacking Triskelion deals both ability and combat damage to Night Stalker instead of its controller (CR 614.9).
+[Bot1 Deck]
+Shimian Night Stalker
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Swamp
+Swamp x20
+[Bot2 Deck]
+Black Lotus x2
+Triskelion
+Island x20
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Shimian Night Stalker.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Triskelion.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Triskelion > Bot1)
+Bot2.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Shimian Night Stalker.Activate(Bot2.Battlefield.Triskelion)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Triskelion.Activate(Bot1; Ability: Remove)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 20
+? Bot1.Battlefield.Shimian Night Stalker.Damage = 1
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard.Shimian Night Stalker.Power = 4

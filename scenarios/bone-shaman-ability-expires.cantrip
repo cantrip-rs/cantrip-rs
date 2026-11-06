@@ -1,0 +1,40 @@
+# After Bone Shaman's granted ability expires, a creature it damages on a later turn can regenerate (CR 611.2a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Bone Shaman
+Island x20
+[Bot2 Deck]
+Black Lotus
+Drudge Skeletons
+Swamp
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bone Shaman.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Bone Shaman.Activate
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Drudge Skeletons.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bone Shaman > Bot2)
+Bot2.Block(Drudge Skeletons > Bone Shaman)
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Drudge Skeletons.Activate
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Drudge Skeletons.Tapped = true
+Bot2.Battlefield.Drudge Skeletons.Damage = 0

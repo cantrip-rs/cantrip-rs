@@ -1,0 +1,42 @@
+# The opponent's enchanted creature gets +3/+3 and a counter on its controller's upkeep; destroying the Aura removes the bonus but leaves the counter (CR 611.3b, 122.1).
+[Bot1 Deck]
+Unstable Mutation
+Mox Sapphire
+Mox Pearl
+Disenchant
+Plains
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Unstable Mutation.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Unstable Mutation.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Unstable Mutation.AttachedTo = Ornithopter
+? Bot2.Battlefield.Ornithopter.Power = 3
+? Bot2.Battlefield.Ornithopter.Toughness = 5
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Counters.MinusOneMinusOne = 1
+? Bot2.Battlefield.Ornithopter.Power = 2
+? Bot2.Battlefield.Ornithopter.Toughness = 4
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Ornithopter.Counters.MinusOneMinusOne = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Disenchant.Cast(Unstable Mutation)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Disenchant; Unstable Mutation
+Bot2.Battlefield.Ornithopter.Counters.MinusOneMinusOne = 1
+Bot2.Battlefield.Ornithopter.Power = -1
+Bot2.Battlefield.Ornithopter.Toughness = 1

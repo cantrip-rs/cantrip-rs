@@ -1,0 +1,51 @@
+# An attacking creature controlled by Night Stalker's controller is a legal target, and its ability damage to that player is redirected (CR 115.1c, 614.9).
+[Bot1 Deck]
+Shimian Night Stalker
+Black Lotus x3
+Mox Pearl
+Mox Sapphire
+Swamp
+Triskelion
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Shimian Night Stalker.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Triskelion.Cast
+Bot1.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Triskelion > Bot2)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Shimian Night Stalker.Activate(Bot1.Battlefield.Triskelion)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Triskelion.Activate(Bot1; Ability: Remove)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Shimian Night Stalker.Damage = 1
+? Bot1.Life = 20
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 17

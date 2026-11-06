@@ -1,0 +1,35 @@
+# Queen may target another creature of her controller; Giant Growth remains on top of the new base, and a tapped Queen cannot activate again (CR 613.4b, 613.4c).
+[Bot1 Deck]
+Sorceress Queen
+Black Lotus
+Mox Emerald
+Ornithopter
+Giant Growth
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Sorceress Queen.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sorceress Queen.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 3
+? Bot1.Battlefield.Ornithopter.Toughness = 5
+! Bot1.Battlefield.Sorceress Queen.Activate(Bot1.Battlefield.Ornithopter)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2

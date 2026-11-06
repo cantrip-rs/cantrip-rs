@@ -26,6 +26,7 @@ Bot2.Hand.Mox Pearl.Cast
 [T3 Bot1.Main1]
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 Bot1.Hand.Bone Shards.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Modes(Discard a card)
 Bot1.Choose(Gabriel Lorca, Mirror Menace)
 Bot1.Pass
 Bot2.Pass

@@ -33,9 +33,14 @@ Bot1.Pass
 Bot2.Pass
 ? Bot2.Life = 16
 ? Bot1.Mana =
-! Bot1.Hand.Village Rites.Cast
+Bot1.Hand.Village Rites.Cast(Ability: Without paying)
+? Bot1.Hand.Village Rites.Colors = Black
+? Bot1.Life = 20
+? Bot1.Mana =
+? Stack.Count = 0
 [T3 Bot1.Main1]
 Bot1.Hand.Ornithopter.Cast(Ability: Without paying)
+Bot1.Pass
 Bot1.Hand.Village Rites.Cast(Ability: Without paying)
 Bot1.Choose(Ornithopter)
 

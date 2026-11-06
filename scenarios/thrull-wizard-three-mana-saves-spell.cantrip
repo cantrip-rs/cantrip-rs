@@ -1,0 +1,45 @@
+# A black spell's controller can pay three generic mana rather than black to save it (CR 118.12a).
+[Bot1 Deck]
+Black Lotus
+Thrull Wizard
+Mox Jet
+Mox Pearl
+Island x16
+[Bot2 Deck]
+Mox Jet
+Black Lotus
+Dark Ritual
+Island x17
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Thrull Wizard.Cast
+? Bot1.Mana =
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Dark Ritual.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Thrull Wizard.Activate(Stack.Dark Ritual)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Pass
+Bot1.Pass
+! Bot2.PayCost
+Bot2.Decline
+Bot2.PayCost
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+? Bot2.Mana = {B}{B}{B}
+[T2 Bot2.Main2]
+[Expect]
+Bot2.Mana =
+Bot2.Graveyard = Dark Ritual; Black Lotus

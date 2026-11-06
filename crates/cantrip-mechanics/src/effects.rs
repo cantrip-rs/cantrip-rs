@@ -340,9 +340,9 @@ pub fn counters_on_each_of_subtype_you_control(g: &mut dyn Game, item: &StackIte
 
 /// "Other [subtype]s you control gain [keywords] until end of turn" (CR 611.2, 611.2c, 702): every permanent with the subtype that `item`'s
 /// controller controls as it resolves but its source, the subtype read through the words of the source's text (CR 612.2), and none that
-/// enters later. `SUBTYPE` is a `Subtype` as `u16` (`lands::sub`), `KEYWORDS` a `Keywords` as `u64` (`Keywords::of(&[Keyword::Flying]).0`).
+/// enters later. `SUBTYPE` is a `Subtype` as `u16` (`lands::sub`), `KEYWORDS` a `Keywords` as `u128` (`Keywords::of(&[Keyword::Flying]).0`).
 /// Cosmic Spider-Man (Spiders, five keywords) and Vulture, Scheming Scavenger (Villains, flying) print it.
-pub fn other_of_subtype_you_control_gain_until_end_of_turn<const SUBTYPE: u16, const KEYWORDS: u64>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+pub fn other_of_subtype_you_control_gain_until_end_of_turn<const SUBTYPE: u16, const KEYWORDS: u128>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let word = g.words(item.object).subtype(crate::lands::printed(SUBTYPE));
     let others: Vec<ObjectId> =
         g.permanents_of(item.controller).into_iter().filter(|&id| id != item.object && g.chars(id).has_subtype(word)).collect();
@@ -606,6 +606,8 @@ pub fn loot(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// graveyard, or exile by a madness replacement), none for an empty hand. Ninja's Blades loses the damaged player life equal to its mana value.
 pub fn loot_discarding(g: &mut dyn Game, player: PlayerId, source: ObjectId) -> Result<Vec<ObjectId>, Suspend> {
     g.draw(player, 1);
+    // A draw replacement may change state without recording an event (CR 603.8, 608.2c).
+    g.end_sentence();
     let chosen = crate::choose_from_hand(g, player, source, 1)?;
     Ok(g.discard_together(&chosen))
 }
@@ -857,16 +859,13 @@ pub fn each_player_may_discard_hand_and_draw_seven(g: &mut dyn Game, item: &Stac
 /// "Target player gains N life" (CR 119.3, 608.2b): the first targeted player gains N life if still legal. Healing Salve,
 /// Kenrith, the Returned King and Titan of Industry print it.
 pub fn target_player_gains<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(player) = crate::targets::player(g, item, 0) {
-        g.gain_life(player, N);
-    }
-    Ok(())
+    target_player_gains_life(g, item, N)
 }
 
 /// "Target player gains X life": Alabaster Potion and Stream of Life (also prepared by Infirmary Healer).
 pub fn target_player_gains_x_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some(player) = crate::targets::player(g, item, 0) {
-        g.gain_life(player, item.x as i32);
+        g.gain_life(player, item.x.min(i32::MAX as u32) as i32);
     }
     Ok(())
 }
@@ -908,9 +907,16 @@ pub fn gain_three_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
 }
 
 /// "You gain that much life" as a triggered ability (CR 119.3): the amount the trigger carries in `data[0]`. Bloodthirsty
-/// Conqueror (life lost) and Metropolis Reformer (damage dealt to it) print it.
+/// Conqueror (life lost) prints it. Damage uses gain_matched_damage_life instead.
 pub fn gain_that_much_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    gain_life(g, item, item.data[0] as i32)
+    gain_life(g, item, item.data[0].min(i32::MAX as u32) as i32)
+}
+
+/// Gain the bounded quantity frozen by `.damage_amount()` from the matched
+/// damage events. This has no legacy `data[0]` fallback.
+pub fn gain_matched_damage_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.gain_life(item.controller, item.matched_damage_amount().min(i32::MAX as u32) as i32);
+    Ok(())
 }
 
 /// "You gain 1 life" as a triggered or activated ability. Koth of the Homestead and Medic's Kitesail use this callback.
@@ -1012,6 +1018,30 @@ pub fn ping_subject_controller<const N: u32>(g: &mut dyn Game, item: &StackItem)
         let controller = g.controller(subject);
         g.damage(item.object, Target::Player(controller), N);
     }
+    Ok(())
+}
+
+/// Compatibility name for `ping_subject_controller`: the trigger's permanent subject identifies the controller.
+pub fn damage_subject_controller<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    ping_subject_controller::<N>(g, item)
+}
+
+/// "This source deals 1 damage to you" (CR 120.3, 608.2h): use the ability's controller.
+/// City of Brass, Serendib Efreet, Mana Vault, Callous Inspector and Chandra's emblem print it.
+pub fn source_deals_one_to_controller(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.damage(item.object, Target::Player(item.controller), 1);
+    Ok(())
+}
+
+/// At the beginning of enchanted permanent's controller's upkeep, this Aura deals N damage to that player.
+/// Cursed Land, Feedback, Wanderlust and Warp Artifact print it (CR 503.1a, 608.2h).
+/// Pair the matcher and effect so its host subject and saved upkeep player have one shared contract.
+pub const fn enchanted_permanents_upkeep_damage<const N: u32>(text: &'static str) -> AbilityDef {
+    triggered(crate::triggers::ENCHANTED_PERMANENTS_CONTROLLERS_UPKEEP_HOST, damage_upkeep_player::<N>, text)
+}
+
+fn damage_upkeep_player<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.damage(item.object, Target::Player(PlayerId(item.data[0] as u8)), N);
     Ok(())
 }
 
@@ -1265,6 +1295,22 @@ pub fn may_pay_to_untap_self(g: &mut dyn Game, item: &StackItem, payment: Cost) 
     Ok(())
 }
 
+/// "You may pay {3}. If you do, untap target permanent" (CR 118.12, 608.2b, 608.2c, 701.26).
+/// Hematite Talisman and Onyx Talisman print this. The sole target was checked when resolution began;
+/// mana abilities used to pay can change its legality or remove its incarnation before the untap.
+pub fn may_pay_three_to_untap_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    static QUESTION: Question = Question::new("Pay", "pay {cost} to untap target permanent?", "", "Pay {cost}", "Decline");
+    let paid = g.may_pay(item.controller, item.object, item.object, cost("{3}"), &QUESTION)?;
+    g.end_sentence();
+    if paid {
+        if let Target::Object(target) = g.state().target(item, 0) {
+            g.untap(target);
+        }
+        g.end_sentence();
+    }
+    Ok(())
+}
+
 /// "Sacrifice this [permanent] unless you pay [cost]" (CR 608.2c, 701.21a, 118.1): the resolving ability's controller pays
 /// `payment` or sacrifices the source. Arcades Sabboth and Phantasmal Forces print it at the beginning of their controller's upkeep.
 pub fn sacrifice_this_unless_pay(g: &mut dyn Game, item: &StackItem, payment: Cost) -> Result<(), Suspend> {
@@ -1285,9 +1331,7 @@ pub fn untap_self(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// Emrakul, the Exigent Doom's cast trigger and Zacama, Primal Calamity's enters trigger print it.
 pub fn untap_all_lands_you_control(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let lands: Vec<ObjectId> = g.permanents_of(item.controller).into_iter().filter(|&id| g.chars(id).is(CardType::Land)).collect();
-    for land in lands {
-        g.untap(land);
-    }
+    g.untap_together(&lands);
     Ok(())
 }
 
@@ -1324,9 +1368,8 @@ pub fn tap_targets(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// "Untap [N] target [permanents]" (CR 701.26, 608.2b): each target that is still legal as the ability resolves. Argothian
 /// Elder, Candelabra of Tawnos and Garruk, Curse Breaker (for lands), Formidable Speaker, Kiora, Behemoth Beckoner, Voltaic Key, Manifold Key, Earthcraft, Hapatra, the Desert Frost and Deceiver Exarch and Divining Duelist (as a mode) print it.
 pub fn untap_targets(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    for permanent in crate::targets::legal_objects(g, item) {
-        g.untap(permanent);
-    }
+    let permanents = crate::targets::legal_objects(g, item);
+    g.untap_together(&permanents);
     Ok(())
 }
 
@@ -1648,6 +1691,14 @@ pub fn damage_target_and_you<const TARGET: u32, const YOU: u32>(g: &mut dyn Game
     Ok(())
 }
 
+/// The source deals damage to a target and to itself in the same instruction (CR 608.2c, 120.4).
+/// Psionic Entity and the ability granted by Psionic Sliver use this recipe.
+pub fn damage_target_and_source<const TARGET: u32, const SOURCE: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let target = g.state().target(item, 0);
+    g.damage_together(&[(item.object, target, TARGET), (item.object, Target::Object(item.object), SOURCE)]);
+    Ok(())
+}
+
 /// "[This source] deals `damage` damage to [a target] and you gain `life` life" (CR 120.3, 119.1): the first target, if it is
 /// still legal (CR 608.2b), is dealt the damage by the resolving object (as it last was if it has left, CR 113.7a). The gain,
 /// a fixed amount that does not use the target, is made whenever this resolves: an item with that target alone never resolves
@@ -1907,10 +1958,10 @@ pub fn becomes_subtype_until_end_of_turn(g: &mut dyn Game, source: ObjectId, tar
 
 /// "Put `COUNTERS` +1/+1 counters on target creature. It gains [keywords] until end of turn" (CR 122.1, 611.2a, 608.2c): the first
 /// target, if it is still a legal target (CR 608.2b), gets the counters and then, as a second instruction, the keywords for the rest of
-/// the turn; `KEYWORDS` is a `Keywords` as `u64` (`Keywords::of(&[Keyword::Lifelink]).0`). With no target chosen (an "up to one")
+/// the turn; `KEYWORDS` is a `Keywords` as `u128` (`Keywords::of(&[Keyword::Lifelink]).0`). With no target chosen (an "up to one")
 /// nothing happens. Bard the Bowman (lifelink), Thranduil's Company (two counters, vigilance), Tam's Resistance (vigilance) and
 /// Fateshaper Aspirant's second mode (vigilance and indestructible) print it.
-pub fn plus_one_counters_on_first_target_that_gains_until_end_of_turn<const COUNTERS: i32, const KEYWORDS: u64>(
+pub fn plus_one_counters_on_first_target_that_gains_until_end_of_turn<const COUNTERS: i32, const KEYWORDS: u128>(
     g: &mut dyn Game,
     item: &StackItem,
 ) -> Result<(), Suspend> {
@@ -2319,6 +2370,64 @@ pub fn return_exiled_to_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), S
     g.return_to_hand(&exiled);
     Ok(())
 }
+
+/// "Target player gains N life" (CR 119.3, 608.2b): the first targeted player gains N life if still legal.
+/// Healing Salve, Alabaster Potion and Stream of Life print it with different amounts.
+pub fn target_player_gains_life(g: &mut dyn Game, item: &StackItem, n: i32) -> Result<(), Suspend> {
+    if let Some(player) = crate::targets::player(g, item, 0) {
+        g.gain_life(player, n);
+    }
+    Ok(())
+}
+
+/// "Enchanted/equipped creature gets +P/+T until end of turn" (CR 608.2h, 611.2a): use the attachment as the ability
+/// resolves, or as the source last existed, and affect only that same object if it remains on the battlefield.
+/// Firebreathing and Umezawa's Jitte print this recipe.
+pub fn attached_creature_gets<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = g.obj(item.object).attached_to {
+        crate::pump(g, item.object, creature, P, T);
+    }
+    Ok(())
+}
+
+/// "This creature gets +P/+T until end of turn" (CR 611.2a). Fallen Angel, Astute Terraformer and Super-Skrull print it.
+pub fn pump_self<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    this_gets::<P, T>(g, item)
+}
+
+/// "Target creature has base power and toughness P/T until end of turn" (CR 613.4b, 611.2a): the first target,
+/// if still legal, gets a layer 7b setting effect. Sorceress Queen, Multiply by Zero, Perfected Theory and Quandrix Charm print it.
+pub fn set_first_target_base_pt<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = crate::targets::object(g, item, 0) {
+        g.add_effect(item.object, creature, EffectKind::SetPt(P, T), Duration::EndOfTurn);
+    }
+    Ok(())
+}
+
+/// Damage equal to the number of cards in a player's hand (CR 608.2h).
+/// Storm Seeker and Emberwilde Captain use this amount.
+pub fn damage_for_cards_in_hand(q: &dyn Query, player: PlayerId) -> u32 {
+    u32::try_from(crate::cards_in_hand(q, player)).unwrap_or(u32::MAX)
+}
+
+/// Add N colorless mana (CR 106.4). Su-Chi, Konstrari Charm and Ugin, Eye of the Storms use this effect.
+pub fn add_colorless<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.add_mana(item.controller, Mana::C, N);
+    Ok(())
+}
+
+/// Switch a creature's power and toughness until end of turn (CR 613.4d, 611.2a).
+/// Transmutation and Twisted Image print this effect.
+pub fn switch_power_toughness_this_turn(g: &mut dyn Game, source: ObjectId, creature: ObjectId) {
+    g.add_effect(source, creature, EffectKind::SwitchPt, Duration::EndOfTurn);
+}
+
+/// Triskelion and Walking Ballista both remove a +1/+1 counter to deal one damage to any target (CR 602.2, 115.4).
+pub const REMOVE_PLUS_ONE_TO_DEAL_ONE: AbilityDef = ability(
+    remove_counters(CounterKind::PlusOne, 1),
+    damage_first_target::<1>,
+    "Remove a +1/+1 counter from this creature: It deals 1 damage to any target.",
+).targets(&[crate::targets::ANY]);
 
 /// "Permanents your opponents control lose hexproof and indestructible until end of turn" (CR 611.2c, 702.11, 702.12): the permanents
 /// those opponents control as the ability resolves, and only those, so one that arrives later keeps both. Shadowspear and The Fire

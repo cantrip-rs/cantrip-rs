@@ -12,16 +12,10 @@ fn counters_and_trample(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspen
     Ok(())
 }
 
-/// "Add {C}{C}{C}." (CR 106.4): a spell's effect, not a mana ability, so it uses the stack.
-fn add_colorless(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.add_mana(item.controller, Mana::C, 3);
-    Ok(())
-}
-
 static MODAL: ModalDef = modes(&[
     mode(effects::damage_first_target::<6>, "Konstrari Charm deals 6 damage to target creature with flying.").targets(&[targets::CREATURE_WITH_FLYING]),
     mode(counters_and_trample, "Put two +1/+1 counters on target creature. It gains trample until end of turn.").targets(&[targets::CREATURE]),
-    mode(add_colorless, "Add {C}{C}{C}."),
+    mode(effects::add_colorless::<3>, "Add {C}{C}{C}."),
 ]);
 
 pub static CARD: CardDef = CardDef { spell: Some(SpellDef::MODAL), modal: Some(&MODAL), ..oracle::KONSTRARI_CHARM };

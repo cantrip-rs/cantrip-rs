@@ -1,0 +1,8 @@
+{
+  "name": "Kei Takahashi",
+  "manaCost": "{2}{G}{W}",
+  "type": "Legendary Creature — Human Cleric",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{T}: Prevent the next 2 damage that would be dealt to target creature this turn."
+}

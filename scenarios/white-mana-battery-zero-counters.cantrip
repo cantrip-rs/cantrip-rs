@@ -1,0 +1,30 @@
+# White Mana Battery can tap with no charge counters and adds one white mana.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+White Mana Battery
+Island
+Island
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.White Mana Battery.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.White Mana Battery.Activate(Ability: Remove any number; X: 0)
+Bot1.Pass
+? Bot1.Mana = {W}
+[Expect]
+Bot1.Battlefield.White Mana Battery.Tapped = true
+Bot1.Battlefield.White Mana Battery.Counters.Charge = (absent)

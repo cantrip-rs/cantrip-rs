@@ -29,6 +29,7 @@ Bot1.Pass
 ! Bot1.Battlefield.Masked Meower.Activate
 [T3 Bot1.Main1]
 Bot1.Battlefield.Masked Meower.Activate
+Bot1.Choose(Discard 1 card)
 Bot1.Choose(Plains)
 
 [Expect]

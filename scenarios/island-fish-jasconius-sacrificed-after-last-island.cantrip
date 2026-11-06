@@ -1,0 +1,32 @@
+# Losing the controller's last Island causes sacrifice even while the opponent controls an Island (CR 603.8, 701.21a).
+[Bot1 Deck]
+Island
+Black Lotus
+Black Lotus
+Island Fish Jasconius
+Zuran Orb
+Mountain x20
+[Bot2 Deck]
+Island
+Mountain x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Zuran Orb.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Island Fish Jasconius.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Island Fish Jasconius.Tapped = false
+Bot1.Battlefield.Zuran Orb.Activate
+Bot1.Choose(Island)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Island Fish Jasconius = (absent)
+Bot1.Graveyard.Island Fish Jasconius.Power = 6
+Bot2.Battlefield.Island.Types = Land

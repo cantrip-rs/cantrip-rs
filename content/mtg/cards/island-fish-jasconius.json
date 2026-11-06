@@ -1,0 +1,8 @@
+{
+  "name": "Island Fish Jasconius",
+  "manaCost": "{4}{U}{U}{U}",
+  "type": "Creature — Fish",
+  "power": 6,
+  "toughness": 8,
+  "oracleText": "This creature doesn't untap during your untap step.\nAt the beginning of your upkeep, you may pay {U}{U}{U}. If you do, untap this creature.\nThis creature can't attack unless defending player controls an Island.\nWhen you control no Islands, sacrifice this creature."
+}

@@ -1,0 +1,31 @@
+# Two white mana cannot pay {1}{B}, even with a legal black spell to target (CR 602.2b).
+[Bot1 Deck]
+Black Lotus
+Thrull Wizard
+Mox Jet
+Mox Pearl
+Mox Pearl
+Dark Ritual
+Island x14
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Thrull Wizard.Cast
+? Bot1.Mana =
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+! Bot1.Battlefield.Thrull Wizard.Activate(Stack.Dark Ritual; Mana: short)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {W}{W}{B}{B}{B}
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Dark Ritual; Black Lotus

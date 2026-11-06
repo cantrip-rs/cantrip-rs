@@ -1,0 +1,38 @@
+# Yeti may target its own first striker: each creature deals lethal damage to the other, because neither damage is combat damage (CR 704.3, 702.7b).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Karplusan Yeti
+Halberdier
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Karplusan Yeti.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Halberdier.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Karplusan Yeti.Activate(Bot2)
+! Bot1.Battlefield.Karplusan Yeti.Activate(Mox Pearl)
+Bot1.Battlefield.Karplusan Yeti.Activate(Halberdier)
+? Bot1.Battlefield.Karplusan Yeti.Tapped = true
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Karplusan Yeti = (absent)
+Bot1.Graveyard.Count = 4
+Bot1.Graveyard.Halberdier.Power = 3
+Bot1.Graveyard.Karplusan Yeti.Power = 3

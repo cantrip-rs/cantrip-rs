@@ -1,0 +1,53 @@
+# A red spell does not trigger Sol'kanar, while its controller's black and red spell does (CR 603.2).
+[Bot1 Deck]
+Sol'kanar the Swamp King
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Lightning Bolt
+Goblin Deathraiders
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Sol'kanar the Swamp King.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack = Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Goblin Deathraiders.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 17
+Bot1.Battlefield.Goblin Deathraiders.Power = 3

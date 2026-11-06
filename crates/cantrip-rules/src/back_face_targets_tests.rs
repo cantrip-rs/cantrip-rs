@@ -58,7 +58,7 @@ fn game(artifact: bool) -> (Game, ObjectId) {
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// The ways the card is offered to be cast with priority: 0 the front face, `WAY_BACK_FACE` the back.
@@ -81,7 +81,7 @@ fn during_resolution(artifact: bool) -> Vec<u8> {
     let (serial, controller) = game.state.stack.last().map(|i| (i.serial, i.controller)).expect("the caster");
     game.state.frame_push(cantrip_state::Frame::new(cantrip_state::FrameKind::Resolve { serial }));
     let frame = game.state.agenda.len() - 1;
-    let mut resolving = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+    let mut resolving = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     let mut ways: Vec<u8> = cast_ways_during_resolution(&mut resolving, card, controller).iter().map(|w| w.way).collect();
     ways.sort_unstable();
     ways

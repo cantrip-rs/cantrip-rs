@@ -1,7 +1,7 @@
 # Fountainport's second and third abilities. The ability is offered only when the mana on hand and in untapped sources can
 # pay it, so mana is spent in an earlier step (it empties between steps, CR 500.4) to leave exactly too little.
 # Turn 3: Island tapped in the upkeep leaves only Sol Ring's {C}{C} against {3}: the Fish ability is refused (so are the
-# sacrifice ability, with no token, and the Treasure ability). Turn 5: a second Island makes three untapped sources
+# an attempted sacrifice ability with no token rolls back, and the Treasure ability). Turn 5: a second Island makes three untapped sources
 # (Island, Island, Sol Ring): {3}, {T}, pay 1 life makes a 1/1 blue Fish (life 19). Turn 7: Sol Ring and the second Island
 # tapped in the upkeep leave one Island against {2}, so the draw is refused with a token in play (the Fish); a third Island
 # makes exactly {2}, and {2}, {T}, sacrifice a token draws a card, sacrificing the Fish; Sol Ring, not a token, stays.
@@ -28,14 +28,26 @@ Bot1.Battlefield.Island.Activate
 [T3 Bot1.Main1]
 Bot1.Hand.Fountainport.Play
 ! Bot1.Battlefield.Fountainport.Activate(Ability: Fish; Mana: short)
-! Bot1.Battlefield.Fountainport.Activate(Ability: Sacrifice a token)
+Bot1.Battlefield.Fountainport.Activate(Ability: Sacrifice a token)
+Bot1.Battlefield.Sol Ring.Activate
+? Bot1.Battlefield.Sol Ring.Tapped = false
+? Bot1.Mana =
+? Bot1.Battlefield.Fountainport.Tapped = false
+? Bot1.Life = 20
+? Stack.Count = 0
 ! Bot1.Battlefield.Fountainport.Activate(Ability: Treasure; Mana: short)
 [T5 Bot1.Main1]
 Bot1.Hand.Island.Play
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Island#2.Activate
 Bot1.Battlefield.Sol Ring.Activate
-! Bot1.Battlefield.Fountainport.Activate(Ability: Sacrifice a token)
+Bot1.Battlefield.Fountainport.Activate(Ability: Sacrifice a token)
+Bot1.Choose(Assign mana)
+Bot1.Choose(Assign mana)
+? Bot1.Mana = {U}{U}{C}{C}
+? Bot1.Battlefield.Fountainport.Tapped = false
+? Bot1.Life = 20
+? Stack.Count = 0
 Bot1.Battlefield.Fountainport.Activate(Ability: Fish)
 [T5 Bot1.Main2]
 ? Bot1.Life = 19

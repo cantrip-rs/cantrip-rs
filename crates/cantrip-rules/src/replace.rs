@@ -13,6 +13,7 @@
 use cantrip_api::*;
 
 use crate::layers::live;
+use crate::actions::WithWords;
 use crate::Cx;
 
 /// Where a replacement effect is defined.
@@ -157,6 +158,7 @@ pub(crate) fn zone_change_possible(cx: &Cx, change: &ZoneChange) -> bool {
 /// but a move there of the object as it is, under its controller (Mox Diamond's "put it into its owner's graveyard").
 pub(crate) fn sent_instead(cx: &Cx, mut change: ZoneChange, instead: Zone) -> ZoneChange {
     change.to = instead;
+    change.put_by = None;
     change.tapped = false;
     change.controller = cx.s().obj(change.object).controller;
     change.counters_by = change.controller;
@@ -252,6 +254,7 @@ fn regeneration_applies(cx: &Cx, z: &ZoneChange) -> bool {
         && z.from.is(ZoneKind::Battlefield)
         && z.to.is(ZoneKind::Graveyard)
         && cx.s().effects.iter().any(|e| e.kind == EffectKind::RegenerationShield && e.affected == z.object)
+        && !crate::static_rules::cant_be_regenerated(cx, cx.cards(), z.object)
 }
 
 /// CR 122.1c: "if this permanent would be destroyed as the result of an effect, instead remove a shield counter from it": a
@@ -344,11 +347,12 @@ static NO_REPLACEMENT: ReplacementDef = ReplacementDef {
     applies: nothing_applies,
     apply: nothing_done,
     then: None,
+    damage: None,
     optional: None,
     in_graveyard: false,
 };
 
-static NO_PREVENTION: PreventionDef = PreventionDef { hint: "", applies: nothing_prevented, amount: None };
+static NO_PREVENTION: PreventionDef = PreventionDef { hint: "", applies: nothing_prevented, amount: PreventionAmount::All };
 
 /// `id`'s printed replacement effect `index` (`printed_replacements`), and the link it is asked with.
 fn printed_replacement(cx: &Cx, id: ObjectId, index: u8) -> &'static ReplacementDef {
@@ -462,6 +466,13 @@ fn affected(cx: &Cx, proposal: &Proposal) -> PlayerId {
 /// Every effect that applies to the event and has not been applied to it yet (CR 614.5), in a deterministic order:
 /// by source, then by the order the card lists them.
 fn candidates(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Option<&Entering>, commander_declined_to: [Option<Zone>; 8]) -> Vec<Candidate> {
+    candidates_for(cx, proposal, applied, entry, commander_declined_to, &|_| Some(*proposal))
+}
+
+/// Formation may retain independent replacement histories within one source/recipient event (CR 614.5, 700.1).
+/// Each effect is tested against exactly the quantity whose lineage still permits that effect. Other proposal kinds
+/// use the original proposal unchanged; availability, source text, redirection legality and candidate order stay here.
+fn candidates_for(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Option<&Entering>, commander_declined_to: [Option<Zone>; 8], select: &dyn Fn(Applied) -> Option<Proposal>) -> Vec<Candidate> {
     // Each effect's own text, its source's now (`Cx::own_text`).
     let _others = cx.others_text();
     // Damage that has been prevented in full is no event any more: nothing is left to replace (CR 615.1); nor is a draw that
@@ -511,7 +522,7 @@ fn candidates(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Option<&
         let controller = if at == At::Graveyard { cx.s().obj(id).owner } else { controller_of(cx, id, proposal) };
         for (index, (def, by)) in printed_replacements(cx, id).enumerate() {
             let index = index as u8;
-            let asker = Asker { source: id, controller, by, spell: false };
+            let asker = Asker { instance: None, source: id, controller, by, spell: false };
             let functions = match at {
                 At::Field => !def.in_graveyard,
                 At::Own => def.own_everywhere,
@@ -520,21 +531,24 @@ fn candidates(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Option<&
             if def.kind != kind || !functions || applied.contains(&(id, index, Origin::Printed)) {
                 continue;
             }
-            if (def.applies)(cx, &asker, proposal)
-                && valid_redirection(cx, proposal, |after| (def.apply)(cx, &asker, after))
+            let Some(selected) = select((id, index, Origin::Printed)) else { continue };
+            if (def.applies)(cx, &asker, &selected)
+                && valid_redirection(cx, &selected, |after| (def.apply)(cx, &asker, after))
             {
                 found.push(Candidate { source: id, index, origin: Origin::Printed });
             }
         }
         // Its static abilities' prevention effects function only while it is on the battlefield (CR 604.1).
-        if let Proposal::Damage(d) = proposal
+        if let Proposal::Damage(_) = proposal
             && preventable
             && at == At::Field
         {
             for (index, (def, by)) in printed_preventions(cx, id).enumerate() {
                 let index = index as u8;
-                let asker = Asker { source: id, controller, by, spell: false };
-                if !applied.contains(&(id, index, Origin::Prevention)) && (def.applies)(cx, &asker, d) {
+                let asker = Asker { instance: None, source: id, controller, by, spell: false };
+                if !applied.contains(&(id, index, Origin::Prevention))
+                    && let Some(Proposal::Damage(selected)) = select((id, index, Origin::Prevention))
+                    && (def.applies)(cx, &asker, &selected) {
                     found.push(Candidate { source: id, index, origin: Origin::Prevention });
                 }
             }
@@ -574,8 +588,10 @@ fn candidates(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Option<&
                     && !applied.contains(&(e.source, index, Origin::GrantedPrevention(e.timestamp)))
                 {
                     let def = &cards.get(card).granted_preventions[index as usize];
-                    let asker = Asker { source: e.source, controller: e.controller, by: None, spell: false };
-                    if (def.applies)(cx, &asker, e.affected, d) {
+                    let asker = Asker { instance: None, source: e.source, controller: e.controller, by: None, spell: false };
+                    let reads = WithWords { q: cx, source: e.source, words: e.words };
+                    if let Some(Proposal::Damage(selected)) = select((e.source, index, Origin::GrantedPrevention(e.timestamp)))
+                        && (def.applies)(&reads, &asker, e.affected, &selected) {
                         found.push(Candidate { source: e.source, index, origin: Origin::GrantedPrevention(e.timestamp) });
                     }
                 }
@@ -590,9 +606,11 @@ fn candidates(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Option<&
         if def.kind != kind || applied.contains(&(e.source, index, Origin::Granted(e.timestamp))) {
             continue;
         }
-        let asker = Asker { source: e.source, controller: e.controller, by: None, spell: false };
-        if (def.applies)(cx, &asker, e.affected, proposal)
-            && valid_redirection(cx, proposal, |after| (def.apply)(cx, &asker, e.affected, after))
+        let asker = Asker { instance: None, source: e.source, controller: e.controller, by: None, spell: false };
+        let reads = WithWords { q: cx, source: e.source, words: e.words };
+        let Some(selected) = select((e.source, index, Origin::Granted(e.timestamp))) else { continue };
+        if (def.applies)(&reads, &asker, e.affected, &selected)
+            && valid_redirection(cx, &selected, |after| (def.apply)(&reads, &asker, e.affected, after))
         {
             found.push(Candidate { source: e.source, index, origin: Origin::Granted(e.timestamp) });
         }
@@ -675,6 +693,7 @@ fn candidates(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Option<&
     if let Proposal::Damage(d) = proposal
         && let Some(id) = shield_damage_applies(cx, d)
         && !applied.contains(&(id, 0, Origin::ShieldCounter))
+        && select((id, 0, Origin::ShieldCounter)).is_some()
     {
         found.insert(0, Candidate { source: id, index: 0, origin: Origin::ShieldCounter });
     }
@@ -686,6 +705,7 @@ fn candidates(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Option<&
         && !found.is_empty()
         && let Some(by) = crate::ops::protection_prevents(cx, d.source, d.target, d.combat)
         && !applied.contains(&(by, 0, Origin::Protection))
+        && select((by, 0, Origin::Protection)).is_some()
     {
         found.insert(0, Candidate { source: by, index: 0, origin: Origin::Protection });
     }
@@ -758,7 +778,7 @@ fn hint_of(cx: &Cx, proposal: &Proposal, c: &Candidate) -> &'static str {
 fn prevents_all(cx: &Cx, c: &Candidate) -> bool {
     match c.origin {
         Origin::Protection => true,
-        Origin::Prevention => printed_prevention(cx, c.source, c.index).0.amount.is_none(),
+        Origin::Prevention => matches!(printed_prevention(cx, c.source, c.index).0.amount, PreventionAmount::All),
         // One with more to do (CR 615.5) is told what it prevented, so which one applies first changes what happens.
         Origin::GrantedPrevention(timestamp) => cx.s().effects.iter().any(|e| {
             e.timestamp == timestamp
@@ -813,10 +833,31 @@ fn takes(cx: &mut Cx, you: PlayerId, source: ObjectId, question: &'static Questi
 /// Runs what an effect does to the game as it applies (`ReplacementThen`): the modified event, every part of which meets only
 /// the effects that have not yet had their opportunity at the event (CR 614.5), `applied`. What it does, the effect's
 /// controller does (CR 609.1): the counters it puts are theirs (`Cx::doer`).
-fn run_then(cx: &mut Cx, applied: &[Applied], controller: PlayerId, then: impl FnOnce(&mut Cx)) {
+fn run_then(cx: &mut Cx, applied: &[Applied], source: ObjectId, controller: PlayerId, then: impl FnOnce(&mut Cx)) {
     let outer = std::mem::replace(&mut cx.lineage, applied.to_vec());
-    cx.acting_as(controller, then);
+    callback_instructions(cx, source, |cx| cx.acting_as(controller, then));
     cx.lineage = outer;
+}
+
+/// A replacement's additional instructions are its own card code (CR 614.6),
+/// not extra instructions of the spell whose event is being changed. Check that
+/// code at its own resolution depth: grouping a core event must not silently
+/// permit arbitrary unannounced changes inside its callbacks. Carry pending
+/// changes into it so an event or explicit sentence boundary judges the whole
+/// game, then restore the enclosing core instruction's bookkeeping.
+fn callback_instructions(cx: &mut Cx, source: ObjectId, callback: impl FnOnce(&mut Cx)) {
+    let outer = cx.g.check;
+    cx.g.check = crate::StateCheck { depth: 1, resolving: Some(source), due: outer.due, open: false, done: outer.done, judged: false };
+    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| callback(cx)));
+    let checked = std::mem::replace(&mut cx.g.check, outer);
+    if let Err(panic) = result { std::panic::resume_unwind(panic); }
+    // A callback may judge the caller's pending change, then make another. Its
+    // final `due` alone cannot tell whether that earlier change was judged.
+    if checked.judged { cx.state_judged(); }
+    if checked.due {
+        cx.g.check.due = true;
+        if checked.open || checked.done { cx.g.check.open = true; }
+    }
 }
 
 /// The counters a replacement effect gives a card arriving in a zone other than the battlefield (the void counter of
@@ -831,6 +872,18 @@ fn note_counters_by(before: &Proposal, after: &mut Proposal, controller: PlayerI
     }
 }
 
+/// Redirecting a move onto the battlefield is that replacement's instruction (CR 609.1, 614.1a), unless it names
+/// another player explicitly. Merely changing an entering permanent's controller does not change its putter.
+fn note_put_by(before: &Proposal, after: &mut Proposal, controller: PlayerId) {
+    if let (Proposal::ZoneChange(before), Proposal::ZoneChange(after)) = (before, after) {
+        if !after.to.is(ZoneKind::Battlefield) {
+            after.put_by = None;
+        } else if !before.to.is(ZoneKind::Battlefield) && after.put_by.is_none() {
+            after.put_by = Some(controller);
+        }
+    }
+}
+
 /// CR 614.9: an invalid redirection does nothing; it does not replace valid damage with no damage.
 /// Replacement functions are pure, so an invalid effect is neither offered nor consumed nor followed by its `then`.
 fn valid_redirection(q: &dyn Query, before: &Proposal, apply: impl FnOnce(&mut Proposal)) -> bool {
@@ -839,6 +892,17 @@ fn valid_redirection(q: &dyn Query, before: &Proposal, apply: impl FnOnce(&mut P
     apply(&mut after);
     let Proposal::Damage(changed) = after else { unreachable!("a replacement cannot change the event kind") };
     original.target == changed.target || damage_recipient(q, original.target) && damage_recipient(q, changed.target)
+}
+
+/// Partial redirection obeys the same recipient authority as whole redirection
+/// (CR 614.9). An impossible redirection neither reduces the original damage nor
+/// consumes its once-only effect.
+fn valid_damage_components(q: &dyn Query, before: &Proposal, components: &[DamageComponent]) -> bool {
+    let Proposal::Damage(original) = before else { return components.is_empty() };
+    components.iter().all(|c| match *c {
+        DamageComponent::Redirected { target, amount } if amount > 0 => damage_recipient(q, original.target) && damage_recipient(q, target),
+        _ => true,
+    })
 }
 
 fn damage_recipient(q: &dyn Query, target: Target) -> bool {
@@ -863,13 +927,31 @@ fn apply(cx: &mut Cx, proposal: &mut Proposal) {
 /// damage, noting in `uses` the prevention effects that have more to do once its event has been dealt (`PreventionUse`).
 /// Each effect is its own text, its source's now, though a resolving ability's instructions made the event (`Cx::own_text`).
 fn apply_to(cx: &mut Cx, proposal: &mut Proposal, entry: Option<&mut Entering>, uses: Option<&mut Vec<PreventionUse>>) {
-    cx.own_text(false, |cx| apply_each(cx, proposal, entry, uses));
+    let added = cx.instruction(|cx| cx.own_text(false, |cx| apply_each(cx, proposal, entry, uses, false, None)), |_| true);
+    assert!(added.is_none(), "damage expansion is formed with its entire damage event");
 }
 
-fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Entering>, mut uses: Option<&mut Vec<PreventionUse>>) {
+enum DamageProgress {
+    Expanded { added: Vec<DamageComponent>, applied: Vec<Applied> },
+}
+
+fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Entering>, mut uses: Option<&mut Vec<PreventionUse>>, group_once: bool, mut selected: Option<Candidate>) -> Option<DamageProgress> {
     let mut applied: Vec<Applied> = cx.lineage.clone();
     let mut commander_declined_to: [Option<Zone>; 8] = [None; 8];
     loop {
+        if let Proposal::ZoneChange(z) = proposal && !z.to.is(ZoneKind::Battlefield) {
+            z.put_by = None;
+        }
+        // A card's replacement can ask to regenerate directly (701.19b), as
+        // Clergy of the Holy Nimbus does. "Can't" also defeats that request.
+        // Clear it before looking for further replacements, so a shield counter
+        // can still replace destruction and the event remains a destruction.
+        if let Proposal::ZoneChange(z) = proposal {
+            if z.regenerated && (!z.destroy || crate::static_rules::cant_be_regenerated(cx, cx.cards(), z.object)) {
+                z.regenerated = false;
+                z.regeneration_shield = false;
+            }
+        }
         // An entering permanent is judged as it would exist with the changes of the replacements applied so far (CR 614.12).
         if let Proposal::ZoneChange(z) = *proposal {
             crate::ops::rejudge_entering(cx, &z);
@@ -882,18 +964,24 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
             if !placement.entering {
                 if !live(cx.s(), placement.object) || !cx.s().obj(placement.object).zone.is(ZoneKind::Battlefield) {
                     placement.counts = [0; CounterKind::COUNT];
-                    return;
+                    return None;
                 }
                 placement.controller = cx.s().obj(placement.object).controller;
             }
             placement.counts = without_banned(cx, placement.object, placement.controller, placement.counts);
             if placement.counts.iter().all(|&n| n <= 0) {
-                return;
+                return None;
             }
         }
-        let found = candidates(cx, proposal, &applied, entry.as_deref(), commander_declined_to);
+        let found = match selected.take() {
+            Some(candidate) => {
+                assert!(candidates(cx, proposal, &applied, entry.as_deref(), commander_declined_to).contains(&candidate), "selected damage effect still applies to its eligible quantity");
+                vec![candidate]
+            }
+            None => candidates(cx, proposal, &applied, entry.as_deref(), commander_declined_to),
+        };
         if found.is_empty() {
-            return;
+            return None;
         }
         let pick = if found.len() > 1 && !found.iter().all(|c| prevents_all(cx, c)) {
             let Some(pick) = choose(cx, proposal, &found) else { continue };
@@ -911,17 +999,19 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
         let Candidate { source, index, origin } = chosen;
         applied.push((source, index, origin));
         let start = *proposal;
+        let mut added = Vec::new();
         match origin {
             Origin::Printed => {
                 // Declined, it has had its opportunity, and the event goes on as it was (CR 614.5, 616.1).
                 if !printed_taken(cx, source, index, proposal) {
+                    if group_once { return Some(DamageProgress::Expanded { added, applied }); }
                     continue;
                 }
-                apply_printed(cx, proposal, source, index, &applied);
+                apply_printed(cx, proposal, source, index, &applied, &mut added);
             }
             Origin::Granted(timestamp) => {
                 let Some((&e, def)) = granted(cx, timestamp) else { continue };
-                apply_granted(cx, proposal, source, e, def, &applied, true);
+                apply_granted(cx, proposal, source, e, def, &applied, true, &mut added);
             }
             // "That player discards it, but exiles it instead of putting it into their graveyard" (CR 702.35a): the
             // graveyard is its owner's (CR 400.3), and so is the exile it goes to.
@@ -1007,6 +1097,7 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
             Origin::Regeneration => {
                 if let Proposal::ZoneChange(z) = proposal {
                     z.regenerated = true;
+                    z.regeneration_shield = true;
                 }
             }
             // CR 122.1c: the destruction never happens (CR 614.6); a shield counter is removed from the permanent instead
@@ -1041,9 +1132,23 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
             // (CR 616.1f).
             Origin::Prevention => {
                 let (def, by) = printed_prevention(cx, source, index);
-                let asker = Asker { source, controller: controller_of(cx, source, proposal), by, spell: false };
+                let asker = Asker { instance: None, source, controller: controller_of(cx, source, proposal), by, spell: false };
                 if let Proposal::Damage(d) = proposal {
-                    let amount = def.amount.map_or(d.amount, |how_much| how_much(&*cx, &asker, d).min(d.amount));
+                    let scope = DamageScope::of(d);
+                    let key = (source, index, origin);
+                    let amount = match def.amount {
+                        PreventionAmount::All => d.amount,
+                        PreventionAmount::Relative(how_much) => how_much(&*cx, &asker, d),
+                        PreventionAmount::Specific(how_much) => {
+                            let previous = cx.damage.as_ref().and_then(|c| c.allowance(key, scope));
+                            let (capacity, spent) =
+                                previous.unwrap_or_else(|| (how_much(&*cx, &asker, d).max(0), 0));
+                            if let Some(context) = cx.damage.as_mut() {
+                                context.freeze(key, scope, capacity);
+                            }
+                            capacity - spent
+                        }
+                    };
                     prevent(cx, d, amount, source);
                 }
             }
@@ -1093,6 +1198,12 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
                 }
             }
         }
+        if is_prevention(origin)
+            && let (Proposal::Damage(before), Proposal::Damage(after)) = (start, *proposal)
+        {
+            let spent = if origin == Origin::Prevention && matches!(printed_prevention(cx, source, index).0.amount, PreventionAmount::Specific(_)) { before.amount.saturating_sub(after.amount) } else { 0 };
+            if spent > 0 && let Some(context) = cx.damage.as_mut() { context.applied((source, index, origin), DamageScope::of(&before), spent); }
+        }
         unlink_if_sent_elsewhere(&start, proposal);
         if let Proposal::ZoneChange(z) = &mut *proposal {
             for declined in &mut commander_declined_to {
@@ -1101,6 +1212,7 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
                 }
             }
         }
+        if group_once || !added.is_empty() { return Some(DamageProgress::Expanded { added, applied }); }
     }
 }
 
@@ -1119,22 +1231,35 @@ fn printed_taken(cx: &mut Cx, source: ObjectId, index: u8, proposal: &Proposal) 
     takes(cx, controller, source, question)
 }
 
+/// Damage quantities are nonnegative even though their expression domain is
+/// signed (CR 107.1b). Normalize before expansion/continuation reads the result.
+fn normalize_damage(proposal: &mut Proposal) {
+    if let Proposal::Damage(d) = proposal { d.amount = d.amount.max(0); }
+}
+
 /// A source's printed effect, taken, applied to the event: what it changes of it, unless that is a redirection that can't be
 /// (CR 614.9), and what it does to the game as it applies (`run_then`).
-fn apply_printed(cx: &mut Cx, proposal: &mut Proposal, source: ObjectId, index: u8, applied: &[Applied]) {
+fn apply_printed(cx: &mut Cx, proposal: &mut Proposal, source: ObjectId, index: u8, applied: &[Applied], added: &mut Vec<DamageComponent>) {
     let def = printed_replacement(cx, source, index);
     let (apply, then) = (def.apply, def.then);
     let controller = printed_controller(cx, source, index, proposal);
-    let asker = Asker { source, controller, by: printed_link(cx, source, index), spell: false };
+    let asker = Asker { instance: None, source, controller, by: printed_link(cx, source, index), spell: false };
     let before = *proposal;
-    if !valid_redirection(&*cx, &before, |after| apply(&*cx, &asker, after)) {
-        return;
-    }
-    apply(&*cx, &asker, proposal);
+    let mut after = before;
+    apply(&*cx, &asker, &mut after);
+    normalize_damage(&mut after);
+    if !valid_redirection(&*cx, &before, |p| *p = after) { return; }
+    let components = if let (Some(damage), Proposal::Damage(before), Proposal::Damage(after)) = (def.damage, before, after) {
+        damage(&*cx, &asker, &before, &after)
+    } else { Vec::new() };
+    if !valid_damage_components(&*cx, &before, &components) { return; }
+    *proposal = after;
     note_counters_by(&before, proposal, controller);
+    note_put_by(&before, proposal, controller);
+    added.extend(components);
     if let Some(then) = then {
         let after = *proposal;
-        run_then(cx, applied, controller, |cx| then(cx, &asker, &before, &after));
+        run_then(cx, applied, source, controller, |cx| then(cx, &asker, &before, &after));
     }
 }
 
@@ -1149,21 +1274,28 @@ fn apply_granted(
     def: &'static GrantedReplacementDef,
     applied: &[Applied],
     use_up: bool,
+    added: &mut Vec<DamageComponent>,
 ) -> bool {
     let (apply, then) = (def.apply, def.then);
-    let asker = Asker { source, controller: e.controller, by: None, spell: false };
+    let asker = Asker { instance: None, source, controller: e.controller, by: None, spell: false };
     let before = *proposal;
-    if !valid_redirection(&*cx, &before, |after| apply(&*cx, &asker, e.affected, after)) {
-        return false;
-    }
-    apply(&*cx, &asker, e.affected, proposal);
-    if use_up && def.once {
-        used_up(cx, e.timestamp);
-    }
+    let reads = WithWords { q: &*cx, source: e.source, words: e.words };
+    let mut after = before;
+    apply(&reads, &asker, e.affected, &mut after);
+    normalize_damage(&mut after);
+    if !valid_redirection(&*cx, &before, |p| *p = after) { return false; }
+    let components = if let (Some(damage), Proposal::Damage(before), Proposal::Damage(after)) = (def.damage, before, after) {
+        damage(&reads, &asker, e.affected, &before, &after)
+    } else { Vec::new() };
+    if !valid_damage_components(&*cx, &before, &components) { return false; }
+    *proposal = after;
+    if use_up && def.once { used_up(cx, e.timestamp); }
     note_counters_by(&before, proposal, e.controller);
+    note_put_by(&before, proposal, e.controller);
+    added.extend(components);
     if let Some(then) = then {
         let after = *proposal;
-        run_then(cx, applied, e.controller, |cx| then(cx, &asker, e.affected, &before, &after));
+        cx.effect_text(&e, |cx| run_then(cx, applied, e.source, e.controller, |cx| then(cx, &asker, e.affected, &before, &after)));
     }
     true
 }
@@ -1183,11 +1315,8 @@ fn used_up(cx: &mut Cx, timestamp: u32) {
 /// that apply to any of the groups and have not yet applied to the event; the affected player, the one whose tokens they
 /// are, chooses one where there are several (CR 616.1); its "you may" is asked once; and it applies to every group it
 /// applies to then, after which it has applied to the whole event and applies to none of it again (CR 614.5).
-///
-/// An effect that creates "those tokens plus a [token]" (`TokenCreation::plus`) adds one group of that single token to the
-/// event once it has applied, under the player whose event it is, which the effects still to apply meet as part of it.
 fn apply_to_parts(cx: &mut Cx, parts: &mut Vec<Proposal>) {
-    cx.own_text(false, |cx| apply_to_each_part(cx, parts));
+    cx.instruction(|cx| cx.own_text(false, |cx| apply_to_each_part(cx, parts)), |_| true);
 }
 
 /// The token an effect that just applied added to the event ("those tokens plus a [token]", `TokenCreation::plus`), as a
@@ -1235,7 +1364,9 @@ fn apply_to_each_part(cx: &mut Cx, parts: &mut Vec<Proposal>) {
                     continue;
                 }
                 for j in (0..parts.len()).filter(|&j| meets(j)) {
-                    apply_printed(cx, &mut parts[j], source, index, &applied);
+                    let mut added = Vec::new();
+                    apply_printed(cx, &mut parts[j], source, index, &applied, &mut added);
+                    assert!(added.is_empty(), "non-damage proposals cannot add damage components");
                 }
                 take_plus(parts);
             }
@@ -1243,7 +1374,9 @@ fn apply_to_each_part(cx: &mut Cx, parts: &mut Vec<Proposal>) {
                 let Some((&e, def)) = granted(cx, timestamp) else { continue };
                 let mut took = false;
                 for j in (0..parts.len()).filter(|&j| meets(j)) {
-                    took |= apply_granted(cx, &mut parts[j], source, e, def, &applied, false);
+                    let mut added = Vec::new();
+                    took |= apply_granted(cx, &mut parts[j], source, e, def, &applied, false, &mut added);
+                    assert!(added.is_empty(), "non-damage proposals cannot add damage components");
                 }
                 if took && def.once {
                     used_up(cx, timestamp);
@@ -1274,12 +1407,13 @@ fn reshape(cx: &Cx, c: &Candidate, proposal: &mut Proposal) {
     match c.origin {
         Origin::Printed => {
             let def = printed_replacement(cx, c.source, c.index);
-            let asker = Asker { source: c.source, controller: controller_of(cx, c.source, proposal), by: printed_link(cx, c.source, c.index), spell: false };
+            let asker = Asker { instance: None, source: c.source, controller: controller_of(cx, c.source, proposal), by: printed_link(cx, c.source, c.index), spell: false };
             (def.apply)(cx, &asker, proposal);
         }
         Origin::Granted(timestamp) => {
             let Some((e, def)) = granted(cx, timestamp) else { return };
-            (def.apply)(cx, &Asker { source: c.source, controller: e.controller, by: None, spell: false }, e.affected, proposal);
+            let reads = WithWords { q: cx, source: e.source, words: e.words };
+            (def.apply)(&reads, &Asker { instance: None, source: c.source, controller: e.controller, by: None, spell: false }, e.affected, proposal);
         }
         // No other kind of effect applies to the mana a permanent produces.
         _ => {}
@@ -1379,7 +1513,7 @@ pub(crate) fn damage_may_change(cx: &Cx) -> bool {
 }
 
 /// The prevention shields that would apply to this damage (CR 615.7), taken together: the source of the first, and how much
-/// they have left to prevent between them, in 32 bits (each shield is a `u16`, and there may be many). None where no
+/// they have left to prevent between them, in the published bounded u32 domain. None where no
 /// shield applies, or the damage can't be prevented (CR 615.12).
 pub(crate) fn shields(cx: &Cx, d: &DamageEvent) -> Option<(ObjectId, u32)> {
     if !cx.s().effects.iter().any(|e| matches!(e.kind, EffectKind::Prevention { shield: Shield::Next(_), .. })) {
@@ -1396,7 +1530,8 @@ pub(crate) fn shields(cx: &Cx, d: &DamageEvent) -> Option<(ObjectId, u32)> {
             continue;
         }
         let def = &cx.cards().get(card).granted_preventions[index as usize];
-        if (def.applies)(cx, &Asker { source: e.source, controller: e.controller, by: None, spell: false }, e.affected, d) {
+        let reads = WithWords { q: cx, source: e.source, words: e.words };
+        if (def.applies)(&reads, &Asker { instance: None, source: e.source, controller: e.controller, by: None, spell: false }, e.affected, d) {
             found = Some(found.map_or((e.source, u32::from(left)), |(s, n)| (s, n + u32::from(left))));
         }
     }
@@ -1423,7 +1558,7 @@ pub(crate) struct PreventionUse {
 pub(crate) fn rest_of_preventions(cx: &mut Cx, uses: Vec<PreventionUse>) {
     // Each effect's rest is its own text, its source's now, though a resolving ability's instructions dealt the damage
     // (`Cx::own_text`).
-    cx.own_text(false, |cx| rest_of_each(cx, uses));
+    cx.instruction(|cx| cx.own_text(false, |cx| rest_of_each(cx, uses)), |_| true);
 }
 
 fn rest_of_each(cx: &mut Cx, uses: Vec<PreventionUse>) {
@@ -1433,14 +1568,15 @@ fn rest_of_each(cx: &mut Cx, uses: Vec<PreventionUse>) {
             used_up(cx, effect.timestamp);
         }
         if let Some(then) = cx.cards().get(card).granted_preventions[index as usize].then {
-            let asker = Asker { source: effect.source, controller: effect.controller, by: None, spell: false };
-            cx.acting_as(effect.controller, |cx| then(cx, &asker, effect.affected, &parts));
+            let asker = Asker { instance: None, source: effect.source, controller: effect.controller, by: None, spell: false };
+            cx.effect_text(&effect, |cx| callback_instructions(cx, effect.source, |cx| cx.acting_as(effect.controller, |cx| then(cx, &asker, effect.affected, &parts))));
         }
     }
 }
 
 /// Prevents `amount` of the damage (CR 615.1) by the effect of `by`, and records it (CR 615.6, 615.13).
 fn prevent(cx: &mut Cx, d: &mut DamageEvent, amount: u32, by: ObjectId) {
+    let amount = amount.min(d.amount);
     if amount == 0 {
         return;
     }
@@ -1621,6 +1757,7 @@ pub fn token_batch(cx: &mut Cx, tokens: &[(CardId, Option<Copiable>, PlayerId)])
 /// is dealt to, which a redirection ("is dealt to this creature instead") changes, after which the effects not yet
 /// applied are judged again against the new recipient and its controller orders them (CR 614.6, 616.1f).
 /// The prevention effects with more to do once the event has been dealt are noted in `uses` (`rest_of_preventions`).
+#[cfg(test)]
 pub(crate) fn damage(cx: &mut Cx, event: DamageEvent, uses: &mut Vec<PreventionUse>) -> DamageEvent {
     if !possible(cx, None) && shield_damage_applies(cx, &event).is_none() {
         return event;
@@ -1630,6 +1767,642 @@ pub(crate) fn damage(cx: &mut Cx, event: DamageEvent, uses: &mut Vec<PreventionU
     match proposal {
         Proposal::Damage(event) => event,
         _ => unreachable!("an effect cannot change the kind of the event"),
+    }
+}
+
+/// One source's damage to one recipient after the entire event is formed.
+/// Private provenance retains original returns without fragmenting the damage
+/// record seen by prevention, toxic or damage triggers.
+pub(crate) struct DamagePart {
+    pub event: DamageEvent,
+    pub origins: Vec<(Option<usize>, i64)>,
+}
+
+impl DamagePart {
+    fn original(event: DamageEvent, index: usize) -> Self {
+        Self { event: DamageEvent { amount: event.amount.max(0), ..event }, origins: vec![(Some(index), i64::from(event.amount))] }
+    }
+
+    /// Reductions consume the caller's stable assignment order. Increases keep
+    /// each assignment's proportional share; remainders stay in that same order.
+    /// Attribution never creates separate native damage events.
+    fn resize(&mut self, total: i64) {
+        let total = total.max(0);
+        let before: i64 = self.origins.iter().map(|(_, n)| *n).sum();
+        if total <= before {
+            let mut remove = before - total;
+            for (_, n) in &mut self.origins {
+                let take = (*n).min(remove);
+                *n -= take;
+                remove -= take;
+            }
+        } else if before > 0 {
+            let mut assigned = 0;
+            for (_, n) in &mut self.origins {
+                *n = i64::try_from((*n as u128) * (total as u128) / (before as u128)).expect("damage attribution fits its semantic total");
+                assigned += *n;
+            }
+            let mut remainder = total - assigned;
+            for (_, n) in &mut self.origins {
+                if remainder == 0 { break; }
+                *n += 1;
+                remainder -= 1;
+            }
+        } else if total > 0 {
+            self.origins.push((None, total));
+        }
+    }
+
+    fn take(&mut self, mut amount: i64) -> Vec<(Option<usize>, i64)> {
+        let mut taken = Vec::new();
+        for (origin, n) in &mut self.origins {
+            let part = (*n).min(amount);
+            if part > 0 { taken.push((*origin, part)); }
+            *n -= part;
+            amount -= part;
+        }
+        assert_eq!(amount, 0, "redirection retains the original damage identity");
+        taken
+    }
+}
+
+struct PendingDamage {
+    part: DamagePart,
+    applied: Vec<Applied>,
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+struct DamageScope {
+    source: ObjectId,
+    target: Target,
+    combat: bool,
+}
+impl DamageScope {
+    fn of(d: &DamageEvent) -> Self {
+        Self {
+            source: d.source,
+            target: d.target,
+            combat: d.combat,
+        }
+    }
+}
+#[derive(Clone)]
+struct PreventionReceipt {
+    effect: Applied,
+    scope: DamageScope,
+    capacity: u32,
+    spent: u32,
+}
+/// Ephemeral specific-allowance receipts for one native damage event. Pure replacement components share them;
+/// nested damage calls are separate events at another time and save/restore an independent context (615.10).
+/// No position, history, observation or per-card scratch field retains it.
+#[derive(Clone, Default)]
+pub(crate) struct DamageContext {
+    receipts: Vec<PreventionReceipt>,
+}
+impl DamageContext {
+    fn allowance(&self, effect: Applied, scope: DamageScope) -> Option<(u32, u32)> {
+        self.receipts
+            .iter()
+            .find(|r| r.effect == effect && r.scope == scope)
+            .map(|r| (r.capacity, r.spent))
+    }
+    fn freeze(&mut self, effect: Applied, scope: DamageScope, capacity: u32) {
+        if self.allowance(effect, scope).is_none() {
+            self.receipts.push(PreventionReceipt {
+                effect,
+                scope,
+                capacity,
+                spent: 0,
+            });
+        }
+    }
+    fn applied(&mut self, effect: Applied, scope: DamageScope, spent: u32) {
+        let r = self
+            .receipts
+            .iter_mut()
+            .find(|r| r.effect == effect && r.scope == scope)
+            .expect("specific allowance frozen at first application");
+        r.spent = r
+            .spent
+            .checked_add(spent)
+            .expect("specific prevention allowance exceeds i64 semantic domain");
+        assert!(
+            r.spent <= r.capacity,
+            "specific prevention never exceeds its frozen allowance"
+        );
+    }
+}
+
+fn same_damage(a: &DamageEvent, b: &DamageEvent) -> bool {
+    DamageScope::of(a) == DamageScope::of(b)
+}
+fn is_prevention(origin: Origin) -> bool {
+    matches!(
+        origin,
+        Origin::Protection
+            | Origin::Prevention
+            | Origin::GrantedPrevention(_)
+            | Origin::ShieldCounter
+    )
+}
+fn specific(cx: &Cx, key: Applied) -> Option<PreventionAmountFn> {
+    if key.2 == Origin::Prevention
+        && let PreventionAmount::Specific(amount) = printed_prevention(cx, key.0, key.1).0.amount
+    {
+        Some(amount)
+    } else {
+        None
+    }
+}
+fn groups(parts: &[PendingDamage]) -> Vec<Vec<usize>> {
+    let mut out: Vec<Vec<usize>> = Vec::new();
+    for (i, p) in parts.iter().enumerate() {
+        if let Some(group) = out
+            .iter_mut()
+            .find(|g| same_damage(&parts[g[0]].part.event, &p.part.event))
+        {
+            group.push(i);
+        } else {
+            out.push(vec![i]);
+        }
+    }
+    out
+}
+fn aggregate(parts: &[PendingDamage], indices: &[usize]) -> DamagePart {
+    let mut event = parts[indices[0]].part.event;
+    event.amount = 0;
+    let mut origins = Vec::new();
+    for &i in indices {
+        event.amount = event.amount.saturating_add(parts[i].part.event.amount);
+        event.heal_marked |= parts[i].part.event.heal_marked;
+        event.shielded = event.shielded.or(parts[i].part.event.shielded);
+        origins.extend_from_slice(&parts[i].part.origins);
+    }
+    origins.sort_by_key(|(origin, _)| origin.unwrap_or(usize::MAX));
+    DamagePart { event, origins }
+}
+fn eligibility(cx: &Cx, parts: &[PendingDamage], group: &[usize], key: Applied) -> Vec<usize> {
+    if specific(cx, key).is_some() {
+        let scope = DamageScope::of(&parts[group[0]].part.event);
+        // Freeze only when chosen; a zero first application is still an explicit allowance of zero.
+        match cx.damage.as_ref().and_then(|c| c.allowance(key, scope)) {
+            Some((capacity, spent)) if capacity <= spent => Vec::new(),
+            _ => group.to_vec(),
+        }
+    } else {
+        group
+            .iter()
+            .copied()
+            .filter(|&i| !parts[i].applied.contains(&key))
+            .collect()
+    }
+}
+
+fn formed_candidates(cx: &Cx, parts: &[PendingDamage], group: &[usize]) -> Vec<Candidate> {
+    let event = aggregate(parts, group).event;
+    candidates_for(cx, &Proposal::Damage(event), &[], None, [None; 8], &|key| {
+        let eligible = eligibility(cx, parts, group, key);
+        (!eligible.is_empty()).then(|| Proposal::Damage(aggregate(parts, &eligible).event))
+    })
+}
+fn ancestors(parts: &[PendingDamage], selected: &[usize], key: Applied) -> Vec<Applied> {
+    let mut out = Vec::new();
+    for &i in selected {
+        for &a in &parts[i].applied {
+            if a != key && !out.contains(&a) {
+                out.push(a);
+            }
+        }
+    }
+    out
+}
+/// Use the established exact attribution policy over the selected quantity, without coalescing its effect histories.
+fn resize_selected(parts: &mut [PendingDamage], selected: &[usize], total: i64) {
+    let mut slots = Vec::new();
+    for &i in selected {
+        for (j, &(origin, n)) in parts[i].part.origins.iter().enumerate() {
+            slots.push((origin.unwrap_or(usize::MAX), i, j, n));
+        }
+    }
+    slots.sort_by_key(|&(origin, i, j, _)| (origin, i, j));
+    let mut allocation = DamagePart {
+        event: parts[selected[0]].part.event,
+        origins: slots
+            .iter()
+            .enumerate()
+            .map(|(k, s)| (Some(k), s.3))
+            .collect(),
+    };
+    allocation.resize(total);
+    for (slot, n) in allocation.origins {
+        if let Some(slot) = slot {
+            let (_, i, j, _) = slots[slot];
+            parts[i].part.origins[j].1 = n;
+        } else {
+            parts[selected[0]].part.origins.push((None, n));
+        }
+    }
+    for &i in selected {
+        parts[i].part.event.amount = parts[i].part.origins.iter().map(|(_, n)| *n).sum::<i64>().clamp(0, i64::from(u32::MAX)) as u32;
+    }
+}
+fn distribute(
+    parts: &mut Vec<PendingDamage>,
+    selected: &[usize],
+    before: DamageEvent,
+    after: DamageEvent,
+    added: Vec<DamageComponent>,
+    mut lineage: Vec<Applied>,
+    key: Applied,
+) {
+    let redirected = added
+        .iter()
+        .try_fold(0i64, |sum, c| match c {
+            DamageComponent::Redirected { amount, .. } => sum.checked_add(i64::from(*amount)),
+            _ => Some(sum),
+        })
+        .expect("redirected sum exceeds i64 semantic domain");
+    resize_selected(
+        parts,
+        selected,
+        i64::from(after.amount)
+            .checked_add(redirected)
+            .expect("expanded original damage exceeds i64 semantic domain"),
+    );
+    if !lineage.contains(&key) {
+        lineage.push(key);
+    }
+    for &i in selected {
+        let amount = parts[i].part.event.amount;
+        parts[i].part.event = DamageEvent { amount, ..after };
+        if !parts[i].applied.contains(&key) {
+            parts[i].applied.push(key);
+        }
+        if !same_damage(&before, &after) {
+            parts[i].applied.retain(|a| !is_prevention(a.2));
+        }
+    }
+    for component in added {
+        match component {
+            DamageComponent::Additional(event) => {
+                let event = DamageEvent {
+                    amount: event.amount.max(0),
+                    ..event
+                };
+                let mut applied = lineage.clone();
+                if !same_damage(&after, &event) {
+                    applied.retain(|a| !is_prevention(a.2));
+                }
+                parts.push(PendingDamage {
+                    part: DamagePart {
+                        event,
+                        origins: vec![(None, i64::from(event.amount))],
+                    },
+                    applied,
+                });
+            }
+            DamageComponent::Redirected { target, amount } => {
+                let mut left = amount.max(0);
+                let mut order = selected.to_vec();
+                order.sort_by_key(|&i| {
+                    (
+                        parts[i]
+                            .part
+                            .origins
+                            .iter()
+                            .filter_map(|(o, n)| (*n > 0).then_some(*o).flatten())
+                            .min()
+                            .unwrap_or(usize::MAX),
+                        i,
+                    )
+                });
+                for i in order {
+                    let take = left.min(parts[i].part.event.amount);
+                    if take == 0 {
+                        continue;
+                    }
+                    let origins = parts[i].part.take(i64::from(take));
+                    parts[i].part.event.amount -= take;
+                    let event = DamageEvent {
+                        target,
+                        amount: take,
+                        heal_marked: false,
+                        shielded: None,
+                        ..after
+                    };
+                    let mut applied = parts[i].applied.clone();
+                    if !same_damage(&after, &event) {
+                        applied.retain(|a| !is_prevention(a.2));
+                    }
+                    parts.push(PendingDamage {
+                        part: DamagePart { event, origins },
+                        applied,
+                    });
+                    left -= take;
+                }
+                assert_eq!(
+                    left, 0,
+                    "redirected original quantity retains its provenance"
+                );
+            }
+        }
+    }
+}
+fn finish_damage(parts: &[PendingDamage]) -> Vec<DamagePart> {
+    let mut out: Vec<_> = groups(parts).iter().map(|g| aggregate(parts, g)).collect();
+    out.sort_by_key(|p| {
+        p.origins
+            .iter()
+            .filter_map(|(origin, amount)| (*amount > 0).then_some(*origin).flatten())
+            .min()
+            .unwrap_or(usize::MAX)
+    });
+    out
+}
+struct DamagePlan {
+    order: Vec<DamageScope>,
+    established: Vec<DamageScope>,
+    shields: Vec<u32>,
+    choosers: Vec<(DamageScope, PlayerId)>,
+    eligible: Vec<DamageScope>,
+}
+impl DamagePlan {
+    fn new(cx: &mut Cx, events: &[DamageEvent]) -> Self {
+        let plan = crate::ops::damage_source_order(cx, events);
+        Self {
+            order: plan
+                .order
+                .into_iter()
+                .map(|i| DamageScope::of(&events[i]))
+                .collect(),
+            established: plan
+                .established
+                .into_iter()
+                .map(|i| DamageScope::of(&events[i]))
+                .collect(),
+            shields: Self::shields(cx),
+            choosers: events
+                .iter()
+                .map(|e| (DamageScope::of(e), affected(cx, &Proposal::Damage(*e))))
+                .collect(),
+            eligible: events
+                .iter()
+                .filter(|e| shields(cx, e).is_some())
+                .map(DamageScope::of)
+                .collect(),
+        }
+    }
+    fn shields(cx: &Cx) -> Vec<u32> {
+        cx.s()
+            .effects
+            .iter()
+            .filter_map(|e| {
+                matches!(
+                    e.kind,
+                    EffectKind::Prevention {
+                        shield: Shield::Next(_),
+                        ..
+                    }
+                )
+                .then_some(e.timestamp)
+            })
+            .collect()
+    }
+    fn valid(&self, cx: &Cx, events: &[DamageEvent]) -> bool {
+        events.iter().all(|e| {
+            self.order.contains(&DamageScope::of(e))
+                && self
+                    .choosers
+                    .contains(&(DamageScope::of(e), affected(cx, &Proposal::Damage(*e))))
+        }) && Self::shields(cx).iter().all(|t| self.shields.contains(t))
+            && events
+                .iter()
+                .filter(|e| shields(cx, e).is_some())
+                .all(|e| self.eligible.contains(&DamageScope::of(e)))
+    }
+}
+fn damage_event_inner(
+    cx: &mut Cx,
+    events: &[DamageEvent],
+    uses: &mut Vec<PreventionUse>,
+    shielded: &mut Vec<ObjectId>,
+) -> Vec<DamagePart> {
+    let mut parts: Vec<_> = events
+        .iter()
+        .enumerate()
+        .map(|(i, &event)| {
+            // A new native damage call is another event/time (615.10), even inside a replacement callback.
+            // True replacement ancestor opportunities still inherit (614.5); prevention opportunities do not.
+            let applied = cx
+                .lineage
+                .iter()
+                .copied()
+                .filter(|a| !is_prevention(a.2))
+                .collect();
+            PendingDamage {
+                part: DamagePart::original(event, i),
+                applied,
+            }
+        })
+        .collect();
+    let mut plan: Option<DamagePlan> = None;
+    loop {
+        for p in &mut parts {
+            if let Some(&id) = shielded
+                .iter()
+                .find(|&&id| p.part.event.target == Target::Object(id))
+            {
+                p.part.event.shielded = Some(id);
+            }
+        }
+        let grouped = groups(&parts);
+        let events: Vec<_> = grouped.iter().map(|g| aggregate(&parts, g).event).collect();
+        if plan.as_ref().is_none_or(|p| !p.valid(cx, &events)) {
+            plan = Some(DamagePlan::new(cx, &events));
+        }
+        let current = plan.as_ref().unwrap();
+        let order: Vec<_> = current
+            .order
+            .iter()
+            .filter_map(|scope| events.iter().position(|e| DamageScope::of(e) == *scope))
+            .collect();
+        let mut choice = None;
+        let mut unasked = false;
+        for at in order {
+            let group = &grouped[at];
+            let found = formed_candidates(cx, &parts, group);
+            if !found.is_empty() {
+                if !current.established.contains(&DamageScope::of(&events[at])) {
+                    unasked = true;
+                    break;
+                }
+                let proposal = Proposal::Damage(events[at]);
+                let pick = if found.len() > 1 && !found.iter().all(|c| prevents_all(cx, c)) {
+                    cx.instruction(
+                        |cx| cx.own_text(false, |cx| choose(cx, &proposal, &found)),
+                        |_| true,
+                    )
+                } else {
+                    Some(0)
+                };
+                let Some(pick) = pick else {
+                    // A concession changed the participants while choosing. Rebuild the event's APNAP plan.
+                    unasked = true;
+                    break;
+                };
+                choice = Some((group.clone(), found[pick]));
+                break;
+            }
+            if events[at].amount > 0
+                && let Some(by) = crate::ops::protection_prevents(
+                    cx,
+                    events[at].source,
+                    events[at].target,
+                    events[at].combat,
+                )
+            {
+                let mut result = aggregate(&parts, group);
+                prevent(cx, &mut result.event, events[at].amount, by);
+                resize_selected(&mut parts, group, i64::from(result.event.amount));
+            }
+        }
+        if unasked {
+            plan = Some(DamagePlan::new(cx, &events));
+            continue;
+        }
+        let Some((group, candidate)) = choice else {
+            break;
+        };
+        let key = (candidate.source, candidate.index, candidate.origin);
+        if let Origin::Granted(timestamp) = candidate.origin
+            && granted(cx, timestamp).is_some_and(|(_, d)| d.once)
+        {
+            let Some((&effect, def)) = granted(cx, timestamp) else {
+                unreachable!()
+            };
+            // Eligibility is captured for the whole once-only event before it changes any original assignment.
+            let snapshots: Vec<_> = groups(&parts)
+                .iter()
+                .filter(|g| formed_candidates(cx, &parts, g).contains(&candidate))
+                .map(|g| eligibility(cx, &parts, g, key))
+                .collect();
+            let mut took = false;
+            for selected in snapshots {
+                let before = aggregate(&parts, &selected).event;
+                let mut proposal = Proposal::Damage(before);
+                let mut lineage = ancestors(&parts, &selected, key);
+                lineage.push(key);
+                let outer = std::mem::replace(&mut cx.lineage, lineage.clone());
+                let mut added = Vec::new();
+                took |= cx.instruction(
+                    |cx| {
+                        cx.own_text(false, |cx| {
+                            apply_granted(
+                                cx,
+                                &mut proposal,
+                                candidate.source,
+                                effect,
+                                def,
+                                &lineage,
+                                false,
+                                &mut added,
+                            )
+                        })
+                    },
+                    |_| true,
+                );
+                cx.lineage = outer;
+                let Proposal::Damage(after) = proposal else {
+                    unreachable!()
+                };
+                if let Some(id) = after.shielded
+                    && !shielded.contains(&id)
+                {
+                    shielded.push(id);
+                }
+                distribute(&mut parts, &selected, before, after, added, lineage, key);
+            }
+            if took {
+                used_up(cx, timestamp);
+            }
+        } else {
+            let selected = eligibility(cx, &parts, &group, key);
+            let before = aggregate(&parts, &selected).event;
+            let mut proposal = Proposal::Damage(before);
+            let outer = std::mem::replace(&mut cx.lineage, ancestors(&parts, &selected, key));
+            let progress = cx.instruction(
+                |cx| {
+                    cx.own_text(false, |cx| {
+                        apply_each(cx, &mut proposal, None, Some(uses), true, Some(candidate))
+                    })
+                },
+                |_| true,
+            );
+            cx.lineage = outer;
+            let Proposal::Damage(after) = proposal else {
+                unreachable!()
+            };
+            if let Some(id) = after.shielded
+                && !shielded.contains(&id)
+            {
+                shielded.push(id);
+            }
+            let Some(DamageProgress::Expanded { added, applied }) = progress else {
+                unreachable!("a selected ordinary damage effect executes once")
+            };
+            distribute(&mut parts, &selected, before, after, added, applied, key);
+        }
+    }
+    finish_damage(&parts)
+}
+
+/// Forms replacement-introduced damage atomically (120.4b-d), retaining per-effect original lineage (614.5) and the
+/// distinct source-event allowance of specific static prevention (615.10). Final records alone coalesce for triggers.
+pub(crate) fn damage_event(
+    cx: &mut Cx,
+    events: &[DamageEvent],
+    uses: &mut Vec<PreventionUse>,
+    shielded: &mut Vec<ObjectId>,
+) -> Vec<DamagePart> {
+    if !possible(cx, None)
+        && events
+            .iter()
+            .all(|d| shield_damage_applies(cx, d).is_none())
+    {
+        let parts: Vec<_> = events
+            .iter()
+            .enumerate()
+            .map(|(i, &e)| PendingDamage {
+                part: DamagePart::original(e, i),
+                applied: Vec::new(),
+            })
+            .collect();
+        let mut out = finish_damage(&parts);
+        for p in &mut out {
+            let d = p.event;
+            if d.amount > 0
+                && let Some(by) = crate::ops::protection_prevents(cx, d.source, d.target, d.combat)
+            {
+                prevent(cx, &mut p.event, d.amount, by);
+                p.resize(i64::from(p.event.amount));
+            }
+        }
+        return out;
+    }
+    let saved = cx.damage.take();
+    let lineage = cx.lineage.clone();
+    cx.damage = Some(Box::default());
+    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        damage_event_inner(cx, events, uses, shielded)
+    }));
+    cx.damage = saved;
+    if result.is_err() {
+        cx.lineage = lineage;
+    }
+    match result {
+        Ok(parts) => parts,
+        Err(panic) => std::panic::resume_unwind(panic),
     }
 }
 
@@ -1751,7 +2524,7 @@ mod tests {
     /// Has the first player draw `count` cards: their hand, library and life afterwards.
     fn draw(game: &mut Game, count: u32) -> (usize, usize, i32) {
         let frame = game.state.agenda.len() - 1;
-        let mut cx = Cx { g: game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
         crate::ops::draw_cards(&mut cx, ME, count);
         assert!(cx.s().agenda[frame].pending.is_none(), "every question was answered");
         let s = cx.s();
@@ -1844,7 +2617,7 @@ mod tests {
         let them = PlayerId(1);
         let frame = game.state.agenda.len() - 1;
         game.state.update_frame(frame, |f| f.answers = vec![(Some(ME), Answer::Yes)]);
-        let mut cx = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
         crate::ops::draw_cards(&mut cx, them, 1);
         assert!(cx.s().agenda[frame].pending.is_none(), "the controller's answer was the one asked for");
         assert!(cx.s().zone(Zone::hand(them)).is_empty(), "the draw was replaced");
@@ -1857,6 +2630,7 @@ mod tests {
     fn a_later_effect_that_sends_the_card_elsewhere_unlinks_it() {
         let linked = Linked { object: ObjectId(5), text: CardId(3), acquired: Acquired::OWN };
         let exiling = ZoneChange {
+            put_by: None,
             object: ObjectId(1),
             from: Zone::hand(ME),
             to: Zone::exile(ME),
@@ -1882,6 +2656,7 @@ mod tests {
             rebounding: false,
             destroy: false,
             regenerated: false,
+            regeneration_shield: false,
             shielded: false,
             replaced: false,
         };

@@ -1,0 +1,38 @@
+# Swift Reconfiguration turns the Yeti into a Vehicle before its ability resolves; a noncreature permanent has no power, so it deals no damage (CR 208.3, 107.2).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Karplusan Yeti
+Swift Reconfiguration
+Island x20
+[Bot2 Deck]
+Black Lotus
+Darksteel Myr
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Karplusan Yeti.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Darksteel Myr.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Karplusan Yeti.Activate(Darksteel Myr)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swift Reconfiguration.Cast(Karplusan Yeti)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Karplusan Yeti.Types = Artifact
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Darksteel Myr.Damage = 0

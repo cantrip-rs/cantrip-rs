@@ -1,0 +1,42 @@
+# The ability does nothing when its target leaves before resolution; the Queen can later affect another creature (CR 608.2b).
+[Bot1 Deck]
+Sorceress Queen
+Black Lotus
+Phyrexian Walker
+Swamp x20
+
+[Bot2 Deck]
+Grizzly Bears
+Mox Emerald
+Forest
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Sorceress Queen.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sorceress Queen.Activate(Bot2.Battlefield.Grizzly Bears)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sorceress Queen.Activate(Bot1.Battlefield.Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Phyrexian Walker.Power = 0
+? Bot1.Battlefield.Phyrexian Walker.Toughness = 2
+[Expect]
+Bot2.Graveyard = Grizzly Bears; Lightning Bolt

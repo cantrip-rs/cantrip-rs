@@ -1,0 +1,73 @@
+# Quicksilver Dagger lets Nicol Bolas deal noncombat damage to an opponent, making that player discard their hand (CR 603.2).
+[Bot1 Deck]
+Nicol Bolas
+Black Lotus
+Mox Jet
+Gleemox
+Mox Ruby
+Lotus Petal
+Mox Pearl
+Island
+Black Lotus
+Quicksilver Dagger
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Lotus Petal.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nicol Bolas.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.PayCost
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.PayCost
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.PayCost
+[T7 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Quicksilver Dagger.Cast(Nicol Bolas)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Nicol Bolas.Activate(Bot2)
+[T7 Bot1.Main2]
+[Expect]
+Bot2.Life = 19
+Bot2.Hand.Count = 0

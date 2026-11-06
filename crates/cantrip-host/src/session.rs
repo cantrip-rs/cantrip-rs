@@ -344,6 +344,7 @@ impl Session {
     fn play_scenario(&mut self) {
         let Some(scenario) = self.scenario.as_mut() else { return };
         scenario.expected = None;
+        let checkpoint_before_script = self.game.checkpoint();
         std::mem::swap(&mut self.game, scenario.scripted.game());
         loop {
             match scenario.scripted.advance(&scenario.driven) {
@@ -367,6 +368,7 @@ impl Session {
         // What the script's own seats answered is not this table's to take back.
         if let Some(expected) = &scenario.expected
             && scenario.scripted.undo_offered(expected.request.player).is_none()
+            && !(self.game.checkpoint() == checkpoint_before_script && self.undoable.pending_for(expected.request.player))
         {
             self.undoable.clear();
         }
@@ -428,14 +430,13 @@ impl Session {
             if let Some(told) = self.undoable.take_back(&mut self.game, request.player) {
                 self.taken_back(told);
             }
-        } else if let Some(noted) = noted
-            && self.undoable.may_take_back(&self.game, &noted)
-            && let Some(mut kept) = kept
-        {
-            let first = self.sequence + 1 + self.told.len() as u64;
-            kept.told = first..first;
-            self.undoable.push(noted, kept);
-            pushed = true;
+        } else if let Some(noted) = noted {
+            let kept = kept.map(|mut kept| {
+                let first = self.sequence + 1 + self.told.len() as u64;
+                kept.told = first..first;
+                kept
+            });
+            pushed = self.undoable.track(&self.game, noted, kept);
         }
         self.play_scenario();
         let step = self.step();
@@ -700,12 +701,12 @@ impl Session {
                 return Err(Rejection::new("IllegalAnswer", "the engine failed on that answer; the game is as it was"));
             }
         }
-        if self.undoable.may_take_back(&self.game, &noted)
-            && let Some(mut kept) = kept
-        {
+        let kept = kept.map(|mut kept| {
             let first = self.sequence + 1 + self.told.len() as u64;
             kept.told = first..first;
-            self.undoable.push(noted, kept);
+            kept
+        });
+        if self.undoable.track(&self.game, noted, kept) {
             let step = self.step();
             if let Some(told) = self.undoable.last_kept() {
                 told.told.end = self.sequence + 1;
@@ -928,7 +929,7 @@ mod tests {
     fn choose(prompt: &PromptPayload, allow_cast: &mut bool) -> AnswerPayload {
         match prompt {
             PromptPayload::PriorityPromptMessage(p) => {
-                let pick = |kind: ActionKindView, quiet: bool| p.options.iter().find(|o| o.kind == kind && (!quiet || o.produces.is_empty()));
+                let pick = |kind: ActionKindView, quiet: bool| p.options.iter().find(|o| o.kind == kind && (!quiet || !AutoMana::is(o)));
                 match pick(ActionKindView::PlayLand, false).or(pick(ActionKindView::CastSpell, false).filter(|_| *allow_cast)).or(pick(ActionKindView::ActivateAbility, true)) {
                     Some(o) => AnswerPayload::TakeActionAnswer(TakeActionAnswer::take(o)),
                     None => AnswerPayload::PassAnswer(PassAnswer {}),
@@ -936,13 +937,13 @@ mod tests {
             }
             PromptPayload::PayCostsPromptMessage(p) => {
                 let pick = |kind: ActionKindView| p.options.iter().find(|o| o.kind == kind);
-                if let Some(o) = pick(ActionKindView::ConfirmCasting) {
-                    return AnswerPayload::TakeActionAnswer(TakeActionAnswer::take(o));
-                }
-                if let Some(o) = p.options.iter().find(|o| o.kind == ActionKindView::ActivateAbility && !o.produces.is_empty()) {
+                if let Some(o) = p.options.iter().find(|o| AutoMana::is(o) && o.source != p.spell) {
                     let mut answer = TakeActionAnswer::take(o);
                     answer.color = o.color_choices.first().copied();
                     return AnswerPayload::TakeActionAnswer(answer);
+                }
+                if let Some(o) = pick(ActionKindView::ConfirmCasting) {
+                    return AnswerPayload::TakeActionAnswer(TakeActionAnswer::take(o));
                 }
                 if let Some(o) = pick(ActionKindView::AssignMana) {
                     *allow_cast = false;
@@ -1200,8 +1201,9 @@ mod tests {
                 RequestKind::PayCosts { options, .. } => {
                     let mox = options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source.is_some_and(|s| game.name(s) == "Mox Sapphire"));
                     let confirm = options.iter().find(|o| o.kind == ActionKind::ConfirmCasting);
-                    Answer::Act(Action::of(confirm.or(mox).expect("a Mox to pay with, or the payment to confirm")))
+                    Answer::Act(Action::of(mox.or(confirm).expect("a Mox to pay with, or the payment to confirm")))
                 }
+                RequestKind::ChooseCostPayment { .. } => Answer::CostPayment(0),
                 RequestKind::Priority { .. } => Answer::Pass,
                 other => panic!("unexpected question {other:?}"),
             };
@@ -1343,6 +1345,47 @@ mod tests {
         panic!("Llanowar Elves was never paid for");
     }
 
+    #[test]
+    fn a_paid_mana_ability_retracts_all_its_intermediate_events_when_undone() {
+        let text = include_str!("../../../scenarios/crystal-grotto-paid-from-the-pool-is-taken-back-and-so-is-the-island-that-paid-it.cantrip");
+        let mut session = Session::scenario(text, "grotto-undo", Vec::new(), &[1]).ok().unwrap();
+        let mut step = session.step();
+        let mut retracted = false;
+        let mut activation_sequences = std::collections::BTreeSet::new();
+        for _ in 0..200 {
+            if let Some(passed) = step["Scenario"]["Verdict"]["Passed"].as_bool() {
+                assert!(passed, "{step}");
+                assert!(retracted, "taking back the activation retracts its published events");
+                return;
+            }
+            let expected = &step["Scenario"]["Expected"];
+            let req = &step["Requests"][0];
+            let id = req["RequestId"].as_u64().unwrap() as u32;
+            let seat = req["Seat"].as_i64().unwrap() as i32;
+            let line = expected["Line"].as_str().unwrap_or("").to_string();
+            let is_undo = expected["Undo"] == true;
+            let payload = if is_undo {
+                let option = options_of(&step).into_iter().find(|o| o.kind == ActionKindView::UndoManaAbility).unwrap_or_else(|| panic!("undo offered: {step}"));
+                AnswerPayload::TakeActionAnswer(TakeActionAnswer::take(&option))
+            } else {
+                serde_json::from_value(expected["Answer"].clone()).unwrap()
+            };
+            step = session.answer(id, seat, &payload).ok().unwrap();
+            let events = step["Events"]["1"].as_array().unwrap();
+            if line.contains("Bot1.Battlefield.Crystal Grotto.Activate") || line.contains("Bot1.Choose(Pay mana)") {
+                activation_sequences.extend(events.iter().filter_map(|event| event["Sequence"].as_i64()));
+            }
+            if is_undo && !retracted {
+                let undo = events.iter().find(|event| event["$type"] == "EventsRetractedEvent").expect("retraction event");
+                let sequences: std::collections::BTreeSet<i64> = undo["Sequences"].as_array().unwrap().iter().filter_map(Value::as_i64).collect();
+                assert!(!activation_sequences.is_empty(), "activation published events");
+                assert!(activation_sequences.is_subset(&sequences), "all activation events were retracted: {activation_sequences:?} vs {sequences:?}");
+                retracted = true;
+            }
+        }
+        panic!("scenario did not finish: {step}");
+    }
+
     /// Plays on until seat 1 may activate a mana ability of the permanent named `name` with priority, activates it for
     /// green, and returns that option and the step after it.
     fn activate_mana_of(session: &mut Session, name: &str) -> (ActionOptionMessage, Value) {
@@ -1360,8 +1403,16 @@ mod tests {
             {
                 let mut answer = TakeActionAnswer::take(mana);
                 answer.color = mana.color_choices.contains(&ColorView::Green).then_some(ColorView::Green);
-                let after = session.answer(id, seat, &AnswerPayload::TakeActionAnswer(answer)).ok().unwrap();
-                return (mana.clone(), after);
+                let mut after = session.answer(id, seat, &AnswerPayload::TakeActionAnswer(answer)).ok().unwrap();
+                for _ in 0..100 {
+                    let r = &after["Requests"][0];
+                    let prompt: PromptPayload = serde_json::from_value(r["Prompt"].clone()).unwrap();
+                    if matches!(prompt, PromptPayload::PriorityPromptMessage(_)) { return (mana.clone(), after); }
+                    let (id, seat) = (r["RequestId"].as_u64().unwrap() as u32, r["Seat"].as_i64().unwrap() as i32);
+                    let answer = choose(&prompt, &mut allow_cast);
+                    after = session.answer(id, seat, &answer).unwrap_or_else(|e| panic!("{name}: {prompt:?}: {}", e.detail));
+                }
+                panic!("{name}'s activation did not finish");
             }
             let answer = match &prompt {
                 PromptPayload::MayPromptMessage(_) if seat == 1 => AnswerPayload::MayChosenAnswer(MayChosenAnswer { accept: true }),

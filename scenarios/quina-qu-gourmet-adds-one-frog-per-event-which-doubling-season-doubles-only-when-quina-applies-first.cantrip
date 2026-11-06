@@ -93,6 +93,7 @@ Bot1.Replace(Quina, Qu Gourmet)
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Quina, Qu Gourmet.Activate
+Bot1.Choose(Sacrifice 1 permanent)
 ! Bot1.Choose(Goblin Token)
 ! Bot1.Choose(Halo Hopper)
 Bot1.Choose(Frog Token)

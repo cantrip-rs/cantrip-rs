@@ -241,7 +241,7 @@ fn given_by_another(index: u8) -> (Game, ObjectId) {
 }
 
 fn cx(g: &mut Game) -> crate::Cx<'_> {
-    crate::Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    crate::Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 /// A triggered ability an effect gives a permanent is acquired by that effect (CR 607.5), even where the permanent prints

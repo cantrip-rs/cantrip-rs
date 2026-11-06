@@ -1,0 +1,45 @@
+# Only Forests present when the ability resolves are animated; changing one to a Mountain does not end the effect (CR 611.2c).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Thelonite Druid
+Ornithopter
+Forest
+Phantasmal Terrain
+Forest
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Thelonite Druid.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Thelonite Druid.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Tap Thelonite Druid)
+Bot1.Choose(Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest.Power = 2
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Phantasmal Terrain.Cast(Bot1.Battlefield.Forest#1)
+Bot1.Modes(Mountain)
+[Expect]
+Bot1.Battlefield.Forest#1.Types = Land; Creature
+Bot1.Battlefield.Forest#1.Subtypes = Mountain
+Bot1.Battlefield.Forest#1.Power = 2
+Bot1.Battlefield.Forest#1.Toughness = 3
+Bot1.Battlefield.Forest#2.Types = Land
+Bot1.Graveyard = Black Lotus; Ornithopter; Black Lotus

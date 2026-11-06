@@ -1,0 +1,50 @@
+# Damage before the ability resolves still prevents regeneration later that turn.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Bone Shaman
+Mountain
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Black Lotus
+Wall of Bone
+Swamp
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bone Shaman.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Wall of Bone.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bone Shaman > Bot2)
+Bot2.Block(Wall of Bone > Bone Shaman)
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Wall of Bone.Damage = 3
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Bone Shaman.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Wall of Bone)
+Bot1.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Wall of Bone.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Graveyard = Wall of Bone; Black Lotus

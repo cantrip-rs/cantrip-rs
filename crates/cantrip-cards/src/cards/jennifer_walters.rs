@@ -23,7 +23,7 @@ fn creature_you_control_is_dealt_damage(q: &dyn Query, source: ObjectId, event: 
                 && q.chars(*id).is(CardType::Creature)
                 && !q.history().done(source, retaliation(q, source), q.controller(source)) =>
         {
-            Some(Fired { subject: *target, data: [*amount as u32, 0] })
+            Some(Fired { subject: *target, data: [0, 0] })
         }
         _ => None,
     }
@@ -36,7 +36,7 @@ fn retaliate(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if g.history().done(item.object, item.ability, item.controller) || !g.target_legal(item, 0) {
         return Ok(());
     }
-    let amount = item.data[0] as u32;
+    let amount = item.matched_damage_amount();
     if amount == 0 {
         return Ok(());
     }
@@ -44,12 +44,12 @@ fn retaliate(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         return Ok(());
     }
     g.note_done(item.object, item.ability, item.controller);
-    g.damage(item.object, item.target(0), amount);
+    g.damage(item.object, item.target(0),(amount) as u32);
     Ok(())
 }
 
 pub static BACK: CardDef = CardDef {
-    abilities: &[triggered(when(EventMask::DAMAGE, creature_you_control_is_dealt_damage), retaliate, "Whenever a creature you control is dealt damage, you may have The Sensational She-Hulk deal that much damage to any target. Do this only once each turn.")
+    abilities: &[triggered(when(EventMask::DAMAGE, creature_you_control_is_dealt_damage), retaliate, "Whenever a creature you control is dealt damage, you may have The Sensational She-Hulk deal that much damage to any target. Do this only once each turn.").damage_amount()
         .targets(&[targets::ANY])
         .sums_per_subject()],
     cast_rules: &[statics::opponents_cant_cast_spells_during_your_turn],
