@@ -1,0 +1,53 @@
+# Pyramids destroys an opponent's Aura attached to a land; neither the land nor a non-Aura artifact is a legal target.
+[Bot1 Deck]
+Pyramids
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Mountain
+Footfall Crater
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pyramids.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Footfall Crater.Cast(Bot2.Battlefield.Mountain)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Pyramids.Activate
+! Bot1.Modes(Count: 0)
+! Bot1.Modes(Destroy target Aura; The next time target land)
+Bot1.Modes(Destroy target Aura)
+! Bot1.Target(Bot2.Battlefield.Mountain)
+! Bot1.Target(Bot1.Battlefield.Mox Jet)
+Bot1.Target(Bot2.Battlefield.Footfall Crater)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Footfall Crater
+Bot2.Battlefield.Mountain.Types = Land

@@ -1,0 +1,27 @@
+# Magical Hack changes Island to Forest while Part Water is on the stack (CR 612.2).
+[Bot1 Deck]
+Part Water
+Magical Hack
+Black Lotus
+Mox Sapphire
+Phyrexian Walker
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Part Water.Cast(X: 1)
+Bot1.Target(Phyrexian Walker)
+Bot1.Hand.Magical Hack.Cast(Stack.Part Water)
+Bot1.Modes(Island)
+Bot1.Modes(Forest)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Phyrexian Walker.Keywords = Forestwalk

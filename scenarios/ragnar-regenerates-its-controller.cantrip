@@ -1,0 +1,44 @@
+# Ragnar pays {G}{W}{U} and taps to shield itself from lethal damage (CR 701.19a).
+[Bot1 Deck]
+Ragnar
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Forest x20
+[Bot2 Deck]
+Lightning Bolt
+Mountain x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ragnar.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Ragnar.Activate(Bot1.Battlefield.Mox Emerald)
+Bot1.Battlefield.Ragnar.Activate(Bot1.Battlefield.Ragnar)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Ragnar.Tapped = true
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ragnar)
+Bot2.Battlefield.Mountain.Activate
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Ragnar.Damage = 0
+Bot1.Battlefield.Ragnar.Tapped = true
+Bot2.Graveyard = Lightning Bolt

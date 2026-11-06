@@ -37,6 +37,7 @@ Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Louisoix's Sacrifice.Cast(Stack.Flametongue Kavu)
+Bot1.Modes(Pay {2})
 ? Bot1.Mana =
 Bot1.Pass
 Bot2.Pass

@@ -1,0 +1,8 @@
+{
+  "name": "Ragnar",
+  "manaCost": "{G}{W}{U}",
+  "type": "Legendary Creature — Human Cleric",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{G}{W}{U}, {T}: Regenerate target creature."
+}

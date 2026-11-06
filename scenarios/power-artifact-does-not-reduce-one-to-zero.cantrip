@@ -1,0 +1,28 @@
+# Mind Stone's {1}, tap, sacrifice ability still costs one mana under Power Artifact (CR 602.2b).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire x2
+Mind Stone
+Power Artifact
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Mind Stone.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Power Artifact.Cast(Bot1.Battlefield.Mind Stone)
+? Bot1.Mana = {R}
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mind Stone.Activate(Ability: Draw)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Power Artifact; Mind Stone; Black Lotus

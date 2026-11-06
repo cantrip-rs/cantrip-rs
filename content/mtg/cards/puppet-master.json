@@ -1,0 +1,6 @@
+{
+  "name": "Puppet Master",
+  "manaCost": "{U}{U}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nWhen enchanted creature dies, return that card to its owner's hand. If that card is returned to its owner's hand this way, you may pay {U}{U}{U}. If you do, return this card to its owner's hand."
+}

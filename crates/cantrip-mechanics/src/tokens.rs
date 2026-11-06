@@ -1408,6 +1408,35 @@ pub static HUMAN_MONK: CardDef = CardDef {
     ..token!(Human Monk)
 };
 
+/// A 1/1 white, red, and green Sand Warrior creature token (CR 111).
+/// Hazezon Tamar, Hazezon, Shaper of Sand and Desert Warfare create this exact token.
+pub static SAND_WARRIOR: CardDef = CardDef {
+    types: TypeSet::of(&[CardType::Creature]),
+    colors: Some(ColorSet(25)),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Sand Warrior)
+};
+
+/// A 1/1 green Saproling creature token (CR 111). Aether Mutation, Artifact Mutation and Aura Mutation create this
+/// exact token.
+pub static SAPROLING: CardDef = CardDef {
+    types: TypeSet::of(&[CardType::Creature]),
+    colors: Some(ColorSet(16)),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Saproling)
+};
+
+/// A 1/1 white Citizen creature token (CR 111). Icatian Crier and Icatian Town create this exact token.
+pub static CITIZEN_1_1_WHITE: CardDef = CardDef {
+    types: TypeSet::of(&[CardType::Creature]),
+    colors: Some(ColorSet(1)),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Citizen)
+};
+
 #[cfg(test)]
 mod tests {
     use super::*;

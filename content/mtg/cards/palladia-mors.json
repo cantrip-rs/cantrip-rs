@@ -1,0 +1,12 @@
+{
+  "name": "Palladia-Mors",
+  "manaCost": "{2}{R}{R}{G}{G}{W}{W}",
+  "type": "Legendary Creature — Elder Dragon",
+  "power": 7,
+  "toughness": 7,
+  "oracleText": "Flying, trample\nAt the beginning of your upkeep, sacrifice Palladia-Mors unless you pay {R}{G}{W}.",
+  "keywords": [
+    "Flying",
+    "Trample"
+  ]
+}

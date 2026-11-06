@@ -46,6 +46,7 @@ Bot2.Pass
 Bot1.Hand.Mox Pearl.Cast
 Bot1.Pass
 Bot2.Hand.Force of Will.Cast(Mox Pearl; Ability: exile a blue card)
+Bot2.Choose(Pay 1 life)
 Bot2.Choose(Brainstorm)
 Bot2.Pass
 Bot1.Pass

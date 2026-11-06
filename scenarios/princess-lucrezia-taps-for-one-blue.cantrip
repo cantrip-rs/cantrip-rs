@@ -1,0 +1,34 @@
+# Princess Lucrezia cannot tap on the turn she enters; on the next turn she taps for exactly one blue mana and cannot tap again (CR 302.6, 605.1a).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Princess Lucrezia
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Princess Lucrezia.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Princess Lucrezia.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Princess Lucrezia.Activate
+? Bot1.Mana = {U}
+? Bot1.Battlefield.Princess Lucrezia.Tapped = true
+! Bot1.Battlefield.Princess Lucrezia.Activate
+
+[Expect]
+Bot1.Battlefield.Princess Lucrezia.Tapped = true

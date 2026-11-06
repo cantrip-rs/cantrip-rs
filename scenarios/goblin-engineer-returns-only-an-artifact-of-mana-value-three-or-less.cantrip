@@ -43,6 +43,7 @@ Bot2.Pass
 ? Bot1.Graveyard = Pyrite Spellbomb; Krark-Clan Ironworks
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Goblin Engineer.Activate(Ability: Return target artifact; Bot1.Graveyard.Pyrite Spellbomb)
+Bot1.Choose(Tap Goblin Engineer)
 Bot1.Choose(Mox Jet)
 Bot1.Pass
 Bot2.Pass

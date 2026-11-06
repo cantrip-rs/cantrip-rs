@@ -1,0 +1,23 @@
+# With X zero Recall discards and returns no cards, then exiles itself (CR 107.3, 701.13a).
+[Bot1 Deck]
+Recall
+Mox Sapphire
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Recall.Cast(X: 0)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Hand.Forest.Colors =
+Bot1.Graveyard.Count = 0
+Exile = Recall

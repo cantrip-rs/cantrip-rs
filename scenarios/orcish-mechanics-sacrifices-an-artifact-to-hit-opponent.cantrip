@@ -1,0 +1,35 @@
+# Orcish Mechanics taps and sacrifices exactly one artifact to deal two damage to an opponent; noncreature lands are not targets (CR 602.2b, 115.4).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Orcish Mechanics
+Mountain
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Orcish Mechanics.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Orcish Mechanics.Activate(Bot1.Battlefield.Mountain)
+Bot1.Battlefield.Orcish Mechanics.Activate(Bot2)
+! Bot1.Choose()
+! Bot1.Choose(Mox Pearl; Mox Ruby)
+! Bot1.Choose(Mountain)
+Bot1.Choose(Tap Orcish Mechanics)
+Bot1.Choose(Mox Pearl)
+? Bot1.Battlefield.Orcish Mechanics.Tapped = true
+? Bot1.Mana =
+! Bot1.Battlefield.Orcish Mechanics.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard = Mox Pearl; Black Lotus
+Bot1.Battlefield.Mox Ruby.Tapped = false

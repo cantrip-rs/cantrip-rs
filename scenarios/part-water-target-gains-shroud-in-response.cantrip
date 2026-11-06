@@ -1,0 +1,38 @@
+# One target gains shroud in response and receives no islandwalk; the other still gains it (CR 608.2b).
+[Bot1 Deck]
+Part Water
+Black Lotus
+Mox Sapphire
+Mox Jet
+Phyrexian Walker
+Island x20
+[Bot2 Deck]
+Sylvan Safekeeper
+Forest
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Sylvan Safekeeper.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Part Water.Cast(X: 2)
+Bot1.Target(Bot1.Battlefield.Phyrexian Walker; Bot2.Battlefield.Sylvan Safekeeper)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Sylvan Safekeeper.Activate(Sylvan Safekeeper)
+Bot2.Choose(Forest)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Sylvan Safekeeper.Keywords = Shroud
+Bot1.Battlefield.Phyrexian Walker.Keywords = Islandwalk

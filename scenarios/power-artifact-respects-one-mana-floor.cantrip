@@ -1,0 +1,29 @@
+# The three-mana untap ability of Basalt Monolith costs one under Power Artifact; its tap-only mana ability still costs no mana (CR 602.2b).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire x2
+Basalt Monolith
+Power Artifact
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Basalt Monolith.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Power Artifact.Cast(Bot1.Battlefield.Basalt Monolith)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Basalt Monolith.Activate(Ability: Add)
+? Bot1.Mana = {C}{C}{C}
+Bot1.Battlefield.Basalt Monolith.Activate(Ability: Untap)
+? Bot1.Mana = {C}{C}
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Basalt Monolith.Tapped = false

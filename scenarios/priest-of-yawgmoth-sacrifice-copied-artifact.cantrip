@@ -1,0 +1,44 @@
+# Phyrexian Metamorph copies Sol Ring: its battlefield mana value is one, although its printed graveyard card has mana value four (CR 707.2).
+[Bot1 Deck]
+Priest of Yawgmoth
+Black Lotus
+Sol Ring
+Mox Sapphire
+Mox Pearl
+Phyrexian Metamorph
+Island x25
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Priest of Yawgmoth.Cast
+? Bot1.Mana = {B}
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Phyrexian Metamorph.Cast
+Bot1.Modes()
+? Bot1.Mana =
+? Stack.Phyrexian Metamorph.ManaValue = 4
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Sol Ring)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Sol Ring#2.ManaValue = 1
+Bot1.Battlefield.Priest of Yawgmoth.Activate(Sacrifice: Sol Ring#2)
+Bot1.Choose(Tap Priest of Yawgmoth)
+Bot1.Choose(Sol Ring#2)
+? Bot1.Mana = {B}
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard.Phyrexian Metamorph.Colors = Blue
+Bot1.Battlefield.Sol Ring.ManaValue = 1

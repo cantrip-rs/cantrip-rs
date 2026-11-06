@@ -1,0 +1,8 @@
+{
+  "name": "Princess Lucrezia",
+  "manaCost": "{3}{U}{U}{B}",
+  "type": "Legendary Creature — Human Wizard",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "{T}: Add {U}."
+}

@@ -443,10 +443,10 @@ public sealed class PlayerRail : Border
                     : $"Speed {speed} of 4. It goes up by 1 once on each of their turns when an opponent loses life. Max speed abilities work at 4.");
         }
 
-        // Effects waiting on the player that sit on no object (CR 611.2c): "the next spell you cast can't be countered".
+        // Waiting effects and delayed abilities have different lifetimes; show their supplied text without inventing one.
         foreach (string pending in player.PendingEffects)
         {
-            Add(pending.TrimEnd('.'), Theme.Accent, tooltip: pending + " It ends with the turn if no spell is cast.");
+            Add(pending.TrimEnd('.'), Theme.Accent, tooltip: pending);
         }
 
         // Where their venture marker is (CR 309.4), and how many dungeons they have completed (CR 309.7): the room alone,

@@ -1,0 +1,52 @@
+# Leyline exiles the card component of a merged token while the token dies; the still-findable card returns (CR 730.3c, 730.3e).
+[Bot1 Deck]
+Mox Pearl
+Black Lotus x3
+Esika's Chariot
+Cubwarden
+Puppet Master
+Black Lotus
+Island x20
+[Bot2 Deck]
+Leyline of the Void
+Mountain
+Lightning Bolt
+Island x20
+[Actions]
+Bot2.Accept
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Esika's Chariot.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cubwarden.Cast(Cat Token; Ability: Mutate)
+Bot1.Pass
+Bot1.Modes(2)
+Bot1.Pass
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Puppet Master.Cast(Cat Token)
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Cat Token#1)
+Bot2.Pass
+Bot1.Pass
+? Exile = Black Lotus; Black Lotus; Black Lotus; Cubwarden; Puppet Master
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.PayCost
+? Bot1.Mana =
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Hand.Cubwarden.Power = 3
+Bot1.Hand.Puppet Master = (absent)
+Exile = Black Lotus; Black Lotus; Black Lotus; Black Lotus; Puppet Master

@@ -1,0 +1,19 @@
+# X=0 costs only {U}, chooses no targets, and leaves an available creature without islandwalk (CR 107.3, 115.1).
+[Bot1 Deck]
+Part Water
+Mox Sapphire
+Phyrexian Walker
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Part Water.Cast(X: 0)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Phyrexian Walker.Keywords = (absent)
+Bot1.Graveyard = Part Water

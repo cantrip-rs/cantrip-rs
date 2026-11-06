@@ -1,0 +1,28 @@
+# Power Artifact reduces Celestial Prism's mana ability from {2} to {1} (CR 602.2b, 605.3a).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire x2
+Mox Pearl
+Celestial Prism
+Power Artifact
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Celestial Prism.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Power Artifact.Cast(Celestial Prism)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Celestial Prism.Activate(Color: Blue)
+Bot1.Choose(Pay mana)
+? Bot1.Mana = {U}
+[Expect]
+Bot1.Battlefield.Celestial Prism.Tapped = true

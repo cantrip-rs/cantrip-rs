@@ -1,0 +1,38 @@
+# Both opponents' artifact taps trigger Powerleech in a three-player game.
+[Bot1 Deck]
+Powerleech
+Mox Emerald
+Gleemox
+Forest x20
+
+[Bot2 Deck]
+Mox Jet
+Island x20
+
+[Bot3 Deck]
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Powerleech.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+[T3 Bot3.Main1]
+? Bot1.Life = 21
+Bot3.Hand.Mox Ruby.Cast
+Bot3.Pass
+Bot3.Battlefield.Mox Ruby.Activate
+[T4 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 20
+Bot3.Life = 20

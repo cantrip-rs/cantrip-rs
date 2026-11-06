@@ -1,0 +1,40 @@
+# Exiling a creature and discarding a creature card are not deaths, so neither produces a carrion counter (CR 700.4).
+[Bot1 Deck]
+Osai Vultures
+Mox Pearl x2
+Mox Jet
+Mox Sapphire
+Swords to Plowshares
+Thoughtseize
+Island x20
+[Bot2 Deck]
+Ornithopter
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Osai Vultures.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Osai Vultures.Counters.Carrion = (absent)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Thoughtseize.Cast(Bot2)
+Bot1.Choose(Memnite)
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Osai Vultures.Counters.Carrion = (absent)
+Bot2.Exile.Ornithopter.Power = 0
+Bot2.Graveyard = Memnite

@@ -1,0 +1,33 @@
+# Power Artifact also reduces an enchanted artifact controlled by its opponent (CR 601.2f).
+[Bot1 Deck]
+Mox Sapphire x2
+Power Artifact
+Island x20
+[Bot2 Deck]
+Black Lotus
+Basalt Monolith
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Basalt Monolith.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Power Artifact.Cast(Bot2.Battlefield.Basalt Monolith)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Basalt Monolith.Activate(Ability: Add)
+? Bot2.Mana = {C}{C}{C}
+Bot2.Battlefield.Basalt Monolith.Activate(Ability: Untap)
+? Bot2.Mana = {C}{C}
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Battlefield.Basalt Monolith.Tapped = false

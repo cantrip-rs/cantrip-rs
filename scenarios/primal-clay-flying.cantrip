@@ -1,0 +1,34 @@
+# The flying form cannot be blocked by a ground creature, which can block Memnite (CR 702.9b).
+[Bot1 Deck]
+Primal Clay
+Black Lotus
+Mox Pearl
+Memnite
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Primal Clay.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Modes(2/2 artifact creature with flying)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Primal Clay > Bot2; Memnite > Bot2)
+! Bot2.Block(Bot2.Battlefield.Memnite > Primal Clay)
+Bot2.Block(Bot2.Battlefield.Memnite > Bot1.Battlefield.Memnite)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Primal Clay.Power = 2
+Bot1.Battlefield.Primal Clay.Toughness = 2
+Bot1.Battlefield.Primal Clay.Types = Artifact; Creature
+Bot1.Battlefield.Primal Clay.Keywords = Flying
+Bot1.Battlefield.Primal Clay.Subtypes = Shapeshifter

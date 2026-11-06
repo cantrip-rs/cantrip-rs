@@ -13,6 +13,7 @@ Swamp x15
 [Actions]
 Bot1.Hand.Sunbaked Canyon.Play
 Bot1.Battlefield.Sunbaked Canyon.Activate(Ability: Add; Color: White)
+Bot1.Choose(Tap Sunbaked Canyon)
 ? Bot1.Mana = {W}
 ? Bot1.Life = 19
 ! Bot1.Battlefield.Sunbaked Canyon.Activate(Ability: Draw)

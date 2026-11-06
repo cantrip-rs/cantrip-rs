@@ -22,6 +22,7 @@ Bot1.Hand.Charging Strifeknight.Cast
 Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Charging Strifeknight.Activate
+Bot1.Choose(Tap Charging Strifeknight)
 Bot1.Choose(Island)
 Bot1.Pass
 Bot2.Pass

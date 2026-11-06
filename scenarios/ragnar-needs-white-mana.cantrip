@@ -1,0 +1,40 @@
+# Ragnar requires white mana even with three other mana available; adding that color
+# permits the same activation (CR 602.2b).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Mox Emerald
+Ragnar
+Plains
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ragnar.Cast
+? Bot1.Mana = {W}{W}
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Ragnar.Activate(Bot1.Battlefield.Ragnar; Mana: short)
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Ragnar.Activate(Bot1.Battlefield.Ragnar)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Battlefield.Ragnar.Tapped = true
+
+[Expect]
+Bot1.Battlefield.Ragnar.Tapped = true

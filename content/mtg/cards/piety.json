@@ -1,0 +1,6 @@
+{
+  "name": "Piety",
+  "manaCost": "{2}{W}",
+  "type": "Instant",
+  "oracleText": "Blocking creatures get +0/+3 until end of turn."
+}

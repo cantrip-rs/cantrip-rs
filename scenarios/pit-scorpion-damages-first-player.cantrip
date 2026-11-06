@@ -1,0 +1,29 @@
+# The damaged player gets one poison counter when the second player controls the Scorpion (CR 603.2).
+[Bot1 Deck]
+Island x20
+
+[Bot2 Deck]
+Pit Scorpion
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Swamp x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Pit Scorpion.Cast
+? Bot2.Mana =
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Pit Scorpion > Bot1)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Poison = 1
+Bot2.Poison = 0

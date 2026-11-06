@@ -1,0 +1,42 @@
+# Returning two cards together triggers Spirit Mascot once, and the discarded cards can be chosen (CR 608.2c, 603.2c).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Spirit Mascot
+Recall
+Forest
+Mountain
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Spirit Mascot.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Recall.Cast(X: 2)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+Bot1.Choose(Forest; Mountain)
+Bot1.Choose(Forest; Mountain)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Spirit Mascot.Counters.PlusOnePlusOne = 1
+Bot1.Hand.Forest.Colors =
+Bot1.Hand.Mountain.Colors =
+Exile = Recall

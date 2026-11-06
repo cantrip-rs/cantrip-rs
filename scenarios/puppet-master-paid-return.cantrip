@@ -1,0 +1,41 @@
+# The Aura enchants a creature, and after it dies returns both cards when its controller pays exactly three blue mana (CR 702.5a, 603.2).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire x3
+Ornithopter
+Puppet Master
+Island
+Island x20
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+! Bot1.Hand.Puppet Master.Cast(Bot1.Battlefield.Mox Sapphire)
+Bot1.Hand.Puppet Master.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Ornithopter.Power = 0
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Hand.Ornithopter.Power = 0
+Bot1.Hand.Puppet Master.Colors = Blue

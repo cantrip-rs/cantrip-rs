@@ -77,10 +77,10 @@ fn life_after(respond: bool) -> i32 {
                 }
             }
             RequestKind::Priority { .. } => Answer::Pass,
-            RequestKind::PayCosts { options, .. } => {
+            RequestKind::ChooseCostPayment { choices, .. } => Answer::CostPayment(choices.iter().position(|c| c.kind == CostPaymentKind::Mana).unwrap_or(0)),
+            RequestKind::PayCosts { options, remaining, mana_abilities, .. } => {
                 let mox = options.iter().find(|o| o.kind == ActionKind::ActivateAbility);
-                let confirm = options.iter().find(|o| o.kind == ActionKind::ConfirmCasting);
-                Answer::Act(Action::of(confirm.or(mox).expect("mana to pay with, or the payment to confirm")))
+                super::pay(options, remaining, *mana_abilities, mox)
             }
             RequestKind::OrderTriggers { sources, .. } => Answer::Order((0..count_u32(sources.len())).collect()),
             RequestKind::DiscardToHandSize { count, hand } => Answer::Cards(hand.iter().rev().copied().take(*count as usize).collect()),

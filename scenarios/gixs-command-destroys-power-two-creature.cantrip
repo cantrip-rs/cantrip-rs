@@ -1,0 +1,62 @@
+# Gix's Command, "Choose two": modes 2 and 3, resolved in printed order. Destroy each creature with power 2 or less takes
+# Bot1's Ornithopter and Bot2's power-two Grizzly Bears together, and then "return up to two creature cards from
+# your graveyard to your hand" gives Bot1 back its Ornithopter. Bot2's creatures stay in Bot2's graveyard.
+
+[Bot1 Deck]
+Gix's Command
+Mox Jet
+Gleemox
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Ornithopter
+Island x11
+
+[Bot2 Deck]
+Mox Emerald
+Gleemox
+Grizzly Bears
+Island
+Island
+Island
+Island
+Island x11
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Gleemox.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Gleemox.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gix's Command.Cast
+Bot1.Modes(2; 3)
+Bot1.Pass
+Bot1.Choose(Ornithopter)
+
+[Expect]
+Bot1.Graveyard = Gix's Command
+Bot1.Hand = Island; Ornithopter
+Bot1.Battlefield = Mox Jet; Gleemox; Mox Emerald; Mox Ruby; Mox Pearl
+Bot2.Graveyard = Grizzly Bears
+Bot2.Battlefield = Mox Emerald; Gleemox

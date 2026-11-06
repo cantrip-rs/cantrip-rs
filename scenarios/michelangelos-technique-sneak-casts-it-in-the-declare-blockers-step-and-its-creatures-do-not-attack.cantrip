@@ -35,11 +35,11 @@ Bot1.Hand.Forest.Play
 Bot1.Attack(Ornithopter > Bot2)
 [T3 Bot1.DeclareBlockers]
 Bot1.Hand.Michelangelo's Technique.Cast(Ability: Sneak)
-Bot1.Choose(Ornithopter)
 Bot1.Battlefield.Forest#1.Activate
 Bot1.Battlefield.Forest#2.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Choose(Ornithopter)
 Bot1.Pass
 Bot1.Choose(Argothian Elder; Woodland Changeling)
 [T3 Bot1.Main2]

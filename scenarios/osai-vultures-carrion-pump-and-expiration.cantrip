@@ -1,0 +1,48 @@
+# A death on each player's turn supplies one carrion counter; two are spent for +1/+1 until cleanup (CR 603.4, 611.2a).
+[Bot1 Deck]
+Osai Vultures
+Mox Pearl
+Mox Jet
+Mox Ruby
+Phyrexian Walker
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Phyrexian Walker
+Mox Ruby
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Osai Vultures.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Osai Vultures.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Phyrexian Walker)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Osai Vultures.Counters.Carrion = 1
+! Bot1.Battlefield.Osai Vultures.Activate
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Phyrexian Walker)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Osai Vultures.Counters.Carrion = 2
+Bot1.Battlefield.Osai Vultures.Activate
+? Bot1.Battlefield.Osai Vultures.Counters.Carrion = (absent)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Osai Vultures.Power = 2
+? Bot1.Battlefield.Osai Vultures.Toughness = 2
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Osai Vultures.Power = 1
+? Bot1.Battlefield.Osai Vultures.Toughness = 1
+[Expect]
+Bot1.Battlefield.Osai Vultures.Counters.Carrion = (absent)

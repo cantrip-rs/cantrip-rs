@@ -1,0 +1,42 @@
+# An opponent's Hexdrinker level-up has no tap cost but is not an artifact ability, so it gives no life;
+# tapping that opponent's Mox afterward is a positive control.
+[Bot1 Deck]
+Powerleech
+Mox Emerald
+Gleemox
+Forest x20
+
+[Bot2 Deck]
+Hexdrinker
+Forest
+Mox Jet
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Powerleech.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Hexdrinker.Cast
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Hexdrinker.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 20
+Bot2.Battlefield.Mox Jet.Activate
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 21

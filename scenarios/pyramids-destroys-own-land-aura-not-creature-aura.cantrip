@@ -1,0 +1,53 @@
+# The Aura mode accepts its controller’s land Aura and rejects an Aura attached to a creature (CR 115.1).
+[Bot1 Deck]
+Pyramids
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mountain
+Footfall Crater
+Island x20
+[Bot2 Deck]
+Forest
+Memnite
+Rancor
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pyramids.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Rancor.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Footfall Crater.Cast(Bot1.Battlefield.Mountain)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Pyramids.Activate
+Bot1.Modes(Destroy target Aura)
+! Bot1.Target(Bot2.Battlefield.Rancor)
+Bot1.Target(Bot1.Battlefield.Footfall Crater)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+[Expect]
+Bot1.Graveyard.Footfall Crater.Colors = Red
+Bot2.Battlefield.Rancor.Colors = Green

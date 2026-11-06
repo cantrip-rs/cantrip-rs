@@ -1,0 +1,8 @@
+{
+  "name": "Pradesh Gypsies",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Human Nomad",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{1}{G}, {T}: Target creature gets -2/-0 until end of turn."
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Orcish Mechanics",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Orc",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}, Sacrifice an artifact: This creature deals 2 damage to any target."
+}

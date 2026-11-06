@@ -1,0 +1,41 @@
+# If the sole target leaves before resolution, the whole ability does nothing, including self damage (CR 608.2b).
+[Bot1 Deck]
+Psionic Entity
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Ornithopter
+Mox Sapphire
+Unsummon
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Psionic Entity.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Psionic Entity.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Unsummon.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Psionic Entity.Damage = 0
+Bot2.Hand.Ornithopter.Power = 0
+Bot2.Graveyard = Unsummon
