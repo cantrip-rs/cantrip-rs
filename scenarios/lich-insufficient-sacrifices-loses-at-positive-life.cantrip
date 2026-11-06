@@ -1,0 +1,46 @@
+# After Harmless Offering and bouncing Lich in response to its damage trigger, its controller has positive life but loses for insufficient sacrifices (CR 113.7a, 609.3).
+[Bot1 Deck]
+Lich
+Phyrexian Unlife
+Harmless Offering
+Banishing Betrayal
+Black Lotus x3
+Mox Jet
+Mox Sapphire
+Black Lotus
+Island x20
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Phyrexian Unlife.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lich.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Lich)
+[T7 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+[T8 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Banishing Betrayal.Cast(Lich)
+[Expect]
+Result = Bot1 won
+Bot2.Life = 17

@@ -1,0 +1,8 @@
+{
+  "name": "Goblin King",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Goblin",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Other Goblins get +1/+1 and have mountainwalk."
+}

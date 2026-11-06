@@ -1,0 +1,53 @@
+# Fork copies an opponent's blue instant as a red spell, so protection from red prevents the copy targeting its creature (CR 707.10, 702.16b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Sea Sprite
+Ornithopter
+Fork
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Windreaper Falcon
+Island
+Ornithopter
+Unsummon
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sea Sprite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Windreaper Falcon.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+! Bot1.Hand.Fork.Cast(Stack.Ornithopter)
+Bot2.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Unsummon.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Hand.Fork.Cast(Stack.Unsummon)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Sea Sprite)
+Bot1.Target(Bot2.Battlefield.Windreaper Falcon)
+[T2 Bot2.End]
+
+[Expect]
+Bot2.Hand.Ornithopter.Power = 0
+Bot2.Hand.Windreaper Falcon.Power = 1
+Bot1.Battlefield.Sea Sprite.Power = 1

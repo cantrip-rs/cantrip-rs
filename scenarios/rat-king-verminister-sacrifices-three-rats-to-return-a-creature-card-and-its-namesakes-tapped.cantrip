@@ -52,12 +52,18 @@ Bot1.Pass
 Bot2.Search(Typhoid Rats)
 ? Bot2.Graveyard = Entomb; Typhoid Rats
 [T3 Bot1.Main1]
-! Bot1.Battlefield.Rat King, Verminister.Activate(Bot1.Graveyard.Typhoid Rats)
+# With fewer than three Rats, an attempted activation rolls back (CR 733).
+Bot1.Battlefield.Rat King, Verminister.Activate(Bot1.Graveyard.Typhoid Rats)
+? Bot1.Battlefield.Rat King, Verminister.Tapped = false
+? Bot1.Life = 20
+? Bot1.Mana =
+? Stack.Count = 0
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Muck Rats.Cast
 Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Rat King, Verminister.Activate(Bot1.Graveyard.Typhoid Rats)
+Bot1.Choose(Tap Rat King, Verminister)
 Bot1.Pass
 Bot2.Pass
 ? Bot1.Battlefield = Mox Jet; Mox Emerald; Typhoid Rats; Typhoid Rats

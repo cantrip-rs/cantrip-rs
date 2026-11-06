@@ -1,0 +1,50 @@
+# The affected artifact stops being a creature, but a move from the battlefield to the graveyard still counts as dying, so it is exiled (CR 700.4).
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Sol Ring
+Ensoul Artifact
+Disintegrate
+Island x20
+[Bot2 Deck]
+Mox Pearl
+Mox Ruby x2
+Sol Ring
+Disenchant
+Shatter
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Ensoul Artifact.Cast(Bot1.Battlefield.Mox Jet)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Disintegrate.Cast(Bot1.Battlefield.Mox Jet; X: 0)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Ensoul Artifact)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Mox Jet)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Mox Jet = (absent)
+Bot1.Graveyard = Ensoul Artifact; Disintegrate
+Exile = Mox Jet

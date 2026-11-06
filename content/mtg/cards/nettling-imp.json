@@ -1,0 +1,8 @@
+{
+  "name": "Nettling Imp",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Imp",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}: Choose target non-Wall creature the active player has controlled continuously since the beginning of the turn. That creature attacks this turn if able. Destroy it at the beginning of the next end step if it didn't attack this turn. Activate only during an opponent's turn, before attackers are declared."
+}

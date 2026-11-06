@@ -58,14 +58,25 @@ pub fn cancels(answer: &Answer) -> bool {
     }
 }
 
+/// Snow allocations are policy choices over actual engine options, independent of the old autotapper.
+pub fn snow_request(request: &Request) -> bool {
+    match &request.kind {
+        RequestKind::PayCosts { announcing: true, .. } => false,
+        RequestKind::PayCosts { remaining, options, .. } | RequestKind::UnlessPays { remaining, options, .. } =>
+            remaining.snow > 0 || options.iter().any(|o| o.snow || o.pay_snow),
+        _ => false,
+    }
+}
+
 /// Whether `request` is a payment the autotapper cannot finish: one it would answer with nothing.
 pub fn unpayable(game: &Game, request: &Request) -> bool {
-    matches!(&request.kind, RequestKind::PayCosts { announcing: false, .. }) && crate::pay::pay(game, request, None).is_none()
+    !snow_request(request) && matches!(&request.kind, RequestKind::PayCosts { announcing: false, .. }) && crate::pay::pay(game, request, None).is_none()
 }
 
 /// The AI's copy of `request`, atomic (see the module).
 pub fn filter(game: &Game, request: &Request) -> Request {
     let mut r = request.clone();
+    if snow_request(request) { return r; }
     let payable = match &r.kind {
         RequestKind::PayCosts { announcing, .. } => *announcing || crate::pay::pay(game, request, None).is_some(),
         _ => true,

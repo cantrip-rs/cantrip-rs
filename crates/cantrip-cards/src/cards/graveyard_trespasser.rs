@@ -15,8 +15,8 @@ fn exile_and_drain(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let exiled = g.exile_all(&cards);
     let creatures = exiled.iter().filter(|&&c| g.chars(c).is(CardType::Creature)).count() as i32;
     if creatures > 0 {
-        g.each_opponent_loses_life(item.controller, creatures);
-        g.gain_life(item.controller, creatures);
+        g.each_opponent_loses_life(item.controller,(creatures) as i32);
+        g.gain_life(item.controller,(creatures) as i32);
     }
     Ok(())
 }

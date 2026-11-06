@@ -1,0 +1,6 @@
+{
+  "name": "Lich",
+  "manaCost": "{B}{B}{B}{B}",
+  "type": "Enchantment",
+  "oracleText": "As this enchantment enters, you lose life equal to your life total.\nYou don't lose the game for having 0 or less life.\nIf you would gain life, draw that many cards instead.\nWhenever you're dealt damage, sacrifice that many nontoken permanents. If you can't, you lose the game.\nWhen this enchantment is put into a graveyard from the battlefield, you lose the game."
+}

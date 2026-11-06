@@ -1,0 +1,43 @@
+# Destroying Nettling Imp in response does not prevent its ability from destroying the tapped creature at the next end step (CR 113.7a).
+[Bot1 Deck]
+Nettling Imp
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Swamp x20
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Ornithopter
+Black Lotus
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Nettling Imp.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Llanowar Elves.Activate
+Bot2.Pass
+Bot1.Battlefield.Nettling Imp.Activate(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nettling Imp)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter)
+[T4 Bot2.End]
+[Expect]
+Bot1.Graveyard = Nettling Imp
+Bot2.Graveyard = Llanowar Elves; Lightning Bolt; Black Lotus
+Bot2.Battlefield.Ornithopter.Tapped = true

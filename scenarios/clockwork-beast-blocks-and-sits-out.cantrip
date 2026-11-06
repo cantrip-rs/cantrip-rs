@@ -1,0 +1,51 @@
+# A different creature blocks first with no effect on the Beast; when the Beast blocks it loses one counter (CR 603.4).
+
+[Bot1 Deck]
+Clockwork Beast
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Phyrexian Walker
+Island x20
+
+[Bot2 Deck]
+Phyrexian Walker
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Clockwork Beast.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clockwork Beast.Counters.Plus1Plus0 = 7
+? Bot1.Battlefield.Clockwork Beast.Power = 7
+? Bot1.Battlefield.Clockwork Beast.Toughness = 4
+! Bot1.Battlefield.Clockwork Beast.Activate
+Bot1.Hand.Phyrexian Walker.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Attack(Phyrexian Walker > Bot1)
+Bot1.Block(Bot1.Battlefield.Phyrexian Walker > Bot2.Battlefield.Phyrexian Walker)
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Clockwork Beast.Counters.Plus1Plus0 = 7
+[T6 Bot2.BeginCombat]
+Bot2.Attack(Phyrexian Walker > Bot1)
+Bot1.Block(Clockwork Beast > Phyrexian Walker)
+[T6 Bot2.Main2]
+? Bot1.Battlefield.Clockwork Beast.Counters.Plus1Plus0 = 6
+? Bot1.Battlefield.Clockwork Beast.Power = 6
+? Bot1.Battlefield.Clockwork Beast.Toughness = 4
+
+[Expect]
+Bot1.Battlefield.Clockwork Beast.Counters.Plus1Plus0 = 6

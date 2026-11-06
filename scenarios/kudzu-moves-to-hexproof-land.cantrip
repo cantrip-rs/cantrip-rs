@@ -1,0 +1,27 @@
+# Moving Kudzu does not target, so its controller can choose an opponent’s hexproof land (CR 701.3a, 702.11b).
+[Bot1 Deck]
+Kudzu
+Black Lotus
+Forest x20
+
+[Bot2 Deck]
+Valgavoth's Lair
+Island x19
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Kudzu.Cast(Bot1.Battlefield.Forest)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Valgavoth's Lair.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Choose(Bot2.Battlefield.Valgavoth's Lair)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Forest; Black Lotus
+Bot1.Battlefield.Kudzu.AttachedTo = Valgavoth's Lair

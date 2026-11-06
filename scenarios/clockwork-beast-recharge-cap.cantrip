@@ -1,0 +1,49 @@
+# Clockwork Beast attacks, losing one counter, then its controller pays X=2 in the next upkeep
+# and chooses two counters, returning to seven; the ability caps the result (CR 608.2d).
+
+[Bot1 Deck]
+Clockwork Beast
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Clockwork Beast.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clockwork Beast.Counters.Plus1Plus0 = 7
+? Bot1.Battlefield.Clockwork Beast.Power = 7
+? Bot1.Battlefield.Clockwork Beast.Toughness = 4
+! Bot1.Battlefield.Clockwork Beast.Activate
+[T3 Bot1.Main1]
+Bot1.Attack(Clockwork Beast > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Clockwork Beast.Counters.Plus1Plus0 = 6
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Clockwork Beast.Activate(X: 2)
+Bot1.Number(2)
+? Bot1.Mana =
+? Bot1.Battlefield.Clockwork Beast.Tapped = true
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Clockwork Beast.Counters.Plus1Plus0 = 7
+Bot1.Battlefield.Clockwork Beast.Power = 7
+Bot1.Battlefield.Clockwork Beast.Toughness = 4

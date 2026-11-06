@@ -162,13 +162,13 @@ fn put(g: &mut Game, def: &'static CardDef, zone: Zone) -> ObjectId {
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 fn add_mana(g: &mut Game, pool: &[Mana]) {
     let source = g.state.battlefield().first().copied().unwrap_or(ObjectId(0));
     for &m in pool {
-        g.state.add_mana(YOU, m, 1, source, None, ManaLasts::Step);
+        g.state.add_mana(YOU, m, 1, source, None, ManaLasts::Step, false);
     }
 }
 

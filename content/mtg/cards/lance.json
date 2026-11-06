@@ -1,0 +1,6 @@
+{
+  "name": "Lance",
+  "manaCost": "{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature has first strike."
+}

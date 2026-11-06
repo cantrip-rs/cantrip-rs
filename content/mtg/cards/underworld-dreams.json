@@ -1,0 +1,6 @@
+{
+  "name": "Underworld Dreams",
+  "manaCost": "{B}{B}{B}",
+  "type": "Enchantment",
+  "oracleText": "Whenever an opponent draws a card, this enchantment deals 1 damage to that player."
+}

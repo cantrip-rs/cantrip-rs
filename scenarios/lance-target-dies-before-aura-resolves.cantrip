@@ -1,0 +1,42 @@
+# If its target dies in response, Lance goes to the graveyard; a second Lance can enchant another creature (CR 608.2b, 303.4a).
+[Bot1 Deck]
+Lance x2
+Mox Pearl x2
+Ornithopter x2
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Lance.Cast(Bot1.Battlefield.Ornithopter#1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter#1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Lance; Ornithopter
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Lance.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Lance.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Keywords = FirstStrike; Flying

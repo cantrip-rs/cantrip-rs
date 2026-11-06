@@ -25,6 +25,9 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 ! Bot1.Battlefield.Disrupting Scepter.Activate(Bot1.Battlefield.Mox Ruby)
 Bot1.Battlefield.Disrupting Scepter.Activate(Bot2)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot2.Choose(Island)
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
@@ -34,6 +37,9 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Disrupting Scepter.Activate(Bot1)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
 ? Bot1.Mana =
 Bot1.Choose(Island)
 [T5 Bot1.Main2]

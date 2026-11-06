@@ -1,0 +1,57 @@
+# At six counters, Doubling Season would double a one-counter placement, but the ability caps the total at seven (CR 614.1a).
+
+[Bot1 Deck]
+Clockwork Beast
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Doubling Season
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Clockwork Beast.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clockwork Beast.Counters.Plus1Plus0 = 7
+? Bot1.Battlefield.Clockwork Beast.Power = 7
+? Bot1.Battlefield.Clockwork Beast.Toughness = 4
+! Bot1.Battlefield.Clockwork Beast.Activate
+[T3 Bot1.Main1]
+Bot1.Attack(Clockwork Beast > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Clockwork Beast.Counters.Plus1Plus0 = 6
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Doubling Season.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Clockwork Beast.Activate(X: 1)
+Bot1.Number(1)
+? Bot1.Mana =
+? Bot1.Battlefield.Clockwork Beast.Tapped = true
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Clockwork Beast.Counters.Plus1Plus0 = 7
+Bot1.Battlefield.Clockwork Beast.Power = 7
+Bot1.Battlefield.Clockwork Beast.Toughness = 4

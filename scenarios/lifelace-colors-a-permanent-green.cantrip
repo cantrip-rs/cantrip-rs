@@ -1,0 +1,18 @@
+# Lifelace makes a colorless permanent green indefinitely (CR 105.3, 611.2a).
+[Bot1 Deck]
+Mox Emerald
+Ornithopter
+Lifelace
+Forest x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Lifelace.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Ornithopter.Colors = Green

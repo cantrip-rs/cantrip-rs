@@ -1,0 +1,46 @@
+# Hithlain Rope becomes a creature but cannot be sacrificed, so Lord deals 7 damage rather than counting it (CR 101.2, 701.21a).
+[Bot1 Deck]
+Lord of the Pit
+Hithlain Rope
+March of the Machines
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Jet
+Black Lotus
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lord of the Pit.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Hithlain Rope.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Life = 13
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.March of the Machines.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Life = 6
+Bot1.Battlefield.Hithlain Rope.Toughness = 2
+Bot1.Battlefield.Lord of the Pit.Power = 7

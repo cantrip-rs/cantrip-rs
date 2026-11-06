@@ -1,0 +1,6 @@
+{
+  "name": "Skull of Orm",
+  "manaCost": "{3}",
+  "type": "Artifact",
+  "oracleText": "{5}, {T}: Return target enchantment card from your graveyard to your hand."
+}

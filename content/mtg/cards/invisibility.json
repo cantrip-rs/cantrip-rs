@@ -1,0 +1,6 @@
+{
+  "name": "Invisibility",
+  "manaCost": "{U}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature can't be blocked except by Walls."
+}

@@ -1,0 +1,37 @@
+# Lance can enchant an opponent’s creature, whose first strike defeats an equal blocker without taking damage (CR 702.7b).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Grizzly Bears
+Lance
+Island
+Island
+Island
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Lance.Cast(Bot1.Battlefield.Island)
+Bot1.Hand.Lance.Cast(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Bot2.Battlefield.Grizzly Bears > Bot1)
+Bot1.Block(Bot1.Battlefield.Grizzly Bears > Bot2.Battlefield.Grizzly Bears)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Lance.AttachedTo = Grizzly Bears
+Bot2.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Graveyard = Grizzly Bears; Black Lotus

@@ -1,0 +1,34 @@
+# Aspect on an opponent's creature counts its own controller's Forests, including nonbasic Savannah (CR 109.5, 305.6).
+[Bot1 Deck]
+Aspect of Wolf
+Mox Emerald
+Mox Pearl
+Forest
+Savannah
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Forest
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Savannah.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Aspect of Wolf.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Aspect of Wolf.AttachedTo = Ornithopter
+Bot2.Battlefield.Ornithopter.Power = 1
+Bot2.Battlefield.Ornithopter.Toughness = 3

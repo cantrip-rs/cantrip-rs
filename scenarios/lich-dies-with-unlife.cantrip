@@ -1,0 +1,39 @@
+# Phyrexian Unlife prevents a loss at zero, so Lich's death trigger itself causes the loss (CR 603.6c).
+[Bot1 Deck]
+Lich
+Black Lotus
+Black Lotus
+Mox Jet
+Phyrexian Unlife
+Island x20
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Disenchant
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Phyrexian Unlife.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lich.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Lich)
+
+[Expect]
+Result = Bot2 won
+Bot1.Life = 0
+Bot1.Battlefield = Mox Jet; Phyrexian Unlife

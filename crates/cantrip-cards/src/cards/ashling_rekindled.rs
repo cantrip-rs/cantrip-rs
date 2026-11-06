@@ -5,7 +5,7 @@ use cantrip_oracle as oracle;
 /// "Whenever this creature transforms into Ashling, Rimebound and at the beginning of your first main phase": one
 /// ability with two trigger events (CR 603.2).
 fn transforms_or_first_main(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
-    triggers::this_transforms(q, source, event).or_else(|| triggers::your_first_main_phase(q, &Asker { source, controller: q.controller(source), by: None, spell: false }, event))
+    triggers::this_transforms(q, source, event).or_else(|| triggers::your_first_main_phase(q, &Asker { instance: None, source, controller: q.controller(source), by: None, spell: false }, event))
 }
 
 /// "You may discard a card. If you do, draw a card."

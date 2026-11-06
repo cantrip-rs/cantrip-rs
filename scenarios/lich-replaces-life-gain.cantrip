@@ -1,0 +1,34 @@
+# Lich replaces three life gained with three draws, leaving life at zero (CR 614.1a).
+[Bot1 Deck]
+Lich
+Black Lotus
+Mox Jet
+Mox Pearl
+Healing Salve
+Island x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lich.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Result = InProgress
+Bot1.Life = 0
+Bot1.Hand.Count = 5
+Bot1.Library.Count = 15

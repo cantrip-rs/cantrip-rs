@@ -1,0 +1,43 @@
+# Invisibility prevents non-Walls from blocking its creature, but a Wall can block it (CR 509.1b).
+[Bot1 Deck]
+Mox Sapphire
+Gleemox
+Invisibility
+Ornithopter
+Memnite
+Island x20
+[Bot2 Deck]
+Black Lotus
+Angelic Wall
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+! Bot1.Hand.Invisibility.Cast(Bot1.Battlefield.Mox Sapphire)
+Bot1.Hand.Invisibility.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Angelic Wall.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter; Memnite)
+! Bot2.Block(Ornithopter > Ornithopter)
+Bot2.Block(Angelic Wall > Ornithopter; Ornithopter > Memnite)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Invisibility.AttachedTo = Ornithopter

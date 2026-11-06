@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::library::exile_up_to_four_named_from_graveyard_hand_and_library;
-use cantrip_mechanics::triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT;
+use cantrip_mechanics::triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT;
 use cantrip_mechanics::{effects, exile_and_return_transformed, firebending, select, targets};
 use cantrip_oracle as oracle;
 
@@ -47,7 +47,7 @@ fn reanimate(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 pub static BACK: CardDef = CardDef {
     abilities: &[
         firebending::trigger::<3>("Firebending 3 (Whenever this creature attacks, add {R}{R}{R}. This mana lasts until end of combat.)"),
-        triggered(DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT, combat_damage, "Whenever Fire Lord Sozin deals combat damage to a player, you may pay {X}. When you do, put any number of target creature cards with total mana value X or less from that player's graveyard onto the battlefield under your control."),
+        triggered(DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT, combat_damage, "Whenever Fire Lord Sozin deals combat damage to a player, you may pay {X}. When you do, put any number of target creature cards with total mana value X or less from that player's graveyard onto the battlefield under your control."),
     ],
     delayed: &[delayed_trigger(reanimate, "When you do, put any number of target creature cards with total mana value X or less from that player's graveyard onto the battlefield under your control.")
         .targets(&[TargetSpec { min: 0, max: TargetSpec::ANY_NUMBER, ..target(targets::creature_card_in_that_players_graveyard) }

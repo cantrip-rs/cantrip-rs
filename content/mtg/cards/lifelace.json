@@ -1,0 +1,6 @@
+{
+  "name": "Lifelace",
+  "manaCost": "{G}",
+  "type": "Instant",
+  "oracleText": "Target spell or permanent becomes green. (Mana symbols on that permanent remain unchanged.)"
+}

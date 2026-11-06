@@ -1,0 +1,30 @@
+# Three damage requires three nontoken sacrifices; with only Lich and Mox Jet, both are sacrificed and its controller loses (CR 609.3, 701.21a).
+[Bot1 Deck]
+Lich
+Black Lotus
+Mox Jet
+Swamp x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lich.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Result = Bot2 won
+Bot1.Life = -3
+Bot1.Graveyard = Lich; Mox Jet; Black Lotus

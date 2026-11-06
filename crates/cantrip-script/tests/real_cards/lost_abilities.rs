@@ -116,10 +116,10 @@ fn play(hand: &[&str], steps: Vec<Step>, until: u32, mut watch: impl FnMut(&Game
                 }
                 _ => Answer::Pass,
             },
-            RequestKind::PayCosts { options, .. } => {
+            RequestKind::ChooseCostPayment { choices, .. } => Answer::CostPayment(choices.iter().position(|c| c.kind == CostPaymentKind::Mana).unwrap_or(0)),
+            RequestKind::PayCosts { options, remaining, mana_abilities, .. } => {
                 let mox = options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source.is_some_and(|s| game.name(s).starts_with("Mox")));
-                let confirm = options.iter().find(|o| o.kind == ActionKind::ConfirmCasting);
-                Answer::Act(Action::of(confirm.or(mox).expect("a Mox to pay with, or the payment to confirm")))
+                super::pay(options, remaining, *mana_abilities, mox)
             }
             RequestKind::DeclareAttackers { .. } if request.player == PlayerId(0) => {
                 match steps.peek() {

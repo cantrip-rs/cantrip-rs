@@ -167,6 +167,8 @@ pub fn destroy_target_its_controller_may_fetch_basic(g: &mut dyn Game, item: &St
     let Some(permanent) = crate::targets::object(g, item, slot) else { return Ok(()) };
     let owner = g.controller(permanent);
     g.destroy(permanent);
+    // The search is a later instruction, even if the destruction was replaced or brought a phased-out permanent back.
+    g.end_sentence();
     may_fetch_basic(g, owner, item.object, tapped)
 }
 

@@ -1,0 +1,43 @@
+# Paralyze taps an opposing creature, prevents its normal untap, and lets its controller decline or pay four to untap it (CR 603.3, 502.3).
+[Bot1 Deck]
+Mox Jet
+Paralyze
+Island x20
+[Bot2 Deck]
+Ornithopter
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Paralyze.Cast(Bot1.Battlefield.Island)
+Bot1.Hand.Paralyze.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+[T4 Bot2.Upkeep]
+Bot2.Decline
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+[T6 Bot2.Upkeep]
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Battlefield.Mox Sapphire#3.Activate
+Bot2.Battlefield.Mox Sapphire#4.Activate
+Bot2.PayCost
+? Bot2.Mana =
+[T6 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Paralyze.AttachedTo = Ornithopter

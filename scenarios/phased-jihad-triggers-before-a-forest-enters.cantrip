@@ -1,0 +1,87 @@
+# Oubliette phases Jihad out. When Assassin's Trophy destroys Oubliette, Jihad phases in while the chosen player controls no green permanent. The fetched Forest then becomes green through Life and Limb. Jihad already triggered (CR 603.8, 610.4).
+[Bot1 Deck]
+Black Lotus
+Opalescence
+Mox Pearl
+Jihad
+Black Lotus
+Mox Emerald
+Life and Limb
+Mox Ruby
+Lightning Bolt
+Black Lotus
+Assassin's Trophy
+Swamp
+Forest
+Island x20
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Black Lotus
+Oubliette
+Swamp
+Island
+Island
+Forest x10
+Island x10
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Opalescence.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Jihad.Cast
+Bot1.Colors(Green)
+Bot1.ChoosePlayer(Bot2)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Oubliette.Cast
+Bot2.Pass
+Bot2.Target(Bot1.Battlefield.Jihad)
+Bot2.Pass
+[T5 Bot1.Main1]
+? Bot1.PhasedOut = Jihad
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Life and Limb.Cast
+Bot1.Pass
+[T11 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T13 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T15 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Assassin's Trophy.Cast(Bot2.Battlefield.Oubliette)
+Bot2.Accept
+Bot2.Search(Forest)
+[T15 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Jihad; Assassin's Trophy; Black Lotus; Lightning Bolt; Black Lotus; Black Lotus
+Bot2.Battlefield.Forest.Colors = Green

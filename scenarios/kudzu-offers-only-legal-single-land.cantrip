@@ -1,0 +1,39 @@
+# The optional move offers one legal land, excluding a land creature protected from green (CR 701.3b, 702.16c).
+[Bot1 Deck]
+Kudzu
+Black Lotus
+Mox Pearl
+Mother of Runes
+Forest
+Dryad Arbor
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mother of Runes.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Kudzu.Cast(Bot1.Battlefield.Forest)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Dryad Arbor.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mother of Runes.Activate(Bot1.Battlefield.Dryad Arbor)
+Bot1.Colors(Green)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Bot1.Battlefield.Dryad Arbor)
+Bot1.Choose(Bot2.Battlefield.Island)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Kudzu.AttachedTo = Island

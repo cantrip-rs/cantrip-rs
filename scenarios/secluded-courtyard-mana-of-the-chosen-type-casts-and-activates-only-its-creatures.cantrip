@@ -45,6 +45,7 @@ Bot1.Battlefield.Secluded Courtyard.Activate(Ability: any color; Color: Green)
 Bot1.Battlefield.Secluded Courtyard.Activate(Ability: any color; Color: Green)
 Bot1.Battlefield.Forest.Activate
 Bot1.Battlefield.Bramble Familiar.Activate(Ability: Return; Spend: G ElementalCreatureSpellsOrAbilities, G)
+Bot1.Choose(Tap Bramble Familiar)
 Bot1.Choose(Island)
 Bot1.Pass
 Bot2.Pass

@@ -1,0 +1,23 @@
+# Disintegrate deals X damage to a creature and replaces its death with exile (CR 614.1a, 704.5g).
+[Bot1 Deck]
+Black Lotus
+Disintegrate
+Mountain x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+! Bot1.Hand.Disintegrate.Cast(Bot1.Battlefield.Mountain; X: 2)
+Bot1.Hand.Disintegrate.Cast(Bot2.Battlefield.Ornithopter; X: 2)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Exile = Ornithopter
+Bot2.Graveyard.Count = 0
+Bot1.Graveyard = Disintegrate; Black Lotus

@@ -1,0 +1,25 @@
+# Disintegrate can target either player and deals the chosen X damage (CR 115.4, 120.3a).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Disintegrate
+Disintegrate
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Disintegrate.Cast(Bot1; X: 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Disintegrate.Cast(Bot2; X: 2)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18

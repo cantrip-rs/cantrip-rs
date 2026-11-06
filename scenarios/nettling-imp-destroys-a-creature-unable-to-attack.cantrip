@@ -1,0 +1,36 @@
+# Nettling Imp can target a tapped creature; if it cannot attack, the delayed trigger destroys it at the next end step (CR 603.7).
+[Bot1 Deck]
+Nettling Imp
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Swamp x20
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Nettling Imp.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Llanowar Elves.Activate
+Bot2.Pass
+Bot1.Battlefield.Nettling Imp.Activate(Bot2.Battlefield.Llanowar Elves)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter)
+[T4 Bot2.End]
+[Expect]
+Bot2.Graveyard = Llanowar Elves
+Bot2.Battlefield.Ornithopter.Tapped = true

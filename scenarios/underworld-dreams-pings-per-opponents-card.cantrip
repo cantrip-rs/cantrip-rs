@@ -1,0 +1,33 @@
+# Underworld Dreams deals one for an opponent's draw step and one for each of Brainstorm's three cards; its controller's draw does not trigger it (CR 121.2).
+[Bot1 Deck]
+Black Lotus
+Underworld Dreams
+Swamp x20
+[Bot2 Deck]
+Island
+Brainstorm
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Underworld Dreams.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+? Bot2.Life = 19
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Brainstorm.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Island; Island)
+Bot1.Pass
+? Stack.Count = 2
+? Bot2.Life = 18
+[T3 Bot1.Main1]
+? Bot1.Life = 20
+[Expect]
+Bot2.Life = 16
+Bot1.Life = 20
+Stack.Count = 0

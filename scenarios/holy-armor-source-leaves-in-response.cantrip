@@ -1,0 +1,35 @@
+# The Aura's ability uses the last enchanted creature if the Aura leaves before the ability resolves (CR 608.2h).
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Ornithopter
+Holy Armor
+Island x20
+[Bot2 Deck]
+Black Lotus
+Disenchant
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Holy Armor.Cast(Bot1.Battlefield.Ornithopter)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Holy Armor.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Holy Armor)
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Holy Armor = (absent)
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 3

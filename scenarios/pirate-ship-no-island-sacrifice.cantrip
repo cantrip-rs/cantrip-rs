@@ -1,0 +1,28 @@
+# An opponent's Island does not satisfy Pirate Ship's state trigger; its controller sacrifices it (CR 603.8).
+[Bot1 Deck]
+Pirate Ship
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pirate Ship.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+[Expect]
+Bot1.Graveyard = Pirate Ship; Black Lotus
+Bot2.Battlefield.Island.Tapped = false

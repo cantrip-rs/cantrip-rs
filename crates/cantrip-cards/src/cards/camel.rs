@@ -33,7 +33,7 @@ pub static CARD: CardDef = CardDef {
         PreventionDef {
             hint: "As long as this creature is attacking, prevent all damage Deserts would deal to this creature and to creatures banded with this creature.",
             applies: as_long_as_creature_attacking_applies,
-            amount: None,
+            amount: PreventionAmount::All,
         },
     ],
     ..oracle::CAMEL

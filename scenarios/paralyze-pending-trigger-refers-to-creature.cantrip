@@ -1,0 +1,38 @@
+# A pending upkeep trigger refers to its enchanted creature even after Shock destroys it; Deflecting Palm can choose it (CR 609.7a).
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Paralyze
+Shock
+Island x20
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Mox Pearl
+Deflecting Palm
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Paralyze.Cast(Bot2.Battlefield.Ornithopter)
+[T4 Bot2.Upkeep]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Deflecting Palm.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Ornithopter)
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Ornithopter = (absent)
+Bot1.Battlefield.Paralyze = (absent)

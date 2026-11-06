@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::targets;
-use cantrip_mechanics::triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT;
+use cantrip_mechanics::triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT;
 use cantrip_oracle as oracle;
 
 const ASK: Question = Question::new("RemoveACounter", "remove a counter from her?", "When you do, destroy target artifact or enchantment that player controls", "Remove a counter", "Keep it");
@@ -48,7 +48,7 @@ fn remove_counter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 pub static CARD: CardDef = CardDef {
     // "Leatherhead enters with a hexproof counter on her" (CR 122.1b, 614.1c).
     enters: Some(cantrip_mechanics::effects::enters_with_a_counter::<{ CounterKind::Hexproof as usize }>),
-    abilities: &[triggered(DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT, remove_counter, "Whenever Leatherhead deals combat damage to a player, you may remove a counter from her. When you do, destroy target artifact or enchantment that player controls.")],
+    abilities: &[triggered(DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT, remove_counter, "Whenever Leatherhead deals combat damage to a player, you may remove a counter from her. When you do, destroy target artifact or enchantment that player controls.")],
     delayed: &[delayed_trigger(cantrip_mechanics::effects::destroy_first_target, "When you do, destroy target artifact or enchantment that player controls.")
         .targets(&[target(targets::artifact_or_enchantment_that_player_controls)])],
     ..oracle::LEATHERHEAD_SWAMP_STALKER

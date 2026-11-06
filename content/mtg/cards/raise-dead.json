@@ -1,0 +1,6 @@
+{
+  "name": "Raise Dead",
+  "manaCost": "{B}",
+  "type": "Sorcery",
+  "oracleText": "Return target creature card from your graveyard to your hand."
+}

@@ -1,4 +1,4 @@
-# The sacrifice costs name creature types: with only an Ornithopter (a Thopter) on the battlefield, "{1}, {T}, Sacrifice a Servo" is refused with mana untapped to pay it, while "{T}, Sacrifice a Thopter" is not: Bot1 sacrifices the Ornithopter for a 4/4
+# The sacrifice costs name creature types: with only an Ornithopter (a Thopter) on the battlefield, attempting "{1}, {T}, Sacrifice a Servo" rolls back; "{T}, Sacrifice a Thopter" succeeds and Bot1 sacrifices the Ornithopter for a 4/4
 # Construct token. Tapped, the Foundry then refuses {2},{T} (Servo) with mana untapped, the positive control being the existing scenario's use of it.
 
 [Bot1 Deck]
@@ -22,7 +22,15 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Retrofitter Foundry.Cast
 Bot1.Hand.Ornithopter.Cast
 Bot1.Pass
-! Bot1.Battlefield.Retrofitter Foundry.Activate(Ability: Sacrifice a Servo)
+Bot1.Battlefield.Retrofitter Foundry.Activate(Ability: Sacrifice a Servo)
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Battlefield.Retrofitter Foundry.Tapped = false
+? Bot1.Battlefield.Mox Sapphire.Tapped = false
+? Bot1.Graveyard.Count = 0
+? Bot1.Mana =
+? Bot1.Life = 20
+? Bot1.Battlefield.Ornithopter.Tapped = false
+? Stack.Count = 0
 Bot1.Battlefield.Retrofitter Foundry.Activate(Ability: Sacrifice a Thopter; Sacrifice: Ornithopter)
 Bot1.Pass
 Bot1.Pass

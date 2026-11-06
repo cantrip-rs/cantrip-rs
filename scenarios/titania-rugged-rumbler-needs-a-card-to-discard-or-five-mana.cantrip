@@ -36,6 +36,7 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Titania, Rugged Rumbler.Cast
+Bot1.Modes(2)
 Bot1.Pass
 [T3 Bot1.Main2]
 

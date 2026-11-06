@@ -1,0 +1,58 @@
+# Skull of Orm returns its controller's enchantment card, rejects a nonenchantment and the opponent's enchantment, and costs exactly {5} and tapping (CR 602.2, 115.1c).
+[Bot1 Deck]
+Black Lotus x2
+Faithless Looting
+Rancor
+Skull of Orm
+Sol Ring x2
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Rancor
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Rancor; Island)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Skull of Orm.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Cleanup]
+Bot2.Discard(Rancor)
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+! Bot1.Battlefield.Skull of Orm.Activate(Bot1.Graveyard.Rancor; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Skull of Orm.Activate(Bot2.Graveyard.Rancor)
+! Bot1.Battlefield.Skull of Orm.Activate(Bot1.Graveyard.Faithless Looting)
+Bot1.Battlefield.Skull of Orm.Activate(Bot1.Graveyard.Rancor)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Skull of Orm.Tapped = true
+Bot1.Pass
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Hand.Rancor.Colors = Green
+Bot2.Graveyard = Island; Rancor

@@ -85,7 +85,10 @@ fn normal(a: &Answer) -> Answer {
         Answer::Cards(c) => c.sort(),
         Answer::Attack(x) => x.sort_by_key(|&(c, _)| c),
         Answer::Block(x) => x.sort(),
-        Answer::Shares(x) => x.sort(),
+        Answer::Shares(x) => {
+            x.retain(|s| s.2 != 0);
+            x.sort();
+        }
         Answer::Divided(x) => x.sort_by_key(|&(t, _)| format!("{t:?}")),
         Answer::Counters(x) => x.sort_by_key(|&(o, k, _)| (o, k as u16)),
         Answer::Placements { placements, .. } => placements.iter_mut().for_each(|p| p.sort()),
@@ -365,4 +368,160 @@ fn scenarios_that_once_failed_factor() {
 #[ignore]
 fn the_whole_corpus_factors() {
     corpus(1);
+}
+
+#[test]
+fn combat_zero_shares_factor_without_hiding_invalid_assignments() {
+    let script = GameScript::parse(
+        include_str!("data/zero-share-foundation.cantrip"),
+        "zero-share-foundation",
+    ).unwrap();
+    let mut game = cantrip_script::run(&script).unwrap().game;
+    let answers: Vec<_> = game
+        .tree
+        .path(game.at)
+        .iter()
+        .filter_map(|&n| game.tree.answer(n).map(|(_, p, a)| (n, *p, a.clone())))
+        .collect();
+    let (node, player, answer) = answers.into_iter().find(|(_, _, a)| matches!(a, Answer::Shares(v) if v.iter().any(|x| x.2 == 0) && v.iter().any(|x| x.2 > 0))).expect("scenario must assign positive and zero shares");
+    game.goto(game.tree.parent(node).unwrap());
+    let request = game.pending().cloned().unwrap();
+    assert!(check_answer(&game, &request, &answer).is_ok());
+    let knowledge = Knowledge::of(&game, player);
+    let (obs, index) = observe_indexed(&game, &knowledge, player, InfoMode::Full).unwrap();
+    let answering = Answering::new(&game, &request, &obs, &index);
+    let factored = answering.factored(&request, &answer, None).unwrap();
+    let FactoredAnswer::Shares(shares) = &factored else {
+        panic!("shares expected")
+    };
+    assert!(
+        shares.iter().all(|s| s.2 > 0),
+        "zero damage is not a separate assignment: {shares:?}"
+    );
+    let tokens = answering.decompose(&[], &factored).unwrap();
+    let mut machine = Machine::new(&answering.ask, &[]);
+    for token in tokens {
+        assert!(machine.choose_token(token));
+    }
+    assert_eq!(machine.answer().map(canon), Some(canon(&factored)));
+    let replay = answering.engine(&game, &request, &factored).unwrap();
+    assert_eq!(normal(&replay), normal(&answer));
+
+    let Answer::Shares(original) = &answer else {
+        unreachable!()
+    };
+    let mut invalid = original.clone();
+    invalid.push((ObjectId(u32::MAX), None, 0));
+    let invalid = Answer::Shares(invalid);
+    assert!(
+        check_answer(&game, &request, &invalid).is_err(),
+        "unknown zero source remains illegal"
+    );
+    assert!(
+        answering.factored(&request, &invalid, None).is_none(),
+        "invalid zero source must not disappear"
+    );
+    let mut invalid = original.clone();
+    invalid.push((original[0].0, Some(original[0].0), 0));
+    let invalid = Answer::Shares(invalid);
+    assert!(
+        check_answer(&game, &request, &invalid).is_err(),
+        "zero damage to a non-blocker remains illegal"
+    );
+    assert!(
+        answering.factored(&request, &invalid, None).is_none(),
+        "invalid zero recipient must not disappear"
+    );
+    let mut invalid = original.clone();
+    invalid.push((original[0].0, None, 0));
+    let invalid = Answer::Shares(invalid);
+    assert!(
+        check_answer(&game, &request, &invalid).is_err(),
+        "a zero share to the defender requires permission"
+    );
+    assert!(answering.factored(&request, &invalid, None).is_none());
+
+    // A request may contain more than one division for a source. Every matching division must
+    // permit the recipient, just as the engine validator requires.
+    let mut legal_duplicate_request = request.clone();
+    let RequestKind::AssignCombatDamage {
+        divisions: legal_divisions,
+    } = &mut legal_duplicate_request.kind
+    else {
+        panic!("combat request expected")
+    };
+    let same_division = legal_divisions
+        .iter()
+        .find(|d| d.source == original[0].0)
+        .unwrap()
+        .clone();
+    legal_divisions.push(same_division);
+    assert!(check_answer(&game, &legal_duplicate_request, &answer).is_ok());
+    assert!(
+        answering
+            .factored(&legal_duplicate_request, &answer, None)
+            .is_some()
+    );
+
+    let mut duplicate_request = request.clone();
+    let RequestKind::AssignCombatDamage { divisions } = &mut duplicate_request.kind else {
+        panic!("combat request expected")
+    };
+    let (source, zero_target, _) = *original.iter().find(|s| s.2 == 0).unwrap();
+    let mut duplicate = divisions
+        .iter()
+        .find(|d| d.source == source)
+        .unwrap()
+        .clone();
+    let zero_target = zero_target.expect("zero target is a blocker");
+    let position = duplicate
+        .creatures
+        .iter()
+        .position(|&c| c == zero_target)
+        .unwrap();
+    duplicate.creatures.remove(position);
+    duplicate.lethal.remove(position);
+    divisions.push(duplicate);
+    assert!(check_answer(&game, &duplicate_request, &answer).is_err());
+    assert!(
+        check_answer(&game, &duplicate_request, &normal(&answer)).is_ok(),
+        "the positive recipient is legal in both divisions; dropping zero alone would hide the invalid answer"
+    );
+    assert!(
+        answering
+            .factored(&duplicate_request, &answer, None)
+            .is_none(),
+        "a zero share rejected by any matching division must not disappear"
+    );
+
+    let mut invalid_positive = original.clone();
+    invalid_positive[0].2 += 1;
+    let invalid_positive = Answer::Shares(invalid_positive);
+    assert!(check_answer(&game, &request, &invalid_positive).is_err());
+    let invalid_factored = answering
+        .factored(&request, &invalid_positive, None)
+        .unwrap();
+    assert!(
+        answering
+            .engine(&game, &request, &invalid_factored)
+            .is_err(),
+        "positive over-assignment is still refused"
+    );
+
+    // Replay both legal forms from the same actual game position. Damage and later rule events must agree.
+    let parent = game.tree.parent(node).unwrap();
+    let start = game.log.len();
+    game.answer(request.id, player, answer.clone()).unwrap();
+    game.run();
+    let events = game.log[start..].to_vec();
+    game.goto(parent);
+    let start = game.log.len();
+    let again = game.pending().cloned().unwrap();
+    game.answer(again.id, player, replay).unwrap();
+    game.run();
+    assert_eq!(
+        &game.log[start..],
+        events.as_slice(),
+        "zero-share normalization must not alter the emitted events"
+    );
 }

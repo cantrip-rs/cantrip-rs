@@ -1,0 +1,30 @@
+# The King boosts an opponent's Goblin and gives it mountainwalk against its controller's Mountain (CR 702.14c).
+[Bot1 Deck]
+Black Lotus
+Mountain
+Goblin King
+Ornithopter
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Raging Goblin
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin King.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Raging Goblin.Cast
+Bot2.Attack(Raging Goblin > Bot1)
+! Bot1.Block(Ornithopter > Raging Goblin)
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Life = 18
+Bot1.Battlefield.Goblin King.Power = 2
+Bot1.Battlefield.Goblin King.Toughness = 2
+Bot2.Battlefield.Raging Goblin.Power = 2
+Bot2.Battlefield.Raging Goblin.Toughness = 2

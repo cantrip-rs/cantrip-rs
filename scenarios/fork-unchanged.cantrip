@@ -1,0 +1,33 @@
+# Fork copies its controller's sorcery and can keep the original target (CR 707.10).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Chain Lightning
+Fork
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Chain Lightning.Cast(Bot2)
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Fork.Cast(Stack.Chain Lightning)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+[T1 Bot1.End]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 14
+Bot1.Graveyard = Chain Lightning; Fork
