@@ -16,7 +16,7 @@ fn dealt_to_black_panther(_: &dyn Query, asker: &Asker, damage: &DamageEvent) ->
 }
 
 pub static BACK: CardDef = CardDef {
-    preventions: &[PreventionDef { hint: "prevents all damage that would be dealt to Black Panther", applies: dealt_to_black_panther, amount: None }],
+    preventions: &[PreventionDef { hint: "prevents all damage that would be dealt to Black Panther", applies: dealt_to_black_panther, amount: PreventionAmount::All }],
     abilities: &[triggered(
         DEALS_COMBAT_DAMAGE_TO_PLAYER,
         |g, item| effects::draw(g, item, 1),

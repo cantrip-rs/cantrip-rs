@@ -17,9 +17,9 @@ fn two(_: &dyn Query, _: &Asker, _: &DamageEvent) -> u32 {
     2
 }
 static SHIELDED: CardDef =
-    CardDef { name: "Excess Shielded", preventions: &[PreventionDef { hint: "prevent two", applies: to_self, amount: Some(two) }], ..BEAR };
+    CardDef { name: "Excess Shielded", preventions: &[PreventionDef { hint: "prevent two", applies: to_self, amount: PreventionAmount::Specific(two) }], ..BEAR };
 static IMMUNE: CardDef =
-    CardDef { name: "Excess Immune", preventions: &[PreventionDef { hint: "prevent all", applies: to_self, amount: None }], ..BEAR };
+    CardDef { name: "Excess Immune", preventions: &[PreventionDef { hint: "prevent all", applies: to_self, amount: PreventionAmount::All }], ..BEAR };
 fn to_another(_: &dyn Query, a: &Asker, p: &Proposal) -> bool {
     matches!(p, Proposal::Damage(d) if matches!(d.target, Target::Object(id) if id != a.source))
 }
@@ -123,7 +123,7 @@ fn cx(g: &mut Game) -> Cx<'_> {
         cursor: 0,
         mana_source: None,
         entering: None,
-        lineage: Vec::new(),
+        lineage: Vec::new(), damage: None,
         asked_at: None,
         doer: None,
         producing: None,

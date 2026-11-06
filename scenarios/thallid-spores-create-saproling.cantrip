@@ -1,0 +1,35 @@
+# Thallid gains one spore on each of its controller's upkeeps, not the opponent's, and spends three for one Saproling (CR 603.2, 701.7a).
+[Bot1 Deck]
+Forest
+Thallid
+Island x30
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Thallid.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Thallid.Counters.Spore = (absent)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Thallid.Counters.Spore = 1
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Thallid.Counters.Spore = 1
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Thallid.Counters.Spore = 2
+! Bot1.Battlefield.Thallid.Activate
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Thallid.Counters.Spore = 3
+Bot1.Battlefield.Thallid.Activate
+? Bot1.Battlefield.Thallid.Counters.Spore = (absent)
+[T7 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Saproling Token.Power = 1
+Bot1.Battlefield.Saproling Token.Toughness = 1
+Bot1.Battlefield.Saproling Token.Colors = Green
+Bot1.Battlefield.Saproling Token.Token = true
+Bot1.Battlefield.Saproling Token.Tapped = false
+Bot1.Battlefield.Saproling Token.Types = Creature
+Bot1.Battlefield.Saproling Token.Subtypes = Saproling
+Bot1.Battlefield.Count = 3

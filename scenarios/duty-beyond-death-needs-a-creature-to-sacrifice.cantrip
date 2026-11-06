@@ -1,5 +1,5 @@
 # Duty Beyond Death: "As an additional cost to cast this spell, sacrifice a creature" (CR 118.8, 601.2h). With the mana to pay for it
-# but no creature, Bot1 cannot cast it (the refusal); with a lone Memnite out it can (the positive control), the Memnite is
+# but no creature, the attempted cast rolls back; with a lone Memnite out it can (the positive control), the Memnite is
 # sacrificed, so there is no creature left to get a counter, and Bot2's Memnite, not Bot1's to control, gets none either.
 
 [Bot1 Deck]
@@ -22,8 +22,14 @@ Bot2.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
-! Bot1.Hand.Duty Beyond Death.Cast
+Bot1.Hand.Duty Beyond Death.Cast
+? Bot1.Mana = {W}{U}
+? Bot1.Graveyard.Count = 0
+? Stack.Count = 0
+? Bot1.Hand.Duty Beyond Death.Colors = White
 Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
 Bot1.Hand.Duty Beyond Death.Cast
 Bot1.Pass
 Bot2.Pass

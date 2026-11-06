@@ -1,0 +1,45 @@
+# The Bomb counts its two time counters at sacrifice and deals two damage to each player and each creature (CR 608.2h, 120.3).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Time Bomb
+Ornithopter
+Island x25
+[Bot2 Deck]
+Ornithopter
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Time Bomb.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Time Bomb.Activate(Mana: short)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Time Bomb.Counters.Time = (absent)
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Time Bomb.Counters.Time = 1
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Time Bomb.Counters.Time = 1
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Time Bomb.Counters.Time = 2
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Time Bomb.Activate
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Choose(Tap Time Bomb)
+? LeftBattlefield = Black Lotus (tapped); Time Bomb (tapped)
+? Bot1.Graveyard.Time Bomb.Colors =
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
+Bot1.Battlefield.Ornithopter = (absent)
+Bot2.Battlefield.Ornithopter = (absent)
+Bot1.Graveyard.Ornithopter.Power = 0
+Bot2.Graveyard.Ornithopter.Power = 0

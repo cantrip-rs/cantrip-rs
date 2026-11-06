@@ -1,0 +1,29 @@
+# An untapped Ridge can fund a one-mana spell but cannot alone fund a two-mana spell; a second land makes the latter affordable (CR 601.2g).
+[Bot1 Deck]
+Timberline Ridge
+Llanowar Elves
+Grizzly Bears
+Forest
+Island
+Island
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Timberline Ridge.Play
+! Bot1.Hand.Grizzly Bears.Cast(Mana: short)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Timberline Ridge.Activate(Color: Green)
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Timberline Ridge.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+? Bot1.Mana =
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Battlefield.Grizzly Bears.Power = 2

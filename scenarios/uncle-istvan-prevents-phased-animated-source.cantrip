@@ -1,0 +1,47 @@
+# A phased-out animated artifact is still a creature as last known when its ability deals damage (CR 702.26b, 608.2h).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Uncle Istvan
+Island x25
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Sol Ring
+Sol Ring
+Sol Ring
+Rod of Ruin
+March of the Machines
+Teferi's Protection
+Plains
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Uncle Istvan.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot2.Hand.Sol Ring.Cast
+Bot2.Hand.Sol Ring.Cast
+Bot2.Hand.Sol Ring.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Sol Ring#3.Activate
+Bot2.Hand.Rod of Ruin.Cast
+Bot2.Battlefield.Sol Ring#1.Activate
+Bot2.Battlefield.Sol Ring#2.Activate
+Bot2.Hand.March of the Machines.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Sol Ring#1.Activate
+Bot2.Battlefield.Sol Ring#2.Activate
+Bot2.Battlefield.Sol Ring#3.Activate
+Bot2.Battlefield.Rod of Ruin.Activate(Bot1.Battlefield.Uncle Istvan)
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Teferi's Protection.Cast
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Uncle Istvan.Damage = 0

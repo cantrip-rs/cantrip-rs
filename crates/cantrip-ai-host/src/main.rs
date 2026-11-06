@@ -102,10 +102,11 @@ fn load(c: &Config) -> Result<Vec<Loaded>, String> {
             .map(|n| n.to_string_lossy().into_owned())
             .unwrap_or_else(|| dir.display().to_string());
         eprintln!(
-            "cantrip-ai-host: model {name} ({}) on {} in {:?}",
+            "cantrip-ai-host: model {name} ({}) on {} in {:?}; input {:?}",
             dir.display(),
             c.backend,
-            started.elapsed()
+            started.elapsed(),
+            cantrip_ai::Model::load(dir, table()).map_err(|e| e.to_string())?.input_compatibility()
         );
         loaded.push(Loaded { name, evaluator });
     }

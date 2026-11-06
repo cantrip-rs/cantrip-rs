@@ -34,6 +34,7 @@ Bot1.Battlefield.Island#2.Activate
 Bot1.Battlefield.Secluded Starforge.Activate(Ability: Target creature; X: 2; Target: Bot1.Battlefield.Ornithopter)
 ! Bot1.Battlefield.Secluded Starforge.Activate(X: 4)
 ! Bot1.Choose(Bot2.Battlefield.Phyrexian Walker)
+Bot1.Choose(Tap Secluded Starforge)
 Bot1.Choose(Memnite; Memnite)
 ? Bot1.Mana =
 ? Bot1.Battlefield.Memnite#1.Tapped = true

@@ -29,7 +29,7 @@ Bot1.Battlefield.Mox Ruby#2.Activate
 Bot1.Battlefield.Mox Ruby#3.Activate
 Bot1.Battlefield.Mox Ruby#4.Activate
 Bot1.Hand.Hill Giant.Cast(Ability: Warp)
-? Bot1.Mana = 
+? Bot1.Mana =
 [T1 Bot1.DeclareAttackers]
 ? Bot1.Battlefield.Hill Giant.Keywords = Haste
 ? Bot1.Battlefield.Tannuk, Steadfast Second.Keywords = (absent)
@@ -47,5 +47,5 @@ Bot1.Pass
 [T4 Bot2.Main1]
 
 [Expect]
-Exile = 
+Exile =
 Bot1.Battlefield = Mox Ruby; Mox Ruby; Mox Ruby; Mox Ruby; Tannuk, Steadfast Second; Hill Giant

@@ -1,0 +1,6 @@
+{
+  "name": "Thrull Retainer",
+  "manaCost": "{B}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +1/+1.\nSacrifice this Aura: Regenerate enchanted creature."
+}

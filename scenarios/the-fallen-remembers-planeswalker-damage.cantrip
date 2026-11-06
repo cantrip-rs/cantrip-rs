@@ -1,0 +1,39 @@
+# Damage to a creature does not count as damage to its controller or a planeswalker; damaging a planeswalker causes one damage to that planeswalker at the next upkeep, but does not count as damage to its controller (CR 120.3c).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+The Fallen
+Swamp x17
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Jace, the Mind Sculptor
+Memnite
+Island x16
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Fallen.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Jace, the Mind Sculptor.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(The Fallen > Bot2)
+Bot2.Block(Memnite > The Fallen)
+[T5 Bot1.Main1]
+? Bot2.Life = 20
+? Bot2.Battlefield.Jace, the Mind Sculptor.Counters.Loyalty = 3
+Bot1.Attack(The Fallen > Bot2.Battlefield.Jace, the Mind Sculptor)
+[T5 Bot1.Main2]
+? Bot2.Battlefield.Jace, the Mind Sculptor.Counters.Loyalty = 1
+[T7 Bot1.Main1]
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Jace, the Mind Sculptor; Memnite; Black Lotus

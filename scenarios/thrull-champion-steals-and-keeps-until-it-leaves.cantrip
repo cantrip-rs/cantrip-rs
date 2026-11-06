@@ -1,0 +1,67 @@
+# Both Champions get each other's bonus; stealing an opposing Champion lasts through untapping, then ends when the source leaves (CR 611.2b).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Thrull Champion
+Ornithopter
+Island
+Island
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Thrull Champion
+Swords to Plowshares
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Thrull Champion.Cast
+? Bot1.Mana =
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Thrull Champion.Power = 3
+? Bot1.Battlefield.Thrull Champion.Toughness = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Thrull Champion.Cast
+? Bot2.Mana =
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Thrull Champion.Power = 4
+? Bot1.Battlefield.Thrull Champion.Toughness = 4
+? Bot2.Battlefield.Thrull Champion.Power = 4
+? Bot1.Battlefield.Ornithopter.Power = 0
+! Bot1.Battlefield.Thrull Champion.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Thrull Champion.Activate(Bot2.Battlefield.Thrull Champion)
+? Bot1.Battlefield.Thrull Champion.Tapped = true
+Bot1.Pass
+[T3 Bot1.Main2]
+! Bot1.Battlefield.Thrull Champion#1.Activate(Bot1.Battlefield.Thrull Champion#2)
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Thrull Champion#1.Tapped = false
+? Bot1.Battlefield.Thrull Champion#2.Power = 4
+Bot1.Battlefield.Thrull Champion#1.Activate(Bot1.Battlefield.Thrull Champion#1)
+? Stack.Count = 1
+[T6 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Thrull Champion#1)
+[T6 Bot2.Main2]
+[Expect]
+Bot2.Battlefield.Thrull Champion.Power = 3
+Bot2.Battlefield.Thrull Champion.Toughness = 3
+Bot1.Battlefield.Thrull Champion = (absent)

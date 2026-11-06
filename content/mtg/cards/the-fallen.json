@@ -1,0 +1,8 @@
+{
+  "name": "The Fallen",
+  "manaCost": "{1}{B}{B}{B}",
+  "type": "Creature — Zombie",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "At the beginning of your upkeep, this creature deals 1 damage to each opponent and planeswalker it has dealt damage to this game."
+}

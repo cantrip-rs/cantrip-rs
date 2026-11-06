@@ -118,8 +118,18 @@ static WATCHER: CardDef = CardDef {
     ..WALL
 };
 
+fn generated_extra_block(_: &dyn Query, source: ObjectId, blocker: ObjectId) -> u32 {
+    u32::from(source == blocker)
+}
+static COMPOSED: CardDef = CardDef {
+    name: "Multi Block Test Composed",
+    abilities: &[block_allowance(1, "This creature can block an additional creature.")],
+    additional_blocks: &[generated_extra_block],
+    ..TWO_HEADED
+};
+
 fn table() -> &'static CardTable {
-    Box::leak(Box::new(CardTable::new([&FILLER, &BLAZE, &VALOR, &HEROISM, &KILL, &BEAR, &FLYER, &WALL, &TWO_HEADED, &WATCHER])))
+    Box::leak(Box::new(CardTable::new([&FILLER, &BLAZE, &VALOR, &HEROISM, &KILL, &BEAR, &FLYER, &WALL, &TWO_HEADED, &WATCHER, &COMPOSED])))
 }
 
 /// A game of two on turn 1, each deck starting with `spells` (P0's, then P1's), and `permanents` on the battlefield.
@@ -337,4 +347,21 @@ fn an_attacker_leaving_combat_leaves_the_blocker_blocking_the_rest() {
     assert!(past_blocks(&mut g).is_none(), "one creature left to deal damage to");
     assert!(!g.state.battlefield().contains(&a1));
     assert_eq!(g.state.obj(wall).damage, 2);
+}
+
+/// Generator callbacks, gained-ability recipes, and upstream static/resolved capacities use the same solver.
+#[test]
+fn generated_and_upstream_block_allowances_compose_once() {
+    for resolved in [false, true] {
+        let (mut g, ids) = game([&[&HEROISM], &[]], &[
+            (&BEAR, P0), (&BEAR, P0), (&BEAR, P0), (&BEAR, P0), (&BEAR, P0), (&COMPOSED, P1),
+        ]);
+        let blocker = ids[5];
+        if resolved { cast(&mut g, P0, &HEROISM, blocker, main_phase); }
+        let ask = declare(&mut g, &ids[..5]);
+        assert_eq!(rules(&ask).capacity_of(blocker), if resolved { 5 } else { 4 });
+        let blocks: Vec<_> = ids[..5].iter().map(|&attacker| (blocker, attacker)).collect();
+        assert!(legal(&g, &ask, &blocks[..4]));
+        assert_eq!(legal(&g, &ask, &blocks), resolved);
+    }
 }

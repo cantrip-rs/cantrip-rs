@@ -1,0 +1,21 @@
+# With no black mana source at upkeep, Tourach's Chant is sacrificed (CR 118.12a).
+[Bot1 Deck]
+Tourach's Chant
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tourach's Chant.Cast
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+! Bot1.PayCost
+Bot1.Decline
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Graveyard.Tourach's Chant.Colors = Black

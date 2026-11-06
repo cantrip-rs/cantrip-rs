@@ -48,6 +48,7 @@ Bot2.Pass
 Bot1.Battlefield.Island#1.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Braided Net.Activate(Ability: Craft)
+Bot1.Choose(craft materials)
 Bot1.Choose(Mox Jet)
 Bot1.Pass
 Bot2.Pass

@@ -1,0 +1,23 @@
+# Removing Thallid in response to its upkeep trigger does not put a counter on its graveyard card (CR 400.7).
+[Bot1 Deck]
+Forest
+Thallid
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Thallid.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Upkeep]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Thallid)
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Thallid = (absent)
+Bot1.Graveyard.Thallid.Counters.Spore = (absent)

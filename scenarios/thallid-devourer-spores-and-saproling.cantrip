@@ -1,0 +1,61 @@
+# Upkeeps add spores only on the controller's turns; three are spent for one green Saproling, sacrificed for +1/+2 until cleanup (CR 603.2, 122.1, 701.7, 701.21, 514.2).
+[Bot1 Deck]
+Thallid Devourer
+Black Lotus
+Ornithopter
+Forest x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thallid Devourer.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Thallid Devourer.Counters.Spore = 1
+! Bot1.Battlefield.Thallid Devourer.Activate(Ability: Remove three)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Thallid Devourer.Counters.Spore = 1
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Thallid Devourer.Counters.Spore = 2
+! Bot1.Battlefield.Thallid Devourer.Activate(Ability: Remove three)
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Thallid Devourer.Counters.Spore = 3
+Bot1.Battlefield.Thallid Devourer.Activate(Ability: Remove three)
+? Bot1.Battlefield.Thallid Devourer.Counters.Spore = (absent)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Saproling Token.Tapped = false
+? Bot1.Battlefield.Saproling Token.Token = true
+? Bot1.Battlefield.Saproling Token.Power = 1
+? Bot1.Battlefield.Saproling Token.Toughness = 1
+? Bot1.Battlefield.Saproling Token.Colors = Green
+? Bot1.Battlefield.Saproling Token.Types = Creature
+? Bot1.Battlefield.Saproling Token.Subtypes = Saproling
+? Bot1.Battlefield.Count = 3
+! Bot1.Battlefield.Thallid Devourer.Activate(Ability: Sacrifice; Sacrifice: Ornithopter)
+Bot1.Battlefield.Thallid Devourer.Activate(Ability: Sacrifice; Sacrifice: Saproling Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thallid Devourer.Power = 3
+? Bot1.Battlefield.Thallid Devourer.Toughness = 4
+? Bot1.Battlefield.Count = 2
+[T8 Bot2.Main1]
+? Bot1.Battlefield.Thallid Devourer.Power = 2
+? Bot1.Battlefield.Thallid Devourer.Toughness = 2
+[T13 Bot1.Main1]
+Bot1.Battlefield.Thallid Devourer.Activate(Ability: Remove three)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Thallid Devourer.Activate(Ability: Sacrifice; Sacrifice: Saproling Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thallid Devourer.Power = 3
+? Bot1.Battlefield.Thallid Devourer.Toughness = 4
+[T14 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Thallid Devourer.Power = 2
+Bot1.Battlefield.Thallid Devourer.Toughness = 2

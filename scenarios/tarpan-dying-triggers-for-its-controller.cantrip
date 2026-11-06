@@ -1,0 +1,37 @@
+# "When this creature dies, you gain 1 life." Bot2's Bilbo's Deadly Slice kills it: its controller, Bot1, gets the effect once (CR 603.10a, 700.4).
+# Nothing happens while it merely sits on the battlefield: life is checked before, so entering is not what did it.
+
+[Bot1 Deck]
+Mox Emerald
+Tarpan
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Bilbo's Deadly Slice
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Tarpan.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Life = 20
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Bilbo's Deadly Slice.Cast(Bot1.Battlefield.Tarpan)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Tarpan = (absent)
+Bot1.Life = 21
+Bot2.Life = 20

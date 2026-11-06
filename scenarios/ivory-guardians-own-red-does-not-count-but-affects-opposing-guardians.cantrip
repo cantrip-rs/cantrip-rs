@@ -42,6 +42,7 @@ Bot2.Pass
 Bot1.Pass
 
 [Expect]
+Bot1.Battlefield.Fanatical Firebrand.Power = 1
 Bot1.Battlefield.Ivory Guardians.Power = 4
 Bot1.Battlefield.Ivory Guardians.Toughness = 4
 Bot2.Battlefield.Ivory Guardians.Power = 4

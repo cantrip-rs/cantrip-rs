@@ -1,0 +1,8 @@
+{
+  "name": "Thallid Devourer",
+  "manaCost": "{1}{G}{G}",
+  "type": "Creature — Fungus",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "At the beginning of your upkeep, put a spore counter on this creature.\nRemove three spore counters from this creature: Create a 1/1 green Saproling creature token.\nSacrifice a Saproling: This creature gets +1/+2 until end of turn."
+}

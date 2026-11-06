@@ -24,11 +24,8 @@ fn make_mowu(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// "At the beginning of your end step, untap all tokens you control." Every token under this permanent's controller's
 /// control as the ability resolves (CR 608.2c), tapped or not; a noncreature token untaps too (CR 111.1).
 fn untap_tokens(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    for id in g.permanents_of(item.controller) {
-        if g.obj(id).token {
-            g.untap(id);
-        }
-    }
+    let tokens: Vec<ObjectId> = g.permanents_of(item.controller).into_iter().filter(|&id| g.obj(id).token).collect();
+    g.untap_together(&tokens);
     Ok(())
 }
 

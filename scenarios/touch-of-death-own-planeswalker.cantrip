@@ -1,0 +1,36 @@
+# Touch of Death can damage its caster's planeswalker, removing one loyalty, while its caster gains one life (CR 120.3c, 119.3).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Liliana of the Veil
+Touch of Death
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Liliana of the Veil.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Liliana of the Veil.Counters.Loyalty = 3
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Touch of Death.Cast(Bot1.Battlefield.Liliana of the Veil)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Liliana of the Veil.Counters.Loyalty = 2
+Bot1.Life = 21
+Bot2.Life = 20

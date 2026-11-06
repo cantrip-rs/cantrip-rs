@@ -1,0 +1,32 @@
+# A counter paid as the unless cost is not doubled by Doubling Season (CR 118.12a).
+[Bot1 Deck]
+Black Lotus
+Thelon's Chant
+Island x20
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Doubling Season
+Ornithopter
+Swamp
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thelon's Chant.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Doubling Season.Cast
+Bot2.Hand.Swamp.Play
+Bot2.Pass
+Bot1.Pass
+Bot2.Accept
+Bot2.Choose(Ornithopter)
+[T2 Bot2.Main2]
+[Expect]
+Bot2.Battlefield.Ornithopter.Counters.MinusOneMinusOne = 1
+Bot2.Life = 20

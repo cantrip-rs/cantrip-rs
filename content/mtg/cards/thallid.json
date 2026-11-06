@@ -1,0 +1,8 @@
+{
+  "name": "Thallid",
+  "manaCost": "{G}",
+  "type": "Creature — Fungus",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "At the beginning of your upkeep, put a spore counter on this creature.\nRemove three spore counters from this creature: Create a 1/1 green Saproling creature token."
+}

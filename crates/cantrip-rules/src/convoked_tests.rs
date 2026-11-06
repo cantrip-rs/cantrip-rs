@@ -40,7 +40,7 @@ static LAND: CardDef = CardDef { name: "Convoked Test Land", has_cost: false, ty
 static WASTES: CardDef = CardDef { name: "Convoked Test Wastes", abilities: &[mana_ability(TAP, add(Mana::C), "{T}: Add {C}.")], ..LAND };
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 
 fn put(game: &mut Game, def: &'static CardDef, zone: Zone) -> ObjectId {
@@ -97,6 +97,9 @@ fn cast(game: &mut Game, knight: ObjectId, mana: &[ObjectId], convoking: &[Objec
     act(game, |o| o.kind == ActionKind::CastSpell && o.source == Some(knight));
     for &m in mana {
         act(game, |o| o.kind == ActionKind::ActivateAbility && o.source == Some(m));
+    }
+    if matches!(game.pending().map(|r| &r.kind), Some(RequestKind::PayCosts { mana_abilities: true, .. })) {
+        act(game, |o| o.kind == ActionKind::ConfirmCasting);
     }
     for &c in convoking {
         act(game, |o| o.kind == ActionKind::TapToPay && o.index == PAY_CONVOKE && o.source == Some(c));

@@ -1,0 +1,33 @@
+# Istvan prevents damage from his controller's Sorcerer; another creature takes that same damage (CR 615.1).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Uncle Istvan
+Black Lotus
+Prodigal Sorcerer
+Memnite
+Island x25
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Uncle Istvan.Cast
+? Bot1.Mana =
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Prodigal Sorcerer.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Prodigal Sorcerer.Activate(Bot1.Battlefield.Uncle Istvan)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Uncle Istvan.Damage = 0
+[T5 Bot1.Main1]
+Bot1.Battlefield.Prodigal Sorcerer.Activate(Bot1.Battlefield.Memnite)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Graveyard.Memnite.Power = 1
+Bot1.Battlefield.Uncle Istvan.Damage = 0

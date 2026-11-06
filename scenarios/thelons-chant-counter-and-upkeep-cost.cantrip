@@ -1,0 +1,46 @@
+# The Swamp's player can put exactly one -1/-1 counter on their creature instead of taking damage;
+# the Chant survives a paid upkeep and is sacrificed when its controller cannot pay {G} (CR 118.12a).
+[Bot1 Deck]
+Thelon's Chant
+Black Lotus
+Mox Emerald
+Memnite
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Swamp
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thelon's Chant.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Swamp.Play
+Bot2.Accept
+! Bot2.Choose(Bot2.Battlefield.Swamp)
+! Bot2.Choose(Memnite)
+Bot2.Choose(Ornithopter)
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T3 Bot1.Main1]
+? Bot2.Life = 20
+? Bot2.Battlefield.Ornithopter.Counters.MinusOneMinusOne = 1
+? Bot1.Battlefield.Thelon's Chant.Types = Enchantment
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Upkeep]
+! Bot1.PayCost
+Bot1.Decline
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Graveyard.Thelon's Chant.Colors = Green
+Bot2.Life = 20
+Bot2.Battlefield.Ornithopter.Counters.MinusOneMinusOne = 1

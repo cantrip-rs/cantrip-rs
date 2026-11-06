@@ -1,0 +1,53 @@
+# If control changes in response to its upkeep trigger, the original controller cannot sacrifice the Chant (CR 701.21a).
+# Opalescence makes it a creature and Giant Growth lets Old Man of the Sea take it.
+[Bot1 Deck]
+Thelon's Chant
+Opalescence
+Black Lotus
+Black Lotus
+Mox Pearl
+Mox Emerald
+Island x20
+
+[Bot2 Deck]
+Old Man of the Sea
+Black Lotus
+Mox Emerald
+Giant Growth
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Opalescence.Cast
+? Bot1.Mana =
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thelon's Chant.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Old Man of the Sea.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Giant Growth.Cast(Bot2.Battlefield.Old Man of the Sea)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Old Man of the Sea.Activate(Bot1.Battlefield.Thelon's Chant)
+Bot2.Pass
+Bot1.Pass
+Bot1.Decline
+[T5 Bot1.Main1]
+[Expect]
+Bot2.Battlefield.Thelon's Chant.Power = 3
+Bot1.Battlefield.Thelon's Chant = (absent)

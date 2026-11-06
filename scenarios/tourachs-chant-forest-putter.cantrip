@@ -1,0 +1,37 @@
+# Flickerwisp's controller returns another player's Forest, and is the player who put it onto the battlefield (CR 608.2c).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Jet
+Tourach's Chant
+Flickerwisp
+Island x20
+[Bot2 Deck]
+Forest
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Tourach's Chant.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T2 Bot2.Main2]
+? Bot2.Life = 17
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Flickerwisp.Cast
+Bot1.Target(Bot2.Battlefield.Forest)
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 17

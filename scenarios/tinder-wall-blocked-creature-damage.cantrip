@@ -1,0 +1,44 @@
+# Tinder Wall sacrifices itself and pays {R} to deal two damage to the creature it blocked (CR 113.7a, 602.2, 120.3).
+[Bot1 Deck]
+Tinder Wall
+Forest
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Hill Giant
+Black Lotus
+Mountain
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Tinder Wall.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Hill Giant.Cast
+? Bot2.Mana =
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Hill Giant > Bot1)
+Bot1.Block(Tinder Wall > Hill Giant)
+Bot2.Pass
+! Bot1.Battlefield.Tinder Wall.Activate(Bot2.Battlefield.Ornithopter; Ability: 2 damage)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Tinder Wall.Activate(Bot2.Battlefield.Hill Giant; Ability: 2 damage)
+Bot1.Choose(Pay mana)
+? Bot1.Mana = {G}
+? Bot1.Graveyard.Tinder Wall.Power = 0
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Hill Giant.Damage = 2
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 20

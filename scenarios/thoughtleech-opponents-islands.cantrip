@@ -1,0 +1,54 @@
+# Thoughtleech triggers for an opponent's Island, including a dual land, but not its controller's Island or an opponent's Forest; the controller may accept or decline each life gain (CR 603.2, 119.3).
+[Bot1 Deck]
+Mox Emerald
+Gleemox
+Thoughtleech
+Island
+Forest x20
+
+[Bot2 Deck]
+Island
+Forest
+Tundra
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Thoughtleech.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+? Bot1.Life = 21
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+? Stack.Count = 0
+? Bot1.Life = 21
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+? Stack.Count = 0
+Bot2.Battlefield.Island.Activate
+Bot2.Pass
+Bot1.Pass
+Bot1.Decline
+? Bot1.Life = 21
+[T6 Bot2.Main1]
+Bot2.Hand.Tundra.Play
+Bot2.Battlefield.Tundra.Activate(Ability: {U})
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 20

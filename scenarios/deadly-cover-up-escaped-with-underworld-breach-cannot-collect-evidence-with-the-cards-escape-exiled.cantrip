@@ -44,6 +44,7 @@ Bot1.Graveyard.Deadly Cover-Up.Cast(Ability: Escape)
 Bot1.Modes(Collect evidence)
 Bot1.Battlefield.Swamp#1.Activate
 Bot1.Battlefield.Swamp#2.Activate
+Bot1.Choose(Exile 3 cards from graveyard)
 Bot1.Choose(Griselbrand; Faithless Looting; Black Lotus)
 ? Bot1.Graveyard.Count = 4
 ? Exile.Count = 0

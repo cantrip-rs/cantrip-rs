@@ -35,6 +35,7 @@ Bot1.Pass
 [T3 Bot1.Main1]
 Bot1.Hand.Forest.Play
 Bot1.Battlefield.Gristle Glutton.Activate
+Bot1.Choose(Tap Gristle Glutton)
 Bot1.Choose(Gristle Glutton)
 Bot1.Pass
 Bot2.Pass

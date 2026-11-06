@@ -1,0 +1,38 @@
+# A Tidal Influence controlled by an opponent prevents casting another; after it is destroyed the spell can be cast (CR 601.2e).
+[Bot1 Deck]
+Black Lotus
+Tidal Influence
+Island x20
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Tidal Influence
+Disenchant
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Tidal Influence.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Blue)
+? Bot2.Mana = {U}{U}{U}
+? Stack.Count = 0
+! Bot2.Hand.Tidal Influence.Cast
+Bot2.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Tidal Influence)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Tidal Influence.Cast
+? Bot2.Mana =
+[Expect]
+Bot2.Battlefield.Tidal Influence.Counters.Tide = 1
+Bot1.Graveyard = Tidal Influence; Black Lotus

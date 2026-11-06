@@ -1,0 +1,8 @@
+{
+  "name": "Tarpan",
+  "manaCost": "{G}",
+  "type": "Creature — Horse",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "When this creature dies, you gain 1 life."
+}

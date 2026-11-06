@@ -1,0 +1,47 @@
+# Trailblazer has no effect when its only target leaves before resolution; a second copy resolves on a legal creature (CR 608.2b).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Mox Emerald
+Trailblazer
+Trailblazer
+Ornithopter
+Island x20
+[Bot2 Deck]
+Black Lotus
+Shock
+Ornithopter
+Island
+Island
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Trailblazer.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter = (absent)
+? Bot1.Graveyard = Trailblazer; Ornithopter; Black Lotus
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Trailblazer.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Ornithopter.Types = Artifact; Creature
+Bot1.Graveyard.Count = 5

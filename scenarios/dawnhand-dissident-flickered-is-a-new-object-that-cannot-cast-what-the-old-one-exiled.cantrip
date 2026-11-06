@@ -32,12 +32,14 @@ Bot1.Hand.Sylvan Caryatid.Cast
 [T3 Bot1.Main1]
 Bot1.Hand.Plains.Play
 Bot1.Battlefield.Dawnhand Dissident.Activate(Ability: Surveil)
+Bot1.Choose(Tap Dawnhand Dissident)
 Bot1.Choose(Dawnhand Dissident)
 Bot1.Pass
 Bot2.Pass
 Bot1.Arrange( | Llanowar Elves)
 [T5 Bot1.Main1]
 Bot1.Battlefield.Dawnhand Dissident.Activate(Bot1.Graveyard.Llanowar Elves; Ability: Exile target)
+Bot1.Choose(Tap Dawnhand Dissident)
 Bot1.Choose(Sylvan Caryatid)
 Bot1.Pass
 Bot2.Pass
@@ -49,6 +51,7 @@ Bot2.Pass
 ? Bot1.Battlefield.Dawnhand Dissident.Toughness = 2
 [T7 Bot1.Main1]
 Bot1.Battlefield.Dawnhand Dissident.Activate(Ability: Surveil)
+Bot1.Choose(Tap Dawnhand Dissident)
 Bot1.Choose(Dawnhand Dissident)
 Bot1.Pass
 Bot2.Pass

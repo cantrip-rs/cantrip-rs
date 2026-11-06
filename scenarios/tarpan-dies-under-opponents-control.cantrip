@@ -1,0 +1,36 @@
+# Tarpan's last controller gains the life when it dies, even though the card returns to its owner's graveyard (CR 603.10a, 700.4).
+[Bot1 Deck]
+Mox Emerald
+Tarpan
+Island x18
+
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Control Magic
+Mountain
+Lightning Bolt
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Tarpan.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Control Magic.Cast(Bot1.Battlefield.Tarpan)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Tarpan)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Tarpan
+Bot1.Life = 20
+Bot2.Life = 21

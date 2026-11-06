@@ -1,0 +1,47 @@
+# With Teferi granting flash, Touch of Death refuses an ability on the stack as its target but can target a player (CR 115.1, 608.2).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Teferi, Time Raveler
+Mishra's Bauble
+Touch of Death
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mishra's Bauble.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Teferi, Time Raveler.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Teferi, Time Raveler.Activate(Ability: +1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mishra's Bauble.Activate(Bot2)
+! Bot1.Hand.Touch of Death.Cast(Stack.Mishra's Bauble)
+Bot1.Hand.Touch of Death.Cast(Bot2)
+? Stack.Count = 2
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+? Bot2.Life = 19
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 19

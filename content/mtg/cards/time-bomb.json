@@ -1,0 +1,6 @@
+{
+  "name": "Time Bomb",
+  "manaCost": "{4}",
+  "type": "Artifact",
+  "oracleText": "At the beginning of your upkeep, put a time counter on this artifact.\n{1}, {T}, Sacrifice this artifact: This artifact deals damage equal to the number of time counters on it to each creature and each player."
+}

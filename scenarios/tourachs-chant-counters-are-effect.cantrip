@@ -1,0 +1,33 @@
+# The counter is paid as a cost, so Doubling Season does not double it (CR 118.12, 118.12a).
+[Bot1 Deck]
+Black Lotus
+Tourach's Chant
+Island x20
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Doubling Season
+Ornithopter
+Forest
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tourach's Chant.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Doubling Season.Cast
+Bot2.Hand.Forest.Play
+Bot2.Pass
+Bot1.Pass
+Bot2.Accept
+Bot2.Choose(Ornithopter)
+[T2 Bot2.Main2]
+[Expect]
+Bot2.Battlefield.Ornithopter.Counters.MinusOneMinusOne = 1
+Bot2.Battlefield.Ornithopter.Toughness = 1
+Bot2.Life = 20

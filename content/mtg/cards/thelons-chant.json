@@ -1,0 +1,6 @@
+{
+  "name": "Thelon's Chant",
+  "manaCost": "{1}{G}{G}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of your upkeep, sacrifice this enchantment unless you pay {G}.\nWhenever a player puts a Swamp onto the battlefield, this enchantment deals 3 damage to that player unless the player puts a -1/-1 counter on a creature they control."
+}

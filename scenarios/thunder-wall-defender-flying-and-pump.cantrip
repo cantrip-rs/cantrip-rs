@@ -1,0 +1,59 @@
+# Defender prevents attacking, flying blocks a flier, and {U} grants +1/+1 until cleanup (CR 702.3b, 702.9b, 611.2a).
+[Bot1 Deck]
+Thunder Wall
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Memnite
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Thunder Wall.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Thunder Wall.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thunder Wall.Power = 1
+? Bot1.Battlefield.Thunder Wall.Toughness = 3
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Thunder Wall.Activate(Mana: short)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Thunder Wall.Power = 0
+? Bot1.Battlefield.Thunder Wall.Toughness = 2
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Thunder Wall.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thunder Wall.Power = 1
+? Bot1.Battlefield.Thunder Wall.Toughness = 3
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Thunder Wall > Bot2)
+Bot1.Attack(Memnite > Bot2)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Thunder Wall.Power = 0
+? Bot1.Battlefield.Thunder Wall.Toughness = 2
+Bot2.Attack(Ornithopter > Bot1)
+Bot1.Block(Thunder Wall > Ornithopter)
+? Combat.Blocks.Count = 1
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19

@@ -1,0 +1,52 @@
+# The original controller cannot sacrifice the Chant after giving it away in response to its upkeep trigger (CR 701.21a).
+[Bot1 Deck]
+Tourach's Chant
+Valley Floodcaller
+Harmless Offering
+Black Lotus
+Black Lotus
+Mox Ruby
+Mox Pearl
+Forest
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Valley Floodcaller.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tourach's Chant.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Bot1.Battlefield.Tourach's Chant)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Tourach's Chant.Types = Enchantment
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T5 Bot1.Main1]
+[Expect]
+Bot2.Battlefield.Tourach's Chant.Types = Enchantment

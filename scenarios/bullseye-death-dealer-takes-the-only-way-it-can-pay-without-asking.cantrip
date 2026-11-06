@@ -34,6 +34,7 @@ Bot1.Battlefield.Bullseye, Death Dealer.Activate(Bot2)
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(Sacrifice 1 permanent)
 Bot1.Choose(Mox Sapphire)
 ? Bot1.Graveyard = Mox Sapphire
 Bot1.Pass

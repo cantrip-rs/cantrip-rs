@@ -29,7 +29,15 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
-! Bot1.Hand.Fear of Isolation.Cast
+Bot1.Hand.Fear of Isolation.Cast
+? Bot1.Hand = Fear of Isolation; Island; Island; Island; Island; Island; Mox Sapphire
+? Bot1.Life = 20
+? Bot1.Mana = {U}{U}{U}
+? Bot1.Battlefield.Count = 0
+? Bot1.Graveyard = Black Lotus
+? Bot2.Battlefield = Ornithopter
+? Stack.Count = 0
+? Exile.Count = 0
 [T5 Bot1.Main1]
 Bot1.Hand.Island.Play
 Bot1.Hand.Mox Sapphire.Cast

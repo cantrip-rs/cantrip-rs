@@ -1,0 +1,38 @@
+# Flickerwisp's controller returns the opponent's Swamp under its owner's control, so that controller takes the damage (CR 603.7, 603.2).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Thelon's Chant
+Flickerwisp
+Plains
+Plains
+Plains x20
+[Bot2 Deck]
+Swamp
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thelon's Chant.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Flickerwisp.Cast
+? Bot1.Mana =
+Bot1.Target(Bot2.Battlefield.Swamp)
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 17
+Bot2.Battlefield.Swamp.Types = Land
