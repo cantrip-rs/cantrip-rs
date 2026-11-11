@@ -3608,8 +3608,6 @@ Game::add_phases accepts the current phase, a main-phase ordinal (CR 505.1b), or
 Returned identities support DelayedWhen::PhaseStep, such as World at War's "at the beginning of that combat".
 Game::add_combat_phase uses the same schedule. Combat boundaries expire combat-duration effects and mana before
 the next phase; ending the turn discards the remaining phase schedule and proceeds to cleanup.
-<<<<<<< HEAD
-=======
 
 ## Commander designation and fixed color identity (CR 903)
 
@@ -3659,4 +3657,15 @@ choices and the active player's exert prohibitions are collected before the simu
 The shared recipes for Combat Celebrant and Ahn-Crop Champion, Own the Day and World at War,
 untapping legal targets, and untapping all controlled lands call that authority. The recipes still
 select their own printed sets; simultaneous legality and replacement timing belong to the core.
->>>>>>> b019bdca5 (Engine: apply untaps simultaneously)
+
+### Blocking exceptions for landwalk (CR 609.4)
+
+`CardDef::landwalk_exceptions` names the landwalk abilities ignored for a particular
+blocker/attacker pair. Great Wall, Deadfall and Staff of the Ages use this same
+rules hook. The declaration's existing live blocking-rule sources supply it;
+loss of abilities and phasing therefore remove the exception, and copies retain
+it. The exception changes only the local landwalk test: it never edits the
+attacker's keywords or lifts flying, protection or other blocking restrictions.
+Named basic-landwalk references include their snow counterparts, consistently
+with the engine's other ability references. The source's `Asker` carries the
+controller and linked component for card predicates and text changes.

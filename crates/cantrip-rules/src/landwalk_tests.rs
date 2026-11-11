@@ -20,7 +20,7 @@ fn position(keyword: Keyword, land_type: Option<Subtype>, supertype: Supertypes,
     let land = Box::leak(Box::new(CardDef { name: "Walked land", types: TypeSet::of(&[CardType::Land]),
         subtypes: land_type.map_or(SubtypeSet::NONE, |t| SubtypeSet::NONE.with(t)), supertypes: supertype, ..CardDef::BLANK }));
     let walker = Box::leak(Box::new(CardDef { name: "Attacking walker", keywords: Keywords::of(&[keyword]), ..CREATURE }));
-    let cards = Box::leak(Box::new(CardTable::new([walker, &CREATURE, land, &SNOW, &BASIC, &LEGENDARY])));
+    let cards = Box::leak(Box::new(CardTable::new([walker, &CREATURE, land, &SNOW, &BASIC, &LEGENDARY, &IGNORE_FOREST, &IGNORE_ALL, &LIMITED, &REFUSE])));
     let deck = vec![cards.id_of(&CREATURE); 20];
     let mut g = Game::new(cards, &Setup { decks: vec![deck; 2], ..Default::default() });
     while !g.state.agenda.is_empty() { g.state.frame_remove(0); }
@@ -166,4 +166,85 @@ fn high_keyword_bits_survive_rollback_and_change_loop_identity() {
     g.state.rollback(mark);
     assert_eq!(crate::loops::position(&g.state), before);
     assert_eq!(cx(&mut g).chars(a).keywords, Keywords::of(&[Keyword::SnowForestwalk]));
+}
+
+
+fn ignore_forest(q: &dyn Query, asker: &Asker, _: ObjectId, _: ObjectId) -> Keywords {
+    Keyword::landwalk(q.words(asker.source).subtype(Subtype::Forest)).map_or(Keywords::NONE, |walk| Keywords::of(&[walk]))
+}
+fn ignore_all(_: &dyn Query, _: &Asker, _: ObjectId, _: ObjectId) -> Keywords { Keywords::LANDWALKS }
+fn ignore_for_yours(q: &dyn Query, asker: &Asker, blocker: ObjectId, _: ObjectId) -> Keywords {
+    if q.controller(blocker) == asker.controller { Keywords::LANDWALKS } else { Keywords::NONE }
+}
+fn refuse(_: &dyn Query, _: ObjectId, _: ObjectId, _: ObjectId) -> bool { false }
+static IGNORE_FOREST: CardDef = CardDef { name: "Forestwalk blocking exception", types: TypeSet::of(&[CardType::Enchantment]),
+    landwalk_exceptions: &[ignore_forest], ..CardDef::BLANK };
+static IGNORE_ALL: CardDef = CardDef { name: "All landwalk blocking exception", landwalk_exceptions: &[ignore_all], ..IGNORE_FOREST };
+static LIMITED: CardDef = CardDef { name: "Scoped landwalk blocking exception", landwalk_exceptions: &[ignore_for_yours], ..IGNORE_FOREST };
+static REFUSE: CardDef = CardDef { name: "Forbid blocking", block_rules: &[refuse], ..IGNORE_FOREST };
+fn put_rule(g: &mut Game, def: &'static CardDef, owner: PlayerId) -> ObjectId {
+    let id=g.state.push_obj(Obj::new(g.cards.id_of(def),owner,Zone::BATTLEFIELD));
+    g.state.zone_push(Zone::BATTLEFIELD,id); g.state.see_statics(); id
+}
+fn excepted_blockable(g: &mut Game, attacker: ObjectId, blocker: ObjectId) -> bool {
+    let cx=cx(g); let sources=blocking_rule_sources(&cx); can_block(&cx,blocker,attacker,&sources)
+}
+
+#[test]
+fn named_landwalk_exceptions_include_snow_without_removing_abilities() {
+    for walk in [Keyword::Forestwalk, Keyword::SnowForestwalk] {
+        let (mut g,a,b,_)=position(walk,Some(Subtype::Forest),supertype(true,false,true),THEM);
+        assert!(!excepted_blockable(&mut g,a,b));
+        put_rule(&mut g,&IGNORE_FOREST,THEM);
+        assert!(excepted_blockable(&mut g,a,b));
+        assert!(cx(&mut g).chars(a).has(walk));
+        assert!(g.cards.block_rules[g.cards.id_of(&IGNORE_FOREST).0 as usize]);
+    }
+}
+#[test]
+fn ignoring_one_landwalk_preserves_others_and_every_other_blocking_restriction() {
+    let (mut g,a,b,land)=position(Keyword::Forestwalk,Some(Subtype::Forest),supertype(true,false,true),THEM);
+    put_rule(&mut g,&IGNORE_FOREST,THEM);
+    cx(&mut g).add_effect(a,a,EffectKind::AddKeywords(Keywords::of(&[Keyword::Islandwalk])),Duration::EndOfTurn);
+    cx(&mut g).add_effect(land,land,EffectKind::AddSubtype(Subtype::Island),Duration::EndOfTurn);
+    assert!(!excepted_blockable(&mut g,a,b));
+    put_rule(&mut g,&IGNORE_ALL,THEM);
+    assert!(excepted_blockable(&mut g,a,b));
+    cx(&mut g).add_effect(a,a,EffectKind::AddKeywords(Keywords::of(&[Keyword::Flying])),Duration::EndOfTurn);
+    assert!(!excepted_blockable(&mut g,a,b));
+    cx(&mut g).add_effect(b,b,EffectKind::AddKeywords(Keywords::of(&[Keyword::Reach])),Duration::EndOfTurn);
+    assert!(excepted_blockable(&mut g,a,b));
+    put_rule(&mut g,&REFUSE,THEM);
+    assert!(!excepted_blockable(&mut g,a,b));
+}
+#[test]
+fn landwalk_exceptions_follow_source_copies_text_control_ability_loss_and_phasing() {
+    let (mut g,a,b,_)=position(Keyword::Islandwalk,Some(Subtype::Island),supertype(true,false,false),THEM);
+    let source=put_rule(&mut g,&IGNORE_FOREST,THEM);
+    assert!(!excepted_blockable(&mut g,a,b));
+    cx(&mut g).add_effect(source,source,EffectKind::ChangeText { from:Word::Subtype(Subtype::Forest),to:Word::Subtype(Subtype::Island) },Duration::EndOfTurn);
+    assert!(excepted_blockable(&mut g,a,b));
+    cx(&mut g).add_effect(source,source,EffectKind::LoseAllAbilities,Duration::EndOfTurn);
+    assert!(!excepted_blockable(&mut g,a,b));
+    g.state.effects_retain(|_|false);
+    let copied=g.cards.id_of(&LIMITED); cx(&mut g).set_copy(source,Copiable::of(copied));
+    assert!(excepted_blockable(&mut g,a,b));
+    crate::phasing::phase_out(&mut cx(&mut g),&[source],None,false);
+    assert!(!excepted_blockable(&mut g,a,b));
+    crate::phasing::untap_step(&mut cx(&mut g),THEM);
+    assert!(excepted_blockable(&mut g,a,b));
+    cx(&mut g).add_effect(source,source,EffectKind::Control(YOU),Duration::EndOfTurn);
+    crate::ops::settle_lasting_and_control(&mut cx(&mut g));
+    assert!(!excepted_blockable(&mut g,a,b));
+}
+#[test]
+fn declared_blockers_offer_the_pair_permitted_by_a_landwalk_exception() {
+    let (mut g,a,b,_)=position(Keyword::Forestwalk,Some(Subtype::Forest),supertype(true,false,false),THEM);
+    put_rule(&mut g,&IGNORE_FOREST,THEM);
+    g.state.set_attackers(vec![Attacker::new(a,Target::Player(THEM),THEM,TypeSet::NONE)]);
+    while !g.state.agenda.is_empty() {g.state.frame_remove(0);}
+    g.state.frame_push(Frame::new(FrameKind::BeginStep)); g.run();
+    let request=g.pending().expect("declaration of blockers");
+    let RequestKind::DeclareBlockers {allowed,..}=&request.kind else {panic!("{:?}",request.kind)};
+    assert!(allowed.contains(&(b,a)));
 }
