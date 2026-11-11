@@ -2652,6 +2652,14 @@ pub type SpellRule = fn(&dyn Query, &Asker, PlayerId, ObjectId) -> bool;
 /// Lookout).
 pub type BlockRule = fn(&dyn Query, ObjectId, ObjectId, ObjectId) -> bool;
 
+/// Landwalk ignored when judging this block (CR 509.1b, 609.4, 702.14c), not abilities removed from the attacker.
+/// Great Wall and Deadfall ignore their named landwalk; Staff of the Ages ignores every landwalk. The callback may
+/// restrict the blocker or attacker and reads named land types through the source's words (CR 612). Named basic
+/// landwalk references include their snow counterparts, as for other ability references (CR 702.1d).
+/// Every other blocking restriction still applies. Sources with no functioning abilities provide no exception.
+pub type LandwalkException = fn(&dyn Query, &Asker, ObjectId, ObjectId) -> Keywords;
+
+
 /// Additional attackers a blocker may block because of a static rule of this source (CR 509.1a).
 /// Unlike an ability granted to the blocker, the rule holds if the blocker loses its abilities.
 /// Brave the Sands and High Ground each permit a creature their controller controls to block one more.
@@ -3650,6 +3658,8 @@ pub struct CardDef {
     pub spell_rules: &'static [SpellRule],
     /// Its static abilities that limit blocking (CR 509.1b), while it is on the battlefield.
     pub block_rules: &'static [BlockRule],
+    /// Landwalk abilities ignored for a block, without removing those abilities (CR 609.4).
+    pub landwalk_exceptions: &'static [LandwalkException],
     /// Static rules that let a blocker block additional attackers (CR 509.1a).
     pub additional_blocks: &'static [AdditionalBlocks],
     /// Its static abilities that limit how many creatures may block an attacker (CR 509.1b), while it is on the battlefield.
@@ -3953,6 +3963,7 @@ impl CardDef {
         cast_rules: &[],
         spell_rules: &[],
         block_rules: &[],
+        landwalk_exceptions: &[],
         additional_blocks: &[],
         blocker_limits: &[],
         block_capacities: &[],
@@ -4060,6 +4071,7 @@ impl CardDef {
             (!self.cast_rules.is_empty(), "cast rules"),
             (!self.spell_rules.is_empty(), "spell rules"),
             (!self.block_rules.is_empty(), "block rules"),
+            (!self.landwalk_exceptions.is_empty(), "landwalk blocking exceptions"),
             (!self.additional_blocks.is_empty(), "additional blocks"),
             (!self.blocker_limits.is_empty(), "blocker limits"),
             (!self.block_capacities.is_empty(), "block capacities"),
@@ -4913,7 +4925,7 @@ impl CardTable {
         let designators: Vec<bool> = cards.iter().map(|c| c.ascend || c.storied).collect();
         let engines: Vec<bool> = cards.iter().map(|c| c.start_your_engines).collect();
         let block_rules: Vec<bool> =
-            cards.iter().map(|c| !c.block_rules.is_empty() || !c.blocker_limits.is_empty() || !c.block_capacities.is_empty() || !c.additional_blocks.is_empty()).collect();
+            cards.iter().map(|c| !c.block_rules.is_empty() || !c.landwalk_exceptions.is_empty() || !c.blocker_limits.is_empty() || !c.block_capacities.is_empty() || !c.additional_blocks.is_empty()).collect();
         let attack_rules: Vec<bool> = cards.iter().map(|c| !c.attack_rules.is_empty()).collect();
         let attack_alone_rules: Vec<bool> = cards.iter().map(|c| !c.attack_alone_rules.is_empty()).collect();
         let goads: Vec<bool> = cards.iter().map(|c| !c.goads.is_empty()).collect();

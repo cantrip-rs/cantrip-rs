@@ -1183,17 +1183,28 @@ fn can_block(cx: &Cx, blocker: ObjectId, attacker: ObjectId, rule_sources: &[Obj
     // CR 702.14c: only a defending player's current lands qualify. Raw membership is exact: snow islandwalk
     // does not confer ordinary islandwalk and cannot evade blockers through a non-snow Island.
     if a.keywords.has_landwalk() {
+        // CR 609.4: "as though it didn't have [landwalk]" changes only blocking. The attacker retains the ability,
+        // including for other abilities that ask about it; flying, protection and other landwalks still restrict it.
+        let mut walks = a.keywords;
+        for &source in rule_sources {
+            for (card, by) in cx.cards().texts_linked(cx.s(), source) {
+                let asker = Asker { instance: None, source, controller: cx.s().obj(source).controller, by, spell: false };
+                for exception in cx.card(card).landwalk_exceptions {
+                    walks.0 &= !(exception(cx, &asker, blocker, attacker)).for_effect().0;
+                }
+            }
+        }
         let defending = cx.s().obj(blocker).controller;
         let walked = cx.s().battlefield().iter().any(|&id| {
             if cx.s().obj(id).controller != defending { return false; }
             let land = cx.chars(id);
             land.is(CardType::Land) && (
-                Keyword::LANDWALKS.iter().any(|&(walk, ty)| a.has(walk) && land.has_subtype(ty))
-                || (land.supertypes.snow && Keyword::SNOW_LANDWALKS.iter().any(|&(walk, ty)| a.has(walk) && land.has_subtype(ty)))
-                || (a.has(Keyword::SnowLandwalk) && land.supertypes.snow)
-                || (a.has(Keyword::Desertwalk) && land.has_subtype(Subtype::Desert))
-                || (a.has(Keyword::NonbasicLandwalk) && !land.supertypes.basic)
-                || (a.has(Keyword::LegendaryLandwalk) && land.supertypes.legendary)
+                Keyword::LANDWALKS.iter().any(|&(walk, ty)| walks.has(walk) && land.has_subtype(ty))
+                || (land.supertypes.snow && Keyword::SNOW_LANDWALKS.iter().any(|&(walk, ty)| walks.has(walk) && land.has_subtype(ty)))
+                || (walks.has(Keyword::SnowLandwalk) && land.supertypes.snow)
+                || (walks.has(Keyword::Desertwalk) && land.has_subtype(Subtype::Desert))
+                || (walks.has(Keyword::NonbasicLandwalk) && !land.supertypes.basic)
+                || (walks.has(Keyword::LegendaryLandwalk) && land.supertypes.legendary)
             )
         });
         if walked { return false; }
@@ -1361,6 +1372,20 @@ fn cant_block(cx: &Cx, id: ObjectId) -> bool {
         || crate::static_rules::lasting_rules_on(cx, cx.cards(), id, LastingRuleKind::CantBlock).next().is_some()
 }
 
+/// Live sources of static blocking rules, shared by declaration legality and its rule-specific tests.
+fn blocking_rule_sources(cx: &Cx) -> Vec<ObjectId> {
+    cx
+        .s()
+        .battlefield()
+        .iter()
+        .copied()
+        .filter(|&id| {
+            let obj = cx.s().obj(id);
+            cx.cards().texts(cx.s(), obj).any(|card| cx.cards().block_rules[card.0 as usize]) && !cx.lost_all_abilities(id)
+        })
+        .collect()
+}
+
 fn declare_blockers(cx: &mut Cx) -> R<()> {
     let attackers: Vec<ObjectId> = cx.s().attackers.iter().map(|a| a.id).collect();
     if attackers.is_empty() {
@@ -1379,16 +1404,7 @@ fn declare_blockers(cx: &mut Cx) -> R<()> {
         .collect();
     // The permanents whose static abilities limit who may block whom, or by how many (CR 509.1b), and which have not lost
     // them (CR 613.1f).
-    let rule_sources: Vec<ObjectId> = cx
-        .s()
-        .battlefield()
-        .iter()
-        .copied()
-        .filter(|&id| {
-            let obj = cx.s().obj(id);
-            cx.cards().texts(cx.s(), obj).any(|card| cx.cards().block_rules[card.0 as usize]) && !cx.lost_all_abilities(id)
-        })
-        .collect();
+    let rule_sources = blocking_rule_sources(cx);
     let mut allowed = Vec::new();
     for &b in &eligible {
         for &a in &attackers {
