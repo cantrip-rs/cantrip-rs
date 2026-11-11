@@ -1549,6 +1549,12 @@ fn block_rules(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)]
     rules
 }
 
+/// CR 510.1a, 609.4: an earlier resolving effect can say the creature assigns no combat damage. It stays in combat,
+/// remains a receiver of assigned damage, and still makes a first-strike step occur when appropriate (CR 510.4).
+fn assigns_combat_damage(cx: &Cx, creature: ObjectId) -> bool {
+    !cx.s().effects.iter().any(|e| e.affected == creature && e.kind == EffectKind::NoCombatDamageAssignment)
+}
+
 /// Combat damage (CR 510): every attacker and blocker deals its damage at once. A creature with a choice in where its damage
 /// goes - an attacker blocked by two or more creatures, or a trampler with more than lethal for its blocker (CR 510.1c,
 /// 702.19b), a blocker blocking two or more creatures (CR 510.1d) - divides it as the player banding names chooses, else as
@@ -1582,11 +1588,12 @@ fn combat_damage(cx: &mut Cx) -> R<()> {
         .attackers
         .iter()
         .copied()
-        .filter(|a| live(cx.s(), a.id) && deals_now(cx, a.id, a.first_strike, first_strike_step))
+        .filter(|a| live(cx.s(), a.id) && deals_now(cx, a.id, a.first_strike, first_strike_step) && assigns_combat_damage(cx, a.id))
         .collect();
     let mut blockers: Vec<ObjectId> = Vec::new();
     for b in &cx.s().blocks {
-        if !blockers.contains(&b.blocker) && live(cx.s(), b.blocker) && deals_now(cx, b.blocker, b.first_strike, first_strike_step) {
+        if !blockers.contains(&b.blocker) && live(cx.s(), b.blocker) && deals_now(cx, b.blocker, b.first_strike, first_strike_step)
+            && assigns_combat_damage(cx, b.blocker) {
             blockers.push(b.blocker);
         }
     }

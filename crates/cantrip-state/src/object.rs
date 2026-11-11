@@ -1566,6 +1566,9 @@ pub enum EffectKind {
     /// Set only base toughness in layer 7b (CR 613.4b); power continues to be determined independently.
     /// Sentinel and Wall of Tombstones set base toughness without setting power.
     SetToughness(i32),
+    /// Assigns no combat damage (CR 510.1a, 609.4), a resolved rule rather than removal or prevention of damage.
+    /// Gaze of Pain and Cloak of Confusion apply it after their controller chooses their triggered effect.
+    NoCombatDamageAssignment,
     /// Is exactly these card types (CR 205.1a, 613.1d), layer 4: an instant or sorcery stays one, and the subtypes it had stay
     /// only where they belong to a card type it still has (`Subtype::card_types`). An effect that also names its subtypes
     /// ("becomes an Equipment artifact") sets them with `LoseSubtypesOf` and `AddSubtype` after it.

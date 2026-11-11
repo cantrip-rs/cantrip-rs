@@ -19,7 +19,7 @@ they are not cards already implemented or independently verified end to end.
 | Set only power or only toughness | 4 / 4 | Native tests passed (17 base-P/T tests) |
 | World supertype and world rule | 12 / 8 | Queued |
 | Bands with other, including grants and removal | 8 / 8 | Queued |
-| Optional no combat damage assignment | 8 / 8 | Queued |
+| No combat damage assignment after an earlier choice | 8 / 8 | Native tests passed (21 assignment tests) |
 | Other players activating abilities | 8 / 5 | Queued |
 | Step-bound effect and permission lifetimes | 6 / 5 | Queued |
 | Computed limits on announced X | 5 / 3 | Queued |
@@ -59,3 +59,17 @@ switching power/toughness continue to apply in their own layers and timestamp
 order. The existing signed 32-bit bounds and journalled effect storage are
 unchanged. Tests include negative and extreme values, changed underlying P/T,
 counters, a power/toughness switch, effect ordering and rollback/loop identity.
+
+
+## No combat damage assignment
+
+`EffectKind::NoCombatDamageAssignment` records a resolved rule about the exact
+creature (CR 510.1a, 609.4). Gaze of Pain and Cloak of Confusion choose their
+alternative in their earlier triggered ability. The damage step does not ask an
+additional question. It excludes that creature from assignment and division
+prompts, without removing it from combat, preventing damage, changing power, or
+preventing its noncombat damage. Other combatants can still assign damage to it.
+A first/double striker still creates a first-strike damage step even when it
+assigns no damage; the rule applies in both damage steps and survives ability
+loss for its duration. Native tests cover the attacking and blocking roles,
+noncombat damage, double strike, and journalled rollback.
