@@ -16,7 +16,7 @@ they are not cards already implemented or independently verified end to end.
 | Feature | Affected / otherwise clear | Status |
 | --- | ---: | --- |
 | Blocking as though landwalk were absent | 9 / 9 | Native tests passed (13 landwalk tests) |
-| Set only power or only toughness | 4 / 4 | Queued |
+| Set only power or only toughness | 4 / 4 | Native tests passed (17 base-P/T tests) |
 | World supertype and world rule | 12 / 8 | Queued |
 | Bands with other, including grants and removal | 8 / 8 | Queued |
 | Optional no combat damage assignment | 8 / 8 | Queued |
@@ -47,3 +47,15 @@ Tests cover named and snow-qualified exceptions, another landwalk continuing to
 restrict blocking, flying and ordinary blocking restrictions, copied sources,
 text changes, ability loss, phasing, controller-dependent scope, and an actual
 declaration offering the newly legal block.
+
+
+## Independent base power and toughness
+
+`EffectKind::SetPower(i32)` and `EffectKind::SetToughness(i32)` are layer-7b
+settings (CR 613.4b). Island of Wak-Wak and Singing Tree set power; Sentinel and
+Wall of Tombstones set toughness. The other axis is never copied at resolution:
+a changing CDA, a later copy, another layer-7b setting, counters, bonuses and
+switching power/toughness continue to apply in their own layers and timestamp
+order. The existing signed 32-bit bounds and journalled effect storage are
+unchanged. Tests include negative and extreme values, changed underlying P/T,
+counters, a power/toughness switch, effect ordering and rollback/loop identity.
