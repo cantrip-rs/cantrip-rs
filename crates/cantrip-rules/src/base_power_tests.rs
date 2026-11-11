@@ -757,3 +757,44 @@ fn a_toughness_setting_and_a_power_and_toughness_setting_apply_in_timestamp_orde
     let c = cx.chars(creature);
     assert_eq!((c.power, c.toughness), (Some(7), Some(8)));
 }
+
+/// CR 613.4b: an effect that sets power alone (Island of Wak-Wak, Singing Tree) leaves toughness as the earlier layers make
+/// it: the printed box, a copy's (CR 613.2), a characteristic-defining ability's (CR 613.4a), with 7c on top of each and 7d
+/// after (CR 613.4d).
+#[test]
+fn setting_power_alone_leaves_toughness_to_the_other_layers() {
+    let mut g = game();
+    let creature = enter(&mut g, &BEAR);
+    let anthem = enter(&mut g, &ANTHEM);
+    effect(&mut g, creature, EffectKind::SetPower(0));
+    assert_eq!(pt(&g, creature), (Some(1), Some(3)));
+    let wall = g.cards.id_of(&WALL);
+    g.state.update_obj(creature, |o| o.copy = Some(Copiable::of(wall)));
+    assert_eq!(pt(&g, creature), (Some(1), Some(4)));
+    effect(&mut g, creature, EffectKind::SwitchPt);
+    assert_eq!(pt(&g, creature), (Some(4), Some(1)));
+    g.state.zone_remove(Zone::BATTLEFIELD, anthem);
+    assert_eq!(pt(&g, creature), (Some(3), Some(0)));
+}
+
+/// CR 613.7: within layer 7b a power setting, a toughness setting and a setting of both apply in timestamp order, each
+/// later one winning what it sets; the value is signed and the effect is undone with the journal.
+#[test]
+fn power_and_toughness_settings_apply_in_timestamp_order() {
+    let mut g = game();
+    let creature = enter(&mut g, &BEAR);
+    effect(&mut g, creature, EffectKind::SetPt(5, 7));
+    effect(&mut g, creature, EffectKind::SetPower(-2));
+    assert_eq!(pt(&g, creature), (Some(-2), Some(7)));
+    effect(&mut g, creature, EffectKind::SetToughness(4));
+    let mark = g.state.mark();
+    let before = crate::loops::position(&g.state);
+    effect(&mut g, creature, EffectKind::SetPower(i32::MIN));
+    assert_eq!(pt(&g, creature), (Some(i32::MIN), Some(4)));
+    assert_ne!(crate::loops::position(&g.state), before);
+    g.state.rollback(mark);
+    assert_eq!(crate::loops::position(&g.state), before);
+    assert_eq!(pt(&g, creature), (Some(-2), Some(4)));
+    effect(&mut g, creature, EffectKind::SetPt(3, 3));
+    assert_eq!(pt(&g, creature), (Some(3), Some(3)));
+}

@@ -3084,7 +3084,7 @@ pub(crate) fn effect_layer(kind: EffectKind) -> Option<Layer> {
         | EffectKind::LoseEnchant(_)
         | EffectKind::MustAttack
         | EffectKind::Toxic(_) => Layer::Ability,
-        EffectKind::SetPt(..) | EffectKind::SetToughness(_) => Layer::PtSet,
+        EffectKind::SetPt(..) | EffectKind::SetPower(_) | EffectKind::SetToughness(_) => Layer::PtSet,
         EffectKind::Pump(..) => Layer::PtModify,
         EffectKind::SwitchPt => Layer::PtSwitch,
         _ => return None,
@@ -3215,6 +3215,7 @@ fn apply_effect(cards: &CardTable, effect: &ContinuousEffect, layer: Layer, char
                 chars.toughness = Some(t);
             }
             // CR 613.4b: setting one of the two leaves the other as it was, to be set or not by what comes later.
+            (Layer::PtSet, EffectKind::SetPower(p)) => chars.power = Some(p),
             (Layer::PtSet, EffectKind::SetToughness(t)) => chars.toughness = Some(t),
             // CR 613.1f: every kind of ability goes, at this effect's timestamp: what is granted after it is kept.
             (Layer::Ability, EffectKind::LoseAllAbilities) => chars.lose_all_abilities(),

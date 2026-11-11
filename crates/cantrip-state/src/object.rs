@@ -1642,6 +1642,9 @@ pub enum EffectKind {
     SwitchPt,
     /// Its power and toughness become these (CR 613.4b), layer 7b: "it becomes a 0/0 creature".
     SetPt(i32, i32),
+    /// Its power alone becomes this (CR 613.4b), layer 7b: "has base power 0" (Island of Wak-Wak, Singing Tree). Its
+    /// toughness is left as the earlier layers and settings make it.
+    SetPower(i32),
     /// Its toughness alone becomes this (CR 613.4b), layer 7b: "its base toughness becomes 5" (Sentinel). Its power is
     /// left as the earlier layers and settings make it.
     SetToughness(i32),
