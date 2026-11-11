@@ -560,3 +560,49 @@ fn the_ability_beside_the_other_assignment_rules() {
     enter(&mut game, &TOUGHNESS, ME);
     assert_eq!(assigned(&mut game, creature), 3, "another permanent's rule, which the loss does not take");
 }
+
+
+/// CR 510.1: no assignment, rather than prevention, for unblocked/blocked attackers and blockers. It remains a
+/// recipient of the other creature's damage and retains its actual power. A noncombat damage instruction still works.
+#[test]
+fn a_resolved_no_assignment_rule_skips_only_that_creatures_combat_damage() {
+    for arrangement in 0..3 {
+        let blocking=arrangement==2;
+        let (mut g,ids)=table(&[(&ABSOLUTE,if blocking {THEM}else{ME}),(&NEGATIVE,if blocking {ME}else{THEM})]);
+        let [silent,normal]=ids[..] else {unreachable!()};
+        for id in [silent,normal] {let card=g.state.obj(id).card;g.state.update_obj(id,|o|o.copy=Some(Copiable::of(card).sized(3,6)));}
+        let attacker=if blocking {normal}else{silent};let blocker=if blocking {silent}else{normal};
+        cantrip_api::Game::add_effect(&mut cx(&mut g),silent,silent,EffectKind::NoCombatDamageAssignment,Duration::EndOfTurn);
+        // Losing abilities does not remove a rule made by the earlier effect (CR 613.1f, 611.2c).
+        cantrip_api::Game::add_effect(&mut cx(&mut g),silent,silent,EffectKind::LoseAllAbilities,Duration::EndOfTurn);
+        g.state.set_attackers(vec![Attacker {blocked:arrangement>0,..Attacker::new(attacker,Target::Player(THEM),THEM,TypeSet::NONE)}]);
+        if arrangement>0 {g.state.set_blocks(vec![Block {blocker,attacker,first_strike:false}]);}
+        g.state.update_turn(|t|t.set_step(Step::CombatDamage));
+        crate::turn::begin_step(&mut cx(&mut g)).unwrap();
+        assert_eq!(g.state.player(THEM).life,20);
+        assert_eq!(g.state.obj(normal).damage,0);assert_eq!(g.state.obj(silent).damage,if arrangement>0 {3}else{0});
+        assert!(g.log.iter().all(|r| !matches!(r.event,Event::Damage {source,..} if source==silent)));
+        assert_eq!(g.chars(silent).power,Some(3));
+        let mut cx=cx(&mut g);cx.doer=Some(if blocking {THEM}else{ME});
+        cantrip_api::Game::damage(&mut cx,silent,Target::Player(if blocking {ME}else{THEM}),1);
+        assert_eq!(cx.s().player(if blocking {ME}else{THEM}).life,19);
+    }
+}
+
+/// CR 510.4: a double striker still creates the first-strike step, but assigns nothing in either damage step.
+#[test]
+fn no_assignment_does_not_erase_first_strike_and_ends_with_its_effect() {
+    let (mut g,ids)=table(&[(&ABSOLUTE,ME)]);let silent=ids[0];
+    cantrip_api::Game::add_effect(&mut cx(&mut g),silent,silent,EffectKind::AddKeywords(Keywords::of(&[Keyword::DoubleStrike])),Duration::EndOfTurn);
+    let mark=g.state.mark();let before=crate::loops::position(&g.state);
+    cantrip_api::Game::add_effect(&mut cx(&mut g),silent,silent,EffectKind::NoCombatDamageAssignment,Duration::EndOfTurn);
+    assert_ne!(before,crate::loops::position(&g.state));
+    g.state.set_attackers(vec![Attacker::new(silent,Target::Player(THEM),THEM,TypeSet::NONE)]);
+    g.state.update_turn(|t|t.set_step(Step::CombatDamage));
+    crate::turn::begin_step(&mut cx(&mut g)).unwrap();assert_eq!(g.state.turn.damage_round,1);assert_eq!(g.state.player(THEM).life,20);
+    crate::turn::begin_step(&mut cx(&mut g)).unwrap();assert_eq!(g.state.turn.damage_round,2);assert_eq!(g.state.player(THEM).life,20);
+    g.state.rollback(mark);assert_eq!(before,crate::loops::position(&g.state));
+    g.state.set_attackers(vec![Attacker::new(silent,Target::Player(THEM),THEM,TypeSet::NONE)]);
+    g.state.update_turn(|t|t.set_step(Step::CombatDamage));
+    crate::turn::begin_step(&mut cx(&mut g)).unwrap();assert_eq!(g.state.player(THEM).life,18);
+}

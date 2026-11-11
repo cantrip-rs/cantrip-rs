@@ -1786,6 +1786,8 @@ impl<'a> Projector<'a> {
                     EffectKind::CantAttack => "Can't attack",
                     EffectKind::CantBlock => "Can't block",
                     EffectKind::CantBeBlocked => "Can't be blocked",
+                    // CR 510.1: a resolved effect that has it assign no combat damage (Cloak of Confusion).
+                    EffectKind::NoCombatDamageAssignment => "Assigns no combat damage",
                     // A resolved restriction on blocking it, in its card's words: "Can't be blocked except by creatures with
                     // haste this turn."
                     EffectKind::BlockRestriction { card, index } => {
