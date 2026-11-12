@@ -444,7 +444,7 @@ pub(crate) struct LockedAttackPayment {
     pub attacker: ObjectId,
     pub chosen: Option<ObjectId>,
     pub by: Option<Linked>,
-    pub cost: Cost,
+    pub cost: &'static Cost,
 }
 
 pub(crate) struct LockedAttackCosts {
@@ -470,7 +470,7 @@ pub(crate) fn lock_attack_costs(cx: &Cx, attacks: &[(ObjectId, Target)]) -> Lock
             }
             for rule in def.attack_cost_rules {
                 if (rule.applies)(cx, &asker, attacker, target) {
-                    total.fixed.push(LockedAttackPayment { source, attacker, chosen: None, by, cost: rule.cost });
+                    total.fixed.push(LockedAttackPayment { source, attacker, chosen: None, by, cost: &rule.cost });
                     total.mana = total.mana.plus(&rule.cost.total_mana());
                     taxed = true;
                 }
