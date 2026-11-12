@@ -3720,3 +3720,12 @@ boundaries. It clears ordinary/restricted pools and their duration, source and
 snow provenance together, and returns the lost types within native per-type
 bounds. It is separate from producing/doubling mana and from asking a player
 to activate a land's mana abilities. All state changes are journalled.
+
+### Random discard as a cost
+
+A `Cost::discard_at_random` component is scheduled after all nonrandom costs
+(CR 601.2h), and selects exact distinct cards with the recorded random-choice
+authority rather than asking the payer. The special-action path separates
+ordinary and random discards for the same ordering. Random discards cannot
+feed an earlier nonrandom graveyard cost. Selection, discard and typed payment
+receipts use the existing journal, movement and cost infrastructure.

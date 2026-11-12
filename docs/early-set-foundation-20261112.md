@@ -244,3 +244,23 @@ Drain Power's forced land-mana-activation procedure remains a separate gap;
 this primitive does not tap lands or claim that procedure is implemented.
 The generator's old coarse requirement label also covers mana doubling, which
 is deliberately not enabled by detecting this loss-only method.
+
+## Random discard costs
+
+`Cost::discard_at_random` is an exact byte-sized count (Coral Helm, Draconian
+Cylix, Stormbind). CR 601.2h requires every nonrandom cost to be paid before it;
+the common cost scheduler marks it as random and offers no card-selection
+prompt. The special-action path also pays random components last, including
+separately declared components. Selection is uniform without replacement,
+through the core's recorded/journalled random-choice API (CR 701.9b). Taking
+the entire hand needs no random draw, zero does nothing, and an insufficient
+hand cannot pay. Discarded objects retain ordinary typed cost receipts.
+
+Availability counts the exact hand resources but does not pretend a random
+discard can supply an earlier nonrandom graveyard-exile cost. Cost combination,
+repetition bounds and tap-only classification include the new component.
+Four focused tests pass: payment order/no card choice, selection without
+replacement and random-state rollback, whole-hand/shortfall cases, the
+nonrandom graveyard-cost dependency, and a separate special-action component.
+The generator only enables constant unrestricted random discards under this
+capability; variable-X random discards remain explicitly unsupported.

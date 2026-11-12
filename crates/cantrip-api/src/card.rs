@@ -877,6 +877,9 @@ pub struct Cost {
     /// or only cards that pass its filter ("discard a creature card"), a cost that specifies a characteristic of the cards
     /// discarded (CR 701.9c, `ZoneChange::pays_characteristic`).
     pub discard: Discards,
+    /// Discard this many cards at random (CR 601.2h, 701.9b), after every nonrandom cost. Exact, never "as many as possible".
+    /// Coral Helm, Draconian Cylix and Stormbind use one. Chosen by the core's journalled random-choice authority.
+    pub discard_at_random: u8,
     /// Pay X life, X announced with the spell (CR 118.8, 601.2b): Toxic Deluge, Vicious Rivalry.
     pub pay_x_life: bool,
     /// Exile this many cards from your graveyard, other than the source (CR 702.138a escape, and "exile three cards
@@ -1147,6 +1150,7 @@ impl Cost {
             remove_counters_among,
             exile_self,
             discard,
+            discard_at_random,
             pay_x_life,
             exile_from_graveyard,
             exile_from_graveyard_of,
@@ -1188,6 +1192,7 @@ impl Cost {
             && remove_counters_among.is_none()
             && !exile_self
             && discard.is_none()
+            && discard_at_random == 0
             && !pay_x_life
             && exile_from_graveyard == 0
             && exile_from_graveyard_of.is_none()
@@ -1238,6 +1243,7 @@ impl Cost {
         c.remove_counters_among = self.remove_counters_among.map(|r| CountersAmong { count: r.count.saturating_mul(n), ..r }).filter(|_| n > 0);
         c.exile_from_hand = self.exile_from_hand.map(|(k, f)| (k.saturating_mul(n), f)).filter(|_| n > 0);
         c.discard = self.discard.times(n);
+        c.discard_at_random = self.discard_at_random.saturating_mul(n);
         c.permanents = self.permanents.map(|p| PermanentCost { count: p.count * u32::from(n), ..p }).filter(|_| n > 0);
         c
     }
@@ -1247,6 +1253,7 @@ impl Cost {
     /// spell is kicked.
     pub fn most_times(&self) -> u32 {
         let largest = [
+            u32::from(self.discard_at_random),
             u32::from(self.exile_from_graveyard),
             u32::from(self.energy),
             u32::from(self.blight),
@@ -1357,6 +1364,7 @@ impl Cost {
             c.exile_from_hand_for_less = other.exile_from_hand_for_less;
         }
         c.discard = self.discard.and(other.discard);
+        c.discard_at_random = self.discard_at_random.saturating_add(other.discard_at_random);
         c.permanents = match (self.permanents, other.permanents) {
             (Some(a), Some(b)) => {
                 // A tapped permanent chosen after the mana and one chosen before are not one choice.
@@ -1436,6 +1444,7 @@ impl Cost {
             remove_counters_among: None,
             exile_self: false,
             discard: Discards::NONE,
+            discard_at_random: 0,
             pay_x_life: false,
             exile_from_graveyard: 0,
             exile_from_graveyard_of: None,

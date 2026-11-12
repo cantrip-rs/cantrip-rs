@@ -745,7 +745,7 @@ fn payable_after_life(cx: &Cx, source: ObjectId, controller: PlayerId, cost: &Co
     }
     let chooses = parts_of(cost).any(|p| {
         p.permanents.is_some() || p.choose.is_some() || p.behold.is_some() || p.tap_creatures.is_some() || p.materials.is_some()
-            || p.blight > 0 || !p.discard.is_none() || p.exile_from_hand.is_some() || p.variable.is_some()
+            || p.blight > 0 || !p.discard.is_none() || p.discard_at_random > 0 || p.exile_from_hand.is_some() || p.variable.is_some()
             || p.exile_from_graveyard > 0 || p.remove_counters_among.is_some()
     });
     if !chooses {
@@ -932,8 +932,9 @@ fn can_pay_other_judged(cx: &Cx, source: ObjectId, controller: PlayerId, cost: &
     if cost.remove_any_counter && !obj.counter_array().iter().any(|&n| n > 0) {
         return false;
     }
-    if parts_of(cost).any(|part| !part.discard.is_none()) {
-        let instructions: Vec<_> = parts_of(cost).flat_map(|part| part.discard.parts()).collect();
+    if parts_of(cost).any(|part| !part.discard.is_none() || part.discard_at_random > 0) {
+        let instructions: Vec<_> = parts_of(cost).flat_map(|part| part.discard.parts().chain(
+            (part.discard_at_random > 0).then_some((part.discard_at_random, None)))).collect();
         let asker = Asker { instance: None, source, controller, by, spell: false };
         let hand: Vec<ObjectId> = cx.s().zone(Zone::hand(controller)).iter().copied().filter(|&c| c != source).collect();
         // A card a mana ability could put into the hand may be any card: it may pay any instruction.
@@ -1536,31 +1537,37 @@ struct Discarding {
 /// (retrace's land card, then escalate's card). A choice that leaves a later instruction too few cards can't pay the cost,
 /// and is taken back (CR 601.2h, 733.1).
 fn choose_discards(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost, by: Option<Linked>) -> R<Discarding> {
-    choose_discards_apart(cx, player, source, cost, by, &[])
+    choose_discards_mode(cx, player, source, cost, by, &[], true, false)
 }
 
 fn choose_discards_apart(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost, by: Option<Linked>, taken: &[ObjectId]) -> R<Discarding> {
+    choose_discards_mode(cx, player, source, cost, by, taken, true, true)
+}
+
+/// Special actions select/pay their ordinary discards first, and their random discards after all other costs.
+#[allow(clippy::too_many_arguments)]
+fn choose_discards_mode(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost, by: Option<Linked>, taken: &[ObjectId], ordinary: bool, random: bool) -> R<Discarding> {
     if !cost.components.is_empty() {
         let mut parts = Vec::new();
         atomic_costs(cost, &mut parts);
         let mut out = Discarding::default();
         for part in parts {
             let used: Vec<ObjectId> = taken.iter().chain(&out.cards).copied().collect();
-            let chosen = choose_discards_apart(cx, player, source, part, by, &used)?;
+            let chosen = choose_discards_mode(cx, player, source, part, by, &used, ordinary, random)?;
             out.cards.extend(chosen.cards);
             out.paying.extend(chosen.paying);
         }
         return Ok(out);
     }
     // "Discard your hand" (CR 701.9) chooses nothing: every card in it, the source (on the stack by now) not among them.
-    if cost.discard_hand {
+    if ordinary && cost.discard_hand {
         if cx.s().zone(Zone::hand(player)).iter().any(|id| taken.contains(id)) { return Err(Stop::Cancel); }
         return Ok(Discarding { cards: cx.s().zone(Zone::hand(player)).iter().copied().filter(|&c| c != source).collect(), paying: Vec::new() });
     }
     let asker = Asker { instance: None, source, controller: player, by, spell: false };
     let hand: Vec<ObjectId> = cx.s().zone(Zone::hand(player)).to_vec();
     let mut out = Discarding::default();
-    for (n, filter) in cost.discard.parts() {
+    for (n, filter) in cost.discard.parts().filter(|_| ordinary) {
         let eligible: Vec<ObjectId> =
             hand.iter().copied().filter(|&c| c != source && !taken.contains(&c) && !out.cards.contains(&c) && filter.is_none_or(|f| f(cx, &asker, c))).collect();
         if eligible.len() < usize::from(n) {
@@ -1572,6 +1579,15 @@ fn choose_discards_apart(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: 
             out.paying.extend_from_slice(&cards);
         }
         out.cards.extend(cards);
+    }
+    if random && cost.discard_at_random > 0 {
+        let mut eligible: Vec<ObjectId> = hand.iter().copied().filter(|&c| c != source && !taken.contains(&c) && !out.cards.contains(&c)).collect();
+        let n = usize::from(cost.discard_at_random);
+        if eligible.len() < n { return Err(Stop::Cancel); }
+        if n < eligible.len() {
+            for i in 0..n { let at = i + Game::choose_at_random(cx, eligible.len() - i); eligible.swap(i, at); }
+        }
+        out.cards.extend(eligible.into_iter().take(n));
     }
     Ok(out)
 }
@@ -1814,7 +1830,7 @@ fn mana_feed(cx: &Cx, player: PlayerId) -> ManaFeed {
             continue;
         };
         let cost = &def.cost;
-        feed.opaque |= def.mana.is_some() || cost.variable.is_some();
+        feed.opaque |= def.mana.is_some() || cost.variable.is_some() || cost.discard_at_random > 0;
         if cost.life > 0 {
             // One limited by nothing but life can be activated as often as its controller can pay it (CR 605.3a).
             let repeatable = !cost.tap && !cost.sacrifice_self && cost.permanents.is_none() && cost.remove_counters.is_none();
@@ -1836,7 +1852,7 @@ fn mana_feed(cx: &Cx, player: PlayerId) -> ManaFeed {
             Some(p) if p.action == PermanentAction::ReturnToHand => hand.extend(takes(&p)),
             _ => {}
         }
-        if cost.discard_hand || !cost.discard.is_none() {
+        if cost.discard_hand || !cost.discard.is_none() || cost.discard_at_random > 0 {
             graveyard.extend(cx.s().zone(Zone::hand(player)).iter().copied());
         }
     }
@@ -2413,6 +2429,7 @@ impl SpellPayment<'_> {
 
     fn has_random_element(&self) -> bool {
         matches!(self, Self::MoveSelf { action: MoveSelf::Library(LibraryPlace::BottomInRandomOrder | LibraryPlace::ShuffledIn), .. })
+            || matches!(self, Self::Discard { cost, .. } if cost.discard_at_random > 0)
     }
 }
 
@@ -2502,6 +2519,10 @@ fn append_fixed_payments<'a>(out: &mut Vec<SpellPayment<'a>>, origin: CostOrigin
                 let cost = Cost { discard: Discards::one(n, filter), ..Cost::NONE };
                 out.push(SpellPayment::Discard { origin, component, cost, part: CostPart::Discard(index), source_text: source_text });
             }
+        }
+        if part.discard_at_random > 0 {
+            let cost = Cost { discard_at_random: part.discard_at_random, ..Cost::NONE };
+            out.push(SpellPayment::Discard { origin, component, cost, part: CostPart::Discard(part.discard.parts().count()), source_text });
         }
         if part.discard_hand {
             let cost = Cost { discard_hand: true, ..Cost::NONE };
@@ -2836,8 +2857,8 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
             SpellPayment::Discard { cost, .. } => {
                 let hand: Vec<ObjectId> = cx.s().zone(Zone::hand(player)).iter().copied().filter(|id| *id != spell && !taken.contains(id)).collect();
                 let available = if cost.discard_hand { cx.s().zone(Zone::hand(player)).iter().all(|id| !taken.contains(id)) }
-                    else { discards_payable(cx, &asker, &hand, &cost.discard) };
-                available.then_some(i)
+                    else { hand.len() >= usize::from(cost.discard_at_random) && discards_payable(cx, &asker, &hand, &cost.discard) };
+                (available && !(step.has_random_element() && has_nonrandom)).then_some(i)
             }
             SpellPayment::Variable { cost, amount, .. } => {
                 let variable = cost.variable.expect("variable component");
@@ -2942,6 +2963,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 },
                 SpellPayment::Discard { cost, .. } => {
                     let action = if cost.discard_hand { "Discard your hand".to_owned() }
+                        else if cost.discard_at_random > 0 { format!("Discard {} card(s) at random", cost.discard_at_random) }
                         else { let n = cost.discard.count(); format!("Discard {n} card{}", if n == 1 { "" } else { "s" }) };
                     CostPaymentChoice { label: format!("{action} — {source_text}"), objects: Vec::new(), kind: CostPaymentKind::Discard }
                 },
@@ -12380,6 +12402,10 @@ fn special_action(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: Abil
     if whole.sacrifice_self {
         ops::sacrifice(cx, player, &[source]);
     }
+    if whole.discard_at_random > 0 {
+        let random = choose_discards_mode(cx, player, source, &whole, None, &[], false, true)?;
+        pay_discards(cx, &random);
+    }
     if let Some(n) = x {
         cx.st().update_obj(source, |o| o.x = n);
     }
@@ -15012,6 +15038,7 @@ fn resolution_parts(cost: &Cost) -> bool {
         remove_counters_among: _,
         exile_self: _,
         discard: _,
+        discard_at_random: _,
         pay_x_life: _,
         exile_from_graveyard: _,
         exile_from_graveyard_of: _,
@@ -15076,6 +15103,7 @@ fn resolution_rest_payable(cx: &Cx, payer: PlayerId, source: ObjectId, cost: &Co
     // Tales's ruling), as a sacrifice can't (`may_sacrifice_for`). Discarding an empty hand discards nothing.
     let discards = cost.discard_self
         || !cost.discard.is_none()
+        || cost.discard_at_random > 0
         || (cost.discard_hand && !cx.s().zone(Zone::hand(payer)).is_empty())
         || matches!(cost.variable, Some(VariableCost::DiscardOneOrMore(_)));
     if discards && !resolution_may_cause(cx, payer, CauseKind::Discard) {
@@ -15882,3 +15910,7 @@ mod delayed_watched_mana_tests {
         assert!(c.s().mana_from_of(you).any(|entry| entry.snow));
     }
 }
+
+#[cfg(test)]
+#[path = "random_discard_cost_tests.rs"]
+mod random_discard_cost_tests;
