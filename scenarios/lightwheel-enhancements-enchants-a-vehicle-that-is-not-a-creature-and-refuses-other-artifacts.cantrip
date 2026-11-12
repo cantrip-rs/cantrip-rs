@@ -1,0 +1,36 @@
+# Lightwheel Enhancements: "Enchant creature or Vehicle" (CR 303.4, 301.7). Bot1 controls a Smuggler's Copter that is no
+# creature and two Moxes. The Aura cannot be cast on a Mox Jet, an artifact that is neither (it is refused), but can on the
+# Copter, a Vehicle that is not a creature: it gains vigilance beside its printed flying (no power or toughness is shown for a
+# noncreature).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Smuggler's Copter
+Lightwheel Enhancements
+Mountain x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter.Types = Artifact
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Lightwheel Enhancements.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Lightwheel Enhancements.Cast(Bot1.Battlefield.Smuggler's Copter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Lightwheel Enhancements.AttachedTo = Smuggler's Copter
+Bot1.Battlefield.Smuggler's Copter.Types = Artifact
+Bot1.Battlefield.Smuggler's Copter.Keywords = Flying; Vigilance

@@ -1,0 +1,86 @@
+# Lightwheel Enhancements: "Enchanted permanent gets +1/+1 and has vigilance." "Max speed — You may cast this card from
+# your graveyard." (CR 702.178a, 113.6b) Bot1 casts it on an Ornithopter on turn 1 (speed 1, CR 704.5aa) and Bolts Bot2
+# (speed 2, CR 702.179d); Bot2 Bolts the Ornithopter on turn 2, which puts the unattached Aura into the graveyard (CR
+# 704.5m). On turn 3 another Bolt makes it speed 3 and the Aura is still refused from the graveyard with its {W} available
+# and a legal Ornithopter to enchant; on turn 5 a third Bolt makes it speed 4 and Bot1 casts it from the graveyard onto that
+# Ornithopter, which becomes a 1/3 with vigilance (an Ornithopter is a 0/2).
+
+[Bot1 Deck]
+Mountain
+Mox Pearl
+Mox Ruby
+Ornithopter
+Lightwheel Enhancements
+Lightning Bolt
+Ornithopter
+Lightning Bolt
+Lightning Bolt
+Mountain x11
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightwheel Enhancements.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Vigilance
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Lightwheel Enhancements; Ornithopter; Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+! Bot1.Graveyard.Lightwheel Enhancements.Cast(Bot1.Battlefield.Ornithopter)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Lightwheel Enhancements.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 5
+Bot1.Speed = 4
+Bot2.Life = 11
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Ornithopter; Lightning Bolt
+Bot1.Battlefield.Lightwheel Enhancements.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Vigilance
