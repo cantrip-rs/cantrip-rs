@@ -1,0 +1,35 @@
+# Bulwark Ox: "Whenever this creature attacks while saddled" (CR 702.171b) - an Ox that was not saddled as it was declared as an
+# attacker (the ruling) does not trigger, so neither it nor Savannah Lions gets a +1/+1 counter, and the Ox deals its own 2.
+
+[Bot1 Deck]
+Bulwark Ox
+Mox Pearl
+Mox Jet
+Plains
+Savannah Lions
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bulwark Ox.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bulwark Ox > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 18
+Bot1.Battlefield.Bulwark Ox.Power = 2
+Bot1.Battlefield.Savannah Lions.Power = 2
+Bot1.Battlefield.Savannah Lions.Tapped = false
