@@ -3803,3 +3803,29 @@ labels and callback identity are never classifiers. Shared factories also tag
 instances granted from a card's delayed list. An Oracle-consistency test holds
 all implemented printed keywords to those tags. No historical counts or
 per-object family collections are stored.
+
+### Explicitly noted values
+
+An instruction that notes information (CR 607.2e) records `ValueNoted`, with an immutable
+`NotedValueRecord` in `GameState::noted_values`. The record carries the precise source incarnation,
+text and acquisition (`Linked`), plus typed mana or a sparse counter snapshot. A later instruction
+can capture the returned payload index; it must not substitute a later note for an earlier delayed
+instruction's snapshot. These records are journalled, cloned and hashed. They add no per-object or
+stack-item field, and events remain small. The unused arena has only an empty vector header.
+
+Ice Cauldron and Jeweled Amulet opt their first abilities into `tracks_mana_spent`. The cost scheduler
+already returns the exact mana spent on the activation's locked total; `ActivationManaPaid` records
+that pool with the actual stack serial after costs. It neither reconstructs the payment from X nor
+widens the compact `ManaSpent` source/type history tally. Nested payments and other activations have
+different receipts. Ordinary abilities allocate none. A payment becomes a linked note only when its
+note instruction resolves, so countering the ability does not replace the last note. Mana abilities
+cannot opt into this stack-activation receipt protocol.
+
+Shared `notes` recipes read those records for Ice Cauldron and Jeweled Amulet. Type-only notes keep
+kinds, including colorless, rather than paid amounts. Producing one mana chooses one of the noted
+kinds if necessary; a never-recorded or empty note produces nothing. Charge counters themselves do
+not carry information. Callback yields remain unknown to payment advice, while the existing
+could-produce authority executes the callback, including its choices and replacements. Tawnos's
+Coffin's counter note captures the original object's retained counters after exile, without putting
+counters on the exiled card. Carrying its independent delayed object groups, restoring counters on
+arrival and returning Auras attached still require their own interfaces.

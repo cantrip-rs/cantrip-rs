@@ -12343,7 +12343,7 @@ fn activate(
     let scope = PaymentScope::Ability { serial, linked: cx.linked(&item), paid, by, granter, cycling: def.cycling };
     let extra: Vec<_> = chosen_cost.into_iter().map(|part| (CostOrigin::CastingWay, part)).collect();
     let extra_chosen = vec![Vec::new(); extra.len()];
-    let (chosen, symbol_exiles, attacking, _, _, _, _, _, _) = pay_scheduled_costs(cx, player, source, scope, &def.cost, &[], &extra, &extra_chosen, &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(item.x), 0, false, None, &[])?;
+    let (chosen, symbol_exiles, attacking, spent, _, _, _, _, _) = pay_scheduled_costs(cx, player, source, scope, &def.cost, &[], &extra, &extra_chosen, &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(item.x), 0, false, None, &[])?;
 
     let at = cx.s().stack.len() - 1;
     let mut with = cx.s().stack[at];
@@ -12354,6 +12354,11 @@ fn activate(
     }
     cx.st().stack_set(at, with);
 
+    if def.track_mana_spent {
+        let by = cx.linked(&item);
+        let value = cx.st().noted_value_push(NotedValueRecord { by, value: NotedValue::Mana(spent) });
+        cx.record(Event::ActivationManaPaid { serial, value });
+    }
     note_activation(cx, source, index as usize, def);
 
     cx.emit(Event::AbilityActivated { source, ability, player, by: Grant::of(granted) });

@@ -1608,6 +1608,9 @@ pub struct ActivatedDef {
     /// "Activate only as an instant" (CR 304.5, 602.5e): requires priority even for a mana ability (CR 605.3a).
     /// Ordinary mana abilities may also be activated while paying; this restriction does not change their classification.
     pub priority_only: bool,
+    /// Preserve the exact mana paid for this activation for a later note instruction.
+    /// Ice Cauldron and Jeweled Amulet use it; ordinary abilities allocate no receipt.
+    pub track_mana_spent: bool,
     /// "Any player may activate" or "only [players] may activate" (CR 602.2): permission for this ability alone.
     /// None means its source's controller (owner outside the battlefield). Conditions, costs and timing still apply.
     /// The asker is the source's controller; the ability's condition and effect instead use its actual activator.
@@ -1758,6 +1761,7 @@ impl ActivatedDef {
         cost: Cost::NONE,
         timing: Timing::Instant,
         priority_only: false,
+        track_mana_spent: false,
         activators: None,
         targets: &[],
         effect: no_effect,

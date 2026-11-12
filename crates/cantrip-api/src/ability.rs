@@ -739,8 +739,14 @@ impl AbilityDef {
         }
     }
 
-    /// The colors its mana of one chosen color may be, worked out when it is offered (CR 607.2a): "any of the exiled
-    /// card's colors".
+    /// Capture the exact mana paid to activate this ability, for its note instruction.
+    pub const fn tracks_mana_spent(self) -> AbilityDef {
+        let d = activated(self, "only an activated ability has an activation payment");
+        assert!(!d.is_mana_ability(), "a noted activation payment currently requires a stack ability");
+        AbilityDef::Activated(ActivatedDef { track_mana_spent: true, ..d })
+    }
+
+    /// The colors its mana of one chosen color may be, worked out when offered (CR 607.2a).
     pub const fn colors_from(self, colors_from: fn(&dyn crate::game::Query, &Asker) -> ColorSet) -> AbilityDef {
         AbilityDef::Activated(ActivatedDef { colors_from: Some(colors_from), ..activated(self, "only a mana ability names colors") })
     }

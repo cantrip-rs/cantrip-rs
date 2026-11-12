@@ -209,6 +209,10 @@ pub enum Event {
     /// is not `AbilityAcquisition::OWN`: what tells independent identical acquisitions apart (CR 113.2c, 602.5b-c). It is no
     /// event of its own - nothing triggers on it and no kind files it.
     ActivatedAs { instance: AbilityAcquisition },
+    /// Exact mana paid for an opted-in activation; no trigger listens to this receipt.
+    ActivationManaPaid { serial: u32, value: u32 },
+    /// Information explicitly noted by an instruction (CR 607.2e). Payload and link are in GameState::noted_values.
+    ValueNoted { value: u32 },
     /// A creature was declared as an attacker (CR 508.1). `known` is the last-known row (`GameState::last_known`) that keeps
     /// its characteristics as it was declared, which "you attacked with a Rogue" asks of it once it has changed, left or
     /// changed controllers (`history::Attacked::chars`). `defending` is its defending player as it attacked (CR 508.5,
@@ -587,7 +591,7 @@ impl Event {
             Event::CombatPaymentBegan { .. } => false,
             Event::CombatFirstStrike { creature } => creature == object,
             Event::CombatCostObjectPaid { source, attacker, object: paid, .. } => source == object || attacker == object || paid == object,
-            Event::AbilityCopied { .. } | Event::ActivatedAs { .. } => false,
+            Event::AbilityCopied { .. } | Event::ActivatedAs { .. } | Event::ActivationManaPaid { .. } | Event::ValueNoted { .. } => false,
             Event::PaidAlternative { spell, .. } | Event::PaidRepeatedly { spell, .. } => spell == object,
             Event::LandPlayed { land, .. } => land == object,
             Event::Copied { copy, original, .. } => copy == object || original == object,
@@ -754,7 +758,7 @@ impl EventMask {
             Event::Looked { .. } => EventMask::LOOKED,
             Event::Countered { .. } => EventMask::COUNTERED,
             Event::AbilityActivated { .. } => EventMask::ABILITY_ACTIVATED,
-            Event::ActivatedAs { .. } => EventMask(0),
+            Event::ActivatedAs { .. } | Event::ActivationManaPaid { .. } | Event::ValueNoted { .. } => EventMask(0),
             // The alternative cost a cast was paid with is part of the cast's record.
             Event::Cast(_) | Event::PaidAlternative { .. } | Event::PaidRepeatedly { .. } => EventMask::CAST,
             Event::LandPlayed { .. } => EventMask::LAND_PLAYED,

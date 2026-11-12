@@ -49,6 +49,8 @@ pub struct GameState {
     pub members: Vec<ObjectId>,
     /// Immutable receipt details referenced by history events; append-only and journalled.
     pub cost_receipts: Vec<CostReceiptDetails>,
+    /// Immutable noted values and opted-in activation payments, named by history records.
+    pub noted_values: Vec<crate::NotedValueRecord>,
     /// The targets of stack items with more than `INLINE_TARGETS` of them, each with the spec it was chosen for
     /// (`StackItem::spill` names a run of it). Append-only, journaled.
     pub spill_targets: Vec<Target>,
@@ -338,7 +340,7 @@ impl PartialEq for GameState {
         // stack items of the spells cast (`StackItem::cast_known`), and by the history's declarations of attackers
         // (`Event::Attacks::known`); the rows themselves are compared, not hashed, since every move, every cast and every
         // attacker declared adds one.
-        self.position() == other.position() && self.last_known == other.last_known && self.cost_receipts == other.cost_receipts
+        self.position() == other.position() && self.last_known == other.last_known && self.cost_receipts == other.cost_receipts && self.noted_values == other.noted_values
     }
 }
 
@@ -347,6 +349,8 @@ impl Eq for GameState {}
 impl std::hash::Hash for GameState {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
         self.position().hash(state);
+        // Ordinary games keep the existing position hash and allocate no note payload.
+        if !self.noted_values.is_empty() { self.noted_values.hash(state); }
     }
 }
 
@@ -428,7 +432,9 @@ pub enum Undo {
     LastKnownPopped(Box<LastKnown>),
     LeftStackPushed,
     LeftStackPopped(Box<StackItem>),
-    /// Members appended since the list was this long.
+    /// An immutable value captured by a note or an opted-in activation.
+    NotedValuePushed,
+    NotedValuePopped(Box<crate::NotedValueRecord>),
     CostReceiptPushed,
     CostReceiptPopped(Box<CostReceiptDetails>),
     MembersPushed(u32),
@@ -557,6 +563,7 @@ impl GameState {
             left_stack: Vec::new(),
             members: Vec::new(),
             cost_receipts: Vec::new(),
+            noted_values: Vec::new(),
             spill_targets: Vec::new(),
             spill_specs: Vec::new(),
             target_chooser_arena: Vec::new(),
@@ -1319,6 +1326,14 @@ impl GameState {
 
     /// Records a fact of this turn.
 
+
+    /// Add immutable noted data and journal its allocation.
+    pub fn noted_value_push(&mut self, record: crate::NotedValueRecord) -> u32 {
+        let id = self.noted_values.len() as u32;
+        self.noted_values.push(record);
+        self.log(Undo::NotedValuePushed);
+        id
+    }
 
     /// Add immutable receipt provenance and journal its allocation.
     pub fn cost_receipt_push(&mut self, receipt: CostReceiptDetails) -> u32 {
@@ -2202,6 +2217,8 @@ impl GameState {
                 self.left_stack.pop();
             }
             Undo::LeftStackPopped(item) => self.left_stack.push(*item),
+            Undo::NotedValuePushed => { self.noted_values.pop(); }
+            Undo::NotedValuePopped(record) => self.noted_values.push(*record),
             Undo::CostReceiptPushed => { self.cost_receipts.pop(); }
             Undo::CostReceiptPopped(receipt) => self.cost_receipts.push(*receipt),
             Undo::MembersPushed(len) => self.members.truncate(len as usize),
@@ -2322,7 +2339,9 @@ impl GameState {
             Undo::LastKnownPopped(_) => Undo::LastKnownPushed,
             Undo::LeftStackPushed => Undo::LeftStackPopped(Box::new(*self.left_stack.last().expect("an item"))),
             Undo::LeftStackPopped(_) => Undo::LeftStackPushed,
+            Undo::NotedValuePushed => Undo::NotedValuePopped(Box::new(self.noted_values.last().expect("noted value").clone())),
             Undo::CostReceiptPushed => Undo::CostReceiptPopped(Box::new(*self.cost_receipts.last().expect("receipt"))),
+            Undo::NotedValuePopped(_) => Undo::NotedValuePushed,
             Undo::CostReceiptPopped(_) => Undo::CostReceiptPushed,
             Undo::MembersPushed(len) => Undo::MembersPopped(self.members[*len as usize..].to_vec()),
             Undo::MembersPopped(_) => Undo::MembersPushed(self.members.len() as u32),
@@ -2444,6 +2463,20 @@ mod tests {
         fork.rollback(start);
         // At the start the real order was 0 1 2 3 4 5; each object stands where the one it replaced stood.
         assert_eq!(fork.zone(library), &[ids[3], ids[0], ids[4], ids[1], ids[2], ids[5]][..]);
+    }
+
+    #[test]
+    fn noted_values_survive_copy_undo_redo_and_change_the_position_hash() {
+        use std::hash::{Hash,Hasher};
+        fn hash(s:&GameState)->u64 { let mut h=std::collections::hash_map::DefaultHasher::new();s.hash(&mut h);h.finish() }
+        let mut state=GameState::new(2,1);let mark=state.mark();let empty_hash=hash(&state);
+        let by=Linked {object:ObjectId(0),text:CardId(0),acquired:Acquired::OWN};
+        let record=crate::NotedValueRecord {by,value:crate::NotedValue::Counters(vec![(CounterKind::Charge,50000)])};
+        let id=state.noted_value_push(record.clone()) as usize;let noted_hash=hash(&state);assert_ne!(noted_hash,empty_hash);
+        let mut fork=state.clone_with_journal();assert_eq!(fork,state);
+        let(undos,redos)=state.step_back(mark);assert!(state.noted_values.is_empty());assert_eq!(hash(&state),empty_hash);
+        state.step_forward(undos,redos);assert_eq!(state.noted_values[id],record);assert_eq!(hash(&state),noted_hash);
+        fork.rollback(mark);assert!(fork.noted_values.is_empty());assert_eq!(state.noted_values[id],record);
     }
 
     #[test]

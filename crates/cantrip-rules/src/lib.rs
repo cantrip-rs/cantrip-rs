@@ -2458,6 +2458,12 @@ impl cantrip_api::Game for Cx<'_> {
         ops::remember_chosen(self, by, cantrip_state::Kept::Name(name));
     }
 
+    fn note_value(&mut self, by: Linked, value: NotedValue) -> u32 {
+        let value = self.st().noted_value_push(NotedValueRecord { by, value });
+        self.record(Event::ValueNoted { value });
+        value
+    }
+
     fn remember_chosen(&mut self, by: Linked, value: ChosenValue) {
         let value = match value {
             ChosenValue::Color(color) => cantrip_state::Kept::Color(color),
@@ -3520,3 +3526,6 @@ mod target_choices;
 
 #[cfg(test)]
 mod target_choice_tests;
+
+#[cfg(test)]
+mod noted_value_tests;

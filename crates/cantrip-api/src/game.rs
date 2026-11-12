@@ -1537,6 +1537,10 @@ pub trait Game: Query {
     /// Reselect a color or number, replacing the earlier choice of the linked text.
     /// Nothing if its permanent has left the battlefield. See `ChosenValue`.
     fn remember_chosen(&mut self, by: Linked, value: ChosenValue);
+    /// Record an instruction's noted value with its linked ability (CR 607.2e).
+    /// The source may already have left: a delayed instruction can still name its original incarnation.
+    /// Returns its immutable payload index for later instructions to capture exactly this snapshot.
+    fn note_value(&mut self, by: Linked, value: NotedValue) -> u32;
     /// An object chosen as `by`, an ability of a permanent, resolves (CR 607.2d), remembered by that permanent: Zenos yae
     /// Galvus's "choose a creature an opponent controls", read by its linked "when the chosen creature leaves the
     /// battlefield". Kept with that ability (`Chosen`) as `remember_chosen_name` keeps a name: the abilities linked to it read
