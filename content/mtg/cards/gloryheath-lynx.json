@@ -1,0 +1,11 @@
+{
+  "name": "Gloryheath Lynx",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Cat Mount",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Lifelink\nWhenever this creature attacks while saddled, search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.\nSaddle 2 (Tap any number of other creatures you control with total power 2 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)",
+  "keywords": [
+    "Lifelink"
+  ]
+}
