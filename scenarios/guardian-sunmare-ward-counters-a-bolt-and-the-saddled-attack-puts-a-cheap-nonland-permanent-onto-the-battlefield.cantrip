@@ -1,0 +1,89 @@
+# Guardian Sunmare: "Ward {2}" counters Bot2's Lightning Bolt (Bot2 has one mana left after the Bolt, so paying {2} is refused) and the Sunmare takes no damage
+# (CR 702.21a). Turn 5: Saddle 4 is refused with Savannah Lions and Mother of Runes (total power 3), allowed once a second Savannah Lions makes it 5; the saddled Sunmare
+# attacks and its trigger searches for a nonland permanent card with mana value 3 or less (CR 701.23, 202.3): neither Pillarfield Ox (mana value 4), Disenchant
+# (not a permanent card) nor a Plains (a land, mana value 0) may be found, nor two cards at once, Wall of Ice (mana value exactly 3) is, one card only, and it goes onto the battlefield untapped and unrevealed, not into hand; the Sunmare deals its 5.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Savannah Lions
+Mother of Runes
+Mox Jet
+Mox Emerald
+Mox Ruby
+Guardian Sunmare
+Savannah Lions
+Pillarfield Ox
+Disenchant
+Wall of Wood
+Wall of Ice
+Plains x10
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Hand.Mother of Runes.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Guardian Sunmare.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Lightning Bolt.Cast(Guardian Sunmare)
+! Bot2.PayCost
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Guardian Sunmare.Damage = 0
+? Bot2.Graveyard = Lightning Bolt
+[T5 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+! Bot1.Battlefield.Guardian Sunmare.Activate(Ability: Saddle)
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Guardian Sunmare.Activate(Ability: Saddle)
+Bot1.Choose(Savannah Lions#1; Savannah Lions#2)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Guardian Sunmare > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Pillarfield Ox)
+! Bot1.Search(Disenchant)
+! Bot1.Search(Plains)
+! Bot1.Search(Wall of Ice; Wall of Wood)
+Bot1.Search(Wall of Ice)
+? Bot1.Revealed = (absent)
+[T5 Bot1.Main2]
+? Bot2.Life = 15
+? Bot1.Battlefield.Wall of Ice.Power = 0
+? Bot1.Battlefield.Wall of Ice.Tapped = false
+? Bot1.Hand.Count = 0
+? Bot1.Library.Count = 13
+# Turn 7: no longer saddled (CR 702.171b), the Sunmare attacks without searching; the library was shuffled by the first search only.
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Guardian Sunmare > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 10
+Bot1.Shuffles = 1
+Bot1.Library.Count = 12

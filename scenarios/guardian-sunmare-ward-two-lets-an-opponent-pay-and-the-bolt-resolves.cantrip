@@ -1,0 +1,49 @@
+# Guardian Sunmare, "Ward {2}" (CR 702.21a): Bot2 has Mox Ruby for the Lightning Bolt and a Mox Jet and Mox Emerald for the {2}, pays it, and the Bolt resolves for 3 damage
+# (the Sunmare is a 5/5, so it lives). Bot1 cast the Sunmare on turn 1 with a Plains and four Moxen.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Emerald
+Mox Ruby
+Guardian Sunmare
+Swamp
+Plains x15
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Guardian Sunmare.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Lightning Bolt.Cast(Guardian Sunmare)
+Bot2.PayCost
+[T2 Bot2.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Guardian Sunmare.Damage = 3
+Bot2.Graveyard = Lightning Bolt
+Bot2.Mana = 
