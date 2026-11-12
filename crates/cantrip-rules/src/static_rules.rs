@@ -1032,3 +1032,33 @@ pub(crate) fn hand_size_rules(cx: &Cx, player: PlayerId) -> Vec<(u32, HandSize)>
     }
     rules
 }
+
+/// Materialize complete-declaration restrictions from live static sources.
+pub fn combat_groups(cx: &Cx, role: CombatRole, eligible: &[ObjectId]) -> Vec<CombatGroup> {
+    let mut groups: Vec<CombatGroup> = Vec::new();
+    for (source, controller, def, by) in sources(cx, |d| !d.combat_groups.is_empty()) {
+        let asker = Asker { instance: None, source, controller, by, spell: false };
+        for rule in def.combat_groups.iter().filter(|r| r.role == role) {
+            for &subject in eligible {
+                if !(rule.applies)(cx, &asker, subject) {
+                    continue;
+                }
+                let members = eligible
+                    .iter()
+                    .copied()
+                    .filter(|&other| (!rule.others_only || other != subject) && (rule.counted)(cx, &asker, subject, other))
+                    .collect();
+                // Global caps share their membership instead of storing one
+                // copy of the whole declaration for every affected creature.
+                if let Some(g) = groups.iter_mut().find(|g| g.members == members && g.at_least == rule.at_least && g.at_most == rule.at_most) {
+                    if !g.subjects.contains(&subject) {
+                        g.subjects.push(subject);
+                    }
+                } else {
+                    groups.push(CombatGroup { subjects: vec![subject], members, at_least: rule.at_least, at_most: rule.at_most });
+                }
+            }
+        }
+    }
+    groups
+}

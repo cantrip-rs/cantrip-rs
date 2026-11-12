@@ -1360,7 +1360,7 @@ fn attack_rules(cx: &Cx, eligible: &[ObjectId], targets: &[Target], barred: Vec<
         }
     }
     let alone = crate::static_rules::attacks_alone_barred(cx, cx.cards(), eligible);
-    let mut rules = AttackRules { required, barred, alone_barred: alone, limits: crate::static_rules::attack_limits(cx, targets), most: 0, suggested: Vec::new() };
+    let mut rules = AttackRules { required, barred, alone_barred: alone, groups: crate::static_rules::combat_groups(cx, CombatRole::Attacker, eligible), limits: crate::static_rules::attack_limits(cx, targets), most: 0, suggested: Vec::new() };
     if !rules.required.is_empty() {
         (rules.most, rules.suggested) = rules.solve(eligible, targets, costs);
     }
@@ -1473,7 +1473,7 @@ fn declare_blockers(cx: &mut Cx) -> R<()> {
     allowed.retain(|p| !menace.contains(&p.1));
     if !allowed.is_empty() {
         // CR 509.1b-c: each attacker's limits, and the blocks effects require if able, with the most of them a declaration can obey.
-        let requirements = block_rules(cx, &attackers, &allowed, &rule_sources);
+        let requirements = block_rules(cx, &attackers, &allowed, &rule_sources, &eligible);
         // A defending player who has left blocks with nothing (CR 800.4a): no one else declares their blocks.
         let answer = cx.ask_rule(defender, RequestKind::DeclareBlockers { eligible, attackers, allowed, requirements })?;
         if let Some(Answer::Block(blocks)) = answer {
@@ -1546,7 +1546,7 @@ fn deals_now(cx: &Cx, id: ObjectId, had_first_strike: bool, first_strike_step: b
 /// says blocks if able (`EffectKind::MustBlock`) that may block something, or blocks one attacker if able (`EffectKind::MustBlockAttacker`) that may block it; and the most of them a declaration can obey, with
 /// one that does (`BlockRequirements::solve`). A creature that can't block, or may block nothing, is required nothing (CR
 /// 509.1c: a requirement is obeyed only as far as the restrictions allow).
-fn block_rules(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)], rule_sources: &[ObjectId]) -> BlockRequirements {
+fn block_rules(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)], rule_sources: &[ObjectId], eligible: &[ObjectId]) -> BlockRequirements {
     let limits = attackers
         .iter()
         .map(|&a| (a, count_u32(cx.chars(a).minimum_blockers()), u32::try_from(maximum_blockers(cx, a, rule_sources)).unwrap_or(u32::MAX)))
@@ -1583,7 +1583,8 @@ fn block_rules(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)]
     // requirement to block another, and one block may obey two.
     let bands = cx.s().attackers.iter().filter(|a| a.band != 0).map(|a| (a.id, a.band)).collect();
     // No block costs anything to declare yet (CR 509.1d): no effect that makes one is built.
-    let mut rules = BlockRequirements { required, most: 0, suggested: Vec::new(), bands, limits, costs: Vec::new(), capacities };
+    let groups = crate::static_rules::combat_groups(cx, CombatRole::Blocker, eligible);
+    let mut rules = BlockRequirements { groups, required, most: 0, suggested: Vec::new(), bands, limits, costs: Vec::new(), capacities };
     if !rules.required.is_empty()
         && let Some((most, suggested)) = rules.solve(allowed, &[], None, true)
     {
