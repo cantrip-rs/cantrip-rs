@@ -501,6 +501,17 @@ pub fn plus<const N: u32>(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
     }
 }
 
+/// "... it deals double that damage instead" / "... twice that much damage instead" (CR 614.1a, 120.3): the damage about to be
+/// dealt is twice as much, still dealt by the same source to the same recipient (the rulings), once it has been divided or
+/// assigned among its recipients. Two such effects make it four times as much (CR 614.5), and the player or controller of the
+/// permanent it is dealt to orders it with other replacement and prevention effects (CR 616.1). Furnace of Rath, Gisela, Blade
+/// of Goldnight, Trance Kuja, Collective Inferno and Mjölnir, Hammer of Thor print it.
+pub fn double_that_damage(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
+    if let Proposal::Damage(d) = proposal {
+        d.amount = d.amount * 2;
+    }
+}
+
 /// "If [this card] would be put into a graveyard from anywhere, reveal [it] and shuffle it into its owner's library instead"
 /// (CR 614.1a, 701.20a, 701.24a): whether this move is that. An ability that says where it functions functions there
 /// (CR 113.6b), so the replacement is `own_everywhere`: from a hand, a library, the stack and the battlefield alike, and only

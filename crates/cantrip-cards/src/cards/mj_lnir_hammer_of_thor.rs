@@ -2,6 +2,7 @@ use cantrip_api::*;
 use cantrip_mechanics::{
     attach::equip_quality,
     effects,
+    replacements,
     targets,
     triggers::THIS_ENTERS,
 };
@@ -12,12 +13,6 @@ use cantrip_oracle as oracle;
 fn damage_from_equipped_creature(q: &dyn Query, asker: &Asker, p: &Proposal) -> bool {
     matches!(p, Proposal::Damage(d)
         if d.amount > 0 && q.attached_to(asker.source) == Some(d.source) && q.chars(d.source).is(CardType::Creature))
-}
-
-fn double(_: &dyn Query, _: &Asker, p: &mut Proposal) {
-    if let Proposal::Damage(d) = p {
-        d.amount = d.amount * 2;
-    }
 }
 
 /// "A creature is worthy if it's a legendary non-Villain that's red and/or white" (CR 700.16): a quality the rules define, so no
@@ -45,6 +40,6 @@ pub static CARD: CardDef = CardDef {
         ability(cost("{2}{R}").and(DISCARD_THIS), two_damage_to_each_creature, "{2}{R}, Discard this card: It deals 2 damage to each creature.")
             .from(ZoneKind::Hand),
     ],
-    replacements: &[replacement(ReplacementKind::Damage, damage_from_equipped_creature, double, "double all damage equipped creature would deal")],
+    replacements: &[replacement(ReplacementKind::Damage, damage_from_equipped_creature, replacements::double_that_damage, "double all damage equipped creature would deal")],
     ..oracle::MJ_LNIR_HAMMER_OF_THOR
 };

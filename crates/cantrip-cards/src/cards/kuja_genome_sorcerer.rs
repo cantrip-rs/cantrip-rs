@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::tokens::{self, WIZARD};
-use cantrip_mechanics::{effects, permanents_with_subtype_you_control, triggers};
+use cantrip_mechanics::{effects, permanents_with_subtype_you_control, replacements, triggers};
 use cantrip_oracle as oracle;
 
 /// "Create a tapped 0/1 black Wizard creature token with ... Then if you control four or more Wizards, transform Kuja"
@@ -27,16 +27,8 @@ fn damage_from_a_wizard_you_control(q: &dyn Query, asker: &Asker, p: &Proposal) 
     matches!(p, Proposal::Damage(d) if q.controller(d.source) == asker.controller && q.chars(d.source).has_subtype(wizard))
 }
 
-/// "... it deals double that damage instead": still dealt by the same source, not by Trance Kuja (the ruling). The player or
-/// controller of the permanent it is dealt to orders it with prevention (CR 616.1, the ruling).
-fn double_that_damage(_: &dyn Query, _: &Asker, p: &mut Proposal) {
-    if let Proposal::Damage(d) = p {
-        d.amount = d.amount * 2;
-    }
-}
-
 pub static BACK: CardDef = CardDef {
-    replacements: &[replacement(ReplacementKind::Damage, damage_from_a_wizard_you_control, double_that_damage, "deals double that damage instead")],
+    replacements: &[replacement(ReplacementKind::Damage, damage_from_a_wizard_you_control, replacements::double_that_damage, "deals double that damage instead")],
     ..oracle::TRANCE_KUJA_FATE_DEFIED
 };
 

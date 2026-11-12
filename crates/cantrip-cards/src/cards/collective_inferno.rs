@@ -1,5 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::chosen_type::enters_choosing_a_creature_type;
+use cantrip_mechanics::replacements;
 use cantrip_oracle as oracle;
 
 /// "Double all damage that sources you control of the chosen type would deal" (CR 614.1, 120.3, 205.3m): damage from any
@@ -14,14 +15,8 @@ fn damage_from_a_source_of_the_chosen_type(q: &dyn Query, asker: &Asker, p: &Pro
         })
 }
 
-fn double(_: &dyn Query, _: &Asker, p: &mut Proposal) {
-    if let Proposal::Damage(d) = p {
-        d.amount = d.amount * 2;
-    }
-}
-
 pub static CARD: CardDef = CardDef {
     enters: Some(enters_choosing_a_creature_type),
-    replacements: &[replacement(ReplacementKind::Damage, damage_from_a_source_of_the_chosen_type, double, "double all damage that sources you control of the chosen type would deal")],
+    replacements: &[replacement(ReplacementKind::Damage, damage_from_a_source_of_the_chosen_type, replacements::double_that_damage, "double all damage that sources you control of the chosen type would deal")],
     ..oracle::COLLECTIVE_INFERNO
 };
