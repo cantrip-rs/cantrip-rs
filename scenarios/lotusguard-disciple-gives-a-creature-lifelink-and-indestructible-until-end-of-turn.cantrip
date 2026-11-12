@@ -1,0 +1,54 @@
+# Lotusguard Disciple: "When this creature enters, target creature or Vehicle gains lifelink and indestructible until end
+# of turn." (CR 603.6a, 611.2a, 702.15, 702.12b) On turn 1 Bot1 sets up Moxes, a Mountain and a Memnite; on turn 3 it casts
+# the Disciple (a 2/2 flier) and targets the Memnite. A Bolt on the Memnite then deals lethal damage but indestructible
+# keeps it alive (CR 702.12b, 704.5g), and attacking with it gains Bot1 1 life from lifelink (CR 702.15b); Bot2 ends at 19.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Memnite
+Lotusguard Disciple
+Mountain
+Lightning Bolt
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lotusguard Disciple.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Indestructible; Lifelink
+? Bot1.Battlefield.Lotusguard Disciple.Keywords = Flying
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Damage = 3
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Turn = 3
+Bot1.Life = 21
+Bot2.Life = 19
+Bot1.Battlefield = Lotusguard Disciple; Memnite; Mountain; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Graveyard = Lightning Bolt
