@@ -3186,6 +3186,23 @@ pub struct SkipStep {
     pub step: Step,
 }
 
+/// A maximum-hand-size change applied in timestamp order (CR 402.2, 613.11).
+#[derive(Clone, Copy, Debug)]
+pub enum HandSize {
+    Unlimited,
+    Set(u32),
+    Adjust(i32),
+}
+
+/// A static rule about a player's hand size: Cursed Rack sets a chosen opponent's;
+/// Jin-Gitaxias, Core Augur reduces opponents' sizes. It follows the source's
+/// current controller and stops when the source loses its abilities.
+#[derive(Clone, Copy, Debug)]
+pub struct HandSizeRule {
+    pub applies: fn(&dyn Query, &Asker, PlayerId) -> bool,
+    pub size: HandSize,
+}
+
 /// A static ability that says a permanent can't phase in (CR 702.26a, 101.2), asked of the permanent that would phase in:
 /// The City on the Edge of Forever's Human token, "Permanents can't phase in." A rule of the game, not an ability of the
 /// permanent that would phase in, so it holds whatever abilities that one has lost (CR 613.1f).
@@ -3819,6 +3836,8 @@ pub struct CardDef {
     pub untap_limits: &'static [UntapLimit],
     /// Steps skipped while this permanent has its abilities. See `SkipStep`.
     pub skip_steps: &'static [SkipStep],
+    /// Maximum hand size rules for players named by their predicates.
+    pub hand_size_rules: &'static [HandSizeRule],
     /// Its static abilities that say permanents can't phase in (CR 702.26a, 101.2), while it is on the battlefield with
     /// its abilities: The City on the Edge of Forever's Human token. See `PhaseInBan`.
     pub phase_in_bans: &'static [PhaseInBan],
@@ -4059,6 +4078,7 @@ impl CardDef {
         untap_bans: &[],
         untap_limits: &[],
         skip_steps: &[],
+        hand_size_rules: &[],
         phase_in_bans: &[],
         cant_become_untapped: &[],
         damage_by_toughness: &[],
@@ -4170,6 +4190,7 @@ impl CardDef {
             (!self.untap_bans.is_empty(), "untap bans"),
             (!self.untap_limits.is_empty(), "untap limits"),
             (!self.skip_steps.is_empty(), "skipped steps"),
+            (!self.hand_size_rules.is_empty(), "hand size rules"),
             (!self.phase_in_bans.is_empty(), "phase-in bans"),
             (!self.cant_become_untapped.is_empty(), "rules against becoming untapped"),
             (!self.damage_by_toughness.is_empty(), "damage by toughness"),

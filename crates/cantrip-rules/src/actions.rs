@@ -7799,8 +7799,13 @@ fn land_rules(cx: &Cx, player: PlayerId) -> LandRules {
 /// permanent they control, an emblem they have (CR 114.4), or an effect a resolved spell made - the newest of those deciding,
 /// whichever way it reads (CR 613.11, 613.7).
 pub fn maximum_hand_size(cx: &Cx, player: PlayerId) -> Option<u32> {
+    let mut ordered = crate::static_rules::hand_size_rules(cx, player);
+    let needs_order = !ordered.is_empty();
     let mut newest: Option<(u32, Option<u32>)> = None;
     let mut says = |stamp: u32, maximum: Option<u32>| {
+        if needs_order {
+            ordered.push((stamp, maximum.map_or(HandSize::Unlimited, HandSize::Set)));
+        }
         if newest.is_none_or(|(at, _)| stamp >= at) {
             newest = Some((stamp, maximum));
         }
@@ -7817,7 +7822,20 @@ pub fn maximum_hand_size(cx: &Cx, player: PlayerId) -> Option<u32> {
             says(play_rule_timestamp(cx, source, ability), *maximum);
         }
     });
-    newest.map_or(Some(7), |(_, maximum)| maximum)
+    if !needs_order {
+        return newest.map_or(Some(7), |(_, maximum)| maximum);
+    }
+    ordered.sort_by_key(|&(stamp, _)| stamp);
+    let mut maximum = Some(7i64);
+    for (_, rule) in ordered {
+        maximum = match rule {
+            HandSize::Unlimited => None,
+            HandSize::Set(n) => Some(i64::from(n)),
+            HandSize::Adjust(n) => maximum.map(|m| m.saturating_add(i64::from(n))),
+        };
+    }
+    // Negative intermediate sizes still participate in later adjustments. Clamp only the final cleanup limit.
+    maximum.map(|n| n.clamp(0, i64::from(u32::MAX)) as u32)
 }
 
 /// Whether `player` may look at the top card of their library any time (CR 401.2): a permanent they control says so (Bolas's

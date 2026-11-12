@@ -1016,3 +1016,19 @@ pub(crate) fn skips_step(cx: &Cx, player: PlayerId, step: Step) -> bool {
         def.skip_steps.iter().any(|rule| rule.step == step && (rule.applies)(cx, &asker, player))
     })
 }
+
+
+/// Static hand-size rules applying to `player`, with their source timestamps
+/// (CR 613.7a, 613.11). No allocation in a game without an applicable source.
+pub(crate) fn hand_size_rules(cx: &Cx, player: PlayerId) -> Vec<(u32, HandSize)> {
+    let mut rules = Vec::new();
+    for (source, controller, def, by) in sources(cx, |d| !d.hand_size_rules.is_empty()) {
+        let asker = Asker { source, controller, by, instance: None, spell: false };
+        for rule in def.hand_size_rules {
+            if (rule.applies)(cx, &asker, player) {
+                rules.push((cx.s().obj(source).timestamp, rule.size));
+            }
+        }
+    }
+    rules
+}
