@@ -3685,3 +3685,16 @@ recalculated after history changes. Only the state-dependent presence of live
 world-sensitive definitions is cached, by epoch; the actual type result is not.
 The guard inspects game sources rather than asking whether the global card table
 contains any World.
+
+### An ability's explicit activators
+
+CR 602.2 permissions belong to `ActivatedDef::activators`, set by
+`.activated_by` or `.any_player_may_activate`. The permission callback reads the
+source's controller and a separate candidate player; the activated ability's
+condition, costs, stack controller and effect use the actual activator. Regular
+and mana activation, payment-window options and affordability share that
+authority. Per-definition metadata is checked on live texts, with acquired
+abilities supplied by the layers; unrelated opposing permanents need no
+characteristics calculation. Permission changes no timing, cost or activation
+limit, never allows sacrificing an opponent's permanent, and never lets it pay
+convoke/improvise. The source's own {T} uses its controller's summoning sickness.

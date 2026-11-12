@@ -20,7 +20,7 @@ they are not cards already implemented or independently verified end to end.
 | World supertype and world rule | 12 / 8 | Native tests passed (8 world-rule tests) |
 | Bands with other, including grants and removal | 8 / 8 | Queued |
 | No combat damage assignment after an earlier choice | 8 / 8 | Native tests passed (21 assignment tests) |
-| Other players activating abilities | 8 / 5 | Queued |
+| Other players activating abilities | 8 / 5 | Native tests passed (9 activation-player tests) |
 | Step-bound effect and permission lifetimes | 6 / 5 | Queued |
 | Computed limits on announced X | 5 / 3 | Queued |
 | Persistent public visibility | 5 / 2 | Queued |
@@ -135,3 +135,36 @@ Reproducible probes and the detailed validation receipt are in MTGish's
 `docs/cantrip-foundation-adoption-20261112.md` and accompanying proof JSON.
 Local logs are under `/mnt/vizier/early-set-foundation-20261112`. The five queued
 feature groups above remain separate follow-up commits.
+
+## Different activators for an ability
+
+`ActivatedDef::activators` and the builders `.activated_by(predicate)` /
+`.any_player_may_activate()` express CR 602.2 permissions for one ability.
+Armageddon Clock and Infinite Hourglass allow every player during upkeep; Clergy
+of the Holy Nimbus permits only opponents; Personal Incarnation permits its
+owner. Permission is evaluated as the source's current controller, with the
+proposed activator as a separate argument. It replaces the default permission
+and may exclude the source's controller. Conditions and the resulting stack
+ability instead use the actual activator (CR 113.8, 602.2a).
+
+Ordinary activation, mana activation and mana affordability use the same test.
+Live source texts and the existing acquisition guard find opposing sources
+without querying the characteristics of ordinary opposing permanents. Copies,
+granted abilities, ability loss and phasing follow the existing layers. Other
+players' hidden zones are not searched. Conditions, timing and once-per-turn
+limits remain in force; the latter still belong to the ability instance, not
+each possible activator. Permission is rechecked when executing an activation.
+
+The activator pays from their own mana, life and hand; a source's own tap symbol
+is authorized, with summoning sickness still read from the source's controller
+(CR 302.6, 107.5). A source may pay explicit return/unattach costs, and an exert
+cost skips the payer's next untap (CR 701.43a). Sacrifice still requires control
+(CR 701.21a). An opposing artifact is never thereby an improvise/convoke payer.
+Counter-placement prohibitions use the permanent's controller, independently
+of the player paying the cost. Nine forced native tests cover these boundaries.
+
+The roadmap's initial 8/5 count precedes the World foundation; together these
+features remove the recorded gaps on six of these eight cards, including Land's
+Edge. Merseine still requires its computed mana cost, and Personal Incarnation
+its damage redirection. Card-level generation and runtime probes are separate
+from these core fixtures.

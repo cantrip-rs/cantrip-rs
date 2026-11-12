@@ -1551,6 +1551,10 @@ pub(crate) const fn same_str(a: &str, b: &str) -> bool {
     true
 }
 
+/// The players an ability itself permits to activate it (CR 602.2). The asker names the source's current controller;
+/// `player` is the proposed activator. This replaces the default controller/owner permission, not costs or timing.
+pub type ActivationPlayers = fn(&dyn Query, &Asker, PlayerId) -> bool;
+
 /// An activated ability (CR 602). A card writes one with `ability` or `mana_ability` (`crate::ability`).
 #[derive(Clone, Copy)]
 pub struct ActivatedDef {
@@ -1561,6 +1565,10 @@ pub struct ActivatedDef {
     /// "Activate only as an instant" (CR 304.5, 602.5e): requires priority even for a mana ability (CR 605.3a).
     /// Ordinary mana abilities may also be activated while paying; this restriction does not change their classification.
     pub priority_only: bool,
+    /// "Any player may activate" or "only [players] may activate" (CR 602.2): permission for this ability alone.
+    /// None means its source's controller (owner outside the battlefield). Conditions, costs and timing still apply.
+    /// The asker is the source's controller; the ability's condition and effect instead use its actual activator.
+    pub activators: Option<ActivationPlayers>,
     pub targets: &'static [TargetSpec],
     pub effect: Effect,
     /// A mana ability's own effect (CR 605.1a), where it does more than add the mana `adds` and `adds_any` list: it
@@ -1705,6 +1713,7 @@ impl ActivatedDef {
         cost: Cost::NONE,
         timing: Timing::Instant,
         priority_only: false,
+        activators: None,
         targets: &[],
         effect: no_effect,
         mana: None,
@@ -4296,6 +4305,9 @@ pub struct CardTable {
     /// Printed Worlds and definitions that can change the world supertype in layer 4, including abilities they grant.
     /// Checked on live game sources, never as a global card-table guard.
     pub world_sensitive: Vec<bool>,
+    /// Definitions whose own activated abilities name different activators. Checked on live source texts; an ability
+    /// acquired from another source is checked separately through the layers' acquisition guard.
+    pub other_activators: Vec<bool>,
     /// Which cards could have a triggered ability that may look back in time (CR 603.10, `TriggeredDef::may_look_back`) of
     /// their own: one they print, one they list to give (`CardDef::delayed`), any a static ability of theirs could give
     /// themselves, or, for a Room, one a door prints (CR 709.5; `CardTable::new`) - the objects a look-back pass needs as
@@ -4884,6 +4896,8 @@ impl CardTable {
         let world_sensitive = cards.iter().map(|c| c.supertypes.world
             || c.statics.iter().any(|s| s.layer == Layer::Type)
             || c.delayed.iter().any(|a| matches!(a, AbilityDef::Static(s) if s.layer == Layer::Type))).collect();
+        let other_activators = cards.iter().map(|c| c.abilities.iter()
+            .any(|a| matches!(a, AbilityDef::Activated(d) if d.activators.is_some()))).collect();
         let looks_back = |a: &AbilityDef| matches!(a, AbilityDef::Triggered(t) if t.may_look_back());
         let look_back: Vec<bool> = cards
             .iter()
@@ -4999,6 +5013,7 @@ impl CardTable {
             statics,
             control_statics,
             world_sensitive,
+            other_activators,
             look_back,
             zone_words,
             zone_word_cards,

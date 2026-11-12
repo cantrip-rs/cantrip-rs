@@ -2800,6 +2800,8 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
     let mut pay_next = |cx: &mut Cx, remaining: &mut Vec<SpellPayment<'_>>| -> R<bool> {
         // Whether `player` controls the permanent `id` (`Query::permanents_of`), asked without listing them.
         let controls = |id: ObjectId| cx.s().obj(id).zone.is(ZoneKind::Battlefield) && cx.s().obj(id).controller == player;
+        let source_usable = || live(cx.s(), spell) && cx.s().obj(spell).zone.is(ZoneKind::Battlefield)
+            && (controls(spell) || matches!(scope, PaymentScope::Ability { .. } | PaymentScope::ManaAbility { .. }));
         let asker = Asker { instance: None, source: spell, controller: player, by: scope.by(), spell: matches!(scope, PaymentScope::Spell) };
         // CR 601.2h: every cost with a random element is paid after all other costs.
         let has_nonrandom = remaining.iter().any(|step| !step.has_random_element());
@@ -2868,10 +2870,10 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
             SpellPayment::SourceCounters { action, .. } => (live(cx.s(), spell) && match action {
                 SourceCounters::Remove(kind, n) => cx.s().obj(spell).counters(*kind) >= *n as i32,
                 SourceCounters::RemoveVariable(kind, n) => i64::from(cx.s().obj(spell).counters(*kind)) >= i64::from(*n),
-                SourceCounters::Put(kind, n) => *n == 0 || !static_rules::counters_banned(cx, cx.cards(), spell, player, *kind),
+                SourceCounters::Put(kind, n) => *n == 0 || !static_rules::counters_banned(cx, cx.cards(), spell, cx.s().obj(spell).controller, *kind),
                 SourceCounters::Loyalty(change) => if *change < 0 {
                     i32::from(cx.s().obj(spell).counters(CounterKind::Loyalty)) >= -*change
-                } else { *change == 0 || !static_rules::counters_banned(cx, cx.cards(), spell, player, CounterKind::Loyalty) },
+                } else { *change == 0 || !static_rules::counters_banned(cx, cx.cards(), spell, cx.s().obj(spell).controller, CounterKind::Loyalty) },
                 SourceCounters::RemoveAny => cx.s().obj(spell).counter_array().iter().any(|n| *n > 0),
             }).then_some(i),
             SpellPayment::Craft { cost, .. } => {
@@ -2879,9 +2881,9 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 let candidates = material_candidates(cx, spell, player, m, scope.by());
                 (live(cx.s(), spell) && candidates.len() >= usize::from(m.count) && parts_can_be_matched(cx, spell, player, m, &candidates, scope.by())).then_some(i)
             }
-            SpellPayment::ExertSelf { .. } => controls(spell).then_some(i),
-            SpellPayment::UnattachSelf { .. } => (controls(spell) && cx.s().obj(spell).attached_to.is_some_and(|id| live(cx.s(), id) && cx.s().obj(id).zone.is(ZoneKind::Battlefield))).then_some(i),
-            SpellPayment::TapSelf { .. } => (controls(spell) && !cx.s().obj(spell).tapped
+            SpellPayment::ExertSelf { .. } => source_usable().then_some(i),
+            SpellPayment::UnattachSelf { .. } => (source_usable() && cx.s().obj(spell).attached_to.is_some_and(|id| live(cx.s(), id) && cx.s().obj(id).zone.is(ZoneKind::Battlefield))).then_some(i),
+            SpellPayment::TapSelf { .. } => (source_usable() && !cx.s().obj(spell).tapped
                 && (!summoning_sick(cx.cards(), cx.s(), &cx.g.log, spell) || static_rules::activates_as_though_haste(cx, player, spell))).then_some(i),
             SpellPayment::SacrificeSelf { object, .. } => {
                 // A successful sacrifice moves this exact object. It cannot later pay its own {T} cost (CR 400.7).
@@ -2892,7 +2894,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
             SpellPayment::MoveSelf { action, .. } => {
                 let object = match action { MoveSelf::ExileGranter(id) => *id, _ => spell };
                 let payable = live(cx.s(), object) && match action {
-                    MoveSelf::Return => controls(spell),
+                    MoveSelf::Return => source_usable(),
                     MoveSelf::Exile => !cx.s().obj(spell).zone.is(ZoneKind::PhasedOut),
                     MoveSelf::ExileGranter(id) => cx.s().obj(*id).zone.is(ZoneKind::Battlefield),
                     MoveSelf::Discard => cx.s().obj(spell).zone == Zone::hand(player),
@@ -3305,17 +3307,18 @@ fn mana_ability_options_as(cx: &Cx, player: PlayerId, window: ManaWindow, option
     let forbidders = static_rules::activation_forbidders(cx);
     // What changes the costs of the abilities judged, read once (empty, so unallocated, in nearly every game).
     let changers = if judged == Judged::Nested { Vec::new() } else { cost_change_sources(cx) };
+    let given = layers::acquisition_possible(cx.cards(), cx.s());
     for &id in cx.s().battlefield() {
-        if cx.s().obj(id).controller != player {
+        if !activation_source(cx, id, player, given) {
             continue;
         }
         let chars = cx.chars(id);
         let givers = std::cell::OnceCell::new();
-        let given = layers::acquisition_possible(cx.cards(), cx.s());
         for (index, ability) in chars.abilities().enumerate() {
             // Asked as the ability it is (CR 607.5): one an effect gave the source reads only its own links.
             let by = if given { cx.link_nth(id, &chars, index) } else { None };
             let Some(def) = activated(cx, ability) else { continue };
+            if !activation_permitted(cx, id, player, ability, index, def, by) { continue; }
             if !def.is_mana_ability()
                 || !window.allows(def)
                 || def.from != ZoneKind::Battlefield
@@ -5823,8 +5826,9 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
     // alternative of a source's.
     let mut payers: Vec<(ObjectId, ColorSet)> = Vec::new();
     let mut placed: Vec<ObjectId> = Vec::new();
+    let given = layers::acquisition_possible(cx.cards(), cx.s());
     for &id in cx.s().battlefield() {
-        if cx.s().obj(id).controller != player || skip == Some(id) {
+        if skip == Some(id) || !activation_source(cx, id, player, given) {
             continue;
         }
         let chars = cx.chars(id);
@@ -5832,11 +5836,11 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
         alternatives.clear();
         // Some alternative neither taps nor sacrifices it (Prismite's): it could make that mana and be tapped for the cost.
         let mut keeps = false;
-        let given = layers::acquisition_possible(cx.cards(), cx.s());
         for (index, ability) in chars.abilities().enumerate() {
             // Asked as the ability it is (CR 607.5): one an effect gave the source reads only its own links.
             let by = if given { cx.link_nth(id, &chars, index) } else { None };
             let Some(def) = activated(cx, ability) else { continue };
+            if !activation_permitted(cx, id, player, ability, index, def, by) { continue; }
             if !def.is_mana_ability()
                 || !window.allows(def)
                 || def.from != ZoneKind::Battlefield
@@ -5954,7 +5958,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
             alternatives.push(alternative);
         }
         // Tapped for the cost, or for its mana: one alternative more of a source whose every mana ability spends it.
-        if let Some(colors) = tap.and_then(|t| t.payer(cx, id, &chars)) {
+        if let Some(colors) = tap.filter(|_| cx.s().obj(id).controller == player).and_then(|t| t.payer(cx, id, &chars)) {
             payers.push((id, colors));
             if !alternatives.is_empty() && !keeps {
                 alternatives.push(Alternative::tapping(colors));
@@ -7189,6 +7193,23 @@ fn any_types(cx: &Cx, id: ObjectId, player: PlayerId, def: &ActivatedDef, by: Op
     }
 }
 
+/// Whether a battlefield source is worth inspecting for this player's abilities. Ordinary opposing permanents cost
+/// no characteristics query; copies, merged components and granted abilities use the existing acquisition authority.
+fn activation_source(cx: &Cx, id: ObjectId, player: PlayerId, given: bool) -> bool {
+    let obj = cx.s().obj(id);
+    obj.controller == player || given || cx.cards().texts(cx.s(), obj).any(|c| cx.cards().other_activators[c.0 as usize])
+}
+
+/// CR 602.2: an ability may name different activators. Permission is asked of the source's controller, while the
+/// condition, costs and resulting ability use the actual activator (CR 602.2a, 113.8).
+fn activation_permitted(cx: &Cx, id: ObjectId, player: PlayerId, ability: AbilityRef, index: usize, def: &ActivatedDef, by: Option<Linked>) -> bool {
+    let controller = cx.s().obj(id).controller;
+    def.activators.map_or(controller == player, |allows| allows(cx, &Asker {
+        instance: Some(AbilityInstance { ability, acquisition: instance_nth(cx, id, &cx.chars(id), index) }),
+        source: id, controller, by, spell: false,
+    }, player))
+}
+
 /// The activated abilities `player` may activate now, judged with the mana `available` could pay.
 fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<Available>, options: &mut Vec<ActionOption>) {
     // A card in exile has no activated ability of its own that functions there (CR 113.6b): only one an effect gave it, and
@@ -7206,12 +7227,13 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
     }
     // Abilities of permanents, then abilities that function from the hand (cycling) and the graveyard (unearth), then the
     // exile zone's granted ones.
+    let given = layers::acquisition_possible(cx.cards(), cx.s());
     let sources: Vec<ObjectId> = cx
         .s()
         .battlefield()
         .iter()
         .copied()
-        .filter(|&id| cx.s().obj(id).controller == player)
+        .filter(|&id| activation_source(cx, id, player, given))
         .chain(cx.s().zone(Zone::hand(player)).iter().copied())
         .chain(cx.s().zone(Zone::graveyard(player)).iter().copied())
         .chain(granted_in_exile)
@@ -7225,11 +7247,11 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
         let zone = cx.s().obj(id).zone.kind();
         let chars = cx.chars(id);
         let givers = std::cell::OnceCell::new();
-        let given = layers::acquisition_possible(cx.cards(), cx.s());
         for (index, ability) in chars.abilities().enumerate() {
             // Asked as the ability it is (CR 607.5): one an effect gave the source reads only its own links.
             let by = if given { cx.link_nth(id, &chars, index) } else { None };
             let Some(def) = activated(cx, ability) else { continue };
+            if !activation_permitted(cx, id, player, ability, index, def, by) { continue; }
             if def.is_mana_ability()
                 || (split && !def.special_action)
                 || def.from != zone
@@ -12017,6 +12039,7 @@ fn activate(
     by: Option<Linked>,
 ) -> R<()> {
     let def = activated(cx, ability).expect("activated");
+    if !activation_permitted(cx, source, player, ability, index as usize, def, by) { return Err(Stop::Cancel); }
     let paid = activating(def);
     // CR 602.2a: announced, its card revealed if it is in a hand or a library, before any choice or cost.
     reveal_if_hidden(cx, player, source);
@@ -12441,6 +12464,7 @@ fn activate_mana_as(
     }
     let ability = cx.chars(source).abilities().nth(index as usize).expect("ability");
     let def = activated(cx, ability).expect("activated");
+    if !activation_permitted(cx, source, player, ability, index as usize, def, by) { return Err(Stop::Cancel); }
     // A mana ability is activated by the rules for any activated ability (CR 605.3, 602.2a): from a hand, its card is
     // revealed first (Elvish Spirit Guide's, exiled as its cost is paid).
     reveal_if_hidden(cx, player, source);
@@ -15071,6 +15095,10 @@ fn resolution_rest_payable(cx: &Cx, payer: PlayerId, source: ObjectId, cost: &Co
 fn is_live(cx: &Cx, id: ObjectId) -> bool {
     live(cx.s(), id)
 }
+
+#[cfg(test)]
+#[path = "activation_players_tests.rs"]
+mod activation_players_tests;
 
 #[cfg(test)]
 #[path = "priority_only_tests.rs"]

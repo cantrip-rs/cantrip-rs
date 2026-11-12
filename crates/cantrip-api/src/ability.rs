@@ -664,6 +664,17 @@ impl AbilityDef {
         AbilityDef::Activated(ActivatedDef { from, ..activated(self, "only an activated ability is given a zone this way") })
     }
 
+    /// "Only [players] may activate this ability" (CR 602.2). Replaces the default controller/owner permission.
+    /// The predicate reads the source's controller through its asker, and the proposed activator as its third argument.
+    pub const fn activated_by(self, players: ActivationPlayers) -> AbilityDef {
+        AbilityDef::Activated(ActivatedDef { activators: Some(players), ..activated(self, "only an activated ability has activators") })
+    }
+
+    /// "Any player may activate this ability" (CR 602.2). Its costs, conditions and timing are unchanged.
+    pub const fn any_player_may_activate(self) -> AbilityDef {
+        self.activated_by(|_, _, _| true)
+    }
+
     /// "Activate only if ..." (CR 602.5b), or a triggered ability's intervening "if" (CR 603.4).
     pub const fn condition(self, condition: Condition) -> AbilityDef {
         match self {
