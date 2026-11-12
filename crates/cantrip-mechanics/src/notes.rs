@@ -3,7 +3,8 @@ use cantrip_api::*;
 
 /// The most recently noted value of this kind, from exactly this linked text.
 pub fn last_mana(q: &dyn Query, by: Linked) -> ManaPool {
-    q.events()
+    q.history()
+        .all()
         .iter()
         .rev()
         .find_map(|r| {
@@ -25,7 +26,8 @@ pub fn last_mana(q: &dyn Query, by: Linked) -> ManaPool {
 pub fn note_mana_spent(g: &mut dyn Game, item: &StackItem, amount: bool) {
     let by = g.linked(item);
     let mana = g
-        .events()
+        .history()
+        .all()
         .iter()
         .rev()
         .find_map(|r| {

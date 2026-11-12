@@ -88,7 +88,9 @@ fn answer(g: &mut Game, a: Answer) {
 }
 fn activate(g: &mut Game, id: ObjectId, index: u8) -> StackItem {
     if g.pending().is_some() {
-        let at=g.state.agenda.len()-1;g.state.frame_remove(at);g.state.frame_push(Frame::new(FrameKind::Priority));
+        let at = g.state.agenda.len() - 1;
+        g.state.frame_remove(at);
+        g.state.frame_push(Frame::new(FrameKind::Priority));
     }
     let r = next(g);
     let RequestKind::Priority { options } = &r.kind else {
@@ -273,4 +275,13 @@ fn notes_do_not_enlarge_hot_object_stack_or_event_records() {
         std::mem::size_of::<Obj>(),
         std::mem::size_of::<NotedValueRecord>()
     );
+}
+
+#[test]
+fn reading_notes_counts_as_a_history_question_for_the_loop_detector() {
+    let (mut g, s) = board();
+    let by = link(&mut g, s);
+    cantrip_api::history::take_reads();
+    assert!(read(&mut g, by).is_empty());
+    assert!(cantrip_api::history::take_reads() > 0);
 }
