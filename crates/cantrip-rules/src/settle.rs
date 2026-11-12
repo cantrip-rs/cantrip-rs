@@ -920,7 +920,10 @@ fn consider(
     let givers = std::cell::OnceCell::new();
     for (nth, ability) in chars.abilities().enumerate() {
         // Only a triggered ability is asked anything here.
-        let AbilityDef::Triggered(_) = cx.cards().ability(ability) else { continue };
+        let AbilityDef::Triggered(t) = cx.cards().ability(ability) else { continue };
+        // Triggered mana abilities resolve within the activation in
+        // `tapped_for_mana`, regardless of which event mask their matcher uses.
+        if t.mana_ability { continue; }
         let by = || {
             let given = *given.get_or_init(|| taken.is_some() || possible);
             if given { layers::given_link(cx.cards(), cx.s(), source, ability, acquired_at(nth)) } else { None }
@@ -1531,18 +1534,30 @@ impl Query for BoardThen<'_> {
 /// however it was given (`could_have`). Where none could, the activation of a mana ability - the most frequent event - is only
 /// recorded in the history, not looked at for triggers: nothing it could trigger is left out.
 pub(crate) fn activation_watched(cx: &Cx) -> bool {
+    event_watched(cx, &cx.cards().activation_triggers, &cx.cards().activation_triggers_elsewhere,
+        |t| t.listens.intersects(EventMask::ABILITY_ACTIVATED))
+}
+
+/// Mana taps stay history-only while this game contains no ordinary observer.
+/// The same conservative guard covers copies, grants, Rooms, delayed abilities
+/// and other zones, without querying every permanent's characteristics.
+pub(crate) fn mana_tap_watched(cx: &Cx) -> bool {
+    event_watched(cx, &cx.cards().mana_tap_observers, &cx.cards().mana_tap_observers_elsewhere,
+        |t| !t.mana_ability && t.listens.intersects(EventMask::TAPPED_FOR_MANA))
+}
+
+fn event_watched(cx: &Cx, here: &[bool], elsewhere: &[bool], listens: fn(&TriggeredDef) -> bool) -> bool {
     let cards = cx.cards();
     let s = cx.s();
-    let listens = |t: &TriggeredDef| t.listens.intersects(EventMask::ABILITY_ACTIVATED);
     let watched = s.delayed.iter().any(|d| d.when.is_event() && matches!(cards.ability(d.ability), AbilityDef::Triggered(t) if listens(t)))
         || s.seats().any(|p| {
             [Zone::hand(p), Zone::graveyard(p), Zone::exile(p), Zone::library(p)]
                 .into_iter()
-                .any(|z| s.zone(z).iter().any(|&id| cards.activation_triggers_elsewhere[s.obj(id).card.0 as usize]))
+                .any(|z| s.zone(z).iter().any(|&id| elsewhere[s.obj(id).card.0 as usize]))
         })
-        || s.zone(Zone::STACK).iter().any(|&id| cards.activation_triggers_elsewhere[s.obj(id).card.0 as usize])
+        || s.zone(Zone::STACK).iter().any(|&id| elsewhere[s.obj(id).card.0 as usize])
         || {
-            let could = could_have(cx, &cards.activation_triggers, listens);
+            let could = could_have(cx, here, listens);
             s.battlefield().iter().chain(s.zone(Zone::COMMAND)).any(|&id| could(id))
         };
     // With `CANTRIP_VERIFY`: nothing the guard left out has such an ability now - a way of giving one that the guard misses is
@@ -1552,7 +1567,7 @@ pub(crate) fn activation_watched(cx: &Cx) -> bool {
         let has = |id: ObjectId| cx.chars(id).abilities().any(|a| matches!(cards.ability(a), AbilityDef::Triggered(t) if listens(t) && t.functions.contains(s.obj(id).zone.kind())));
         let elsewhere = s.seats().flat_map(|p| [Zone::hand(p), Zone::graveyard(p), Zone::exile(p), Zone::library(p)]).chain(std::iter::once(Zone::STACK));
         for id in s.battlefield().iter().chain(s.zone(Zone::COMMAND)).chain(elsewhere.flat_map(|z| s.zone(z).iter())) {
-            assert!(!has(*id), "{id:?} has an ability that triggers on an activation that nothing counted as able to give it (CR 603.2)");
+            assert!(!has(*id), "{id:?} has an event observer that nothing counted as able to give it (CR 603.2)");
         }
     }
     watched

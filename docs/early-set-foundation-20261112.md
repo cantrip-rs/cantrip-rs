@@ -351,3 +351,29 @@ checks. This catalog uses the engine's existing dense counter storage, so two
 additional i32 entries add eight bytes to an object; quantity widths do not
 change. This is a data prerequisite, not an additional rules primitive. The
 next batched benchmark includes this catalog growth.
+
+## Ordinary observers of mana taps
+
+`EventMask::TAPPED_FOR_MANA` exposes the existing event to ordinary triggered
+abilities, including Manabarbs and Burning Earth (CR 106.12, 603.3). They queue
+for the stack after a mana ability completes. Triggered mana abilities still
+resolve immediately within the activation (CR 605.4a), and the ordinary trigger
+collector excludes them even if they use the new mask. A production replaced
+by zero triggers ordinary observers, but no additional-mana trigger.
+
+An interest guard examines actual game objects, their possible copied/granted
+texts, delayed abilities and functioning zones before collecting observers.
+A game with none keeps the history-only path. This reuses the activation
+observer guard's procedure with separate per-card metadata, rather than a
+whole-table presence check or an allocation on every tap. Verification asserts
+that the guard never misses a live observer. Seven focused tests pass, covering
+immediate/stack timing, payment windows, zero production, irrelevant taps,
+grants/loss, other zones and a table whose observers are absent from the game.
+The generated runtime suite passes 41 scenarios, including actual Manabarbs
+and Burning Earth with basic/nonbasic lands, artifacts and a different payer.
+
+The generator adapter deliberately leaves mixed mana-producing triggers such
+as Overabundance and Snowfall gated: they require correct immediate-mana
+classification/advice, not an ordinary stack trigger. The previous complete
+native gate is through the ten-feature batch; this feature's full batch and
+performance receipt follow with the next group of changes.

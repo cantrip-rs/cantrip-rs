@@ -235,7 +235,7 @@ pub enum Event {
     Exerted { permanent: ObjectId, player: PlayerId },
     /// A permanent was tapped for mana (CR 106.12, 605.1b): a mana ability with {T} in its cost was activated by `player` and
     /// resolved. `produced` is the mana that ability added (CR 106.12a), of any restriction - not what the triggered mana
-    /// abilities it triggers add: "one mana of any type that land produced" reads it. Recorded for the history; the
+    /// abilities it triggers add: "one mana of any type that land produced" reads it. Ordinary observers use the stack;
     /// triggered mana abilities it triggers (`TriggeredDef::mana_ability`) resolve at once, where the tap happens, and only
     /// when it produced some mana (CR 106.12a).
     TappedForMana { permanent: ObjectId, player: PlayerId, produced: ManaTally },
@@ -648,6 +648,10 @@ impl EventMask {
     pub const TRANSFORMED: EventMask = EventMask(1 << 15);
     pub const UNATTACHED: EventMask = EventMask(1 << 30);
     pub const TAPPED: EventMask = EventMask(1 << 29);
+    /// An activated mana ability with {T} resolved (CR 106.12). Ordinary
+    /// observers such as Manabarbs/Burning Earth use the stack; triggered mana
+    /// abilities still resolve immediately through their dedicated procedure.
+    pub const TAPPED_FOR_MANA: EventMask = EventMask(1 << 65);
     /// Becoming untapped is distinct from tapping, including for mask-only history queries.
     pub const UNTAPPED: EventMask = EventMask(1 << 64);
     pub const LIFE_CHANGE: EventMask = EventMask(1 << 16);
@@ -799,6 +803,7 @@ impl EventMask {
             Event::Unattached { .. } => EventMask::UNATTACHED,
             Event::Attached { .. } => EventMask::ATTACHED,
             Event::Tapped { .. } => EventMask::TAPPED,
+            Event::TappedForMana { .. } => EventMask::TAPPED_FOR_MANA,
             Event::Untapped { .. } => EventMask::UNTAPPED,
             Event::TappedForTeamwork { .. } => EventMask::TAPPED_FOR_TEAMWORK,
             Event::Crewed { .. } => EventMask::CREWED,

@@ -3463,3 +3463,6 @@ mod keyword_family_tests;
 
 #[cfg(test)]
 mod untap_limit_tests;
+
+#[cfg(test)]
+mod nonmana_mana_tap_tests;

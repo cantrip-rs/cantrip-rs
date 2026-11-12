@@ -13427,7 +13427,9 @@ fn answers_to_try(kind: &RequestKind, budget: usize) -> Result<(Vec<Answer>, boo
 /// with the answer.
 fn tapped_for_mana(cx: &mut Cx, player: PlayerId, source: ObjectId, produced: ManaPool) -> R<()> {
     let event = Event::TappedForMana { permanent: source, player, produced: ManaTally::of(produced) };
-    cx.record(event);
+    // Ordinary observers trigger even if the mana production was replaced by
+    // nothing; only additional-mana triggers require actual production (106.12a).
+    if crate::settle::mana_tap_watched(cx) { cx.emit(event); } else { cx.record(event); }
     if produced.is_empty() {
         return Ok(());
     }
