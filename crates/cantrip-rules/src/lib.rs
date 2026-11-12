@@ -64,6 +64,9 @@ mod library_visibility;
 #[cfg(test)]
 mod library_visibility_tests;
 mod world;
+mod hand_visibility;
+#[cfg(test)]
+mod hand_visibility_tests;
 mod loops;
 mod merge;
 #[cfg(test)]
@@ -1263,6 +1266,11 @@ impl Game {
         static_rules::mana_told_apart(self, self.cards, player)
     }
 
+    /// Continuous public hand visibility, independent of a one-time reveal action.
+    pub fn revealed_hands(&self) -> u8 {
+        hand_visibility::mask(self, self.cards)
+    }
+
     /// Whether `player` may look at the top card of their library any time (CR 401.2), as a permanent they control says.
     pub fn may_look_at_library_top(&self, player: PlayerId) -> bool {
         actions::may_look_at_library_top(self, self.cards, player)
@@ -1533,7 +1541,7 @@ impl<'a> Cx<'a> {
         // instruction, once it is done (`ops::as_one_instruction`).
         if self.s().settle_held.get() == 0 {
             ops::settle_combat(self);
-            world::sync(self);
+            world::sync(self); hand_visibility::sync(self);
         }
         let check = &mut self.g.check;
         if check.depth == 0 {
@@ -1702,7 +1710,7 @@ impl<'a> Cx<'a> {
         for &event in events {
             self.record_only(event);
         }
-        if self.s().settle_held.get() == 0 { world::sync(self); }
+        if self.s().settle_held.get() == 0 { world::sync(self); hand_visibility::sync(self); }
         start
     }
 
@@ -1727,7 +1735,7 @@ impl<'a> Cx<'a> {
     }
     pub fn record(&mut self, event: Event) {
         self.record_only(event);
-        if self.s().settle_held.get() == 0 { world::sync(self); }
+        if self.s().settle_held.get() == 0 { world::sync(self); hand_visibility::sync(self); }
     }
 
     /// A batch appends all its events before history-dependent characteristics are synchronized.

@@ -7788,7 +7788,7 @@ fn land_rules(cx: &Cx, player: PlayerId) -> LandRules {
         PlayRule::LibraryTop | PlayRule::LibraryTopLands => {
             rules.top_lands.push(Grant { object: source, ability });
         }
-        PlayRule::LibraryTopSpells(..) | PlayRule::MaximumHandSize(_) | PlayRule::LookAtLibraryTop | PlayRule::RevealLibraryTop | PlayRule::While(..) => {}
+        PlayRule::HandRevealed(_) | PlayRule::LibraryTopSpells(..) | PlayRule::MaximumHandSize(_) | PlayRule::LookAtLibraryTop | PlayRule::RevealLibraryTop | PlayRule::While(..) => {}
     });
     // "You may play an additional land this turn" (CR 305.2, 611.2c): an effect a resolved spell or ability made, added to
     // the rest - the number a player can play is the sum of everything that increases it.

@@ -1048,7 +1048,8 @@ impl<'a> Projector<'a> {
         };
         let count = contents.len() as i32;
         let zone = Zone::new(kind, owner);
-        let contents_visible = looks_into(s, self.viewer, zone);
+        let contents_visible = looks_into(s, self.viewer, zone)
+            || (kind == ZoneKind::Hand && self.game.revealed_hands() & (1 << owner.0) != 0);
         let mut view = ZoneView {
             kind: Some(zone_kind_view(kind)),
             owner: if kind == ZoneKind::Command { seat(owner) } else { zone_owner(zone) },

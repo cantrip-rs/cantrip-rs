@@ -159,7 +159,11 @@ pub enum Event {
         /// The old permanent this Aura enchanted when it left the battlefield (CR 400.7f): it left in this same move
         /// batch, or the Aura followed it to its owner's graveyard by the unattached-Aura state-based action (704.5m).
         /// Rules-derived from the actual moves after replacement, never inferred from a later unrelated move.
-        enchanted_left: Option<ObjectId> },
+        enchanted_left: Option<ObjectId>,
+        /// Continuous hand visibility on each side of this move. These are actual-time observations, not a later
+        /// query of a revealing source that may have left. The old and new sides can differ in a simultaneous batch.
+        from_revealed_hand: bool,
+        to_revealed_hand: bool },
     /// Damage was dealt. `controller` and `kind.colors()` are the source's as it dealt it (CR 120.3, 609.7): "damage red sources
     /// you controlled dealt this turn" counts a source that has since changed controller or color, or left (Temple of
     /// Power's ruling), and a spell's or an ability's source by what it was on the stack or the battlefield then.

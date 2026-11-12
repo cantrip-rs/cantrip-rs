@@ -93,6 +93,8 @@ pub struct GameState {
     /// permanent (CR 122.1j): until one has, the layers skip looking for static sources, and hone counters, at all. Only
     /// ever set, so it can be stale only towards looking.
     pub statics_seen: bool,
+    /// Hands whose current continuous public interval has already been announced to history. One bit per seat.
+    pub shown_hands: u8,
     pub agenda: Vec<Frame>,
     pub rng: Rng,
     pub next_timestamp: u32,
@@ -137,6 +139,8 @@ pub struct GameState {
     /// The layers' work for one position and history (`cantrip_rules::layers`): each layer's application order (CR 613.8) and
     /// the characteristics worked out with it. Derived, shared by a clone until either moves on; no part of the position.
     pub layer_pass: LayerCache,
+    /// Conservative live-source interest in continuous hand visibility, derived for one position epoch.
+    pub hand_visibility_interest: std::cell::Cell<Option<(u64, bool)>>,
 }
 
 /// The layers' cache (`GameState::layer_pass`): passes the rules crate made, each for its own position and history.
@@ -257,6 +261,7 @@ pub struct DerivedAside {
     chars_epoch: u64,
     static_sources: StaticSources,
     layer_pass: Vec<std::rc::Rc<dyn std::any::Any>>,
+    hand_visibility_interest: Option<(u64, bool)>,
 }
 
 impl GameState {
@@ -270,6 +275,7 @@ impl GameState {
             chars_epoch: self.chars_epoch,
             static_sources: self.static_sources.replace(StaticSources::none()),
             layer_pass: std::mem::take(&mut *self.layer_pass.0.borrow_mut()),
+            hand_visibility_interest: self.hand_visibility_interest.replace(None),
         }
     }
 
@@ -281,6 +287,7 @@ impl GameState {
         self.chars_epoch = aside.chars_epoch;
         *self.static_sources.borrow_mut() = aside.static_sources;
         *self.layer_pass.0.borrow_mut() = aside.layer_pass;
+        self.hand_visibility_interest.set(aside.hand_visibility_interest);
     }
 
     fn position(
@@ -295,7 +302,7 @@ impl GameState {
         (&Vec<PendingTrigger>, &Vec<Delayed>, &Vec<PlayPermission>),
         (&Vec<Attacker>, &Vec<ObjectId>, &Vec<Block>, &Vec<ExtraTurn>, &Vec<ScheduledPhase>, (&LoopWatch, &Vec<LoopKey>)),
         &Vec<Frame>,
-        (&Rng, u32, &Outcome, bool, &Vec<ObjectId>, &Vec<StackItem>, (&Vec<Target>, &Vec<u8>, &Vec<u32>), (&Vec<Merge>, &Vec<Vec<Copiable>>, &Vec<(ObjectId, u32)>)),
+        (&Rng, u32, &Outcome, (bool, u8), &Vec<ObjectId>, &Vec<StackItem>, (&Vec<Target>, &Vec<u8>, &Vec<u32>), (&Vec<Merge>, &Vec<Vec<Copiable>>, &Vec<(ObjectId, u32)>)),
     ) {
         (
             (&self.players, &self.restricted_mana, &self.counter_stamps, &self.mana_from),
@@ -311,7 +318,7 @@ impl GameState {
                 &self.rng,
                 self.next_timestamp,
                 &self.outcome,
-                self.unsettled,
+                (self.unsettled, self.shown_hands),
                 &self.members,
                 &self.left_stack,
                 (&self.spill_targets, &self.spill_specs, &self.share_arena),
@@ -449,6 +456,7 @@ pub enum Undo {
     LoopKeyWords(u32, Option<Vec<u64>>),
     LoopKeysSet(Vec<LoopKey>),
     StaticsSeen(bool),
+    ShownHands(u8),
     FramePushed,
     FramePopped(Frame),
     FrameRemoved(u32, Frame),
@@ -502,6 +510,7 @@ impl Undo {
                 | Undo::Rng(_)
                 | Undo::Timestamp(_)
                 | Undo::Unsettled(_)
+                | Undo::ShownHands(_)
                 | Undo::ManaFromPushed
                 | Undo::ManaFromSet(..)
                 | Undo::ManaFromRemoved(..)
@@ -558,6 +567,7 @@ impl GameState {
             outside_supply: Vec::new(),
             minimum_deck_size: 0,
             statics_seen: false,
+            shown_hands: 0,
             agenda: Vec::new(),
             rng: Rng::new(seed),
             next_timestamp: 1,
@@ -574,6 +584,7 @@ impl GameState {
             settle_held: std::cell::Cell::new(0),
             returning: std::cell::Cell::new(false),
             layer_pass: LayerCache::default(),
+            hand_visibility_interest: std::cell::Cell::new(None),
         }
     }
 
@@ -1777,6 +1788,14 @@ impl GameState {
         self.log(Undo::Outcome(old));
     }
 
+    pub fn set_shown_hands(&mut self, mask: u8) {
+        if self.shown_hands != mask {
+            let old = self.shown_hands;
+            self.shown_hands = mask;
+            self.log(Undo::ShownHands(old));
+        }
+    }
+
     pub fn set_unsettled(&mut self) {
         if !self.unsettled {
             self.unsettled = true;
@@ -2200,6 +2219,7 @@ impl GameState {
                 self.loop_keys = old;
             }
             Undo::StaticsSeen(old) => self.statics_seen = old,
+            Undo::ShownHands(old) => self.shown_hands = old,
             Undo::FramePushed => {
                 self.agenda.pop();
             }
@@ -2304,6 +2324,7 @@ impl GameState {
             Undo::LoopKeyWords(at, _) => Undo::LoopKeyWords(*at, self.loop_keys[*at as usize].words.clone()),
             Undo::LoopKeysSet(_) => Undo::LoopKeysSet(self.loop_keys.clone()),
             Undo::StaticsSeen(_) => Undo::StaticsSeen(self.statics_seen),
+            Undo::ShownHands(_) => Undo::ShownHands(self.shown_hands),
             Undo::FramePushed => Undo::FramePopped(self.agenda.last().expect("a frame").clone()),
             Undo::FramePopped(_) => Undo::FramePushed,
             Undo::FrameRemoved(at, _) => Undo::FrameInserted(*at),

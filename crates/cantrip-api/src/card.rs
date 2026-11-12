@@ -3392,6 +3392,9 @@ pub enum PlayRule {
     /// Benjamin Sisko, Besieged and Garruk's Horde. Every player sees the current top,
     /// subject to the announcement barrier of CR 401.5. This grants no play permission.
     RevealLibraryTop,
+    /// The selected players play with their hands revealed: Enduring Renewal, Revelation, Zur's Weirding.
+    /// The predicate is asked with the rule's source/controller and the player whose hand it opens.
+    HandRevealed(fn(&dyn Query, &Asker, PlayerId) -> bool),
     /// "As long as [condition], [rules]": the rules apply only while the condition holds, asked with the permanent as source
     /// and its controller. A Case's "Solved - [static ability]" means "As long as this Case is solved, [static ability]"
     /// (CR 702.169b): `cantrip_mechanics::solved::play_rules`.
@@ -4445,6 +4448,8 @@ pub struct CardTable {
     /// Which cards have play rules, and whether any does: land plays look for them only when one might.
     pub play_rules: Vec<bool>,
     pub any_play_rules: bool,
+    /// Definitions that list continuous hand visibility, including rules they can grant. Checked on live sources.
+    pub hand_visibility: Vec<bool>,
     /// Which cards list a play rule to give (`AbilityDef::PlayRule` in `delayed`), and whether any does: what objects were
     /// given is looked for only when one might have been.
     pub grants_play_rules: Vec<bool>,
@@ -5056,6 +5061,15 @@ impl CardTable {
         let exile_statics = cards.iter().any(|c| c.statics.iter().any(|s| s.from == ZoneKind::Exile));
         let play_rules: Vec<bool> = cards.iter().map(|c| !c.play_rules.is_empty()).collect();
         let any_play_rules = play_rules.iter().any(|&s| s);
+        fn opens_hand(rule: &PlayRule) -> bool {
+            match rule {
+                PlayRule::HandRevealed(_) => true,
+                PlayRule::While(_, rules) => rules.iter().any(opens_hand),
+                _ => false,
+            }
+        }
+        let hand_visibility = cards.iter().map(|c| c.play_rules.iter().any(opens_hand)
+            || c.delayed.iter().any(|a| matches!(a, AbilityDef::PlayRule(d) if opens_hand(&d.rule)))).collect();
         let grants_play_rules: Vec<bool> = cards.iter().map(|c| c.delayed.iter().any(|a| matches!(a, AbilityDef::PlayRule(_)))).collect();
         let any_granted_play_rules = grants_play_rules.iter().any(|&g| g);
         let replaces: Vec<bool> = cards.iter().map(|c| !c.replacements.is_empty() || !c.preventions.is_empty()).collect();
@@ -5157,6 +5171,7 @@ impl CardTable {
             exile_statics,
             play_rules,
             any_play_rules,
+            hand_visibility,
             grants_play_rules,
             any_granted_play_rules,
             replaces,
