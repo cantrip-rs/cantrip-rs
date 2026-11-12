@@ -396,3 +396,9 @@ including three-player defender choices. The generated runtime suite passes
 Chaos Lord distinguishing a new entry from a control change this turn. Quantity
 bounds and the AST schema remain unchanged. The next complete gate/benchmark
 batches this feature with ordinary mana-tap observers and counter metadata.
+
+The next generator-only recovery, Glyph of Delusion, also requires the named
+Glyph counter, appended at 93. Existing IDs 0–92 remain unchanged. The original
+source's false end-of-turn grant duration is corrected in MTGish; the native
+prerequisite supplies only its name. The three appended entries now occupy
+12 additional bytes in the existing dense counter array, before object padding.
