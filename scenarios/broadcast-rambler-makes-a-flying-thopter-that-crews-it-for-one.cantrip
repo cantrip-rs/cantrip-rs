@@ -1,0 +1,69 @@
+# Broadcast Rambler (5/4 Vehicle, Crew 1): "When this Vehicle enters, create a 1/1 colorless Thopter artifact creature token with
+# flying" (CR 111.1, 603.6a). The Thopter, whose power is exactly the 1 that Crew 1 needs, taps to crew it (CR 702.122a); Bot2's Savannah
+# Lions is not a creature Bot1 controls, so Bot1 cannot choose it, and the crewed Rambler is a 5/4 artifact creature. The Thopter first
+# attacks in the air for 1 on turn 3 and, tapped, leaves Bot1 nothing to crew with until turn 5 (a Crew 0 would not need it).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Broadcast Rambler
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Pearl
+Savannah Lions
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Broadcast Rambler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thopter Token.Types = Artifact; Creature
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Thopter Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+# The tapped Thopter is the only creature Bot1 has: nothing is left to crew with (CR 702.122a).
+! Bot1.Battlefield.Broadcast Rambler.Activate(Ability: Crew)
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Broadcast Rambler.Types = Artifact
+Bot1.Battlefield.Broadcast Rambler.Activate(Ability: Crew)
+! Bot1.Choose(Savannah Lions)
+Bot1.Choose(Thopter Token)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Thopter Token.Power = 1
+Bot1.Battlefield.Thopter Token.Toughness = 1
+Bot1.Battlefield.Thopter Token.Keywords = Flying
+Bot1.Battlefield.Thopter Token.Colors = (absent)
+Bot1.Battlefield.Thopter Token.Tapped = true
+Bot1.Battlefield.Broadcast Rambler.Types = Artifact; Creature
+Bot1.Battlefield.Broadcast Rambler.Power = 5
+Bot1.Battlefield.Broadcast Rambler.Toughness = 4
+Bot2.Battlefield.Savannah Lions.Tapped = false
+Bot2.Life = 19
