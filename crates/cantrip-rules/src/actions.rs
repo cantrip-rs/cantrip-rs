@@ -2336,11 +2336,12 @@ fn pay_permanents(cx: &mut Cx, player: PlayerId, cost: &Cost, chosen: &[ObjectId
     chosen.iter().copied().filter(|&id| cx.s().obj(id).became.is_some_and(|new| moved.contains(&new))).map(|id| (0, id)).collect()
 }
 
-/// Receipts belong to a spell or to one particular activation serial.
+/// Receipts belong to one spell, activation, resolution payment or combat declaration.
 #[derive(Clone, Copy)]
 enum PaymentScope {
     Spell,
     Resolution { payment: u32, payer: PlayerId },
+    Combat { payment: u32, payer: PlayerId, attacker: ObjectId, by: Option<Linked> },
     Ability { serial: u32, linked: Linked, paid: Option<CostFor>, by: Option<Linked>, granter: Option<ObjectId>, cycling: bool },
     ManaAbility { linked: Linked, by: Option<Linked>, granter: Option<ObjectId>, colors: Option<(usize, Option<Color>, bool)> },
     PlayerManaAbility,
@@ -2348,22 +2349,23 @@ enum PaymentScope {
 
 impl PaymentScope {
     fn paid_for(self) -> Option<CostFor> {
-        match self { Self::Spell => Some(CostFor::Spell), Self::Resolution { .. } => None, Self::Ability { paid, .. } => paid, Self::ManaAbility { .. } | Self::PlayerManaAbility => Some(CostFor::ManaAbility) }
+        match self { Self::Spell => Some(CostFor::Spell), Self::Resolution { .. } | Self::Combat { .. } => None, Self::Ability { paid, .. } => paid, Self::ManaAbility { .. } | Self::PlayerManaAbility => Some(CostFor::ManaAbility) }
     }
     fn linked(self) -> Option<Linked> {
-        match self { Self::Spell | Self::Resolution { .. } | Self::PlayerManaAbility => None, Self::Ability { linked, .. } | Self::ManaAbility { linked, .. } => Some(linked) }
+        match self { Self::Spell | Self::Resolution { .. } | Self::Combat { .. } | Self::PlayerManaAbility => None, Self::Ability { linked, .. } | Self::ManaAbility { linked, .. } => Some(linked) }
     }
     fn by(self) -> Option<Linked> {
-        match self { Self::Spell | Self::Resolution { .. } | Self::PlayerManaAbility => None, Self::Ability { by, .. } | Self::ManaAbility { by, .. } => by }
+        match self { Self::Spell | Self::Resolution { .. } | Self::PlayerManaAbility => None, Self::Ability { by, .. } | Self::ManaAbility { by, .. } | Self::Combat { by, .. } => by }
     }
     fn record(self, cx: &mut Cx, source: ObjectId, object: ObjectId, origin: CostOrigin, component: usize, part: CostPart) {
         match self {
-            Self::Spell | Self::Resolution { .. } | Self::Ability { .. } => {
+            Self::Spell | Self::Resolution { .. } | Self::Combat { .. } | Self::Ability { .. } => {
                 let receipt = cx.st().cost_receipt_push(cantrip_state::CostReceiptDetails { origin: matches!(self, Self::Spell).then_some(origin), component, part });
                 match self {
                     Self::Spell => cx.record(Event::CostObjectPaid { spell: source, object, receipt }),
                     Self::Resolution { payment, payer } => cx.record(Event::ResolutionCostObjectPaid { payment, source, payer, object, receipt }),
                     Self::Ability { serial, .. } => cx.record(Event::AbilityCostObjectPaid { serial, object, receipt }),
+                    Self::Combat { payment, payer, attacker, .. } => cx.record(Event::CombatCostObjectPaid { payment, source, attacker, payer, object, receipt }),
                     _ => unreachable!(),
                 }
             }
@@ -2388,6 +2390,8 @@ enum SourceText {
     ManaCost,
     /// The life an X is paid in.
     XLife,
+    /// The static source and the attack for which this separate fixed cost is due.
+    Combat { source: ObjectId, attacker: ObjectId, by: Option<Linked> },
 }
 
 /// A currently selected fixed cost operation. Grouped permanents stay one operation.
@@ -2434,6 +2438,13 @@ impl SpellPayment<'_> {
 }
 
 impl SpellPayment<'_> {
+    fn context(&self, source: ObjectId, scope: PaymentScope) -> (ObjectId, PaymentScope) {
+        match (self.source_text(), scope) {
+            (SourceText::Combat { source, attacker, by }, PaymentScope::Combat { payment, payer, .. }) =>
+                (source, PaymentScope::Combat { payment, payer, attacker, by }),
+            _ => (source, scope),
+        }
+    }
     /// Which part of the total cost it comes from, for its label (`source_label`).
     fn source_text(&self) -> SourceText {
         match self {
@@ -2454,6 +2465,7 @@ fn source_label(cx: &Cx, scope: PaymentScope, permission: Option<Grant>, name: &
         SourceText::Own => match scope {
             PaymentScope::Spell => format!("casting cost of {name}"),
             PaymentScope::Resolution { .. } => format!("resolution cost of {name}"),
+            PaymentScope::Combat { .. } => format!("cost to attack — {name}"),
             PaymentScope::Ability { .. } | PaymentScope::ManaAbility { .. } | PaymentScope::PlayerManaAbility => format!("activation cost of {name}"),
         },
         SourceText::Extra(origin) => match origin {
@@ -2467,6 +2479,7 @@ fn source_label(cx: &Cx, scope: PaymentScope, permission: Option<Grant>, name: &
         SourceText::Granted(ability, giver) => format!("{}: {}", cx.chars(giver).name, cx.cards().ability(ability).text()),
         SourceText::ManaCost => format!("mana cost of {name}"),
         SourceText::XLife => format!("additional cost of {name}"),
+        SourceText::Combat { source, attacker, .. } => format!("{} attacking — {}", cx.chars(attacker).name, cx.chars(source).name),
     }
 }
 
@@ -2535,7 +2548,7 @@ fn append_fixed_payments<'a>(out: &mut Vec<SpellPayment<'a>>, origin: CostOrigin
         if part.tap_creatures.is_some() {
             out.push(SpellPayment::TapCreatures { origin, component, cost: part, source_text: source_text });
         }
-        if matches!(scope, PaymentScope::Ability { .. } | PaymentScope::ManaAbility { .. } | PaymentScope::Resolution { .. }) {
+        if matches!(scope, PaymentScope::Ability { .. } | PaymentScope::ManaAbility { .. } | PaymentScope::Resolution { .. } | PaymentScope::Combat { .. }) {
             let granter = match scope { PaymentScope::Ability { granter, .. } | PaymentScope::ManaAbility { granter, .. } => granter, _ => None };
             if let Some((kind, n)) = part.remove_counters { out.push(SpellPayment::SourceCounters { origin, component, action: SourceCounters::Remove(kind, n), source_text: source_text }); }
             if let Some((kind, n)) = part.put_counters { out.push(SpellPayment::SourceCounters { origin, component, action: SourceCounters::Put(kind, n), source_text: source_text }); }
@@ -2634,6 +2647,11 @@ impl Footprint {
         };
         self.writes & other.reads != 0
             || other.writes & self.reads != 0
+            // Different overlapping removal choices can strand the later
+            // payment: sacrifice a land versus sacrifice an Island. Identical
+            // candidate sets still commute and do not add an ordering prompt.
+            || (self.act == Act::Removes && other.act == Act::Removes && overlap()
+                && (self.objects.iter().any(|o| !other.objects.contains(o)) || other.objects.iter().any(|o| !self.objects.contains(o))))
             || ((self.act == Act::Counters || other.act == Act::Counters) && overlap())
             || (matches!((self.act, other.act), (Act::Tap, Act::TakesTapped) | (Act::TakesTapped, Act::Tap)) && overlap())
             // Taking away first an object the other step could choose without taking it (behold a creature card, then
@@ -2646,6 +2664,7 @@ impl Footprint {
 
 /// What a step of a cost's payment may act on, as `pay_scheduled_costs` would pay it now.
 fn footprint(cx: &Cx, player: PlayerId, spell: ObjectId, scope: PaymentScope, taken: &[ObjectId], step: &SpellPayment<'_>) -> Footprint {
+    let (spell, scope) = step.context(spell, scope);
     let asker = Asker { instance: None, source: spell, controller: player, by: scope.by(), spell: matches!(scope, PaymentScope::Spell) };
     let hand = || -> Vec<ObjectId> { cx.s().zone(Zone::hand(player)).iter().copied().filter(|&id| id != spell && !taken.contains(&id)).collect() };
     let graveyard = || -> Vec<ObjectId> { cx.s().zone(Zone::graveyard(player)).iter().copied().filter(|&id| id != spell && !taken.contains(&id)).collect() };
@@ -2784,7 +2803,7 @@ fn canonical_step(remaining: &[SpellPayment<'_>], eligible: &[usize]) -> usize {
 /// Pays the parts of a total cost in the order the payer chooses (CR 601.2h): every kind of cost a spell's, an ability's or
 /// a resolving payment's total holds is one step, its mana one step paid from the pool once the mana abilities have had
 /// their window (CR 601.2g), and the order is asked only where it could matter (`order_matters`).
-fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: PaymentScope, cost: &Cost, chosen: &[ObjectId], extra: &[(CostOrigin, Cost)], extra_chosen: &[Vec<ObjectId>], options: &[Cost], option_chosen: &[Vec<ObjectId>], option_origins: &[CostOrigin], paid_options: &[(AbilityRef, ObjectId)], permission: Option<Grant>, phyrexian_life: u32, x_life: u32, owed: ManaCost, helpers: &Helpers, reducer: Option<ObjectId>, x: u32, sacrificed_any_number: u32, teamwork: bool, mut mana_script: Option<Option<Vec<crate::takeback::Step>>>) -> R<(Vec<ObjectId>, Vec<ObjectId>, Option<Target>, ManaPool, u8, Vec<ObjectId>, Option<u32>, Option<Subtype>, Option<bool>)> {
+fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: PaymentScope, cost: &Cost, chosen: &[ObjectId], extra: &[(CostOrigin, Cost)], extra_chosen: &[Vec<ObjectId>], options: &[Cost], option_chosen: &[Vec<ObjectId>], option_origins: &[CostOrigin], paid_options: &[(AbilityRef, ObjectId)], permission: Option<Grant>, phyrexian_life: u32, x_life: u32, owed: ManaCost, helpers: &Helpers, reducer: Option<ObjectId>, x: u32, sacrificed_any_number: u32, teamwork: bool, mut mana_script: Option<Option<Vec<crate::takeback::Step>>>, combat: &[static_rules::LockedAttackPayment]) -> R<(Vec<ObjectId>, Vec<ObjectId>, Option<Target>, ManaPool, u8, Vec<ObjectId>, Option<u32>, Option<Subtype>, Option<bool>)> {
     let mut remaining = Vec::new();
     let crafting = cost.materials.is_some();
     append_fixed_payments(&mut remaining, CostOrigin::CastingWay, cost, chosen, SourceText::Own, x, sacrificed_any_number, scope, spell, crafting, 0);
@@ -2799,6 +2818,13 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
         let (ability, giver) = paid_options[index];
         let label = SourceText::Granted(ability, giver);
         append_fixed_payments(&mut remaining, *origin, part, objects, label, x, sacrificed_any_number, scope, spell, crafting, 0);
+    }
+    let mut combat_offset = 0;
+    for payment in combat {
+        let text = SourceText::Combat { source: payment.source, attacker: payment.attacker, by: payment.by };
+        let combat_scope = PaymentScope::Combat { payment: match scope { PaymentScope::Combat { payment, .. } => payment, _ => unreachable!() }, payer: player, attacker: payment.attacker, by: payment.by };
+        append_fixed_payments(&mut remaining, CostOrigin::PrintedAdditional, &payment.cost, payment.chosen.as_slice(), text, 0, 0, combat_scope, payment.source, false, combat_offset);
+        combat_offset += part_count(&payment.cost);
     }
     for (position, payment) in remaining.iter_mut().enumerate() {
         if let SpellPayment::ChooseObject { declaration, .. } = payment { *declaration = position; }
@@ -2819,15 +2845,17 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
     let mut chosen_object_members: Vec<(usize, ObjectId)> = Vec::new();
     let mut mana_adds_nothing = None;
     let mut pay_next = |cx: &mut Cx, remaining: &mut Vec<SpellPayment<'_>>| -> R<bool> {
-        // Whether `player` controls the permanent `id` (`Query::permanents_of`), asked without listing them.
-        let controls = |id: ObjectId| cx.s().obj(id).zone.is(ZoneKind::Battlefield) && cx.s().obj(id).controller == player;
-        let source_usable = || live(cx.s(), spell) && cx.s().obj(spell).zone.is(ZoneKind::Battlefield)
-            && (controls(spell) || matches!(scope, PaymentScope::Ability { .. } | PaymentScope::ManaAbility { .. }));
-        let asker = Asker { instance: None, source: spell, controller: player, by: scope.by(), spell: matches!(scope, PaymentScope::Spell) };
         // CR 601.2h: every cost with a random element is paid after all other costs.
         let has_nonrandom = remaining.iter().any(|step| !step.has_random_element());
         let source_tap_pending = remaining.iter().any(|step| matches!(step, SpellPayment::TapSelf { .. }));
-        let eligible: Vec<usize> = remaining.iter().enumerate().filter_map(|(i, step)| match step {
+        let eligible: Vec<usize> = remaining.iter().enumerate().filter_map(|(i, step)| {
+            let (spell, scope) = step.context(spell, scope);
+            // Whether `player` controls the permanent `id` (`Query::permanents_of`), asked without listing them.
+            let controls = |id: ObjectId| live(cx.s(), id) && cx.s().obj(id).zone.is(ZoneKind::Battlefield) && cx.s().obj(id).controller == player;
+            let source_usable = || live(cx.s(), spell) && cx.s().obj(spell).zone.is(ZoneKind::Battlefield)
+                && (controls(spell) || matches!(scope, PaymentScope::Ability { .. } | PaymentScope::ManaAbility { .. }));
+            let asker = Asker { instance: None, source: spell, controller: player, by: scope.by(), spell: matches!(scope, PaymentScope::Spell) };
+            match step {
             SpellPayment::Life { amount, .. } => can_pay_life_for(cx, player, *amount, scope.paid_for()).then_some(i),
             SpellPayment::Energy { amount, .. } => (u32::from(cx.s().player(player).energy()) >= *amount).then_some(i),
             SpellPayment::CountersAmong { cost, .. } => {
@@ -2938,13 +2966,12 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                     else { objects.iter().copied().all(eligible) };
                 (!conflicts && can_pay).then_some(i)
             }
-        }).collect();
+        }}).collect();
         if eligible.is_empty() { return Err(Stop::Cancel); }
         let position = if eligible.len() == 1 { 0 } else if !order_matters(cx, player, spell, scope, &taken, remaining, &eligible) {
             canonical_step(remaining, &eligible)
         } else {
-            let name = cx.chars(spell).name;
-            let choices = eligible.iter().map(|&i| { let source_text = source_label(cx, scope, permission, name, remaining[i].source_text()); match &remaining[i] {
+            let choices = eligible.iter().map(|&i| { let (spell, scope) = remaining[i].context(spell, scope); let name = cx.chars(spell).name; let source_text = source_label(cx, scope, permission, name, remaining[i].source_text()); match &remaining[i] {
                 SpellPayment::Life { amount, .. } => CostPaymentChoice { label: format!("Pay {amount} life — {source_text}"), objects: Vec::new(), kind: CostPaymentKind::Life },
                 SpellPayment::Energy { amount, .. } => CostPaymentChoice { label: format!("Pay {amount} energy — {source_text}"), objects: Vec::new(), kind: CostPaymentKind::Energy },
                 SpellPayment::CountersAmong { cost, .. } => CostPaymentChoice { label: format!("Remove {} counters — {source_text}", cost.remove_counters_among.expect("counter component").count), objects: Vec::new(), kind: CostPaymentKind::Counters },
@@ -3048,7 +3075,9 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 _ => return Err(Stop::Cancel),
             }
         };
-        match remaining.remove(eligible[position]) {
+        let step = remaining.remove(eligible[position]);
+        let (spell, scope) = step.context(spell, scope);
+        match step {
             SpellPayment::Life { amount, .. } => { ops::change_life(cx, player, -life_paid(amount)); }
             SpellPayment::Energy { amount, .. } => { ops::change_energy(cx, player, -(amount as i32), player); }
             SpellPayment::CountersAmong { origin, component, cost, .. } => {
@@ -3117,7 +3146,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 if let Some(at) = cx.s().stack.iter().rposition(|item| match scope {
                     PaymentScope::Spell => item.kind == StackKind::Spell && item.object == spell,
                     PaymentScope::Ability { serial, .. } => item.kind == StackKind::Activated && item.serial == serial,
-                    PaymentScope::ManaAbility { .. } | PaymentScope::PlayerManaAbility | PaymentScope::Resolution { .. } => false,
+                    PaymentScope::ManaAbility { .. } | PaymentScope::PlayerManaAbility | PaymentScope::Resolution { .. } | PaymentScope::Combat { .. } => false,
                 }) {
                     let mut item = cx.s().stack[at];
                     let old_count = chosen_object_members.len();
@@ -3149,7 +3178,7 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 if let Some(at) = cx.s().stack.iter().rposition(|item| match scope {
                     PaymentScope::Spell => item.kind == StackKind::Spell && item.object == spell,
                     PaymentScope::Ability { serial, .. } => item.kind == StackKind::Activated && item.serial == serial,
-                    PaymentScope::ManaAbility { .. } | PaymentScope::PlayerManaAbility | PaymentScope::Resolution { .. } => false,
+                    PaymentScope::ManaAbility { .. } | PaymentScope::PlayerManaAbility | PaymentScope::Resolution { .. } | PaymentScope::Combat { .. } => false,
                 }) {
                     add_revealed_to_item(cx, at, &revealed);
                 }
@@ -10477,7 +10506,7 @@ fn cast(
     let extra_selected: Vec<Vec<ObjectId>> = vec![Vec::new(); extra_parts.len()];
     let option_chosen: Vec<Vec<ObjectId>> = vec![Vec::new(); option_costs.len()];
     let teamwork = item.paid > 0 && def.optional_cost.is_some_and(|o| o.cost.tap_creatures.is_some());
-    let (_way_paid, _exiled, way_attacking, mut spent, mut restrictions, taken, variable_paid, beheld_type, _) = pay_scheduled_costs(cx, player, spell, PaymentScope::Spell, &cost, &chosen, &extra_parts, &extra_selected, &option_costs, &option_chosen, &option_origins, &paid_options, by.by, life, u32::from(x_life), owed, &helpers, reducer, u32::from(item.x), sacrificed_any_number, teamwork, None)?;
+    let (_way_paid, _exiled, way_attacking, mut spent, mut restrictions, taken, variable_paid, beheld_type, _) = pay_scheduled_costs(cx, player, spell, PaymentScope::Spell, &cost, &chosen, &extra_parts, &extra_selected, &option_costs, &option_chosen, &option_origins, &paid_options, by.by, life, u32::from(x_life), owed, &helpers, reducer, u32::from(item.x), sacrificed_any_number, teamwork, None, &[])?;
     if let Some(announced) = beheld_type { item.choice = StackItem::announce_type(announced); }
     // The mana the assisting player spent was spent to cast it too (CR 601.2h, 106.6).
     if let Some(a) = assisted {
@@ -12269,7 +12298,7 @@ fn activate(
     let scope = PaymentScope::Ability { serial, linked: cx.linked(&item), paid, by, granter, cycling: def.cycling };
     let extra: Vec<_> = chosen_cost.into_iter().map(|part| (CostOrigin::CastingWay, part)).collect();
     let extra_chosen = vec![Vec::new(); extra.len()];
-    let (chosen, symbol_exiles, attacking, _, _, _, _, _, _) = pay_scheduled_costs(cx, player, source, scope, &def.cost, &[], &extra, &extra_chosen, &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(item.x), 0, false, None)?;
+    let (chosen, symbol_exiles, attacking, _, _, _, _, _, _) = pay_scheduled_costs(cx, player, source, scope, &def.cost, &[], &extra, &extra_chosen, &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(item.x), 0, false, None, &[])?;
 
     let at = cx.s().stack.len() - 1;
     let mut with = cx.s().stack[at];
@@ -12647,7 +12676,7 @@ fn activate_mana_as(
         }
 
         helpers.abilities_closed = true;
-        pay_scheduled_costs(cx, player, source, scope, &def.cost, &chosen, &[], &[], &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(x.unwrap_or(0)), 0, false, script)
+        pay_scheduled_costs(cx, player, source, scope, &def.cost, &chosen, &[], &[], &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(x.unwrap_or(0)), 0, false, script, &[])
     })();
     if !mana.is_zero() { crate::takeback::end_paying(cx.g); }
     let (_, _, _, _, _, _, _, _, pending_color) = payment?;
@@ -12921,7 +12950,7 @@ fn activate_player_mana_effect(cx: &mut Cx, player: PlayerId, source: ObjectId, 
             mana_activation_window(cx, player, source, mana, &helpers, 0, true)?;
         }
         helpers.abilities_closed = true;
-        pay_scheduled_costs(cx, player, source, PaymentScope::PlayerManaAbility, &def.cost, &[], &[], &[], &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(x.unwrap_or(0)), sacrificed_any_number, false, script)
+        pay_scheduled_costs(cx, player, source, PaymentScope::PlayerManaAbility, &def.cost, &[], &[], &[], &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(x.unwrap_or(0)), sacrificed_any_number, false, script, &[])
     })();
     if !mana.is_zero() { crate::takeback::end_paying(cx.g); }
     payment?;
@@ -14298,6 +14327,24 @@ pub(crate) fn pay_mana_with(cx: &mut Cx, player: PlayerId, source: ObjectId, tot
     Ok(pay_mana_used(cx, player, source, total, helpers)?.0)
 }
 
+/// Pay the locked attack total with the same scheduler as spells and abilities.
+/// Costs stay locked if a taxing permanent leaves while mana is being made.
+pub(crate) fn pay_attack_costs(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: ManaCost, fixed: &[static_rules::LockedAttackPayment], attackers: &[ObjectId]) -> R<()> {
+    if fixed.is_empty() { return pay_mana_with(cx, player, source, total, &Helpers { attackers, ..Helpers::NONE }).map(|_| ()); }
+    let life = if total.phyrexian != [0; 5] { announce_life(cx, player, source, &mut total, AnyMana::No, None)? } else { 0 };
+    if total.twobrid != [0; 5] { announce_twobrids(cx, player, source, &mut total, AnyMana::No)?; }
+    if !can_pay_life_for(cx, player, life, None) { return Err(Stop::Cancel); }
+    let helpers = Helpers { attackers, ..Helpers::NONE };
+    if !total.is_zero() { mana_activation_window(cx, player, source, total, &helpers, life, false)?; }
+    let helpers = Helpers { abilities_closed: true, ..helpers };
+    let payment = cx.g.log.len() as u32;
+    cx.record(Event::CombatPaymentBegan { payment, payer: player });
+    pay_scheduled_costs(cx, player, source,
+        PaymentScope::Combat { payment, payer: player, attacker: ObjectId::NONE, by: None },
+        &Cost::NONE, &[], &[], &[], &[], &[], &[], &[], None, life, 0, total, &helpers, None, 0, 0, false, None, fixed)?;
+    Ok(())
+}
+
 /// `pay_mana_with`, and what the mana spent does to what it paid for (`ManaRestriction::effects`, CR 106.6).
 pub(crate) fn pay_mana_used(cx: &mut Cx, player: PlayerId, source: ObjectId, total: ManaCost, helpers: &Helpers) -> R<(ManaPool, u8)> {
     if !helpers.mana_ability {
@@ -15059,7 +15106,7 @@ fn pay_resolution_cost(cx: &mut Cx, payer: PlayerId, source: ObjectId, cost: &Co
     cx.record(Event::ResolutionPaymentBegan { payment, source, payer, resolving });
     let (_, _, _, _, _, _, variable_paid, _, _) = pay_scheduled_costs(
         cx, payer, source, PaymentScope::Resolution { payment, payer }, cost, &[], &[], &[], &[], &[], &[], &[], None,
-        extra_life, 0, total, &helpers, None, u32::from(x), 0, false, None,
+        extra_life, 0, total, &helpers, None, u32::from(x), 0, false, None, &[],
     )?;
     Ok(u32::try_from(variable_paid.unwrap_or(0)).unwrap_or(u32::MAX))
 }

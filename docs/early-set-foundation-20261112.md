@@ -449,3 +449,36 @@ Evidence is retained under `/mnt/vizier/early-set-foundation-20261112`, includin
 `workspace-fifteen-tests-rerun.log`, `generator-fifteen-suite.log`,
 `generator-player-values-native-runtime-final.log`, the 193-module compile log
 and the sequential `benchmark-fifteen-*-control.log` files.
+
+## Fixed nonmana attack costs
+
+Flooded Woodlands, Reclamation and Leviathan share a declaration payment
+procedure, exposed as `CardDef::attack_cost_rules: &[AttackPayment]`. Each
+matching attack owes its own fixed `Cost`. The engine keeps each rule's source
+and linked text, locks the total after attackers tap and optional costs are
+announced, opens the mana window when the total includes mana, then uses the
+existing cost scheduler to pay every component. An abandoned declaration rolls
+back sacrifices, taps, mana payments and payment receipts together. A cost never
+forces an otherwise required attacker to attack.
+
+The scheduler now recognizes different overlapping removal choices, such as a
+land and an Island, as order-sensitive. Enlist joins that scheduler when a fixed
+attack cost is owed: a land creature can be tapped before it is sacrificed.
+Old object identities cannot pay later taps, and a chosen attacker that left the
+battlefield during payment never becomes attacking. Each combat payment and its
+object receipts are recorded in history, including their imposing source and
+attacker; they are distinct from spell and resolution receipts.
+
+Eleven focused regressions and all 1,490 rules tests pass (one existing test
+ignored). MTGish's generated runtime probe covers all three printed cards and
+62 earlier scenarios. Its fixed audit now has 215 generation-ready candidates
+and 71 gapped cards; these candidates are not installed card implementations.
+The normal declaration advice still describes the mana part of attack costs;
+nonmana valuation in client/AI advice is not supplied by this primitive. An
+entry with zero mana still denotes a cost for requirement validation.
+
+No per-object storage or quantity width changes. Locking scans live static
+sources and chosen attacks, allocating no lists when there is no active tax.
+Evidence and final receipts are kept in MTGish's
+`docs/cantrip-foundation-nonmana-combat-20261112.md` and proof JSON. Complete
+workspace test gates remain batched for the end of the shared-family milestone.

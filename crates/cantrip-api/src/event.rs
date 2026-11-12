@@ -134,6 +134,10 @@ pub enum Event {
     ResolutionPaymentBegan { payment: u32, source: ObjectId, payer: PlayerId, resolving: Option<u32> },
     /// An object paid one component of that resolution payment, identified before any zone change.
     ResolutionCostObjectPaid { payment: u32, source: ObjectId, payer: PlayerId, object: ObjectId, receipt: u32 },
+    /// One locked total payment for a declaration of attackers (CR 508.1h-j).
+    CombatPaymentBegan { payment: u32, payer: PlayerId },
+    /// An object paid a component imposed by `source` for `attacker`'s attack.
+    CombatCostObjectPaid { payment: u32, source: ObjectId, attacker: ObjectId, payer: PlayerId, object: ObjectId, receipt: u32 },
     /// An ability copy's serial and the serial it copied, including copies of copies.
     AbilityCopied { copy: u32, original: u32 },
     /// A spell became cast (CR 601.2i), with how many spells its caster has cast this turn, this one included. `options` has a
@@ -576,6 +580,8 @@ impl Event {
             Event::AbilityCostObjectPaid { object: paid, .. } => paid == object,
             Event::ResolutionPaymentBegan { source, .. } => source == object,
             Event::ResolutionCostObjectPaid { source, object: paid, .. } => source == object || paid == object,
+            Event::CombatPaymentBegan { .. } => false,
+            Event::CombatCostObjectPaid { source, attacker, object: paid, .. } => source == object || attacker == object || paid == object,
             Event::AbilityCopied { .. } | Event::ActivatedAs { .. } => false,
             Event::PaidAlternative { spell, .. } | Event::PaidRepeatedly { spell, .. } => spell == object,
             Event::LandPlayed { land, .. } => land == object,

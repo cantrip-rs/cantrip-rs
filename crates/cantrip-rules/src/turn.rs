@@ -985,19 +985,26 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
         ops::tap_together(cx, &tapping);
         // CR 508.1g: the optional costs to attack the active player chooses to pay.
         let options = choose_attack_options(cx, active, &attacks)?;
-        let RequestKind::DeclareAttackers { costs, .. } = &kind else { unreachable!() };
+        let locked = crate::static_rules::lock_attack_costs(cx, &attacks);
+        let mut fixed = locked.fixed;
+        let scheduled_options = !fixed.is_empty();
+        if scheduled_options {
+            // Enlist may tap a land creature before a mandatory sacrifice
+            // takes it. It belongs to the same payment ordering.
+            for o in &options {
+                let (cost, chosen) = match o.option {
+                    AttackOption::Enlist => (Cost::tap_untapped(1, enlist_cost_creature), Some(o.tapped)),
+                    AttackOption::Exert => (Cost { exert: true, ..Cost::NONE }, None),
+                };
+                fixed.push(crate::static_rules::LockedAttackPayment { source: o.attacker, attacker: o.attacker, chosen, by: None, cost });
+            }
+        }
         // CR 508.1h: the total cost to attack, locked in now; mana abilities activated while paying it (CR 508.1i) change
         // nothing of it. CR 508.1j: it is paid all at once.
-        let total = AttackCost::total(costs, &attacks);
-        if !total.is_zero() {
-            let paying: Vec<ObjectId> = attacks.iter().filter(|&&(a, t)| !AttackCost::free(costs, a, t)).map(|a| a.0).collect();
-            let source = costs
-                .iter()
-                .find(|c| attacks.contains(&(c.attacker, c.target)))
-                .map(|c| c.source)
-                .expect("a cost to attack has a source");
-            let helpers = actions::Helpers { attackers: &paying, ..actions::Helpers::NONE };
-            match actions::pay_mana_with(cx, active, source, total, &helpers) {
+        let total = locked.mana;
+        if !total.is_zero() || !fixed.is_empty() {
+            let source = locked.source.expect("a cost to attack has a source");
+            match actions::pay_attack_costs(cx, active, source, total, &fixed, &locked.attackers) {
                 Ok(_) => {}
                 Err(Stop::Cancel) => {
                     crate::takeback::take_back(cx, mark, log_mark, since);
@@ -1008,11 +1015,11 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
         }
         // CR 508.1j: the optional costs are paid with the rest. A creature to be tapped that a mana ability tapped, or that is
         // gone, can't be: the declaration is illegal and taken back (CR 508.1, 733.1).
-        if !options.iter().all(|o| o.tapped == ObjectId::NONE || enlistable_now(cx, active, o.tapped)) {
+        if !scheduled_options && !options.iter().all(|o| o.tapped == ObjectId::NONE || enlistable_now(cx, active, o.tapped)) {
             crate::takeback::take_back(cx, mark, log_mark, since);
             continue;
         }
-        for o in &options {
+        for o in options.iter().filter(|_| !scheduled_options) {
             match o.option {
                 AttackOption::Enlist => ops::tap(cx, o.tapped),
                 AttackOption::Exert => ops::exert(cx, o.attacker, active),
@@ -1023,6 +1030,9 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
     let (attacks, bands, options) = attacks;
     let mut attackers = Vec::new();
     for ((id, target), band) in attacks.into_iter().zip(bands) {
+        // Paying may sacrifice an attacking land creature or move/control a
+        // chosen creature. Only the still-present creatures become attacking.
+        if !live(cx.s(), id) || !cx.s().obj(id).zone.is(ZoneKind::Battlefield) || cx.s().obj(id).controller != active || !cx.chars(id).is(CardType::Creature) { continue; }
         // Each names a player or a planeswalker or battle of a defending player (CR 508.1b), which the declaration was checked
         // against: its defending player is the one that names (CR 508.5).
         let Some(defending) = defending_player(cx, target) else { continue };
@@ -1129,9 +1139,14 @@ fn choose_attack_options(cx: &mut Cx, active: PlayerId, attacks: &[(ObjectId, Ta
     Ok(paid)
 }
 
-/// Whether `id` may be tapped for an enlist ability of a creature `player` attacks with (CR 702.154a), past not attacking and
-/// not being tapped for another: an untapped creature `player` controls that has haste or has been under their control
-/// continuously since the turn began.
+/// The creature/haste part of a locked enlist payment's filter.
+fn enlist_cost_creature(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
+    let obj = q.obj(id);
+    let chars = q.chars(id);
+    chars.is(CardType::Creature) && (chars.has(Keyword::Haste) || obj.controlled_since < q.state().player(obj.controller).turn_began)
+}
+
+/// Whether the optional enlist declaration can choose this untapped creature.
 fn enlistable_now(cx: &Cx, player: PlayerId, id: ObjectId) -> bool {
     let obj = cx.s().obj(id);
     obj.zone == Zone::BATTLEFIELD
