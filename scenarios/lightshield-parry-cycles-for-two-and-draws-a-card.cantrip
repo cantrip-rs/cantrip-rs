@@ -1,0 +1,32 @@
+# Lightshield Parry: "Cycling {2}" (CR 702.29a): {2}, discard it from hand: draw a card. Bot1 pays the generic {2} with two
+# Plains on turn 3 and the Parry ends in the graveyard with one extra card drawn (a Plains, after the turn-3 draw of Mountain).
+
+[Bot1 Deck]
+Plains
+Plains
+Memnite
+Lightshield Parry
+Plains
+Plains
+Plains
+Mountain
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Hand.Lightshield Parry.Activate(Ability: Cycling)
+Bot1.Battlefield.Plains#2.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Graveyard = Lightshield Parry
+Bot1.Hand = Memnite; Mountain; Plains; Plains; Plains; Plains

@@ -1,0 +1,39 @@
+# Lightshield Parry: if its only target is illegal as it would resolve, it does not resolve and does nothing (CR 608.2b).
+# On turn 3 Bot1 casts it on Bot2's Memnite and then Bolts that Memnite in response; the Bolt resolves first and kills it
+# (CR 704.5g), the Parry then fizzles and goes to the graveyard (CR 608.2b), and nothing is left pumped.
+
+[Bot1 Deck]
+Mountain
+Plains
+Lightning Bolt
+Lightshield Parry
+Plains x16
+Mountain x1
+
+[Bot2 Deck]
+Memnite
+Plains x19
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Lightshield Parry.Cast(Bot2.Battlefield.Memnite)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Graveyard = Lightshield Parry; Lightning Bolt
+Bot2.Graveyard = Memnite
+Bot2.Battlefield = 
+Stack = 
