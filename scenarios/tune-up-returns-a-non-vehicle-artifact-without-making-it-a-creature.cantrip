@@ -1,0 +1,51 @@
+# Tune Up: only a Vehicle becomes a creature. Bot2
+# Shatters Bot1's Mox Jet on turn 2; Tune Up on turn 3, paid with Mox Pearl, Sapphire, Emerald and Ruby, returns it as a plain
+# artifact, not a creature.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Mox Ruby
+Tune Up
+Mountain
+Mountain x13
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Shatter
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Mox Jet)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Mox Jet
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tune Up.Cast(Bot1.Graveyard.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Tune Up
+Bot1.Battlefield.Mox Jet.Types = Artifact
+Bot1.Battlefield.Mox Jet.Power = (absent)
+Bot1.Battlefield.Mox Jet.Tapped = false
