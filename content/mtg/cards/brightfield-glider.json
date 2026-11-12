@@ -1,0 +1,11 @@
+{
+  "name": "Brightfield Glider",
+  "manaCost": "{W}",
+  "type": "Creature — Possum Mount",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Vigilance\nWhenever this creature attacks while saddled, it gets +1/+2 and gains flying until end of turn.\nSaddle 3 (Tap any number of other creatures you control with total power 3 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}

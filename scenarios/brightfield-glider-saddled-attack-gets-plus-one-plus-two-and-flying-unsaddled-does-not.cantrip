@@ -1,0 +1,60 @@
+# Brightfield Glider: "Whenever this creature attacks while saddled, it gets +1/+2 and gains flying until end of turn" (CR 702.171b, 611.2a, 702.9b).
+# Turn 3: Saddle 3 is refused with Savannah Lions (power 2) alone, then allowed once Mother of Runes (power 1) joins; the saddled Glider attacks as a 2/3
+# flier the Wall of Wood cannot block and Bot2 takes 2. Turn 5: unsaddled, the Glider attacks as a plain 1/1, the Wall blocks it, and Bot2 takes nothing.
+
+[Bot1 Deck]
+Brightfield Glider
+Mox Pearl
+Plains
+Plains
+Savannah Lions
+Mother of Runes
+Plains
+Plains x15
+
+[Bot2 Deck]
+Forest
+Wall of Wood
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Brightfield Glider.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Wall of Wood.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+! Bot1.Battlefield.Brightfield Glider.Activate
+Bot1.Hand.Mother of Runes.Cast
+Bot1.Battlefield.Brightfield Glider.Activate
+Bot1.Choose(Savannah Lions; Mother of Runes)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Brightfield Glider > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Brightfield Glider.Power = 2
+? Bot1.Battlefield.Brightfield Glider.Toughness = 3
+? Bot1.Battlefield.Brightfield Glider.Keywords = Flying; Vigilance
+! Bot2.Block(Wall of Wood > Brightfield Glider)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Brightfield Glider > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Brightfield Glider.Power = 1
+Bot2.Block(Wall of Wood > Brightfield Glider)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Brightfield Glider.Toughness = 1
