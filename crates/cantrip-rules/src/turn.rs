@@ -520,12 +520,19 @@ pub fn begin_step(cx: &mut Cx) -> R<Flow> {
     let turn = cx.s().turn;
     let active = turn.active;
     if turn.step() != Step::Untap {
+        // CR 103.8a skips the first draw STEP, including its triggers and priority, not just its draw action.
+        let first_draw = turn.step() == Step::Draw && turn.number == 1 && active == turn.starting && cx.s().players.len() == 2 && !turn.phase_additional;
+        if first_draw || crate::static_rules::skips_step(cx, active, turn.step()) {
+            return Ok(Flow::Done);
+        }
         crate::settle::step_began(cx, turn.step());
     }
     match turn.step() {
         Step::Untap => {
             if turn.phase_additional {
-                // CR 500.8, 501.1: another beginning phase in this same turn runs untap/upkeep/draw again.
+                // Another beginning phase has the same skip rules and step deadlines, without beginning another turn.
+                if crate::static_rules::skips_step(cx, active, Step::Untap) { return Ok(Flow::Done); }
+                crate::settle::expire_step_deadlines(cx, Step::Untap);
                 crate::phasing::untap_step(cx, active);
                 crate::day_night::check_untap_step(cx)?;
                 untap_step(cx, active)?;
@@ -541,7 +548,6 @@ pub fn begin_step(cx: &mut Cx) -> R<Flow> {
                 });
                 return Ok(Flow::Done);
             }
-            crate::settle::expire_step_deadlines(cx, Step::Untap);
             // The turn begins: the control of a player for the turn before ends (CR 723.1), lasting through its cleanup and
             // any turn skipped since, and the effects waiting to control this turn's player during it apply.
             let controllers: Vec<PlayerId> = (0..cx.s().players.len()).map(|i| cx.s().player_controller(PlayerId(i as u8))).collect();
@@ -559,14 +565,10 @@ pub fn begin_step(cx: &mut Cx) -> R<Flow> {
             // How many turns a player has taken is asked of the history (`cantrip_mechanics::history::in_your_first_turns`).
             // Whether it is an extra turn is part of its beginning (CR 500.7: "haven't begun an extra turn this game").
             cx.record(Event::TurnBegan { player: active, extra: turn.extra != 0 });
-            // CR 502.1: first, the active player's phased-out permanents phase in.
-            crate::phasing::untap_step(cx, active);
-            // CR 502.2: the untap step's second turn-based action reads what the previous turn's active player cast,
-            // before the counts are cleared for this turn.
-            crate::day_night::check_untap_step(cx)?;
             // "Until your next turn" ends as that turn begins (CR 611.2b).
             if cx.s().effects.iter().any(|e| e.duration == Duration::UntilNextTurnOf(active)) {
                 cx.st().effects_retain(|e| e.duration != Duration::UntilNextTurnOf(active));
+                ops::settle_lasting_and_control(cx);
             }
             // The same for a delayed ability that lasts until then (CR 603.7b).
             for at in (0..cx.s().delayed.len()).rev() {
@@ -581,16 +583,19 @@ pub fn begin_step(cx: &mut Cx) -> R<Flow> {
                     cx.st().effect_set(at, effect);
                 }
             }
+            // The turn begins even when its first step is skipped (CR 500.11, 614.10a).
+            // Turn-bound durations ended above; skipped untap-step deadlines, phasing, day/night, exert and untaps wait.
+            if crate::static_rules::skips_step(cx, active, Step::Untap) {
+                return Ok(Flow::Done);
+            }
+            crate::settle::expire_step_deadlines(cx, Step::Untap);
+            // CR 502.1-2: phasing, then day/night, before the simultaneous untap.
+            crate::phasing::untap_step(cx, active);
+            crate::day_night::check_untap_step(cx)?;
             untap_step(cx, active)?;
             return Ok(Flow::Done);
         }
-        Step::Draw => {
-            // CR 103.8a: the player who goes first skips the draw of their first turn (in a two-player game).
-            let skip = turn.number == 1 && active == turn.starting && cx.s().players.len() == 2 && !turn.phase_additional;
-            if !skip {
-                ops::draw_cards(cx, active, 1);
-            }
-        }
+        Step::Draw => ops::draw_cards(cx, active, 1),
         Step::PrecombatMain => ops::add_lore_counters(cx),
         Step::DeclareAttackers => declare_attackers(cx)?,
         Step::DeclareBlockers => declare_blockers(cx)?,
