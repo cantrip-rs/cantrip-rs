@@ -1,0 +1,29 @@
+# Detention Chariot's "Cycling {W}" (CR 702.29a) is paid with white mana only: a Mox Jet (black) is not enough, a Mox Pearl is. The
+# card goes to the graveyard and its controller draws the Forest from the top of the library.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Detention Chariot
+Island x4
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Detention Chariot.Activate(Ability: Cycling; Mana: short)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Detention Chariot.Activate(Ability: Cycling)
+? Bot1.Mana = {B}
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Detention Chariot
+Bot1.Hand = Forest; Island; Island; Island; Island
+Bot1.Library.Count = 12

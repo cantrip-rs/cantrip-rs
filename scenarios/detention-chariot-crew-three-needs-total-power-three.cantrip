@@ -1,0 +1,57 @@
+# Detention Chariot's "Crew 3" (CR 702.122a): Savannah Lions (power 2) alone cannot crew the 6/6 Vehicle, and Zephyr Sprite (power 1,
+# summoning sick, which does not matter for a crew cost) added to it makes exactly 3. The Chariot, cast on turn 1 with nothing to
+# exile (its enters trigger has no target and is not put on the stack, CR 603.3d), is then an artifact creature.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Plains
+Detention Chariot
+Savannah Lions
+Zephyr Sprite
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Detention Chariot.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Detention Chariot.Activate(Ability: Crew)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Detention Chariot.Activate(Ability: Crew)
+! Bot1.Choose(Savannah Lions)
+Bot1.Choose(Savannah Lions; Zephyr Sprite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Detention Chariot.Types = Artifact; Creature
+Bot1.Battlefield.Detention Chariot.Power = 6
+Bot1.Battlefield.Savannah Lions.Tapped = true
+Bot1.Battlefield.Zephyr Sprite.Tapped = true

@@ -1,0 +1,48 @@
+# Detention Chariot's "artifact or creature an opponent controls" (CR 115.1): Bot2's Mox Pearl is the only legal target (Bot1's own Mox
+# Pearl is not one, so it is chosen automatically), and an artifact that is not a creature is exiled until the Chariot leaves (CR 610.3).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Plains
+Detention Chariot
+Plains x13
+
+[Bot2 Deck]
+Mox Pearl
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Detention Chariot.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Mox Pearl
+Bot2.Battlefield.Count = 0
+Bot1.Battlefield.Detention Chariot.Types = Artifact
+Bot1.Battlefield.Mox Pearl.Tapped = true
