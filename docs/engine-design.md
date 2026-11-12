@@ -3947,3 +3947,11 @@ labels and callback identity are never classifiers. Shared factories also tag
 instances granted from a card's delayed list. An Oracle-consistency test holds
 all implemented printed keywords to those tags. No historical counts or
 per-object family collections are stored.
+### Random discard as a cost
+
+A `Cost::discard_at_random` component is scheduled after all nonrandom costs
+(CR 601.2h), and selects exact distinct cards with the recorded random-choice
+authority rather than asking the payer. The special-action path separates
+ordinary and random discards for the same ordering. Random discards cannot
+feed an earlier nonrandom graveyard cost. Selection, discard and typed payment
+receipts use the existing journal, movement and cost infrastructure.
