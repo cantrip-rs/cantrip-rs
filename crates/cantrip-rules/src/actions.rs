@@ -3547,25 +3547,15 @@ pub fn target_candidates_given(
     candidates(cx, asker, spec, earlier, subject, slot_player, x, false, None)
 }
 
-/// `target_candidates_given` with no X announced, judged by `text` (`resolve::Given::text`): a triggered ability's slots as it
-/// is put on the stack with the words of the text that made it (`PendingTrigger::words`).
-pub fn target_candidates_with_text(
-    cx: &Cx,
-    asker: &Asker,
-    spec: &TargetSpec,
-    earlier: &[Target],
-    subject: Target,
-    slot_player: Option<PlayerId>,
-    text: Option<(ObjectId, Words)>,
-) -> Vec<Target> {
-    candidates(cx, asker, spec, earlier, subject, slot_player, None, false, text)
-}
-
 /// The candidates for target `slot_player`'s slot of `item`, a spell or ability on the stack, after the slots before it chose
 /// `earlier`, as its targets are changed or chosen anew (CR 115.7, 707.10c): judged by its own text - an ability's as it was
 /// put on the stack (`resolve::item_text`, CR 113.7a) - with what it triggered on and the X it was announced with.
 pub fn item_target_candidates(cx: &Cx, asker: &Asker, spec: &TargetSpec, earlier: &[Target], item: &StackItem, slot_player: Option<PlayerId>) -> Vec<Target> {
-    candidates(cx, asker, spec, earlier, item.subject, slot_player, crate::resolve::announced_x(item), false, crate::resolve::item_text(item))
+    // Callers may have a copied spec, so identify its occurrence by the target
+    // offset being considered, rather than by function pointer equality.
+    let at = earlier.len();
+    let given = crate::resolve::Given { chooser: cx.s().target_chooser(item, at), q: cx, earlier, subject: item.subject, slot_player, gift: false, x: crate::resolve::announced_x(item), text: crate::resolve::item_text(item) };
+    target_candidates_as(&given, asker, spec)
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -3580,12 +3570,25 @@ fn candidates(
     gift: bool,
     text: Option<(ObjectId, Words)>,
 ) -> Vec<Target> {
+    let given = crate::resolve::Given { chooser: None, q, earlier, subject, slot_player, gift, x, text };
+    if let Some(choice) = spec.chooser {
+        let mut out = Vec::new();
+        for chooser in crate::target_choices::players(&given, asker, choice) {
+            for target in target_candidates_as(&crate::resolve::Given { chooser: Some(chooser), ..given }, asker, spec) {
+                if !out.contains(&target) { out.push(target); }
+            }
+        }
+        return out;
+    }
+    target_candidates_as(&given, asker, spec)
+}
+
+pub(crate) fn target_candidates_as(q: &dyn Query, asker: &Asker, spec: &TargetSpec) -> Vec<Target> {
     let s = q.state();
-    let cx = &crate::resolve::Given { q, earlier, subject, slot_player, gift, x, text };
     let mut out = Vec::new();
     for p in s.seats() {
         let t = Target::Player(p);
-        if (spec.filter)(cx, asker, t) && cx.can_target(asker, t) {
+        if (spec.filter)(q, asker, t) && q.can_target(asker, t) {
             out.push(t);
         }
     }
@@ -3601,7 +3604,7 @@ fn candidates(
                 continue;
             }
             let t = Target::Object(id);
-            if (spec.filter)(cx, asker, t) && cx.can_target(asker, t) {
+            if (spec.filter)(q, asker, t) && q.can_target(asker, t) {
                 out.push(t);
             }
         }
@@ -3609,7 +3612,7 @@ fn candidates(
     // Abilities on the stack (CR 115.1), oldest first.
     for item in s.stack.iter().filter(|i| i.kind != StackKind::Spell) {
         let t = Target::Ability(item.serial);
-        if (spec.filter)(cx, asker, t) && cx.can_target(asker, t) {
+        if (spec.filter)(q, asker, t) && q.can_target(asker, t) {
             out.push(t);
         }
     }
@@ -3619,7 +3622,7 @@ fn candidates(
 /// Whether the targets are announced with the action (a single slot for one target), rather than asked slot by
 /// slot once the spell or ability has begun to be put on the stack, as the C# engine does for anything else.
 pub fn targets_with_action(specs: &[TargetSpec]) -> bool {
-    specs.len() == 1 && specs[0].max == 1
+    specs.len() == 1 && specs[0].max == 1 && specs[0].chooser.is_none()
 }
 
 /// Whether an activated ability's targets are announced with the action: one slot of one target, unless they wait for X
@@ -3634,7 +3637,7 @@ fn targets_with_activation(def: &ActivatedDef) -> bool {
 /// A slot whose targets together are judged (`TargetSpec::together`) needs that many the rule allows together, judged before X
 /// is announced with its rule's `COUNTED` unread, so as large as any X could make it.
 pub(crate) fn slots_satisfiable(cx: &Cx, asker: &Asker, specs: &[TargetSpec]) -> bool {
-    if specs.len() > 1 && specs.iter().any(TargetSpec::required) {
+    if (specs.len() > 1 || specs.iter().any(|s| s.chooser.is_some())) && specs.iter().any(TargetSpec::required) {
         // Glyph of Delusion and Goblin Welder: a later slot may read the earlier choices. Asking each filter with
         // no earlier targets can both hide legal announcements and offer impossible ones. Reuse the ordered search.
         // This is before X: a COUNTED minimum may be zero, and a COUNTED maximum/together bound is not yet limited.
@@ -4025,9 +4028,25 @@ impl<K: PartialEq> AnnouncementSearch<'_, K> {
             self.seen.push(key);
             return if (self.covered)(targets) { Found::Yes } else { Found::No };
         };
-        let earlier: &[Target] = if in_segment > 1 { &targets[start..] } else { &[] };
-        let candidates = candidates(self.q, self.asker, &spec, earlier, Target::None, slot_player, None, self.gift, None);
-        let (candidates, together) = within_together(self.q, self.asker, &spec, self.counted, candidates);
+        if let Some(choice) = spec.chooser {
+            let earlier = if in_segment > 1 { &targets[start..] } else { &[] };
+            let given = crate::resolve::Given { chooser: None, q: self.q, earlier, subject: Target::None, slot_player, gift: self.gift, x: None, text: None };
+            for player in crate::target_choices::players(&given, self.asker, choice) {
+                let found = self.slot_chosen_by(at, targets, start, spec, slot_player, in_segment, Some(player));
+                if found != Found::No { return found; }
+            }
+            Found::No
+        } else {
+            self.slot_chosen_by(at, targets, start, spec, slot_player, in_segment, None)
+        }
+    }
+
+    fn slot_chosen_by(&mut self, at: usize, targets: &mut Vec<Target>, start: usize, spec: TargetSpec, slot_player: Option<PlayerId>, in_segment: usize, chooser: Option<PlayerId>) -> Found {
+        let earlier = if in_segment > 1 { &targets[start..] } else { &[] };
+        let given = crate::resolve::Given { chooser, q: self.q, earlier, subject: Target::None, slot_player, gift: self.gift, x: None, text: None };
+        let candidates = target_candidates_as(&given, self.asker, &spec);
+        let given = crate::resolve::Given { chooser, q: self.q, earlier: &[], subject: Target::None, slot_player, gift: self.gift, x: None, text: None };
+        let (candidates, together) = within_together(&given, self.asker, &spec, self.counted, candidates);
         let (least, most) = spec.bounds(self.counted);
         if candidates.len() < least as usize || (candidates.is_empty() && spec.required()) {
             return Found::No;
@@ -4065,7 +4084,7 @@ impl<K: PartialEq> AnnouncementSearch<'_, K> {
                 let allowed = together.is_none() || {
                     picked.clear();
                     picked.extend(chosen.iter().map(|&i| candidates[i]));
-                    select::targets_together(self.q, together.as_slice(), self.asker.controller, self.asker.source, &picked)
+                    select::targets_together(&given, together.as_slice(), self.asker.controller, self.asker.source, &picked)
                 };
                 if allowed {
                     targets.extend(chosen.iter().map(|&i| candidates[i]));
@@ -9753,6 +9772,7 @@ pub(crate) fn stack_item(kind: StackKind, object: ObjectId, ability: AbilityRef,
         inline_targets: [Target::None; cantrip_state::INLINE_TARGETS],
         target_count: 0,
         inline_spec_of: [0; cantrip_state::INLINE_TARGETS],
+        target_choosers: Default::default(),
         x: 0,
         kicked: 0,
         counted: 0,
@@ -10395,8 +10415,8 @@ fn cast(
         for spliced in spliced {
             let specs = cx.card(spliced).spell.map_or(&[][..], |s| s.targets);
             if !specs.is_empty() {
-                let (chosen, chosen_of) = choose_slots(cx, player, spell, true, specs, counted, item.kicked, announced_x(&item), None)?;
-                of.extend(chosen_of.iter().map(|&s| next + s));
+                let (chosen, chosen_of) = choose_slots_after(cx, player, spell, true, specs, counted, item.kicked, announced_x(&item), None, &[], next, all.len())?;
+                of.extend(chosen_of);
                 all.extend(chosen);
             }
             next += specs.len() as u8;
@@ -11206,24 +11226,33 @@ pub(crate) fn enough_together(q: &dyn Query, asker: &Asker, together: &Option<Pa
 /// `x` is the X announced for the spell or ability (`resolve::announced_x`), which its filters read.
 #[allow(clippy::too_many_arguments)]
 fn choose_slots(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool, specs: &[TargetSpec], counted: u32, kicked: u8, x: Option<u32>, by: Option<Linked>) -> R<(Vec<Target>, Vec<u8>)> {
-    choose_slots_after(cx, player, source, spell, specs, counted, kicked, x, by, &[], 0)
+    choose_slots_after(cx, player, source, spell, specs, counted, kicked, x, by, &[], 0, 0)
 }
 
 /// Announce slots after a divided slot, preserving the earlier targets for filters that read them.
 #[allow(clippy::too_many_arguments)]
-fn choose_slots_after(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool, specs: &[TargetSpec], counted: u32, kicked: u8, x: Option<u32>, by: Option<Linked>, earlier: &[Target], first_spec: u8) -> R<(Vec<Target>, Vec<u8>)> {
+fn choose_slots_after(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool, specs: &[TargetSpec], counted: u32, kicked: u8, x: Option<u32>, by: Option<Linked>, earlier: &[Target], first_spec: u8, first_target: usize) -> R<(Vec<Target>, Vec<u8>)> {
     let asker = Asker { instance: None, source, controller: player, by, spell };
     let slots = crate::resolve::expand_specs(cx.s(), player, specs);
     let mut targets = earlier.to_vec();
     let start = targets.len();
     let mut of = vec![0; start];
+    let mut chosen_players: Vec<Option<PlayerId>> = Vec::new();
     for (spec, slot_player, at) in &slots {
         // CR 702.33a, 601.2c: "if this spell was kicked, instead choose ...", the kicker announced by now.
         let spec = &spec.when_kicked(kicked);
         let before = targets.len();
+        let mut selected_chooser = None;
         'slot: {
-            let candidates = target_candidates_given(cx, &asker, spec, &targets, Target::None, *slot_player, x);
-            let (candidates, together) = within_together(cx, &asker, spec, counted, candidates);
+            let context = crate::resolve::Given { chooser: None, q: &*cx, earlier: &targets, subject: Target::None, slot_player: *slot_player, gift: false, x, text: None };
+            let eligible = crate::target_choices::eligible(&context, &asker, spec, counted);
+            let Some(chooser) = crate::target_choices::choose(cx, &asker, spec, eligible, player, true)? else { return Err(Stop::Cancel) };
+            if spec.chooser.is_some() {
+                selected_chooser = Some(chooser);
+            }
+            let context = crate::resolve::Given { chooser: spec.chooser.map(|_| chooser), q: &*cx, earlier: &targets, subject: Target::None, slot_player: *slot_player, gift: false, x, text: None };
+            let candidates = target_candidates_as(&context, &asker, spec);
+            let (candidates, together) = within_together(&context, &asker, spec, counted, candidates);
             let (least, most) = spec.bounds(counted);
             // Fewer legal targets than the slot's minimum is not a legal announcement (CR 601.2c, 602.2b): given up whole.
             if !enough_together(cx, &asker, &together, &candidates, least) {
@@ -11251,7 +11280,7 @@ fn choose_slots_after(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bo
                 any_number: spec.is_any_number(),
                 together,
             };
-            match cx.ask_core(player, ask, true)? {
+            match cx.ask_core(chooser, ask, chooser == player)? {
                 Answer::Targets(chosen) => targets.extend(chosen),
                 _ => return Err(Stop::Cancel),
             }
@@ -11260,11 +11289,25 @@ fn choose_slots_after(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bo
             targets.push(Target::None);
         }
         of.resize(targets.len(), first_spec + at);
+        if let Some(player) = selected_chooser {
+            chosen_players.resize(targets.len(), None);
+            chosen_players[before..targets.len()].fill(Some(player));
+        }
     }
     while targets.len() > start && targets.last() == Some(&Target::None) {
         targets.pop();
     }
     of.truncate(targets.len());
+    chosen_players.truncate(targets.len());
+    if !chosen_players.is_empty() {
+        let at = cx.s().stack.len() - 1;
+        let mut item = cx.s().stack[at];
+        let mut all = cx.s().target_choosers(&item).to_vec();
+        all.resize(all.len().max(first_target + chosen_players.len()), None);
+        for (at, player) in chosen_players.into_iter().enumerate() { if player.is_some() { all[first_target + at] = player; } }
+        cx.st().set_item_target_choosers(&mut item, &all);
+        cx.st().stack_set(at, item);
+    }
     Ok((targets.split_off(start), of.split_off(start)))
 }
 
@@ -11298,7 +11341,7 @@ fn announce_divided(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool
         Divided::Impossible => return Err(Stop::Cancel),
     }
     let mut of = vec![0; targets.len()];
-    let (later, later_of) = choose_slots_after(cx, player, source, spell, &specs[1..], counted, item.kicked, x, by, &targets, 1)?;
+    let (later, later_of) = choose_slots_after(cx, player, source, spell, &specs[1..], counted, item.kicked, x, by, &targets, 1, 0)?;
     targets.extend(later);
     of.extend(later_of);
     set_item_targets(cx, &targets, &of);
@@ -11333,7 +11376,8 @@ fn divided_x_bound(cx: &Cx, asker: &Asker, divide: Option<Divide>, specs: &[Targ
 /// its slot requires. An X that comes to too little is taken back as it is announced.
 fn divided_activation_possible(cx: &Cx, asker: &Asker, def: &ActivatedDef, divide: Divide) -> bool {
     let announces_x = def.cost.mana.x > 0 || def.cost.loyalty == Some(LOYALTY_MINUS_X) || def.cost.variable.is_some() || !def.cost_choice.is_empty();
-    slots_satisfiable(cx, asker, def.targets)
+    !def.targets.first().is_some_and(|s| s.chooser.is_some())
+        && slots_satisfiable(cx, asker, def.targets)
         && (announces_x || !def.targets.first().is_some_and(TargetSpec::required) || divide.total_for(cx, asker, 0) > 0)
 }
 
@@ -11342,6 +11386,7 @@ fn divided_activation_possible(cx: &Cx, asker: &Asker, def: &ActivatedDef, divid
 /// a target, each of which must receive at least one; with no candidate an optional slot takes no target. `may_cancel` is
 /// for a spell or ability still being announced; `x` is the X announced for it (`resolve::announced_x`).
 pub(crate) fn ask_divided(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool, spec: &TargetSpec, total: u32, x: Option<u32>, may_cancel: bool, by: Option<Linked>, trigger: Option<(AbilityRef, Words)>) -> R<Divided> {
+    if spec.chooser.is_some() { return Ok(Divided::Impossible); }
     if total == 0 {
         return Ok(if spec.required() { Divided::Impossible } else { Divided::Skipped });
     }

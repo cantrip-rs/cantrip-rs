@@ -478,6 +478,11 @@ pub trait Query {
         false
     }
 
+    /// The player chosen to choose this target slot (Preacher's "they control"),
+    /// retained from announcement when the target is checked on resolution.
+    /// This never replaces the spell/ability's controller for targeting legality.
+    fn target_chooser(&self) -> Option<PlayerId> { None }
+
     fn slot_opponent(&self) -> Option<PlayerId> {
         None
     }

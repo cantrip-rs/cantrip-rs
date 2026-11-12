@@ -724,9 +724,21 @@ impl Asker {
     }
 }
 
+/// Who chooses this target slot instead of the spell or ability's controller.
+/// Cuombajj Witches and Preacher leave their effects controlled by the player
+/// activating them: an opponent choosing targets cannot bypass hexproof against
+/// that controller. With OneOf, the controller first chooses one eligible player.
+#[derive(Clone, Copy)]
+pub enum TargetChooser {
+    Player(fn(&dyn Query, &Asker) -> PlayerId),
+    OneOf(fn(&dyn Query, &Asker) -> Vec<PlayerId>),
+}
+
 /// One target slot (CR 115.1).
 #[derive(Clone, Copy)]
 pub struct TargetSpec {
+    /// None uses the normal chooser; otherwise the chosen player is retained with the stack item.
+    pub chooser: Option<TargetChooser>,
     pub min: u32,
     pub max: u32,
     pub filter: TargetFilter,

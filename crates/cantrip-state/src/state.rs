@@ -54,6 +54,9 @@ pub struct GameState {
     pub spill_targets: Vec<Target>,
     /// Parallel to `spill_targets`: the spec each was chosen for.
     pub spill_specs: Vec<u8>,
+    /// Optional per-target players chosen during a target announcement. Immutable
+    /// current stack configuration, like target specs and shares; not a history counter.
+    pub target_chooser_arena: Vec<Option<PlayerId>>,
     /// What represents each merged permanent besides its own card (CR 730.2), every version of it (`merged_objects` names the
     /// one an object has now). Append-only, journaled; empty in a game where nothing has merged.
     pub merges: Vec<Merge>,
@@ -302,7 +305,7 @@ impl GameState {
         (&Vec<PendingTrigger>, &Vec<Delayed>, &Vec<PlayPermission>),
         (&Vec<Attacker>, &Vec<ObjectId>, &Vec<Block>, &Vec<ExtraTurn>, &Vec<ScheduledPhase>, (&LoopWatch, &Vec<LoopKey>)),
         &Vec<Frame>,
-        (&Rng, u32, &Outcome, (bool, u8), &Vec<ObjectId>, &Vec<StackItem>, (&Vec<Target>, &Vec<u8>, &Vec<u32>), (&Vec<Merge>, &Vec<Vec<Copiable>>, &Vec<(ObjectId, u32)>)),
+        (&Rng, u32, &Outcome, (bool, u8), &Vec<ObjectId>, &Vec<StackItem>, (&Vec<Target>, &Vec<u8>, &Vec<u32>, &Vec<Option<PlayerId>>), (&Vec<Merge>, &Vec<Vec<Copiable>>, &Vec<(ObjectId, u32)>)),
     ) {
         (
             (&self.players, &self.restricted_mana, &self.counter_stamps, &self.mana_from),
@@ -321,7 +324,7 @@ impl GameState {
                 (self.unsettled, self.shown_hands),
                 &self.members,
                 &self.left_stack,
-                (&self.spill_targets, &self.spill_specs, &self.share_arena),
+                (&self.spill_targets, &self.spill_specs, &self.share_arena, &self.target_chooser_arena),
                 (&self.merges, &self.merged_sources, &self.merged_objects),
             ),
         )
@@ -434,6 +437,8 @@ pub enum Undo {
     TargetsSpilled(usize),
     TargetsUnspilled(Vec<Target>, Vec<u8>),
     /// Shares appended since the arena was this long.
+    TargetChoosersPushed(usize),
+    TargetChoosersPopped(Vec<Option<PlayerId>>),
     SharesPushed(usize),
     SharesPopped(Vec<u32>),
     /// Merge versions appended since the arena was this long.
@@ -490,6 +495,8 @@ impl Undo {
                 | Undo::MembersPopped(_)
                 | Undo::TargetsSpilled(_)
                 | Undo::TargetsUnspilled(..)
+                | Undo::TargetChoosersPushed(_)
+                | Undo::TargetChoosersPopped(_)
                 | Undo::SharesPushed(_)
                 | Undo::SharesPopped(_)
                 | Undo::MergesPushed(_)
@@ -552,6 +559,7 @@ impl GameState {
             cost_receipts: Vec::new(),
             spill_targets: Vec::new(),
             spill_specs: Vec::new(),
+            target_chooser_arena: Vec::new(),
             share_arena: Vec::new(),
             merges: Vec::new(),
             merged_sources: Vec::new(),
@@ -1473,6 +1481,22 @@ impl GameState {
         item.spill..item.spill + item.target_count as usize
     }
 
+    pub fn target_choosers(&self, item: &StackItem) -> &[Option<PlayerId>] {
+        let span = item.target_choosers;
+        &self.target_chooser_arena[span.start as usize..(span.start + span.len) as usize]
+    }
+    pub fn target_chooser(&self, item: &StackItem, slot: usize) -> Option<PlayerId> {
+        self.target_choosers(item).get(slot).copied().flatten()
+    }
+    /// Keep the chosen players with this announcement, parallel to its target occurrences. Ordinary declarations allocate nothing here.
+    pub fn set_item_target_choosers(&mut self, item: &mut StackItem, players: &[Option<PlayerId>]) {
+        if players.iter().all(Option::is_none) { item.target_choosers = Span::default(); return; }
+        let start = self.target_chooser_arena.len();
+        self.target_chooser_arena.extend_from_slice(players);
+        self.log(Undo::TargetChoosersPushed(start));
+        item.target_choosers = Span { start: start as u32, len: players.len() as u32 };
+    }
+
     /// A stack item's targets, in the order chosen (CR 601.2c): those it holds, or all of them from the arena.
     pub fn targets<'a>(&'a self, item: &'a StackItem) -> &'a [Target] {
         if item.holds_its_targets() { &item.inline_targets[..item.target_count as usize] } else { &self.spill_targets[Self::spilled(item)] }
@@ -2186,6 +2210,8 @@ impl GameState {
                 self.spill_targets.truncate(len);
                 self.spill_specs.truncate(len);
             }
+            Undo::TargetChoosersPushed(len) => self.target_chooser_arena.truncate(len),
+            Undo::TargetChoosersPopped(players) => self.target_chooser_arena.extend(players),
             Undo::SharesPushed(len) => self.share_arena.truncate(len),
             Undo::SharesPopped(shares) => self.share_arena.extend(shares),
             Undo::MergesPushed(len) => self.merges.truncate(len as usize),
@@ -2304,6 +2330,8 @@ impl GameState {
                 self.spill_targets[*len..].to_vec(),
                 self.spill_specs[*len..].to_vec(),
             ),
+            Undo::TargetChoosersPushed(len) => Undo::TargetChoosersPopped(self.target_chooser_arena[*len..].to_vec()),
+            Undo::TargetChoosersPopped(_) => Undo::TargetChoosersPushed(self.target_chooser_arena.len()),
             Undo::SharesPushed(len) => Undo::SharesPopped(self.share_arena[*len..].to_vec()),
             Undo::SharesPopped(_) => Undo::SharesPushed(self.share_arena.len()),
             Undo::MergesPushed(len) => Undo::MergesPopped(self.merges[*len as usize..].to_vec()),
@@ -2358,6 +2386,7 @@ mod tests {
             inline_targets: [Target::None; INLINE_TARGETS],
             target_count: 0,
             inline_spec_of: [0; INLINE_TARGETS],
+            target_choosers: Default::default(),
             x: 0,
             kicked: 0,
             counted: 0,
@@ -2432,6 +2461,24 @@ mod tests {
         copy.rollback(mark);
         assert!(copy.cost_receipts.is_empty());
         assert_eq!(state.cost_receipts[id], receipt);
+    }
+
+    #[test]
+    fn target_chooser_configuration_survives_copy_undo_and_redo() {
+        let mut state=GameState::new(3,1);let mark=state.mark();let mut original=item();
+        state.set_item_targets(&mut original,&[Target::Player(PlayerId(1)),Target::Player(PlayerId(2))],&[0,1],&[]);
+        state.set_item_target_choosers(&mut original,&[Some(PlayerId(1)),Some(PlayerId(2))]);state.stack_push(original);
+        let mut copied=original;copied.controller=PlayerId(2);state.stack_push(copied);
+        let mut fork=state.clone_with_journal();let (undos,redos)=state.step_back(mark);
+        assert!(state.target_chooser_arena.is_empty());assert!(state.stack.is_empty());state.step_forward(undos,redos);
+        assert_eq!(state.target_choosers(state.stack.last().unwrap()),&[Some(PlayerId(1)),Some(PlayerId(2))]);
+        copied.narrow_target_choosers(1,1);assert_eq!(state.target_chooser(&copied,0),Some(PlayerId(2)));
+        fork.rollback(mark);assert!(fork.target_chooser_arena.is_empty());assert_eq!(state.target_chooser(&original,0),Some(PlayerId(1)));
+    }
+    #[test]
+    fn ordinary_targets_allocate_no_chooser_configuration() {
+        let mut state=GameState::new(2,1);let mut spell=item();state.set_item_target_choosers(&mut spell,&[None,None]);
+        assert!(state.target_choosers(&spell).is_empty());assert_eq!(state.target_chooser_arena.capacity(),0);
     }
 
     /// Past `INLINE_TARGETS` a stack item's targets and specs are in the game's arena, and its shares in theirs, read back whole; changing one

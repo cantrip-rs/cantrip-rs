@@ -149,6 +149,7 @@ pub fn run_modes(cx: &mut Cx, item: &StackItem, modal: &ModalDef) -> Result<(), 
             let n = (next..item.target_count as usize).take_while(|&t| (cx.s().spec(item, t) as usize) < ends).count();
             let mut sub = *item;
             sub.modes = modal.once(i);
+            sub.narrow_target_choosers(next, n);
             let of: Vec<u8> = (0..n).map(|t| cx.s().spec(item, next + t) - spec_at as u8).collect();
             let targets = cx.s().targets(item)[next..next + n].to_vec();
             let shares: Vec<u32> = (next..next + n).map(|t| cx.s().share(item, t)).collect();
@@ -181,6 +182,7 @@ fn run_fused(cx: &mut Cx, item: &StackItem, left: &'static CardDef, right: &'sta
         let Some(spell) = half.spell else { continue };
         let mut sub = *item;
         sub.way = way;
+        sub.narrow_target_choosers(from, to - from);
         let of: Vec<u8> = (from..to).map(|t| cx.s().spec(item, t) - base as u8).collect();
         // Shares are kept only where a divided total was announced.
         let shares = cx.s().shares(item);
@@ -220,11 +222,11 @@ pub fn target_legal(cards: &'static CardTable, state: &GameState, events: &[Reco
     let earlier = if item.target_count > 1 { &state.targets(item)[..slot] } else { &[][..] };
     // An ability's targets are judged by its own text, as it was put on the stack (CR 113.7a, `StackItem::words`).
     let text = item_text(item);
-    let given = Given { q: &q, earlier, subject: item.subject, slot_player, gift: false, x: announced_x(item), text };
+    let given = Given { chooser: state.target_chooser(item, slot), q: &q, earlier, subject: item.subject, slot_player, gift: false, x: announced_x(item), text };
     (spec.filter)(&given, &asker, target)
         && layers::can_target(cards, state, events, &asker, target)
         && (spec.together.is_none()
-            || together_legal(&Given { q: &q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, text }, state, item, slot, &spec))
+            || together_legal(&Given { chooser: None, q: &q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, text }, state, item, slot, &spec))
 }
 
 /// Whether the targets of the slot target `slot` of `item` was chosen for are still allowed together by `spec`'s rule
@@ -244,7 +246,7 @@ pub fn item_text(item: &StackItem) -> Option<(ObjectId, Words)> {
 /// `q` reading `item`'s source's words as `item`'s own text has them (`item_text`): what the rule of its targets together is
 /// judged with as they are changed or chosen anew (CR 115.7, 601.2c).
 pub fn as_item<'a>(q: &'a dyn Query, item: &StackItem) -> Given<'a> {
-    Given { q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, text: item_text(item) }
+    Given { chooser: None, q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, text: item_text(item) }
 }
 
 /// The X announced for a spell or an activated ability on the stack (CR 107.3a, 601.2b, 602.2b), its own (CR 107.3k): what
@@ -254,7 +256,9 @@ pub fn announced_x(item: &StackItem) -> Option<u32> {
 }
 
 /// A `Query` that also says what the earlier target slots chose, for the filter of a later one.
+#[derive(Clone, Copy)]
 pub struct Given<'a> {
+    pub chooser: Option<PlayerId>,
     pub q: &'a dyn Query,
     pub earlier: &'a [Target],
     /// The subject of the event the ability triggered on.
@@ -334,6 +338,8 @@ impl Query for Given<'_> {
     fn can_target(&self, asker: &Asker, target: Target) -> bool {
         self.q.can_target(asker, target)
     }
+
+    fn target_chooser(&self) -> Option<PlayerId> { self.chooser }
 
     fn chosen_targets(&self) -> &[Target] {
         self.earlier

@@ -1366,6 +1366,9 @@ pub struct StackItem {
     /// 700.2c). So a slot that takes a variable number of targets ("attach any number of target Equipment you control to
     /// target creature you control") can stand anywhere in the list, and each target is judged by its own slot.
     pub inline_spec_of: [u8; INLINE_TARGETS],
+    /// Per-target chosen players, in the optional target-chooser arena. Empty for
+    /// ordinary targeting; copied with the other announcement choices.
+    pub target_choosers: Span,
     /// The X announced for it (CR 107.3); for a reflexive triggered ability, the number its "that many" counts
     /// (CR 603.12, `PendingTrigger::count`).
     pub x: u32,
@@ -1453,6 +1456,13 @@ pub struct StackItem {
 }
 
 impl StackItem {
+    /// A resolving mode/half uses local spec numbers for its existing choices.
+    pub fn narrow_target_choosers(&mut self, first: usize, count: usize) {
+        let skip = first.min(self.target_choosers.len as usize) as u32;
+        self.target_choosers.start += skip;
+        self.target_choosers.len = (self.target_choosers.len - skip).min(count as u32);
+    }
+
     /// The damage a "that much damage" triggered ability (`TriggeredDef::damage_amount`) matched, added up over its batch
     /// (CR 603.2c); 0 where it matched none.
     pub fn matched_damage_amount(&self) -> u32 {

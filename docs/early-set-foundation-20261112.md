@@ -482,3 +482,44 @@ sources and chosen attacks, allocating no lists when there is no active tax.
 Evidence and final receipts are kept in MTGish's
 `docs/cantrip-foundation-nonmana-combat-20261112.md` and proof JSON. Complete
 workspace test gates remain batched for the end of the shared-family milestone.
+
+## Targets chosen by another player
+
+Cuombajj Witches, Preacher and Nova Pentacle share a targeting procedure that
+changes who answers a slot without changing the ability's controller.
+`TargetSpec::chosen_by` names one player; `chosen_by_one_of` lets the controller
+first select an eligible player. Hexproof, protection, wards and crime remain
+judged for the spell or ability's controller. An opponent cannot cancel another
+player's announcement merely because that opponent is choosing its target.
+
+The chosen player is kept with each target occurrence in an optional immutable
+arena, alongside the stack item's other announced choices. This covers expanded
+per-opponent slots, copies, changed targets and each resolving mode/half's local
+target list. Preacher's "they control" reads the original chosen opponent when
+the target is checked again. The arena participates in undo, redo, copying and
+state hashing. It adds no per-object data; an ordinary announcement allocates no
+chooser list. A stack item grows from 312 to 320 bytes, and a used arena entry is
+two bytes. The empty arena adds one vector header to a game state.
+
+The availability search branches by chooser as well as by targets. It never
+combines one creature from each of two opponents to satisfy a single opponent's
+two-creature slot. Typed target filters see `Query::target_chooser`; unrelated
+player-choice contexts keep their existing explicit requirements.
+
+Ten new rules scenarios and two state regressions pass, as do all 1,500 rules
+tests (one existing ignored test) and 86 state tests. Native workspace
+compilation passes. MTGish executes 67 generated scenarios, including the actual
+Cuombajj Witches damage slots and Preacher gaining and releasing control.
+The fixed scope now has 217 generation-ready candidates and 69 gapped cards.
+Nova Pentacle clears its chooser requirement but retains delayed target capture;
+a first divided-target slot with a different chooser retains its separate
+protocol gap. These are not claims of full card installation or universal
+announcement combinations.
+
+The 128-game benchmark finishes all games and observes 45.09 us of engine time
+and 27.31 KB allocated per decision. The prior checkpoint observed 48.70 us and
+27.31 KB on this shared host; these single runs support no statistical speed
+claim. Full workspace test gates remain batched until the final two shared
+families are complete, before the requested pause. MTGish's
+`docs/cantrip-foundation-target-choosers-20261112.md` and proof JSON retain the
+reproducible evidence.

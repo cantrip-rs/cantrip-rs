@@ -930,20 +930,27 @@ pub const fn spell(targets: &'static [TargetSpec], effect: Effect) -> Option<Spe
 
 /// One target that passes the filter (CR 115.1).
 pub const fn target(filter: TargetFilter) -> TargetSpec {
-    TargetSpec { min: 1, max: 1, filter, label: "", if_kicked: None, together: None }
+    TargetSpec { min: 1, max: 1, filter, label: "", if_kicked: None, together: None, chooser: None }
 }
 
 /// "Up to one target" (CR 115.1d).
 pub const fn up_to_one(filter: TargetFilter) -> TargetSpec {
-    TargetSpec { min: 0, max: 1, filter, label: "", if_kicked: None, together: None }
+    TargetSpec { min: 0, max: 1, filter, label: "", if_kicked: None, together: None, chooser: None }
 }
 
 /// "Up to N targets" (CR 115.1d).
 pub const fn up_to(n: u32, filter: TargetFilter) -> TargetSpec {
-    TargetSpec { min: 0, max: n, filter, label: "", if_kicked: None, together: None }
+    TargetSpec { min: 0, max: n, filter, label: "", if_kicked: None, together: None, chooser: None }
 }
 
 impl TargetSpec {
+    pub const fn chosen_by(self, player: fn(&dyn crate::Query, &Asker) -> PlayerId) -> Self {
+        Self { chooser: Some(TargetChooser::Player(player)), ..self }
+    }
+    pub const fn chosen_by_one_of(self, players: fn(&dyn crate::Query, &Asker) -> Vec<PlayerId>) -> Self {
+        Self { chooser: Some(TargetChooser::OneOf(players)), ..self }
+    }
+
     /// The same slot, which may be left without a target ("up to").
     pub const fn optional(self) -> TargetSpec {
         TargetSpec { min: 0, ..self }

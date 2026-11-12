@@ -585,15 +585,16 @@ fn choose_trigger_targets(
     all_of_few: bool,
     targets: &mut Vec<Target>,
     of: &mut Vec<u8>,
+    choosers: &mut Vec<Option<PlayerId>>,
     first_spec: u8,
 ) -> R<bool> {
-    choose_trigger_targets_after(cx, trigger, specs, all_of_few, targets, of, first_spec, false)
+    choose_trigger_targets_after(cx, trigger, specs, all_of_few, targets, of, choosers, first_spec, false)
 }
 
 #[allow(clippy::too_many_arguments)]
 fn choose_trigger_targets_after(
     cx: &mut Cx, trigger: &PendingTrigger, specs: &[TargetSpec], all_of_few: bool,
-    targets: &mut Vec<Target>, of: &mut Vec<u8>, first_spec: u8, after_divided: bool,
+    targets: &mut Vec<Target>, of: &mut Vec<u8>, choosers: &mut Vec<Option<PlayerId>>, first_spec: u8, after_divided: bool,
 ) -> R<bool> {
     // Asked as the ability it is (CR 607.5): one an effect gave its source reads only its own links.
     let asker = Asker { instance: None, source: trigger.source, controller: trigger.controller, by: layers::given_link(cx.cards(), cx.s(), trigger.source, trigger.ability, trigger.acquired), spell: false };
@@ -607,18 +608,22 @@ fn choose_trigger_targets_after(
     for (spec, slot_player, at) in &slots {
         let spec = &spec.when_kicked(kicked);
         let before = targets.len();
+        let mut selected_chooser = None;
         'slot: {
-            let candidates = crate::actions::target_candidates_with_text(
-                cx,
-                &asker,
-                spec,
-                if after_divided { &targets[..] } else if slots.len() > 1 { &targets[start..] } else { &[] },
-                trigger.subject,
-                *slot_player,
-                text,
-            );
             let counted = u32::from(trigger_counted(cx, trigger));
-            let own = crate::resolve::Given { q: &*cx, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, text };
+            let earlier = if after_divided { &targets[..] } else if slots.len() > 1 { &targets[start..] } else { &[] };
+            let context = crate::resolve::Given { chooser: None, q: &*cx, earlier, subject: trigger.subject, slot_player: *slot_player, gift: false, x: None, text };
+            let eligible = crate::target_choices::eligible(&context, &asker, spec, counted);
+            let default = match trigger.subject {
+                Target::Player(p) if triggered(cx, trigger.ability).subject_chooses_targets && !cx.s().player(p).lost => p,
+                _ => trigger.controller,
+            };
+            let Some(chooser) = crate::target_choices::choose(cx, &asker, spec, eligible, default, false)? else { return Ok(false) };
+            if spec.chooser.is_some() {
+                selected_chooser = Some(chooser);
+            }
+            let own = crate::resolve::Given { chooser: spec.chooser.map(|_| chooser), q: &*cx, earlier, subject: trigger.subject, slot_player: *slot_player, gift: false, x: None, text };
+            let candidates = crate::actions::target_candidates_as(&own, &asker, spec);
             let (candidates, together) = crate::actions::within_together(&own, &asker, spec, counted, candidates);
             let (least, most) = spec.bounds(counted);
             if !crate::actions::enough_together(&own, &asker, &together, &candidates, least) {
@@ -661,10 +666,6 @@ fn choose_trigger_targets_after(
                 together,
             };
             // The ability's controller chooses its targets (CR 603.3d), unless it says that player does: the one it is about.
-            let chooser = match trigger.subject {
-                Target::Player(p) if triggered(cx, trigger.ability).subject_chooses_targets && !cx.s().player(p).lost => p,
-                _ => trigger.controller,
-            };
             if let Answer::Targets(chosen) = cx.ask_core(chooser, ask, false)? {
                 targets.extend(chosen);
             }
@@ -675,11 +676,16 @@ fn choose_trigger_targets_after(
         }
         // Each target with the spec it was chosen for (`StackItem::spec_of`), numbered across a modal ability's modes.
         of.resize(targets.len(), first_spec + at);
+        if let Some(player) = selected_chooser {
+            choosers.resize(targets.len(), None);
+            choosers[before..targets.len()].fill(Some(player));
+        }
     }
     while targets.len() > start && targets.last() == Some(&Target::None) {
         targets.pop();
     }
     of.truncate(targets.len());
+    choosers.truncate(targets.len());
     Ok(true)
 }
 
@@ -739,6 +745,7 @@ pub(crate) fn announce_trigger(cx: &mut Cx, trigger: PendingTrigger, by: Option<
     let asker = Asker { instance: None, source: trigger.source, controller: trigger.controller, by: layers::given_link(cx.cards(), cx.s(), trigger.source, trigger.ability, trigger.acquired), spell: false };
     let mut targets = Vec::new();
     let mut of: Vec<u8> = Vec::new();
+    let mut choosers: Vec<Option<PlayerId>> = Vec::new();
     let mut shares: Vec<u32> = Vec::new();
     let mut mask = 0u32;
     if let Some(modal) = def.modal {
@@ -786,7 +793,7 @@ pub(crate) fn announce_trigger(cx: &mut Cx, trigger: PendingTrigger, by: Option<
         let mut first_spec = 0u8;
         for (n, mode) in modal.modes.iter().enumerate() {
             for _ in 0..modal.times(mask, n) {
-                if !choose_trigger_targets(cx, &trigger, mode.targets, true, &mut targets, &mut of, first_spec)? {
+                if !choose_trigger_targets(cx, &trigger, mode.targets, true, &mut targets, &mut of, &mut choosers, first_spec)? {
                     return Ok(None);
                 }
                 first_spec += mode.targets.len() as u8;
@@ -810,10 +817,10 @@ pub(crate) fn announce_trigger(cx: &mut Cx, trigger: PendingTrigger, by: Option<
             crate::actions::Divided::Impossible => return Ok(None),
         }
         of.resize(targets.len(), 0);
-        if !choose_trigger_targets_after(cx, &trigger, &def.targets[1..], false, &mut targets, &mut of, 1, true)? {
+        if !choose_trigger_targets_after(cx, &trigger, &def.targets[1..], false, &mut targets, &mut of, &mut choosers, 1, true)? {
             return Ok(None);
         }
-    } else if !choose_trigger_targets(cx, &trigger, def.targets, false, &mut targets, &mut of, 0)? {
+    } else if !choose_trigger_targets(cx, &trigger, def.targets, false, &mut targets, &mut of, &mut choosers, 0)? {
         return Ok(None);
     }
     let mut item = StackItem { instance: AbilityAcquisition::OWN, event_amount: trigger.event_amount,
@@ -824,6 +831,7 @@ pub(crate) fn announce_trigger(cx: &mut Cx, trigger: PendingTrigger, by: Option<
         inline_targets: [Target::None; cantrip_state::INLINE_TARGETS],
         target_count: 0,
         inline_spec_of: [0; cantrip_state::INLINE_TARGETS],
+        target_choosers: Default::default(),
         x: trigger.count.unwrap_or(0),
         kicked: 0,
         counted: trigger_counted(cx, &trigger),
@@ -856,6 +864,7 @@ pub(crate) fn announce_trigger(cx: &mut Cx, trigger: PendingTrigger, by: Option<
         return Ok(None);
     }
     cx.st().set_item_targets(&mut item, &targets, &of, &shares);
+    cx.st().set_item_target_choosers(&mut item, &choosers);
     cx.st().stack_push(item);
     Ok(Some(targets))
 }
@@ -934,7 +943,7 @@ fn consider(
         } else {
             None
         };
-        let given_text = crate::resolve::Given {
+        let given_text = crate::resolve::Given { chooser: None,
             q: cx,
             earlier: &[],
             subject: Target::None,
@@ -1626,11 +1635,11 @@ fn that_mana_spent(cx: &Cx, rider: u32, event: &Event) -> u32 {
 /// Every triggered ability this event triggers (CR 603.2).
 /// Ask the event of the watched object, but ask the creating ability's conditions of its actual source.
 pub(crate) fn delayed_fires(q: &dyn Query, d: &cantrip_state::Delayed, t: &TriggeredDef, asker: &Asker, event: &Event) -> Option<Fired> {
-    let own = crate::resolve::Given { q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None,
+    let own = crate::resolve::Given { chooser: None, q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None,
         text: d.words.map(|w| (d.watched(), w)) };
     if d.when == DelayedWhen::WatchingThisTurn {
         let source_asker = Asker { source: d.source, ..*asker };
-        let source_text = crate::resolve::Given { text: d.words.map(|w| (d.source, w)), ..own };
+        let source_text = crate::resolve::Given { chooser: None, text: d.words.map(|w| (d.source, w)), ..own };
         if t.only_if.is_some_and(|c| !c(&source_text, &source_asker))
             || t.condition.is_some_and(|c| !c(&source_text, &source_asker)) { return None; }
         if let Some(asked) = t.asked { asked(&own, asker, event) } else { (t.matches)(&own, asker.source, event) }
@@ -1741,7 +1750,7 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                     // in an intervening "if" (CR 603.4). Its event is asked of the object it watches (`Delayed::watched`).
                     let asker = Asker { instance: None, source: d.watched(), controller: d.controller, by: delayed_link(cx, &d), spell: false };
                     // Its text is the one that created it (`Delayed::words`, CR 603.7, 113.7a), its source's now notwithstanding.
-                    let given = crate::resolve::Given {
+                    let given = crate::resolve::Given { chooser: None,
                         q: &*cx,
                         earlier: &[],
                         subject: Target::None,
