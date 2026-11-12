@@ -228,6 +228,7 @@ fn check_once(cx: &mut Cx) -> R<bool> {
     let mut unbestow = Vec::new();
     let mut sagas = Vec::new();
     let mut legends: Vec<(ObjectId, &'static str)> = Vec::new();
+    let mut worlds: Vec<(ObjectId, u32)> = Vec::new();
     let mut bound: Vec<crate::day_night::Bound> = Vec::new();
     let mut battles: Vec<(ObjectId, bool)> = Vec::new();
     let mut annihilate: Vec<(ObjectId, i32)> = Vec::new();
@@ -247,6 +248,7 @@ fn check_once(cx: &mut Cx) -> R<bool> {
             bound.push(crate::day_night::Bound { id, daybound });
         }
         let obj = cx.s().obj(id);
+        if chars.supertypes.world { worlds.push((id, obj.world_since)); }
         // CR 704.5j: not for a player for whom an effect says the legend rule doesn't apply (Hall of Echoes), nor for a
         // permanent a static ability exempts (Mirror Gallery).
         if chars.supertypes.legendary
@@ -401,6 +403,13 @@ fn check_once(cx: &mut Cx) -> R<bool> {
     // order its first permanent entered; decided on the same board as the other actions of this check (CR 704.3),
     // so a legend that is dying anyway may still be the one kept.
     let mut surplus = Vec::new();
+    // CR 704.5k: compare continuous world intervals, not layer timestamps. A tie for newest sends EVERY World to
+    // the graveyard, including older ones. This is neither destruction nor sacrifice and has no player choice.
+    if worlds.len() > 1 {
+        let newest = worlds.iter().map(|&(_, since)| since).max().unwrap();
+        let tied = worlds.iter().filter(|&&(_, since)| since == newest).count() > 1;
+        surplus.extend(worlds.iter().filter_map(|&(id, since)| (tied || since != newest).then_some(id)));
+    }
     if legends.len() > 1 {
         for p in cx.s().apnap().collect::<Vec<_>>() {
             let mine: Vec<(ObjectId, &'static str)> =

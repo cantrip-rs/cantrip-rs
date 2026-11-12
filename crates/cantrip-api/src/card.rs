@@ -3869,7 +3869,7 @@ impl CardDef {
         colors: None,
         color_identity: ColorSet::NONE,
         types: TypeSet::NONE,
-        supertypes: Supertypes { basic: false, legendary: false, snow: false },
+        supertypes: Supertypes { basic: false, legendary: false, snow: false, world: false },
         subtypes: SubtypeSet::NONE,
         power: None,
         toughness: None,
@@ -4293,6 +4293,9 @@ pub struct CardTable {
     /// Which cards have a control-changing static ability (CR 613.1b, `Layer::Control`): what tells whether control could
     /// change without working out the static sources.
     pub control_statics: Vec<bool>,
+    /// Printed Worlds and definitions that can change the world supertype in layer 4, including abilities they grant.
+    /// Checked on live game sources, never as a global card-table guard.
+    pub world_sensitive: Vec<bool>,
     /// Which cards could have a triggered ability that may look back in time (CR 603.10, `TriggeredDef::may_look_back`) of
     /// their own: one they print, one they list to give (`CardDef::delayed`), any a static ability of theirs could give
     /// themselves, or, for a Room, one a door prints (CR 709.5; `CardTable::new`) - the objects a look-back pass needs as
@@ -4878,6 +4881,9 @@ impl CardTable {
             .collect();
         let statics: Vec<bool> = cards.iter().map(|c| c.statics.iter().any(|s| !s.own)).collect();
         let control_statics: Vec<bool> = cards.iter().map(|c| c.statics.iter().any(|s| s.layer == Layer::Control)).collect();
+        let world_sensitive = cards.iter().map(|c| c.supertypes.world
+            || c.statics.iter().any(|s| s.layer == Layer::Type)
+            || c.delayed.iter().any(|a| matches!(a, AbilityDef::Static(s) if s.layer == Layer::Type))).collect();
         let looks_back = |a: &AbilityDef| matches!(a, AbilityDef::Triggered(t) if t.may_look_back());
         let look_back: Vec<bool> = cards
             .iter()
@@ -4992,6 +4998,7 @@ impl CardTable {
             functions_elsewhere,
             statics,
             control_statics,
+            world_sensitive,
             look_back,
             zone_words,
             zone_word_cards,

@@ -14,7 +14,7 @@ static LEGENDARY_SORCERY: CardDef = CardDef {
     oracle: true,
     has_cost: true,
     types: TypeSet::of(&[CardType::Sorcery]),
-    supertypes: Supertypes { basic: false, legendary: true, snow: false },
+    supertypes: Supertypes { basic: false, legendary: true, snow: false, world: false },
     ..CardDef::BLANK
 };
 

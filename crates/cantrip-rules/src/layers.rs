@@ -4132,7 +4132,7 @@ mod tests {
         name: "Idol",
         colors: Some(ColorSet::of(Color::Green)),
         types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),
-        supertypes: Supertypes { basic: false, legendary: true, snow: false },
+        supertypes: Supertypes { basic: false, legendary: true, snow: false, world: false },
         subtypes: SubtypeSet::of(&[Subtype::Equipment, Subtype::Shapeshifter]),
         keywords: Keywords::of(&[Keyword::Changeling, Keyword::Flying]),
         power: Some(2),

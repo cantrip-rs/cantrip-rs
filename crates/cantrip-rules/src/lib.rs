@@ -60,6 +60,7 @@ mod layers;
 mod library_visibility;
 #[cfg(test)]
 mod library_visibility_tests;
+mod world;
 mod loops;
 mod merge;
 #[cfg(test)]
@@ -324,6 +325,9 @@ pub struct Game {
     /// event, which is already recorded so that the continuous effects that read the history see it (CR 603.10). None
     /// otherwise.
     pub(crate) history_end: Option<usize>,
+    /// Derived presence of world-sensitive live definitions, keyed only on state. Actual world characteristics may
+    /// read event history and are never cached here. Not part of the game state, journal, or loop identity.
+    world_interest: std::cell::Cell<Option<(u64, bool)>>,
     /// Where the state triggers stand in the run of a resolution (`StateCheck`). Bookkeeping of a call, not of the game.
     pub(crate) check: StateCheck,
     /// What the offer of the actions a player may take asks of the spells cards would be (`actions::SpellsAsCast`), while
@@ -426,6 +430,7 @@ impl Clone for Game {
             verify: self.verify,
             max_events: self.max_events,
             history_end: self.history_end,
+            world_interest: Default::default(),
             check: StateCheck::NONE,
             spells_as_cast: Default::default(),
             own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), mana_activation_x: None, mana_rider: 0, mana_interval: None,
@@ -447,6 +452,7 @@ impl Game {
             verify: false,
             max_events: self.max_events,
             history_end: self.history_end,
+            world_interest: Default::default(),
             check: StateCheck::NONE,
             spells_as_cast: Default::default(),
             own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None,
@@ -589,7 +595,7 @@ impl Game {
             t.priority = chooser;
         });
 
-        let mut game = Game { state, log: Vec::new(), tree: tree::Tree::new(), at: tree::NodeId::ROOT, cards, verify: false, max_events: MAX_GAME_EVENTS, history_end: None, check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() };
+        let mut game = Game { state, log: Vec::new(), tree: tree::Tree::new(), at: tree::NodeId::ROOT, cards, verify: false, max_events: MAX_GAME_EVENTS, history_end: None, world_interest: Default::default(), check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() };
         // CR 103.2b: the companion chosen as the deck was built is revealed once the starting player is known, if the starting
         // deck - the library as dealt - fulfils its condition; one that doesn't is a sideboard card, and nothing is said of it.
         for (p, id) in companions {
@@ -1033,7 +1039,7 @@ impl Game {
         let state = self.state.clone_with_journal_from(floor);
         let root = self.tree.next();
         let tree = tree::Tree::rooted(root, (state.mark(), self.log.len()));
-        Game { state, log: self.log.clone(), tree, at: root, cards: self.cards, verify: self.verify, max_events: self.max_events, history_end: None, check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() }
+        Game { state, log: self.log.clone(), tree, at: root, cards: self.cards, verify: self.verify, max_events: self.max_events, history_end: None, world_interest: Default::default(), check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() }
     }
 
     /// Gives the game's generator another seed (`GameState::reseed`): a fork for search that must not shuffle or roll
@@ -1523,6 +1529,7 @@ impl<'a> Cx<'a> {
         // instruction, once it is done (`ops::as_one_instruction`).
         if self.s().settle_held.get() == 0 {
             ops::settle_combat(self);
+            world::sync(self);
         }
         let check = &mut self.g.check;
         if check.depth == 0 {
@@ -1689,8 +1696,9 @@ impl<'a> Cx<'a> {
         ops::settle_at_once(self);
         let start = self.g.log.len();
         for &event in events {
-            self.record(event);
+            self.record_only(event);
         }
+        if self.s().settle_held.get() == 0 { world::sync(self); }
         start
     }
 
@@ -1714,6 +1722,12 @@ impl<'a> Cx<'a> {
         }
     }
     pub fn record(&mut self, event: Event) {
+        self.record_only(event);
+        if self.s().settle_held.get() == 0 { world::sync(self); }
+    }
+
+    /// A batch appends all its events before history-dependent characteristics are synchronized.
+    fn record_only(&mut self, event: Event) {
         let turn = self.g.state.turn;
         let cause = self.cause();
         let serial = self.g.log.len() as u32;

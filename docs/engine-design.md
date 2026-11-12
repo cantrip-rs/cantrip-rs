@@ -3666,3 +3666,22 @@ attacker's keywords or lifts flying, protection or other blocking restrictions.
 Named basic-landwalk references include their snow counterparts, consistently
 with the engine's other ability references. The source's `Asker` carries the
 controller and linked component for card predicates and text changes.
+
+
+### World intervals and state-based actions
+
+World permanents obey CR 704.5k. Their current continuous world-supertype interval
+has its own journalled `Obj::world_since` timestamp: ordinary layer timestamps
+can change while a permanent remains World. Acquisitions in a simultaneous batch
+share a value. The state-based action keeps the unique newest interval, or puts
+all Worlds into their owners' graveyards if newest is tied. World age is
+preserved through phasing and refreshed after actually losing and regaining the
+supertype. The interval's relative order and ties are included in canonical loop
+identity; absolute timestamp magnitudes are not.
+
+Synchronization follows whole instructions, ungrouped characteristics changes
+and recorded event batches. History-sensitive type-layer abilities are
+recalculated after history changes. Only the state-dependent presence of live
+world-sensitive definitions is cached, by epoch; the actual type result is not.
+The guard inspects game sources rather than asking whether the global card table
+contains any World.

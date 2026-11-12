@@ -17,7 +17,7 @@ they are not cards already implemented or independently verified end to end.
 | --- | ---: | --- |
 | Blocking as though landwalk were absent | 9 / 9 | Native tests passed (13 landwalk tests) |
 | Set only power or only toughness | 4 / 4 | Native tests passed (17 base-P/T tests) |
-| World supertype and world rule | 12 / 8 | Queued |
+| World supertype and world rule | 12 / 8 | Native tests passed (8 world-rule tests) |
 | Bands with other, including grants and removal | 8 / 8 | Queued |
 | No combat damage assignment after an earlier choice | 8 / 8 | Native tests passed (21 assignment tests) |
 | Other players activating abilities | 8 / 5 | Queued |
@@ -73,3 +73,38 @@ A first/double striker still creates a first-strike damage step even when it
 assigns no damage; the rule applies in both damage steps and survives ability
 loss for its duration. Native tests cover the attacking and blocking roles,
 noncombat damage, double strike, and journalled rollback.
+
+
+## World supertype and world rule
+
+The oracle builder, native characteristics, host view and raw observation now
+retain `world` (observation supertype bit 3; existing basic/legendary/snow bits are
+unchanged). The host protocol already defines `SupertypeView::World`. Explicit
+`Supertypes` initializers receive the required false field; those compatibility
+edits do not change the affected cards' behavior.
+
+`Obj::world_since` is the timestamp of its current uninterrupted World interval,
+not a record of how often something happened. The core synchronizes it after a
+whole instruction and after changes visible in event history. Simultaneous
+acquisitions share one value. Copies that remain World, control, attachments and
+other layer timestamp changes do not refresh it. Losing and regaining World
+does; phasing preserves it while the permanent is treated as nonexistent.
+
+The state-based action (CR 704.5k) keeps only the World with the newest interval,
+across all controllers. A tie for newest puts every World into its owner's
+graveyard, including older Worlds. It neither destroys nor sacrifices and asks
+no choice. The normal state-based-action batch still applies other simultaneous
+actions on that same position.
+
+The clock uses journalled object updates. Loop identity includes its relative
+order and ties, not absolute clock values. The presence of world-sensitive live
+definitions is cached by state epoch; actual characteristics are recalculated
+when event history changes, so a history-dependent type-layer ability remains
+correct. Games without relevant live sources do not perform a characteristics
+sweep. This cache is derived and reset when cloning or making a hypothetical
+game, rather than serialized or used as a table-wide guard.
+
+Tests cover successive Worlds under different controllers, simultaneous entry
+and ties including an older World, indestructibility, copies and continuous
+intervals, phasing, simultaneous type-layer changes, history-dependent type
+changes and atomic event batches, and rollback/canonical loop identity.

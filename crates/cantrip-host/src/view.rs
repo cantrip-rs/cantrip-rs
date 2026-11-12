@@ -266,6 +266,9 @@ pub fn supertypes_view(s: Supertypes) -> Vec<SupertypeView> {
     if s.snow {
         out.push(SupertypeView::Snow);
     }
+    if s.world {
+        out.push(SupertypeView::World);
+    }
     out
 }
 

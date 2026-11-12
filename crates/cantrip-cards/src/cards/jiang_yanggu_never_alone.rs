@@ -8,7 +8,7 @@ pub static MOWU: CardDef = CardDef {
     has_cost: false,
     colors: Some(ColorSet::of(Color::Green)),
     types: TypeSet::of(&[CardType::Creature]),
-    supertypes: Supertypes { basic: false, legendary: true, snow: false },
+    supertypes: Supertypes { basic: false, legendary: true, snow: false, world: false },
     subtypes: SubtypeSet::of(&[Subtype::Dog]),
     power: Some(3),
     toughness: Some(3),

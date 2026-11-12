@@ -118,7 +118,7 @@ static DRAIN: CardDef = CardDef {
 /// A basic land with a static ability of its rules text: "Creatures get +1/+1."
 static BASIC_PEAK: CardDef = CardDef {
     name: "Land Text Basic Peak",
-    supertypes: Supertypes { basic: true, legendary: false, snow: false },
+    supertypes: Supertypes { basic: true, legendary: false, snow: false, world: false },
     subtypes: SubtypeSet::NONE,
     ..PEAK
 };

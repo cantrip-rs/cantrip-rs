@@ -39,6 +39,10 @@ pub struct Obj {
     any_counters: bool,
     /// When it entered its zone (CR 613.7d), for ordering and for layer timestamps.
     pub timestamp: u32,
+    /// The start of its current uninterrupted interval as a World permanent (CR 704.5k), zero while it is not one.
+    /// Unlike its layer timestamp this is not reset by attaching, turning face up, or changing copies while still a World.
+    /// Simultaneous acquisitions share a clock value, independently of their APNAP layer timestamp order.
+    pub world_since: u32,
     /// The copy effects on it (CR 707.2, 613.2, layer 1a): the values it copied, which are its copiable values unless it
     /// is face down (`copiable`, layer 1b). An object about to be put onto the battlefield face down holds the face-down
     /// values here until it enters (`put_onto_battlefield_face_down`).
@@ -624,6 +628,7 @@ impl Obj {
             counters: _,
             any_counters: _,
             timestamp: _,
+            world_since: _,
             copy: _,
             loyalty_turn: _,
             became,
@@ -698,6 +703,7 @@ impl Obj {
             counters: [0; CounterKind::COUNT],
             any_counters: false,
             timestamp: 0,
+            world_since: 0,
             copy: None,
             loyalty_turn: 0,
             became: None,

@@ -35,7 +35,7 @@ fn position(keyword: Keyword, land_type: Option<Subtype>, supertype: Supertypes,
     let land = put(cards.id_of(land), land_owner);
     (g, attacker, blocker, land)
 }
-fn supertype(basic: bool, legendary: bool, snow: bool) -> Supertypes { Supertypes { basic, legendary, snow } }
+fn supertype(basic: bool, legendary: bool, snow: bool) -> Supertypes { Supertypes { basic, legendary, snow, world: false } }
 fn blockable(g: &mut Game, attacker: ObjectId, blocker: ObjectId) -> bool { can_block(&cx(g), blocker, attacker, &[]) }
 
 #[test]

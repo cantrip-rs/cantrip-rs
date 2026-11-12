@@ -5520,6 +5520,7 @@ pub fn settle_lasting_and_control(cx: &mut Cx) -> bool {
         }
     }
     settle_combat(cx);
+    crate::world::sync(cx);
     changed
 }
 
