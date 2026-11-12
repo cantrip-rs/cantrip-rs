@@ -881,6 +881,7 @@ fn defending_player(cx: &Cx, attack: Target) -> Option<PlayerId> {
 fn declare_attackers(cx: &mut Cx) -> R<()> {
     spend_next_turn_effects(cx);
     let active = cx.s().turn.active;
+    let attack_haste = std::cell::OnceCell::new();
     let eligible: Vec<ObjectId> = cx
         .s()
         .battlefield()
@@ -898,7 +899,8 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
                 // CR 508.1c: a resolved rule about an open set that says it, or those who control it, can't attack this turn
                 // (`LastingRuleKind::CantAttack`: Peace in Our Time).
                 && crate::static_rules::lasting_rules_on(cx, cx.cards(), id, LastingRuleKind::CantAttack).next().is_none()
-                && !summoning_sick(cx.cards(), cx.s(), &cx.g.log, id)
+                && (!summoning_sick(cx.cards(), cx.s(), &cx.g.log, id)
+                    || !attack_haste.get_or_init(|| crate::static_rules::attack_haste_sources(cx)).is_empty())
                 // CR 702.3b: defender, unless an effect or a static ability lets it attack as though it didn't have it
                 // (CR 609.4), which lifts no other restriction: asked last, of a creature that could otherwise attack.
                 && (!chars.has(Keyword::Defender) || crate::static_rules::may_attack_despite_defender(&*cx, cx.cards(), id))
@@ -911,6 +913,20 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
     // CR 508.1c: the attacks a static ability forbids ("this creature can't attack unless ...", "creatures with flying
     // can't attack you"). A creature forbidden every attack open to it can't attack at all.
     let mut barred = crate::static_rules::attacks_barred(&*cx, cx.cards(), &eligible, &targets);
+    // The permission may name particular defenders; include a sick creature
+    // only for the attacks it permits. Every independent restriction still holds.
+    if let Some(sources) = attack_haste.get().filter(|s| !s.is_empty()) {
+        for &creature in &eligible {
+            if summoning_sick(cx.cards(), cx.s(), &cx.g.log, creature) {
+                for &defender in &targets {
+                    if !sources.iter().any(|(asker, def)| def.attacks_as_though_haste.iter().any(|rule| rule(cx, asker, creature, defender)))
+                        && !barred.contains(&(creature, defender)) {
+                        barred.push((creature, defender));
+                    }
+                }
+            }
+        }
+    }
     // CR 508.1c, 611.2c: the attacks a resolved rule about an open set forbids - "until your next turn, creatures can't
     // attack you" (Chronomantic Escape), barring the attack on that player alone.
     for attack in crate::static_rules::lasting_rules_barring_attacks(&*cx, cx.cards(), &eligible, &targets) {

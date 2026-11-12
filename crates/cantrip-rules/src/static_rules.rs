@@ -366,6 +366,14 @@ pub fn may_attack_despite_defender(q: &dyn Query, cards: &'static CardTable, cre
     })
 }
 
+/// Live sources of attack-only summoning-sickness exceptions (CR 302.6, 609.4).
+/// Asked lazily only when an otherwise eligible creature is summoning sick.
+/// Empty sources allocate nothing and read no extra characteristics.
+pub(crate) fn attack_haste_sources(cx: &Cx) -> Vec<(Asker, &'static CardDef)> {
+    sources(cx, |d| !d.attacks_as_though_haste.is_empty())
+        .map(|(source, controller, def, by)| (Asker { source, controller, by, spell: false, instance: None }, def)).collect()
+}
+
 /// What each attack open to the active player's creatures costs to declare (CR 508.1d, 508.1h): for each of `eligible`
 /// and each of `targets`, every static ability of a permanent on the battlefield that makes that attack cost something
 /// (`CardDef::attack_costs`: Propaganda's "creatures can't attack you unless their controller pays {2} for each creature

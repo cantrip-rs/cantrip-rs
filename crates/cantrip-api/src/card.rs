@@ -2812,6 +2812,12 @@ pub type MustBeBlocked = fn(&dyn Query, ObjectId, ObjectId) -> bool;
 /// whose condition fails afterwards stays attacking (CR 506.4).
 pub type AttackRule = fn(&dyn Query, &Asker, ObjectId, Target) -> bool;
 
+/// Permission to ignore summoning sickness for one attack (CR 302.6, 508.1a,
+/// 609.4): Instill Energy and Chaos Lord. True permits this creature to attack
+/// this defender as though it had haste; it grants no keyword, no tap/untap
+/// cost permission, and overrides no other attack restriction.
+pub type AttackHasteRule = fn(&dyn Query, &Asker, ObjectId, Target) -> bool;
+
 /// A static ability that makes attacking cost something (CR 508.1d, 508.1h): "creatures can't attack you unless their
 /// controller pays {2} for each creature they control that's attacking you" (Propaganda, Ghostly Prison, Windborn Muse),
 /// "creatures can't attack you or planeswalkers you control unless their controller pays {1} for each of those creatures"
@@ -3726,6 +3732,8 @@ pub struct CardDef {
     /// Its static abilities that goad creatures (CR 701.15a), while it is on the battlefield with its abilities: "All
     /// Tribbles ... are goaded". The goader is the source's controller (CR 701.15b).
     pub goads: &'static [GoadRule],
+    /// Attack-only exceptions to summoning sickness while this permanent has its abilities.
+    pub attacks_as_though_haste: &'static [AttackHasteRule],
     /// Its static abilities that change who can target what and whether ward triggers, while it is on the battlefield.
     pub targeting_rules: &'static [TargetingRule],
     /// Its static abilities that give players keyword abilities ("You have shroud", CR 702.18a), while it is on the
@@ -4014,6 +4022,7 @@ impl CardDef {
         attack_limits: &[],
         attacks_despite_defender: &[],
         goads: &[],
+        attacks_as_though_haste: &[],
         targeting_rules: &[],
         player_keywords: &[],
         player_protection: &[],
@@ -4118,6 +4127,7 @@ impl CardDef {
             (!self.block_requirements.is_empty(), "block requirements"),
             (!self.must_be_blocked.is_empty(), "must be blocked"),
             (!self.attack_rules.is_empty(), "attack rules"),
+            (!self.attacks_as_though_haste.is_empty(), "attack-only haste permissions"),
             (!self.attack_alone_rules.is_empty(), "a rule against attacking alone"),
             (!self.attack_costs.is_empty(), "attack costs"),
             (!self.attack_limits.is_empty(), "attack limits"),

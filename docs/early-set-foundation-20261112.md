@@ -377,3 +377,22 @@ as Overabundance and Snowfall gated: they require correct immediate-mana
 classification/advice, not an ordinary stack trigger. The previous complete
 native gate is through the ten-feature batch; this feature's full batch and
 performance receipt follow with the next group of changes.
+
+## Attack-only summoning-sickness exceptions
+
+`CardDef::attacks_as_though_haste` grants permission for one creature/defender
+pair (CR 302.6, 508.1a, 609.4), as Instill Energy and Chaos Lord require. It
+gives no haste keyword and no permission to pay tap/untap-symbol costs or to
+enlist. Tapped status, controller, defender and independent attack bans still
+apply. Losing an external permission's recipient's abilities leaves that rule;
+losing the source's abilities removes it. Copied source texts participate.
+
+Sources are collected lazily only when an otherwise eligible attacker is sick;
+no collection is allocated in the ordinary path. Target-specific exceptions
+feed the existing declaration validator, so invalid defender choices are
+rejected by the core and its client-facing verdict. Six focused tests pass,
+including three-player defender choices. The generated runtime suite passes
+43 scenarios, including an actual Instill Energy on a sick mana creature and
+Chaos Lord distinguishing a new entry from a control change this turn. Quantity
+bounds and the AST schema remain unchanged. The next complete gate/benchmark
+batches this feature with ordinary mana-tap observers and counter metadata.
