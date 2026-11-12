@@ -213,7 +213,7 @@ pub fn resolve(g: &mut dyn Game, item: &StackItem, payment: Payment) -> Result<(
 /// The triggered ability of cumulative upkeep, its effect `pay` being the card's `resolve` with its payment. Use
 /// `cumulative_upkeep!`.
 pub const fn ability(pay: Effect, text: &'static str) -> AbilityDef {
-    triggered(when(EventMask::STEP_BEGAN, your_upkeep), pay, text)
+    triggered(when(EventMask::STEP_BEGAN, your_upkeep), pay, text).keyword_family(KeywordFamily::CumulativeUpkeep)
 }
 
 /// Cumulative upkeep [cost] (CR 702.24a): `cumulative_upkeep!(payment, text)`; see the module.

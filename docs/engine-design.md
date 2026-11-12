@@ -3729,3 +3729,12 @@ authority rather than asking the payer. The special-action path separates
 ordinary and random discards for the same ordering. Random discards cannot
 feed an earlier nonrandom graveyard cost. Selection, discard and typed payment
 receipts use the existing journal, movement and cost infrastructure.
+
+### Typed triggered-keyword families
+
+The rampage and cumulative-upkeep factories tag their `TriggeredDef` with a
+compact `KeywordFamily`. Queries inspect current layered ability references;
+labels and callback identity are never classifiers. Shared factories also tag
+instances granted from a card's delayed list. An Oracle-consistency test holds
+all implemented printed keywords to those tags. No historical counts or
+per-object family collections are stored.

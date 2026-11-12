@@ -675,6 +675,12 @@ impl AbilityDef {
         self.activated_by(|_, _, _| true)
     }
 
+    /// The triggered keyword's family (CR 702.23, 702.24), set by its shared implementation for "has rampage" and
+    /// "doesn't have cumulative upkeep" queries. Display text and the trigger's function pointer are not classifiers.
+    pub const fn keyword_family(self, family: KeywordFamily) -> AbilityDef {
+        AbilityDef::Triggered(TriggeredDef { keyword_family: Some(family), ..triggered_def(self, "only a triggered keyword has this family") })
+    }
+
     /// "Activate only if ..." (CR 602.5b), or a triggered ability's intervening "if" (CR 603.4).
     pub const fn condition(self, condition: Condition) -> AbilityDef {
         match self {

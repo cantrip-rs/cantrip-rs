@@ -280,3 +280,20 @@ after-run during concurrent builds measured 77.01. Shared-machine variability
 precludes a statistical speed claim. No .NET pass is claimed: the SDK remains
 unavailable. MTGish's docs/cantrip-foundation-progress-20261112.json records
 the per-card ledger, exact native revision, API fingerprint and log hashes.
+
+## Typed keyword-family queries
+
+`TriggeredDef::keyword_family` and `Query::has_keyword_family` identify rampage
+and cumulative upkeep without parsing display text or comparing function
+pointers (CR 702.23, 702.24). Their shared keyword factories supply the tag;
+queries read the object's current layered abilities, including grants and
+copies, so ability loss removes the family and a later granted instance
+restores it. These are compact static tags, not new game-history counters or
+permanent allocations. Ward/flanking's existing metadata is unchanged.
+
+Rapid Fire asks whether its creature already has rampage; Balduvian Shaman
+requires a target without cumulative upkeep. Two focused rules tests cover
+labels that disagree with the typed tag, copies, grants and ability loss. An
+Oracle-consistency test checks every currently implemented card's printed
+rampage/cumulative-upkeep lines against its actual tags and passes. Production
+classification never reads those lines. No existing card file needed edits.

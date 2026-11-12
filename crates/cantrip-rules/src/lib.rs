@@ -3455,3 +3455,7 @@ mod copy_retarget_tests;
 #[cfg(test)]
 #[path = "empty_mana_tests.rs"]
 mod empty_mana_tests;
+
+#[cfg(test)]
+#[path = "keyword_family_tests.rs"]
+mod keyword_family_tests;

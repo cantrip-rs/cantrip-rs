@@ -266,6 +266,12 @@ pub trait Query {
         }
     }
 
+    /// Whether the object's current abilities include a triggered keyword family, after grants, copies and ability
+    /// loss (CR 613.1f). Multiple instances still constitute one "has" test; their triggers remain independent.
+    fn has_keyword_family(&self, object: ObjectId, family: crate::KeywordFamily) -> bool {
+        self.chars(object).abilities().any(|a| self.triggered_ability(a).is_some_and(|t| t.keyword_family == Some(family)))
+    }
+
     /// An object's rules information after every continuous effect (CR 613). A phased-out source is read as it last
     /// existed phased in (CR 608.2h, 702.15c); projected current characteristics are separate from source information.
     fn chars(&self, id: ObjectId) -> Chars;
