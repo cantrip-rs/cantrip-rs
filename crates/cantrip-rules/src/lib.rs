@@ -3722,3 +3722,6 @@ mod keyword_family_tests;
 
 #[cfg(test)]
 mod combat_group_tests;
+
+#[cfg(test)]
+mod combat_delayed_tests;

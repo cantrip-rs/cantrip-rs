@@ -16,19 +16,16 @@ fn during_combat_on_your_turn_before_blockers(q: &dyn Query, asker: &Asker) -> b
 fn melee(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.add_player_effect(item.controller, item.object, EffectKind::ChoosesBlocks, Duration::EndOfCombat);
     g.end_sentence();
-    g.delayed_trigger(DelayedWhen::ThisTurn, item.object, item.controller, AbilityRef::delayed(item.ability.card, 0), Target::None);
+    g.delayed_trigger(DelayedWhen::ThisCombat, item.object, item.controller, AbilityRef::delayed(item.ability.card, 0), Target::None);
     Ok(())
 }
 
 /// "Whenever a creature attacks and isn't blocked this combat" (CR 509.3g, 603.7): an attacker no creature was declared to
-/// block, about that attacker, in the combat Melee was cast in: the one its "you choose which creatures block this combat"
-/// effect - made by the same resolution, the only effect this spell makes - lasts through (`Duration::EndOfCombat`); a
-/// later combat phase of the turn is not it.
-fn attacks_and_isnt_blocked_this_combat(q: &dyn Query, asker: &Asker, event: &Event) -> Option<Fired> {
-    match event {
-        Event::Unblocked { attacker, .. } if q.state().effects.iter().any(|e| e.source == asker.source) => Fired::about(Target::Object(*attacker)),
-        _ => None,
-    }
+/// block, about that attacker. The delayed ability is `DelayedWhen::ThisCombat`, so it ends with the combat phase Melee was
+/// cast in and a later combat phase of the turn is not it.
+fn attacks_and_isnt_blocked_this_combat(_q: &dyn Query, _asker: &Asker, event: &Event) -> Option<Fired> {
+    let Event::Unblocked { attacker, .. } = event else { return None };
+    Fired::about(Target::Object(*attacker))
 }
 
 /// "Untap it and remove it from combat." (CR 701.26b, 506.4): nothing for a creature that has left the battlefield.
