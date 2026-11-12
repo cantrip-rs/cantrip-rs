@@ -1,0 +1,59 @@
+# Voyager Quickwelder: "Artifact spells you cast cost {1} less to cast." (CR 601.2f, 118.7a) Bot1 casts it on turn 1 with three
+# Moxes. On turn 3 a Smuggler's Copter ({2}) costs {1}: one Mox pays for it and nothing is left in the pool. A Grizzly Bears is no artifact and still costs
+# {1}{G}: with only the {W} and {R} of its Moxes it is refused, and once the Mox Emerald comes down it is cast. In Bot2's turn 2 Bot2's own Smuggler's
+# Copter is not "you cast" and still costs {2}: refused with a single Mox's mana.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Voyager Quickwelder
+Smuggler's Copter
+Grizzly Bears
+Mox Emerald
+Mountain x13
+
+[Bot2 Deck]
+Mox Jet
+Smuggler's Copter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Voyager Quickwelder.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+! Bot2.Hand.Smuggler's Copter.Cast(Mana: short)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter.Types = Artifact
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Grizzly Bears.Cast(Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Battlefield = Grizzly Bears; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Smuggler's Copter; Voyager Quickwelder
+Bot1.Battlefield.Mox Jet.Tapped = true
+Bot1.Battlefield.Mox Ruby.Tapped = false
+Bot1.Hand = Mountain
+Bot2.Battlefield = Mox Jet
+Bot2.Hand.Count = 7
