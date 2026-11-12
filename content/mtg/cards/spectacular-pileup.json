@@ -1,0 +1,6 @@
+{
+  "name": "Spectacular Pileup",
+  "manaCost": "{3}{W}{W}",
+  "type": "Sorcery",
+  "oracleText": "All creatures and Vehicles lose indestructible until end of turn, then destroy all creatures and Vehicles.\nCycling {2} ({2}, Discard this card: Draw a card.)"
+}
