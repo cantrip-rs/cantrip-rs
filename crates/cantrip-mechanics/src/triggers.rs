@@ -471,6 +471,19 @@ pub fn this_attacks_subject(_: &dyn Query, source: ObjectId, event: &Event) -> O
     }
 }
 
+/// "Whenever this creature attacks while saddled" (CR 702.171b, 508.1m, 603.2): its own attack, declared while it is saddled
+/// (until end of turn, CR 702.171b); a Mount that is saddled afterwards, or was saddled and has left the battlefield and come back
+/// (CR 400.7), does not trigger it. Brightfield Glider, Brightfield Mustang, Bulwark Ox, Gloryheath Lynx and Guardian Sunmare
+/// print it. The `listens` mask is `EventMask::ATTACKS`.
+pub fn this_attacks_while_saddled(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    match event {
+        Event::Attacks { attacker, .. } if *attacker == source && q.is_saddled(source) => Fired::PLAIN,
+        _ => None,
+    }
+}
+
+pub const THIS_ATTACKS_WHILE_SADDLED: Trigger = when(EventMask::ATTACKS, this_attacks_while_saddled);
+
 /// "Whenever this creature is dealt damage" (CR 120.2, 603.2c): the damage it is dealt at once, even if it is lethal, as
 /// `data[0]` bounded to u32, or the bounded frozen payload with `.damage_amount()` ("that much"); damage of zero is not dealt. The ability is `.sums_per_subject()`, which adds up
 /// the events of one combat that hurt it from several sources. Screaming Nemesis and Hexhaven Invigorator print it. The
