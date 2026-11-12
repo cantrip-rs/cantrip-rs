@@ -1,0 +1,6 @@
+{
+  "name": "Gallant Strike",
+  "manaCost": "{1}{W}",
+  "type": "Instant",
+  "oracleText": "Destroy target creature with toughness 4 or greater.\nCycling {2} ({2}, Discard this card: Draw a card.)"
+}
