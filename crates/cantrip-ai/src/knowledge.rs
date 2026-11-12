@@ -189,7 +189,7 @@ impl Knowledge {
                 }
             }
             Event::TurnedFaceUp { permanent, .. } => self.see(game, permanent),
-            Event::ZoneChange { old, new, from, to, .. } => self.moved(game, old, new, from, to),
+            Event::ZoneChange { old, new, from, to, from_revealed_hand, to_revealed_hand, .. } => self.moved(game, old, new, from, to, from_revealed_hand, to_revealed_hand),
             Event::PlayerControlled { player, controller } if controller == player => {
                 self.controllers.remove(&player);
             }
@@ -209,18 +209,21 @@ impl Knowledge {
         self.see(game, id);
     }
 
-    fn moved(&mut self, game: &Game, old: ObjectId, new: ObjectId, from: Zone, to: Zone) {
+    fn moved(&mut self, game: &Game, old: ObjectId, new: ObjectId, from: Zone, to: Zone, from_revealed_hand: bool, to_revealed_hand: bool) {
         let s = &game.state;
         let stored = self.known.remove(&old);
         let traced = self.traced.remove(&old);
-        let sees_from = self.looks_into(from) && !from.is(ZoneKind::Gone);
-        let sees_to = self.looks_into(to);
+        let sees_from = (self.looks_into(from) || from_revealed_hand) && !from.is(ZoneKind::Gone);
+        let sees_to = self.looks_into(to) || to_revealed_hand;
         let sees_new = sees_to && self.knows_face(game, new);
+        if to_revealed_hand && sees_new && !self.looks_into(to) {
+            self.known.insert(new, false);
+        }
         // It can tell which object left: it sees the zone, or knows the library card's place.
         let follows = sees_from || from.is(ZoneKind::Gone) || stored == Some(true);
         let identity = follows && (stored.is_some() || (sees_from && self.knows_face(game, old)));
         if follows {
-            if identity && !sees_to && to.kind().is_hidden() {
+            if (identity || sees_new) && !self.looks_into(to) && to.kind().is_hidden() {
                 // Put on top or at the bottom is a place it knows; shuffled in or at random, the events that follow say not.
                 self.known.insert(new, to.is(ZoneKind::Library));
             }
