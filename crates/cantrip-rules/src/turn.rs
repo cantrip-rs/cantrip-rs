@@ -754,6 +754,7 @@ pub(crate) fn untap_step(cx: &mut Cx, active: PlayerId) -> R<()> {
         }
         untapping.push(id);
     }
+    crate::untap_limits::restrict(cx, active, &mut untapping)?;
     // "Untap [these] during each other player's untap step" (CR 611.3a): what each rule is true of now, before anything
     // untaps, untaps with the active player's permanents and is no one's choice (Bender's Waterskin ruling, 2025-10-02).
     // A permanent of a player who isn't active is outside "doesn't untap during its controller's untap step" (CR 502.3,

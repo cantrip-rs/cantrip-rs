@@ -274,6 +274,7 @@ mod static_rule_source_tests;
 #[cfg(test)]
 mod transformed_cast_tests;
 mod turn;
+mod untap_limits;
 #[cfg(test)]
 mod cant_become_untapped_tests;
 #[cfg(test)]
@@ -3460,3 +3461,6 @@ mod copy_retarget_tests;
 #[cfg(test)]
 #[path = "empty_mana_tests.rs"]
 mod empty_mana_tests;
+
+#[cfg(test)]
+mod untap_limit_tests;
