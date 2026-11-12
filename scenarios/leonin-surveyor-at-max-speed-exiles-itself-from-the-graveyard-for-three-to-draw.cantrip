@@ -1,0 +1,85 @@
+# Leonin Surveyor: "Max speed — {3}, Exile this card from your graveyard: Draw a card." A static ability of the card that
+# functions in the graveyard (CR 113.6b, 702.178b) grants the ability while its owner's speed is 4 (CR 702.178a). Cast on
+# turn 1 it gives Bot1 speed 1 (CR 704.5aa, 702.179a), and a Lightning Bolt to Bot2's face on each of turns 1, 3 and 5
+# raises it once a turn: 2, 3, 4 (CR 702.179d). At speed 3 on turn 3 the Surveyor is on the battlefield, where the
+# ability is not offered. Bot2 Bolts it on turn 6 (2 toughness); on turn 7, at speed 4, Bot1 exiles the card from the
+# graveyard for {3} and draws the card after the turn's draw, Memnite.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Pearl
+Leonin Surveyor
+Lightning Bolt
+Mountain
+Mountain
+Lightning Bolt
+Lightning Bolt
+Ornithopter
+Memnite
+Mountain x9
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Leonin Surveyor.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+! Bot1.Battlefield.Leonin Surveyor.Activate
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Leonin Surveyor)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Leonin Surveyor; Lightning Bolt; Lightning Bolt; Lightning Bolt
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mountain#3.Activate
+Bot1.Graveyard.Leonin Surveyor.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 7
+Bot1.Speed = 4
+Exile = Leonin Surveyor
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Lightning Bolt
+Bot1.Hand = Ornithopter; Memnite
