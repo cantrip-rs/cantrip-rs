@@ -1005,3 +1005,14 @@ pub fn cant_be_regenerated(q: &dyn Query, cards: &'static CardTable, id: ObjectI
             })
         })
 }
+
+
+/// Whether a live static ability skips this step (CR 500.11, 614.10).
+/// Reads only sources actually on the battlefield; copies and component links count,
+/// and a source that lost all its abilities does not. No candidate list is allocated.
+pub(crate) fn skips_step(cx: &Cx, player: PlayerId, step: Step) -> bool {
+    sources(cx, |d| !d.skip_steps.is_empty()).any(|(source, controller, def, by)| {
+        let asker = Asker { source, controller, by, instance: None, spell: false };
+        def.skip_steps.iter().any(|rule| rule.step == step && (rule.applies)(cx, &asker, player))
+    })
+}

@@ -3176,6 +3176,16 @@ pub struct UntapLimit {
     pub amount: u32,
 }
 
+/// A static ability that skips a step for the players it names (CR 500.11, 614.10):
+/// Stasis skips every untap step; Necropotence skips its controller's draw step.
+/// The supported steps are Untap, Upkeep and Draw. No step begins, so neither
+/// its actions nor beginning triggers occur.
+#[derive(Clone, Copy, Debug)]
+pub struct SkipStep {
+    pub applies: fn(&dyn Query, &Asker, PlayerId) -> bool,
+    pub step: Step,
+}
+
 /// A static ability that says a permanent can't phase in (CR 702.26a, 101.2), asked of the permanent that would phase in:
 /// The City on the Edge of Forever's Human token, "Permanents can't phase in." A rule of the game, not an ability of the
 /// permanent that would phase in, so it holds whatever abilities that one has lost (CR 613.1f).
@@ -3807,6 +3817,8 @@ pub struct CardDef {
     pub untap_bans: &'static [UntapBan],
     /// Simultaneous untap limits while this permanent has its abilities. See `UntapLimit`.
     pub untap_limits: &'static [UntapLimit],
+    /// Steps skipped while this permanent has its abilities. See `SkipStep`.
+    pub skip_steps: &'static [SkipStep],
     /// Its static abilities that say permanents can't phase in (CR 702.26a, 101.2), while it is on the battlefield with
     /// its abilities: The City on the Edge of Forever's Human token. See `PhaseInBan`.
     pub phase_in_bans: &'static [PhaseInBan],
@@ -4046,6 +4058,7 @@ impl CardDef {
         face_up_bans: &[],
         untap_bans: &[],
         untap_limits: &[],
+        skip_steps: &[],
         phase_in_bans: &[],
         cant_become_untapped: &[],
         damage_by_toughness: &[],
@@ -4156,6 +4169,7 @@ impl CardDef {
             (!self.face_up_bans.is_empty(), "face-up bans"),
             (!self.untap_bans.is_empty(), "untap bans"),
             (!self.untap_limits.is_empty(), "untap limits"),
+            (!self.skip_steps.is_empty(), "skipped steps"),
             (!self.phase_in_bans.is_empty(), "phase-in bans"),
             (!self.cant_become_untapped.is_empty(), "rules against becoming untapped"),
             (!self.damage_by_toughness.is_empty(), "damage by toughness"),
@@ -4848,6 +4862,8 @@ impl CardTable {
         // A static ability given in layer 6 applies from there on (CR 613.1f): once given, in layer 6 itself, and from 7a on.
         // One of an earlier layer would come into being after its layer was done, and would be quietly absent: refused.
         for card in &cards {
+            assert!(card.skip_steps.iter().all(|rule| matches!(rule.step, Step::Untap | Step::Upkeep | Step::Draw)),
+                "{}: skipped steps currently support Untap, Upkeep and Draw", card.name);
             for ability in card.abilities.iter().chain(card.delayed) {
                 if let AbilityDef::Static(s) = ability {
                     assert!(s.layer >= Layer::Ability, "{}: a granted static ability applies in layer 6 or later (CR 613.1f)", card.name);
