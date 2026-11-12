@@ -1529,6 +1529,8 @@ pub enum EffectKind {
     /// and indestructible" (Shadowspear). Named landwalk references include the matching snow variant
     /// (`Keywords::for_effect`); grants stay exact. What is granted after it is kept.
     LoseKeywords(Keywords),
+    /// All kinds of "bands with other", independently of ordinary banding (CR 702.22).
+    LoseBandsWithOthers,
     /// Gains this ability (activated, triggered or a supported static rule), layer 6.
     AddAbility(AbilityRef),
     /// Protection from a player (CR 702.16a): their spells and abilities can't target it, their creatures can't block

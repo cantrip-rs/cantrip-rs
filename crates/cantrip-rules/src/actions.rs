@@ -581,7 +581,7 @@ fn has_split_second(cx: &Cx, spell: ObjectId) -> bool {
 fn activated(cx: &Cx, ability: AbilityRef) -> Option<&'static ActivatedDef> {
     match cx.cards().ability(ability) {
         AbilityDef::Activated(a) => Some(a),
-        AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => None,
+        AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => None,
     }
 }
 

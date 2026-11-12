@@ -577,7 +577,7 @@ pub fn add_listed(g: &mut dyn Game, controller: PlayerId, def: &ActivatedDef, ch
 const fn activated(a: AbilityDef, method: &str) -> ActivatedDef {
     match a {
         AbilityDef::Activated(d) => d,
-        AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("{}", method),
+        AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => panic!("{}", method),
     }
 }
 
@@ -597,7 +597,7 @@ impl AbilityDef {
         match self {
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { targets, ..d }),
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { targets, ..t }),
-            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("a static ability has no targets"),
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => panic!("a static ability has no targets"),
         }
     }
 
@@ -686,7 +686,7 @@ impl AbilityDef {
         match self {
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { condition: Some(condition), ..d }),
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { condition: Some(condition), ..t }),
-            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("a static ability has no condition"),
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => panic!("a static ability has no condition"),
         }
     }
 
@@ -704,7 +704,7 @@ impl AbilityDef {
     pub const fn only_if(self, only_if: Condition) -> AbilityDef {
         match self {
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { only_if: Some(only_if), ..t }),
-            AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("only a triggered ability triggers only if"),
+            AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => panic!("only a triggered ability triggers only if"),
         }
     }
 
@@ -713,7 +713,7 @@ impl AbilityDef {
     pub const fn pay_one_of(self, ways: &'static [ExtraCost]) -> AbilityDef {
         match self {
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { cost_choice: ways, ..d }),
-            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("only an activated ability has a cost"),
+            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => panic!("only an activated ability has a cost"),
         }
     }
 
@@ -723,7 +723,7 @@ impl AbilityDef {
             AbilityDef::Activated(_) if modal.max == ModalDef::COUNTED => panic!("an activated ability has no count for \"that many\" modes"),
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { modal: Some(modal), ..d }),
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { modal: Some(modal), ..t }),
-            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("a static ability has no modes"),
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => panic!("a static ability has no modes"),
         }
     }
 
@@ -801,7 +801,7 @@ impl AbilityDef {
 const fn triggered_def(a: AbilityDef, method: &str) -> TriggeredDef {
     match a {
         AbilityDef::Triggered(t) => t,
-        AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("{}", method),
+        AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => panic!("{}", method),
     }
 }
 
@@ -884,7 +884,7 @@ impl AbilityDef {
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { divide: Some(divide), ..d }),
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { divide: Some(divide), ..t }),
             AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_)
-            | AbilityDef::BlockAllowance(_) => panic!("a static ability has no targets to divide among"),
+            | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => panic!("a static ability has no targets to divide among"),
         }
     }
 

@@ -27,7 +27,7 @@ fn target_specs(cards: &CardTable, state: &GameState, item: &StackItem) -> &'sta
         _ => match cards.ability(item.ability) {
             AbilityDef::Activated(a) => a.targets,
             AbilityDef::Triggered(t) => t.targets,
-            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => &[],
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => &[],
         },
     }
 }
@@ -38,11 +38,11 @@ pub fn modal_of(cards: &CardTable, state: &GameState, item: &StackItem) -> Optio
         StackKind::Spell => cards.get(face(state, item.object)).modal,
         StackKind::Activated => match cards.ability(item.ability) {
             AbilityDef::Activated(a) => a.modal,
-            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => None,
+            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => None,
         },
         StackKind::Triggered => match cards.ability(item.ability) {
             AbilityDef::Triggered(t) => t.modal,
-            AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => None,
+            AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => None,
         },
     }
 }
@@ -740,7 +740,7 @@ fn resolve_inner(cx: &mut Cx, summarize_terminal_mana: bool) -> R<Flow> {
                     AbilityDef::Activated(a) => (a.effect)(cx, &item),
                     AbilityDef::Triggered(TriggeredDef { modal: Some(modal), .. }) => run_modes(cx, &item, modal),
                     AbilityDef::Triggered(t) => triggered_effect(cx, &item, t, summarize_terminal_mana),
-                    AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => unreachable!("a static ability is never on the stack"),
+                    AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => unreachable!("a static ability is never on the stack"),
                 })?;
                 // It has resolved (CR 608.2m: "the first time this ability has resolved this turn").
                 cx.record(Event::Resolved { source: item.object, ability: item.ability });

@@ -2027,6 +2027,19 @@ pub enum AbilityDef {
     /// An ability of this creature allowing additional attackers to be blocked (CR 509.1a).
     /// Unlike a rule another permanent imposes, this is lost and copied as an ability.
     BlockAllowance(BlockAllowanceDef),
+    /// Parameterized banding keyword (CR 702.22), held in the ordinary ability slots.
+    BandsWithOthers(BandsWithOthersDef),
+}
+
+/// The named quality of "bands with other [quality]". The quality describes
+/// creatures independently of the holder: legendary creatures, or creatures
+/// named Wolves of the Hunt. The holder must itself match to form such a band.
+pub type BandQuality = fn(&dyn Query, ObjectId) -> bool;
+
+#[derive(Clone, Copy)]
+pub struct BandsWithOthersDef {
+    pub quality: BandQuality,
+    pub text: &'static str,
 }
 
 /// A creature's own ability to block additional attackers. `u32::MAX` means any number.
@@ -2069,6 +2082,7 @@ impl AbilityDef {
             AbilityDef::PlayRule(p) => p.text,
             AbilityDef::RegenerationBan(ban) => ban.text,
             AbilityDef::BlockAllowance(allowance) => allowance.text,
+            AbilityDef::BandsWithOthers(bands) => bands.text,
         }
     }
 }
@@ -5512,7 +5526,7 @@ impl CardTable {
         match self.ability(ability) {
             AbilityDef::Activated(a) => a.modal,
             AbilityDef::Triggered(t) => t.modal,
-            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => None,
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => None,
         }
     }
 
@@ -5521,7 +5535,7 @@ impl CardTable {
     pub fn cost_choice_of(&self, ability: AbilityRef) -> &'static [ExtraCost] {
         match self.ability(ability) {
             AbilityDef::Activated(a) => a.cost_choice,
-            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => &[],
+            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => &[],
         }
     }
 

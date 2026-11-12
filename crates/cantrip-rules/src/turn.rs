@@ -1128,16 +1128,14 @@ fn enlistable_now(cx: &Cx, player: PlayerId, id: ObjectId) -> bool {
 }
 
 /// The attacking bands the active player announces (CR 508.1e, 702.22c), one band number for each of `attacks` (0 for none).
-/// Each attacker with banding not yet in a band is asked in turn for the other attackers that band with it: any of those
-/// attacking what it attacks (CR 702.22d) and in no band yet (each creature is in one band at most), any number with banding
-/// and at most one without (the core refuses more, `validate`). Choosing none forms no band with it. Nothing is asked where no
-/// attacker has banding, or one has no other attacker beside it.
+/// A qualifying provider not already in a band may choose the other unbanded attackers attacking the same defender.
+/// The selection enforces ordinary banding or the provider's named "bands with other" quality. Declining forms no band.
 fn declare_bands(cx: &mut Cx, active: PlayerId, attacks: &[(ObjectId, Target)]) -> R<Vec<u32>> {
     let mut band = vec![0u32; attacks.len()];
     let mut next = 1;
     for i in 0..attacks.len() {
         let (source, target) = attacks[i];
-        if band[i] != 0 || !cx.chars(source).has(Keyword::Banding) {
+        if band[i] != 0 || !crate::banding::can_lead(cx, source) {
             continue;
         }
         let eligible: Vec<ObjectId> =
@@ -1162,15 +1160,8 @@ fn declare_bands(cx: &mut Cx, active: PlayerId, attacks: &[(ObjectId, Target)]) 
     Ok(band)
 }
 
-/// "Any number of creatures with banding and up to one without" (CR 702.22c): the creatures that join a band.
-fn up_to_one_without_banding(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
-    let banding = |c: ObjectId| q.chars(c).has(Keyword::Banding);
-    let without = choice.selected.iter().filter(|&&c| !banding(c)).count();
-    Verdict { complete: without <= 1, addable: Bits::of(choice.candidates.len(), |i| without == 0 || banding(choice.candidates[i])) }
-}
-
-/// The rule of a band's other members (CR 702.22c), a part of the question that asks for them.
-const BAND: Part = cantrip_api::select::part(&(up_to_one_without_banding as SelectFn), 0, "");
+/// The rule of a band's other members (CR 702.22c), including parameterized qualities.
+const BAND: Part = cantrip_api::select::part(&(crate::banding::selection as SelectFn), 0, "");
 
 /// Whether `blocker` may block `attacker` (CR 509.1b): a creature that can't block (decayed's too, CR 702.147a), one that
 /// can't be blocked (an ability, or a resolved effect: `EffectKind::CantBeBlocked`), a resolved restriction on the pair
@@ -1800,7 +1791,7 @@ fn attacker_division(cx: &Cx, attacker: &Attacker) -> Option<DamageDivision> {
     if power == 0 || blockers.is_empty() {
         return None;
     }
-    let banding = blockers.iter().any(|&b| cx.chars(b).has(Keyword::Banding));
+    let banding = crate::banding::controls_assignment(cx, &blockers);
     let trample = cx.chars(attacker.id).has(Keyword::Trample) && !banding && combat_defender_present(cx, attacker.target);
     let lethal = lethal_for(cx, attacker.id, &blockers);
     if blockers.len() == 1 && (!trample || power <= lethal[0]) {
@@ -1829,7 +1820,7 @@ fn blocker_division(cx: &Cx, blocker: ObjectId) -> Option<DamageDivision> {
     if power == 0 || blocked.len() < 2 {
         return None;
     }
-    let banding = blocked.iter().any(|&a| cx.chars(a).has(Keyword::Banding));
+    let banding = crate::banding::controls_assignment(cx, &blocked);
     let lethal = lethal_for(cx, blocker, &blocked);
     let suggested = if banding { spared(cx, power, &blocked, &lethal) } else { lethal_in_turn(power, &lethal, false).0 };
     Some(DamageDivision {

@@ -2955,21 +2955,36 @@ that can block additional creatures (the validator's one-attacker-per-blocker ru
 
 ### Banding
 
-Banding (CR 702.22) is a core keyword, `Keyword::Banding` (Benalish Hero, Mesa Pegasus, plain cards). As attackers are
-declared (CR 508.1e, before they tap), `turn::declare_bands` asks the active player, for each attacker with banding not yet in a
-band, which other attackers attacking the same thing (CR 702.22d) and in no band join it: a `ChooseCards` of
-`Purpose::Band`, up to all of them, which `validate` refuses with more than one creature without banding (CR 702.22c). Each
-`Attacker` keeps its `band` number for the rest of combat (CR 702.22e); one that leaves combat is no longer `live` and so out
-of it (CR 702.22f). A creature declared blocking one member of a band blocks every member (CR 702.22h, `declare_blockers`), its
-restrictions judged on the declared block alone, as the rule's example has it. In the damage step each creature with a choice
-has a `DamageDivision`: an attacker blocked by two or more, or a trampler past lethal (CR 510.1c, 702.19b), and a blocker
-blocking two or more (CR 510.1d) - which only a band makes. Banding moves a division to the other player (`banding`): an
-attacker blocked by a creature with banding is divided by the defending player among its blockers, past lethal and none to
-the player (CR 702.22j); a blocker blocking a creature with banding by the attacking player among the creatures it blocks
-(CR 702.22k). The active player divides first, then each defending player (CR 510.1). The engine's suggestion for a banding
-division spares: all of it on one creature it would not kill, or on the one worth least by power and toughness; the client
-captions it as the opponent's creature's damage, and the attacking band carries its number to the view (`BAND 1` on the
-card). "Bands with other" (CR 702.22b) is not built: no card in content has it.
+Banding (CR 702.22) is a core keyword, `Keyword::Banding`. Parameterized
+"bands with other" abilities use `AbilityDef::BandsWithOthers` and a `BandQuality`
+predicate, constructed by `cantrip_mechanics::banding::with_others`. They occupy
+ordinary ability slots; there is no extra per-object state. A named quality
+(legendary creatures or creatures named Wolves of the Hunt) is independent of
+which permanent grants or holds the ability.
+
+As attackers are declared (CR 508.1e, before they tap), `turn::declare_bands`
+asks qualifying providers which unbanded attackers attacking the same defender
+join them. `banding::selection` accepts either ordinary banding with at most
+one nonbander, or a qualifying provider plus any number of creatures matching
+its quality (CR 702.22c-d). A partial selection may be completed by an unused
+provider. Declining forms no band. Each `Attacker` retains its band number after
+ability loss (CR 702.22e); leaving combat removes it from the band (702.22f).
+Blocking one member blocks every member, with restrictions judged on the
+declared block alone (702.22h).
+
+`banding::controls_assignment` moves a damage division to the other player:
+ordinary banding suffices, while a parameterized ability requires a qualifying
+holder and one other creature of the named quality. Unrelated members of the
+combat group do not invalidate that pair (CR 702.22j-k). The controller of the
+banding creatures assigns the opposing creature's damage without the usual
+lethal-order or trample constraints. The active player divides first, then each
+defending player (CR 510.1). The client receives the existing `DamageDivision`
+and band number. Suggestions still spare a creature where possible.
+
+`EffectKind::LoseBandsWithOthers` removes only parameterized instances at its
+layer timestamp. Losing ordinary banding also removes those instances, even
+when the creature had no ordinary banding instance (CR 702.22b). Later grants
+work normally; copying and losing all abilities use the ordinary ability list.
 
 ### Becoming blocked and rampage
 

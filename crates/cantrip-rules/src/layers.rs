@@ -1901,7 +1901,7 @@ fn apply_raw(view: &View, layer: Layer, id: ObjectId, entry: &GEntry, chars: &mu
     match entry.kind {
         GKind::Static { source, st, by, .. } => apply_static(st, &view.as_text(by), source, id, chars),
         GKind::Given { holder, st, by, .. } => apply_static(st, &View { asking: Some(by), ..*view }, holder, id, chars),
-        GKind::Effect(e) => apply_effect(&e, layer, chars),
+        GKind::Effect(e) => apply_effect(view.cards, &e, layer, chars),
         GKind::Granted { st, by, .. } => (st.apply)(&View { asking: Some(by), ..*view }, id, chars),
     }
 }
@@ -2934,6 +2934,7 @@ pub(crate) fn effect_layer(kind: EffectKind) -> Option<Layer> {
         | EffectKind::AddKeywords(_)
         | EffectKind::Suspected
         | EffectKind::LoseKeywords(_)
+        | EffectKind::LoseBandsWithOthers
         | EffectKind::AddAbility(_)
         | EffectKind::Enchant(_)
         | EffectKind::LoseEnchant(_)
@@ -2975,8 +2976,17 @@ fn granted_to_others(cx: &Ctx, holder: ObjectId, layer: Layer) -> Vec<(u32, Obje
     found.into_iter().filter(|(_, ability, _, _)| has.abilities.contains(&Some(*ability))).map(|(t, _, s, by)| (t, holder, s, by)).collect()
 }
 
+/// CR 702.22b: remove the parameterized abilities at this timestamp.
+fn lose_bands_with_others(cards: &CardTable, chars: &mut Chars) {
+    for slot in &mut chars.abilities {
+        if slot.is_some_and(|a| matches!(cards.ability(a), AbilityDef::BandsWithOthers(_))) {
+            *slot = None;
+        }
+    }
+}
+
 /// A continuous effect a resolved spell or ability created (CR 611.2), applied if it is in `layer`.
-fn apply_effect(effect: &ContinuousEffect, layer: Layer, chars: &mut Chars) {
+fn apply_effect(cards: &CardTable, effect: &ContinuousEffect, layer: Layer, chars: &mut Chars) {
     {
         match (layer, effect.kind) {
             // CR 612.1: a subtype in the type line is a word of its text; the rules text's words are read by card code.
@@ -3074,6 +3084,14 @@ fn apply_effect(effect: &ContinuousEffect, layer: Layer, chars: &mut Chars) {
                 if k.has(Keyword::Hexproof) {
                     chars.hexproof_from = HexproofFrom::NONE;
                 }
+                // CR 702.22b applies even if the creature has no ordinary
+                // banding instance: losing banding loses every special kind.
+                if k.has(Keyword::Banding) {
+                    lose_bands_with_others(cards, chars);
+                }
+            }
+            (Layer::Ability, EffectKind::LoseBandsWithOthers) => {
+                lose_bands_with_others(cards, chars);
             }
             (Layer::Ability, EffectKind::AddAbility(ability)) => {
                 if let Some(slot) = chars.abilities.iter().position(|a| a.is_none()) {
@@ -4113,14 +4131,14 @@ mod tests {
         chars.keywords = Keywords::of(&[Keyword::Swampwalk, Keyword::Flying]);
         chars.protection = ColorSet::of(Color::Black);
         let swamp = effect(5, EffectKind::ChangeText { from: Word::Subtype(Subtype::Swamp), to: Word::Subtype(Subtype::Island) });
-        apply_effect(&swamp, Layer::Text, &mut chars);
+        apply_effect(&cards, &swamp, Layer::Text, &mut chars);
         assert_eq!(chars.keywords, Keywords::of(&[Keyword::Islandwalk, Keyword::Flying]));
         let black = effect(6, EffectKind::ChangeText { from: Word::Color(Color::Black), to: Word::Color(Color::Red) });
-        apply_effect(&black, Layer::Text, &mut chars);
+        apply_effect(&cards, &black, Layer::Text, &mut chars);
         assert_eq!(chars.protection, ColorSet::of(Color::Red));
         // A creature type is no land type: no landwalk names it.
         let elf = effect(7, EffectKind::ChangeText { from: Word::Subtype(Subtype::Elf), to: Word::Subtype(Subtype::Goblin) });
-        apply_effect(&elf, Layer::Text, &mut chars);
+        apply_effect(&cards, &elf, Layer::Text, &mut chars);
         assert_eq!(chars.keywords, Keywords::of(&[Keyword::Islandwalk, Keyword::Flying]));
     }
 

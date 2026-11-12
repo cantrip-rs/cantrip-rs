@@ -537,7 +537,7 @@ fn check_once(cx: &mut Cx) -> R<bool> {
 fn triggered(cx: &Cx, ability: AbilityRef) -> &'static TriggeredDef {
     match cx.cards().ability(ability) {
         AbilityDef::Triggered(t) => t,
-        AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => unreachable!("a triggered ability"),
+        AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => unreachable!("a triggered ability"),
     }
 }
 
