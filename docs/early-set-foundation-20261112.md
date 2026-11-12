@@ -297,3 +297,27 @@ labels that disagree with the typed tag, copies, grants and ability loss. An
 Oracle-consistency test checks every currently implemented card's printed
 rampage/cumulative-upkeep lines against its actual tags and passes. Production
 classification never reads those lines. No existing card file needed edits.
+
+## Simultaneous untap limits
+
+`CardDef::untap_limits` holds typed player/filter/amount rules for Smoke,
+Damping Field and Winter Orb (CR 502.3). The active player chooses one
+inclusion-maximal set satisfying every current limit; this does not force the
+largest-cardinality set. Smoke's ruling permits choosing a single animated land
+instead of a separate creature and land. Duplicate limits do not add together.
+The existing selection validator enforces the intersection for answers and
+partial client selections. Unrestricted permanents untap without a question.
+
+All choices precede the simultaneous untap. Tapped Winter Orb cannot turn on
+halfway through that action. Ability loss disables a source; copied and merged
+texts retain their normal links, using the existing text walk factored into
+`CardTable::texts_of` so the query validator needs no allocated metadata copy.
+An impossible untap cannot consume a slot; a stun replacement does. Optional
+untaps are decided before the quota selection. Other players' simultaneous
+untaps and effects outside the untap step retain their existing behavior.
+
+Seven focused native tests and two generated runtime scenarios (the complete
+runtime probe passes 40) cover those rules, rejected answers and journal undo.
+No permanent data or historical counters are added. Games without a live limit
+allocate no feature-specific list and do not compute extra characteristics for
+this rule. The batched workspace gate and benchmark follow this feature commit.

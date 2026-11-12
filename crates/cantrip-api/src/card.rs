@@ -3159,6 +3159,17 @@ pub type FaceUpBan = fn(&dyn Query, &Asker, ObjectId) -> bool;
 /// doesn't untap during its controller's untap step". A permanent's own, printed or granted, is `Keyword::DoesNotUntap`.
 pub type UntapBan = fn(&dyn Query, &Asker, ObjectId) -> bool;
 
+/// A limit on the active player's simultaneous untap (CR 502.3): Smoke limits
+/// creatures, Damping Field artifacts and Winter Orb lands. Every applicable
+/// limit constrains the same selection; a permanent of several kinds counts
+/// toward each. This is neither an untap ban nor a limit on untapping by effects.
+#[derive(Clone, Copy, Debug)]
+pub struct UntapLimit {
+    pub applies: fn(&dyn Query, &Asker, PlayerId) -> bool,
+    pub permanents: ObjectFilter,
+    pub amount: u32,
+}
+
 /// A static ability that says a permanent can't phase in (CR 702.26a, 101.2), asked of the permanent that would phase in:
 /// The City on the Edge of Forever's Human token, "Permanents can't phase in." A rule of the game, not an ability of the
 /// permanent that would phase in, so it holds whatever abilities that one has lost (CR 613.1f).
@@ -3786,6 +3797,8 @@ pub struct CardDef {
     /// Its static abilities that say permanents don't untap during their controllers' untap steps (CR 502.3), while it is on
     /// the battlefield with its abilities. See `UntapBan`.
     pub untap_bans: &'static [UntapBan],
+    /// Simultaneous untap limits while this permanent has its abilities. See `UntapLimit`.
+    pub untap_limits: &'static [UntapLimit],
     /// Its static abilities that say permanents can't phase in (CR 702.26a, 101.2), while it is on the battlefield with
     /// its abilities: The City on the Edge of Forever's Human token. See `PhaseInBan`.
     pub phase_in_bans: &'static [PhaseInBan],
@@ -4023,6 +4036,7 @@ impl CardDef {
         regeneration_bans: &[],
         face_up_bans: &[],
         untap_bans: &[],
+        untap_limits: &[],
         phase_in_bans: &[],
         cant_become_untapped: &[],
         damage_by_toughness: &[],
@@ -4131,6 +4145,7 @@ impl CardDef {
             (!self.regeneration_bans.is_empty(), "regeneration bans"),
             (!self.face_up_bans.is_empty(), "face-up bans"),
             (!self.untap_bans.is_empty(), "untap bans"),
+            (!self.untap_limits.is_empty(), "untap limits"),
             (!self.phase_in_bans.is_empty(), "phase-in bans"),
             (!self.cant_become_untapped.is_empty(), "rules against becoming untapped"),
             (!self.damage_by_toughness.is_empty(), "damage by toughness"),
@@ -5262,21 +5277,27 @@ impl CardTable {
     /// object with no exception text anywhere - nearly every one - walks a plain list of its own and its components' cards,
     /// a small iterator; any other walks `texts_with_exclusions`, without the exclusions (which only the layers read), boxed
     /// so that the plain walk does not carry its size.
+    #[inline]
     pub fn texts<'a>(&self, s: &'a GameState, obj: &'a Obj) -> impl Iterator<Item = CardId> + use<'a> {
+        Self::texts_of(s, obj, self.current(obj))
+    }
+
+    /// The same text walk when the current definition is already known, preserving component and CDA exclusions.
+    #[inline]
+    pub fn texts_of<'a>(s: &'a GameState, obj: &'a Obj, card: CardId) -> impl Iterator<Item = CardId> + use<'a> {
         let copy = obj.copy.as_ref().filter(|_| obj.marks.face_down_as.is_none());
         let sources = copy.filter(|c| c.merged != 0).map_or(&[][..], |c| s.merged_sources(c));
-        let card = self.current(obj);
         if no_exception_texts(copy, sources) {
             Texts::Own(std::iter::once(card).chain(sources.iter().map(|v| v.card)))
         } else {
-            let all: Box<dyn Iterator<Item = CardId> + 'a> = Box::new(self.texts_with_exclusions(s, card, copy).map(|(card, _, _)| card));
+            let all: Box<dyn Iterator<Item = CardId> + 'a> = Box::new(Self::texts_with_exclusions(s, card, copy).map(|(card, _, _)| card));
             Texts::Excepted(all)
         }
     }
 
     /// The same text walk with its component of origin and CR 707.9d exclusions. An exception text belongs to the
     /// component whose values acquired it, not the card defining the quoted ability. No state beyond copiable values.
-    fn texts_with_exclusions<'a>(&self, s: &'a GameState, card: CardId, copy: Option<&'a Copiable>) -> impl Iterator<Item = (CardId, Option<CardId>, CdaExclusions)> + use<'a> {
+    fn texts_with_exclusions<'a>(s: &'a GameState, card: CardId, copy: Option<&'a Copiable>) -> impl Iterator<Item = (CardId, Option<CardId>, CdaExclusions)> + use<'a> {
         let sources = copy.filter(|c| c.merged != 0).map_or(&[][..], |c| s.merged_sources(c));
         let excluded = copy.map_or(CdaExclusions::NONE, Copiable::excluded_cdas);
         let merged_excluded = copy.map_or(CdaExclusions::NONE, Copiable::merged_excluded_cdas);
@@ -5322,7 +5343,7 @@ impl CardTable {
     /// The same walk for the values the layers are judging, including a face-down permanent as it would be face up
     /// (CR 708.8). This changes no row: the layers supply the effective primary card and copy values they already use.
     pub fn texts_linked_with_exclusions_of<'a>(&'a self, s: &'a GameState, id: ObjectId, card: CardId, copy: Option<&'a Copiable>) -> impl Iterator<Item = (CardId, Option<Linked>, CdaExclusions)> + use<'a> {
-        self.texts_with_exclusions(s, card, copy).map(move |(card, component, excluded)| {
+        Self::texts_with_exclusions(s, card, copy).map(move |(card, component, excluded)| {
             (card, component.map(|c| self.component_link(s, id, c)), excluded)
         })
     }
