@@ -1,0 +1,60 @@
+# Tune Up ({3}{W} sorcery): "Return target artifact card from your graveyard to the battlefield. If it's a Vehicle, it becomes an
+# artifact creature." Bot1 crews Smuggler's Copter with Grizzly Bears on turn 3 and Bot2 Bolts the crewed 3/3
+# (a Vehicle is only a legal Bolt target while it is a creature, CR 301.7). Tune Up returns the Copter, which enters as an
+# artifact creature with no duration (CR 205.1b): it is still one on turn 5, long after any crew effect would have ended.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Smuggler's Copter
+Grizzly Bears
+Tune Up
+Mountain x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Smuggler's Copter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Smuggler's Copter
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Tune Up.Cast(Bot1.Graveyard.Smuggler's Copter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Tune Up
+? Bot1.Battlefield.Smuggler's Copter.Types = Artifact; Creature
+? Bot1.Battlefield.Smuggler's Copter.Power = 3
+? Bot1.Battlefield.Smuggler's Copter.Toughness = 3
+? Bot1.Battlefield.Smuggler's Copter.Tapped = false
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Smuggler's Copter.Types = Artifact; Creature
