@@ -582,6 +582,18 @@ const fn activated(a: AbilityDef, method: &str) -> ActivatedDef {
 }
 
 impl AbilityDef {
+    /// The text defines X, rather than the activator choosing it (CR 107.3c).
+    pub const fn x_is(self, value: XValue) -> AbilityDef {
+        let def = activated(self, "only an activated ability defines X");
+        AbilityDef::Activated(ActivatedDef { x_rule: Some(XRule::Is(value)), ..def })
+    }
+
+    /// The text limits the X its activator may announce (CR 107.3a).
+    pub const fn x_at_most(self, value: XValue) -> AbilityDef {
+        let def = activated(self, "only an activated ability limits X");
+        AbilityDef::Activated(ActivatedDef { x_rule: Some(XRule::AtMost(value)), ..def })
+    }
+
     /// This mana ability reads its own X only as the amount of mana it produces (or the number of its colors chosen).
     /// Positive X never changes its possible mana types. Allows "could produce" to ignore the ability's costs (CR 106.7).
     pub const fn x_is_mana_amount(self) -> AbilityDef {

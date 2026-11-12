@@ -4277,16 +4277,12 @@ fn some_cast(
         u32::MAX
     };
     let most = bound.max(least).min(cap).max(least);
-    let xs = if def.kicker.is_some() || (x_symbols == 0 && !x_life && !x_sacrifices) {
-        0..=0
-    } else if open {
-        least..=most
-    } else {
-        least..=least
-    };
+    let (x_least, x_most) = if def.kicker.is_some() || (x_symbols == 0 && !x_life && !x_sacrifices && !crate::x_rules::defines(def.x_rule)) {
+        (0, 0)
+    } else if open { (least, most) } else { (least, least) };
     for &paid in paid {
         for kicks in kicks.clone() {
-            for x in xs.clone() {
+            for x in crate::x_rules::values(cx, asker, def.x_rule, prefix.unwrap_or(&[]), x_least, x_most) {
                 // A kicker with {X} announces X and is kicked when it is not 0 (CR 702.33a, 107.3).
                 let (x, kicked) = match def.kicker {
                     Some(k) if k.cost.x > 0 => (kicks, u8::from(kicks > 0)),
@@ -4381,7 +4377,7 @@ fn some_activation(
     let announces_x = cost.x > 0 || def.cost.loyalty == Some(LOYALTY_MINUS_X);
     let bound = count_bound(cx, asker, def.targets.iter().chain(mode_specs_all));
     let bound = if announces_x { bound.max(divided_x_bound(cx, asker, def.divide, def.targets)) } else { bound };
-    let xs = if announces_x { least..=bound.max(least) } else { 0..=0 };
+    let xs = crate::x_rules::values(cx, asker, def.x_rule, &[], if announces_x { least } else { 0 }, if announces_x { bound.max(least) } else { 0 });
     let masks: Vec<u32> = match def.modal {
         Some(modal) => mode_masks(cx, asker, modal, (modal.min, modal.max)),
         None => vec![0],
@@ -4389,7 +4385,7 @@ fn some_activation(
     let mut budget = ANNOUNCEMENT_BUDGET;
     for x in xs {
         let mut owed = cost;
-        if cost.x > 0 {
+        if cost.x > 0 && !matches!(def.x_rule, Some(XRule::Is(_))) {
             // "Spend only black mana on X" (CR 107.3, 601.2h): X's generic mana only that mana may pay.
             owed = cost.with_x_mana(def.x_mana).plus_x(u32::from(x) * u32::from(cost.x), def.x_mana);
             owed.x = 0;
@@ -4428,13 +4424,13 @@ fn offer_costed(
 ) -> bool {
     // CR 107.3a: the {X} of a waterbend cost an additional cost has is announced with the spell's own.
     let x_symbols = x_symbols + def.additional_cost.map_or(0, |c| c.waterbend.x);
-    let changes = !a.changers.is_empty() || !def.own_cost_changes.is_empty() || lasting_changes(cx);
+    let changes = !a.changers.is_empty() || !def.own_cost_changes.is_empty() || lasting_changes(cx) || def.x_rule.is_some();
     if !changes {
         return covered(&[], &Earlier::NONE) && offer_spell(cx, asker, def, option);
     }
     // A kicker, an optional cost or a splice announced after the target announced with the cast (CR 601.2b-c) may change
     // what a change reads ("if this spell was kicked") or bring targets of its own.
-    let announces = def.kicker.is_some() || def.optional_cost.is_some() || !splice_cards(cx, asker.controller, asker.source).is_empty();
+    let announces = def.kicker.is_some() || def.optional_cost.is_some() || !splice_cards(cx, asker.controller, asker.source).is_empty() || def.x_rule.is_some();
     let mut budget = ANNOUNCEMENT_BUDGET;
     if targets_with_cast(cx.cards(), def) {
         if !offer_spell(cx, asker, def, option) {
@@ -4846,6 +4842,10 @@ fn x_available(cx: &Cx, player: PlayerId, source: ObjectId, paid: &XCost, n: u32
 /// (`CardDef::cost_of_targets`), the cost changes applied as they are then (CR 601.2f, `change_any`: each way the payer
 /// could announce a reduction's hybrid symbols), the life they add payable (CR 118.8, 119.4), the reduction announced
 /// before X, and the least the total may come to. Past `ANNOUNCEMENT_BUDGET` it answers no: never more X than can be paid.
+pub(crate) fn defined_x_payable(cx: &Cx, player: PlayerId, source: ObjectId, paid: &XCost, n: u32) -> bool {
+    x_payable(cx, &x_available(cx, player, source, paid, n), player, source, paid, n)
+}
+
 fn x_payable(cx: &Cx, a: &Available, player: PlayerId, source: ObjectId, paid: &XCost, n: u32) -> bool {
     let (costed, by, spell, ability) = match paid.costed {
         XCosted::Spell => (Costed::Spell(source), None, true, None),
@@ -4928,7 +4928,7 @@ fn x_payable(cx: &Cx, a: &Available, player: PlayerId, source: ObjectId, paid: &
             _ => pre,
         };
         // Targets the action announced, or none to choose: the total is judged once.
-        if !paid.targets_later || !changes && of_targets.is_none() {
+        if !paid.targets_later || !changes && of_targets.is_none() && !card.is_some_and(|d| crate::x_rules::defines(d.x_rule)) {
             if covered(cost, &paid.targets) {
                 return true;
             }
@@ -5486,7 +5486,7 @@ fn least_cost_parts(
 ) -> bool {
     // "X can't be 0" (CR 107.3a): X at 1, and no cast at all for a cost where X could only be 0 (CR 107.3b), as `cast`
     // refuses it.
-    if x_only_zero(def.x_cant_be_zero, def.cost.x, base.x) {
+    if !crate::x_rules::defines(def.x_rule) && x_only_zero(def.x_cant_be_zero, def.cost.x, base.x) {
         return false;
     }
     // "Spend only black mana on X" (CR 107.3, 601.2h): X's generic mana only that mana may pay (`ManaCost::plus_x`).
@@ -7364,7 +7364,7 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             // (CR 602.2b): a seat handed it would cancel at the payment and be handed it again, forever.
             let owed = if def.special_action { special_action_cost(cx, player, id, ability, def) } else { def.cost.mana };
             // An {X} is judged at the least it may be announced as (CR 107.3a, 601.2b): 0, or 1 where X can't be 0.
-            let judged = at_least_x(owed, def.x_cant_be_zero).mana_value() > 0 && !def.tap_creatures_for_mana;
+            let judged = (def.x_rule.is_some() || at_least_x(owed, def.x_cant_be_zero).mana_value() > 0) && !def.tap_creatures_for_mana;
             // What pays for it (`activation_available`), its waterbend judged at the least X may be announced as.
             let own = judged
                 .then(|| {
@@ -7376,7 +7376,14 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             // A special action is no ability, so mana limited to activating abilities can't pay for it (CR 116.2, 106.6).
             let payment = if def.special_action { ManaPayment::Other } else { ability_payment(cx, id, chars.types, chars.subtypes, def.equip) };
             let covered = |a: &Available, owed: ManaCost, targets: &[Target]| {
-                let owed = at_least_x(owed, def.x_cant_be_zero);
+                let owed = if let Some(rule) = def.x_rule {
+                    let Some(x) = crate::x_rules::least(cx, &asker, Some(rule), targets, least_x(def.x_cant_be_zero)) else { return false };
+                    owed.with_x_mana(def.x_mana).plus_x(x.saturating_mul(u32::from(owed.x)), def.x_mana)
+                } else {
+                    // Almost every activation has no printed X rule. Keep that
+                    // common path out of the sparse-value iterator entirely.
+                    at_least_x(owed, def.x_cant_be_zero)
+                };
                 // A special action is no activated ability (CR 116.2): what changes the cost of activating abilities does not
                 // touch it; what changes its own cost is already in `owed` (`special_action_cost`), which `special_action`
                 // pays. A cost of nothing is judged too: an increase still applies to it (CR 118.9d, 601.2f).
@@ -7403,7 +7410,7 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             // with the action could be: only those the cost could then be paid for are offered. Only where something could
             // change the cost - a cost changer on the battlefield, or the ability's own - since nearly nothing does;
             // otherwise the cost is judged once, before any target is looked for.
-            let changes = |a: &Available| !a.changers.is_empty() || def.cost_change.is_some();
+            let changes = |a: &Available| !a.changers.is_empty() || def.cost_change.is_some() || def.x_rule.is_some();
             let each_target = a.is_some_and(|a| targets_with_activation(def) && !def.special_action && def.modal.is_none() && changes(a));
             // Targets chosen once it has begun, after its modes and X (CR 601.2b-c by way of 602.2b): offered if some legal
             // announcement of them could be paid for (`some_activation`).
@@ -10161,10 +10168,10 @@ fn cast(
     };
     // "X can't be 0" (CR 107.3a): cast where X can only be 0 (CR 107.3b: without paying its mana cost, or for an
     // alternative cost with no {X}), there is no X it may be cast with, and it can't be cast (Mind Grind's ruling).
-    if x_only_zero(def.x_cant_be_zero, def.cost.x, x_symbols) {
+    if !crate::x_rules::defines(def.x_rule) && x_only_zero(def.x_cant_be_zero, def.cost.x, x_symbols) {
         return Err(Stop::Cancel);
     }
-    if x_symbols > 0 || def.kicker.is_some() || extra.pay_x_life || sacrifices_x {
+    if x_symbols > 0 || def.kicker.is_some() || extra.pay_x_life || sacrifices_x || crate::x_rules::defines(def.x_rule) {
         // "Spend only black mana on X" (CR 107.3, 601.2h): the X announced, its mana cost's or its kicker's, is generic mana
         // only that mana may pay (`ManaCost::plus_x`).
         cost.mana = cost.mana.with_x_mana(def.x_mana);
@@ -10191,9 +10198,11 @@ fn cast(
             // refuses a count that still can't be.
             let paid_with = extra;
             (1..=more.most_times()).take_while(|&n| can_pay_other(cx, spell, player, &paid_with.and(more.times(n as u8)))).count() as u32
-        } else {
+        } else if crate::x_rules::defines(def.x_rule) { u32::MAX } else {
             1000
         };
+        let x_asker = Asker { instance: None, source: spell, controller: player, by: None, spell: true };
+        let cap = cap.min(crate::x_rules::upper(cx, &x_asker, def.x_rule, targets));
         // An X that can't be 0 starts at 1 (CR 107.3a). A kicker with {X} announces 0 as not kicking it, so a kicked one
         // has X 1 or more as it is.
         let least = if def.kicker.is_none() && less_each == 0 { u32::from(least_x(def.x_cant_be_zero)) } else { 0 };
@@ -10217,7 +10226,10 @@ fn cast(
             targets: targets.to_vec(),
             targets_later: def.modal.is_some() || (!specs.is_empty() && (def.divide.is_some() || resolving || !targets_with_cast(cx.cards(), def))),
         });
-        let announced = announce_x(cx, player, spell, base, def.kicker, paid.as_ref(), least, cap, false, less_each, extra.variable.map_or("", |v| v.governs()))?;
+        let announced = match crate::x_rules::choose(cx, &x_asker, def.x_rule, targets, least, cap, paid.as_ref())? {
+            Some(n) => n,
+            None => announce_x(cx, player, spell, base, def.kicker, paid.as_ref(), least, cap, false, less_each, extra.variable.map_or("", |v| v.governs()))?,
+        };
         let n = announced;
         if let Some(k) = def.kicker {
             if k.cost.x > 0 {
@@ -12122,7 +12134,7 @@ fn activate(
             None => return Err(Stop::Cancel),
         }
         // An alternative cost with no {X} leaves an X that can't be 0 nothing to be (CR 107.3a, 118.9).
-        if x_only_zero(def.x_cant_be_zero, def.cost.mana.x, mana.x) {
+        if !crate::x_rules::defines(def.x_rule) && x_only_zero(def.x_cant_be_zero, def.cost.mana.x, mana.x) {
             return Err(Stop::Cancel);
         }
     }
@@ -12148,10 +12160,12 @@ fn activate(
         Some(VariableCost::TapX(filter)) => Some((filter, tap_x_candidates(cx, source, player, filter, whole.tap, by).len() as u32)),
         _ => None,
     };
-    if mana.x > 0 {
+    if mana.x > 0 || crate::x_rules::defines(def.x_rule) {
         // "X target lands" cannot be announced past the legal targets there are (CR 601.2c, 602.2b).
         let cap = x_target_cap(cx, &Asker { instance: None, source, controller: player, by, spell: false }, def);
         let cap = tap_x.map_or(cap, |(_, most)| cap.min(most));
+        let x_asker = Asker { instance: None, source, controller: player, by, spell: false };
+        let cap = cap.min(crate::x_rules::upper(cx, &x_asker, def.x_rule, targets));
         // "Spend only black mana on X" (CR 107.3, 601.2h by way of 602.2b): X's generic mana only that mana may pay.
         mana = mana.with_x_mana(def.x_mana);
         // What the total comes to at each X (`x_total`), with the targets still to be chosen and the cost changes they may
@@ -12162,7 +12176,10 @@ fn activate(
             targets_later: def.modal.is_some() || (!def.targets.is_empty() && (def.divide.is_some() || !targets_with_activation(def))),
             ..untargeted_x(mana, XCosted::Ability(ability, by))
         };
-        let n = announce(cx, player, source, &paid, least_x(def.x_cant_be_zero), cap)?;
+        let n = match crate::x_rules::choose(cx, &x_asker, def.x_rule, targets, least_x(def.x_cant_be_zero), cap, Some(&paid))? {
+            Some(n) => n,
+            None => announce(cx, player, source, &paid, least_x(def.x_cant_be_zero), cap)?,
+        };
         mana = x_total(&paid, n);
         item.x = n;
     }

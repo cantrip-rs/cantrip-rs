@@ -1564,6 +1564,28 @@ pub(crate) const fn same_str(a: &str, b: &str) -> bool {
 /// `player` is the proposed activator. This replaces the default controller/owner permission, not costs or timing.
 pub type ActivationPlayers = fn(&dyn Query, &Asker, PlayerId) -> bool;
 
+/// An X value evaluated while a cost is announced (CR 107.3, 601.2b).
+/// `targets` are the targets already selected with a single-target action. A definition
+/// depending on targets must not also require X to select those targets.
+pub type XValue = fn(&dyn Query, &Asker, &[Target]) -> u32;
+
+/// A printed definition or upper bound for X. The core owns announcement and cost authority;
+/// the card supplies the number. No change to the engine's quantity types or per-object storage.
+#[derive(Clone, Copy)]
+pub enum XRule {
+    /// X is this value, rather than a value chosen by the controller: Chromatic Armor,
+    /// Voodoo Doll, Reflecting Mirror. Cost determination freezes the payment, not later effect reads.
+    Is(XValue),
+    /// X may be chosen up to this value: Winter's Chill's snow lands.
+    AtMost(XValue),
+    /// A named player's property defines X as the spell is cast: Spoils of War.
+    /// The caster chooses an eligible player; this is not a target.
+    OfPlayer {
+        players: fn(&dyn Query, &Asker, PlayerId) -> bool,
+        value: fn(&dyn Query, &Asker, PlayerId) -> u32,
+    },
+}
+
 /// An activated ability (CR 602). A card writes one with `ability` or `mana_ability` (`crate::ability`).
 #[derive(Clone, Copy)]
 pub struct ActivatedDef {
@@ -1679,6 +1701,8 @@ pub struct ActivatedDef {
     /// (Crypt Rats, Crimson Hellkite, Atalya, Samite Master's modes), `XMana::ANY` for most. Written `.x_mana(..)`; held to
     /// the Oracle text by `cantrip-cards/tests/x_mana_matches_oracle.rs`.
     pub x_mana: XMana,
+    /// Its printed definition or upper bound for X (CR 107.3, 601.2b); None permits ordinary announced X.
+    pub x_rule: Option<XRule>,
     /// "This ability can't be copied" (CR 101.2, 707.10): no effect copies it while it is on the stack, and an effect that
     /// would does nothing (Gogo, Master of Mimicry).
     pub cant_be_copied: bool,
@@ -1754,6 +1778,7 @@ impl ActivatedDef {
         ninjutsu: false,
         x_cant_be_zero: false,
         x_mana: XMana::ANY,
+        x_rule: None,
         cant_be_copied: false,
         divide: None,
         special_action: false,
@@ -3512,6 +3537,8 @@ pub struct CardDef {
     /// Life, Consume Spirit: `XMana::only(Mana::B)`; Emblazoned Golem: `XMana::COLORED_ONE_EACH`), `XMana::ANY` for most.
     /// Held to the Oracle text by `cantrip-cards/tests/x_mana_matches_oracle.rs`.
     pub x_mana: XMana,
+    /// Its printed definition or upper bound for X (CR 107.3, 601.2b); None permits ordinary announced X.
+    pub x_rule: Option<XRule>,
     /// Delayed abilities created as it is cast for a way, with no stack item of their own (CR 608.3g, 603.7a): a pair
     /// of the way (as `ways[n - 1]`) and the index in `delayed`. The ability triggers at the beginning of the next end
     /// step, aimed at the permanent the spell becomes: dash's "return it to its owner's hand" (CR 702.109a), blitz's.
@@ -3987,6 +4014,7 @@ impl CardDef {
         late_targets: false,
         x_cant_be_zero: false,
         x_mana: XMana::ANY,
+        x_rule: None,
         additional_cost: None,
         additional_choice: &[],
         enters: None,

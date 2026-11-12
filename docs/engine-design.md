@@ -331,6 +331,20 @@ every target of the slot illegal (Nethroi, Apex of Death's and Run Away Together
 keep the choice legal. The client keeps a total's running total in the caption (`Tally`), shows the rule's words, and offers
 only the candidates the host's verdict on those picked says may be added.
 
+Printed X definitions and limits belong to announcement/cost authority (`XRule`, CR 107.3, 601.2b/f), not a test in a
+resolving effect. `CardDef::x_rule` and an activated ability's `.x_is(value)` / `.x_at_most(value)` supply query callbacks;
+Chromatic Armor and Voodoo Doll read their counters, Reflecting Mirror reads its already-selected target's mana value,
+and Winter's Chill limits the chosen value by its caster's snow lands. Availability and target candidates use the same
+rule as actual casting/activation; a fixed X has no free-number prompt, and its cost is locked before mana abilities
+change the queried state. A target-dependent definition must not also require X to select that target. `OfPlayer` lets
+the caster pick an eligible player whose property defines X (Spoils of War); it uses the existing player-choice
+protocol, never turns that player into a target, and searches only those sparse values for availability. Ordinary X
+keeps its existing prompt cap; text-defined native values can exceed that UI cap. The existing `u32` X/mana and signed
+counter/P-T/life types are unchanged. These callbacks live on shared card/ability definitions, with no new object fields.
+The recorded cost value is not a universal substitute for a live text-defined value read by the effect (CR 107.3c):
+card code must query the printed effect quantity at its specified time. Copying retains the cost's announced X as before.
+
+
 ### Characteristics
 
 - **Computed on query** (`chars()`), through the layers (613), from the object's card, its counters and the
