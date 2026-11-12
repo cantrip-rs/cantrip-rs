@@ -2970,6 +2970,17 @@ impl cantrip_api::Game for Cx<'_> {
         actions::add_in_any_combination(self, asker, colors, count)
     }
 
+    fn empty_mana_pool(&mut self, player: PlayerId) -> ManaPool {
+        let mut lost = self.g.state.player(player).pool;
+        for (_, restricted) in self.g.state.restricted_of(player) {
+            for (total, amount) in lost.0.iter_mut().zip(restricted.0) { *total += amount; }
+        }
+        // `Turn` is the longest intrinsic mana lifetime. An explicit loss is unrelated to step/phase boundaries,
+        // so no static `mana_kept` rule applies. This also removes source, snow and restriction provenance.
+        self.g.state.empty_mana(player, ManaLasts::Turn);
+        lost
+    }
+
     fn become_day(&mut self) -> Result<(), Suspend> {
         day_night::become_designation(self, DayNight::Day).map_err(|_| Suspend)
     }
@@ -3445,3 +3456,7 @@ mod non_target_attachment_tests;
 
 #[cfg(test)]
 mod copy_retarget_tests;
+
+#[cfg(test)]
+#[path = "empty_mana_tests.rs"]
+mod empty_mana_tests;

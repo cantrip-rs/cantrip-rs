@@ -1577,6 +1577,10 @@ pub trait Game: Query {
     /// independently choose each unit, in successive wire-sized requests. Wizard's Rockets and
     /// Vivi Ornitier use this exact procedure. It never summarizes an opaque caller's later steps.
     fn add_mana_in_any_combination(&mut self, asker: &Asker, colors: ColorSet, count: u32) -> Result<(), Suspend>;
+    /// The player loses all unspent mana (CR 106.4, 609.1): normal, restricted and extended-duration mana alike.
+    /// Unlike step/phase emptying, this ignores rules keeping mana as steps and phases end. Returns the lost types,
+    /// within the native per-type quantity bound, for an instruction such as Drain Power's "add the mana lost".
+    fn empty_mana_pool(&mut self, player: PlayerId) -> ManaPool;
     /// Adds mana that lasts until the end of combat (CR 106.4, 500.5a): not lost as the steps before it end.
     fn add_mana_until_end_of_combat(&mut self, player: PlayerId, mana: Mana, amount: u32);
     /// Adds mana that lasts until the end of the turn (CR 106.4, 500.5a): not lost as the steps and phases before it end.
