@@ -1,0 +1,90 @@
+# Salvation Engine (6/10 Vehicle, Crew 6): "Other artifact creatures you control get +2/+2." "Whenever this Vehicle attacks, return up
+# to one target artifact card from your graveyard to the battlefield." Bot1 casts it on turn 1 with five Moxes and a free
+# Ornithopter, which survives one Bolt (a 2/4 with the bonus) and dies to a second on turn 2. On turn 3 a summoning-sick Adaptive Snapjaw (power 6) crews it (CR 702.122a), and
+# when the Engine attacks Bot1 targets the Ornithopter in the graveyard: it returns as an artifact creature, a 2/4 with the
+# Engine's bonus (a 0/2 printed). The Engine itself is no "other" and stays 6/10; the non-artifact Snapjaw is not boosted (its 7/3 is
+# its Evolve counter, as the 2/4 Ornithopter entering has greater toughness than 6/2).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Salvation Engine
+Ornithopter
+Adaptive Snapjaw
+Mountain x11
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Salvation Engine.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Ornithopter.Damage = 3
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Ornithopter
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Adaptive Snapjaw.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Salvation Engine.Activate(Ability: Crew)
+Bot1.Choose(Adaptive Snapjaw)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Salvation Engine.Types = Artifact; Creature
+Bot1.Attack(Salvation Engine > Bot2)
+Bot1.Target(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = 
+Bot1.Battlefield.Ornithopter.Types = Artifact; Creature
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Salvation Engine.Power = 6
+Bot1.Battlefield.Salvation Engine.Toughness = 10
+Bot1.Battlefield.Adaptive Snapjaw.Power = 7
+Bot1.Battlefield.Adaptive Snapjaw.Toughness = 3
+Bot2.Life = 14

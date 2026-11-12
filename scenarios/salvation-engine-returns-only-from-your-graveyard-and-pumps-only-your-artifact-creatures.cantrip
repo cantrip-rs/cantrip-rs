@@ -1,0 +1,71 @@
+# Salvation Engine: "Other artifact creatures you control get +2/+2" and "return up to one target artifact card from your
+# graveyard" are both its controller's (CR 109.5, 115.1). Bot1 and Bot2 each sacrifice a Lotus Petal for mana, so an
+# artifact card lies in each graveyard, and Bot2 casts an Ornithopter. When the Engine attacks on turn 3 (crewed by Adaptive
+# Snapjaw, CR 702.122a) its trigger cannot target Bot2's Lotus Petal and returns Bot1's (CR 400.3). Bot2's Ornithopter, an
+# artifact creature Bot1 does not control, stays a 0/2.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Salvation Engine
+Lotus Petal
+Adaptive Snapjaw
+Mountain x11
+
+[Bot2 Deck]
+Lotus Petal
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Salvation Engine.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Lotus Petal.Activate(Color: White)
+? Bot1.Graveyard = Lotus Petal
+[T2 Bot2.Main1]
+Bot2.Hand.Lotus Petal.Cast
+Bot2.Battlefield.Lotus Petal.Activate(Color: White)
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Lotus Petal
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Adaptive Snapjaw.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Salvation Engine.Activate(Ability: Crew)
+Bot1.Choose(Adaptive Snapjaw)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Salvation Engine > Bot2)
+! Bot1.Target(Bot2.Graveyard.Lotus Petal)
+Bot1.Target(Bot1.Graveyard.Lotus Petal)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard =
+Bot1.Battlefield.Lotus Petal.Tapped = false
+Bot2.Graveyard = Lotus Petal
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2

@@ -1,0 +1,62 @@
+# Salvation Engine: the attack trigger targets "up to one" artifact card in your graveyard, so with none there the Vehicle
+# still attacks (crewed by Adaptive Snapjaw, CR 702.122a) and the trigger does nothing. The Engine is not an "other" artifact
+# creature, so it stays 6/10, and the Snapjaw is not an artifact creature at all, so it stays 6/2.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Salvation Engine
+Mountain
+Adaptive Snapjaw
+Mountain x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Salvation Engine.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Adaptive Snapjaw.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Salvation Engine.Activate(Ability: Crew)
+Bot1.Choose(Adaptive Snapjaw)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Salvation Engine > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = 
+Bot1.Battlefield.Salvation Engine.Power = 6
+Bot1.Battlefield.Salvation Engine.Toughness = 10
+Bot1.Battlefield.Adaptive Snapjaw.Power = 6
+Bot1.Battlefield.Adaptive Snapjaw.Toughness = 2
+Bot2.Life = 14
