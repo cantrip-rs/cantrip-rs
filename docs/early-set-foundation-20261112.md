@@ -339,3 +339,15 @@ decision and both runs finished all games. The shared host is busy, so this is
 not a statistical speed claim. The .NET SDK is unavailable; only the complete
 native gate is claimed. The generator's old Earthlore expectation was updated
 to expect its now-supported named tap cost before the successful full rerun.
+
+## Named-counter delivery prerequisites
+
+Append Cube (91) for Delif's Cube and Doom (92) for Armageddon Clock, preserving
+all existing IDs 0–90. These are distinct named counters with no intrinsic
+power/toughness meaning. The normal catalog walks provide host names, scenario
+tokens and proliferate support; no card-specific rules are added to the core.
+Thirteen vocabulary tests pass, including the dense-ID/name/token consistency
+checks. This catalog uses the engine's existing dense counter storage, so two
+additional i32 entries add eight bytes to an object; quantity widths do not
+change. This is a data prerequisite, not an additional rules primitive. The
+next batched benchmark includes this catalog growth.
