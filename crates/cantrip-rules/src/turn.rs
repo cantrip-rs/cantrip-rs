@@ -1427,7 +1427,7 @@ fn attack_rules(cx: &Cx, eligible: &[ObjectId], targets: &[Target], barred: Vec<
     let alone = crate::static_rules::attacks_alone_barred(cx, cx.cards(), eligible);
     // CR 508.1h-j: the permanents attacks cost, which a declaration must be able to pay.
     let sacrifices = if costs.is_empty() { Vec::new() } else { crate::static_rules::attack_sacrifices(cx, eligible, targets) };
-    let mut rules = AttackRules { required, barred, alone_barred: alone, limits: crate::static_rules::attack_limits(cx, targets), most: 0, suggested: Vec::new(), sacrifices, taken_back: false };
+    let mut rules = AttackRules { required, barred, alone_barred: alone, groups: crate::static_rules::combat_groups(cx, CombatRole::Attacker, eligible), limits: crate::static_rules::attack_limits(cx, targets), most: 0, suggested: Vec::new(), sacrifices, taken_back: false };
     if !rules.required.is_empty() {
         (rules.most, rules.suggested) = rules.solve(eligible, targets, costs);
     }
@@ -1552,7 +1552,7 @@ fn declare_blockers(cx: &mut Cx) -> R<()> {
             None
         } else {
             // CR 509.1b-c: each attacker's limits, and the blocks effects require if able, with the most of them a declaration can obey.
-            let requirements = block_rules(cx, &attackers, &allowed, &rule_sources);
+            let requirements = block_rules(cx, &attackers, &allowed, &rule_sources, &eligible);
             // A defending player who has left blocks with nothing (CR 800.4a): no one else declares their blocks. One an effect
             // has another player choose the blocks for ("you choose which creatures block this combat and how those creatures
             // block", Melee) still has them made, by that player.
@@ -1717,7 +1717,7 @@ fn deals_now(cx: &Cx, id: ObjectId, had_first_strike: bool, first_strike_step: b
 /// says blocks if able (`EffectKind::MustBlock`) that may block something, or blocks one attacker if able (`EffectKind::MustBlockAttacker`) that may block it; and the most of them a declaration can obey, with
 /// one that does (`BlockRequirements::solve`). A creature that can't block, or may block nothing, is required nothing (CR
 /// 509.1c: a requirement is obeyed only as far as the restrictions allow).
-fn block_rules(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)], rule_sources: &[ObjectId]) -> BlockRequirements {
+fn block_rules(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)], rule_sources: &[ObjectId], eligible: &[ObjectId]) -> BlockRequirements {
     let mut required = crate::static_rules::block_requirements(cx, allowed);
     // One requirement for each effect (CR 509.1c counts requirements): two "blocks this turn if able" on a creature are two.
     for e in &cx.s().effects {
@@ -1736,6 +1736,7 @@ fn block_rules(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)]
         }
     }
     let mut rules = block_limits(cx, attackers, allowed, rule_sources);
+    rules.groups = crate::static_rules::combat_groups(cx, CombatRole::Blocker, eligible);
     rules.required = required;
     // CR 509.1d: what each block costs, where a static ability makes blocking cost something - before the most requirements
     // are counted, which counts free blocks only (CR 509.1c).
@@ -1767,7 +1768,7 @@ fn block_limits(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)
     // A creature blocking one member of an attacking band blocks every member (CR 702.22h), so blocking any member obeys a
     // requirement to block another, and one block may obey two.
     let bands = cx.s().attackers.iter().filter(|a| a.band != 0).map(|a| (a.id, a.band)).collect();
-    BlockRequirements { required: Vec::new(), most: 0, suggested: Vec::new(), bands, limits, costs: Vec::new(), taken_back: false, capacities }
+    BlockRequirements { groups: Vec::new(), required: Vec::new(), most: 0, suggested: Vec::new(), bands, limits, costs: Vec::new(), taken_back: false, capacities }
 }
 
 /// The most of `rules`' requirements a declaration among `allowed` that obeys every restriction can obey, with one that does

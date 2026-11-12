@@ -2775,6 +2775,19 @@ pub type SpellRule = fn(&dyn Query, &Asker, PlayerId, ObjectId) -> bool;
 /// Lookout).
 pub type BlockRule = fn(&dyn Query, ObjectId, ObjectId, ObjectId) -> bool;
 
+/// The participants counted by a declaration restriction, not combat events.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum CombatRole { Attacker, Blocker }
+
+/// A restriction on how many creatures a complete declaration has (CR 508.1c, 509.1b): Caverns of Despair's "No more than
+/// two creatures can attack each combat", every attacking (or blocking) creature counted. The core snapshots membership,
+/// judges full declarations and maximizes requirements with it.
+#[derive(Clone, Copy)]
+pub struct CombatGroupRule {
+    pub role: CombatRole,
+    pub at_most: u32,
+}
+
 /// Landwalk ignored when judging this block (CR 509.1b, 609.4, 702.14c), not abilities removed from the attacker.
 /// Great Wall and Deadfall ignore their named landwalk; Staff of the Ages ignores every landwalk. The callback may
 /// restrict the blocker or attacker and reads named land types through the source's words (CR 612). Named basic
@@ -3973,6 +3986,8 @@ pub struct CardDef {
     /// Its static abilities that forbid a creature to attack alone (CR 508.1c): each rule is false of the creature it is
     /// about, as Pet Sehlat's "This creature can't attack alone" is. Read as a declaration of exactly one attacker is judged.
     pub attack_alone_rules: &'static [AttackRule],
+    /// Count restrictions on complete attack/block declarations.
+    pub combat_groups: &'static [CombatGroupRule],
     /// Its static abilities that make attacking cost something (CR 508.1d, 508.1h), while it is on the battlefield.
     pub attack_costs: &'static [AttackCostRule],
     /// Fixed costs, including nonmana components, for individual attacks.
@@ -4300,6 +4315,7 @@ impl CardDef {
         block_costs: &[],
         attack_rules: &[],
         attack_alone_rules: &[],
+        combat_groups: &[],
         attack_costs: &[],
         attack_cost_rules: &[],
         attack_limits: &[],
@@ -4420,6 +4436,7 @@ impl CardDef {
             (!self.attack_rules.is_empty(), "attack rules"),
             (!self.attacks_as_though_haste.is_empty(), "attack-only haste permissions"),
             (!self.attack_alone_rules.is_empty(), "a rule against attacking alone"),
+            (!self.combat_groups.is_empty(), "combat group restrictions"),
             (!self.attack_costs.is_empty(), "attack costs"),
             (!self.attack_cost_rules.is_empty(), "attack payments"),
             (!self.attack_limits.is_empty(), "attack limits"),

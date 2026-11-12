@@ -1231,3 +1231,18 @@ pub(crate) fn skips_step(cx: &Cx, player: PlayerId, step: Step) -> bool {
         def.skip_steps.iter().any(|rule| rule.step == step && (rule.applies)(cx, &asker, player))
     })
 }
+
+/// Materialize complete-declaration restrictions from live static sources.
+pub fn combat_groups(cx: &Cx, role: CombatRole, eligible: &[ObjectId]) -> Vec<CombatGroup> {
+    let mut groups: Vec<CombatGroup> = Vec::new();
+    for (_, _, def, _) in sources(cx, |d| !d.combat_groups.is_empty()) {
+        for rule in def.combat_groups.iter().filter(|r| r.role == role) {
+            // Two of the same cap are one restriction.
+            let group = CombatGroup { members: eligible.to_vec(), at_most: rule.at_most };
+            if !groups.contains(&group) {
+                groups.push(group);
+            }
+        }
+    }
+    groups
+}

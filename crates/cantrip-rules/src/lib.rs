@@ -3681,3 +3681,6 @@ mod banding_tests;
 #[cfg(test)]
 #[path = "keyword_family_tests.rs"]
 mod keyword_family_tests;
+
+#[cfg(test)]
+mod combat_group_tests;
