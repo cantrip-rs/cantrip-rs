@@ -2254,6 +2254,10 @@ pub enum DelayedWhen {
     /// "Whenever [event] this turn" (CR 603.7b): triggers each time the ability's own `listens`/`matches` accept an
     /// event, until the cleanup step ends the turn. The ability's `matches` is asked of `source`.
     ThisTurn,
+    /// "Whenever [event] this combat" (CR 603.7b): every matching event until this combat phase ends,
+    /// including an effect ending the combat phase or turn early. It lasts through the end-of-combat step.
+    /// Goblin Flotilla and Melee create these; the ability exists independently of its creating source.
+    ThisCombat,
     /// "Whenever [that object] [event] this turn" (CR 603.7b): as `ThisTurn`, except that its `matches` is asked of the
     /// object it was made for, its `subject` (`Delayed::watched`) — no ability of that object's, so nothing it loses or gains
     /// changes it (CR 603.7c), and it goes on watching after that object has left the battlefield. Its conditions are its
@@ -2311,6 +2315,7 @@ impl DelayedWhen {
         matches!(
             self,
             DelayedWhen::ThisTurn
+                | DelayedWhen::ThisCombat
                 | DelayedWhen::WatchingThisTurn
                 | DelayedWhen::UntilEvent
                 | DelayedWhen::UntilNextTurnOf(_)

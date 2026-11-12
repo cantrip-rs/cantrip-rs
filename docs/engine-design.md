@@ -1084,6 +1084,17 @@ land dies or is put into exile, return it", earthbend, CR 701.66a; its `matches`
 603.7c; dropped as a turn begins once that object has changed zones). Only the end of an "until" wait (`UntilEvent`) is
 no triggered ability (CR 610.3), so nothing stops it.
 
+A repeating event ability limited to the combat uses `DelayedWhen::ThisCombat`
+(Goblin Flotilla and Melee). It remains active through priority in the
+end-of-combat step, then expires as that combat phase ends, before an extra
+combat begins. Ending the phase or turn early also expires it; one created
+outside combat ends at cleanup at the latest. Continuous effects ending at
+the same boundary settle before the watcher is removed, so their resulting
+control-change events can still trigger it. An already pending trigger is not
+cancelled by the watcher's expiry. Source departure and ability loss do not
+remove a created watcher. Expiry uses the existing journalled delayed list;
+no per-object fields or quantity types change.
+
 `Game::delayed_trigger_with` exposes both existing typed roles for step-delayed abilities: an independent singular
 `subject` and one real-object list (`Delayed::members`, read through `event_objects` on its stack item). Infinite
 Authority carries the original enchanted creature separately from the opposing creature, including across its nested

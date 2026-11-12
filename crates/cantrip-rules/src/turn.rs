@@ -100,14 +100,18 @@ pub fn next_step(game: &mut Game) {
         let mut cx = Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
         ops::settle_lasting_and_control(&mut cx);
     }
-    let s = &mut game.state;
-    // CR 724.1d, 724.2d: a turn or combat phase ended during combat removes every creature and planeswalker from combat as
-    // the step ends, as the end of the combat phase does, and "until end of combat" effects expire.
+    // CR 511.3, 724.1d, 724.2d: combat durations end before another combat begins.
+    // Settle the effects ending at this boundary while event watchers still exist, just as at cleanup.
     if turn.number > 0 && combat_ends {
-        // "This combat" effects end with the combat phase (CR 511.3), before an additional one begins.
-        if s.effects.iter().any(|e| e.duration == Duration::EndOfCombat) {
-            s.effects_retain(|e| e.duration != Duration::EndOfCombat);
+        if game.state.effects.iter().any(|e| e.duration == Duration::EndOfCombat) {
+            game.state.effects_retain(|e| e.duration != Duration::EndOfCombat);
         }
+        let mut cx = Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        expire_combat_watchers(&mut cx);
+    }
+    let s = &mut game.state;
+    // Removing every creature from combat also happens when the phase or turn ended early.
+    if turn.number > 0 && combat_ends {
         s.set_attackers(Vec::new());
         s.set_blocks(Vec::new());
         s.set_blockers(Vec::new());
@@ -254,6 +258,16 @@ fn first_step(spec: PhaseSpec, main_seen: bool) -> Step {
         PhaseSpec::Whole(Phase::Main) => if main_seen { Step::PostcombatMain } else { Step::PrecombatMain },
         PhaseSpec::Whole(Phase::Combat) => Step::BeginCombat,
         PhaseSpec::Whole(Phase::Ending) => Step::End,
+    }
+}
+
+/// A combat-limited delayed event ability expires after continuous effects ending at this boundary have settled.
+/// The normal path has no such delayed entries and needs neither layer work nor allocation.
+fn expire_combat_watchers(cx: &mut Cx) {
+    if !cx.s().delayed.iter().any(|d| d.when == DelayedWhen::ThisCombat) { return; }
+    ops::settle_lasting_and_control(cx);
+    for at in (0..cx.s().delayed.len()).rev() {
+        if cx.s().delayed[at].when == DelayedWhen::ThisCombat { cx.st().delayed_remove(at); }
     }
 }
 
@@ -1898,6 +1912,8 @@ pub(crate) fn cleanup(cx: &mut Cx) -> R<()> {
         // permanents you control").
         ops::settle_lasting_and_control(cx);
     }
+    // A combat-duration watcher made outside combat ends with the turn at the latest, like an EndOfCombat effect.
+    expire_combat_watchers(cx);
     // "This turn" delayed abilities end with it (CR 603.7b), and so does a "when you next ... this turn" that never triggered:
     // as the "until end of turn" effects end, at the same moment (CR 514.2), so one still triggers on what their ending does
     // (Stolen Uniform's "when you lose control of that Equipment this turn" as its "until end of turn" control ends; its

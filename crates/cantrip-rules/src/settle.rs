@@ -2120,6 +2120,7 @@ pub fn step_began(cx: &mut Cx, step: Step) {
             DelayedWhen::PhaseStep { step: s, phase } => (s == step && cx.s().turn.phase_id == phase, true),
             DelayedWhen::NextTurnStep { step: s, player, after } => (s == step && player == active && cx.s().turn.number > after, true),
             DelayedWhen::ThisTurn
+            | DelayedWhen::ThisCombat
             | DelayedWhen::WatchingThisTurn
             | DelayedWhen::UntilEvent
             | DelayedWhen::UntilNextTurnOf(_)
