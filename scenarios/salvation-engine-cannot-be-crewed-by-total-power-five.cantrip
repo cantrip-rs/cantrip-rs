@@ -1,0 +1,45 @@
+# Salvation Engine has Crew 6 (CR 702.122a): tapping creatures with total power 5 is not enough. Adorned Crocodile (5/3) is the
+# only creature Bot1 controls on turn 3, so the Engine cannot be crewed and stays a noncreature Vehicle.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Salvation Engine
+Mountain
+Adorned Crocodile
+Mountain x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Salvation Engine.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Adorned Crocodile.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Salvation Engine.Activate(Ability: Crew)
+
+[Expect]
+Bot1.Battlefield.Adorned Crocodile.Power = 5
+Bot1.Battlefield.Salvation Engine.Types = Artifact
