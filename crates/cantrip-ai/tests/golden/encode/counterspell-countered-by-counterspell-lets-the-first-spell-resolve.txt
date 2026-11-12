@@ -1,4 +1,4 @@
-# counterspell-countered-by-counterspell-lets-the-first-spell-resolve, answer 62
+# counterspell-countered-by-counterspell-lets-the-first-spell-resolve, answer 60
 
 ## Full
 bucket 64 len 36 first_option 35 options 1 cap_hit false compact 1363 bytes dense 13568 bytes
