@@ -1,0 +1,65 @@
+# Air Response Unit (3/3 flying, vigilance Vehicle, Crew 1): "total power 1 or more" (CR 702.122a) needs a creature you control. Bot1's
+# Aegis Turtle has power 0 and Bot2's Savannah Lions has power 2, so neither can crew it; Bot1's Zephyr Sprite (power 1, summoning
+# sick, which does not matter for a crew cost) can. The crewed Unit attacks in the air for 3 and, with vigilance, is not tapped by it.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Air Response Unit
+Aegis Turtle
+Zephyr Sprite
+Island x13
+
+[Bot2 Deck]
+Mox Pearl
+Savannah Lions
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Air Response Unit.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aegis Turtle.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+# The Turtle's power 0 and the opponent's Lions do not add up to a crew of 1.
+! Bot1.Battlefield.Air Response Unit.Activate(Ability: Crew)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Air Response Unit.Types = Artifact
+Bot1.Battlefield.Air Response Unit.Activate(Ability: Crew)
+Bot1.Choose(Zephyr Sprite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Air Response Unit.Types = Artifact; Creature
+Bot1.Attack(Air Response Unit > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Air Response Unit.Keywords = Flying; Vigilance
+Bot1.Battlefield.Air Response Unit.Tapped = false
+Bot1.Battlefield.Zephyr Sprite.Tapped = true
+Bot1.Battlefield.Aegis Turtle.Tapped = false
+Bot2.Battlefield.Savannah Lions.Tapped = false
