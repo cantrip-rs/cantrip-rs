@@ -1,0 +1,30 @@
+# Instill Energy lets only the enchanted creature attack as though it had haste: another creature that came under its
+# controller's control this turn still can't attack (CR 302.6, 508.1a).
+[Bot1 Deck]
+Instill Energy
+Llanowar Elves
+Ornithopter
+Forest
+Mox Emerald
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Instill Energy.Cast(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Instill Energy.AttachedTo = Llanowar Elves
+[T1 Bot1.DeclareAttackers]
+! Bot1.Attack(Ornithopter > Bot2)
+Bot1.Attack(Llanowar Elves > Bot2)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Battlefield.Ornithopter.Tapped = false
