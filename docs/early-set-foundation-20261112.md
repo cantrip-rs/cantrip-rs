@@ -321,3 +321,21 @@ runtime probe passes 40) cover those rules, rejected answers and journal undo.
 No permanent data or historical counters are added. Games without a live limit
 allocate no feature-specific list and do not compute extra characteristics for
 this rule. The batched workspace gate and benchmark follow this feature commit.
+
+## Ten-feature batch validation
+
+The complete native Rust workspace through `d8d0d26b7` passes 22587 tests
+(15 ignored), verification enabled. MTGish's complete generator suite passes
+1,577 tests (22 ignored), and its generated runtime probe passes 40 scenarios.
+Of the frozen 286 missing cards, 185 generate without feature gaps and 101
+remain gapped. A direct native compile covers 183 of those modules; the other
+two require only the missing Doom and Cube counter-name declarations. They are
+not silently aliased to other counter kinds, and no overlay is used for the
+183-module receipt. None of these cards is installed by this work.
+
+A sequential 128-game benchmark measured 59.36 microseconds per engine decision
+on the original base, 60.40 on this foundation; allocations remain 26.74 KB per
+decision and both runs finished all games. The shared host is busy, so this is
+not a statistical speed claim. The .NET SDK is unavailable; only the complete
+native gate is claimed. The generator's old Earthlore expectation was updated
+to expect its now-supported named tap cost before the successful full rerun.
