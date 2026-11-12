@@ -5349,7 +5349,8 @@ fn source_interval_begins(cx: &Cx, e: &cantrip_state::ContinuousEffect) -> bool 
 /// Whether an effect's duration begins as it would first apply (CR 611.2b). Source-tapped durations additionally ask
 /// the history: an interval ended before resolution does not revive merely because the source has been retapped.
 pub fn duration_begins(cx: &Cx, e: &cantrip_state::ContinuousEffect) -> bool {
-    !source_departed(cx.s(), e) && lasting_holds(cx, e) && source_interval_begins(cx, e)
+    !matches!(e.duration, Duration::DuringControllersNextUntapSteps(0))
+        && !source_departed(cx.s(), e) && lasting_holds(cx, e) && source_interval_begins(cx, e)
 }
 
 /// Whether any control-changing effect could apply, or have applied: the guard of `settle_control`, free in nearly every

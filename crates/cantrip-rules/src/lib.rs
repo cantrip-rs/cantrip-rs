@@ -1575,7 +1575,7 @@ impl<'a> Cx<'a> {
                 Duration::DuringControllersNextTurn(self.g.state.turn.number)
             }
             // Only the untap step reads it, of a permanent's untapping.
-            Duration::DuringItsControllersNextUntapStep => {
+            Duration::DuringItsControllersNextUntapStep | Duration::DuringControllersNextUntapSteps(_) => {
                 debug_assert!(kind == EffectKind::DoesntUntap, "only an effect on untapping lasts until its controller's next untap step");
                 duration
             }
