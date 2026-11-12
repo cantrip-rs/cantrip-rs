@@ -1,0 +1,56 @@
+# Bulwark Ox: "Whenever this creature attacks while saddled, put a +1/+1 counter on target creature" (CR 702.171b, 122.1a, 115.1): any creature, so Bot2's Aegis
+# Turtle (0/5) becomes 1/6. "Sacrifice this creature: Creatures you control with counters on them gain hexproof and indestructible until end of turn" (CR 702.11,
+# 702.12): the Turtle has a counter but Bot2 controls it, and Zephyr Sprite and Savannah Lions are Bot1's without counters, so nothing gains the keywords.
+
+[Bot1 Deck]
+Bulwark Ox
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Plains
+Savannah Lions
+Zephyr Sprite
+Plains x15
+
+[Bot2 Deck]
+Island
+Aegis Turtle
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bulwark Ox.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Bulwark Ox.Activate(Ability: Saddle)
+Bot1.Choose(Zephyr Sprite)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bulwark Ox > Bot2)
+Bot1.Target(Bot2.Battlefield.Aegis Turtle)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Aegis Turtle.Power = 1
+? Bot2.Battlefield.Aegis Turtle.Toughness = 6
+Bot1.Battlefield.Bulwark Ox.Activate(Ability: Sacrifice)
+? Bot2.Battlefield.Aegis Turtle.Keywords = (absent)
+? Bot1.Battlefield.Savannah Lions.Keywords = (absent)
+? Bot1.Battlefield.Zephyr Sprite.Keywords = Flying
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Bulwark Ox
+Bot2.Battlefield.Aegis Turtle.Power = 1
