@@ -4400,6 +4400,10 @@ pub struct CardTable {
     /// functions off the battlefield (`TriggeredDef::functions`, CR 113.6): the only cards that `settle::collect_batch` asks of
     /// such an event in a hand, a graveyard, exile, a library or on the stack. False for every card printed so far.
     pub activation_triggers_elsewhere: Vec<bool>,
+    /// Per-card candidates for ordinary triggers on tapping for mana, read
+    /// against actual objects in the game; triggered mana abilities are separate.
+    pub mana_tap_observers: Vec<bool>,
+    pub mana_tap_observers_elsewhere: Vec<bool>,
     /// Per card: the fused split spell's target specs of a split card with fuse (CR 702.102b: the left half's, then the right
     /// half's), made once as the table is.
     pub fused_targets: Vec<Option<&'static [TargetSpec]>>,
@@ -5004,6 +5008,16 @@ impl CardTable {
                 })
             })
             .collect();
+        let mana_tap_observers: Vec<bool> = cards.iter().map(|c| {
+            c.abilities.iter().chain(c.delayed).any(|a| matches!(a, AbilityDef::Triggered(t)
+                if !t.mana_ability && t.listens.intersects(EventMask::TAPPED_FOR_MANA)))
+                || c.statics.iter().any(|s| s.own && s.layer == Layer::Ability)
+        }).collect();
+        let mana_tap_observers_elsewhere: Vec<bool> = cards.iter().map(|c| {
+            c.abilities.iter().any(|a| matches!(a, AbilityDef::Triggered(t)
+                if !t.mana_ability && t.listens.intersects(EventMask::TAPPED_FOR_MANA)
+                && t.functions.0 & !crate::ability::ON_THE_BATTLEFIELD.0 != 0))
+        }).collect();
         let state_triggers: Vec<bool> = cards
             .iter()
             .map(|c| c.abilities.iter().chain(c.delayed).any(|a| matches!(a, AbilityDef::Triggered(t) if t.state.is_some())))
@@ -5066,6 +5080,8 @@ impl CardTable {
             mana_triggers,
             activation_triggers,
             activation_triggers_elsewhere,
+            mana_tap_observers,
+            mana_tap_observers_elsewhere,
             fused_targets,
             state_triggers,
             ability_grants,
@@ -5128,6 +5144,7 @@ impl CardTable {
                 table.state_triggers[front] |= triggered(|t| t.state.is_some());
                 table.mana_triggers[front] |= triggered(|t| t.mana_ability);
                 table.activation_triggers[front] |= triggered(|t| t.listens.intersects(EventMask::ABILITY_ACTIVATED));
+                table.mana_tap_observers[front] |= triggered(|t| !t.mana_ability && t.listens.intersects(EventMask::TAPPED_FOR_MANA));
                 let ids = (table.find(left.name), table.find(right.name));
                 table.halves[front] = Some((ids.0.expect("a door is in the card table"), ids.1.expect("a door is in the card table")));
                 // Both doors are printed on the Room card (CR 607.1, 709.5).

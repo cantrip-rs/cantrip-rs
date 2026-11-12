@@ -13502,7 +13502,9 @@ fn answers_to_try(kind: &RequestKind, budget: usize) -> Result<(Vec<Answer>, boo
 /// with the answer.
 fn tapped_for_mana(cx: &mut Cx, player: PlayerId, source: ObjectId, produced: ManaPool) -> R<()> {
     let event = Event::TappedForMana { permanent: source, player, produced: ManaTally::of(produced) };
-    cx.record(event);
+    // A "tapped for mana" trigger, ordinary or a mana ability, triggers only when the ability resolves and produces mana
+    // (CR 106.12a): a production replaced by nothing is recorded in the history but triggers no observer.
+    if !produced.is_empty() && crate::settle::mana_tap_watched(cx) { cx.emit(event); } else { cx.record(event); }
     if produced.is_empty() {
         return Ok(());
     }
