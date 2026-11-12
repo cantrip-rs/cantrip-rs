@@ -65,7 +65,7 @@ fn graveyard_card_targets_exclude_tokens_during_resolution() {
     put(&CREATURE, YOU, Zone::graveyard(YOU));
     put(&LAND, YOU, Zone::graveyard(YOU));
     put(&CREATURE, THEM, Zone::graveyard(THEM));
-    game.state.stack_push(StackItem { instance: AbilityAcquisition::OWN, event_amount: None,
+    game.state.stack_push(StackItem { target_choosers: Span::default(), instance: AbilityAcquisition::OWN, event_amount: None,
         kind: StackKind::Triggered, object: source, ability: AbilityRef::delayed(cards.id_of(&SOURCE), 0), controller: YOU,
         inline_targets: [Target::None; INLINE_TARGETS], target_count: 0, inline_spec_of: [0; INLINE_TARGETS],
         x: 0, kicked: 0, counted: 0, paid: 0, modes: 0, way: 0, choice: 0,

@@ -34,7 +34,7 @@ mod tests {
             let halver = game.state.push_obj(Obj::new(cards.id_of(&HALVER), PlayerId(1), Zone::BATTLEFIELD));
             game.state.zone_push(Zone::BATTLEFIELD, halver);
         }
-        let item = StackItem { event_amount: Some(amount),
+        let item = StackItem { target_choosers: Span::default(), event_amount: Some(amount),
             kind: StackKind::Triggered, object: aura, ability: AbilityRef { card, index: 0 }, controller: you,
             inline_targets: [Target::None; INLINE_TARGETS], target_count: 0, inline_spec_of: [0; INLINE_TARGETS],
             x: 0, kicked: 0, counted: 0, paid: 0, modes: 0, way: 0, choice: 0,
