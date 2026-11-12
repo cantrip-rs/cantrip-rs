@@ -264,3 +264,19 @@ replacement and random-state rollback, whole-hand/shortfall cases, the
 nonrandom graveyard-cost dependency, and a separate special-action component.
 The generator only enables constant unrestricted random discards under this
 capability; variable-X random discards remain explicitly unsupported.
+
+## Eight-feature batch validation
+
+The complete Rust workspace through `4deb96071` passes 22,577 tests (15 ignored),
+with verification enabled. MTGish's generator suite passes 1,573 tests (22
+ignored), and its generated-card runtime probe passes 34 scenarios. Within
+the frozen 286 unsupported early-set cards, 178 now have no recorded generator
+feature gap and 108 remain gapped. This is not a claim that those cards are
+installed or independently reviewed.
+
+The 128-game benchmark still allocates 26.74 KB per engine decision. Sequential
+control runs measured 49.88 microseconds before and 44.79 after; a previous
+after-run during concurrent builds measured 77.01. Shared-machine variability
+precludes a statistical speed claim. No .NET pass is claimed: the SDK remains
+unavailable. MTGish's docs/cantrip-foundation-progress-20261112.json records
+the per-card ledger, exact native revision, API fingerprint and log hashes.
