@@ -3033,6 +3033,15 @@ identify attackers that had become blocked by only the removed creature. A secon
 prevents this unblocking. Removal and unblocking are separate instructions; the attackers becoming unblocked together
 are one instruction. Moving through the search tree restores both the blocked flags and the transition history.
 
+`Game::change_blocks` is the separate authority for effects assigning or changing blocking relationships. Its inputs
+name creatures to remove from combat, pairs to end, and pairs to establish. Ending a pair alone preserves blocking
+and blocked status. Establishing a pair expands an attacking band and records per-creature block events, with the
+generic `declared` marker only when that creature becomes a blocker. A retained pair does not trigger again; removing
+and reassigning a blocker does, even if the new attacker is the same. The complete graph is installed before trigger
+collection. False Orders, Balduvian Warlord, General Jarkeld and Sorrow's Path need these distinctions. This mutation
+does not declare blockers or apply a declaration's costs and requirements; explicit "could block" checks belong
+before it, and are not supplied by this mutation API.
+
 ### The regular combat damage step
 
 The quantity assigned is read by the core (`static_rules::combat_damage_of`, CR 510.1a), shared by attackers, blockers
@@ -3095,6 +3104,10 @@ CR 510.4: the regular combat damage step after a first-strike step is for the at
 strike nor double strike as the first-strike step began, and those that have double strike now. `Attacker::first_strike` and
 `Block::first_strike` record which had one of them as that step began; a creature that loses first strike after dealing
 first-strike damage deals no more, and one that gains it only afterwards deals its damage in the regular step.
+The first-strike step also records `CombatFirstStrike` for battlefield creatures that have either ability then.
+It is history-only, with no trigger mask and no additional per-object state. Changing a block reads that combat's
+record when its old association is gone, preserving eligibility when Sorrow's Path reassigns a surviving blocker
+after its attacker left. New incarnations and a later combat do not inherit the fact.
 
 ### Landwalk
 

@@ -74,6 +74,9 @@ mod merge_tests;
 #[cfg(test)]
 mod read_ahead_tests;
 mod ops;
+mod combat_changes;
+#[cfg(test)]
+mod combat_changes_tests;
 mod phasing;
 #[cfg(test)]
 mod any_color_spell_tests;
@@ -2625,6 +2628,10 @@ impl cantrip_api::Game for Cx<'_> {
 
     fn become_unblocked(&mut self, attacker: ObjectId) {
         ops::set_blocked(self, attacker, false);
+    }
+
+    fn change_blocks(&mut self, remove_from_combat: &[ObjectId], ending: &[(ObjectId, ObjectId)], starting: &[(ObjectId, ObjectId)]) {
+        combat_changes::change_blocks(self, remove_from_combat, ending, starting);
     }
 
     fn put_onto_battlefield_transformed(&mut self, object: ObjectId, controller: PlayerId, tapped: bool) -> Result<ObjectId, Suspend> {

@@ -285,15 +285,19 @@ pub enum Event {
     AttackersDeclared { player: PlayerId, count: u32 },
     /// A creature blocks an attacker (CR 509.1, 509.1g): one event for each blocker and each attacker it blocks, so an
     /// attacker blocked by two sees both, and a creature blocking several attackers (CR 509.1a) has one for each. `declared`
-    /// marks one event of each blocker: the first attacker it was declared to block. The other members of that attacker's
+    /// marks one event of each new blocker: the first attacker it was declared or caused to block. The other members of that attacker's
     /// band, which it blocks too (CR 702.22h), and the other attackers a creature that can block several was declared to
     /// block come as `declared: false`. "Whenever this creature blocks" (CR 509.3a) reads the declared one alone, triggering
     /// once however many it blocks; "whenever it blocks a creature" (CR 509.3b) and "becomes blocked by a creature" (CR 509.3d)
-    /// read each.
+    /// read each. An effect changing the attacker of an already-blocking creature emits `declared: false`.
     Blocks { blocker: ObjectId, attacker: ObjectId, declared: bool },
     /// An unblocked attacking creature became blocked (CR 509.3c): once for the creature, however many blockers
     /// were declared, or when an effect makes it blocked. Further blockers do not repeat the transition.
     BecameBlocked { attacker: ObjectId },
+    /// This creature had first strike or double strike as the first combat damage step began (CR 510.4).
+    /// Historical information, not damage dealt: a creature assigning no damage still has it. Reassignment and removal
+    /// of its last attacker must not discard the fact. A later combat phase has its own records.
+    CombatFirstStrike { creature: ObjectId },
     /// An attacking creature was not blocked (CR 509.1h): decided as the declare blockers step's blocks are made.
     Unblocked { attacker: ObjectId, defender: Target },
     /// A permanent became monstrous (CR 701.37a).
@@ -581,6 +585,7 @@ impl Event {
             Event::ResolutionPaymentBegan { source, .. } => source == object,
             Event::ResolutionCostObjectPaid { source, object: paid, .. } => source == object || paid == object,
             Event::CombatPaymentBegan { .. } => false,
+            Event::CombatFirstStrike { creature } => creature == object,
             Event::CombatCostObjectPaid { source, attacker, object: paid, .. } => source == object || attacker == object || paid == object,
             Event::AbilityCopied { .. } | Event::ActivatedAs { .. } => false,
             Event::PaidAlternative { spell, .. } | Event::PaidRepeatedly { spell, .. } => spell == object,

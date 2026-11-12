@@ -1635,6 +1635,16 @@ fn combat_damage(cx: &mut Cx) -> R<()> {
     // CR 510.4: which attackers and blockers had first strike or double strike as the first-strike step began, which the
     // regular step after it asks.
     if first_strike_step {
+        // A creature not blocking now can become a blocker by an effect later. The fact belongs to the actual
+        // incarnation, even if its last blocking relationship disappears before it is assigned a new one.
+        let first: Vec<_> = cx.s().battlefield().iter().copied()
+            .filter(|&id| {
+                if !live(cx.s(), id) { return false; }
+                let chars = cx.chars(id);
+                chars.is(CardType::Creature) && (chars.has(Keyword::FirstStrike) || chars.has(Keyword::DoubleStrike))
+            })
+            .map(|creature| Event::CombatFirstStrike { creature }).collect();
+        cx.record_batch(&first);
         let mut attackers = cx.s().attackers.clone();
         for a in &mut attackers {
             a.first_strike = live(cx.s(), a.id) && strikes_first(cx, a.id);

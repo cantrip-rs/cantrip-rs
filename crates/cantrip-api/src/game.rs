@@ -1140,6 +1140,14 @@ pub trait Game: Query {
     /// Makes an attacking creature unblocked by an effect (CR 509.1h), rather than by declaring no blockers.
     /// This does not trigger "attacks and isn't blocked" (CR 509.3g). False Orders and Imprison use it.
     fn become_unblocked(&mut self, attacker: ObjectId);
+    /// Changes blocking relationships as one instruction (CR 509.3). Remove the named creatures from combat first,
+    /// end the specified (blocker, attacker) pairs, then establish the new pairs. Ending a pair alone preserves both
+    /// the creature's blocking status and the attacker's blocked status. Banding expands new blocks automatically.
+    /// Existing pairs retained by the change do not trigger again; removing a blocker from combat and reassigning it
+    /// does. False Orders, Balduvian Warlord, General Jarkeld and Sorrow's Path use this authority.
+    /// This carries out the effect, without declaring blockers or checking declaration restrictions, costs or requirements.
+    /// A recipe with an explicit "could block" condition must check it separately before making the change.
+    fn change_blocks(&mut self, remove_from_combat: &[ObjectId], ending: &[(ObjectId, ObjectId)], starting: &[(ObjectId, ObjectId)]);
     /// Creates token copies entering attacking (CR 508.4, 707.2), tapped only when `tapped`. If `defender` is absent,
     /// each token's controller chooses what it attacks as it enters. Attacking state is visible to ETB abilities.
     fn create_token_copies_attacking(&mut self, values: Copiable, controller: PlayerId, count: u32, tapped: bool, defender: Option<Target>) -> Result<Vec<ObjectId>, Suspend>;
