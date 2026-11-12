@@ -3938,3 +3938,12 @@ to activate a land's mana abilities. All state changes are journalled.
 Immediately before an actual simultaneous departure, the layers identify the first part at its original stage, before that entry applies. A source that lost its text before that stage contributes nothing; a first part that starts before ability loss in layer6 retains its later parts. The existing journaled continuous-effect list keeps the printed definition, linked context, acquisition identity and original timestamp until cleanup. It evaluates the current affected objects on every pass, including later arrivals and an initially empty affected set. It never snapshots that set or preserves unrelated abilities of the departed source. Copies and merged text retain the definition they actually had. Prospective entry projects the surviving effect before excluding simultaneously departing sources. Phasing is not a departure.
 
 The existing epoch-derived static-source cache guards departure work on a live source with this lifetime and notes the retained parts’ layer and ability-loss interests. Ordinary games allocate no extra list; there is no new per-object field or persistent game-state collection. Retained effects are journaled and expire through the existing end-of-turn cleanup.
+
+### Typed triggered-keyword families
+
+The cumulative-upkeep factory tags its `TriggeredDef` with a compact
+`KeywordFamily` (Balduvian Shaman's "doesn't have cumulative upkeep"). Queries inspect current layered ability references;
+labels and callback identity are never classifiers. Shared factories also tag
+instances granted from a card's delayed list. An Oracle-consistency test holds
+all implemented printed keywords to those tags. No historical counts or
+per-object family collections are stored.
