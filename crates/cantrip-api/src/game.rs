@@ -1148,6 +1148,11 @@ pub trait Game: Query {
     /// This carries out the effect, without declaring blockers or checking declaration restrictions, costs or requirements.
     /// A recipe with an explicit "could block" condition must check it separately before making the change.
     fn change_blocks(&mut self, remove_from_combat: &[ObjectId], ending: &[(ObjectId, ObjectId)], starting: &[(ObjectId, ObjectId)]);
+    /// Whether a proposed reassignment obeys current blocking restrictions, including the capacities of the changed
+    /// blockers and the group limits of the changed attackers. Unchanged unrelated relationships stay fixed facts;
+    /// declaration-only untapped eligibility, costs and requirements are not imposed. General Jarkeld and Sorrow's Path
+    /// explicitly ask this before changing their blocks. The query changes no state and asks no player a question.
+    fn block_reassignment_allowed(&self, ending: &[(ObjectId, ObjectId)], starting: &[(ObjectId, ObjectId)]) -> bool;
     /// Creates token copies entering attacking (CR 508.4, 707.2), tapped only when `tapped`. If `defender` is absent,
     /// each token's controller chooses what it attacks as it enters. Attacking state is visible to ETB abilities.
     fn create_token_copies_attacking(&mut self, values: Copiable, controller: PlayerId, count: u32, tapped: bool, defender: Option<Target>) -> Result<Vec<ObjectId>, Suspend>;

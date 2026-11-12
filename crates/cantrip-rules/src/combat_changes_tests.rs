@@ -10,6 +10,17 @@ static CREATURE: CardDef = CardDef {
 };
 static STRIKER: CardDef = CardDef { name: "Combat change first striker", keywords: Keywords::of(&[Keyword::FirstStrike]), ..CREATURE };
 static BATTLE: CardDef = CardDef { name: "Combat change creature battle", types: TypeSet::of(&[CardType::Creature, CardType::Battle]), ..CREATURE };
+static FLYER: CardDef = CardDef { name:"Combat change flyer", keywords:Keywords::of(&[Keyword::Flying]), ..CREATURE };
+static MENACE: CardDef = CardDef { name:"Combat change menace", keywords:Keywords::of(&[Keyword::Menace]), ..CREATURE };
+static LONE: CardDef = CardDef { name:"Combat change single-block limit", keywords:Keywords::of(&[Keyword::CantBeBlockedByMoreThanOne]), ..CREATURE };
+static RED: CardDef = CardDef { name:"Combat change red creature", colors:Some(ColorSet::of(Color::Red)), ..CREATURE };
+static PROTECTED: CardDef = CardDef { name:"Combat change red protection", protection:ColorSet::of(Color::Red), ..CREATURE };
+static MULTI: CardDef = CardDef { name:"Combat change multi blocker", abilities:&[block_allowance(1,"Can block an additional creature.")], ..CREATURE };
+fn any_blocker(_: &dyn Query, _: &Asker, _: ObjectId) -> bool {true}
+fn everyone(_: &dyn Query, _: &Asker, _: ObjectId, _: ObjectId) -> bool {true}
+static CAP: CardDef = CardDef { name:"Combat change group cap", combat_groups:&[
+    CombatGroupRule {role:CombatRole::Blocker,applies:any_blocker,counted:everyone,others_only:false,at_least:0,at_most:2}
+], ..CardDef::BLANK };
 fn blocks(_: &dyn Query, source: ObjectId, e: &Event) -> Option<Fired> {
     matches!(e, Event::Blocks { blocker, declared: true, .. } if *blocker == source).then_some(Fired::PLAIN).flatten()
 }
@@ -27,7 +38,7 @@ fn cx(g: &mut Game) -> Cx<'_> {
     Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
 }
 fn game() -> Game {
-    let table = Box::leak(Box::new(CardTable::new([&CREATURE, &STRIKER, &WITNESS, &BATTLE])));
+    let table = Box::leak(Box::new(CardTable::new([&CREATURE, &STRIKER, &WITNESS, &BATTLE,&FLYER,&MENACE,&LONE,&RED,&PROTECTED,&MULTI,&CAP])));
     let deck = vec![table.id_of(&CREATURE); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck; 2], ..Default::default() });
     while !g.state.agenda.is_empty() { g.state.frame_remove(0); }
@@ -41,7 +52,10 @@ fn put(g: &mut Game, def: &'static CardDef, player: PlayerId) -> ObjectId {
     g.state.zone_push(Zone::BATTLEFIELD, id); id
 }
 fn attack(g: &mut Game) -> ObjectId {
-    let id = put(g, &CREATURE, YOU);
+    attack_as(g,&CREATURE)
+}
+fn attack_as(g: &mut Game, def: &'static CardDef) -> ObjectId {
+    let id = put(g, def, YOU);
     let mut a = g.state.attackers.clone();
     a.push(Attacker::new(id, Target::Player(THEM), THEM, TypeSet::NONE));
     g.state.set_attackers(a); id
@@ -185,4 +199,122 @@ fn relationship_status_triggers_and_provenance_rollback_and_replay() {
     g.state.rollback(mark); g.log.truncate(log); assert_eq!(hash(&g),before);
     cx(&mut g).change_blocks(&[], &[], &[(b,a)]);
     assert_eq!(hash(&g),after); assert_eq!(g.log[log..].iter().map(|r| r.event).collect::<Vec<_>>(),events);
+}
+
+fn set_pairs(g:&mut Game,pairs:&[(ObjectId,ObjectId)]) {
+    g.state.set_blocks(pairs.iter().map(|&(blocker,attacker)|Block {blocker,attacker,first_strike:false}).collect());
+    update_attackers(g,|a|for a in a {a.blocked=true;});
+}
+fn swap(g:&mut Game,first:ObjectId,second:ObjectId,attacking:bool) {
+    cantrip_mechanics::combat::swap_blocks(&mut cx(g),Some(first),Some(second),attacking);
+}
+#[test]
+fn attacker_exchange_moves_exclusive_edges_and_keeps_shared_ones() {
+    let mut g=game();let a=attack(&mut g);let b=attack(&mut g);
+    let x=put(&mut g,&WITNESS,THEM);let y=put(&mut g,&WITNESS,THEM);let shared=put(&mut g,&MULTI,THEM);
+    set_pairs(&mut g,&[(x,a),(y,b),(shared,a),(shared,b)]);
+    swap(&mut g,a,b,true);
+    assert!(g.state.blocks.iter().any(|p|p.blocker==x&&p.attacker==b));
+    assert!(g.state.blocks.iter().any(|p|p.blocker==y&&p.attacker==a));
+    assert_eq!(g.state.blocks.iter().filter(|p|p.blocker==shared).count(),2);
+    assert_eq!(edges(&g),[(x,b,false),(y,a,false)]);assert_eq!(g.state.triggers.len(),2);
+}
+#[test]
+fn current_flying_and_reach_decide_whether_an_exchange_is_allowed() {
+    let mut g=game();let a=attack_as(&mut g,&FLYER);let b=attack(&mut g);
+    let x=put(&mut g,&FLYER,THEM);let y=put(&mut g,&CREATURE,THEM);
+    set_pairs(&mut g,&[(x,a),(y,b)]);let before=g.state.blocks.clone();
+    swap(&mut g,a,b,true);assert_eq!(g.state.blocks,before);
+    cx(&mut g).add_effect(y,y,EffectKind::AddKeywords(Keywords::of(&[Keyword::Reach])),Duration::EndOfTurn);
+    g.state.update_obj(y,|o|o.tapped=true);
+    swap(&mut g,a,b,true);assert!(g.state.blocks.iter().any(|p|p.blocker==y&&p.attacker==a));
+}
+#[test]
+fn protection_blocks_the_exchange_without_partial_changes() {
+    let mut g=game();let a=attack_as(&mut g,&PROTECTED);let b=attack(&mut g);
+    let x=put(&mut g,&CREATURE,THEM);let y=put(&mut g,&RED,THEM);
+    set_pairs(&mut g,&[(x,a),(y,b)]);let before=hash(&g);swap(&mut g,a,b,true);assert_eq!(hash(&g),before);
+}
+#[test]
+fn attacker_exchanges_check_minimum_and_maximum_blocker_counts() {
+    for def in [&MENACE,&LONE] {
+        let mut g=game();let a=attack_as(&mut g,def);let b=attack(&mut g);
+        let x=put(&mut g,&CREATURE,THEM);let y=put(&mut g,&CREATURE,THEM);let z=put(&mut g,&CREATURE,THEM);
+        let pairs=if std::ptr::eq(def,&MENACE) {vec![(x,a),(y,a),(z,b)]}else{vec![(x,a),(y,b),(z,b)]};
+        set_pairs(&mut g,&pairs);let before=g.state.blocks.clone();swap(&mut g,a,b,true);assert_eq!(g.state.blocks,before);
+    }
+}
+#[test]
+fn blocker_exchange_requires_capacity_for_the_entire_other_attack_group() {
+    for other_multi in [false,true] {
+        let mut g=game();let a=attack(&mut g);let b=attack(&mut g);let c=attack(&mut g);
+        let x=put(&mut g,&MULTI,THEM);let y=put(&mut g,if other_multi {&MULTI}else{&CREATURE},THEM);
+        set_pairs(&mut g,&[(x,a),(x,b),(y,c)]);let before=g.state.blocks.clone();swap(&mut g,x,y,false);
+        if other_multi {assert!(g.state.blocks.iter().any(|p|p.blocker==y&&p.attacker==a));assert_eq!(edges(&g).len(),3);}
+        else {assert_eq!(g.state.blocks,before);}
+    }
+}
+#[test]
+fn removing_and_reassigning_two_blockers_repeats_their_generic_triggers() {
+    let mut g=game();let a=attack(&mut g);let b=attack(&mut g);
+    let x=put(&mut g,&WITNESS,THEM);let y=put(&mut g,&WITNESS,THEM);
+    set_pairs(&mut g,&[(x,a),(y,b)]);g.state.update_obj(x,|o|o.tapped=true);
+    swap(&mut g,x,y,false);assert_eq!(edges(&g),[(y,a,true),(x,b,true)]);assert_eq!(g.state.triggers.len(),4);
+}
+#[test]
+fn a_blocked_attacker_with_no_remaining_blocker_can_exchange_its_empty_cohort() {
+    let mut g=game();let a=attack(&mut g);let b=attack(&mut g);let x=put(&mut g,&CREATURE,THEM);
+    set_pairs(&mut g,&[(x,a)]);swap(&mut g,a,b,true);
+    assert_eq!(g.state.blocks.len(),1);assert_eq!(g.state.blocks[0].attacker,b);assert!(g.is_blocked(a));assert!(g.is_blocked(b));
+}
+#[test]
+fn a_surviving_blocker_can_exchange_its_empty_attack_group() {
+    let mut g=game();let a=attack(&mut g);let b=attack(&mut g);
+    let x=put(&mut g,&CREATURE,THEM);let y=put(&mut g,&CREATURE,THEM);
+    set_pairs(&mut g,&[(x,a),(y,b)]);cx(&mut g).remove_from_combat(a);
+    swap(&mut g,x,y,false);assert!(g.is_blocking(x));assert!(!g.is_blocking(y));assert_eq!(g.state.blocks[0].blocker,x);
+}
+#[test]
+fn an_unrelated_existing_illegal_pair_does_not_prevent_the_exchange() {
+    let mut g=game();let a=attack(&mut g);let b=attack(&mut g);let c=attack_as(&mut g,&FLYER);
+    let x=put(&mut g,&CREATURE,THEM);let y=put(&mut g,&CREATURE,THEM);let z=put(&mut g,&CREATURE,THEM);
+    set_pairs(&mut g,&[(x,a),(y,b),(z,c)]);swap(&mut g,a,b,true);
+    assert!(g.state.blocks.iter().any(|p|p.blocker==x&&p.attacker==b));assert!(g.state.blocks.iter().any(|p|p.blocker==z&&p.attacker==c));
+}
+#[test]
+fn declaration_requirements_are_not_imposed_again_by_an_exchange() {
+    let mut g=game();let a=attack(&mut g);let b=attack(&mut g);
+    let x=put(&mut g,&CREATURE,THEM);let y=put(&mut g,&CREATURE,THEM);let unused=put(&mut g,&CREATURE,THEM);
+    set_pairs(&mut g,&[(x,a),(y,b)]);
+    cx(&mut g).add_effect(unused,unused,EffectKind::MustBlockAttacker(a),Duration::EndOfTurn);
+    swap(&mut g,a,b,true);assert!(g.state.blocks.iter().any(|p|p.blocker==x&&p.attacker==b));
+}
+#[test]
+fn new_pairs_obey_whole_blocker_group_restrictions() {
+    let mut g=game();let a=attack(&mut g);let x=put(&mut g,&CREATURE,THEM);let y=put(&mut g,&CREATURE,THEM);let z=put(&mut g,&CREATURE,THEM);
+    put(&mut g,&CAP,THEM);
+    let mark=g.state.mark();let log=g.log.len();assert!(!cx(&mut g).block_reassignment_allowed(&[],&[(x,a),(y,a),(z,a)]));
+    assert_eq!(g.state.mark(),mark);assert_eq!(g.log.len(),log);
+    assert!(cx(&mut g).block_reassignment_allowed(&[],&[(x,a),(y,a)]));
+}
+#[test]
+fn the_solver_uses_a_legal_band_representative_without_extra_block_capacity() {
+    let mut g=game();let a=attack_as(&mut g,&FLYER);let b=attack(&mut g);let x=put(&mut g,&CREATURE,THEM);
+    update_attackers(&mut g,|a|for a in a {a.band=1;});
+    assert!(cx(&mut g).block_reassignment_allowed(&[],&[(x,a)]));
+    cx(&mut g).change_blocks(&[],&[],&[(x,a)]);assert_eq!(g.state.blocks.len(),2);
+}
+#[test]
+fn distinct_bands_consume_distinct_block_allowances() {
+    let mut g=game();let a=attack(&mut g);let b=attack(&mut g);let c=attack(&mut g);let d=attack(&mut g);
+    update_attackers(&mut g,|a|{a[0].band=1;a[1].band=1;a[2].band=2;a[3].band=2;});
+    let x=put(&mut g,&CREATURE,THEM);assert!(!cx(&mut g).block_reassignment_allowed(&[],&[(x,a),(x,c)]));
+    let y=put(&mut g,&MULTI,THEM);assert!(cx(&mut g).block_reassignment_allowed(&[],&[(y,a),(y,b),(y,c),(y,d)]));
+}
+#[test]
+fn a_shared_blocker_with_a_new_illegal_quality_prevents_the_exchange() {
+    let mut g=game();let a=attack_as(&mut g,&FLYER);let b=attack(&mut g);let x=put(&mut g,&MULTI,THEM);
+    set_pairs(&mut g,&[(x,a),(x,b)]);
+    assert!(!cx(&mut g).block_reassignment_allowed(&[(x,a),(x,b)],&[(x,a),(x,b)]));
+    let before=hash(&g);swap(&mut g,a,b,true);assert_eq!(hash(&g),before);assert!(edges(&g).is_empty());
 }

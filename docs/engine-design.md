@@ -3042,6 +3042,18 @@ collection. False Orders, Balduvian Warlord, General Jarkeld and Sorrow's Path n
 does not declare blockers or apply a declaration's costs and requirements; explicit "could block" checks belong
 before it, and are not supplied by this mutation API.
 
+`Game::block_reassignment_allowed` supplies those explicit conditions at resolution. It uses the existing
+`BlockRequirements` solver with every desired relationship as a required fact of the hypothetical assignment.
+Changed pairs use current evasion, protection and other pair restrictions; changed blockers use current capacities,
+and changed attackers use their current group limits. Band representatives satisfy automatic relationships without
+using extra block allowances. Unrelated existing pairs are retained without demanding that they could still be
+declared. Whole-blocker restrictions are checked, but declaration requirements, payments and untapped eligibility
+are not imposed anew. The query asks no player a question and changes no state.
+
+The shared `combat::swap_blocks` recipe reads the two cohorts and checks this authority before performing either
+exchange. `combat::choose_attacker_to_block` makes the non-target resolution choice for False Orders and Balduvian
+Warlord; its caller owns the preceding removal/unblocking instruction and any optional choice.
+
 ### The regular combat damage step
 
 The quantity assigned is read by the core (`static_rules::combat_damage_of`, CR 510.1a), shared by attackers, blockers

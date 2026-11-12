@@ -1450,6 +1450,50 @@ fn blocking_rule_sources(cx: &Cx) -> Vec<ObjectId> {
         .collect()
 }
 
+/// A "could block" condition at resolution, rather than a new declaration. Find a restriction-valid representation of
+/// exactly the proposed graph, including automatic band associations. Every desired relationship is required by this
+/// hypothetical question, not by a Lure or other gameplay requirement. Unrelated existing pairs may persist even after
+/// gaining evasion; only the proposed pairs are checked for pair restrictions. No declaration payment or untap test.
+pub(crate) fn block_reassignment_allowed(cx: &Cx, ending: &[(ObjectId, ObjectId)], starting: &[(ObjectId, ObjectId)]) -> bool {
+    let sources = blocking_rule_sources(cx);
+    let mut graph: Vec<_> = cx.s().blocks.iter().map(|b| (b.blocker,b.attacker)).filter(|p| !ending.contains(p)).collect();
+    let mut proposed = Vec::new();
+    let mut changed_blockers = Vec::new();
+    let mut changed_attackers = Vec::new();
+    for &(b,a) in ending.iter().chain(starting) {
+        if !changed_blockers.contains(&b) { changed_blockers.push(b); }
+        if !changed_attackers.contains(&a) { changed_attackers.push(a); }
+    }
+    for &(b,a) in starting {
+        if !live(cx.s(),b) { return false; }
+        let chars = cx.chars(b);
+        if !chars.is(CardType::Creature) || chars.is(CardType::Battle) || cx.is_attacking(b) { return false; }
+        let Some(attack) = cx.s().attackers.iter().find(|x| x.id == a && x.defending == cx.controller(b)) else { return false; };
+        for member in cx.s().attackers.iter().filter(|x| x.id == a || (attack.band != 0 && x.band == attack.band)) {
+            let pair = (b,member.id);
+            if !graph.contains(&pair) { graph.push(pair); }
+            if !proposed.contains(&pair) { proposed.push(pair); }
+            if !changed_attackers.contains(&member.id) { changed_attackers.push(member.id); }
+        }
+    }
+    // A band can be blocked through any member which this blocker can legally be declared to block. The solver chooses
+    // those representatives and checks their minimum/maximum counts; automatic associations consume no extra capacity.
+    let allowed: Vec<_> = graph.iter().copied().filter(|&(b,a)| {
+        !proposed.contains(&(b,a)) || (!cant_block(cx,b) && can_block(cx,b,a,&sources))
+    }).collect();
+    let mut blockers = Vec::new();
+    for &(b,_) in &graph { if !blockers.contains(&b) { blockers.push(b); } }
+    let rules = BlockRequirements {
+        groups: crate::static_rules::combat_groups(cx,CombatRole::Blocker,&blockers),
+        required: graph.iter().map(|&(b,a)| RequiredBlock {blocker:Some(b),attacker:Some(a)}).collect(),
+        bands: cx.s().attackers.iter().filter(|a| a.band != 0).map(|a| (a.id,a.band)).collect(),
+        limits: changed_attackers.iter().copied().map(|a| (a,count_u32(cx.chars(a).minimum_blockers()),u32::try_from(maximum_blockers(cx,a,&sources)).unwrap_or(u32::MAX))).collect(),
+        capacities: blockers.iter().copied().map(|b| (b,if changed_blockers.contains(&b) {block_capacity(cx,b,&sources)} else {u32::MAX})).collect(),
+        ..Default::default()
+    };
+    rules.solve(&allowed,&[],Some(count_u32(graph.len())),false).is_some()
+}
+
 fn declare_blockers(cx: &mut Cx) -> R<()> {
     let attackers: Vec<ObjectId> = cx.s().attackers.iter().map(|a| a.id).collect();
     if attackers.is_empty() {

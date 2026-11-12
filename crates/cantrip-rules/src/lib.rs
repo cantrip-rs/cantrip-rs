@@ -2634,6 +2634,10 @@ impl cantrip_api::Game for Cx<'_> {
         combat_changes::change_blocks(self, remove_from_combat, ending, starting);
     }
 
+    fn block_reassignment_allowed(&self, ending: &[(ObjectId, ObjectId)], starting: &[(ObjectId, ObjectId)]) -> bool {
+        turn::block_reassignment_allowed(self, ending, starting)
+    }
+
     fn put_onto_battlefield_transformed(&mut self, object: ObjectId, controller: PlayerId, tapped: bool) -> Result<ObjectId, Suspend> {
         ops::put_onto_battlefield_as(self, object, controller, tapped, true, ZoneReason::Other, &[]).map_err(|_| Suspend)
     }
