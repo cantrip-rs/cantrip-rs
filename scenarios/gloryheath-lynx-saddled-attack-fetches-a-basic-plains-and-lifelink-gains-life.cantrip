@@ -1,0 +1,60 @@
+# Gloryheath Lynx: "Whenever this creature attacks while saddled, search your library for a basic Plains card, reveal it, put it into your hand, then shuffle"
+# (CR 702.171b, 701.23). Turn 1: Saddle 2 is refused with only Zephyr Sprite (power 1) to tap. Turn 3: Savannah Lions (power 2) saddles the Lynx; the search may not find
+# Scrubland (a Plains, but not a basic one), only the basic Plains, which is revealed and put into hand; Lifelink gains 2 for the combat damage. Turn 5: unsaddled, the
+# Lynx attacks without searching, and the library keeps its size.
+
+[Bot1 Deck]
+Gloryheath Lynx
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Plains
+Savannah Lions
+Zephyr Sprite
+Forest
+Scrubland
+Plains
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gloryheath Lynx.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+! Bot1.Battlefield.Gloryheath Lynx.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gloryheath Lynx.Activate
+! Bot1.Choose(Zephyr Sprite)
+Bot1.Choose(Savannah Lions)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Gloryheath Lynx > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Scrubland)
+Bot1.Search(Plains)
+? Bot1.Revealed = Plains
+? Bot1.Hand.Count = 2
+? Bot1.Library.Count = 11
+[T3 Bot1.Main2]
+? Bot1.Life = 22
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Gloryheath Lynx > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 24
+Bot2.Life = 16
+Bot1.Hand.Count = 3
+Bot1.Library.Count = 10
