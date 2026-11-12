@@ -1,0 +1,53 @@
+# Spotcycle Scouter: "When this Vehicle enters, scry 2." (CR 701.22a) Bot1 casts it on turn 1 with two Moxes; the scry looks at
+# Lightning Bolt and Counterspell, and Bot1 keeps Counterspell on top and bottoms the Bolt, so Counterspell is the card drawn on
+# turn 3. "Crew 1" (CR 702.122a): on turn 3 the summoning-sick Memnite (power 1) taps to crew the 3/2 Vehicle, which attacks
+# Bot2 and deals 3.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Spotcycle Scouter
+Memnite
+Island
+Island
+Island
+Lightning Bolt
+Counterspell
+Mountain x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Spotcycle Scouter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Counterspell | Lightning Bolt)
+? Bot1.Battlefield.Spotcycle Scouter.Types = Artifact
+[T3 Bot1.Main1]
+? Bot1.Hand.Counterspell.Colors = Blue
+Bot1.Battlefield.Spotcycle Scouter.Activate(Ability: Crew)
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spotcycle Scouter.Types = Artifact; Creature
+Bot1.Attack(Spotcycle Scouter > Bot2)
+Bot1.Pass
+Bot2.Pass
+
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Memnite.Tapped = true
+Bot1.Hand.Counterspell.Colors = Blue
