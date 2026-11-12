@@ -3605,6 +3605,20 @@ fn targets_with_activation(def: &ActivatedDef) -> bool {
 /// A slot whose targets together are judged (`TargetSpec::together`) needs that many the rule allows together, judged before X
 /// is announced with its rule's `COUNTED` unread, so as large as any X could make it.
 pub(crate) fn slots_satisfiable(cx: &Cx, asker: &Asker, specs: &[TargetSpec]) -> bool {
+    if specs.len() > 1 && specs.iter().any(TargetSpec::required) {
+        // Glyph of Delusion and Goblin Welder: a later slot may read the earlier choices. Asking each filter with
+        // no earlier targets can both hide legal announcements and offer impossible ones. Reuse the ordered search.
+        // This is before X: a COUNTED minimum may be zero, and a COUNTED maximum/together bound is not yet limited.
+        // The payable-announcement search judges the actual X later. As there, exhausting the budget defers the
+        // decision to announcement, rather than hiding a possibly legal action.
+        let specs = specs.iter().map(|s| TargetSpec {
+            min: if s.min == TargetSpec::COUNTED { 0 } else { s.min },
+            ..*s
+        }).collect();
+        let mut budget = ANNOUNCEMENT_BUDGET;
+        return some_announcement(cx, cx, asker, &[], &[specs], (u32::MAX, 0, false),
+            &mut budget, &[], &|_, _| (), &mut |_| true) != Found::No;
+    }
     specs.iter().all(|spec| {
         if !spec.required() {
             return true;
