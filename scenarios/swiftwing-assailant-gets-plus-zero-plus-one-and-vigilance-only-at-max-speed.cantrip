@@ -1,0 +1,71 @@
+# Swiftwing Assailant: "Max speed — This creature gets +0/+1 and has vigilance." (CR 702.178a) Bot1 casts the 3/3 flier on turn 1
+# (speed 1, CR 704.5aa) and Bolts Bot2 on each of turns 3, 5 and 7 for speed 2, 3 and 4 (CR 702.179d). At speed 3 it is still a
+# 3/3 flier without vigilance; at speed 4 it is a 3/4 with flying and vigilance and attacks Bot2 without tapping:
+# 20 - 3 x 3 - 3 = 8.
+
+[Bot1 Deck]
+Mountain
+Mox Pearl
+Mox Jet
+Mox Ruby
+Swiftwing Assailant
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Swiftwing Assailant.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+? Bot1.Battlefield.Swiftwing Assailant.Toughness = 3
+? Bot1.Battlefield.Swiftwing Assailant.Keywords = Flying
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+? Bot1.Battlefield.Swiftwing Assailant.Toughness = 4
+? Bot1.Battlefield.Swiftwing Assailant.Power = 3
+? Bot1.Battlefield.Swiftwing Assailant.Keywords = Flying; Vigilance
+Bot1.Attack(Swiftwing Assailant > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 7
+Bot2.Life = 8
+Bot1.Battlefield.Swiftwing Assailant.Tapped = false
