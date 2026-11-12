@@ -2823,8 +2823,8 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
     for payment in combat {
         let text = SourceText::Combat { source: payment.source, attacker: payment.attacker, by: payment.by };
         let combat_scope = PaymentScope::Combat { payment: match scope { PaymentScope::Combat { payment, .. } => payment, _ => unreachable!() }, payer: player, attacker: payment.attacker, by: payment.by };
-        append_fixed_payments(&mut remaining, CostOrigin::PrintedAdditional, &payment.cost, payment.chosen.as_slice(), text, 0, 0, combat_scope, payment.source, false, combat_offset);
-        combat_offset += part_count(&payment.cost);
+        append_fixed_payments(&mut remaining, CostOrigin::PrintedAdditional, payment.cost, payment.chosen.as_slice(), text, 0, 0, combat_scope, payment.source, false, combat_offset);
+        combat_offset += part_count(payment.cost);
     }
     for (position, payment) in remaining.iter_mut().enumerate() {
         if let SpellPayment::ChooseObject { declaration, .. } = payment { *declaration = position; }

@@ -993,8 +993,8 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
             // takes it. It belongs to the same payment ordering.
             for o in &options {
                 let (cost, chosen) = match o.option {
-                    AttackOption::Enlist => (Cost::tap_untapped(1, enlist_cost_creature), Some(o.tapped)),
-                    AttackOption::Exert => (Cost { exert: true, ..Cost::NONE }, None),
+                    AttackOption::Enlist => (&ENLIST_COST, Some(o.tapped)),
+                    AttackOption::Exert => (&EXERT_COST, None),
                 };
                 fixed.push(crate::static_rules::LockedAttackPayment { source: o.attacker, attacker: o.attacker, chosen, by: None, cost });
             }
@@ -1138,6 +1138,9 @@ fn choose_attack_options(cx: &mut Cx, active: PlayerId, attacks: &[(ObjectId, Ta
     }
     Ok(paid)
 }
+
+const ENLIST_COST: Cost = Cost::tap_untapped(1, enlist_cost_creature);
+const EXERT_COST: Cost = Cost { exert: true, ..Cost::NONE };
 
 /// The creature/haste part of a locked enlist payment's filter.
 fn enlist_cost_creature(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
