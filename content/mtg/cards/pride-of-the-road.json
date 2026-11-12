@@ -1,0 +1,11 @@
+{
+  "name": "Pride of the Road",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Zombie Cat Warrior",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "Vigilance\nStart your engines! (If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.)\nMax speed — At the beginning of combat on your turn, target creature or Vehicle you control gains double strike until end of turn.",
+  "keywords": [
+    "Vigilance"
+  ]
+}

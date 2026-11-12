@@ -1,0 +1,85 @@
+# Pride of the Road: "Max speed — At the beginning of combat on your turn, target creature or Vehicle you control gains
+# double strike until end of turn." (CR 702.178a, 702.4) Bot1 casts it on turn 1 (speed 1, CR 704.5aa) and Bolts Bot2 on
+# each of turns 3, 5 and 7 for speed 2, 3 and 4 (CR 702.179d). At speed 3 on turn 5 nothing is put on the stack at the
+# beginning of combat; at speed 4 on turn 7 the trigger gives the Memnite double strike, which then deals 1 first-strike
+# and 1 regular combat damage to Bot2 (CR 702.4b): 20 - 3 x 3 - 2 = 9.
+
+[Bot1 Deck]
+Mountain
+Mox Pearl
+Mox Jet
+Mox Ruby
+Pride of the Road
+Memnite
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Mountain x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Pride of the Road.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+Bot1.Pass
+[T7 Bot1.BeginCombat]
+Bot1.Target(Bot1.Battlefield.Memnite)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = DoubleStrike
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 7
+Bot1.Speed = 4
+Bot2.Life = 9
+Bot1.Battlefield.Memnite.Keywords = DoubleStrike
