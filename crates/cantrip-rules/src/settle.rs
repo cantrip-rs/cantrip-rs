@@ -2056,15 +2056,40 @@ pub(crate) fn delayed_turn(cx: &Cx, since: u32, of: Option<PlayerId>) -> Delayed
     }
 }
 
+/// CR 500.4 deadlines, also run for the untap step before its turn-based actions. Separate from step triggers so
+/// the untap step gains no new event or priority window.
+pub(crate) fn expire_step_deadlines(cx: &mut Cx, step: Step) {
+    let active = cx.s().turn.active;
+    // CR 500.4: deadlines expire before beginning-of-step triggers. A grant/effect made during this step waits
+    // for a later matching beginning; a skipped step never calls this procedure.
+    let begins = |duration: Duration| match duration {
+        Duration::UntilNextStepOf { step: s, player } | Duration::UntilEndOfNextStepOf { step: s, player } => s == step && player.is_none_or(|p| p == active),
+        _ => false,
+    };
+    let changed = cx.s().effects.iter().any(|e| begins(e.duration));
+    if changed {
+        cx.st().effects_retain(|e| !matches!(e.duration, Duration::UntilNextStepOf { .. }) || !begins(e.duration));
+        for at in 0..cx.s().effects.len() {
+            let e = cx.s().effects[at];
+            if matches!(e.duration, Duration::UntilEndOfNextStepOf { .. }) && begins(e.duration) {
+                cx.st().effect_set(at, ContinuousEffect { duration: Duration::EndOfStep, ..e });
+            }
+        }
+    }
+    let expires = |p: &cantrip_state::PlayPermission| p.player == active && match p.grant.expiry {
+        Expiry::UntilYourNextEndStep => step == Step::End,
+        Expiry::UntilYourNextStep(s) => s == step,
+        _ => false,
+    };
+    if cx.s().permissions.iter().any(expires) { cx.st().permissions_retain(|p| !expires(p)); }
+    if changed { ops::settle_lasting_and_control(cx); }
+}
+
 /// A step has begun: its "at the beginning of" abilities trigger, and so do the delayed abilities waiting for it,
 /// which are used up (CR 603.7c) unless they wait for each such step for the rest of the game.
 pub fn step_began(cx: &mut Cx, step: Step) {
     let active = cx.s().turn.active;
-    // CR 500.4: a duration of "until your next end step" ends as the step begins, before its abilities trigger; a
-    // permission granted during that step is for the next one.
-    if step == Step::End && cx.s().permissions.iter().any(|p| p.grant.expiry == Expiry::UntilYourNextEndStep) {
-        cx.st().permissions_retain(|p| !(p.grant.expiry == Expiry::UntilYourNextEndStep && p.player == active));
-    }
+    expire_step_deadlines(cx, step);
     let mut at = 0;
     while at < cx.s().delayed.len() {
         let d = cx.s().delayed[at];

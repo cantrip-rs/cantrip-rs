@@ -1903,6 +1903,13 @@ pub enum Duration {
     /// (CR 500.8, Aurelia, the Warleader) begins without it; one made outside combat ends with the turn's cleanup at the
     /// latest. Ursine Monstrosity's "attacks that player this combat if able".
     EndOfCombat,
+    /// Until the current step ends (CR 500.4, 611.2a), including when an effect ends the turn/combat early.
+    EndOfStep,
+    /// Until the next matching step begins (CR 500.4). A skipped step never begins. `None` means any player's.
+    /// Erhnam Djinn, Gabriel Angelfire and Xenic Poltergeist name their controller's next upkeep.
+    UntilNextStepOf { step: Step, player: Option<PlayerId> },
+    /// Through the next matching step (CR 611.2a). Becomes `EndOfStep` when it begins; Halfdane's next upkeep.
+    UntilEndOfNextStepOf { step: Step, player: Option<PlayerId> },
     /// As long as the affected object stays where it is.
     Indefinite,
     /// "For as long as [the source] remains on the battlefield" (CR 611.2b): it ends the moment the effect's source is no
@@ -1969,6 +1976,10 @@ pub enum Duration {
     /// ends with that untap step, whatever it did: a permanent untapped as that step began is under it no more (the Frost
     /// Titan ruling). About an object, so only an effect on one lasts so (`EffectKind::DoesntUntap`).
     DuringItsControllersNextUntapStep,
+    /// During the affected permanent's controller's next N untap steps (CR 502.3, 611.2a): Telekinesis (2),
+    /// Frost Breath (1). Each actual matching untap step consumes one, even if the permanent was already untapped.
+    /// Follows its current controller, works through ability loss, and is independent of other such durations.
+    DuringControllersNextUntapSteps(u32),
     /// "During [that player's] next untap step" (CR 502.3, 611.2a): until the end of this player's next untap step, and a
     /// rule it makes about untapping applies in that untap step alone (Exhaustion's "their next untap step"; Sleep's "that
     /// player's next untap step") - another player's untap step a permanent untaps in is not it (the Exhaustion ruling). A
@@ -2002,6 +2013,8 @@ pub enum Expiry {
     EndOfYourNextTurn,
     /// "Until your next end step" (CR 500.4): ends as the holder's next end step begins, before its triggers.
     UntilYourNextEndStep,
+    /// Until the holder's next step of this kind begins (CR 500.4): Elkin Bottle's next upkeep. Skipped steps don't expire it.
+    UntilYourNextStep(Step),
     /// "For as long as you control [this permanent]" (CR 611.2b): it lasts while the holder controls this object on the
     /// battlefield, and ends for good the first time they don't - the permanent leaves (a returned one is a new object,
     /// CR 400.7), phases out (CR 702.26f) or changes controller, though it come back - and it does nothing if that is

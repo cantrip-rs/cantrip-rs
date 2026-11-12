@@ -1010,6 +1010,13 @@ impl<'a> Projector<'a> {
         match duration {
             Duration::EndOfTurn => " this turn".to_string(),
             Duration::EndOfCombat => " this combat".to_string(),
+            Duration::EndOfStep => " until this step ends".to_string(),
+            Duration::UntilNextStepOf { step, player } | Duration::UntilEndOfNextStepOf { step, player } => {
+                let whose = player.map_or_else(|| "the".to_string(), |p| if p == self.viewer { "your".to_string() } else { format!("{}'s", self.player_name(p)) });
+                let end = if matches!(duration, Duration::UntilEndOfNextStepOf { .. }) { "end of " } else { "beginning of " };
+                format!(" until the {end}{whose} next {}", step.name())
+            }
+            Duration::DuringControllersNextUntapSteps(n) => format!(" during its controller's next {n} untap steps"),
             Duration::UntilNextTurnOf(q) if q == self.viewer => " until your next turn".to_string(),
             Duration::UntilNextTurnOf(q) => format!(" until {}'s next turn", self.names.get(q.index()).cloned().unwrap_or_default()),
             Duration::DuringControllersNextTurn(_) => " during its controller's next turn".to_string(),
@@ -1275,6 +1282,7 @@ impl<'a> Projector<'a> {
             Expiry::EndOfTurn => "this turn".to_string(),
             Expiry::EndOfYourNextTurn => format!("until {whose} next turn ends"),
             Expiry::UntilYourNextEndStep => format!("until {whose} next end step"),
+            Expiry::UntilYourNextStep(step) => format!("until {whose} next {} begins", step.name()),
             // Named as the permanent is now: a transformed one by its other face (CR 712.18).
             Expiry::WhileControls(source) => {
                 let name = self.game.cards.get(self.game.chars(source).card).name;

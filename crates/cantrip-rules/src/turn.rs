@@ -93,6 +93,13 @@ pub fn next_step(game: &mut Game) {
         s.drop_spent_mana_riders();
     }
     let main_seen = turn.scheduled && game.log.iter().rev().take_while(|r| r.turn == turn.number).any(|r| matches!(r.event, Event::StepBegan { step } if step.is_main()));
+    // A duration through this step ends at its boundary, even when the step is ended early. Settle control before
+    // the new step's beginning triggers inspect its permanents (CR 500.4, 611.2a).
+    if game.state.effects.iter().any(|e| e.duration == Duration::EndOfStep) {
+        game.state.effects_retain(|e| e.duration != Duration::EndOfStep);
+        let mut cx = Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        ops::settle_lasting_and_control(&mut cx);
+    }
     let s = &mut game.state;
     // CR 724.1d, 724.2d: a turn or combat phase ended during combat removes every creature and planeswalker from combat as
     // the step ends, as the end of the combat phase does, and "until end of combat" effects expire.
@@ -338,7 +345,8 @@ fn next_turn_taker(s: &mut GameState, after: PlayerId) -> PlayerId {
 /// next turn".
 fn turn_would_have_begun(s: &mut GameState, p: PlayerId) {
     // "During that player's next untap step" too: the untap step would have been that turn's first step.
-    let waits = |e: &ContinuousEffect| matches!(e.duration, Duration::UntilNextTurnOf(q) | Duration::EndOfNextTurnOf(q) | Duration::DuringNextUntapStepOf(q) if q == p);
+    let waits = |e: &ContinuousEffect| matches!(e.duration, Duration::UntilNextTurnOf(q) | Duration::EndOfNextTurnOf(q) | Duration::DuringNextUntapStepOf(q) if q == p)
+        || matches!(e.duration, Duration::UntilNextStepOf { player: Some(q), .. } | Duration::UntilEndOfNextStepOf { player: Some(q), .. } if q == p);
     if s.effects.iter().any(waits) {
         s.effects_retain(|e| !waits(e));
     }
@@ -533,6 +541,7 @@ pub fn begin_step(cx: &mut Cx) -> R<Flow> {
                 });
                 return Ok(Flow::Done);
             }
+            crate::settle::expire_step_deadlines(cx, Step::Untap);
             // The turn begins: the control of a player for the turn before ends (CR 723.1), lasting through its cleanup and
             // any turn skipped since, and the effects waiting to control this turn's player during it apply.
             let controllers: Vec<PlayerId> = (0..cx.s().players.len()).map(|i| cx.s().player_controller(PlayerId(i as u8))).collect();
@@ -773,11 +782,21 @@ pub(crate) fn untap_step(cx: &mut Cx, active: PlayerId) -> R<()> {
     let ends = |e: &ContinuousEffect| match e.duration {
         Duration::DuringNextUntapStepOf(p) => p == active,
         Duration::DuringItsControllersNextUntapStep => s.obj(e.affected).controller == active,
+        Duration::DuringControllersNextUntapSteps(n) => n <= 1 && s.obj(e.affected).controller == active,
         _ => false,
     };
     if s.effects.iter().any(ends) {
         let keep: Vec<bool> = s.effects.iter().map(|e| !ends(e)).collect();
         cx.st().effects_keep(&keep);
+    }
+    // These are remaining future steps, not a tally of past actions. Every independent effect advances together;
+    // skipped steps never enter this procedure. Read the controllers before settling control after the untap.
+    for at in 0..cx.s().effects.len() {
+        let e = cx.s().effects[at];
+        if let Duration::DuringControllersNextUntapSteps(n) = e.duration
+            && cx.s().obj(e.affected).controller == active {
+            cx.st().effect_set(at, ContinuousEffect { duration: Duration::DuringControllersNextUntapSteps(n - 1), ..e });
+        }
     }
     // No player gets priority in the untap step (CR 502.4), so no state-based actions are checked before the upkeep begins:
     // an effect "for as long as [it] remains tapped" ends the moment its source untaps (CR 611.2b), and the controller it
@@ -1894,7 +1913,7 @@ pub(crate) fn cleanup(cx: &mut Cx) -> R<()> {
                     Expiry::Never => true,
                     Expiry::EndOfTurn => false,
                     Expiry::EndOfYourNextTurn => !(p.player == active && number > p.turn),
-                    Expiry::UntilYourNextEndStep | Expiry::WhileControls(_) | Expiry::UntilAnotherExiledWith(_) => true,
+                    Expiry::UntilYourNextEndStep | Expiry::UntilYourNextStep(_) | Expiry::WhileControls(_) | Expiry::UntilAnotherExiledWith(_) => true,
                 }
         });
     }
@@ -2057,3 +2076,7 @@ fn _unused(cx: &Cx) -> bool {
 #[cfg(test)]
 #[path = "landwalk_tests.rs"]
 mod landwalk_tests;
+
+#[cfg(test)]
+#[path = "step_deadline_tests.rs"]
+mod step_deadline_tests;

@@ -3698,3 +3698,16 @@ abilities supplied by the layers; unrelated opposing permanents need no
 characteristics calculation. Permission changes no timing, cost or activation
 limit, never allows sacrificing an opponent's permanent, and never lets it pay
 convoke/improvise. The source's own {T} uses its controller's summoning sickness.
+
+### Step-bound lifetimes
+
+The core owns CR 500.4 step deadlines. `UntilNextStepOf` expires before the step's
+beginning triggers; `UntilEndOfNextStepOf` changes to `EndOfStep` when it begins.
+The latter expires before the following step, including an early turn/combat
+end, and settles control before that step's triggers. Skipped steps do nothing.
+A play permission's `UntilYourNextStep` uses the same start boundary. Counted
+`DuringControllersNextUntapSteps` durations consume future untap steps in
+parallel, under the affected object's current controller, even when it is
+already untapped. These are journalled duration transitions, never card-owned
+counts of past events. Numeric representation and observation dimensions do not
+change.

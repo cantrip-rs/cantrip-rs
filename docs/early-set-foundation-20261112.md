@@ -21,7 +21,7 @@ they are not cards already implemented or independently verified end to end.
 | Bands with other, including grants and removal | 8 / 8 | Queued |
 | No combat damage assignment after an earlier choice | 8 / 8 | Native tests passed (21 assignment tests) |
 | Other players activating abilities | 8 / 5 | Native tests passed (9 activation-player tests) |
-| Step-bound effect and permission lifetimes | 6 / 5 | Queued |
+| Step-bound effect and permission lifetimes | 6 / 5 | Native tests passed (6 step-deadline tests); generator adoption in progress |
 | Computed limits on announced X | 5 / 3 | Queued |
 | Persistent public visibility | 5 / 2 | Queued |
 
@@ -199,3 +199,29 @@ MTGish's `docs/cantrip-foundation-activators-20261112.proof.json` records the
 exact revision, candidate API fingerprint, card list, counter-only patch and
 log hashes. It keeps the normal upstream API pin unchanged. Local evidence
 is `/mnt/vizier/early-set-foundation-20261112`.
+
+## Step deadlines and counted untap steps
+
+`Duration::UntilNextStepOf` expires before a matching step's beginning triggers
+(CR 500.4); `UntilEndOfNextStepOf` becomes `EndOfStep` at that beginning and
+expires at its boundary, even if an effect ends the turn/combat early. A player
+selector is fixed when the effect is created; `None` means the next such step
+for anyone. Effects made during the step wait for its next beginning. Skipped
+steps never trigger expiry (CR 500.11). Effects naming a departed player's next
+step expire when that player's turn would have begun (CR 800.4m).
+
+`Expiry::UntilYourNextStep` supplies the same start boundary for a play
+permission. Erhnam Djinn, Gabriel Angelfire and Xenic Poltergeist use the next
+upkeep; Elkin Bottle also expires a play permission then. Halfdane lasts through
+its controller's next upkeep. Control is settled before the incoming step's
+triggers inspect the battlefield. The untap boundary is handled without adding
+an event or priority window to that step.
+
+`DuringControllersNextUntapSteps(n)` is a remaining-duration state, not a count
+of past events. Telekinesis uses two; Frost Breath uses one. Only actual untap
+steps under the affected permanent's current controller consume a step, even
+if it was already untapped. Independent effects advance together. Changes of
+control and ability loss do not remove it; ordinary spell/ability untapping
+still works. A zero-step duration never begins. Six native tests include
+journal rollback, departed-player deadlines, early turn endings, permission
+expiry and the beginning-trigger view. Workspace type-checking also passed.
