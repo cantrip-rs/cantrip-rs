@@ -3005,6 +3005,9 @@ collection. False Orders, Balduvian Warlord, General Jarkeld and Sorrow's Path n
 does not declare blockers or apply a declaration's costs and requirements; explicit "could block" checks belong
 before it, and are not supplied by this mutation API.
 
+`combat::choose_attacker_to_block` makes the non-target resolution choice for False Orders and Balduvian
+Warlord; its caller owns the preceding removal/unblocking instruction and any optional choice.
+
 ### The regular combat damage step
 
 The quantity assigned is read by the core (`static_rules::combat_damage_of`, CR 510.1a), shared by attackers, blockers

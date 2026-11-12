@@ -177,6 +177,19 @@ pub fn remove_from_combat_and_unblock(g: &mut dyn Game, blocker: ObjectId) {
     });
 }
 
+/// Assign an existing creature to block a chosen attacker as an effect, rather than declaring it as a blocker.
+/// False Orders and Balduvian Warlord print this instruction. The choice is not a target. The caller supplies the
+/// attacking population and performs any preceding removal/unblocking instruction.
+pub fn choose_attacker_to_block(g: &mut dyn Game, asker: &Asker, blocker: Option<ObjectId>, attackers: &[ObjectId]) -> Result<(), Suspend> {
+    let Some(blocker) = blocker.filter(|&b| is_live(g,b)) else { return Ok(()) };
+    let candidates = attackers.iter().copied().filter(|&a| is_live(g,a) && g.is_attacking(a)
+        && g.defending_player(a) == Some(g.controller(blocker))).map(Target::Object).collect();
+    if let Some(Target::Object(attacker)) = crate::choose::one_target(g,asker.controller,asker.source,candidates,"Choose an attacking creature to block")? {
+        g.change_blocks(&[],&[],&[(blocker,attacker)]);
+    }
+    Ok(())
+}
+
 /// "During combat" (CR 506.1): any step of the combat phase, beginning of combat through end of combat. Yuriko, Blade of the
 /// Mighty ("During combat, players can't cast spells") and Jade Statue print it.
 pub fn during_combat(q: &dyn Query) -> bool {
