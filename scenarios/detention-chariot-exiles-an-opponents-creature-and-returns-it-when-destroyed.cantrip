@@ -1,0 +1,65 @@
+# Detention Chariot, "When this Vehicle enters, exile target artifact or creature an opponent controls until this Vehicle leaves the
+# battlefield" (CR 610.3, 603.1): Bot1's own Mox Pearl is refused as the target (CR 115.1), and Bot2's Savannah Lions is exiled.
+# When Bot2 destroys the Chariot with Disenchant, the Lions comes back (CR 610.3) under its owner's control.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Plains
+Detention Chariot
+Plains x13
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Savannah Lions
+Disenchant
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Detention Chariot.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Mox Pearl)
+Bot1.Target(Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Exile = Savannah Lions
+? Bot2.Battlefield = Mox Jet; Mox Pearl
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Detention Chariot)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Detention Chariot
+Bot2.Battlefield = Mox Jet; Mox Pearl; Savannah Lions
+Bot2.Graveyard = Disenchant
+Exile.Count = 0
