@@ -1,6 +1,7 @@
 //! The creatures that crewed a Vehicle (CR 702.122b-c) are in the history: an `Event::Crewed` for each creature tapped to pay
 //! the cost of its crew ability, read with `History::crewed` for the turn. A creature tapped for another cost that taps
-//! creatures crewed nothing; one that has left the battlefield still counts; crewing twice names a creature twice. Test-only cards.
+//! creatures crewed nothing; one that has left the battlefield still counts; crewing twice names a creature twice. One
+//! tapped to pay a saddle ability's cost (CR 702.171c) is an `Event::Saddled` and crewed nothing. Test-only cards.
 
 use crate::{Cx, Game, Setup};
 use cantrip_api::*;
@@ -32,6 +33,19 @@ static DRUM: CardDef = CardDef {
     abilities: &[ability(Cost { tap_creatures: Some(TapCreatures { power: 1, greater_with: None }), ..Cost::NONE }, nothing, "Tap a creature.")],
     ..CardDef::BLANK
 };
+/// A Mount with "Saddle 1" as the core reads it.
+static HORSE: CardDef = CardDef {
+    name: "Crewed Test Horse",
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    abilities: &[ability(
+        Cost { tap_creatures: Some(TapCreatures { power: 1, greater_with: Some(Keyword::SaddlesAsThoughPowerTwoGreater) }), ..Cost::NONE },
+        nothing,
+        "Saddle 1",
+    )],
+    ..CardDef::BLANK
+};
 static BEAR: CardDef = CardDef {
     name: "Crewed Test Bear",
     types: TypeSet::of(&[CardType::Creature]),
@@ -47,19 +61,25 @@ fn put(game: &mut Game, def: &'static CardDef, zone: Zone) -> ObjectId {
     id
 }
 
-/// A game at your first main phase with the Van, the Drum and three Bears on the battlefield.
+/// A game at your first main phase with the Van, the Drum, a Horse and three Bears on the battlefield.
 fn game() -> (Game, ObjectId, ObjectId, [ObjectId; 3]) {
-    let table = Box::leak(Box::new(CardTable::new([&VAN, &DRUM, &BEAR, &LAND])));
+    let (game, van, drum, bears, _) = game_with_horse();
+    (game, van, drum, bears)
+}
+
+fn game_with_horse() -> (Game, ObjectId, ObjectId, [ObjectId; 3], ObjectId) {
+    let table = Box::leak(Box::new(CardTable::new([&VAN, &DRUM, &HORSE, &BEAR, &LAND])));
     let filler = table.id_of(&LAND);
     let mut game = Game::new(table, &Setup { decks: vec![vec![filler; 30], vec![filler; 30]], ..Default::default() });
     let van = put(&mut game, &VAN, Zone::BATTLEFIELD);
     let drum = put(&mut game, &DRUM, Zone::BATTLEFIELD);
     let bears = [put(&mut game, &BEAR, Zone::BATTLEFIELD), put(&mut game, &BEAR, Zone::BATTLEFIELD), put(&mut game, &BEAR, Zone::BATTLEFIELD)];
+    let horse = put(&mut game, &HORSE, Zone::BATTLEFIELD);
     for _ in 0..150 {
         game.run();
         let r = game.pending().cloned().expect("a question");
         if r.player == YOU && game.state.turn.active == YOU && game.state.turn.step() == Step::PrecombatMain && matches!(r.kind, RequestKind::Priority { .. }) {
-            return (game, van, drum, bears);
+            return (game, van, drum, bears, horse);
         }
         let answer = match &r.kind {
             RequestKind::Priority { .. } => Answer::Pass,
@@ -125,4 +145,25 @@ fn a_creature_tapped_for_another_cost_crewed_nothing() {
     assert!(game.state.obj(a).tapped);
     assert_eq!(crewed(&game, van), []);
     assert_eq!(crewed(&game, drum), []);
+}
+
+/// CR 702.171c: each creature tapped to pay a saddle ability's cost saddled the Mount, an `Event::Saddled` as the crew's
+/// is an `Event::Crewed` (one event for each creature, in the order chosen); it crewed nothing.
+#[test]
+fn every_creature_tapped_to_saddle_saddled_the_mount_and_crewed_nothing() {
+    let (mut game, van, _, [a, b, c], horse) = game_with_horse();
+    activate(&mut game, horse, &[b, a]);
+    let saddled: Vec<(ObjectId, ObjectId)> = game
+        .history()
+        .this_turn()
+        .iter()
+        .filter_map(|r| match r.event {
+            Event::Saddled { creature, mount } => Some((creature, mount)),
+            _ => None,
+        })
+        .collect();
+    assert_eq!(saddled, [(b, horse), (a, horse)]);
+    assert_eq!(crewed(&game, van), []);
+    assert_eq!(crewed(&game, horse), []);
+    assert!(!game.state.obj(c).tapped);
 }
