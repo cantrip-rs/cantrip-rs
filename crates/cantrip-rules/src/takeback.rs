@@ -510,6 +510,16 @@ fn same_events(replayed: &[Record], did: &[Event], new_receipts: &[cantrip_state
     // Match each new id to its original and check all of its receipts against the same mapping.
     let mut payments = Vec::new();
     replayed.iter().zip(did).all(|(r, &e)| match (r.event, e) {
+        (Event::CombatPaymentBegan { payment: new, payer: a }, Event::CombatPaymentBegan { payment: old, payer: b }) => {
+            if a != b || payments.iter().any(|&(n, o)| n == new || o == old) { return false; }
+            payments.push((new, old));
+            true
+        }
+        (Event::CombatCostObjectPaid { payment: new, source: a, attacker: b, payer: c, object: d, receipt: e },
+         Event::CombatCostObjectPaid { payment: old, source: f, attacker: g, payer: h, object: i, receipt: j }) => {
+            payments.contains(&(new, old)) && (a, b, c, d) == (f, g, h, i)
+                && new_receipts.get(e as usize).zip(old_receipts.get(j as usize)).is_some_and(|(x, y)| x == y)
+        }
         (Event::ResolutionPaymentBegan { payment: new, source: a, payer: b, resolving: ra }, Event::ResolutionPaymentBegan { payment: old, source: c, payer: d, resolving: rb }) => {
             if a != c || b != d || ra != rb || payments.iter().any(|&(n, o)| n == new || o == old) { return false; }
             payments.push((new, old));

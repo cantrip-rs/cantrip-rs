@@ -136,6 +136,10 @@ pub enum Event {
     ResolutionCostObjectPaid { payment: u32, source: ObjectId, payer: PlayerId, object: ObjectId, receipt: u32 },
     /// A token made by an ability, with the exact linked text and acquisition (CR 607.2c, 607.5).
     TokenCreatedByAbility { token: ObjectId, by: Linked, ability: AbilityRef },
+    /// One locked total payment for a declaration of attackers (CR 508.1h-j).
+    CombatPaymentBegan { payment: u32, payer: PlayerId },
+    /// An object paid a component imposed by `source` for `attacker`'s attack.
+    CombatCostObjectPaid { payment: u32, source: ObjectId, attacker: ObjectId, payer: PlayerId, object: ObjectId, receipt: u32 },
     /// An ability copy's serial and the serial it copied, including copies of copies.
     AbilityCopied { copy: u32, original: u32 },
     /// An actual permanent sacrificed by an entering object's own replacement (CR 614.1c, 701.21a).
@@ -590,6 +594,8 @@ impl Event {
             Event::ResolutionCostObjectPaid { source, object: paid, .. } => source == object || paid == object,
             Event::CombatFirstStrike { creature } => creature == object,
             Event::TokenCreatedByAbility { .. } | Event::AbilityCopied { .. } | Event::ActivatedAs { .. } => false,
+            Event::CombatPaymentBegan { .. } => false,
+            Event::CombatCostObjectPaid { source, attacker, object: paid, .. } => source == object || attacker == object || paid == object,
             Event::PaidAlternative { spell, .. } | Event::PaidRepeatedly { spell, .. } => spell == object,
             Event::LandPlayed { land, .. } => land == object,
             Event::Copied { copy, original, .. } => copy == object || original == object,

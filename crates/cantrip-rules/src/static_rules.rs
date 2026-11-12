@@ -402,7 +402,7 @@ pub(crate) fn attack_haste_sources(cx: &Cx) -> Vec<(Asker, &'static CardDef)> {
 /// they control that's attacking you"), added up, with the first such permanent named as the cost's source. Attacks that
 /// cost nothing have no entry. A board with no such permanent, nearly every board, makes no list.
 pub fn attack_costs(cx: &Cx, eligible: &[ObjectId], targets: &[Target]) -> Vec<AttackCost> {
-    let taxes: Vec<(ObjectId, PlayerId, &'static CardDef, Option<Linked>)> = sources(cx, |d| !d.attack_costs.is_empty()).collect();
+    let taxes: Vec<(ObjectId, PlayerId, &'static CardDef, Option<Linked>)> = sources(cx, |d| !d.attack_costs.is_empty() || !d.attack_cost_rules.is_empty()).collect();
     if taxes.is_empty() {
         return Vec::new();
     }
@@ -421,6 +421,13 @@ pub fn attack_costs(cx: &Cx, eligible: &[ObjectId], targets: &[Target]) -> Vec<A
                         first.get_or_insert(id);
                     }
                 }
+                for rule in def.attack_cost_rules {
+                    if (rule.applies)(cx, &asker, attacker, target) {
+                        total = total.plus(&rule.cost.total_mana());
+                        // A zero mana total can still owe a nonmana cost.
+                        first.get_or_insert(id);
+                    }
+                }
             }
             if let Some(source) = first {
                 out.push(AttackCost { attacker, target, cost: total, source });
@@ -428,6 +435,53 @@ pub fn attack_costs(cx: &Cx, eligible: &[ObjectId], targets: &[Target]) -> Vec<A
         }
     }
     out
+}
+
+/// Each fixed rule contributes separately for each chosen attack. Keep the
+/// provider and its linked text after locking, even if payment removes it.
+pub(crate) struct LockedAttackPayment {
+    pub source: ObjectId,
+    pub attacker: ObjectId,
+    pub chosen: Option<ObjectId>,
+    pub by: Option<Linked>,
+    pub cost: Cost,
+}
+
+pub(crate) struct LockedAttackCosts {
+    pub mana: ManaCost,
+    pub source: Option<ObjectId>,
+    pub fixed: Vec<LockedAttackPayment>,
+    pub attackers: Vec<ObjectId>,
+}
+
+pub(crate) fn lock_attack_costs(cx: &Cx, attacks: &[(ObjectId, Target)]) -> LockedAttackCosts {
+    let mut total = LockedAttackCosts { mana: ManaCost::ZERO, source: None, fixed: Vec::new(), attackers: Vec::new() };
+    // No live source means no allocation, even when the card table contains
+    // thousands of unused taxing cards. Read only chosen attack/defender pairs.
+    for (source, controller, def, by) in sources(cx, |d| !d.attack_cost_rules.is_empty() || !d.attack_costs.is_empty()) {
+        let asker = Asker { instance: None, source, controller, by, spell: false };
+        for &(attacker, target) in attacks {
+            let mut taxed = false;
+            for rule in def.attack_costs {
+                if let Some(cost) = rule(cx, &asker, attacker, target) && !cost.is_zero() {
+                    total.mana = total.mana.plus(&cost);
+                    taxed = true;
+                }
+            }
+            for rule in def.attack_cost_rules {
+                if (rule.applies)(cx, &asker, attacker, target) {
+                    total.fixed.push(LockedAttackPayment { source, attacker, chosen: None, by, cost: rule.cost });
+                    total.mana = total.mana.plus(&rule.cost.total_mana());
+                    taxed = true;
+                }
+            }
+            if taxed {
+                total.source.get_or_insert(source);
+                if !total.attackers.contains(&attacker) { total.attackers.push(attacker); }
+            }
+        }
+    }
+    total
 }
 
 /// Whether `player` may spend mana as though it were of any color to pay a cost for `source` (CR 609.4b): to activate an

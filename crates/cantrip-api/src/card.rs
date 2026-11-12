@@ -2845,6 +2845,19 @@ pub type AttackHasteRule = fn(&dyn Query, &Asker, ObjectId, Target) -> bool;
 /// `cantrip_mechanics::statics` has the shared ones.
 pub type AttackCostRule = fn(&dyn Query, &Asker, ObjectId, Target) -> Option<ManaCost>;
 
+/// A fixed cost for each attack to which `applies` is true (CR 508.1h-j).
+/// Flooded Woodlands and Reclamation ask for a land per matching attacker;
+/// Leviathan asks for two Islands. The declaring player pays, with filters and
+/// self references read from this rule's source and linked text. All applicable
+/// costs are locked after attackers tap, before mana abilities, then paid by
+/// the ordinary cost scheduler in the payer's chosen order. Announced X and
+/// optional cost announcements are not part of this fixed-cost interface.
+#[derive(Clone, Copy)]
+pub struct AttackPayment {
+    pub applies: fn(&dyn Query, &Asker, ObjectId, Target) -> bool,
+    pub cost: Cost,
+}
+
 /// A static ability that says how many creatures may attack a given player, planeswalker or battle in one declaration of
 /// attackers (CR 508.1c): asked, while the object that has it is on the battlefield with its abilities, of every player,
 /// planeswalker and battle a creature could attack; `None` when this ability limits none, else the most that may attack
@@ -3746,6 +3759,8 @@ pub struct CardDef {
     pub attack_alone_rules: &'static [AttackRule],
     /// Its static abilities that make attacking cost something (CR 508.1d, 508.1h), while it is on the battlefield.
     pub attack_costs: &'static [AttackCostRule],
+    /// Fixed costs, including nonmana components, for individual attacks.
+    pub attack_cost_rules: &'static [AttackPayment],
     /// Its static abilities that limit how many creatures may attack a player, planeswalker or battle (CR 508.1c), while
     /// it is on the battlefield with its abilities: Judoon Enforcers' and, while she is tapped, Mirri, Weatherlight
     /// Duelist's "No more than one creature can attack you each combat"; The Eternal Wanderer's and Tomik, Orzhov
@@ -4052,6 +4067,7 @@ impl CardDef {
         attack_rules: &[],
         attack_alone_rules: &[],
         attack_costs: &[],
+        attack_cost_rules: &[],
         attack_limits: &[],
         attacks_despite_defender: &[],
         goads: &[],
@@ -4165,6 +4181,7 @@ impl CardDef {
             (!self.attacks_as_though_haste.is_empty(), "attack-only haste permissions"),
             (!self.attack_alone_rules.is_empty(), "a rule against attacking alone"),
             (!self.attack_costs.is_empty(), "attack costs"),
+            (!self.attack_cost_rules.is_empty(), "attack payments"),
             (!self.attack_limits.is_empty(), "attack limits"),
             (!self.attacks_despite_defender.is_empty(), "attacking despite defender"),
             (!self.goads.is_empty(), "static goads"),
