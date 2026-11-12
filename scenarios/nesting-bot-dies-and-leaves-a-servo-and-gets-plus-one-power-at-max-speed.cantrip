@@ -1,0 +1,76 @@
+# Nesting Bot: "When this creature dies, create a 1/1 colorless Servo artifact creature token." "Max speed — This creature
+# gets +1/+0." (CR 702.178a) Cast on turn 1 it gives Bot1 speed 1 (CR 704.5aa, 702.179a) and is a 1/1; a Lightning Bolt to
+# Bot2's face on each of turns 1, 3 and 5 raises the speed to 2, 3 and 4 (CR 702.179d), when the Bot becomes a 2/1 (power 1
+# before). On turn 6 Bot2 Bolts it, it dies and Bot1 gets a 1/1 colorless Servo artifact creature token (CR 603.10a).
+
+[Bot1 Deck]
+Mountain
+Mox Pearl
+Nesting Bot
+Lightning Bolt
+Mountain
+Mountain
+Lightning Bolt
+Lightning Bolt
+Mountain x12
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nesting Bot.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+? Bot1.Battlefield.Nesting Bot.Power = 1
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+? Bot1.Battlefield.Nesting Bot.Power = 1
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+? Bot1.Battlefield.Nesting Bot.Power = 2
+? Bot1.Battlefield.Nesting Bot.Toughness = 1
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nesting Bot)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Turn = 6
+Bot1.Speed = 4
+Bot2.Life = 11
+Bot1.Graveyard = Nesting Bot; Lightning Bolt; Lightning Bolt; Lightning Bolt
+Bot1.Battlefield.Servo Token.Types = Artifact; Creature
+Bot1.Battlefield.Servo Token.Power = 1
+Bot1.Battlefield.Servo Token.Toughness = 1
