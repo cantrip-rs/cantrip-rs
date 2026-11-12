@@ -891,6 +891,13 @@ impl From<MoveReason> for ZoneReason {
     }
 }
 
+/// A color reselected by a permanent's resolving ability (CR 607.2d): Chromatic Armor's "choose a color".
+/// Kept with the choosing ability's link; this does not make the value copiable.
+#[derive(Clone, Copy, Debug)]
+pub enum ChosenValue {
+    Color(Color),
+}
+
 pub trait Game: Query {
     /// Asks `player` a question. The first time, the effect stops here (`Err(Suspend)`); once answered, the effect
     /// runs again from its start and this returns the answer.
@@ -1627,6 +1634,9 @@ pub trait Game: Query {
     /// object's alone: a new object the permanent becomes has no chosen name (CR 400.7), and a later choice for the same
     /// object replaces the earlier one. Nothing if the permanent is no longer on the battlefield.
     fn remember_chosen_name(&mut self, by: Linked, name: CardId);
+    /// Reselect a color, replacing the earlier choice of the linked text.
+    /// Nothing if its permanent has left the battlefield. See `ChosenValue`.
+    fn remember_chosen(&mut self, by: Linked, value: ChosenValue);
     /// An object chosen as `by`, an ability of a permanent, resolves (CR 607.2d), remembered by that permanent: Zenos yae
     /// Galvus's "choose a creature an opponent controls", read by its linked "when the chosen creature leaves the
     /// battlefield". Kept with that ability (`Chosen`) as `remember_chosen_name` keeps a name: the abilities linked to it read

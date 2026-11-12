@@ -239,6 +239,7 @@ pub enum Kept {
     Name(CardId),
     /// Two ordered subtype choices made by one text as it entered (CR 607.2d).
     SubtypePair([Subtype; 2]),
+    Color(Color),
     Object(ObjectId),
     Player(PlayerId),
     /// On an emblem, no choice but what its text names: the object whose ability made it, as the object it was then (CR
@@ -334,6 +335,13 @@ impl ChoiceRecord for Choices {
     }
 
     fn keep(&mut self, by: Linked, value: Kept) -> bool {
+        // A reselected entry choice uses its existing carrier, without taking another kept slot.
+        if by.acquired == Acquired::OWN && self.by == Some(by.text) {
+            match value {
+                Kept::Color(color) if self.color.is_some() => { self.color = Some(color); return true; }
+                _ => {}
+            }
+        }
         let chosen = Chosen { value, text: by.text, acquired: by.acquired };
         let mine = |c: &Option<Chosen<Kept>>| {
             c.is_some_and(|c| c.text == by.text && c.acquired == by.acquired && c.value.same_kind(value))
@@ -391,7 +399,8 @@ impl Choices {
 
     /// The color chosen, to `by` (`GameState::chosen_color`).
     pub fn color(&self, by: Linked) -> Option<Color> {
-        self.entered_to(by)?.color
+        self.entered_to(by).and_then(|c| c.color)
+            .or_else(|| self.kept_to(by, |k| match k { Kept::Color(c) => Some(c), _ => None }))
     }
 
     /// The creature or land type chosen, to `by`.
@@ -3523,6 +3532,28 @@ mod tests {
         assert_eq!(choices.subtype_pair(Linked { text: CardId(5), ..own }), None);
         let copy = Acquired { by: AcquiredBy::Copy, stamp: 7, part: 0 };
         assert_eq!(choices.subtype_pair(Linked { acquired: copy, ..own }), None);
+    }
+
+    #[test]
+    fn reselected_entry_colors_reuse_their_carrier() {
+        let text=CardId(4);let own=Linked {object:ObjectId(2),text,acquired:Acquired::OWN};
+        let mut choices=Choices::entered(text,Entered {color:Some(Color::Blue),card:Some(CardId(9)),..Default::default()});
+        assert!(choices.keep(own,Kept::Player(PlayerId(1))),"fill the second kept slot");
+        assert!(choices.keep(own,Kept::Color(Color::Red)));
+        assert_eq!(choices.color(own),Some(Color::Red));
+        assert_eq!(choices.card(own),Some(CardId(9)));assert_eq!(choices.player(own),Some(PlayerId(1)));
+    }
+
+    #[test]
+    fn reselected_values_stay_linked_to_the_ability_that_chose_them() {
+        let own=Linked {object:ObjectId(2),text:CardId(4),acquired:Acquired::OWN};
+        let grant=Linked {acquired:Acquired {by:AcquiredBy::Grant,stamp:7,part:0},..own};
+        let mut choices=Choices::entered(own.text,Entered {color:Some(Color::Blue),..Default::default()});
+        assert!(choices.keep(grant,Kept::Color(Color::Red)));
+        assert_eq!(choices.color(own),Some(Color::Blue));
+        assert_eq!(choices.color(grant),Some(Color::Red));
+        assert!(choices.keep(grant,Kept::Color(Color::Green)));assert_eq!(choices.color(grant),Some(Color::Green));
+        assert_eq!(choices.color(Linked {text:CardId(8),..grant}),None);
     }
 
     /// Each ability that chose a name keeps its own (CR 607.2d): a second ability's name doesn't take the first's place, the
