@@ -108,3 +108,30 @@ Tests cover successive Worlds under different controllers, simultaneous entry
 and ties including an older World, indestructibility, copies and continuous
 intervals, phasing, simultaneous type-layer changes, history-dependent type
 changes and atomic event batches, and rollback/canonical loop identity.
+
+## First-batch validation
+
+The four feature commits through `1617f06d8` passed the complete Rust workspace
+via `tools/test.sh --engine`: 22,556 tests passed and 15 were ignored, with
+`CANTRIP_VERIFY=1`. The full test script was also attempted; it stopped before
+tests because the .NET SDK is unavailable on this machine. No .NET pass is claimed.
+
+The 128-game benchmark measured 45.24 microseconds per engine decision before
+and 45.44 after the batch (about 0.4% on this shared machine), with reported
+allocation unchanged at 26.74 KB per decision. A run during concurrent builds
+measured 45.73 microseconds.
+
+MTGish commit `6a9d523` adds capability-gated adapters without advancing its normal
+upstream API pin or changing AST schema 190. Of 33 affected early-set card probes,
+29 have no remaining recorded feature gap. All 33 modules type-check with a
+names-only Cube-counter prerequisite overlay; no Cube declaration is part of
+this engine branch. Twenty-five generated-card scenarios pass against the
+pristine foundation, and the older 21-scenario corpus still passes against the
+previous engine target. The generator suite passes 1,569 tests (22 ignored),
+and the default target's Rust bodies and gap lists remain identical for all
+33,529 corpus records. These are generator probes, not newly installed cards.
+
+Reproducible probes and the detailed validation receipt are in MTGish's
+`docs/cantrip-foundation-adoption-20261112.md` and accompanying proof JSON.
+Local logs are under `/mnt/vizier/early-set-foundation-20261112`. The five queued
+feature groups above remain separate follow-up commits.
