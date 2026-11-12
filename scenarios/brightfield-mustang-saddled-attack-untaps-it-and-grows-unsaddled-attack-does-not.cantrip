@@ -1,0 +1,60 @@
+# Brightfield Mustang: "Whenever this creature attacks while saddled, untap it and put a +1/+1 counter on it" (CR 702.171b, 701.26b, 122.1a).
+# Turn 1: Saddle 1 (CR 702.171a) taps *other* creatures with total power 1 or more, so neither the Mustang alone nor Aegis Turtle (power 0) can saddle it.
+# Turn 3: Zephyr Sprite (power 1) saddles it (the Turtle is refused as the creature to tap), it attacks, and the trigger untaps it and makes it a 4/4 (Bot2 takes 4).
+# Turn 5: unsaddled, it attacks again, stays tapped, grows no further, and Bot2 takes 4 more.
+
+[Bot1 Deck]
+Brightfield Mustang
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Plains
+Aegis Turtle
+Zephyr Sprite
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Brightfield Mustang.Cast
+! Bot1.Battlefield.Brightfield Mustang.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aegis Turtle.Cast
+! Bot1.Battlefield.Brightfield Mustang.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Battlefield.Brightfield Mustang.Activate
+! Bot1.Choose(Aegis Turtle)
+Bot1.Choose(Zephyr Sprite)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Brightfield Mustang > Bot2)
+? Bot1.Battlefield.Brightfield Mustang.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Brightfield Mustang.Tapped = false
+? Bot1.Battlefield.Brightfield Mustang.Power = 4
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Brightfield Mustang > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 12
+Bot1.Battlefield.Brightfield Mustang.Power = 4
+Bot1.Battlefield.Brightfield Mustang.Toughness = 4
+Bot1.Battlefield.Brightfield Mustang.Tapped = true
