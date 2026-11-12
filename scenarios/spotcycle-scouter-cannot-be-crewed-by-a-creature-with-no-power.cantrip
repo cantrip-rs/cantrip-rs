@@ -1,0 +1,31 @@
+# Spotcycle Scouter, "Crew 1" (CR 702.122a): total power 1 or more is needed, so a lone Ornithopter (power 0) cannot crew it
+# and it stays a plain artifact.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Spotcycle Scouter
+Ornithopter
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Spotcycle Scouter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island; Island | )
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Spotcycle Scouter.Activate(Ability: Crew)
+
+[Expect]
+Bot1.Battlefield.Spotcycle Scouter.Types = Artifact
+Bot1.Battlefield.Ornithopter.Tapped = false
