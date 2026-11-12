@@ -1,4 +1,4 @@
-# a-bolted-blocker-carries-damage-into-the-division, answer 173
+# a-bolted-blocker-carries-damage-into-the-division, answer 171
 
 ## Full
 bucket 64 len 47 first_option 41 options 6 cap_hit false compact 1763 bytes dense 13568 bytes

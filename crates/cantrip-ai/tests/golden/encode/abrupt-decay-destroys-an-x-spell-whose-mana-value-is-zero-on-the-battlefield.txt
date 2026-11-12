@@ -1,4 +1,4 @@
-# abrupt-decay-destroys-an-x-spell-whose-mana-value-is-zero-on-the-battlefield, answer 54
+# abrupt-decay-destroys-an-x-spell-whose-mana-value-is-zero-on-the-battlefield, answer 52
 
 ## Full
 bucket 64 len 37 first_option 35 options 2 cap_hit false compact 1401 bytes dense 13568 bytes
