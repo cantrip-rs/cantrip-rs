@@ -402,3 +402,50 @@ Glyph counter, appended at 93. Existing IDs 0–92 remain unchanged. The origina
 source's false end-of-turn grant duration is corrected in MTGish; the native
 prerequisite supplies only its name. The three appended entries now occupy
 12 additional bytes in the existing dense counter array, before object padding.
+
+## Additional shared rules and the fifteen-group receipt
+
+The same branch now also supplies these capabilities:
+
+| Group | Native contract and witnesses |
+| --- | --- |
+| Ordinary mana-tap observers | A separate `TAPPED_FOR_MANA` event interest queues Manabarbs/Burning Earth on the stack, while triggered mana abilities remain immediate. A live-state interest guard preserves the common path. |
+| Attack-only summoning-sickness exceptions | `attacks_as_though_haste` permits Instill Energy/Chaos Lord to attack without granting haste, changing tap-symbol costs, or bypassing independent restrictions. |
+| Skipped beginning-phase steps | `skip_steps` handles Stasis/Necropotence. The turn still begins when untap is skipped; step actions, triggers, priority and deadlines wait. The starting player's first draw step is entirely skipped. Other step kinds are rejected until their procedures support skipping. |
+| Named players' hand sizes | `hand_size_rules` merges setters, adjustments and unlimited sizes with existing resolved/granted rules in timestamp order. Cursed Rack names its chosen opponent; Jin-Gitaxias names all opponents. Negative intermediate values are retained until the final cleanup limit. |
+| Reselected linked values | `remember_chosen` replaces a permanent's chosen color or number while preserving the choosing text's link. Shapeshifter and Chromatic Armor reuse existing entry-choice carriers; copied/granted text stays separate. No new object fields or heap storage. |
+
+Glyph of Delusion's runtime also exposed an existing availability bug: required
+related target slots were tested without earlier target choices. The repair
+reuses the bounded ordered announcement search (also needed by Goblin Welder),
+including optional slot positions and conservative pre-X bounds. The source
+reference's unrelated erroneous end-of-turn grant duration is repaired in
+MTGish and reported as i5jb/mtgish#269. The native counter catalog appends Cube,
+Doom and Glyph without changing old IDs; its dense storage grows by three i32
+entries. Quantity contracts remain unchanged.
+
+Native `cfac93547` passes the full engine workspace gate with verification:
+22,616 passed, zero failed, 15 ignored, across 236 test targets. Four AI golden
+files needed only their diagnostic answer indices reduced by two after the
+first draw step stopped offering priority. Their encoded tensors are byte for
+byte unchanged. No other old tests or golden payloads were modified.
+
+MTGish's complete generator suite passes 1,584 tests (22 ignored). All 193
+currently gap-free modules in the fixed 286-card early-set audit compile
+against this foundation, and 48 generated runtime scenarios pass. The remaining
+93 cards retain explicit gaps. These are generation candidates, not installed
+or fully reviewed card implementations. The detailed per-card ledger lives in
+MTGish's `docs/cantrip-foundation-progress-20261112.json`.
+
+The 128-game sequential benchmark controls measured 49.44 us/decision and
+26.74 KB allocated on the original base, versus 50.16 us and 27.04 KB on
+`994d7b122` (the same production code as `cfac93547`). Both finished all games.
+The corrected first draw step changes the random seats' game paths, so these
+are whole-run observations rather than isolated API costs; shared-host timing
+supports no statistical speed claim. The .NET SDK is unavailable, so no .NET
+validation is claimed.
+
+Evidence is retained under `/mnt/vizier/early-set-foundation-20261112`, including
+`workspace-fifteen-tests-rerun.log`, `generator-fifteen-suite.log`,
+`generator-player-values-native-runtime-final.log`, the 193-module compile log
+and the sequential `benchmark-fifteen-*-control.log` files.
