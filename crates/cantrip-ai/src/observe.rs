@@ -208,7 +208,7 @@ impl View<'_> {
             let c = game.chars(id);
             CharsObs {
                 types: c.types.0,
-                supertypes: u8::from(c.supertypes.basic) | u8::from(c.supertypes.legendary) << 1 | u8::from(c.supertypes.snow) << 2,
+                supertypes: u8::from(c.supertypes.basic) | u8::from(c.supertypes.legendary) << 1 | u8::from(c.supertypes.snow) << 2 | u8::from(c.supertypes.world) << 3,
                 colors: c.colors.0,
                 subtypes: c.subtypes.iter().map(|t| t as u16).collect(),
                 power: c.power,

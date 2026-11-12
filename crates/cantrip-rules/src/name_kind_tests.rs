@@ -9,7 +9,7 @@ static ISLAND: CardDef = CardDef {
     name: "Name Test Island",
     oracle: true,
     types: TypeSet::of(&[CardType::Land]),
-    supertypes: Supertypes { basic: true, legendary: false, snow: false },
+    supertypes: Supertypes { basic: true, legendary: false, snow: false, world: false },
     ..CardDef::BLANK
 };
 
@@ -17,7 +17,7 @@ static SNOW_COVERED_ISLAND: CardDef = CardDef {
     name: "Name Test Snow-Covered Island",
     oracle: true,
     types: TypeSet::of(&[CardType::Land]),
-    supertypes: Supertypes { basic: true, legendary: false, snow: true },
+    supertypes: Supertypes { basic: true, legendary: false, snow: true, world: false },
     ..CardDef::BLANK
 };
 

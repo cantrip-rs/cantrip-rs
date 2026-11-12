@@ -15,14 +15,14 @@ static LEGEND: CardDef = CardDef {
     name: "Legendary Mana Test Legend",
     cost: mana("{G}"),
     types: TypeSet::of(&[CardType::Creature]),
-    supertypes: Supertypes { basic: false, legendary: true, snow: false },
+    supertypes: Supertypes { basic: false, legendary: true, snow: false, world: false },
     power: Some(2),
     toughness: Some(2),
     ..CardDef::BLANK
 };
 
 /// The same creature, not legendary.
-static COMMONER: CardDef = CardDef { name: "Legendary Mana Test Commoner", supertypes: Supertypes { basic: false, legendary: false, snow: false }, ..LEGEND };
+static COMMONER: CardDef = CardDef { name: "Legendary Mana Test Commoner", supertypes: Supertypes { basic: false, legendary: false, snow: false, world: false }, ..LEGEND };
 
 /// A legendary creature for {G}{G}.
 static TWO_GREEN: CardDef = CardDef { name: "Legendary Mana Test Two Green", cost: mana("{G}{G}"), ..LEGEND };
@@ -44,7 +44,7 @@ fn nothing(_: &mut dyn cantrip_api::Game, _: &StackItem) -> Result<(), Suspend> 
 }
 
 /// A creature with "{G}: Nothing happens."
-static TINKERER: CardDef = CardDef { name: "Legendary Mana Test Tinkerer", supertypes: Supertypes { basic: false, legendary: false, snow: false }, abilities: &[ability(cost("{G}"), nothing, "{G}: Nothing happens.")], ..LEGEND };
+static TINKERER: CardDef = CardDef { name: "Legendary Mana Test Tinkerer", supertypes: Supertypes { basic: false, legendary: false, snow: false, world: false }, abilities: &[ability(cost("{G}"), nothing, "{G}: Nothing happens.")], ..LEGEND };
 
 fn game() -> Game {
     let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &LEGEND, &COMMONER, &TWO_GREEN, &GRUUL, &HYBRID, &GENERIC, &CONVOKER, &TINKERER])));

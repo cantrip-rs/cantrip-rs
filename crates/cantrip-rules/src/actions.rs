@@ -16757,7 +16757,7 @@ mod delayed_watched_mana_tests {
         g.add_mana(item.controller, Mana::G, 1); Ok(())
     }
     static SOURCE: CardDef = CardDef {
-        name: "Snow delayed mana source", supertypes: Supertypes { basic: false, legendary: false, snow: true },
+        name: "Snow delayed mana source", supertypes: Supertypes { basic: false, legendary: false, snow: true, world: false },
         delayed: &[triggered(when_asked(EventMask::TAPPED, watched_tap), add_green, "Whenever it is tapped for mana this turn, add {G}.")
             .mana_ability(TriggeredMana::One(Mana::G)).condition(snow_creator).only_if(snow_creator)], ..CardDef::BLANK
     };

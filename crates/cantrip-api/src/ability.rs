@@ -1177,6 +1177,11 @@ pub const fn characteristic_defining(layer: Layer, apply: StaticApply, text: &'s
 }
 
 impl StaticDef {
+    /// It can give what it affects the World supertype (CR 205.4f): `StaticDef::makes_world`.
+    pub const fn makes_world(self) -> StaticDef {
+        StaticDef { makes_world: true, ..self }
+    }
+
     /// It affects objects anywhere, not only permanents (CR 611.3a).
     pub const fn everywhere(self) -> StaticDef {
         StaticDef { everywhere: true, ..self }

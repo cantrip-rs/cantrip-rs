@@ -262,7 +262,7 @@ fn a_player_still_in_the_game_gains_control() {
 
 static LEGEND: CardDef = CardDef {
     name: "Leave Test Legend",
-    supertypes: Supertypes { basic: false, legendary: true, snow: false },
+    supertypes: Supertypes { basic: false, legendary: true, snow: false, world: false },
     ..BEAR
 };
 

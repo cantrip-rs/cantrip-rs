@@ -936,6 +936,8 @@ pub struct Supertypes {
     pub basic: bool,
     pub legendary: bool,
     pub snow: bool,
+    /// World permanents obey the world state-based action (CR 205.4f, 704.5k).
+    pub world: bool,
 }
 
 pub use crate::subtypes::{SUBTYPE_WORDS, Subtype};

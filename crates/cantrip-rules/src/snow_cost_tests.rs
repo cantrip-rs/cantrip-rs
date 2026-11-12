@@ -5,7 +5,7 @@ use cantrip_api::Game as Rules;
 use cantrip_state::{Frame, FrameKind};
 const YOU: PlayerId = PlayerId(0);
 static PLAIN: CardDef = CardDef { name: "Plain source", types: TypeSet::of(&[CardType::Land]), ..CardDef::BLANK };
-static SNOW: CardDef = CardDef { name: "Snow source", supertypes: Supertypes { basic: true, legendary: false, snow: true }, ..PLAIN };
+static SNOW: CardDef = CardDef { name: "Snow source", supertypes: Supertypes { basic: true, legendary: false, snow: true, world: false }, ..PLAIN };
 fn position(snow: bool) -> (Game, ObjectId) {
     let cards = Box::leak(Box::new(CardTable::new([&PLAIN, &SNOW])));
     let deck = vec![cards.id_of(&PLAIN); 20];

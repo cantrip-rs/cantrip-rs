@@ -3955,3 +3955,24 @@ authority rather than asking the payer. The special-action path separates
 ordinary and random discards for the same ordering. Random discards cannot
 feed an earlier nonrandom graveyard cost. Selection, discard and typed payment
 receipts use the existing journal, movement and cost infrastructure.
+
+### World intervals and state-based actions
+
+World permanents obey CR 704.5k. Their current continuous world-supertype interval
+has its own journalled `Obj::world_since` timestamp: ordinary layer timestamps
+can change while a permanent remains World. Acquisitions in a simultaneous batch
+share a value. The state-based action keeps the unique newest interval, or puts
+all Worlds into their owners' graveyards if newest is tied. World age is
+preserved through phasing and refreshed after actually losing and regaining the
+supertype. The interval's relative order and ties are included in canonical loop
+identity; absolute timestamp magnitudes are not.
+
+Synchronization follows whole instructions, ungrouped characteristics changes
+and recorded event batches. History-sensitive type-layer abilities are
+recalculated after history changes. Synchronization is skipped unless a World
+could be involved: a permanent or emblem with a World interval, one whose text
+is a World card's, or one whose static ability can make something a World
+(`StaticDef::makes_world`, which the layers check in debug builds). Nothing is
+cached: the guard reads those objects as it is asked, after every event, as
+`library_visibility::sync` does, and inspects game objects rather than asking
+whether the global card table contains any World.

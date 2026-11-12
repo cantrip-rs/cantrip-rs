@@ -17,7 +17,7 @@ static FOREST: CardDef = CardDef {
     name: "Assist Test Forest",
     has_cost: false,
     types: TypeSet::of(&[CardType::Land]),
-    supertypes: Supertypes { basic: true, legendary: false, snow: false },
+    supertypes: Supertypes { basic: true, legendary: false, snow: false, world: false },
     subtypes: SubtypeSet::of(&[Subtype::Forest]),
     basic_land_types: &[Mana::G],
     ..CardDef::BLANK

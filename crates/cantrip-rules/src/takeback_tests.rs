@@ -16,7 +16,7 @@ static MOUNTAIN: CardDef = CardDef {
     name: "Takeback Test Mountain",
     has_cost: false,
     types: TypeSet::of(&[CardType::Land]),
-    supertypes: Supertypes { basic: true, legendary: false, snow: false },
+    supertypes: Supertypes { basic: true, legendary: false, snow: false, world: false },
     subtypes: SubtypeSet::of(&[Subtype::Mountain]),
     basic_land_types: &[Mana::R],
     ..CardDef::BLANK
@@ -27,7 +27,7 @@ static FOREST: CardDef = CardDef {
     name: "Takeback Test Forest",
     has_cost: false,
     types: TypeSet::of(&[CardType::Land]),
-    supertypes: Supertypes { basic: true, legendary: false, snow: false },
+    supertypes: Supertypes { basic: true, legendary: false, snow: false, world: false },
     subtypes: SubtypeSet::of(&[Subtype::Forest]),
     basic_land_types: &[Mana::G],
     ..CardDef::BLANK

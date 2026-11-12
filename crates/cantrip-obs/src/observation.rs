@@ -158,7 +158,7 @@ pub struct VisibleObs {
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CharsObs {
     pub types: u16,
-    /// Basic, legendary, snow.
+    /// Basic, legendary, snow, world in bits 0 through 3.
     pub supertypes: u8,
     pub colors: u8,
     pub subtypes: Vec<u16>,

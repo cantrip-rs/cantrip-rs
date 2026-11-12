@@ -8,7 +8,7 @@ pub static PORTHOS: CardDef = CardDef {
     has_cost: false,
     colors: Some(ColorSet::of(Color::Green)),
     types: TypeSet::of(&[CardType::Creature]),
-    supertypes: Supertypes { basic: false, legendary: true, snow: false },
+    supertypes: Supertypes { basic: false, legendary: true, snow: false, world: false },
     subtypes: SubtypeSet::of(&[Subtype::Dog]),
     power: Some(1),
     toughness: Some(1),

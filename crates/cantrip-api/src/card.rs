@@ -417,6 +417,11 @@ pub struct StaticDef {
     /// which lands have lost the abilities of their rules text, from layer 4 on, so that their static abilities from layer
     /// 4 on (CR 613.8a: they depend on it), replacement effects, cost changes and other printed rules agree with it.
     pub sets_land_subtypes: bool,
+    /// It can give what it affects the World supertype (CR 205.4f, layer 4): `makes_world()`. Only while a World is on the
+    /// battlefield, or a permanent with such an ability is, does the engine keep the World intervals (`world::sync`, CR
+    /// 704.5k); the layers refuse, in debug builds, a static ability that makes something a World without saying so, and
+    /// the card table one that functions elsewhere than on the battlefield.
+    pub makes_world: bool,
 }
 
 fn affects_nothing(_: &dyn LayerQuery, _: ObjectId, _: ObjectId, _: &Chars) -> bool {
@@ -441,6 +446,7 @@ impl StaticDef {
             continues: false,
             lingers_until_end_of_turn: false,
             sets_land_subtypes: false,
+            makes_world: false,
         };
 }
 
@@ -4223,7 +4229,7 @@ impl CardDef {
         colors: None,
         color_identity: ColorSet::NONE,
         types: TypeSet::NONE,
-        supertypes: Supertypes { basic: false, legendary: false, snow: false },
+        supertypes: Supertypes { basic: false, legendary: false, snow: false, world: false },
         subtypes: SubtypeSet::NONE,
         power: None,
         toughness: None,
@@ -4674,6 +4680,9 @@ pub struct CardTable {
     /// Definitions whose own activated abilities name different activators. Checked on live source texts; an ability
     /// acquired from another source is checked separately through the layers' acquisition guard.
     pub other_activators: Vec<bool>,
+    /// Printed Worlds and definitions that can change the world supertype in layer 4, including abilities they grant.
+    /// Checked on live game sources, never as a global card-table guard.
+    pub world_sensitive: Vec<bool>,
     /// Which cards could have a triggered ability that may look back in time (CR 603.10, `TriggeredDef::may_look_back`) of
     /// their own: one they print, one they list to give (`CardDef::delayed`), any a static ability of theirs could give
     /// themselves, or, for a Room, one a door prints (CR 709.5; `CardTable::new`) - the objects a look-back pass needs as
@@ -5194,6 +5203,10 @@ impl CardTable {
                     assert!(s.layer >= Layer::Ability, "{}: a granted static ability applies in layer 6 or later (CR 613.1f)", card.name);
                 }
             }
+            // `world::sync` looks for what can make a World on the battlefield and in the command zone.
+            for s in card.statics.iter().filter(|s| s.makes_world) {
+                assert!(s.from == ZoneKind::Battlefield, "{}: a static ability that makes a World functions on the battlefield", card.name);
+            }
             // A play rule given to an object is one ability, named by its place in `delayed`: never printed among its
             // abilities (a card prints its own in `play_rules`), and never an "as long as" holding others.
             assert!(!card.abilities.iter().any(|a| matches!(a, AbilityDef::PlayRule(_))), "{}: a play rule a card prints is in its play_rules", card.name);
@@ -5282,6 +5295,9 @@ impl CardTable {
         let control_statics: Vec<bool> = cards.iter().map(|c| c.statics.iter().any(|s| s.layer == Layer::Control)).collect();
         let other_activators = cards.iter().map(|c| c.abilities.iter()
             .any(|a| matches!(a, AbilityDef::Activated(d) if d.activators.is_some()))).collect();
+        // A World card, or one with a static ability that can make something a World (a given static ability never
+        // applies in layer 4, as `new` asserts above).
+        let world_sensitive = cards.iter().map(|c| c.supertypes.world || c.statics.iter().any(|s| s.makes_world)).collect();
         let looks_back = |a: &AbilityDef| matches!(a, AbilityDef::Triggered(t) if t.may_look_back());
         let look_back: Vec<bool> = cards
             .iter()
@@ -5416,6 +5432,7 @@ impl CardTable {
             statics,
             control_statics,
             other_activators,
+            world_sensitive,
             look_back,
             zone_words,
             zone_word_cards,

@@ -69,6 +69,7 @@ mod mana_under_way_tests;
 mod hand_visibility;
 #[cfg(test)]
 mod hand_visibility_tests;
+mod world;
 mod loops;
 mod merge;
 #[cfg(test)]
@@ -1615,6 +1616,7 @@ impl<'a> Cx<'a> {
         if self.s().settle_held.get() == 0 {
             ops::settle_combat(self);
             hand_visibility::sync(self);
+            world::sync(self);
         }
         let check = &mut self.g.check;
         if check.depth == 0 {
@@ -1781,8 +1783,9 @@ impl<'a> Cx<'a> {
         ops::settle_at_once(self);
         let start = self.g.log.len();
         for &event in events {
-            self.record(event);
+            self.record_only(event);
         }
+        if self.s().settle_held.get() == 0 { world::sync(self); }
         start
     }
 
@@ -1806,6 +1809,12 @@ impl<'a> Cx<'a> {
         }
     }
     pub fn record(&mut self, event: Event) {
+        self.record_only(event);
+        if self.s().settle_held.get() == 0 { world::sync(self); }
+    }
+
+    /// A batch appends all its events before history-dependent characteristics are synchronized.
+    fn record_only(&mut self, event: Event) {
         let turn = self.g.state.turn;
         let cause = self.cause();
         let serial = self.g.log.len() as u32;

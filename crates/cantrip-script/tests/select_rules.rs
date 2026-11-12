@@ -52,7 +52,7 @@ static WASTES: CardDef = CardDef {
     name: "Probe Wastes",
     has_cost: false,
     types: TypeSet::of(&[CardType::Land]),
-    supertypes: Supertypes { basic: true, legendary: false, snow: false },
+    supertypes: Supertypes { basic: true, legendary: false, snow: false, world: false },
     ..CardDef::BLANK
 };
 static FILLER: CardDef = CardDef { name: "Filler", has_cost: false, types: TypeSet::of(&[CardType::Land]), ..CardDef::BLANK };

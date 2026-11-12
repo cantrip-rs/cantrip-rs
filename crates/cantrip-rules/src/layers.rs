@@ -1583,10 +1583,14 @@ fn printed(cards: &CardTable, card: CardId, rules: bool) -> &Chars {
 ///
 /// A static ability of `source` applied to `id`: its effect, or its effect on that object (`StaticDef::apply_each`).
 fn apply_static(st: &StaticDef, view: &View, source: ObjectId, id: ObjectId, chars: &mut Chars) {
+    let world = chars.supertypes.world;
     match st.apply_each {
         Some(apply) => apply(view, source, id, chars),
         None => (st.apply)(view, source, chars),
     }
+    // The World intervals are kept only where something can make a World (`world::sync`): one that does is marked so
+    // (`StaticDef::makes_world`).
+    debug_assert!(st.makes_world || !chars.supertypes.world || world, "{}: a static ability that makes a World is marked makes_world()", st.text);
 }
 
 /// Every static ability `source`'s card lists (`CardDef::statics`): those of the definition it has, then, for a merged
@@ -4386,7 +4390,7 @@ mod tests {
         name: "Idol",
         colors: Some(ColorSet::of(Color::Green)),
         types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),
-        supertypes: Supertypes { basic: false, legendary: true, snow: false },
+        supertypes: Supertypes { basic: false, legendary: true, snow: false, world: false },
         subtypes: SubtypeSet::of(&[Subtype::Equipment, Subtype::Shapeshifter]),
         keywords: Keywords::of(&[Keyword::Changeling, Keyword::Flying]),
         power: Some(2),
