@@ -1,0 +1,67 @@
+# Spectacular Pileup ({3}{W}{W} sorcery): "All creatures and Vehicles lose indestructible until end of turn, then destroy all
+# creatures and Vehicles." Bot2's Darksteel Myr (an indestructible creature) and uncrewed Smuggler's Copter (a Vehicle that is
+# not a creature, CR 301.7) die with Bot1's Ornithopter, because the indestructible loss (CR 702.12) is applied first
+# (CR 608.2c). The Moxen, noncreature and not Vehicles, stay.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains
+Plains
+Spectacular Pileup
+Ornithopter
+Mountain x13
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Smuggler's Copter
+Darksteel Myr
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Smuggler's Copter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Darksteel Myr.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield = Darksteel Myr; Mountain; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire; Smuggler's Copter
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Spectacular Pileup.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire; Plains; Plains
+Bot1.Graveyard = Spectacular Pileup; Ornithopter
+Bot2.Battlefield = Mountain; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire
+Bot2.Graveyard = Darksteel Myr; Smuggler's Copter

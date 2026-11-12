@@ -1,0 +1,79 @@
+# Spectacular Pileup: "All creatures and Vehicles lose indestructible until end of turn" (CR 611.2a, 514.2). Bot2's Drudge
+# Skeletons wears Darksteel Plate ("Equipped creature has indestructible") and regenerates in response, so it survives the
+# destruction (CR 701.19a) without indestructible for the rest of the turn; on Bot2's next turn the loss has ended and the Plate's
+# indestructible is back.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains
+Plains
+Spectacular Pileup
+Mountain x14
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Drudge Skeletons
+Darksteel Plate
+Swamp x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Drudge Skeletons.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Darksteel Plate.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Darksteel Plate.Activate(Ability: Equip; Drudge Skeletons)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Drudge Skeletons.Keywords = Indestructible
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Spectacular Pileup.Cast
+Bot1.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Drudge Skeletons.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Spectacular Pileup
+? Bot2.Battlefield.Drudge Skeletons.Keywords = (absent)
+? Bot2.Battlefield.Drudge Skeletons.Tapped = true
+[T6 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Drudge Skeletons.Keywords = Indestructible
+Bot2.Battlefield.Darksteel Plate.AttachedTo =Drudge Skeletons

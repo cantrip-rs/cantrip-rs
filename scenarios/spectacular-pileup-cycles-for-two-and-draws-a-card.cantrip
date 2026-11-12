@@ -1,0 +1,30 @@
+# Spectacular Pileup has Cycling {2}: Bot1 discards it from hand for {2} and draws a card (CR 702.29a), the next card of its
+# deck here, a Mox Emerald, and nothing on the battlefield is destroyed.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Spectacular Pileup
+Ornithopter
+Mountain x2
+Mox Emerald
+Mountain x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Spectacular Pileup.Activate(Ability: Cycling)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Mountain; Mountain; Mox Emerald; Mox Jet
+Bot1.Graveyard = Spectacular Pileup
+Bot1.Battlefield = Mox Pearl; Mox Sapphire; Ornithopter
