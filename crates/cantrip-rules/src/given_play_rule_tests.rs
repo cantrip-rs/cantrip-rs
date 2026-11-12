@@ -104,3 +104,74 @@ fn a_maximum_hand_size_a_static_ability_gives_has_its_givers_timestamp() {
     effect(&mut game, bear, bear, EffectKind::MaximumHandSize(Some(4)));
     assert_eq!(maximum_hand_size(&cx(&mut game), YOU), Some(4), "a maximum made after the giver entered is newer");
 }
+
+const THEM: PlayerId = PlayerId(1);
+fn opponent(_: &dyn Query, a: &Asker, p: PlayerId) -> bool {
+    p != a.controller
+}
+fn anyone(_: &dyn Query, _: &Asker, _: PlayerId) -> bool {
+    true
+}
+/// Cursed Rack's kind: a rule about the maximum hand size of players other than its controller.
+static RACK: CardDef = CardDef {
+    name: "Cursed Rack hand-size fixture",
+    types: TypeSet::of(&[CardType::Artifact]),
+    play_rules: &[PlayRule::MaximumHandSizeOf(opponent, Some(4))],
+    ..CardDef::BLANK
+};
+static UNLIMITED: CardDef = CardDef { name: "Hand-size unlimited fixture", play_rules: &[PlayRule::MaximumHandSizeOf(anyone, None)], ..RACK };
+/// Reliquary Tower's kind: "You have no maximum hand size."
+static TOWER: CardDef = CardDef { name: "Hand-size tower fixture", play_rules: &[PlayRule::MaximumHandSize(None)], ..RACK };
+fn hand_game() -> Game {
+    let cards = Box::leak(Box::new(CardTable::new([&RACK, &UNLIMITED, &TOWER, &BEAR])));
+    Game::new(cards, &Setup { decks: vec![vec![]; 3], ..Default::default() })
+}
+#[test]
+fn a_static_hand_size_limit_follows_its_controller_and_stops_with_ability_loss() {
+    use cantrip_api::Game as Rules;
+    let mut g = hand_game();
+    let rack = enter(&mut g, &RACK);
+    assert_eq!(maximum_hand_size(&cx(&mut g), YOU), Some(7));
+    for player in [THEM, PlayerId(2)] {
+        assert_eq!(maximum_hand_size(&cx(&mut g), player), Some(4));
+    }
+    g.state.update_obj(rack, |o| o.controller = THEM);
+    assert_eq!(maximum_hand_size(&cx(&mut g), YOU), Some(4));
+    assert_eq!(maximum_hand_size(&cx(&mut g), THEM), Some(7));
+    cx(&mut g).add_effect(rack, rack, EffectKind::LoseAllAbilities, Duration::Indefinite);
+    assert_eq!(maximum_hand_size(&cx(&mut g), YOU), Some(7));
+}
+/// The newest of a player's maximum-hand-size effects decides, whoever controls its source and whichever way it reads (CR
+/// 613.11, 613.7): an opponent's four, then anyone's none, then a resolved spell's six, then a second four.
+#[test]
+fn a_named_players_hand_size_takes_its_place_in_timestamp_order() {
+    let mut g = hand_game();
+    let rack = enter(&mut g, &RACK);
+    enter(&mut g, &UNLIMITED);
+    assert_eq!(maximum_hand_size(&cx(&mut g), THEM), None);
+    let timestamp = g.state.timestamp();
+    g.state.effect_push(ContinuousEffect { source: rack, controller: THEM, affected: rack, timestamp, kind: EffectKind::MaximumHandSize(Some(6)), duration: Duration::Indefinite, words: Words::NONE });
+    assert_eq!(maximum_hand_size(&cx(&mut g), THEM), Some(6));
+    enter(&mut g, &RACK);
+    assert_eq!(maximum_hand_size(&cx(&mut g), THEM), Some(4));
+    assert_eq!(maximum_hand_size(&cx(&mut g), YOU), None, "the unlimited rule names its controller too");
+}
+#[test]
+fn a_copied_static_hand_size_limit_applies_at_the_sources_timestamp() {
+    use cantrip_api::Game as Rules;
+    let mut g = hand_game();
+    let bear = enter(&mut g, &BEAR);
+    let card = g.cards.id_of(&RACK);
+    cx(&mut g).set_copy(bear, Copiable::of(card));
+    assert_eq!(maximum_hand_size(&cx(&mut g), THEM), Some(4));
+}
+/// "You have no maximum hand size" is its controller's alone: an opponent's Reliquary Tower leaves your seven, while a rule
+/// that names its players (Cursed Rack's kind) is judged for every player whoever controls it.
+#[test]
+fn your_maximum_hand_size_is_of_its_controller_alone() {
+    let mut g = hand_game();
+    let tower = enter(&mut g, &TOWER);
+    g.state.update_obj(tower, |o| o.controller = THEM);
+    assert_eq!(maximum_hand_size(&cx(&mut g), THEM), None);
+    assert_eq!(maximum_hand_size(&cx(&mut g), YOU), Some(7), "an opponent's \"you\" is not you");
+}

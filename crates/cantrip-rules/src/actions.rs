@@ -8191,7 +8191,7 @@ fn land_rules(cx: &Cx, player: PlayerId) -> LandRules {
         PlayRule::LibraryTop | PlayRule::LibraryTopLands => {
             rules.top_lands.push(Grant { object: source, ability });
         }
-        PlayRule::HandRevealed(_) | PlayRule::LibraryTopSpells(..) | PlayRule::MaximumHandSize(_) | PlayRule::LookAtLibraryTop | PlayRule::RevealLibraryTop | PlayRule::While(..) => {}
+        PlayRule::HandRevealed(_) | PlayRule::LibraryTopSpells(..) | PlayRule::MaximumHandSize(_) | PlayRule::MaximumHandSizeOf(..) | PlayRule::LookAtLibraryTop | PlayRule::RevealLibraryTop | PlayRule::While(..) => {}
     });
     // "You may play an additional land this turn" (CR 305.2, 611.2c): an effect a resolved spell or ability made, added to
     // the rest - the number a player can play is the sum of everything that increases it.
@@ -8206,8 +8206,9 @@ fn land_rules(cx: &Cx, player: PlayerId) -> LandRules {
 }
 
 /// `player`'s maximum hand size (CR 402.2), `None` when they have no maximum: seven unless an effect says otherwise - a
-/// permanent they control, an emblem they have (CR 114.4), or an effect a resolved spell made - the newest of those deciding,
-/// whichever way it reads (CR 613.11, 613.7).
+/// permanent they control, an emblem they have (CR 114.4), a permanent anyone controls that names them (Cursed Rack's
+/// chosen player), or an effect a resolved spell made - the newest of those deciding, whichever way it reads (CR 613.11,
+/// 613.7).
 pub fn maximum_hand_size(cx: &Cx, player: PlayerId) -> Option<u32> {
     let mut newest: Option<(u32, Option<u32>)> = None;
     let mut says = |stamp: u32, maximum: Option<u32>| {
@@ -8222,11 +8223,17 @@ pub fn maximum_hand_size(cx: &Cx, player: PlayerId) -> Option<u32> {
             says(e.timestamp, maximum);
         }
     }
-    each_play_rule_named(cx, cx.cards(), player, true, |source, ability, rule| {
-        if let PlayRule::MaximumHandSize(maximum) = rule {
-            says(play_rule_timestamp(cx, source, ability), *maximum);
-        }
-    });
+    // Each player's permanents: "your maximum hand size" of `player`'s own, and of anyone's a rule that names `player`.
+    for controller in cx.s().seats() {
+        each_play_rule_named(cx, cx.cards(), controller, true, |source, ability, rule| {
+            let maximum = match *rule {
+                PlayRule::MaximumHandSize(maximum) if controller == player => maximum,
+                PlayRule::MaximumHandSizeOf(applies, maximum) if applies(cx, &Asker::new(source, controller), player) => maximum,
+                _ => return,
+            };
+            says(play_rule_timestamp(cx, source, ability), maximum);
+        });
+    }
     newest.map_or(Some(7), |(_, maximum)| maximum)
 }
 

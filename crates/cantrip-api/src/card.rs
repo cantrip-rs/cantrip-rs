@@ -3594,6 +3594,10 @@ pub enum PlayRule {
     /// wins, whichever way it reads (CR 613.11, 613.7), an effect of a resolved spell (`EffectKind::MaximumHandSize`) in the
     /// same order.
     MaximumHandSize(Option<u32>),
+    /// "The chosen player's maximum hand size is four" (CR 402.2): Cursed Rack. `MaximumHandSize` for each player `applies`
+    /// names - asked with the permanent as source and its controller, so a player other than its controller too - judged
+    /// with the other maximum-hand-size effects in the same timestamp order (CR 613.11, 613.7).
+    MaximumHandSizeOf(fn(&dyn Query, &Asker, PlayerId) -> bool, Option<u32>),
 }
 
 /// What else may pay a spell's total cost besides mana (CR 601.2f-h): convoke (CR 702.51a), delve (CR 702.66a) and
