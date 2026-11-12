@@ -3669,3 +3669,17 @@ attacker's keywords or lifts flying, protection or other blocking restrictions.
 Named basic-landwalk references include their snow counterparts, consistently
 with the engine's other ability references. The source's `Asker` carries the
 controller and linked component for card predicates and text changes.
+
+
+### An ability's explicit activators
+
+CR 602.2 permissions belong to `ActivatedDef::activators`, set by
+`.activated_by` or `.any_player_may_activate`. The permission callback reads the
+source's controller and a separate candidate player; the activated ability's
+condition, costs, stack controller and effect use the actual activator. Regular
+and mana activation, payment-window options and affordability share that
+authority. Per-definition metadata is checked on live texts, with acquired
+abilities supplied by the layers; unrelated opposing permanents need no
+characteristics calculation. Permission changes no timing, cost or activation
+limit, never allows sacrificing an opponent's permanent, and never lets it pay
+convoke/improvise. The source's own {T} uses its controller's summoning sickness.
