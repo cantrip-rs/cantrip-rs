@@ -3142,8 +3142,12 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 for object in tapped {
                     if matches!(scope, PaymentScope::Ability { .. }) {
                         ability_tappers.push((component, object));
-                        if cost.tap_creatures.is_some_and(|t| t.greater_with == Some(Keyword::CrewsAsThoughPowerTwoGreater)) {
-                            cx.record(Event::Crewed { creature: object, vehicle: spell });
+                        // "Crews a Vehicle" (CR 702.122b) and "saddles a permanent" (CR 702.171c): tapped to pay the cost of the
+                        // crew or the saddle ability.
+                        match cost.tap_creatures.and_then(|t| t.greater_with) {
+                            Some(Keyword::CrewsAsThoughPowerTwoGreater) => cx.emit(Event::Crewed { creature: object, vehicle: spell }),
+                            Some(Keyword::SaddlesAsThoughPowerTwoGreater) => cx.emit(Event::Saddled { creature: object, mount: spell }),
+                            _ => {}
                         }
                     }
                     scope.record(cx, spell, object, origin, component, CostPart::TapCreatures);

@@ -247,10 +247,14 @@ pub enum Event {
     /// complete. A tap for mana, for convoke or for any other cost is none.
     TappedForTeamwork { creature: ObjectId, spell: ObjectId },
     /// `creature` crewed `vehicle` (CR 702.122b-c): it was tapped to pay the cost of the Vehicle's crew ability (not saddle's, nor
-    /// any other cost that taps creatures). Recorded for each creature tapped, after the cost's taps (announced together), as the ability is
-    /// activated. It names the creature and copies nothing out of it: what it is now, or was as it last existed, is its row
-    /// (CR 608.2h). Only recorded: "creatures that crewed it this turn" asks `History::crewed`.
+    /// any other cost that taps creatures). Emitted for each creature tapped, after the cost's taps (announced together), as the
+    /// ability is activated, so "whenever [this creature] crews a Vehicle" triggers once the activation is complete (Canyon
+    /// Vaulter). It names the creature and copies nothing out of it: what it is now, or was as it last existed, is its row
+    /// (CR 608.2h). "Creatures that crewed it this turn" asks `History::crewed`.
     Crewed { creature: ObjectId, vehicle: ObjectId },
+    /// `creature` saddled `mount` (CR 702.171c): it was tapped to pay the cost of the permanent's saddle ability, the saddle
+    /// counterpart of `Crewed`, emitted the same way (Canyon Vaulter).
+    Saddled { creature: ObjectId, mount: ObjectId },
     /// A player became the monarch (CR 725.1, 725.4): it was not theirs before.
     BecameMonarch { player: PlayerId },
     /// A player took the initiative (CR 726.1), even one who had it (CR 726.5): what makes them venture into Undercity
@@ -601,6 +605,7 @@ impl Event {
             Event::ManaSpent { source, on, .. } => source == object || on == object,
             Event::Convoked { creature, spell } | Event::TappedForTeamwork { creature, spell } => creature == object || spell == object,
             Event::Crewed { creature, vehicle } => creature == object || vehicle == object,
+            Event::Saddled { creature, mount } => creature == object || mount == object,
             Event::LifeChange { .. } | Event::Searched { .. } | Event::AttackersDeclared { .. } | Event::StepBegan { .. } | Event::BecameMonarch { .. } | Event::TookInitiative { .. } | Event::GaveGift { .. } | Event::ChosenAtRandom { .. } | Event::CoinFlipped { .. } | Event::DieRolled { .. } | Event::TurnEnded { .. } | Event::TurnBegan { .. } | Event::DungeonCompleted { .. } | Event::Scried { .. } | Event::Surveilled { .. } | Event::SpeedChanged { .. } | Event::GameLost { .. } | Event::GameDrawn { .. } | Event::Shuffled { .. } | Event::PlayerControlled { .. } => false,
         }
     }
@@ -700,8 +705,10 @@ impl EventMask {
     pub const CONTROL_CHANGED: EventMask = EventMask(1 << 61);
     /// A permanent entered the battlefield as it was (CR 603.6a): recorded only, for the history.
     pub const ENTERED: EventMask = EventMask(1 << 62);
-    /// A creature crewed a Vehicle (CR 702.122b): recorded only, for the history.
+    /// A creature crewed a Vehicle (CR 702.122b).
     pub const CREWED: EventMask = EventMask(1 << 63);
+    /// A creature saddled a Mount (CR 702.171c).
+    pub const SADDLED: EventMask = EventMask(1 << 66);
     /// A spell merged with a permanent (CR 702.140d), a distinct event from transforming.
     pub const MUTATED: EventMask = EventMask(1 << 65);
     /// A meld card's counterpart melded with it (CR 701.42a): recorded only, sharing transforming's bit.
@@ -783,6 +790,7 @@ impl EventMask {
             Event::Untapped { .. } => EventMask::UNTAPPED,
             Event::TappedForTeamwork { .. } => EventMask::TAPPED_FOR_TEAMWORK,
             Event::Crewed { .. } => EventMask::CREWED,
+            Event::Saddled { .. } => EventMask::SADDLED,
             Event::BecameMonarch { .. } => EventMask::BECAME_MONARCH,
             Event::TookInitiative { .. } => EventMask::TOOK_INITIATIVE,
             Event::CoinFlipped { .. } => EventMask::COIN_FLIPPED,
