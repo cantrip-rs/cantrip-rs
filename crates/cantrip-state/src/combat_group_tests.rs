@@ -1,22 +1,26 @@
 //! Compare declaration validation and completion against complete small games,
-//! using a count of the participants as an independent legality oracle.
+//! using the printed restrictions, counted directly, as an independent legality oracle.
 use crate::*;
 const IDS: [ObjectId; 3] = [ObjectId(10), ObjectId(11), ObjectId(12)];
 const TARGETS: [Target; 2] = [Target::Player(PlayerId(1)), Target::Player(PlayerId(2))];
-/// Caverns of Despair's cap of two (`flags` 1), a cap of one (2), or both (3).
+/// Caverns of Despair's cap of two (`flags` 1), a cap of one (2), Errantry's "can only attack alone" on the second
+/// creature (4), or any of them together.
 fn groups(flags: u32) -> Vec<CombatGroup> {
     let mut out = vec![];
     if flags & 1 != 0 {
-        out.push(CombatGroup { members: IDS.to_vec(), at_most: 2 });
+        out.push(CombatGroup { subjects: IDS.to_vec(), members: IDS.to_vec(), at_most: 2 });
     }
     if flags & 2 != 0 {
-        out.push(CombatGroup { members: IDS.to_vec(), at_most: 1 });
+        out.push(CombatGroup { subjects: IDS.to_vec(), members: IDS.to_vec(), at_most: 1 });
+    }
+    if flags & 4 != 0 {
+        out.push(CombatGroup { subjects: vec![IDS[1]], members: IDS.to_vec(), at_most: 1 });
     }
     out
 }
 fn printed_allows(flags: u32, present: impl Fn(ObjectId) -> bool) -> bool {
     let n = IDS.iter().filter(|&&id| present(id)).count();
-    (flags & 1 == 0 || n <= 2) && (flags & 2 == 0 || n <= 1)
+    (flags & 1 == 0 || n <= 2) && (flags & 2 == 0 || n <= 1) && (flags & 4 == 0 || !present(IDS[1]) || n == 1)
 }
 fn declarations() -> Vec<Vec<(ObjectId, Target)>> {
     (0..27)
@@ -34,7 +38,7 @@ fn declarations() -> Vec<Vec<(ObjectId, Target)>> {
 #[test]
 fn combat_group_attacks_match_exhaustive_requirements_costs_caps_and_completions() {
     let all = declarations();
-    for flags in 1..4 {
+    for flags in 1..8 {
         for capped in [false, true] {
             for paid in [false, true] {
                 let mut r = AttackRules {
@@ -87,7 +91,7 @@ fn combat_group_blocks_count_distinct_creatures_and_match_every_completion() {
     let attackers = [ObjectId(100), ObjectId(101)];
     let allowed: Vec<_> = IDS.iter().flat_map(|&b| attackers.map(|a| (b, a))).collect();
     let all: Vec<Vec<_>> = (0..64).map(|mask| allowed.iter().enumerate().filter(|(i, _)| mask & (1 << i) != 0).map(|(_, p)| *p).collect()).collect();
-    for flags in 1..4 {
+    for flags in 1..8 {
         for multi in [false, true] {
             for paid in [false, true] {
                 let mut r = BlockRequirements {
@@ -143,7 +147,7 @@ fn combat_group_blocks_count_distinct_creatures_and_match_every_completion() {
 fn a_global_cap_with_many_required_attackers_keeps_the_search_bounded() {
     let ids: Vec<_> = (0..128).map(|n| ObjectId(1000 + n)).collect();
     let r = AttackRules {
-        groups: vec![CombatGroup { members: ids.clone(), at_most: 2 }],
+        groups: vec![CombatGroup { subjects: ids.clone(), members: ids.clone(), at_most: 2 }],
         required: ids.iter().map(|&attacker| RequiredAttack { attacker, aim: AttackAim::Anything }).collect(),
         ..Default::default()
     };

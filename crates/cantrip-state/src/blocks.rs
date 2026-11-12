@@ -122,7 +122,7 @@ impl BlockRequirements {
         }
         let has = |id| blocks.iter().any(|p| p.0 == id);
         if let Some(g) = self.groups.iter().find(|g| !g.allows(has)) {
-            return issue(g.members.iter().copied().find(|&id| has(id)).unwrap_or(ObjectId::NONE), "can't block with this group".into(), None, "509.1b", false);
+            return issue(g.subjects.iter().copied().find(|&id| has(id)).unwrap_or(ObjectId::NONE), "can't block with this group".into(), None, "509.1b", false);
         }
         if self.obeyed(blocks) < self.most {
             // A requirement left unobeyed by a creature that obeys none, so the caption names a creature that can still obey

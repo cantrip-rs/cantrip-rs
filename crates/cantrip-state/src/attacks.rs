@@ -331,9 +331,16 @@ impl AttackRules {
                 }
                 let mut remaining = self.after[i];
                 for g in &self.rules.groups {
-                    // A cap also bounds the remaining requirement gain: no more of its members than it has room for may
-                    // still attack, and the declaration so far is within it.
-                    let mut room = g.at_most - g.count(has);
+                    // A cap also bounds the remaining requirement gain once it binds - a subject attacks, and the
+                    // declaration so far is within it - or when every creature still to decide is a subject: no more of
+                    // its members than it has room for may still attack. One that does not bind yet with more members
+                    // attacking than it allows has room for none, and none of its subjects may join them.
+                    let binds = g.binds(has);
+                    if !binds && !self.options[i..].iter().all(|p| g.subjects.contains(&p.0)) {
+                        continue;
+                    }
+                    let count = g.count(has);
+                    let mut room = if count > g.at_most { 0 } else { g.at_most - count };
                     let mut bound = 0;
                     for (id, choices) in &self.options[i..] {
                         if !g.members.contains(id) {
@@ -389,7 +396,7 @@ impl AttackRules {
         if verdict.issue.is_none() {
             if let Some(g) = broken {
                 verdict.issue = Some(AttackIssue {
-                    creature: g.members.iter().copied().find(|&id| has(id)).unwrap_or(ObjectId::NONE),
+                    creature: g.subjects.iter().copied().find(|&id| has(id)).unwrap_or(ObjectId::NONE),
                     words: "can't attack with this group".into(),
                     other: None,
                     rule: "508.1c",

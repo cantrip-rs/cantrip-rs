@@ -2794,12 +2794,16 @@ pub type BlockRule = fn(&dyn Query, ObjectId, ObjectId, ObjectId) -> bool;
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum CombatRole { Attacker, Blocker }
 
-/// A restriction on how many creatures a complete declaration has (CR 508.1c, 509.1b): Caverns of Despair's "No more than
-/// two creatures can attack each combat", every attacking (or blocking) creature counted. The core snapshots membership,
-/// judges full declarations and maximizes requirements with it.
+/// A restriction on how many creatures a complete declaration has (CR 508.1c, 509.1b), every attacking (or blocking)
+/// creature counted: with no `about`, Caverns of Despair's "No more than two creatures can attack each combat"; with one,
+/// only a declaration that has a creature it is true of is limited - Errantry's "Enchanted creature can only attack alone"
+/// (CR 506.5) is `at_most: 1` about the enchanted creature. The core snapshots membership, judges full declarations and
+/// maximizes requirements with it.
 #[derive(Clone, Copy)]
 pub struct CombatGroupRule {
     pub role: CombatRole,
+    /// The creatures the restriction is about, asked of each eligible creature with the source's asker; `None` for all.
+    pub about: Option<fn(&dyn Query, &Asker, ObjectId) -> bool>,
     pub at_most: u32,
 }
 

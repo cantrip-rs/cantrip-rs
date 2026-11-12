@@ -1235,10 +1235,18 @@ pub(crate) fn skips_step(cx: &Cx, player: PlayerId, step: Step) -> bool {
 /// Materialize complete-declaration restrictions from live static sources.
 pub fn combat_groups(cx: &Cx, role: CombatRole, eligible: &[ObjectId]) -> Vec<CombatGroup> {
     let mut groups: Vec<CombatGroup> = Vec::new();
-    for (_, _, def, _) in sources(cx, |d| !d.combat_groups.is_empty()) {
+    for (source, controller, def, by) in sources(cx, |d| !d.combat_groups.is_empty()) {
+        let asker = Asker { instance: None, source, controller, by, spell: false };
         for rule in def.combat_groups.iter().filter(|r| r.role == role) {
-            // Two of the same cap are one restriction.
-            let group = CombatGroup { members: eligible.to_vec(), at_most: rule.at_most };
+            let subjects: Vec<ObjectId> = match rule.about {
+                None => eligible.to_vec(),
+                Some(about) => eligible.iter().copied().filter(|&id| about(cx, &asker, id)).collect(),
+            };
+            if subjects.is_empty() {
+                continue;
+            }
+            // Two of the same restriction are one.
+            let group = CombatGroup { subjects, members: eligible.to_vec(), at_most: rule.at_most };
             if !groups.contains(&group) {
                 groups.push(group);
             }
