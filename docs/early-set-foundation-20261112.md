@@ -225,3 +225,22 @@ control and ability loss do not remove it; ordinary spell/ability untapping
 still works. A zero-step duration never begins. Six native tests include
 journal rollback, departed-player deadlines, early turn endings, permission
 expiry and the beginning-trigger view. Workspace type-checking also passed.
+
+## Explicit loss of unspent mana
+
+`Game::empty_mana_pool(player) -> ManaPool` makes the named player lose all
+unspent mana, as Mana Short, Power Sink and Drain Power instruct (CR 106.4,
+609.1). This is not a step/phase boundary: Upwelling/Omnath-style boundary keep
+rules do not apply. Normal and restricted pools, mana lasting through combat or
+the turn, snow/source provenance and cached lasting amounts are all cleared
+through the state's existing journalled emptying primitive. Another player's
+pool is unaffected. Returned amounts name the types lost, within the native
+per-type quantity bound, for a later instruction; no quantity type is widened.
+
+Two native tests exercise the keep-rule distinction, mixed unrestricted and
+restricted mana, all supported intrinsic lifetimes, snow/source metadata, a
+second empty loss, journal rollback and producing fresh mana afterwards.
+Drain Power's forced land-mana-activation procedure remains a separate gap;
+this primitive does not tap lands or claim that procedure is implemented.
+The generator's old coarse requirement label also covers mana doubling, which
+is deliberately not enabled by detecting this loss-only method.

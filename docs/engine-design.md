@@ -3711,3 +3711,12 @@ parallel, under the affected object's current controller, even when it is
 already untapped. These are journalled duration transitions, never card-owned
 counts of past events. Numeric representation and observation dimensions do not
 change.
+
+### Explicit unspent-mana loss
+
+`Game::empty_mana_pool` uses the existing state emptying authority at its longest
+intrinsic lifetime, ignoring static rules that keep mana only at step/phase
+boundaries. It clears ordinary/restricted pools and their duration, source and
+snow provenance together, and returns the lost types within native per-type
+bounds. It is separate from producing/doubling mana and from asking a player
+to activate a land's mana abilities. All state changes are journalled.
