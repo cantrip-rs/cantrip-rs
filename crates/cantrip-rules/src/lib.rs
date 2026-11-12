@@ -3672,3 +3672,8 @@ mod entry_sacrifice_history_tests;
 
 #[cfg(test)]
 mod combat_payment_tests;
+
+mod banding;
+
+#[cfg(test)]
+mod banding_tests;
