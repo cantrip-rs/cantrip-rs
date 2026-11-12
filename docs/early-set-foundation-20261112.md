@@ -168,3 +168,34 @@ features remove the recorded gaps on six of these eight cards, including Land's
 Edge. Merseine still requires its computed mana cost, and Personal Incarnation
 its damage redirection. Card-level generation and runtime probes are separate
 from these core fixtures.
+
+## Five-feature validation receipt
+
+Through `de790242f`, the complete native Rust workspace passes 22,565 tests,
+with 15 ignored (`tools/test.sh --engine`, verification enabled). MTGish
+`c6a9ad2` enables the new permission interface only for the candidate foundation
+profile. Its suite passes 1,570 tests (22 ignored); 27 generated-card scenarios
+pass against the pristine engine, including an opponent paying for Land's Edge
+and Clergy of the Holy Nimbus. Forty affected modules type-check with an
+explicit names-only Cube/Doom declaration overlay. That overlay is not part of
+this branch; its sources/build cache were removed after archiving the patch.
+
+Thirty-five of those 40 card candidates now have no recorded generator feature
+gap. Caverns of Despair, Field of Dreams, Revelation, Merseine and Personal
+Incarnation retain their other requirements. No card implementation was added,
+no reservation changed, and the campaign remains paused. The four roadmap
+groups still marked queued remain future focused commits.
+
+The 128-game benchmark still reports 26.74 KB allocated per decision. Timings
+are noisy on this shared machine: original baseline 45.24 microseconds per
+engine decision, initial five-feature after-run 48.81 during builds, additional
+before runs 44.12/46.67 and after runs 42.55/43.47. Additional runs overlapped
+in their copy/presentation phases; these are not controlled evidence of a
+speedup or regression. The release rebuild needed RUST_MIN_STACK=16777216,
+matching native validation. The .NET SDK remains unavailable, so no .NET pass
+is claimed.
+
+MTGish's `docs/cantrip-foundation-activators-20261112.proof.json` records the
+exact revision, candidate API fingerprint, card list, counter-only patch and
+log hashes. It keeps the normal upstream API pin unchanged. Local evidence
+is `/mnt/vizier/early-set-foundation-20261112`.
