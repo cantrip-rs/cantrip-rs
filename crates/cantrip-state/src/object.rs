@@ -241,6 +241,8 @@ pub const CHOSEN_KEPT: usize = 2;
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum Kept {
     Name(CardId),
+    Color(Color),
+    Number(u32),
     Object(ObjectId),
     Player(PlayerId),
     /// On an emblem, no choice but what its text names: the object whose ability made it, as the object it was then (CR
@@ -335,6 +337,14 @@ impl ChoiceRecord for Choices {
     }
 
     fn keep(&mut self, by: Linked, value: Kept) -> bool {
+        // A reselected entry choice uses its existing carrier, without taking another kept slot.
+        if by.acquired == Acquired::OWN && self.by == Some(by.text) {
+            match value {
+                Kept::Color(color) if self.color.is_some() => { self.color = Some(color); return true; }
+                Kept::Number(number) if self.number.is_some() => { self.number = Some(number); return true; }
+                _ => {}
+            }
+        }
         let chosen = Chosen { value, text: by.text, acquired: by.acquired };
         let mine = |c: &Option<Chosen<Kept>>| {
             c.is_some_and(|c| c.text == by.text && c.acquired == by.acquired && c.value.same_kind(value))
@@ -388,7 +398,8 @@ impl Choices {
 
     /// The color chosen, to `by` (`GameState::chosen_color`).
     pub fn color(&self, by: Linked) -> Option<Color> {
-        self.entered_to(by)?.color
+        self.entered_to(by).and_then(|c| c.color)
+            .or_else(|| self.kept_to(by, |k| match k { Kept::Color(c) => Some(c), _ => None }))
     }
 
     /// The creature or land type chosen, to `by`.
@@ -411,9 +422,10 @@ impl Choices {
         self.entered_to(by)?.option
     }
 
-    /// The number chosen as this permanent entered, to the linked ability.
+    /// The number chosen as this permanent entered or reselected by its linked ability.
     pub fn number(&self, by: Linked) -> Option<u32> {
-        self.entered_to(by)?.number
+        self.entered_to(by).and_then(|c| c.number)
+            .or_else(|| self.kept_to(by, |k| match k { Kept::Number(n) => Some(n), _ => None }))
     }
 
     /// The object chosen, to `by`, wherever it is now: as the permanent entered, or by `by` as it resolved.
@@ -3325,6 +3337,28 @@ mod tests {
         let by_copy = Chosen { value: CardId(6), text: CardId(4), acquired: copy };
         assert_eq!(by_copy.to(by(CardId(4), copy)), Some(CardId(6)));
         assert_eq!(by_copy.to(by(CardId(4), Acquired::OWN)), None);
+    }
+
+    #[test]
+    fn reselected_entry_colors_and_numbers_reuse_their_carriers() {
+        let text=CardId(4);let own=Linked {object:ObjectId(2),text,acquired:Acquired::OWN};
+        let mut choices=Choices::entered(text,Entered {color:Some(Color::Blue),number:Some(2),card:Some(CardId(9)),..Default::default()});
+        assert!(choices.keep(own,Kept::Player(PlayerId(1))),"fill the second kept slot");
+        assert!(choices.keep(own,Kept::Color(Color::Red)));assert!(choices.keep(own,Kept::Number(u32::MAX)));
+        assert_eq!(choices.color(own),Some(Color::Red));assert_eq!(choices.number(own),Some(u32::MAX));
+        assert_eq!(choices.card(own),Some(CardId(9)));assert_eq!(choices.player(own),Some(PlayerId(1)));
+    }
+
+    #[test]
+    fn reselected_values_stay_linked_to_the_ability_that_chose_them() {
+        let own=Linked {object:ObjectId(2),text:CardId(4),acquired:Acquired::OWN};
+        let grant=Linked {acquired:Acquired {by:AcquiredBy::Grant,stamp:7,part:0},..own};
+        let mut choices=Choices::entered(own.text,Entered {color:Some(Color::Blue),number:Some(2),..Default::default()});
+        assert!(choices.keep(grant,Kept::Color(Color::Red)));assert!(choices.keep(grant,Kept::Number(5)));
+        assert_eq!((choices.color(own),choices.number(own)),(Some(Color::Blue),Some(2)));
+        assert_eq!((choices.color(grant),choices.number(grant)),(Some(Color::Red),Some(5)));
+        assert!(choices.keep(grant,Kept::Number(6)));assert_eq!(choices.number(grant),Some(6));
+        assert_eq!(choices.number(Linked {text:CardId(8),..grant}),None);
     }
 
     /// Each ability that chose a name keeps its own (CR 607.2d): a second ability's name doesn't take the first's place, the

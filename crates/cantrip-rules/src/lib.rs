@@ -2444,6 +2444,14 @@ impl cantrip_api::Game for Cx<'_> {
         ops::remember_chosen(self, by, cantrip_state::Kept::Name(name));
     }
 
+    fn remember_chosen(&mut self, by: Linked, value: ChosenValue) {
+        let value = match value {
+            ChosenValue::Color(color) => cantrip_state::Kept::Color(color),
+            ChosenValue::Number(number) => cantrip_state::Kept::Number(number),
+        };
+        ops::remember_chosen(self, by, value);
+    }
+
     fn remember_chosen_object(&mut self, by: Linked, object: ObjectId) {
         ops::remember_chosen(self, by, cantrip_state::Kept::Object(object));
     }
