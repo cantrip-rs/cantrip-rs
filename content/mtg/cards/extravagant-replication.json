@@ -1,0 +1,6 @@
+{
+  "name": "Extravagant Replication",
+  "manaCost": "{4}{U}{U}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of your upkeep, create a token that's a copy of another target nonland permanent you control."
+}
