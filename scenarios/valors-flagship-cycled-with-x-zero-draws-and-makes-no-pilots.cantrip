@@ -1,0 +1,32 @@
+# Valor's Flagship cycled with X = 0 costs {2}{W} and the trigger creates zero tokens (CR 107.3a, 111.1): the card is drawn, nothing
+# else changes on the battlefield.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Valor's Flagship
+Mountain
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Valor's Flagship.Activate(Ability: Cycling; X: 0)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire
+Bot1.Graveyard = Valor's Flagship
+Bot1.Hand.Count = 4
