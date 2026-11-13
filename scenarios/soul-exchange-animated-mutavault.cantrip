@@ -1,0 +1,31 @@
+# Mutavault is a Thrull when exiled as a creature, although it is a land in exile (CR 608.2h).
+[Bot1 Deck]
+Black Lotus
+Entomb
+Mutavault
+Mox Pearl
+Soul Exchange
+Island x2
+Grizzly Bears
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mutavault.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mutavault.Activate(Ability: {1})
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mutavault.Types = Land; Creature
+Bot1.Hand.Soul Exchange.Cast(Grizzly Bears)
+? Bot1.Mana =
+Bot1.Choose(Mutavault)
+[T1 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 4
+Bot1.Battlefield.Grizzly Bears.Toughness = 4
