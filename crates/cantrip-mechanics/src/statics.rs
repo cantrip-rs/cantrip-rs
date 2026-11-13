@@ -251,6 +251,12 @@ pub fn creature_type_alone<const SUBTYPE: u16>(view: &dyn LayerQuery, source: Ob
     }
 }
 
+/// "... is colorless" / "... are colorless" (CR 105.2c, 613.1e, layer 5) as a static ability's `StaticDef::apply`: it has no color. Noggle the Mind,
+/// Mycosynth Lattice and Imprisoned in the Moon print it.
+pub fn colorless(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
+    chars.colors = ColorSet::NONE;
+}
+
 /// "... is a [subtype] creature" with nothing else (CR 205.1a, 613.1d, layer 4) as a static ability's `StaticDef::apply`, `SUBTYPE` a
 /// `Subtype` as `u16` (`lands::sub`): its card types are replaced by creature alone and its subtypes by that one creature type (the
 /// subtypes of the card types it loses go with them); its supertypes stay. The subtype is a word of the source's text (CR 612.2).

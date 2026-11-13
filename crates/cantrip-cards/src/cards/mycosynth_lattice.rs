@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::statics::artifact_too;
+use cantrip_mechanics::statics::{artifact_too, colorless};
 use cantrip_oracle as oracle;
 
 /// "All permanents" (CR 110.1): every permanent on the battlefield, Mycosynth Lattice itself among them. Spells and cards
@@ -12,11 +12,6 @@ fn all_permanents(_: &dyn LayerQuery, _: ObjectId, _: ObjectId, _: &Chars) -> bo
 /// in every zone of the game").
 fn everything(_: &dyn LayerQuery, _: ObjectId, _: ObjectId, _: &Chars) -> bool {
     true
-}
-
-/// "... are colorless" (CR 105.2c, 613.1e, layer 5).
-fn colorless(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
-    chars.colors = ColorSet::NONE;
 }
 
 /// "Players may spend mana as though it were mana of any color." (CR 609.4b): every player, for every payment - a spell, an

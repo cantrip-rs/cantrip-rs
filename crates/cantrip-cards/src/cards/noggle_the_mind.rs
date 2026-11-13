@@ -1,16 +1,11 @@
 use cantrip_api::*;
-use cantrip_mechanics::statics::{base_pt, creature_type_alone};
+use cantrip_mechanics::statics::{base_pt, colorless, creature_type_alone};
 use cantrip_mechanics::{attach::attached_object, lands, targets};
 use cantrip_oracle as oracle;
 
 // "Enchanted creature loses all abilities and is a colorless Noggle with base power and toughness 1/1. (It loses all
 // colors and all other creature types.)": one static ability, an effect in layers 4, 5, 6 and 7b, all at the time this Aura
 // became attached (CR 613.7e).
-
-/// "... is a colorless ..." (CR 105.3, layer 5): it has no color.
-fn colorless(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
-    chars.colors = ColorSet::NONE;
-}
 
 pub static CARD: CardDef = CardDef {
     enchant: Some(targets::CREATURE),
