@@ -1,0 +1,60 @@
+# Interface Ace (0/4) saddles Mounts using its toughness: its power 0 could not pay Caustic Bronco's Saddle 3 (CR 702.171c), its toughness 4
+# does alone, and the saddling untaps it (it was tapped during its controller's turn, CR 603.2). On turn 4, Bot2's turn, it crews
+# Reckoner Bankbuster (Crew 3, CR 702.122b) the same way, but "during your turn" does not hold there, so it stays tapped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Plains
+Interface Ace
+Caustic Bronco
+Reckoner Bankbuster
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Interface Ace.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Caustic Bronco.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Reckoner Bankbuster.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Caustic Bronco.Activate(Ability: Saddle 3)
+Bot1.Choose(Interface Ace)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Interface Ace.Tapped = false
+? Stack.Count = 1
+? Bot1.Battlefield.Caustic Bronco.Saddled = (absent)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Caustic Bronco.Saddled = true
+[T4 Bot2.Main1]
+Bot2.Pass
+Bot1.Battlefield.Reckoner Bankbuster.Activate(Ability: Crew 3)
+Bot1.Choose(Interface Ace)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Reckoner Bankbuster.Types = Artifact; Creature
+Bot1.Battlefield.Interface Ace.Tapped = true

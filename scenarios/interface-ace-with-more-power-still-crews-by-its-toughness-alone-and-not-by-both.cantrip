@@ -1,0 +1,56 @@
+# Interface Ace "crews Vehicles using its toughness rather than its power" (CR 702.122b): rather than, not as well as. S.H.I.E.L.D. Helicarrier has
+# Crew 6, with two Soldier tokens of power 1. A Rebellious Strike makes the Ace a 3/4, yet it still counts 4, not 7 or 10: alone it is refused,
+# with one Soldier it is 5, short of 6, and with both Soldiers it is exactly 6.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Plains
+Interface Ace
+S.H.I.E.L.D. Helicarrier
+Rebellious Strike
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Interface Ace.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.S.H.I.E.L.D. Helicarrier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rebellious Strike.Cast(Bot1.Battlefield.Interface Ace)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Interface Ace.Power = 3
+Bot1.Battlefield.S.H.I.E.L.D. Helicarrier.Activate(Ability: Crew 6)
+! Bot1.Choose(Interface Ace)
+! Bot1.Choose(Interface Ace; Soldier Token#1)
+Bot1.Choose(Interface Ace; Soldier Token#1; Soldier Token#2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.S.H.I.E.L.D. Helicarrier.Types = Artifact; Creature
+Bot1.Battlefield.Interface Ace.Tapped = false

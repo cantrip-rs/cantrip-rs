@@ -1,0 +1,8 @@
+{
+  "name": "Interface Ace",
+  "manaCost": "{1}{W}",
+  "type": "Artifact Creature — Robot Pilot",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": "This creature saddles Mounts and crews Vehicles using its toughness rather than its power.\nWhenever this creature becomes tapped during your turn, untap it. This ability triggers only once each turn."
+}
