@@ -1,0 +1,30 @@
+# A white-and-black legendary creature is black and receives the banding ability, allowing it to band
+# with a white legendary creature (CR 105.2, 702.22c).
+[Bot1 Deck]
+Unholy Citadel
+Amalia Benavides Aguirre
+Isamaru, Hound of Konda
+Black Lotus
+Mox Pearl x2
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Unholy Citadel.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Amalia Benavides Aguirre.Cast
+? Bot1.Mana = {B}{B}
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Amalia Benavides Aguirre > Bot2; Isamaru, Hound of Konda > Bot2)
+Bot1.Choose(Isamaru, Hound of Konda)
+[T3 Bot1.Blockers]
+? Combat.Attackers = Amalia Benavides Aguirre > Bot2 (band 1); Isamaru, Hound of Konda > Bot2 (band 1)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 16

@@ -1,0 +1,37 @@
+# The opponent's black legend does not gain the Citadel's ability: when it and another legend block,
+# the attacker controls combat damage assignment (CR 702.22j).
+[Bot1 Deck]
+Unholy Citadel
+Black Lotus
+Mox Emerald
+Ulvenwald Oddity
+Island x20
+[Bot2 Deck]
+Arnyn, Deathbloom Botanist
+Isamaru, Hound of Konda
+Black Lotus
+Mox Pearl
+Island x20
+[Actions]
+Bot1.Hand.Unholy Citadel.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Arnyn, Deathbloom Botanist.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Isamaru, Hound of Konda.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ulvenwald Oddity.Cast
+Bot1.Attack(Ulvenwald Oddity > Bot2)
+Bot2.Block(Arnyn, Deathbloom Botanist > Ulvenwald Oddity; Isamaru, Hound of Konda > Ulvenwald Oddity)
+[T3 Bot1.Blockers]
+Bot1.AssignDamage(Ulvenwald Oddity > Arnyn, Deathbloom Botanist: 4)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Isamaru, Hound of Konda.Damage = 0
+Bot2.Graveyard = Arnyn, Deathbloom Botanist; Black Lotus
