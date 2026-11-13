@@ -9,7 +9,7 @@
 
 use crate::library::{ask_may_search, find_to_battlefield, find_to_hand, find_to_top, search_to_battlefield, Find};
 use crate::select;
-use crate::{choose, effects, mana, triggers};
+use crate::{choose, effects, mana, tokens, triggers};
 use cantrip_api::*;
 
 /// "A basic land card" (CR 205.4a, 305.6): a land card with the basic supertype, as the library search of every fetch below
@@ -139,6 +139,18 @@ pub fn enters_tapped_unless_you_control_basic_land(g: &mut dyn Game, entering: &
     Ok(())
 }
 
+/// A Roads land's two abilities: "{T}: Add {A}." (`add_text` is its full text) and "{1}{A}, {T}, Sacrifice this land: Create a 1/1
+/// colorless Pilot creature token with \"This token saddles Mounts and crews Vehicles as though its power were 2 greater.\"
+/// Activate only as a sorcery." (CR 602.5d; `cost` is the mana part, `text` the full text). With `enters:
+/// Some(enters_tapped_unless_you_control_either::<{ sub(Subtype::Mount) }, { sub(Subtype::Vehicle) }>)` it is Country Roads,
+/// Foul Roads, Reef Roads, Rocky Roads and Wild Roads. The card file lists the Pilot in its `EXTRA`.
+pub const fn roads_land(a: Mana, add_text: &'static str, cost: Cost, text: &'static str) -> [AbilityDef; 2] {
+    [
+        mana_ability(TAP, add(a), add_text),
+        ability(cost.and(TAP).and(SACRIFICE_THIS), tokens::create_a_pilot, text).sorcery_speed(),
+    ]
+}
+
 /// "This land enters tapped unless you control two or more basic lands" (CR 614.12, 614.1d, 205.4c): the supertype, not a land
 /// type, read on the battlefield as it is while the land enters, so the land itself - and any land entering at the same time,
 /// which the core leaves out as not yet on the battlefield - is not counted; `became.is_none()` drops the objects that already
@@ -185,8 +197,9 @@ pub fn enters_tapped_unless_two_or_more_opponents(g: &mut dyn Game, entering: &m
 }
 
 /// "This land enters tapped unless you control a [land type] or a [land type]" (CR 614.1d, 614.12): as `enters_tapped_unless_you_control`
-/// with two land types, each read through the layers and the land's words (CR 612.2). Cori Mountain Monastery (Plains or
-/// Island) and Mistrise Village (Mountain or Forest) print it.
+/// with two subtypes, each read through the layers and the land's words (CR 612.2). Cori Mountain Monastery (Plains or
+/// Island) and Mistrise Village (Mountain or Forest) print it, and the five Roads lands with a creature type and an artifact
+/// type ("unless you control a Mount or Vehicle").
 pub fn enters_tapped_unless_you_control_either<const A: u16, const B: u16>(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
     let (a, b) = (word(g, entering.object, A), word(g, entering.object, B));
     if !controls_land_type(g, entering.controller, a) && !controls_land_type(g, entering.controller, b) {
