@@ -817,6 +817,12 @@ pub fn creatures_you_control(q: &dyn Query, player: PlayerId) -> usize {
     q.permanents_of(player).into_iter().filter(|&id| q.chars(id).is(CardType::Creature)).count()
 }
 
+/// "The number of attacking creatures" (CR 508.1k, 611.2c): every creature attacking right now, whoever controls it, counted as
+/// the ability resolves. Marshal of the Lost and Raffine, Scheming Seer count it for their triggers, Jazal Goldmane for its pump.
+pub fn attacking_creatures(q: &dyn Query) -> usize {
+    q.state().battlefield().iter().filter(|&&id| q.is_attacking(id) && q.chars(id).is(CardType::Creature)).count()
+}
+
 /// "The number of [subtype]s [player] controls" (CR 205.3, 109.4): every permanent of that subtype they control, read through
 /// the layers, so a changeling counts for each creature type. Beorn the Fierce's Bears, The Notary Hobbits' Halflings and Gloom Ripper's Elves
 /// are such counts.
