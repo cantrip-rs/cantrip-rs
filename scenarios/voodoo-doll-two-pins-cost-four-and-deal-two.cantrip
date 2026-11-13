@@ -1,0 +1,56 @@
+# With two pin counters each X in the cost is two, so activation spends four mana and deals two damage (CR 107.3, 120.3a).
+
+[Bot1 Deck]
+Voodoo Doll
+Black Lotus
+Black Lotus
+Sol Ring
+Sol Ring
+Swamp
+Mox Pearl
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Voodoo Doll.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Voodoo Doll.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Voodoo Doll.Activate(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Voodoo Doll.Counters.Pin = 2
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Voodoo Doll.Activate(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Voodoo Doll.Tapped = true
