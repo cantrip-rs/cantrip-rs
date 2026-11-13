@@ -1,0 +1,37 @@
+# The Citadel gives its controller's black legendary creature bands with other legendary creatures:
+# Arnyn bands with Isamaru but cannot include a nonlegendary Ornithopter (CR 702.22c).
+[Bot1 Deck]
+Unholy Citadel
+Arnyn, Deathbloom Botanist
+Isamaru, Hound of Konda
+Black Lotus
+Mox Pearl
+Ornithopter
+Island x20
+[Bot2 Deck]
+Arnyn, Deathbloom Botanist
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Unholy Citadel.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Arnyn, Deathbloom Botanist.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Arnyn, Deathbloom Botanist.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Arnyn, Deathbloom Botanist > Bot2; Isamaru, Hound of Konda > Bot2; Ornithopter > Bot2)
+! Bot1.Choose(Ornithopter)
+Bot1.Choose(Isamaru, Hound of Konda)
+[T3 Bot1.Blockers]
+? Combat.Attackers = Arnyn, Deathbloom Botanist > Bot2 (band 1); Isamaru, Hound of Konda > Bot2 (band 1); Ornithopter > Bot2
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 16
