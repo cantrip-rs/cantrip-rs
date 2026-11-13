@@ -805,6 +805,18 @@ pub fn draw(g: &mut dyn Game, item: &StackItem, n: u32) -> Result<(), Suspend> {
     Ok(())
 }
 
+const PAY_TO_DRAW: Question = Question::new("DrawCard", "pay {cost} to draw a card?", "", "Pay {cost}", "Don't pay");
+
+/// "You may pay [cost]. If you do, draw a card." (CR 608.2d, 118.12, 121.1) as the ability resolves: its controller is asked
+/// whether to pay `payment`, and draws one card only if they did. Venus, Torn Between Worlds ({U}), Uhura, Xenolinguist and Mentor
+/// of the Meek ({1}) print it.
+pub fn may_pay_to_draw(g: &mut dyn Game, item: &StackItem, payment: Cost) -> Result<(), Suspend> {
+    if g.may_pay(item.controller, item.object, item.object, payment, &PAY_TO_DRAW)? {
+        draw(g, item, 1)?;
+    }
+    Ok(())
+}
+
 /// "You gain LIFE life and draw CARDS card(s)" (CR 119.3, 121.1): the controller gains the life, then draws. Candy Trail and
 /// Chevill, Bane of Monsters print it with 3 life and a card, Inspiring Overseer with 1 life and a card.
 pub fn gain_life_then_draw<const LIFE: i32, const CARDS: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {

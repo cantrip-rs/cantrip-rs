@@ -1864,6 +1864,17 @@ pub fn creature_with_power_four_or_more_you_control_enters(q: &dyn Query, me: &A
     if q.chars(*new).power.is_some_and(|p| p >= 4) { Fired::PLAIN } else { None }
 }
 
+/// "Whenever another creature you control with power `MIN` or greater and `MAX` or less enters" (CR 603.6a): a creature other than this
+/// permanent, under your control as it entered, whose power as it is on the battlefield is within the bounds (inclusive). The static
+/// abilities that apply to it, the counters it entered with and what it entered as a copy of all count, and once triggered a later
+/// change to its power does not matter (the rulings on Mentor of the Meek). "Power 4 or greater" is `<4, { i32::MAX }>`, "power 2 or
+/// less" `<{ i32::MIN }, 2>`. Outcaster Trailblazer (4 or greater) and Mentor of the Meek (2 or less) print it.
+pub fn another_creature_you_control_with_power_between_enters<const MIN: i32, const MAX: i32>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    let fired = another_creature_you_control_enters(q, me, event)?;
+    let Target::Object(creature) = fired.subject else { return None };
+    q.chars(creature).power.is_some_and(|p| (MIN..=MAX).contains(&p)).then_some(fired)
+}
+
 /// "Whenever a legendary creature you control enters" (CR 603.6a): any legendary creature, this one included, under your
 /// control as it entered. The Irencrag and Tinybones Joins Up print it.
 pub fn legendary_creature_you_control_enters(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {

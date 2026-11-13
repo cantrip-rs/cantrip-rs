@@ -1,21 +1,12 @@
 use cantrip_api::*;
+use cantrip_mechanics::effects;
 use cantrip_mechanics::triggers::{self, creature_you_control_with_a_counter_deals_combat_damage_to_player};
 use cantrip_oracle as oracle;
-
-const DRAW: Question = Question::new("DrawCard", "pay {cost} to draw a card?", "", "Pay {cost}", "Don't pay");
 
 /// "Put that many +1/+1 counters on her" (CR 120.2, 122.1): the damage dealt at once, the trigger's `event_amount`. Venus must have
 /// survived it (the reminder text, CR 400.7): the ability's source that has left the battlefield is another object and gets none.
 fn counters_for_the_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.add_counters(item.object, CounterKind::PlusOne, item.matched_damage_amount() as i32);
-    Ok(())
-}
-
-/// "You may pay {U}. If you do, draw a card." (CR 118.12, 608.2d): the controller of the ability pays and draws.
-fn pay_to_draw(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if g.may_pay(item.controller, item.object, item.object, cost("{U}"), &DRAW)? {
-        g.draw(item.controller, 1);
-    }
     Ok(())
 }
 
@@ -29,7 +20,7 @@ pub static CARD: CardDef = CardDef {
         .sums_per_subject(),
         triggered(
             when_asked(EventMask::DAMAGE, creature_you_control_with_a_counter_deals_combat_damage_to_player),
-            pay_to_draw,
+            |g, item| effects::may_pay_to_draw(g, item, cost("{U}")),
             "Whenever a creature you control with a counter on it deals combat damage to a player, you may pay {U}. If you do, draw a card.",
         ),
     ],

@@ -19,22 +19,10 @@ fn non_human_creature_enters(q: &dyn Query, me: &Asker, event: &Event) -> Option
     }
 }
 
-const PAY_TO_DRAW: Question =
-    Question::new("DrawCard", "pay {cost} to draw a card?", "", "Pay {cost}", "Don't pay");
-
-/// "you may pay {1}. If you do, draw a card." (CR 608.2d, 118.12): its controller is asked as the ability resolves, and
-/// draws only if they paid.
-fn pay_1_to_draw(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if g.may_pay(item.controller, item.object, item.object, cost("{1}"), &PAY_TO_DRAW)? {
-        effects::draw(g, item, 1)?;
-    }
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
         when_asked(EventMask::ZONE_CHANGE, non_human_creature_enters),
-        pay_1_to_draw,
+        |g, item| effects::may_pay_to_draw(g, item, cost("{1}")),
         "Whenever a non-Human creature enters, you may pay {1}. If you do, draw a card.",
     )],
     ..oracle::UHURA_XENOLINGUIST
