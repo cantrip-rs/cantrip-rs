@@ -1,0 +1,60 @@
+# Claws Out: "Affinity for Cats" (CR 702.41a) costs {1} less for each Cat you control, and "creatures you control get +2/+2 until
+# end of turn". Bot1's Prideful Parent (a Cat Beast) makes a Cat token on turn 1, so Claws Out ({3}{W}{W}) would cost {1}{W}{W}
+# with two Cats: with only Mox Pearl and Mox Sapphire untapped the cast is refused. Ajani's Pridemate (a Cat Soldier) makes three
+# Cats, and on turn 3 the cast with {W}{W} alone (Mox Sapphire stays untapped) is accepted. The three attackers hit for
+# 4 + 3 + 4 = 11 (the Cat token is 1/1) and Bot2's Memnite, which is not Bot1's creature, is not pumped.
+
+[Bot1 Deck]
+Black Lotus
+Prideful Parent
+Mox Pearl
+Mox Sapphire
+Ajani's Pridemate
+Claws Out
+Plains
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Prideful Parent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Cat Token; Mox Pearl; Mox Sapphire; Prideful Parent
+! Bot1.Hand.Claws Out.Cast(Mana: short)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ajani's Pridemate.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Prideful Parent > Bot2; Cat Token > Bot2; Ajani's Pridemate > Bot2)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Claws Out.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Sapphire.Tapped = false
+? Bot1.Battlefield.Prideful Parent.Power = 4
+? Bot1.Battlefield.Cat Token.Power = 3
+? Bot1.Battlefield.Ajani's Pridemate.Power = 4
+? Bot2.Battlefield.Memnite.Power = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 9
+Bot1.Graveyard = Claws Out; Black Lotus
