@@ -394,6 +394,12 @@ pub fn have_flying_and_vigilance(_: &dyn LayerQuery, _: ObjectId, chars: &mut Ch
     chars.keywords = chars.keywords.with(Keyword::Flying).with(Keyword::Vigilance);
 }
 
+/// "... has flying and first strike" (CR 702.9, 702.7, layer 6) as a static ability's `StaticDef::apply`: both in the one
+/// layer-6 effect. Wings of Aesthir, Wedgelight Rammer's 9+ striation and Angelic Destiny print it.
+pub fn have_flying_and_first_strike(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
+    chars.keywords = chars.keywords.with(Keyword::Flying).with(Keyword::FirstStrike);
+}
+
 /// "... has flying and haste" (CR 702.9, 702.10, layer 6). Detective's Phoenix and Whiplash Wordsmith print it.
 pub fn have_flying_and_haste(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
     chars.keywords = chars.keywords.with(Keyword::Flying).with(Keyword::Haste);
