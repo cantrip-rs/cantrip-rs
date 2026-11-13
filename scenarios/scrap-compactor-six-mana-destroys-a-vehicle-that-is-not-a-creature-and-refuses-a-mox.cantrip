@@ -1,0 +1,63 @@
+# Scrap Compactor: "{6}, {T}, Sacrifice this artifact: Destroy target creature or Vehicle." Bot2's uncrewed Skybox Ferry
+# is no creature, so the 3-damage ability refuses it, while the six-mana ability destroys it; Bot2's Mox Jet is neither a
+# creature nor a Vehicle and is refused. Bot1's four Moxen and Sol Ring (two) pay exactly six, the pool empty after.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Scrap Compactor
+Mox Sapphire
+Mox Emerald
+Sol Ring
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Skybox Ferry
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Scrap Compactor.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Skybox Ferry.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Scrap Compactor.Activate(Ability: 3 damage; Bot2.Battlefield.Skybox Ferry)
+! Bot1.Battlefield.Scrap Compactor.Activate(Ability: Destroy; Bot2.Battlefield.Mox Jet)
+Bot1.Battlefield.Scrap Compactor.Activate(Ability: Destroy; Bot2.Battlefield.Skybox Ferry)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Scrap Compactor
+Bot2.Graveyard = Skybox Ferry
+Bot2.Battlefield = Mox Ruby; Mox Jet; Mox Pearl; Mox Sapphire; Mox Emerald

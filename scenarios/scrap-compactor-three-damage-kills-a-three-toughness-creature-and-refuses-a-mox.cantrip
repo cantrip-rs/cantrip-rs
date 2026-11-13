@@ -1,0 +1,54 @@
+# Scrap Compactor: "{3}, {T}, Sacrifice this artifact: It deals 3 damage to target creature." Turn 1 Bot1 casts it with
+# one Mox. Turn 2 Bot2 casts Hill Giant (3/3). Turn 3 the ability is refused at Bot2's Mox Jet (not a creature), then
+# with exactly {3} paid (the pool empty right after) it deals 3 to the Giant, which dies, the Compactor sacrificed as a cost.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Scrap Compactor
+Mox Sapphire
+Mox Emerald
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Hill Giant
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Scrap Compactor.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Hill Giant.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Scrap Compactor.Activate(Ability: 3 damage; Bot2.Battlefield.Mox Jet)
+Bot1.Battlefield.Scrap Compactor.Activate(Ability: 3 damage; Bot2.Battlefield.Hill Giant)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Mox Sapphire; Mox Emerald
+Bot1.Graveyard = Scrap Compactor
+Bot2.Graveyard = Hill Giant
+Bot2.Battlefield = Mox Ruby; Mox Jet; Mox Pearl; Mox Sapphire
