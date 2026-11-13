@@ -1,0 +1,65 @@
+# March of the World Ooze, {3}{G}{G}{G}: "Creatures you control have base power and toughness 6/6 and are Oozes in addition to their other
+# types." Bot1 casts it on turn 1 with Black Lotus and three Moxen: its Memnite and Ornithopter (1/1 and 0/2 artifact creatures) become 6/6
+# Oozes that keep their types and Ornithopter its flying, while Mox Emerald, no creature, is untouched. Bot2's Phyrexian Walker, cast on turn 2, is
+# still a 0/3 Construct. On turn 3 a Giant Growth on Bot1's Memnite makes it 9/9: the +3/+3 applies to the base 6/6 (CR 613.4). Bot2
+# casting a spell on its own turn 2 or Bot1 casting on its own turn 3 does not trigger the Elephant: "not their turn" means the
+# caster's own turn. Bot1 has no Elephant token at the end.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+March of the World Ooze
+Memnite
+Ornithopter
+Giant Growth
+Island x13
+
+[Bot2 Deck]
+Phyrexian Walker
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.March of the World Ooze.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 6
+? Bot1.Battlefield.Memnite.Toughness = 6
+? Bot1.Battlefield.Memnite.Subtypes = Construct; Ooze
+? Bot1.Battlefield.Memnite.Types = Artifact; Creature
+? Bot1.Battlefield.Ornithopter.Power = 6
+? Bot1.Battlefield.Ornithopter.Toughness = 6
+? Bot1.Battlefield.Ornithopter.Subtypes = Ooze; Thopter
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+? Bot1.Battlefield.Mox Emerald.Subtypes = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Phyrexian Walker.Power = 0
+? Bot2.Battlefield.Phyrexian Walker.Toughness = 3
+? Bot2.Battlefield.Phyrexian Walker.Subtypes = Construct; Phyrexian
+? Bot1.Battlefield.Elephant Token = (absent)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 9
+? Bot1.Battlefield.Memnite.Toughness = 9
+? Bot1.Battlefield.Ornithopter.Power = 6
+
+[Expect]
+Bot1.Battlefield.Elephant Token = (absent)
+Bot2.Battlefield.Phyrexian Walker.Power = 0

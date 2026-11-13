@@ -1,0 +1,63 @@
+# March of the World Ooze, the other player's side: Bot2 controls it. Bot1 casts a Phyrexian Walker on its own turn 1 (no March yet). On Bot2's turn 2 Bot2
+# casts March (Black Lotus and three Moxen) and then a Memnite: casting on its own turn gives no Elephant, and Bot2's creatures are 6/6 Oozes
+# while Bot1's Walker is still a 0/3. Bot1 then casts Lightning Bolt at Bot2 on Bot2's turn: "not their turn" is true for Bot1, so Bot2, March's
+# controller, creates a 3/3 Elephant that March makes a 6/6 Ooze, and Bot1 gets nothing. Casting the Bolt in response to March itself would not have
+# triggered it: March is not yet on the battlefield (CR 603.2 only looks at permanents that were there when the spell was cast).
+
+[Bot1 Deck]
+Mox Ruby
+Phyrexian Walker
+Lightning Bolt
+Island x4
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+March of the World Ooze
+Memnite
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.March of the World Ooze.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Memnite.Power = 6
+? Bot2.Battlefield.Memnite.Subtypes = Construct; Ooze
+? Bot2.Battlefield.Elephant Token = (absent)
+? Bot1.Battlefield.Phyrexian Walker.Power = 0
+? Bot1.Battlefield.Phyrexian Walker.Subtypes = Construct; Phyrexian
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Elephant Token.Power = 6
+? Bot2.Battlefield.Elephant Token.Toughness = 6
+? Bot2.Battlefield.Elephant Token.Subtypes = Elephant; Ooze
+? Bot2.Life = 20
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+
+[Expect]
+Bot1.Battlefield.Elephant Token = (absent)
+Bot1.Battlefield.Phyrexian Walker.Toughness = 3

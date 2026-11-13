@@ -1,0 +1,65 @@
+# March of the World Ooze: "Whenever an opponent casts a spell, if it's not their turn, you create a 3/3 green Elephant creature token." Bot1
+# casts March on turn 1 (Black Lotus and three Moxen) and has a Memnite. Bot2 casts a Phyrexian Walker on its own turn 2: it is that player's turn,
+# so no Elephant. On turn 3 Bot1 casts a Giant Growth on its Memnite and Bot2 responds with a Lightning Bolt at Bot1: a spell cast by an opponent on
+# a turn that is not its own, so Bot1 creates an Elephant, which March makes a 6/6 Ooze like the other creatures it controls (the token's printed 3/3 is
+# replaced by the base 6/6, CR 613.4b). The Elephant resolves first (the trigger is above the Bolt), then the Bolt (Bot1 at 17) and the Giant Growth.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+March of the World Ooze
+Memnite
+Island
+Giant Growth
+Island x13
+
+[Bot2 Deck]
+Phyrexian Walker
+Mox Ruby
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.March of the World Ooze.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Elephant Token = (absent)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Memnite)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Elephant Token.Power = 6
+? Bot1.Battlefield.Elephant Token.Toughness = 6
+? Bot1.Battlefield.Elephant Token.Subtypes = Elephant; Ooze
+? Bot1.Battlefield.Elephant Token.Colors = Green
+? Bot1.Life = 20
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Memnite.Power = 9
+
+[Expect]
+Bot1.Battlefield.Elephant Token#2 = (absent)
+Bot2.Battlefield.Phyrexian Walker.Power = 0
