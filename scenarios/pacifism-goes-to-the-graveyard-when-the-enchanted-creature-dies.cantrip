@@ -1,0 +1,45 @@
+# Pacifism ("Enchant creature"): on turn 3 Bot1 enchants Bot2's Savannah Lions, then kills it with Lightning Bolt. Once the
+# Lions is in the graveyard Pacifism is attached to nothing and is put into its owner's graveyard as a state-based action
+# (CR 303.4c, 704.5m); it does not stay on the battlefield waiting for another creature.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Pacifism
+Lightning Bolt
+Plains x15
+
+[Bot2 Deck]
+Plains
+Savannah Lions
+Plains x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pacifism.Cast(Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pacifism.AttachedTo = Savannah Lions
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Graveyard = Savannah Lions
+Bot2.Battlefield.Savannah Lions = (absent)
+Bot1.Battlefield.Pacifism = (absent)
+Bot1.Graveyard.Count = 2
+Bot1.Graveyard.Pacifism.Colors = White
