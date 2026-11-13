@@ -379,6 +379,13 @@ pub fn pump_other_creatures_you_control_and_gain(g: &mut dyn Game, item: &StackI
     });
 }
 
+/// "Other creatures you control get +`P`/+`T` until end of turn" as a triggered ability's or chapter's whole effect:
+/// `pump_other_creatures_you_control` (CR 611.2, 611.2c). Restless Prairie, Summon: Choco/Mog and Syr Alin print it.
+pub fn other_creatures_you_control_get<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    pump_other_creatures_you_control(g, item, P, T);
+    Ok(())
+}
+
 /// "Creatures you control gain [keywords] until end of turn" (CR 611.2, 611.2c, 702): the creatures `item`'s controller controls
 /// as it resolves, and no creature that enters later. Bitter Reunion and Ingris Stingerquill print it with haste, Deafening
 /// Clarion with lifelink, Spectacular Spider-Man and Invasion of Gobakhan with hexproof and indestructible, and The Wind
