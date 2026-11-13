@@ -1,0 +1,45 @@
+# Icewind Elemental: "Flying. When this creature enters, draw a card, then discard a card." It enters with Black Lotus's blue and
+# two Moxen paying {4}{U}; Bot1 draws the Forest first and then discards the Plains from its hand (CR 701.9a, 608.2c): the card
+# drawn is not the one discarded, so the discard is the player's choice among the cards in hand after the draw.
+
+[Bot1 Deck]
+Black Lotus
+Icewind Elemental
+Mox Jet
+Mox Pearl
+Island
+Plains
+Mountain
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Icewind Elemental.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose()
+Bot1.Choose(Plains)
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Plains; Black Lotus
+Bot1.Hand = Forest; Island; Mountain
+Bot1.Battlefield.Icewind Elemental.Keywords = Flying
+Bot1.Battlefield.Icewind Elemental.Power = 3
+Bot1.Battlefield.Icewind Elemental.Toughness = 4

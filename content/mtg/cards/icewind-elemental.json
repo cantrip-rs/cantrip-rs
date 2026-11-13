@@ -1,0 +1,11 @@
+{
+  "name": "Icewind Elemental",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Elemental",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flying\nWhen this creature enters, draw a card, then discard a card.",
+  "keywords": [
+    "Flying"
+  ]
+}
