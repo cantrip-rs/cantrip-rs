@@ -1,0 +1,49 @@
+# Deadly Riposte: "3 damage to target tapped creature and you gain 2 life." Bot2 attacks on turn 4 with its Armored Warhorse (2/3,
+# tapped by attacking) and keeps its Ornithopter (untapped) home: the untapped Ornithopter is refused, the tapped Warhorse
+# dies of exactly 3 damage (CR 120.3, 704.5g) and Bot1 gains 2 (20 + 2: the Warhorse never deals damage). Cost {1}{W}: three
+# mana in the pool, {W} left right after the cast (CR 601.2f).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Deadly Riposte
+Plains x17
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Armored Warhorse
+Ornithopter
+Plains x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Armored Warhorse.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Armored Warhorse > Bot1)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Deadly Riposte.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Hand.Deadly Riposte.Cast(Bot2.Battlefield.Armored Warhorse)
+? Bot1.Mana = {W}
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 4
+Bot1.Graveyard = Deadly Riposte
+Bot1.Life = 22
+Bot2.Graveyard = Armored Warhorse; Black Lotus
+Bot2.Battlefield.Ornithopter.Tapped = false
