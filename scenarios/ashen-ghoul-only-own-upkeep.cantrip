@@ -1,0 +1,61 @@
+# With three creatures above it, white mana cannot pay Ashen Ghoul’s black activation cost; a black mana pays it (CR 602.5).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Entomb
+Entomb
+Entomb
+Entomb
+Swamp
+Ashen Ghoul
+Grizzly Bears
+Llanowar Elves
+Elvish Mystic
+Swamp x15
+[Bot2 Deck]
+Swamp
+Entomb
+Island x6
+Ashen Ghoul
+Island x15
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Ashen Ghoul)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Llanowar Elves)
+! Bot1.Graveyard.Ashen Ghoul.Activate
+[T2 Bot2.Upkeep]
+! Bot1.Graveyard.Ashen Ghoul.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Ashen Ghoul)
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Elvish Mystic)
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Graveyard.Ashen Ghoul.Activate(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Graveyard.Ashen Ghoul.Activate
+? Bot1.Mana =
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Ashen Ghoul > Bot2)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Ashen Ghoul.Power = 3
+Bot2.Life = 17
+Bot2.Graveyard.Ashen Ghoul.Power = 3
