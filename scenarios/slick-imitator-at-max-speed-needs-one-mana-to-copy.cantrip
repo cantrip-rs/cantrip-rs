@@ -1,0 +1,63 @@
+# Slick Imitator's "{1}, Sacrifice this creature" costs one mana besides the sacrifice (CR 118.3, 602.2b). Bot1 reaches speed 4
+# with Lightning Bolts on turns 1, 3 and 5. On turn 5 its Mox Ruby is tapped in the upkeep, whose mana empties unused, so with
+# both Mountains spent on the turn's two Bolts nothing is left for {1}: the ability is not offered against the second Bolt,
+# and the Imitator stays on the battlefield.
+
+[Bot1 Deck]
+Mountain
+Mountain
+Black Lotus
+Slick Imitator
+Lightning Bolt
+Lightning Bolt
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain x13
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Slick Imitator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Mox Ruby.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+! Bot1.Battlefield.Slick Imitator.Activate(Stack.Lightning Bolt; Mana: short)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 8
+Bot1.Battlefield = Mountain; Mountain; Mox Ruby; Slick Imitator
+Bot1.Battlefield.Mox Ruby.Tapped = true

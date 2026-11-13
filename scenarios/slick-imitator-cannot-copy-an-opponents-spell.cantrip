@@ -1,0 +1,67 @@
+# "Copy target spell you control" (CR 115.1, 109.5): at max speed the Imitator's ability is not offered for an opponent's spell
+# on the stack. Bot1 reaches speed 4 with Lightning Bolts on turns 1, 3 and 5; on turn 6 Bot2 casts Llanowar Elves and Bot1,
+# with an untapped Mox Ruby for {1}, is still not offered the ability against it.
+
+[Bot1 Deck]
+Mountain
+Mountain
+Black Lotus
+Slick Imitator
+Lightning Bolt
+Mox Ruby
+Mountain
+Lightning Bolt
+Lightning Bolt
+Mountain x13
+
+[Bot2 Deck]
+Forest
+Forest
+Llanowar Elves
+Forest x17
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Slick Imitator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+[T6 Bot2.Main1]
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+! Bot1.Battlefield.Slick Imitator.Activate(Stack.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+[Bot2.Main2]
+
+[Expect]
+Bot2.Battlefield = Forest; Forest; Llanowar Elves
+Bot1.Battlefield = Mountain; Mountain; Mox Ruby; Slick Imitator

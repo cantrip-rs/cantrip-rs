@@ -1,0 +1,64 @@
+# Slick Imitator at max speed copies a creature spell (CR 707.10): the copy of Memnite is a token (CR 608.3f) that enters
+# the battlefield alongside the real Memnite. Bot1 reaches speed 4 with Lightning Bolts on turns 1, 3 and 5, then casts Memnite
+# on turn 5 and sacrifices the Imitator to copy it.
+
+[Bot1 Deck]
+Mountain
+Mountain
+Black Lotus
+Slick Imitator
+Lightning Bolt
+Memnite
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain x13
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Slick Imitator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Slick Imitator.Activate(Stack.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Memnite; Memnite; Mountain; Mountain; Mox Ruby
+Bot1.Battlefield.Memnite#1.Token = true
+Bot1.Graveyard = Slick Imitator; Lightning Bolt; Lightning Bolt; Lightning Bolt; Black Lotus
