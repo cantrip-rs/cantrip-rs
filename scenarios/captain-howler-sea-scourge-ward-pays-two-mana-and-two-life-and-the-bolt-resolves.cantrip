@@ -1,0 +1,44 @@
+# Captain Howler's Ward--{2}, Pay 2 life: Bot2's Lightning Bolt aimed at it asks for both, and Bot2 pays {2} from two
+# Moxen and 2 life, so the Bolt resolves for 3 damage (Howler is 5/4 and survives).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Captain Howler, Sea Scourge
+Island x4
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mox Emerald
+Mox Sapphire
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Captain Howler, Sea Scourge.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Captain Howler, Sea Scourge)
+Bot2.PayCost
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+? Bot2.Mana = 
+
+[Expect]
+Bot2.Life = 18
+Bot2.Mana = 
+Bot1.Battlefield.Captain Howler, Sea Scourge.Damage = 3
+Bot2.Graveyard = Lightning Bolt

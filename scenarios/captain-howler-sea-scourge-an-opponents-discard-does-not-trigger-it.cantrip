@@ -1,0 +1,36 @@
+# "Whenever you discard": Bot2 cycles Miscalculation on its own turn and Bot1's Howler is not pumped. Bot1's own discard is
+# in the other scenarios.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Captain Howler, Sea Scourge
+Island x4
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Miscalculation
+Mountain
+Mountain x4
+Mountain x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Captain Howler, Sea Scourge.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Miscalculation.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+[T2 Bot2.Main2]
+? Bot1.Battlefield.Captain Howler, Sea Scourge.Power = 5
+? Bot2.Graveyard = Miscalculation
+
+[Expect]
+Bot1.Battlefield.Captain Howler, Sea Scourge.Power = 5
+Bot2.Graveyard = Miscalculation

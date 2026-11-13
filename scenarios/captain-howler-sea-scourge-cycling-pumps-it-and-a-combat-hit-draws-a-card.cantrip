@@ -1,0 +1,37 @@
+# Captain Howler, Sea Scourge (5/4) comes down on turn 1 from a Black Lotus and a Mox Ruby. On turn 3 Bot1 cycles
+# Miscalculation for {2}: the one discarded card makes the trigger give Howler +2/+0, and when Howler then deals combat
+# damage to Bot2 this turn Bot1 draws a card.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Captain Howler, Sea Scourge
+Miscalculation
+Black Lotus
+Island x4
+Island x14
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Captain Howler, Sea Scourge.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Miscalculation.Activate
+Bot1.Attack(Captain Howler, Sea Scourge > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Captain Howler, Sea Scourge.Power = 7
+? Bot2.Life = 13
+? Bot1.Hand.Count = 5
+
+[Expect]
+Bot1.Battlefield.Captain Howler, Sea Scourge.Power = 7
+Bot1.Battlefield.Captain Howler, Sea Scourge.Toughness = 4
+Bot2.Life = 13
+Bot1.Hand.Count = 5
