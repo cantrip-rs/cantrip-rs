@@ -1,0 +1,74 @@
+# Canyon Vaulter (3/1): "Whenever this creature saddles a Mount or crews a Vehicle during your main phase, that Mount or Vehicle gains flying until end of turn" (CR 702.122b,
+# 505.1, 603.2). Reckoner Bankbuster (Crew 3, no flying): turn 5 Savannah Lions and Mother of Runes crew it, not the Vaulter, so nothing happens; turn 6 the Vaulter crews it in Bot2's main phase, which is not its controller's, and nothing happens; turn 7 the Vaulter alone crews
+# it in the main phase and it gains flying; turn 9 the Vaulter crews it at the beginning of combat, which is no main phase, and it does not.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Canyon Vaulter
+Savannah Lions
+Plains
+Mother of Runes
+Reckoner Bankbuster
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Canyon Vaulter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Mother of Runes.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Reckoner Bankbuster.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Reckoner Bankbuster.Activate(Ability: Crew 3)
+Bot1.Choose(Savannah Lions; Mother of Runes)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Reckoner Bankbuster.Keywords = (absent)
+[T6 Bot2.Main1]
+Bot2.Pass
+Bot1.Battlefield.Reckoner Bankbuster.Activate(Ability: Crew 3)
+Bot1.Choose(Canyon Vaulter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Reckoner Bankbuster.Keywords = (absent)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Reckoner Bankbuster.Activate(Ability: Crew 3)
+Bot1.Choose(Canyon Vaulter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Reckoner Bankbuster.Keywords = Flying
+[T9 Bot1.BeginCombat]
+Bot1.Battlefield.Reckoner Bankbuster.Activate(Ability: Crew 3)
+Bot1.Choose(Canyon Vaulter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Reckoner Bankbuster.Keywords = (absent)
+Bot1.Battlefield.Reckoner Bankbuster.Power = 4
+Bot1.Battlefield.Canyon Vaulter.Tapped = true

@@ -1,0 +1,8 @@
+{
+  "name": "Canyon Vaulter",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Kor Pilot",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Whenever this creature saddles a Mount or crews a Vehicle during your main phase, that Mount or Vehicle gains flying until end of turn."
+}
