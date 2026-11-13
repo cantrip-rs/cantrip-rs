@@ -1,0 +1,52 @@
+# Trade the Helm: "Exchange control of target artifact or creature you control and target artifact or creature an opponent
+# controls." (CR 701.12). Bot1's Ornithopter goes to Bot2 and Bot2's Llanowar Elves comes to Bot1; ownership is unchanged. A land
+# (Bot2's Island) is refused as the opponent's target, and so is Bot1's own Mox Jet: the second target must be an opponent's.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Ornithopter
+Trade the Helm
+Island x13
+
+[Bot2 Deck]
+Mox Emerald
+Island
+Llanowar Elves
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Trade the Helm.Cast(Bot1.Battlefield.Ornithopter; Bot2.Battlefield.Island)
+! Bot1.Hand.Trade the Helm.Cast(Bot1.Battlefield.Ornithopter; Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Trade the Helm.Cast
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Llanowar Elves; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot2.Battlefield = Island; Mox Emerald; Ornithopter
+Bot1.Graveyard = Trade the Helm
