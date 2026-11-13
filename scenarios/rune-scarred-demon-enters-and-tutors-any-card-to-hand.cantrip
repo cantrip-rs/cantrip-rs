@@ -1,0 +1,39 @@
+# Rune-Scarred Demon (CR 702.9, 701.23, 701.24): a 6/6 flyer whose enters trigger searches the library for any card (a Lightning
+# Bolt, not a land or creature), puts it into hand, then shuffles. Black Lotus {B}{B}{B} and four Moxen pay {5}{B}{B}.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Rune-Scarred Demon
+Island
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Rune-Scarred Demon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Lightning Bolt)
+
+[Expect]
+Bot1.Hand = Island; Lightning Bolt
+Bot1.Library.Count = 10
+Bot1.Battlefield.Rune-Scarred Demon.Power = 6
+Bot1.Battlefield.Rune-Scarred Demon.Toughness = 6
+Bot1.Battlefield.Rune-Scarred Demon.Keywords = Flying

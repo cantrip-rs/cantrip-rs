@@ -1,0 +1,11 @@
+{
+  "name": "Rune-Scarred Demon",
+  "manaCost": "{5}{B}{B}",
+  "type": "Creature — Demon",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Flying\nWhen this creature enters, search your library for a card, put it into your hand, then shuffle.",
+  "keywords": [
+    "Flying"
+  ]
+}
