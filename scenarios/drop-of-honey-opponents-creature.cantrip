@@ -1,0 +1,30 @@
+# Drop of Honey destroys an opponent's least-power creature, and stays while only the opponent controls creatures (CR 603.8, 701.8a).
+[Bot1 Deck]
+Mox Emerald
+Drop of Honey
+Forest x18
+[Bot2 Deck]
+Black Lotus
+Ornithopter
+Grizzly Bears
+Island x20
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Drop of Honey.Cast
+? Bot1.Mana =
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Drop of Honey.Tapped = false
+[T5 Bot1.Main1]
+[Expect]
+Bot2.Graveyard = Ornithopter; Black Lotus
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Drop of Honey.Tapped = false

@@ -1,0 +1,37 @@
+# The controller chooses exactly one of two tied least-power creatures, not the higher-power creature (CR 701.8a).
+[Bot1 Deck]
+Black Lotus
+Wall of Wood
+Wall of Wood
+Grizzly Bears
+Drop of Honey
+Mox Emerald
+Forest
+Island x13
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Wall of Wood.Cast
+Bot1.Hand.Wall of Wood.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Drop of Honey.Cast
+? Bot1.Mana =
+[T5 Bot1.Upkeep]
+! Bot1.Choose(Grizzly Bears)
+! Bot1.Choose(Wall of Wood#1; Wall of Wood#2)
+! Bot1.Choose()
+Bot1.Choose(Wall of Wood#2)
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Wall of Wood.Power = 0
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Graveyard.Wall of Wood.Power = 0

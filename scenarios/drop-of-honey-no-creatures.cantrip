@@ -1,0 +1,17 @@
+# With no creatures on the battlefield, the state trigger sacrifices Drop of Honey (CR 603.8).
+[Bot1 Deck]
+Mox Emerald
+Drop of Honey
+Forest x18
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Drop of Honey.Cast
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Graveyard = Drop of Honey
+Bot1.Battlefield = Mox Emerald

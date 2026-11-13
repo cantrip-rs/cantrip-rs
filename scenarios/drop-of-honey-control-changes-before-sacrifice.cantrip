@@ -1,0 +1,44 @@
+# The original controller cannot sacrifice Drop of Honey after giving it away in response to its state trigger.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Teferi, Time Raveler
+Drop of Honey
+Harmless Offering
+Black Lotus
+Island x15
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Teferi, Time Raveler.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Teferi, Time Raveler.Activate(Ability: +1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Drop of Honey.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Bot1.Battlefield.Drop of Honey)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Drop of Honey.Tapped = false
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Drop of Honey.Tapped = false
+[Expect]
+Bot1.Graveyard = Drop of Honey; Harmless Offering; Black Lotus; Black Lotus

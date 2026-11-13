@@ -1,0 +1,31 @@
+# If the only least-power creature is indestructible, no creature is destroyed, even though a stronger one can be.
+[Bot1 Deck]
+Black Lotus
+Darksteel Myr
+Mox Emerald
+Grizzly Bears
+Drop of Honey
+Forest
+Island
+Island x13
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Darksteel Myr.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Drop of Honey.Cast
+? Bot1.Mana =
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Darksteel Myr.Power = 0
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Drop of Honey.Tapped = false

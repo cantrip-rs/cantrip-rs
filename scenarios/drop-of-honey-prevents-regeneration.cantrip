@@ -1,0 +1,28 @@
+# A regeneration shield made in response to the upkeep trigger cannot save its least-power creature.
+[Bot1 Deck]
+Black Lotus
+Elephant-Rat
+Mox Emerald
+Drop of Honey
+Elephant Graveyard
+Island
+Island
+Island x13
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Elephant-Rat.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Elephant Graveyard.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Drop of Honey.Cast
+? Bot1.Mana =
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Elephant Graveyard.Activate(Bot1.Battlefield.Elephant-Rat; Ability: Regenerate)
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Graveyard = Drop of Honey; Elephant-Rat; Black Lotus

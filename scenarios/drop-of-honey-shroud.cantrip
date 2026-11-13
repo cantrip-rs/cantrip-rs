@@ -1,0 +1,28 @@
+# The upkeep ability does not target, so it destroys a creature with shroud.
+[Bot1 Deck]
+Black Lotus
+Elvish Lookout
+Grizzly Bears
+Drop of Honey
+Forest
+Island
+Island
+Island x13
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Elvish Lookout.Cast
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Drop of Honey.Cast
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Choose(Elvish Lookout)
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Graveyard = Elvish Lookout; Black Lotus
+Bot1.Battlefield.Grizzly Bears.Power = 2
