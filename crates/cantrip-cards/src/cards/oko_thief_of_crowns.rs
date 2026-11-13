@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::effects;
+use cantrip_mechanics::{effects, exchange};
 use cantrip_mechanics::targets;
 use cantrip_mechanics::tokens;
 use cantrip_oracle as oracle;
@@ -17,24 +17,12 @@ fn elk(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Exchange control of target artifact or creature you control and target creature an opponent controls with power
-/// 3 or less" (CR 701.12): if the whole exchange can't be completed, none of it happens. Both controllers are read
-/// before either changes.
-fn exchange(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if !g.target_legal(item, 0) || !g.target_legal(item, 1) {
-        return Ok(());
-    }
-    let (Target::Object(yours), Target::Object(theirs)) = (item.target(0), item.target(1)) else { return Ok(()) };
-    g.exchange_control(item.object, yours, theirs);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         ability(loyalty(2), food, "+2: Create a Food token."),
         ability(loyalty(1), elk, "+1: Target artifact or creature loses all abilities and becomes a green Elk creature with base power and toughness 3/3.")
             .targets(&[targets::ARTIFACT_OR_CREATURE]),
-        ability(loyalty(-5), exchange, "\u{2212}5: Exchange control of target artifact or creature you control and target creature an opponent controls with power 3 or less.")
+        ability(loyalty(-5), exchange::control_of_two_targets, "\u{2212}5: Exchange control of target artifact or creature you control and target creature an opponent controls with power 3 or less.")
             .targets(&[
                 targets::ARTIFACT_OR_CREATURE_YOU_CONTROL,
                 targets::CREATURE_AN_OPPONENT_CONTROLS_WITH_POWER_3_OR_LESS,
