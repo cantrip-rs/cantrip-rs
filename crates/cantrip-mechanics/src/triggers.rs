@@ -1916,6 +1916,19 @@ pub fn creature_attacks_you_or_a_planeswalker_you_control(q: &dyn Query, me: &As
     }
 }
 
+/// "Whenever one or more creatures attack you" (CR 508.1, 603.2c): each creature declared as an attacker of this ability's controller,
+/// the ability being about it (`Fired::about`), so with `.once_per_batch()` the creatures of one declaration that
+/// attack the ability's controller are one batch (`Query::event_objects`). Any creature counts, whoever controls it; one
+/// attacking a planeswalker or battle you control does not. Sabotage Strategist and Orim's Prayer print it.
+pub fn creature_attacks_you(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::Attacks { attacker, defender: Target::Player(p), .. } if *p == me.controller => Fired::about(Target::Object(*attacker)),
+        _ => None,
+    }
+}
+
+pub const CREATURE_ATTACKS_YOU: Trigger = when_asked(EventMask::ATTACKS, creature_attacks_you);
+
 /// "Whenever a creature an opponent controls enters" (CR 603.6a): any creature, token or not, under the control of a player
 /// other than this ability's controller as it entered. The ability is about that player (`Fired::about`), for "deals 1 damage
 /// to that player". Authority of the Consuls and Gideon the Oathless print it.
