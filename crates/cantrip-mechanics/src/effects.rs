@@ -745,6 +745,22 @@ pub fn destroy_all_creatures(g: &mut dyn Game, _: &StackItem) -> Result<(), Susp
     Ok(())
 }
 
+/// "Destroy [these permanents]. You gain 1 life for each [permanent] destroyed this way": one destroy event (CR 701.8a, 101.4) and one life
+/// gain for the number of permanents that really left the battlefield (CR 119.3, 608.2c): an indestructible permanent or a regeneration
+/// shield saves its own and buys no life, and nothing destroyed gains nothing. Fumigate and Ob Nixilis, the Ascended print it.
+pub fn destroy_all_and_gain_life_for_each_destroyed(g: &mut dyn Game, you: PlayerId, doomed: &[ObjectId]) {
+    let destroyed = g.destroy_all(doomed);
+    g.gain_life(you, destroyed.count() as i32);
+}
+
+/// "Destroy all creatures. You gain 1 life for each creature destroyed this way." (`destroy_all_and_gain_life_for_each_destroyed`).
+/// Fumigate prints it.
+pub fn destroy_all_creatures_and_gain_life_for_each_destroyed(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let creatures = creatures_on_the_battlefield(g);
+    destroy_all_and_gain_life_for_each_destroyed(g, item.controller, &creatures);
+    Ok(())
+}
+
 /// "Destroy all creatures. They can't be regenerated." (CR 701.19c). Wrath of God and Damnation print it.
 pub fn destroy_all_creatures_no_regen(g: &mut dyn Game, _: &StackItem) -> Result<(), Suspend> {
     let creatures = creatures_on_the_battlefield(g);
