@@ -1,0 +1,46 @@
+# Rapid Fire grants first strike and rampage 2 to a creature without rampage; three blockers give +4/+4 and both effects expire (CR 702.23a, 611.2a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Grizzly Bears
+Rapid Fire
+Island x20
+[Bot2 Deck]
+Ornithopter x3
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Rapid Fire.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Rapid Fire.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = FirstStrike
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Ornithopter#1 > Grizzly Bears; Ornithopter#2 > Grizzly Bears; Ornithopter#3 > Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 6
+? Bot1.Battlefield.Grizzly Bears.Toughness = 6
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
