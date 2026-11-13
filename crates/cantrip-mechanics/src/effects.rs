@@ -375,11 +375,18 @@ pub fn pump_all_creatures(g: &mut dyn Game, source: ObjectId, power: i32, toughn
 }
 
 /// "Creatures other than [these] get +`power`/+`toughness` until end of turn" (CR 611.2, 611.2c): `pump_all_creatures`, with
-/// the creatures `other_than` names left out. Harvester of Misery's "other creatures get -2/-2" and D'Ghor Bloodletter's
-/// "all other creatures get -1/-1" leave out their source; Zenos yae Galvus's "creatures other than Zenos yae Galvus and the
-/// chosen creature get -2/-2" its source and the creature it chose.
+/// the creatures `other_than` names left out. Zenos yae Galvus's "creatures other than Zenos yae Galvus and the chosen
+/// creature get -2/-2" leaves out its source and the creature it chose; `other_creatures_get` is it leaving out only the source.
 pub fn pump_creatures_other_than(g: &mut dyn Game, source: ObjectId, other_than: &[ObjectId], power: i32, toughness: i32) {
     pump_creatures_where(g, source, |_, id| !other_than.contains(&id), power, toughness);
+}
+
+/// "Other creatures get +`P`/+`T` until end of turn" as a spell's or ability's whole effect: `pump_creatures_other_than`, leaving
+/// out only its source (CR 611.2, 611.2c), whoever controls the rest. Harvester of Misery (-2/-2), D'Ghor Bloodletter (-1/-1,
+/// "All other creatures") and Shefet Archfiend (-2/-2, "all other creatures") print it.
+pub fn other_creatures_get<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    pump_creatures_other_than(g, item.object, &[item.object], P, T);
+    Ok(())
 }
 
 /// "All nonartifact creatures get -`power`/-`toughness` until end of turn" (CR 611.2c): the creatures on the battlefield at
