@@ -1,0 +1,43 @@
+# Guidelight Pathmaker {4}{W}{U}: "Put it onto the battlefield if its mana value is 2 or less. Otherwise, put it into your hand." Bot1 searches for the Coalition Relic, of mana value 3, one above the limit:
+# it goes into the hand, revealed, and the Mind Stone and Sol Ring stay in the library, which is shuffled.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Guidelight Pathmaker
+Island
+Island
+Sol Ring
+Mind Stone
+Coalition Relic
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Guidelight Pathmaker.Cast
+Bot1.Pass
+Bot1.Accept
+Bot1.Search(Coalition Relic)
+
+[Expect]
+Bot1.Battlefield = Guidelight Pathmaker; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Hand = Coalition Relic; Island; Island
+Bot1.Library.Count = 13
+Bot1.Shuffles = 1
+Bot1.Revealed = Coalition Relic

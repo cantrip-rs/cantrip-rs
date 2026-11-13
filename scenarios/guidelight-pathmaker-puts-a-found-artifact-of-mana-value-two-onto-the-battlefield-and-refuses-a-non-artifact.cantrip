@@ -1,0 +1,48 @@
+# Guidelight Pathmaker {4}{W}{U}: "When this Vehicle enters, you may search your library for an artifact card and reveal it. Put it onto the battlefield if its mana value is 2 or less. Otherwise, put it into your hand.
+# If you search your library this way, shuffle." Bot1 pays for it on turn one with Mox Pearl's W, Mox Sapphire's U, Mox Ruby's R and the Black Lotus's three. An Island is no artifact card; the Mind
+# Stone, of mana value exactly 2, is put onto the battlefield, and the Coalition Relic (mana value 3) and Sol Ring stay in the library, which is shuffled once.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Guidelight Pathmaker
+Island
+Island
+Sol Ring
+Mind Stone
+Coalition Relic
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Guidelight Pathmaker.Cast
+Bot1.Pass
+Bot1.Accept
+! Bot1.Search(Island)
+Bot1.Search(Mind Stone)
+? Bot1.Shuffles = 1
+
+[Expect]
+Bot1.Battlefield = Guidelight Pathmaker; Mind Stone; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Graveyard = Black Lotus
+Bot1.Hand = Island; Island
+Bot1.Library.Count = 13
+Bot1.Shuffles = 1
+Bot1.Revealed = Mind Stone
+Bot1.Battlefield.Mind Stone.Tapped = false

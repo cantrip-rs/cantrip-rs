@@ -1,0 +1,39 @@
+# Guidelight Pathmaker {4}{W}{U}: "you may search your library for an artifact card [...]. If you search your library this way, shuffle." Bot1's library holds no artifact card, so the search finds
+# nothing (CR 701.23b); it was made all the same, and the library is shuffled once.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Guidelight Pathmaker
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Guidelight Pathmaker.Cast
+Bot1.Pass
+Bot1.Accept
+Bot1.Search()
+
+[Expect]
+Bot1.Battlefield = Guidelight Pathmaker; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Hand = Island; Island
+Bot1.Library.Count = 14
+Bot1.Shuffles = 1

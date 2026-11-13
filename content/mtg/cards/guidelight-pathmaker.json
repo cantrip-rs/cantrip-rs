@@ -1,0 +1,11 @@
+{
+  "name": "Guidelight Pathmaker",
+  "manaCost": "{4}{W}{U}",
+  "type": "Artifact — Vehicle",
+  "power": 6,
+  "toughness": 5,
+  "oracleText": "Vigilance\nWhen this Vehicle enters, you may search your library for an artifact card and reveal it. Put it onto the battlefield if its mana value is 2 or less. Otherwise, put it into your hand. If you search your library this way, shuffle.\nCrew 2",
+  "keywords": [
+    "Vigilance"
+  ]
+}

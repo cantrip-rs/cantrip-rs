@@ -1,0 +1,66 @@
+# Guidelight Pathmaker {4}{W}{U}: "you may search your library [...]. If you search your library this way, shuffle." Bot1 casts it on turn one and declines: nothing is searched or shuffled. Bot2 casts its own on turn
+# two and accepts, taking the Sol Ring (mana value 1) onto its own battlefield from its own library, which only it shuffles.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Guidelight Pathmaker
+Island
+Island
+Mind Stone
+Island x13
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Guidelight Pathmaker
+Island
+Island
+Island
+Sol Ring
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Guidelight Pathmaker.Cast
+Bot1.Pass
+Bot1.Decline
+? Bot1.Shuffles = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Guidelight Pathmaker.Cast
+Bot2.Pass
+Bot2.Accept
+Bot2.Search(Sol Ring)
+
+[Expect]
+Bot1.Hand = Island; Island
+Bot1.Shuffles = 0
+Bot2.Battlefield = Guidelight Pathmaker; Mox Pearl; Mox Ruby; Mox Sapphire; Sol Ring
+Bot2.Shuffles = 1
