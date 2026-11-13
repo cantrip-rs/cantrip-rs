@@ -1,0 +1,61 @@
+# Wretched Doll {1}{B}, 3/1: "{B}, {T}: Surveil 1." It is a creature, so on turn 1 it is summoning sick and the ability is
+# refused (CR 302.6). On turn 3 Bot1 spends Mox Jet's {B} (and an Island) on a second Doll, leaving only Mox Ruby's {R}: the
+# first Doll's ability is refused for want of {B}. On turn 5 Mox Jet alone pays it, exactly: the pool is empty, and the
+# surveil keeps Lightning Bolt on top. The Doll is tapped, so it is refused again that turn. On turn 7 it untaps and surveils
+# again, now binning the top card, Counterspell.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Wretched Doll
+Wretched Doll
+Island x3
+Island x2
+Lightning Bolt
+Counterspell
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wretched Doll.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Wretched Doll.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Wretched Doll.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Wretched Doll#1.Activate(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Wretched Doll#1.Activate
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Lightning Bolt |)
+? Bot1.Battlefield.Wretched Doll#1.Tapped = true
+? Bot1.Library.Top = Lightning Bolt
+! Bot1.Battlefield.Wretched Doll#1.Activate
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Wretched Doll#1.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(| Counterspell)
+
+[Expect]
+Turn = 7
+Bot1.Graveyard = Counterspell
+Bot1.Battlefield.Wretched Doll#1.Tapped = true
