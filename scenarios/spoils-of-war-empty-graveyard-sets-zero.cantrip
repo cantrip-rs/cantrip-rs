@@ -1,0 +1,25 @@
+# With no artifacts or creatures in the opposing graveyard X is zero; the spell can have no targets (CR 601.2b, 601.2d).
+
+[Bot1 Deck]
+Spoils of War
+Mox Jet
+Ornithopter
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Spoils of War.Cast(X: 0)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Spoils of War
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
