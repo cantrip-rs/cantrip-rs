@@ -1,0 +1,8 @@
+{
+  "name": "Guidelight Optimizer",
+  "manaCost": "{1}{U}",
+  "type": "Artifact Creature — Robot",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "{T}: Add {U}. Spend this mana only to cast an artifact spell or activate an ability."
+}

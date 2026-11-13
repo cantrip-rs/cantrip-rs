@@ -1,0 +1,35 @@
+# Guidelight Optimizer: "{T}: Add {U}. Spend this mana only to cast an artifact spell or activate an ability" (CR 106.6). Turn 3:
+# its {U} alone pays for Sol Ring (an artifact spell, {1}) while the Island and Mox Ruby stay untapped.
+
+[Bot1 Deck]
+Island
+Mox Ruby
+Guidelight Optimizer
+Sol Ring
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Guidelight Optimizer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Guidelight Optimizer.Activate
+? Bot1.Mana = {U} (AnyOf(ArtifactSpells+Abilities))
+Bot1.Hand.Sol Ring.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Sol Ring.Types = Artifact
+Bot1.Battlefield.Island.Tapped = false
+Bot1.Battlefield.Mox Ruby.Tapped = false
+Bot1.Battlefield.Guidelight Optimizer.Tapped = true
