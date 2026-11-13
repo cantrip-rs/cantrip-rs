@@ -1,0 +1,43 @@
+# An Offer You Can't Refuse counters target noncreature spell and its controller creates two Treasure tokens. Bot1 holds
+# Island for {U}. Bot2's Llanowar Elves is a creature spell, so the Offer is not offered against it (the refusal, with Bot1's
+# Island untapped so the cost is payable). Bot2's Lightning Bolt at Bot1 is countered: Bot1 stays at 20 and Bot2, not
+# Bot1, ends with exactly two Treasures.
+
+[Bot1 Deck]
+Island
+An Offer You Can't Refuse
+Island x18
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Mountain
+Lightning Bolt
+Forest x14
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+? Stack = Llanowar Elves
+! Bot1.Hand.An Offer You Can't Refuse.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+? Stack = Lightning Bolt
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.An Offer You Can't Refuse.Cast(Lightning Bolt)
+
+[Expect]
+Turn = 4
+Stack.Count = 0
+Bot1.Life = 20
+Bot1.Graveyard = An Offer You Can't Refuse
+Bot2.Graveyard = Lightning Bolt
+Bot2.Battlefield.Treasure Token#1.Token = true
+Bot2.Battlefield.Treasure Token#2.Token = true
+Bot2.Battlefield.Count = 5
+Bot1.Battlefield.Count = 1

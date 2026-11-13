@@ -1,0 +1,29 @@
+# The Treasures go to the countered spell's controller, not to the Offer's: Bot1 counters its own Sol Ring (a noncreature
+# spell of its own as target) with Mox Sapphire's mana and ends with two Treasure tokens beside the Moxen.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Sol Ring
+An Offer You Can't Refuse
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.An Offer You Can't Refuse.Cast(Sol Ring)
+[T2 Bot2.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = An Offer You Can't Refuse; Sol Ring
+Bot1.Battlefield.Treasure Token#1.Token = true
+Bot1.Battlefield.Treasure Token#2.Token = true
+Bot1.Battlefield.Count = 4
+Bot2.Battlefield.Count = 0

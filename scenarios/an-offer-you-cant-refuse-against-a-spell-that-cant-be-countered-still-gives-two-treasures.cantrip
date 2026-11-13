@@ -1,0 +1,39 @@
+# An Offer You Can't Refuse at a spell that can't be countered (the ruling): the target is still legal, so the spell is not
+# countered but its controller still creates two Treasure tokens. Bot2's Abrupt Decay ("This spell can't be countered.") at
+# Bot1's Mox Sapphire is the target; it resolves and destroys the Mox, and Bot2 ends with two Treasures.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+An Offer You Can't Refuse
+Island x17
+
+[Bot2 Deck]
+Swamp
+Forest
+Abrupt Decay
+Swamp x17
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Abrupt Decay.Cast(Mox Sapphire)
+? Stack = Abrupt Decay
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.An Offer You Can't Refuse.Cast(Abrupt Decay)
+
+[Expect]
+Turn = 4
+Stack.Count = 0
+Bot1.Graveyard = Mox Sapphire; An Offer You Can't Refuse
+Bot2.Graveyard = Abrupt Decay
+Bot2.Battlefield.Treasure Token#1.Token = true
+Bot2.Battlefield.Treasure Token#2.Token = true
+Bot2.Battlefield.Count = 4
