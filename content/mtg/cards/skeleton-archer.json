@@ -1,0 +1,8 @@
+{
+  "name": "Skeleton Archer",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Skeleton Archer",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When this creature enters, it deals 1 damage to any target."
+}

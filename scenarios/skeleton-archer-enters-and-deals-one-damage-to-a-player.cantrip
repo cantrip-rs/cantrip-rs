@@ -1,0 +1,38 @@
+# "When this creature enters, it deals 1 damage to any target" (CR 120.3, 603.3d): Skeleton Archer, cast with Black Lotus and Mox Jet, pings Bot2, 20 -> 19 (exactly 1); the 3/3 itself and Bot1 are untouched.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Skeleton Archer
+Island x17
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Skeleton Archer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 20
+Bot1.Battlefield.Skeleton Archer.Damage = 0
+Bot2.Battlefield = Memnite
