@@ -3,6 +3,17 @@
 
 use cantrip_api::*;
 
+/// "It produces colorless mana instead of any other type" (CR 614.1a, 106.12b), as Ritual of Subdual and Chaos Moon
+/// print it. Replace only the types in a proposed production, retaining its total, recipient, restrictions and duration.
+/// The caller supplies the land/source restriction and whether this is an ordinary or granted replacement.
+pub fn produce_colorless_instead(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
+    if let Proposal::ManaProduction(production) = proposal {
+        let total = production.total();
+        production.mana = ManaPool::default();
+        production.mana.0[Mana::C as usize] = total;
+    }
+}
+
 /// "{T}: Add an amount of {G} equal to this creature's power" (CR 106.1, 107.1b): its power as the ability resolves, which adds
 /// nothing if it is 0 or less. A mana ability's `add_by`: Rainveil Rejuvenator and Topiary Lecturer.
 pub fn add_green_equal_to_its_power(g: &mut dyn Game, asker: &Asker, _: Option<Color>) -> Result<(), Suspend> {
