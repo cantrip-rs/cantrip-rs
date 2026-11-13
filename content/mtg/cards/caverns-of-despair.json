@@ -1,0 +1,6 @@
+{
+  "name": "Caverns of Despair",
+  "manaCost": "{2}{R}{R}",
+  "type": "World Enchantment",
+  "oracleText": "No more than two creatures can attack each combat.\nNo more than two creatures can block each combat."
+}
