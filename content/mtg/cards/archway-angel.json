@@ -1,0 +1,11 @@
+{
+  "name": "Archway Angel",
+  "manaCost": "{5}{W}",
+  "type": "Creature — Angel",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flying\nWhen this creature enters, you gain 2 life for each Gate you control.",
+  "keywords": [
+    "Flying"
+  ]
+}
