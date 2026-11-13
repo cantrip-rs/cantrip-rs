@@ -1,0 +1,41 @@
+# Gatekeeper of Malakir: "Kicker {B}" (CR 702.33a) and "When this creature enters, if it was kicked, target player sacrifices a creature of their choice." (CR 603.4, 701.21a)
+# Bot2 controls a Memnite and an Ornithopter. Bot1 sacrifices its Black Lotus for {B}{B}{B}, adds {R} with Mox Ruby, and casts Gatekeeper kicked: {B}{B}{B} is paid and the {R} is
+# left (a kicker of {1} would have taken it), then targets Bot2. Bot2 chooses which creature to sacrifice (it picks the Ornithopter, the second one offered), and the Gatekeeper itself stays.
+
+[Bot1 Deck]
+Black Lotus
+Gatekeeper of Malakir
+Mox Ruby
+Island x4
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x5
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gatekeeper of Malakir.Cast(Kicked: 1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Ornithopter)
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Gatekeeper of Malakir
+Bot2.Battlefield = Memnite
+Bot2.Graveyard = Ornithopter

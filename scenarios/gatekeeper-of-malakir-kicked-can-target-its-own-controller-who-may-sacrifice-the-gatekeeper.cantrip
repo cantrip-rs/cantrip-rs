@@ -1,0 +1,36 @@
+# Gatekeeper of Malakir says "target player", not "target opponent": Bot1 targets itself with the kicked trigger. It controls a Memnite and the Gatekeeper that just entered, and it
+# chooses the Gatekeeper (CR 701.21a). Bot2 controls a creature too, which is untouched.
+
+[Bot1 Deck]
+Black Lotus
+Gatekeeper of Malakir
+Memnite
+Island x5
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x6
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Gatekeeper of Malakir.Cast(Kicked: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Gatekeeper of Malakir)
+
+[Expect]
+Bot1.Battlefield = Memnite
+Bot1.Graveyard = Gatekeeper of Malakir; Black Lotus
+Bot2.Battlefield = Memnite
