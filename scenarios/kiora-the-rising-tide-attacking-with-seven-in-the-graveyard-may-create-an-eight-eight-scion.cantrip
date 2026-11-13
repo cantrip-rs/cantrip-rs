@@ -1,0 +1,55 @@
+# Kiora, the Rising Tide: "Threshold — Whenever Kiora attacks, if there are seven or more cards in your graveyard, you may
+# create Scion of the Deep, a legendary 8/8 blue Octopus creature token." Exactly seven qualifies. Turn 1: Bot1 Wheels
+# off a Black Lotus (graveyard: Lotus, Wheel and three Islands = 5; Bot2's seven discarded cards are not Bot1's).
+# Turn 3: Kiora's entry loot discards two more Islands (7). Turn 5: she attacks, Bot1 accepts, and the token appears
+# untapped and not attacking while Kiora's three damage lands. Only one is made: nothing but the Black Lotus has left the
+# battlefield (a second legendary Scion would have gone by the legend rule, CR 704.5j).
+
+[Bot1 Deck]
+Black Lotus
+Wheel of Fortune
+Island
+Mox Sapphire
+Island
+Island
+Island
+Kiora, the Rising Tide
+Island x6
+Island x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kiora, the Rising Tide.Cast
+Bot1.Choose(Island; Island)
+? Bot1.Graveyard.Count = 7
+[T5 Bot1.Main1]
+Bot1.Attack(Kiora, the Rising Tide > Bot2)
+Bot1.Accept
+[Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot2.Life = 17
+Bot1.Graveyard.Count = 7
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Scion of the Deep.Power = 8
+Bot1.Battlefield.Scion of the Deep.Toughness = 8
+Bot1.Battlefield.Scion of the Deep.Token = true
+Bot1.Battlefield.Scion of the Deep.Tapped = false
+Bot1.Battlefield.Scion of the Deep.Colors = Blue
+Bot1.Battlefield.Scion of the Deep.Subtypes = Octopus
+Bot1.Battlefield.Scion of the Deep.Supertypes = Legendary
+Bot1.Battlefield.Scion of the Deep.Types = Creature
+LeftBattlefield = Black Lotus (tapped)

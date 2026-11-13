@@ -1,0 +1,44 @@
+# Kiora, the Rising Tide: one short of seven does nothing, and the opponent's graveyard is not counted. Turn 1: Bot1
+# Wheels (Bot1 graveyard: Lotus, Wheel and two Islands = 4 after casting a spare Mox Jet; Bot2 discards its seven cards,
+# so a full graveyard sits on the wrong side: seven discarded to Wheel and one to hand size). Turn 3: Kiora's entry discards two Islands (6). Turn 5: she attacks
+# and nothing triggers, so there is no question and no token.
+
+[Bot1 Deck]
+Black Lotus
+Wheel of Fortune
+Island
+Mox Sapphire
+Mox Jet
+Island
+Island
+Kiora, the Rising Tide
+Island x6
+Island x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kiora, the Rising Tide.Cast
+Bot1.Choose(Island; Island)
+? Bot1.Graveyard.Count = 6
+? Bot2.Graveyard.Count = 8
+[T5 Bot1.Main1]
+Bot1.Attack(Kiora, the Rising Tide > Bot2)
+[Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot2.Life = 17
+Bot1.Battlefield = Island; Island; Kiora, the Rising Tide; Mox Jet; Mox Sapphire

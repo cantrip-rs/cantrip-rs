@@ -1,0 +1,36 @@
+# Kiora, the Rising Tide: "When Kiora enters, draw two cards, then discard two cards." The draw comes first: with an empty
+# hand (every other card was a free artifact already cast, Black Lotus paid {2}{U}) the two cards just drawn are the two
+# discarded, which could not happen the other way round. The library tops are a Mountain then an Island.
+
+[Bot1 Deck]
+Black Lotus
+Kiora, the Rising Tide
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Mountain
+Island
+Island x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+? Bot1.Hand.Count = 1
+Bot1.Hand.Kiora, the Rising Tide.Cast
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 0
+Bot1.Graveyard.Count = 3
+Bot1.Graveyard = Island; Mountain; Black Lotus
+Bot1.Battlefield.Kiora, the Rising Tide.Power = 3

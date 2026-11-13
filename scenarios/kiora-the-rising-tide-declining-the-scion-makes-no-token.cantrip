@@ -1,0 +1,40 @@
+# Kiora, the Rising Tide: the Scion of the Deep is a "may" (the other answer). Same setup as accepting it, graveyard of
+# seven; Bot1 declines, so only Kiora is on the battlefield with the lands and artifacts.
+
+[Bot1 Deck]
+Black Lotus
+Wheel of Fortune
+Island
+Mox Sapphire
+Island
+Island
+Island
+Kiora, the Rising Tide
+Island x6
+Island x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kiora, the Rising Tide.Cast
+Bot1.Choose(Island; Island)
+[T5 Bot1.Main1]
+Bot1.Attack(Kiora, the Rising Tide > Bot2)
+Bot1.Decline
+[Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot2.Life = 17
+Bot1.Battlefield = Island; Island; Kiora, the Rising Tide; Mox Sapphire
