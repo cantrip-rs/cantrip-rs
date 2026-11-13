@@ -1,0 +1,54 @@
+# Aetherjacket: "{2}, {T}, Sacrifice this creature: Destroy another target artifact. Activate only as a sorcery." Turn 1
+# Bot1 casts it. Turn 3, with a spell of its own still on the stack, the ability is refused (sorcery speed, CR 602.5d);
+# once the stack is empty it can't target Aetherjacket itself (another, CR 115.1) and then destroys Bot2's Mox Ruby, the
+# {2} paid exactly (the pool is empty right after) and the Aetherjacket sacrificed as part of the cost.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Aetherjacket
+Mox Sapphire
+Mox Emerald
+Sol Ring
+Swamp x10
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Aetherjacket.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Aetherjacket.Keywords = Flying; Vigilance
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Aetherjacket.Activate(Bot2.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+! Bot1.Battlefield.Aetherjacket.Activate(Bot1.Battlefield.Aetherjacket)
+Bot1.Battlefield.Aetherjacket.Activate(Bot2.Battlefield.Mox Ruby)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Mox Sapphire; Mox Emerald; Sol Ring
+Bot1.Graveyard = Aetherjacket
+Bot2.Battlefield = Mox Jet
+Bot2.Graveyard = Mox Ruby
