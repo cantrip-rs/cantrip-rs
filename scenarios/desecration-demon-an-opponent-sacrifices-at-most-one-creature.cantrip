@@ -1,0 +1,37 @@
+# Desecration Demon: "any opponent may sacrifice a creature of their choice" - one creature, not more (CR 701.21a). At its beginning of combat on turn 2 Bot2, holding a Memnite and an
+# Ornithopter, is refused when it chooses both and sacrifices the Memnite alone: the Ornithopter stays, and the Demon is tapped with one +1/+1 counter, a 7/7.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Desecration Demon
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Desecration Demon.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot2.Choose(Memnite; Ornithopter)
+Bot2.Choose(Memnite)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Graveyard = Memnite
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Desecration Demon.Power = 7
+Bot1.Battlefield.Desecration Demon.Tapped = true

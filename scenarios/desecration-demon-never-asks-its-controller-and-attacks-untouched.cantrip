@@ -1,0 +1,33 @@
+# Desecration Demon: "any opponent" (CR 102.3) - its controller's own Memnite is never offered for sacrifice, and with Bot2 holding no creature nothing is asked: at both combats the
+# Demon stays an untapped 6/6 and on turn 3 it attacks, 6 damage (Bot2 14).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Desecration Demon
+Memnite
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Desecration Demon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Desecration Demon > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Desecration Demon.Power = 6
+Bot1.Battlefield.Desecration Demon.Tapped = true
+Bot1.Battlefield.Memnite.Power = 1
