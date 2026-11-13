@@ -11,11 +11,6 @@ pub const fn kicker(cost: ManaCost) -> Kicker {
     Kicker { cost, extra: None, multi: false, waterbend: false }
 }
 
-/// The intervening "if" (CR 603.4): its additional cost was paid.
-fn offspring_paid(q: &dyn Query, asker: &Asker) -> bool {
-    q.obj(asker.source).kicked > 0
-}
-
 /// A copy of the creature that entered, except that it is 1/1 (CR 707.2, 707.9b).
 fn create_offspring(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let values = g.copiable_values(item.object).sized(1, 1);
@@ -25,5 +20,5 @@ fn create_offspring(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub const fn trigger(text: &'static str) -> AbilityDef {
     triggered(THIS_ENTERS, create_offspring, text)
-        .condition(offspring_paid)
+        .condition(crate::kicker::was_kicked)
 }

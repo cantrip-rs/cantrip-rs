@@ -21,3 +21,10 @@ pub fn enters_with_counters<const KIND: usize>(g: &mut dyn Game, entering: &mut 
 pub const fn non_mana(cost: Cost) -> OptionalCost {
     OptionalCost { kicker: true, ..OptionalCost::new(cost) }
 }
+
+/// An intervening "if it was kicked" / "if this creature was kicked" (CR 603.4, 702.33a), checked as the ability triggers and again
+/// as it resolves; a permanent that has left the battlefield is judged by how it last existed there (CR 608.2h), kicked or not. Thieving
+/// Skydiver, Blood-Sport Champion and Sun-Blessed Healer print it.
+pub fn was_kicked(q: &dyn Query, asker: &Asker) -> bool {
+    q.obj(asker.source).kicked > 0
+}
