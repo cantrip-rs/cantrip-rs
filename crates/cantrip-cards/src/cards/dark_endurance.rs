@@ -9,19 +9,8 @@ fn costs_one_less_if_it_targets_a_blocking_creature(q: &dyn Query, _: ObjectId, 
     if blocking { CostDelta::less(1) } else { CostDelta::NONE }
 }
 
-/// "Target creature you control gets +2/+0 and gains indestructible until end of turn" (CR 611.2a, 702.12): both come from the
-/// spell, to the creature it targeted, if it is still a legal target as this resolves (CR 608.2b).
-fn flourish(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
-    instruction(g, |g| {
-        cantrip_mechanics::pump(g, item.object, creature, 2, 0);
-        effects::gain_indestructible_until_end_of_turn(g, item.object, creature);
-    });
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
-    spell: spell(&[targets::CREATURE], flourish),
+    spell: spell(&[targets::CREATURE], effects::target_creature_gets_and_gains_indestructible::<2, 0>),
     own_cost_changes: &[costs_one_less_if_it_targets_a_blocking_creature],
     ..oracle::DARK_ENDURANCE
 };

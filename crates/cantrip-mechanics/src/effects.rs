@@ -145,6 +145,19 @@ pub fn target_creature_gets_and_gains_deathtouch<const P: i32, const T: i32>(g: 
     Ok(())
 }
 
+/// "Target creature gets +`P`/+`T` and gains indestructible until end of turn" (CR 611.2a, 702.12b): one instruction, the creature
+/// being the ability's first target; nothing if it is no longer a legal target as the spell or ability resolves (CR 608.2b).
+/// Dark Endurance (+2/+0), Masterful Flourish, Reigning Victor and Foot Elite (+1/+0) print it, and Adamant Will (+2/+2).
+pub fn target_creature_gets_and_gains_indestructible<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = crate::targets::object(g, item, 0) {
+        instruction(g, |g| {
+            crate::pump(g, item.object, creature, P, T);
+            gain_indestructible_until_end_of_turn(g, item.object, creature);
+        });
+    }
+    Ok(())
+}
+
 /// "Target creature gets +`P`/+`T` and gains haste until end of turn" (CR 611.2a, 702.10): one instruction, the creature
 /// being the ability's first target; nothing if it is no longer a legal target as the spell resolves (CR 608.2b). Wild Ride
 /// (+3/+0), Fame (+2/+0) and Kavaron Turbodrone (+1/+1) print it.
