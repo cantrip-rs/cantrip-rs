@@ -2734,6 +2734,26 @@ pub const ANOTHER_CREATURE_DIES: Trigger = when(EventMask::ZONE_CHANGE, another_
 pub const CREATURE_AN_OPPONENT_CONTROLS_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_an_opponent_controls_dies);
 pub const CREATURE_YOU_CONTROL_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_you_control_dies);
 pub const ANOTHER_CREATURE_YOU_CONTROL_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, another_creature_you_control_dies);
+
+/// "Whenever a nontoken creature you control dies" (CR 700.4, 603.10a, 111.7): a creature you controlled as it died, one that was not
+/// a token, looked back on as it last was on the battlefield. This permanent too, if it is one. Zahur, Glory's Past prints it.
+pub fn nontoken_creature_you_control_dies(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::ZoneChange { old, .. } if q.obj(*old).token => None,
+        _ => creature_you_control_dies(q, me, event),
+    }
+}
+
+/// "Whenever another nontoken creature you control dies" (CR 700.4, 603.10a, 111.7): as above, but never this permanent. Agent Venom
+/// prints it.
+pub fn another_nontoken_creature_you_control_dies(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::ZoneChange { old, .. } if q.obj(*old).token => None,
+        _ => another_creature_you_control_dies(q, me, event),
+    }
+}
+pub const NONTOKEN_CREATURE_YOU_CONTROL_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, nontoken_creature_you_control_dies);
+pub const ANOTHER_NONTOKEN_CREATURE_YOU_CONTROL_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, another_nontoken_creature_you_control_dies);
 /// "Whenever you cast an enchantment spell" (CR 603.2): the spell is the subject. Verduran Enchantress and Dathon, His Heart Open print it.
 pub fn you_cast_an_enchantment(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
