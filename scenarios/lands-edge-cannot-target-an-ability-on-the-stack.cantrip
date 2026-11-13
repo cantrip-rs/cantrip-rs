@@ -1,0 +1,26 @@
+# Land's Edge cannot target an ability on the stack; another player is a legal target at the same priority.
+[Bot1 Deck]
+Black Lotus
+Land's Edge
+Mountain
+Mountain
+Plains x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Land's Edge.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Land's Edge.Activate(Bot1)
+Bot1.Choose(Mountain)
+! Bot1.Battlefield.Land's Edge.Activate(Stack.Land's Edge)
+Bot1.Battlefield.Land's Edge.Activate(Bot2)
+Bot1.Choose(Mountain)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
