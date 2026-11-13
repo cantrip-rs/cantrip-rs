@@ -1,0 +1,59 @@
+# Point the Way: X is Bot1's speed as the ability resolves. Speed 1 on entering; on turn 3 Lightning Bolt makes Bot2 lose life, so
+# Bot1's speed increases once, to 2 (CR 702.179c). Sacrificed then for {3}{G}, the ability searches for up to two basic lands:
+# Bot1 takes a Forest and an Island, both onto the battlefield tapped, and the Tropical Island stays in the library.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Point the Way
+Lightning Bolt
+Island
+Forest
+Island
+Tropical Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Point the Way.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Bot1.Speed = 2
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Point the Way.Activate
+! Bot1.Search(Tropical Island)
+! Bot1.Search(Forest; Island; Island)
+Bot1.Search(Forest; Island)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Speed = 2
+Bot1.Graveyard = Point the Way; Lightning Bolt
+Bot1.Battlefield = Forest; Island; Mox Emerald; Mox Jet; Mox Ruby; Mox Pearl; Mox Sapphire
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.Island.Tapped = true

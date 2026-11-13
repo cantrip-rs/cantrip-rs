@@ -1,0 +1,49 @@
+# Point the Way: "Start your engines!" gives Bot1 speed 1 as it enters. "{3}{G}, Sacrifice this enchantment: Search your library for
+# up to X basic land cards, where X is your speed. Put those cards onto the battlefield tapped, then shuffle." At speed 1 the
+# search takes at most one basic land: two at once are refused, and so is Tropical Island, which has basic land types but is not
+# basic (CR 205.4c; the refusals). The Forest arrives tapped; Point the Way is in the graveyard (sacrificed as a cost).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Point the Way
+Island x2
+Forest
+Forest
+Tropical Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Point the Way.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Point the Way.Activate
+! Bot1.Search(Forest; Island)
+! Bot1.Search(Tropical Island)
+Bot1.Search(Forest)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Speed = 1
+Bot1.Graveyard = Point the Way
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield = Forest; Mox Emerald; Mox Jet; Mox Ruby; Mox Pearl
+Bot1.Shuffles = 1
