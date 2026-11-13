@@ -1,0 +1,38 @@
+# Macabre Waltz (CR 608.2c, 701.9): the discard follows the return and cannot be skipped. With the Waltz the only card in hand
+# (the Island is played first), the two cards it returns are all Bot1 holds: it discards the Ornithopter and keeps the Memnite.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Entomb
+Entomb
+Macabre Waltz
+Island
+Mox Ruby
+Memnite
+Ornithopter
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Ornithopter)
+Bot1.Hand.Macabre Waltz.Cast
+Bot1.Target(Bot1.Graveyard.Memnite; Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter)
+
+[Expect]
+Bot1.Hand = Memnite
+Bot1.Graveyard = Macabre Waltz; Ornithopter; Entomb; Black Lotus; Entomb

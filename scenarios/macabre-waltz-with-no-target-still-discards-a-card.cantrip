@@ -1,0 +1,26 @@
+# Macabre Waltz (CR 115.1, 608.2c, 701.9): "up to two" targets may be none; the spell still resolves and Bot1 discards a card,
+# an Island of the four in hand (three are left).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Macabre Waltz
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Macabre Waltz.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Graveyard = Macabre Waltz; Island

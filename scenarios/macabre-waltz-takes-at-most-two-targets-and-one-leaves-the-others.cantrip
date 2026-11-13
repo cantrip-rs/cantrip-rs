@@ -1,0 +1,43 @@
+# Macabre Waltz (CR 601.2c, 115.1): "up to two target creature cards" is no more than two. Three Entombs bury Memnite, Ornithopter
+# and Llanowar Elves: naming all three is refused, and choosing just the Memnite returns that one and leaves the other two in
+# the graveyard. The Memnite is then the only card in hand, so the discard takes it: eight cards in the graveyard (Black Lotus,
+# three Entombs, the three creature cards and the Waltz).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Entomb
+Entomb
+Entomb
+Macabre Waltz
+Memnite
+Ornithopter
+Llanowar Elves
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Ornithopter)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Llanowar Elves)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Macabre Waltz.Cast
+! Bot1.Target(Bot1.Graveyard.Memnite; Bot1.Graveyard.Ornithopter; Bot1.Graveyard.Llanowar Elves)
+Bot1.Target(Bot1.Graveyard.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 0
+Bot1.Graveyard.Count = 8

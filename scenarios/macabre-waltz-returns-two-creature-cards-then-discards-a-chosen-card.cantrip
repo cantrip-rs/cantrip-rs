@@ -1,0 +1,38 @@
+# Macabre Waltz (CR 608.2c, 701.9): "Return up to two target creature cards from your graveyard to your hand, then discard a
+# card." Two Entombs bury Memnite and Ornithopter; the Waltz returns both and Bot1 then discards the Island of the three cards
+# in hand, keeping the creatures.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Entomb
+Entomb
+Macabre Waltz
+Island
+Memnite
+Ornithopter
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Ornithopter)
+Bot1.Hand.Macabre Waltz.Cast
+Bot1.Target(Bot1.Graveyard.Memnite; Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+
+[Expect]
+Bot1.Hand = Memnite; Ornithopter
+Bot1.Graveyard = Macabre Waltz; Island; Entomb; Black Lotus; Entomb
