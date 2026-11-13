@@ -1,0 +1,39 @@
+# Seafarer's Quay grants Rona bands with other legendary creatures, allowing her to band with Isamaru (CR 702.22c).
+[Bot1 Deck]
+Seafarer's Quay
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Rona, Herald of Invasion
+Isamaru, Hound of Konda
+Memnite
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Seafarer's Quay.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rona, Herald of Invasion.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Rona, Herald of Invasion > Bot2; Isamaru, Hound of Konda > Bot2; Memnite > Bot2)
+! Bot1.Choose(Memnite)
+Bot1.Choose(Isamaru, Hound of Konda)
+? Combat.Attackers = Rona, Herald of Invasion > Bot2 (band 1); Isamaru, Hound of Konda > Bot2 (band 1); Memnite > Bot2
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16

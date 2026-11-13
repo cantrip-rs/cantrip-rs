@@ -1,0 +1,28 @@
+# An opponent's blue legendary creature does not gain bands with other from your Quay (CR 702.22c).
+[Bot1 Deck]
+Seafarer's Quay
+Island x20
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Rona, Herald of Invasion
+Isamaru, Hound of Konda
+Island x20
+[Actions]
+Bot1.Hand.Seafarer's Quay.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Rona, Herald of Invasion.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Isamaru, Hound of Konda.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Rona, Herald of Invasion > Bot1; Isamaru, Hound of Konda > Bot1)
+? Combat.Attackers = Rona, Herald of Invasion > Bot1; Isamaru, Hound of Konda > Bot1
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 17
