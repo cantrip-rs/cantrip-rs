@@ -1,0 +1,52 @@
+# "Target creature gains deathtouch and indestructible until end of turn" (CR 702.2b, 702.12b, 611.2a): on turn 3 Bot1 casts Offer Immortality (Black Lotus
+# mana) on its Memnite (1/1) and attacks. Bot2's Grizzly Bears blocks: Memnite's 1 deathtouch damage kills the Bears and the 2 damage on Memnite does not
+# destroy it. Both keywords are there during the turn and gone in the next.
+
+[Bot1 Deck]
+Black Lotus
+Memnite
+Offer Immortality
+Island x17
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Offer Immortality.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Deathtouch; Indestructible
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Grizzly Bears > Memnite)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Memnite.Damage = 2
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears
+Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Battlefield.Memnite.Damage = 0

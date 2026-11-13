@@ -1,0 +1,6 @@
+{
+  "name": "Offer Immortality",
+  "manaCost": "{1}{B}",
+  "type": "Instant",
+  "oracleText": "Target creature gains deathtouch and indestructible until end of turn. (Damage and effects that say \"destroy\" don't destroy it.)"
+}
