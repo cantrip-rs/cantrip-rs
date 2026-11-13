@@ -1,0 +1,8 @@
+{
+  "name": "Sanguine Syphoner",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Vampire Warlock",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Whenever this creature attacks, each opponent loses 1 life and you gain 1 life."
+}

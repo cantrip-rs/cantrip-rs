@@ -1,0 +1,37 @@
+# Sanguine Syphoner's trigger gains Bot1 1 life, which triggers Marauding Blight-Priest ("Whenever you gain life, each opponent loses 1
+# life"). On turn 3 the Syphoner attacks unblocked: Bot2 loses 1 to the Syphoner, 1 to the Priest and 1 to combat damage (20 to 17), and Bot1
+# gains 1 (CR 603.2, 119.3, 508.1m).
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Sanguine Syphoner
+Marauding Blight-Priest
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sanguine Syphoner.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Marauding Blight-Priest.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Sanguine Syphoner > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 21
