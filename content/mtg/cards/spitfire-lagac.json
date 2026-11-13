@@ -1,0 +1,8 @@
+{
+  "name": "Spitfire Lagac",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Lizard",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Landfall — Whenever a land you control enters, this creature deals 1 damage to each opponent."
+}
