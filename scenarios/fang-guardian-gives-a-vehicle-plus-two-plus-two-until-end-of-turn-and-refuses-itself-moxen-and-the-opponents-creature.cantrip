@@ -1,0 +1,66 @@
+# Fang Guardian, {3}{G} 4/2 Flash: "When this creature enters, another target creature or Vehicle you control gets +2/+2 until end of turn" (CR 611.2a).
+# Bot1 casts Smuggler's Copter turn 1 and, on turn 3, the Guardian with Black Lotus and a Forest. A Vehicle that is not a creature is a legal target
+# (CR 205.3g, 301.7, 115.1); Mox Emerald (a non-creature artifact), the Guardian itself ("another", 115.1) and Bot2's Memnite (not "you control") are refused.
+# With two legal targets the choice is Bot1's: the Copter becomes 5/5 for the turn and is 3/3 again on turn 4 (CR 514.2); the Guardian stays 4/2 and Bot1's Memnite 1/1.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Black Lotus
+Smuggler's Copter
+Fang Guardian
+Memnite
+Forest
+Forest x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Fang Guardian.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Fang Guardian)
+! Bot1.Target(Bot1.Battlefield.Mox Emerald)
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Smuggler's Copter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter.Power = 5
+? Bot1.Battlefield.Smuggler's Copter.Toughness = 5
+? Bot1.Battlefield.Fang Guardian.Power = 4
+? Bot1.Battlefield.Fang Guardian.Toughness = 2
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot2.Battlefield.Memnite.Power = 1
+[T4 Bot2.Main1]
+Bot1.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot1.Choose(Fang Guardian)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 4
+Bot1.Battlefield.Smuggler's Copter.Power = 3
+Bot1.Battlefield.Smuggler's Copter.Toughness = 3
+Bot1.Battlefield.Fang Guardian.Power = 4

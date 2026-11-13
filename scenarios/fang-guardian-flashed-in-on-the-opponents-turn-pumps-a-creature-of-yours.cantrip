@@ -1,0 +1,54 @@
+# Fang Guardian has flash (CR 702.8a): Bot1 casts it during Bot2's turn 2, after Bot2's Memnite has resolved, and the enter trigger targets
+# Bot1's own Memnite (3/3 until end of turn, CR 611.2a). Bot2's Memnite is refused (not "you control", CR 115.1) and so is the Guardian itself
+# ("another"). Bot1's Ornithopter keeps its 0/2, and the Memnite is 1/1 again from turn 3.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Mox Jet
+Memnite
+Fang Guardian
+Ornithopter
+Forest x14
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fang Guardian.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Fang Guardian)
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 3
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Memnite.Power = 1
+[T3 Bot1.Main1]
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Fang Guardian.Power = 4
