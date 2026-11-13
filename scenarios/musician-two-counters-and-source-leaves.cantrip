@@ -1,0 +1,52 @@
+# Two Musicians give one creature two music counters but only one upkeep ability; it survives paying {2}, retains the ability after the Musicians leave, then is destroyed when unpaid (CR 611.2a).
+[Bot1 Deck]
+Black Lotus x3
+Musician x2
+Ornithopter
+Mox Pearl
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Island x24
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Musician.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Musician.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.PayCost
+Bot1.PayCost
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Musician#1.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Musician#2.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Counters.Music = 2
+[T5 Bot1.Upkeep]
+Bot1.Triggers(Musician; Musician; Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Counters.Music = 2
+? Bot1.Graveyard = Musician; Musician; Black Lotus; Black Lotus; Black Lotus
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Graveyard = Ornithopter; Musician; Musician; Black Lotus; Black Lotus; Black Lotus

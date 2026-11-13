@@ -1,0 +1,47 @@
+# The opposing creature gains a music counter and can pay {1} at its upkeep; without mana next upkeep it is destroyed (CR 118.12).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Musician
+Island x20
+[Bot2 Deck]
+Memnite
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Musician.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Musician.Activate(Bot1.Battlefield.Mox Sapphire)
+Bot1.Battlefield.Musician.Activate(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Counters.Music = 1
+! Bot1.Battlefield.Musician.Activate(Bot2.Battlefield.Memnite)
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+! Bot1.PayCost(X: 1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Battlefield.Musician.Counters.Age = 1
+? Bot1.Mana =
+[T4 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.PayCost
+Bot2.Pass
+? Bot2.Mana = {W}{W}
+? Bot2.Battlefield.Memnite.Counters.Music = 1
+[T6 Bot2.Main1]
+[Expect]
+Bot2.Graveyard = Memnite; Black Lotus
