@@ -1,0 +1,44 @@
+# Energy Storm prevents Earthquake's simultaneous sorcery damage to both players and creatures (CR 615.1).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Energy Storm
+Earthquake
+Grizzly Bears
+Mox Emerald
+Plains
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Energy Storm.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.PayCost
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Earthquake.Cast(X: 1)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Battlefield.Grizzly Bears.Types = Creature
+Bot2.Battlefield.Grizzly Bears.Types = Creature
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Bot2.Battlefield.Grizzly Bears.Damage = 0

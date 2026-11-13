@@ -1,0 +1,35 @@
+# Energy Storm prevents damage from instant spells to either player (CR 615.1).
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Energy Storm
+Lightning Bolt
+Mountain
+Plains
+Island x20
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Energy Storm.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20

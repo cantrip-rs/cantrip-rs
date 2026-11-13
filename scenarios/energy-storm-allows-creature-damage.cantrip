@@ -1,0 +1,33 @@
+# Energy Storm does not prevent damage from a creature's ability (CR 615.1).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Energy Storm
+Prodigal Sorcerer
+Island
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Prodigal Sorcerer.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Energy Storm.Cast
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.PayCost
+[T3 Bot1.Main1]
+Bot1.Battlefield.Prodigal Sorcerer.Activate(Bot2)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 19

@@ -1,0 +1,30 @@
+# Creeping Chill deals damage as a graveyard ability, not as a sorcery spell (CR 112.1, 113.7a).
+[Bot1 Deck]
+Thought Scour
+Energy Storm
+Mox Pearl x2
+Mox Sapphire
+Island x2
+Creeping Chill
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Energy Storm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 17
+Exile = Creeping Chill

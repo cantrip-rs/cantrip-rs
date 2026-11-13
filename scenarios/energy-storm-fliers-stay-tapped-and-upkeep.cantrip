@@ -1,0 +1,54 @@
+# Cumulative upkeep adds an age counter and costs one mana; flying creatures remain tapped while a nonflying creature untaps in their controllers' untap steps (CR 702.24a, 502.3).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Energy Storm
+Birds of Paradise
+Memnite
+Plains
+Plains
+Island x20
+[Bot2 Deck]
+Black Lotus
+Birds of Paradise
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Energy Storm.Cast
+? Bot1.Mana = {W}
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Birds of Paradise.Cast
+? Bot1.Mana = {W}
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Birds of Paradise.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Birds of Paradise.Activate(Color: Green)
+! Bot1.PayCost(X: 1)
+Bot1.PayCost
+? Bot1.Mana =
+? Bot1.Battlefield.Energy Storm.Counters.Age = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Birds of Paradise.Activate(Color: Green)
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Birds of Paradise.Tapped = true
+Bot2.Battlefield.Birds of Paradise.Tapped = true
+Bot1.Battlefield.Memnite.Tapped = false
