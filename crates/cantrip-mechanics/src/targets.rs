@@ -315,10 +315,14 @@ pub const OTHER_CREATURE_YOU_CONTROL_WITH_POWER_2_OR_LESS: TargetSpec = target(o
 /// "Creature or Vehicle" (CR 205.3g, 301.7): a permanent on the battlefield that is a creature, or a Vehicle whether or not
 /// it is crewed into a creature right now. Bounce Off and Perilous Snare target one; Reckoner Shakedown chooses one.
 pub fn creature_or_vehicle(q: &dyn Query, id: ObjectId) -> bool {
-    on_battlefield(q, id) && {
-        let c = q.chars(id);
-        c.is(CardType::Creature) || c.has_subtype(Subtype::Vehicle)
-    }
+    on_battlefield(q, id) && is_creature_or_vehicle(&q.chars(id))
+}
+
+/// Whether these are the characteristics of a creature or a Vehicle (CR 205.3g, 301.7), wherever the object is: the creature type, or
+/// the Vehicle subtype whether or not it is crewed into a creature. Bounce Off and Perilous Snare target a permanent that is one;
+/// Back on Track and Carrion Cruiser take a card from a graveyard that is one.
+pub fn is_creature_or_vehicle(c: &Chars) -> bool {
+    c.is(CardType::Creature) || c.has_subtype(Subtype::Vehicle)
 }
 
 fn creature_or_vehicle_filter(q: &dyn Query, _: &Asker, t: Target) -> bool {
