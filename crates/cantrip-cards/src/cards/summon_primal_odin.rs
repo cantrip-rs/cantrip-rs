@@ -14,13 +14,12 @@ fn zantetsuken(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 }
 
 /// III: "Draw two cards. Each player loses 2 life." (CR 121.1, 119.3): the controller draws first; then every player still in the
-/// game loses 2 life, in turn order.
+/// game loses 2 life, together (CR 101.4, 603.2c).
 fn hall_of_sorrow(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     effects::draw(g, item, 2)?;
     g.end_sentence();
-    for player in g.state().apnap().collect::<Vec<_>>() {
-        g.lose_life(player, 2);
-    }
+    let losses: Vec<(PlayerId, i32)> = g.state().apnap().map(|p| (p, 2)).collect();
+    g.lose_life_together(&losses);
     Ok(())
 }
 
