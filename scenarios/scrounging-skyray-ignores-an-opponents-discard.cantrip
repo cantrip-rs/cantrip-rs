@@ -1,0 +1,37 @@
+# "Whenever YOU discard": Bot1's Hymn to Tourach makes Bot2 discard two cards, and Bot1's Scrounging Skyray gets nothing.
+# Bot2 plays its land so no cleanup discard adds to its graveyard.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Scrounging Skyray
+Swamp
+Hymn to Tourach
+Mox Jet
+Swamp
+Swamp x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Scrounging Skyray.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Hymn to Tourach.Cast(Bot2)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Scrounging Skyray.Power = 1
+Bot2.Graveyard.Count = 2
+Bot1.Graveyard = Hymn to Tourach
