@@ -1,0 +1,54 @@
+# Pacesetter Paragon (2/3, "Exhaust - {2}{R}: Put a +1/+1 counter on this creature. It gains double strike until end of turn"): cast
+# on turn 1 off the Mountain and three Moxen. On turn 3 it attacks and Bot1 pays the exhaust cost during combat (Mountain and two
+# Moxen, the pool empty after): a 3/4 with double strike deals 3 twice, 6 in all (20 - 6 = 14). Double strike ends with the turn,
+# the counter stays, and on turn 5 the exhaust ability is not offered again with every source untapped.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Pacesetter Paragon
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Pacesetter Paragon.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pacesetter Paragon.Power = 2
+? Bot1.Battlefield.Pacesetter Paragon.Toughness = 3
+? Bot1.Battlefield.Pacesetter Paragon.Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Pacesetter Paragon > Bot2)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Pacesetter Paragon.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Pacesetter Paragon.Power = 3
+? Bot1.Battlefield.Pacesetter Paragon.Toughness = 4
+? Bot1.Battlefield.Pacesetter Paragon.Keywords = DoubleStrike
+[T3 Bot1.Main2]
+? Bot2.Life = 14
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Pacesetter Paragon.Power = 3
+? Bot1.Battlefield.Pacesetter Paragon.Keywords = (absent)
+! Bot1.Battlefield.Pacesetter Paragon.Activate
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Pacesetter Paragon.Power = 3

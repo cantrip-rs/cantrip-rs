@@ -1,0 +1,8 @@
+{
+  "name": "Pacesetter Paragon",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Human Pilot",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Exhaust — {2}{R}: Put a +1/+1 counter on this creature. It gains double strike until end of turn. (Activate each exhaust ability only once.)"
+}

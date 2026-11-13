@@ -1,0 +1,61 @@
+# Pacesetter Paragon: "Activate each exhaust ability only once" (CR 702.177a) is per object. Exhausted on turn 3 (a 3/4 with a counter),
+# it is bounced with Unsummon and recast: a new object with no counter (CR 400.7), whose exhaust ability works again on turn 5.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Pacesetter Paragon
+Unsummon
+Black Lotus
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pacesetter Paragon.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Pacesetter Paragon.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pacesetter Paragon.Power = 3
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unsummon.Cast(Bot1.Battlefield.Pacesetter Paragon)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Pacesetter Paragon.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pacesetter Paragon.Power = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Pacesetter Paragon.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Pacesetter Paragon.Power = 3
+Bot1.Battlefield.Pacesetter Paragon.Toughness = 4
+Bot1.Battlefield.Pacesetter Paragon.Keywords = DoubleStrike
