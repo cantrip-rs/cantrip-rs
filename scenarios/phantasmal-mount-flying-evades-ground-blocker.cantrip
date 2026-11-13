@@ -1,0 +1,28 @@
+# Phantasmal Mount flies over a creature without flying or reach (CR 702.9b).
+[Bot1 Deck]
+Phantasmal Mount
+Mox Sapphire
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Phantasmal Mount.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Phantasmal Mount > Bot2)
+! Bot2.Block(Memnite > Phantasmal Mount)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 19

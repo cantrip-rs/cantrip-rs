@@ -1,0 +1,42 @@
+# An unrelated creature leaving does not trigger either delayed sacrifice (CR 603.7b).
+[Bot1 Deck]
+Phantasmal Mount
+Mox Sapphire
+Mox Pearl
+Mox Ruby
+Memnite x2
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Phantasmal Mount.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Phantasmal Mount.Activate(Bot1.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite#1.Power = 2
+? Bot1.Battlefield.Memnite#1.Toughness = 2
+? Bot1.Battlefield.Memnite#1.Keywords = Flying
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite#2)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Phantasmal Mount.Power = 1
+Bot1.Graveyard = Memnite; Lightning Bolt
