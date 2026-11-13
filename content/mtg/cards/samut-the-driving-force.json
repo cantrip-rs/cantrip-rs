@@ -1,0 +1,13 @@
+{
+  "name": "Samut, the Driving Force",
+  "manaCost": "{3}{R}{G}{W}",
+  "type": "Legendary Creature — Human Warrior Cleric",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "First strike, vigilance, haste\nStart your engines! (If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.)\nOther creatures you control get +X/+0, where X is your speed.\nNoncreature spells you cast cost {X} less to cast, where X is your speed.",
+  "keywords": [
+    "FirstStrike",
+    "Vigilance",
+    "Haste"
+  ]
+}

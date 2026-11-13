@@ -447,6 +447,10 @@ const INERT: &[(&str, &str)] = &[
         "Aspect of Wolf",
         "its effect counts the Forests its controller controls, and the synthetic boards hold none; its scenarios show +X/+Y for odd and even counts, nonbasic Forests, a Forest that stops being one, and an opponent's creature",
     ),
+    (
+        "Samut, the Driving Force",
+        "its effect adds its controller's speed to the power, and the synthetic players have none (speed starts when a player's engine starts); its scenarios show the +X/+0 at speed 1 and 2 for its controller and for the opponent when Samut is theirs",
+    ),
 ];
 
 /// The contract of every static ability's effect (`StaticApply`), across the whole card table: applied to synthetic objects

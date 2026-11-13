@@ -1,0 +1,73 @@
+# Samut, the Driving Force under Bot2's control (CR 613.4c, 601.2f, 702.179): Bot2's Memnite is a 2/1 at speed 1 and a 3/1 at speed 2, and its Mind Stone
+# ({2}) is cast for no mana at speed 2. Bot1's Memnite stays a 1/1, and with a single Mox Pearl its own Mind Stone cannot be cast (it would be free
+# if Samut's discount reached it). Bot2's haste Samut hits for 4 on turn 2, which takes it from speed 1 to speed 2; Bot1 is not blocking.
+
+[Bot1 Deck]
+Memnite
+Mox Pearl
+Mind Stone
+Plains x17
+
+[Bot2 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Island
+Samut, the Driving Force
+Memnite
+Mind Stone
+Island x11
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Samut, the Driving Force.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Speed = 1
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Power = 1
+Bot2.Attack(Samut, the Driving Force > Bot1)
+Bot1.Block(Count: 0)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+? Bot1.Life = 16
+? Bot2.Speed = 2
+? Bot2.Battlefield.Memnite.Power = 3
+[T3 Bot1.Main1]
+! Bot1.Hand.Mind Stone.Cast(Mana: short)
+[T4 Bot2.Main1]
+Bot2.Hand.Mind Stone.Cast
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Mind Stone.Tapped = false
+Bot2.Battlefield.Mox Pearl.Tapped = false
+Bot2.Battlefield.Mox Sapphire.Tapped = false
+Bot2.Battlefield.Mox Jet.Tapped = false
+Bot2.Battlefield.Mox Ruby.Tapped = false
+Bot2.Battlefield.Mox Emerald.Tapped = false
+Bot2.Battlefield.Island.Tapped = false
+Bot1.Battlefield.Memnite.Power = 1

@@ -1,0 +1,92 @@
+# Samut, the Driving Force {3}{R}{G}{W}: "Start your engines! Other creatures you control get +X/+0, where X is your speed. Noncreature spells
+# you cast cost {X} less to cast, where X is your speed." (CR 702.179, 613.4c, 601.2f, 118.7a). Five Moxen and a Mountain pay for it on turn 1
+# (speed 1); its haste attack makes Bot2 lose life, so the speed rises to 2 (CR 702.179d). Bot2's own Memnite stays 1/1 and its Mind Stone ({2}) still
+# costs two: with one Mox it is refused (Samut's discount is only for its controller). On turn 3 Bot1's Memnite is a 3/1; on turn 5 Bot1's Mind Stone costs
+# {2} less at speed 2, so it is cast with no mana at all and every Mox stays untapped. On turn 7 Hedron Archive ({4}) is cast with exactly
+# two mana from two Moxen and leaves none floating: the discount is the speed, 2, not more.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mountain
+Samut, the Driving Force
+Memnite
+Mind Stone
+Hedron Archive
+Plains x10
+
+[Bot2 Deck]
+Mox Sapphire
+Mind Stone
+Memnite
+Island x17
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Samut, the Driving Force.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+Bot1.Pass
+Bot1.Pass
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Samut, the Driving Force > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+? Bot2.Life = 16
+? Bot1.Speed = 2
+? Bot1.Battlefield.Samut, the Driving Force.Power = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot2.Hand.Mind Stone.Cast(Mana: short)
+? Bot2.Battlefield.Memnite.Power = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 1
+[T5 Bot1.Main1]
+Bot1.Hand.Mind Stone.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mind Stone.Tapped = false
+? Bot1.Battlefield.Mox Pearl.Tapped = false
+? Bot1.Battlefield.Mox Sapphire.Tapped = false
+? Bot1.Battlefield.Mox Jet.Tapped = false
+? Bot1.Battlefield.Mox Ruby.Tapped = false
+? Bot1.Battlefield.Mox Emerald.Tapped = false
+? Bot1.Battlefield.Mountain.Tapped = false
+[T7 Bot1.Main1]
+? Bot1.Speed = 2
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Hedron Archive.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Hedron Archive.Tapped = false
+Bot1.Battlefield.Mox Pearl.Tapped = false
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Battlefield.Mox Ruby.Tapped = false
+Bot2.Battlefield.Memnite.Power = 1
