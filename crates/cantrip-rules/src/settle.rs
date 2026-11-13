@@ -127,24 +127,15 @@ fn check_once(cx: &mut Cx) -> R<bool> {
             continue;
         }
         if let Some(reason) = ops::loses_to_state_based_actions_given(cx, p, &commander_beaten) {
-            cx.st().update_player(p, |pl| {
-                pl.lost = true;
-                pl.drew_from_empty = false;
-            });
             leavers.push((p, reason));
             acted = true;
         } else if player.drew_from_empty {
             cx.st().update_player(p, |pl| pl.drew_from_empty = false);
         }
     }
-    // The monarch and the initiative pass on once every loser of this check has left, so none of them is passed one on
-    // the way (CR 725.4, 726.4, 800.4a).
-    if !leavers.is_empty() {
-        crate::designations::monarch_left(cx);
-        crate::designations::initiative_left(cx);
-    }
     // The game they lost is looked back on (CR 603.10f): as the board was before this check, whose actions all happen at
-    // once with the losses (CR 704.3) - a permanent dying in it still sees its controller's opponent lose.
+    // once with the losses (CR 704.3) - a permanent dying in it still sees its controller's opponent lose. Take it before
+    // marking anyone lost: that mark ends control effects, which must not change how this check judges the other SBAs.
     let lost_before = (!leavers.is_empty()).then(|| (cx.s().battlefield().to_vec(), Then::now(cx)));
     // CR 903.9a: a commander that entered graveyard or exile since the previous check may move to command zone now.
     let mut pending = Vec::new();
@@ -157,7 +148,7 @@ fn check_once(cx: &mut Cx) -> R<bool> {
     for id in pending {
         let owner = cx.s().obj(id).owner;
         cx.st().update_obj(id, |obj| obj.commander_return_pending = false);
-        if !cx.s().player(owner).lost
+        if !cx.s().player(owner).lost && !leavers.iter().any(|&(p, _)| p == owner)
             && matches!(cx.ask_rule(owner, RequestKind::May { source: id, purpose: Purpose::Optional })?, Some(Answer::Yes))
         {
             return_to_command.push(ops::Moving::to(id, Zone::COMMAND));
@@ -411,7 +402,7 @@ fn check_once(cx: &mut Cx) -> R<bool> {
         surplus.extend(worlds.iter().filter_map(|&(id, since)| (tied || since != newest).then_some(id)));
     }
     if legends.len() > 1 {
-        for p in cx.s().apnap().collect::<Vec<_>>() {
+        for p in cx.s().apnap().filter(|p| !leaving.contains(p)).collect::<Vec<_>>() {
             let mine: Vec<(ObjectId, &'static str)> =
                 legends.iter().copied().filter(|&(id, _)| cx.s().obj(id).controller == p).collect();
             let mut asked: Vec<&'static str> = Vec::new();
@@ -488,10 +479,12 @@ fn check_once(cx: &mut Cx) -> R<bool> {
     // last existed with those objects there (CR 603.10a). The game goes on without them, or ends with the one left (CR
     // 104.2a).
     if let Some((battlefield, then)) = &lost_before {
+        // Every loser leaves in the same check. Until its other actions were judged and performed, their control effects
+        // still described that pre-check board. Now the loss procedure can end those effects and settle the new board.
+        for &(p, _) in &leavers {
+            cx.st().update_player(p, |pl| { pl.lost = true; pl.drew_from_empty = false; });
+        }
         lost_the_game(cx, &leavers, battlefield, then);
-    }
-    for (p, _) in leavers {
-        ops::leave_game(cx, p);
     }
 
     // CR 704.5t: a player on the bottommost room of a dungeon with none of its abilities on the stack completes it.
@@ -1606,16 +1599,26 @@ pub(crate) fn could_have<'a>(cx: &'a Cx, table: &'a [bool], kind: fn(&TriggeredD
     }
 }
 
-/// `losses`, players who lost the game at once and are about to leave it (CR 104.3, 800.4a): recorded, and the abilities
-/// that trigger on them looked for (CR 603.2), looking back on `battlefield` as it was just before (CR 603.10f), as `then`
-/// took it. Their own abilities that trigger go with them as they leave (CR 800.4a).
+/// `losses`, players marked lost at once (CR 104.3, 800.4a): record their loss, settle its continuous consequences, collect
+/// its triggers looking back on the captured pre-loss board (CR 603.10f), then clear their objects and abilities. A control
+/// effect cannot leave a stored controller inconsistent with layer 2 while triggers are asked. Concession, Phage the Untouchable and ordinary lethal
+/// damage all use this procedure; their own abilities cannot survive their leaving (CR 800.4a).
 pub(crate) fn lost_the_game(cx: &mut Cx, losses: &[(PlayerId, LossReason)], battlefield: &[ObjectId], then: &Then) {
     let events: Vec<Event> = losses.iter().map(|&(player, reason)| Event::GameLost { player, reason }).collect();
     let start = cx.g.log.len();
     for &event in &events {
         cx.record(event);
     }
+    // Static control can no longer give these players anything (CR 800.4a); make that continuous change real before an
+    // event's triggers or a designation change asks the new board. The captured Then still supplies pre-loss controllers.
+    ops::settle_at_once(cx);
+    // All losers are marked before passing either designation, so neither is passed to another player leaving in this
+    // same check (CR 725.4, 726.4). Their loss is already in history when any consequences of leaving are recorded.
+    crate::designations::monarch_left(cx);
+    crate::designations::initiative_left(cx);
     collect_batch(cx, &events, Some(Before { battlefield, then, seen_by_all: &[] }), start);
+    // Collected before cleanup so a loser's own pending loss triggers are removed by the ordinary leave_game procedure.
+    for &(p, _) in losses { ops::leave_game(cx, p); }
 }
 
 /// How many mana that a "when that mana is spent" delayed ability rides (`DelayedWhen::ThatMana`) were spent to cast the

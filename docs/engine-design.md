@@ -1608,6 +1608,14 @@ who can't win (`CardDef::win_rules`) or who has an opponent who can't lose. A co
 (104.3a). Every loss records `Event::GameLost` with its `LossReason`, and a draw `Event::GameDrawn` with its `DrawReason`,
 which the host tells each seat (`PlayerLostEvent`, `GameEndedEvent.DrawReason`).
 
+Concession, an effect's loss and a state-based loss share `settle::lost_the_game`: the loss is recorded before its
+continuous consequences, control is settled before collecting triggers, and `leave_game` removes the loser's objects
+and pending abilities (800.4a). Loss triggers ask the captured pre-loss battlefield and controllers (603.10f), even though
+the current board has already given back a creature controlled through the loser's Aura. A state-based check captures
+that board only when it has a loser, and marks all its losers after judging and performing its other actions (704.3);
+neither its legend-rule choices nor its commander-return choices are asked of a player leaving in that check. All
+simultaneous losers are marked before the monarch or initiative is passed, so neither passes to another loser.
+
 Loops are `loops.rs`'s (CR 104.4b, 732; `docs/rules-exceptions.md`, RX-4), watched in `GameState::loop_watch` and
 `GameState::loop_keys`, journalled like any other write. The engine finds one kind of loop only: a run of passes that
 comes back to the same exact position. Any choice ends a run - an action at priority, or an answer to any other question

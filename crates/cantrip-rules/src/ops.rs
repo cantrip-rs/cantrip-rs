@@ -5691,10 +5691,7 @@ fn leaves_having_lost(cx: &mut Cx, player: PlayerId, reason: LossReason) {
     // The board just before the loss, which an ability that triggers on it looks back on (CR 603.10f).
     let (battlefield, then) = (cx.s().battlefield().to_vec(), crate::settle::Then::now(cx));
     cx.st().update_player(player, |pl| pl.lost = true);
-    crate::designations::monarch_left(cx);
-    crate::designations::initiative_left(cx);
     crate::settle::lost_the_game(cx, &[(player, reason)], &battlefield, &then);
-    leave_game(cx, player);
     let left: Vec<PlayerId> = cx.s().apnap().collect();
     match left.len() {
         0 => {
