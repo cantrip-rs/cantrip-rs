@@ -2183,7 +2183,7 @@ pub fn legendary_spell_you_cast(q: &dyn Query, me: &Asker, event: &Event) -> Opt
 pub fn artifact_spell_you_cast(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
         Event::SpellCast { spell, player, .. } if *player == me.controller && q.chars(*spell).is(CardType::Artifact) => {
-            Fired::PLAIN
+            Fired::about(Target::Object(*spell))
         }
         _ => None,
     }

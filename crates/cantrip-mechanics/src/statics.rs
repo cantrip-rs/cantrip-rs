@@ -521,6 +521,13 @@ pub fn power_is_creatures_you_control(q: &dyn LayerQuery, source: ObjectId, char
     chars.power = Some(crate::lands::count_you_control(q, source, &|c| c.is(CardType::Creature)));
 }
 
+/// "[This creature]'s power is equal to the number of artifacts you control" (CR 604.3, layer 7a): a characteristic-defining
+/// ability, counted as the earlier layers left every permanent, the creature itself among them if it is an artifact.
+/// Mendicant Core, Guidelight, Filigree Attendant, Cephalopod Sentry and Bronze Guardian print it.
+pub fn power_is_artifacts_you_control(q: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
+    chars.power = Some(crate::lands::count_you_control(q, source, &|c| c.is(CardType::Artifact)));
+}
+
 /// "Gets +1/+0 for each other artifact you control" (CR 613.4c, layer 7c): the artifacts as the earlier layers made them, under
 /// the control of the source's controller, the source itself not among them. Krang, Master Mind and Iron Man, Master of
 /// Machines print it.
