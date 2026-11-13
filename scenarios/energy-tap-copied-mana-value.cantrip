@@ -1,0 +1,29 @@
+# Clone copies Ornithopter, so Energy Tap uses the copied mana value zero rather than Clone's printed four (CR 707.2, 202.3).
+[Bot1 Deck]
+Ornithopter
+Black Lotus
+Mox Sapphire
+Clone
+Energy Tap
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Clone.Cast
+Bot1.Accept
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Energy Tap.Cast(Bot1.Battlefield.Ornithopter#2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Mana =
+Bot1.Battlefield.Ornithopter#2.Tapped = true

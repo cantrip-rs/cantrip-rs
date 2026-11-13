@@ -1,0 +1,26 @@
+# Energy Tap taps an untapped creature you control and adds colorless mana equal to its mana value (CR 701.26a, 106.3).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Grizzly Bears
+Energy Tap
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Energy Tap.Cast(Grizzly Bears)
+? Bot1.Mana = {G}
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Mana = {G}{C}{C}
+Bot1.Battlefield.Grizzly Bears.Tapped = true
