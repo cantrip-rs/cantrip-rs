@@ -1,0 +1,8 @@
+{
+  "name": "Charming Prince",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Noble",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, choose one —\n• Scry 2.\n• You gain 3 life.\n• Exile another target creature you own. Return it to the battlefield under your control at the beginning of the next end step."
+}
