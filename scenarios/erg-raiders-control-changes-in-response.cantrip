@@ -1,0 +1,34 @@
+# A later control change cannot erase the fact that Raiders entered under its ability controller this turn.
+[Bot1 Deck]
+Erg Raiders
+Mox Jet
+Mox Pearl
+Swamp x20
+
+[Bot2 Deck]
+Old Man of the Sea
+Black Lotus
+Island x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Old Man of the Sea.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Erg Raiders.Cast
+[T5 Bot1.End]
+? Stack.Count = 1
+Bot2.Battlefield.Old Man of the Sea.Activate(Bot1.Battlefield.Erg Raiders)
+[T6 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Battlefield.Erg Raiders.Tapped = False

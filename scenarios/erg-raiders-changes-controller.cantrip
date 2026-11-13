@@ -1,0 +1,38 @@
+# Gaining control on the battlefield prevents damage that turn, but the new controller takes 2 at a later idle end step (CR 603.4).
+[Bot1 Deck]
+Erg Raiders
+Mox Jet
+Mox Pearl
+Swamp x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Control Magic
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Erg Raiders.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Control Magic.Cast(Bot1.Battlefield.Erg Raiders)
+[T3 Bot1.Main1]
+? Bot2.Life = 20
+[T5 Bot1.Main1]
+? Bot2.Life = 18
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18

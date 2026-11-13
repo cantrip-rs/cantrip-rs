@@ -1,0 +1,38 @@
+# Erg Raiders causes no damage on the turn it enters or a turn it attacks, but deals 2 on a later idle end step (CR 603.4).
+[Bot1 Deck]
+Erg Raiders
+Mox Jet
+Mox Pearl
+Ornithopter x2
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Erg Raiders.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+? Bot1.Life = 20
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Erg Raiders > Bot2)
+[T4 Bot2.Main1]
+? Bot1.Life = 20
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+[T6 Bot2.Main1]
+? Bot1.Life = 18
+
+[Expect]
+Bot1.Life = 18

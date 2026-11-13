@@ -1,0 +1,32 @@
+# The triggered ability still deals damage when its source dies in response, using last known information (CR 113.7a).
+[Bot1 Deck]
+Erg Raiders
+Mox Jet
+Mox Pearl
+Swamp x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Erg Raiders.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Erg Raiders)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 18
+Bot1.Graveyard = Erg Raiders

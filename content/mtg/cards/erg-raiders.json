@@ -1,0 +1,8 @@
+{
+  "name": "Erg Raiders",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Human Warrior",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "At the beginning of your end step, if this creature didn't attack this turn, it deals 2 damage to you unless it came under your control this turn."
+}
