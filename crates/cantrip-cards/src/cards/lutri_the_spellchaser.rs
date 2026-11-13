@@ -1,14 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::{same_name, targets};
+use cantrip_mechanics::{copy, same_name, targets};
 use cantrip_oracle as oracle;
-
-/// "Copy target instant or sorcery spell you control. You may choose new targets for the copy."
-fn copy(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(spell) = targets::object(g, item, 0) {
-        g.copy_spell(spell, item.controller, true)?;
-    }
-    Ok(())
-}
 
 /// "Companion - Each nonland card in your starting deck has a different name" (CR 702.139a, 201.2b): no two share a name, a
 /// split card sharing one with a card named for either half (CR 201.2a).
@@ -19,7 +11,7 @@ fn nonland_cards_named_apart(q: &dyn Query, deck: &StartingDeck) -> bool {
 
 pub static CARD: CardDef = CardDef {
     companion: Some(nonland_cards_named_apart),
-    abilities: &[triggered(cantrip_mechanics::triggers::THIS_ENTERS_IF_CAST, copy, "When Lutri, the Spellchaser enters, if you cast it, copy target instant or sorcery spell you control. You may choose new targets for the copy.")
+    abilities: &[triggered(cantrip_mechanics::triggers::THIS_ENTERS_IF_CAST, copy::copy_target_spell, "When Lutri, the Spellchaser enters, if you cast it, copy target instant or sorcery spell you control. You may choose new targets for the copy.")
         .targets(&[targets::INSTANT_OR_SORCERY_SPELL_YOU_CONTROL])],
     ..oracle::LUTRI_THE_SPELLCHASER
 };

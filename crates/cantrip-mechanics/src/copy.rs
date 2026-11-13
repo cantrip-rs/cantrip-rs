@@ -277,6 +277,16 @@ pub fn copy_the_cast_spell(g: &mut dyn Game, item: &StackItem) -> Result<(), Sus
     Ok(())
 }
 
+/// "Copy target [...] spell [you control]. You may choose new targets for the copy" (CR 707.10, 707.10c) for a spell or ability whose
+/// target 0 is the spell: the copy is created on the stack above it and is not cast; a permanent spell's copy becomes a token as
+/// it resolves (CR 707.10a, 111.1). With the target gone it does nothing (CR 608.2b). Choreographed Sparks, Lutri, the
+/// Spellchaser and Slick Imitator print it.
+pub fn copy_target_spell(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(spell) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    g.copy_spell(spell, item.controller, true)?;
+    Ok(())
+}
+
 /// The delayed ability of "When you next cast an instant or sorcery spell this turn, copy that spell. You may choose new targets
 /// for the copy" (CR 603.7b, 707.10), for the card's `delayed` list: set up by `delayed::next_this_turn`, it triggers once on the next
 /// instant or sorcery spell its controller casts this turn (the copy is not cast, CR 707.10) and ends with the turn if none is.
