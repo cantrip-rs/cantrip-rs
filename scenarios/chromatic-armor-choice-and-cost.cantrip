@@ -1,0 +1,66 @@
+# The Aura enters attached with one sleight counter and prevents damage of its chosen color;
+# activating it adds a counter, changes that color, and costs the number already on it (CR 615.1, 122.6).
+
+[Bot1 Deck]
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Island
+Chromatic Armor
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Shock
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Chromatic Armor.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Chromatic Armor.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Colors(Red)
+? Bot1.Battlefield.Chromatic Armor.AttachedTo = Ornithopter
+? Bot1.Battlefield.Chromatic Armor.Counters.Sleight = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Damage = 0
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 18
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Chromatic Armor.Activate
+? Bot1.Mana =
+Bot1.Colors(Blue)
+? Bot1.Battlefield.Chromatic Armor.Counters.Sleight = 2
+? Bot1.Battlefield.Chromatic Armor.ChosenColor = Blue
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Chromatic Armor.Activate
+? Bot1.Mana =
+Bot1.Colors(Red)
+? Bot1.Battlefield.Chromatic Armor.Counters.Sleight = 3
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Chromatic Armor.ChosenColor = Red
+Bot1.Battlefield.Ornithopter.Damage = 0

@@ -1,0 +1,49 @@
+# White is a valid choice both as the Aura enters and when its ability resolves. After Vampire Hexmage
+# removes its sleight counter, its next activation costs zero and adds one counter (CR 107.3, 122.1).
+
+[Bot1 Deck]
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Chromatic Armor
+Black Lotus
+Vampire Hexmage
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Chromatic Armor.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Colors(White)
+? Bot1.Battlefield.Chromatic Armor.ChosenColor = White
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Vampire Hexmage.Cast
+Bot1.Pass
+Bot1.Battlefield.Vampire Hexmage.Activate(Bot1.Battlefield.Chromatic Armor)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Chromatic Armor.Counters.Sleight = (absent)
+? Bot1.Mana =
+Bot1.Battlefield.Chromatic Armor.Activate
+? Bot1.Mana =
+Bot1.Colors(White)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Chromatic Armor.Counters.Sleight = 1
+Bot1.Battlefield.Chromatic Armor.ChosenColor = White
