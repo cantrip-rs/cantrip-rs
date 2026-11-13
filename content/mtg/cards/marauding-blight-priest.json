@@ -1,0 +1,8 @@
+{
+  "name": "Marauding Blight-Priest",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Vampire Cleric",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Whenever you gain life, each opponent loses 1 life."
+}

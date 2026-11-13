@@ -1,0 +1,50 @@
+# "Whenever you gain life, each opponent loses 1 life": Bot1's Healing Salve gains 3 life on turn 3 (20 to 23) - one trigger, however much
+# was gained - and Bot2 drops from 20 to 19 (CR 603.2, 119.3). On turn 2 Bot2 gains 2 life with its own Zuran Orb (20 to 22); that is not
+# "you", so the Priest does not trigger and Bot1 stays at 20 until the Salve.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Marauding Blight-Priest
+Healing Salve
+Island x20
+
+[Bot2 Deck]
+Plains
+Zuran Orb
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Marauding Blight-Priest.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Zuran Orb.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Zuran Orb.Activate(Sacrifice: Plains)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 22
+? Bot1.Life = 20
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 21
