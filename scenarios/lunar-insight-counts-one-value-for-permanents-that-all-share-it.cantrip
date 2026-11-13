@@ -1,0 +1,35 @@
+# Lunar Insight: every nonland permanent Bot1 controls here has mana value 0 (two Moxen, a Memnite, an Ornithopter), so there is one different value and
+# it draws exactly one card (not four): the turn-3 draw is Counterspell, Lunar Insight's is Giant Growth. Without any permanent but lands it would draw none.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Memnite
+Ornithopter
+Lunar Insight
+Island
+Island
+Counterspell
+Giant Growth
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Lunar Insight.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Counterspell; Giant Growth; Island
+Bot1.Library.Count = 12

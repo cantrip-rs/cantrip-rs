@@ -1,0 +1,47 @@
+# Lunar Insight {2}{U}: "Draw a card for each different mana value among nonland permanents you control" (CR 202.3). Bot1 controls three Moxen and a
+# Memnite (mana value 0 all four, counted once), a Mother of Runes (1) and an Island (a land: not counted); Bot2's Grizzly Bears (2) is not Bot1's. Two
+# different values, so Bot1 draws two cards (Giant Growth and an Island, after its turn-3 draw of Counterspell).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mother of Runes
+Memnite
+Lunar Insight
+Island
+Counterspell
+Giant Growth
+Island x12
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mother of Runes.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Lunar Insight.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Counterspell; Giant Growth; Island
+Bot1.Library.Count = 11
+Bot1.Graveyard = Lunar Insight

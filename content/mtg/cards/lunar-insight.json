@@ -1,0 +1,6 @@
+{
+  "name": "Lunar Insight",
+  "manaCost": "{2}{U}",
+  "type": "Sorcery",
+  "oracleText": "Draw a card for each different mana value among nonland permanents you control."
+}
