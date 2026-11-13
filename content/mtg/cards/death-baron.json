@@ -1,0 +1,8 @@
+{
+  "name": "Death Baron",
+  "manaCost": "{1}{B}{B}",
+  "type": "Creature — Zombie Wizard",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Skeletons you control and other Zombies you control get +1/+1 and have deathtouch. (Any amount of damage they deal to a creature is enough to destroy it.)"
+}

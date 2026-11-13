@@ -1,0 +1,96 @@
+# "Skeletons you control and other Zombies you control get +1/+1 and have deathtouch" (CR 613.1f, 205.3m): Bot1's Skeleton Archer (a Skeleton) and
+# Walking Corpse (a Zombie) are 4/4 and 3/3 with deathtouch; Death Baron itself, a Zombie Wizard, gets nothing ("other"), and Bot2's Walking
+# Corpse (not "you control") is a plain 2/2. When the Baron leaves, the bonuses go.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Death Baron
+Skeleton Archer
+Walking Corpse
+Island x12
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Walking Corpse
+Shock
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Death Baron.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Skeleton Archer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Walking Corpse.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Walking Corpse.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Skeleton Archer.Power = 4
+? Bot1.Battlefield.Skeleton Archer.Toughness = 4
+? Bot1.Battlefield.Skeleton Archer.Keywords = Deathtouch
+? Bot1.Battlefield.Walking Corpse.Power = 3
+? Bot1.Battlefield.Walking Corpse.Toughness = 3
+? Bot1.Battlefield.Walking Corpse.Keywords = Deathtouch
+? Bot1.Battlefield.Death Baron.Power = 2
+? Bot1.Battlefield.Death Baron.Toughness = 2
+? Bot1.Battlefield.Death Baron.Keywords = (absent)
+? Bot2.Battlefield.Walking Corpse.Power = 2
+? Bot2.Battlefield.Walking Corpse.Toughness = 2
+? Bot2.Battlefield.Walking Corpse.Keywords = (absent)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Death Baron)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Skeleton Archer.Power = 3
+Bot1.Battlefield.Skeleton Archer.Keywords = (absent)
+Bot1.Battlefield.Walking Corpse.Power = 2
+Bot1.Battlefield.Walking Corpse.Keywords = (absent)

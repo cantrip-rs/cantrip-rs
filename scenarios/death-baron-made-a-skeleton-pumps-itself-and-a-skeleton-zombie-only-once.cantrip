@@ -1,0 +1,80 @@
+# Death Baron's rulings (2018-07-13): "Skeletons you control" includes the Baron itself once it is a Skeleton, and a creature that is both a
+# Skeleton and a Zombie gets the bonus only once (CR 613.1f, 205.3m). On turn 3 Bot1's Arcane Adaptation, choosing Skeleton, makes every creature
+# Bot1 controls a Skeleton too: Death Baron (a Zombie Wizard Skeleton) becomes a 3/3 with deathtouch, and Walking Corpse (a Zombie Skeleton)
+# stays a 3/3, not a 4/4. Bot2's Walking Corpse is not Bot1's and stays a plain 2/2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Death Baron
+Walking Corpse
+Arcane Adaptation
+Island x12
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Walking Corpse
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Death Baron.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Walking Corpse.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Walking Corpse.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Death Baron.Power = 2
+? Bot1.Battlefield.Walking Corpse.Power = 3
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Arcane Adaptation.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Skeleton)
+
+[Expect]
+Bot1.Battlefield.Death Baron.Subtypes = Skeleton; Wizard; Zombie
+Bot1.Battlefield.Death Baron.Power = 3
+Bot1.Battlefield.Death Baron.Toughness = 3
+Bot1.Battlefield.Death Baron.Keywords = Deathtouch
+Bot1.Battlefield.Walking Corpse.Power = 3
+Bot1.Battlefield.Walking Corpse.Toughness = 3
+Bot1.Battlefield.Walking Corpse.Keywords = Deathtouch
+Bot2.Battlefield.Walking Corpse.Power = 2
+Bot2.Battlefield.Walking Corpse.Keywords = (absent)
