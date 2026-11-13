@@ -1548,6 +1548,18 @@ pub fn return_first_target_to_hand_then_surveil<const N: usize>(g: &mut dyn Game
     surveil(g, item, N)
 }
 
+/// "Return target [permanent] to its owner's hand. If this spell was kicked, draw a card" (CR 702.33e, 608.2c). A spell whose
+/// only target has become illegal does nothing at all (CR 608.2b), so there is no draw then; otherwise the draw follows
+/// whether or not the permanent really moved. Into the Roil and Whoosh print it.
+pub fn return_first_target_to_hand_then_draw_if_kicked(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    return_first_target_to_hand(g, item)?;
+    g.end_sentence();
+    if item.kicked > 0 {
+        draw(g, item, 1)?;
+    }
+    Ok(())
+}
+
 /// "Scry N" (CR 701.22) for the ability's controller. The scry lands (Crystal Grotto, Temple of Deceit) print it.
 pub fn scry(g: &mut dyn Game, item: &StackItem, n: usize) -> Result<(), Suspend> {
     crate::scry(g, item.controller, item.object, n)
