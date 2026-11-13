@@ -1,0 +1,61 @@
+# Push the Limit: "Return all Mount and Vehicle cards from your graveyard to the battlefield." Only those: Bot1's Faithless Looting
+# discards a Smuggler's Copter (a Vehicle) and a Memnite (an artifact creature card, neither a Mount nor a Vehicle). On turn 5 Push the
+# Limit returns the Copter, which becomes an artifact creature with haste, and the Memnite stays in the graveyard. At the beginning of the
+# end step the Copter is sacrificed.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Faithless Looting
+Smuggler's Copter
+Memnite
+Push the Limit
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mountain
+Mox Emerald
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Smuggler's Copter; Memnite)
+Bot1.Pass
+? Bot1.Graveyard = Faithless Looting; Memnite; Smuggler's Copter
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Push the Limit.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter.Types = Artifact; Creature
+? Bot1.Battlefield.Smuggler's Copter.Keywords = Flying; Haste
+? Bot1.Graveyard = Push the Limit; Faithless Looting; Memnite
+[T6 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield = Mountain; Mountain; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Graveyard = Smuggler's Copter; Push the Limit; Faithless Looting; Memnite

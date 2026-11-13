@@ -1,0 +1,98 @@
+# Push the Limit ({5}{R}{R}): "Return all Mount and Vehicle cards from your graveyard to the battlefield. Sacrifice them at the beginning of the next end step.
+# Vehicles you control become artifact creatures until end of turn. Creatures you control gain haste until end of turn."
+# Turn 1: Bot1's Faithless Looting discards Smuggler's Copter and Caustic Bronco; Looting itself stays in the graveyard after it resolves. Bot2's own Looting
+# (turn 2) discards its Caustic Bronco, which is not Bot1's to return. Bot2 has a Smuggler's Copter on the battlefield, Bot1 another one (turn 3).
+# Turn 7: Push the Limit returns Copter and Bronco (not Looting, not Bot2's Bronco); Bot1's other Copter and the returned one become artifact
+# creatures, Bot2's Copter does not; the returned Bronco and both Copters have haste (they are creatures when the last sentence resolves)
+# and the returned ones are not summoning sick. At the beginning of the end step Bronco and the returned Copter are sacrificed and the other Copter stays.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Faithless Looting
+Smuggler's Copter
+Caustic Bronco
+Push the Limit
+Mox Pearl
+Mountain
+Smuggler's Copter
+Mountain
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Faithless Looting
+Smuggler's Copter
+Caustic Bronco
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Smuggler's Copter; Caustic Bronco)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Smuggler's Copter.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot2.Choose(Caustic Bronco; Island)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Faithless Looting; Caustic Bronco; Smuggler's Copter
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mountain#3.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Push the Limit.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter#1.Types = Artifact; Creature
+? Bot1.Battlefield.Smuggler's Copter#2.Types = Artifact; Creature
+? Bot1.Battlefield.Caustic Bronco.Keywords = Haste
+? Bot1.Battlefield.Smuggler's Copter#1.Keywords = Flying; Haste
+? Bot1.Battlefield.Smuggler's Copter#2.Keywords = Flying; Haste
+? Bot1.Battlefield.Caustic Bronco.SummoningSick = false
+? Bot2.Battlefield.Smuggler's Copter.Types = Artifact
+? Bot2.Battlefield.Smuggler's Copter.Keywords = Flying
+? Bot2.Graveyard = Faithless Looting; Island; Caustic Bronco
+[T8 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield = Mountain; Mountain; Mountain; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Smuggler's Copter
+Bot1.Graveyard = Caustic Bronco; Smuggler's Copter; Push the Limit; Faithless Looting
+Bot2.Graveyard = Faithless Looting; Island; Caustic Bronco
