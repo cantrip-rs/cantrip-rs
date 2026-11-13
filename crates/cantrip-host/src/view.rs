@@ -1648,6 +1648,7 @@ impl<'a> Projector<'a> {
                 let what = match e.kind {
                     EffectKind::CantAttack => "Can't attack",
                     EffectKind::CantBlock => "Can't block",
+                    EffectKind::NoCombatDamageAssignment => "Assigns no combat damage",
                     EffectKind::CantBeBlocked => "Can't be blocked",
                     // A resolved restriction on blocking it, in its card's words: "Can't be blocked except by creatures with
                     // haste this turn."
@@ -2016,6 +2017,33 @@ mod tests {
         let mut handles = HandleSpace::new();
         let handle = handles.handle(target);
         assert!(projector.describe(target, handle, None, &mut handles).granted_abilities.is_empty());
+    }
+
+    #[test]
+    fn no_combat_damage_assignment_is_visible_to_every_viewer_and_disappears_with_the_effect() {
+        let cards = cantrip_engine::cards();
+        let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+        let owner = PlayerId(0);
+        let id = game.state.push_obj(Obj::new(cards.find("Grizzly Bears").unwrap(), owner, Zone::BATTLEFIELD));
+        game.state.zone_push(Zone::BATTLEFIELD, id);
+        let timestamp = game.state.timestamp();
+        game.state.effect_push(ContinuousEffect { source: id, controller: owner, timestamp, affected: id,
+            kind: EffectKind::NoCombatDamageAssignment, duration: Duration::EndOfTurn, words: Words::NONE });
+        let names = vec!["A".to_string(), "B".to_string()];
+        let faces = HashSet::new();
+        for active in [true, false] {
+            if !active { game.state.effects_retain(|_| false); }
+            for viewer in [owner, PlayerId(1), PUBLIC] {
+                let projector = Projector { game: &game, viewer, names: &names, conceded: &[false, false], faces: &faces };
+                let mut handles = HandleSpace::new();
+                let handle = handles.handle(id);
+                let shown = projector.describe(id, handle, None, &mut handles);
+                let decoded: ObjectView = serde_json::from_str(&serde_json::to_string(&shown).unwrap()).unwrap();
+                let labels = decoded.granted_abilities.iter().map(|a| a.text.as_str()).collect::<Vec<_>>();
+                if active { assert_eq!(labels, ["Assigns no combat damage this turn."]); }
+                else { assert!(labels.is_empty()); }
+            }
+        }
     }
 
     #[test]
