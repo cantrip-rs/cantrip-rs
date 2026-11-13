@@ -1,0 +1,87 @@
+# Aether Syphon: "{2}, {T}: Draw a card." and "Max speed — Whenever you draw a card, each opponent mills two cards." Cast on
+# turn 1 it gives Bot1 speed 1 (CR 704.5aa, 702.179a); a Lightning Bolt to Bot2's face on each of turns 1, 3 and 5 raises it
+# once a turn: 2, 3, 4 (CR 702.179d). On turn 3, at speed 3, the {2},{T} draw mills nothing (the card does not have the
+# trigger below max speed, CR 702.178a); on turn 5, at speed 4, the same draw mills Bot2's top two (CR 701.17a: library 11 to 9), and only
+# that: Bot2's own draw on turn 6 is not "you draw" (CR 109.5), so Bot2's library goes down by one card only.
+
+[Bot1 Deck]
+Mountain
+Mox Sapphire
+Mox Sapphire
+Mox Ruby
+Aether Syphon
+Lightning Bolt
+Mountain
+Lightning Bolt
+Lightning Bolt
+Mountain
+Island
+Island x12
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Aether Syphon.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Aether Syphon.Activate
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot2.Library.Count = 12
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Aether Syphon.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Library.Count = 9
+[T6 Bot2.Main1]
+
+[Expect]
+Turn = 6
+Bot1.Speed = 4
+Bot2.Library.Count = 8
+Bot2.Life = 11

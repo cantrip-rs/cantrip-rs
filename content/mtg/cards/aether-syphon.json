@@ -1,0 +1,6 @@
+{
+  "name": "Aether Syphon",
+  "manaCost": "{1}{U}{U}",
+  "type": "Artifact",
+  "oracleText": "Start your engines! (If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.)\n{2}, {T}: Draw a card.\nMax speed — Whenever you draw a card, each opponent mills two cards. (Each opponent puts the top two cards of their library into their graveyard.)"
+}
