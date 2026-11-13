@@ -1,0 +1,43 @@
+# Armasaur Guide: the target may be the Guide itself (CR 115.1, 122.1): attacking with the Guide, Memnite and Ornithopter, Bot1
+# targets the Guide, which becomes a 5/5. Combat damage 5 + 1 + 0 = 6, Bot2 20 to 14.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Armasaur Guide
+Memnite
+Ornithopter
+Plains x10
+
+[Bot2 Deck]
+Memnite
+Island x10
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Armasaur Guide.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Armasaur Guide > Bot2; Memnite > Bot2; Ornithopter > Bot2)
+Bot1.Target(Bot1.Battlefield.Armasaur Guide)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Armasaur Guide.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Armasaur Guide.Power = 5
+Bot1.Battlefield.Armasaur Guide.Toughness = 5
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)

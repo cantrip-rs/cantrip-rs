@@ -1,0 +1,43 @@
+# Armasaur Guide: two attackers are not three (CR 603.2). Bot1 attacks with the Guide and Memnite only: nothing triggers (no
+# target is asked for, the stack is empty and no creature has a counter), and the 4 + 1 combat damage takes Bot2 from 20 to 15. The
+# Ornithopter stays home.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Armasaur Guide
+Memnite
+Ornithopter
+Plains x10
+
+[Bot2 Deck]
+Memnite
+Island x10
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Armasaur Guide.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Armasaur Guide > Bot2; Memnite > Bot2)
+? Stack.Count = 0
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Armasaur Guide.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
