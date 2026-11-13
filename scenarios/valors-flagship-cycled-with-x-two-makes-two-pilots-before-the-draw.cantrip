@@ -1,0 +1,46 @@
+# Valor's Flagship: Cycling {X}{2}{W} with X = 2 costs exactly five mana (the pool is empty right after paying), and "when you cycle
+# this card" makes X = 2 Pilot tokens (CR 107.3a, 702.29c): X is the cycling cost's. The trigger goes on the stack above the cycling
+# ability (the only other object on the stack) and resolves before the draw (CR 603.3, 405.5), so the two Pilots are there while the hand is still the one Mountain.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Valor's Flagship
+Mountain
+Mountain x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Valor's Flagship.Activate(Ability: Cycling; X: 2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+? Bot1.Mana =
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Hand.Count = 1
+? Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Pilot Token; Pilot Token
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Pilot Token; Pilot Token
+Bot1.Graveyard = Valor's Flagship
+Bot1.Hand.Count = 2

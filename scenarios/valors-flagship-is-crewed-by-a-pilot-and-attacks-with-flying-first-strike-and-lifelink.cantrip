@@ -1,0 +1,84 @@
+# Valor's Flagship (7/7 Vehicle, Flying, first strike, lifelink, Crew 3): a Pilot token made by cycling the first Flagship (X = 1) is
+# a 1/1 that crews Vehicles as though its power were 2 greater, so it alone makes the crew 3 (CR 702.122a). Bot1 casts the second
+# Flagship on turn 3 ({4}{W}{W}{W} from seven Moxes, three of them Pearls) and crews it with the Pilot (summoning-sick Vehicles
+# can't attack, so it only becomes a 7/7 artifact creature). On turn 5 it is crewed again and attacks: lifelink gains Bot1 7 life
+# as the 7 damage goes to Bot2 (CR 702.15b).
+
+[Bot1 Deck]
+Mox Pearl x3
+Mox Sapphire
+Mox Jet
+Valor's Flagship
+Valor's Flagship
+Mox Ruby
+Mox Emerald
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Valor's Flagship.Activate(Ability: Cycling; X: 1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Pearl; Mox Pearl; Mox Ruby; Mox Sapphire; Pilot Token
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Valor's Flagship.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Valor's Flagship.Types = Artifact
+Bot1.Battlefield.Valor's Flagship.Activate(Ability: Crew)
+Bot1.Choose(Pilot Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Valor's Flagship.Types = Artifact; Creature
+? Bot1.Battlefield.Valor's Flagship.Power = 7
+? Bot1.Battlefield.Valor's Flagship.Toughness = 7
+? Bot1.Battlefield.Pilot Token.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Battlefield.Valor's Flagship.Activate(Ability: Crew)
+Bot1.Choose(Pilot Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Valor's Flagship > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 13
+Bot1.Life = 27
+Bot1.Battlefield.Valor's Flagship.Types = Artifact; Creature
