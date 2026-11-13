@@ -1,0 +1,11 @@
+{
+  "name": "Guidelight Synergist",
+  "manaCost": "{3}{W}",
+  "type": "Artifact Creature — Robot Artificer",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": "Flying\nThis creature gets +1/+0 for each artifact you control.",
+  "keywords": [
+    "Flying"
+  ]
+}
