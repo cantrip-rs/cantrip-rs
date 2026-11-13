@@ -1,0 +1,74 @@
+# Streaking Oilgorger's "Max speed — This creature has lifelink" asks about its controller's speed, not its owner's
+# (CR 702.178a). Bot1 casts it on turn 1; its hits on turns 1 and 3 and a Lightning Bolt on turn 5 take Bot1 to max speed
+# (Bot2 at 11), the Oilgorger staying untapped. On turn 6 Bot2 takes it with Control Magic: Bot2 now controls a Start your
+# engines! permanent, so it gets speed 1 (CR 702.179a), and the Oilgorger (it has haste) attacks Bot1 for 3 without lifelink:
+# Bot1 goes to 17 and Bot2 stays at 11, though Bot1, its owner, still has max speed.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Streaking Oilgorger
+Lightning Bolt
+Swamp x15
+
+[Bot2 Deck]
+Mox Sapphire
+Control Magic
+Island
+Island
+Island
+Island
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Streaking Oilgorger.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Streaking Oilgorger > Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Streaking Oilgorger > Bot2)
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+? Bot2.Life = 11
+[T6 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island#1.Activate
+Bot2.Battlefield.Island#2.Activate
+Bot2.Battlefield.Island#3.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Control Magic.Cast(Bot1.Battlefield.Streaking Oilgorger)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Streaking Oilgorger.Keywords = Flying; Haste
+? Bot2.Speed = 1
+Bot2.Attack(Streaking Oilgorger > Bot1)
+[T6 Bot2.Main2]
+
+[Expect]
+Bot1.Speed = 4
+Bot1.Life = 17
+Bot2.Life = 11
