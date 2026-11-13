@@ -1,0 +1,47 @@
+# District Mascot, "{1}{G}, Remove two +1/+1 counters from this creature: Destroy target artifact": the {G} is a green
+# symbol, not generic mana. Turn 1: Black Lotus (green) pays for the Mascot and Llanowar Elves. Turn 3: the Elves saddle it
+# and it attacks, growing to two counters (Bot2 at 18). After combat three mana and none of it green (Mox Jet, Mox Ruby and an
+# Island) is enough in all, and destroying Bot1's own Mox Ruby is refused: the counters and the Mox stay.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+District Mascot
+Llanowar Elves
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.District Mascot.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.District Mascot.Activate(Ability: Saddle)
+Bot1.Choose(Llanowar Elves)
+Bot1.Attack(District Mascot > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+? Bot1.Battlefield.District Mascot.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+? Bot1.Mana = {U}{B}{R}
+! Bot1.Battlefield.District Mascot.Activate(Bot1.Battlefield.Mox Ruby; Ability: Destroy; Mana: short)
+
+[Expect]
+Bot1.Battlefield.District Mascot.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Mox Ruby.Tapped = true
+Bot1.Graveyard = Black Lotus

@@ -1,0 +1,63 @@
+# Bot2 owns the District Mascot (cast on turn 2 with a Llanowar Elves). Turn 4: it attacks unsaddled and gets no counter (Bot1 at 19), and with
+# one counter the destroy ability is refused although mana and an artifact target (Bot1's Mox Pearl) are there. Turn 6: saddled by the Elves it
+# attacks, grows to 2/2 and, after combat, removing its two counters destroys Bot1's Mox Pearl: Bot1 loses its own artifact to Bot2's ability.
+# (Bot1, doing nothing, discards an Island to hand size on turn 5, so it sits under the Mox Pearl in its graveyard.)
+
+[Bot1 Deck]
+Mox Pearl
+Island x19
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+District Mascot
+Llanowar Elves
+Forest
+Forest
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.District Mascot.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Attack(District Mascot > Bot1)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+? Bot1.Life = 19
+? Bot2.Battlefield.District Mascot.Counters.PlusOnePlusOne = 1
+! Bot2.Battlefield.District Mascot.Activate(Bot1.Battlefield.Mox Pearl; Ability: Destroy)
+[T6 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.District Mascot.Activate(Ability: Saddle)
+Bot2.Choose(Llanowar Elves)
+Bot2.Attack(District Mascot > Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.District Mascot.Counters.PlusOnePlusOne = 2
+[T6 Bot2.Main2]
+? Bot1.Life = 17
+Bot2.Battlefield.Forest#1.Activate
+Bot2.Battlefield.Forest#2.Activate
+Bot2.Battlefield.District Mascot.Activate(Bot1.Battlefield.Mox Pearl; Ability: Destroy)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Mox Pearl = (absent)
+Bot1.Graveyard = Mox Pearl; Island
+Bot2.Graveyard = District Mascot

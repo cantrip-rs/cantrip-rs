@@ -1,0 +1,63 @@
+# District Mascot, {G} 0/0 "enters with a +1/+1 counter", "{1}{G}, Remove two +1/+1 counters: Destroy target artifact", Saddle 1 and "Whenever this
+# creature attacks while saddled, put a +1/+1 counter on it." Turn 3: with one counter the destroy ability is refused (two counters are the cost);
+# Llanowar Elves (summoning sick, power 1) saddles it, it attacks and grows to 2/2 (Bot2 at 18). In the second main phase a non-artifact (Bot2's
+# Island) is refused as a target; removing the two counters leaves a 0/0 that dies as a state-based action (CR 704.5f), but the ability still
+# resolves and destroys Bot2's Ornithopter.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+District Mascot
+Llanowar Elves
+Forest
+Forest x11
+
+[Bot2 Deck]
+Island
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.District Mascot.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.District Mascot.Activate(Ability: Saddle)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+? Bot1.Battlefield.District Mascot.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.District Mascot.Power = 1
+! Bot1.Battlefield.District Mascot.Activate(Bot2.Battlefield.Ornithopter; Ability: Destroy)
+Bot1.Battlefield.District Mascot.Activate(Ability: Saddle)
+Bot1.Choose(Llanowar Elves)
+Bot1.Attack(District Mascot > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.District Mascot.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.District Mascot.Power = 2
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+! Bot1.Battlefield.District Mascot.Activate(Bot2.Battlefield.Island; Ability: Destroy)
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.District Mascot.Activate(Bot2.Battlefield.Ornithopter; Ability: Destroy)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter = (absent)
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.District Mascot = (absent)
+Bot1.Graveyard = District Mascot
+Bot1.Mana =
