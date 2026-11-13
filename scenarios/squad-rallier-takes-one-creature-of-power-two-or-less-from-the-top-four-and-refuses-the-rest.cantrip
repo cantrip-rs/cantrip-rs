@@ -1,0 +1,62 @@
+# Squad Rallier: "{2}{W}: Look at the top four cards of your library. You may reveal a creature card with power 2 or less from among
+# them and put it into your hand. Put the rest on the bottom of your library in a random order." Of the top four (Serra Angel 4/4,
+# Hill Giant 3/3, Grizzly Bears 2/2, Memnite 1/1) Bears and Memnite qualify (power exactly 2 and below it) but only
+# one may be taken, and the Giant is one over the power limit and the Angel two over. The Savannah Lions (2/1) beneath them is not among the four and stays where it was. Black Lotus'
+# three mana pay {2}{W} exactly, and the Rallier does not tap for its own ability.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Squad Rallier
+Black Lotus
+Island
+Serra Angel
+Hill Giant
+Grizzly Bears
+Memnite
+Savannah Lions
+Island x8
+
+[Bot2 Deck]
+Island x7
+Grizzly Bears
+Island x11
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Squad Rallier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Squad Rallier.Activate
+Bot1.Pass
+? Stack.Count = 1
+? Bot1.Mana =
+Bot2.Pass
+! Bot1.Choose(Serra Angel)
+! Bot1.Choose(Hill Giant)
+! Bot1.Choose(Savannah Lions)
+! Bot1.Choose(Grizzly Bears; Memnite)
+Bot1.Choose(Grizzly Bears)
+? Bot1.Revealed = Grizzly Bears
+
+[Expect]
+Bot1.Hand = Grizzly Bears; Island
+Bot1.Library.Count = 12
+Bot1.Library.Memnite.Power = 1
+Bot1.Library.Serra Angel.Power = 4
+Bot1.Library.Hill Giant.Power = 3
+Bot1.Library.Savannah Lions.Power = 2
+Bot1.Battlefield.Squad Rallier.Tapped = false
+Bot2.Library.Count = 12
+Bot2.Library.Grizzly Bears.Power = 2

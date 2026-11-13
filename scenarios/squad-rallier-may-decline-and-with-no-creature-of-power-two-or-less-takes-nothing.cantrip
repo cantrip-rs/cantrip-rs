@@ -1,0 +1,61 @@
+# Squad Rallier: "You may reveal a creature card with power 2 or less from among them and put it into your hand. Put the rest on the
+# bottom of your library in a random order." It is a "may": with Memnite and Grizzly Bears among the top four Bot1 declines, so
+# nothing is revealed and the hand stays as it was (CR 401.4). On turn 3, after the draw, the new top four (Serra Angel, Hill Giant,
+# Lightning Bolt and an Island: nothing of power 2 or less, one card with no power at all) offer nothing to take and Bot1 is not
+# asked, and all four cards go to the bottom: the hand stays as it was.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Squad Rallier
+Black Lotus
+Island
+Memnite
+Grizzly Bears
+Hill Giant
+Island
+Island
+Serra Angel
+Hill Giant
+Lightning Bolt
+Island x5
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Squad Rallier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Squad Rallier.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Bot1.Hand = Island
+? Bot1.Library.Count = 13
+[T3 Bot1.Main1]
+? Bot1.Hand = Island; Island
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Squad Rallier.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Hand = Island; Island
+Bot1.Library.Count = 12
+Stack.Count = 0
