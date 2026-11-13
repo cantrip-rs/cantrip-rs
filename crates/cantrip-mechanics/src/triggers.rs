@@ -166,6 +166,12 @@ pub fn you_control_two_or_more_tapped_creatures(q: &dyn Query, asker: &Asker) ->
     q.permanents_of(asker.controller).into_iter().filter(|&id| q.obj(id).tapped && q.chars(id).is(CardType::Creature)).count() >= 2
 }
 
+/// An intervening "if you control three or more creatures" (CR 603.4), checked as the ability triggers and again as it
+/// resolves, off the board as it stands: the creatures need not be the same ones. Dundoolin Weaver and Leonin Vanguard print it.
+pub fn you_control_three_or_more_creatures(q: &dyn Query, asker: &Asker) -> bool {
+    crate::creatures_you_control(q, asker.controller) >= 3
+}
+
 /// An intervening "if it's on the battlefield" (CR 603.4), checked as the ability triggers and again as it resolves: the
 /// permanent is still the object that triggered (CR 400.7) and has not left. Animate Dead and Necromancy print it.
 pub fn this_is_on_the_battlefield(q: &dyn Query, asker: &Asker) -> bool {
