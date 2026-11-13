@@ -1,0 +1,8 @@
+{
+  "name": "Basri, Tomorrow's Champion",
+  "manaCost": "{W}",
+  "type": "Legendary Creature — Human Knight",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "{W}, {T}, Exert Basri: Create a 1/1 white Cat creature token with lifelink. (An exerted creature won't untap during your next untap step.)\nCycling {2}{W} ({2}{W}, Discard this card: Draw a card.)\nWhen you cycle this card, Cats you control gain hexproof and indestructible until end of turn."
+}
