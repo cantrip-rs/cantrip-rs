@@ -1,0 +1,35 @@
+# Mystical Teachings ({3}{U}, paid with Black Lotus's {U}{U}{U} and Mox Sapphire) searches for an instant card or a card with flash
+# (CR 701.23). Lightning Bolt is an instant and is found; Ponder (a sorcery), Sol Ring (an artifact) and Guerrilla Gorilla (a creature
+# without flash) are refused. The card is revealed (CR 701.20a) and goes to the hand and the Teachings to the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mystical Teachings
+Island x4
+Lightning Bolt
+Ponder
+Sol Ring
+Guerrilla Gorilla
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mystical Teachings.Cast
+! Bot1.Search(Ponder)
+! Bot1.Search(Sol Ring)
+! Bot1.Search(Guerrilla Gorilla)
+Bot1.Search(Lightning Bolt)
+? Bot1.Revealed = Lightning Bolt
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island; Lightning Bolt
+Bot1.Graveyard = Mystical Teachings; Black Lotus

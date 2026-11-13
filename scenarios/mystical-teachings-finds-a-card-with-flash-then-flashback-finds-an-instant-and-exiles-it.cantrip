@@ -1,0 +1,57 @@
+# Mystical Teachings finds a card with flash as well as an instant (CR 701.23, 702.8a): on turn 1 (Black Lotus's {U}{U}{U} and Mox Pearl)
+# Snapcaster Mage, a creature with flash, is found; Guerrilla Gorilla, a creature without it, is refused. On turn 3 its flashback
+# {5}{B} (CR 702.34a) is refused with five mana available (Mox Sapphire, Mox Pearl, Mox Ruby and Sol Ring's two), and cast once Mox Jet
+# adds the sixth, the black one: it finds Lightning Bolt and the Teachings is exiled, not put into the graveyard. Two copies of each
+# card are in the library, so the card Bot1 draws on turn 3 cannot leave the search empty.
+
+[Bot1 Deck]
+Black Lotus
+Mystical Teachings
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Sol Ring
+Snapcaster Mage
+Snapcaster Mage
+Lightning Bolt
+Lightning Bolt
+Guerrilla Gorilla
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mystical Teachings.Cast
+! Bot1.Search(Guerrilla Gorilla)
+Bot1.Search(Snapcaster Mage)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Sol Ring.Activate
+! Bot1.Graveyard.Mystical Teachings.Cast(Ability: Flashback; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Graveyard.Mystical Teachings.Cast(Ability: Flashback)
+Bot1.Search(Lightning Bolt)
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Exile.Mystical Teachings.Colors = Blue
+Bot1.Graveyard = Black Lotus
