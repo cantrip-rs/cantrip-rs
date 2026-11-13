@@ -1,0 +1,44 @@
+# Broken Wings, "Destroy target artifact, enchantment, or creature with flying." Bot2's Oath of Druids, an enchantment, is a legal
+# target and is destroyed, while Bot2's Island, a land that is none of the three, is not (the refusal with the mana there).
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Broken Wings
+Island x20
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Oath of Druids
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Oath of Druids.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Broken Wings.Cast(Bot2.Battlefield.Forest)
+Bot1.Hand.Broken Wings.Cast(Bot2.Battlefield.Oath of Druids)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Forest; Mox Emerald
+Bot2.Graveyard = Oath of Druids
+Bot1.Graveyard = Broken Wings
+Stack.Count = 0

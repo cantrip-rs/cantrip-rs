@@ -1,0 +1,67 @@
+# Broken Wings, "Destroy target artifact, enchantment, or creature with flying." {2}{G}. On turn 1 Bot1 destroys its own Mox
+# Jet (an artifact of its own is a legal target); on turn 3 Bot2 has Birds of Paradise (flying) and Llanowar Elves (no flying):
+# the Elves are no legal target (`!` with the mana there), then the Birds are destroyed with exactly three sources and the
+# pool ends empty; on turn 5 Bot2's Mox Ruby, an artifact of the opponent's, goes.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Mox Jet
+Broken Wings
+Broken Wings
+Broken Wings
+Forest x15
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Birds of Paradise
+Llanowar Elves
+Island x15
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Broken Wings.Cast(Bot1.Battlefield.Mox Jet)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Forest; Mox Emerald; Mox Ruby
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Birds of Paradise.Cast
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Broken Wings.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Hand.Broken Wings.Cast(Bot2.Battlefield.Birds of Paradise)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Forest; Mox Emerald; Mox Ruby; Llanowar Elves
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Broken Wings.Cast(Bot2.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Forest; Mox Emerald; Llanowar Elves
+Bot2.Graveyard = Mox Ruby; Birds of Paradise
+Bot1.Graveyard = Broken Wings; Broken Wings; Broken Wings; Mox Jet
+Stack.Count = 0

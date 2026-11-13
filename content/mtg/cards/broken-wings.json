@@ -1,0 +1,6 @@
+{
+  "name": "Broken Wings",
+  "manaCost": "{2}{G}",
+  "type": "Instant",
+  "oracleText": "Destroy target artifact, enchantment, or creature with flying."
+}
