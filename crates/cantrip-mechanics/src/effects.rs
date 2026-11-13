@@ -344,9 +344,16 @@ pub fn creatures_you_control_gain(g: &mut dyn Game, item: &StackItem, keywords: 
 /// for the creatures `wanted` accepts as `item` resolves, no creature that enters later (or comes to qualify) gaining anything.
 /// Synchronized Charge's "creatures you control with counters on them gain vigilance and trample" prints it.
 pub fn creatures_you_control_where_gain(g: &mut dyn Game, item: &StackItem, keywords: &[Keyword], wanted: impl Fn(&dyn Game, ObjectId) -> bool) {
-    let creatures: Vec<ObjectId> = g.permanents_of(item.controller).into_iter().filter(|&id| g.chars(id).is(CardType::Creature) && wanted(&*g, id)).collect();
+    permanents_you_control_where_gain(g, item, keywords, |g, id| g.chars(id).is(CardType::Creature) && wanted(g, id));
+}
+
+/// "Permanents you control [that `wanted`] gain [keywords] until end of turn" (CR 109.2, 611.2c, 702): the permanents of any
+/// type `wanted` accepts as `item` resolves, none that enters or comes to qualify later gaining anything. Basri, Tomorrow's
+/// Champion's "Cats you control" (a Kindred Artifact with changeling is one) and Synchronized Charge's creatures print it.
+pub fn permanents_you_control_where_gain(g: &mut dyn Game, item: &StackItem, keywords: &[Keyword], wanted: impl Fn(&dyn Game, ObjectId) -> bool) {
+    let permanents: Vec<ObjectId> = g.permanents_of(item.controller).into_iter().filter(|&id| wanted(&*g, id)).collect();
     instruction(g, |g| {
-        for id in creatures {
+        for id in permanents {
             g.add_effect(item.object, id, EffectKind::AddKeywords(Keywords::of(keywords)), Duration::EndOfTurn);
         }
     });
