@@ -1,0 +1,119 @@
+# Abyssal Harvester: "{T}: Exile target creature card from a graveyard that was put there this turn. Create a token that's a copy of it,
+# except it's a Nightmare in addition to its other types. Then exile all other Nightmare tokens you control." Both players cast one
+# on turn 1 and 2. Turn 3: Bot1 kills its Walking Corpse with a Lightning Bolt and does not use its Harvester. Turn 4: Bot2 does the same
+# and makes a Nightmare token with its Harvester, a copy of its own Corpse (the Harvester tapped, its cost paid). Turn 5: Bot1's turn-3 Corpse
+# was put into its graveyard on an earlier turn, so it is refused as a target, the Bolt (a noncreature card put there this turn) too; a
+# Corpse killed this turn is taken and copied, exiled (not in the graveyard), and the token is a Nightmare Zombie that stays. Turn 7: Bot1
+# kills Bot2's Harvester with a Bolt and takes it from the opponent's graveyard (a creature card from any graveyard): the token is a copy of
+# it, with its ability, a Nightmare in addition, and Bot1's turn-5 Nightmare token is exiled while Bot2's own Nightmare token stays,
+# and the new one is not exiled.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Abyssal Harvester
+Walking Corpse
+Lightning Bolt
+Walking Corpse
+Lightning Bolt
+Lightning Bolt
+Swamp x11
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Abyssal Harvester
+Walking Corpse
+Lightning Bolt
+Swamp x13
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Abyssal Harvester.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Abyssal Harvester.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Walking Corpse.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Walking Corpse)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Walking Corpse; Lightning Bolt
+[T4 Bot2.Main1]
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Walking Corpse.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Walking Corpse)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Walking Corpse; Lightning Bolt
+Bot2.Battlefield.Abyssal Harvester.Activate(Bot2.Graveyard.Walking Corpse)
+? Bot2.Battlefield.Abyssal Harvester.Tapped = true
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Lightning Bolt
+? Exile = Walking Corpse
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Walking Corpse.Subtypes = Nightmare; Zombie
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Walking Corpse.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Walking Corpse)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 4
+! Bot1.Battlefield.Abyssal Harvester.Activate(Bot1.Graveyard.Walking Corpse#2)
+! Bot1.Battlefield.Abyssal Harvester.Activate(Bot1.Graveyard.Lightning Bolt#1)
+? Bot1.Battlefield.Abyssal Harvester.Tapped = false
+Bot1.Battlefield.Abyssal Harvester.Activate(Bot1.Graveyard.Walking Corpse#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Walking Corpse.Subtypes = Nightmare; Zombie
+? Bot1.Battlefield.Abyssal Harvester.Tapped = true
+[T7 Bot1.Main1]
+? Bot1.Battlefield = Swamp; Mox Jet; Mox Pearl; Mox Ruby; Abyssal Harvester; Walking Corpse
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Abyssal Harvester)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Swamp; Mox Jet; Mox Pearl; Mox Ruby; Walking Corpse
+Bot1.Battlefield.Abyssal Harvester.Activate(Bot2.Graveyard.Abyssal Harvester)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Swamp; Mox Jet; Mox Pearl; Mox Ruby; Abyssal Harvester; Abyssal Harvester
+Bot1.Battlefield.Abyssal Harvester#2.Subtypes = Demon; Nightmare; Warlock
+Bot2.Battlefield = Swamp; Mox Jet; Mox Pearl; Mox Ruby; Walking Corpse
+Bot2.Battlefield.Walking Corpse.Subtypes = Nightmare; Zombie
+Bot2.Graveyard = Lightning Bolt

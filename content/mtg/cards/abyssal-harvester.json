@@ -1,0 +1,8 @@
+{
+  "name": "Abyssal Harvester",
+  "manaCost": "{1}{B}{B}",
+  "type": "Creature — Demon Warlock",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "{T}: Exile target creature card from a graveyard that was put there this turn. Create a token that's a copy of it, except it's a Nightmare in addition to its other types. Then exile all other Nightmare tokens you control."
+}

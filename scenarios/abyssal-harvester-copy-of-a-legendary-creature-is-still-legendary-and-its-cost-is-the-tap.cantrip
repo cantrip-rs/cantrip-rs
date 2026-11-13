@@ -1,0 +1,51 @@
+# Abyssal Harvester: "Create a token that's a copy of it, except it's a Nightmare in addition to its other types" (CR 707.9b). The only
+# exception is the Nightmare type: a copy of a legendary creature card is legendary too (the rulings: "the token ... copies exactly what was
+# printed on the original card"). Bot1 casts the Harvester on turn 1; on turn 3 it casts Zul Ashur, Lich Lord (legendary, with ward)
+# and kills it with its own Lightning Bolt, then taps the Harvester for the Zul Ashur card in its graveyard: the token has Zul Ashur's
+# name, is a legendary Nightmare Zombie Warlock, and the Harvester is tapped (the {T} paid), so it cannot be used again that turn.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Abyssal Harvester
+Zul Ashur, Lich Lord
+Lightning Bolt
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Abyssal Harvester.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Zul Ashur, Lich Lord.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Zul Ashur, Lich Lord)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Zul Ashur, Lich Lord; Lightning Bolt
+Bot1.Battlefield.Abyssal Harvester.Activate(Bot1.Graveyard.Zul Ashur, Lich Lord)
+? Bot1.Battlefield.Abyssal Harvester.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Zul Ashur, Lich Lord.Supertypes = Legendary
+? Bot1.Battlefield.Zul Ashur, Lich Lord.Subtypes = Nightmare; Warlock; Zombie
+! Bot1.Battlefield.Abyssal Harvester.Activate(Bot1.Graveyard.Lightning Bolt)
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt
+Bot1.Battlefield = Swamp; Mox Jet; Mox Pearl; Mox Ruby; Abyssal Harvester; Zul Ashur, Lich Lord
