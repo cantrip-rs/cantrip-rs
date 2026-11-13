@@ -1,0 +1,67 @@
+# Cat Collector: the Cat is for the first life gain "during each of your turns" (CR 603.2). Bot1 casts the Collector on turn 1
+# (Food token and no Cat) and, on Bot2's turn 2, gains 3 life with Healing Salve: no Cat, it is not Bot1's turn. On turn 3 a
+# Salve that gains life for Bot2, not for Bot1, makes no Cat and does not use up the "first time" (positive control), and the
+# next Salve, which gains Bot1's life for the first time this turn, makes the Cat: one Cat token for the three gains.
+
+[Bot1 Deck]
+Black Lotus
+Cat Collector
+Mox Pearl
+Gleemox
+Healing Salve
+Healing Salve
+Healing Salve
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Cat Collector.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Food Token.Types = Artifact
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Stack.Count = 0
+? Bot1.Battlefield.Cat Token = (absent)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 23
+? Bot1.Life = 23
+? Stack.Count = 0
+? Bot1.Battlefield.Cat Token = (absent)
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 26
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 26
+Bot2.Life = 23
+Bot1.Battlefield.Cat Token.Power = 1
+Bot1.Battlefield = Cat Collector; Cat Token; Food Token; Gleemox; Mox Pearl

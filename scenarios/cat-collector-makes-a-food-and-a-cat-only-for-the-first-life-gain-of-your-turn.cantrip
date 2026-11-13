@@ -1,0 +1,61 @@
+# Cat Collector: "When this creature enters, create a Food token." and "Whenever you gain life for the first time during each of
+# your turns, create a 1/1 white Cat creature token." Bot1 casts the Collector on turn 1 (a 3/2) and gets a Food token (an
+# artifact), but no Cat yet. Paying {2} and sacrificing the Food gains 3 life: the first gain of the turn, so a Cat token is created.
+# A Healing Salve the same turn gains 3 more: no second Cat (CR 603.2, the ability is for the first gain only).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Cat Collector
+Mox Pearl
+Gleemox
+Healing Salve
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Cat Collector.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Food Token.Types = Artifact
+? Bot1.Battlefield.Cat Token = (absent)
+? Bot1.Life = 20
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Battlefield.Food Token.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Bot1.Battlefield.Food Token = (absent)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cat Token.Power = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 26
+Bot1.Battlefield = Cat Collector; Cat Token; Gleemox; Mox Pearl; Mox Sapphire
+Bot1.Battlefield.Cat Token.Token = true
+Bot1.Battlefield.Cat Token.Colors = White
+Bot1.Battlefield.Cat Token.Power = 1
+Bot1.Battlefield.Cat Token.Toughness = 1
+Bot1.Battlefield.Cat Collector.Power = 3
+Bot1.Battlefield.Cat Collector.Toughness = 2
