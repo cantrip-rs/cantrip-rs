@@ -1,0 +1,47 @@
+# Zahur, Glory's Past {W}{B}: "Sacrifice another creature: Surveil 1. Activate only once each turn." (CR 701.25a, 602.5b). Zahur is not
+# offered as its own sacrifice, the Memnite sacrificed is a cost (it is in the graveyard when the surveil happens) and the Island on top
+# is binned. A second activation the same turn is refused with another creature to sacrifice, and allowed on turn 3 (a new turn).
+# At speed 1 the max speed ability is off (CR 702.178a, 702.179e): the dying Memnites make no Zombie.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Zahur, Glory's Past
+Memnite
+Memnite
+Memnite
+Plains
+Island
+Swamp
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Zahur, Glory's Past.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+Bot1.Battlefield.Zahur, Glory's Past.Activate
+! Bot1.Choose(Zahur, Glory's Past)
+Bot1.Choose(Memnite)
+Bot1.Arrange(| Island)
+? Bot1.Graveyard = Island; Memnite
+? Bot1.Battlefield.Count = 4
+! Bot1.Battlefield.Zahur, Glory's Past.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Zahur, Glory's Past.Activate
+Bot1.Choose(Memnite)
+Bot1.Arrange(Plains |)
+
+[Expect]
+Bot1.Graveyard = Memnite; Island; Memnite
+Bot1.Library.Top = Plains
+Bot1.Battlefield.Count = 3

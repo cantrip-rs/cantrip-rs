@@ -1,0 +1,64 @@
+# Zahur, Glory's Past: "Max speed - Whenever a nontoken creature you control dies, create a tapped 2/2 black Zombie creature token."
+# A leaves-the-battlefield ability looks back in time (CR 603.10a): Zahur dying at max speed sees its own death, as it had the
+# ability just before, and makes one tapped Zombie. Lightning Bolt to Bot2's face on turns 3, 5 and 7 brings the speed to 4
+# (CR 702.179d); then a fourth Bolt kills Zahur (3/2).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Zahur, Glory's Past
+Mountain
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Mountain
+Lightning Bolt
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Zahur, Glory's Past.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Zahur, Glory's Past)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 5
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Zombie Token.Tapped = true
+Bot1.Battlefield.Zombie Token.Power = 2
+Bot1.Battlefield.Count = 5
