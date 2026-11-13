@@ -1,0 +1,23 @@
+# The targeted opponent chooses only a card in the caster's graveyard, leaving their own graveyard and hand alone.
+[Bot1 Deck]
+Black Lotus
+Forgotten Lore
+Forest x18
+[Bot2 Deck]
+Lotus Petal
+Island x19
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Lotus Petal.Cast
+Bot2.Battlefield.Lotus Petal.Activate(Color: Green)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Forgotten Lore.Cast(Bot2)
+? Bot1.Mana = {G}{G}
+! Bot2.Choose(Lotus Petal)
+Bot2.Choose(Black Lotus)
+Bot1.Decline
+[Expect]
+Bot1.Graveyard = Forgotten Lore
+Bot2.Graveyard = Lotus Petal

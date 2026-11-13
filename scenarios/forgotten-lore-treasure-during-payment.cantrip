@@ -1,0 +1,29 @@
+# A Treasure sacrificed for the repeat payment is not a card, even before state-based actions remove it from the graveyard.
+[Bot1 Deck]
+Black Lotus
+Mishra's Bauble
+Gold Pan
+Forgotten Lore
+Forest x16
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mishra's Bauble.Cast
+Bot1.Battlefield.Mishra's Bauble.Activate(Bot2)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Gold Pan.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forgotten Lore.Cast(Bot2)
+? Bot1.Mana =
+Bot2.Choose(Black Lotus)
+Bot1.Battlefield.Treasure Token.Activate(Color: Green)
+Bot1.PayCost
+! Bot2.Choose(Treasure Token)
+Bot2.Choose(Mishra's Bauble)
+Bot1.Decline
+[Expect]
+Bot1.Graveyard = Forgotten Lore; Black Lotus
