@@ -1,0 +1,43 @@
+# Its controller may pay exactly three to avoid damage and tapping, or decline on a later upkeep (CR 603.2).
+[Bot1 Deck]
+Mind Whip
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Memnite
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Mind Whip.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Mind Whip.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+? Bot1.Life = 20
+? Bot1.Battlefield.Memnite.Tapped = false
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.PayCost
+? Bot1.Mana =
+? Bot1.Life = 20
+? Bot1.Battlefield.Memnite.Tapped = false
+[T5 Bot1.Upkeep]
+Bot1.Decline
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 20
+Bot1.Battlefield.Memnite.Tapped = true
+Bot1.Battlefield.Mind Whip.AttachedTo = Memnite

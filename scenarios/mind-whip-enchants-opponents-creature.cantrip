@@ -1,0 +1,29 @@
+# The enchanted creature's controller, not the Aura's controller, is damaged and has their creature tapped on upkeep (CR 603.2).
+[Bot1 Deck]
+Mind Whip
+Black Lotus
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mind Whip.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+[T4 Bot2.Upkeep]
+Bot2.Decline
+[T4 Bot2.Main1]
+? Bot2.Life = 18
+? Bot2.Battlefield.Memnite.Tapped = true
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18
+Bot1.Battlefield.Mind Whip.AttachedTo = Memnite

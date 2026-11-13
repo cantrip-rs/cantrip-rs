@@ -1,0 +1,34 @@
+# The upkeep player leaves before paying; their control effect ends, but the original creature is still tapped (CR 800.4a, 800.4f).
+[Bot1 Deck]
+Mind Whip
+Memnite
+Black Lotus
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Control Magic
+Black Lotus
+Mox Sapphire
+Island x20
+[Bot3 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mind Whip.Cast(Bot1.Battlefield.Memnite)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Control Magic.Cast(Bot1.Battlefield.Memnite)
+[T5 Bot2.Upkeep]
+? Stack.Count = 1
+Bot2.Concede
+[T6 Bot3.Main1]
+[Expect]
+Bot1.Battlefield.Memnite.Tapped = true
+Bot1.Battlefield.Mind Whip.AttachedTo = Memnite

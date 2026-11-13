@@ -1,0 +1,6 @@
+{
+  "name": "Mind Whip",
+  "manaCost": "{2}{B}{B}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nAt the beginning of the upkeep of enchanted creature's controller, that player may pay {3}. If they don't, this Aura deals 2 damage to that player and you tap that creature."
+}
