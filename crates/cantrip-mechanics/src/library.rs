@@ -1465,3 +1465,21 @@ pub fn mill_then_return_a_card(g: &mut dyn Game, item: &StackItem, count: u32, r
     g.return_to_hand(&chosen);
     Ok(())
 }
+
+/// "Mill two cards, then put a +1/+1 counter on this creature for each artifact and/or creature card in your graveyard"
+/// (CR 701.17a, 608.2c, 122.1): the count is made after the mill, in the whole graveyard as the mill left it, so a milled
+/// card counts, and a card that is both an artifact and a creature counts once. Ceti Eel and Ooze Patrol print it.
+pub fn mill_two_then_counters_for_each_artifact_or_creature_card(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.mill(item.controller, 2);
+    g.end_sentence();
+    let amount = {
+        let q: &dyn Query = g;
+        q.state()
+            .zone(Zone::graveyard(item.controller))
+            .iter()
+            .filter(|&&id| q.chars(id).is(CardType::Artifact) || q.chars(id).is(CardType::Creature))
+            .count() as i32
+    };
+    g.add_counters_together(&[(item.object, CounterKind::PlusOne, amount)]);
+    Ok(())
+}
