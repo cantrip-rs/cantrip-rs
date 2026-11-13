@@ -1,0 +1,47 @@
+# Vampire Gourmand: whenever it attacks, Bot1 may sacrifice another creature; if Bot1 does, it draws a card and the Gourmand can't
+# be blocked this turn (CR 701.21a, 608.2c, 509.1b). Bot1 sacrifices its Memnite. The Gourmand itself, Bot2's Ornithopter and
+# Bot1's Mox Jets (not creatures) are not choices ("another" excludes the source; a player sacrifices only what they control),
+# and Memnite and Ornithopter can't both go: the sacrifice is of one. Bot2's Ornithopter would have blocked, but can't.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Vampire Gourmand
+Memnite
+Ornithopter
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Vampire Gourmand.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Vampire Gourmand)
+Bot1.Pass
+! Bot1.Choose(Vampire Gourmand)
+! Bot1.Choose(Bot2.Battlefield.Ornithopter)
+! Bot1.Choose(Mox Jet)
+! Bot1.Choose(Memnite; Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Memnite)
+! Bot2.Block(Ornithopter > Vampire Gourmand)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Memnite = (absent)
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Hand.Count = 3
+Bot2.Life = 18
+Bot2.Battlefield.Ornithopter.Tapped = false

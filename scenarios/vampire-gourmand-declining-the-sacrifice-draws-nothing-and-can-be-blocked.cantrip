@@ -1,0 +1,42 @@
+# Vampire Gourmand: the sacrifice is optional (CR 608.2d). Bot1 declines, so it draws nothing and the Gourmand is not unblockable:
+# Bot2's Ornithopter blocks it, and the 2/2 kills the 0/2 blocker without taking damage (CR 509.1, 510.2).
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Vampire Gourmand
+Memnite
+Ornithopter
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Vampire Gourmand.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Vampire Gourmand)
+Bot1.Pass
+Bot1.Choose()
+Bot2.Block(Ornithopter > Vampire Gourmand)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Hand.Count = 2
+Bot2.Life = 20
+Bot2.Battlefield.Ornithopter = (absent)
+Bot2.Graveyard.Count = 1
