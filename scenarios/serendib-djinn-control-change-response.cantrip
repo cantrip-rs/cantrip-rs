@@ -1,0 +1,54 @@
+# A state trigger controlled by Bot1 cannot sacrifice the Djinn after Bot2 gains control of it in response (CR 701.21a).
+
+[Bot1 Deck]
+Island
+Black Lotus
+Mox Pearl
+Serendib Djinn
+Plains x20
+
+[Bot2 Deck]
+Island
+Black Lotus
+Black Lotus
+Rubinia Soulsinger
+Plains x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Rubinia Soulsinger.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Serendib Djinn.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Rubinia Soulsinger.Activate(Bot1.Battlefield.Serendib Djinn)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+
+[Expect]
+Bot2.Battlefield.Serendib Djinn.Power = 5
+Bot1.Life = 17

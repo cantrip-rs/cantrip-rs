@@ -1,0 +1,32 @@
+# Sacrificing the last land, an Island, deals 3 damage and causes the Djinn to be sacrificed even if an opponent controls a land (CR 603.8).
+
+[Bot1 Deck]
+Island
+Black Lotus
+Mox Pearl
+Serendib Djinn
+Plains x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Serendib Djinn.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Graveyard.Serendib Djinn.Power = 5
+Bot1.Graveyard = Serendib Djinn; Island; Black Lotus
+Bot2.Battlefield.Island.Types = Land

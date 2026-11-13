@@ -1,0 +1,61 @@
+# On upkeep the controller chooses a non-Island to sacrifice, taking no damage; flying prevents a ground creature blocking the Djinn (CR 702.9b).
+
+[Bot1 Deck]
+Plains
+Island
+Black Lotus
+Mox Pearl
+Serendib Djinn
+Plains x20
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Wind Drake
+Black Lotus
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wind Drake.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Serendib Djinn.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T5 Bot1.Upkeep]
+? Bot1.Battlefield.Plains.Types = Land
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose()
+! Bot1.Choose(Plains; Island)
+Bot1.Choose(Plains)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Serendib Djinn > Bot2)
+! Bot2.Block(Grizzly Bears > Serendib Djinn)
+Bot2.Block(Wind Drake > Serendib Djinn)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard.Plains.Colors =
+Bot1.Battlefield.Island.Types = Land
+Bot1.Battlefield.Serendib Djinn.Power = 5
+Bot2.Graveyard.Wind Drake.Power = 2

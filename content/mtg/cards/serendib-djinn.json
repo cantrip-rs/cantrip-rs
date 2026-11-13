@@ -1,0 +1,11 @@
+{
+  "name": "Serendib Djinn",
+  "manaCost": "{2}{U}{U}",
+  "type": "Creature — Djinn",
+  "power": 5,
+  "toughness": 6,
+  "oracleText": "Flying\nAt the beginning of your upkeep, sacrifice a land. If you sacrifice an Island this way, this creature deals 3 damage to you.\nWhen you control no lands, sacrifice this creature.",
+  "keywords": [
+    "Flying"
+  ]
+}
