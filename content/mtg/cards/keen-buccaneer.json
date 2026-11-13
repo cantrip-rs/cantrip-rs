@@ -1,0 +1,11 @@
+{
+  "name": "Keen Buccaneer",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Octopus Pirate",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Vigilance\nExhaust — {1}{U}: Draw a card, then discard a card. Put a +1/+1 counter on this creature. (Activate each exhaust ability only once.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}
