@@ -1,0 +1,47 @@
+# X=1 exiles one creature and the Monster enters with a chosen counter (CR 614.1c).
+[Bot1 Deck]
+Swamp
+Entomb
+Black Lotus
+Mox Jet
+Frankenstein's Monster
+Swamp
+Swamp
+Grizzly Bears
+Swamp x12
+
+[Bot2 Deck]
+Swamp
+Entomb
+Island x6
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Llanowar Elves)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Frankenstein's Monster.Cast(X: 1)
+Bot1.Choose(Confirm X)
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Choose(Llanowar Elves)
+! Bot1.Choose(Entomb)
+Bot1.Choose(Grizzly Bears)
+Bot1.Modes(2)
+
+[Expect]
+Bot2.Graveyard.Llanowar Elves.Power = 1
+Exile = Grizzly Bears
+Bot1.Battlefield.Frankenstein's Monster.Power = 1
+Bot1.Battlefield.Frankenstein's Monster.Toughness = 2
