@@ -1,0 +1,33 @@
+# Far Fortune, End Boss ({2}{B}{R}, 4/5): "Start your engines!" puts Bot1 at speed 1. Cast on turn one with Black Lotus and Mox Ruby.
+# On turn three it attacks: "Whenever you attack" deals 1 damage to each opponent, exactly 1 because Bot1's speed is below 4 (the plus 1 is
+# a max speed ability, CR 702.178a), the first life Bot2 loses on Bot1's turn moves the speed to 2 (CR 702.179a), and the unblocked 4/5
+# deals its plain 4 combat damage: Bot2 is at 20 - 1 - 4 = 15.
+
+[Bot1 Deck]
+Mox Ruby
+Black Lotus
+Far Fortune, End Boss
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Far Fortune, End Boss.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+[T3 Bot1.Main1]
+Bot1.Attack(Far Fortune, End Boss > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Speed = 2

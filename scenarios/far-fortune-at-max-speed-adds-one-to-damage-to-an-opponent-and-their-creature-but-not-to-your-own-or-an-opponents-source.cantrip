@@ -1,0 +1,91 @@
+# Far Fortune, End Boss ({2}{B}{R}): the Max speed damage replacement. Bot1 casts it on turn one and bolts Bot2 on turns one, three and five; each is the first life
+# Bot2 loses on that turn of Bot1's, so the speed goes 1, 2, 3, then 4 (CR 702.179a, 702.179d). Each of those Bolts deals a plain 3 as it is dealt (Bot2 at 17, 14, 11):
+# below speed 4 the ability does not apply (CR 702.178a).
+# At speed 4 on turn five: a second Bolt on Bot2's Dune Beetle (1/4) deals 3 plus 1 = 4 and kills it, which 3 would not; Far Fortune's attack trigger
+# deals 1 plus 1 = 2 (Bot2 at 9); and the unblocked Far Fortune deals 4 plus 1 = 5 combat damage (Bot2 at 4).
+# The bonus is only for sources Bot1 controls: Bot2's own Bolt on turn six deals Bot1 exactly 3 (Bot1 at 17).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Black Lotus
+Far Fortune, End Boss
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Mountain
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Dune Beetle
+Lightning Bolt
+Island x15
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Far Fortune, End Boss.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Bot1.Speed = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Dune Beetle.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 14
+? Bot1.Speed = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 11
+? Bot1.Speed = 4
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Dune Beetle)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Dune Beetle
+Bot1.Attack(Far Fortune, End Boss > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 9
+[T6 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 4
+Bot1.Life = 17
+Bot2.Graveyard = Lightning Bolt; Dune Beetle
