@@ -1,0 +1,65 @@
+# Venomous Breath destroys at this turn's next end of combat only: a creature that blocks the chosen attacker in an
+# additional combat after that is not destroyed (CR 603.7b, 506.1).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Sol Ring
+Mox Emerald
+Crimson Kobolds
+World at War
+Venomous Breath
+Island x20
+[Bot2 Deck]
+Phyrexian Walker
+Phyrexian Walker
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Crimson Kobolds.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Pass
+Bot2.Hand.Phyrexian Walker.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.World at War.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Crimson Kobolds)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Venomous Breath.Cast(Crimson Kobolds)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Block(Phyrexian Walker#1 > Crimson Kobolds)
+[T3 Bot1.Main2]
+? Bot2.Graveyard = Phyrexian Walker
+Bot1.Pass
+Bot2.Pass
+? Step = BeginCombat
+Bot1.Attack(Crimson Kobolds)
+Bot2.Block(Phyrexian Walker > Crimson Kobolds)
+[T3 Bot1.EndCombat]
+Bot1.Pass
+Bot2.Pass
+? Step = Main2
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Graveyard = Phyrexian Walker
+Bot2.Battlefield.Phyrexian Walker.Toughness = 3
+Bot1.Battlefield.Crimson Kobolds.Toughness = 1
