@@ -1,0 +1,56 @@
+# Midnight Reaper: "Whenever a nontoken creature you control dies, ..." (CR 603.10a, 700.4, 111.7): a leaves-the-battlefield trigger looks back, so the Reaper sees creatures dying
+# with it, itself included, one trigger each. Bot1 controls the Reaper, a Memnite and two Spirit tokens; Bot2 controls a Memnite. Bot2's Wrath of God destroys all seven creatures:
+# Bot1's Reaper and Memnite trigger it (2 damage, 2 cards), the tokens and Bot2's Memnite do not.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Midnight Reaper
+Memnite
+Lingering Souls
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Plains
+Mox Sapphire
+Mox Ruby
+Wrath of God
+Memnite
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Midnight Reaper.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Plains.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Wrath of God.Cast
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 18
+Bot1.Hand.Count = 2
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby
+Bot2.Battlefield = Mox Pearl; Mox Sapphire; Mox Ruby; Plains

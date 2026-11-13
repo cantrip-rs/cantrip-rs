@@ -1,0 +1,8 @@
+{
+  "name": "Midnight Reaper",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Zombie Knight",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Whenever a nontoken creature you control dies, this creature deals 1 damage to you and you draw a card."
+}
