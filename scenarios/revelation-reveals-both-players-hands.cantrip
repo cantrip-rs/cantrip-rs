@@ -1,0 +1,22 @@
+# Revelation makes both players' hands public while it remains on the battlefield (CR 604.1).
+[Bot1 Deck]
+Revelation
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+? Bot1.Sees.Bot2.Hand.Count = 0
+? Bot2.Sees.Bot1.Hand.Count = 0
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Revelation.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+# revelation_visibility.rs checks the same visibility at this position, and the World supertype the dump omits.
+[Expect]
+Bot1.Battlefield = Forest; Revelation
+Bot1.Sees.Bot2.Hand = Island; Island; Island; Island; Island; Island; Island
+Bot2.Sees.Bot1.Hand = Forest; Forest; Forest; Forest; Forest
