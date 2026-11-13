@@ -94,6 +94,10 @@ fn another_creature(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
     Verdict::each(choice, |id| id != choice.source && q.chars(id).is(CardType::Creature))
 }
 
+fn instant_or_sorcery(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
+    Verdict::each(choice, |card| crate::library::instant_or_sorcery_card(q, card))
+}
+
 fn subtype(q: &dyn Query, choice: &Choice, word: u32) -> Verdict {
     let wanted = crate::lands::word(q, choice.source, u16::try_from(word).unwrap_or(u16::MAX));
     Verdict::each(choice, |card| q.chars(card).has_subtype(wanted))
@@ -264,6 +268,10 @@ pub const ANOTHER_CREATURE_OR_ARTIFACT: Part = part(&(another_creature_or_artifa
 /// "Another creature": a creature permanent other than the object whose text asks (`Choice::source`). Bolg of the North and
 /// Sephiroth, Fabled SOLDIER sacrifice one.
 pub const ANOTHER_CREATURE: Part = part(&(another_creature as SelectFn), 0, "");
+
+/// "An instant or sorcery card" (CR 205.2a): a card with either type, as its layers make it. Micromancer searches for it, Inspiration from
+/// Beyond returns it from the graveyard and Most Decrepit Old Bird puts one milled into the hand.
+pub const INSTANT_OR_SORCERY: Part = part(&(instant_or_sorcery as SelectFn), 0, "");
 
 /// "With mana value `most` or less" (CR 202.3), each card's read where it is (an {X} in a library or graveyard is 0, CR
 /// 202.3e). Trinket Mage (an artifact card, 1) and Green Sun's Zenith (a green creature card, X) search for it. Of targets,
@@ -565,6 +573,11 @@ pub const fn another_creature_permanents(count: Count) -> Selection {
 /// caller lists those permanents. Titan of Industry's shield counter and Humiliate's +1/+1 counter are put on one.
 pub const fn creature_permanents(count: Count) -> Selection {
     Selection::of(count, &[CREATURE]).called("creature you control")
+}
+
+/// `count` instant or sorcery cards: Micromancer's one (with `mana_value_exactly(1)`), Inspiration from Beyond's and Most Decrepit Old Bird's one.
+pub const fn instant_or_sorcery_cards(count: Count) -> Selection {
+    Selection::of(count, &[INSTANT_OR_SORCERY]).called("instant or sorcery")
 }
 
 /// `count` artifact cards: Tinker's and Goblin Engineer's one (`ARTIFACT_CARD`), and Trinket Mage's one with
