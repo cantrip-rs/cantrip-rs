@@ -1,0 +1,45 @@
+# Massacre Wurm: "Whenever a creature an opponent controls dies, that player loses 2 life." (CR 700.4) The trigger is about creatures Bot1's opponents control: when Bot2's Lightning Bolt kills Bot1's
+# own Memnite on turn 4, neither player loses life (Bot1 20, Bot2 20).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Massacre Wurm
+Memnite
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Massacre Wurm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Graveyard = Memnite; Black Lotus
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire; Massacre Wurm

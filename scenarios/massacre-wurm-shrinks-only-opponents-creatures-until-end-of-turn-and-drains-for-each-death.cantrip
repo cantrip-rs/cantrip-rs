@@ -1,0 +1,67 @@
+# Massacre Wurm: "When this creature enters, creatures your opponents control get -2/-2 until end of turn." (CR 611.2c) and "Whenever a creature an opponent controls dies, that player loses 2 life." (CR 700.4, 119.3)
+# Bot1 casts it on turn 3 for {3}{B}{B}{B} (the Lotus, Mox Jet, Mox Pearl and Mox Sapphire). Bot2's Memnite (1/1) and Ornithopter (0/2) die together, so it loses 2 for each (16), its Hill Giant (3/3) is a 1/1, and
+# Bot1's own Ornithopter is untouched (0/2) and costs Bot1 no life. On turn 4 the Giant is a 3/3 again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Massacre Wurm
+Ornithopter
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Black Lotus
+Hill Giant
+Ornithopter
+Memnite
+Mountain x2
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Hill Giant.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Massacre Wurm.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Triggers(Massacre Wurm; Massacre Wurm)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Hill Giant.Power = 1
+? Bot2.Battlefield.Hill Giant.Toughness = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot2.Life = 16
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Hill Giant.Power = 3
+? Bot2.Battlefield.Hill Giant.Toughness = 3
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 16
+Bot2.Graveyard = Memnite; Ornithopter; Black Lotus

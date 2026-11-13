@@ -1,0 +1,8 @@
+{
+  "name": "Massacre Wurm",
+  "manaCost": "{3}{B}{B}{B}",
+  "type": "Creature — Phyrexian Wurm",
+  "power": 6,
+  "toughness": 5,
+  "oracleText": "When this creature enters, creatures your opponents control get -2/-2 until end of turn.\nWhenever a creature an opponent controls dies, that player loses 2 life."
+}
