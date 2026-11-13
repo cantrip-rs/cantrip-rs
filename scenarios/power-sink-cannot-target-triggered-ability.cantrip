@@ -1,0 +1,44 @@
+# Power Sink can target a creature spell but cannot target its triggered ability (CR 115.1a).
+[Bot1 Deck]
+Island
+Ornithopter
+Power Sink
+Power Sink
+Mox Sapphire
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Flametongue Kavu
+Island x15
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Flametongue Kavu.Cast
+? Stack = Flametongue Kavu
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Power Sink.Cast(Stack.Flametongue Kavu; X: 0)
+Bot1.Pass
+Bot2.PayCost
+Bot2.Target(Ornithopter)
+? Stack.Count = 1
+! Bot1.Hand.Power Sink.Cast(Stack.Flametongue Kavu; X: 0)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard.Ornithopter.Colors = 
+Bot1.Graveyard = Ornithopter; Power Sink
+Bot2.Battlefield = Mountain; Flametongue Kavu

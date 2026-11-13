@@ -1,0 +1,29 @@
+# Tapping City of Brass for Power Sink triggers its ability (CR 603.2).
+[Bot1 Deck]
+Black Lotus
+Power Sink
+Island x20
+[Bot2 Deck]
+City of Brass
+Mox Emerald
+Llanowar Elves
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.City of Brass.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Power Sink.Cast(Stack.Llanowar Elves; X: 2)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Decline
+[Expect]
+Bot2.Graveyard.Llanowar Elves.Colors = Green
+Bot2.Battlefield.City of Brass.Tapped = true
+Bot2.Mana =
+Bot2.Life = 19

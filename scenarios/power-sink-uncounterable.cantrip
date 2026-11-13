@@ -1,0 +1,38 @@
+# Dovin's Veto cannot be countered, but declining still taps its controller's land and empties their mana (CR 101.2, 118.12).
+[Bot1 Deck]
+Forest
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Dovin's Veto
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Power Sink
+Sol Ring
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dovin's Veto.Cast(Stack.Sol Ring)
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Power Sink.Cast(Stack.Dovin's Veto; X: 2)
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Decline
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Mana =
+Bot1.Graveyard.Dovin's Veto.Colors = Blue; White
+Bot2.Graveyard.Sol Ring.Colors =

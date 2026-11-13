@@ -1,0 +1,34 @@
+# Paying X with a mana ability lets the spell resolve and leaves the other
+# lands untapped; the payer cannot choose a new X (CR 118.12, 605.3a, 107.3a).
+[Bot1 Deck]
+Black Lotus
+Power Sink
+Island x20
+[Bot2 Deck]
+Forest
+Mox Emerald
+Mox Pearl
+Llanowar Elves
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Power Sink.Cast(Stack.Llanowar Elves; X: 1)
+Bot1.Pass
+! Bot2.PayCost(X: 1)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.PayCost
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Power = 1
+Bot2.Battlefield.Forest.Tapped = false
