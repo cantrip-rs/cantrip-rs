@@ -1,0 +1,60 @@
+# Crypt Feaster (CR 207.2c, 603.4, 508.1m): "Threshold — Whenever this creature attacks, if there are seven or more cards in your
+# graveyard, this creature gets +2/+0 until end of turn." The Wheel of Fortune (cast off Black Lotus) leaves five cards in
+# Bot1's graveyard (Black Lotus, three Islands, the Wheel). On turn 5 the 3/4 attacks as a 3/4 (Bot2 at 17); on turn 7 Faithless
+# Looting (two Islands drawn, both discarded, the spell itself) makes eight and it attacks as a 5/4 (Bot2 at 12).
+
+[Bot1 Deck]
+Black Lotus
+Wheel of Fortune
+Mox Jet
+Mox Ruby
+Island x3
+Crypt Feaster
+Swamp
+Island x5
+Faithless Looting
+Island x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Swamp.Play
+? Bot1.Graveyard.Count = 5
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Crypt Feaster.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Attack(Crypt Feaster > Bot2)
+[T5 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Battlefield.Crypt Feaster.Power = 3
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island; Island)
+? Bot1.Graveyard.Count = 8
+Bot1.Attack(Crypt Feaster > Bot2)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Crypt Feaster.Power = 5
+Bot1.Battlefield.Crypt Feaster.Toughness = 4
+Bot1.Battlefield.Crypt Feaster.Keywords = Menace
+Bot1.Graveyard.Count = 8
+Bot2.Life = 12
