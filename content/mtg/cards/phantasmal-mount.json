@@ -1,0 +1,11 @@
+{
+  "name": "Phantasmal Mount",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Illusion Horse",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying\n{T}: Target creature you control with toughness 2 or less gets +1/+1 and gains flying until end of turn. When this creature leaves the battlefield this turn, sacrifice that creature. When the creature leaves the battlefield this turn, sacrifice this creature.",
+  "keywords": [
+    "Flying"
+  ]
+}

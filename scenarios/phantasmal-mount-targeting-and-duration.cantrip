@@ -1,0 +1,62 @@
+# The Mount targets your creature of toughness at most two, gives +1/+1 and flying through the turn, and its delayed sacrifice expires at cleanup (CR 115.1c, 514.2).
+[Bot1 Deck]
+Phantasmal Mount
+Black Lotus x2
+Mox Emerald
+Grizzly Bears
+Ogre Sentry
+Mox Sapphire
+Mox Ruby
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Phantasmal Mount.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Ogre Sentry.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Phantasmal Mount.Activate(Bot1.Battlefield.Ogre Sentry)
+! Bot1.Battlefield.Phantasmal Mount.Activate(Bot2.Battlefield.Memnite)
+Bot1.Battlefield.Phantasmal Mount.Activate(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Battlefield.Phantasmal Mount.Tapped = true
+! Bot1.Battlefield.Phantasmal Mount.Activate(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 3
+? Bot1.Battlefield.Grizzly Bears.Toughness = 3
+? Bot1.Battlefield.Grizzly Bears.Keywords = Flying
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+? Bot1.Battlefield.Grizzly Bears.Toughness = 2
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Phantasmal Mount)
+? Bot1.Mana =
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Graveyard = Phantasmal Mount; Lightning Bolt; Black Lotus; Black Lotus
