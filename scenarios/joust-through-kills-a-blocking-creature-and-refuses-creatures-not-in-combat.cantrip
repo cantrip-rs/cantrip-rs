@@ -1,0 +1,43 @@
+# Joust Through targets an attacking or blocking creature only (CR 506.4). Bot1's Isamaru attacks on turn 3 and Bot2's first
+# Ornithopter (0/2) blocks it. Before the attack nothing is in combat, so a cast at Bot2's Ornithopter or Bot1's own Isamaru is not
+# offered; once Isamaru attacks, the unblocking second Ornithopter and a Bot1 creature that is not attacking are still refused,
+# while the blocker is a legal target (positive control), dies to the 3 damage, and Bot1 gains 1.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Isamaru, Hound of Konda
+Memnite
+Joust Through
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.Joust Through.Cast(Bot2.Battlefield.Ornithopter#1)
+! Bot1.Hand.Joust Through.Cast(Bot1.Battlefield.Isamaru, Hound of Konda)
+Bot1.Attack(Isamaru, Hound of Konda > Bot2)
+Bot2.Block(Ornithopter#1 > Isamaru, Hound of Konda)
+! Bot1.Hand.Joust Through.Cast(Bot2.Battlefield.Ornithopter#2)
+! Bot1.Hand.Joust Through.Cast(Bot1.Battlefield.Memnite)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Joust Through.Cast(Bot2.Battlefield.Ornithopter#1)
+Bot1.Pass
+
+[Expect]
+Turn = 3
+Bot1.Life = 21
+Bot1.Graveyard = Joust Through
+Bot2.Graveyard = Ornithopter
