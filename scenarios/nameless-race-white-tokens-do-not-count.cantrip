@@ -1,0 +1,40 @@
+# White tokens are excluded from the limit while the white spell in the opponent’s graveyard counts (CR 614.1c).
+[Bot1 Deck]
+Nameless Race
+Black Lotus
+Mox Jet
+Savannah Lions
+Mox Pearl
+Swamp x20
+
+[Bot2 Deck]
+Black Lotus
+Lingering Souls
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Lingering Souls.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Nameless Race.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Number(2)
+Bot1.Number(1)
+Bot1.Accept
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Nameless Race.Power = 1
+Bot1.Battlefield.Nameless Race.Toughness = 1

@@ -1,0 +1,51 @@
+# A white card in an opponent's graveyard adds to two white permanents; the resulting 3/3 tramples over a 1/1 (CR 702.19b).
+[Bot1 Deck]
+Nameless Race
+Black Lotus
+Mox Jet
+Mox Ruby
+Lightning Bolt
+Swamp x20
+
+[Bot2 Deck]
+Mox Pearl
+Black Lotus
+Savannah Lions
+Mother of Runes
+Elite Vanguard
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Hand.Mother of Runes.Cast
+Bot2.Hand.Elite Vanguard.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Savannah Lions)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Nameless Race.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Number(4)
+Bot1.Number(3)
+Bot1.Accept
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Nameless Race > Bot2)
+Bot2.Block(Mother of Runes > Nameless Race)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Nameless Race.Power = 3
+Bot1.Battlefield.Nameless Race.Toughness = 3
+Bot2.Life = 18
+Bot2.Graveyard.Count = 3
