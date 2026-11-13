@@ -23,9 +23,8 @@ fn mill_and_lose(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let legal = targets::legal_players(g, item);
     let mills: Vec<(PlayerId, u32)> = legal.iter().map(|&p| (p, 1)).collect();
     g.mill_together(&mills);
-    for p in legal {
-        g.lose_life(p, 1);
-    }
+    let losses: Vec<(PlayerId, i32)> = legal.into_iter().map(|p| (p, 1)).collect();
+    g.lose_life_together(&losses);
     Ok(())
 }
 
