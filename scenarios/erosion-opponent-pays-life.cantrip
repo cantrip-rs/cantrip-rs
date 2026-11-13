@@ -1,0 +1,26 @@
+# The enchanted land's controller, rather than Erosion's controller, pays 1 life during their upkeep.
+[Bot1 Deck]
+Black Lotus
+Erosion
+Island x20
+[Bot2 Deck]
+Forest
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Erosion.Cast(Bot2.Battlefield.Forest)
+? Bot1.Mana =
+[T4 Bot2.Upkeep]
+Bot2.Decline
+Bot2.Accept
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 20
+Bot2.Battlefield.Forest.Types = Land
+Bot1.Battlefield.Erosion.AttachedTo = Forest

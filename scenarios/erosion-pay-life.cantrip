@@ -1,0 +1,24 @@
+# Erosion enchants a land; its controller may pay exactly 1 life at their upkeep to save it.
+[Bot1 Deck]
+Island
+Black Lotus
+Erosion
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Erosion.Cast(Bot1.Battlefield.Island)
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Decline
+Bot1.Accept
+[T3 Bot1.Main1]
+? Bot1.Life = 19
+[Expect]
+Bot1.Battlefield.Erosion.AttachedTo = Island
+Bot1.Battlefield.Island.Types = Land
+Bot2.Life = 20
