@@ -1,0 +1,11 @@
+{
+  "name": "Angel of Finality",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Angel",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flying\nWhen this creature enters, exile target player's graveyard.",
+  "keywords": [
+    "Flying"
+  ]
+}
