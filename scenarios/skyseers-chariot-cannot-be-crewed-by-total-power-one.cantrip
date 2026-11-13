@@ -1,0 +1,30 @@
+# Skyseer's Chariot has Crew 2 (CR 702.122a): tapping creatures with total power 1 is not enough. Llanowar Elves (1/1) is the only
+# creature Bot1 controls, so the Chariot stays a noncreature Vehicle however the Elves are tapped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Skyseer's Chariot
+Llanowar Elves
+Mountain x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Skyseer's Chariot.Cast
+Bot1.Name(Black Lotus)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Skyseer's Chariot.Activate(Ability: Crew)
+
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Battlefield.Skyseer's Chariot.Types = Artifact

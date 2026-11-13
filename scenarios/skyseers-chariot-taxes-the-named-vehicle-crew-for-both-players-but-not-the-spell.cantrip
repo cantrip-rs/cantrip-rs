@@ -1,0 +1,84 @@
+# Skyseer's Chariot: "Activated abilities of sources with the chosen name cost {2} more to activate." Bot1 names Smuggler's
+# Copter as the Chariot enters. Casting a Copter is not activating an ability, so Bot1's turn-1 Copter costs its printed {2}. Crewing
+# a Copter costs {2} more for either player (CR 602.2b): on turn 3 Bot1 crews with Grizzly Bears paying exactly {2} (the other two
+# Moxen cast the Bears), and on turn 4 Bot2 does the same, leaving its other two Moxen untapped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Skyseer's Chariot
+Smuggler's Copter
+Grizzly Bears
+Mountain x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Smuggler's Copter
+Grizzly Bears
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Skyseer's Chariot.Cast
+Bot1.Name(Smuggler's Copter)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Sapphire; Skyseer's Chariot; Smuggler's Copter
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Smuggler's Copter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter.Types = Artifact; Creature
+? Bot1.Battlefield.Mox Pearl.Tapped = true
+? Bot1.Battlefield.Mox Jet.Tapped = true
+? Bot1.Battlefield.Mox Emerald.Tapped = true
+? Bot1.Battlefield.Mox Sapphire.Tapped = true
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot2.Choose(Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Smuggler's Copter.Types = Artifact; Creature
+Bot2.Battlefield.Mox Jet.Tapped = true
+Bot2.Battlefield.Mox Ruby.Tapped = true
+Bot2.Battlefield.Mox Emerald.Tapped = false
+Bot2.Battlefield.Mox Sapphire.Tapped = false
