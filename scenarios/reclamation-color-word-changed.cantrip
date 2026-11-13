@@ -1,0 +1,36 @@
+# Sleight of Mind changes Reclamation's black words to red; a black attacker then attacks without sacrificing a land (CR 612.1).
+[Bot1 Deck]
+Reclamation
+Black Lotus x2
+Mox Pearl
+Mox Sapphire
+Hired Poisoner
+Swamp
+Sleight of Mind
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Reclamation.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Hired Poisoner.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleight of Mind.Cast(Bot1.Battlefield.Reclamation)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Black)
+Bot1.Colors(Red)
+Bot1.Attack(Hired Poisoner > Bot2)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Swamp.Types = Land
+Bot2.Life = 19
