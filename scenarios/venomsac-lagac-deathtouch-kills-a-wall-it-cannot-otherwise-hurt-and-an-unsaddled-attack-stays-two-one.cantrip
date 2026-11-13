@@ -1,0 +1,38 @@
+# Venomsac Lagac (2/1 deathtouch): its 2 damage to Bot2's 0/7 Wall of Ice is lethal (CR 702.2b), and the Lagac takes none. Attacking
+# unsaddled it gets no +0/+3: it is still 2/1 as the wall blocks.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Venomsac Lagac
+Swamp x17
+
+[Bot2 Deck]
+Black Lotus
+Wall of Ice
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Venomsac Lagac.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Wall of Ice.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Venomsac Lagac > Bot2)
+Bot2.Block(Wall of Ice > Venomsac Lagac)
+? Bot1.Battlefield.Venomsac Lagac.Toughness = 1
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Wall of Ice; Black Lotus
+Bot2.Life = 20
+Bot1.Battlefield.Venomsac Lagac.Damage = 0

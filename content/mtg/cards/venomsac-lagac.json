@@ -1,0 +1,11 @@
+{
+  "name": "Venomsac Lagac",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Lizard Mount",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Deathtouch\nWhenever this creature attacks while saddled, it gets +0/+3 until end of turn.\nSaddle 2 (Tap any number of other creatures you control with total power 2 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)",
+  "keywords": [
+    "Deathtouch"
+  ]
+}
