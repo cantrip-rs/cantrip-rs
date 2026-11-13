@@ -1,0 +1,78 @@
+# "If you would draw a card, draw two cards instead" is cumulative with Thought Reflection's (its ruling; CR 614.5, 616.1): each
+# replacement effect gets one opportunity at the draw and at the draws that replace it, so at max speed the draw step's one draw
+# is four cards (Thought Reflection's two, each made two by Vnwxt, or the other way round), no more and no fewer. Bot1 reaches
+# speed 4 with Lightning Bolts on turns 1, 3 and 5; its turn 7 draw step is Vnwxt's alone (two cards: Thought Reflection and an
+# Island), and Thought Reflection is cast that turn with Black Lotus, Mox Sapphire, Mox Ruby and its two Mountains, so the draw
+# step of turn 9 draws four: a Forest, a Plains, a Swamp and a Mountain.
+
+[Bot1 Deck]
+Mountain
+Mountain
+Mox Sapphire
+Mox Ruby
+Vnwxt, Verbose Host
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Thought Reflection
+Island
+Forest
+Plains
+Swamp
+Mountain
+Island x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Vnwxt, Verbose Host.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+[T7 Bot1.Main1]
+? Bot1.Hand.Count = 2
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Thought Reflection.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Replace(Thought Reflection)
+[T9 Bot1.Main1]
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Hand = Forest; Island; Mountain; Plains; Swamp
