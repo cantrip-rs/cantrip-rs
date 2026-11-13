@@ -1,0 +1,55 @@
+# Archway Angel: "When this creature enters, you gain 2 life for each Gate you control." Bot1 controls no Gate (Bot2's Talon
+# Gates of Madara is not Bot1's), so the trigger gains 2 x 0 = 0 life. Gaining 0 life is no life gain event (CR 119.9): Bot1's
+# Ajani's Pridemate ("whenever you gain life") does not trigger, the stack is empty once the Angel's trigger resolves, and the
+# Pridemate stays a 2/2. Bot1 pays {1}{W} for the Pridemate on turn 1 and {5}{W} for the Angel on turn 3 from a Plains and Moxen.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Ajani's Pridemate
+Archway Angel
+Plains x12
+
+[Bot2 Deck]
+Talon Gates of Madara x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ajani's Pridemate.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Talon Gates of Madara.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Archway Angel.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Ajani's Pridemate.Power = 2
+Bot1.Battlefield.Ajani's Pridemate.Toughness = 2
+Bot1.Battlefield.Archway Angel.Power = 3

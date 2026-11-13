@@ -1,0 +1,48 @@
+# Archway Angel: "When this creature enters, you gain 2 life for each Gate you control." Bot1 plays a Talon Gates of Madara (a Gate land)
+# on turn 1 and a second on turn 3 (no creature is there to target, so each trigger is dropped), then casts the Angel with its Moxes and one Talon's {C}. Bot2 has a Gate of its own and Bot1 has
+# no other lands: only Bot1's two Gates count, so Bot1 gains exactly 4 life in one gain (CR 119.3, 608.2c), not 2 or 6. The Angel flies.
+
+[Bot1 Deck]
+Talon Gates of Madara
+Talon Gates of Madara
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Archway Angel
+Plains x12
+
+[Bot2 Deck]
+Talon Gates of Madara x22
+
+[Actions]
+Bot1.Hand.Talon Gates of Madara.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Talon Gates of Madara.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Talon Gates of Madara.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Talon Gates of Madara#1.Activate(Ability: {T}: Add {C}.)
+Bot1.Hand.Archway Angel.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 24
+Bot2.Life = 20
+Bot1.Battlefield.Archway Angel.Keywords = Flying
