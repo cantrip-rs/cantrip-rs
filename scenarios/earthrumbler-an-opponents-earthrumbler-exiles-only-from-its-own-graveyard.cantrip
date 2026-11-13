@@ -1,0 +1,42 @@
+# Earthrumbler is symmetric: "from your graveyard" is the activating player's own. Bot1 casts and sacrifices Black Lotus on turn 1 (an
+# artifact card in Bot1's graveyard) and nothing else. Bot2 casts its Earthrumbler on turn 2 with its own Black Lotus, a Mox Emerald and a
+# Mox Jet, and exiles that Lotus from its own graveyard to animate it (Bot1's Lotus, also an artifact card, stays where it is). It is a 7/6
+# artifact creature with vigilance and trample for the turn, and no creature again on turn 3.
+
+[Bot1 Deck]
+Black Lotus
+Island x19
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Earthrumbler
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Earthrumbler.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Black Lotus
+? Bot2.Graveyard = Black Lotus
+Bot2.Battlefield.Earthrumbler.Activate(Ability: Exile)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Earthrumbler.Power = 7
+? Bot2.Battlefield.Earthrumbler.Keywords = Trample; Vigilance
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Earthrumbler.Power = (absent)
+
+[Expect]
+Bot1.Graveyard = Black Lotus
+Bot2.Graveyard.Count = 0

@@ -1,0 +1,73 @@
+# Earthrumbler, {4}{G} Vehicle 7/6, vigilance and trample: "Exile an artifact or creature card from your graveyard: This Vehicle becomes
+# an artifact creature until end of turn." Bot1 casts it on turn 1 with Black Lotus (sacrificed, so an artifact card in its graveyard), a
+# green Mox Emerald and a Mox Jet, and Lightning Bolts its own Memnite (a creature card in the graveyard). Earthrumbler is no creature
+# (no power) until it is animated. Bot1 may not exile the Lightning Bolt (neither an artifact nor a creature card), exiles the Memnite,
+# and Earthrumbler is a 7/6 creature with vigilance and trample for the turn. On turn 2 it is no creature again (CR 611.2a, until end of
+# turn). On turn 3 Bot1 kills Bot2's Memnite with a second Bolt (a creature card in Bot2's graveyard, which Earthrumbler cannot exile),
+# exiles its own Black Lotus (the only card it may), attacks, and being a 7/6 vigilance creature it deals 7 and does not tap.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Earthrumbler
+Mox Ruby
+Memnite
+Lightning Bolt
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Earthrumbler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Memnite; Lightning Bolt; Black Lotus
+? Bot1.Battlefield.Earthrumbler.Power = (absent)
+Bot1.Battlefield.Earthrumbler.Activate(Ability: Exile)
+! Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Lightning Bolt; Black Lotus
+? Bot1.Battlefield.Earthrumbler.Power = 7
+? Bot1.Battlefield.Earthrumbler.Toughness = 6
+? Bot1.Battlefield.Earthrumbler.Keywords = Trample; Vigilance
+? Bot1.Battlefield.Earthrumbler.Types = Artifact; Creature
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+? Bot1.Battlefield.Earthrumbler.Power = (absent)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Memnite
+Bot1.Battlefield.Earthrumbler.Activate(Ability: Exile)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Lightning Bolt; Lightning Bolt
+? Bot2.Graveyard = Memnite
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Earthrumbler > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Earthrumbler.Tapped = false
+Bot2.Graveyard = Memnite

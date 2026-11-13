@@ -1,0 +1,58 @@
+# Earthrumbler (Crew 3, vigilance, trample, 7/6): cast on turn 1 with Black Lotus, Mox Emerald and Mox Jet. On turn 3 a Memnite
+# (power 1) alone cannot crew it (CR 702.122a); a Grizzly Bears (power 2) alone could not either, but together they tap for total power 3 and
+# Earthrumbler becomes an artifact creature.
+# It attacks: Bot2's Memnite chump blocks, trample assigns 1 to it and 6 to Bot2 (14), and vigilance leaves Earthrumbler untapped.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Earthrumbler
+Memnite
+Grizzly Bears
+Island
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Earthrumbler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Earthrumbler.Activate(Ability: Crew)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Earthrumbler.Power = (absent)
+Bot1.Battlefield.Earthrumbler.Activate(Ability: Crew)
+! Bot1.Choose(Grizzly Bears)
+! Bot1.Choose(Memnite)
+Bot1.Choose(Memnite; Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Earthrumbler.Power = 7
+? Bot1.Battlefield.Memnite.Tapped = true
+? Bot1.Battlefield.Grizzly Bears.Tapped = true
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Earthrumbler > Bot2)
+Bot2.Block(Memnite > Earthrumbler)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot2.Battlefield.Memnite = (absent)
+Bot1.Battlefield.Earthrumbler.Tapped = false
