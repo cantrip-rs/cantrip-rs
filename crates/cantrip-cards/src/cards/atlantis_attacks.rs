@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{targets, teamwork, tokens};
+use cantrip_mechanics::{effects, targets, teamwork, tokens};
 use cantrip_oracle as oracle;
 
 /// The 6/5 blue Leviathan creature token with hexproof.
@@ -20,17 +20,11 @@ fn leviathan(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Return one or two target nonland permanents to their owners' hands": those still legal go together (CR 608.2b, 400.7).
-fn return_them(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.return_to_hand(&targets::legal_objects(g, item));
-    Ok(())
-}
-
 /// "Choose one. If this spell was cast using teamwork, choose both instead." (CR 700.2, 702.194): with the teamwork cost paid,
 /// both modes, each with its own targets (CR 700.2c), done in printed order (CR 700.2d).
 static MODAL: ModalDef = modes(&[
     mode(leviathan, "Target player creates a 6/5 blue Leviathan creature token with hexproof.").targets(&[targets::PLAYER]),
-    mode(return_them, "Return one or two target nonland permanents to their owners' hands.")
+    mode(effects::return_each_target_to_hand, "Return one or two target nonland permanents to their owners' hands.")
         .targets(&[targets::NONLAND_PERMANENT.between(1, 2)]),
 ])
 .when_paid(2, 2);

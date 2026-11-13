@@ -1749,6 +1749,15 @@ pub fn next_spell_cant_be_countered(g: &mut dyn Game, item: &StackItem) -> Resul
     Ok(())
 }
 
+/// "Return up to N target [things] to their owners' hands" (CR 400.3, 608.2b): every target still legal as the spell or ability
+/// resolves goes to its owner's hand together, as one event; one that is gone is left out and the others still return. Fight On!,
+/// Pull from the Grave, Wail of War and Macabre Waltz (up to two creature cards), Rewrite History, Rydia's Return, Stray from History,
+/// Sanguine Indulgence, Archenemy's Charm, Atlantis Attacks, Call Damage Control, Leave // Chance and Loamcrafter Faun print it.
+pub fn return_each_target_to_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.return_to_hand(&crate::targets::legal_objects(g, item));
+    Ok(())
+}
+
 /// "Destroy up to N target [things]" (CR 701.8, 608.2b, 101.4): every object target that is still legal, destroyed together,
 /// so none is gone before another is destroyed. Force of Vigor and Armaggon, Future Shark print it.
 pub fn destroy_each_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {

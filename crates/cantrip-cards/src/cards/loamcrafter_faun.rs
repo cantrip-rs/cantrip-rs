@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{targets, targets::filters, triggers::THIS_ENTERS};
+use cantrip_mechanics::{effects, targets, targets::filters, triggers::THIS_ENTERS};
 use cantrip_oracle as oracle;
 
 const ASK: Question = Question::new("Discard", "discard one or more land cards?", "When you do, return up to that many nonland permanent cards from your graveyard to your hand", "Discard lands", "Don't");
@@ -18,16 +18,9 @@ fn discard_lands(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// Return up to that many target nonland permanent cards from your graveyard to your hand, those still legal
-/// (CR 608.2b), together.
-fn return_cards(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.return_to_hand(&targets::legal_objects(g, item));
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(THIS_ENTERS, discard_lands, "When this creature enters, you may discard one or more land cards. When you do, return up to that many target nonland permanent cards from your graveyard to your hand.")],
-    delayed: &[delayed_trigger(return_cards, "When you do, return up to that many target nonland permanent cards from your graveyard to your hand.")
+    delayed: &[delayed_trigger(effects::return_each_target_to_hand, "When you do, return up to that many target nonland permanent cards from your graveyard to your hand.")
         .targets(&[targets::NONLAND_PERMANENT_CARD_IN_YOUR_GRAVEYARD.between(0, TargetSpec::COUNTED)])],
     ..oracle::LOAMCRAFTER_FAUN
 };
