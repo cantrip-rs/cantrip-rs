@@ -1,0 +1,39 @@
+# The target is chosen on activation, but the tap, untap or no-action choice is made on resolution, after an opponent taps it in response (CR 602.2, 608.2d).
+[Bot1 Deck]
+Hyperion Blacksmith
+Black Lotus
+Mox Pearl
+Mountain x20
+[Bot2 Deck]
+Mox Sapphire
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Hyperion Blacksmith.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Hyperion Blacksmith.Activate(Bot1.Battlefield.Mox Pearl)
+! Bot1.Battlefield.Hyperion Blacksmith.Activate(Bot2.Battlefield.Island)
+Bot1.Battlefield.Hyperion Blacksmith.Activate(Bot2.Battlefield.Mox Sapphire)
+? Bot1.Battlefield.Hyperion Blacksmith.Tapped = true
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Pass
+Bot1.Modes(Untap)
+? Bot2.Battlefield.Mox Sapphire.Tapped = false
+! Bot1.Battlefield.Hyperion Blacksmith.Activate(Bot2.Battlefield.Mox Sapphire)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Hyperion Blacksmith.Activate(Bot2.Battlefield.Mox Sapphire)
+Bot1.Modes(Tap)
+? Bot2.Battlefield.Mox Sapphire.Tapped = true
+[T7 Bot1.Main1]
+Bot1.Battlefield.Hyperion Blacksmith.Activate(Bot2.Battlefield.Mox Sapphire)
+Bot1.Modes(Do nothing)
+[Expect]
+Bot2.Battlefield.Mox Sapphire.Tapped = false
+Bot1.Battlefield.Hyperion Blacksmith.Tapped = true

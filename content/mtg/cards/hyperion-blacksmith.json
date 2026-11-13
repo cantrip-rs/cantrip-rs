@@ -1,0 +1,8 @@
+{
+  "name": "Hyperion Blacksmith",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Human Artificer",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{T}: You may tap or untap target artifact an opponent controls."
+}
