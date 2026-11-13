@@ -1,0 +1,25 @@
+# Skirmishers attacks alone and kills a 1/1 blocker before the blocker can deal damage (CR 702.7b).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Icatian Skirmishers
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Icatian Skirmishers.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Icatian Skirmishers > Bot2)
+Bot2.Block(Memnite > Icatian Skirmishers)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Icatian Skirmishers.Damage = 0
+Bot2.Graveyard.Memnite.Power = 1
