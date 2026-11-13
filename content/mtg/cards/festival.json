@@ -1,0 +1,6 @@
+{
+  "name": "Festival",
+  "manaCost": "{W}",
+  "type": "Instant",
+  "oracleText": "Cast this spell only during an opponent's upkeep.\nCreatures can't attack this turn."
+}
