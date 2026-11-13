@@ -1,0 +1,58 @@
+# Bot2's The Wondrous Wasp strips Vnwxt of every ability on turn 2, its "You have no maximum hand size" with them. On turn 3 Bot1
+# draws up to ten cards with three Ancestral Recalls and, having no such ability, must discard to seven at cleanup (CR 514.1).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Vnwxt, Verbose Host
+Black Lotus
+Ancestral Recall
+Ancestral Recall
+Ancestral Recall
+Island
+Island x19
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+The Wondrous Wasp
+Island x17
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Vnwxt, Verbose Host.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.The Wondrous Wasp.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Target(Vnwxt, Verbose Host)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+Bot1.Pass
+Bot1.Discard(Island; Island; Island)
+
+[Expect]
+Bot1.Hand.Count = 7

@@ -1,0 +1,63 @@
+# Vnwxt, Verbose Host (Start your engines!; "Max speed — If you would draw a card, draw two cards instead"): its controller's speed
+# is 1 with it on the battlefield on turn 1 and rises on each of Bot1's turns when it Lightning Bolts Bot2: 2, 3 and 4 after the
+# Bolts of turns 1, 3 and 5 (CR 702.179d). Below max speed the draw step draws one card (turn 3 and turn 5, at speeds 2 and 3);
+# at max speed (turn 7) it draws two: a Forest and an Island.
+
+[Bot1 Deck]
+Mountain
+Mountain
+Lightning Bolt
+Mox Sapphire
+Vnwxt, Verbose Host
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain
+Island
+Forest
+Mountain x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Vnwxt, Verbose Host.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 3
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+[T5 Bot1.Main1]
+? Bot1.Hand.Count = 2
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+[T7 Bot1.Main1]
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Hand = Forest; Island; Mountain
+Bot2.Life = 11

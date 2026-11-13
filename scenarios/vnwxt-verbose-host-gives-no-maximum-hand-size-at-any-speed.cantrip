@@ -1,0 +1,41 @@
+# "You have no maximum hand size" is not a max speed ability: with Vnwxt out and a speed of just 1, Bot1 draws nine cards with three
+# Ancestral Recalls (Black Lotus's three blue mana) on turn 1, one card per draw below max speed, and keeps all nine at cleanup
+# (CR 514.1).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Vnwxt, Verbose Host
+Black Lotus
+Ancestral Recall
+Ancestral Recall
+Ancestral Recall
+Island x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Vnwxt, Verbose Host.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Hand.Count = 9
