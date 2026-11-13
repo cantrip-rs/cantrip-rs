@@ -1,0 +1,31 @@
+# Browser
+# Bot2's Cuombajj Witches: Bot2 chooses the first target, and Bot1's page is asked to choose the second, "any target of
+# an opponent's choice", for an ability it does not control (CR 115.1). The page's prompt names the ability, Bot1 clicks
+# Bot2's box, and each player is dealt 1 damage.
+[Bot1 Deck]
+Island x20
+[Bot2 Deck]
+Cuombajj Witches
+Mox Jet
+Gleemox
+Swamp x20
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Gleemox.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Gleemox.Activate(Color: Black)
+Bot2.Hand.Cuombajj Witches.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Cuombajj Witches.Activate
+Bot2.Target(Bot1)
+? Client.Bot1.Prompt.Title = Target for Cuombajj Witches
+Bot1.Target(Bot2)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 19
+? Bot2.Life = 19
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
+Bot2.Battlefield.Cuombajj Witches.Tapped = true

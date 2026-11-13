@@ -1,0 +1,34 @@
+# Browser
+# Cuombajj Witches in a game of three: its "any target of an opponent's choice" has two opponents to leave it to, so
+# Bot1's page is first asked which one chooses, and says what that player will do - choose targets for the ability, not
+# "choose targets" as a sentence of its own (CR 115.1, 608.2d). Bot1 picks Bot2, who then chooses Bot3 for the second target.
+[Bot1 Deck]
+Cuombajj Witches
+Mox Jet
+Gleemox
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Bot3 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Cuombajj Witches.Cast
+[T4 Bot1.Main1]
+Bot1.Battlefield.Cuombajj Witches.Activate
+Bot1.Target(Bot1)
+? Client.Bot1.Prompt.Title = Cuombajj Witches: choose an opponent
+? Client.Bot1.Prompt.Detail = The player you choose chooses targets for the ability of Cuombajj Witches
+Bot1.ChoosePlayer(Bot2)
+Bot2.Target(Bot3)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 20
+Bot3.Life = 19
+Bot1.Battlefield.Cuombajj Witches.Tapped = true

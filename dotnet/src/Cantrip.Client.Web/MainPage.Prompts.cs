@@ -1401,6 +1401,8 @@ public sealed partial class MainPage
             "GainControl" => "gains control of this artifact",
             "GainControlOf" => $"gains control of {subject}",
             "SeparatePiles" => $"separates the {(prompt.Amount == 1 ? "revealed card" : $"{prompt.Amount} revealed cards")} into two piles",
+            // An ability that leaves a target to an opponent of the controller's choosing (CR 115.1): the one chosen picks it.
+            "choose targets" => $"chooses targets for the ability of {source}",
             "PutOnBottomOfYourLibrary" => $"chooses which of the revealed cards go on the bottom of your library, one at a time (up to {prompt.Amount})",
             _ => prompt.Verb,
         };

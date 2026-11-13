@@ -1,0 +1,8 @@
+{
+  "name": "Cuombajj Witches",
+  "manaCost": "{B}{B}",
+  "type": "Creature — Human Wizard",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "{T}: This creature deals 1 damage to any target and 1 damage to any target of an opponent's choice."
+}

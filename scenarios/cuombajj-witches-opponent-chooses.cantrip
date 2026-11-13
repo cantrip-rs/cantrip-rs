@@ -1,0 +1,35 @@
+# The controller chooses one target and the opponent chooses the other; both take one damage (CR 115.1c, 120.3).
+[Bot1 Deck]
+Cuombajj Witches
+Mox Jet
+Gleemox
+Swamp x20
+[Bot2 Deck]
+Forest
+Gladecover Scout
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Cuombajj Witches.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Gladecover Scout.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Cuombajj Witches.Activate
+! Bot1.Target(Bot2.Battlefield.Forest)
+Bot1.Target(Bot2)
+! Bot2.Target(Bot2.Battlefield.Gladecover Scout)
+! Bot2.Target(Bot2.Battlefield.Forest)
+Bot2.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Cuombajj Witches.Activate(Bot2)
+? Bot1.Life = 19
+? Bot2.Life = 19
+[Expect]
+Bot1.Battlefield.Cuombajj Witches.Tapped = true
