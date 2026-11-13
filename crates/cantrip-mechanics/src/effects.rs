@@ -2368,20 +2368,14 @@ pub fn gain_indestructible_until_end_of_turn(g: &mut dyn Game, source: ObjectId,
 /// nothing if it is no longer a legal target as the spell or ability resolves (CR 608.2b). Valorous Stance's first mode and
 /// Burdened Stoneback print it.
 pub fn target_creature_gains_indestructible(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = crate::targets::object(g, item, 0) {
-        gain_indestructible_until_end_of_turn(g, item.object, creature);
-    }
-    Ok(())
+    first_target_gains_until_end_of_turn::<{ Keywords::of(&[Keyword::Indestructible]).0 }>(g, item)
 }
 
 /// "Target creature gains double strike until end of turn" (CR 702.4, 611.2a), the creature (or other permanent) being the
 /// ability's first target; nothing if it is no longer a legal target as the spell or ability resolves (CR 608.2b). Raking Claws,
 /// Boros Charm's third mode and Pride of the Road's max speed ability print it.
 pub fn target_gains_double_strike(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(target) = crate::targets::object(g, item, 0) {
-        gain_until_end_of_turn(g, item.object, target, Keyword::DoubleStrike);
-    }
-    Ok(())
+    first_target_gains_until_end_of_turn::<{ Keywords::of(&[Keyword::DoubleStrike]).0 }>(g, item)
 }
 
 /// "This creature gains [a keyword] until end of turn. Tap it." (CR 611.2a, 701.26a): if the ability's source is still on the
@@ -2452,6 +2446,18 @@ pub fn gain_until_end_of_turn(g: &mut dyn Game, source: ObjectId, target: Object
     g.add_effect(source, target, EffectKind::AddKeywords(Keywords::of(&[keyword])), Duration::EndOfTurn);
 }
 
+/// "Target creature gains [keywords] until end of turn" (CR 611.2a, 608.2b): the ability's first target, a layer 6 keyword
+/// grant for the rest of the turn from its source; nothing for a target no longer legal as the spell or ability resolves.
+/// `KEYWORDS` is a `Keywords` as `u128` (`Keywords::of(&[Keyword::Trample]).0`); the named `target_..._gains_...` effects here
+/// are this for one keyword set. Greenbelt Guardian (trample), Boros Charm and Raking Claws (double strike, through
+/// `target_gains_double_strike`), Widow's Bite and Tal'Shiar Operative (deathtouch), Daily Bugle Building and
+/// Item Shopkeep (menace), Oteclan Landmark (flying, through `first_target_gains_flying`) and Sylvan Safekeeper (shroud) print it.
+pub fn first_target_gains_until_end_of_turn<const KEYWORDS: u128>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    g.add_effect(item.object, creature, EffectKind::AddKeywords(Keywords(KEYWORDS)), Duration::EndOfTurn);
+    Ok(())
+}
+
 /// "`source` gains your choice of [keywords] until end of turn" (CR 608.2d, 611.2a): `target` gains the one the controller
 /// picks from `keywords`, labelled by `card`'s `labels` in the same order. Hungering Puppetbeast (trample, hexproof or haste)
 /// and Wingnut, Bat on the Belfry (flying, menace or haste) print it.
@@ -2480,10 +2486,7 @@ pub fn this_gains_flying(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspe
 /// "Target creature gains flying until end of turn" (CR 702.9b, 611.2a): the ability's first target. A target no longer legal gains
 /// nothing (CR 608.2b). Helitrooper and Stratosoarer print it.
 pub fn first_target_gains_flying(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = crate::targets::object(g, item, 0) {
-        gain_until_end_of_turn(g, item.object, creature, Keyword::Flying);
-    }
-    Ok(())
+    first_target_gains_until_end_of_turn::<{ Keywords::of(&[Keyword::Flying]).0 }>(g, item)
 }
 
 /// "This creature gains first strike until end of turn" (CR 702.7a): `this_gains_until_end_of_turn` for first strike.
@@ -2519,10 +2522,7 @@ pub fn gain_hexproof_and_indestructible_until_end_of_turn(g: &mut dyn Game, sour
 /// spell or ability's first target; nothing if it is no longer a legal target as it resolves (CR 608.2b). Concerted Care, Defend the
 /// Rider, Restoration Magic, Vigorbloom Charm and Plaza of Heroes print it.
 pub fn target_gains_hexproof_and_indestructible_until_end_of_turn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(permanent) = crate::targets::object(g, item, 0) {
-        gain_hexproof_and_indestructible_until_end_of_turn(g, item.object, permanent);
-    }
-    Ok(())
+    first_target_gains_until_end_of_turn::<{ Keywords::of(&[Keyword::Hexproof, Keyword::Indestructible]).0 }>(g, item)
 }
 
 /// "A creature or planeswalker with the greatest mana value among creatures and planeswalkers they control": the

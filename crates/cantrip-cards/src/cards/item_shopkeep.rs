@@ -10,19 +10,10 @@ fn attacking_equipped_creature(q: &dyn Query, asker: &Asker, t: Target) -> bool 
     targets::attacking_creature_filter(q, asker, t) && matches!(t, Target::Object(id) if attach::is_equipped(q, id))
 }
 
-/// "Target attacking equipped creature gains menace until end of turn" (CR 702.110, 611.2a): nothing if the target is no longer
-/// legal as the ability resolves (CR 608.2b).
-fn gains_menace(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = targets::object(g, item, 0) {
-        effects::gain_until_end_of_turn(g, item.object, creature, Keyword::Menace);
-    }
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
         YOU_ATTACK,
-        gains_menace,
+        effects::first_target_gains_until_end_of_turn::<{ Keywords::of(&[Keyword::Menace]).0 }>,
         "Whenever you attack, target attacking equipped creature gains menace until end of turn.",
     )
     .targets(&[target(attacking_equipped_creature)])],
