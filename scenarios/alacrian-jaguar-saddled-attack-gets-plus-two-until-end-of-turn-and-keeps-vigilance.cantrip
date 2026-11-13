@@ -1,0 +1,58 @@
+# Alacrian Jaguar, {4}{G} 4/4 vigilance, Saddle 1: "Whenever this creature attacks while saddled, it gets +2/+2 until end of turn."
+# Turn 1: cast off the Lotus, Mox Emerald and Mox Jet; with no other creature to tap, Saddle 1 is refused. Turn 3: Llanowar Elves (power 1,
+# summoning sick) is tapped to saddle it, it attacks as a 6/6 and, with vigilance, stays untapped; Bot2 takes 6. On Bot2's turn it is a 4/4 again.
+# Turn 5: it attacks unsaddled: no trigger, a 4/4 deals 4 (Bot2 at 10).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Alacrian Jaguar
+Llanowar Elves
+Forest
+Forest
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Alacrian Jaguar.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Alacrian Jaguar.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Alacrian Jaguar.Activate
+Bot1.Choose(Llanowar Elves)
+Bot1.Attack(Alacrian Jaguar > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Alacrian Jaguar.Power = 6
+? Bot1.Battlefield.Alacrian Jaguar.Toughness = 6
+? Bot1.Battlefield.Alacrian Jaguar.Tapped = false
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Alacrian Jaguar.Saddled = true
+? Bot2.Life = 14
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Alacrian Jaguar.Power = 4
+? Bot1.Battlefield.Alacrian Jaguar.Toughness = 4
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Alacrian Jaguar > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Alacrian Jaguar.Power = 4
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 10
+Bot1.Battlefield.Alacrian Jaguar.Saddled = (absent)

@@ -1,0 +1,43 @@
+# Bot2 casts Alacrian Jaguar on turn 2 (Lotus, Mox Emerald, Mox Jet), saddles it with a Llanowar Elves on turn 4 and attacks: its own trigger makes
+# it a 6/6 until end of turn, and Bot1, with no creatures, takes 6. Bot1's side of the board is not affected (no pump for it).
+
+[Bot1 Deck]
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Alacrian Jaguar
+Llanowar Elves
+Forest
+Forest
+Forest x10
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Alacrian Jaguar.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Alacrian Jaguar.Activate
+Bot2.Choose(Llanowar Elves)
+Bot2.Attack(Alacrian Jaguar > Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Alacrian Jaguar.Power = 6
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 14
+Bot2.Battlefield.Alacrian Jaguar.Tapped = false
