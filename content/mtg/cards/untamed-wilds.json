@@ -1,0 +1,6 @@
+{
+  "name": "Untamed Wilds",
+  "manaCost": "{2}{G}",
+  "type": "Sorcery",
+  "oracleText": "Search your library for a basic land card, put that card onto the battlefield, then shuffle."
+}

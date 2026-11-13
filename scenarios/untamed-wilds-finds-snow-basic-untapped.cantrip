@@ -1,0 +1,37 @@
+# Untamed Wilds finds a snow basic, refuses a nonbasic and a second land, then shuffles its controller's library (CR 701.23, 701.24a).
+[Bot1 Deck]
+Untamed Wilds
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Island
+Island
+Island
+Snow-Covered Forest
+Tropical Island
+Plains
+Island x15
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Untamed Wilds.Cast
+? Bot1.Mana =
+? Bot1.Shuffles = 0
+! Bot1.Search(Tropical Island)
+! Bot1.Search(Snow-Covered Forest; Plains)
+Bot1.Search(Snow-Covered Forest)
+? Bot1.Shuffles = 1
+[Expect]
+Bot1.Battlefield.Snow-Covered Forest.Tapped = false
+Bot1.Graveyard = Untamed Wilds
+Bot2.Library.Count = 13
+Bot2.Shuffles = 0
