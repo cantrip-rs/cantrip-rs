@@ -5,14 +5,9 @@ use cantrip_oracle as oracle;
 /// "You may have this creature enter as a copy of a creature or planeswalker you control, except it enters with an additional
 /// +1/+1 counter on it if it's a creature, it enters with an additional loyalty counter on it if it's a planeswalker, and it
 /// isn't legendary." (CR 614.1c, 614.12, 707.2, 707.9b, 122.6). "You" is the player it enters under (CR 110.2, 614.12), not its
-/// owner, so the candidates are `entering.controller`'s permanents.
+/// owner, so the candidates are `entering.controller`'s permanents (`enter_as_copy_of_one_you_control`).
 fn have_creature_enter_as_copy_enters(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
-    let candidates: Vec<ObjectId> = g
-        .permanents_of(entering.controller)
-        .into_iter()
-        .filter(|&id| id != entering.object && (g.chars(id).is(CardType::Creature) || g.chars(id).is(CardType::Planeswalker)))
-        .collect();
-    copy::enter_as_copy_of_one_of(g, entering, &candidates, |_, copy| copy.nonlegendary(), &copy::COPY_AS_ENTERS)?;
+    copy::enter_as_copy_of_one_you_control(g, entering, |c| c.is(CardType::Creature) || c.is(CardType::Planeswalker), |_, copy| copy.nonlegendary())?;
     if entering.copy.is_none() {
         return Ok(());
     }

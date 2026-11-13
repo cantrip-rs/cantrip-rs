@@ -62,6 +62,22 @@ pub fn enter_as_copy_of_one_of(
     Ok(())
 }
 
+/// "You may have this [permanent] enter as a copy of a [permanent that passes `eligible`] you control, except [`exception`]"
+/// (CR 614.1c, 707.2, 707.9): a choice, not a target (CR 608.2d). "You" is the player it enters under (CR 110.2, 614.12), not its
+/// owner, and an opponent's permanent is not offered. With nothing to copy nothing is asked. It is the body of
+/// `enter_as_copy_of_creature_you_control`; Spark Double (a creature or planeswalker) and Waxen Shapethief (an artifact or a
+/// creature) print it with their own filters.
+pub fn enter_as_copy_of_one_you_control(
+    g: &mut dyn Game,
+    entry: &mut Entering,
+    eligible: fn(&Chars) -> bool,
+    exception: fn(&dyn Query, Copiable) -> Copiable,
+) -> Result<(), Suspend> {
+    let candidates: Vec<ObjectId> =
+        g.permanents_of(entry.controller).into_iter().filter(|&id| id != entry.object && eligible(&g.chars(id))).collect();
+    enter_as_copy_of_one_of(g, entry, &candidates, exception, &COPY_AS_ENTERS)
+}
+
 /// "You may have this creature enter as a copy of a creature you control, except [`exception`]" (CR 614.1c, 707.2, 707.9): a
 /// choice, not a target (CR 608.2d). "You" is the player it enters under (CR 110.2, 614.12), not its owner, and an opponent's
 /// creature is not offered. With nothing to copy nothing is asked. Glasspool Mimic (a Shapeshifter Rogue in addition) and
@@ -71,9 +87,7 @@ pub fn enter_as_copy_of_creature_you_control(
     entry: &mut Entering,
     exception: fn(&dyn Query, Copiable) -> Copiable,
 ) -> Result<(), Suspend> {
-    let candidates: Vec<ObjectId> =
-        g.permanents_of(entry.controller).into_iter().filter(|&id| id != entry.object && g.chars(id).is(CardType::Creature)).collect();
-    enter_as_copy_of_one_of(g, entry, &candidates, exception, &COPY_AS_ENTERS)
+    enter_as_copy_of_one_you_control(g, entry, |c| c.is(CardType::Creature), exception)
 }
 
 /// What a land that may "enter tapped as a copy" asks: entering as a copy is entering tapped, so the question says both.
