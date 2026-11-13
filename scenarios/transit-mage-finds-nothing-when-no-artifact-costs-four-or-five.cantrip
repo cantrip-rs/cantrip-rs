@@ -1,0 +1,35 @@
+# Transit Mage: the search may find nothing (CR 701.23b). A Phyrexian Dragon Engine (mana value 3), a Sol Ring (1) and a
+# Thoughtcast (5, no artifact) are not on offer, so Bot1 takes nothing.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Transit Mage
+Island x3
+Phyrexian Dragon Engine
+Sol Ring
+Thoughtcast
+Island x7
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Transit Mage.Cast
+Bot1.Accept
+! Bot1.Search(Phyrexian Dragon Engine; Sol Ring; Thoughtcast)
+Bot1.Search()
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Hand = Island; Island; Island
+Bot1.Library.Count = 10
+Bot1.Shuffles = 1

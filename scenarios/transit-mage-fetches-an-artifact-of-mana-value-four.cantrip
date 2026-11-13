@@ -1,0 +1,47 @@
+# Transit Mage's enters ability searches for an artifact card with mana value 4 or 5: Bot1 casts it off three Moxen, accepts, and
+# takes Juggernaut (mana value 4). Phyrexian Dragon Engine (3), Sol Ring (1) and Mox Jet (0) are too cheap, and Thoughtcast (5) is
+# no artifact, and Argentum Armor (6) costs too much: none is on offer. Only one card may be taken, so Paradox Engine (5) stays
+# in the library.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Transit Mage
+Island x3
+Juggernaut
+Phyrexian Dragon Engine
+Sol Ring
+Mox Jet
+Thoughtcast
+Paradox Engine
+Argentum Armor
+Island x6
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Transit Mage.Cast
+Bot1.Accept
+! Bot1.Search(Phyrexian Dragon Engine)
+! Bot1.Search(Sol Ring)
+! Bot1.Search(Mox Jet)
+! Bot1.Search(Thoughtcast)
+! Bot1.Search(Argentum Armor)
+! Bot1.Search(Juggernaut; Paradox Engine)
+Bot1.Search(Juggernaut)
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Hand = Island; Island; Island; Juggernaut
+Bot1.Library.Count = 12
+Bot1.Revealed = Juggernaut
+Bot1.Shuffles = 1
