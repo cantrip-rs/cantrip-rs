@@ -1,0 +1,54 @@
+# Harvester of Misery: "{1}{B}, Discard Harvester of Misery: Target creature gets -2/-2 until end of turn" on a creature that
+# survives it, so both numbers show: the second Harvester, discarded, takes the 5/4 Harvester on the battlefield to exactly 3/2
+# (the first one's entering already killed Bot2's Llanowar Elves and Ornithopter; the later Elves are left alone).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Swamp
+Harvester of Misery
+Harvester of Misery
+Swamp
+Swamp
+Swamp x9
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Ornithopter
+Llanowar Elves
+Forest x12
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Harvester of Misery.Cast
+[T3 Bot1.Main2]
+? Bot2.Graveyard.Count = 2
+? Bot1.Battlefield.Harvester of Misery.Toughness = 4
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Harvester of Misery.Activate(Bot1.Battlefield.Harvester of Misery)
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard.Count = 2
+Bot1.Battlefield.Harvester of Misery.Power = 3
+Bot1.Battlefield.Harvester of Misery.Toughness = 2
+Bot2.Battlefield.Count = 3
