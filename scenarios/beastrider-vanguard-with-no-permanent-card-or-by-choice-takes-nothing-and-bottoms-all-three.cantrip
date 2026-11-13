@@ -1,0 +1,66 @@
+# Beastrider Vanguard: "You may reveal a permanent card from among them". On turn 3 the top three are Lightning Bolt, Giant Growth and
+# Brainstorm, no permanent card (CR 110.4a): Bot1 still looks at them, none can go to the hand, and all three go to the bottom in the order
+# chosen. On turn 5 the top three are Grizzly Bears, Hill Giant and Forest, permanent cards, but Bot1 may leave them all (nothing is
+# revealed) and they go to the bottom too; the card taken by neither is the Swamp below them, which stays on top.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Beastrider Vanguard
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Plains
+Island
+Lightning Bolt
+Giant Growth
+Brainstorm
+Plains
+Grizzly Bears
+Hill Giant
+Forest
+Swamp x2
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Beastrider Vanguard.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Beastrider Vanguard.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Lightning Bolt | Giant Growth; Brainstorm)
+! Bot1.Arrange(Giant Growth | Lightning Bolt; Brainstorm)
+! Bot1.Arrange(Brainstorm | Lightning Bolt; Giant Growth)
+Bot1.Arrange( | Giant Growth; Brainstorm; Lightning Bolt)
+? Bot1.Hand = Island; Plains
+? Bot1.Revealed = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Beastrider Vanguard.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Hill Giant; Forest; Grizzly Bears)
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot1.Hand = Island; Plains; Plains
+Bot1.Library = Swamp; Swamp; Giant Growth; Brainstorm; Lightning Bolt; Hill Giant; Forest; Grizzly Bears

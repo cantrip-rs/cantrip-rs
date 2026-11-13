@@ -1,0 +1,48 @@
+# Beastrider Vanguard's "{4}{G}" needs green: on turn 3, with an Island and four non-green Moxen untapped (five mana, no green source,
+# the Black Lotus that paid for the Vanguard gone) the ability is refused (CR 602.2b, 601.2g); the Mox Emerald drawn that turn adds {G} and
+# it is activated, and Bot1 takes the Grizzly Bears from the top three.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Beastrider Vanguard
+Mox Pearl
+Mox Sapphire
+Island
+Mox Emerald
+Grizzly Bears
+Plains
+Swamp
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Beastrider Vanguard.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Beastrider Vanguard.Activate(Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Beastrider Vanguard.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Grizzly Bears | Plains; Swamp)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Grizzly Bears
+Bot1.Library.Top = Island

@@ -1,0 +1,55 @@
+# Beastrider Vanguard is symmetric: Bot2 casts it on turn 2 and cannot activate it with three untapped Moxen ({4}{G} is five mana), then
+# does on turn 4 and takes a Forest, a land card being a permanent card (CR 110.4a), from the top three of its own library (the Lightning Bolt
+# and the Island below the Forest go to the bottom). Bot1's library, with a Grizzly Bears on top, is untouched.
+
+[Bot1 Deck]
+Island x7
+Grizzly Bears
+Island x8
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Beastrider Vanguard
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Plains
+Island
+Swamp
+Forest
+Lightning Bolt
+Island
+Swamp x2
+
+[Actions]
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Beastrider Vanguard.Cast
+! Bot2.Battlefield.Beastrider Vanguard.Activate
+[T4 Bot2.Main1]
+Bot2.Battlefield.Beastrider Vanguard.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Pass
+Bot1.Pass
+! Bot2.Arrange(Lightning Bolt | Forest; Island)
+Bot2.Arrange(Forest | Lightning Bolt; Island)
+[T4 Bot2.Main2]
+
+[Expect]
+Turn = 4
+Bot2.Hand = Forest; Island; Plains; Swamp
+Bot2.Revealed = Forest
+Bot2.Library = Swamp; Swamp; Lightning Bolt; Island
+Bot1.Library.Count = 8

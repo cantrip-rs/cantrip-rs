@@ -1,0 +1,55 @@
+# Beastrider Vanguard, {1}{G} 2/2: "{4}{G}: Look at the top three cards of your library. You may reveal a permanent card from among them
+# and put it into your hand. Put the rest on the bottom of your library in any order." Bot1 casts it on turn 1 and activates it on
+# turn 3 with five Moxen (one green source, exactly {4}{G}: the pool is empty afterwards). The top three are Lightning Bolt, Grizzly Bears and
+# Ornithopter; the card below them (Plains) is not looked at. A permanent card is any that is not an instant or sorcery (CR 110.4a): the
+# Bolt cannot be taken, and only one card may be (the Ornithopter as well is refused). The Grizzly Bears is revealed and taken, and the
+# Ornithopter and the Bolt go to the bottom in the order chosen (CR 401.4), the Bolt lowest.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Beastrider Vanguard
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Plains
+Island
+Lightning Bolt
+Grizzly Bears
+Ornithopter
+Plains x2
+Swamp
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Beastrider Vanguard.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Beastrider Vanguard.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Lightning Bolt | Grizzly Bears; Ornithopter)
+! Bot1.Arrange(Grizzly Bears; Ornithopter | Lightning Bolt)
+Bot1.Arrange(Grizzly Bears | Ornithopter; Lightning Bolt)
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot1.Hand = Grizzly Bears; Island; Plains
+Bot1.Revealed = Grizzly Bears
+Bot1.Library = Plains; Plains; Swamp; Ornithopter; Lightning Bolt
+Bot2.Library.Count = 12
