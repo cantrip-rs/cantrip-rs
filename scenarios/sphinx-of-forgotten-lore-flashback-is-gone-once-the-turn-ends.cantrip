@@ -1,0 +1,46 @@
+# Sphinx of Forgotten Lore: the flashback it grants lasts only until end of turn. Bot1 attacks in turn 3 and gets flashback on its Lightning
+# Bolt but casts nothing; at turn 5 the Bolt can no longer be cast from the graveyard even with {R} available, and stays there.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Sphinx of Forgotten Lore
+Lightning Bolt
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sphinx of Forgotten Lore.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[T3 Bot1.Main1]
+Bot1.Attack(Sphinx of Forgotten Lore > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Graveyard.Lightning Bolt.Cast(Bot2)
+
+[Expect]
+Bot2.Life = 14
+Exile =

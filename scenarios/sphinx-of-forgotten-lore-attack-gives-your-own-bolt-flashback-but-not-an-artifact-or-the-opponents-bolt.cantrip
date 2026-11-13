@@ -1,0 +1,52 @@
+# Sphinx of Forgotten Lore (Flash, Flying, 3/3): "Whenever this creature attacks, target instant or sorcery card in your graveyard gains
+# flashback until end of turn. The flashback cost is equal to that card's mana cost." Bot1 casts it in turn 1 (Black Lotus and Mox Sapphire) and
+# Lightning Bolt at Bot2 (Mox Ruby); Bot2's own Bolt hits Bot1 in turn 2. Attacking in turn 3, the sacrificed Black Lotus (an artifact) and
+# Bot2's Bolt (not in Bot1's graveyard) are not legal targets, so the trigger's only target is Bot1's Bolt, which Bot1 then casts from the
+# graveyard for {R}: it is exiled, and Bot2 (20 - 3 - 3 - 3, the flying Sphinx is not blocked) is at 11. Bot2's Bolt stays in its graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Sphinx of Forgotten Lore
+Lightning Bolt
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sphinx of Forgotten Lore.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[T3 Bot1.Main1]
+Bot1.Attack(Sphinx of Forgotten Lore > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 11
+Exile = Lightning Bolt
+Bot2.Graveyard = Lightning Bolt

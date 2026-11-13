@@ -1,0 +1,52 @@
+# Sphinx of Forgotten Lore: "Flash" (CR 702.8a) and "Flying" (CR 702.9b), from its Oracle text. Bot1 Bolts Bot2 on turn 1, then casts the
+# Sphinx in Bot2's turn-2 end step (Black Lotus and Mox Sapphire), which only flash allows. Attacking on turn 3, its trigger gives the Bolt
+# flashback; Bot2's Memnite, which has neither flying nor reach, cannot block it. After combat Bot1 flashes back the Bolt for {R}: Bot2 is at
+# 20 - 3 - 3 - 3 = 11 and the Bolt is exiled.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Sphinx of Forgotten Lore
+Lightning Bolt
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.End]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sphinx of Forgotten Lore.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sphinx of Forgotten Lore.Keywords = Flash; Flying
+[T3 Bot1.Main1]
+Bot1.Attack(Sphinx of Forgotten Lore > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot2.Block(Memnite > Sphinx of Forgotten Lore)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 11
+Bot2.Battlefield = Memnite
+Exile = Lightning Bolt
