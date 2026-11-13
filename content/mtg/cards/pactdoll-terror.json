@@ -1,0 +1,8 @@
+{
+  "name": "Pactdoll Terror",
+  "manaCost": "{3}{B}",
+  "type": "Artifact Creature — Toy",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Whenever this creature or another artifact you control enters, each opponent loses 1 life and you gain 1 life."
+}
