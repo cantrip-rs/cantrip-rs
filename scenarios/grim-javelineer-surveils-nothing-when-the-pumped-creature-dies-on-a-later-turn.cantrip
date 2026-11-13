@@ -1,0 +1,41 @@
+# Grim Javelineer: "When that creature dies this turn" is a delayed trigger of this turn only (CR 603.7). Turn 3: Bot1 attacks
+# with the Javelineer and pumps it (4/2): Bot2 has no creature, so it survives and Bot2 is at 16. Turn 4: Bot2's Lightning Bolt
+# kills it after the turn it was pumped, and Bot1 surveils nothing (the library stays as it is).
+
+[Bot1 Deck]
+Black Lotus
+Grim Javelineer
+Swamp
+Swamp
+Swamp
+Island
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Grim Javelineer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Grim Javelineer > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grim Javelineer)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Grim Javelineer; Black Lotus
+Bot1.Library.Count = 12

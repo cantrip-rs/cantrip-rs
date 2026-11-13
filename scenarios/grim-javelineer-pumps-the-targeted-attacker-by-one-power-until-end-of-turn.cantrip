@@ -1,0 +1,49 @@
+# Grim Javelineer: "Whenever you attack, target attacking creature gets +1/+0 until end of turn." Bot1 attacks on turn 3 with the
+# Javelineer (3/2) and Memnite (1/1) and keeps Ornithopter home. The trigger's target must be an attacking creature: the
+# Ornithopter (Bot1's, not attacking) and Bot2's Ornithopter are refused, Memnite is chosen and is a 2/1 (power +1, toughness
+# unchanged) while the Javelineer stays 3/2: 3 + 2 = 5 damage, Bot2 at 15. On turn 5 the pump has ended: Memnite is 1/1 again.
+# Black Lotus pays the {2}{B}; no creature dies, so no surveil is asked.
+
+[Bot1 Deck]
+Black Lotus
+Grim Javelineer
+Memnite
+Ornithopter
+Swamp x3
+Swamp x14
+
+[Bot2 Deck]
+Ornithopter
+Island x6
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Grim Javelineer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Grim Javelineer > Bot2; Memnite > Bot2)
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Grim Javelineer.Power = 3
+? Bot1.Battlefield.Grim Javelineer.Toughness = 2
+[T3 Bot1.Main2]
+? Bot2.Life = 15
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+
+[Expect]
+Bot1.Battlefield.Grim Javelineer.Power = 3
