@@ -1,0 +1,70 @@
+# Odd upkeep boosts red creatures already present and Mountains produce extra red; even upkeep reduces both players' red creatures and replaces Mountain mana with colorless (CR 611.2c, 614.1a).
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Rip-Clan Crasher
+Chaos Moon
+Island x16
+[Bot2 Deck]
+Mountain
+Goblin Assailant
+Mox Emerald
+Ornithopter x2
+Island x17
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Rip-Clan Crasher.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Chaos Moon.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Rip-Clan Crasher.Power = 3
+? Bot1.Battlefield.Rip-Clan Crasher.Toughness = 3
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+? Bot2.Mana = {R}{R}
+Bot2.Hand.Goblin Assailant.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+? Bot2.Mana = {G}
+? Bot2.Battlefield.Goblin Assailant.Power = 2
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Rip-Clan Crasher.Power = 1
+? Bot1.Battlefield.Rip-Clan Crasher.Toughness = 1
+? Bot2.Battlefield.Goblin Assailant.Power = 1
+? Bot2.Battlefield.Goblin Assailant.Toughness = 1
+? Bot2.Battlefield.Ornithopter#1.Toughness = 2
+Bot1.Battlefield.Mountain.Activate
+? Bot1.Mana = {C}
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Mana = {U}{C}
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+? Bot2.Mana = {C}
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+? Bot2.Mana = {U}{C}
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Rip-Clan Crasher.Power = 3
+? Bot2.Battlefield.Goblin Assailant.Power = 3
+? Bot2.Battlefield.Ornithopter#1.Power = 0
+? Bot2.Battlefield.Ornithopter#1.Toughness = 2
+Bot1.Battlefield.Mountain.Activate
+? Bot1.Mana = {R}{R}
+[Expect]
+Bot1.Battlefield.Rip-Clan Crasher.Power = 3
+Bot2.Battlefield.Goblin Assailant.Toughness = 3

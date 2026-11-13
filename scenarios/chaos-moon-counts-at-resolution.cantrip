@@ -1,0 +1,36 @@
+# The upkeep trigger counts after Lightning Bolt removes a permanent in response, and affects a Mountain played later (CR 608.2, 611.2c).
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Chaos Moon
+Ornithopter
+Lightning Bolt
+Mountain
+Island x15
+[Bot2 Deck]
+Mountain
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Chaos Moon.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#2.Activate
+? Bot1.Mana = {C}
+[Expect]
+Bot1.Battlefield.Ornithopter = (absent)
