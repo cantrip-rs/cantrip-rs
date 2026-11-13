@@ -2433,6 +2433,18 @@ pub fn plus_one_counters_on_first_target_that_gains_until_end_of_turn<const COUN
     Ok(())
 }
 
+/// "Put `COUNTERS` +1/+1 counters on [this creature]. It gains [keywords] until end of turn" (CR 122.1, 611.2a, 608.2c): the
+/// ability's source, and only while it is still the object that was on the battlefield (CR 400.7); the counters, then as a second
+/// instruction the keywords for the rest of the turn. `KEYWORDS` is a `Keywords` as `u128`
+/// (`Keywords::of(&[Keyword::DoubleStrike]).0`). Pacesetter Paragon (one counter, double strike) and Rough Rhino Cavalry (two
+/// counters, trample) print it.
+pub fn plus_one_counters_on_this_that_gains_until_end_of_turn<const COUNTERS: i32, const KEYWORDS: u128>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.add_counters(item.object, CounterKind::PlusOne, COUNTERS);
+    g.end_sentence();
+    g.add_effect(item.object, item.object, EffectKind::AddKeywords(Keywords(KEYWORDS)), Duration::EndOfTurn);
+    Ok(())
+}
+
 /// "`target` gains [a keyword] until end of turn" (CR 611.2a): a layer 6 keyword for the rest of the turn, from the effect's
 /// source. Creeping Tar Pit, Immolation Shaman and Kappa Cannoneer print it inside a longer instruction ("can't be blocked
 /// this turn", "gains menace"); the `this_gains_*` below are the abilities that only give it.
