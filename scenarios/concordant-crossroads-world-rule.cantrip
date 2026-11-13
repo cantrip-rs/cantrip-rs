@@ -1,0 +1,22 @@
+# A later world permanent replaces the earlier Crossroads under the world rule (CR 704.5k).
+[Bot1 Deck]
+Concordant Crossroads
+Mox Emerald
+Forest x20
+[Bot2 Deck]
+Concordant Crossroads
+Mox Emerald
+Forest x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Concordant Crossroads.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Concordant Crossroads.Cast
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Graveyard = Concordant Crossroads
+Bot2.Battlefield.Concordant Crossroads.Tapped = false

@@ -1,0 +1,31 @@
+# After Disenchant removes Crossroads, a newly cast creature cannot attack that turn (CR 611.3b, 302.6).
+[Bot1 Deck]
+Concordant Crossroads
+Mox Emerald
+Forest x20
+[Bot2 Deck]
+Disenchant
+Savannah Lions
+Black Lotus
+Mox Pearl
+Plains x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Concordant Crossroads.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Disenchant.Cast(Concordant Crossroads)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T2 Bot2.DeclareAttackers]
+! Bot2.Attack
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Graveyard = Concordant Crossroads
+Bot2.Battlefield.Savannah Lions.Keywords = (absent)
