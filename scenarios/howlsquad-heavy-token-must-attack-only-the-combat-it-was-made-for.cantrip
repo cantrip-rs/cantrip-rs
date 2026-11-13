@@ -1,0 +1,77 @@
+# Howlsquad Heavy: "At the beginning of combat on your turn, create a 1/1 red Goblin creature token. That token attacks this combat
+# if able" (CR 508.1d): the requirement lasts for the combat its token was made in, not the turn. Full Throttle gives Bot1 three
+# combats on turn 3 and untaps the attackers at the beginning of each: the Heavy makes a token each combat, and in the second and
+# third combats only the newest token has to attack (an empty attack is refused; the newest alone is accepted though the older,
+# untapped and hasty, stay home). Bot2 takes 1 per combat: 17.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Sol Ring
+Black Lotus
+Howlsquad Heavy
+Full Throttle
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+[T1 Bot1.Main2]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Howlsquad Heavy.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Full Throttle.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Step = BeginCombat
+Bot1.Pass
+Bot2.Pass
+! Bot1.Attack()
+Bot1.Attack(Goblin Token > Bot2)
+[T3 Bot1.EndCombat]
+? Bot2.Life = 19
+Bot1.Pass
+Bot2.Pass
+? Step = BeginCombat
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Token#1.Tapped = false
+! Bot1.Attack()
+Bot1.Attack(Goblin Token#2 > Bot2)
+[T3 Bot1.EndCombat]
+? Bot2.Life = 18
+Bot1.Pass
+Bot2.Pass
+? Step = BeginCombat
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Attack()
+Bot1.Attack(Goblin Token#3 > Bot2)
+[T3 Bot1.EndCombat]
+Bot1.Pass
+Bot2.Pass
+? Step = Main2
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Goblin Token#1.Tapped = false
+Bot1.Battlefield.Goblin Token#2.Tapped = false
+Bot1.Battlefield.Goblin Token#3.Tapped = true

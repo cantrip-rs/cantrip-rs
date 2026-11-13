@@ -1,0 +1,85 @@
+# Howlsquad Heavy (max speed - "{T}: Add {R} for each Goblin you control"): counted as it resolves, the Heavy alone is one Goblin, and Bot2's Goblin Assailant does not
+# count. Kickoff Celebrations gives Bot1 speed 1 on turn 1 and Lightning Bolts to Bot2's face raise it on turns 3, 5 and 7 (2, 3, 4). The Heavy comes down after turn 5's
+# combat, so it has made no token yet. On turn 7 its combat trigger makes a Goblin token that must attack and Bot2's Assailant blocks and kills it; in the second
+# main phase the Heavy is the only Goblin Bot1 controls and taps for exactly {R}.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Kickoff Celebrations
+Howlsquad Heavy
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Goblin Assailant
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kickoff Celebrations.Cast
+Bot1.Choose()
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Goblin Assailant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+[T5 Bot1.Main2]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Howlsquad Heavy.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+[T7 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Goblin Token > Bot2)
+Bot2.Block(Goblin Assailant > Goblin Token)
+[T7 Bot1.Main2]
+? Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Howlsquad Heavy.Activate
+? Bot1.Mana = {R}
+
+[Expect]
+Bot1.Mana = {R}
+Bot1.Speed = 4

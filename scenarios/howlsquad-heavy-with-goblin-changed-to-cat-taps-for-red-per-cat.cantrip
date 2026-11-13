@@ -1,0 +1,77 @@
+# "Goblin" is a creature type word in Howlsquad Heavy's text (CR 612.2), so Artificial Evolution changing it to Cat changes what its
+# max speed mana ability counts: "{T}: Add {R} for each Cat you control". Howlsquad Heavy and a Savannah Lions come down in turn 1's
+# first main phase (speed 1). Each of Bot1's combats makes a hasty Goblin token that must attack: on turn 1 it alone hits an empty board
+# (speed 2), on turns 3 and 5 the Lions and every token do (speed 3, 4). In turn 5's second main phase Bot1 controls four Goblins (the
+# Heavy and three tokens) and one Cat. The change rewrites the Heavy's type line too (CR 612.1), so it is now a Cat Mercenary itself:
+# two Cats, and the Heavy taps for exactly {R}{R}, not one {R} per Goblin token.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Howlsquad Heavy
+Savannah Lions
+Artificial Evolution
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Howlsquad Heavy.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+[T1 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Goblin Token > Bot2)
+[T1 Bot1.Main2]
+? Bot1.Speed = 2
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Savannah Lions > Bot2; Goblin Token > Bot2; Goblin Token > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Speed = 3
+[T5 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Savannah Lions > Bot2; Goblin Token > Bot2; Goblin Token > Bot2; Goblin Token > Bot2)
+[T5 Bot1.Main2]
+? Bot1.Speed = 4
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Artificial Evolution.Cast(Bot1.Battlefield.Howlsquad Heavy)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Goblin)
+Bot1.Modes(Cat)
+? Bot1.Battlefield.Howlsquad Heavy.Subtypes = Cat; Mercenary
+Bot1.Battlefield.Howlsquad Heavy.Activate
+
+[Expect]
+Bot1.Mana = {R}{R}
+Bot1.Speed = 4
+Bot2.Life = 10

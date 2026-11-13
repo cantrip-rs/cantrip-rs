@@ -1,0 +1,69 @@
+# Howlsquad Heavy (2/3; "Other Goblins you control have haste"; at the beginning of combat on your turn a 1/1 red Goblin token that must attack that combat; max speed -
+# {T}: Add {R} for each Goblin you control). Turn 1: the Heavy comes down, has no haste itself, and the token it makes has haste and must attack (the empty attack is
+# refused); its damage raises Bot1's speed to 2. Turn 2: Bot2 casts its own Goblin Assailant, which gets no haste from the Heavy. Turn 3: a second token must attack, the
+# first is free to stay home, and below max speed (3 after the hit) the Heavy has no mana ability. Turn 5: a third token attacks, the speed reaches 4 and
+# the Heavy taps for four red (itself and three tokens; Bot2's Goblin does not count).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Howlsquad Heavy
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Goblin Assailant
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Howlsquad Heavy.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Howlsquad Heavy.Keywords = (absent)
+? Bot1.Speed = 1
+! Bot1.Attack()
+Bot1.Attack(Goblin Token > Bot2)
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Goblin Token.Keywords = Haste
+? Bot2.Life = 19
+? Bot1.Speed = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Goblin Assailant.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Goblin Assailant.Keywords = (absent)
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+! Bot1.Attack()
+Bot1.Attack(Goblin Token#2 > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+? Bot1.Speed = 3
+! Bot1.Battlefield.Howlsquad Heavy.Activate(Ability: Add)
+[T5 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Goblin Token#3 > Bot2)
+Bot2.Block()
+[T5 Bot1.Main2]
+? Bot1.Speed = 4
+Bot1.Battlefield.Howlsquad Heavy.Activate
+? Bot1.Mana = {R}{R}{R}{R}
+
+[Expect]
+Bot1.Mana = {R}{R}{R}{R}
