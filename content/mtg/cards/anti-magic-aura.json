@@ -1,0 +1,6 @@
+{
+  "name": "Anti-Magic Aura",
+  "manaCost": "{2}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature can't be the target of spells and can't be enchanted by other Auras."
+}

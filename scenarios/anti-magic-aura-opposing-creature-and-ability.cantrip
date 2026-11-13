@@ -1,0 +1,51 @@
+# The Aura can enchant an opposing creature; spells from its controller cannot target it, but a triggered ability can (CR 115.1, 303.4).
+[Bot1 Deck]
+Black Lotus
+Anti-Magic Aura
+Plains
+Mox Pearl
+Ossification
+Island
+Island
+Island x20
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Mox Ruby
+Shock
+Island
+Island
+Island
+Island x20
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter#1.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+! Bot1.Hand.Anti-Magic Aura.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Anti-Magic Aura.Cast(Bot2.Battlefield.Ornithopter#1)
+? Bot1.Mana =
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Shock.Cast(Bot2.Battlefield.Ornithopter#1)
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Ornithopter#2)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ossification.Cast(Bot1.Battlefield.Plains)
+Bot1.Pass
+[T5 Bot1.Main2]
+[Expect]
+Exile = Ornithopter
+Bot1.Graveyard = Anti-Magic Aura; Black Lotus
+Bot2.Graveyard = Ornithopter; Shock
