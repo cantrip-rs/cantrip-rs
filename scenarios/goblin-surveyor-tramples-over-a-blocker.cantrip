@@ -1,0 +1,30 @@
+# Goblin Surveyor's "Trample" (CR 702.19b): blocked by a 1/1 Memnite, the 3/2 Surveyor assigns lethal damage (1) to it and the rest
+# (2) to Bot2, 20 -> 18; without trample Bot2 would take nothing.
+
+[Bot1 Deck]
+Black Lotus
+Goblin Surveyor
+Island x18
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Surveyor.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Goblin Surveyor > Bot2)
+Bot2.Block(Memnite > Goblin Surveyor)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Graveyard = Memnite

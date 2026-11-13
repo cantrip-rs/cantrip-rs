@@ -1,0 +1,78 @@
+# Goblin Surveyor (3/2 trample, Start your engines!): "Max speed — {3}, Exile this card from your graveyard: Draw a card" (CR 702.178a/b:
+# the ability functions from the graveyard only at max speed). Bot1 casts two Surveyors on turn 1 (speed 1); Bot2 bolts one of them on
+# turn 2, leaving it in Bot1's graveyard. The other attacks into an empty board on turns 3, 5, 7, raising speed to 2, 3, 4 (CR 702.179d).
+# At speed 3 (one short of max) with exactly the three mana available the graveyard ability is refused; at speed 4 it is allowed, and it
+# exiles the card as a cost and draws one: Bot1's hand 4 -> 5, and Bot2 took 3 a turn (20 - 9 = 11). The ability works only from the
+# graveyard: the Surveyor on the battlefield cannot activate it, even at max speed.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Goblin Surveyor
+Goblin Surveyor
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Surveyor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Surveyor.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Goblin Surveyor#2)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Goblin Surveyor; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Attack(Goblin Surveyor > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Speed = 2
+[T5 Bot1.Main1]
+Bot1.Attack(Goblin Surveyor > Bot2)
+[T5 Bot1.Main2]
+? Bot1.Speed = 3
+! Bot1.Graveyard.Goblin Surveyor.Activate
+[T7 Bot1.Main1]
+Bot1.Attack(Goblin Surveyor > Bot2)
+[T7 Bot1.Main2]
+? Bot1.Speed = 4
+? Bot1.Hand.Count = 4
+! Bot1.Battlefield.Goblin Surveyor.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Goblin Surveyor.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 11
+Bot1.Speed = 4
+Bot1.Hand.Count = 5
+Bot1.Graveyard = Black Lotus
+Exile.Count = 1
