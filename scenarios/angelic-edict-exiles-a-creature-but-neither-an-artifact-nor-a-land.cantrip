@@ -1,0 +1,54 @@
+# Angelic Edict: "Exile target creature or enchantment." On turn 3 Bot1 pays {4}{W} (Plains, Plains, Mox Pearl and Black Lotus for
+# three: six mana, {W} left, so the cost is exactly five, CR 601.2f). Bot2's Mox Emerald (artifact) and Forest (land) are refused
+# as targets (CR 115.1), its Grizzly Bears is exiled (CR 701.13a) - to exile, not the graveyard.
+
+[Bot1 Deck]
+Plains
+Plains
+Mox Pearl
+Black Lotus
+Angelic Edict
+Plains x15
+
+[Bot2 Deck]
+Forest
+Forest
+Mox Emerald
+Grizzly Bears
+Forest x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Angelic Edict.Cast(Bot2.Battlefield.Mox Emerald)
+! Bot1.Hand.Angelic Edict.Cast(Bot2.Battlefield.Forest)
+Bot1.Hand.Angelic Edict.Cast(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana = {W}
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Graveyard = Angelic Edict; Black Lotus
+Exile = Grizzly Bears
+Bot2.Graveyard.Count = 0
+Bot2.Battlefield.Grizzly Bears = (absent)
+Bot2.Battlefield.Mox Emerald.Tapped = true

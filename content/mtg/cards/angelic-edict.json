@@ -1,0 +1,6 @@
+{
+  "name": "Angelic Edict",
+  "manaCost": "{4}{W}",
+  "type": "Sorcery",
+  "oracleText": "Exile target creature or enchantment."
+}
