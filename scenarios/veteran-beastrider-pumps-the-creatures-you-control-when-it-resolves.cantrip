@@ -1,0 +1,51 @@
+# Veteran Beastrider: "{2}{G}{W}: Creatures you control get +1/+1 until end of turn" (CR 611.2c). Bot1 pays with Black Lotus
+# (three green) and Mox Pearl: the Beastrider becomes 4/5 and Llanowar Elves 2/2, while Bot2's Elves stays 1/1 and an
+# Ornithopter cast after the ability resolves stays 0/2 - it affects only the creatures there as it resolves.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Black Lotus
+Veteran Beastrider
+Llanowar Elves
+Plains
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Veteran Beastrider.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Veteran Beastrider.Activate
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Veteran Beastrider.Power = 4
+Bot1.Battlefield.Veteran Beastrider.Toughness = 5
+Bot1.Battlefield.Llanowar Elves.Power = 2
+Bot1.Battlefield.Llanowar Elves.Toughness = 2
+Bot2.Battlefield.Llanowar Elves.Power = 1
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2

@@ -1,0 +1,51 @@
+# Veteran Beastrider: "At the beginning of your end step, untap each creature you control." Bot1's Llanowar Elves taps for
+# mana to cast the Beastrider on turn 3 and is untapped again on turn 4, though it would otherwise stay tapped until Bot1's
+# next untap step. It is Bot1's creatures only: Bot2's Elves, tapped on turn 4, is still tapped once the trigger has resolved in Bot1's
+# turn-5 end step ("you control"); and nothing triggers at the beginning of Bot2's end step on turn 4 ("your end step", CR 513.1).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Llanowar Elves
+Veteran Beastrider
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Veteran Beastrider.Cast
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Llanowar Elves.Tapped = true
+[T4 Bot2.Main1]
+Bot2.Battlefield.Llanowar Elves.Activate
+? Bot1.Battlefield.Llanowar Elves.Tapped = false
+[T4 Bot2.End]
+? Stack.Count = 0
+[T5 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Battlefield.Llanowar Elves.Tapped = false
