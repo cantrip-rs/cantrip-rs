@@ -1,0 +1,41 @@
+# Prideful Parent: vigilance (CR 702.20b). On turn 3 Bot1 attacks Bot2 with the Parent and with the Cat token its enters trigger
+# made on turn 1: the token taps to attack, the Parent, which has vigilance, stays untapped (a positive control that attacking
+# does tap a creature without it). Both connect: 2 + 1 combat damage takes Bot2 from 20 to 17.
+
+[Bot1 Deck]
+Prideful Parent
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Prideful Parent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Prideful Parent > Bot2; Cat Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Prideful Parent.Tapped = false
+? Bot1.Battlefield.Cat Token.Tapped = true
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Prideful Parent.Tapped = false
+Bot1.Battlefield.Cat Token.Tapped = true

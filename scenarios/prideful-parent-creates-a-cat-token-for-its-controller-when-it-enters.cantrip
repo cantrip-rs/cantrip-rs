@@ -1,0 +1,45 @@
+# Prideful Parent: "When this creature enters, create a 1/1 white Cat creature token." Bot1 casts it on turn 1 off three Moxen
+# and Bot1 alone gets the token (CR 111.2: the ability's controller creates it): a 1/1 white Cat creature, with no abilities, that
+# is a token and not a card. The Parent itself is a 2/2 and Bot2 (who has a Mox of their own and no creature) gets nothing.
+
+[Bot1 Deck]
+Prideful Parent
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Plains x20
+
+[Bot2 Deck]
+Mox Jet
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Prideful Parent.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cat Token = (absent)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+
+[Expect]
+Bot1.Battlefield = Cat Token; Mox Pearl; Mox Ruby; Mox Sapphire; Prideful Parent
+Bot1.Battlefield.Cat Token.Token = true
+Bot1.Battlefield.Cat Token.Colors = White
+Bot1.Battlefield.Cat Token.Power = 1
+Bot1.Battlefield.Cat Token.Toughness = 1
+Bot1.Battlefield.Cat Token.Keywords = (absent)
+Bot1.Battlefield.Prideful Parent.Power = 2
+Bot1.Battlefield.Prideful Parent.Toughness = 2
+Bot2.Battlefield.Count = 0
