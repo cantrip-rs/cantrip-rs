@@ -1,0 +1,11 @@
+{
+  "name": "Arbiter of Woe",
+  "manaCost": "{4}{B}{B}",
+  "type": "Creature — Demon",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "As an additional cost to cast this spell, sacrifice a creature.\nFlying\nWhen this creature enters, each opponent discards a card and loses 2 life. You draw a card and gain 2 life.",
+  "keywords": [
+    "Flying"
+  ]
+}
