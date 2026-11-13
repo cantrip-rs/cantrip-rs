@@ -1,0 +1,12 @@
+{
+  "name": "Fog Bank",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Wall",
+  "power": 0,
+  "toughness": 2,
+  "oracleText": "Defender (This creature can't attack.)\nFlying\nPrevent all combat damage that would be dealt to and dealt by this creature.",
+  "keywords": [
+    "Defender",
+    "Flying"
+  ]
+}

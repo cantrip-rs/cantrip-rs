@@ -1,0 +1,35 @@
+# Fog Bank's prevention is only of combat damage (CR 615.1): Bot2's Lightning Bolt deals 3 noncombat damage to the 0/2, which dies (SBA, CR 704.5g).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Fog Bank
+Island x4
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fog Bank.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Fog Bank)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Fog Bank = (absent)
+Bot1.Graveyard = Fog Bank

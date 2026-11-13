@@ -1,0 +1,49 @@
+# Fog Bank (0/2, Defender, Flying) blocks Bot2's Grizzly Bears (2/2): "Prevent all combat damage that would be dealt to ... this creature"
+# means the 2 damage does not destroy it (CR 615.1, 510.2). Its keywords come from its card, and Defender keeps it from attacking.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Fog Bank
+Island x4
+Island x15
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fog Bank.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Fog Bank.Keywords = Defender; Flying
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Block(Fog Bank > Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Fog Bank.Keywords = Defender; Flying
+Bot1.Battlefield.Fog Bank.Damage = 0
+Bot2.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Life = 20

@@ -1,0 +1,59 @@
+# Fog Bank blocks Bot2's Grizzly Bears (2/2) and Bot1 casts Giant Growth (+3/+3, Mox Emerald's {G}) on it, making it 3/5: "Prevent all combat
+# damage that would be ... dealt by this creature" means its 3 damage never reaches the Bears, which stay at 0 damage and alive, and the Bears'
+# 2 is prevented too (CR 615.1, 510.2).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Fog Bank
+Giant Growth
+Island x2
+Island x15
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fog Bank.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Block(Fog Bank > Grizzly Bears)
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Fog Bank)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fog Bank.Power = 3
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Fog Bank.Power = 3
+Bot1.Battlefield.Fog Bank.Damage = 0
+Bot2.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Life = 20
