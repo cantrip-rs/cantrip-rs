@@ -1,0 +1,11 @@
+{
+  "name": "Axelrod Gunnarson",
+  "manaCost": "{4}{B}{B}{R}{R}",
+  "type": "Legendary Creature — Giant",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Trample\nWhenever a creature dealt damage by Axelrod Gunnarson this turn dies, you gain 1 life and Axelrod Gunnarson deals 1 damage to target player or planeswalker.",
+  "keywords": [
+    "Trample"
+  ]
+}

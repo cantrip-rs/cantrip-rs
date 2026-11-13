@@ -1,0 +1,72 @@
+# A planeswalker dealt damage by Axelrod dying is not a creature dying (CR 603.2).
+[Bot1 Deck]
+Axelrod Gunnarson
+Black Lotus
+Mox Ruby
+Gleemox
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Shock
+Swamp x20
+[Bot2 Deck]
+Hover Barrier
+Kiora, Behemoth Beckoner
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Axelrod Gunnarson.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Kiora, Behemoth Beckoner.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Hover Barrier.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Axelrod Gunnarson > Bot2.Battlefield.Kiora, Behemoth Beckoner)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Kiora, Behemoth Beckoner)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target
+[T3 Bot1.End] 
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Graveyard = Shock; Black Lotus
+Bot2.Graveyard = Kiora, Behemoth Beckoner; Black Lotus
