@@ -1,0 +1,8 @@
+{
+  "name": "Boris Devilboon",
+  "manaCost": "{3}{B}{R}",
+  "type": "Legendary Creature — Zombie Wizard",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{2}{B}{R}, {T}: Create a 1/1 black and red Demon creature token named Minor Demon."
+}
