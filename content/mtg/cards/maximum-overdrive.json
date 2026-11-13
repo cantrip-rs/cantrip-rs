@@ -1,0 +1,6 @@
+{
+  "name": "Maximum Overdrive",
+  "manaCost": "{1}{B}",
+  "type": "Instant",
+  "oracleText": "Put a +1/+1 counter on target creature. It gains deathtouch and indestructible until end of turn."
+}
