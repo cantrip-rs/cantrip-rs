@@ -1,0 +1,6 @@
+{
+  "name": "Spirit Shackle",
+  "manaCost": "{B}{B}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nWhenever enchanted creature becomes tapped, put a -0/-2 counter on it."
+}
