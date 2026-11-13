@@ -1,0 +1,48 @@
+# Adamant Will: "Target creature" - any creature, whoever controls it, and nothing that is not one. On turn 3 Bot1 may not target
+# its own Mox Pearl (an artifact that is not a creature, CR 115.1), and may target Bot2's Balduvian Bears (the positive control): the
+# Bears become a 4/4 with indestructible while Bot1's own Isamaru is left a 2/2 (CR 611.2a: only the target is affected).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Isamaru, Hound of Konda
+Adamant Will
+Plains x20
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Balduvian Bears
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Balduvian Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Adamant Will.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Adamant Will.Cast(Bot2.Battlefield.Balduvian Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Balduvian Bears.Power = 4
+
+[Expect]
+Bot2.Battlefield.Balduvian Bears.Power = 4
+Bot2.Battlefield.Balduvian Bears.Toughness = 4
+Bot2.Battlefield.Balduvian Bears.Keywords = Indestructible
+Bot1.Battlefield.Isamaru, Hound of Konda.Power = 2
+Bot1.Battlefield.Isamaru, Hound of Konda.Keywords = (absent)
