@@ -1,0 +1,43 @@
+# Into the Roil ({1}{U}, kicker {1}{U}): "Return target nonland permanent to its owner's hand. If this spell was kicked, draw a card."
+# Kicked on turn 3 it costs exactly four - Black Lotus (blue) and Mox Sapphire, the pool is empty after - returns Bot2's Ornithopter
+# (Bot2's hand 5 -> 6) and draws Bot1 a card (hand 5 -> 6).
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Into the Roil
+Island x4
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Lightning Bolt
+Island x4
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Into the Roil.Cast(Bot2.Battlefield.Ornithopter; Kicked: 1)
+Bot1.Pass
+? Bot1.Mana = 
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield = Island; Mox Ruby
+Bot2.Hand.Count = 6
+Bot1.Hand.Count = 6
+Bot1.Graveyard = Into the Roil; Black Lotus
