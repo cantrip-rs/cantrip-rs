@@ -892,17 +892,34 @@ use cantrip_api::intrinsic::ward_matches;
 /// (CR 701.58a).
 pub use cantrip_api::intrinsic::ward;
 
-/// Ward's life cost, paid or not (CR 702.21a, 118.12a): the payer may pay `amount` life when they have that much (CR
-/// 119.4), in one payment, and the spell or ability that targeted is countered unless they do.
-fn ward_pay_life(g: &mut dyn Game, item: &StackItem, life: u32) -> Result<(), Suspend> {
+/// Ward's mana and life cost, paid or not (CR 702.21a, 118.12a): the payer may pay `mana` generic mana and `life` life
+/// when they have that much life (CR 119.4), in one payment, and the spell or ability that targeted is countered unless
+/// they do.
+fn ward_pay_mana_and_life(g: &mut dyn Game, item: &StackItem, mana: u32, life: u32) -> Result<(), Suspend> {
     let Target::Object(by) = item.subject else { return Ok(()) };
     let payer = PlayerId(item.data[0] as u8);
     let paid = g.state().player(payer).life >= life as i32
-        && g.may_pay(payer, item.object, by, Cost { life: u32::from(life), ..Cost::NONE }, &crate::COUNTERED_UNLESS_PAID)?;
+        && g.may_pay(payer, item.object, by, Cost { mana: generic(mana), life, ..Cost::NONE }, &crate::COUNTERED_UNLESS_PAID)?;
     if !paid {
         g.counter_item(by, item.data[1] as usize);
     }
     Ok(())
+}
+
+fn ward_pay_life(g: &mut dyn Game, item: &StackItem, life: u32) -> Result<(), Suspend> {
+    ward_pay_mana_and_life(g, item, 0, life)
+}
+
+fn ward_mana_and_life_effect<const MANA: u8, const LIFE: u8>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    ward_pay_mana_and_life(g, item, u32::from(MANA), u32::from(LIFE))
+}
+
+/// Ward--{N}, Pay M life (CR 702.21a, 118.12): "Whenever this becomes the target of a spell or ability an opponent controls,
+/// counter it unless that player pays {N} and M life." Captain Howler, Sea Scourge and Gisa, the Hellraiser print it with {2} and 2
+/// life, Ovika, Enigma Goliath with {3} and 3 life.
+pub const fn ward_mana_and_life<const MANA: u8, const LIFE: u8>(text: &'static str) -> AbilityDef {
+    triggered(when(EventMask::BECAME_TARGET, ward_matches), ward_mana_and_life_effect::<MANA, LIFE>, text)
+        .ward()
 }
 
 fn ward_life_effect<const N: u8>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
