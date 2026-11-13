@@ -1,0 +1,8 @@
+{
+  "name": "Wickerfolk Indomitable",
+  "manaCost": "{3}{B}",
+  "type": "Artifact Creature — Scarecrow",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "You may cast this card from your graveyard by paying 2 life and sacrificing an artifact or creature in addition to paying its other costs."
+}
