@@ -1,0 +1,39 @@
+# Voyage Home's affinity counts the artifacts its caster controls, not the other player's (CR 702.41a). Bot1 has three Moxen
+# - Pearl, Sapphire and Jet - so the spell costs {2}{W}{U}, four mana, and Bot1 has only three: the cast is refused, though
+# Bot2's three Moxen would make it {W}{U} were they counted. A Sol Ring (cast with Mox Jet) is a fourth artifact: the cost falls to {1}{W}{U}, and Sol Ring, Mox Pearl and Mox Sapphire pay it.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Sol Ring
+Voyage Home
+Island x17
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.Voyage Home.Cast(Mana: short)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Voyage Home.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Voyage Home
+Bot1.Life = 23

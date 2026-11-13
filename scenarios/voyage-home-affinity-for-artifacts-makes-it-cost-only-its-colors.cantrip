@@ -1,0 +1,35 @@
+# Voyage Home: "Affinity for artifacts" (CR 702.41a) takes {1} off for each artifact Bot1 controls: five Moxen make
+# {5}{W}{U} cost {W}{U}, paid by Mox Pearl and Mox Sapphire alone (the other three stay untapped). "You draw three cards and
+# gain 3 life": Bot1 ends with the Island left in hand and three drawn cards, and 23 life.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Voyage Home
+Island
+Island x16
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Voyage Home.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Voyage Home
+Bot1.Hand.Count = 4
+Bot1.Life = 23
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Battlefield.Mox Ruby.Tapped = false
+Bot1.Battlefield.Mox Emerald.Tapped = false
