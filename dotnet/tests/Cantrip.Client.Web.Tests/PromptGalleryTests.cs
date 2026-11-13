@@ -13,6 +13,19 @@ namespace Cantrip.Client.Web.Tests;
 public sealed class PromptGalleryTests(WebClient web)
 {
     [Fact]
+    public async Task Defined_x_names_the_choice_and_displays_the_spells_definition()
+    {
+        await using TablePage table = await TablePage.OpenAsync(web, "prompt=choose-player-defined-x", WebClient.Pictures(nameof(PromptGalleryTests)));
+        TableState opened = await table.SettledAsync(state => state.Fixture == "choose-player-defined-x");
+        Assert.Equal("Spoils of War: choose a player to determine X", opened.Title);
+        Assert.Contains("artifact and/or creature cards in an opponent's graveyard", opened.Detail, StringComparison.Ordinal);
+        await table.ClickAsync("Bot 3", "button");
+        TableState answered = await table.SettledAsync(state => state.Answered.Length > 0);
+        Assert.Equal("PlayerChosenAnswer 3", answered.Answered);
+        Assert.Empty(table.Errors);
+    }
+
+    [Fact]
     public async Task Ordered_library_top_names_the_destination_for_graveyard_and_library_cards()
     {
         await using TablePage table = await TablePage.OpenAsync(web, "prompt=arrange-opponent-library", WebClient.Pictures(nameof(PromptGalleryTests)));
