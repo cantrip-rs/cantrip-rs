@@ -1,0 +1,36 @@
+# Kolodin, Triumph Caster: "Mounts and Vehicles you control have haste" and "Whenever a Mount you control enters, it becomes saddled
+# until end of turn." Brightfield Glider (a 1/1 Mount: "Whenever this creature attacks while saddled, it gets +1/+2 and gains flying")
+# is cast on turn 3, enters saddled, and with haste attacks at once as a 2/3 flier: Bot2 takes 2, not 1.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Kolodin, Triumph Caster
+Brightfield Glider
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kolodin, Triumph Caster.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Brightfield Glider.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Attack(Brightfield Glider > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Brightfield Glider.Power = 2

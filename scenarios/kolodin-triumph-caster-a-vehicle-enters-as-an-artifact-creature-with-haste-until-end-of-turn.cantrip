@@ -1,0 +1,44 @@
+# Kolodin, Triumph Caster: "Whenever a Vehicle you control enters, it becomes an artifact creature until end of turn" and, with
+# haste, Reckoner Bankbuster (a 4/4 Vehicle with Crew 3) attacks the turn it is cast with no crew: Bot2 takes 4. Until end of turn
+# only: it is an artifact and not a creature again in Bot2's turn. Haste is the Vehicle's even then, as a non-creature.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Kolodin, Triumph Caster
+Reckoner Bankbuster
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kolodin, Triumph Caster.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Reckoner Bankbuster.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Reckoner Bankbuster.Types = Artifact; Creature
+Bot1.Pass
+Bot1.Attack(Reckoner Bankbuster > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Reckoner Bankbuster.Types = Artifact
+
+[Expect]
+Bot1.Battlefield.Reckoner Bankbuster.Keywords = Haste
