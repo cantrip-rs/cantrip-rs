@@ -1,0 +1,8 @@
+{
+  "name": "Storm Fleet Spy",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Human Pirate",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Raid — When this creature enters, if you attacked this turn, draw a card."
+}

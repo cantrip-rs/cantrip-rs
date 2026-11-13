@@ -1,0 +1,51 @@
+# Storm Fleet Spy: Raid -- when it enters after Bot1 has attacked this turn (with a hasty Fanatical Firebrand), Bot1 draws a card:
+# the Forest that was next in its library (raid is an ability word, CR 207.2c; 603.4 intervening if). Its three Moxen pay for it exactly.
+
+[Bot1 Deck]
+Mox Ruby
+Fanatical Firebrand
+Storm Fleet Spy
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Island
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Fanatical Firebrand > Bot2)
+[Bot1.Main2]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Storm Fleet Spy.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Forest; Island
+Bot1.Battlefield.Storm Fleet Spy.Power = 2

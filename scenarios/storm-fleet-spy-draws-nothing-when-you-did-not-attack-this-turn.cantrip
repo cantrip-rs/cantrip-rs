@@ -1,0 +1,48 @@
+# Storm Fleet Spy: Raid needs an attack this turn -- Bot1 attacked on turn 1, but on turn 3 casts Storm Fleet Spy before any
+# combat, so the trigger does not even go on the stack (CR 603.4) and Bot1 has only its turn-3 draw, the Forest.
+
+[Bot1 Deck]
+Mox Ruby
+Fanatical Firebrand
+Storm Fleet Spy
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Island
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Fanatical Firebrand > Bot2)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Storm Fleet Spy.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Hand = Forest; Island
+Bot1.Battlefield.Storm Fleet Spy.Power = 2
