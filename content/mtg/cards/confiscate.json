@@ -1,0 +1,6 @@
+{
+  "name": "Confiscate",
+  "manaCost": "{4}{U}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant permanent\nYou control enchanted permanent."
+}

@@ -1,0 +1,46 @@
+# Confiscate ({4}{U}{U}) is "Enchant permanent": cast on Bot2's Mox Emerald (not a creature) it gives Bot1 control, so Bot1 taps it for {G}
+# and Bot2 no longer has it (CR 303.4, 613.1b). With Black Lotus not yet cast, Bot1 has only Mox Sapphire, Jet and Ruby (three mana) and the
+# cast is refused for want of mana; the Lotus's {U}{U}{U} then makes six, with four blue (CR 601.2f).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Confiscate
+Island x2
+Island x15
+
+[Bot2 Deck]
+Mox Emerald
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Confiscate.Cast(Bot2.Battlefield.Mox Emerald; Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Confiscate.Cast(Bot2.Battlefield.Mox Emerald)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+? Bot1.Mana = {G}
+
+[Expect]
+Bot1.Battlefield.Confiscate.AttachedTo = Mox Emerald
+Bot1.Battlefield.Mox Emerald.Tapped = true
+Bot2.Battlefield.Count = 0
