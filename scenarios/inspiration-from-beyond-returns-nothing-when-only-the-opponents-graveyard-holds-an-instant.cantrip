@@ -1,0 +1,33 @@
+# Inspiration from Beyond returns an instant or sorcery card from *your* graveyard: Bot2's Lightning Bolt, cast at Bot1 in turn 2, sits in Bot2's
+# graveyard. Bot1's turn-3 cast (Black Lotus) mills three Islands and has nothing to return; the Bolt stays where it is and Bot1 is asked nothing.
+
+[Bot1 Deck]
+Black Lotus
+Inspiration from Beyond
+Island x5
+Island x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Inspiration from Beyond.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 17
+Bot1.Hand.Count = 6
+Bot1.Library.Count = 9
+Bot1.Graveyard.Count = 5
+Bot2.Graveyard = Lightning Bolt

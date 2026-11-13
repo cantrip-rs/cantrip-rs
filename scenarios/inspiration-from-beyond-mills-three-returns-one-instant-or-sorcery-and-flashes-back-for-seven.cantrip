@@ -1,0 +1,63 @@
+# Inspiration from Beyond ({2}{U}; Flashback {5}{U}{U}): "Mill three cards, then return an instant or sorcery card from your graveyard to
+# your hand." Bot1 casts it on turn 1 from three Moxen: the mill puts Counterspell, Memnite and Lightning Bolt into the graveyard and Bot1
+# returns one card, the milled Counterspell (the choice is made after the mill); Memnite is no instant or sorcery and is refused, and
+# only one card is returned, so the Bolt stays. On turn 3 the flashback costs all seven of five Moxen and two Islands (the pool is empty after
+# paying); it mills three Islands, the spell itself is on the stack and not a choice, and the Bolt is returned. It is exiled afterwards.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Inspiration from Beyond
+Island
+Counterspell
+Memnite
+Lightning Bolt
+Island
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Inspiration from Beyond.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Memnite)
+! Bot1.Choose(Counterspell; Lightning Bolt)
+Bot1.Choose(Counterspell)
+? Bot1.Graveyard = Inspiration from Beyond; Lightning Bolt; Memnite
+? Bot1.Hand = Counterspell
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Graveyard.Inspiration from Beyond.Cast(Ability: Flashback)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+
+[Expect]
+Bot1.Hand = Counterspell; Lightning Bolt
+Bot1.Graveyard = Island; Island; Island; Memnite
+Exile = Inspiration from Beyond

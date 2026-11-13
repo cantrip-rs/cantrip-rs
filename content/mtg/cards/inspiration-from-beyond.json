@@ -1,0 +1,6 @@
+{
+  "name": "Inspiration from Beyond",
+  "manaCost": "{2}{U}",
+  "type": "Sorcery",
+  "oracleText": "Mill three cards, then return an instant or sorcery card from your graveyard to your hand.\nFlashback {5}{U}{U} (You may cast this card from your graveyard for its flashback cost. Then exile it.)"
+}
