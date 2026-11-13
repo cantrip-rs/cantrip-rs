@@ -1,0 +1,57 @@
+# Magmakin Artillerist ("Whenever you discard one or more cards, this creature deals that much damage to each opponent"; cycling {1}{R};
+# "When you cycle this card, it deals 1 damage to each opponent"). Turn 1: Bot1 casts one Artillerist, leaving one mana, which is not enough
+# to cycle the other. Turn 3: cycling the second one for exactly {1}{R} (the pool empty after) discards one card, so the first Artillerist
+# deals 1, and the cycled card's own trigger deals 1 from the graveyard: Bot2 is at 18. Faithless Looting then discards two Islands together:
+# one trigger, 2 damage (16).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Magmakin Artillerist
+Magmakin Artillerist
+Faithless Looting
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Magmakin Artillerist.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+! Bot1.Hand.Magmakin Artillerist.Activate(Ability: Cycling; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Magmakin Artillerist.Activate(Ability: Cycling)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot2.Life = 18
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island; Island)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+
+[Expect]
+Bot2.Life = 16
+Bot1.Graveyard.Count = 4
