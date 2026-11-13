@@ -1,0 +1,57 @@
+# Glyph of Doom destroys only creatures the targeted Wall blocked: an attacker another creature blocked survives, and so does
+# one the Wall blocked that is no longer a creature at end of combat (Ensoul Artifact destroyed, so the Mox is removed from
+# combat, CR 506.4). "Destroy all creatures" asks what is a creature as the delayed trigger resolves (CR 608.2h, 701.8a).
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Steel Wall
+Ornithopter
+Glyph of Doom
+Disenchant
+Swamp x20
+[Bot2 Deck]
+Mox Sapphire
+Mox Emerald
+Ensoul Artifact
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Steel Wall.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Ensoul Artifact.Cast(Bot2.Battlefield.Mox Emerald)
+Bot2.Pass
+[T4 Bot2.Attackers]
+Bot2.Attack(Mox Emerald; Memnite)
+Bot1.Block(Steel Wall > Mox Emerald; Ornithopter > Memnite)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Glyph of Doom.Cast(Bot1.Battlefield.Steel Wall)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Disenchant.Cast(Bot2.Battlefield.Ensoul Artifact)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Mox Emerald.Types = Artifact
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Battlefield = Mox Sapphire; Mox Emerald; Memnite
+Bot1.Battlefield.Steel Wall.Damage = 0

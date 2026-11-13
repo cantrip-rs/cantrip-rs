@@ -1,0 +1,50 @@
+# Removing the targeted Wall in response counters the Glyph; a second Glyph on a new Wall works next combat.
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Shatter
+Steel Wall
+Glyph of Doom
+Glyph of Doom
+Steel Wall
+Swamp x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Steel Wall.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.Attackers]
+Bot2.Attack(Memnite)
+Bot1.Block(Steel Wall > Memnite)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Glyph of Doom.Cast(Bot1.Battlefield.Steel Wall)
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Shatter.Cast(Bot1.Battlefield.Steel Wall)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+? Bot2.Battlefield.Memnite.Toughness = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Steel Wall.Cast
+[T6 Bot2.Attackers]
+Bot2.Attack(Memnite)
+Bot1.Block(Steel Wall > Memnite)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Glyph of Doom.Cast(Bot1.Battlefield.Steel Wall)
+? Bot1.Mana =
+[T6 Bot2.Main2]
+[Expect]
+Bot2.Graveyard = Memnite; Island

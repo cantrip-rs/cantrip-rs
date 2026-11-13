@@ -1,0 +1,6 @@
+{
+  "name": "Glyph of Doom",
+  "manaCost": "{B}",
+  "type": "Instant",
+  "oracleText": "Choose target Wall creature. At this turn's next end of combat, destroy all creatures that were blocked by that creature this turn."
+}

@@ -1,0 +1,43 @@
+# Blaze of Glory lets the Wall block two attackers; Glyph of Doom destroys both at end of combat.
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Blaze of Glory
+Steel Wall
+Glyph of Doom
+Swamp x20
+[Bot2 Deck]
+Memnite
+Phyrexian Walker
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Steel Wall.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Phyrexian Walker.Cast
+[T4 Bot2.BeginCombat]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Blaze of Glory.Cast(Bot1.Battlefield.Steel Wall)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Attackers]
+Bot2.Attack(Memnite; Phyrexian Walker)
+Bot1.Block(Steel Wall > Memnite; Steel Wall > Phyrexian Walker)
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Glyph of Doom.Cast(Bot2.Battlefield.Memnite)
+Bot1.Hand.Glyph of Doom.Cast(Bot1.Battlefield.Steel Wall)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Toughness = 1
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Graveyard = Phyrexian Walker; Memnite
+Bot2.Battlefield.Count = 0
+Bot1.Battlefield.Steel Wall.Toughness = 4

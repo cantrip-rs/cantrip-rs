@@ -1,0 +1,46 @@
+# The delayed trigger remembers which Wall blocked even after that Wall has been destroyed.
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Shatter
+Steel Wall
+Glyph of Doom
+Swamp x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Steel Wall.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.Attackers]
+Bot2.Attack(Memnite; Ornithopter)
+Bot1.Block(Steel Wall > Memnite)
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Glyph of Doom.Cast(Bot2.Battlefield.Memnite)
+Bot1.Hand.Glyph of Doom.Cast(Bot1.Battlefield.Steel Wall)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Shatter.Cast(Bot1.Battlefield.Steel Wall)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Graveyard = Memnite
+Bot2.Battlefield = Ornithopter
+Bot1.Graveyard = Shatter; Steel Wall; Glyph of Doom
