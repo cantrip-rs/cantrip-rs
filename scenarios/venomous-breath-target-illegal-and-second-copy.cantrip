@@ -1,0 +1,50 @@
+# A target returned to hand before resolution makes the first spell fail; a second copy resolves on a legal creature (CR 608.2b).
+[Bot1 Deck]
+Venomous Breath
+Venomous Breath
+Black Lotus
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Unsummon
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Ornithopter
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Venomous Breath.Cast(Ornithopter)
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Unsummon.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Hand.Ornithopter.Toughness = 2
+? Stack.Count = 0
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Venomous Breath.Cast(Memnite)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Memnite.Toughness = 1
+Bot1.Graveyard = Venomous Breath; Venomous Breath; Unsummon; Black Lotus; Black Lotus
