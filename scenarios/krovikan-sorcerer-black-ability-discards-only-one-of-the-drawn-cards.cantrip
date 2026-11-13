@@ -1,0 +1,34 @@
+# The black ability must discard one of the two cards it drew, not a card already in hand.
+[Bot1 Deck]
+Krovikan Sorcerer
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Dark Ritual
+Plains
+Mountain
+Forest
+Island
+Swamp
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Krovikan Sorcerer.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Krovikan Sorcerer.Activate(Ability: Discard a black card)
+Bot1.Choose(Dark Ritual)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Plains)
+Bot1.Choose(Island)
+[Expect]
+Bot1.Hand = Forest; Mountain; Plains; Swamp
+Bot1.Graveyard = Island; Dark Ritual

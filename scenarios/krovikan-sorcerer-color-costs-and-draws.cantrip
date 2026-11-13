@@ -1,0 +1,47 @@
+# The nonblack cost accepts a colorless land and refuses a blue and black card; the black cost does the reverse.
+# Each activation taps the Sorcerer and draws its stated number, with the second discard after drawing.
+[Bot1 Deck]
+Krovikan Sorcerer
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Baleful Strix
+Plains
+Mountain
+Forest
+Island
+Swamp
+Memnite
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Krovikan Sorcerer.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Krovikan Sorcerer.Activate(Ability: Discard a nonblack card)
+! Bot1.Choose(Baleful Strix)
+Bot1.Choose(Plains)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Baleful Strix; Forest; Island; Mountain
+! Bot1.Battlefield.Krovikan Sorcerer.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Krovikan Sorcerer.Activate(Ability: Discard a black card)
+! Bot1.Choose(Mountain)
+Bot1.Choose(Baleful Strix)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose()
+! Bot1.Choose(Memnite; Island)
+Bot1.Choose(Memnite)
+[Expect]
+Bot1.Battlefield.Krovikan Sorcerer.Tapped = true
+Bot1.Hand = Forest; Island; Island; Mountain; Swamp
+Bot1.Graveyard = Memnite; Baleful Strix; Plains

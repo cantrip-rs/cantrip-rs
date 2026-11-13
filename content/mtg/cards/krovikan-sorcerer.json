@@ -1,0 +1,8 @@
+{
+  "name": "Krovikan Sorcerer",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Human Wizard Sorcerer",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}, Discard a nonblack card: Draw a card.\n{T}, Discard a black card: Draw two cards, then discard one of them."
+}
