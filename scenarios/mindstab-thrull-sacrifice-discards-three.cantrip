@@ -1,0 +1,24 @@
+# An unblocked Thrull can be sacrificed before combat damage; the defending player chooses exactly three cards to discard (CR 509.1h, 701.9a).
+[Bot1 Deck]
+Mindstab Thrull
+Black Lotus
+Swamp x20
+[Bot2 Deck]
+Plains x4
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mindstab Thrull.Cast
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Mindstab Thrull > Bot2)
+Bot1.Accept
+! Bot2.Choose(Plains; Plains; Plains; Plains)
+! Bot2.Choose()
+Bot2.Choose(Plains; Plains; Plains)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard.Mindstab Thrull.Power = 2
+Bot2.Graveyard = Plains; Plains; Plains; Island
+Bot2.Life = 20

@@ -1,0 +1,54 @@
+# Regeneration removes the entering attacker from combat with its unblocked trigger on the stack; its defender still discards (CR 508.5).
+[Bot1 Deck]
+Kinscaer Sentry
+Mindstab Thrull
+Ornithopter x2
+Mox Pearl
+Mox Sapphire
+Horror of Horrors
+Black Lotus
+Swamp
+Island x20
+[Bot2 Deck]
+Mountain
+Shock
+Plains x4
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kinscaer Sentry.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Horror of Horrors.Cast
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Kinscaer Sentry; Ornithopter; Ornithopter)
+Bot1.Choose(Mindstab Thrull)
+[T5 Bot1.Blockers]
+? Stack.Count = 1
+Bot1.Battlefield.Horror of Horrors.Activate(Bot1.Battlefield.Mindstab Thrull)
+Bot1.Choose(Swamp)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Mindstab Thrull)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mindstab Thrull.Power = 2
+Bot1.Accept
+Bot2.Choose(Plains; Plains; Plains)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Graveyard.Mindstab Thrull.Power = 2
+Bot2.Graveyard = Plains; Plains; Plains; Shock; Island
+Bot2.Life = 18

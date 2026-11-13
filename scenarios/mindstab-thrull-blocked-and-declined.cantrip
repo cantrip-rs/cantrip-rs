@@ -1,0 +1,32 @@
+# Blocking suppresses the ability; on a later unblocked attack its controller may decline sacrifice and deal combat damage (CR 509.1h).
+[Bot1 Deck]
+Mindstab Thrull
+Black Lotus
+Memnite
+Swamp x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mindstab Thrull.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Mindstab Thrull > Bot2; Memnite > Bot2)
+Bot2.Block(Ornithopter > Mindstab Thrull)
+[T3 Bot1.Blockers]
+? Stack.Count = 0
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Mindstab Thrull > Bot2)
+Bot1.Decline
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Mindstab Thrull.Power = 2
+Bot2.Life = 17
+Bot2.Graveyard.Ornithopter.Power = 0

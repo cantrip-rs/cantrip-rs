@@ -1,0 +1,8 @@
+{
+  "name": "Mindstab Thrull",
+  "manaCost": "{1}{B}{B}",
+  "type": "Creature — Thrull",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever this creature attacks and isn't blocked, you may sacrifice it. If you do, defending player discards three cards."
+}

@@ -1,0 +1,29 @@
+# Kinscaer Sentry puts the Thrull onto the battlefield attacking; it still triggers when unblocked (CR 508.4, 509.1h).
+[Bot1 Deck]
+Kinscaer Sentry
+Mindstab Thrull
+Ornithopter x2
+Mox Pearl
+Mox Sapphire
+Island x25
+[Bot2 Deck]
+Plains x4
+Island x25
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kinscaer Sentry.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Kinscaer Sentry; Ornithopter; Ornithopter)
+Bot1.Choose(Mindstab Thrull)
+Bot1.Accept
+Bot2.Choose(Plains; Plains; Plains)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard.Mindstab Thrull.Power = 2
+Bot2.Graveyard = Plains; Plains; Plains; Island
+Bot2.Life = 18
