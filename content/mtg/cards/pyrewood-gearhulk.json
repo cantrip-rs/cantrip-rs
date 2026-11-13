@@ -1,0 +1,12 @@
+{
+  "name": "Pyrewood Gearhulk",
+  "manaCost": "{2}{R}{R}{G}{G}",
+  "type": "Artifact Creature — Construct",
+  "power": 7,
+  "toughness": 7,
+  "oracleText": "Vigilance, menace\nWhen this creature enters, other creatures you control get +2/+2 and gain vigilance and menace until end of turn. Damage can't be prevented this turn.",
+  "keywords": [
+    "Vigilance",
+    "Menace"
+  ]
+}

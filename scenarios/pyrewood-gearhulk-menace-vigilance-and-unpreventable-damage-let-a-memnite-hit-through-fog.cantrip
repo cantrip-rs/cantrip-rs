@@ -1,0 +1,66 @@
+# Pyrewood Gearhulk: "...gain vigilance and menace until end of turn. Damage can't be prevented this turn." (CR 702.20, 702.111,
+# 615.12) Bot1's Memnite from turn 1 gets +2/+2, vigilance and menace when the Gearhulk enters on turn 3. It attacks: Bot2's
+# lone Memnite may not block it (menace), it stays untapped (vigilance), and Bot2's Fog, cast after the Gearhulk resolved,
+# prevents nothing, so the 3/3 deals its 3 damage: Bot2 ends at 17.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Memnite
+Pyrewood Gearhulk
+Mountain x13
+
+[Bot2 Deck]
+Forest
+Memnite
+Fog
+Island x14
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pyrewood Gearhulk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+! Bot2.Block(Memnite > Memnite)
+[T3 Bot1.Blockers]
+Bot1.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Fog.Cast
+Bot1.Pass
+? Bot2.Graveyard = Fog
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Memnite.Tapped = false
+Prevented = (absent)

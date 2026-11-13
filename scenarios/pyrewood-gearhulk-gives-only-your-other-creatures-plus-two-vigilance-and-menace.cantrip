@@ -1,0 +1,60 @@
+# Pyrewood Gearhulk: "When this creature enters, other creatures you control get +2/+2 and gain vigilance and menace until end
+# of turn." (CR 611.2c) Bot1 has a Memnite from turn 1, Bot2 one from turn 2. When Bot1 casts the Gearhulk on turn 3 its Memnite is
+# a 3/3 with vigilance and menace, Bot2's stays a 1/1, and the Gearhulk itself is only the 7/7 with its own two keywords
+# (other creatures, not this one). A Memnite entering afterwards would not be reached (the creatures are fixed as the
+# ability resolves), and the effects end with the turn.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Memnite
+Pyrewood Gearhulk
+Mountain x13
+
+[Bot2 Deck]
+Memnite
+Island x15
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pyrewood Gearhulk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Toughness = 3
+Bot1.Battlefield.Memnite.Keywords = Menace; Vigilance
+Bot1.Battlefield.Pyrewood Gearhulk.Power = 7
+Bot1.Battlefield.Pyrewood Gearhulk.Toughness = 7
+Bot1.Battlefield.Pyrewood Gearhulk.Keywords = Menace; Vigilance
+Bot2.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Memnite.Keywords = (absent)
