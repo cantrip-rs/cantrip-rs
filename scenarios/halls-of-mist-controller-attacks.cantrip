@@ -1,0 +1,31 @@
+# Halls also restricts its controller's creature and stops restricting it after a turn without attacking (CR 508.1c).
+[Bot1 Deck]
+Memnite
+Ornithopter
+Halls of Mist
+Plains
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Attack(Memnite > Bot2)
+[T5 Bot1.Main1]
+Bot1.Hand.Halls of Mist.Play
+[T5 Bot1.DeclareAttackers]
+! Bot1.Attack(Memnite > Bot2)
+Bot1.Attack(Ornithopter > Bot2)
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.PayCost
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T7 Bot1.Main2]
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Halls of Mist.Counters.Age = 1

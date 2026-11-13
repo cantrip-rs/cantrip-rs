@@ -1,0 +1,5 @@
+{
+  "name": "Halls of Mist",
+  "type": "Land",
+  "oracleText": "Cumulative upkeep {1} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nCreatures that attacked during their controller's last turn can't attack."
+}

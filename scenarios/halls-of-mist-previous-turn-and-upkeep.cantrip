@@ -1,0 +1,53 @@
+# Halls requires one mana per age counter and prevents an attacker from attacking on its controller's next turn, but not the turn after (CR 702.24a, 508.1c).
+[Bot1 Deck]
+Halls of Mist
+Sol Ring
+Black Lotus
+Plains x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Halls of Mist.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+! Bot1.PayCost(X: 1)
+Bot1.PayCost
+? Bot1.Mana = {C}
+? Bot1.Battlefield.Halls of Mist.Counters.Age = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.BeginCombat]
+Bot2.Attack(Memnite > Bot1)
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.PayCost
+? Bot1.Mana =
+? Bot1.Battlefield.Halls of Mist.Counters.Age = 2
+[T6 Bot2.BeginCombat]
+! Bot2.Attack(Memnite > Bot1)
+Bot2.Attack(Ornithopter > Bot1)
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T8 Bot2.BeginCombat]
+Bot2.Attack(Memnite > Bot1)
+[T8 Bot2.Main2]
+[Expect]
+Bot1.Life = 18
