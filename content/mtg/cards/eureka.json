@@ -1,0 +1,6 @@
+{
+  "name": "Eureka",
+  "manaCost": "{2}{G}{G}",
+  "type": "Sorcery",
+  "oracleText": "Starting with you, each player may put a permanent card from their hand onto the battlefield. Repeat this process until no one puts a card onto the battlefield."
+}

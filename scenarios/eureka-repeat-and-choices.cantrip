@@ -1,0 +1,41 @@
+# Each player may put at most one permanent each round; a decline does not end a round in which the other player puts one, and both declines end the process.
+[Bot1 Deck]
+Eureka
+Black Lotus
+Mox Pearl
+Forest
+Grizzly Bears
+Lightning Bolt
+Forest x20
+
+[Bot2 Deck]
+Island
+Plains
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Eureka.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Choose(Forest; Grizzly Bears)
+! Bot1.Choose(Lightning Bolt)
+Bot1.Choose()
+Bot2.Choose(Island)
+Bot1.Choose(Grizzly Bears)
+Bot2.Choose()
+Bot1.Choose()
+Bot2.Choose()
+[Expect]
+Bot1.Battlefield = Mox Pearl; Grizzly Bears
+Bot1.Hand = Forest; Lightning Bolt; Forest
+Bot2.Battlefield = Island
+Bot2.Hand = Plains; Lightning Bolt; Island; Island; Island; Island
+Bot1.Graveyard = Eureka; Black Lotus
+Bot1.Battlefield.Grizzly Bears.Tapped = false

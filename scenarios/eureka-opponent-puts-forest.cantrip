@@ -1,0 +1,29 @@
+# Tourach's Chant sees that the opponent put their Forest onto the battlefield, and its trigger waits until Eureka finishes (CR 608.2c, 603.3).
+[Bot1 Deck]
+Eureka
+Black Lotus x2
+Mox Pearl
+Tourach's Chant
+Forest x20
+[Bot2 Deck]
+Forest
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Tourach's Chant.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Eureka.Cast
+Bot1.Pass
+Bot1.Choose()
+Bot2.Choose(Forest)
+Bot1.Choose()
+Bot2.Choose()
+[T1 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Forest.Tapped = false
+Bot1.Life = 20
+Bot2.Life = 17
