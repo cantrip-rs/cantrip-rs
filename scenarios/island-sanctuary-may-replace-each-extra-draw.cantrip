@@ -1,0 +1,45 @@
+# A draw spell in the draw step offers the replacement separately for each card; skipping one suffices for protection.
+[Bot1 Deck]
+Island Sanctuary
+Mox Pearl
+Mox Sapphire
+Ancestral Recall
+Plains x3
+Forest
+Swamp
+Mountain
+Island x20
+[Bot2 Deck]
+Ornithopter
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Island Sanctuary.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Draw]
+Bot1.Decline
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Decline
+Bot1.Accept
+[T3 Bot1.Main1]
+? Bot1.Hand.Forest.Colors =
+? Bot1.Hand.Swamp.Colors =
+? Bot1.Library.Top = Mountain
+[T4 Bot2.Attackers]
+! Bot2.Attack(Memnite > Bot1)
+Bot2.Attack(Ornithopter > Bot1)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 20

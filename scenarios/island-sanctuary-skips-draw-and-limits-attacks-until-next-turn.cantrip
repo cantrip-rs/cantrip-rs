@@ -1,0 +1,46 @@
+# Skipping the draw protects its controller from a ground attacker, while flying and islandwalk attack; declining next turn ends the protection.
+[Bot1 Deck]
+Island Sanctuary
+Mox Pearl
+Mox Sapphire
+Plains x4
+Forest
+Island x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Grayscaled Gharial
+Mox Sapphire
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Island Sanctuary.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Grayscaled Gharial.Cast
+[T3 Bot1.Draw]
+Bot1.Accept
+[T3 Bot1.Main1]
+? Bot1.Library.Top = Forest
+? Bot1.Battlefield.Mox Pearl.LastingRules = (absent)
+? Bot2.Battlefield.Memnite.LastingRules = If you would draw a card during your draw step, instead you may skip that draw. If you do, until your next turn, you can't be attacked except by creatures with flying and/or islandwalk.
+[T4 Bot2.Attackers]
+! Bot2.Attack(Memnite > Bot1)
+Bot2.Attack(Ornithopter > Bot1; Grayscaled Gharial > Bot1)
+[T5 Bot1.Draw]
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Library.Top = Island
+? Bot1.Hand.Forest.Colors =
+[T6 Bot2.Attackers]
+Bot2.Attack(Memnite > Bot1)
+[T6 Bot2.Main2]
+[Expect]
+Bot1.Life = 18

@@ -1,0 +1,45 @@
+# The controller draws in an opponent's draw step and in their own main phase without being offered the replacement.
+[Bot1 Deck]
+Island Sanctuary
+Mox Pearl
+Mox Sapphire
+Mox Sapphire
+Ancestral Recall
+Ancestral Recall
+Plains
+Forest
+Swamp
+Mountain
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Island Sanctuary.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Draw]
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+[T2 Bot2.Main1]
+? Bot1.Hand.Forest.Colors =
+? Bot1.Hand.Swamp.Colors =
+? Bot1.Hand.Mountain.Colors =
+[T3 Bot1.Draw]
+Bot1.Accept
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Library.Count = 17
