@@ -930,6 +930,17 @@ pub static INSECT: CardDef = CardDef {
     ..token!(Insect)
 };
 
+/// The 1/1 black and green Insect creature token with flying (CR 111.4, 205.3m). The Swarmweaver and Infestation Sage make it.
+pub static INSECT_BLACK_GREEN_FLYING: CardDef = CardDef {
+    // Black and green: bits 2 and 4 of W, U, B, R, G.
+    colors: Some(ColorSet(0b10100)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    keywords: Keywords::of(&[Keyword::Flying]),
+    ..token!(Insect)
+};
+
 /// The 4/4 white Angel creature token with flying and vigilance. Resplendent Angel and Parhelion II make it.
 pub static ANGEL: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::White)),

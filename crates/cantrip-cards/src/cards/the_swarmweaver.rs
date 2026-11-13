@@ -2,20 +2,9 @@ use cantrip_api::*;
 use cantrip_mechanics::{statics, tokens, triggers};
 use cantrip_oracle as oracle;
 
-/// A 1/1 black and green Insect creature token with flying (CR 111.4, 205.3m).
-pub static INSECT: CardDef = CardDef {
-    // Black and green: bits 2 and 4 of W, U, B, R, G.
-    colors: Some(ColorSet(0b10100)),
-    types: TypeSet::of(&[CardType::Creature]),
-    power: Some(1),
-    toughness: Some(1),
-    keywords: Keywords::of(&[Keyword::Flying]),
-    ..token!(Insect)
-};
-
 /// "Create two 1/1 black and green Insect creature tokens with flying." (CR 111.1.)
 fn two_insects(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &INSECT, 2)?;
+    tokens::create(g, item.controller, &tokens::INSECT_BLACK_GREEN_FLYING, 2)?;
     Ok(())
 }
 
@@ -49,4 +38,4 @@ pub static CARD: CardDef = CardDef {
     ..oracle::THE_SWARMWEAVER
 };
 
-pub static EXTRA: &[&CardDef] = &[&INSECT];
+pub static EXTRA: &[&CardDef] = &[&tokens::INSECT_BLACK_GREEN_FLYING];
