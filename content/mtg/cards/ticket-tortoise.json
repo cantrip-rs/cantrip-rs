@@ -1,0 +1,11 @@
+{
+  "name": "Ticket Tortoise",
+  "manaCost": "{2}",
+  "type": "Artifact Creature — Turtle",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Defender\nWhen this creature enters, if an opponent controls more lands than you, you create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "keywords": [
+    "Defender"
+  ]
+}

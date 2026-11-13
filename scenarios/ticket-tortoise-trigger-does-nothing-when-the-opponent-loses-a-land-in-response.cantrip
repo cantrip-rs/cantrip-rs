@@ -1,0 +1,47 @@
+# Ticket Tortoise: the Treasure condition is an intervening "if" (CR 603.4): it must hold when the ability would trigger and
+# again as it resolves. On turn 5 Bot2 has two lands to Bot1's one, so casting the Tortoise triggers it; with the trigger
+# on the stack Bot2 sacrifices Strip Mine to destroy its own Island, leaving none to Bot1's one, and no Treasure is made.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Island
+Ticket Tortoise
+Island x16
+
+[Bot2 Deck]
+Island
+Strip Mine
+Island x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Strip Mine.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ticket Tortoise.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Strip Mine.Activate(Bot2.Battlefield.Island; Ability: Destroy)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield = 
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Turn = 5
+Stack.Count = 0
+Bot1.Battlefield = Island; Mox Ruby; Mox Pearl; Ticket Tortoise
+Bot2.Battlefield = 
+Bot2.Graveyard = Island; Strip Mine

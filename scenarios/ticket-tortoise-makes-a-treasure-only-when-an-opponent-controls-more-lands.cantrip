@@ -1,0 +1,35 @@
+# Ticket Tortoise: "When this creature enters, if an opponent controls more lands than you, you create a Treasure token"
+# (CR 603.4: an intervening "if"). Bot1 plays no land and casts it on turn 3 with two Moxen, after Bot2 played an Island
+# on turn 2: one land to none, so Bot1 gets a Treasure token.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Ticket Tortoise
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ticket Tortoise.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ticket Tortoise.Types = Artifact; Creature
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Mox Ruby; Mox Pearl; Ticket Tortoise; Treasure Token
+Bot2.Battlefield = Island

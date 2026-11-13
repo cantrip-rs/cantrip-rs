@@ -1,0 +1,43 @@
+# Ticket Tortoise: the Treasure needs an opponent to control more lands than you (CR 603.4). On turn 3 Bot1 has an Island
+# and Bot2 has an Island: equal, so no trigger and no Treasure. On turn 5 Bot1 has two lands to Bot2's one, and casts a
+# second Tortoise: it is the opponent who must have more, so again none. The first Tortoise has its printed defender
+# (CR 702.3).
+
+[Bot1 Deck]
+Mox Pearl
+Ticket Tortoise
+Island
+Ticket Tortoise
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ticket Tortoise.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield = Island; Mox Pearl; Ticket Tortoise
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ticket Tortoise.Keywords = Defender
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Ticket Tortoise.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 5
+Stack.Count = 0
+Bot1.Battlefield = Island; Island; Mox Pearl; Ticket Tortoise; Ticket Tortoise
+Bot2.Battlefield = Island
