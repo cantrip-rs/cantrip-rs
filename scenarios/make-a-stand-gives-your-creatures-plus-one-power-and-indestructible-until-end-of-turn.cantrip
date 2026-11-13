@@ -1,0 +1,50 @@
+# Make a Stand: "Creatures you control get +1/+0 and gain indestructible until end of turn." (CR 611.2c.) Bot1 holds Black Lotus
+# and casts it as an instant on Bot2's turn 2 for exactly {2}{W} with its Memnite (1/1) and Ornithopter (0/2) in play beside
+# Bot2's Memnite: the Memnite is 2/1 and the Ornithopter 1/2, both indestructible (the toughness half untouched), while Bot2's
+# Memnite stays a plain 1/1. On turn 3 the pump and the keyword are gone (CR 514.2).
+
+[Bot1 Deck]
+Black Lotus
+Memnite
+Ornithopter
+Make a Stand
+Plains x16
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Make a Stand.Cast(Spend: W, W, W)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Memnite.Keywords = Indestructible
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Indestructible
+? Bot2.Battlefield.Memnite.Power = 1
+? Bot2.Battlefield.Memnite.Toughness = 1
+? Bot2.Battlefield.Memnite.Keywords = (absent)
+[T3 Bot1.Main1]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Graveyard = Make a Stand; Black Lotus
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Keywords = Flying

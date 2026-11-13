@@ -1,0 +1,43 @@
+# Make a Stand: "Creatures you control get +1/+0 and gain indestructible until end of turn." On turn 2 Bot2 casts Lightning Bolt
+# at Bot1's Memnite (1/1). In response Bot1 casts Make a Stand off Black Lotus: it resolves first, so the Memnite is a 2/1 with
+# indestructible when the Bolt deals it 3 damage, which is lethal (the +1/+0 leaves its toughness at 1) but does not destroy it
+# (CR 702.12b, 704.5g). The keyword and the damage are both gone on turn 3 (CR 514.2) and the Memnite is still there, a 1/1.
+
+[Bot1 Deck]
+Black Lotus
+Memnite
+Make a Stand
+Plains x17
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Make a Stand.Cast(Spend: W, W, W)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Battlefield.Memnite.Keywords = Indestructible
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 1
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Make a Stand; Black Lotus
+Bot2.Graveyard = Lightning Bolt
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Keywords = (absent)
