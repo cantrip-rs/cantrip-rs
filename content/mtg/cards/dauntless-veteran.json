@@ -1,0 +1,8 @@
+{
+  "name": "Dauntless Veteran",
+  "manaCost": "{1}{W}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever this creature attacks, creatures you control get +1/+1 until end of turn."
+}
