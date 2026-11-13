@@ -1,0 +1,28 @@
+# A creature token dying triggers Renewal, but the token ceases to exist and cannot return to hand (CR 111.8).
+[Bot1 Deck]
+Black Lotus x2
+Mox Pearl
+Enduring Renewal
+News Helicopter
+Lightning Bolt
+Mountain
+Island x20
+[Bot2 Deck]
+Island x27
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Enduring Renewal.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.News Helicopter.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Human Citizen Token)
+[Expect]
+Bot1.Hand =
+Bot1.Graveyard = Lightning Bolt; Black Lotus; Black Lotus
+Bot1.Battlefield = Enduring Renewal; Mox Pearl; Mountain; News Helicopter

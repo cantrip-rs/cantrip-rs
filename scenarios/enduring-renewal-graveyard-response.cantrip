@@ -1,0 +1,37 @@
+# The death ability uses the stack: exiling the graveyard in response prevents the creature's return (CR 400.7).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Enduring Renewal
+Ornithopter
+Lightning Bolt
+Mountain
+Tormod's Crypt
+Island x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Enduring Renewal.Cast
+? Bot1.Mana =
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Ornithopter; Lightning Bolt; Black Lotus
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot1)
+
+[Expect]
+Bot1.Hand =
+Bot1.Graveyard =
+Exile = Black Lotus; Lightning Bolt; Ornithopter; Tormod's Crypt

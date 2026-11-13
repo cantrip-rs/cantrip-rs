@@ -1,0 +1,30 @@
+# A creature searched into hand is not drawn and is not diverted; the sacrificed creature also returns (CR 121.5).
+[Bot1 Deck]
+Black Lotus x2
+Mox Pearl
+Enduring Renewal
+Altar of Bone
+Ornithopter
+Forest
+Island
+Grizzly Bears
+Island x18
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Enduring Renewal.Cast
+? Bot1.Mana =
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Altar of Bone.Cast
+Bot1.Choose(Ornithopter)
+Bot1.Search(Grizzly Bears)
+[Expect]
+Bot1.Hand = Forest; Island; Grizzly Bears; Ornithopter
