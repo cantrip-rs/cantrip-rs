@@ -1,0 +1,39 @@
+# The upkeep sets toughness to one plus creature cards in its controller's graveyard, not the opponent's; defender prevents an attack while another creature can attack (CR 603.2, 702.3b).
+[Bot1 Deck]
+Wall of Tombstones
+Mox Jet
+Mox Pearl
+Walking Ballista x2
+Ornithopter
+Swamp x15
+
+[Bot2 Deck]
+Walking Ballista
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Walking Ballista.Cast(X: 0)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wall of Tombstones.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Walking Ballista.Cast(X: 0)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Wall of Tombstones.Toughness = 2
+! Bot1.Attack(Wall of Tombstones > Bot2)
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+Bot1.Hand.Walking Ballista.Cast(X: 0)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Wall of Tombstones.Toughness = 2
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Wall of Tombstones.Toughness = 3
+
+[Expect]
+Bot1.Battlefield.Wall of Tombstones.Toughness = 3
+Bot1.Graveyard = Walking Ballista; Walking Ballista
+Bot2.Graveyard = Island; Walking Ballista

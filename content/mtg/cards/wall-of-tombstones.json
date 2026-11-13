@@ -1,0 +1,11 @@
+{
+  "name": "Wall of Tombstones",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Wall",
+  "power": 0,
+  "toughness": 1,
+  "oracleText": "Defender (This creature can't attack.)\nAt the beginning of your upkeep, this creature's base toughness becomes equal to 1 plus the number of creature cards in your graveyard. (This effect lasts indefinitely.)",
+  "keywords": [
+    "Defender"
+  ]
+}
