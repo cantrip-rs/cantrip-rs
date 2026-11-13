@@ -1,0 +1,6 @@
+{
+  "name": "Count on Luck",
+  "manaCost": "{R}{R}{R}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of your upkeep, exile the top card of your library. You may play that card this turn."
+}

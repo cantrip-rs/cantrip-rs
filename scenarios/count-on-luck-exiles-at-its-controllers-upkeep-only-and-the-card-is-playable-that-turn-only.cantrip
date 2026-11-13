@@ -1,0 +1,44 @@
+# Count on Luck: "At the beginning of your upkeep, exile the top card of your library. You may play that card this turn." (CR 603.2,
+# 701.13). Cast on turn 1 off Black Lotus. Bot2's turn-2 upkeep exiles nothing (the exile holds only what Bot1's turn-3 upkeep
+# put there: a Lightning Bolt, which Bot1 casts from exile that same turn: 17). On turn 5 a second Bolt is exiled and not cast;
+# on turn 7 it can no longer be cast (the refusal, beside the cast of the first), and that upkeep exiled a Dark Ritual.
+
+[Bot1 Deck]
+Count on Luck
+Black Lotus
+Mountain
+Island x4
+Lightning Bolt
+Island
+Lightning Bolt
+Island
+Dark Ritual
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Count on Luck.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Exile = Lightning Bolt
+Bot1.Battlefield.Mountain.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+? Bot2.Life = 17
+? Exile = Lightning Bolt
+[T7 Bot1.Main1]
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+
+[Expect]
+Bot2.Life = 17
+Exile = Dark Ritual; Lightning Bolt

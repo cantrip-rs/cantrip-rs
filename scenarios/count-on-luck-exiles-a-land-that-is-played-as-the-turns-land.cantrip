@@ -1,0 +1,33 @@
+# Count on Luck: "You may play that card this turn" (CR 305.2, 116.2a): a land it exiles may be played from exile, and playing it
+# is the turn's land play. Cast on turn 1 off Black Lotus; Bot1's turn-3 upkeep exiles a Plains, which Bot1 plays from exile, after which
+# the Island in hand cannot be played that turn.
+
+[Bot1 Deck]
+Count on Luck
+Black Lotus
+Mountain
+Island x4
+Plains
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Count on Luck.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Exile = Plains
+Bot1.Exile.Plains.Play
+! Bot1.Hand.Island.Play
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Count = 3
+Bot1.Battlefield.Plains.Tapped = false
