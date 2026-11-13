@@ -1,0 +1,33 @@
+# Carrion Cruiser {2}{B}: "When this Vehicle enters, mill two cards, then return a creature or Vehicle card from your
+# graveyard to your hand." (CR 701.17, 608.2c.) "A ... card" is one card: with two creature cards milled, Bot1 takes the
+# Memnite and the Ornithopter is refused and stays in the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Carrion Cruiser
+Island x5
+Memnite
+Ornithopter
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Carrion Cruiser.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Memnite; Ornithopter)
+Bot1.Choose(Memnite)
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island; Island; Memnite
+Bot1.Graveyard = Ornithopter; Black Lotus
+Bot1.Library.Count = 11
+Bot1.Battlefield = Carrion Cruiser
