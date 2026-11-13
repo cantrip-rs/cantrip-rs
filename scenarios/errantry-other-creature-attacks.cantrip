@@ -1,0 +1,45 @@
+# Errantry enchants a creature, adds three power without changing toughness, and prevents it from being declared
+# alongside another attacker while permitting the other creature to attack alone (CR 303.4, 508.1c).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Grizzly Bears
+Ornithopter
+Errantry
+Forest
+Forest
+Forest x10
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Errantry.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Errantry.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Grizzly Bears > Bot2; Ornithopter > Bot2)
+Bot1.Attack(Ornithopter)
+? Combat.Attackers = Ornithopter > Bot2
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Errantry.AttachedTo = Grizzly Bears
+Bot1.Battlefield.Grizzly Bears.Power = 5
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot2.Life = 20
