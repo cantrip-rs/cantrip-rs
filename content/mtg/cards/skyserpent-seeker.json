@@ -1,0 +1,12 @@
+{
+  "name": "Skyserpent Seeker",
+  "manaCost": "{G}{U}",
+  "type": "Creature — Snake",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying, deathtouch\nExhaust — {4}: Reveal cards from the top of your library until you reveal two land cards. Put those land cards onto the battlefield tapped and the rest on the bottom of your library in a random order. Put a +1/+1 counter on this creature. (Activate each exhaust ability only once.)",
+  "keywords": [
+    "Flying",
+    "Deathtouch"
+  ]
+}

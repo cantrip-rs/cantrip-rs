@@ -1,0 +1,55 @@
+# Skyserpent Seeker {G}{U}: "Exhaust - {4}: Reveal cards from the top of your library until you reveal two land cards. Put those land
+# cards onto the battlefield tapped and the rest on the bottom of your library in a random order. Put a +1/+1 counter on this creature."
+# (CR 701.20, 702.177a, 401.4, 122.1a). Three sources are refused (Mana: short), the fourth pays. The two Memnites revealed on the way
+# go under the Plains, only the Forest and Island enter, tapped, the Seeker is a 2/2, and a second try on turn 5 is refused with mana to pay it.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Skyserpent Seeker
+Mox Jet
+Mox Ruby
+Mox Pearl
+Plains
+Memnite
+Memnite
+Forest
+Memnite
+Island
+Plains x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Skyserpent Seeker.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Skyserpent Seeker.Power = 1
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Skyserpent Seeker.Activate(Ability: Exhaust; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Skyserpent Seeker.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Skyserpent Seeker.Power = 2
+? Bot1.Battlefield.Skyserpent Seeker.Toughness = 2
+? Bot1.Battlefield.Forest.Tapped = true
+? Bot1.Battlefield.Island.Tapped = true
+? Bot1.Library.Count = 10
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Skyserpent Seeker.Activate
+
+[Expect]
+Bot1.Battlefield.Skyserpent Seeker.Power = 2
+Bot1.Battlefield.Count = 7
+Bot1.Library.Count = 9
