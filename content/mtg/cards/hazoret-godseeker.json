@@ -1,0 +1,12 @@
+{
+  "name": "Hazoret, Godseeker",
+  "manaCost": "{1}{R}",
+  "type": "Legendary Creature — God",
+  "power": 5,
+  "toughness": 3,
+  "oracleText": "Indestructible, haste\nStart your engines! (If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.)\n{1}, {T}: Target creature with power 2 or less can't be blocked this turn.\nHazoret can't attack or block unless you have max speed.",
+  "keywords": [
+    "Indestructible",
+    "Haste"
+  ]
+}

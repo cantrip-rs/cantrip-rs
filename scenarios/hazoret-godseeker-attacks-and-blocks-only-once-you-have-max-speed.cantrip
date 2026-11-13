@@ -1,0 +1,78 @@
+# Hazoret, Godseeker (5/3 indestructible, haste; "Hazoret can't attack or block unless you have max speed"). Casting it gives Bot1 speed 1; Lightning Bolt
+# to Bot2's face on each of Bot1's turns raises it by one (once a turn): 2 after turn 1, 3 after turn 3, max speed (4) after turn 5.
+# Turn 3 (speed 3): Hazoret has haste but is not allowed to attack (Bot1's Memnite is, but stays home). On Bot2's turn 4 it may not block Memnite either (Bot1's own Memnite may).
+# Turn 5: max speed. Turn 6, Hazoret (untapped) blocks Memnite and takes 1, indestructible or not. Turn 7, still at max speed: it attacks for 5.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Hazoret, Godseeker
+Lightning Bolt
+Lightning Bolt
+Memnite
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hazoret, Godseeker.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+! Bot1.Attack(Hazoret, Godseeker > Bot2)
+Bot1.Attack()
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+! Bot1.Block(Hazoret, Godseeker > Memnite)
+Bot1.Block()
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+[T6 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Block(Hazoret, Godseeker > Memnite)
+[T6 Bot2.Main2]
+? Bot1.Battlefield.Hazoret, Godseeker.Damage = 1
+[T7 Bot1.Main1]
+Bot1.Attack(Hazoret, Godseeker > Bot2)
+[T7 Bot1.Main2]
+? Bot2.Life = 6
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 6
+Bot1.Speed = 4
+Bot2.Battlefield = 

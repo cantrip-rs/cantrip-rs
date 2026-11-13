@@ -1,0 +1,72 @@
+# Hazoret, Godseeker's "{1}, {T}: Target creature with power 2 or less can't be blocked this turn." Turn 1, with every source tapped, the ability is refused. Turn 3: paid with
+# exactly one Mountain (the pool is empty after) it makes Bot1's Grizzly Bears (power exactly 2) unblockable, so Bot2's Memnite is not asked to block and
+# the Bears hit for 2. Turn 5: Hill Giant (power 3) is refused as a target, the opponent's Memnite is accepted (and does Bot2 no harm), and as the effect
+# lasted only for turn 3 Bot2's Memnite blocks the Bears again (and dies).
+
+[Bot1 Deck]
+Mountain
+Mountain
+Mox Ruby
+Mox Jet
+Mox Emerald
+Hazoret, Godseeker
+Grizzly Bears
+Hill Giant
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hazoret, Godseeker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Hazoret, Godseeker.Activate(Ability: can't be blocked; Bot1.Battlefield.Grizzly Bears; Mana: short)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Hazoret, Godseeker.Activate(Ability: can't be blocked; Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Grizzly Bears > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain#2.Activate
+! Bot1.Battlefield.Hazoret, Godseeker.Activate(Ability: can't be blocked; Bot1.Battlefield.Hill Giant)
+Bot1.Battlefield.Hazoret, Godseeker.Activate(Ability: can't be blocked; Bot2.Battlefield.Memnite)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Memnite > Grizzly Bears)
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Grizzly Bears.Damage = 1
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Hazoret, Godseeker.Tapped = true
+Bot2.Battlefield = 
