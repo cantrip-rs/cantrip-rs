@@ -2867,7 +2867,11 @@ haste"), `EffectKind::BlockRestriction { card, index }`, which names the `index`
 card that made it - a `BlockRule` asked of each possible block, with the effect's `affected` object as its source, while the
 effect lasts, as `EffectKind::SpellCostChange` names a `lasting_cost_changes` entry. It is read beside the
 static block rules in `turn::can_block`, but from the effects, not from a source permanent's abilities, so neither the
-creature's nor the source's losing abilities ends it. `Chars::maximum_blockers` is the counterpart of `minimum_blockers`: a declaration giving an
+creature's nor the source's losing abilities ends it. The effect captures its creator's `Words` when it begins;
+`WithWords` supplies those words under the callback's affected-object argument, which still identifies the attacker.
+Tower of Coireall and Joven's Tools therefore use the text which created the restriction, not a later text change on
+their source or an unrelated text change on the targeted creature (CR 611.2c, 612.1).
+`Chars::maximum_blockers` is the counterpart of `minimum_blockers`: a declaration giving an
 attacker more blockers is refused (`validate`, CR 509.1b), and an attacker whose minimum is above its maximum (menace as well:
 the restrictions are cumulative) is offered no block at all (`turn::declare_blockers`). The question carries both per attacker
 (`DeclareBlockersPrompt::maximum_blockers`, 0 for any number); the web client sends at most that many of the creatures picked up
@@ -2913,8 +2917,11 @@ block this turn" and Headliner Scarlett's "creatures target player controls can'
 `about` is what the words named as it resolved ("target opponent", for Exhaustion's "creatures and lands target opponent
 controls don't untap during their next untap step"; "target player", for Headliner Scarlett), handed to `applies`. It is read
 beside each per-object effect (`static_rules::lasting_rules_on`: `turn::attack_rules`, `cant_block`, `untap_step`), from the effects and not from any object's abilities, so neither the source's nor the permanent's losing
-abilities ends it, and it outlives its source. A set the words fix as the effect resolves ("each attacking creature doesn't
-untap during its controller's next untap step", Tangle; "those creatures", Frost Breath) is an effect on each object instead:
+abilities ends it, and it outlives its source. `LastingRule` also captures its creation-time `Words`, read through `WithWords` by both `lasting_rules_on` and
+`lasting_rules_barring_attacks`. The objects' characteristics remain live; only the rule's words are fixed.
+Island Sanctuary's islandwalk exception thus survives a later Magical Hack of the enchantment. A set the words fix as
+the effect resolves ("each attacking creature doesn't untap during its controller's next untap step", Tangle;
+"those creatures", Frost Breath) is an effect on each object instead:
 `EffectKind::DoesntUntap`, weaker than `CantBecomeUntapped` (another untap still untaps it, CR 502.3), with
 `Duration::DuringItsControllersNextUntapStep` - whoever controls it at that untap step, per the Tamiyo, the Moon Sage ruling -
 or `Duration::DuringNextUntapStepOf(player)`, which applies in that player's untap step alone; both end as that untap step
