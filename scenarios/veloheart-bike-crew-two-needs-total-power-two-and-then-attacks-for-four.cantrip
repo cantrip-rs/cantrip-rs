@@ -1,0 +1,45 @@
+# Veloheart Bike, "Crew 2": a lone Memnite (power 1) cannot crew it. With Grizzly Bears (power 2, summoning sick: tapping for a
+# cost is not a {T} ability, CR 702.122a) it becomes a 4/2 artifact creature; having been under Bot1's control since turn 1 it
+# attacks Bot2 for 4 on turn 3.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Veloheart Bike
+Memnite
+Grizzly Bears
+Swamp x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Veloheart Bike.Cast
+Bot1.Hand.Memnite.Cast
+! Bot1.Battlefield.Veloheart Bike.Activate(Ability: Crew)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Veloheart Bike.Activate(Ability: Crew)
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Veloheart Bike.Power = 4
+? Bot1.Battlefield.Veloheart Bike.Toughness = 2
+Bot1.Attack(Veloheart Bike > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Grizzly Bears.Tapped = true
+Bot1.Battlefield.Memnite.Tapped = false

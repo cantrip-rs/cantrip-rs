@@ -1,0 +1,8 @@
+{
+  "name": "Veloheart Bike",
+  "manaCost": "{2}{G}",
+  "type": "Artifact — Vehicle",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "When this Vehicle enters, you gain 2 life.\n{T}: Add one mana of any color.\nCrew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)"
+}

@@ -1,0 +1,51 @@
+# Veloheart Bike: "When this Vehicle enters, you gain 2 life" gains Bot1 2 (22) and, for Bot2's own Bike, Bot2 2 (22): each
+# controller gains. "{T}: Add one mana of any color" works at once (an uncrewed Vehicle is no creature, so it has no
+# summoning sickness, CR 302.6): Bot1 taps it for {U}.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Veloheart Bike
+Swamp x16
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Veloheart Bike
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Veloheart Bike.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+? Bot2.Life = 20
+Bot1.Battlefield.Veloheart Bike.Activate(Color: Blue)
+? Bot1.Mana = {U}
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Veloheart Bike.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 22
