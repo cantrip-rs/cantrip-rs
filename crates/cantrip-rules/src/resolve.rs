@@ -220,11 +220,11 @@ pub fn target_legal(cards: &'static CardTable, state: &GameState, events: &[Reco
     let earlier = if item.target_count > 1 { &state.targets(item)[..slot] } else { &[][..] };
     // An ability's targets are judged by its own text, as it was put on the stack (CR 113.7a, `StackItem::words`).
     let text = item_text(item);
-    let given = Given { q: &q, earlier, subject: item.subject, slot_player, gift: false, x: announced_x(item), text };
+    let given = Given { q: &q, earlier, subject: item.subject, slot_player, gift: false, x: announced_x(item), data: item.data, text };
     (spec.filter)(&given, &asker, target)
         && layers::can_target(cards, state, events, &asker, target)
         && (spec.together.is_none()
-            || together_legal(&Given { q: &q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, text }, state, item, slot, &spec))
+            || together_legal(&Given { q: &q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, data: [u32::MAX; 2], text }, state, item, slot, &spec))
 }
 
 /// Whether the targets of the slot target `slot` of `item` was chosen for are still allowed together by `spec`'s rule
@@ -244,7 +244,7 @@ pub fn item_text(item: &StackItem) -> Option<(ObjectId, Words)> {
 /// `q` reading `item`'s source's words as `item`'s own text has them (`item_text`): what the rule of its targets together is
 /// judged with as they are changed or chosen anew (CR 115.7, 601.2c).
 pub fn as_item<'a>(q: &'a dyn Query, item: &StackItem) -> Given<'a> {
-    Given { q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, text: item_text(item) }
+    Given { q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, data: [u32::MAX; 2], text: item_text(item) }
 }
 
 /// The X announced for a spell or an activated ability on the stack (CR 107.3a, 601.2b, 602.2b), its own (CR 107.3k): what
@@ -265,6 +265,8 @@ pub struct Given<'a> {
     pub gift: bool,
     /// The X announced for the spell or ability whose targets these are (`Query::announced_x`, `announced_x`).
     pub x: Option<u32>,
+    /// What the event a triggered ability triggered on carried (`StackItem::data`, `Query::event_data`); `[u32::MAX; 2]` for none.
+    pub data: [u32; 2],
     /// For an ability on the stack, its source and the words of its text as it was put there (`StackItem::words`): what
     /// `Query::words` of that source answers, the source's text since notwithstanding (CR 113.7a). None otherwise.
     pub text: Option<(ObjectId, Words)>,
@@ -353,6 +355,10 @@ impl Query for Given<'_> {
 
     fn announced_x(&self) -> Option<u32> {
         self.x.map(u32::from)
+    }
+
+    fn event_data(&self) -> [u32; 2] {
+        self.data
     }
 
     fn words(&self, id: ObjectId) -> Words {

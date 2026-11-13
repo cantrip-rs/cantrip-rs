@@ -605,11 +605,12 @@ fn choose_trigger_targets_after(
                 spec,
                 if after_divided { &targets[..] } else if slots.len() > 1 { &targets[start..] } else { &[] },
                 trigger.subject,
+                trigger.data,
                 *slot_player,
                 text,
             );
             let counted = u32::from(trigger_counted(cx, trigger));
-            let own = crate::resolve::Given { q: &*cx, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, text };
+            let own = crate::resolve::Given { q: &*cx, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, data: [u32::MAX; 2], text };
             let (candidates, together) = crate::actions::within_together(&own, &asker, spec, counted, candidates);
             let (least, most) = spec.bounds(counted);
             if !crate::actions::enough_together(&own, &asker, &together, &candidates, least) {
@@ -929,6 +930,7 @@ fn consider(
             slot_player: None,
             gift: false,
             x: None,
+            data: [u32::MAX; 2],
             text: words.map(|w| (source, w)),
         };
         // Asked through the game itself where its text is its object's own, which is nearly always.
@@ -1484,6 +1486,10 @@ impl Query for BoardThen<'_> {
         self.q.event_subject()
     }
 
+    fn event_data(&self) -> [u32; 2] {
+        self.q.event_data()
+    }
+
     fn slot_opponent(&self) -> Option<PlayerId> {
         self.q.slot_opponent()
     }
@@ -1602,7 +1608,7 @@ fn that_mana_spent(cx: &Cx, rider: u32, event: &Event) -> u32 {
 /// Every triggered ability this event triggers (CR 603.2).
 /// Ask the event of the watched object, but ask the creating ability's conditions of its actual source.
 pub(crate) fn delayed_fires(q: &dyn Query, d: &cantrip_state::Delayed, t: &TriggeredDef, asker: &Asker, event: &Event) -> Option<Fired> {
-    let own = crate::resolve::Given { q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None,
+    let own = crate::resolve::Given { q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, data: [u32::MAX; 2],
         text: d.words.map(|w| (d.watched(), w)) };
     if d.when == DelayedWhen::WatchingThisTurn {
         let source_asker = Asker { source: d.source, ..*asker };
@@ -1724,6 +1730,7 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                         slot_player: None,
                         gift: false,
                         x: None,
+                        data: [u32::MAX; 2],
                         text: d.words.map(|w| (d.source, w)),
                     };
                     // One that looks back is asked of the game as it was just before the events (CR 603.10a, `BoardThen`).

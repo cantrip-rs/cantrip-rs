@@ -3492,7 +3492,7 @@ pub fn target_candidates(cx: &Cx, asker: &Asker, spec: &TargetSpec) -> Vec<Targe
 
 /// The candidates for a slot of a spell as if its gift were promised (`Query::gift_assumed`), without promising it.
 fn target_candidates_if_promised(cx: &Cx, asker: &Asker, spec: &TargetSpec) -> Vec<Target> {
-    candidates(cx, asker, spec, &[], Target::None, None, None, true, None)
+    candidates(cx, asker, spec, &[], Target::None, [u32::MAX; 2], None, None, true, None)
 }
 
 /// The candidates for a slot after the slots before it chose `earlier` (CR 601.2c); `slot_player` is the opponent the slot
@@ -3507,7 +3507,7 @@ pub fn target_candidates_given(
     slot_player: Option<PlayerId>,
     x: Option<u32>,
 ) -> Vec<Target> {
-    candidates(cx, asker, spec, earlier, subject, slot_player, x, false, None)
+    candidates(cx, asker, spec, earlier, subject, [u32::MAX; 2], slot_player, x, false, None)
 }
 
 /// `target_candidates_given` with no X announced, judged by `text` (`resolve::Given::text`): a triggered ability's slots as it
@@ -3518,17 +3518,18 @@ pub fn target_candidates_with_text(
     spec: &TargetSpec,
     earlier: &[Target],
     subject: Target,
+    data: [u32; 2],
     slot_player: Option<PlayerId>,
     text: Option<(ObjectId, Words)>,
 ) -> Vec<Target> {
-    candidates(cx, asker, spec, earlier, subject, slot_player, None, false, text)
+    candidates(cx, asker, spec, earlier, subject, data, slot_player, None, false, text)
 }
 
 /// The candidates for target `slot_player`'s slot of `item`, a spell or ability on the stack, after the slots before it chose
 /// `earlier`, as its targets are changed or chosen anew (CR 115.7, 707.10c): judged by its own text - an ability's as it was
 /// put on the stack (`resolve::item_text`, CR 113.7a) - with what it triggered on and the X it was announced with.
 pub fn item_target_candidates(cx: &Cx, asker: &Asker, spec: &TargetSpec, earlier: &[Target], item: &StackItem, slot_player: Option<PlayerId>) -> Vec<Target> {
-    candidates(cx, asker, spec, earlier, item.subject, slot_player, crate::resolve::announced_x(item), false, crate::resolve::item_text(item))
+    candidates(cx, asker, spec, earlier, item.subject, item.data, slot_player, crate::resolve::announced_x(item), false, crate::resolve::item_text(item))
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -3538,13 +3539,14 @@ fn candidates(
     spec: &TargetSpec,
     earlier: &[Target],
     subject: Target,
+    data: [u32; 2],
     slot_player: Option<PlayerId>,
     x: Option<u32>,
     gift: bool,
     text: Option<(ObjectId, Words)>,
 ) -> Vec<Target> {
     let s = q.state();
-    let cx = &crate::resolve::Given { q, earlier, subject, slot_player, gift, x, text };
+    let cx = &crate::resolve::Given { q, earlier, subject, slot_player, gift, x, data, text };
     let mut out = Vec::new();
     for p in s.seats() {
         let t = Target::Player(p);
@@ -3975,7 +3977,7 @@ impl<K: PartialEq> AnnouncementSearch<'_, K> {
             return if (self.covered)(targets) { Found::Yes } else { Found::No };
         };
         let earlier: &[Target] = if in_segment > 1 { &targets[start..] } else { &[] };
-        let candidates = candidates(self.q, self.asker, &spec, earlier, Target::None, slot_player, None, self.gift, None);
+        let candidates = candidates(self.q, self.asker, &spec, earlier, Target::None, [u32::MAX; 2], slot_player, None, self.gift, None);
         let (candidates, together) = within_together(self.q, self.asker, &spec, self.counted, candidates);
         let (least, most) = spec.bounds(self.counted);
         if candidates.len() < least as usize || (candidates.is_empty() && spec.required()) {

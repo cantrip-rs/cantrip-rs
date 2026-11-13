@@ -373,6 +373,10 @@ impl Query for AsText<'_> {
         self.q.event_subject()
     }
 
+    fn event_data(&self) -> [u32; 2] {
+        self.q.event_data()
+    }
+
     fn slot_opponent(&self) -> Option<PlayerId> {
         self.q.slot_opponent()
     }

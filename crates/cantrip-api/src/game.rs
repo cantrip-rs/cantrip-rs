@@ -483,6 +483,13 @@ pub trait Query {
         Target::None
     }
 
+    /// What the event a triggered ability triggered on carried (`Fired::data`, `StackItem::data`), for the filter of its targets:
+    /// "destroy up to one target artifact or enchantment with mana value X" on "when you cycle this card", where X is the X of
+    /// the cycling cost paid (CR 702.29c, 107.3a). `[u32::MAX; 2]` outside a trigger's target filter.
+    fn event_data(&self) -> [u32; 2] {
+        [u32::MAX; 2]
+    }
+
     /// The X announced for the spell or activated ability whose target is being chosen or checked (CR 107.3a, 601.2b,
     /// 602.2b), for the filter of a target "with mana value X": that spell's or ability's own, as it is announced, as it is
     /// judged again on resolution (CR 608.2b) and as its targets are changed or chosen anew (CR 115.7), never another
