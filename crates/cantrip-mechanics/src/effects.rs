@@ -1413,6 +1413,16 @@ pub fn each_opponent_loses_life_you_gain_life<const N: i32>(g: &mut dyn Game, it
     Ok(())
 }
 
+/// "Each opponent loses `amount` life. You gain life equal to the life lost this way" (CR 119.3, 608.2c): every opponent loses it
+/// together and `controller` gains what was actually lost in total, measured rather than assumed since an effect can change what
+/// is lost; nothing is gained when nothing was lost. Kokusho, the Evening Star (5) and Exsanguinate (X) print it.
+pub fn each_opponent_loses_life_you_gain_life_lost(g: &mut dyn Game, controller: PlayerId, amount: i32) {
+    let lost = g.each_opponent_loses_life(controller, amount);
+    if lost > 0 {
+        g.gain_life(controller, lost);
+    }
+}
+
 /// "Each opponent loses 1 life and you gain 1 life" (CR 119.3): `each_opponent_loses_life_you_gain_life` of 1. Bontus's
 /// Monument, Doom Reigns Supreme, Grave Venerations, Raven of Fell Omens, Thunder of Unity, Tithing Blade, Witherbloom
 /// Apprentice and Dream Beavers print it.

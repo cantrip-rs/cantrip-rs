@@ -1,14 +1,11 @@
 use cantrip_api::*;
+use cantrip_mechanics::effects;
 use cantrip_mechanics::triggers::THIS_DIES;
 use cantrip_oracle as oracle;
 
-/// "Each opponent loses 5 life. You gain life equal to the life lost this way": measured rather than assumed, since an
-/// effect can change what is lost (CR 119.3, 608.2c).
+/// "Each opponent loses 5 life. You gain life equal to the life lost this way."
 fn drain(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let lost = g.each_opponent_loses_life(item.controller, 5);
-    if lost > 0 {
-        g.gain_life(item.controller, lost);
-    }
+    effects::each_opponent_loses_life_you_gain_life_lost(g, item.controller, 5);
     Ok(())
 }
 
