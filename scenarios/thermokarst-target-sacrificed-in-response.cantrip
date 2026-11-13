@@ -1,0 +1,30 @@
+# Sacrificing the snow land in response makes the only target illegal, so no life is gained; a second copy destroys a legal land (CR 608.2b).
+[Bot1 Deck]
+Thermokarst x2
+Black Lotus x2
+Forest x20
+[Bot2 Deck]
+Snow-Covered Forest
+Zuran Orb
+Island x20
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Forest.Play
+Bot2.Hand.Zuran Orb.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thermokarst.Cast(Bot2.Battlefield.Snow-Covered Forest)
+? Bot1.Mana =
+Bot2.Battlefield.Zuran Orb.Activate(Sacrifice: Snow-Covered Forest)
+[T3 Bot1.Main2]
+? Bot1.Life = 20
+? Bot2.Life = 22
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thermokarst.Cast(Bot1.Battlefield.Forest)
+? Bot1.Mana =
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard = Thermokarst; Forest; Black Lotus; Thermokarst; Black Lotus

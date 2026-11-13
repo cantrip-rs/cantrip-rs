@@ -1,0 +1,18 @@
+# Thermokarst can destroy its controller's snow land, and its controller gains exactly one life (CR 701.8a, 119.3).
+[Bot1 Deck]
+Thermokarst
+Black Lotus
+Snow-Covered Forest
+Forest x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thermokarst.Cast(Bot1.Battlefield.Snow-Covered Forest)
+? Bot1.Mana =
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 20
+Bot1.Graveyard = Thermokarst; Snow-Covered Forest; Black Lotus

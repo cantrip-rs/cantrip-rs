@@ -1,0 +1,24 @@
+# A nonland is not a legal target, while the opponent's nonsnow land is destroyed without life gain (CR 115.1a, 701.8a).
+[Bot1 Deck]
+Thermokarst
+Black Lotus
+Forest x20
+[Bot2 Deck]
+Forest
+Ornithopter
+Island x20
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Hand.Thermokarst.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Hand.Thermokarst.Cast(Bot2.Battlefield.Forest)
+? Bot1.Mana =
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot2.Graveyard = Forest
+Bot2.Battlefield.Ornithopter.Types = Artifact; Creature
