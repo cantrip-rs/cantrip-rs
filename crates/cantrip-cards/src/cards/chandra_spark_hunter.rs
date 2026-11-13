@@ -19,12 +19,6 @@ fn animate_vehicle(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// 0: "Create a 3/2 colorless Vehicle artifact token with crew 1."
-fn create_vehicle(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &tokens::VEHICLE_CREW_1, 1)?;
-    Ok(())
-}
-
 fn emblem(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     tokens::create_emblem(g, item.controller, &EMBLEM);
     Ok(())
@@ -54,7 +48,7 @@ pub static CARD: CardDef = CardDef {
         )
         .targets(&[up_to_one(vehicle_you_control)]),
         ability(loyalty(2), |g, item| effects::may_sacrifice_an_artifact_or_discard_to_draw(g, item, 1), "+2: You may sacrifice an artifact or discard a card. If you do, draw a card."),
-        ability(loyalty(0), create_vehicle, "0: Create a 3/2 colorless Vehicle artifact token with crew 1."),
+        ability(loyalty(0), tokens::create_a_crew_1_vehicle, "0: Create a 3/2 colorless Vehicle artifact token with crew 1."),
         ability(loyalty(-7), emblem, "\u{2212}7: You get an emblem with \"Whenever an artifact you control enters, this emblem deals 3 damage to any target.\""),
     ],
     labels: &["Sacrifice an artifact", "Discard a card", "Neither"],
