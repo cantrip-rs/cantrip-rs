@@ -1463,7 +1463,8 @@ fn blocking_rule_sources(cx: &Cx) -> Vec<ObjectId> {
 /// A "could block" condition at resolution, rather than a new declaration. Find a restriction-valid representation of
 /// exactly the proposed graph, including automatic band associations. Every desired relationship is required by this
 /// hypothetical question, not by a Lure or other gameplay requirement. Unrelated existing pairs may persist even after
-/// gaining evasion; only the proposed pairs are checked for pair restrictions. No declaration payment or untap test.
+/// gaining evasion; only the proposed pairs are checked for pair restrictions. A proposed blocker must be untapped
+/// (Sorrow's Path and General Jarkeld); declaration payments are not imposed again.
 pub(crate) fn block_reassignment_allowed(cx: &Cx, ending: &[(ObjectId, ObjectId)], starting: &[(ObjectId, ObjectId)]) -> bool {
     let sources = blocking_rule_sources(cx);
     let mut graph: Vec<_> = cx.s().blocks.iter().map(|b| (b.blocker,b.attacker)).filter(|p| !ending.contains(p)).collect();
@@ -1475,7 +1476,7 @@ pub(crate) fn block_reassignment_allowed(cx: &Cx, ending: &[(ObjectId, ObjectId)
         if !changed_attackers.contains(&a) { changed_attackers.push(a); }
     }
     for &(b,a) in starting {
-        if !live(cx.s(),b) { return false; }
+        if !live(cx.s(),b) || cx.s().obj(b).tapped { return false; }
         let chars = cx.chars(b);
         if !chars.is(CardType::Creature) || chars.is(CardType::Battle) || cx.is_attacking(b) { return false; }
         let Some(attack) = cx.s().attackers.iter().find(|x| x.id == a && x.defending == cx.controller(b)) else { return false; };

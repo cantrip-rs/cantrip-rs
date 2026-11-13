@@ -226,7 +226,6 @@ fn current_flying_and_reach_decide_whether_an_exchange_is_allowed() {
     set_pairs(&mut g,&[(x,a),(y,b)]);let before=g.state.blocks.clone();
     swap(&mut g,a,b,true);assert_eq!(g.state.blocks,before);
     cx(&mut g).add_effect(y,y,EffectKind::AddKeywords(Keywords::of(&[Keyword::Reach])),Duration::EndOfTurn);
-    g.state.update_obj(y,|o|o.tapped=true);
     swap(&mut g,a,b,true);assert!(g.state.blocks.iter().any(|p|p.blocker==y&&p.attacker==a));
 }
 #[test]
@@ -258,7 +257,7 @@ fn blocker_exchange_requires_capacity_for_the_entire_other_attack_group() {
 fn removing_and_reassigning_two_blockers_repeats_their_generic_triggers() {
     let mut g=game();let a=attack(&mut g);let b=attack(&mut g);
     let x=put(&mut g,&WITNESS,THEM);let y=put(&mut g,&WITNESS,THEM);
-    set_pairs(&mut g,&[(x,a),(y,b)]);g.state.update_obj(x,|o|o.tapped=true);
+    set_pairs(&mut g,&[(x,a),(y,b)]);
     swap(&mut g,x,y,false);assert_eq!(edges(&g),[(y,a,true),(x,b,true)]);assert_eq!(g.state.triggers.len(),4);
 }
 #[test]
@@ -317,4 +316,33 @@ fn a_shared_blocker_with_a_new_illegal_quality_prevents_the_exchange() {
     set_pairs(&mut g,&[(x,a),(x,b)]);
     assert!(!cx(&mut g).block_reassignment_allowed(&[(x,a),(x,b)],&[(x,a),(x,b)]));
     let before=hash(&g);swap(&mut g,a,b,true);assert_eq!(hash(&g),before);assert!(edges(&g).is_empty());
+}
+
+#[test]
+fn a_tapped_blocker_cannot_make_a_proposed_exchange_but_existing_blocks_persist() {
+    for attacking in [false, true] {
+        let mut g=game();let a=attack(&mut g);let b=attack(&mut g);let c=attack(&mut g);
+        let x=put(&mut g,&CREATURE,THEM);let y=put(&mut g,&CREATURE,THEM);let z=put(&mut g,&CREATURE,THEM);
+        set_pairs(&mut g,&[(x,a),(y,b),(z,c)]);
+        g.state.update_obj(x,|o|o.tapped=true);g.state.update_obj(z,|o|o.tapped=true);
+        let before=hash(&g);
+        if attacking {swap(&mut g,a,b,true);} else {swap(&mut g,x,y,false);}
+        assert_eq!(hash(&g),before,"a tapped creature cannot make its proposed block");
+        g.state.update_obj(x,|o|o.tapped=false);
+        if attacking {swap(&mut g,a,b,true);} else {swap(&mut g,x,y,false);}
+        assert!(g.state.blocks.iter().any(|p|p.blocker==x&&p.attacker==b));
+        assert!(g.state.blocks.iter().any(|p|p.blocker==z&&p.attacker==c),"unrelated tapped blocker keeps its block");
+    }
+}
+
+#[test]
+fn a_tapped_blocker_can_receive_an_empty_assignment() {
+    let mut g=game();let a=attack(&mut g);let b=attack(&mut g);
+    let x=put(&mut g,&CREATURE,THEM);let y=put(&mut g,&CREATURE,THEM);
+    set_pairs(&mut g,&[(x,a),(y,b)]);cx(&mut g).remove_from_combat(a);
+    g.state.update_obj(y,|o|o.tapped=true);
+    swap(&mut g,x,y,false);
+    assert_eq!(g.state.blocks.len(),1);
+    assert_eq!((g.state.blocks[0].blocker,g.state.blocks[0].attacker),(x,b));
+    assert!(!g.is_blocking(y));
 }
