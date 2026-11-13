@@ -1189,6 +1189,17 @@ impl Game {
         self.chars(id).name
     }
 
+    /// Whether a resolved rule about an open set applies to `id` now (CR 611.2c): the same callback as the rules ask,
+    /// through the words captured when the effect began. Projections and diagnostic dumps must not ask it through the
+    /// source's later text. Island Sanctuary's attack exception and Falter's blocking restriction use this interface.
+    pub fn lasting_rule_applies(&self, effect: &ContinuousEffect, id: ObjectId) -> bool {
+        let EffectKind::LastingRule { card, index, about } = effect.kind else { return false };
+        self.cards.get(card).lasting_rules.get(index as usize).is_some_and(|rule| {
+            let reads = actions::WithWords { q: self, source: effect.source, words: effect.words };
+            (rule.applies)(&reads, &Asker::new(effect.source, effect.controller), about, id)
+        })
+    }
+
     /// The name of what an object is to one who knows every card, as a script or a log does: its name (`name`), but for a
     /// card exiled face down, which has none (CR 406.3a), its card's. Never what a player is shown.
     pub fn known_name(&self, id: ObjectId) -> &'static str {

@@ -750,7 +750,8 @@ impl<'a> Projector<'a> {
                 && let Some(rule) = game.cards.get(card).lasting_rules.get(index as usize)
             {
                 let name = game.cards.get(card).name;
-                summary.pending_effects.push(if p == self.viewer { format!("{name}: {}", rule.text) } else { format!("Their {name}'s effect: {}", rule.text) });
+                let text = crate::text::changed_text(rule.text, name, e.words);
+                summary.pending_effects.push(if p == self.viewer { format!("{name}: {text}") } else { format!("Their {name}'s effect: {text}") });
             }
         }
         // A play rule a resolved ability gave the player for a duration (CR 611.2a, 401.2: "until end of turn, you may play cards
@@ -1652,9 +1653,12 @@ impl<'a> Projector<'a> {
                     EffectKind::CantBeBlocked => "Can't be blocked",
                     // A resolved restriction on blocking it, in its card's words: "Can't be blocked except by creatures with
                     // haste this turn."
-                    EffectKind::BlockRestriction { card, index } => match game.cards.get(card).lasting_block_rules.get(index as usize) {
-                        Some(rule) => rule.text,
-                        None => continue,
+                    EffectKind::BlockRestriction { card, index } => {
+                        if let Some(rule) = game.cards.get(card).lasting_block_rules.get(index as usize) {
+                            let text = crate::text::changed_text(rule.text, game.cards.get(card).name, e.words);
+                            view.granted_abilities.push(AbilityTextView { text: format!("{text}{}.", self.effect_until_text(e)), spent: false });
+                        }
+                        continue;
                     },
                     // A requirement to block (CR 509.1c): "Blocks this turn if able."
                     EffectKind::MustBlock => {
@@ -1753,11 +1757,13 @@ impl<'a> Projector<'a> {
             // A resolved rule about an open set that takes it in now (CR 611.2c: Falter's "creatures without flying can't block
             // this turn"), in its card's words and named for it: no ability of the permanent says so.
             for e in s.effects.iter() {
-                if let EffectKind::LastingRule { card, index, about } = e.kind
+                if let EffectKind::LastingRule { card, index, .. } = e.kind
                     && let Some(rule) = game.cards.get(card).lasting_rules.get(index as usize)
-                    && (rule.applies)(game, &Asker::new(e.source, e.controller), about, id)
+                    && game.lasting_rule_applies(e, id)
                 {
-                    view.granted_abilities.push(AbilityTextView { text: format!("{} ({})", rule.text, game.cards.get(card).name), spent: false });
+                    let name = game.cards.get(card).name;
+                    let text = crate::text::changed_text(rule.text, name, e.words);
+                    view.granted_abilities.push(AbilityTextView { text: format!("{text} ({name})"), spent: false });
                 }
             }
             // "Can't attack" from a static ability while its condition holds (CR 508.1c: Patchwork Beastie without delirium).
@@ -1911,6 +1917,80 @@ fn protection_words(c: &Chars, names: &[String]) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
+    fn captured_projection_game() -> (Game, ObjectId, ObjectId, ObjectId) {
+        fn applies(q: &dyn Query, asker: &Asker, _: Target, id: ObjectId) -> bool {
+            let land = q.words(asker.source).subtype(Subtype::Island);
+            let walk = Keyword::LANDWALKS.iter().find(|(_, ty)| *ty == land).map(|(walk, _)| *walk);
+            q.chars(id).is(CardType::Creature) && walk.is_none_or(|walk| !q.chars(id).has(walk))
+        }
+        static SOURCE: CardDef = CardDef {
+            name: "Captured Projection Source", types: TypeSet::of(&[CardType::Artifact]),
+            lasting_rules: &[LastingRule { text: "Creatures without islandwalk can't attack you.", rule: LastingRuleKind::CantAttackYou, applies }],
+            lasting_block_rules: &[LastingBlockRule { text: "Can't be blocked by Walls", allows: |_, _, _, _| true }],
+            ..CardDef::BLANK
+        };
+        static ISLAND: CardDef = CardDef {
+            name: "Projection Islandwalker", types: TypeSet::of(&[CardType::Creature]), power: Some(2), toughness: Some(2),
+            keywords: Keywords::of(&[Keyword::Islandwalk]), ..CardDef::BLANK
+        };
+        static SWAMP: CardDef = CardDef { name: "Projection Swampwalker", keywords: Keywords::of(&[Keyword::Swampwalk]), ..ISLAND };
+        let cards = Box::leak(Box::new(CardTable::new([&SOURCE, &ISLAND, &SWAMP])));
+        let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+        let mut put = |card| {
+            let id = game.state.push_obj(Obj::new(cards.id_of(card), PlayerId(0), Zone::BATTLEFIELD));
+            game.state.zone_push(Zone::BATTLEFIELD, id); id
+        };
+        let source = put(&SOURCE); let island = put(&ISLAND); let swamp = put(&SWAMP);
+        for (affected, kind, words) in [
+            (source, EffectKind::LastingRule { card: cards.id_of(&SOURCE), index: 0, about: Target::Player(PlayerId(0)) }, Words::NONE.changed(Word::Subtype(Subtype::Island), Word::Subtype(Subtype::Swamp))),
+            (island, EffectKind::BlockRestriction { card: cards.id_of(&SOURCE), index: 0 }, Words::NONE.changed(Word::Subtype(Subtype::Wall), Word::Subtype(Subtype::Elf))),
+            (source, EffectKind::ChangeText { from: Word::Subtype(Subtype::Island), to: Word::Subtype(Subtype::Forest) }, Words::NONE),
+        ] {
+            let timestamp = game.state.timestamp();
+            game.state.effect_push(ContinuousEffect { source, controller: PlayerId(0), timestamp, affected, kind, duration: Duration::EndOfTurn, words });
+        }
+        (game, source, island, swamp)
+    }
+
+    #[test]
+    fn lasting_rule_projection_uses_captured_words_for_text_and_membership() {
+        let (game, source, island, swamp) = captured_projection_game();
+        assert_eq!(Query::words(&game, source).subtype(Subtype::Island), Subtype::Forest);
+        let dump = cantrip_script::dump::StateDump::of(&game);
+        assert_eq!(dump.values.get("Bot1.Battlefield.Projection Islandwalker.LastingRules").map(String::as_str), Some("Creatures without swampwalk can't attack you."));
+        assert!(!dump.values.contains_key("Bot1.Battlefield.Projection Swampwalker.LastingRules"));
+        let names = vec!["A".to_string(), "B".to_string()]; let faces = HashSet::new();
+        for viewer in [PlayerId(0), PlayerId(1), PUBLIC] {
+            let projector = Projector { game: &game, viewer, names: &names, conceded: &[false, false], faces: &faces };
+            let mut handles = HandleSpace::new();
+            let summary = projector.summarise(PlayerId(0), &mut handles);
+            assert!(summary.pending_effects.iter().any(|s| s.contains("without swampwalk")), "{:?}", summary.pending_effects);
+            assert!(!summary.pending_effects.iter().any(|s| s.contains("islandwalk") || s.contains("forestwalk")));
+            for (id, restricted) in [(island, true), (swamp, false)] {
+                let handle = handles.handle(id);
+                let shown = projector.describe(id, handle, None, &mut handles);
+                let decoded: ObjectView = serde_json::from_str(&serde_json::to_string(&shown).unwrap()).unwrap();
+                let rules = decoded.granted_abilities.iter().filter(|a| a.text.contains("can't attack you")).collect::<Vec<_>>();
+                assert_eq!(rules.len(), usize::from(restricted));
+                if restricted { assert!(rules[0].text.contains("without swampwalk")); }
+            }
+        }
+    }
+
+    #[test]
+    fn blocking_rule_projection_uses_its_captured_creature_type() {
+        let (game, _, island, _) = captured_projection_game();
+        let dump = cantrip_script::dump::StateDump::of(&game);
+        assert_eq!(dump.values.get("Bot1.Battlefield.Projection Islandwalker.BlockRestriction").map(String::as_str), Some("Can't be blocked by Elves"));
+        let names = vec!["A".to_string(), "B".to_string()]; let faces = HashSet::new();
+        for viewer in [PlayerId(0), PlayerId(1), PUBLIC] {
+            let projector = Projector { game: &game, viewer, names: &names, conceded: &[false, false], faces: &faces };
+            let mut handles = HandleSpace::new(); let handle = handles.handle(island);
+            let shown = projector.describe(island, handle, None, &mut handles);
+            assert!(shown.granted_abilities.iter().any(|a| a.text == "Can't be blocked by Elves this turn."), "{:?}", shown.granted_abilities);
+        }
+    }
+
     #[test]
     fn uncrewed_vehicle_projects_its_printed_stats_without_creature_characteristics() {
         let cards = cantrip_engine::cards();
