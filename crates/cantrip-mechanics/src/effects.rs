@@ -1239,6 +1239,12 @@ pub const fn dies_gain_life<const N: i32>(text: &'static str) -> AbilityDef {
     triggered(crate::triggers::THIS_DIES, gain_life_amount::<N>, text)
 }
 
+/// "Whenever this creature attacks, you gain N life" (CR 508.1m, 603.2, 119.3). Shopkeeper's Bane and Herald of Faith print
+/// two; Teacher's Pest and the Equipment and spell that grant it print one.
+pub const fn attacks_gain_life<const N: i32>(text: &'static str) -> AbilityDef {
+    triggered(crate::triggers::THIS_ATTACKS, gain_life_amount::<N>, text)
+}
+
 fn gain_life_amount<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     gain_life(g, item, N)
 }
