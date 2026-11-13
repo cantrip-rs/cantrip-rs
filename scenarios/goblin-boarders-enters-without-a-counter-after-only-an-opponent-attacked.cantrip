@@ -1,0 +1,48 @@
+# Goblin Boarders: "Raid -- This creature enters with a +1/+1 counter on it if you attacked this turn." "You" is the player it enters
+# under (CR 614.12), not whoever attacked: on turn 2 Bot2 attacks Bot1 with a hasty Fanatical Firebrand, and Bot1, who attacked
+# with nothing this turn, puts Goblin Boarders onto the battlefield with Through the Breach in Bot2's declare attackers step. It
+# enters a plain 3/2, no counter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Through the Breach
+Goblin Boarders
+Mountain x10
+
+[Bot2 Deck]
+Fanatical Firebrand
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Fanatical Firebrand.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.DeclareAttackers]
+Bot2.Attack(Fanatical Firebrand > Bot1)
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Through the Breach.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Goblin Boarders)
+
+[Expect]
+Bot1.Battlefield.Goblin Boarders.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Goblin Boarders.Power = 3
+Bot1.Battlefield.Goblin Boarders.Toughness = 2
