@@ -1,0 +1,57 @@
+# Angel of Finality: "When this creature enters, exile target player's graveyard" (CR 115.1, 406.2). Bot1's Black Lotus is in its own
+# graveyard (sacrificed for mana on turn 1) and Bot2's Lightning Bolt is in theirs. Bot1 targets Bot2, so the Bolt is exiled and the
+# Lotus stays (a positive control that only the chosen graveyard is exiled). The Angel is a 3/4 flier. The trigger waits on the
+# stack until its controller passes with the Angel on the battlefield, with both graveyards still full.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Angel of Finality
+Plains x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+? Bot1.Graveyard = Black Lotus
+? Bot2.Graveyard = Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Angel of Finality.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Black Lotus
+Bot2.Graveyard.Count = 0
+Bot2.Exile.Lightning Bolt.Colors = Red
+Bot1.Battlefield.Angel of Finality.Power = 3
+Bot1.Battlefield.Angel of Finality.Toughness = 4
+Bot1.Battlefield.Angel of Finality.Keywords = Flying
