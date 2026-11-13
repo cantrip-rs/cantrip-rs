@@ -1,0 +1,35 @@
+# Carrion Cruiser {2}{B}: "When this Vehicle enters, mill two cards, then return a creature or Vehicle card from your
+# graveyard to your hand." (CR 701.17, 608.2c.) Black Lotus pays the {2}{B} and is sacrificed. Bot1 mills Lightning Bolt and
+# Ornithopter, and the graveyard then holds Black Lotus and Lightning Bolt, neither a creature nor a Vehicle (refused), and the
+# Ornithopter, which is taken: the choice is made after the mill, from the card just milled. The library keeps its rest.
+
+[Bot1 Deck]
+Black Lotus
+Carrion Cruiser
+Island x5
+Lightning Bolt
+Ornithopter
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Carrion Cruiser.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Black Lotus)
+! Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Ornithopter)
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island; Island; Ornithopter
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Library.Count = 10
+Bot1.Battlefield = Carrion Cruiser

@@ -1,0 +1,47 @@
+# Carrion Cruiser: "Crew 1" (CR 702.122): tapping creatures with total power 1 or more makes it a 3/2 artifact creature until
+# end of turn. Bot1's Ornithopter has power 0 and cannot crew it alone (the refusal; Memnite is not yet on the battlefield),
+# and Memnite, power 1, can. Black Lotus pays the {2}{B}; the Cruiser's own enter trigger mills Islands and has no creature
+# or Vehicle card to take.
+
+[Bot1 Deck]
+Black Lotus
+Carrion Cruiser
+Ornithopter
+Memnite
+Island x3
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Carrion Cruiser.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Carrion Cruiser.Activate(Ability: Crew 1)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Carrion Cruiser.Types = Artifact
+Bot1.Battlefield.Carrion Cruiser.Activate(Ability: Crew 1)
+! Bot1.Choose(Ornithopter)
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Carrion Cruiser.Types = Artifact; Creature
+? Bot1.Battlefield.Carrion Cruiser.Power = 3
+? Bot1.Battlefield.Carrion Cruiser.Toughness = 2
+? Bot1.Battlefield.Memnite.Tapped = true
+? Bot1.Battlefield.Ornithopter.Tapped = false
+
+[Expect]
+Bot1.Graveyard = Island; Island; Black Lotus

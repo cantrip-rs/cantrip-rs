@@ -1,0 +1,59 @@
+# Carrion Cruiser: "mill two cards, then return a creature or Vehicle card from your graveyard to your hand". The first Cruiser
+# mills Dependable Quinjet (a Vehicle card, no creature) and a Lightning Bolt; the Quinjet is the only card that may be taken
+# (the Bolt and Black Lotus are refused) and comes to the hand. A second Cruiser, cast from the hand with a Mox Jet and Mox
+# Ruby and Mox Pearl, mills two Islands: the graveyard then holds the Bolt, Black Lotus and Islands and no creature or
+# Vehicle card, so nothing is asked and nothing returns.
+
+[Bot1 Deck]
+Black Lotus
+Carrion Cruiser
+Carrion Cruiser
+Mox Jet
+Mox Ruby
+Mox Pearl
+Island
+Lightning Bolt
+Dependable Quinjet
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Carrion Cruiser.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Lightning Bolt)
+! Bot1.Choose(Black Lotus)
+Bot1.Choose(Dependable Quinjet)
+? Bot1.Hand = Carrion Cruiser; Island; Dependable Quinjet
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Carrion Cruiser.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Island; Dependable Quinjet
+Bot1.Graveyard = Island; Island; Lightning Bolt; Black Lotus
+Bot1.Battlefield = Carrion Cruiser; Carrion Cruiser; Mox Jet; Mox Pearl; Mox Ruby
