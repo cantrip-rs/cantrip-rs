@@ -1,0 +1,8 @@
+{
+  "name": "Gearseeker Serpent",
+  "manaCost": "{5}{U}{U}",
+  "type": "Creature — Serpent",
+  "power": 5,
+  "toughness": 6,
+  "oracleText": "Affinity for artifacts (This spell costs {1} less to cast for each artifact you control.)\n{5}{U}: This creature can't be blocked this turn."
+}

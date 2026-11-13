@@ -1,0 +1,60 @@
+# Gearseeker Serpent: affinity for artifacts (CR 702.41a) takes {1} off for each of Bot1's five Moxen, so {5}{U}{U} is just {U}{U}
+# (Mox Sapphire and an Island). Next turn {5}{U} (CR 509.1b), paid with exactly the five Moxen and the one Island, makes it
+# unblockable for the turn: Bot2's Ornithopter may not block it, and the 5/6 deals 5 to Bot2.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Gearseeker Serpent
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Gearseeker Serpent.Cast
+Bot1.Pass
+? Bot1.Battlefield.Mox Jet.Tapped = false
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Gearseeker Serpent.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = 
+Bot1.Attack(Gearseeker Serpent > Bot2)
+! Bot2.Block(Ornithopter > Gearseeker Serpent)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot2.Life = 15
+Bot2.Battlefield = Ornithopter
