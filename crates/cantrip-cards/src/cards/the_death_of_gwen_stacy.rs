@@ -22,14 +22,8 @@ fn each_player_discards_or_loses_three(g: &mut dyn Game, item: &StackItem) -> Re
     g.end_sentence();
     // The cards discarded are new objects (CR 400.7): each is its owner's, who is therefore a player who did discard.
     let discarders: Vec<PlayerId> = discarded.iter().map(|&card| g.obj(card).owner).collect();
-    instruction(g, |g| {
-        for (player, _) in &chosen {
-            if !discarders.contains(player) {
-                let player = *player;
-                g.lose_life(player, 3);
-            }
-        }
-    });
+    let losses: Vec<(PlayerId, i32)> = chosen.iter().filter(|(player, _)| !discarders.contains(player)).map(|&(player, _)| (player, 3)).collect();
+    g.lose_life_together(&losses);
     Ok(())
 }
 
