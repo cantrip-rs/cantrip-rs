@@ -1,0 +1,48 @@
+# Each upkeep adds an age counter before paying one black and one life per counter; declining sacrifices it.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Infernal Darkness
+Forest
+Island
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Infernal Darkness.Cast
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Forest.Activate
+Bot1.PayCost
+? Bot1.Mana = {W}
+? Bot1.Life = 19
+? Bot1.Battlefield.Infernal Darkness.Counters.Age = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Island.Activate
+Bot1.PayCost
+? Bot1.Mana =
+? Bot1.Life = 17
+? Bot1.Battlefield.Infernal Darkness.Counters.Age = 2
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Graveyard = Infernal Darkness; Black Lotus
+Bot1.Life = 17

@@ -1,0 +1,44 @@
+# Lands of either player produce black instead of their usual types, preserving the amount; nonland mana is unchanged.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Infernal Darkness
+Forest
+Island x20
+[Bot2 Deck]
+City of Traitors
+Mox Pearl
+Swamp
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Infernal Darkness.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+? Bot1.Mana = {B}
+[T2 Bot2.Main1]
+Bot2.Hand.City of Traitors.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.City of Traitors.Activate
+? Bot2.Mana = {B}{B}
+Bot2.Battlefield.Mox Pearl.Activate
+? Bot2.Mana = {W}{B}{B}
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.PayCost
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Swamp.Activate
+? Bot2.Mana = {B}
+[Expect]
+Bot2.Battlefield.Swamp.Tapped = true
