@@ -1699,6 +1699,15 @@ pub fn untap_all_creatures_you_control(g: &mut dyn Game, item: &StackItem) -> Re
     Ok(())
 }
 
+/// "Untap all nonland permanents you control" (CR 701.26b): everything the ability's controller controls as it resolves that is
+/// not a land, with no choice, untapped together (CR 101.4). Paradox Engine and Unstoppable Plan print it.
+pub fn untap_all_nonland_permanents_you_control(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let nonland: Vec<ObjectId> =
+        g.permanents_of(item.controller).into_iter().filter(|&id| !g.chars(id).is(CardType::Land)).collect();
+    g.untap_together(&nonland);
+    Ok(())
+}
+
 /// "Put a +1/+1 counter on each of up to N target creatures" (CR 122.1, 601.2c, 608.2b): on every target of the ability that is still
 /// legal as it resolves, put on together (CR 101.4), so a "one or more" ability triggers once. Agent Bishop, Man in Black and White
 /// Widow, Free Agent print it.
