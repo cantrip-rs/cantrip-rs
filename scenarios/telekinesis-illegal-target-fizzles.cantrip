@@ -1,0 +1,42 @@
+# A creature removed in response makes Telekinesis fail to resolve; a second copy resolves on a legal target (CR 608.2b).
+[Bot1 Deck]
+Telekinesis
+Telekinesis
+Mox Sapphire
+Gleemox
+Ornithopter
+Memnite
+Island x20
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Hand.Telekinesis.Cast(Ornithopter)
+? Bot1.Mana =
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Ornithopter)
+[T5 Bot1.Main1]
+? Bot1.Graveyard = Telekinesis; Ornithopter
+? Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Hand.Telekinesis.Cast(Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Tapped = true
+[Expect]
+Bot1.Battlefield.Memnite.Tapped = true
