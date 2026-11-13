@@ -1,0 +1,57 @@
+# Fang-Druid Summoner: Bot1 wheels Grizzly Bears, Llanowar Elves and Ornithopter into its graveyard on turn 1, then casts the Summoner on
+# turn 3 and Accepts both the "may" and the library: the graveyard and the library are searched together. The Hill Giant in the library and
+# the Grizzly Bears in the graveyard both qualify (no abilities); Llanowar Elves and Ornithopter do not. Bot1 takes the Grizzly Bears from
+# the graveyard. The library was searched (even though the card came from the graveyard), so it is shuffled (CR 701.24a), and the Hill
+# Giant stays in it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Wheel of Fortune
+Grizzly Bears
+Llanowar Elves
+Ornithopter
+Mox Jet
+Mox Sapphire
+Fang-Druid Summoner
+Plains x3
+Island
+Swamp
+Hill Giant
+Island x2
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Fang-Druid Summoner.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Accept
+Bot1.Accept
+! Bot1.Search(Llanowar Elves)
+! Bot1.Search(Ornithopter)
+! Bot1.Search(Wheel of Fortune)
+! Bot1.Search(Grizzly Bears; Hill Giant)
+Bot1.Search(Grizzly Bears)
+
+[Expect]
+Turn = 3
+Bot1.Hand = Grizzly Bears; Island; Plains; Plains; Plains; Swamp
+Bot1.Graveyard = Wheel of Fortune; Ornithopter; Llanowar Elves
+Bot1.Library = Island; Hill Giant; Island
+Bot1.Battlefield.Fang-Druid Summoner.Keywords = Reach

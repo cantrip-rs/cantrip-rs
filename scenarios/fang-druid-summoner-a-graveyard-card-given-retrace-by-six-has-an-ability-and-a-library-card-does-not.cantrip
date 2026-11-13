@@ -1,0 +1,58 @@
+# Fang-Druid Summoner looks for "a creature card with no abilities", judged where the card is (CR 113.1, 113.3): an ability it is given
+# there counts. Bot1 wheels Grizzly Bears into its graveyard on turn 1, then on turn 3 casts Six ("During your turn, nonland permanent cards
+# in your graveyard have retrace") and the Summoner, and searches both zones. The Grizzly Bears in the graveyard has retrace, a keyword
+# ability, and is refused; the Hill Giant in the library is no card in Bot1's graveyard, has nothing, and is taken.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Wheel of Fortune
+Grizzly Bears
+Plains
+Plains
+Mox Jet
+Mox Sapphire
+Black Lotus
+Six
+Fang-Druid Summoner
+Island
+Island
+Swamp
+Hill Giant
+Island x5
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Six.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Fang-Druid Summoner.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Accept
+Bot1.Accept
+! Bot1.Search(Grizzly Bears)
+Bot1.Search(Hill Giant)
+
+[Expect]
+Turn = 3
+Bot1.Hand = Hill Giant; Island; Island; Swamp
+Bot1.Graveyard = Black Lotus; Wheel of Fortune; Plains; Plains; Grizzly Bears

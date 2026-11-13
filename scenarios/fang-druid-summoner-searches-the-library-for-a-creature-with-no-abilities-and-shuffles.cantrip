@@ -1,0 +1,49 @@
+# Fang-Druid Summoner, {3}{G} 2/4 Reach: "When this creature enters, you may search your library and/or graveyard for a creature card with no abilities,
+# reveal it, and put it into your hand. If you search your library this way, shuffle." Bot1 accepts the "may" and the library search. A creature card
+# with no abilities is one whose printed text is empty (CR 113.1): Grizzly Bears is taken; Llanowar Elves (an activated ability), Ornithopter (a keyword) and
+# Lord of Atlantis (static abilities and no keyword of its own) are refused, as is Black Lotus (not a creature, CR 205.2a); Bot2's Memnite is
+# no part of the search. The library was searched, so it is shuffled (its order is no longer the deck's).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Fang-Druid Summoner
+Plains x2
+Lord of Atlantis
+Llanowar Elves
+Ornithopter
+Black Lotus
+Grizzly Bears
+Island
+Swamp
+
+[Bot2 Deck]
+Memnite
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Fang-Druid Summoner.Cast
+Bot1.Accept
+Bot1.Accept
+! Bot1.Search(Lord of Atlantis)
+! Bot1.Search(Llanowar Elves)
+! Bot1.Search(Ornithopter)
+! Bot1.Search(Black Lotus)
+Bot1.Search(Grizzly Bears)
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Hand = Plains; Plains; Grizzly Bears
+Bot1.Battlefield.Fang-Druid Summoner.Keywords = Reach
+Bot1.Library = Swamp; Lord of Atlantis; Ornithopter; Island; Black Lotus; Llanowar Elves

@@ -1,0 +1,11 @@
+{
+  "name": "Fang-Druid Summoner",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Ape Druid",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Reach\nWhen this creature enters, you may search your library and/or graveyard for a creature card with no abilities, reveal it, and put it into your hand. If you search your library this way, shuffle.",
+  "keywords": [
+    "Reach"
+  ]
+}

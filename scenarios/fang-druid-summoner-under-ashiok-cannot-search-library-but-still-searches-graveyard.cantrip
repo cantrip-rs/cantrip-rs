@@ -1,0 +1,68 @@
+# Fang-Druid Summoner under an opponent's Ashiok, Dream Render ("Spells and abilities your opponents control can't cause their
+# controller to search their library"): the library can't be searched (CR 101.2), but "search your library and/or graveyard" is
+# still a "may" that searches the graveyard (CR 701.23). Bot1 wheels Grizzly Bears into Bot2's graveyard and casts Ashiok; Bot2's
+# Summoner is offered the search, accepted, and takes the Bears from the graveyard to hand.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Wheel of Fortune
+Island x3
+Mox Jet
+Mox Sapphire
+Black Lotus
+Ashiok, Dream Render
+Island x15
+
+[Bot2 Deck]
+Grizzly Bears
+Island x6
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Fang-Druid Summoner
+Island
+Island
+Hill Giant
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Ashiok, Dream Render.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Grizzly Bears.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Fang-Druid Summoner.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Accept
+Bot2.Choose(Grizzly Bears)
+
+[Expect]
+Turn = 2
+Bot2.Hand.Grizzly Bears.Power = 2

@@ -1,0 +1,36 @@
+# Fang-Druid Summoner, {3}{G} 2/4 Reach: the search is optional ("you may search", CR 608.2d). Bot1 casts it off four Moxen and
+# Declines: nothing is searched, no card enters the hand, and since the library was not searched it is not shuffled (it keeps the deck's
+# order, Grizzly Bears still on top of the library).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Fang-Druid Summoner
+Plains x2
+Grizzly Bears
+Island
+Swamp
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Fang-Druid Summoner.Cast
+Bot1.Decline
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Hand = Plains; Plains
+Bot1.Library = Grizzly Bears; Island; Swamp
+Bot1.Battlefield.Fang-Druid Summoner.Keywords = Reach
