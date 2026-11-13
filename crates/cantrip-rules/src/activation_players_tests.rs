@@ -166,7 +166,7 @@ fn explicit_self_costs_use_the_permitted_source_and_exert_uses_the_payers_next_u
             let moved=g.state.obj(source).became.expect("returned source");
             assert_eq!(g.state.obj(moved).zone,Zone::hand(YOU));
         } else if std::ptr::eq(def,&EXERT) {
-            assert_eq!(g.state.obj(source).marks.exerted_by,Some(THEM));
+            assert_eq!(g.state.obj(source).marks.exerted_by,1u8 << THEM.0);
         } else { assert!(g.state.obj(source).attached_to.is_none()); }
     }
 }

@@ -13033,7 +13033,7 @@ pub(crate) fn producible_types_in(game: &crate::Game, permanent: ObjectId) -> (C
 
 /// A rules query over a read-only state, as target and cost checks outside a frame read it.
 pub(crate) fn producible_types_on(cards: &'static CardTable, state: &GameState, events: &[Record], permanent: ObjectId) -> (ColorSet, bool) {
-    let mut copy = crate::Game { state: state.clone(), log: events.to_vec(), tree: crate::tree::Tree::new(), at: crate::tree::NodeId::ROOT, cards, verify: false, max_events: crate::MAX_GAME_EVENTS, history_end: None, check: crate::StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() };
+    let mut copy = crate::Game { state: state.clone(), log: events.to_vec(), tree: crate::tree::Tree::new(), at: crate::tree::NodeId::ROOT, cards, verify: false, max_events: crate::MAX_GAME_EVENTS, history_end: None, world_interest: Default::default(), check: crate::StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() };
     let cx = Cx { g: &mut copy, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     producible_types(&cx, permanent)
 }

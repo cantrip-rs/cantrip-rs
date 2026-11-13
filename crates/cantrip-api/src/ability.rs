@@ -620,7 +620,7 @@ impl AbilityDef {
         match self {
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { produces_mana: true, ..d }),
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { produces_mana: true, ..t }),
-            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("only an activated or triggered ability produces mana"),
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => panic!("only an activated or triggered ability produces mana"),
         }
     }
 

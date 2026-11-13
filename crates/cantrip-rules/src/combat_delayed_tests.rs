@@ -124,10 +124,8 @@ fn repeats_through_end_combat_priority_then_expires_without_cancelling_pending_t
 fn an_additional_combat_does_not_inherit_the_previous_combats_watchers() {
     let (mut g, s, b) = board();
     watch(&mut g, s, 0, DelayedWhen::ThisCombat);
-    g.state.update_turn(|t| {
-        t.set_step(Step::EndOfCombat);
-        t.extra_combats = 1;
-    });
+    g.state.update_turn(|t| t.set_step(Step::EndOfCombat));
+    cx(&mut g).add_combat_phase();
     crate::turn::next_step(&mut g);
     assert_eq!(g.state.turn.step(), Step::BeginCombat);
     assert!(g.state.delayed.is_empty());

@@ -76,3 +76,29 @@ fn unsupported_combat_step_skips_are_rejected_instead_of_breaking_damage_round_p
     static BAD:CardDef=CardDef {name:"Unsupported skip fixture",skip_steps:&[SkipStep {applies:all,step:Step::CombatDamage}],..UNTAP};
     CardTable::new([&BAD]);
 }
+
+#[test]
+fn an_additional_draw_step_in_the_first_turn_is_not_the_skipped_ordinary_draw(){
+    let mut g=setup();
+    g.state.update_turn(|t|{t.number=1;t.starting=YOU;t.phase_additional=true;});
+    let hand=g.state.zone(Zone::hand(YOU)).len();
+    begin(&mut g,YOU,Step::Draw);
+    assert_eq!(g.state.zone(Zone::hand(YOU)).len(),hand+1);
+    assert!(began(&g,Step::Draw));
+}
+
+#[test]
+fn an_additional_untap_respects_skips_without_beginning_another_turn(){
+    let mut g=setup();let source=put(&mut g,&UNTAP,YOU);let creature=put(&mut g,&PHASING,YOU);
+    g.state.update_obj(creature,|o|o.tapped=true);
+    g.state.update_turn(|t|t.phase_additional=true);
+    g.state.update_player(YOU,|p|p.lands_played=1);
+    cx(&mut g).add_effect(source,creature,EffectKind::AddKeywords(Keywords::of(&[Keyword::Flying])),Duration::UntilNextStepOf{step:Step::Untap,player:Some(YOU)});
+    let turn_began=g.state.player(YOU).turn_began;
+    begin(&mut g,YOU,Step::Untap);
+    assert_eq!(g.state.player(YOU).turn_began,turn_began);
+    assert_eq!(g.state.player(YOU).lands_played,1);
+    assert!(g.state.obj(creature).tapped);
+    assert!(g.state.obj(creature).marks.phased.is_none());
+    assert!(g.chars(creature).has(Keyword::Flying));
+}
