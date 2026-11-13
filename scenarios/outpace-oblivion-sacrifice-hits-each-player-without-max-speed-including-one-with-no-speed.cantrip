@@ -1,0 +1,45 @@
+# Outpace Oblivion (Start your engines!; "When this enchantment enters, it deals 5 damage to up to one target creature or planeswalker";
+# "{2}, Sacrifice this enchantment: It deals 2 damage to each player who doesn't have max speed"). Turn 1: Bot1 casts it (speed 1); its trigger has no creature or planeswalker to target, so it does nothing; one mana is left, too little for {2}. Turn 3: Bot1 pays
+# exactly {2} and sacrifices it: Bot1 (speed 1) and Bot2 (no speed at all) both lack max speed, so both take 2 (18 each). Bot2 losing
+# life on Bot1's turn then raises Bot1's speed to 2.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Outpace Oblivion
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Outpace Oblivion.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+? Bot2.Speed = (absent)
+! Bot1.Battlefield.Outpace Oblivion.Activate(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Outpace Oblivion.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
+Bot1.Speed = 2
+Bot1.Graveyard = Outpace Oblivion

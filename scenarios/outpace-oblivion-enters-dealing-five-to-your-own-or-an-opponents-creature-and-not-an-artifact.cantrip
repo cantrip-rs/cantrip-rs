@@ -1,0 +1,67 @@
+# Outpace Oblivion ("When this enchantment enters, it deals 5 damage to up to one target creature or planeswalker"). Turn 1: Bot1 casts a
+# Memnite, then an Outpace Oblivion whose trigger takes its own Memnite (a target of either player's is legal): it dies. Turn 3: Bot2's Wall of
+# Stone (0/8) is hit by the second Outpace Oblivion for exactly 5 and survives with 5 damage; Bot2's Mox Jet (an artifact, not a creature)
+# is refused as a target.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Memnite
+Outpace Oblivion
+Outpace Oblivion
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Wall of Stone
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Outpace Oblivion.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Memnite
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wall of Stone.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Outpace Oblivion.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Mox Jet)
+Bot1.Target(Bot2.Battlefield.Wall of Stone)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Wall of Stone.Damage = 5
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Wall of Stone.Damage = 5
+Bot1.Graveyard = Memnite

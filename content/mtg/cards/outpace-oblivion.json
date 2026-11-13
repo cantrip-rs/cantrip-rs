@@ -1,0 +1,6 @@
+{
+  "name": "Outpace Oblivion",
+  "manaCost": "{2}{R}",
+  "type": "Enchantment",
+  "oracleText": "Start your engines! (If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.)\nWhen this enchantment enters, it deals 5 damage to up to one target creature or planeswalker.\n{2}, Sacrifice this enchantment: It deals 2 damage to each player who doesn't have max speed."
+}

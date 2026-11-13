@@ -1,0 +1,58 @@
+# Outpace Oblivion: "It deals 2 damage to each player who doesn't have max speed". Bot1 casts it on turn 1 (speed 1) and a Memnite
+# attacks on turns 3, 5 and 7, each hit raising the speed once (2, 3, then 4 = max speed) and taking Bot2 to 17. In the second main phase
+# of turn 7 Bot1 pays {2} and sacrifices it: Bot1 has max speed and takes nothing (20), Bot2 takes 2 (15).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Outpace Oblivion
+Memnite
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Outpace Oblivion.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Speed = 2
+[T5 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+[T5 Bot1.Main2]
+? Bot1.Speed = 3
+[T7 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+[T7 Bot1.Main2]
+? Bot1.Speed = 4
+? Bot2.Life = 17
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Outpace Oblivion.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 15
+Bot1.Speed = 4
+Bot1.Graveyard = Outpace Oblivion
