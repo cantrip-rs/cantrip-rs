@@ -1,0 +1,65 @@
+# Engine Rat: "{5}{B}: Each opponent loses 2 life." (CR 602.2, 119.3). Three players: Bot2 and Bot3 each lose 2, Bot1 loses
+# nothing. Bot1 casts the Rat with Mox Jet, then has Black Lotus (3) and Pearl and Ruby (1 each) = 5 mana: the ability is
+# not offered (it costs six). With Mox Sapphire as the sixth source it is, and paying it with Lotus for {B} and
+# the three Moxen for {5} leaves the pool empty. The cost has no {T}, so the Rat need not wait out summoning sickness.
+
+[Bot1 Deck]
+Engine Rat
+Mox Jet
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Engine Rat.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Bot1.Battlefield.Engine Rat.Keywords = Deathtouch
+! Bot1.Battlefield.Engine Rat.Activate(Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Engine Rat.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18
+Bot3.Life = 18
+Bot1.Mana =

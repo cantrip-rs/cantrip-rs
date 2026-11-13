@@ -1,0 +1,11 @@
+{
+  "name": "Engine Rat",
+  "manaCost": "{B}",
+  "type": "Creature — Zombie Rat",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Deathtouch\n{5}{B}: Each opponent loses 2 life.",
+  "keywords": [
+    "Deathtouch"
+  ]
+}
