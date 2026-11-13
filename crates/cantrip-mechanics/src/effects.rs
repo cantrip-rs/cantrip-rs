@@ -1475,16 +1475,13 @@ pub fn target_player_mills<const N: u32>(g: &mut dyn Game, item: &StackItem) -> 
 }
 
 /// "You draw two cards and each player loses 2 life." (CR 121.1, 119.3, 101.4): the controller draws, then every player in
-/// the game loses the life, in turn order from the active player, as one instruction. Impossible Choice's second mode and
+/// the game loses the life together, as one event, replaced in turn order from the active player. Impossible Choice's second mode and
 /// The City on the Edge of Forever's chapter II print it.
 pub fn draw_two_each_player_loses_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.draw(item.controller, 2);
-    let players: Vec<PlayerId> = g.state().apnap().collect();
-    instruction(g, |g| {
-        for player in players {
-            g.lose_life(player, 2);
-        }
-    });
+    // Every player loses it together: one event, replaced in APNAP order (CR 101.4, 603.2c).
+    let losses: Vec<(PlayerId, i32)> = g.state().apnap().map(|player| (player, 2)).collect();
+    g.lose_life_together(&losses);
     Ok(())
 }
 
