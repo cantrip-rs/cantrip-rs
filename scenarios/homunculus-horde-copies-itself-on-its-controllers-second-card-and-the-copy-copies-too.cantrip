@@ -1,0 +1,60 @@
+# Homunculus Horde {3}{U}, 2/2: "Whenever you draw your second card each turn, create a token that's a copy of this creature" (CR 121.2, 603.2, 707.2).
+# Cast on turn 1 off Black Lotus and a Mox. Bot2's own second card on turn 2 makes nothing for Bot1. On turn 3 the draw step's card is Bot1's first
+# and the first of Ancestral Recall's the second: one token, and Ancestral's third card makes no more. On turn 5, with the token on the
+# battlefield, the second card (Ancestral Recall again) triggers both Hordes: the token has the ability too, and two more tokens enter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Homunculus Horde
+Ancestral Recall
+Ancestral Recall
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Sapphire
+Ancestral Recall
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Homunculus Horde.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Ancestral Recall.Cast(Bot2)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield = Homunculus Horde; Mox Sapphire
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield = Homunculus Horde; Homunculus Horde; Island; Mox Sapphire
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Homunculus Horde; Homunculus Horde; Homunculus Horde; Homunculus Horde; Island; Island; Mox Sapphire
+Bot1.Battlefield.Count = 7

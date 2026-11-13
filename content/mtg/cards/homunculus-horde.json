@@ -1,0 +1,8 @@
+{
+  "name": "Homunculus Horde",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Homunculus",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever you draw your second card each turn, create a token that's a copy of this creature."
+}
