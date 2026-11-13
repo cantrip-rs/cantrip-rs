@@ -1,0 +1,6 @@
+{
+  "name": "Guidelight Matrix",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "When this artifact enters, draw a card.\n{2}, {T}: Target Mount you control becomes saddled until end of turn. Activate only as a sorcery.\n{2}, {T}: Target Vehicle you control becomes an artifact creature until end of turn."
+}

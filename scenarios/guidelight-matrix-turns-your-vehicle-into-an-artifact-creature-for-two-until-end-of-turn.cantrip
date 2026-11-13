@@ -1,0 +1,72 @@
+# Guidelight Matrix: "{2}, {T}: Target Vehicle you control becomes an artifact creature until end of turn." Turn 1 Bot1
+# casts Matrix (Sol Ring's {C}{C}; the enters trigger draws Memnite) and Smuggler's Copter, and has nothing left: the
+# ability is refused for want of mana. On turn 3, with Sol Ring's two mana (the pool empty right after) and Bot1's second
+# Memnite still on the stack (no sorcery-speed limit on this ability), the Copter becomes an artifact creature
+# (still a Vehicle, so Types lists Artifact; Creature) with no crew, and attacks Bot2 for 3. The ability is refused
+# for Bot1's Memnite (a creature, not a Vehicle) and Bot2's own Smuggler's Copter (not "you control"). The Copter
+# is not a creature again on turn 5.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Sol Ring
+Guidelight Matrix
+Smuggler's Copter
+Memnite
+Memnite
+Mountain
+Mountain x12
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Smuggler's Copter
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Guidelight Matrix.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Guidelight Matrix.Activate(Ability: Vehicle; Smuggler's Copter; Mana: short)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Smuggler's Copter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+! Bot1.Battlefield.Guidelight Matrix.Activate(Ability: Vehicle; Memnite)
+! Bot1.Battlefield.Guidelight Matrix.Activate(Ability: Vehicle; Bot2.Battlefield.Smuggler's Copter)
+? Bot1.Battlefield.Smuggler's Copter.Types = Artifact
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Guidelight Matrix.Activate(Ability: Vehicle; Smuggler's Copter)
+? Bot1.Mana =
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter.Types = Artifact; Creature
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Smuggler's Copter > Bot2)
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Smuggler's Copter.Types = Artifact
+
+[Expect]
+Bot2.Life = 17

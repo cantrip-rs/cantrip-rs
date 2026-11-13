@@ -1,0 +1,81 @@
+# Guidelight Matrix: "{2}, {T}: Target Mount you control becomes saddled until end of turn. Activate only as a sorcery."
+# Turn 1 Bot1 casts Matrix with Sol Ring's {C}{C} (the enters trigger draws Memnite) and a Smuggler's Copter, a Vehicle
+# that is not a Mount. Bot2's turn 2 puts a Caustic Bronco, a Mount, on its side. On turn 3 Bot1's own Caustic Bronco is
+# saddled for {2} (CR 702.171b): the opponent's Bronco, Bot1's Copter and Bot1's Memnite are refused as targets. With
+# Bot1's own Memnite still on the stack the ability is refused (sorcery speed, CR 602.5d), though the Matrix is untapped
+# and Sol Ring unspent. The saddling ends with the turn: on turn 5 the Bronco is no longer saddled.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Sol Ring
+Guidelight Matrix
+Caustic Bronco
+Smuggler's Copter
+Memnite
+Mountain
+Mountain x12
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Caustic Bronco
+Smuggler's Copter
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Guidelight Matrix.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Caustic Bronco.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Caustic Bronco.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Caustic Bronco.Saddled = (absent)
+Bot1.Hand.Memnite.Cast
+! Bot1.Battlefield.Guidelight Matrix.Activate(Ability: Mount; Caustic Bronco)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+! Bot1.Battlefield.Guidelight Matrix.Activate(Ability: Mount; Bot2.Battlefield.Caustic Bronco)
+! Bot1.Battlefield.Guidelight Matrix.Activate(Ability: Mount; Smuggler's Copter)
+! Bot1.Battlefield.Guidelight Matrix.Activate(Ability: Mount; Memnite)
+Bot1.Battlefield.Guidelight Matrix.Activate(Ability: Mount; Caustic Bronco)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Caustic Bronco.Saddled = true
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Caustic Bronco.Saddled = (absent)
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire; Sol Ring; Guidelight Matrix; Smuggler's Copter; Caustic Bronco; Memnite
+Bot2.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Emerald; Caustic Bronco
