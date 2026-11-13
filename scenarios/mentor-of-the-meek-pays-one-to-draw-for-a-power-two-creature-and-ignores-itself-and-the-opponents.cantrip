@@ -1,0 +1,58 @@
+# Mentor of the Meek: "Whenever another creature you control with power 2 or less enters, you may pay {1}. If you do, draw a card."
+# Bot1 casts the Mentor on turn 1 with Mox Pearl, Mox Jet and Mox Ruby (exactly {2}{W}), Mox Emerald untapped: the Mentor's own
+# entering asks nothing ("another"). Bot2's Memnite on turn 2 asks Bot1 nothing ("you control"). On turn 3 Bot1's Grizzly Bears,
+# a creature with power exactly 2, triggers it: Bot1 pays exactly {1} (Mox Jet) and draws one card, the top of the library (a
+# Forest, after the Island drawn for the turn), and the pool is empty.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mentor of the Meek
+Grizzly Bears
+Plains
+Island
+Forest
+Plains x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mentor of the Meek.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Hand = Forest; Island; Plains
+Bot1.Battlefield = Mox Pearl; Mox Jet; Mox Ruby; Mox Emerald; Mentor of the Meek; Grizzly Bears

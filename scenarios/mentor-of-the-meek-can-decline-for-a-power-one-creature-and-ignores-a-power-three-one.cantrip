@@ -1,0 +1,52 @@
+# Mentor of the Meek: "Whenever another creature you control with power 2 or less enters, you may pay {1}. If you do, draw a card."
+# Bot1 casts the Mentor on turn 1 (Mox Pearl, Mox Jet, Mox Ruby) with Mox Emerald untapped, then a Memnite (power 1): the trigger
+# asks, Bot1 declines, and no card is drawn. On turn 3 Bot1 casts Hill Giant (power 3, Mox Ruby and Black Lotus) with Mox Pearl,
+# Mox Jet and Mox Emerald still untapped: nothing is asked, the trigger never goes on the stack, and the Hill Giant stays.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mentor of the Meek
+Memnite
+Black Lotus
+Hill Giant
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mentor of the Meek.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Hand = Black Lotus
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hill Giant.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Hand.Count = 0
+Bot1.Battlefield = Mox Pearl; Mox Jet; Mox Ruby; Mox Emerald; Mentor of the Meek; Memnite; Hill Giant
+Bot1.Battlefield.Mox Pearl.Tapped = false

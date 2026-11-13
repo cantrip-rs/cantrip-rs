@@ -1,0 +1,8 @@
+{
+  "name": "Mentor of the Meek",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever another creature you control with power 2 or less enters, you may pay {1}. If you do, draw a card."
+}
