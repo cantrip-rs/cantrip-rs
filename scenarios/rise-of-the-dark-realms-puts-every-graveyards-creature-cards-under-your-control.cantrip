@@ -1,0 +1,68 @@
+# Rise of the Dark Realms (CR 404.1, 110.2a, 101.4): "Put all creature cards from all graveyards onto the battlefield under your
+# control." Bot2's Lightning Bolt kills Bot1's Memnite and its Entomb buries an Ornithopter in its own graveyard; on turn 5
+# Bot1 pays {7}{B}{B} (Black Lotus, four Moxen, Swamp and Island) and gets both, while the Bolt and Entomb (noncreature cards)
+# stay in Bot2's graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Memnite
+Rise of the Dark Realms
+Swamp
+Island
+Island x15
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Entomb
+Lightning Bolt
+Island x4
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Memnite
+? Bot2.Graveyard = Entomb; Ornithopter; Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Rise of the Dark Realms.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Island; Memnite; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter; Swamp
+Bot1.Graveyard = Rise of the Dark Realms; Black Lotus
+Bot2.Graveyard = Entomb; Lightning Bolt
