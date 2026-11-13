@@ -1,0 +1,70 @@
+# Curator of Destinies: "This spell can't be countered." Bot2's Counterspell may still target it and resolves, but Curator
+# is not countered (the ruling). Its entry ability then looks at the top FIVE cards (Lightning Bolt, Plains, Counterspell,
+# Forest, Mountain), Bot1 makes the Bolt and the Plains the face-down pile, and Bot2, the opponent chosen as it resolves,
+# takes the face-up pile for Bot1: the Counterspell, the Forest and the Mountain go to Bot1's hand (revealed to every
+# player), the face-down Bolt and Plains to its graveyard. Bot1 held its Moxen and Black Lotus for {4}{U}{U}.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Curator of Destinies
+Island
+Island
+Island
+Lightning Bolt
+Plains
+Counterspell
+Forest
+Mountain
+Island x10
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Counterspell
+Island x4
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Curator of Destinies.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Counterspell.Cast(Curator of Destinies)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt; Plains)
+Bot1.ChoosePlayer(Bot2)
+Bot2.Modes(Face-up pile)
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Curator of Destinies; Mox Jet; Mox Pearl; Mox Sapphire
+Bot1.Battlefield.Curator of Destinies.Keywords = CantBeCountered; Flying
+Bot2.Graveyard = Counterspell
+Bot1.Hand = Counterspell; Forest; Island; Island; Island; Mountain
+Bot1.Graveyard = Plains; Lightning Bolt; Black Lotus
+Bot1.Library.Count = 10
+Bot1.Revealed = Counterspell; Forest; Mountain

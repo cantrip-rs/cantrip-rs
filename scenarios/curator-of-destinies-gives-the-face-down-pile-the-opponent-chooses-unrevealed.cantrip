@@ -1,0 +1,52 @@
+# Curator of Destinies: the opponent sees what is in the face-up pile and only how many cards the face-down one holds
+# (CR 700.3). Bot1 looks at the top five (Lightning Bolt, Plains, Counterspell, Forest, Mountain) and makes the Bolt and the
+# Plains the face-down pile. Bot2 takes the face-down pile for Bot1: the Bolt and the Plains go to Bot1's hand, never
+# revealed, and the face-up Counterspell, Forest and Mountain, revealed to every player, to its graveyard.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Curator of Destinies
+Black Lotus
+Island
+Island
+Lightning Bolt
+Plains
+Counterspell
+Forest
+Mountain
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Curator of Destinies.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt; Plains)
+Bot1.ChoosePlayer(Bot2)
+Bot2.Modes(Face-down pile)
+
+[Expect]
+Turn = 1
+Bot1.Hand = Island; Island; Lightning Bolt; Plains
+Bot1.Graveyard = Mountain; Forest; Counterspell; Black Lotus
+Bot1.Library.Count = 10
+Bot1.Revealed = Counterspell; Forest; Mountain

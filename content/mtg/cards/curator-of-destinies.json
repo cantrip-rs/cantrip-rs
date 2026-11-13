@@ -1,0 +1,12 @@
+{
+  "name": "Curator of Destinies",
+  "manaCost": "{4}{U}{U}",
+  "type": "Creature — Sphinx",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "This spell can't be countered.\nFlying\nWhen this creature enters, look at the top five cards of your library and separate them into a face-down pile and a face-up pile. An opponent chooses one of those piles. Put that pile into your hand and the other into your graveyard.",
+  "keywords": [
+    "Flying",
+    "CantBeCountered"
+  ]
+}

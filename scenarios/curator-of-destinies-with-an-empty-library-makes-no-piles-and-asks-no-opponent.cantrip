@@ -1,0 +1,44 @@
+# Curator of Destinies with nothing left in the library: Bot1's deck is the seven cards of its opening hand, so as the
+# entry ability resolves on turn 1 there are no cards to look at (CR 609.3). Bot1 separates nothing, no opponent is
+# chosen and no pile is taken: the ability does nothing, and Bot1 still holds its two Islands. Bot1 held its Moxen and
+# Black Lotus for {4}{U}{U}.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Curator of Destinies
+Island
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Curator of Destinies.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Battlefield = Curator of Destinies; Mox Jet; Mox Pearl; Mox Sapphire
+Bot1.Hand = Island; Island
+Bot1.Graveyard = Black Lotus
+Bot1.Library.Count = 0
+Bot1.Revealed = (absent)
