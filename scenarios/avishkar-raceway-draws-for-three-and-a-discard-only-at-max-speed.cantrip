@@ -1,0 +1,70 @@
+# Avishkar Raceway: "Start your engines!", "{T}: Add {C}" and "Max speed — {3}, {T}, Discard a card: Draw a card"
+# (CR 702.178a: as long as your speed is 4, the land has that ability). Bot1 plays it on turn 1 for speed 1 (CR 702.179a)
+# with two Moxen, and Lightning Bolts on turns 1, 3 and 5 raise it once each (CR 702.179d): 2, 3, then 4. At speed 3 the
+# ability is not offered. At speed 4 on turn 5 it costs {3} (a Mountain, a Mountain and Mox Jet), the Raceway's own tap
+# and the discard of the last card in hand, a Mountain: the next card down, a Forest, is drawn.
+
+[Bot1 Deck]
+Avishkar Raceway
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Mountain
+Mountain
+Mountain
+Forest
+Mountain x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Avishkar Raceway.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+! Bot1.Battlefield.Avishkar Raceway.Activate(Ability: Discard)
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+? Bot1.Hand = Mountain
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Avishkar Raceway.Activate(Ability: Discard)
+Bot1.Choose(Mountain)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 5
+Stack.Count = 0
+Bot1.Speed = 4
+Bot1.Hand = Forest
+Bot1.Graveyard = Mountain; Lightning Bolt; Lightning Bolt; Lightning Bolt
+Bot1.Battlefield.Avishkar Raceway.Tapped = true

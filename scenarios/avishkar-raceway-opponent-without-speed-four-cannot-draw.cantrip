@@ -1,0 +1,70 @@
+# Avishkar Raceway on the other side: Max speed is about its controller's own speed (CR 702.178a, 702.179), which is
+# tracked per player. Bot2 plays its own Avishkar Raceway on turn 2 with two Moxen and an Island on turn 4, and has
+# speed 1 (CR 702.179a) while Bot1, with a Raceway of its own and three Lightning Bolts, reaches speed 4 on turn 5.
+# Bot2 could pay {3}, tap the land and discard an Island, but its land does not have Bot1's max-speed ability.
+
+[Bot1 Deck]
+Avishkar Raceway
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Mountain x15
+
+[Bot2 Deck]
+Avishkar Raceway
+Mox Ruby
+Mox Jet
+Island x17
+
+[Actions]
+Bot1.Hand.Avishkar Raceway.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Avishkar Raceway.Play
+? Bot2.Speed = 1
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+? Bot2.Speed = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Island.Activate
+! Bot2.Battlefield.Avishkar Raceway.Activate(Ability: Discard)
+
+[Expect]
+Turn = 5
+Bot1.Speed = 4
+Bot2.Speed = 1
+Bot2.Battlefield.Avishkar Raceway.Tapped = false
+Bot2.Battlefield.Mox Ruby.Tapped = true
