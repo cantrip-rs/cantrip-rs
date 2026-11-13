@@ -1,0 +1,46 @@
+# High-Society Hunter: "Whenever another nontoken creature dies, draw a card." The Hunter, a Memnite and an Ornithopter die together to
+# Bot2's Wrath of God on turn 2: the Hunter sees the other two die as it leaves (CR 603.10a) and Bot1 draws two cards, not three
+# - the Hunter is not "another" creature to itself (CR 700.4, ruling 2024-11-08).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Memnite
+Ornithopter
+High-Society Hunter
+Island
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Wrath of God
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.High-Society Hunter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Wrath of God.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby
+Bot1.Graveyard = High-Society Hunter; Ornithopter; Memnite; Black Lotus
+Bot1.Hand = Island; Island; Island

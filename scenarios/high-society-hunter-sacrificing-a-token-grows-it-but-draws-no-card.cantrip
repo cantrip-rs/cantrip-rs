@@ -1,0 +1,45 @@
+# High-Society Hunter: "Whenever another nontoken creature dies, draw a card." On turn 3 Bot1 makes two Spirit tokens with
+# Lingering Souls and attacks with the Hunter, sacrificing one Spirit to its attack trigger: the Hunter gets its counter (6/4) but
+# a token's death draws nothing (CR 111.7, 700.4).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+High-Society Hunter
+Lingering Souls
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.High-Society Hunter.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(High-Society Hunter > Bot2)
+Bot1.Choose(Spirit Token)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.High-Society Hunter.Power = 6
+Bot1.Battlefield.High-Society Hunter.Toughness = 4
+Bot1.Hand = Island; Island
+Bot2.Life = 14
