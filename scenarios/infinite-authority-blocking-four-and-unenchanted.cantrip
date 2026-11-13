@@ -1,0 +1,35 @@
+# An enchanted blocker doesn't trigger against toughness 4, nor does an unenchanted blocker trigger against toughness 3 (CR 603.2).
+[Bot1 Deck]
+Infinite Authority
+Black Lotus
+Ornithopter x2
+Plains x20
+[Bot2 Deck]
+Kraken Hatchling
+Phyrexian Walker
+Mox Sapphire
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Infinite Authority.Cast(Bot1.Battlefield.Ornithopter#1)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Kraken Hatchling.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Kraken Hatchling > Bot1; Phyrexian Walker > Bot1)
+Bot1.Block(Ornithopter#1 > Kraken Hatchling; Ornithopter#2 > Phyrexian Walker)
+[T4 Bot2.Main2]
+? Bot2.Battlefield.Kraken Hatchling.Toughness = 4
+? Bot2.Battlefield.Phyrexian Walker.Toughness = 3
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Ornithopter#1.Power = 0
+Bot1.Battlefield.Ornithopter#2.Power = 0
+Bot2.Battlefield.Kraken Hatchling.Toughness = 4
+Bot2.Battlefield.Phyrexian Walker.Toughness = 3

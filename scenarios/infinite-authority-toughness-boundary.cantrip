@@ -1,0 +1,39 @@
+# A toughness-3 blocker is destroyed while a toughness-4 blocker survives, and one counter is added (CR 603.2).
+[Bot1 Deck]
+Infinite Authority
+Black Lotus
+Memnite
+Plains x20
+[Bot2 Deck]
+Wall of Wood
+Wall of Shields
+Black Lotus
+Mox Emerald
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+! Bot1.Hand.Infinite Authority.Cast(Bot1.Battlefield.Plains)
+Bot1.Hand.Infinite Authority.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Wall of Wood.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Wall of Shields.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Wall of Wood > Memnite; Wall of Shields > Memnite)
+[T3 Bot1.Main2]
+? Bot2.Graveyard = Wall of Wood; Black Lotus
+? Bot2.Battlefield.Wall of Shields.Toughness = 4
+? Bot1.Battlefield.Memnite.Power = 1
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Infinite Authority.AttachedTo = Memnite

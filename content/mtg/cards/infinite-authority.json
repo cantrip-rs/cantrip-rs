@@ -1,0 +1,6 @@
+{
+  "name": "Infinite Authority",
+  "manaCost": "{W}{W}{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nWhenever enchanted creature blocks or becomes blocked by a creature with toughness 3 or less, destroy the other creature at end of combat. At the beginning of the next end step, if that creature was destroyed this way, put a +1/+1 counter on the first creature."
+}

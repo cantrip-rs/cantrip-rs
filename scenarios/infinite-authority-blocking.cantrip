@@ -1,0 +1,27 @@
+# The enchanted creature also triggers when blocking a toughness-3 creature, destroying the attacker at end of combat and receiving a counter at end step (CR 603.2).
+[Bot1 Deck]
+Infinite Authority
+Black Lotus
+Ornithopter
+Plains x20
+[Bot2 Deck]
+Phyrexian Walker
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Infinite Authority.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Phyrexian Walker > Bot1)
+Bot1.Block(Ornithopter > Bot2.Battlefield.Phyrexian Walker)
+[T4 Bot2.Main2]
+? Bot2.Graveyard = Phyrexian Walker
+? Bot1.Battlefield.Ornithopter.Power = 0
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3

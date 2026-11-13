@@ -1,0 +1,39 @@
+# Moving the Aura after the block does not change which creature receives its counter (CR 603.2).
+[Bot1 Deck]
+Infinite Authority
+Black Lotus
+Memnite
+Mox Sapphire
+Ornithopter
+Enchantment Alteration
+Plains x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+! Bot1.Hand.Infinite Authority.Cast(Bot1.Battlefield.Plains)
+Bot1.Hand.Infinite Authority.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Ornithopter > Memnite)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Enchantment Alteration.Cast(Bot1.Battlefield.Infinite Authority)
+Bot1.Choose(Bot1.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+? Bot2.Graveyard.Count = 1
+? Bot1.Battlefield.Memnite.Power = 1
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Infinite Authority.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 0
