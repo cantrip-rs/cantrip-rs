@@ -1,0 +1,40 @@
+# Dread Summons: "Each player mills X cards. For each creature card put into a graveyard this way, you create a tapped 2/2 black Zombie creature token." (CR 701.17a, 101.4, 111.1)
+# Bot1 casts it for X=2 ({2}{B}{B}, all four from Black Lotus and Mox Jet). Bot1's top two cards are Memnite and Island, Bot2's are two Memnites: exactly two cards leave each
+# library, three creature cards land in the graveyards (the Island does not count, and Bot2's cards count for Bot1), so Bot1 gets three tapped Zombies and Bot2 none.
+
+[Bot1 Deck]
+Dread Summons
+Black Lotus
+Mox Jet
+Island x4
+Memnite
+Island
+Island x20
+
+[Bot2 Deck]
+Island x7
+Memnite
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dread Summons.Cast(X: 2)
+Bot1.Pass
+
+[Expect]
+Bot1.Library.Count = 20
+Bot2.Library.Count = 20
+Bot1.Graveyard = Dread Summons; Island; Memnite; Black Lotus
+Bot2.Graveyard = Memnite; Memnite
+Bot1.Battlefield = Mox Jet; Zombie Token; Zombie Token; Zombie Token
+Bot1.Battlefield.Zombie Token#1.Tapped = true
+Bot1.Battlefield.Zombie Token#2.Tapped = true
+Bot1.Battlefield.Zombie Token#3.Tapped = true
+Bot1.Battlefield.Zombie Token#1.Power = 2
+Bot1.Battlefield.Zombie Token#1.Toughness = 2
+Bot1.Battlefield.Zombie Token#1.Colors = Black
+Bot2.Battlefield =
