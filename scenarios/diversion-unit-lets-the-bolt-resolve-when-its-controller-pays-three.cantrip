@@ -1,0 +1,52 @@
+# Diversion Unit's counter is "unless its controller pays {3}" (CR 118.12): Bot2 casts Lightning Bolt with its Mountain and pays
+# exactly three more with Moxen when asked, so the Bolt resolves and Bot1 takes 3. The Unit was sacrificed as a cost anyway.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Diversion Unit
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Diversion Unit.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Diversion Unit.Activate(Stack.Lightning Bolt)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.PayCost
+? Bot2.Mana =
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Diversion Unit = (absent)
+Bot1.Graveyard = Diversion Unit
+Bot2.Graveyard = Lightning Bolt

@@ -1,0 +1,11 @@
+{
+  "name": "Diversion Unit",
+  "manaCost": "{1}{U}",
+  "type": "Artifact Creature — Robot",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying\n{U}, Sacrifice this creature: Counter target instant or sorcery spell unless its controller pays {3}.",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,48 @@
+# Diversion Unit's {U}, Sacrifice this creature (CR 602.2, 118.12): in response to Bot2's Lightning Bolt it counters the spell
+# unless its controller pays {3}. Bot2 has only two mana left after casting the Bolt, so payment is not offered and the Bolt
+# is countered: Bot1 keeps all 20 life, and the Unit is sacrificed (in its graveyard, not on the battlefield).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Diversion Unit
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Emerald
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Diversion Unit.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Diversion Unit.Activate(Stack.Lightning Bolt)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+! Bot2.PayCost
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Diversion Unit = (absent)
+Bot1.Graveyard = Diversion Unit
+Bot2.Graveyard = Lightning Bolt
