@@ -1,0 +1,33 @@
+# Arboria protects a player who did nothing on their last turn, but not that player's
+# planeswalker; Jace supplies a legal defender for the refusal (CR 506.2, 508.1c).
+[Bot1 Deck]
+Arboria
+Black Lotus x2
+Mox Pearl
+Mox Sapphire
+Jace, the Mind Sculptor
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Arboria.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Jace, the Mind Sculptor.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.Attackers]
+! Bot2.Attack(Memnite > Bot1)
+Bot2.Attack(Memnite > Jace, the Mind Sculptor)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Jace, the Mind Sculptor.Counters.Loyalty = 2
