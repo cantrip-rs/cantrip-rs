@@ -1,0 +1,48 @@
+# The land sets base power, leaving Giant Growth's bonus and toughness intact; its tap ability targets either player's flyer and expires at cleanup (CR 613.4b, 613.4c).
+[Bot1 Deck]
+Island of Wak-Wak
+Mox Pearl
+Mox Emerald
+Suntail Hawk
+Memnite
+Giant Growth
+Plains x20
+[Bot2 Deck]
+Mox Pearl
+Suntail Hawk
+Island x20
+[Actions]
+Bot1.Hand.Island of Wak-Wak.Play
+? Bot1.Battlefield.Island of Wak-Wak.Subtypes = (absent)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Suntail Hawk.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Suntail Hawk)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Suntail Hawk.Power = 4
+! Bot1.Battlefield.Island of Wak-Wak.Activate(Bot1.Battlefield.Memnite)
+Bot1.Battlefield.Island of Wak-Wak.Activate(Bot1.Battlefield.Suntail Hawk)
+? Bot1.Battlefield.Island of Wak-Wak.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Suntail Hawk.Power = 3
+? Bot1.Battlefield.Suntail Hawk.Toughness = 4
+! Bot1.Battlefield.Island of Wak-Wak.Activate(Bot1.Battlefield.Suntail Hawk)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Suntail Hawk.Power = 1
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Suntail Hawk.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island of Wak-Wak.Activate(Bot2.Battlefield.Suntail Hawk)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Suntail Hawk.Power = 0
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Suntail Hawk.Power = 1
+Bot1.Battlefield.Memnite.Power = 1

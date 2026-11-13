@@ -1,0 +1,34 @@
+# A flyer removed in response is an illegal target, so the ability does nothing; the next activation resolves on another flyer (CR 608.2b).
+[Bot1 Deck]
+Island of Wak-Wak
+Mox Pearl
+Suntail Hawk
+Plains x4
+Suntail Hawk
+Plains x15
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Island of Wak-Wak.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Suntail Hawk.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Island of Wak-Wak.Activate(Bot1.Battlefield.Suntail Hawk)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Suntail Hawk)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Suntail Hawk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island of Wak-Wak.Activate(Bot1.Battlefield.Suntail Hawk)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Suntail Hawk.Power = 0
+Bot1.Graveyard = Suntail Hawk
