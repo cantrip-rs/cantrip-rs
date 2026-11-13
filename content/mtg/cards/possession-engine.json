@@ -1,0 +1,8 @@
+{
+  "name": "Possession Engine",
+  "manaCost": "{3}{U}{U}",
+  "type": "Artifact — Vehicle",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "When this Vehicle enters, gain control of target creature an opponent controls for as long as you control this Vehicle. That creature can't attack or block for as long as you control this Vehicle.\nCrew 3"
+}
