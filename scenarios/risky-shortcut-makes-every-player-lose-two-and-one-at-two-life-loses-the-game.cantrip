@@ -1,0 +1,37 @@
+# Risky Shortcut {2}{B}: "Draw two cards. Each player loses 2 life." In a game of three "each player" is every player, the
+# caster and both opponents (CR 119.3, 101.4): Bot1 and Bot2 go to 18, and Bot3, at 2 life, goes to 0 and loses the game
+# (CR 704.5a) while the game goes on between Bot1 and Bot2.
+
+[Life]
+Bot3: 2
+
+[Bot1 Deck]
+Black Lotus
+Risky Shortcut
+Swamp x18
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Risky Shortcut.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[T2 Bot2.Main1]
+
+[Expect]
+Result = InProgress
+Bot1.Life = 18
+Bot2.Life = 18
+Bot3.Life = 0
+Bot3.Status = Lost
+Bot1.Hand.Count = 7

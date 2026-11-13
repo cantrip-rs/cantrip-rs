@@ -1,0 +1,6 @@
+{
+  "name": "Risky Shortcut",
+  "manaCost": "{2}{B}",
+  "type": "Sorcery",
+  "oracleText": "Draw two cards. Each player loses 2 life."
+}
