@@ -1,0 +1,69 @@
+# "When you cycle this card, Cats you control gain hexproof and indestructible until end of turn": cycling the second Basri
+# ({2}{W}, discard, draw; CR 702.29a, 603.3) gives the Cat token and the printed Savannah Lions Bot1 controls both keywords
+# (CR 205.3m, 702.11, 702.12), but not Basri himself (a Human Knight) and not the Savannah Lions Bot2 controls, so Bot2's Shock
+# cannot target Bot1's Cats and can target Basri and Bot2's own Lions.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Basri, Tomorrow's Champion
+Basri, Tomorrow's Champion
+Plains
+Savannah Lions
+Plains x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Ruby
+Savannah Lions
+Shock
+Shock
+Plains
+Plains
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Basri, Tomorrow's Champion.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Basri, Tomorrow's Champion.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cat Token.Power = 1
+? Bot1.Battlefield.Cat Token.Keywords = Lifelink
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Basri, Tomorrow's Champion.Activate(Ability: Cycling)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Shock.Cast(Bot1.Battlefield.Cat Token)
+! Bot2.Hand.Shock.Cast(Bot1.Battlefield.Savannah Lions)
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Basri, Tomorrow's Champion)
+
+[Expect]
+Bot1.Battlefield.Cat Token.Keywords = Hexproof; Indestructible; Lifelink
+Bot1.Battlefield.Savannah Lions.Keywords = Hexproof; Indestructible
+Bot2.Battlefield.Savannah Lions.Keywords = (absent)

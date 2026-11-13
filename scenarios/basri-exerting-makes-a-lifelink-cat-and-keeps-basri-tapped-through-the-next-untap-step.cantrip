@@ -1,0 +1,50 @@
+# Basri's {W}, {T}, Exert ability makes a 1/1 white Cat token with lifelink (CR 111.1, 701.43a); exerted, Basri does not untap in
+# his controller's next untap step (CR 701.43b), so on turn 5 he cannot activate again, and on turn 7 he can.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Basri, Tomorrow's Champion
+Plains
+Plains
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Basri, Tomorrow's Champion.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Basri, Tomorrow's Champion.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Basri, Tomorrow's Champion.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cat Token.Power = 1
+? Bot1.Battlefield.Basri, Tomorrow's Champion.Exerted = true
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Basri, Tomorrow's Champion.Tapped = true
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Basri, Tomorrow's Champion.Activate
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Basri, Tomorrow's Champion.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Cat Token#1.Power = 1
+Bot1.Battlefield.Cat Token#2.Power = 1
+Bot1.Battlefield.Cat Token#1.Toughness = 1
+Bot1.Battlefield.Cat Token#2.Toughness = 1
+Bot1.Battlefield.Cat Token#1.Colors = White
+Bot1.Battlefield.Cat Token#2.Colors = White
+Bot1.Battlefield.Cat Token#1.Keywords = Lifelink
+Bot1.Battlefield.Cat Token#2.Keywords = Lifelink
+Bot1.Battlefield.Basri, Tomorrow's Champion.Exerted = true
