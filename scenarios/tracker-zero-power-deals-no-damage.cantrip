@@ -1,0 +1,45 @@
+# Sorceress Queen makes Tracker 0/2; the opposing Ornithopter also has zero power, so neither deals damage
+# when Tracker's ability resolves (CR 120.8).
+[Bot1 Deck]
+Tracker
+Sorceress Queen
+Black Lotus
+Black Lotus
+Mox Emerald
+Gleemox
+Forest x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Tracker.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Sorceress Queen.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sorceress Queen.Activate(Bot1.Battlefield.Tracker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tracker.Power = 0
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Tracker.Activate(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Tracker.Damage = 0
+Bot2.Battlefield.Ornithopter.Damage = 0

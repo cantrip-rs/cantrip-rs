@@ -1,0 +1,46 @@
+# Swift Reconfiguration turns Tracker into a noncreature before its ability resolves; with no power, it deals
+# no damage to the target (CR 608.2h, 107.2).
+[Bot1 Deck]
+Tracker
+Black Lotus
+Mox Emerald
+Forest x20
+[Bot2 Deck]
+White Knight
+Black Lotus
+Mox Pearl
+Swift Reconfiguration
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Tracker.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.White Knight.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Tracker.Activate(Bot1.Battlefield.Forest)
+Bot1.Battlefield.Tracker.Activate(Bot2.Battlefield.White Knight)
+? Bot1.Mana =
+? Bot1.Battlefield.Tracker.Tapped = true
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swift Reconfiguration.Cast(Bot1.Battlefield.Tracker)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.White Knight.Damage = 0
+Bot1.Battlefield.Tracker.Types = Artifact
