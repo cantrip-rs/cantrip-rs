@@ -1,0 +1,60 @@
+# Sun-Blessed Healer: "When this creature enters, if it was kicked, return target nonland permanent card ..." (CR 603.4): the
+# intervening 'if' is checked again as the trigger resolves, and for a Healer that has left the battlefield that is as it last
+# existed there (CR 603.10a, 608.2h), kicked. Bot2's Lightning Bolt kills the 3/1 Healer in response to its enters trigger, which
+# still returns Grizzly Bears from Bot1's graveyard to the battlefield (Bot2 killed it on turn 2 with another Bolt).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Grizzly Bears
+Sun-Blessed Healer
+Plains
+Plains x13
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Grizzly Bears
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Sun-Blessed Healer.Cast(Kicked: 1)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Sun-Blessed Healer)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Sun-Blessed Healer; Grizzly Bears
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Grizzly Bears; Mox Emerald; Mox Pearl; Mox Sapphire; Plains
+Bot1.Graveyard = Sun-Blessed Healer
