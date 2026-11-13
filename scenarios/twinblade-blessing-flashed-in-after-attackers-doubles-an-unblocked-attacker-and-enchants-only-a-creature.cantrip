@@ -1,0 +1,39 @@
+# Twinblade Blessing: "Flash. Enchant creature. Enchanted creature has double strike." Bot1 attacks with Isamaru (2/2) and only
+# then casts the Aura, with the three mana of Black Lotus, in the declare attackers step (Flash, CR 702.8a): it is refused on a Mox
+# Pearl (not a creature, CR 303.4a) and accepted on Isamaru, which has double strike for the rest of combat and, unblocked, deals 2
+# in the first-strike damage step and 2 again in the regular one (CR 510.4, 702.4b): Bot2 goes 20 -> 16.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Isamaru, Hound of Konda
+Twinblade Blessing
+Island x3
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Isamaru, Hound of Konda.Keywords = (absent)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Isamaru, Hound of Konda > Bot2)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+! Bot1.Hand.Twinblade Blessing.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Twinblade Blessing.Cast(Bot1.Battlefield.Isamaru, Hound of Konda)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Isamaru, Hound of Konda.Keywords = DoubleStrike
+? Bot1.Battlefield.Twinblade Blessing.AttachedTo = Isamaru, Hound of Konda
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Isamaru, Hound of Konda.Keywords = DoubleStrike
