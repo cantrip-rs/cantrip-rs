@@ -1,0 +1,66 @@
+# A blocker destroyed in response is no longer counted as the trigger resolves (CR 608.2h, 509.1h).
+[Bot1 Deck]
+Johtull Wurm
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Gleemox
+Forest x20
+
+[Bot2 Deck]
+Ornithopter x3
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Johtull Wurm.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Johtull Wurm > Bot2)
+Bot2.Block(Ornithopter#1 > Johtull Wurm; Ornithopter#2 > Johtull Wurm; Ornithopter#3 > Johtull Wurm)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter#1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Johtull Wurm.Power = 4
+? Bot1.Battlefield.Johtull Wurm.Toughness = 5
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Johtull Wurm.Power = 6
+? Bot1.Battlefield.Johtull Wurm.Toughness = 6
+[Expect]
+Bot1.Battlefield.Johtull Wurm.Power = 6

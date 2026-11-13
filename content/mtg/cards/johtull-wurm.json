@@ -1,0 +1,8 @@
+{
+  "name": "Johtull Wurm",
+  "manaCost": "{5}{G}",
+  "type": "Creature — Wurm",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Whenever this creature becomes blocked, it gets -2/-1 until end of turn for each creature blocking it beyond the first."
+}
