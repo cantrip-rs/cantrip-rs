@@ -2654,6 +2654,13 @@ pub fn target_creature_gains_indestructible(g: &mut dyn Game, item: &StackItem) 
     first_target_gains_until_end_of_turn::<{ Keywords::of(&[Keyword::Indestructible]).0 }>(g, item)
 }
 
+/// "Target creature gains deathtouch and indestructible until end of turn" (CR 702.2b, 702.12b, 611.2a): one layer 6 change for the rest
+/// of the turn, the creature being the ability's first target; nothing if it is no longer a legal target as the spell resolves (CR 608.2b).
+/// Alesha's Legacy (a creature you control) and Offer Immortality print it.
+pub fn target_creature_gains_deathtouch_and_indestructible(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    first_target_gains_until_end_of_turn::<{ Keywords::of(&[Keyword::Deathtouch, Keyword::Indestructible]).0 }>(g, item)
+}
+
 /// "Target creature gains double strike until end of turn" (CR 702.4, 611.2a), the creature (or other permanent) being the
 /// ability's first target; nothing if it is no longer a legal target as the spell or ability resolves (CR 608.2b). Raking Claws,
 /// Boros Charm's third mode and Pride of the Road's max speed ability print it.

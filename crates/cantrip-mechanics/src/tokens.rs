@@ -1627,10 +1627,11 @@ mod tests {
     }
 }
 
-/// "Create a 2/2 black Zombie creature token." (CR 111.1): one `ZOMBIE` under `item`'s controller, the card file listing it in
-/// its `EXTRA`. Hour of Victory and Liliana, Dreadhorde General print it.
-pub fn create_a_zombie(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    create(g, item.controller, &ZOMBIE, 1)?;
+/// "Create a 2/2 black Zombie creature token" / "create `COUNT` 2/2 black Zombie creature tokens" (CR 111.1): `COUNT` of `ZOMBIE`
+/// under `item`'s controller, the card file listing it in its `EXTRA`. Embalmed Ascendant, Hour of Victory, Risen Necroregent and
+/// Liliana, Dreadhorde General print one; Maalfeld Twins's death trigger and Suspicious Shambler's graveyard ability two each.
+pub fn create_zombies<const COUNT: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &ZOMBIE, COUNT)?;
     Ok(())
 }
 

@@ -8,7 +8,7 @@ pub static EXTRA: &[&CardDef] = &[&tokens::ZOMBIE];
 
 pub static CARD: CardDef = CardDef {
     start_your_engines: true,
-    delayed: &[triggered(YOUR_END_STEP, tokens::create_a_zombie, "At the beginning of your end step, create a 2/2 black Zombie creature token.")],
+    delayed: &[triggered(YOUR_END_STEP, tokens::create_zombies::<1>, "At the beginning of your end step, create a 2/2 black Zombie creature token.")],
     statics: &[max_speed("Max speed \u{2014} At the beginning of your end step, create a 2/2 black Zombie creature token.")],
     ..oracle::RISEN_NECROREGENT
 };

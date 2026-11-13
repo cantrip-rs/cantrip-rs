@@ -8,7 +8,7 @@ pub static EXTRA: &[&CardDef] = &[&tokens::ZOMBIE];
 
 pub static CARD: CardDef = CardDef {
     start_your_engines: true,
-    abilities: &[triggered(THIS_ENTERS, tokens::create_a_zombie, "When this enchantment enters, create a 2/2 black Zombie creature token.")],
+    abilities: &[triggered(THIS_ENTERS, tokens::create_zombies::<1>, "When this enchantment enters, create a 2/2 black Zombie creature token.")],
     delayed: &[ability(
         cost("{1}{B}").and(SACRIFICE_THIS),
         library::search_for_a_card_to_hand,

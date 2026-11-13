@@ -7,7 +7,7 @@ use cantrip_oracle as oracle;
 
 pub static CARD: CardDef = CardDef {
     start_your_engines: true,
-    abilities: &[triggered(THIS_ENTERS, tokens::create_a_zombie, "When this creature enters, create a 2/2 black Zombie creature token.")],
+    abilities: &[triggered(THIS_ENTERS, tokens::create_zombies::<1>, "When this creature enters, create a 2/2 black Zombie creature token.")],
     delayed: &[triggered(
         CREATURE_YOU_CONTROL_DIES,
         effects::each_opponent_loses_1_life_you_gain_1,
