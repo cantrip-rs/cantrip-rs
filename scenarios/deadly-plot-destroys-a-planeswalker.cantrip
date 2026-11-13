@@ -1,0 +1,40 @@
+# "Destroy target creature or planeswalker" (CR 701.8): Bot2's Liliana of the Veil (cast with Black Lotus mana) is destroyed by Bot1's Deadly Plot.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Deadly Plot
+Island x17
+
+[Bot2 Deck]
+Black Lotus
+Liliana of the Veil
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Liliana of the Veil.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Deadly Plot.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot2.Battlefield.Liliana of the Veil)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield =
+Bot2.Graveyard = Liliana of the Veil; Black Lotus
