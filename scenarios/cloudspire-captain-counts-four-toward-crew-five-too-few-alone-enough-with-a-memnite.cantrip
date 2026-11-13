@@ -1,0 +1,41 @@
+# Cloudspire Captain (2/3): "This creature saddles Mounts and crews Vehicles as though its power were 2 greater" (CR 702.122b):
+# it counts 4 toward a crew cost, not 5. Swift Reconfiguration makes Bot1's Isamaru an artifact Vehicle with crew 5 (CR 702.122a),
+# so the Captain alone is refused, and the Captain and a Memnite (power 1) make exactly 5 and are accepted. The crewed Isamaru is an artifact creature, its 2/2 plus the Captain's +1/+1 for Vehicles you control.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Isamaru, Hound of Konda
+Cloudspire Captain
+Swift Reconfiguration
+Memnite
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: W)
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cloudspire Captain.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Swift Reconfiguration.Cast(Isamaru, Hound of Konda)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+? Bot1.Battlefield.Isamaru, Hound of Konda.Types = Artifact
+Bot1.Battlefield.Isamaru, Hound of Konda.Activate(Ability: Crew)
+! Bot1.Choose(Cloudspire Captain)
+Bot1.Choose(Cloudspire Captain; Memnite)
+
+[Expect]
+Bot1.Battlefield.Isamaru, Hound of Konda.Types = Creature; Artifact
+Bot1.Battlefield.Isamaru, Hound of Konda.Power = 3
+Bot1.Battlefield.Isamaru, Hound of Konda.Toughness = 3
+Bot1.Battlefield.Cloudspire Captain.Tapped = true
+Bot1.Battlefield.Memnite.Tapped = true
