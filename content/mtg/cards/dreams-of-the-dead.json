@@ -1,0 +1,6 @@
+{
+  "name": "Dreams of the Dead",
+  "manaCost": "{3}{U}",
+  "type": "Enchantment",
+  "oracleText": "{1}{U}: Return target white or black creature card from your graveyard to the battlefield. That creature gains \"Cumulative upkeep {2}.\" If the creature would leave the battlefield, exile it instead of putting it anywhere else. (At the beginning of its controller's upkeep, that player puts an age counter on it, then sacrifices it unless they pay its upkeep cost for each age counter on it.)"
+}

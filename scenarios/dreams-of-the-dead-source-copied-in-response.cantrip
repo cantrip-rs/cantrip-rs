@@ -1,0 +1,62 @@
+# Opalescence makes Dreams a creature. Mirrorweave changes its copiable identity after activation;
+# the resolving ability still grants its own cumulative upkeep (CR 113.7a, 702.24a).
+[Bot1 Deck]
+Savannah Lions
+Mox Pearl
+Mox Ruby
+Lightning Bolt
+Black Lotus
+Mox Sapphire
+Dreams of the Dead
+Opalescence
+Black Lotus
+Mirrorweave
+Ornithopter
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Savannah Lions)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Opalescence.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dreams of the Dead.Cast
+[T9 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Dreams of the Dead.Activate(Bot1.Graveyard.Savannah Lions)
+Bot1.Hand.Mirrorweave.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#2.Types = Artifact; Creature
+Bot1.Pass
+Bot2.Pass
+[T13 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T13 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Savannah Lions.Counters.Age = 1
