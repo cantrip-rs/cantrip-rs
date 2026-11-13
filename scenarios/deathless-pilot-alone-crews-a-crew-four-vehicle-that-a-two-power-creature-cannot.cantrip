@@ -1,0 +1,45 @@
+# Deathless Pilot: "This creature crews Vehicles as though its power were 2 greater" (CR 702.122), so its 2 power counts as
+# 4. Dependable Quinjet has Crew 4: Isamaru (power 2) cannot crew it alone (the refusal; its power counts as 2). Once the
+# Pilot is cast, the Pilot alone can, though it just came under Bot1's control (crew taps as a cost, not a {T} ability),
+# and the Quinjet becomes an artifact creature. Black Lotus pays the Quinjet's {3}; Mox Jet and Mox Ruby pay the Pilot.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Isamaru, Hound of Konda
+Dependable Quinjet
+Deathless Pilot
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Dependable Quinjet.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Dependable Quinjet.Activate(Ability: Crew 4)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Deathless Pilot.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Dependable Quinjet.Activate(Ability: Crew 4)
+Bot1.Choose(Deathless Pilot)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Dependable Quinjet.Types = Artifact; Creature
+Bot1.Battlefield.Deathless Pilot.Tapped = True
+Bot1.Battlefield.Isamaru, Hound of Konda.Tapped = False

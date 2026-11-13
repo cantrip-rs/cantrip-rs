@@ -1,0 +1,8 @@
+{
+  "name": "Deathless Pilot",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Zombie Pilot",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "This creature saddles Mounts and crews Vehicles as though its power were 2 greater.\n{3}{B}: Return this card from your graveyard to your hand."
+}
