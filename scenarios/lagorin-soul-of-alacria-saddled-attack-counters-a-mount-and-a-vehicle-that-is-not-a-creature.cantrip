@@ -1,0 +1,53 @@
+# Lagorin, Soul of Alacria: "Whenever Lagorin attacks while saddled, put a +1/+1 counter on each of up to two target Mounts
+# and/or Vehicles." Saddle 1 is paid by Llanowar Elves. Lagorin attacks as a flier and chooses itself and Reckoner Bankbuster (a
+# Vehicle that is not a creature, still a legal target). Llanowar Elves is not a Mount or Vehicle and is refused. Both get a
+# +1/+1 counter before damage, so Lagorin hits for 2.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Pearl
+Lagorin, Soul of Alacria
+Llanowar Elves
+Mox Sapphire
+Mox Jet
+Reckoner Bankbuster
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lagorin, Soul of Alacria.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Reckoner Bankbuster.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Lagorin, Soul of Alacria.Activate
+Bot1.Choose(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Attack(Lagorin, Soul of Alacria > Bot2)
+! Bot1.Target(Llanowar Elves)
+Bot1.Target(Lagorin, Soul of Alacria; Reckoner Bankbuster)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Lagorin, Soul of Alacria.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Reckoner Bankbuster.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Reckoner Bankbuster.Types = Artifact

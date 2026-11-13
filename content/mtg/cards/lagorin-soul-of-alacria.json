@@ -1,0 +1,11 @@
+{
+  "name": "Lagorin, Soul of Alacria",
+  "manaCost": "{G}{W}",
+  "type": "Legendary Creature — Beast Mount",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying\nWhenever Lagorin attacks while saddled, put a +1/+1 counter on each of up to two target Mounts and/or Vehicles.\nSaddle 1 (Tap any number of other creatures you control with total power 1 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)",
+  "keywords": [
+    "Flying"
+  ]
+}

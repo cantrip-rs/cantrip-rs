@@ -1,0 +1,61 @@
+# Lagorin, Soul of Alacria: Saddle 1 (CR 702.171a) is refused with Ornithopter (power 0) alone; Llanowar Elves (power 1) pays it.
+# The trigger asks for "up to two" and "Mounts and/or Vehicles" of any controller: it puts one counter on Bot2's Reckoner Bankbuster
+# alone, not on Lagorin. Turn 5 Lagorin attacks unsaddled: no trigger, no new counter, 1 damage.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Pearl
+Lagorin, Soul of Alacria
+Ornithopter
+Llanowar Elves
+Island x14
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Reckoner Bankbuster
+Island x17
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lagorin, Soul of Alacria.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Reckoner Bankbuster.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Lagorin, Soul of Alacria.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Lagorin, Soul of Alacria.Activate
+Bot1.Choose(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Attack(Lagorin, Soul of Alacria > Bot2)
+! Bot1.Target(Ornithopter)
+Bot1.Target(Reckoner Bankbuster)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Lagorin, Soul of Alacria > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield.Reckoner Bankbuster.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Lagorin, Soul of Alacria.Counters.PlusOnePlusOne = (absent)
