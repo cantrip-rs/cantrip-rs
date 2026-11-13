@@ -1373,6 +1373,31 @@ pub static GOBLIN_ARMY: CardDef = CardDef {
     ..token!(Goblin Army)
 };
 
+/// A 4/4 red Dragon creature token with flying. Dragonback Assault and Dragon Trainer make it.
+pub static DRAGON_4_4: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Red)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(4),
+    toughness: Some(4),
+    keywords: Keywords::of(&[Keyword::Flying]),
+    text: "Flying",
+    ..token!(Dragon)
+};
+
+/// "Create a 4/4 red Dragon creature token with flying" (CR 111.1, 701.7) as an ability's whole effect: one `DRAGON_4_4` under
+/// the ability's controller, the card file listing it in its `EXTRA`. Dragonback Assault and Dragon Trainer print it.
+pub fn create_a_dragon_4_4(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &DRAGON_4_4, 1)?;
+    Ok(())
+}
+
+/// "Create a 5/5 red Dragon creature token with flying" (CR 111.1, 701.7) as an ability's whole effect: one `DRAGON_5_5` under
+/// the ability's controller, the card file listing it in its `EXTRA`. Kiora of Fire and Ashes and Rite of the Dragoncaller print it.
+pub fn create_a_dragon_5_5(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &DRAGON_5_5, 1)?;
+    Ok(())
+}
+
 /// A 5/5 red Dragon creature token with flying. Sarkhan, Fireblood and Kiora of Fire and Ashes make it, and Draconic
 /// Visitor makes it instead of artifact tokens.
 pub static DRAGON_5_5: CardDef = CardDef {
