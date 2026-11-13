@@ -1,0 +1,47 @@
+# Diamond Valley taps and sacrifices a creature as a cost, then gains its last-known modified toughness (CR 608.2h, 701.21a).
+[Bot1 Deck]
+Diamond Valley
+Mox Emerald
+Mox Pearl
+Ornithopter
+Giant Growth
+Memnite
+Plains x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Diamond Valley.Play
+! Bot1.Battlefield.Diamond Valley.Activate
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Toughness = 5
+Bot1.Battlefield.Diamond Valley.Activate
+! Bot1.Choose()
+! Bot1.Choose(Bot1.Battlefield.Mox Pearl)
+! Bot1.Choose(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Bot1.Battlefield.Ornithopter)
+? Bot1.Battlefield.Diamond Valley.Tapped = true
+? Bot1.Graveyard.Ornithopter.Toughness = 2
+? Bot1.Life = 20
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 25
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+! Bot1.Battlefield.Diamond Valley.Activate
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 25
+Bot2.Battlefield.Ornithopter.Toughness = 2
