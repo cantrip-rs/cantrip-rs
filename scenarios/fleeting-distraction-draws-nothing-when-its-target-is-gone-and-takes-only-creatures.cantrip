@@ -1,0 +1,42 @@
+# Fleeting Distraction: only a creature is a legal target (Bot1's Mox Sapphire is refused while the mana is there to pay). If its target is gone as
+# it resolves the spell does not resolve (CR 608.2b): Bot1 Bolts Bot2's Memnite in response and draws nothing.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Fleeting Distraction
+Lightning Bolt
+Island
+Island
+Island
+Counterspell
+Island x12
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+! Bot1.Hand.Fleeting Distraction.Cast(Bot1.Battlefield.Mox Sapphire)
+Bot2.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fleeting Distraction.Cast(Bot2.Battlefield.Memnite)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Memnite
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Fleeting Distraction; Lightning Bolt
+Bot1.Hand = Island; Island; Island
+Bot1.Library.Count = 13

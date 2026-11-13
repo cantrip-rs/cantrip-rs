@@ -1,0 +1,6 @@
+{
+  "name": "Fleeting Distraction",
+  "manaCost": "{U}",
+  "type": "Instant",
+  "oracleText": "Target creature gets -1/-0 until end of turn.\nDraw a card."
+}
