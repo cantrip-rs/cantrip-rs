@@ -1,0 +1,80 @@
+# Cloudspire Captain (2/3): "Mounts and Vehicles you control get +1/+1. This creature saddles Mounts and crews Vehicles as though its power were 2 greater"
+# (CR 613.4c, 702.171c, 702.122b). Caustic Bronco (Saddle 3) is a 3/3 for Bot1 and still a 2/2 for Bot2; the Captain, counting 4, saddles it alone on turn 3.
+# On turn 5 Savannah Lions (power 2) cannot pay Dependable Quinjet's Crew 4 and the Captain can, making it a 4/4 artifact creature (3/3 and the +1/+1).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Cloudspire Captain
+Caustic Bronco
+Dependable Quinjet
+Savannah Lions
+Plains x12
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Caustic Bronco
+Island x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Cloudspire Captain.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Caustic Bronco.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Caustic Bronco.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dependable Quinjet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Caustic Bronco.Activate
+Bot1.Choose(Cloudspire Captain)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Caustic Bronco.Saddled = true
+? Bot1.Battlefield.Caustic Bronco.Power = 3
+? Bot2.Battlefield.Caustic Bronco.Power = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Dependable Quinjet.Activate(Ability: Crew 4)
+! Bot1.Choose(Savannah Lions)
+Bot1.Choose(Cloudspire Captain)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Dependable Quinjet.Power = 4
+Bot1.Battlefield.Dependable Quinjet.Toughness = 4
+Bot1.Battlefield.Cloudspire Captain.Power = 2
+Bot1.Battlefield.Cloudspire Captain.Tapped = true
+Bot1.Battlefield.Savannah Lions.Tapped = false
+Bot1.Battlefield.Caustic Bronco.Power = 3
+Bot2.Battlefield.Caustic Bronco.Power = 2

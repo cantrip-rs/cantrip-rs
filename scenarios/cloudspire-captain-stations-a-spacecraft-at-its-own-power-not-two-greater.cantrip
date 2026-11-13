@@ -1,0 +1,43 @@
+# Cloudspire Captain (2/3): "This creature saddles Mounts and crews Vehicles as though its power were 2 greater" (CR 702.171c, 702.122b) says nothing of stationing,
+# so tapped for Class-F Shuttlecraft's Station (CR 702.184a) it counts as its own power of 2: two charge counters, not four. Station only as a sorcery, on turn 3.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Cloudspire Captain
+Class-F Shuttlecraft
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cloudspire Captain.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Class-F Shuttlecraft.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Class-F Shuttlecraft.Activate(Ability: Station)
+Bot1.Choose(Cloudspire Captain)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Class-F Shuttlecraft.Counters.Charge = 2
+Bot1.Battlefield.Class-F Shuttlecraft.Types = Artifact
+Bot1.Battlefield.Cloudspire Captain.Tapped = true
