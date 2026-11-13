@@ -1876,6 +1876,15 @@ pub fn return_what_it_became(g: &mut dyn Game, left: ObjectId, tapped: bool, cou
     Ok(g.put_all_onto_battlefield_with_counters(&cards, counters)?.into_iter().filter(|&c| g.is_on_battlefield(c)).collect())
 }
 
+/// "Return it to the battlefield tapped under its owner's control" as a "when this dies" ability's effect (CR 110.2a, 400.7,
+/// 603.10a): the card the permanent became in the graveyard, each card of a merged permanent together (CR 730.3c); a token has
+/// ceased to exist, so there is nothing to return. Pain 101, Perigee Beckoner, Vincent's Limit Break and Fake Your Own Death
+/// print it.
+pub fn return_it_tapped(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    return_what_it_became(g, item.object, true, &[])?;
+    Ok(())
+}
+
 /// "You may pay [cost]. If you do, untap this [permanent]" (CR 608.2c, 701.26).
 /// Brass Man and Mana Vault print this; the payment is offered even if the source has left.
 pub fn may_pay_to_untap_self(g: &mut dyn Game, item: &StackItem, payment: Cost) -> Result<(), Suspend> {
