@@ -1,0 +1,81 @@
+# Walking Sarcophagus: "your speed" is its controller's (CR 702.178a, 109.5). Bot1 reaches speed 4 on turn 5 with three
+# Lightning Bolts (CR 702.179d), the 3/3 Sarcophagus having the +1/+2. On turn 6 Bot2, who has no speed, takes it with
+# Control Magic: gaining control of a permanent with start your engines! gives Bot2 speed 1 (CR 702.179a), and the
+# Sarcophagus under its new controller is a 2/1 though Bot1, the owner, is still at speed 4.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Walking Sarcophagus
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Mountain
+Mountain x12
+
+[Bot2 Deck]
+Mox Sapphire
+Island
+Control Magic
+Island x17
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Walking Sarcophagus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+? Bot2.Speed = (absent)
+? Bot1.Battlefield.Walking Sarcophagus.Power = 3
+? Bot1.Battlefield.Walking Sarcophagus.Toughness = 3
+[T6 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Island#2.Activate
+Bot2.Battlefield.Island#3.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Control Magic.Cast(Bot1.Battlefield.Walking Sarcophagus)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Walking Sarcophagus.Power = 2
+? Bot2.Battlefield.Walking Sarcophagus.Toughness = 1
+
+[Expect]
+Turn = 6
+Bot1.Speed = 4
+Bot2.Speed = 1
+Bot1.Battlefield = Mountain
+Bot2.Battlefield.Walking Sarcophagus.Power = 2
+Bot2.Battlefield.Walking Sarcophagus.Toughness = 1
