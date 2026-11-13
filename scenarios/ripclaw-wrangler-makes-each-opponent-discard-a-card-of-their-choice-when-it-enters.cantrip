@@ -1,0 +1,35 @@
+# Ripclaw Wrangler {3}{B}: "When this Vehicle enters, each opponent discards a card." Bot2 holds a Lightning Bolt and six
+# Islands and chooses what to discard (CR 701.9b): an Island, so the Bolt stays; Bot1, the controller, discards nothing.
+# Paid exactly from Black Lotus's {B}{B}{B} and Mox Jet's {B}.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Ripclaw Wrangler
+Swamp x17
+
+[Bot2 Deck]
+Lightning Bolt
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ripclaw Wrangler.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Island)
+? Bot2.Hand.Count = 6
+? Bot2.Graveyard = Island
+
+[Expect]
+Turn = 1
+Bot2.Graveyard = Island
+Bot2.Hand.Count = 6
+Bot1.Hand.Count = 4
+Bot1.Battlefield = Mox Jet; Ripclaw Wrangler
