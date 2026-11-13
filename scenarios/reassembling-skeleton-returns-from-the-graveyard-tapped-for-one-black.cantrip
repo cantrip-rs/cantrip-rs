@@ -1,0 +1,54 @@
+# Reassembling Skeleton (CR 113.6m, 602.2): "{1}{B}: Return this card from your graveyard to the battlefield tapped" works only
+# from the graveyard. Bot2's Lightning Bolt kills it; on Bot1's turn 3, with Mox Jet already tapped, mana with no black in it
+# ({W} from Mox Pearl, {U} from Mox Sapphire, the untapped Island) cannot pay, and on turn 5 it comes back tapped for exactly
+# {1}{B} (Mox Jet, Mox Pearl), the pool left empty. Nothing offers the ability from the battlefield.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Reassembling Skeleton
+Island x3
+Island x25
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x31
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Reassembling Skeleton.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Reassembling Skeleton)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Reassembling Skeleton
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Graveyard.Reassembling Skeleton.Activate(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Reassembling Skeleton.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Reassembling Skeleton.Tapped = True
+! Bot1.Battlefield.Reassembling Skeleton.Activate
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield = Island; Mox Jet; Mox Pearl; Mox Sapphire; Reassembling Skeleton

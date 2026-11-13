@@ -1,0 +1,8 @@
+{
+  "name": "Reassembling Skeleton",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Skeleton Warrior",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{1}{B}: Return this card from your graveyard to the battlefield tapped."
+}
