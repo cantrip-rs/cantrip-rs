@@ -1,0 +1,8 @@
+{
+  "name": "Oviya, Automech Artisan",
+  "manaCost": "{3}{G}",
+  "type": "Legendary Creature — Human Artificer",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Each creature that's attacking one of your opponents has trample.\n{G}, {T}: You may put a creature or Vehicle card from your hand onto the battlefield. If you put an artifact onto the battlefield this way, put two +1/+1 counters on it."
+}

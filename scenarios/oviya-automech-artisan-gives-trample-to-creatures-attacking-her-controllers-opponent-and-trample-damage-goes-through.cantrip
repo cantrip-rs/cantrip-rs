@@ -1,0 +1,53 @@
+# Oviya, Automech Artisan: "Each creature that's attacking one of your opponents has trample" (CR 508.5, 702.19). Bot1's Grizzly
+# Bears (2/2) attacks Bot2 on turn 3 and so has trample (any creature of any controller would): Bot2's Memnite (1/1) blocks it
+# and the extra 1 damage goes to Bot2 (CR 702.19b). Bot2's Ornithopter attacking Bot1 on turn 4 is attacking Oviya's own
+# controller, not an opponent, so it only has flying.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Jet
+Oviya, Automech Artisan
+Grizzly Bears
+Swamp x14
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Oviya, Automech Artisan.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Memnite > Grizzly Bears)
+? Bot1.Battlefield.Grizzly Bears.Keywords = Trample
+? Bot1.Battlefield.Oviya, Automech Artisan.Keywords = (absent)
+[T4 Bot2.Main1]
+Bot2.Attack(Ornithopter > Bot1)
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+
+[Expect]
+Bot2.Life = 19
+Bot2.Graveyard = Memnite
+Bot1.Life = 20
+Bot1.Battlefield.Grizzly Bears.Keywords = (absent)

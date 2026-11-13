@@ -1,0 +1,55 @@
+# Oviya, Automech Artisan: "{G}, {T}: You may put a creature or Vehicle card from your hand onto the battlefield. If you put an
+# artifact onto the battlefield this way, put two +1/+1 counters on it." Turn 3 puts Veloheart Bike (an artifact Vehicle) onto the
+# battlefield: it enters (Bot1 gains 2) and gets two counters; a Lightning Bolt is not a creature or Vehicle card, so it cannot be
+# chosen. Turn 5 puts Memnite (an artifact creature) onto the battlefield with two counters, 3/3 (CR 608.2d, 205.2a).
+# A card put onto the battlefield is not cast, so no mana is paid for either.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Oviya, Automech Artisan
+Veloheart Bike
+Memnite
+Lightning Bolt
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Oviya, Automech Artisan.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Oviya, Automech Artisan.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Oviya, Automech Artisan.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Veloheart Bike)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Veloheart Bike.Counters.PlusOnePlusOne = 2
+? Bot1.Life = 22
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Oviya, Automech Artisan.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite)
+
+[Expect]
+Bot1.Battlefield.Veloheart Bike.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Toughness = 3
+Bot1.Battlefield.Oviya, Automech Artisan.Tapped = true
+Bot1.Hand.Lightning Bolt.Toughness = (absent)
+Bot1.Life = 22
