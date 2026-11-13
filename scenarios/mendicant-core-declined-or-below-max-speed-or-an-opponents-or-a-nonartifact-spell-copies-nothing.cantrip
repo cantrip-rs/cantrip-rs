@@ -1,0 +1,74 @@
+# Mendicant Core, Guidelight: "Max speed - Whenever you cast an artifact spell, you may pay {1}. If you do, copy it." (CR
+# 702.178a, 118.12) Reaching speed 4 takes until turn 7 (Bolts on turns 3, 5 and 7, CR 702.179d). There the Memnite Bot1
+# casts is not copied when Bot1 declines to pay (the Mox stays untapped), a Bolt (no artifact spell) and Bot2's Memnite
+# (not Bot1's spell) copy nothing.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mendicant Core, Guidelight
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Memnite
+Memnite
+Mountain x11
+
+[Bot2 Deck]
+Memnite
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mendicant Core, Guidelight.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 4
+? Bot2.Battlefield.Count = 1
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+? Bot1.Battlefield.Mox Pearl.Tapped = false
+
+[Expect]
+Turn = 7
+Bot2.Life = 11
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Mendicant Core, Guidelight.Power = 5

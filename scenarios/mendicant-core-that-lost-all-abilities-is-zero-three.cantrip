@@ -1,0 +1,45 @@
+# Mendicant Core, Guidelight: "Mendicant Core's power is equal to the number of artifacts you control", a characteristic-defining
+# ability (CR 604.3) over a printed */3. With two Moxen it is a 3/3 (the control: itself and the Moxen are its artifacts). Bot2's
+# The Wondrous Wasp takes it away on turn 2, and the star is worth 0 (CR 208.2a, 208.5): a 0/3.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mendicant Core, Guidelight
+Plains x17
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Mox Jet
+The Wondrous Wasp
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mendicant Core, Guidelight.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Mendicant Core, Guidelight.Power = 3
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.The Wondrous Wasp.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Target(Mendicant Core, Guidelight)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Mendicant Core, Guidelight.Power = 0
+Bot1.Battlefield.Mendicant Core, Guidelight.Toughness = 3

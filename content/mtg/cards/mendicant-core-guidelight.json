@@ -1,0 +1,8 @@
+{
+  "name": "Mendicant Core, Guidelight",
+  "manaCost": "{W}{U}",
+  "type": "Legendary Artifact Creature — Robot",
+  "power": "*",
+  "toughness": 3,
+  "oracleText": "Mendicant Core's power is equal to the number of artifacts you control.\nStart your engines! (If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.)\nMax speed — Whenever you cast an artifact spell, you may pay {1}. If you do, copy it. (The copy becomes a token.)"
+}
