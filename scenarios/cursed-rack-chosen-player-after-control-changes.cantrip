@@ -1,0 +1,34 @@
+# The chosen player remains chosen when that player takes control of the Rack, and still discards to four (CR 514.1).
+[Bot1 Deck]
+Cursed Rack
+Black Lotus
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Systems Override
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cursed Rack.Cast
+? Bot1.Mana =
+Bot1.ChoosePlayer(Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Systems Override.Cast(Bot1.Battlefield.Cursed Rack)
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Cursed Rack.ChosenPlayer = 2
+? Bot2.Hand.Count = 6
+[T3 Bot1.Main1]
+[Expect]
+Bot2.Hand.Count = 4
+Bot1.Battlefield.Cursed Rack.ChosenPlayer = 2

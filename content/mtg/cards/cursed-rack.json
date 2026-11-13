@@ -1,0 +1,6 @@
+{
+  "name": "Cursed Rack",
+  "manaCost": "{4}",
+  "type": "Artifact",
+  "oracleText": "As this artifact enters, choose an opponent.\nThe chosen player's maximum hand size is four."
+}
