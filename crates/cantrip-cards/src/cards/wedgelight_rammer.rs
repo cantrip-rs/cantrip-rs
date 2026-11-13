@@ -10,11 +10,6 @@ fn robot(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// The 9+ striation's "Flying, first strike" (CR 702.9, 702.7, 721.2a): both in the one layer-6 effect.
-fn have_flying_and_first_strike(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
-    chars.keywords = chars.keywords.with(Keyword::Flying).with(Keyword::FirstStrike);
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(THIS_ENTERS, robot, "When this Spacecraft enters, create a 2/2 colorless Robot artifact creature token."),
@@ -22,7 +17,7 @@ pub static CARD: CardDef = CardDef {
     ],
     statics: &[
         static_ability(Layer::Type, station::charged::<9>, station::is_a_creature, NINE_PLUS),
-        static_ability(Layer::Ability, station::charged::<9>, have_flying_and_first_strike, NINE_PLUS).continues(),
+        static_ability(Layer::Ability, station::charged::<9>, statics::have_flying_and_first_strike, NINE_PLUS).continues(),
         static_ability(Layer::PtSet, station::charged::<9>, statics::base_pt::<3, 4>, NINE_PLUS).continues(),
     ],
     ..oracle::WEDGELIGHT_RAMMER
