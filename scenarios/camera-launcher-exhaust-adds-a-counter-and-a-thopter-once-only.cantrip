@@ -1,0 +1,55 @@
+# Camera Launcher: "Exhaust — {3}: Put a +1/+1 counter on this creature. Create a 1/1 colorless Thopter artifact creature
+# token with flying. (Activate each exhaust ability only once.)" Turn 1 Bot1 casts it. On turn 3 it is paid with exactly {3}
+# (Sol Ring and a Mox; the pool is empty right after), the Launcher gets the counter (3/3) and Bot1 a Thopter. With another {3} from
+# three Moxen the second activation is refused the same turn, and on turn 5 as well: once per object, ever.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Camera Launcher
+Sol Ring
+Mox Sapphire
+Mox Emerald
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Camera Launcher.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Camera Launcher.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Camera Launcher.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Camera Launcher.Power = 3
+? Bot1.Battlefield.Thopter Token.Power = 1
+? Bot1.Battlefield.Thopter Token.Keywords = Flying
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Camera Launcher.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Camera Launcher.Activate
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Mox Sapphire; Mox Emerald; Sol Ring; Camera Launcher; Thopter Token
+Bot1.Battlefield.Camera Launcher.Power = 3

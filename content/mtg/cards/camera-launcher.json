@@ -1,0 +1,8 @@
+{
+  "name": "Camera Launcher",
+  "manaCost": "{3}",
+  "type": "Artifact Creature — Construct",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Exhaust — {3}: Put a +1/+1 counter on this creature. Create a 1/1 colorless Thopter artifact creature token with flying. (Activate each exhaust ability only once.)"
+}
