@@ -1,0 +1,8 @@
+{
+  "name": "Bigfin Bouncer",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Shark Pirate",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature enters, return target creature an opponent controls to its owner's hand."
+}

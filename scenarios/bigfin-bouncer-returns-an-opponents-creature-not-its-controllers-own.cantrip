@@ -1,0 +1,46 @@
+# Bigfin Bouncer: "When this creature enters, return target creature an opponent controls to its owner's hand" (CR 603.6a, 400.3). Bot1 has an
+# Ornithopter of its own and Bot2 a Llanowar Elves: only Bot2's can be the target and it goes back to Bot2's hand; Ornithopter and the Bouncer stay.
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Bigfin Bouncer
+Ornithopter
+Island x30
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x30
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bigfin Bouncer.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Llanowar Elves = (absent)
+Bot2.Hand.Llanowar Elves.Colors = Green
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Bigfin Bouncer.Power = 3
+Bot1.Battlefield.Bigfin Bouncer.Toughness = 2

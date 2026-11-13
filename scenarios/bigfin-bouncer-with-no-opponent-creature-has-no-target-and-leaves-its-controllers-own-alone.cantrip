@@ -1,0 +1,32 @@
+# Bigfin Bouncer: "When this creature enters, return target creature an opponent controls to its owner's hand" (CR 603.3d, 115.1). Bot2 controls no
+# creature, so the trigger has no legal target and is removed from the stack: Bot1's own Ornithopter is never a choice and stays, and nothing is returned.
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Bigfin Bouncer
+Ornithopter
+Island x30
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bigfin Bouncer.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Bigfin Bouncer; Mox Sapphire; Ornithopter
+Bot1.Hand.Count = 3
+Bot2.Hand.Count = 7
