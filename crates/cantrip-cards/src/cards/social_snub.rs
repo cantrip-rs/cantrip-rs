@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::triggers::cast_this_spell;
-use cantrip_mechanics::{creatures_you_control, each_player_sacrifices, effects};
+use cantrip_mechanics::{creatures_you_control, effects};
 use cantrip_oracle as oracle;
 
 const ASK: Question = Question::new("CopySpell", "copy this spell?", "The copy is not cast", "Copy it", "Don't copy").no_default();
@@ -24,7 +24,7 @@ fn may_copy(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// "Each player sacrifices a creature of their choice. Each opponent loses 1 life and you gain 1 life." Every player chooses in
 /// turn order and the creatures are sacrificed together (CR 101.4, 701.21a); a player with no creature sacrifices nothing.
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    each_player_sacrifices(g, item.object, 1, |q, id| q.chars(id).is(CardType::Creature))?;
+    effects::each_player_sacrifices_creatures::<1>(g, item)?;
     g.end_sentence();
     effects::each_opponent_loses_life_you_gain_life::<1>(g, item)
 }

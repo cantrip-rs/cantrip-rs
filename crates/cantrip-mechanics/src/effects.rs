@@ -2073,6 +2073,15 @@ pub fn choose_to_discard_a_card_or_lose_life(
     Ok(())
 }
 
+/// "Each player sacrifices `N` creature[s] of their choice" (CR 701.21a, 101.4): every player, the controller included, chooses
+/// in turn order from the active player knowing the earlier choices, and the creatures chosen are sacrificed together; a player
+/// with fewer than `N` creatures sacrifices them all. Innocent Blood, Dghor, Bloodletter, Liliana, Dreadhorde General (two) and
+/// Blasphemous Edict (thirteen) print it.
+pub fn each_player_sacrifices_creatures<const N: u8>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    crate::each_player_sacrifices(g, item.object, N, |q, id| q.chars(id).is(CardType::Creature))?;
+    Ok(())
+}
+
 const PAY_TO_GAIN_LIFE: Question = Question::new("GainLife", "pay {cost} to gain 1 life?", "", "Pay {cost}", "Don't pay");
 
 /// "You may pay [cost]. If you do, you gain 1 life." (CR 608.2d, 118.12, 119.3) as the ability resolves: its controller is asked

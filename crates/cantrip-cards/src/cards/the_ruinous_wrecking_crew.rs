@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::triggers::THIS_ENTERS;
-use cantrip_mechanics::{destroy_target, each_player_sacrifices, effects, targets};
+use cantrip_mechanics::{destroy_target, effects, targets};
 use cantrip_oracle as oracle;
 
 /// "Target token" (CR 115.1, 111.1): a token permanent on the battlefield, under any player's control.
@@ -30,13 +30,6 @@ fn destroy_token(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// Mode 4: "Each player sacrifices a creature of their choice." (CR 701.21a, 101.4): every player chooses in turn order and the
-/// creatures are sacrificed together.
-fn each_player_sacrifices_a_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    each_player_sacrifices(g, item.object, 1, |q, id| q.chars(id).is(CardType::Creature))?;
-    Ok(())
-}
-
 /// "Choose up to X —" (CR 700.2, 603.3c): its modes are chosen as the ability is put on the stack, as many as the X the
 /// creature was cast with (read from its source, `ModalDef::up_to_that_many`), each at most once; with none chosen it is removed
 /// from the stack.
@@ -44,7 +37,7 @@ static MODAL: ModalDef = modes(&[
     mode(discard_then_draw, "Discard a card, then draw a card."),
     mode(opponent_loses_2, "Target opponent loses 2 life.").targets(&[targets::OPPONENT]),
     mode(destroy_token, "Destroy target token.").targets(&[target(token)]),
-    mode(each_player_sacrifices_a_creature, "Each player sacrifices a creature of their choice."),
+    mode(effects::each_player_sacrifices_creatures::<1>, "Each player sacrifices a creature of their choice."),
 ])
 .up_to_that_many();
 
