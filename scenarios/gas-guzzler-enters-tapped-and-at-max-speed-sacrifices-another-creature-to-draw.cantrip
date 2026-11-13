@@ -1,0 +1,77 @@
+# Gas Guzzler: Start your engines! (CR 702.179), "This creature enters tapped" (CR 614.1d), and "Max speed - {B}, Sacrifice
+# another creature or Vehicle: Draw a card" (CR 702.178a): the ability exists only at speed 4. Bot1's speed is 1 when the
+# Guzzler enters tapped on turn 1, and a Lightning Bolt on each of turns 1, 3 and 5 raises it to 2, 3, then 4 (CR 702.179d).
+# On turn 3, at speed 3 with an untapped Mox Jet to pay and an Ornithopter to sacrifice, the ability is refused. On turn 5 at
+# speed 4 it is offered: the Mox Ruby (a noncreature artifact) and the Guzzler itself ("another") are refused as the
+# sacrifice, the Ornithopter is taken, {B} from Mox Jet pays exactly (the pool is empty) and a card is drawn.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mountain
+Gas Guzzler
+Lightning Bolt
+Ornithopter
+Island
+Lightning Bolt
+Lightning Bolt
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Gas Guzzler.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+? Bot1.Battlefield.Gas Guzzler.Tapped = true
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Gas Guzzler.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+Bot1.Battlefield.Gas Guzzler.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Choose(Mox Ruby)
+! Bot1.Choose(Gas Guzzler)
+Bot1.Choose(Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Speed = 4
+Bot1.Graveyard = Ornithopter; Lightning Bolt; Lightning Bolt; Lightning Bolt
+Bot1.Hand.Count = 2

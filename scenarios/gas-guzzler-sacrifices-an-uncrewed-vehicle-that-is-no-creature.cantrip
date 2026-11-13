@@ -1,0 +1,74 @@
+# Gas Guzzler: "Max speed - {B}, Sacrifice another creature or Vehicle: Draw a card" (CR 702.178a, 301.7): a Vehicle that is
+# not crewed is no creature (CR 301.7, 702.122), and is still a Vehicle the cost can sacrifice. Bot1's speed rises to 4 with a Lightning
+# Bolt on each of turns 1, 3 and 5 (CR 702.179d). On turn 3 Smuggler's Copter is cast and never crewed; on turn 5 Mox Ruby, a
+# noncreature artifact and no Vehicle, is refused as the sacrifice and the uncrewed Copter is taken; a card is drawn.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mountain
+Gas Guzzler
+Lightning Bolt
+Smuggler's Copter
+Island
+Lightning Bolt
+Lightning Bolt
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Gas Guzzler.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+? Bot1.Battlefield.Smuggler's Copter.Types = Artifact
+Bot1.Battlefield.Gas Guzzler.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Choose(Mox Ruby)
+Bot1.Choose(Smuggler's Copter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Smuggler's Copter; Lightning Bolt; Lightning Bolt; Lightning Bolt
+Bot1.Battlefield = Gas Guzzler; Island; Mountain; Mox Jet; Mox Ruby
+Bot1.Hand.Count = 1
