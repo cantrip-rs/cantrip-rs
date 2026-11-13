@@ -1,0 +1,8 @@
+{
+  "name": "Inspiring Paladin",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Knight",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "During your turn, this creature has first strike. (It deals combat damage before creatures without first strike.)\nDuring your turn, creatures you control with +1/+1 counters on them have first strike."
+}

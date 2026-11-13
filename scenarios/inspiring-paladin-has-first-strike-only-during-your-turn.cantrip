@@ -1,0 +1,45 @@
+# Inspiring Paladin: "During your turn, this creature has first strike." Bot1's Paladin (3/3) attacks on turn 3 and Bot2's
+# Memnite blocks: with first strike (CR 702.7b) the Paladin kills it before it deals damage and takes none (it would take 1
+# otherwise). The keyword is there on the Paladin's controller's turn 3 and gone on Bot2's turn 2 and 4 (CR 613.1f).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Gleemox
+Inspiring Paladin
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Inspiring Paladin.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Inspiring Paladin.Keywords = (absent)
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Inspiring Paladin.Keywords = FirstStrike
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Inspiring Paladin > Bot2)
+Bot2.Block(Memnite > Inspiring Paladin)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Inspiring Paladin.Damage = 0
+? Bot2.Graveyard = Memnite
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Inspiring Paladin.Keywords = (absent)
+
+[Expect]
+Turn = 4
+Bot2.Life = 20
+Bot2.Graveyard = Memnite

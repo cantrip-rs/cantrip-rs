@@ -1,0 +1,39 @@
+# On Bot2's turn the Paladin has no first strike (CR 613.1f), so a block is ordinary simultaneous damage. Bot1's Paladin does not
+# attack on turn 3; on turn 4 Bot2's Memnite attacks and the Paladin blocks it: the Memnite deals its 1 damage and dies.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Gleemox
+Inspiring Paladin
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Inspiring Paladin.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Block(Inspiring Paladin > Memnite)
+? Bot1.Battlefield.Inspiring Paladin.Keywords = (absent)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Turn = 4
+Bot1.Life = 20
+Bot1.Battlefield.Inspiring Paladin.Damage = 1
+Bot2.Graveyard = Memnite
