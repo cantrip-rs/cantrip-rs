@@ -1,0 +1,57 @@
+# Crackling Cyclops, a 0/4: "Whenever you cast a noncreature spell, this creature gets +3/+0 until end of turn." Turn 1: with the
+# Cyclops in play, a Fanatical Firebrand (a creature spell) leaves it a 0/4. Turn 2: Bot2's Mox Ruby is not Bot1's spell, still 0/4.
+# Turn 3: Bot1's own Mox Ruby makes it 3/4 (the toughness untouched); on turn 4 it is a 0/4 again.
+
+[Bot1 Deck]
+Mox Ruby x4
+Crackling Cyclops
+Fanatical Firebrand
+Mountain
+Mox Ruby
+Mountain x10
+
+[Bot2 Deck]
+Mox Ruby
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Crackling Cyclops.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Crackling Cyclops.Power = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Crackling Cyclops.Power = 0
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Crackling Cyclops.Power = 3
+? Bot1.Battlefield.Crackling Cyclops.Toughness = 4
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Crackling Cyclops.Power = 0
+
+[Expect]
+Bot1.Battlefield.Crackling Cyclops.Power = 0
+Bot1.Battlefield.Crackling Cyclops.Toughness = 4
