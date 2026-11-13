@@ -1,0 +1,6 @@
+{
+  "name": "Ring of Ma'rûf",
+  "manaCost": "{5}",
+  "type": "Artifact",
+  "oracleText": "{5}, {T}, Exile this artifact: The next time you would draw a card this turn, instead put a card you own from outside the game into your hand."
+}
