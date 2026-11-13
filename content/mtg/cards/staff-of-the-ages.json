@@ -1,0 +1,6 @@
+{
+  "name": "Staff of the Ages",
+  "manaCost": "{3}",
+  "type": "Artifact",
+  "oracleText": "Creatures with landwalk abilities can be blocked as though they didn't have those abilities."
+}
