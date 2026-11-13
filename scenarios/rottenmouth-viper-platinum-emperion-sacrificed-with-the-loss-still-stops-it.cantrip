@@ -1,0 +1,42 @@
+# Rottenmouth Viper's rulings: each opponent makes all their choices, then the sacrifices, discards and losses of life all
+# happen at the same time (CR 101.4). Bot2 Show and Tells Platinum Emperion ("Your life total can't change") in beside Bot1's
+# Viper, and chooses to lose 4 life for its first counter: the Emperion stops that loss (CR 119.7). On turn 3 the Viper attacks with two counters and Bot2 chooses to sacrifice the Emperion for one and
+# to lose 4 life for the other: the Emperion is still on the battlefield as that loss would happen, so its life total can't
+# change and it loses none. Only then is it gone, and the Viper's 6 combat damage is lost: 20 - 6 = 14 (not 10, as it would
+# be had the sacrifice come first).
+
+[Bot1 Deck]
+Island
+Black Lotus
+Show and Tell
+Rottenmouth Viper
+Island x10
+
+[Bot2 Deck]
+Platinum Emperion
+Lightning Bolt x15
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Rottenmouth Viper)
+Bot2.Choose(Platinum Emperion)
+Bot2.Modes(Lose 4 life)
+? Bot2.Life = 20
+? Bot2.Battlefield = Platinum Emperion
+[T3 Bot1.Main1]
+Bot1.Attack(Rottenmouth Viper > Bot2)
+Bot2.Modes(Sacrifice a nonland permanent)
+Bot2.Choose(Platinum Emperion)
+Bot2.Modes(Lose 4 life)
+? Bot2.Graveyard = Platinum Emperion
+? Bot2.Life = 20
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot2.Life = 14
+Bot1.Battlefield.Rottenmouth Viper.Counters.Blight = 2
+Bot2.Graveyard = Platinum Emperion

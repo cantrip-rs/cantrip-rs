@@ -4,7 +4,8 @@
 //! Third Seat's kind) triggers once in a three-player game. No implemented card has such a trigger yet, so a test card
 //! watches here; each card's own effect runs - the card itself at no cost where it can be cast or activated at once, and
 //! otherwise its triggered ability's effect on a zero-cost test sorcery with the ability's targets.
-//! `each_opponent_loses_life_unless_together` is Ob Nixilis, the Adversary's.
+//! `each_opponent_loses_life_unless_together` is Ob Nixilis, the Adversary's. Rottenmouth Viper's losses and an exchange of
+//! life totals (`Game::together`) are one event in the same way.
 
 use std::sync::OnceLock;
 
@@ -84,7 +85,8 @@ fn probe(card: &str, text: &str) -> &'static CardDef {
 /// answering every question plainly: a "may" no, an optional discard none, a forced choice the first cards it may take,
 /// targets the opponents. `others` is each opponent's library. Played until everything has resolved and `done` holds.
 fn play(witness: &'static CardDef, card: &'static CardDef, activate: bool, others: Vec<&'static CardDef>, done: fn(&Game) -> bool) -> Game {
-    let cards: Vec<&'static CardDef> = vec![witness, card, &FILLER, &ROCK];
+    // Rottenmouth Viper's free copy names its choices by the real card's labels, which the table must hold.
+    let cards: Vec<&'static CardDef> = vec![witness, card, &FILLER, &ROCK, real("Rottenmouth Viper")];
     let table: &'static CardTable = Box::leak(Box::new(CardTable::new(cards)));
     let find = |c: &CardDef| table.find(c.name).unwrap();
     let mut first = vec![find(witness), find(card)];
@@ -131,6 +133,8 @@ fn play(witness: &'static CardDef, card: &'static CardDef, activate: bool, other
                 Answer::Targets(candidates.iter().copied().filter(|&t| matches!(t, Target::Player(p) if p != PlayerId(0))).collect())
             }
             RequestKind::OrderTriggers { sources, .. } => Answer::Order((0..count_u32(sources.len())).collect()),
+            // Rottenmouth Viper's "sacrifice, discard or lose 4 life": the last, losing the life.
+            RequestKind::ChooseModes { eligible, .. } => Answer::Modes(vec![eligible.len() as u8 - 1]),
             other => panic!("unexpected question {other:?}"),
         };
         game.answer(request.id, request.player, answer).unwrap();
@@ -216,6 +220,51 @@ fn tinybones_joins_up_target_players_lose_1_in_one_event() {
 fn parker_luck_both_players_lose_life_in_one_event() {
     let game = play(&LIFE_WITNESS, probe("Parker Luck", "At the beginning of your end step"), false, vec![&ROCK; 30], all_resolved);
     assert_eq!(lives(&game), [20 + 1, 18, 18]);
+}
+
+/// "Whenever this creature enters or attacks, put a blight counter on it. Then for each blight counter on it, each opponent
+/// loses 4 life unless that player sacrifices a nonland permanent of their choice or discards a card." Both opponents choose
+/// the life: every loss is one simultaneous action with the sacrifices and discards (the rulings, `Game::together`).
+#[test]
+fn rottenmouth_viper_each_opponents_4_life_in_one_event() {
+    let viper = Box::leak(Box::new(CardDef { cost: ManaCost::ZERO, additional_cost: None, ..*real("Rottenmouth Viper") }));
+    let game = play(&LIFE_WITNESS, viper, false, vec![&FILLER; 30], all_resolved);
+    assert_eq!(lives(&game), [20 + 1, 16, 16]);
+}
+
+/// Bot2 loses 5 life, then Bot1 exchanges life totals with Bot2 (CR 701.12c): Bot1 loses 5 and Bot2 gains 5, one simultaneous
+/// change of both totals announced together, not a loss and then a gain.
+fn bot2_loses_5_then_exchange_with_bot2(g: &mut dyn Rules, item: &StackItem) -> Result<(), Suspend> {
+    g.lose_life(PlayerId(1), 5);
+    g.end_sentence();
+    cantrip_mechanics::exchange::life_totals(g, item.controller, PlayerId(1));
+    Ok(())
+}
+
+/// Any loss of life, or a gain by anyone but Bot1 (whose own gains, the witness's, it does not watch).
+fn a_loss_or_anothers_gain(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
+    match event {
+        Event::LifeChange { player, delta } if *delta < 0 || *player != PlayerId(0) => Fired::PLAIN,
+        _ => None,
+    }
+}
+
+/// A zero-cost enchantment: "Whenever one or more players lose life or an opponent gains life, you gain 1 life."
+static CHANGE_WITNESS: CardDef = CardDef {
+    name: "Probe Change Witness",
+    types: TypeSet::of(&[CardType::Enchantment]),
+    abilities: &[triggered(when(EventMask::LIFE_CHANGE, a_loss_or_anothers_gain), gain_one, "Whenever one or more players lose life or an opponent gains life, you gain 1 life.")
+        .once_per_batch()],
+    ..CardDef::BLANK
+};
+
+/// An exchange of life totals (Mister Negative's) is one event: the witness triggers once for Bot2's 5 lost and once for the
+/// exchange's loss and gain together (20 and 15 exchanged, then 2 gained), not once for each.
+#[test]
+fn an_exchange_of_life_totals_is_one_event() {
+    let card = Box::leak(Box::new(CardDef { name: "Probe", types: TypeSet::of(&[CardType::Sorcery]), spell: spell(&[], bot2_loses_5_then_exchange_with_bot2), ..CardDef::BLANK }));
+    let game = play(&CHANGE_WITNESS, card, false, vec![&FILLER; 30], all_resolved);
+    assert_eq!(lives(&game), [15 + 2, 20, 20]);
 }
 
 /// Memory Jar's end step: "each player discards their hand" is one discard of every hand.

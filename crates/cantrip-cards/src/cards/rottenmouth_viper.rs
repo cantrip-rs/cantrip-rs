@@ -16,8 +16,9 @@ const LOSE: u8 = 2;
 ///
 /// Each opponent in turn order (CR 101.4) makes all of their choices - one for each counter: to sacrifice a nonland
 /// permanent, to discard a card, or to lose 4 life, a permanent or card already chosen not chosen again, and losing 4 life
-/// the one choice left to a player with neither - and then all the actions happen together (the rulings): the sacrifices
-/// and the discards at once, then the life, 4 for each time it was chosen.
+/// the one choice left to a player with neither - and then all the actions happen together (the rulings, CR 101.4): every
+/// sacrifice, every discard and every loss of life at once, the player losing 4 life "the appropriate number of times" - a
+/// loss of 4 for each time it was chosen, each its own occurrence (`Game::together`).
 fn blight_and_punish(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.add_counters(item.object, CounterKind::Blight, 1);
     let counters = g.obj(item.object).counters(CounterKind::Blight).max(0);
@@ -51,15 +52,11 @@ fn blight_and_punish(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
             match choice {
                 SACRIFICE => sacrificed.extend(choose::cards(g, opponent, item.object, Purpose::Sacrifice, permanents, 1, false)?.into_iter().map(|id| (opponent, id))),
                 DISCARD => discarded.extend(choose::cards_from(g, opponent, item.object, Purpose::Discard, hand, cards, 1, false)?),
-                _ => losses.push(opponent),
+                _ => losses.push((opponent, -4)),
             }
         }
     }
-    g.sacrifice_each(&sacrificed);
-    g.discard_together(&discarded);
-    for player in losses {
-        g.lose_life(player, 4);
-    }
+    g.together(Together { sacrifices: &sacrificed, discards: &discarded, life: &losses });
     Ok(())
 }
 

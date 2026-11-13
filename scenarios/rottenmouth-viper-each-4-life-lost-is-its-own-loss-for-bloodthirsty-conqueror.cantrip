@@ -1,0 +1,77 @@
+# Rottenmouth Viper's rulings: the opponent "loses 4 life the appropriate number of times", all at once with their other
+# choices. Each 4 is its own loss of life (CR 119.3), one simultaneous event (CR 101.4, 603.2c) with one life change for
+# each: Bloodthirsty Conqueror's "whenever an opponent loses life, you gain that much life" triggers once for each 4, not
+# once for an 8. Bot1 casts the Conqueror from Moxen on turn 1 and the Viper on turn 3: one counter, Bot2 loses 4, one
+# trigger (24). On turn 5 the Viper attacks: two counters, Bot2 chooses to lose 4 life both times - two triggers, each for 4
+# (32) - then the Viper's 6 combat damage, a third for 6 (38). Bot2: 20 - 4 - 4 - 4 - 6 = 2.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Bloodthirsty Conqueror
+Black Lotus
+Rottenmouth Viper
+Swamp x12
+
+[Bot2 Deck]
+Lightning Bolt x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bloodthirsty Conqueror.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rottenmouth Viper.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Modes(Lose 4 life)
+? Bot2.Life = 16
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 24
+[T5 Bot1.Main1]
+Bot1.Attack(Rottenmouth Viper > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Modes(Lose 4 life)
+Bot2.Modes(Lose 4 life)
+? Bot2.Life = 8
+? Bot1.Life = 24
+Bot1.Triggers(Bloodthirsty Conqueror; Bloodthirsty Conqueror)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 32
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot2.Life = 2
+Bot1.Life = 38
+Bot1.Battlefield.Rottenmouth Viper.Counters.Blight = 2
