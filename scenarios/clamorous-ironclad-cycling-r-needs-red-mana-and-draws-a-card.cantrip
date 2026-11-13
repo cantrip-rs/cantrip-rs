@@ -1,0 +1,32 @@
+# Clamorous Ironclad's "Cycling {R}" (CR 702.29a): with only a Mox Jet on the battlefield the {R} cannot be paid (refusal, turn 1); a Mox
+# Ruby cast and tapped pays it exactly, the Ironclad is discarded as the cost and Bot1 draws the top card, the Forest.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Clamorous Ironclad
+Island x4
+Forest
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+
+! Bot1.Hand.Clamorous Ironclad.Activate(Ability: Cycling; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Clamorous Ironclad.Activate(Ability: Cycling)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Clamorous Ironclad
+Bot1.Hand = Forest; Island; Island; Island; Island

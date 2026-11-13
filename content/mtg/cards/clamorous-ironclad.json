@@ -1,0 +1,11 @@
+{
+  "name": "Clamorous Ironclad",
+  "manaCost": "{3}{R}",
+  "type": "Artifact — Vehicle",
+  "power": 6,
+  "toughness": 3,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nCrew 3 (Tap any number of creatures you control with total power 3 or more: This Vehicle becomes an artifact creature until end of turn.)\nCycling {R} ({R}, Discard this card: Draw a card.)",
+  "keywords": [
+    "Menace"
+  ]
+}

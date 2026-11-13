@@ -1,0 +1,55 @@
+# Clamorous Ironclad (6/3 menace Vehicle, Crew 3): a lone Savannah Lions (power 2, one short of 3) cannot crew it on turn 3
+# (refusal); with a Zephyr Sprite (power 1) cast first the two together (total power exactly 3) do, and the Ironclad attacks
+# for its power of 6 into an empty board (Bot2: 14). Bot2 had no creatures, so menace does not come into it here.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Clamorous Ironclad
+Savannah Lions
+Zephyr Sprite
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Clamorous Ironclad.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Clamorous Ironclad.Activate(Ability: Crew)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Clamorous Ironclad.Activate(Ability: Crew)
+Bot1.Choose(Savannah Lions; Zephyr Sprite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clamorous Ironclad.Types = Artifact; Creature
+Bot1.Attack(Clamorous Ironclad > Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Savannah Lions.Tapped = true
+Bot1.Battlefield.Zephyr Sprite.Tapped = true
+Bot1.Battlefield.Clamorous Ironclad.Keywords = Menace
