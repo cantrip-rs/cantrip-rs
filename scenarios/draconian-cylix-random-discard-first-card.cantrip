@@ -1,0 +1,36 @@
+# Fixed random face 1 discards Shock from a two-card hand as the activation cost, before the ability resolves (CR 701.9a, 701.9b, 602.2b).
+[Bot1 Deck]
+Black Lotus
+Draconian Cylix
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Shock
+Island
+Island x13
+[Bot2 Deck]
+Island x20
+[Dice]
+1
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Draconian Cylix.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Draconian Cylix.Activate(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+? Bot1.Graveyard.Shock.Colors = Red
+? Bot1.Hand.Island.Colors = 
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard.Shock.Colors = Red
+Bot1.Hand.Island.Colors =
