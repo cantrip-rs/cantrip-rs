@@ -1591,3 +1591,17 @@ pub fn create_a_zombie(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
     create(g, item.controller, &ZOMBIE, 1)?;
     Ok(())
 }
+
+/// "Create a 1/1 white Cat creature token." (CR 111.1): one `CAT` under `item`'s controller, the card file listing it in its
+/// `EXTRA`. Arahbo, the First Fang, Cat Collector and Prideful Parent print it.
+pub fn create_a_cat(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &CAT, 1)?;
+    Ok(())
+}
+
+/// "Create a 1/1 white Soldier creature token." (CR 111.1): one `SOLDIER` under `item`'s controller, the card file listing it in
+/// its `EXTRA`. Black Panther Vanguard's first mode and Resolute Reinforcements print it.
+pub fn create_a_soldier(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &SOLDIER, 1)?;
+    Ok(())
+}

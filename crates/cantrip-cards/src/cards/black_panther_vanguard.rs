@@ -23,14 +23,9 @@ fn another_nontoken_hero_you_control_enters(q: &dyn Query, me: &Asker, event: &E
 /// "Choose one" as the trigger goes on the stack (CR 603.3c, 700.2a): "Create a 1/1 white Soldier creature token" (CR 111.4) or
 /// "Creatures you control get +1/+1 until end of turn" (CR 611.2a).
 static MODAL: ModalDef = modes(&[
-    mode(create_a_soldier, "Create a 1/1 white Soldier creature token."),
+    mode(tokens::create_a_soldier, "Create a 1/1 white Soldier creature token."),
     mode(pump_creatures_you_control, "Creatures you control get +1/+1 until end of turn."),
 ]);
-
-fn create_a_soldier(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &tokens::SOLDIER, 1)?;
-    Ok(())
-}
 
 fn pump_creatures_you_control(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     effects::pump_creatures_you_control(g, item, 1, 1);
