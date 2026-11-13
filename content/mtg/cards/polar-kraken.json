@@ -1,0 +1,11 @@
+{
+  "name": "Polar Kraken",
+  "manaCost": "{8}{U}{U}{U}",
+  "type": "Creature — Kraken",
+  "power": 11,
+  "toughness": 11,
+  "oracleText": "Trample\nThis creature enters tapped.\nCumulative upkeep—Sacrifice a land. (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)",
+  "keywords": [
+    "Trample"
+  ]
+}

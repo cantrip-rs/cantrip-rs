@@ -1,0 +1,90 @@
+# Polar Kraken enters tapped, pays one then two lands as its age grows, and tramples over a 0/2 blocker for nine damage (CR 614.1d, 702.24a, 702.19b).
+[Bot1 Deck]
+Polar Kraken
+Ornithopter
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Forest
+Island x30
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T11 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T13 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T15 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T17 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T19 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T21 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Polar Kraken.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+Bot2.Pass
+? Bot1.Battlefield.Polar Kraken.Tapped = true
+[T23 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+! Bot1.Choose(Ornithopter)
+! Bot1.Choose(Forest)
+Bot1.Choose(Island)
+? Bot1.Battlefield.Polar Kraken.Counters.Age = 1
+? Bot1.Battlefield.Count = 12
+[T23 Bot1.DeclareAttackers]
+Bot1.Attack(Polar Kraken > Bot2)
+Bot2.Block(Ornithopter > Polar Kraken)
+[T23 Bot1.Main2]
+? Bot2.Life = 11
+[T25 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+! Bot1.Choose(Island; Island; Island)
+Bot1.Choose(Island; Island)
+? Bot1.Battlefield.Polar Kraken.Counters.Age = 2
+[Expect]
+Bot1.Battlefield.Count = 10
+Bot2.Life = 11
