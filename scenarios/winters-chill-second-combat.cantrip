@@ -1,0 +1,43 @@
+# Winter's Chill can be cast before blockers in an additional combat phase; Aurelia creates the second phase (CR 500.8, 601.3).
+[Bot1 Deck]
+Forest
+Llanowar Elves
+Black Lotus
+Mox Pearl
+Plains
+Aurelia, the Warleader
+Forest x20
+[Bot2 Deck]
+Snow-Covered Island
+Mox Sapphire
+Winter's Chill
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Hand.Aurelia, the Warleader.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Aurelia, the Warleader)
+Bot1.Attack(Aurelia, the Warleader)
+Bot2.Battlefield.Snow-Covered Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Winter's Chill.Cast(X: 1)
+Bot2.Target(Bot1.Battlefield.Aurelia, the Warleader)
+Bot2.Pass
+? Bot2.Mana =
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Aurelia, the Warleader; Black Lotus
+Bot2.Life = 14
