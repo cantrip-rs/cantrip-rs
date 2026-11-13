@@ -1,0 +1,62 @@
+# Gonti, Night Minister and Walking Corpse (both cast on turn 1 with Black Lotus and three Mox Jets) attack Bot2 on turn 3 and
+# both connect: the trigger is "whenever a creature deals combat damage to one of your opponents", so each creature makes its
+# own (Bot2 takes 3 + 2 = 5, and two cards leave the top of its library face down: Plains and Ornithopter, 12 -> 10). Bot1, as
+# each creature's controller, plays the exiled Plains as its land for the turn and casts the exiled Ornithopter for {0}; the
+# Ornithopter is a spell Bot1 does not own, so Bot1 gets one Treasure. Bot1's own fourth Mox Jet, cast with Gonti out, is a
+# spell Bot1 owns and makes no Treasure - the single Treasure Token on the battlefield is the proof.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Jet
+Gonti, Night Minister
+Walking Corpse
+Mox Jet
+Swamp x13
+
+[Bot2 Deck]
+Island x8
+Plains
+Ornithopter
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Hand.Gonti, Night Minister.Cast
+Bot1.Hand.Walking Corpse.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Gonti, Night Minister > Bot2; Walking Corpse > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 15
+? Exile.Count = 2
+? Bot2.Library.Count = 10
+Bot1.Exile.Plains.Play
+Bot1.Exile.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Plains.Tapped = false
+Bot1.Battlefield = Gonti, Night Minister; Mox Jet; Mox Jet; Mox Jet; Mox Jet; Ornithopter; Plains; Treasure Token; Walking Corpse
+Exile.Count = 0
+Bot2.Library.Count = 10

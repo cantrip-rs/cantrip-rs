@@ -1,0 +1,48 @@
+# Gonti, Night Minister triggers for any combat damage dealt to an opponent, one point of it included: Bot1's Memnite (1/1)
+# connects on turn 3 and exiles the top card of Bot2's library face down (12 -> 11), while Bot1's Ornithopter (power 0) deals no
+# damage, so it makes no trigger and exiles nothing. Gonti stays home, so the one exiled card is the Memnite's, and Bot1 plays it:
+# the exiled Plains, as Bot1's land for the turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Gonti, Night Minister
+Memnite
+Ornithopter
+Swamp x15
+
+[Bot2 Deck]
+Island x8
+Plains
+Island x11
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gonti, Night Minister.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2; Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Exile.Count = 1
+? Bot2.Library.Count = 11
+Bot1.Exile.Plains.Play
+
+[Expect]
+Bot1.Battlefield.Plains.Tapped = false
+Exile.Count = 0

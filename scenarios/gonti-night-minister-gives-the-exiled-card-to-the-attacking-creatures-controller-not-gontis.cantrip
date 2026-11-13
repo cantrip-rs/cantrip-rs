@@ -1,0 +1,63 @@
+# Gonti, Night Minister: "Whenever a creature deals combat damage to one of your opponents, its controller looks at the top
+# card of that opponent's library and exiles it face down. They may play that card ..." (CR 608.2c, 109.5). In a game of
+# three Bot1 controls Gonti and Bot2's Memnite hits Bot3 on turn 5: Bot3 is Bot1's opponent, so Bot1's Gonti triggers, and
+# the card goes to the creature's controller, Bot2, not to Gonti's: the Ornithopter off the top of Bot3's library (Bot3's
+# library 12 -> 11) is cast by Bot2 from exile. It is a spell Bot2 does not own, so Bot2 - the player who cast it, not
+# Gonti's controller - creates a Treasure token.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Gonti, Night Minister
+Swamp x17
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Bot3 Deck]
+Island x8
+Ornithopter
+Island x11
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gonti, Night Minister.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T5 Bot2.Main1]
+Bot2.Attack(Memnite > Bot3)
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+? Bot3.Life = 19
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+? Exile.Count = 1
+? Bot3.Library.Count = 11
+[T5 Bot2.Main2]
+Bot2.Exile.Ornithopter.Cast
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot2.Battlefield = Memnite; Ornithopter; Treasure Token
+Bot1.Battlefield = Gonti, Night Minister; Mox Jet

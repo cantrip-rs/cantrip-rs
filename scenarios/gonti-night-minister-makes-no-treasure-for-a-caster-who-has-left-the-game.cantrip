@@ -1,0 +1,84 @@
+# Gonti, Night Minister: "Whenever a player casts a spell they don't own, that player creates a Treasure token." A player who has
+# left the game creates nothing (CR 800.4a). In a game of three each of Bot1 and Bot2 has a Gonti. On turn 5 Bot2's Gonti hits
+# Bot1 and exiles Bot1's Lightning Bolt, which Bot2 casts at Bot3: both Gontis trigger for Bot2. Bot1 answers with its own Bolt to
+# Bot2's face (3 life), so Bot2 loses, its spell and its own Gonti trigger leave with it, and Bot1's trigger then resolves for a
+# player no longer in the game: no Treasure is made, and Bot3 takes no damage.
+
+[Life]
+Bot2: 3
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Gonti, Night Minister
+Mountain
+Lightning Bolt
+Swamp
+Swamp
+Swamp
+Swamp
+Lightning Bolt
+Swamp x10
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Gonti, Night Minister
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x13
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gonti, Night Minister.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Gonti, Night Minister.Cast
+Bot2.Pass
+[T5 Bot2.Main1]
+Bot2.Attack(Gonti, Night Minister > Bot1)
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+? Bot1.Life = 17
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+? Exile.Count = 1
+Bot2.Battlefield.Swamp.Activate
+Bot2.Exile.Lightning Bolt.Cast(Bot3)
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+
+[Expect]
+Result = InProgress
+Bot2.Status = Lost
+Bot3.Life = 20
+Bot1.Battlefield = Gonti, Night Minister; Mountain; Mox Jet
+Bot3.Battlefield.Count = 0
+Bot2.Battlefield.Count = 0
