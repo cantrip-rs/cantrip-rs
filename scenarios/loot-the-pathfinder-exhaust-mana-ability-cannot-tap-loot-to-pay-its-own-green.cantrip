@@ -1,0 +1,40 @@
+# Loot, the Pathfinder: "Exhaust - {G}, {T}: Add three mana of any one color." Its {T} is part of the cost being paid, so while
+# its {G} is paid Loot cannot be tapped for mana by its own exhaust ability to pay it (CR 605.3a, 602.2): that would leave its
+# {T} unpayable. Never activated before, the ability is not barred by "activate only once" - only by the activation under way.
+# Turn 1: Loot (haste) is cast off two Moxen and a Lotus. Turn 3: a Forest is played and Loot's ability activated with the
+# pool empty; while its {G} is owed, Loot is refused, and the Forest pays: RRR.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Island
+Loot, the Pathfinder
+Forest
+Island
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Loot, the Pathfinder.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+? Bot1.Mana =
+Bot1.Battlefield.Loot, the Pathfinder.Activate(Ability: Add three mana; Color: Red)
+! Bot1.Battlefield.Loot, the Pathfinder.Activate(Ability: Add three mana; Color: Green)
+Bot1.Battlefield.Forest.Activate
+
+[Expect]
+Bot1.Mana = {R}{R}{R}
+Bot1.Battlefield.Loot, the Pathfinder.Tapped = true
+Bot1.Battlefield.Forest.Tapped = true

@@ -3802,6 +3802,12 @@ pub struct CardDef {
     /// permanent is on the battlefield with its abilities. The additions of several such permanents are summed. Wonder Man,
     /// Hollywood Hero.
     pub extra_power_up_activations: u8,
+    /// "During your turn, as long as you haven't activated an exhaust ability this turn, you may activate exhaust abilities as
+    /// though they haven't been activated" (CR 702.177a-b, 609.4): an exhaust ability of a permanent its controller controls is
+    /// not "activated only once" while it is that player's turn and they have not begun to activate any exhaust ability this
+    /// turn, whether or not it has been activated before, while this permanent is on the battlefield with its abilities. Elvish
+    /// Refueler.
+    pub exhaust_as_though_unactivated: bool,
     /// "You may activate abilities of creatures you control as though those creatures had haste" (CR 302.6, 702.10c): a
     /// {T} in the cost of an activated ability of such a creature may be paid though it came under its controller's control
     /// this turn. It gives no haste: the creature still can't attack. Shang-Chi, Master of Kung Fu and Thousand-Year
@@ -4001,6 +4007,7 @@ impl CardDef {
         spend_any_color: &[],
         granted_once_each_turn: None,
         extra_power_up_activations: 0,
+        exhaust_as_though_unactivated: false,
         activate_as_though_haste: &[],
         cause_rules: &[],
         turn_begin: &[],
@@ -4116,7 +4123,7 @@ impl CardDef {
             (!self.trigger_rules.is_empty(), "trigger rules"),
             (!self.additional_triggers.is_empty(), "additional triggers"),
             (self.ascend || self.storied || self.start_your_engines, "a designation keyword"),
-            (self.may_not_untap || self.granted_once_each_turn.is_some() || self.extra_power_up_activations > 0, "a permanent's rule"),
+            (self.may_not_untap || self.granted_once_each_turn.is_some() || self.extra_power_up_activations > 0 || self.exhaust_as_though_unactivated, "a permanent's rule"),
             (self.untimely_cleanup_rider, "a cleanup rider"),
             (!self.basic_land_types.is_empty(), "basic land types"),
         ];

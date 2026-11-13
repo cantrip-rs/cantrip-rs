@@ -41,6 +41,28 @@ pub fn extra_power_up_activations(cx: &Cx, player: PlayerId) -> u32 {
         .sum()
 }
 
+/// "During your turn, as long as you haven't activated an exhaust ability this turn, you may activate exhaust abilities as
+/// though they haven't been activated" (CR 702.177a-b, 609.4, `CardDef::exhaust_as_though_unactivated`): whether `player`'s
+/// exhaust abilities are, for the "activate only once" of each, not yet activated. It is their turn, a permanent they control
+/// has the rule and has not lost its abilities (CR 613.1f), and they have not begun to activate an exhaust ability this
+/// turn (CR 702.177b): none is in the history this turn, and none is being activated - on top of the stack, where an
+/// ability that uses the stack is while its costs are paid (CR 602.2a), or a mana ability under way, which never goes there
+/// (CR 605.3a; Loot, the Pathfinder's, `Frame::mana_abilities`).
+pub fn exhaust_as_though_unactivated(cx: &Cx, player: PlayerId) -> bool {
+    if cx.s().turn.active != player || !sources(cx, |d| d.exhaust_as_though_unactivated).any(|(_, controller, _, _)| controller == player) {
+        return false;
+    }
+    let exhaust = |ability: AbilityRef| matches!(cx.cards().ability(ability), AbilityDef::Activated(a) if a.exhaust);
+    let on_the_stack = cx.s().stack.last().is_some_and(|item| item.kind == StackKind::Activated && item.controller == player && exhaust(item.ability));
+    let under_way = || crate::actions::mana_abilities_under_way(cx.s()).any(|(p, _, ability)| p == player && exhaust(ability));
+    !on_the_stack
+        && !under_way()
+        && !cx
+            .history()
+            .select(EventQuery::kind(EventMask::ABILITY_ACTIVATED).this_turn())
+            .any(|r| matches!(r.event, Event::AbilityActivated { ability, player: p, .. } if p == player && exhaust(ability)))
+}
+
 /// The players whose unspent mana of some types a static ability keeps in their pool as steps and phases end (CR 500.5,
 /// `CardDef::mana_kept`): each with those types, indexed by `Mana`. Empty while no permanent with its abilities has one
 /// (CR 613.1f).

@@ -45,6 +45,13 @@ pub struct Frame {
     /// Top cards at the start of an announcement or special action (CR 401.5).
     /// New top cards cannot be revealed or looked at before that procedure finishes.
     pub library_tops: Option<Vec<Option<ObjectId>>>,
+    /// The mana abilities being activated in this run, outermost first, each with its player, its source and the ability as
+    /// the source had it when the activation began (CR 602.2a, 113.7a): begun and not yet activated, as one is while its costs
+    /// are paid. A mana ability never goes on the stack (CR 605.3a), so this is where the position says one is under way -
+    /// what "haven't begun to activate an exhaust ability" (CR 702.177b) and a {T} cost still to be paid read. Part of the
+    /// position, as `library_tops` is: a run stopped at a question inside an activation keeps it, the game-log tree restores
+    /// it with the position, and the answer's re-run rolls it back with the rest of the run. Empty in nearly every frame.
+    pub mana_abilities: Vec<(PlayerId, ObjectId, AbilityRef)>,
 }
 
 impl Frame {
@@ -63,6 +70,7 @@ impl Frame {
             scratch: [0; 4],
             unjudged: false,
             library_tops: None,
+            mana_abilities: Vec::new(),
         }
     }
 
@@ -85,7 +93,7 @@ impl Frame {
 /// Two frames are the same work in progress whatever bookkeeping their runs carry: the marks and request ids.
 impl PartialEq for Frame {
     fn eq(&self, other: &Frame) -> bool {
-        self.position() == other.position() && self.library_tops == other.library_tops
+        self.position() == other.position() && self.library_tops == other.library_tops && self.mana_abilities == other.mana_abilities
     }
 }
 
@@ -95,6 +103,7 @@ impl std::hash::Hash for Frame {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
         self.position().hash(state);
         self.library_tops.hash(state);
+        self.mana_abilities.hash(state);
     }
 }
 

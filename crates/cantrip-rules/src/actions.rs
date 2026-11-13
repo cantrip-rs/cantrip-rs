@@ -1429,7 +1429,11 @@ fn limit_reached(cx: &Cx, id: ObjectId, chars: &Chars, index: usize, def: &Activ
             if def.power_up {
                 allowed += static_rules::extra_power_up_activations(cx, cx.s().obj(id).controller);
             }
-            if 1 + activations.count() >= allowed as usize {
+            // An exhaust ability may be activated again, as though it had not been, where its controller's permanent says so
+            // (CR 702.177b, 609.4): asked last, when the ability has been activated enough.
+            if 1 + activations.count() >= allowed as usize
+                && !(def.exhaust && static_rules::exhaust_as_though_unactivated(cx, cx.s().obj(id).controller))
+            {
                 return true;
             }
         }
@@ -3310,6 +3314,13 @@ fn mana_ability_options_as(cx: &Cx, player: PlayerId, window: ManaWindow, option
     let forbidders = static_rules::activation_forbidders(cx);
     // What changes the costs of the abilities judged, read once (empty, so unallocated, in nearly every game).
     let changers = if judged == Judged::Nested { Vec::new() } else { cost_change_sources(cx) };
+    // The sources of the mana abilities under way whose own {T} is in their cost (CR 605.3a, 602.2): each stays untapped to
+    // pay it, so none of its {T} abilities can be activated to pay for it (or for one activated to pay it) - tapping it then
+    // would leave that cost unpayable. Empty unless a mana ability with a mana cost is being paid.
+    let tapping: Vec<ObjectId> = mana_abilities_under_way(cx.s())
+        .filter(|&(_, _, ability)| activated(cx, ability).is_some_and(|d| d.cost.tap))
+        .map(|(_, source, _)| source)
+        .collect();
     for &id in cx.s().battlefield() {
         if cx.s().obj(id).controller != player {
             continue;
@@ -3324,6 +3335,7 @@ fn mana_ability_options_as(cx: &Cx, player: PlayerId, window: ManaWindow, option
             if !def.is_mana_ability()
                 || !window.allows(def)
                 || def.from != ZoneKind::Battlefield
+                || def.cost.tap && tapping.contains(&id)
                 || limit_reached(cx, id, &chars, index, def)
                 || static_rules::activation_barred(cx, &forbidders, id, def)
             {
@@ -12433,11 +12445,28 @@ pub fn activate_mana(
     let run = crate::takeback::begin(cx.g, act);
     // A mana ability activated while an ability resolves (paying a cost it asks for) is its own text, its source's now, as are
     // the triggered mana abilities it triggers (`Cx::own_text`).
+    // How many mana abilities the frame has under way (`Frame::mana_abilities`): this one is recorded as it begins, and is no
+    // longer once it is activated or given up. One stopped at a question stays under way in the position while the question
+    // waits (CR 602.2, 605.3a): the run is put back to the position the question was asked in (`Game::run`), and the answer's
+    // re-run rolls it back with the rest of the run.
+    let under_way = cx.s().agenda.get(cx.frame).map(|f| f.mana_abilities.len());
     let done = cx.with_mana_interval(source, |cx| {
         cx.own_text(false, |cx| activate_mana_as(cx, player, source, index, color, colorless, sacrifice, by, held))
     });
+    if let Some(n) = under_way
+        && cx.s().agenda[cx.frame].mana_abilities.len() > n
+    {
+        let frame = cx.frame;
+        cx.st().update_frame(frame, |f| f.mana_abilities.truncate(n));
+    }
     crate::takeback::end(cx.g, run, done.is_ok());
     done
+}
+
+/// The mana abilities being activated in the position, each with its player, source and ability (`Frame::mana_abilities`,
+/// CR 605.3a): those of the frame running, or of the one waiting on a question asked during them.
+pub(crate) fn mana_abilities_under_way(s: &GameState) -> impl Iterator<Item = (PlayerId, ObjectId, AbilityRef)> + '_ {
+    s.agenda.iter().flat_map(|f| f.mana_abilities.iter().copied())
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -12456,6 +12485,11 @@ fn activate_mana_as(
         return activate_player_mana(cx, player, source, index - PLAYER_MANA_ABILITY, held);
     }
     let ability = cx.chars(source).abilities().nth(index as usize).expect("ability");
+    // Under way from now until it is activated (`Frame::mana_abilities`), as it is begun (CR 602.2a).
+    if cx.s().agenda.get(cx.frame).is_some() {
+        let frame = cx.frame;
+        cx.st().update_frame(frame, |f| f.mana_abilities.push((player, source, ability)));
+    }
     let def = activated(cx, ability).expect("activated");
     // A mana ability is activated by the rules for any activated ability (CR 605.3, 602.2a): from a hand, its card is
     // revealed first (Elvish Spirit Guide's, exiled as its cost is paid).

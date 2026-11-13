@@ -60,6 +60,8 @@ mod layers;
 mod library_visibility;
 #[cfg(test)]
 mod library_visibility_tests;
+#[cfg(test)]
+mod mana_under_way_tests;
 mod loops;
 mod merge;
 #[cfg(test)]
