@@ -1,0 +1,54 @@
+# Mu Yanling, Wind Rider (2/4, {2}{U}{U}): "When Mu Yanling enters, create a 3/2 colorless Vehicle artifact token with crew 1." and "Vehicles
+# you control have flying." Bot1 casts her on turn 1 (four Moxes): the token is a 3/2 artifact Vehicle with flying (CR 301.7, 702.9); Bot2's
+# own Midnight Mangler on turn 2 is a Vehicle that does not fly, and Mu Yanling herself has no flying (she is no Vehicle).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mu Yanling, Wind Rider
+Island x15
+
+[Bot2 Deck]
+Mox Sapphire
+Island
+Midnight Mangler
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mu Yanling, Wind Rider.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vehicle Token.Keywords = Flying
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Midnight Mangler.Cast
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Vehicle Token.Keywords = Flying
+Bot1.Battlefield.Vehicle Token.Types = Artifact
+Bot1.Battlefield.Vehicle Token.Subtypes = Vehicle
+Bot1.Battlefield.Vehicle Token.Token = true
+Bot1.Battlefield.Mu Yanling, Wind Rider.Keywords = (absent)
+Bot2.Battlefield.Midnight Mangler.Keywords = (absent)

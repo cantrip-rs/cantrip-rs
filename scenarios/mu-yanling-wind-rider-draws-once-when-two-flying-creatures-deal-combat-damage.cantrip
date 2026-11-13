@@ -1,0 +1,54 @@
+# Mu Yanling, Wind Rider: "Whenever one or more creatures you control with flying deal combat damage to a player, draw a card." On turn 5
+# Bot1 crews her Vehicle token (a creature with flying, as Vehicles she controls fly) with Mu Yanling and attacks with it and a Zephyr
+# Sprite (flying): the two hurt Bot2 together (3 + 1 = 4, 20 -> 16) and Bot1 draws exactly one card (CR 603.2c), 3 -> 4 in hand.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mu Yanling, Wind Rider
+Zephyr Sprite
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mu Yanling, Wind Rider.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Vehicle Token.Activate(Ability: Crew)
+Bot1.Choose(Mu Yanling, Wind Rider)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Vehicle Token > Bot2; Zephyr Sprite > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Hand.Count = 4
