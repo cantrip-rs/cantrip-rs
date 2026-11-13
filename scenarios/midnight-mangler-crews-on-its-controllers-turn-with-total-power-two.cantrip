@@ -1,0 +1,47 @@
+# Midnight Mangler, Crew 2 (CR 702.122a): on its controller's turn it is only an artifact; one Zephyr Sprite (power 1) cannot crew it but two (total power 2,
+# exactly) can crew it, making it an artifact creature until end of turn.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Midnight Mangler
+Zephyr Sprite
+Zephyr Sprite
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Midnight Mangler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Midnight Mangler.Types = Artifact
+Bot1.Battlefield.Midnight Mangler.Activate(Ability: Crew)
+! Bot1.Choose(Zephyr Sprite#1)
+Bot1.Choose(Zephyr Sprite#1; Zephyr Sprite#2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Midnight Mangler.Types = Artifact; Creature
+Bot1.Battlefield.Zephyr Sprite#1.Tapped = true
+Bot1.Battlefield.Zephyr Sprite#2.Tapped = true

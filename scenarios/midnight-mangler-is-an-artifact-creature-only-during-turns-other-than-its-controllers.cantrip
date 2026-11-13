@@ -1,0 +1,47 @@
+# Midnight Mangler: "During turns other than yours, this Vehicle is an artifact creature" (CR 604.1, 301.7). Each player has one:
+# it is a plain Vehicle artifact during its controller's own turn and a 3/3 artifact creature during the other player's turn.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Midnight Mangler
+Island x17
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Midnight Mangler
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Midnight Mangler.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Midnight Mangler.Types = Artifact
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Midnight Mangler.Types = Artifact; Creature
+? Bot1.Battlefield.Midnight Mangler.Power = 3
+? Bot1.Battlefield.Midnight Mangler.Toughness = 3
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Midnight Mangler.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Midnight Mangler.Types = Artifact
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Midnight Mangler.Types = Artifact
+? Bot2.Battlefield.Midnight Mangler.Types = Artifact; Creature
+? Bot2.Battlefield.Midnight Mangler.Power = 3
+
+[Expect]
+Bot1.Battlefield.Midnight Mangler.Subtypes = Vehicle
