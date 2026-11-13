@@ -1,0 +1,27 @@
+# Chitin Gravestalker's cycling {2} (CR 702.29a): paying {2} and discarding it from the hand draws a card (the Swamp on top).
+# With only Mox Jet's {B} the ability is not offered; Mox Ruby's {R} makes the {2} and the pool ends empty.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Chitin Gravestalker
+Swamp x4
+Island
+Swamp x13
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Chitin Gravestalker.Activate(Mana: short)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Chitin Gravestalker.Activate
+Bot1.Pass
+? Bot1.Mana = 
+
+[Expect]
+Bot1.Graveyard = Chitin Gravestalker
+Bot1.Hand.Count = 5

@@ -1,0 +1,39 @@
+# Chitin Gravestalker: an artifact card in Bot1's own graveyard counts: Black Lotus, sacrificed for mana, is in the graveyard
+# when the Gravestalker is cast, so it costs {4}{B}. Bot2's Black Lotus is in Bot2's graveyard and does not count. Lotus (3)
+# and Mox Jet (1) are four mana and refused; Mox Ruby makes five and it is cast.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Chitin Gravestalker
+Swamp
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Black Lotus
+Island x6
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Chitin Gravestalker.Cast(Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Chitin Gravestalker.Cast
+? Bot1.Mana = 
+
+[Expect]
+Bot1.Graveyard = Black Lotus
+Bot2.Graveyard = Black Lotus
