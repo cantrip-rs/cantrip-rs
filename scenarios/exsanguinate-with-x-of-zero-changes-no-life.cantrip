@@ -1,0 +1,21 @@
+# X can be 0 (CR 107.3b): Exsanguinate for {B}{B} makes each opponent lose 0 life and gains Bot1 nothing, and Bot1 does not have to pay more than the two black mana (the third floats from Black Lotus and is lost).
+
+[Bot1 Deck]
+Black Lotus
+Exsanguinate
+Island x16
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Exsanguinate.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot1.Life = 20
+Bot1.Graveyard = Exsanguinate; Black Lotus

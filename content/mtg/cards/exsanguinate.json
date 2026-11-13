@@ -1,0 +1,6 @@
+{
+  "name": "Exsanguinate",
+  "manaCost": "{X}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "Each opponent loses X life. You gain life equal to the life lost this way."
+}
