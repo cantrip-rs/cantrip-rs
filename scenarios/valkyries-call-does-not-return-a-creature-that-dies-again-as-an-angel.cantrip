@@ -1,0 +1,58 @@
+# Valkyrie's Call never loops (CR 700.4, 603.10a): the Memnite that dies on turn 3 returns as a flying Angel with a +1/+1 counter, and
+# when Bot1 Bolts that 2/2 Angel on turn 5 it is an Angel as it dies, so the Call does not trigger for it and the Memnite stays in the
+# graveyard. The first death, as a plain Construct, is the positive control.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Valkyrie's Call
+Memnite
+Lightning Bolt
+Lightning Bolt
+Plains x10
+
+[Bot2 Deck]
+Mountain x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Valkyrie's Call.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Memnite.Subtypes = Angel; Construct
+? Bot1.Battlefield.Memnite.Power = 2
+[T4 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Graveyard = Memnite; Lightning Bolt; Lightning Bolt; Black Lotus
+? Bot1.Battlefield.Count = 3
+
+[Expect]
+Bot1.Battlefield.Count = 3

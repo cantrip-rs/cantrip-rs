@@ -1,0 +1,62 @@
+# Valkyrie's Call: "return that card to the battlefield under its owner's control" (CR 110.2a, 400.7). Bot1 Act of Treasons Bot2's
+# Memnite and Bolts it while it controls it, so it dies under Bot1's control (CR 603.10a, last known information) and the Call
+# triggers. The card returns under Bot2's control, its owner, as a 2/2 flying Angel with a +1/+1 counter, and not under Bot1's.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Valkyrie's Call
+Act of Treason
+Lightning Bolt
+Mountain
+Plains x10
+
+[Bot2 Deck]
+Memnite
+Mountain x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Valkyrie's Call.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Act of Treason.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot2.Battlefield.Count = 0
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot2.Graveyard = Memnite
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Count = 5
+? Bot2.Battlefield.Memnite.Power = 2
+? Bot2.Battlefield.Memnite.Toughness = 2
+? Bot2.Battlefield.Memnite.Keywords = Flying
+? Bot2.Battlefield.Memnite.Subtypes = Angel; Construct
+? Bot2.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+
+[Expect]
+Bot2.Battlefield.Memnite.Power = 2
