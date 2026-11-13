@@ -1,0 +1,37 @@
+# Cycling {2} (CR 702.29a) discards the card as a cost: Bot1 cycles a second Scrounging Skyray from hand on turn 3, which is one
+# discard, so the Skyray on the battlefield gets one +1/+1 counter, and the cycled card's draw still happens. The cycled Skyray
+# was in hand, where its own ability does not function, so it grows nothing itself and is not on the battlefield to grow.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Scrounging Skyray
+Scrounging Skyray
+Island
+Island
+Island
+Mountain
+Island x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Scrounging Skyray.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Scrounging Skyray.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Scrounging Skyray.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Scrounging Skyray.Power = 2
+
+[Expect]
+Bot1.Battlefield.Scrounging Skyray.Counters.PlusOnePlusOne = 1
+Bot1.Graveyard = Scrounging Skyray
+Bot1.Battlefield = Island; Island; Mox Sapphire; Scrounging Skyray

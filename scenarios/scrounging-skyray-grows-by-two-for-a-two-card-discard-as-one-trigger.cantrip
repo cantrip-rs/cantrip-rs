@@ -1,0 +1,44 @@
+# Scrounging Skyray comes down on turn 1 off a Mox Sapphire. On Bot2's turn 4 Chain of Smog makes Bot1 discard two cards at
+# once: one event, one trigger, "that many" = two +1/+1 counters (CR 603.2c), so the Skyray is a 3/4.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Scrounging Skyray
+Island
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Swamp
+Swamp
+Chain of Smog
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x14
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Scrounging Skyray.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Chain of Smog.Cast(Bot1)
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Swamp.Activate
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Scrounging Skyray.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Scrounging Skyray.Power = 3
+
+[Expect]
+Bot1.Battlefield.Scrounging Skyray.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Scrounging Skyray.Keywords = Flying
+Bot1.Graveyard.Count = 2
