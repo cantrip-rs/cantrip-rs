@@ -1,0 +1,8 @@
+{
+  "name": "Preacher",
+  "manaCost": "{1}{W}{W}",
+  "type": "Creature — Human Cleric",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "You may choose not to untap this creature during your untap step.\n{T}: For as long as this creature remains tapped, gain control of target creature of an opponent's choice they control."
+}
