@@ -1,0 +1,47 @@
+# A pumped attacker is exiled after the delayed trigger goes on the stack; accepting uses its last-known power of four (CR 608.2h).
+[Bot1 Deck]
+Delif's Cone
+Memnite
+Mox Emerald
+Giant Growth
+Island x20
+[Bot2 Deck]
+Black Lotus
+Swords to Plowshares
+Island x20
+[Actions]
+Bot1.Hand.Delif's Cone.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Delif's Cone.Activate(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 4
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 28
+Bot2.Life = 20
+Bot1.Graveyard = Giant Growth; Delif's Cone
+Exile = Memnite

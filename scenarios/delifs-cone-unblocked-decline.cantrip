@@ -1,0 +1,30 @@
+# Declining life gain leaves the unblocked attacker to deal combat damage (CR 118.12).
+[Bot1 Deck]
+Delif's Cone
+Memnite
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Delif's Cone.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Delif's Cone.Activate(Bot1.Battlefield.Memnite)
+? Bot1.Graveyard = Delif's Cone
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Decline
+[T3 Bot1.Main2]
+? Bot1.Life = 20
+? Bot2.Life = 19
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18

@@ -1,0 +1,33 @@
+# An unblocked Memnite gains its controller one life on acceptance and deals no combat damage; it deals damage on a later turn (CR 509.1h, 118.12, 611.2a).
+[Bot1 Deck]
+Delif's Cone
+Memnite
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Delif's Cone.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Delif's Cone.Activate(Bot1.Battlefield.Memnite)
+? Bot1.Graveyard = Delif's Cone
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2; Ornithopter > Bot2)
+Bot1.Accept
+[T3 Bot1.Main2]
+? Bot1.Life = 21
+? Bot2.Life = 20
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 19
