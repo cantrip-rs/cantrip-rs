@@ -1,18 +1,7 @@
 use cantrip_api::*;
-use cantrip_mechanics::replacements::{EXILE_INSTEAD_OF_DYING, exile_if_it_would_die};
-use cantrip_mechanics::{damage_target, destroy_target, targets};
+use cantrip_mechanics::replacements::EXILE_INSTEAD_OF_DYING;
+use cantrip_mechanics::{destroy_target, effects, targets};
 use cantrip_oracle as oracle;
-
-/// Pinecone Strike deals 3 damage to target creature. If that creature would die this turn, exile it instead. The
-/// replacement is the spell's own effect on that creature (CR 611.2c, 614.1a), made whether or not the damage is dealt, and
-/// before it.
-fn damage_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = targets::object(g, item, 0) {
-        exile_if_it_would_die(g, item, 0, creature);
-        damage_target(g, item, 0, 3);
-    }
-    Ok(())
-}
 
 /// Destroy target artifact token (CR 111.1, 701.8): an artifact permanent that is a token.
 fn destroy_artifact_token(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -26,7 +15,7 @@ fn artifact_token(q: &dyn Query, asker: &Asker, t: Target) -> bool {
 
 /// "Choose one or both" (CR 700.2): the modes are carried out in the order printed (CR 608.2c).
 static MODAL: ModalDef = modes(&[
-    mode(damage_creature, "Pinecone Strike deals 3 damage to target creature. If that creature would die this turn, exile it instead.")
+    mode(effects::damage_target_exile_if_it_would_die::<3>, "Pinecone Strike deals 3 damage to target creature. If that creature would die this turn, exile it instead.")
         .targets(&[targets::CREATURE]),
     mode(destroy_artifact_token, "Destroy target artifact token.")
         .targets(&[target(artifact_token)]),

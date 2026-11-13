@@ -119,6 +119,15 @@ pub fn target_creature_gets<const P: i32, const T: i32>(g: &mut dyn Game, item: 
     Ok(())
 }
 
+/// "Target creature gets +`P`/+`T` until end of turn. You gain `LIFE` life" (CR 611.2a, 119.3, 608.2b): both are lost if the target is no
+/// longer legal as the spell resolves, since a spell with only illegal targets does not resolve. Which creatures may be targeted is the
+/// card's own. Moment of Triumph (+2/+2, 2 life), Syphon Fuel (-6/-6, 2) and Locthwain Scorn (-3/-3, 2) print it.
+pub fn target_creature_gets_and_you_gain_life<const P: i32, const T: i32, const LIFE: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    target_creature_gets::<P, T>(g, item)?;
+    g.end_sentence();
+    gain_life(g, item, LIFE)
+}
+
 /// "Target creature gets +`P`/+`T` and gains first strike until end of turn" (CR 611.2a, 702.7): one instruction, the creature
 /// being the ability's first target; nothing if it is no longer a legal target as the spell resolves (CR 608.2b). Interjection
 /// (+2/+2), Molecular Modifier (+1/+0), Charge the Sanctum's single-target mode (+2/+0) and Riverguard's Reflexes (+2/+2) print it.
@@ -1516,6 +1525,19 @@ pub fn each_opponent_discards_a_card_and_those_who_cant(g: &mut dyn Game, item: 
 /// ability. Lightning Bolt (any target, 3), Shock (2), Flametongue Kavu (creature, 4) and Hired Claw (opponent, 1) print it.
 pub fn damage_first_target<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     crate::damage_target(g, item, 0, N);
+    Ok(())
+}
+
+/// "[Source] deals `N` damage to target creature. If that creature would die this turn, exile it instead" (CR 120.3, 614.1a, 611.2c,
+/// 700.4): the replacement is the spell's own effect on the target for the turn, made before the damage and whether or not the damage
+/// is dealt, so it also covers a death the damage does not cause; nothing if the target is no longer legal as the spell resolves
+/// (CR 608.2b). The card lists `replacements::EXILE_INSTEAD_OF_DYING` first among its `granted_replacements`. Which targets are
+/// allowed is the card's own. Feed the Flames (5), Pinecone Strike (3), Suplex (3), Wilt in the Heat (5) and Elspeth's Smite (3) print it.
+pub fn damage_target_exile_if_it_would_die<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = crate::targets::object(g, item, 0) {
+        crate::replacements::exile_if_it_would_die(g, item, 0, creature);
+        crate::damage_target(g, item, 0, N);
+    }
     Ok(())
 }
 
