@@ -1,0 +1,11 @@
+{
+  "name": "Guarded Heir",
+  "manaCost": "{5}{W}",
+  "type": "Creature — Human Noble",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Lifelink (Damage dealt by this creature also causes you to gain that much life.)\nWhen this creature enters, create two 3/3 white Knight creature tokens.",
+  "keywords": [
+    "Lifelink"
+  ]
+}
