@@ -1,0 +1,8 @@
+{
+  "name": "Felidar Cub",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Cat Beast",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Sacrifice this creature: Destroy target enchantment."
+}
