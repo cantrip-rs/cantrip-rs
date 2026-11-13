@@ -2283,6 +2283,18 @@ pub fn subtype_you_control_deal_combat_damage_to_player<const SUBTYPE: u16>(q: &
     }
 }
 
+/// "Whenever a creature you control with flying deals combat damage to a player" (CR 510.2, 603.2, 702.9): flying as the layers
+/// give it to the creature as it dealt the damage. Written with `.sums_per_subject()`, the "one or more creatures" form of Mu
+/// Yanling, Wind Rider and Vulture, Feathered Fiend (CR 603.2c) triggers once for each player the batch damaged.
+pub fn creature_you_control_with_flying_deals_combat_damage_to_player(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::Damage { source: from, .. } if q.chars(*from).has(Keyword::Flying) => {
+            creature_you_control_deals_combat_damage_to_player(q, me, event)
+        }
+        _ => None,
+    }
+}
+
 /// "Whenever you commit a crime" (CR 700.13): the ability's controller cast a spell, activated an ability or put a
 /// triggered ability on the stack that targets an opponent, anything an opponent controls and/or a card in an opponent's
 /// graveyard - once for that spell or ability, however many such targets it has. Magda, the Hoardmaster, Raven of Fell
