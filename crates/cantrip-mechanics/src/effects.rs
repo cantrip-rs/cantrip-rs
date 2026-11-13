@@ -1205,6 +1205,13 @@ pub fn each_opponent_loses_1_life(g: &mut dyn Game, item: &StackItem) -> Result<
     Ok(())
 }
 
+/// "Each opponent loses 2 life" (CR 119.3): every opponent still in the game loses it together. Engine Rat, Leech Collector's
+/// Bloodletting and The Coming of Galactus's chapters II and III print it.
+pub fn each_opponent_loses_2_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.each_opponent_loses_life(item.controller, 2);
+    Ok(())
+}
+
 /// "Target player loses `n` life and you gain `n` life" (CR 119.3), and "target opponent ...": the first target, a player,
 /// whichever its slot allows. A target no longer legal loses nothing (CR 608.2b), while the gain, which does not use it, is
 /// still made when the resolution goes on without it (a mode of a modal spell whose other target is legal); an ability with that
