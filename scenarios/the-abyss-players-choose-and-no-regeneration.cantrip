@@ -1,0 +1,77 @@
+# Each upkeep's active player chooses their own nonartifact creature; an artifact creature is ineligible and regeneration cannot save the chosen creature (CR 603.3d, 701.8a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+The Abyss
+Kobolds of Kher Keep
+Ornithopter
+Crimson Kobolds
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Swamp
+Drudge Skeletons
+Kobolds of Kher Keep
+Ornithopter
+Mox Emerald
+Gladecover Scout
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Abyss.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Kobolds of Kher Keep.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Crimson Kobolds.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Drudge Skeletons.Cast
+Bot2.Pass
+Bot2.Hand.Kobolds of Kher Keep.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Gladecover Scout.Cast
+Bot2.Pass
+Bot2.Hand.Swamp.Play
+[T3 Bot1.Upkeep]
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+! Bot1.Target(Bot2.Battlefield.Kobolds of Kher Keep)
+Bot1.Target(Bot1.Battlefield.Kobolds of Kher Keep)
+[T3 Bot1.Main1]
+? Bot1.Graveyard.Kobolds of Kher Keep.Power = 0
+[T4 Bot2.Upkeep]
+! Bot2.Target(Bot2.Battlefield.Ornithopter)
+! Bot2.Target(Bot2.Battlefield.Gladecover Scout)
+Bot2.Target(Bot2.Battlefield.Drudge Skeletons)
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Drudge Skeletons.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Graveyard.Drudge Skeletons.Power = 1
+Bot2.Battlefield.Kobolds of Kher Keep.Power = 0
+Bot2.Battlefield.Gladecover Scout.Power = 1
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Power = 0
