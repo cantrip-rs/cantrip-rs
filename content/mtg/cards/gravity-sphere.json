@@ -1,0 +1,6 @@
+{
+  "name": "Gravity Sphere",
+  "manaCost": "{2}{R}",
+  "type": "World Enchantment",
+  "oracleText": "All creatures lose flying."
+}
