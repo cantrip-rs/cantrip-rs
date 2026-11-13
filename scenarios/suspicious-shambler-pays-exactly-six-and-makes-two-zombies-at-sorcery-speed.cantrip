@@ -1,0 +1,77 @@
+# "{4}{B}{B}, Exile this card from your graveyard: Create two 2/2 black Zombie creature tokens. Activate only as a sorcery." (CR 113.6m, 602.2,
+# 602.5d, 701.7): Bot2's Shock kills Bot1's Suspicious Shambler; on Bot1's turn 3 five sources do not pay {4}{B}{B}, the sixth does, exactly (the
+# pool is empty afterwards), and the card leaves the graveyard as the cost; both tokens enter together, 2/2 black Zombies. Not offered on Bot2's turn.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Suspicious Shambler
+Swamp
+Swamp
+Swamp x16
+
+[Bot2 Deck]
+Mox Ruby
+Shock
+Island x18
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Suspicious Shambler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Suspicious Shambler)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+! Bot1.Graveyard.Suspicious Shambler.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Graveyard.Suspicious Shambler.Activate(Mana: short)
+? Bot1.Mana = {W}{U}{B}{B}{R}
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Graveyard.Suspicious Shambler.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Exile.Suspicious Shambler.Colors = Black
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Swamp; Swamp; Zombie Token; Zombie Token
+Bot1.Battlefield.Zombie Token#1.Token = true
+Bot1.Battlefield.Zombie Token#1.Colors = Black
+Bot1.Battlefield.Zombie Token#1.Power = 2
+Bot1.Battlefield.Zombie Token#1.Toughness = 2
+Bot1.Battlefield.Zombie Token#1.Subtypes = Zombie
+Bot1.Battlefield.Zombie Token#2.Power = 2
+Bot1.Battlefield.Zombie Token#2.Toughness = 2
+Stack.Count = 0

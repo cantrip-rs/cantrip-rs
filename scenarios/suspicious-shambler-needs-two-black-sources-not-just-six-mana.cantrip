@@ -1,0 +1,66 @@
+# "{4}{B}{B}" (CR 202.1, 106.1a): Bot1's Suspicious Shambler is in its graveyard (Bot2's Shock), and on turn 3 Bot1 has nine mana (Black Lotus
+# for white, three Moxen, two Islands) of which only Mox Jet's is black, so the ability is refused: both {B} symbols must be paid with black mana.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Suspicious Shambler
+Island
+Island
+Black Lotus
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Shock
+Island x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Suspicious Shambler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Suspicious Shambler)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+? Bot1.Mana = {W}{W}{W}{W}{U}{U}{U}{B}{R}
+! Bot1.Graveyard.Suspicious Shambler.Activate(Mana: short)
+
+[Expect]
+Bot1.Graveyard = Black Lotus; Suspicious Shambler
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Island; Island

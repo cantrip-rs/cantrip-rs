@@ -1,0 +1,63 @@
+# "Exile this card from your graveyard" (CR 113.6m, 602.2): an activated ability that works from a graveyard works only from its owner's. Bot2's
+# Suspicious Shambler dies to Bot1's Lightning Bolt; Bot1 has seven mana, enough for {4}{B}{B}, and still cannot activate it; the card stays put.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Lightning Bolt
+Swamp
+Swamp
+Island x15
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Suspicious Shambler
+Island x17
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Suspicious Shambler.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Suspicious Shambler)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Suspicious Shambler; Black Lotus
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+? Bot1.Mana = {W}{B}{B}{B}{B}{B}{B}
+! Bot2.Graveyard.Suspicious Shambler.Activate
+
+[Expect]
+Bot2.Graveyard = Suspicious Shambler; Black Lotus
+Bot1.Battlefield.Count = 5

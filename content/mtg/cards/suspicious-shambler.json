@@ -1,0 +1,8 @@
+{
+  "name": "Suspicious Shambler",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Zombie",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "{4}{B}{B}, Exile this card from your graveyard: Create two 2/2 black Zombie creature tokens. Activate only as a sorcery."
+}
