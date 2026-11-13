@@ -1,0 +1,89 @@
+# Glitch Ghost Surveyor: "Max speed — {3}, Exile this card from your graveyard: Draw a card." A static ability of the card
+# that functions in the graveyard (CR 113.6b, 702.178b) grants the ability while its owner's speed is 4 (CR 702.178a). Cast on
+# turn 1 it gives Bot1 speed 1 (CR 704.5aa, 702.179a), and a Lightning Bolt to Bot2's face on each of turns 1 and 3 raises it
+# to 2 and 3 (CR 702.179d). Bot2 Bolts the 2/2 flier on turn 4 (speed 3), and on turn 5 the card in the graveyard has no
+# ability to activate; a third Bolt makes speed 4, and the same activation is then offered: {3} and the card exiled
+# from the graveyard draw the card after the turn's draw, Memnite.
+
+[Bot1 Deck]
+Mountain
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Glitch Ghost Surveyor
+Lightning Bolt
+Mountain
+Lightning Bolt
+Lightning Bolt
+Memnite
+Ornithopter
+Mountain x9
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Glitch Ghost Surveyor.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+? Bot1.Battlefield.Glitch Ghost Surveyor.Keywords = Flying
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Glitch Ghost Surveyor)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Glitch Ghost Surveyor; Lightning Bolt; Lightning Bolt
+[T5 Bot1.Main1]
+? Bot1.Speed = 3
+! Bot1.Graveyard.Glitch Ghost Surveyor.Activate
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Glitch Ghost Surveyor.Activate
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 5
+Bot1.Speed = 4
+Exile = Glitch Ghost Surveyor
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Lightning Bolt
+Bot1.Hand = Memnite
