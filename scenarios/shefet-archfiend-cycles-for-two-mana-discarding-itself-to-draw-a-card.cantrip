@@ -1,0 +1,34 @@
+# Shefet Archfiend, "Cycling {2}" (CR 702.29a): "{2}, Discard this card: Draw a card." With only Mox Ruby's {R} in the
+# pool the cycling is refused for want of mana; once Mox Jet is cast and tapped too, {R}{B} pay the {2} exactly (pool empty),
+# the Archfiend goes to the graveyard (not the battlefield, so its enters trigger never happens) and Bot1 draws the top
+# card, Lightning Bolt.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Shefet Archfiend
+Island x4
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Shefet Archfiend.Activate(Ability: Cycling; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Shefet Archfiend.Activate(Ability: Cycling)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 1
+Bot1.Graveyard = Shefet Archfiend
+Bot1.Hand.Count = 5
+Bot1.Hand = Island; Island; Island; Island; Lightning Bolt
