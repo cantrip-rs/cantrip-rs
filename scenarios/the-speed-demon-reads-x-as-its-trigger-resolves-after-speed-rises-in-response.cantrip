@@ -1,0 +1,52 @@
+# The Speed Demon: "At the beginning of your end step, you draw X cards and lose X life, where X is your speed." X is read as the
+# ability resolves (CR 608.2h), not when it triggers. Cast on turn 1 (speed 1, CR 702.179), its end-step trigger goes on the
+# stack at speed 1; in response Bot1 Lightning Bolts Bot2, the first life an opponent has lost on Bot1's turn, raising the speed
+# to 2 (CR 702.179d). The trigger then has Bot1 draw 2 and lose 2 (18), not 1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+The Speed Demon
+Mountain
+Lightning Bolt
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Speed Demon.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+[T1 Bot1.End]
+? Stack.Count = 1
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Speed = 2
+Bot1.Life = 18
+Bot2.Life = 17
+Bot1.Hand.Count = 3

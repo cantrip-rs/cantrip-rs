@@ -1,0 +1,49 @@
+# The Speed Demon {3}{B}{B}: Flying, trample; Start your engines! (CR 702.179); "At the beginning of your end step, you
+# draw X cards and lose X life, where X is your speed." Cast on turn 1 (Black Lotus {B}{B}{B} + Mox Jet + Mox Ruby, exactly
+# {3}{B}{B}) it gives speed 1, and the end step that turn Bot1 draws 1 and loses 1 (19). With no haste it cannot attack
+# until turn 3, where its 5 damage to Bot2 raises the speed to 2 (CR 702.179d) before that end step: Bot1 draws 2 and loses
+# 2. Bot2's end step does nothing for Bot1 (the trigger is "your end step").
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+The Speed Demon
+Swamp x3
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Speed Demon.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+? Bot1.Battlefield.The Speed Demon.Keywords = Flying; Trample
+[T2 Bot2.Main1]
+? Bot1.Life = 19
+? Bot1.Hand.Count = 4
+[T3 Bot1.Main1]
+Bot1.Attack(The Speed Demon > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 15
+? Bot1.Speed = 2
+[T4 Bot2.Main1]
+? Bot1.Life = 17
+? Bot1.Hand.Count = 7
+
+[Expect]
+Turn = 4
+Bot1.Life = 17
+Bot1.Speed = 2
