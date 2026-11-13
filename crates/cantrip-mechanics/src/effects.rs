@@ -1212,6 +1212,16 @@ pub fn gain_life_for_differently_named_lands(g: &mut dyn Game, item: &StackItem)
     gain_life(g, item, n)
 }
 
+/// "You gain N life for each [subtype] you control" (CR 119.3, 608.2c): one gain of `PER` times the permanents of the subtype `TYPE`
+/// (`lands::sub`, read through the words of the source's text, CR 612) its controller controls as the ability resolves, a
+/// permanent that is no creature included. Archway Angel (2 per Gate), Landbind Ritual (2 per Plains), Honden of Cleansing Fire
+/// (2 per Shrine) and Nissa Revane (2 per Elf) print it.
+pub fn gain_life_for_each_subtype_you_control<const TYPE: u16, const PER: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let subtype = crate::lands::word(g, item.object, TYPE);
+    let n = crate::permanents_with_subtype_you_control(g, item.controller, subtype) as i32;
+    gain_life(g, item, PER * n)
+}
+
 /// "You gain life equal to its toughness" (CR 119.3, 608.2h) as a triggered ability's callback: the toughness of the trigger's
 /// subject (`StackItem::subject`, a permanent that entered or a creature that died) as the layers make it, or as it last
 /// existed on the battlefield if it has left. A permanent that is not a creature as the ability resolves has no toughness (CR 208.3) and
