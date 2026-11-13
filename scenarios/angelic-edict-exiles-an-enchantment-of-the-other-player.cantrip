@@ -1,0 +1,44 @@
+# Angelic Edict also exiles an enchantment that is not an Aura or a creature: Bot2's Flood, while its Island is refused (CR 115.1).
+# Same payment as the creature case: six mana for a five-mana sorcery leaves {W}.
+
+[Bot1 Deck]
+Plains
+Plains
+Mox Pearl
+Black Lotus
+Angelic Edict
+Plains x15
+
+[Bot2 Deck]
+Island
+Flood
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Flood.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Angelic Edict.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Angelic Edict.Cast(Bot2.Battlefield.Flood)
+? Bot1.Mana = {W}
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Exile = Flood
+Bot2.Graveyard.Count = 0
+Bot2.Battlefield.Flood = (absent)
