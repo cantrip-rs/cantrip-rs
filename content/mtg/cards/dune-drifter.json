@@ -1,0 +1,8 @@
+{
+  "name": "Dune Drifter",
+  "manaCost": "{X}{W}{B}",
+  "type": "Artifact — Vehicle",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When this Vehicle enters, return target artifact or creature card with mana value X or less from your graveyard to the battlefield.\nCrew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)"
+}

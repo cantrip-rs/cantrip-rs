@@ -1,0 +1,47 @@
+# Dune Drifter cast with X = 0 ({W}{B}) into an empty graveyard: the enters trigger has no legal target (CR 603.3d) so asks for none.
+# On turn three a lone Zephyr Sprite (power 1) cannot pay Crew 2 (CR 702.122a), so the ability is refused; Savannah Lions (power 2,
+# summoning sick, which does not matter for a crew cost) alone crews it. The 3/3 Vehicle attacks and deals 3 to Bot2, at 17.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Dune Drifter
+Savannah Lions
+Zephyr Sprite
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dune Drifter.Cast(X: 0)
+Bot1.Pass
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Dune Drifter.Activate(Ability: Crew)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Dune Drifter.Activate(Ability: Crew)
+Bot1.Choose(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Dune Drifter > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Savannah Lions.Tapped = true
+Bot1.Battlefield.Dune Drifter.Tapped = true

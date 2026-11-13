@@ -1,0 +1,40 @@
+# Dune Drifter cast with X = 1 ({1}{W}{B}, paid with Plains, Swamp and Mox Pearl): its enters trigger returns a card with mana value
+# 1 or less (CR 107.3m) that is an artifact or creature card. Sol Ring (mana value 1, exactly X) may be chosen; Mind Stone (mana value 2)
+# and Lightning Bolt (mana value 1 but neither an artifact nor a creature) may not. Lion's Eye Diamond discards the hand on turn one.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Lion's Eye Diamond
+Sol Ring
+Mind Stone
+Ornithopter
+Lightning Bolt
+Swamp
+Dune Drifter
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Lion's Eye Diamond.Cast
+Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: White)
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dune Drifter.Cast(X: 1)
+! Bot1.Target(Mind Stone)
+! Bot1.Target(Lightning Bolt)
+Bot1.Target(Sol Ring)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Dune Drifter; Mox Pearl; Plains; Sol Ring; Swamp
+Bot1.Graveyard = Lion's Eye Diamond; Lightning Bolt; Ornithopter; Mind Stone
+Bot1.Hand.Count = 0

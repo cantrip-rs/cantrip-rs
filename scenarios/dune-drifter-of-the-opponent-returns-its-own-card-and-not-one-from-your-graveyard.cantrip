@@ -1,0 +1,45 @@
+# Dune Drifter cast by Bot2 with X = 2 ({2}{W}{B}, paid with Black Lotus and two Moxen): the trigger finds only cards in its controller's
+# own graveyard (CR 115.1). Bot1's Ornithopter, discarded to Lion's Eye Diamond, is not a legal target even though its mana value is 0;
+# Bot2's own Mind Stone (mana value 2, exactly X) is, and returns under Bot2's control. Bot2's Lightning Bolt cannot be chosen.
+# Black Lotus is put onto the battlefield before Bot2's Lion's Eye Diamond discards the hand.
+
+[Bot1 Deck]
+Lion's Eye Diamond
+Ornithopter
+Island x18
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Black Lotus
+Lion's Eye Diamond
+Mind Stone
+Memnite
+Lightning Bolt
+Swamp
+Dune Drifter
+Island x11
+
+[Actions]
+Bot1.Hand.Lion's Eye Diamond.Cast
+Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Blue)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Lion's Eye Diamond.Cast
+Bot2.Battlefield.Lion's Eye Diamond.Activate(Color: Blue)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Dune Drifter.Cast(X: 2)
+! Bot2.Target(Ornithopter)
+! Bot2.Target(Lightning Bolt)
+Bot2.Target(Mind Stone)
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Dune Drifter; Mind Stone; Mox Jet; Mox Pearl
+Bot1.Graveyard = Lion's Eye Diamond; Island; Island; Island; Island; Island; Ornithopter
+Bot1.Battlefield.Count = 0
