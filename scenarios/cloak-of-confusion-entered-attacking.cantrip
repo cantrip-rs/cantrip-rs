@@ -1,0 +1,43 @@
+# A creature put onto the battlefield attacking is enchanted before blockers, then dies in response to the unblocked trigger.
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Ornithopter
+Kinscaer Sentry
+Cloak of Confusion
+Enchantment Alteration
+Grizzly Bears
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+[Dice]
+1
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: W)
+Bot1.Hand.Kinscaer Sentry.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cloak of Confusion.Cast(Bot1.Battlefield.Ornithopter)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Kinscaer Sentry; Ornithopter)
+Bot1.Choose(Grizzly Bears)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Enchantment Alteration.Cast(Cloak of Confusion)
+Bot1.Choose(Grizzly Bears)
+[T3 Bot1.DeclareBlockers]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Accept
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Graveyard.Count = 2

@@ -1,0 +1,36 @@
+# The Aura can enchant only its controller's creature; a blocked enchanted attacker and an unrelated unblocked attacker cause no discard.
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Pearl
+Grizzly Bears
+Cloak of Confusion
+Ornithopter
+Swamp x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.Cloak of Confusion.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cloak of Confusion.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Grizzly Bears > Bot2; Ornithopter > Bot2)
+Bot2.Block(Ornithopter > Grizzly Bears)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Cloak of Confusion.AttachedTo = Grizzly Bears
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter
