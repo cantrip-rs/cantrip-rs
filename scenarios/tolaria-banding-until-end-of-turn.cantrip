@@ -1,0 +1,41 @@
+# Tolaria removes banding from either player's creature during upkeep, until cleanup (CR 611.2a, 514.2).
+[Bot1 Deck]
+Tolaria
+Mox Pearl
+Benalish Hero
+Island x20
+[Bot2 Deck]
+Mox Pearl
+Benalish Hero
+Island x20
+[Actions]
+Bot1.Hand.Tolaria.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Benalish Hero.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Tolaria.Activate(Bot1.Battlefield.Benalish Hero; Ability: loses banding)
+[T2 Bot2.Upkeep]
+! Bot1.Battlefield.Tolaria.Activate(Bot1.Battlefield.Mox Pearl; Ability: loses banding)
+Bot1.Battlefield.Tolaria.Activate(Bot1.Battlefield.Benalish Hero; Ability: loses banding)
+? Bot1.Battlefield.Tolaria.Tapped = true
+! Bot1.Battlefield.Tolaria.Activate(Bot1.Battlefield.Benalish Hero; Ability: loses banding)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Benalish Hero.Keywords = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Benalish Hero.Cast
+[T3 Bot1.Upkeep]
+? Bot1.Battlefield.Benalish Hero.Keywords = Banding
+Bot1.Battlefield.Tolaria.Activate(Bot2.Battlefield.Benalish Hero; Ability: loses banding)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Benalish Hero.Keywords = (absent)
+? Bot1.Battlefield.Benalish Hero.Keywords = Banding
+[T4 Bot2.Upkeep]
+[Expect]
+Bot2.Battlefield.Benalish Hero.Keywords = Banding

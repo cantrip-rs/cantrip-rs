@@ -1,0 +1,14 @@
+# Tolaria taps to add exactly one blue mana and cannot tap again until untapped (CR 605.1a).
+[Bot1 Deck]
+Tolaria
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Tolaria.Play
+Bot1.Battlefield.Tolaria.Activate(Ability: Add {U})
+? Bot1.Mana = {U}
+? Bot1.Battlefield.Tolaria.Tapped = true
+! Bot1.Battlefield.Tolaria.Activate(Ability: Add {U})
+[Expect]
+Bot1.Mana = {U}
