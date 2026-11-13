@@ -1,0 +1,5 @@
+{
+  "name": "Urza's Tower",
+  "type": "Land — Urza's Tower",
+  "oracleText": "{T}: Add {C}. If you control an Urza's Mine and an Urza's Power-Plant, add {C}{C}{C} instead."
+}

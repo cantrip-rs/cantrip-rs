@@ -1,0 +1,26 @@
+# With Urza's Mine, Urza's Power Plant and Urza's Tower all controlled, each takes its "instead" amount: the Mine and the
+# Power Plant add {C}{C} each and the Tower {C}{C}{C}, seven in all; before the Tower arrives the Mine adds only {C}
+# (CR 605.1a, 205.3i; rulings 2004-10-04, 2024-06-07).
+[Bot1 Deck]
+Urza's Mine
+Urza's Power Plant
+Urza's Tower
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Urza's Mine.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Urza's Power Plant.Play
+Bot1.Battlefield.Urza's Mine.Activate
+? Bot1.Mana = {C}
+[T5 Bot1.Main1]
+Bot1.Hand.Urza's Tower.Play
+Bot1.Battlefield.Urza's Mine.Activate
+? Bot1.Mana = {C}{C}
+Bot1.Battlefield.Urza's Power Plant.Activate
+? Bot1.Mana = {C}{C}{C}{C}
+Bot1.Battlefield.Urza's Tower.Activate
+? Bot1.Mana = {C}{C}{C}{C}{C}{C}{C}
+[Expect]
+Bot1.Mana = {C}{C}{C}{C}{C}{C}{C}
