@@ -1,0 +1,53 @@
+# Stampeding Scurryfoot: "Exhaust - {3}{G}: Put a +1/+1 counter on this creature. Create a 3/3 green Elephant creature token."
+# Four Moxen (one green) pay it on turn 3: the Mouse becomes 2/2 and Bot1 has a 3/3 Elephant. Activating it again on turn 5
+# with every Mox untapped is refused (CR 702.177a).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Stampeding Scurryfoot
+Swamp x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Stampeding Scurryfoot.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Stampeding Scurryfoot.Power = 1
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Stampeding Scurryfoot.Activate(Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Stampeding Scurryfoot.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stampeding Scurryfoot.Power = 2
+? Bot1.Battlefield.Stampeding Scurryfoot.Toughness = 2
+? Bot1.Battlefield.Stampeding Scurryfoot.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Elephant Token.Power = 3
+? Bot1.Battlefield.Elephant Token.Toughness = 3
+Bot1.Hand.Mox Sapphire.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Stampeding Scurryfoot.Activate
+
+[Expect]
+Bot1.Battlefield.Stampeding Scurryfoot.Power = 2
+Bot1.Battlefield.Elephant Token.Power = 3

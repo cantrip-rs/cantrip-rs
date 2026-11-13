@@ -1,0 +1,8 @@
+{
+  "name": "Stampeding Scurryfoot",
+  "manaCost": "{G}",
+  "type": "Creature — Mouse",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Exhaust — {3}{G}: Put a +1/+1 counter on this creature. Create a 3/3 green Elephant creature token. (Activate each exhaust ability only once.)"
+}
