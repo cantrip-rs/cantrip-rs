@@ -1,0 +1,53 @@
+# Mystic Archaeologist's {3}{U}{U}: Draw two cards costs five mana, two of them blue (CR 107.4). On turn 3 Bot1's Island and Mox
+# Sapphire give the two blue and its Mox Jet and Mox Pearl two more: four mana is refused (nothing else is left to tap), and the
+# fifth, Mox Ruby's, lets the ability resolve: Bot1 draws the Forest and the Mountain that were on top of its library.
+
+[Bot1 Deck]
+Black Lotus
+Mystic Archaeologist
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Island
+Island
+Forest
+Mountain
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mystic Archaeologist.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Mystic Archaeologist.Activate(Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mystic Archaeologist.Activate
+? Bot1.Mana =
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Forest; Island; Mountain
+Bot1.Battlefield.Mystic Archaeologist.Tapped = false

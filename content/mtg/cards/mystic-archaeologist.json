@@ -1,0 +1,8 @@
+{
+  "name": "Mystic Archaeologist",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Human Wizard",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "{3}{U}{U}: Draw two cards."
+}
