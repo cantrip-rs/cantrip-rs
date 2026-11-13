@@ -1,0 +1,36 @@
+# Imprisoned in the Moon on Bot1's own Plains: it keeps its land type and the basic supertype (the ruling) but loses its intrinsic mana
+# ability and taps only for {C}, so with that {C} alone Savannah Lions ({W}) cannot be cast. Mox Jet, an artifact that is neither creature,
+# land nor planeswalker, is not a legal thing to enchant.
+
+[Bot1 Deck]
+Black Lotus
+Plains
+Imprisoned in the Moon
+Savannah Lions
+Mox Jet
+Island x2
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+! Bot1.Hand.Imprisoned in the Moon.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Imprisoned in the Moon.Cast(Bot1.Battlefield.Plains)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Plains.Types = Land
+? Bot1.Battlefield.Plains.Subtypes = Plains
+? Bot1.Battlefield.Plains.Supertypes = Basic
+Bot1.Battlefield.Plains.Activate
+! Bot1.Hand.Savannah Lions.Cast(Mana: short)
+
+[Expect]
+Bot1.Battlefield.Plains.Tapped = true
+Bot1.Hand = Island; Island; Savannah Lions

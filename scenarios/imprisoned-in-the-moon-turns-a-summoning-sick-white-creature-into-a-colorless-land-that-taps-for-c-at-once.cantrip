@@ -1,0 +1,39 @@
+# Imprisoned in the Moon on Bot1's own Savannah Lions (a white 2/1 Cat Soldier creature with first strike), both cast the same turn: it is a
+# colorless land with no other card type, no creature subtype and no first strike, and it is no longer a creature, so its summoning sickness
+# does not keep it from tapping for {C} (CR 302.6): the {C} pays for Wayfarer's Bauble.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Savannah Lions
+Imprisoned in the Moon
+Wayfarer's Bauble
+Island x2
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Imprisoned in the Moon.Cast(Bot1.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Savannah Lions.Types = Land
+? Bot1.Battlefield.Savannah Lions.Colors = (absent)
+? Bot1.Battlefield.Savannah Lions.Subtypes = (absent)
+? Bot1.Battlefield.Savannah Lions.Keywords = (absent)
+Bot1.Battlefield.Savannah Lions.Activate
+Bot1.Hand.Wayfarer's Bauble.Cast
+
+[Expect]
+Bot1.Battlefield = Imprisoned in the Moon; Mox Pearl; Savannah Lions; Wayfarer's Bauble
+Bot1.Battlefield.Savannah Lions.Tapped = true
+Bot1.Battlefield.Imprisoned in the Moon.AttachedTo = Savannah Lions

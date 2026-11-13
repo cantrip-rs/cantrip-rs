@@ -1,0 +1,42 @@
+# Imprisoned in the Moon on an opponent's creature: Bot1 enchants Bot2's Savannah Lions. It is a colorless land with no creature
+# type, and the "{T}: Add {C}" it is given is Bot2's to activate: on turn 4 Bot2 taps it for {C} (its Plains left untapped) and
+# pays for Wayfarer's Bauble with it. Bot1 controls the Aura, never the land or its mana.
+
+[Bot1 Deck]
+Black Lotus
+Imprisoned in the Moon
+Island x18
+
+[Bot2 Deck]
+Plains
+Savannah Lions
+Wayfarer's Bauble
+Plains x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Imprisoned in the Moon.Cast(Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Savannah Lions.Types = Land
+? Bot2.Battlefield.Savannah Lions.Colors = (absent)
+? Bot2.Battlefield.Savannah Lions.Subtypes = (absent)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Savannah Lions.Activate
+? Bot2.Mana = {C}
+Bot2.Hand.Wayfarer's Bauble.Cast
+
+[Expect]
+Turn = 4
+Bot2.Battlefield.Wayfarer's Bauble.Tapped = false
+Bot2.Battlefield.Savannah Lions.Tapped = true
+Bot2.Battlefield.Plains.Tapped = false
+Bot1.Battlefield = Imprisoned in the Moon
+Bot1.Battlefield.Imprisoned in the Moon.AttachedTo = Savannah Lions
