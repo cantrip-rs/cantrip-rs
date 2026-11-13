@@ -1,0 +1,47 @@
+# "When this creature enters or dies, mill two cards": Crow of Dark Tidings ({2}{B}, paid with Black Lotus' BBB) mills the top two
+# cards of Bot1's library when it enters (Swamp, Forest) and two more when Shock kills it (Plains, Mountain): both triggers happen
+# (the 2020 ruling). The Crow is a 2/1 with flying while it lives. Only Bot1's own library is milled.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Crow of Dark Tidings
+Shock
+Island
+Island
+Island
+Swamp
+Forest
+Plains
+Mountain
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Crow of Dark Tidings.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 3
+? Bot1.Battlefield.Crow of Dark Tidings.Keywords = Flying
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Forest; Swamp; Black Lotus
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Crow of Dark Tidings)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Mountain; Plains; Crow of Dark Tidings; Shock; Forest; Swamp; Black Lotus
+Bot2.Graveyard.Count = 0
