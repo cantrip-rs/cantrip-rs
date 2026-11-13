@@ -1,0 +1,92 @@
+# Loxodon Surveyor, {2}{G} 3/3 Elephant Scout: "Start your engines!" and "Max speed — {3}, Exile this card from your graveyard: Draw a card."
+# The static ability functions in the graveyard (CR 113.6b, 702.178b) and grants the ability only while its owner's speed is 4 (702.178a).
+# Cast on turn 1 it gives Bot1 speed 1 (CR 704.5aa, 702.179a); a Lightning Bolt to Bot2's face on each of turns 1, 3 and 5 takes it to 2, 3 and 4
+# (702.179d). On turn 5 at speed 4 the Surveyor on the battlefield offers nothing (the ability works only from the graveyard). Bot2 Bolts it on
+# turn 6 (3 damage kills the 3/3); on turn 7 the speed is still 4 and the graveyard card offers the draw:
+# {3} pays for it, the card is exiled from the graveyard and Bot1 draws Ornithopter after the turn's draw (Memnite).
+
+[Bot1 Deck]
+Mountain
+Mox Emerald
+Mox Ruby
+Mox Jet
+Loxodon Surveyor
+Lightning Bolt
+Mountain
+Lightning Bolt
+Lightning Bolt
+Memnite
+Ornithopter
+Mountain x9
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Loxodon Surveyor.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+? Bot2.Speed = (absent)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Loxodon Surveyor.Activate
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Loxodon Surveyor)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Loxodon Surveyor; Lightning Bolt; Lightning Bolt; Lightning Bolt
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Graveyard.Loxodon Surveyor.Activate
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 7
+Bot1.Speed = 4
+Exile = Loxodon Surveyor
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Lightning Bolt
+Bot1.Hand = Memnite; Ornithopter

@@ -1,0 +1,93 @@
+# Loxodon Surveyor's max speed ability is its owner's (CR 702.178a: "your speed"; each player has a speed apart, CR 702.179). Bot2 casts the
+# Surveyor on turn 2 (speed 1) and Lightning Bolts Bot1's face on each of its turns 2, 4 and 6, raising its speed to 2, 3 and 4 (702.179d), while
+# Bot1 never has a speed (it has no permanent with start your engines!). Bot1 Bolts the Surveyor on turn 3, so on turn 4 at speed 3 the graveyard
+# card has no ability to activate even with every source untapped; on turn 6 at speed 4 the same activation is offered, {3} exiles the card
+# and Bot2 draws Ornithopter after the turn's draw (Memnite).
+
+[Bot1 Deck]
+Mountain
+Lightning Bolt
+Island x19
+
+[Bot2 Deck]
+Mountain
+Mox Emerald
+Mox Ruby
+Mox Jet
+Loxodon Surveyor
+Lightning Bolt
+Mountain
+Lightning Bolt
+Lightning Bolt
+Memnite
+Ornithopter
+Island x9
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Loxodon Surveyor.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Speed = 1
+? Bot1.Speed = (absent)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Speed = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Loxodon Surveyor)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Loxodon Surveyor; Lightning Bolt
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Speed = 3
+! Bot2.Graveyard.Loxodon Surveyor.Activate
+[T6 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Speed = 4
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Graveyard.Loxodon Surveyor.Activate
+? Bot2.Mana = 
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Turn = 6
+Bot2.Speed = 4
+Bot1.Speed = (absent)
+Exile = Loxodon Surveyor
+Bot2.Graveyard = Lightning Bolt; Lightning Bolt; Lightning Bolt
+Bot2.Hand = Memnite; Ornithopter
+Bot1.Life = 11
