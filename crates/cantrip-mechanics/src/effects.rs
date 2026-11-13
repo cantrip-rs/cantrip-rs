@@ -343,15 +343,17 @@ pub fn creatures_target_player_controls_get<const TARGET: usize, const P: i32, c
     Ok(())
 }
 
-/// "Creatures you control get +`power`/+`toughness` and gain [a keyword] until end of turn" (CR 611.2, 611.2c): the creatures
-/// `item`'s controller controls as it resolves, and no creature that enters later. Silk, Web Weaver (+2/+2) and The Super Hero
-/// Civil War (+1/+1) print it with vigilance.
-pub fn pump_creatures_you_control_and_gain(g: &mut dyn Game, item: &StackItem, power: i32, toughness: i32, keyword: Keyword) {
+/// "Creatures you control get +`P`/+`T` and gain [keywords] until end of turn" (CR 611.2, 611.2c, 702): the creatures `item`'s
+/// controller controls as it resolves, and no creature that enters later. `KEYWORDS` is a `Keywords` as `u128`
+/// (`Keywords::of(&[Keyword::Vigilance]).0`). Silk, Web Weaver (+2/+2) and The Super Hero Civil War (+1/+1) print it with
+/// vigilance, Catharsis (+1/+1) with haste, Hakoda, Selfless Commander (+0/+5) and Make a Stand (+1/+0) with indestructible.
+pub fn creatures_you_control_get_and_gain<const P: i32, const T: i32, const KEYWORDS: u128>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     instruction(g, |g| {
-        for id in pump_creatures_you_control(g, item, power, toughness) {
-            gain_until_end_of_turn(g, item.object, id, keyword);
+        for id in pump_creatures_you_control(g, item, P, T) {
+            g.add_effect(item.object, id, EffectKind::AddKeywords(Keywords(KEYWORDS)), Duration::EndOfTurn);
         }
     });
+    Ok(())
 }
 
 /// "Other creatures you control get +`power`/+`toughness` until end of turn" (CR 611.2, 611.2c): the creatures `item`'s
