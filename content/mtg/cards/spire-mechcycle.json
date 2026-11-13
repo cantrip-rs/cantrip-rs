@@ -1,0 +1,11 @@
+{
+  "name": "Spire Mechcycle",
+  "manaCost": "{4}{R}",
+  "type": "Artifact — Vehicle",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Haste\nExhaust — Tap another untapped Mount or Vehicle you control: This Vehicle becomes an artifact creature. Put a +1/+1 counter on it for each Mount and/or Vehicle you control other than this Vehicle. (Activate each exhaust ability only once.)\nCrew 2",
+  "keywords": [
+    "Haste"
+  ]
+}

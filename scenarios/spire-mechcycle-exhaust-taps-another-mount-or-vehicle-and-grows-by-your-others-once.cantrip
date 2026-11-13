@@ -1,0 +1,79 @@
+# Spire Mechcycle (5/4 haste Vehicle; "Exhaust - Tap another untapped Mount or Vehicle you control: This Vehicle becomes an artifact creature. Put a
+# +1/+1 counter on it for each Mount and/or Vehicle you control other than this Vehicle"; crew 2). Turn 1: alone, the exhaust ability has no
+# other permanent to tap (not itself) and is refused. Bot2 has its own Smuggler's Copter, which neither pays nor counts. Turn 3: Bot1 has a
+# Smuggler's Copter and a Caustic Bronco; tapping the Copter makes the Mechcycle a creature with two counters (7/6), for good, and it attacks for 7
+# (13). Turn 5: still a creature, and the exhaust ability is not offered again with the untapped Bronco and the Copter to pay.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Spire Mechcycle
+Smuggler's Copter
+Caustic Bronco
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Smuggler's Copter
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Spire Mechcycle.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Spire Mechcycle.Activate(Ability: Exhaust)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Smuggler's Copter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Caustic Bronco.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spire Mechcycle.Power = (absent)
+Bot1.Battlefield.Spire Mechcycle.Activate(Ability: Exhaust)
+Bot1.Choose(Smuggler's Copter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spire Mechcycle.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Spire Mechcycle.Power = 7
+? Bot1.Battlefield.Spire Mechcycle.Toughness = 6
+? Bot1.Battlefield.Spire Mechcycle.Types = Artifact; Creature
+? Bot1.Battlefield.Smuggler's Copter.Tapped = true
+Bot1.Attack(Spire Mechcycle > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 13
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Spire Mechcycle.Power = 7
+! Bot1.Battlefield.Spire Mechcycle.Activate(Ability: Exhaust)
+
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Spire Mechcycle.Counters.PlusOnePlusOne = 2
