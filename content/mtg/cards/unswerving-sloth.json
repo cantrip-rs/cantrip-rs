@@ -1,0 +1,8 @@
+{
+  "name": "Unswerving Sloth",
+  "manaCost": "{3}{W}{W}",
+  "type": "Creature — Sloth Mount",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Whenever this creature attacks while saddled, it gains indestructible until end of turn. Untap all creatures you control.\nSaddle 4 (Tap any number of other creatures you control with total power 4 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)"
+}
