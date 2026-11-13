@@ -1,0 +1,38 @@
+# Accepting the optional destruction cost prevents damage even when indestructibility prevents destruction; declining on the next turn allows damage (CR 118.12, 702.12b).
+[Bot1 Deck]
+Floral Spuzzem
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Ornithopter
+Forest x20
+[Bot2 Deck]
+Darksteel Citadel
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Floral Spuzzem.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Darksteel Citadel.Play
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Floral Spuzzem > Bot2)
+Bot1.Accept
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+[T5 Bot1.BeginCombat]
+Bot1.Attack(Floral Spuzzem > Bot2; Ornithopter > Bot2)
+Bot1.Decline
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Battlefield = Darksteel Citadel
+Bot2.Life = 18

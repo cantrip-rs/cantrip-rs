@@ -1,0 +1,8 @@
+{
+  "name": "Floral Spuzzem",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Elemental",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever this creature attacks and isn't blocked, you may destroy target artifact defending player controls. If you do, this creature assigns no combat damage this turn."
+}
