@@ -1,0 +1,55 @@
+# Unswerving Sloth (5/5 Mount, Saddle 4): "Whenever this creature attacks while saddled, it gains indestructible until end of turn.
+# Untap all creatures you control." On turn 3 the freshly cast Su-Chi (power 4, exactly the total power needed) is tapped to saddle the Sloth
+# (CR 702.171a; a creature can saddle while summoning sick). The Sloth and Ornithopter attack; the trigger gives the Sloth
+# indestructible and untaps the attacking Ornithopter (tapped by attacking) and the Su-Chi (tapped to saddle).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Plains
+Unswerving Sloth
+Ornithopter
+Su-Chi
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Unswerving Sloth.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Su-Chi.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Unswerving Sloth.Activate
+Bot1.Choose(Su-Chi)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Su-Chi.Tapped = true
+Bot1.Attack(Unswerving Sloth > Bot2; Ornithopter > Bot2)
+
+[Expect]
+Bot1.Battlefield.Unswerving Sloth.Keywords = Indestructible
+Bot1.Battlefield.Unswerving Sloth.Tapped = false
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Su-Chi.Tapped = false
+Bot1.Battlefield.Mox Pearl.Tapped = true

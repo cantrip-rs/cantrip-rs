@@ -1,0 +1,38 @@
+# Unswerving Sloth's attack trigger needs it saddled as it attacks (CR 702.171b): attacked unsaddled it gains nothing and untaps
+# nothing, so the Ornithopter that attacked with it stays tapped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Plains
+Unswerving Sloth
+Ornithopter
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Unswerving Sloth.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Unswerving Sloth > Bot2; Ornithopter > Bot2)
+
+[Expect]
+Bot1.Battlefield.Unswerving Sloth.Keywords = (absent)
+Bot1.Battlefield.Unswerving Sloth.Tapped = true
+Bot1.Battlefield.Ornithopter.Tapped = true
