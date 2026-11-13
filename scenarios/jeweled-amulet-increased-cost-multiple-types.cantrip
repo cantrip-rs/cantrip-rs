@@ -1,0 +1,35 @@
+# An increased activation cost paid with three mana types lets the Amulet add only one of those types (CR 106.1b).
+[Bot1 Deck]
+Jeweled Amulet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Island x20
+[Bot2 Deck]
+Anointed Peacekeeper
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Jeweled Amulet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Anointed Peacekeeper.Cast
+Bot2.Name(Jeweled Amulet)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Jeweled Amulet.Activate(Ability: Put a charge)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Jeweled Amulet.Activate(Ability: Remove a charge)
+Bot1.Modes(R)
+? Bot1.Mana = {R}
+[Expect]
+Bot1.Battlefield.Jeweled Amulet.Counters.Charge = (absent)
