@@ -1,0 +1,63 @@
+# When its target dies in response the ability has no effect, but the discard cost remains paid; a later activation resolves (CR 608.2b).
+[Bot1 Deck]
+Coral Helm
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Ornithopter
+Forest
+Island x20
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Shock
+Island x20
+[Dice]
+1; 1
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Coral Helm.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Coral Helm.Activate(Bot2)
+Bot1.Battlefield.Coral Helm.Activate(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+? Bot1.Graveyard = Forest; Black Lotus
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+? Bot2.Graveyard = Ornithopter; Shock
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Coral Helm.Activate(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot2.Graveyard = Ornithopter; Shock
