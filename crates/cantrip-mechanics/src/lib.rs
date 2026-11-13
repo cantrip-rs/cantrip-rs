@@ -824,6 +824,22 @@ pub fn permanents_with_subtype_you_control(q: &dyn Query, player: PlayerId, subt
     q.permanents_of(player).into_iter().filter(|&id| q.chars(id).has_subtype(subtype)).count()
 }
 
+/// "Mounts and Vehicles [player] controls" (CR 205.3, 109.4): every permanent of either subtype they control, read through the
+/// layers, each once - a creature that is somehow both a Mount and a Vehicle counts only once (Road Rage's ruling). The count of
+/// Road Rage and, less the Vehicle itself, of Spire Mechcycle's exhaust ability. Both subtypes are read through `source`'s words (CR 612).
+pub fn mounts_and_vehicles_you_control(q: &dyn Query, source: ObjectId, player: PlayerId) -> Vec<ObjectId> {
+    q.permanents_of(player).into_iter().filter(|&id| is_mount_or_vehicle(q, source, id)).collect()
+}
+
+/// "[A] Mount or Vehicle" (CR 205.3, 301.7): whether `id` - a permanent or a card in any zone - has either subtype as the layers
+/// give it, both read through `source`'s words (CR 612). Interface Ace (what it crews or saddles with toughness), Push the Limit
+/// (the Mount and Vehicle cards in a graveyard) and Spire Mechcycle (the permanent it taps) ask it.
+pub fn is_mount_or_vehicle(q: &dyn Query, source: ObjectId, id: ObjectId) -> bool {
+    let (mount, vehicle) = (q.words(source).subtype(Subtype::Mount), q.words(source).subtype(Subtype::Vehicle));
+    let subtypes = q.chars(id).subtypes;
+    subtypes.has(mount) || subtypes.has(vehicle)
+}
+
 /// "The number of lands [player] controls": every land on the battlefield they control, read through the layers. Beza, the
 /// Bounding Spring, Consult the Star Charts, Fabled Passage, Pillage the Bog and Emeritus of Abundance count it exactly so.
 pub fn lands_you_control(q: &dyn Query, player: PlayerId) -> usize {

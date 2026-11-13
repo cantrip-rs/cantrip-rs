@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::effects;
+use cantrip_mechanics::{effects, is_mount_or_vehicle};
 use cantrip_mechanics::triggers::this_becomes_tapped;
 use cantrip_oracle as oracle;
 
@@ -8,9 +8,7 @@ use cantrip_oracle as oracle;
 /// toughness replaces that power, so what else changed it (a bonus from another ability) is kept. A Spacecraft it stations
 /// still counts its power.
 fn toughness_for_mounts_and_vehicles(q: &dyn Query, asker: &Asker, power: i32, permanent: ObjectId) -> i32 {
-    let words = q.words(asker.source);
-    let subtypes = q.chars(permanent).subtypes;
-    if subtypes.has(words.subtype(Subtype::Vehicle)) || subtypes.has(words.subtype(Subtype::Mount)) {
+    if is_mount_or_vehicle(q, asker.source, permanent) {
         let this = q.chars(asker.source);
         power - i32::from(this.power.unwrap_or(0)) + i32::from(this.toughness.unwrap_or(0))
     } else {
