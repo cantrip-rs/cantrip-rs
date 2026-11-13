@@ -1294,7 +1294,10 @@ and a choice given up is undone and the payer asked again. The parts only a spel
 craft's materials, a granted ability's "sacrifice the permanent that gives it") are never paid. The whole is paid together,
 and "if they do" asks whether they paid (CR 118.12). "You may pay {X}" where the text leaves X to the payer (CR 107.3f) is `Game::may_pay_x`
 (`actions::may_pay_x`): the same question with its `x`, raised and lowered (`IncreaseX`, `DecreaseX`) while mana is made, any
-X from 0 up, and the X paid is what it returns, for "when you do" to carry (Fire Lord Sozin). "You may pay {G} up to three
+X from 0 up, and the X paid is what it returns, for "when you do" to carry (Fire Lord Sozin). A variable source-counter
+removal uses the available-counter bound shared with storage-land activations (`source_counter_x_limit`), including
+fixed removals and repeated components. Its count is not capped by the mana-X picker, and a counter-only payment
+offers no mana abilities. Paying zero still returns `Some(0)`; declining returns `None`. "You may pay {G} up to three
 times" and "any number of times" are `Game::may_pay_times` (`actions::may_pay_times`): the same question with its `times`, the
 number raised and lowered from 1 to the most (`ANY_NUMBER_OF_TIMES`: what the mana cost's shape holds, `ManaCost::times`) and
 the mana that many times over paid at once, its number returned. "When you pay this cost one or more times" triggers once

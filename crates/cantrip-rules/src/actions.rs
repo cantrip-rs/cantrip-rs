@@ -647,6 +647,21 @@ fn parts_of<'a>(cost: &'a Cost) -> impl Iterator<Item = &'a Cost> + 'a {
     single.into_iter().chain(flat.into_iter().flatten())
 }
 
+/// The largest X a source-counter payment can take (CR 118.3), shared by Tetravus's resolving payment and the
+/// storage lands' activations. Fixed removals consume their counters first; repeated variable components share X.
+/// A departed incarnation or phased-out source supplies no counters. No mana-X picker limit applies to this count.
+fn source_counter_x_limit(cx: &Cx, source: ObjectId, cost: &Cost) -> Option<u32> {
+    let Some(VariableCost::RemoveAnyNumberOfCounters(kind)) = cost.variable else { return None };
+    let obj = cx.s().obj(source);
+    let available = if live(cx.s(), source) && !obj.zone.is(ZoneKind::PhasedOut) { obj.counters(kind).max(0) as u32 } else { 0 };
+    let (fixed, copies) = parts_of(cost).fold((0u32, 0u32), |(fixed, copies), part| {
+        let n = part.remove_counters.filter(|(k, _)| *k == kind).map_or(0, |(_, n)| u32::from(n));
+        let variable = matches!(part.variable, Some(VariableCost::RemoveAnyNumberOfCounters(k)) if k == kind);
+        (fixed.saturating_add(n), copies.saturating_add(u32::from(variable)))
+    });
+    Some(available.saturating_sub(fixed) / copies.max(1))
+}
+
 /// How many atomic parts `cost` has (`atomic_costs`).
 fn part_count(cost: &Cost) -> usize {
     if cost.components.is_empty() { 1 } else { cost.components.iter().map(part_count).sum() }
@@ -12266,7 +12281,7 @@ fn activate(
     // number is the ability's X (CR 107.3), which its effect reads as "that many".
     let _removes = match whole.variable {
         Some(VariableCost::RemoveAnyNumberOfCounters(kind)) => {
-            let cap = cx.s().obj(source).counters(kind).max(0) as u32;
+            let cap = source_counter_x_limit(cx, source, &whole).expect("variable counter cost");
             item.x = announce_x(cx, player, source, mana, None, None, 0, cap, false, 0, VariableCost::RemoveAnyNumberOfCounters(kind).governs())? ;
             Some((kind, item.x))
         }
@@ -12662,8 +12677,7 @@ fn activate_mana_as(
     let mut mana = def.cost.mana;
     let removes = match def.cost.variable {
         Some(VariableCost::RemoveAnyNumberOfCounters(kind)) => {
-            let fixed = def.cost.remove_counters.filter(|(k, _)| *k == kind).map_or(0, |(_, n)| i32::from(n));
-            let cap = (cx.s().obj(source).counters(kind) - fixed).max(0) as u32;
+            let cap = source_counter_x_limit(cx, source, &def.cost).expect("variable counter cost");
             let n = announce_x(cx, player, source, mana, None, None, u32::from(least_x(def.x_cant_be_zero)), cap, false, 0,
                 VariableCost::RemoveAnyNumberOfCounters(kind).governs())?;
             Some((kind, n))
@@ -15003,7 +15017,8 @@ fn pay_during_resolution_inner(
         // Paying is judged exactly, on what is there now: the mana abilities have had their chance by the time the payer
         // asks to pay (CR 605.3a, 601.2g-h). Only the mana abilities themselves are offered on what they could feed the rest of
         // the cost, and only where the payment includes mana, which is what gives them a chance at all.
-        let mana_asked = total != ManaCost::ZERO || x.is_some();
+        let mana_asked = total != ManaCost::ZERO || cost.mana.x > 0;
+        let counter_limit = source_counter_x_limit(cx, source, cost);
         let payable = life_payable && resolution_rest_payable(cx, payer, source, cost, x.unwrap_or(0), false);
         let may_become = payable || mana_asked && life_payable && resolution_rest_payable(cx, payer, source, cost, x.unwrap_or(0), true);
         // CR 118.3: a payer who can't pay the cost - too few permanents to sacrifice, cards to discard, counters to remove,
@@ -15030,7 +15045,7 @@ fn pay_during_resolution_inner(
         } else if let Some(n) = x
             && (may_become || cost.pay_x_life || cost.variable.is_some())
         {
-            if n < MOST_X_PAID {
+            if n < counter_limit.unwrap_or(MOST_X_PAID) {
                 options.push(ActionOption::simple(ActionKind::IncreaseX));
             }
             if n > 0 {
@@ -15263,6 +15278,9 @@ fn resolution_rest_payable(cx: &Cx, payer: PlayerId, source: ObjectId, cost: &Co
     {
         return false;
     }
+    if source_counter_x_limit(cx, source, cost).is_some_and(|limit| x > limit) {
+        return false;
+    }
     can_pay_other_fed(cx, source, payer, &Cost { tap: false, mana: ManaCost::ZERO, ..*cost }, Judged::Activation, None, None, feeds) || cost.tap
 }
 
@@ -15275,6 +15293,10 @@ fn is_live(cx: &Cx, id: ObjectId) -> bool {
 #[cfg(test)]
 #[path = "activation_players_tests.rs"]
 mod activation_players_tests;
+
+#[cfg(test)]
+#[path = "resolution_counter_cost_tests.rs"]
+mod resolution_counter_cost_tests;
 
 #[cfg(test)]
 #[path = "priority_only_tests.rs"]

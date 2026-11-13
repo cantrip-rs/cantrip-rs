@@ -1784,7 +1784,8 @@ pub trait Game: Query {
     /// question that raises and lowers it and makes mana, any X from 0 up. `cost` is the cost with its {X}
     /// (`cost("{X}")`), and `question` what paying does, as for `may_pay`. The X paid, or `None` when the payer declined:
     /// "when you do" asks whether it was paid (CR 603.12), and a reflexive ability that reads X is given it
-    /// (`reflexive_trigger_counted`).
+    /// (`reflexive_trigger_counted`). A variable source-counter removal chooses only counters actually available,
+    /// including fixed removals in the same cost; it asks for no mana abilities unless the cost also includes mana.
     fn may_pay_x(&mut self, payer: PlayerId, source: ObjectId, subject: ObjectId, cost: crate::card::Cost, question: &'static Question) -> Result<Option<u32>, Suspend>;
     /// `may_pay` for a cost with a part whose size the payer sets as they pay it ("you may discard one or more land cards",
     /// `VariableCost::DiscardOneOrMore`): how many that part took, or `None` when the payer declined - the "that many" of a
