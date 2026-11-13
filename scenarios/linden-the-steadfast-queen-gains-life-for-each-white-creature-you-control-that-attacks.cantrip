@@ -1,0 +1,47 @@
+# Linden, the Steadfast Queen (3/3 vigilance): "Whenever a white creature you control attacks, you gain 1 life." (CR 508.1m, 603.2.)
+# Bot1 pays exactly {W}{W}{W} with Black Lotus, then Elite Vanguard ({W}, white) and Memnite (colorless). On turn 3 all three
+# attack: Linden herself and the Vanguard are white creatures Bot1 controls, so 2 life (20 -> 22), not 3 for the colorless
+# Memnite. Linden's vigilance keeps her untapped. On turn 4 Bot2's own white Elite Vanguard attacks: Bot1 gains nothing.
+
+[Bot1 Deck]
+Black Lotus
+Linden, the Steadfast Queen
+Elite Vanguard
+Memnite
+Plains
+Plains x15
+
+[Bot2 Deck]
+Elite Vanguard
+Plains x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Linden, the Steadfast Queen.Cast(Spend: W, W, W)
+? Bot1.Mana =
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Elite Vanguard.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Elite Vanguard.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Life = 20
+Bot1.Attack(Linden, the Steadfast Queen > Bot2; Elite Vanguard > Bot2; Memnite > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Life = 22
+? Bot1.Battlefield.Linden, the Steadfast Queen.Tapped = false
+? Bot1.Battlefield.Linden, the Steadfast Queen.Keywords = Vigilance
+[T4 Bot2.Main1]
+Bot2.Attack(Elite Vanguard > Bot1)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Linden, the Steadfast Queen.Tapped = false
