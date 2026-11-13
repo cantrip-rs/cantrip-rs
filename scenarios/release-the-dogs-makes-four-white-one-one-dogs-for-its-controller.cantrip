@@ -1,0 +1,37 @@
+# Release the Dogs: "Create four 1/1 white Dog creature tokens." (CR 111.4, 701.7a.) Bot1 casts it on turn 1 with Black Lotus
+# and Mox Jet for exactly {3}{W}; four tokens come under Bot1's control (not three, not five, not the opponent's), each a
+# white 1/1 Dog, and the sorcery goes to the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Release the Dogs
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Release the Dogs.Cast(Spend: W, W, W, B)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Battlefield.Count = 5
+Bot2.Battlefield.Count = 0
+Bot1.Graveyard = Release the Dogs; Black Lotus
+Bot1.Battlefield.Dog Token#1.Power = 1
+Bot1.Battlefield.Dog Token#1.Toughness = 1
+Bot1.Battlefield.Dog Token#1.Colors = White
+Bot1.Battlefield.Dog Token#1.Subtypes = Dog
+Bot1.Battlefield.Dog Token#1.Types = Creature
+Bot1.Battlefield.Dog Token#4.Power = 1
+Bot1.Battlefield.Dog Token#4.Toughness = 1
+Bot1.Battlefield.Dog Token#4.Colors = White
