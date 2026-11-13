@@ -1,0 +1,11 @@
+{
+  "name": "Sun-Blessed Healer",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Cleric",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Kicker {1}{W} (You may pay an additional {1}{W} as you cast this spell.)\nLifelink (Damage dealt by this creature also causes you to gain that much life.)\nWhen this creature enters, if it was kicked, return target nonland permanent card with mana value 2 or less from your graveyard to the battlefield.",
+  "keywords": [
+    "Lifelink"
+  ]
+}
