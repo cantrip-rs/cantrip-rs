@@ -1,0 +1,39 @@
+# A wordless white enchantment is legal; a nonwhite enchantment and a creature are not (CR 115.1c, 612.2).
+[Bot1 Deck]
+Balduvian Shaman
+Glorious Anthem
+Bad Moon
+Black Lotus x2
+Mox Sapphire
+Mox Jet
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Glorious Anthem.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Bad Moon.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Balduvian Shaman.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Balduvian Shaman.Activate(Bad Moon)
+! Bot1.Battlefield.Balduvian Shaman.Activate(Balduvian Shaman)
+Bot1.Battlefield.Balduvian Shaman.Activate(Glorious Anthem)
+Bot1.Colors(Black)
+! Bot1.Colors(Black)
+Bot1.Colors(Blue)
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost(Spend: U)
+Bot1.Pass
+? Bot1.Mana = {B}
+[Expect]
+Bot1.Battlefield.Glorious Anthem.Counters.Age = 1

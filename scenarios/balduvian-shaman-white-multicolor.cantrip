@@ -1,0 +1,30 @@
+# A white and green enchantment is white and can receive cumulative upkeep (CR 105.2b).
+[Bot1 Deck]
+Balduvian Shaman
+Aura Shards
+Mox Sapphire
+Mox Pearl
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Aura Shards.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Balduvian Shaman.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Balduvian Shaman.Activate(Aura Shards)
+Bot1.Colors(White)
+Bot1.Colors(Blue)
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Graveyard = Aura Shards; Black Lotus

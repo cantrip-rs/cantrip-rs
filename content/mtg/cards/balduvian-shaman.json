@@ -1,0 +1,8 @@
+{
+  "name": "Balduvian Shaman",
+  "manaCost": "{U}",
+  "type": "Creature — Human Cleric Shaman",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}: Change the text of target white enchantment you control that doesn't have cumulative upkeep by replacing all instances of one color word with another. (For example, you may change \"black creatures can't attack\" to \"blue creatures can't attack.\") That enchantment gains \"Cumulative upkeep {1}.\" (At the beginning of its controller's upkeep, that player puts an age counter on it, then sacrifices it unless they pay its upkeep cost for each age counter on it.)"
+}
