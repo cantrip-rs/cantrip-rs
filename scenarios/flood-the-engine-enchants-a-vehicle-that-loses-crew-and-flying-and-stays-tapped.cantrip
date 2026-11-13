@@ -1,0 +1,58 @@
+# "Enchant creature or Vehicle": Flood the Engine on Bot1's own Adventurer's Airship, a Vehicle that is not a creature (CR 303.4).
+# Its trigger taps the Airship, it loses all abilities (Crew 2 included, CR 613.1f), so two Zephyr Sprites can no longer crew it,
+# and it stays tapped through Bot1's next untap step (CR 502.3).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Emerald
+Mox Ruby
+Adventurer's Airship
+Flood the Engine
+Zephyr Sprite
+Zephyr Sprite
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Adventurer's Airship.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Adventurer's Airship.Keywords = Flying
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Flood the Engine.Cast(Adventurer's Airship)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Adventurer's Airship.Tapped = true
+? Bot1.Battlefield.Adventurer's Airship.Keywords = (absent)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Adventurer's Airship.Activate(Ability: Crew)
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Adventurer's Airship.Tapped = true
+Bot1.Battlefield.Adventurer's Airship.Types = Artifact

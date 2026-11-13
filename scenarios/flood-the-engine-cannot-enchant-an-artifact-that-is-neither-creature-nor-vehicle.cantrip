@@ -1,0 +1,26 @@
+# Flood the Engine enchants only a creature or Vehicle: Mox Jet, an artifact that is neither, is not offered as its target.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Flood the Engine
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+! Bot1.Hand.Flood the Engine.Cast(Mox Jet)
+
+[Expect]
+Bot1.Hand.Flood the Engine.Colors = Blue
