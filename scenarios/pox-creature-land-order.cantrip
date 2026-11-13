@@ -1,0 +1,46 @@
+# An animated land sacrificed as a creature is gone before the land sacrifice is counted (CR 608.2c).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Swamp
+Nissa, Who Shakes the World
+Pox
+Memnite
+Swamp x20
+[Bot2 Deck]
+Swamp x20
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Nissa, Who Shakes the World.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Nissa, Who Shakes the World.Activate(Ability: +1; Bot1.Battlefield.Swamp)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Pox.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Swamp)
+Bot2.Choose(Swamp; Swamp; Swamp)
+Bot1.Choose(Swamp)
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Swamp = (absent)

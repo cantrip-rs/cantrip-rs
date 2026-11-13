@@ -1,0 +1,73 @@
+# Both players lose a rounded-up third of life, discard, then sacrifice creatures and lands (CR 701.9a, 701.21a).
+[Bot1 Deck]
+Black Lotus
+Pox
+Memnite
+Memnite
+Swamp
+Swamp
+Swamp
+Swamp x20
+[Bot2 Deck]
+Memnite
+Memnite
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x20
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Pox.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 13
+? Bot2.Life = 13
+! Bot1.Choose()
+! Bot1.Choose(Swamp; Swamp)
+Bot1.Choose(Swamp)
+Bot2.Choose(Swamp; Swamp)
+? Bot1.Hand.Count = 1
+? Bot2.Hand.Count = 3
+! Bot1.Choose()
+! Bot1.Choose(Memnite#1; Memnite#2)
+! Bot1.Choose(Bot2.Battlefield.Memnite)
+Bot1.Choose(Memnite)
+Bot2.Choose(Memnite)
+? Bot1.Battlefield.Count = 3
+? Bot2.Battlefield.Count = 2
+! Bot1.Choose()
+! Bot1.Choose(Swamp#1; Swamp#2)
+! Bot1.Choose(Bot2.Battlefield.Swamp)
+Bot1.Choose(Swamp)
+[Expect]
+Bot1.Life = 13
+Bot2.Life = 13
+Bot1.Hand.Count = 1
+Bot2.Hand.Count = 3
+Bot1.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Count = 2
+Bot2.Battlefield.Count = 1

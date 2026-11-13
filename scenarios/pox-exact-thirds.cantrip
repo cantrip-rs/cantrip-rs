@@ -1,0 +1,45 @@
+# Exact multiples of three round without adding one; the two players have different life and permanent counts (CR 608.2c).
+[Bot1 Deck]
+Caves of Koilos
+Black Lotus
+Pox
+Memnite
+Memnite
+Memnite
+Swamp
+Swamp
+Island
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Caves of Koilos.Play
+Bot1.Battlefield.Caves of Koilos.Activate(Ability: {W} or {B}; Color: Black)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Pox.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 12
+Bot2.Life = 13
+Bot1.Battlefield.Count = 4
+Bot1.Hand.Count = 0
+Bot2.Battlefield.Count = 0
