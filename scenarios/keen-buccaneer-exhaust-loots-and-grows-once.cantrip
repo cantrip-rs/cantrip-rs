@@ -1,0 +1,53 @@
+# Keen Buccaneer (2/3 vigilance, {2}{U}): "Exhaust -- {1}{U}: Draw a card, then discard a card. Put a +1/+1 counter on this creature."
+# On turn 3 Bot1 pays exactly {1}{U} with two Mox Sapphires: the hand stays the same size (draw one, discard one), the Buccaneer
+# gets a +1/+1 counter and is a 3/4 (CR 122.1a). On turn 5 it cannot be activated again although the mana is there (CR 702.177a).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Keen Buccaneer
+Mountain
+Forest
+Swamp
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Hand.Keen Buccaneer.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Keen Buccaneer.Power = 2
+? Bot1.Battlefield.Keen Buccaneer.Keywords = Vigilance
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 4
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Keen Buccaneer.Activate
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Swamp)
+? Bot1.Hand.Count = 4
+? Bot1.Battlefield.Keen Buccaneer.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Keen Buccaneer.Power = 3
+? Bot1.Battlefield.Keen Buccaneer.Toughness = 4
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+! Bot1.Battlefield.Keen Buccaneer.Activate
+
+[Expect]
+Bot1.Battlefield.Keen Buccaneer.Counters.PlusOnePlusOne = 1
+Bot1.Graveyard = Swamp
