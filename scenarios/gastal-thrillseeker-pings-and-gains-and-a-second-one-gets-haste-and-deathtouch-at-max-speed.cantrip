@@ -1,0 +1,87 @@
+# Gastal Thrillseeker (2/3): "Start your engines!" "When this creature enters, it deals 1 damage to target opponent and you gain 1 life."
+# "Max speed — This creature has deathtouch and haste." Turn 1: the first Gastal pings Bot2 (19) and Bot1 gains 1 (21), speed 1 then 2 as
+# Bot2 lost life (CR 702.179a, 702.179d). Turn 3 a Lightning Bolt makes the speed 3: the Gastal attacks and Bot2's Hill Giant blocks it, taking
+# 2 damage and surviving as there is no deathtouch yet while the Gastal dies. Turn 5 a second Gastal's own enter trigger pings Bot2 and takes
+# the speed to 4: it has deathtouch and haste, so it attacks at once, and the Hill Giant that blocks it dies to its 2 damage (CR 702.2b)
+# while the Gastal dies to the Giant's 3.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Gastal Thrillseeker
+Gastal Thrillseeker
+Mountain
+Lightning Bolt
+Mountain
+Mountain x13
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Hill Giant
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gastal Thrillseeker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Life = 21
+? Bot1.Speed = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Gastal Thrillseeker > Bot2)
+Bot2.Block(Hill Giant > Gastal Thrillseeker)
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Hill Giant.Damage = 2
+? Bot1.Graveyard = Gastal Thrillseeker; Lightning Bolt
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gastal Thrillseeker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+? Bot2.Life = 15
+? Bot1.Life = 22
+Bot1.Attack(Gastal Thrillseeker > Bot2)
+Bot2.Block(Hill Giant > Gastal Thrillseeker)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Hill Giant
+Bot1.Graveyard = Gastal Thrillseeker; Gastal Thrillseeker; Lightning Bolt

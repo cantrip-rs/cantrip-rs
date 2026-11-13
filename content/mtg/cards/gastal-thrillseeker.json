@@ -1,0 +1,8 @@
+{
+  "name": "Gastal Thrillseeker",
+  "manaCost": "{B}{R}",
+  "type": "Creature — Lizard Berserker",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Start your engines! (If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.)\nWhen this creature enters, it deals 1 damage to target opponent and you gain 1 life.\nMax speed — This creature has deathtouch and haste."
+}

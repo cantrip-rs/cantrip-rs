@@ -1,0 +1,31 @@
+# Gastal Thrillseeker cast by Bot2 on turn 2: "it deals 1 damage to target opponent and you gain 1 life" aims at Bot1, the only opponent,
+# so Bot1 goes to 19 and Bot2 to 21 (CR 120.3, 119.3). Bot2's speed becomes 2 (CR 702.179a, 702.179d); Bot1 has none.
+
+[Bot1 Deck]
+Island x15
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Gastal Thrillseeker
+Island x12
+
+[Actions]
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Gastal Thrillseeker.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 21
+Bot2.Speed = 2
