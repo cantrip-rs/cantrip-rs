@@ -1,0 +1,48 @@
+# Zul Ashur, Lich Lord: "Ward—Pay 2 life." (CR 702.21a) Bot2 casts two Lightning Bolts at it on turn 2. The first: Bot2 declines the
+# ward cost, so the Bolt is countered and Zul Ashur (2/2) is untouched and Bot2 keeps 20 life. The second: Bot2 pays 2 life (20 to 18),
+# the Bolt is not countered, and its 3 damage kills the 2/2.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Zul Ashur, Lich Lord
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Zul Ashur, Lich Lord.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Zul Ashur, Lich Lord)
+Bot2.Decline
+Bot1.Pass
+? Bot1.Battlefield.Zul Ashur, Lich Lord.Damage = 0
+? Bot2.Life = 20
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Zul Ashur, Lich Lord)
+Bot2.Accept
+Bot1.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard = Zul Ashur, Lich Lord
+Bot1.Battlefield = Mox Pearl; Mox Jet
+Bot2.Graveyard = Lightning Bolt; Lightning Bolt

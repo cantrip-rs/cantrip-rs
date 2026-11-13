@@ -1,0 +1,85 @@
+# Zul Ashur, Lich Lord: "{T}: You may cast target Zombie creature card from your graveyard this turn" (CR 601.3, 611.2a). Bot1 casts
+# Zul Ashur, a Walking Corpse (Zombie) and a Grizzly Bears (not a Zombie) on turn 1, and Bot2 kills the Corpse and the Bears with two
+# Lightning Bolts on turn 2. So Bot1's graveyard holds the Corpse, the Bears and the sacrificed Black Lotus. On turn 3 Zul Ashur cannot
+# target the Bears (a creature card, but not a Zombie) or the Black Lotus (not a creature card at all); it targets the
+# Corpse, is tapped and cannot be activated again, and the grant covers only the Corpse (the Bears still cannot be cast). "May": Bot1
+# does not cast it and the Corpse stays in the graveyard. On turn 5 the grant is gone (the Corpse cannot be cast); Zul Ashur taps again,
+# and now the Corpse is cast from the graveyard and enters the battlefield.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Emerald
+Black Lotus
+Zul Ashur, Lich Lord
+Walking Corpse
+Grizzly Bears
+Swamp x13
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain
+Mountain
+Mountain
+Mountain x13
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Zul Ashur, Lich Lord.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Walking Corpse.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Walking Corpse)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Grizzly Bears; Walking Corpse; Black Lotus
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Zul Ashur, Lich Lord.Activate(Bot1.Graveyard.Grizzly Bears)
+! Bot1.Battlefield.Zul Ashur, Lich Lord.Activate(Bot1.Graveyard.Black Lotus)
+? Bot1.Battlefield.Zul Ashur, Lich Lord.Tapped = false
+Bot1.Battlefield.Zul Ashur, Lich Lord.Activate(Bot1.Graveyard.Walking Corpse)
+? Bot1.Battlefield.Zul Ashur, Lich Lord.Tapped = true
+Bot1.Pass
+Bot2.Pass
+! Bot1.Graveyard.Grizzly Bears.Cast
+! Bot1.Battlefield.Zul Ashur, Lich Lord.Activate(Bot1.Graveyard.Walking Corpse)
+[T5 Bot1.Main1]
+? Bot1.Graveyard = Grizzly Bears; Walking Corpse; Black Lotus
+! Bot1.Graveyard.Walking Corpse.Cast
+Bot1.Battlefield.Zul Ashur, Lich Lord.Activate(Bot1.Graveyard.Walking Corpse)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Graveyard.Walking Corpse.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Swamp; Mox Jet; Mox Emerald; Zul Ashur, Lich Lord; Walking Corpse
+Bot1.Graveyard = Grizzly Bears; Black Lotus

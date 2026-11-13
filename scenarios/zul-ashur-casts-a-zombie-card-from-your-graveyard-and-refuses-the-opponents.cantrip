@@ -1,0 +1,79 @@
+# Zul Ashur, Lich Lord: "{T}: You may cast target Zombie creature card from your graveyard this turn" (CR 601.3, 602.2). Bot1 casts
+# Zul Ashur and a Walking Corpse (a 2/2 Zombie) on turn 1; on turn 2 Bot2 casts its own Walking Corpse and kills Bot1's with a Lightning
+# Bolt. On turn 3 Bot1 kills Bot2's Walking Corpse with its own Bolt, so each graveyard holds one Walking Corpse. Targeting the
+# opponent's is refused (it is not "your graveyard"), and it stays there. Targeting its own is accepted: the {T} is paid (Zul Ashur
+# tapped), and the Corpse is cast from the graveyard for {1}{B} (the pool empty after, so the cost is paid exactly) and is on the battlefield.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Zul Ashur, Lich Lord
+Walking Corpse
+Lightning Bolt
+Swamp x13
+
+[Bot2 Deck]
+Mountain
+Mox Jet
+Mox Pearl
+Mox Ruby
+Walking Corpse
+Lightning Bolt
+Mountain
+Mountain x13
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Zul Ashur, Lich Lord.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Walking Corpse.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Walking Corpse.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Walking Corpse)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Walking Corpse
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Walking Corpse)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Walking Corpse; Lightning Bolt
+! Bot1.Battlefield.Zul Ashur, Lich Lord.Activate(Bot2.Graveyard.Walking Corpse)
+? Bot1.Battlefield.Zul Ashur, Lich Lord.Tapped = false
+Bot1.Battlefield.Zul Ashur, Lich Lord.Activate(Bot1.Graveyard.Walking Corpse)
+? Bot1.Battlefield.Zul Ashur, Lich Lord.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Lightning Bolt; Walking Corpse
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Graveyard.Walking Corpse.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Swamp; Mox Jet; Mox Pearl; Mox Ruby; Zul Ashur, Lich Lord; Walking Corpse
+Bot1.Graveyard = Lightning Bolt
+Bot2.Graveyard = Walking Corpse; Lightning Bolt

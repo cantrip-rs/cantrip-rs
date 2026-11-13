@@ -1,0 +1,8 @@
+{
+  "name": "Zul Ashur, Lich Lord",
+  "manaCost": "{1}{B}",
+  "type": "Legendary Creature — Zombie Warlock",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Ward—Pay 2 life. (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays 2 life.)\n{T}: You may cast target Zombie creature card from your graveyard this turn."
+}
