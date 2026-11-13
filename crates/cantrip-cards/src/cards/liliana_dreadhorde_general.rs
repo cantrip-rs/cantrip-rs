@@ -5,12 +5,6 @@ use cantrip_oracle as oracle;
 
 pub static EXTRA: &[&CardDef] = &[&tokens::ZOMBIE];
 
-/// +1: "Create a 2/2 black Zombie creature token."
-fn plus_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &tokens::ZOMBIE, 1)?;
-    Ok(())
-}
-
 /// −4: "Each player sacrifices two creatures of their choice" (CR 701.21a, 101.4): the active player chooses first, then each
 /// other player in turn order knowing those choices, and all the chosen creatures are sacrificed at the same time; a player
 /// with only one creature sacrifices it.
@@ -37,7 +31,7 @@ pub static CARD: CardDef = CardDef {
         // "Whenever a creature you control dies, draw a card" (CR 603.10a): looked back on, so it triggers for each creature
         // that dies at the same time as Liliana herself.
         triggered(CREATURE_YOU_CONTROL_DIES, |g, item| effects::draw(g, item, 1), "Whenever a creature you control dies, draw a card."),
-        ability(loyalty(1), plus_one, "+1: Create a 2/2 black Zombie creature token."),
+        ability(loyalty(1), tokens::create_a_zombie, "+1: Create a 2/2 black Zombie creature token."),
         ability(loyalty(-4), minus_four, "\u{2212}4: Each player sacrifices two creatures of their choice."),
         ability(loyalty(-9), minus_nine, "\u{2212}9: Each opponent chooses a permanent they control of each permanent type and sacrifices the rest."),
     ],

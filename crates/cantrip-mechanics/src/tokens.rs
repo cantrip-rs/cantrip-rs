@@ -1550,3 +1550,10 @@ mod tests {
         assert_eq!(OFFICER.toughness, Some(1));
     }
 }
+
+/// "Create a 2/2 black Zombie creature token." (CR 111.1): one `ZOMBIE` under `item`'s controller, the card file listing it in
+/// its `EXTRA`. Hour of Victory and Liliana, Dreadhorde General print it.
+pub fn create_a_zombie(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &ZOMBIE, 1)?;
+    Ok(())
+}
