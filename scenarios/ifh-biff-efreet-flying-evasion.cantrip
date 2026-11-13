@@ -1,0 +1,31 @@
+# Flying prevents a ground creature from blocking the Efreet (CR 702.9b).
+[Bot1 Deck]
+Ifh-Bíff Efreet
+Black Lotus
+Mox Pearl
+Mox Emerald
+Forest x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ifh-Bíff Efreet.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ifh-Bíff Efreet > Bot2)
+! Bot2.Block(Memnite > Ifh-Bíff Efreet)
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Ifh-Bíff Efreet.Activate
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Life = 16
