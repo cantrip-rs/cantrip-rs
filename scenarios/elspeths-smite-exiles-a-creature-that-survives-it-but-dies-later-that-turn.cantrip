@@ -1,0 +1,49 @@
+# "If that creature would die this turn, exile it instead" (CR 611.2c, 614.1a): the replacement lasts the turn, not just for the
+# Smite's damage. Bot2's attacking Ageless Guardian (1/4) survives the 3 damage; Bot1's Armored Warhorse (2/3) blocks it and its 2
+# combat damage makes 5 marked: the Guardian would die, and is exiled. The Warhorse takes 1 and lives.
+
+[Bot1 Deck]
+Plains
+Plains
+Mox Pearl
+Armored Warhorse
+Elspeth's Smite
+Plains x15
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Ageless Guardian
+Plains x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Armored Warhorse.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Ageless Guardian.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ageless Guardian > Bot1)
+Bot1.Block(Armored Warhorse > Ageless Guardian)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Hand.Elspeth's Smite.Cast(Bot2.Battlefield.Ageless Guardian)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Turn = 4
+Exile = Ageless Guardian
+Bot2.Graveyard = Black Lotus
+Bot1.Battlefield.Armored Warhorse.Damage = 1
+Bot1.Life = 20

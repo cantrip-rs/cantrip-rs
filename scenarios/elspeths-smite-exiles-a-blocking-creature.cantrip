@@ -1,0 +1,49 @@
+# Elspeth's Smite on a blocker: Bot1 attacks on turn 3 with its Savannah Lions (2/1) and Bot2 blocks with its Armored Warhorse (2/3).
+# Smite deals 3 to the blocking Warhorse and it is exiled instead of dying; Bot2's other creature (an Ornithopter that does not
+# block) was refused as a target. Bot1's Lions stays blocked (CR 509.1h): Bot2 takes no damage, and the Lions takes none either.
+
+[Bot1 Deck]
+Plains
+Plains
+Savannah Lions
+Elspeth's Smite
+Plains x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Armored Warhorse
+Ornithopter
+Plains x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Armored Warhorse.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Savannah Lions > Bot2)
+Bot2.Block(Armored Warhorse > Savannah Lions)
+Bot1.Battlefield.Plains#1.Activate
+! Bot1.Hand.Elspeth's Smite.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Hand.Elspeth's Smite.Cast(Bot2.Battlefield.Armored Warhorse)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Exile = Armored Warhorse
+Bot2.Graveyard = Black Lotus
+Bot2.Life = 20
+Bot1.Battlefield.Savannah Lions.Damage = 0
