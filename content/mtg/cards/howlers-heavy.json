@@ -1,0 +1,8 @@
+{
+  "name": "Howler's Heavy",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Seal Pirate",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Cycling {1}{U} ({1}{U}, Discard this card: Draw a card.)\nWhen you cycle this card, target creature or Vehicle an opponent controls gets -3/-0 until end of turn."
+}

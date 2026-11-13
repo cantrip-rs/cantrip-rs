@@ -1,0 +1,69 @@
+# "Target creature or Vehicle an opponent controls": Bot2's Adventurer's Airship, a Vehicle that is not a creature when the
+# trigger goes on the stack, is a legal target, and it gets -3/-0 until end of turn (CR 611.2): crewed in response it is a 3/3
+# creature, with power 0 once the trigger resolves, and is a plain Vehicle again on Bot2's turn.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Howler's Heavy
+Island x17
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Emerald
+Mox Ruby
+Mox Jet
+Adventurer's Airship
+Zephyr Sprite
+Zephyr Sprite
+Island x14
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Adventurer's Airship.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Hand.Zephyr Sprite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Hand.Zephyr Sprite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Howler's Heavy.Activate(Ability: Cycling)
+Bot1.Pass
+Bot2.Battlefield.Adventurer's Airship.Activate(Ability: Crew)
+Bot2.Choose(Zephyr Sprite#1; Zephyr Sprite#2)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Adventurer's Airship.Types.Count = 2
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Adventurer's Airship.Power = 0
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Adventurer's Airship.Types.Count = 1
+
+[Expect]
+Bot2.Battlefield.Adventurer's Airship.Tapped = false
