@@ -1,0 +1,8 @@
+{
+  "name": "Goblin Artisans",
+  "manaCost": "{R}",
+  "type": "Creature — Goblin Artificer",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}: Flip a coin. If you win the flip, draw a card. If you lose the flip, counter target artifact spell you control that isn't the target of an ability from another creature named Goblin Artisans."
+}

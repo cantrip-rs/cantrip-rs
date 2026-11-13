@@ -1,0 +1,26 @@
+# Another Goblin Artisans cannot target the same artifact spell while the first ability is on the stack; a lost flip counters it (CR 115.1, 701.6a).
+[Bot1 Deck]
+Black Lotus
+Goblin Artisans
+Goblin Artisans
+Ornithopter
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Dice]
+2
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Artisans.Cast
+Bot1.Hand.Goblin Artisans.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Goblin Artisans#1.Activate(Stack.Ornithopter)
+! Bot1.Battlefield.Goblin Artisans#2.Activate(Stack.Ornithopter)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Ornithopter; Black Lotus
+Bot1.Battlefield.Goblin Artisans#1.Tapped = true
+Bot1.Battlefield.Goblin Artisans#2.Tapped = false
+Bot1.Hand.Count = 4

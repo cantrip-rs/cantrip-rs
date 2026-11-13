@@ -1,0 +1,30 @@
+# A won flip draws a card and leaves the targeted artifact spell to resolve; activating taps the Artisans (CR 602.2, 705.1).
+[Bot1 Deck]
+Mountain
+Goblin Artisans
+Ornithopter
+Lightning Bolt
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Dice]
+1
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Goblin Artisans.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+! Bot1.Battlefield.Goblin Artisans.Activate(Stack.Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Goblin Artisans.Activate(Stack.Ornithopter)
+? Bot1.Battlefield.Goblin Artisans.Tapped = true
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Ornithopter.Types = Artifact; Creature
+Bot1.Hand.Count = 5
+Bot1.Graveyard = Lightning Bolt

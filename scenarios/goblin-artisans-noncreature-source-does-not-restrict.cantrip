@@ -1,0 +1,33 @@
+# A source that is no longer a creature does not prevent another Artisans targeting the spell (CR 113.7a).
+[Bot1 Deck]
+Black Lotus
+Goblin Artisans
+Goblin Artisans
+Ornithopter
+Swift Reconfiguration
+Plains
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Dice]
+2
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Artisans.Cast
+Bot1.Hand.Goblin Artisans.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Goblin Artisans#1.Activate(Stack.Ornithopter)
+Bot1.Hand.Swift Reconfiguration.Cast(Bot1.Battlefield.Goblin Artisans#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Goblin Artisans#2.Activate(Stack.Ornithopter)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Ornithopter; Black Lotus
+Bot1.Battlefield.Goblin Artisans#1.Tapped = true
+Bot1.Battlefield.Goblin Artisans#2.Tapped = true
+Bot1.Battlefield.Goblin Artisans#1.Types = Artifact

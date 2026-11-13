@@ -1,0 +1,34 @@
+# Only an ability from another creature named Goblin Artisans stops the target: Spellskite's ability targeting the artifact
+# spell leaves it a legal target for Goblin Artisans (CR 115.1, 201.2).
+[Bot1 Deck]
+Black Lotus
+Goblin Artisans
+Spellskite
+Ornithopter
+Island
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Dice]
+1
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Artisans.Cast
+Bot1.Hand.Spellskite.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Spellskite.Activate(Stack.Ornithopter)
+Bot1.Modes()
+Bot1.Battlefield.Island.Activate
+? Stack.Count = 2
+Bot1.Battlefield.Goblin Artisans.Activate(Stack.Ornithopter)
+? Stack.Count = 3
+? Bot1.Battlefield.Goblin Artisans.Tapped = true
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Ornithopter.Types = Artifact; Creature
+Bot1.Battlefield.Goblin Artisans.Tapped = true
+Bot1.Life = 20

@@ -1,0 +1,23 @@
+# An opponent's artifact spell is not a legal target for the Artisans' ability (CR 115.1).
+[Bot1 Deck]
+Mountain
+Goblin Artisans
+Mountain x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Dice]
+1
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Goblin Artisans.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+! Bot1.Battlefield.Goblin Artisans.Activate(Stack.Ornithopter)
+[T3 Bot1.Main1]
+[Expect]
+Bot2.Battlefield.Ornithopter.Types = Artifact; Creature
+Bot1.Battlefield.Goblin Artisans.Tapped = false
