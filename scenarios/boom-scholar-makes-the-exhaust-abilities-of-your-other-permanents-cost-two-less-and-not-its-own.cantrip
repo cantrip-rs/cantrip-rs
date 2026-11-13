@@ -1,0 +1,47 @@
+# Boom Scholar: "exhaust abilities of other permanents you control cost {2} less to activate" (CR 601.2f, 602.2b, 702.177a). Bot1's Hog-Monkey, whose exhaust
+# costs {5}, pays it on turn three with exactly three of four mana (the green is left in the pool). The reduction is not for Boom Scholar's own exhaust, {4}{R}{G} = six mana:
+# four sources, which would pay it were it reduced by two, are refused.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Boom Scholar
+Hog-Monkey
+Black Lotus
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Boom Scholar.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Hog-Monkey.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Boom Scholar.Activate(Ability: Exhaust; Mana: short)
+Bot1.Battlefield.Hog-Monkey.Activate(Spend: W, B, R)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {G}
+? Bot1.Battlefield.Hog-Monkey.Counters.PlusOnePlusOne = 2
+
+[Expect]
+Bot1.Battlefield.Hog-Monkey.Power = 5
+Bot1.Battlefield.Boom Scholar.Power = 3
