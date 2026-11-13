@@ -1,0 +1,6 @@
+{
+  "name": "Disharmony",
+  "manaCost": "{2}{R}",
+  "type": "Instant",
+  "oracleText": "Cast this spell only during combat before blockers are declared.\nUntap target attacking creature and remove it from combat. Gain control of that creature until end of turn."
+}

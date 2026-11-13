@@ -1,0 +1,40 @@
+# Disharmony untaps and removes an attacking creature, allowing it to block another attacker; control ends at cleanup (CR 506.4, 611.2a).
+[Bot1 Deck]
+Disharmony x2
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Grizzly Bears
+Llanowar Elves
+Black Lotus
+Plains x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Llanowar Elves.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Grizzly Bears > Bot1; Llanowar Elves > Bot1)
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Disharmony.Cast(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Tapped = false
+Bot1.Block(Grizzly Bears > Llanowar Elves)
+! Bot1.Hand.Disharmony.Cast(Bot2.Battlefield.Llanowar Elves)
+[T4 Bot2.Main2]
+? Bot1.Life = 20
+[T5 Bot1.Main1]
+[Expect]
+Bot2.Battlefield.Grizzly Bears.Tapped = false
+Bot2.Graveyard = Llanowar Elves; Black Lotus
