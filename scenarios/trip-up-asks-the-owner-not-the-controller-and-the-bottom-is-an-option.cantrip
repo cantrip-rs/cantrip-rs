@@ -1,0 +1,57 @@
+# Trip Up: the OWNER chooses, not the controller (CR 108.3). Bot2 takes Bot1's Llanowar Elves with Act of Treason on turn 2, and
+# Bot1 Trip Ups it while it is still under Bot2's control. Bot1 (the owner) is asked and declines: the Elves go on the bottom of
+# Bot1's own library, not Bot2's.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Llanowar Elves
+Trip Up
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Act of Treason
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Act of Treason.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Trip Up.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Bot2.Battlefield = Mox Jet; Mox Ruby; Mox Sapphire
+Bot1.Library = Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Llanowar Elves

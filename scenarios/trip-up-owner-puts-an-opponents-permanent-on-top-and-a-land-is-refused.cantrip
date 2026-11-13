@@ -1,0 +1,41 @@
+# Trip Up: "Target nonland permanent's owner puts it on their choice of the top or bottom of their library." Bot2's Island is a land
+# and is refused as a target; Bot2's Ornithopter is chosen. Bot2, its owner, accepts: the Ornithopter goes on top of Bot2's library,
+# not into its graveyard, and is not countered or destroyed.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Trip Up
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Trip Up.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Trip Up.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot2.Accept
+
+[Expect]
+Bot2.Battlefield = Island
+Bot2.Graveyard.Count = 0
+Bot2.Library.Top = Ornithopter
+Bot1.Graveyard = Trip Up
