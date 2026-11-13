@@ -486,6 +486,10 @@ pub enum Event {
     /// permanent `permanent`, recorded after the permanent's zone change, which is the pair's one entering (CR 712.21's
     /// "one permanent"). `card` is no object any more, but part of the permanent (CR 400.7), as a mutating spell is.
     Melded { permanent: ObjectId, card: ObjectId },
+    /// A creature's combat target was assigned without declaring an attacker (CR 508.4, 508.5): it entered attacking,
+    /// or an effect reselected what it attacks. Recorded only, never an attack trigger. Retains its defender after
+    /// removal from combat, without making "whenever this creature attacks" see an undeclared attack.
+    AttackAssigned { attacker: ObjectId, defender: Target, defending: PlayerId },
 }
 
 /// Why a player loses the game (CR 104.3): what a "can't lose the game" or "don't lose the game for ..." effect is asked
@@ -608,7 +612,8 @@ impl Event {
             | Event::ModesChosen { source, .. }
             | Event::Done { source, .. } => source == object,
             Event::CrimeCommitted { by, .. } => by == object,
-            Event::Attacks { attacker, .. } | Event::Unblocked { attacker, .. } | Event::BecameBlocked { attacker } => attacker == object,
+            Event::Attacks { attacker, .. } | Event::AttackAssigned { attacker, .. }
+            | Event::Unblocked { attacker, .. } | Event::BecameBlocked { attacker } => attacker == object,
             Event::PaidToAttack { attacker, tapped, .. } => attacker == object || tapped == object,
             Event::Blocks { blocker, attacker, .. } => blocker == object || attacker == object,
             Event::ClassLevel { object: o, .. }
