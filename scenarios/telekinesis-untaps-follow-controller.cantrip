@@ -1,0 +1,49 @@
+# The two skipped untaps follow the creature after Control Magic changes its controller (CR 611.2a).
+[Bot1 Deck]
+Telekinesis
+Mox Sapphire
+Gleemox
+Control Magic
+Black Lotus
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Grizzly Bears.Tapped = false
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Hand.Telekinesis.Cast(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Tapped = true
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Grizzly Bears.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Control Magic.Cast(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Tapped = true
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Grizzly Bears.Tapped = true
+[T9 Bot1.Main1]
+? Bot1.Battlefield.Grizzly Bears.Tapped = false
+[Expect]
+Bot1.Battlefield.Control Magic.AttachedTo = Grizzly Bears

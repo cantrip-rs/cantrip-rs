@@ -1,0 +1,37 @@
+# The controller can target their own attacker; its combat damage is prevented this turn but works on a later turn (CR 615.1).
+[Bot1 Deck]
+Telekinesis
+Mox Sapphire
+Gleemox
+Black Lotus
+Grizzly Bears
+Island x20
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Grizzly Bears)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Hand.Telekinesis.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Grizzly Bears.Tapped = true
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Grizzly Bears.Tapped = true
+[T9 Bot1.BeginCombat]
+? Bot1.Battlefield.Grizzly Bears.Tapped = false
+Bot1.Attack(Grizzly Bears)
+[T9 Bot1.Main2]
+[Expect]
+Bot2.Life = 18

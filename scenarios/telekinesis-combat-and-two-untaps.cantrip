@@ -1,0 +1,47 @@
+# Telekinesis prevents a target attacker's combat damage, not damage dealt to it, and stops exactly two untaps (CR 615.1).
+[Bot1 Deck]
+Telekinesis
+Mox Sapphire
+Gleemox
+Black Lotus
+Grizzly Bears
+Island x20
+[Bot2 Deck]
+Black Lotus
+Trained Armodon
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Trained Armodon.Cast
+[T4 Bot2.BeginCombat]
+Bot2.Attack(Trained Armodon)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+! Bot1.Hand.Telekinesis.Cast(Bot1.Battlefield.Mox Sapphire)
+Bot1.Hand.Telekinesis.Cast(Bot2.Battlefield.Trained Armodon)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Block(Grizzly Bears > Trained Armodon)
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Grizzly Bears.Damage = 0
+? Bot2.Battlefield.Trained Armodon.Damage = 2
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Trained Armodon.Tapped = true
+[T8 Bot2.Main1]
+? Bot2.Battlefield.Trained Armodon.Tapped = true
+[T10 Bot2.Main1]
+? Bot2.Battlefield.Trained Armodon.Tapped = false
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2
