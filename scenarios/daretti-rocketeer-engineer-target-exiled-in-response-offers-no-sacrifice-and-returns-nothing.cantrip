@@ -1,0 +1,54 @@
+# Daretti, Rocketeer Engineer: the chosen artifact card is a target (CR 115.1, 608.2b). Turn 1 Bot1 declines the sacrifice for the Black Lotus
+# in its graveyard; on turn 3 Daretti attacks and Bot2 answers the attack trigger by exiling the Lotus with Cling to Dust. With its only
+# target gone the ability does not resolve: Bot1 is never asked about a sacrifice, so Mox Pearl stays, and nothing comes back.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Daretti, Rocketeer Engineer
+Forest x12
+
+[Bot2 Deck]
+Mox Jet
+Cling to Dust
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Daretti, Rocketeer Engineer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Bot1.Graveyard = Black Lotus
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Daretti, Rocketeer Engineer)
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Cling to Dust.Cast(Bot1.Graveyard.Black Lotus)
+Bot2.Pass
+Bot1.Pass
+? Exile = Black Lotus
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Daretti, Rocketeer Engineer; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Graveyard =
+Exile = Black Lotus
+Stack =

@@ -1,0 +1,43 @@
+# Daretti, Rocketeer Engineer: "Whenever Daretti enters or attacks, choose target artifact card in your graveyard. You may sacrifice an
+# artifact. If you do, return the chosen card to the battlefield." (CR 603.3d, 608.2d). Turn 1 Bot1 sacrifices a Black Lotus for mana
+# and casts Daretti; entering, he targets the Lotus and Bot1 declines the sacrifice: it stays in the graveyard. On turn 3 he attacks, the
+# second trigger targets it again, Bot1 sacrifices Mox Pearl this time and the Lotus returns to the battlefield.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Daretti, Rocketeer Engineer
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Daretti, Rocketeer Engineer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Bot1.Graveyard = Black Lotus
+? Bot1.Battlefield = Daretti, Rocketeer Engineer; Mox Jet; Mox Pearl; Mox Ruby
+[T3 Bot1.Main1]
+Bot1.Attack(Daretti, Rocketeer Engineer > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mox Pearl)
+
+[Expect]
+Bot1.Battlefield = Black Lotus; Daretti, Rocketeer Engineer; Mox Jet; Mox Ruby
+Bot1.Graveyard = Mox Pearl

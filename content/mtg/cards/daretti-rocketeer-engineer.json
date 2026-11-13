@@ -1,0 +1,8 @@
+{
+  "name": "Daretti, Rocketeer Engineer",
+  "manaCost": "{4}{R}",
+  "type": "Legendary Creature — Goblin Artificer",
+  "power": "*",
+  "toughness": 5,
+  "oracleText": "Daretti's power is equal to the greatest mana value among artifacts you control.\nWhenever Daretti enters or attacks, choose target artifact card in your graveyard. You may sacrifice an artifact. If you do, return the chosen card to the battlefield."
+}

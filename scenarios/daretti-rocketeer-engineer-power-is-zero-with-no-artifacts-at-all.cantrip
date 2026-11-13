@@ -1,0 +1,35 @@
+# Daretti, Rocketeer Engineer: "Daretti's power is equal to the greatest mana value among artifacts you control" (CR 604.3, 202.3). Cast on
+# turn 9 from five Mountains with no artifact anywhere, the greatest of nothing is 0, so he is a 0/5 - this pins the empty case, which a
+# Mox (mana value 0) cannot tell from a 0 power by itself. With no artifact card in the graveyard his enters trigger has no target.
+
+[Bot1 Deck]
+Mountain x5
+Daretti, Rocketeer Engineer
+Mountain
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mountain#3.Activate
+Bot1.Battlefield.Mountain#4.Activate
+Bot1.Battlefield.Mountain#5.Activate
+Bot1.Hand.Daretti, Rocketeer Engineer.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Daretti, Rocketeer Engineer.Power = 0
+Bot1.Battlefield.Daretti, Rocketeer Engineer.Toughness = 5

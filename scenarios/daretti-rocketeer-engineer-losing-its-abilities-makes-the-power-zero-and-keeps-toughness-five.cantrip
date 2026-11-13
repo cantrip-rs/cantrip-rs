@@ -1,0 +1,53 @@
+# Daretti, Rocketeer Engineer: the power-defining ability is a static ability, so Dress Down ("creatures lose all abilities") takes it away
+# and the star is worth 0 (CR 604.3, 613.1f, 208.5). Turn 3 Bot1's Smuggler's Copter (mana value 2) makes him a 2/5; Dress Down on the
+# same turn makes him a 0/5 though the Copter is still there.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Daretti, Rocketeer Engineer
+Smuggler's Copter
+Dress Down
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Daretti, Rocketeer Engineer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Daretti, Rocketeer Engineer.Power = 2
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dress Down.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Daretti, Rocketeer Engineer.Power = 0
+Bot1.Battlefield.Daretti, Rocketeer Engineer.Toughness = 5
+Bot1.Battlefield.Smuggler's Copter.ManaValue = 2

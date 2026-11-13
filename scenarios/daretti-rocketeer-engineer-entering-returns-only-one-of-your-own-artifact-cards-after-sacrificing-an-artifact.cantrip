@@ -1,0 +1,56 @@
+# Daretti, Rocketeer Engineer: "Whenever Daretti enters or attacks, choose target artifact card in your graveyard. You may sacrifice an
+# artifact. If you do, return the chosen card to the battlefield." (CR 603.3d, 701.21a). Turn 3 Bot1 sacrifices both Black Lotuses for mana
+# and Lightning Bolts Bot2, so Bot1's graveyard holds two Lotuses and a Bolt while Bot2's holds its own sacrificed Lotus. Daretti
+# (not an artifact) enters: the Bolt (not an artifact card) and Bot2's Lotus (not Bot1's graveyard) are refused as the target, a Lotus of
+# Bot1's is accepted; Daretti himself is refused as the sacrifice, so is sacrificing two artifacts (Mox Jet and Mox Emerald) for "an artifact", and sacrificing the one Mox Jet returns the Lotus.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Jet
+Lightning Bolt
+Daretti, Rocketeer Engineer
+Mox Emerald
+Mox Pearl
+Forest x12
+
+[Bot2 Deck]
+Black Lotus
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Daretti, Rocketeer Engineer.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Lightning Bolt)
+! Bot1.Target(Bot2.Graveyard.Black Lotus)
+Bot1.Target(Bot1.Graveyard.Black Lotus)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Daretti, Rocketeer Engineer)
+! Bot1.Choose(Mox Jet; Mox Emerald)
+Bot1.Choose(Mox Jet)
+
+[Expect]
+Bot1.Battlefield = Black Lotus; Daretti, Rocketeer Engineer; Mox Emerald
+Bot1.Graveyard = Mox Jet; Lightning Bolt; Black Lotus
+Bot2.Graveyard = Black Lotus
