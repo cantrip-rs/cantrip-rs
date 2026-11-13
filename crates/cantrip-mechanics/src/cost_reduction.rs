@@ -53,6 +53,19 @@ pub fn spells_you_cast_cost_1_less(q: &dyn Query, source: ObjectId, player: Play
     if player == q.controller(source) { CostDelta::less(1) } else { CostDelta::NONE }
 }
 
+/// "Instant and sorcery spells you cast cost {N} less to cast" (CR 601.2f, 118.7a): the controller's spells that are instants or
+/// sorceries, as the spell has those types on the stack (an Adventure's instant or sorcery half included, CR 715.3b); a generic
+/// reduction takes only the generic part (CR 118.7c). Glamdring, Foe-hammer reduces by a count of its own.
+pub fn instants_and_sorceries_you_cast_cost_less_by(q: &dyn Query, source: ObjectId, player: PlayerId, costed: Costed, amount: u32) -> CostDelta {
+    let Costed::Spell(spell) = costed else { return CostDelta::NONE };
+    if player == q.controller(source) && crate::library::instant_or_sorcery_card(q, spell) { CostDelta::less(amount) } else { CostDelta::NONE }
+}
+
+/// "Instant and sorcery spells you cast cost {N} less to cast" with a fixed amount: Mocking Sprite and Archmage of Runes ({1}).
+pub fn instants_and_sorceries_you_cast_cost_less<const N: u8>(q: &dyn Query, source: ObjectId, player: PlayerId, costed: Costed, _: &[Target]) -> CostDelta {
+    instants_and_sorceries_you_cast_cost_less_by(q, source, player, costed, N as u32)
+}
+
 /// Whether `spell` is the first spell `player` casts this turn that `kind` accepts (CR 601.2f, 118.7): `kind` reads a spell's
 /// characteristics as it was cast, and no other such spell was cast by them this turn - before the source came to the battlefield
 /// included, a spell that `kind` rejects not counting. Asked of this turn's casts, which hold a spell once it has been cast,

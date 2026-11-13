@@ -1,5 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::attach::equip;
+use cantrip_mechanics::cost_reduction;
 use cantrip_mechanics::library::instant_or_sorcery_card;
 use cantrip_oracle as oracle;
 
@@ -8,12 +9,8 @@ use cantrip_oracle as oracle;
 /// included, CR 715.3b), X the power the equipped creature has as the cost is determined, none being 0 (and a negative power
 /// reducing nothing, CR 107.1b). The cost is locked in once determined, so the creature's power changing later alters nothing.
 fn instants_and_sorceries_cost_the_equipped_creatures_power_less(q: &dyn Query, source: ObjectId, player: PlayerId, costed: Costed, _: &[Target]) -> CostDelta {
-    let Costed::Spell(spell) = costed else { return CostDelta::NONE };
-    if player != q.controller(source) || !instant_or_sorcery_card(q, spell) {
-        return CostDelta::NONE;
-    }
     let power = q.obj(source).attached_to.and_then(|creature| q.chars(creature).power).unwrap_or(0);
-    CostDelta::less(power.max(0) as u32)
+    cost_reduction::instants_and_sorceries_you_cast_cost_less_by(q, source, player, costed, power.max(0) as u32)
 }
 
 /// "Mill six cards, then put all instant and sorcery cards from among them into your hand." (CR 701.17a, 701.17c, 608.2c): the
