@@ -1440,6 +1440,14 @@ pub fn target_player_mills<const N: u32>(g: &mut dyn Game, item: &StackItem) -> 
     Ok(())
 }
 
+/// "Each opponent mills N cards" (CR 701.17a, 101.4): every opponent of the controller mills together, as one instruction.
+/// Aether Syphon and Psychic Corrosion print it (two).
+pub fn each_opponent_mills<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let mills: Vec<(PlayerId, u32)> = g.state().opponents(item.controller).map(|p| (p, N)).collect();
+    g.mill_together(&mills);
+    Ok(())
+}
+
 /// "You draw two cards and each player loses 2 life." (CR 121.1, 119.3, 101.4): the controller draws, then every player in
 /// the game loses the life, in turn order from the active player, as one instruction. Impossible Choice's second mode and
 /// The City on the Edge of Forever's chapter II print it.
