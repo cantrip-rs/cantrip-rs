@@ -8,12 +8,6 @@ fn you_discard_at_level_two(q: &dyn Query, me: &Asker, event: &Event) -> Option<
     if class::level(q, me.source) >= 2 { triggers::you_discard(q, me, event) } else { None }
 }
 
-/// "Whenever you discard a card, this Class deals 2 damage to each opponent."
-fn two_damage_to_each_opponent(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::damage_each_opponent(g, item, 2);
-    Ok(())
-}
-
 /// "When this Class becomes level 3" (CR 716.4).
 fn became_level_three(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
     match event {
@@ -34,7 +28,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(triggers::YOU_ATTACK, |g, item| effects::may_discard_to_draw(g, item, 1), "Whenever you attack, you may discard a card. If you do, draw a card."),
         class::level_two("{1}{R}", "{1}{R}: Level 2"),
-        triggered(when_asked(EventMask::DISCARDED, you_discard_at_level_two), two_damage_to_each_opponent, "Whenever you discard a card, this Class deals 2 damage to each opponent."),
+        triggered(when_asked(EventMask::DISCARDED, you_discard_at_level_two), effects::damage_each_opponent_n::<2>, "Whenever you discard a card, this Class deals 2 damage to each opponent."),
         class::level_three("{1}{R}", "{1}{R}: Level 3"),
         triggered(
             when(EventMask::CLASS_LEVEL, became_level_three),

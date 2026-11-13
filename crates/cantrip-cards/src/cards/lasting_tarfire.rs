@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::effects::damage_each_opponent;
+use cantrip_mechanics::effects;
 use cantrip_mechanics::triggers::EACH_END_STEP;
 use cantrip_oracle as oracle;
 
@@ -12,16 +12,10 @@ fn you_put_a_counter_on_a_creature_this_turn(q: &dyn Query, asker: &Asker) -> bo
     })
 }
 
-/// "This enchantment deals 2 damage to each opponent."
-fn two_damage_to_each_opponent(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    damage_each_opponent(g, item, 2);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
         EACH_END_STEP,
-        two_damage_to_each_opponent,
+        effects::damage_each_opponent_n::<2>,
         "At the beginning of each end step, if you put a counter on a creature this turn, this enchantment deals 2 damage to each opponent.",
     )
     .condition(you_put_a_counter_on_a_creature_this_turn)],

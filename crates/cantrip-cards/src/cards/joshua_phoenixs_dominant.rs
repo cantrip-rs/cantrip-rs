@@ -16,12 +16,6 @@ fn transform(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     exile_and_return_transformed(g, item.object, owner)
 }
 
-/// I, II: "Phoenix deals 2 damage to each opponent."
-fn rising_flames(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::damage_each_opponent(g, item, 2);
-    Ok(())
-}
-
 /// III: "Return any number of target creature cards with total mana value 6 or less from your graveyard to the battlefield.
 /// Exile Phoenix, then return it to the battlefield (front face up)." The total was judged as the targets were chosen and is
 /// judged again on resolution: if it has grown past 6 every target is illegal (CR 608.2b); otherwise the targets still legal
@@ -36,8 +30,8 @@ fn flames_of_rebirth(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
 /// Flying and lifelink are core keywords read from its characteristics.
 pub static BACK: CardDef = CardDef {
     abilities: &[
-        chapter(1, rising_flames, "I \u{2014} Rising Flames \u{2014} Phoenix deals 2 damage to each opponent."),
-        chapter(2, rising_flames, "II \u{2014} Rising Flames \u{2014} Phoenix deals 2 damage to each opponent."),
+        chapter(1, effects::damage_each_opponent_n::<2>, "I \u{2014} Rising Flames \u{2014} Phoenix deals 2 damage to each opponent."),
+        chapter(2, effects::damage_each_opponent_n::<2>, "II \u{2014} Rising Flames \u{2014} Phoenix deals 2 damage to each opponent."),
         chapter(3, flames_of_rebirth, "III \u{2014} Flames of Rebirth \u{2014} Return any number of target creature cards with total mana value 6 or less from your graveyard to the battlefield. Exile Phoenix, then return it to the battlefield (front face up).")
             .targets(&[TargetSpec { min: 0, max: TargetSpec::ANY_NUMBER, ..targets::CREATURE_CARD_IN_YOUR_GRAVEYARD }
                 .together(select::total_mana_value_at_most(6))

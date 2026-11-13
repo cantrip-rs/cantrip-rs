@@ -12,12 +12,6 @@ fn add_red_then_reflex(g: &mut dyn Game, asker: &Asker, _: Option<Color>) -> Res
     Ok(())
 }
 
-/// "This creature deals 1 damage to each opponent."
-fn ping(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::damage_each_opponent(g, item, 1);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(THIS_ENTERS, |g, item| effects::may_discard_to_draw(g, item, 1), "When this creature enters, you may discard a card. If you do, draw a card."),
@@ -27,6 +21,6 @@ pub static CARD: CardDef = CardDef {
             "{T}, Exile a card from your graveyard: Add {R}. When you do, this creature deals 1 damage to each opponent.",
         ),
     ],
-    delayed: &[delayed_trigger(ping, "When you do, this creature deals 1 damage to each opponent.")],
+    delayed: &[delayed_trigger(effects::damage_each_opponent_n::<1>, "When you do, this creature deals 1 damage to each opponent.")],
     ..oracle::RUBBLE_ROUSER
 };
