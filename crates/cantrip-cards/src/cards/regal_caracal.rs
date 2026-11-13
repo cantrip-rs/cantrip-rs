@@ -9,16 +9,10 @@ use cantrip_oracle as oracle;
 /// type read through the words of this card's text (CR 612).
 const TEXT: &str = "Other Cats you control get +1/+1 and have lifelink.";
 
-/// "When this creature enters, create two 1/1 white Cat creature tokens with lifelink." (CR 603.1, 111.1).
-fn create_two_1_1_white(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &tokens::CAT_LIFELINK, 2)?;
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
         triggers::THIS_ENTERS,
-        create_two_1_1_white,
+        tokens::create_lifelink_cats::<2>,
         "When this creature enters, create two 1/1 white Cat creature tokens with lifelink.",
     )],
     statics: &[

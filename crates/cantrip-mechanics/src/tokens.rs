@@ -970,6 +970,14 @@ pub static CAT: CardDef = CardDef {
     ..token!(Cat)
 };
 
+/// "Create [COUNT] 1/1 white Cat creature tokens with lifelink" (CR 701.7, 111.1): every token is made at once, as one event,
+/// under the ability's controller, the card file listing `CAT_LIFELINK` in its `EXTRA`. Basri, Tomorrow's Champion makes one;
+/// Cubwarden and Regal Caracal make two.
+pub fn create_lifelink_cats<const COUNT: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &CAT_LIFELINK, COUNT)?;
+    Ok(())
+}
+
 /// A 1/1 white Cat creature token with lifelink (CR 111). Cubwarden, Basri, Tomorrow's Champion and Liberated Livestock
 /// create this exact token.
 pub static CAT_LIFELINK: CardDef = CardDef {
@@ -1023,7 +1031,15 @@ pub static REBEL: CardDef = CardDef {
     ..token!(Rebel)
 };
 
-/// The 1/1 colorless Servo artifact creature token. Retrofitter Foundry and Saheeli, Sublime Artificer make it.
+/// "Create a 1/1 colorless Servo artifact creature token." (CR 111.1) as an ability's whole effect: one `SERVO` under `item`'s
+/// controller (the ability's controller, as it resolves, CR 603.3a), the card file listing it in its `EXTRA`. Nesting Bot,
+/// Retrofitter Foundry and Saheeli, Sublime Artificer print it.
+pub fn create_a_servo(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &SERVO, 1)?;
+    Ok(())
+}
+
+/// The 1/1 colorless Servo artifact creature token. Nesting Bot, Retrofitter Foundry and Saheeli, Sublime Artificer make it.
 pub static SERVO: CardDef = CardDef {
     types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),
     power: Some(1),
