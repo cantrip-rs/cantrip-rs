@@ -1,0 +1,8 @@
+{
+  "name": "Singing Tree",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Plant",
+  "power": 0,
+  "toughness": 3,
+  "oracleText": "{T}: Target attacking creature has base power 0 until end of turn."
+}
