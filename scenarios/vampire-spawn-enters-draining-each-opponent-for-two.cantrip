@@ -1,0 +1,29 @@
+# Vampire Spawn ({2}{B}, 2/3): "When this creature enters, each opponent loses 2 life and you gain 2 life" (CR 119.3, 603.6a). Paid exactly with three Moxen; Bot2 18, Bot1 22.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Vampire Spawn
+Swamp x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Vampire Spawn.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18
+Bot1.Battlefield.Vampire Spawn.Power = 2
+Bot1.Battlefield.Vampire Spawn.Toughness = 3

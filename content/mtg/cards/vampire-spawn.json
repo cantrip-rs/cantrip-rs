@@ -1,0 +1,8 @@
+{
+  "name": "Vampire Spawn",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Vampire",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "When this creature enters, each opponent loses 2 life and you gain 2 life."
+}
