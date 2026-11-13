@@ -1,0 +1,89 @@
+# Crash and Burn, first mode: "Destroy target Vehicle" (CR 700.2, 701.8, 301.7). Bot2 has a Smuggler's Copter (an uncrewed Vehicle, so not a
+# creature), an Ornithopter (an artifact creature, no Vehicle), a Savannah Lions and a Mox Jet. On turn 3 the target question refuses all
+# three (a Vehicle is an artifact with that subtype, nothing else is) and takes the Copter, which is destroyed. On turn 5 the second takes
+# Bot1's own Reckoner Bankbuster: a Vehicle of the caster's own is just as legal, and goes too.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Reckoner Bankbuster
+Crash and Burn
+Crash and Burn
+Island x13
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Smuggler's Copter
+Savannah Lions
+Ornithopter
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Reckoner Bankbuster.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Smuggler's Copter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Crash and Burn.Cast
+Bot1.Modes(Destroy target Vehicle)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+! Bot1.Target(Bot2.Battlefield.Savannah Lions)
+! Bot1.Target(Bot2.Battlefield.Mox Jet)
+Bot1.Target(Bot2.Battlefield.Smuggler's Copter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Smuggler's Copter = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Crash and Burn.Cast
+Bot1.Modes(Destroy target Vehicle)
+Bot1.Target(Bot1.Battlefield.Reckoner Bankbuster)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Reckoner Bankbuster = (absent)
+Bot2.Battlefield.Ornithopter.Types = Artifact; Creature
+Bot2.Battlefield.Savannah Lions.Types = Creature
+Bot2.Graveyard = Smuggler's Copter

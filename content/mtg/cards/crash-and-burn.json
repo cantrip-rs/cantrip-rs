@@ -1,0 +1,6 @@
+{
+  "name": "Crash and Burn",
+  "manaCost": "{3}{R}",
+  "type": "Instant",
+  "oracleText": "Choose one —\n• Destroy target Vehicle.\n• Crash and Burn deals 6 damage to target creature or planeswalker."
+}

@@ -1,0 +1,83 @@
+# Crash and Burn, second mode: "deals 6 damage to target creature or planeswalker" (CR 700.2, 120.3). Bot2 has a Wall of Earth (0/6), a Wall
+# of Granite (0/7), and a Mox Pearl. On turn 3 the target question refuses Bot2 itself (a player is not a creature or planeswalker) and the
+# Mox Pearl (an artifact, not a creature), then takes the Wall of Earth: 6 damage is lethal to toughness 6, it dies. On turn 5 the second
+# Crash and Burn takes the Wall of Granite: 6 damage marked, not lethal to toughness 7, so it survives with exactly 6 (a damage of 5 or 7
+# would fail the toughness-6 death or the Damage = 6).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Crash and Burn
+Crash and Burn
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Wall of Earth
+Wall of Granite
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wall of Earth.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Wall of Granite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Crash and Burn.Cast
+Bot1.Modes(Crash and Burn deals 6 damage)
+! Bot1.Target(Bot2)
+! Bot1.Target(Bot2.Battlefield.Mox Pearl)
+Bot1.Target(Bot2.Battlefield.Wall of Earth)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Wall of Earth = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Crash and Burn.Cast
+Bot1.Modes(Crash and Burn deals 6 damage)
+Bot1.Target(Bot2.Battlefield.Wall of Granite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Wall of Granite.Damage = 6
+Bot2.Battlefield.Wall of Granite.Toughness = 7
+Bot2.Graveyard.Count = 2
+Bot1.Graveyard.Count = 3

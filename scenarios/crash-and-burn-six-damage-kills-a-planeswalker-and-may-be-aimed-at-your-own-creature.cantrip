@@ -1,0 +1,65 @@
+# Crash and Burn, second mode: "creature or planeswalker" (CR 115.1, 120.3c): damage to a planeswalker removes that many loyalty counters.
+# On turn 3 Bot1 aims it at Bot2's Liliana of the Veil (loyalty 3): 6 is more than enough, she is put into the graveyard (a state-based
+# action, CR 704.5i). On turn 5 Bot1 aims the second at its own Ornithopter (0/2), which dies too.
+# Bot2's Black Lotus went to its graveyard paying for Liliana.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Crash and Burn
+Crash and Burn
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Black Lotus
+Liliana of the Veil
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Liliana of the Veil.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Liliana of the Veil.Counters.Loyalty = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Crash and Burn.Cast
+Bot1.Modes(Crash and Burn deals 6 damage)
+Bot1.Target(Bot2.Battlefield.Liliana of the Veil)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Liliana of the Veil = (absent)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Crash and Burn.Cast
+Bot1.Modes(Crash and Burn deals 6 damage)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard.Count = 2
+Bot1.Battlefield.Ornithopter = (absent)
+Bot1.Graveyard.Count = 4
