@@ -1,0 +1,51 @@
+# Clinquant Skymage: Flying, and "Whenever you draw a card, put a +1/+1 counter on this creature" (CR 121.1, 603.2). Cast on turn 1 for exactly
+# {3}{U} (Black Lotus and a Mox Sapphire), it gets nothing from Bot2's Ancestral Recall on turn 2. On turn 3 the draw step's card is one counter and Ancestral
+# Recall's three more: four counters, a 5/5 that still has flying.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Clinquant Skymage
+Ancestral Recall
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Sapphire
+Ancestral Recall
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Clinquant Skymage.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Ancestral Recall.Cast(Bot2)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Clinquant Skymage.Counters.PlusOnePlusOne = (absent)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Clinquant Skymage.Counters.PlusOnePlusOne = 1
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Clinquant Skymage.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Clinquant Skymage.Power = 5
+Bot1.Battlefield.Clinquant Skymage.Toughness = 5
+Bot1.Battlefield.Clinquant Skymage.Keywords = Flying
