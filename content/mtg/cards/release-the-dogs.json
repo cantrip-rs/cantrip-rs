@@ -1,0 +1,6 @@
+{
+  "name": "Release the Dogs",
+  "manaCost": "{3}{W}",
+  "type": "Sorcery",
+  "oracleText": "Create four 1/1 white Dog creature tokens."
+}
