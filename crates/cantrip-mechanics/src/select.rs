@@ -124,6 +124,10 @@ fn mana_value_is(q: &dyn Query, choice: &Choice, exactly: u32) -> Verdict {
     Verdict::each(choice, |card| q.mana_value(card) == exactly)
 }
 
+fn power_is_at_most(q: &dyn Query, choice: &Choice, most: u32) -> Verdict {
+    Verdict::each(choice, |card| q.chars(card).power.is_some_and(|power| i64::from(power) <= i64::from(most)))
+}
+
 fn has_name(q: &dyn Query, choice: &Choice, card: u32) -> Verdict {
     let wanted = CardId(u16::try_from(card).unwrap_or(u16::MAX));
     Verdict::each(choice, |c| crate::library::object_has_name(q, c, wanted))
@@ -267,6 +271,13 @@ pub const ANOTHER_CREATURE: Part = part(&(another_creature as SelectFn), 0, "");
 /// `Query::announced_x` there.
 pub const fn mana_value_at_most(most: u32) -> Part {
     part(&(mana_value as SelectFn), most, "with mana value {n} or less")
+}
+
+/// "With power `most` or less" (CR 208.1): a card's printed power as it is in the library, read through its characteristics (a card
+/// with no power, a noncreature, is never chosen). Water Tribe Rallier (3) and Squad Rallier (2) look through the top of a library for
+/// a creature card with it.
+pub const fn power_at_most(most: u32) -> Part {
+    part(&(power_is_at_most as SelectFn), most, "with power {n} or less")
 }
 
 /// "With the same mana value as" a card or permanent, `exactly` (CR 202.3), each card's read where it is (an {X} in a library is
