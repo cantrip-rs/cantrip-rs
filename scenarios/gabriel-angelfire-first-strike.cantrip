@@ -1,0 +1,47 @@
+# First strike destroys the blocker before it can deal combat damage (CR 702.7b).
+[Bot1 Deck]
+Gabriel Angelfire
+Black Lotus
+Mox Pearl
+Gleemox
+Mox Sapphire
+Mox Jet
+Forest x20
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gabriel Angelfire.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Upkeep]
+Bot1.Modes(first strike)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Gabriel Angelfire > Bot2)
+Bot2.Block(Grizzly Bears > Gabriel Angelfire)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Gabriel Angelfire.Damage = 0
+Bot2.Graveyard = Grizzly Bears; Black Lotus
