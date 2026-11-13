@@ -1,0 +1,38 @@
+# Gastal Raider {2}{B}: "When this creature enters, target opponent reveals their hand. You choose an instant or sorcery
+# card from it. That player discards that card." (CR 701.9a, 701.20a.) Bot2's hand holds Lightning Bolt (instant), Demonic Tutor
+# (sorcery), Grizzly Bears (creature), Mox Pearl (artifact) and Island. Grizzly Bears, Mox Pearl and Island are refused,
+# Lightning Bolt is taken; Demonic Tutor stays in Bot2's hand. Below max speed (speed 1) the Raider is a plain 2/1 with no menace.
+
+[Bot1 Deck]
+Black Lotus
+Gastal Raider
+Island x14
+
+[Bot2 Deck]
+Lightning Bolt
+Demonic Tutor
+Grizzly Bears
+Mox Pearl
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Gastal Raider.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Grizzly Bears)
+! Bot1.Choose(Mox Pearl)
+! Bot1.Choose(Island)
+Bot1.Choose(Lightning Bolt)
+? Bot2.Graveyard = Lightning Bolt
+? Bot2.Hand = Demonic Tutor; Grizzly Bears; Island; Island; Island; Mox Pearl
+? Bot1.Battlefield.Gastal Raider.Power = 2
+? Bot1.Battlefield.Gastal Raider.Toughness = 1
+? Bot1.Battlefield.Gastal Raider.Keywords = (absent)
+
+[Expect]
+Bot1.Speed = 1

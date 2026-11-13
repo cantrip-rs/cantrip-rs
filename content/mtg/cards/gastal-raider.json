@@ -1,0 +1,8 @@
+{
+  "name": "Gastal Raider",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Vampire Rogue",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Start your engines!\nWhen this creature enters, target opponent reveals their hand. You choose an instant or sorcery card from it. That player discards that card.\nMax speed — This creature gets +1/+1 and has menace."
+}
