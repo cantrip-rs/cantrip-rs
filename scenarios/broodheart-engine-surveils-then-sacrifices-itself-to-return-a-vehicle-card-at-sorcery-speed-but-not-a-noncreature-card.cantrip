@@ -1,0 +1,60 @@
+# Broodheart Engine {B}{G}: "At the beginning of your upkeep, surveil 1. {2}{B}{G}, {T}, Sacrifice this artifact: Return target creature or Vehicle card from your graveyard to the battlefield. Activate only as a
+# sorcery." On turn one Bot1 casts it and a Lightning Bolt (an instant card is neither a creature nor a Vehicle, so no target once it is in the graveyard). In Bot1's turn 3 upkeep it surveils 1 and puts
+# the Adventurer's Airship, a Vehicle card and no creature card, into the graveyard; the Forest under it is drawn. In the declare attackers step the ability is refused (CR 602.5d), and in main phase two the
+# Bolt is no target either; the Airship is, and the four Moxen pay {2}{B}{G} exactly, the Jet's B and the Emerald's G.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Broodheart Engine
+Mox Ruby
+Mox Pearl
+Lightning Bolt
+Island
+Adventurer's Airship
+Forest
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Broodheart Engine.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Arrange( | Adventurer's Airship)
+[T3 Bot1.DeclareAttackers]
+! Bot1.Battlefield.Broodheart Engine.Activate(Bot1.Graveyard.Adventurer's Airship)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Broodheart Engine.Activate(Bot1.Graveyard.Lightning Bolt)
+Bot1.Battlefield.Broodheart Engine.Activate(Bot1.Graveyard.Adventurer's Airship)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Forest; Island
+Bot1.Graveyard = Broodheart Engine; Lightning Bolt
+Bot1.Battlefield = Adventurer's Airship; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby
+Bot2.Life = 17

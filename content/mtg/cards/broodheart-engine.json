@@ -1,0 +1,6 @@
+{
+  "name": "Broodheart Engine",
+  "manaCost": "{B}{G}",
+  "type": "Artifact",
+  "oracleText": "At the beginning of your upkeep, surveil 1.\n{2}{B}{G}, {T}, Sacrifice this artifact: Return target creature or Vehicle card from your graveyard to the battlefield. Activate only as a sorcery."
+}

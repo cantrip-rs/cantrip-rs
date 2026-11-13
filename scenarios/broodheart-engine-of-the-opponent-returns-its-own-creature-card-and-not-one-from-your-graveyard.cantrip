@@ -1,0 +1,69 @@
+# Broodheart Engine {B}{G}: "{2}{B}{G}, {T}, Sacrifice this artifact: Return target creature or Vehicle card from your graveyard to the battlefield." Both players cast one. Bot1 surveils a Memnite into its
+# graveyard in turn 3, and Bot2 a Haywire Mite in turn 4. In turn 4 Bot2's ability cannot target the Memnite in Bot1's graveyard, only its own Haywire Mite, which comes back to Bot2's battlefield.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Broodheart Engine
+Island
+Island
+Island
+Island
+Memnite
+Forest
+Island x11
+
+[Bot2 Deck]
+Mox Jet
+Mox Emerald
+Broodheart Engine
+Mox Ruby
+Mox Pearl
+Island
+Island
+Forest
+Haywire Mite
+Island x11
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Broodheart Engine.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Broodheart Engine.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Arrange( | Memnite)
+[T4 Bot2.Upkeep]
+Bot2.Arrange( | Haywire Mite)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+! Bot2.Battlefield.Broodheart Engine.Activate(Bot1.Graveyard.Memnite)
+Bot2.Battlefield.Broodheart Engine.Activate(Bot2.Graveyard.Haywire Mite)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Memnite
+Bot2.Battlefield = Haywire Mite; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby
+Bot2.Graveyard = Broodheart Engine
