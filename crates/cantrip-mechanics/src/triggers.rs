@@ -2345,6 +2345,21 @@ pub fn you_discard(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
 
 pub const YOU_DISCARD: Trigger = when_asked(EventMask::DISCARDED, you_discard);
 
+/// "Whenever this creature saddles a Mount or crews a Vehicle during your main phase" (CR 702.171, 702.122, 603.2): the
+/// source itself is the creature that tapped to saddle or crew (`Event::Saddled`, `Event::Crewed`), in a main phase of a turn of
+/// its controller's; the trigger is about the Mount or Vehicle (`StackItem::subject`). Reckless Velocitaur prints it.
+pub fn this_saddles_or_crews_in_your_main_phase(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    let (Event::Saddled { creature, mount: permanent } | Event::Crewed { creature, vehicle: permanent }) = event else { return None };
+    let turn = q.state().turn;
+    if *creature != me.source || turn.active != me.controller || !turn.step().is_main() {
+        return None;
+    }
+    Fired::about(Target::Object(*permanent))
+}
+
+pub const THIS_SADDLES_OR_CREWS_IN_YOUR_MAIN_PHASE: Trigger =
+    when_asked(EventMask(EventMask::SADDLED.0 | EventMask::CREWED.0), this_saddles_or_crews_in_your_main_phase);
+
 /// "Whenever you flip a coin" (CR 705.1): any flip its controller makes, won or lost.
 pub fn you_flip_a_coin(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
