@@ -1,0 +1,52 @@
+# Agonasaur Rex, "Cycling {2}{G}" and "When you cycle this card, put two +1/+1 counters on up to one target creature or Vehicle. It gains trample
+# and indestructible until end of turn." Turn 1: with only Mox Jet's {B} left (Mox Emerald made Llanowar Elves) cycling is refused for want of mana;
+# the Black Lotus's three {G} pay {2}{G} exactly. A Mox is no target. The cycling trigger resolves first (the Elves are a 3/3 with trample and
+# indestructible and the card is not yet drawn, CR 702.29a), then the ability draws the Grizzly Bears. Turn 3: the keywords are gone and the
+# counters stay.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Agonasaur Rex
+Llanowar Elves
+Forest
+Forest
+Grizzly Bears
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Agonasaur Rex.Activate(Ability: Cycling; Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Agonasaur Rex.Activate(Ability: Cycling)
+! Bot1.Target(Bot1.Battlefield.Mox Emerald)
+Bot1.Target(Bot1.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Llanowar Elves.Power = 3
+? Bot1.Battlefield.Llanowar Elves.Toughness = 3
+? Bot1.Battlefield.Llanowar Elves.Keywords = Indestructible; Trample
+? Bot1.Hand = Forest; Forest
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Forest; Forest; Grizzly Bears
+? Bot1.Graveyard = Agonasaur Rex; Black Lotus
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Llanowar Elves.Power = 3
+? Bot1.Battlefield.Llanowar Elves.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Toughness = 3

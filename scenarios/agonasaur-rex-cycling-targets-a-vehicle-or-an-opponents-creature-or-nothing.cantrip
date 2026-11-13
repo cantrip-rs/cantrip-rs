@@ -1,0 +1,78 @@
+# Two Agonasaur Rex cycled. Turn 1: the first targets Bot1's own Smuggler's Copter, a Vehicle that is not a creature (it still gets two +1/+1
+# counters and trample and indestructible). Turn 3: the second targets Bot2's Llanowar Elves, an opponent's creature (CR 115.1: any creature, not only
+# one's own), and only one target is taken (two at once, the Elves and the Copter, are refused); the keywords on the Copter are gone and its counters stay. Turn 5: a third cycling with no target ("up to one") still draws (the
+# cycling ability and its trigger are separate, 702.29a) and adds no counters anywhere (the earlier two stay).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Smuggler's Copter
+Agonasaur Rex
+Agonasaur Rex
+Agonasaur Rex
+Forest
+Forest
+Forest x11
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Agonasaur Rex.Activate(Ability: Cycling)
+Bot1.Target(Bot1.Battlefield.Smuggler's Copter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Smuggler's Copter.Keywords = Flying; Indestructible; Trample
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Agonasaur Rex.Activate(Ability: Cycling)
+! Bot1.Target(Bot2.Battlefield.Llanowar Elves; Bot1.Battlefield.Smuggler's Copter)
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = 2
+? Bot2.Battlefield.Llanowar Elves.Keywords = Indestructible; Trample
+? Bot1.Battlefield.Smuggler's Copter.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Smuggler's Copter.Keywords = Flying
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Agonasaur Rex.Activate(Ability: Cycling)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Power = 3
+Bot2.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Smuggler's Copter.Counters.PlusOnePlusOne = 2
+Bot1.Hand = Forest; Forest; Forest

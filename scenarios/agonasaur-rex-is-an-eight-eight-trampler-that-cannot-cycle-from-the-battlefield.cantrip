@@ -1,0 +1,44 @@
+# Agonasaur Rex, {3}{G}{G} 8/8 with trample. Cast on turn 1 (Black Lotus' {G}{G}{G} and two Moxen); cycling works from the hand only, so on the
+# battlefield it offers none. On turn 3 it attacks and Bot2's Llanowar Elves chump blocks: trample puts 7 on Bot2 (13) and the Elves die.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Agonasaur Rex
+Forest x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Agonasaur Rex.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Agonasaur Rex.Power = 8
+? Bot1.Battlefield.Agonasaur Rex.Toughness = 8
+? Bot1.Battlefield.Agonasaur Rex.Keywords = Trample
+! Bot1.Battlefield.Agonasaur Rex.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Agonasaur Rex > Bot2)
+Bot2.Block(Llanowar Elves > Agonasaur Rex)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Bot2.Battlefield.Llanowar Elves = (absent)
+Bot2.Graveyard = Llanowar Elves

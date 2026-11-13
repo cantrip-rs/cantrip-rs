@@ -1,0 +1,36 @@
+# Agonasaur Rex's "Cycling {2}{G}" needs green: with {B}{U}{R} from three Moxen, three mana but none of it green, cycling is
+# refused (CR 702.29a, 601.2g); once a Forest adds {G} it is offered and draws a card, its trigger, with no creature or Vehicle to target, removed (CR 603.3d).
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Agonasaur Rex
+Forest
+Forest
+Forest
+Grizzly Bears
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Agonasaur Rex.Activate(Ability: Cycling; Mana: short)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Agonasaur Rex.Activate(Ability: Cycling)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Forest; Forest; Grizzly Bears
+Bot1.Graveyard = Agonasaur Rex
