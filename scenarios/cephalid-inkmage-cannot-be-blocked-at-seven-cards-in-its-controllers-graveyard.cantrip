@@ -1,0 +1,64 @@
+# Cephalid Inkmage {2}{U}, 2/2: "When this creature enters, surveil 3" (CR 701.25) and "Threshold - can't be blocked as long as there are
+# seven or more cards in your graveyard" (CR 207.2c, 509.1b). Bot1 casts it with Black Lotus (graveyard 1), surveils three Islands into the graveyard
+# (4) and Bolts Bot2 twice (6). On turn 3 with six it is blocked by Bot2's Memnite (which dies). After a third Bolt (7) Bot2's Ornithopter may not
+# block it on turn 5. Bot2's own graveyard (the dead Memnite) is not Bot1's.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Cephalid Inkmage
+Lightning Bolt
+Lightning Bolt
+Island
+Island x3
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Cephalid Inkmage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Island; Island; Island)
+? Bot1.Graveyard.Count = 4
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 6
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Cephalid Inkmage > Bot2)
+Bot2.Block(Memnite > Cephalid Inkmage)
+[T3 Bot1.Main2]
+? Bot2.Graveyard = Memnite
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 7
+[T5 Bot1.Main1]
+Bot1.Attack(Cephalid Inkmage > Bot2)
+! Bot2.Block(Ornithopter > Cephalid Inkmage)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 9
+Bot2.Battlefield = Ornithopter

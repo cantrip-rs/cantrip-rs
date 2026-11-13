@@ -1,0 +1,8 @@
+{
+  "name": "Cephalid Inkmage",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Octopus Wizard",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, surveil 3. (Look at the top three cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)\nThreshold — This creature can't be blocked as long as there are seven or more cards in your graveyard."
+}

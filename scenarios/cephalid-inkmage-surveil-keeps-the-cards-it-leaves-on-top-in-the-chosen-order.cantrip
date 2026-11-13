@@ -1,0 +1,44 @@
+# Cephalid Inkmage: "When this creature enters, surveil 3" (CR 701.25a). Bot1 puts the Swamp into its graveyard and keeps the Plains and the Island
+# on top, Plains first: the turn-3 draw is the Plains, the turn-5 draw the Island. Two cards in the graveyard (the Swamp and Black Lotus) are far from
+# threshold, so Bot2's Memnite may block it (and dies). Bot2, which plays no land, discards an Island to its hand size.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Cephalid Inkmage
+Mountain
+Mountain
+Mountain
+Mountain
+Island
+Swamp
+Plains
+Mountain x10
+
+[Bot2 Deck]
+Memnite
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Cephalid Inkmage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains; Island | Swamp)
+? Bot1.Graveyard = Swamp; Black Lotus
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand = Mountain; Mountain; Mountain; Mountain; Plains
+Bot1.Attack(Cephalid Inkmage > Bot2)
+Bot2.Block(Memnite > Cephalid Inkmage)
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Mountain; Mountain; Mountain; Mountain; Plains; Island
+Bot2.Graveyard = Island; Memnite
+Bot2.Life = 20
