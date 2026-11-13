@@ -1,0 +1,54 @@
+# Twinblade Paladin: "Whenever you gain life, put a +1/+1 counter on this creature." On turn 3 Bot1 has a 3/3 Paladin. Its first
+# Healing Salve gives Bot2 3 life: not Bot1's gain, so no counter. Its second gives Bot1 3 life as one event, so exactly one counter
+# (a 4/4), not three, and 23 life is under 25: no double strike (CR 603.2, 119.3).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Twinblade Paladin
+Healing Salve
+Healing Salve
+Plains
+Plains x13
+
+[Bot2 Deck]
+Plains x22
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Twinblade Paladin.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 23
+? Bot1.Battlefield.Twinblade Paladin.Power = 3
+? Bot1.Battlefield.Twinblade Paladin.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot1.Battlefield.Twinblade Paladin.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Twinblade Paladin.Power = 4
+Bot1.Battlefield.Twinblade Paladin.Toughness = 4
+Bot1.Battlefield.Twinblade Paladin.Keywords = (absent)
