@@ -1,0 +1,33 @@
+# Regal Imperiosaur (5/4 Dinosaur): "Other Dinosaurs you control get +1/+1." Alone it is a 5/4: it is not "other". Bot1 casts a
+# second one (each from a Black Lotus): each is another Dinosaur to the other, so both are 6/5.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Regal Imperiosaur
+Regal Imperiosaur
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Regal Imperiosaur.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Regal Imperiosaur.Power = 5
+? Bot1.Battlefield.Regal Imperiosaur.Toughness = 4
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Regal Imperiosaur.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Regal Imperiosaur#1.Power = 6
+Bot1.Battlefield.Regal Imperiosaur#1.Toughness = 5
+Bot1.Battlefield.Regal Imperiosaur#2.Power = 6
+Bot1.Battlefield.Regal Imperiosaur#2.Toughness = 5

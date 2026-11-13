@@ -1,0 +1,8 @@
+{
+  "name": "Regal Imperiosaur",
+  "manaCost": "{1}{G}{G}",
+  "type": "Creature — Dinosaur",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Other Dinosaurs you control get +1/+1."
+}

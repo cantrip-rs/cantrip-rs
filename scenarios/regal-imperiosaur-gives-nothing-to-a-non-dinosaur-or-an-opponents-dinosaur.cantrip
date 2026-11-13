@@ -1,0 +1,37 @@
+# Regal Imperiosaur: "Other Dinosaurs you control" only. Bot1's Imperiosaur does not boost its own controller's Memnite (not a
+# Dinosaur), nor Bot2's Imperiosaur (a Dinosaur, but Bot2's): both Imperiosaurs are 5/4 and the Memnite 1/1. Bot2's gives
+# nothing to Bot1's either.
+
+[Bot1 Deck]
+Black Lotus
+Regal Imperiosaur
+Memnite
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Regal Imperiosaur
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Regal Imperiosaur.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Regal Imperiosaur.Cast
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Regal Imperiosaur.Power = 5
+Bot1.Battlefield.Regal Imperiosaur.Toughness = 4
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot2.Battlefield.Regal Imperiosaur.Power = 5
+Bot2.Battlefield.Regal Imperiosaur.Toughness = 4
