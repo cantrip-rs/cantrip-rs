@@ -1,0 +1,46 @@
+# The attacker has 4 power from Rancor before dying; its last-known power destroys a 0/3 Wall of Wood (CR 113.7a, 608.2h).
+[Bot1 Deck]
+Gaze of Pain
+Mox Jet
+Mox Pearl
+Grizzly Bears
+Black Lotus
+Rancor
+Swamp x20
+[Bot2 Deck]
+Wall of Wood
+Black Lotus
+Mox Ruby
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Rancor.Cast(Grizzly Bears)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Wall of Wood.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gaze of Pain.Cast
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot1.Target(Bot2.Battlefield.Wall of Wood)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard.Grizzly Bears.Power = 2
+Bot2.Graveyard.Wall of Wood.Toughness = 3
+Bot2.Life = 20

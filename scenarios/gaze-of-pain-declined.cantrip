@@ -1,0 +1,37 @@
+# Declining the optional damage leaves the target unharmed and the attacker assigns combat damage normally (CR 118.12).
+[Bot1 Deck]
+Gaze of Pain
+Mox Jet
+Mox Pearl
+Grizzly Bears
+Black Lotus
+Memnite
+Swamp x20
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gaze of Pain.Cast
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Decline
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Ornithopter.Damage = 0
+Bot2.Life = 18

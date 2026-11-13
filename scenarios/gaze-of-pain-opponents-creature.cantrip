@@ -1,0 +1,36 @@
+# Gaze of Pain cast on the opponent's turn does not trigger for their unblocked creature (CR 603.2).
+[Bot1 Deck]
+Gaze of Pain
+Captain Mar-Vell, Space-Born
+Black Lotus
+Mox Jet
+Mox Pearl
+Swamp x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Captain Mar-Vell, Space-Born.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.BeginCombat]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gaze of Pain.Cast
+? Bot1.Mana =
+Bot2.Attack(Memnite > Bot1)
+[T4 Bot2.DeclareBlockers]
+Bot1.Block()
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 19
+Bot2.Battlefield.Memnite.Power = 1
