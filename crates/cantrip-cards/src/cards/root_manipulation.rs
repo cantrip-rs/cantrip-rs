@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{effects, triggers};
+use cantrip_mechanics::effects;
 use cantrip_oracle as oracle;
 
 /// Until end of turn, the creatures you control as it resolves get +2/+2 and gain menace and the attack trigger (CR 611.2c, 613.1f):
@@ -18,6 +18,6 @@ fn pump_and_grant(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 pub static CARD: CardDef = CardDef {
     spell: spell(&[], pump_and_grant),
     // The granted ability (the card's delayed ability 0).
-    delayed: &[triggered(triggers::THIS_ATTACKS, effects::gain_one_life, "Whenever this creature attacks, you gain 1 life.")],
+    delayed: &[effects::attacks_gain_life::<1>("Whenever this creature attacks, you gain 1 life.")],
     ..oracle::ROOT_MANIPULATION
 };
