@@ -1,0 +1,59 @@
+# Rangers' Refueler: "Whenever you activate an exhaust ability" - only its controller's. On turn 4 Bot2 activates the exhaust ability of its own Keen
+# Buccaneer (draw, then discard): Bot2 gets that and nothing else, and Bot1, who controls the Refueler, draws nothing (hand stays 3).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Rangers' Refueler
+Island x15
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Keen Buccaneer
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rangers' Refueler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Keen Buccaneer.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+? Bot1.Hand.Count = 3
+? Bot2.Hand.Count = 5
+Bot2.Battlefield.Keen Buccaneer.Activate
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Island)
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot2.Hand.Count = 5
+Bot2.Battlefield.Keen Buccaneer.Counters.PlusOnePlusOne = 1

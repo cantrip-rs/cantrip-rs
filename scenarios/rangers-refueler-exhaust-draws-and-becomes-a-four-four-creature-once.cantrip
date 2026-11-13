@@ -1,0 +1,59 @@
+# Rangers' Refueler (3/3 Vehicle, {1}{U}, crew 2): "Whenever you activate an exhaust ability, draw a card." and "Exhaust -- {4}: This Vehicle becomes an
+# artifact creature. Put a +1/+1 counter on it." Its own exhaust ability triggers the draw (CR 702.177a, 603.2): on turn 3 Bot1 pays {4} (four Moxes) and
+# draws (the trigger resolves first: hand 3 -> 4), then the ability resolves and the Refueler is a 4/4 artifact creature that is still a Vehicle, for good (CR 611.2a,
+# 301.7). On turn 5 it cannot be activated again although four mana are there.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Rangers' Refueler
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rangers' Refueler.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 3
+? Bot1.Battlefield.Rangers' Refueler.Types = Artifact
+Bot1.Battlefield.Rangers' Refueler.Activate(Ability: Exhaust)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Hand.Count = 3
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+? Bot1.Battlefield.Rangers' Refueler.Types = Artifact
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rangers' Refueler.Types = Artifact; Creature
+? Bot1.Battlefield.Rangers' Refueler.Power = 4
+? Bot1.Battlefield.Rangers' Refueler.Toughness = 4
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Rangers' Refueler.Activate(Ability: Exhaust)
+
+[Expect]
+Bot1.Battlefield.Rangers' Refueler.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Rangers' Refueler.Subtypes = Vehicle
+Bot1.Hand.Count = 5
