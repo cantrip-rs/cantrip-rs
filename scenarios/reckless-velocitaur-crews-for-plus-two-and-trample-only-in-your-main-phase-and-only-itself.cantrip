@@ -1,0 +1,77 @@
+# Reckless Velocitaur ("Whenever this creature saddles a Mount or crews a Vehicle during your main phase, that Mount or Vehicle gets +2/+0 and
+# gains trample until end of turn"). Bot1's Smuggler's Copter (3/3 flying, crew 1) is crewed: turn 3 main phase by a Memnite (not the Velocitaur:
+# no bonus); turn 4, Bot2's upkeep, by the Velocitaur (not Bot1's main phase: no bonus); turn 5 main phase by the Velocitaur: a 5/3 with flying
+# and trample (+2 on power only); turn 7 at the beginning of combat by the Velocitaur (not a main phase: no bonus), and the turn 5 bonus has ended.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Reckless Velocitaur
+Memnite
+Smuggler's Copter
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Reckless Velocitaur.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter.Power = 3
+? Bot1.Battlefield.Smuggler's Copter.Keywords = Flying
+[T4 Bot2.Upkeep]
+Bot1.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot1.Choose(Reckless Velocitaur)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter.Power = 3
+? Bot1.Battlefield.Smuggler's Copter.Keywords = Flying
+[T5 Bot1.Main1]
+Bot1.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot1.Choose(Reckless Velocitaur)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter.Power = 5
+? Bot1.Battlefield.Smuggler's Copter.Toughness = 3
+? Bot1.Battlefield.Smuggler's Copter.Keywords = Flying; Trample
+[T7 Bot1.BeginCombat]
+? Bot1.Battlefield.Smuggler's Copter.Power = (absent)
+Bot1.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot1.Choose(Reckless Velocitaur)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter.Power = 3
+? Bot1.Battlefield.Smuggler's Copter.Keywords = Flying
+
+[Expect]
+Bot1.Battlefield.Smuggler's Copter.Power = 3

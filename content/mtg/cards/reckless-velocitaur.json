@@ -1,0 +1,8 @@
+{
+  "name": "Reckless Velocitaur",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Minotaur Pilot",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever this creature saddles a Mount or crews a Vehicle during your main phase, that Mount or Vehicle gets +2/+0 and gains trample until end of turn."
+}

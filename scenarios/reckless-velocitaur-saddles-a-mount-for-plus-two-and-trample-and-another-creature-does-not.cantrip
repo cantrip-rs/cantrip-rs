@@ -1,0 +1,65 @@
+# Reckless Velocitaur: "Whenever this creature saddles a Mount ... during your main phase, that Mount gets +2/+0 and gains trample until end
+# of turn". Bot1's Caustic Bronco (2/2, saddle 3) is saddled on turn 3 by a Cathar Commando (power 3): the Velocitaur did not saddle it, so
+# the Bronco is saddled and nothing more (2/2, no trample). On turn 5 the Velocitaur (power 3) saddles it: a 4/2 with trample, the +2 on power only.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Reckless Velocitaur
+Cathar Commando
+Caustic Bronco
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Reckless Velocitaur.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Caustic Bronco.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cathar Commando.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Caustic Bronco.Activate
+Bot1.Choose(Cathar Commando)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Caustic Bronco.Saddled = true
+? Bot1.Battlefield.Caustic Bronco.Power = 2
+? Bot1.Battlefield.Caustic Bronco.Keywords = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Caustic Bronco.Activate
+Bot1.Choose(Reckless Velocitaur)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Caustic Bronco.Saddled = true
+? Bot1.Battlefield.Caustic Bronco.Power = 4
+? Bot1.Battlefield.Caustic Bronco.Toughness = 2
+? Bot1.Battlefield.Caustic Bronco.Keywords = Trample
+
+[Expect]
+Bot1.Battlefield.Caustic Bronco.Power = 4
