@@ -1,0 +1,79 @@
+# Back on Track: "Return target creature or Vehicle card from your graveyard to the battlefield" (CR 205.3g, 115.1). Bot1's
+# graveyard holds Dependable Quinjet (a Vehicle card that is no creature, sacrificed to Hellish Sideswipe on turn 1 to
+# destroy Bot1's own Ornithopter), that Ornithopter and the Sideswipe; Bot2's holds an Ornithopter and a Lightning Bolt.
+# Refused as targets: the Sideswipe (neither a creature nor a Vehicle card), and both of Bot2's cards, though the
+# Ornithopter is a creature card (it is not in your graveyard). The Quinjet is accepted: it returns to the battlefield,
+# with a 1/1 Pilot token, and the Ornithopter stays in the graveyard. Black Lotus, Mox Jet and Mox Ruby pay the five.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Dependable Quinjet
+Ornithopter
+Hellish Sideswipe
+Black Lotus
+Island
+Back on Track
+Island x10
+
+[Bot2 Deck]
+Mountain
+Ornithopter
+Lightning Bolt
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dependable Quinjet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Dependable Quinjet.Activate(Color: Black)
+Bot1.Hand.Hellish Sideswipe.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Dependable Quinjet)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Hellish Sideswipe; Ornithopter; Dependable Quinjet
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Ornithopter; Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Back on Track.Cast(Bot1.Graveyard.Hellish Sideswipe)
+! Bot1.Hand.Back on Track.Cast(Bot2.Graveyard.Ornithopter)
+! Bot1.Hand.Back on Track.Cast(Bot2.Graveyard.Lightning Bolt)
+Bot1.Hand.Back on Track.Cast(Bot1.Graveyard.Dependable Quinjet)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Dependable Quinjet; Mox Jet; Mox Pearl; Mox Ruby; Pilot Token
+Bot1.Graveyard = Back on Track; Black Lotus; Hellish Sideswipe; Ornithopter
+Bot2.Graveyard = Ornithopter; Lightning Bolt

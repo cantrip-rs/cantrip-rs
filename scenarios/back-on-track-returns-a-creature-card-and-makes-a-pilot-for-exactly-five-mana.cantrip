@@ -1,0 +1,59 @@
+# Back on Track {4}{B}: "Return target creature or Vehicle card from your graveyard to the battlefield. Create a 1/1
+# colorless Pilot creature token with 'This token saddles Mounts and crews Vehicles as though its power were 2 greater.'"
+# (CR 701.1, 111.1). Bot2's Lightning Bolt kills Bot1's Ornithopter. On turn 3 Bot1 has Black Lotus and Mox Jet, four mana,
+# and the spell is refused for want of the fifth (it costs five); with Mox Ruby the Lotus's three and the two Moxen pay it
+# exactly (the pool is empty). The Ornithopter comes back, untapped, and a 1/1 colorless Pilot token joins it.
+
+[Bot1 Deck]
+Ornithopter
+Black Lotus
+Mox Jet
+Mox Ruby
+Back on Track
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x14
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Ornithopter
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Back on Track.Cast(Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana = {B}{B}{B}{B}{R}
+Bot1.Hand.Back on Track.Cast(Bot1.Graveyard.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Ornithopter; Pilot Token
+Bot1.Graveyard = Back on Track; Black Lotus
+Bot1.Battlefield.Pilot Token.Power = 1
+Bot1.Battlefield.Pilot Token.Toughness = 1
+Bot1.Battlefield.Pilot Token.Colors = (absent)
+Bot1.Battlefield.Ornithopter.Tapped = false
