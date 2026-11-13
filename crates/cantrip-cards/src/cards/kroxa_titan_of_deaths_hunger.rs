@@ -12,11 +12,12 @@ fn each_opponent_discards_then_loses_life(g: &mut dyn Game, item: &StackItem) ->
     let opponents: Vec<PlayerId> = g.state().apnap().filter(|&p| p != you).collect();
     let discarded = each_discards_a_card(g, &opponents, item.object)?;
     g.end_sentence();
-    for who in opponents {
-        if !discarded.iter().any(|&card| g.obj(card).owner == who && hand::discarded_nonland_card(&*g, card)) {
-            g.lose_life(who, 3);
-        }
-    }
+    let losses: Vec<(PlayerId, i32)> = opponents
+        .into_iter()
+        .filter(|&who| !discarded.iter().any(|&card| g.obj(card).owner == who && hand::discarded_nonland_card(&*g, card)))
+        .map(|who| (who, 3))
+        .collect();
+    g.lose_life_together(&losses);
     Ok(())
 }
 
