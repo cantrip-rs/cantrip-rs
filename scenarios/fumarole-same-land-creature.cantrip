@@ -1,0 +1,41 @@
+# An animated Mishra's Factory is both a creature and a land, and may be chosen for both targets (CR 115.3).
+[Bot1 Deck]
+Fumarole
+Mishra's Factory
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mishra's Factory.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Fumarole.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mishra's Factory.Activate(Ability: {1})
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Fumarole.Cast
+Bot1.Target(Bot1.Battlefield.Mishra's Factory)
+Bot1.Target(Bot1.Battlefield.Mishra's Factory)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 17
+Bot1.Graveyard = Fumarole; Mishra's Factory; Black Lotus

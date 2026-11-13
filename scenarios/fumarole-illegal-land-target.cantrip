@@ -1,0 +1,57 @@
+# Blossoming Defense gives the animated land hexproof in response; the still-legal creature is destroyed, but the land survives (CR 608.2b).
+[Bot1 Deck]
+Fumarole
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Forest
+Mishra's Factory
+Ornithopter
+Blossoming Defense
+Mox Emerald
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mishra's Factory.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fumarole.Cast
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Mishra's Factory)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mishra's Factory.Activate(Ability: Add)
+Bot2.Battlefield.Mishra's Factory.Activate(Ability: {1})
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Blossoming Defense.Cast(Bot2.Battlefield.Mishra's Factory)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Mishra's Factory.Toughness = 4
+Bot2.Graveyard = Ornithopter; Blossoming Defense

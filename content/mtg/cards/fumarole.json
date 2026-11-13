@@ -1,0 +1,6 @@
+{
+  "name": "Fumarole",
+  "manaCost": "{3}{B}{R}",
+  "type": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, pay 3 life.\nDestroy target creature and target land."
+}
