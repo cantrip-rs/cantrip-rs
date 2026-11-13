@@ -18,13 +18,9 @@ fn reveal_and_trade(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         }));
     }
     g.end_sentence();
-    instruction(g, |g| {
-        for (i, &player) in players.iter().enumerate() {
-            if let Some((_, value)) = revealed.get(1 - i).copied().flatten() {
-                g.lose_life(player,(value) as i32);
-            }
-        }
-    });
+    let losses: Vec<(PlayerId, i32)> =
+        players.iter().enumerate().filter_map(|(i, &player)| revealed.get(1 - i).copied().flatten().map(|(_, value)| (player, value as i32))).collect();
+    g.lose_life_together(&losses);
     g.end_sentence();
     let cards: Vec<ObjectId> = revealed.into_iter().flatten().map(|(card, _)| card).collect();
     g.return_to_hand_revealed(&cards);
