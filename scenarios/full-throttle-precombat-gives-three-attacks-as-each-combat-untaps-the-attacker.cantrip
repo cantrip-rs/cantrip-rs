@@ -1,0 +1,67 @@
+# Full Throttle: "After this main phase, there are two additional combat phases. At the beginning of each combat this turn, untap all
+# creatures that attacked this turn." (CR 500.8, 603.7b). Cast in the precombat main for the full {4}{R}{R}, it puts two combats
+# before the turn's own, so a Fanatical Firebrand (1/1 haste) attacks three times: the untap at the beginning of the second and third
+# combat frees it, and Bot2 goes from 20 to exactly 17 (not 19, 18 or 16). It ends the turn tapped, having attacked in the last one.
+
+[Bot1 Deck]
+Mox Ruby
+Sol Ring
+Black Lotus
+Full Throttle
+Fanatical Firebrand
+Mountain
+Mountain
+Mountain x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Full Throttle.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Step = BeginCombat
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Fanatical Firebrand)
+? Bot1.Battlefield.Fanatical Firebrand.Tapped = true
+[T3 Bot1.EndCombat]
+? Bot2.Life = 19
+Bot1.Pass
+Bot2.Pass
+? Step = BeginCombat
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fanatical Firebrand.Tapped = false
+Bot1.Attack(Fanatical Firebrand)
+[T3 Bot1.EndCombat]
+? Bot2.Life = 18
+Bot1.Pass
+Bot2.Pass
+? Step = BeginCombat
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fanatical Firebrand.Tapped = false
+Bot1.Attack(Fanatical Firebrand)
+[T3 Bot1.EndCombat]
+Bot1.Pass
+Bot2.Pass
+? Step = Main2
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Fanatical Firebrand.Tapped = true

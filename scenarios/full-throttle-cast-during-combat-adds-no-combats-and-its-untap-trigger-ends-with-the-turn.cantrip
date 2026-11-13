@@ -1,0 +1,54 @@
+# Full Throttle: "After this main phase, there are two additional combat phases" does nothing when the spell resolves outside a main
+# phase (CR 500.8), and "at the beginning of each combat this turn" lasts only this turn (CR 603.7b). Brazen Bluff lets Bot1 cast it free
+# during combat on turn 3, after Fanatical Firebrand attacked: no combat follows, so the Firebrand stays tapped (nothing untaps it), the
+# turn goes from the postcombat main straight to the end step, and the delayed trigger is gone when turn 4 begins (Delayed.Count 1 -> 0).
+
+[Bot1 Deck]
+Mox Ruby
+Black Lotus
+Fanatical Firebrand
+Full Throttle
+Brazen Bluff
+Sol Ring
+Mountain
+Mountain x24
+
+[Bot2 Deck]
+Island
+Opt
+Island x28
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Pass
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Fanatical Firebrand)
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Opt.Cast
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Brazen Bluff.Cast(Opt)
+Bot1.Pass
+Bot2.Pass
+Bot2.Decline
+Bot1.Choose(Full Throttle)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fanatical Firebrand.Tapped = true
+? Delayed.Count = 1
+[T3 Bot1.Main2]
+Bot1.Pass
+Bot2.Pass
+? Step = End
+[T4 Bot2.Main1]
+? Delayed.Count = 0
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Fanatical Firebrand.Tapped = true
+Bot1.Graveyard = Full Throttle; Brazen Bluff; Black Lotus

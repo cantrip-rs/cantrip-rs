@@ -1,0 +1,78 @@
+# Full Throttle cast in the second main phase (CR 500.8): exactly two additional combat phases follow it and the end step comes next,
+# with no main phase between (the ruling). Two Firebrands attack on turn 5 (Bot2 20 -> 18), then Harmless Offering gives Bot2 one
+# of them and Full Throttle costs the full six. At the beginning of each of the two combats "all creatures that attacked this turn"
+# untap, the Firebrand now under Bot2's control included, so the remaining Firebrand attacks twice more (18 -> 17 -> 16, not 17 or 15).
+
+[Bot1 Deck]
+Mox Ruby
+Sol Ring
+Black Lotus
+Black Lotus
+Full Throttle
+Harmless Offering
+Fanatical Firebrand
+Fanatical Firebrand
+Mountain x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Attack(Fanatical Firebrand#1; Fanatical Firebrand#2)
+[T5 Bot1.Main2]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Fanatical Firebrand#1)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+? Bot2.Battlefield.Fanatical Firebrand.Tapped = true
+? Bot1.Battlefield.Fanatical Firebrand.Tapped = true
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Full Throttle.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Step = BeginCombat
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fanatical Firebrand.Tapped = false
+? Bot2.Battlefield.Fanatical Firebrand.Tapped = false
+Bot1.Attack(Fanatical Firebrand)
+Bot2.Block()
+[T5 Bot1.EndCombat]
+? Bot2.Life = 17
+Bot1.Pass
+Bot2.Pass
+? Step = BeginCombat
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fanatical Firebrand.Tapped = false
+Bot1.Attack(Fanatical Firebrand)
+Bot2.Block()
+[T5 Bot1.EndCombat]
+Bot1.Pass
+Bot2.Pass
+? Step = End
+
+[Expect]
+Bot2.Life = 16
+Bot2.Battlefield.Fanatical Firebrand.Tapped = false
+Bot1.Battlefield.Fanatical Firebrand.Tapped = true
