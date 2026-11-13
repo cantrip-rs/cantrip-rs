@@ -6,6 +6,10 @@ use cantrip_state::{Frame, FrameKind};
 use crate::layers::{self, live, summoning_sick};
 use crate::{Cx, Flow, Game, R, Stop, actions, ops};
 
+#[cfg(test)]
+#[path = "lasting_block_text_tests.rs"]
+mod lasting_block_text_tests;
+
 /// What a card that may begin the game on the battlefield asks (CR 103.6a): the Leylines, Gemstone Caverns.
 const BEGIN_ON_BATTLEFIELD: Question = Question::new(
     "BeginOnBattlefield",
@@ -1216,7 +1220,13 @@ fn can_block(cx: &Cx, blocker: ObjectId, attacker: ObjectId, rule_sources: &[Obj
     // effect too, so it holds whatever abilities its source or the creature have lost since (CR 113.1a, 611.2c, 613.1f).
     for e in &cx.s().effects {
         if let EffectKind::BlockRestriction { card, index } = e.kind
-            && cx.card(card).lasting_block_rules.get(index as usize).is_some_and(|r| !(r.allows)(cx, e.affected, blocker, attacker))
+            && cx.card(card).lasting_block_rules.get(index as usize).is_some_and(|r| {
+                // This callback's source argument names the affected attacker,
+                // not the object which created the rule. Read its rule words
+                // through that argument, while characteristics remain live.
+                let reads = actions::WithWords { q: cx, source: e.affected, words: e.words };
+                !(r.allows)(&reads, e.affected, blocker, attacker)
+            })
         {
             return false;
         }

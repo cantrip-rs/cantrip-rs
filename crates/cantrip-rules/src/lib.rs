@@ -1906,9 +1906,9 @@ impl<'a> Cx<'a> {
         })
     }
 
-    /// The creation text retained by a granted ability, replacement or prevention (CR 611.2c, 113.7a).
+    /// The creation text retained by a granted ability, replacement, prevention or lasting rule (CR 611.2c, 113.7a).
     pub(crate) fn granting_words(&self, source: ObjectId, kind: EffectKind) -> Words {
-        if matches!(kind, EffectKind::AddAbility(_) | EffectKind::Replacement { .. } | EffectKind::ReplacementRule { .. } | EffectKind::Prevention { .. }) {
+        if matches!(kind, EffectKind::AddAbility(_) | EffectKind::Replacement { .. } | EffectKind::ReplacementRule { .. } | EffectKind::Prevention { .. } | EffectKind::LastingRule { .. } | EffectKind::BlockRestriction { .. }) {
             Query::words(self, source)
         } else { Words::NONE }
     }

@@ -5,7 +5,7 @@
 use cantrip_api::*;
 use cantrip_state::ManaPart;
 
-use crate::Cx;
+use crate::{Cx, actions::WithWords};
 
 /// The permanents with a static ability of this kind, with the player who controls each, once for each definition it has
 /// one in: a merged permanent has its other components' (CR 702.140e, `CardTable::texts`).
@@ -806,8 +806,10 @@ pub fn lasting_rules_barring_attacks(q: &dyn Query, cards: &CardTable, creatures
         for &creature in creatures {
             let applies = match e.kind {
                 EffectKind::CantAttackPlayer { .. } => e.affected == creature,
-                EffectKind::LastingRule { card, index, about } =>
-                    (cards.get(card).lasting_rules[index as usize].applies)(q, &Asker::new(e.source, e.controller), about, creature),
+                EffectKind::LastingRule { card, index, about } => {
+                    let reads = WithWords { q, source: e.source, words: e.words };
+                    (cards.get(card).lasting_rules[index as usize].applies)(&reads, &Asker::new(e.source, e.controller), about, creature)
+                },
                 _ => unreachable!(),
             };
             if !applies { continue; }
@@ -996,7 +998,10 @@ pub fn lasting_rules_on<'a>(
             .get(card)
             .lasting_rules
             .get(index as usize)
-            .is_some_and(|r| r.rule == rule && (r.applies)(q, &Asker::new(e.source, e.controller), about, id)),
+            .is_some_and(|r| {
+                let reads = WithWords { q, source: e.source, words: e.words };
+                r.rule == rule && (r.applies)(&reads, &Asker::new(e.source, e.controller), about, id)
+            }),
         _ => false,
     })
 }
