@@ -1,0 +1,48 @@
+# Jazal Goldmane: "{3}{W}{W}: ..." On turn 3 Bot1 has five mana sources: a Pearl (one white) and a Jet, a Ruby, an Emerald and a
+# Sapphire (none). That is five mana but only one {W}, so the activation is refused (CR 202.1a, 601.2h). Once it plays the Plains it
+# drew, the second white makes it payable: Jazal attacks alone and is a 5/5 (X = 1).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Jazal Goldmane
+Plains
+Plains x13
+
+[Bot2 Deck]
+Plains x22
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jazal Goldmane.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Jazal Goldmane.Activate(Mana: short)
+Bot1.Hand.Plains.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Jazal Goldmane > Bot2)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Jazal Goldmane.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Jazal Goldmane.Power = 5
+Bot1.Battlefield.Jazal Goldmane.Toughness = 5

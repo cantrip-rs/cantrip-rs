@@ -1,0 +1,51 @@
+# Jazal Goldmane: "Attacking creatures you control get +X/+X until end of turn, where X is the number of attacking creatures." On
+# turn 4 Bot2's Ornithopter attacks and Bot1 activates Jazal (which is not attacking): no creature Bot1 controls is
+# attacking, so none is pumped, and the opponent's attacker is not one "you control", so it stays a 0/2 and Jazal a 4/4 (CR 611.2c).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Jazal Goldmane
+Ornithopter
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Plains x21
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Jazal Goldmane.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Jazal Goldmane.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+
+[Expect]
+Bot1.Battlefield.Jazal Goldmane.Power = 4
+Bot1.Battlefield.Jazal Goldmane.Toughness = 4

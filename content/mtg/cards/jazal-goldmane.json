@@ -1,0 +1,11 @@
+{
+  "name": "Jazal Goldmane",
+  "manaCost": "{2}{W}{W}",
+  "type": "Legendary Creature — Cat Warrior",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "First strike (This creature deals combat damage before creatures without first strike.)\n{3}{W}{W}: Attacking creatures you control get +X/+X until end of turn, where X is the number of attacking creatures.",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

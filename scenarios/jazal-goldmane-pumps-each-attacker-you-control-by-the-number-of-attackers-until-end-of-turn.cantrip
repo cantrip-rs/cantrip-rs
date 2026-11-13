@@ -1,0 +1,61 @@
+# Jazal Goldmane: {2}{W}{W} 4/4 first strike; "{3}{W}{W}: Attacking creatures you control get +X/+X until end of turn, where X is the
+# number of attacking creatures." On turn 3 Jazal and an Ornithopter attack (X = 2): both are pumped by exactly +2/+2 (a 6/6 Jazal
+# and a 2/4 Ornithopter), the second Ornithopter that stayed home is not, and Bot2 takes the pumped 6 + 2 = 8 combat damage
+# (CR 611.2c). The pump is over once the turn is (CR 514.2): Jazal is a 4/4 again on turn 4.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Jazal Goldmane
+Ornithopter
+Ornithopter
+Plains x13
+
+[Bot2 Deck]
+Plains x22
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Jazal Goldmane.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Jazal Goldmane > Bot2; Ornithopter#1 > Bot2)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Jazal Goldmane.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Jazal Goldmane.Power = 6
+? Bot1.Battlefield.Jazal Goldmane.Toughness = 6
+? Bot1.Battlefield.Ornithopter#1.Power = 2
+? Bot1.Battlefield.Ornithopter#1.Toughness = 4
+? Bot1.Battlefield.Ornithopter#2.Power = 0
+? Bot1.Battlefield.Ornithopter#2.Toughness = 2
+[T3 Bot1.Main2]
+? Bot2.Life = 12
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Jazal Goldmane.Power = 4
+Bot1.Battlefield.Jazal Goldmane.Toughness = 4
+Bot1.Battlefield.Ornithopter#1.Power = 0
+Bot1.Battlefield.Ornithopter#1.Toughness = 2

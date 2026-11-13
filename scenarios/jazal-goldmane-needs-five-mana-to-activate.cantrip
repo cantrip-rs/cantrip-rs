@@ -1,0 +1,47 @@
+# Jazal Goldmane: "{3}{W}{W}: Attacking creatures you control get +X/+X until end of turn, where X is the number of attacking
+# creatures." On turn 3 Bot1 has four mana sources (a Pearl, a Jet, a Ruby and an Emerald), one short of the {3}{W}{W}: the activation is
+# refused. After it plays its Plains it has five, with a second white, and Jazal (attacking alone, X = 1, a 5/5) is paid exactly: the
+# pool is empty right after (CR 602.2b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Jazal Goldmane
+Plains
+Plains x14
+
+[Bot2 Deck]
+Plains x22
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jazal Goldmane.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Jazal Goldmane.Activate(Mana: short)
+Bot1.Hand.Plains.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Jazal Goldmane > Bot2)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Jazal Goldmane.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Jazal Goldmane.Power = 5
+Bot1.Battlefield.Jazal Goldmane.Toughness = 5
