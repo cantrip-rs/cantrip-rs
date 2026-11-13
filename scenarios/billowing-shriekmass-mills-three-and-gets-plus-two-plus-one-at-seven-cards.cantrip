@@ -1,0 +1,45 @@
+# Billowing Shriekmass (CR 701.17a, 207.2c, 613.4c): "When this creature enters, mill three cards" puts the top three cards of
+# its controller's library into the graveyard; "Threshold — +2/+1 as long as there are seven or more cards in your graveyard"
+# applies only from the seventh card on. Black Lotus is sacrificed for {B}{B}{B} (one card), Mox Jet adds the fourth mana: the
+# Shriekmass enters and mills three Islands (four cards: a 2/3), then Faithless Looting off Mox Ruby draws two Plains and
+# discards them, itself included (seven cards: a 4/4).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Billowing Shriekmass
+Faithless Looting
+Island
+Island
+Island x3
+Plains x12
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Billowing Shriekmass.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 4
+? Bot1.Battlefield.Billowing Shriekmass.Power = 2
+? Bot1.Battlefield.Billowing Shriekmass.Toughness = 3
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Plains; Plains)
+
+[Expect]
+Bot1.Graveyard.Count = 7
+Bot1.Battlefield.Billowing Shriekmass.Power = 4
+Bot1.Battlefield.Billowing Shriekmass.Toughness = 4
+Bot1.Battlefield.Billowing Shriekmass.Keywords = Flying
