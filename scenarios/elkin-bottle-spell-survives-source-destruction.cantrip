@@ -1,0 +1,39 @@
+# The exile permission survives the Bottle's destruction and permits an instant at normal timing for its mana cost.
+[Bot1 Deck]
+Elkin Bottle
+Black Lotus
+Black Lotus
+Mountain
+Island x3
+Lightning Bolt
+Island x15
+[Bot2 Deck]
+Shatter
+Black Lotus
+Island x5
+Forest
+Island x15
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Elkin Bottle.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Elkin Bottle.Activate
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Elkin Bottle)
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+[Expect]
+Bot1.Graveyard = Lightning Bolt; Elkin Bottle; Black Lotus; Black Lotus
+Bot2.Life = 17
