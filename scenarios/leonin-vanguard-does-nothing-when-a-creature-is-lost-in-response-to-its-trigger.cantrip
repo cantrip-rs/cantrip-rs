@@ -1,0 +1,40 @@
+# Leonin Vanguard's condition is intervening (CR 603.4): Bot1 controls three creatures (it casts the third on turn 3) as
+# combat begins, so it triggers, but Bot2 destroys one of the Ornithopters with Disenchant in response. As the ability would
+# resolve Bot1 controls only two, so it does nothing: the Vanguard stays 1/1 and no life is gained. (The scenario with exactly
+# three creatures is the control.)
+
+[Bot1 Deck]
+Plains
+Leonin Vanguard
+Ornithopter
+Ornithopter
+Plains x19
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Disenchant
+Plains x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Leonin Vanguard.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Ornithopter#1.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Ornithopter#1)
+[T3 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Leonin Vanguard.Power = 1
+
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard = Ornithopter
+Bot1.Battlefield.Leonin Vanguard.Power = 1
