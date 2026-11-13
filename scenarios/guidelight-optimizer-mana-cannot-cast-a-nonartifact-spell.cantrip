@@ -1,0 +1,37 @@
+# Guidelight Optimizer's {U} is only for an artifact spell or an ability (CR 106.6). Turn 3: the Island's {U} casts Sol Ring first, so
+# the Optimizer's restricted {U} is the only blue mana left, and Opt, a nonartifact spell, can't be paid with it (Mox Ruby's {R}
+# can't pay {U}): it is not offered, and Opt stays in the hand.
+
+[Bot1 Deck]
+Island
+Mox Ruby
+Guidelight Optimizer
+Opt
+Sol Ring
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Guidelight Optimizer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Guidelight Optimizer.Activate
+? Bot1.Mana = {U} (AnyOf(ArtifactSpells+Abilities))
+! Bot1.Hand.Opt.Cast(Mana: short)
+? Bot1.Mana = {U} (AnyOf(ArtifactSpells+Abilities))
+
+[Expect]
+Bot1.Battlefield.Sol Ring.Types = Artifact
+Bot1.Hand.Opt.Colors = Blue

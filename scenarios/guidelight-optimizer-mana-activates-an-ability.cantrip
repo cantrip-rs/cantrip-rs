@@ -1,0 +1,47 @@
+# Guidelight Optimizer's {U} may pay for any ability (CR 106.6, 602.2b), not only an artifact's: Turn 3, with Sea Spirit cast from the
+# five Moxen, its {U} pays Sea Spirit's {U}: +1/+0 (a nonartifact creature's ability) and the pool is empty afterwards.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Guidelight Optimizer
+Sea Spirit
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Guidelight Optimizer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Sea Spirit.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Guidelight Optimizer.Activate
+Bot1.Battlefield.Sea Spirit.Activate
+? Bot1.Mana = 
+
+[Expect]
+Bot1.Battlefield.Sea Spirit.Power = 3
