@@ -879,6 +879,22 @@ pub static ELEPHANT_5_5: CardDef = CardDef {
     ..token!(Elephant)
 };
 
+/// The 3/3 green Elephant creature token. Autarch Mammoth and March of the World Ooze make it.
+pub static ELEPHANT_3_3: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Green)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(3),
+    toughness: Some(3),
+    ..token!(Elephant)
+};
+
+/// "Create a 3/3 green Elephant creature token" as an effect (CR 111.1): one `ELEPHANT_3_3` under the controller of the
+/// resolving spell or ability. Autarch Mammoth and March of the World Ooze print it.
+pub fn create_a_3_3_elephant(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &ELEPHANT_3_3, 1)?;
+    Ok(())
+}
+
 /// The 2/2 red Mutant creature token. Jennika, Bad Apple Big Sister, Mighty Mutanimals, Sally Pride, Slash, Turtle Blimp, Wooden
 /// Cane, Old Hob and Splinter & Leo make it.
 pub static MUTANT: CardDef = CardDef {
