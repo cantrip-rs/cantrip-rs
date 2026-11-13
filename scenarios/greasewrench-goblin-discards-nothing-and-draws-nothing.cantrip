@@ -1,0 +1,47 @@
+# Greasewrench Goblin (2/1, "Exhaust - {2}{R}: Discard up to two cards, then draw that many cards. Put a +1/+1 counter on this
+# creature"): Bot1 casts it on turn 1 and pays the exhaust cost, Ruby and two Moxen (the pool empty after). Discarding nothing draws nothing: only the counter.
+# The counter comes either way (3/2), and on turn 3 the exhaust ability is not offered again with every source untapped.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Greasewrench Goblin
+Swamp
+Island
+Mox Pearl
+Mox Emerald
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Greasewrench Goblin.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Greasewrench Goblin.Power = 2
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Greasewrench Goblin.Activate
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Greasewrench Goblin.Power = 3
+? Bot1.Battlefield.Greasewrench Goblin.Toughness = 2
+? Bot1.Hand = Swamp; Island
+? Bot1.Graveyard.Count = 0
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Greasewrench Goblin.Activate
+
+[Expect]
+Bot1.Battlefield.Greasewrench Goblin.Power = 3
+Bot1.Library.Count = 21
