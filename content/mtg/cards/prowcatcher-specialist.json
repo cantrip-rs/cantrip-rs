@@ -1,0 +1,11 @@
+{
+  "name": "Prowcatcher Specialist",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin Warrior",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Haste\nExhaust — {3}{R}: Put two +1/+1 counters on this creature. (Activate each exhaust ability only once.)",
+  "keywords": [
+    "Haste"
+  ]
+}

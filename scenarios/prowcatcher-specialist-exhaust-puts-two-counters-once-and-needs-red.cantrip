@@ -1,0 +1,53 @@
+# Prowcatcher Specialist (2/1 haste, "Exhaust - {3}{R}: Put two +1/+1 counters on this creature"): cast on turn 1 off the Mountain and
+# Mox Ruby, it leaves only three non-red mana, so the exhaust ability is not offered (too little, and no red). On turn 3 Bot1 pays
+# exactly {3}{R} (Mountain and three Moxen, the pool empty after) and it becomes a 4/3; on turn 5, with every mana source untapped, the
+# exhaust ability is not offered again (it can be activated only once).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Prowcatcher Specialist
+Island
+Mox Emerald
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Prowcatcher Specialist.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Prowcatcher Specialist.Power = 2
+? Bot1.Battlefield.Prowcatcher Specialist.Toughness = 1
+? Bot1.Battlefield.Prowcatcher Specialist.Keywords = Haste
+! Bot1.Battlefield.Prowcatcher Specialist.Activate(Mana: short)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Prowcatcher Specialist.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Prowcatcher Specialist.Power = 4
+? Bot1.Battlefield.Prowcatcher Specialist.Toughness = 3
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Prowcatcher Specialist.Activate
+
+[Expect]
+Bot1.Battlefield.Prowcatcher Specialist.Power = 4
+Bot1.Battlefield.Prowcatcher Specialist.Toughness = 3
