@@ -15,18 +15,10 @@ fn indestructible(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Target creature gains double strike until end of turn": nothing if the target is no longer legal (CR 608.2b).
-fn double_strike(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = targets::object(g, item, 0) {
-        effects::gain_until_end_of_turn(g, item.object, creature, Keyword::DoubleStrike);
-    }
-    Ok(())
-}
-
 static MODAL: ModalDef = modes(&[
     mode(effects::damage_first_target::<4>, "Boros Charm deals 4 damage to target player or planeswalker.").targets(&[targets::PLAYER_OR_PLANESWALKER]),
     mode(indestructible, "Permanents you control gain indestructible until end of turn."),
-    mode(double_strike, "Target creature gains double strike until end of turn.").targets(&[targets::CREATURE]),
+    mode(effects::target_gains_double_strike, "Target creature gains double strike until end of turn.").targets(&[targets::CREATURE]),
 ]);
 
 pub static CARD: CardDef = CardDef { spell: Some(SpellDef::MODAL), modal: Some(&MODAL), ..oracle::BOROS_CHARM };

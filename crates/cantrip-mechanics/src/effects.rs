@@ -615,6 +615,19 @@ pub fn this_gets_and_gains_menace<const P: i32, const T: i32>(g: &mut dyn Game, 
     })
 }
 
+/// "[This creature] gets +`P`/+`T` and gains flying until end of turn" (CR 611.2a, 613.4c, 702.9a): one instruction of two
+/// continuous effects from the ability's source, both of which do nothing once it has left the battlefield (CR 400.7).
+/// Brightfield Glider (+1/+2, when it attacks while saddled) and Kithkeeper (+3/+0) print it.
+pub fn this_gets_and_gains_flying<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.one_instruction(&mut |g| {
+        crate::pump(g, item.object, item.object, P, T);
+        if g.is_on_battlefield(item.object) {
+            gain_until_end_of_turn(g, item.object, item.object, Keyword::Flying);
+        }
+        Ok(())
+    })
+}
+
 fn creatures_on_the_battlefield(g: &dyn Game) -> Vec<ObjectId> {
     g.state().battlefield().iter().copied().filter(|&id| g.chars(id).is(CardType::Creature)).collect()
 }
@@ -2283,6 +2296,16 @@ pub fn gain_indestructible_until_end_of_turn(g: &mut dyn Game, source: ObjectId,
 pub fn target_creature_gains_indestructible(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some(creature) = crate::targets::object(g, item, 0) {
         gain_indestructible_until_end_of_turn(g, item.object, creature);
+    }
+    Ok(())
+}
+
+/// "Target creature gains double strike until end of turn" (CR 702.4, 611.2a), the creature (or other permanent) being the
+/// ability's first target; nothing if it is no longer a legal target as the spell or ability resolves (CR 608.2b). Raking Claws,
+/// Boros Charm's third mode and Pride of the Road's max speed ability print it.
+pub fn target_gains_double_strike(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(target) = crate::targets::object(g, item, 0) {
+        gain_until_end_of_turn(g, item.object, target, Keyword::DoubleStrike);
     }
     Ok(())
 }
