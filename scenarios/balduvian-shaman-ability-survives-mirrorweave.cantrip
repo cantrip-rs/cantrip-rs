@@ -1,0 +1,54 @@
+# Mirrorweave changes the Shaman after activation; the ability still grants its own cumulative upkeep (CR 113.7a, 702.24a).
+[Bot1 Deck]
+Balduvian Shaman
+Crusade
+Mox Sapphire
+Mox Pearl x2
+Black Lotus
+Mirrorweave
+Island x20
+[Bot2 Deck]
+Grizzly Bears
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Crusade.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Balduvian Shaman.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Balduvian Shaman.Activate(Crusade)
+Bot1.Hand.Mirrorweave.Cast(Grizzly Bears)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(White)
+Bot1.Colors(Blue)
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.PayCost(Spend: U)
+Bot1.Pass
+? Bot1.Mana = {W}
+? Bot1.Battlefield.Crusade.Counters.Age = 1
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Graveyard = Crusade; Mirrorweave; Black Lotus

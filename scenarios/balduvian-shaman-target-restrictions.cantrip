@@ -1,0 +1,42 @@
+# The Shaman can target its controller's white enchantment, but not an opponent's or one with cumulative upkeep (CR 115.1c).
+[Bot1 Deck]
+Balduvian Shaman
+Crusade
+Cold Snap
+Mox Sapphire
+Black Lotus x2
+Island x20
+[Bot2 Deck]
+Crusade
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Crusade.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Cold Snap.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Balduvian Shaman.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Crusade.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.PayCost
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Balduvian Shaman.Activate(Bot2.Battlefield.Crusade)
+! Bot1.Battlefield.Balduvian Shaman.Activate(Bot1.Battlefield.Cold Snap)
+Bot1.Battlefield.Balduvian Shaman.Activate(Bot1.Battlefield.Crusade)
+Bot1.Colors(White)
+Bot1.Colors(Blue)
+? Bot1.Battlefield.Balduvian Shaman.Tapped = True
+[Expect]
+Bot1.Battlefield.Balduvian Shaman.Power = 2
