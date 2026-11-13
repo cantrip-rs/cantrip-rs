@@ -1,0 +1,30 @@
+# Cursed Rack chooses Bot3, not its controller; at cleanup Bot3 discards to four while Bot2 retains seven (CR 514.1).
+[Bot1 Deck]
+Cursed Rack
+Black Lotus
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Island x20
+[Bot3 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cursed Rack.Cast
+? Bot1.Mana =
+! Bot1.ChoosePlayer(Bot1)
+Bot1.ChoosePlayer(Bot3)
+[T3 Bot3.Main1]
+? Bot3.Hand.Count = 8
+? Bot2.Hand.Count = 7
+[T4 Bot1.Main1]
+[Expect]
+Bot3.Hand.Count = 4
+Bot2.Hand.Count = 7
+Bot3.Graveyard.Count = 4
+Bot1.Battlefield = Cursed Rack; Mox Pearl
