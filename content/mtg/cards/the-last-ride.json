@@ -1,0 +1,8 @@
+{
+  "name": "The Last Ride",
+  "manaCost": "{B}",
+  "type": "Legendary Artifact — Vehicle",
+  "power": 13,
+  "toughness": 13,
+  "oracleText": "The Last Ride gets -X/-X, where X is your life total.\n{2}{B}, Pay 2 life: Draw a card.\nCrew 2"
+}

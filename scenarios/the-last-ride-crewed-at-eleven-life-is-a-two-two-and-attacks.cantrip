@@ -1,0 +1,53 @@
+# The Last Ride (13/13, -X/-X where X is its controller's life total). Bot2 burns Bot1 down from 20 to 11 with three Lightning
+# Bolts (Black Lotus for {R}{R}{R}), so on turn 3 crewing the Ride with Bot1's Walking Corpse (power 2, Crew 2) makes it a 2/2
+# artifact creature that survives and attacks: Bot2 takes 2.
+
+[Bot1 Deck]
+Black Lotus
+The Last Ride
+Walking Corpse
+Swamp x17
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Island x3
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.The Last Ride.Cast
+Bot1.Hand.Walking Corpse.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 11
+[T3 Bot1.Main1]
+Bot1.Battlefield.The Last Ride.Activate(Ability: Crew 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Last Ride.Power = 2
+? Bot1.Battlefield.The Last Ride.Toughness = 2
+Bot1.Attack(The Last Ride > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 11

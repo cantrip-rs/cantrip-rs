@@ -1,0 +1,30 @@
+# The Last Ride's "{2}{B}, Pay 2 life: Draw a card." Black Lotus and a Mox Jet make four mana; the Ride's {B} leaves three,
+# which pays the ability once: Bot1 goes to 18 life and draws the Swamp on top (hand 4 -> 5). A second activation is refused for
+# lack of mana (the Mox and Lotus are spent).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+The Last Ride
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Last Ride.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+Bot1.Battlefield.The Last Ride.Activate(Ability: Draw)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.The Last Ride.Activate(Ability: Draw; Mana: short)
+
+[Expect]
+Bot1.Life = 18
+Bot1.Hand.Count = 5

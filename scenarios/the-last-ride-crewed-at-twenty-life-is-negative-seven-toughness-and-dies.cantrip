@@ -1,0 +1,30 @@
+# The Last Ride at 20 life is a -7/-7 once crewed (13 - 20): the Vehicle is not a creature until Walking Corpse crews it, so
+# it sits safely on the battlefield, then becomes a creature with toughness 0 or less and is put into its owner's graveyard as
+# a state-based action (CR 704.5f).
+
+[Bot1 Deck]
+Black Lotus
+The Last Ride
+Walking Corpse
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.The Last Ride.Cast
+Bot1.Hand.Walking Corpse.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = The Last Ride; Walking Corpse
+[T3 Bot1.Main1]
+Bot1.Battlefield.The Last Ride.Activate(Ability: Crew 2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Walking Corpse
+Bot1.Graveyard = The Last Ride; Black Lotus
+Bot1.Battlefield.Walking Corpse.Tapped = true
