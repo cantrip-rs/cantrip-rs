@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::targets;
+use cantrip_mechanics::effects;
 use cantrip_mechanics::triggers::THIS_ENTERS;
 use cantrip_oracle as oracle;
 
@@ -7,14 +7,6 @@ use cantrip_oracle as oracle;
 fn equipment_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     cantrip_mechanics::targets::card_in_your_graveyard(q, asker, t, &[CardType::Artifact])
         && matches!(t, Target::Object(id) if q.chars(id).has_subtype(Subtype::Equipment))
-}
-
-/// When this enters, return target Equipment card from your graveyard to the battlefield.
-fn return_equipment(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(card) = targets::object(g, item, 0) {
-        g.put_onto_battlefield(card, item.controller, false)?;
-    }
-    Ok(())
 }
 
 /// Whether the ability `index` of `source` is an equip ability (CR 702.6a).
@@ -39,7 +31,7 @@ fn free_first_equip(q: &dyn Query, asker: &Asker, activator: PlayerId, _: Object
 }
 
 pub static CARD: CardDef = CardDef {
-    abilities: &[triggered(THIS_ENTERS, return_equipment, "When this enchantment enters, return target Equipment card from your graveyard to the battlefield.")
+    abilities: &[triggered(THIS_ENTERS, effects::return_first_target_to_battlefield, "When this enchantment enters, return target Equipment card from your graveyard to the battlefield.")
         .targets(&[target(equipment_in_your_graveyard)])],
     instant_activation: &[instant_equip],
     ability_alternatives: &[free_first_equip],

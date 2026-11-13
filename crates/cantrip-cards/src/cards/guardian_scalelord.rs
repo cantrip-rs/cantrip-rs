@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::targets;
+use cantrip_mechanics::{effects, targets};
 use cantrip_mechanics::backup;
 use cantrip_oracle as oracle;
 
@@ -19,17 +19,9 @@ fn permanent_card_up_to_power(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     q.mana_value(id) as i32 <= power as i32
 }
 
-/// Return it to the battlefield.
-fn return_it(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(card) = targets::object(g, item, 0) {
-        g.put_onto_battlefield(card, item.controller, false)?;
-    }
-    Ok(())
-}
-
 const ATTACK_TEXT: &str = "Whenever this creature attacks, return target nonland permanent card with mana value X or less from your graveyard to the battlefield, where X is this creature's power.";
 
-const ATTACK: AbilityDef = triggered(cantrip_mechanics::triggers::THIS_ATTACKS, return_it, ATTACK_TEXT)
+const ATTACK: AbilityDef = triggered(cantrip_mechanics::triggers::THIS_ATTACKS, effects::return_first_target_to_battlefield, ATTACK_TEXT)
     .targets(&[target(permanent_card_up_to_power)]);
 
 pub static CARD: CardDef = CardDef {
