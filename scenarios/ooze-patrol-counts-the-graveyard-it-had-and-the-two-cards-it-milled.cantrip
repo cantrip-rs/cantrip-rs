@@ -1,0 +1,34 @@
+# Ooze Patrol (2/2): "When this creature enters, mill two cards, then put a +1/+1 counter on this creature for each artifact and/or
+# creature card in your graveyard." Black Lotus, sacrificed for the mana that casts it, is already in the graveyard (an artifact
+# card). The mill puts Memnite (an artifact creature card: it is one card, so it counts once, not twice) and an Island there. That is
+# two such cards, so two counters: a 4/4. Counted when the ability resolves, after the mill.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Ooze Patrol
+Island x4
+Memnite
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ooze Patrol.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Black Lotus
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Island; Memnite; Black Lotus
+Bot1.Battlefield.Ooze Patrol.Power = 4
+Bot1.Battlefield.Ooze Patrol.Toughness = 4

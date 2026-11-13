@@ -1,0 +1,8 @@
+{
+  "name": "Ooze Patrol",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Ooze",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, mill two cards, then put a +1/+1 counter on this creature for each artifact and/or creature card in your graveyard. (To mill two cards, put the top two cards of your library into your graveyard.)"
+}

@@ -1,0 +1,52 @@
+# Ooze Patrol: a graveyard of only lands gives it no counter. The two Islands it mills are not artifact or creature cards, and the
+# Memnite Bot2's Entomb has put into Bot2's graveyard on turn 2 is not in "your graveyard". Bot1's Moxen come down on turn 1 and
+# the Patrol is cast on turn 3; it stays a 2/2.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Ooze Patrol
+Island x2
+Island x2
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Entomb
+Island x6
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Memnite)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ooze Patrol.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Island; Island
+Bot2.Graveyard = Entomb; Memnite
+Bot1.Battlefield.Ooze Patrol.Power = 2
+Bot1.Battlefield.Ooze Patrol.Toughness = 2
