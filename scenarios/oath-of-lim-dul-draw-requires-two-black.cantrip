@@ -1,0 +1,40 @@
+# The draw ability costs exactly two black mana, and draws one card (CR 107.4).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Oath of Lim-Dûl
+Swamp
+Mox Ruby
+Island
+Island
+Forest
+Mountain
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Oath of Lim-Dûl.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Oath of Lim-Dûl.Activate(Mana: short)
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Oath of Lim-Dûl.Activate
+? Bot1.Mana = {R}
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Hand = Forest; Mountain; Island; Island
+Bot1.Library.Top = Island

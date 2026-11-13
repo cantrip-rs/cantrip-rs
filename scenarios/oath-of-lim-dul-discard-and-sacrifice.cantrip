@@ -1,0 +1,40 @@
+# Three damage causes three choices: discard twice and sacrifice one other permanent (CR 118.12a).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Oath of Lim-Dûl
+Lightning Bolt
+Swamp
+Forest
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Oath of Lim-Dûl.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+Bot1.Choose(Swamp)
+Bot1.PayCost
+Bot1.Choose(Forest)
+Bot1.Choose(Mox Ruby)
+[Expect]
+Bot1.Life = 17
+Bot1.Graveyard = Mox Ruby; Forest; Swamp; Lightning Bolt; Black Lotus
+Bot1.Battlefield.Oath of Lim-Dûl.Types = Enchantment
+Bot1.Battlefield.Mox Jet.Types = Artifact

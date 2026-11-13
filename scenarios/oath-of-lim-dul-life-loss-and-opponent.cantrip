@@ -1,0 +1,48 @@
+# Only its controller's life loss triggers Oath; Thoughtseize's life loss also triggers it (CR 119.3).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Oath of Lim-Dûl
+Thoughtseize
+Forest
+Swamp
+Island
+Island x20
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Oath of Lim-Dûl.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 17
+? Stack.Count = 0
+? Bot1.Hand.Forest.Colors =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Thoughtseize.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Choose(Lightning Bolt)
+Bot1.PayCost
+Bot1.Choose(Forest)
+Bot1.PayCost
+Bot1.Choose(Swamp)
+[Expect]
+Bot1.Life = 18
+Bot1.Graveyard = Swamp; Forest; Thoughtseize; Black Lotus
+Bot1.Battlefield.Oath of Lim-Dûl.Types = Enchantment

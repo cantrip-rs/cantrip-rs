@@ -1,0 +1,49 @@
+# Quark forbids sacrificing Treasure, so Oath's mandatory sacrifice choice offers other permanents instead (CR 101.2).
+[Bot1 Deck]
+Black Lotus x2
+Mox Jet
+Oath of Lim-Dûl
+Quark, Humble Proprietor
+Mox Ruby
+Swamp
+Island x20
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Oath of Lim-Dûl.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Quark, Humble Proprietor.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Decline
+! Bot1.Choose(Treasure Token)
+Bot1.Choose(Quark, Humble Proprietor; Mox Jet; Mox Ruby)
+[Expect]
+Bot1.Battlefield.Treasure Token.Types = Artifact
+Bot1.Battlefield.Swamp.Types = Land
+Bot1.Battlefield.Oath of Lim-Dûl.Types = Enchantment
