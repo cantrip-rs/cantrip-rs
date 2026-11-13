@@ -1,0 +1,40 @@
+# Undying Malice ({B}): until end of turn the target creature gains "When this creature dies, return it to the battlefield tapped under its owner's control with a +1/+1 counter on it"
+# (CR 700.4, 603.6c, 122.6). Bot1 targets its own Ornithopter (0/2) and Lightning Bolt kills it; it comes back tapped as a 1/3 (a new object, so without the granted ability).
+
+[Bot1 Deck]
+Ornithopter
+Mox Jet
+Mox Pearl
+Undying Malice
+Mox Ruby
+Lightning Bolt
+Island
+Island x16
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Undying Malice.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot1.Graveyard = Lightning Bolt; Undying Malice

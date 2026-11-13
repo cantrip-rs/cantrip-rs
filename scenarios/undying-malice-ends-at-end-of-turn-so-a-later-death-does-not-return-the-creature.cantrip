@@ -1,0 +1,35 @@
+# Undying Malice's effect lasts "until end of turn" (CR 514.2, 611.2): on turn 3 Bot1's Ornithopter has lost the granted return ability, so when Lightning Bolt kills it,
+# it stays in the graveyard.
+
+[Bot1 Deck]
+Ornithopter
+Mox Jet
+Mox Pearl
+Undying Malice
+Mox Ruby
+Lightning Bolt
+Island
+Island x16
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Undying Malice.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Ornithopter; Lightning Bolt; Undying Malice
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby
