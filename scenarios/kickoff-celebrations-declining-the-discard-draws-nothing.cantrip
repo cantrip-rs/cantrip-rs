@@ -1,0 +1,32 @@
+# Kickoff Celebrations: the discard is optional, and drawing two depends on doing it ("If you do"): Bot1 declines and keeps the four cards it had,
+# discarding nothing and drawing nothing (the library stays at 13).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Kickoff Celebrations
+Island
+Plains
+Plains
+Plains
+Swamp
+Forest
+Plains x11
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kickoff Celebrations.Cast
+Bot1.Choose()
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Hand.Count = 4
+Bot1.Library.Count = 13
+Bot1.Speed = 1

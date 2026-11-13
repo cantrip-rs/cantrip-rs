@@ -1,0 +1,6 @@
+{
+  "name": "Kickoff Celebrations",
+  "manaCost": "{1}{R}",
+  "type": "Enchantment",
+  "oracleText": "Start your engines! (If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.)\nWhen this enchantment enters, you may discard a card. If you do, draw two cards.\nMax speed — Sacrifice this enchantment: Creatures and Vehicles you control gain haste until end of turn."
+}

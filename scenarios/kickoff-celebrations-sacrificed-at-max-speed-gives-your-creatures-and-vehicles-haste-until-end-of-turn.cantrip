@@ -1,0 +1,79 @@
+# Kickoff Celebrations: "Max speed - Sacrifice this enchantment: Creatures and Vehicles you control gain haste until end of turn." Bot1's speed is 1 from
+# the enchantment on turn 1 and a Memnite hit raises it on turns 3, 5 and 7 (2, 3, then 4). Below max speed (turn 5, speed 3) the sacrifice is not
+# offered. At max speed in turn 7's second main phase it is: Bot1's Memnite (a creature) and Smuggler's Copter (a Vehicle that is no creature) gain haste;
+# Bot1's Mox Ruby and Bot2's Ornithopter and Smuggler's Copter do not (not "you control", not a creature or Vehicle). An Ornithopter Bot1 casts afterwards
+# does not either (CR 611.2c). On turn 9 the Memnite no longer has haste ("until end of turn").
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Kickoff Celebrations
+Memnite
+Smuggler's Copter
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Smuggler's Copter
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kickoff Celebrations.Cast
+Bot1.Choose()
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Smuggler's Copter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block()
+[T3 Bot1.Main2]
+? Bot1.Speed = 2
+! Bot1.Battlefield.Kickoff Celebrations.Activate
+[T5 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block()
+[T5 Bot1.Main2]
+? Bot1.Speed = 3
+! Bot1.Battlefield.Kickoff Celebrations.Activate
+[T7 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block()
+[T7 Bot1.Main2]
+? Bot1.Speed = 4
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Battlefield.Kickoff Celebrations.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Kickoff Celebrations
+? Bot1.Battlefield.Memnite.Keywords = Haste
+? Bot1.Battlefield.Smuggler's Copter.Keywords = Flying; Haste
+? Bot1.Battlefield.Mox Ruby.Keywords = (absent)
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+? Bot2.Battlefield.Smuggler's Copter.Keywords = Flying
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+[T9 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Battlefield.Smuggler's Copter.Keywords = Flying
+Bot1.Graveyard = Kickoff Celebrations

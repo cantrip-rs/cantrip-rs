@@ -1,0 +1,33 @@
+# Kickoff Celebrations: "When this enchantment enters, you may discard a card. If you do, draw two cards." Bot1 chooses the Island: it is
+# discarded and the next two cards, Swamp and Forest, are drawn (the hand is 4 - 1 + 2 = 5 cards; the library 13 - 2 = 11).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Kickoff Celebrations
+Island
+Plains
+Plains
+Plains
+Swamp
+Forest
+Plains x11
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kickoff Celebrations.Cast
+Bot1.Choose(Island)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Island
+Bot1.Hand.Count = 5
+Bot1.Hand = Forest; Plains; Plains; Plains; Swamp
+Bot1.Library.Count = 11
+Bot1.Speed = 1
