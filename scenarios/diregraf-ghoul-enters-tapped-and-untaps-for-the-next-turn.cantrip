@@ -1,0 +1,25 @@
+# "This creature enters tapped" (CR 614.1d): Diregraf Ghoul (2/2) is on the battlefield tapped the turn it is cast, so it is untapped
+# and attacks on turn 3 for 2.
+
+[Bot1 Deck]
+Mox Jet
+Diregraf Ghoul
+Swamp x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Diregraf Ghoul.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Diregraf Ghoul.Tapped = true
+[T3 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Diregraf Ghoul.Tapped = false
+Bot1.Attack(Diregraf Ghoul > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18

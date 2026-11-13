@@ -1,0 +1,8 @@
+{
+  "name": "Diregraf Ghoul",
+  "manaCost": "{B}",
+  "type": "Creature — Zombie",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "This creature enters tapped."
+}
