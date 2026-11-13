@@ -1,0 +1,9 @@
+{
+  "name": "Stasis Snare",
+  "manaCost": "{1}{W}{W}",
+  "type": "Enchantment",
+  "oracleText": "Flash (You may cast this spell any time you could cast an instant.)\nWhen this enchantment enters, exile target creature an opponent controls until this enchantment leaves the battlefield.",
+  "keywords": [
+    "Flash"
+  ]
+}

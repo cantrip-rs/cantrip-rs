@@ -1,0 +1,57 @@
+# "Exile target creature an opponent controls until this enchantment leaves the battlefield" (CR 610.3): Bot1 flashes in
+# Stasis Snare on Bot2's turn 2 and exiles Bot2's Memnite; Bot2 then destroys the Snare with Disenchant and the Memnite comes
+# back to the battlefield (as a new object, CR 400.7).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Stasis Snare
+Plains x16
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Memnite
+Disenchant
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Stasis Snare.Cast(Spend: W, W, W)
+Bot1.Pass
+Bot2.Pass
+Bot2.Pass
+Bot1.Pass
+? Exile = Memnite
+? Bot2.Battlefield.Count = 2
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Disenchant.Cast(Stasis Snare)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Exile.Count = 0
+Bot2.Battlefield = Memnite; Mox Jet; Mox Pearl
+Bot1.Graveyard = Stasis Snare
+Bot2.Graveyard = Disenchant
