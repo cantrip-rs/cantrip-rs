@@ -1,0 +1,68 @@
+# Ajani, Caller of the Pride, -8: "Create X 2/2 white Cat creature tokens, where X is your life total." A player can be at 0 life
+# and still in the game (CR 104.3b, 704.5a): Bot1 casts Lich on turn 3 and loses life equal to its life total, to 0, and Lich keeps
+# it from losing for that. Ajani +1s on turns 1, 3, 5 and 7 (loyalty 8), and on turn 9 the -8 makes X = 0 Cats: no token at all,
+# not one (CR 107.1b, 111.1). Ajani goes to the graveyard with no loyalty left (CR 704.5i).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Ajani, Caller of the Pride
+Mox Jet
+Mox Jet
+Dark Ritual
+Lich
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ajani, Caller of the Pride.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ajani, Caller of the Pride.Activate(Ability: Put a +1/+1 counter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Ajani, Caller of the Pride.Activate(Ability: Put a +1/+1 counter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Lich.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 0
+? Bot1.Battlefield.Ajani, Caller of the Pride.Counters.Loyalty = 6
+[T5 Bot1.Main1]
+Bot1.Battlefield.Ajani, Caller of the Pride.Activate(Ability: Put a +1/+1 counter)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Ajani, Caller of the Pride.Activate(Ability: Put a +1/+1 counter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ajani, Caller of the Pride.Counters.Loyalty = 8
+[T9 Bot1.Main1]
+Bot1.Battlefield.Ajani, Caller of the Pride.Activate(Ability: Create X 2/2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Result = InProgress
+Stack.Count = 0
+Bot1.Life = 0
+Bot1.Battlefield = Lich; Mox Jet; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Graveyard.Ajani, Caller of the Pride.Colors = White

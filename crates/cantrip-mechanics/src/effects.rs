@@ -2586,7 +2586,8 @@ pub fn gain_until_end_of_turn(g: &mut dyn Game, source: ObjectId, target: Object
 /// `KEYWORDS` is a `Keywords` as `u128` (`Keywords::of(&[Keyword::Trample]).0`); the named `target_..._gains_...` effects here
 /// are this for one keyword set. Greenbelt Guardian (trample), Boros Charm and Raking Claws (double strike, through
 /// `target_gains_double_strike`), Widow's Bite and Tal'Shiar Operative (deathtouch), Daily Bugle Building and
-/// Item Shopkeep (menace), Oteclan Landmark (flying, through `first_target_gains_flying`) and Sylvan Safekeeper (shroud) print it.
+/// Item Shopkeep (menace), Oteclan Landmark (flying, through `first_target_gains_flying`), Sylvan Safekeeper (shroud) and
+/// Ajani, Caller of the Pride (flying and double strike) print it.
 pub fn first_target_gains_until_end_of_turn<const KEYWORDS: u128>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
     g.add_effect(item.object, creature, EffectKind::AddKeywords(Keywords(KEYWORDS)), Duration::EndOfTurn);
