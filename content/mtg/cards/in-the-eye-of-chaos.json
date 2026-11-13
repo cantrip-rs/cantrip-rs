@@ -1,0 +1,6 @@
+{
+  "name": "In the Eye of Chaos",
+  "manaCost": "{2}{U}",
+  "type": "World Enchantment",
+  "oracleText": "Whenever a player casts an instant spell, counter it unless that player pays {X}, where X is its mana value."
+}
