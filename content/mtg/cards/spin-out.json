@@ -1,0 +1,6 @@
+{
+  "name": "Spin Out",
+  "manaCost": "{1}{B}{B}",
+  "type": "Instant",
+  "oracleText": "Destroy target creature or Vehicle."
+}

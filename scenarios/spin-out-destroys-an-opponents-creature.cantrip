@@ -1,0 +1,36 @@
+# Spin Out {1}{B}{B} destroys an opponent's creature: Bot2's Ornithopter (an artifact creature). Bot1 pays {B}{B}{B} from
+# Black Lotus, so the Spin Out is paid exactly. Bot2's Mox Jet is an artifact but not a creature or Vehicle: refused.
+
+[Bot1 Deck]
+Black Lotus
+Spin Out
+Swamp x18
+
+[Bot2 Deck]
+Mox Jet
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Hand.Spin Out.Cast(Bot2.Battlefield.Mox Jet)
+Bot1.Hand.Spin Out.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot2.Battlefield = Mox Jet
+Bot2.Graveyard = Ornithopter
+Bot1.Graveyard = Spin Out; Black Lotus
