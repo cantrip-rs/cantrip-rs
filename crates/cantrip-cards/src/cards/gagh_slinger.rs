@@ -2,16 +2,6 @@ use cantrip_api::*;
 use cantrip_mechanics::{cost_reduction, effects, lands, triggers};
 use cantrip_oracle as oracle;
 
-/// "Klingon spells and Warrior spells you cast cost {1} less to cast." (CR 601.2f, 118.7a): a spell that is a Klingon, a Warrior
-/// or both costs {1} less, once; the two subtypes are read through the words of this card's text (CR 612).
-fn klingon_or_warrior_spells_cost_less(q: &dyn Query, source: ObjectId, player: PlayerId, costed: Costed, targets: &[Target]) -> CostDelta {
-    let klingon = cost_reduction::subtype_spells_you_cast::<1, { lands::sub(Subtype::Klingon) }>(q, source, player, costed, targets);
-    if klingon != CostDelta::NONE {
-        return klingon;
-    }
-    cost_reduction::subtype_spells_you_cast::<1, { lands::sub(Subtype::Warrior) }>(q, source, player, costed, targets)
-}
-
 /// "Whenever another Klingon or Warrior you control enters" (CR 603.6a): a permanent other than this one, under this
 /// creature's controller's control as it entered, that is a Klingon or a Warrior (a token too), the types read through the
 /// words of this card's text (CR 612); once for that permanent, though it is both.
@@ -29,6 +19,6 @@ pub static CARD: CardDef = CardDef {
         },
         "Whenever another Klingon or Warrior you control enters, this creature deals 1 damage to each opponent.",
     )],
-    cost_changes: &[klingon_or_warrior_spells_cost_less],
+    cost_changes: &[cost_reduction::either_subtype_spells_you_cast::<1, { lands::sub(Subtype::Klingon) }, { lands::sub(Subtype::Warrior) }>],
     ..oracle::GAGH_SLINGER
 };
