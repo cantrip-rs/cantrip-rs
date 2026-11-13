@@ -1,0 +1,58 @@
+# Debris Beetle (6/6 trample Vehicle, Crew 2): "When this Vehicle enters, each opponent loses 3 life and you gain 3 life." Cast on
+# turn 1 off four Moxen it drains Bot2 to 17 and Bot1 to 23 (CR 603.2). On turn 3 a summoning-sick Savannah Lions (power 2, which does
+# not matter for a crew cost, CR 702.122a) crews it and the Beetle attacks: Bot2's 0/2 Ornithopter blocks, 2 of the 6 damage goes to it and the
+# other 4 trample over (CR 702.19b), leaving Bot2 at 13.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Debris Beetle
+Savannah Lions
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Debris Beetle.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Bot1.Life = 23
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Debris Beetle.Activate(Ability: Crew)
+Bot1.Choose(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Debris Beetle.Types = Artifact; Creature
+Bot1.Attack(Debris Beetle > Bot2)
+Bot2.Block(Ornithopter > Debris Beetle)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Bot1.Life = 23
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Savannah Lions.Tapped = true
+Bot1.Battlefield.Debris Beetle.Tapped = true

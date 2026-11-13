@@ -1,0 +1,44 @@
+# Debris Beetle cast by Bot2 on turn 2: "each opponent loses 3 life and you gain 3 life" is from Bot2's side, so Bot1 goes to 17 and
+# Bot2 to 23 (CR 603.2). Crew 2 (CR 702.122a) cannot be paid by a lone Zephyr Sprite (power 1), so the Beetle stays a plain artifact.
+
+[Bot1 Deck]
+Island x15
+
+[Bot2 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Debris Beetle
+Zephyr Sprite
+Island x12
+
+[Actions]
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Debris Beetle.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+? Bot2.Life = 23
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Zephyr Sprite.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot2.Battlefield.Debris Beetle.Activate(Ability: Crew)
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 23
+Bot2.Battlefield.Debris Beetle.Types = Artifact

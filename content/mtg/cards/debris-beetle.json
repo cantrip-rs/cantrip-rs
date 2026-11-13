@@ -1,0 +1,11 @@
+{
+  "name": "Debris Beetle",
+  "manaCost": "{2}{B}{G}",
+  "type": "Artifact — Vehicle",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Trample\nWhen this Vehicle enters, each opponent loses 3 life and you gain 3 life.\nCrew 2",
+  "keywords": [
+    "Trample"
+  ]
+}
