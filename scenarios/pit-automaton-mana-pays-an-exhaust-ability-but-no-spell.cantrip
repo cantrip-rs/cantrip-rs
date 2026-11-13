@@ -1,0 +1,56 @@
+# Pit Automaton: "{T}: Add {C}{C}. Spend this mana only to activate abilities." (CR 106.6) Bot1 has the Automaton from turn 1. On
+# turn 3, with the Moxen tapped (a Camera Launcher and an Aether Spellbomb cast), its {C}{C} cannot cast Sol Ring, a spell: refused.
+# On turn 5 it does pay the Launcher's exhaust {3} along with Mox Jet: a counter and a Thopter, the pool left empty and the Automaton
+# tapped. Its printed defender (CR 702.3) is on it.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Pit Automaton
+Camera Launcher
+Sol Ring
+Aether Spellbomb
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Pit Automaton.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Pit Automaton.Keywords = Defender
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Camera Launcher.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aether Spellbomb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Pit Automaton.Activate(Ability: Add)
+? Bot1.Mana = {C}{C} (Abilities)
+! Bot1.Hand.Sol Ring.Cast(Mana: short)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Pit Automaton.Activate(Ability: Add)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Camera Launcher.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Mox Sapphire; Pit Automaton; Camera Launcher; Aether Spellbomb; Thopter Token
+Bot1.Battlefield.Pit Automaton.Tapped = true
+Bot1.Battlefield.Camera Launcher.Counters.PlusOnePlusOne = 1

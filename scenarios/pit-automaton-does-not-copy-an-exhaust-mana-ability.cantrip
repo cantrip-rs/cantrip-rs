@@ -1,0 +1,69 @@
+# Pit Automaton: "When you next activate an exhaust ability that isn't a mana ability this turn, copy it." (CR 605.1a; the
+# 2025-02-07 Oracle update: an exhaust mana ability doesn't trigger it) On turn 5 Bot1 arms the Automaton with two of Black
+# Lotus's green mana, then activates Loot, the Pathfinder's "Exhaust - {G}, {T}: Add three mana of any one color" with the
+# third: three red mana, nothing triggered and nothing copied. The delayed ability is not used up: Camera Launcher's exhaust
+# {3}, paid with that red mana, is the next exhaust ability that isn't a mana ability, and is copied (two counters, two Thopters).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Pit Automaton
+Camera Launcher
+Black Lotus
+Loot, the Pathfinder
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pit Automaton.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Camera Launcher.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Loot, the Pathfinder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Pit Automaton.Activate(Ability: When you next activate)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {G}
+Bot1.Battlefield.Loot, the Pathfinder.Activate(Color: Red)
+? Bot1.Mana = {R}{R}{R}
+? Stack.Count = 0
+Bot1.Battlefield.Camera Launcher.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Camera Launcher.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Mox Sapphire; Mox Emerald; Pit Automaton; Camera Launcher; Loot, the Pathfinder; Thopter Token; Thopter Token

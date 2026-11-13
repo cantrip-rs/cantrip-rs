@@ -1,0 +1,68 @@
+# Pit Automaton: "When you next activate an exhaust ability that isn't a mana ability this turn, copy it." (CR 702.177a, 603.7) A
+# plain activated ability is not one. With the Automaton's ability resolved on turn 5, Bot1 activates Mind Stone's "{1}, {T},
+# Sacrifice this artifact: Draw a card" (one Mox): one card, no copy and the Automaton's ability not used up. The Camera Launcher's
+# exhaust {3} is then the next exhaust ability and is copied: two counters' worth of Thopters (two).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Pit Automaton
+Camera Launcher
+Mind Stone
+Sol Ring
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Pit Automaton.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mind Stone.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Camera Launcher.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Pit Automaton.Activate(Ability: When you next activate)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mind Stone.Activate(Ability: Draw)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+? Stack.Count = 0
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Camera Launcher.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Mox Sapphire; Pit Automaton; Camera Launcher; Sol Ring; Thopter Token; Thopter Token
+Bot1.Graveyard = Mind Stone
+Bot1.Battlefield.Camera Launcher.Counters.PlusOnePlusOne = 2

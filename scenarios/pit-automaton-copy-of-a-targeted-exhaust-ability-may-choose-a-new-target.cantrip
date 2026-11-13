@@ -1,0 +1,58 @@
+# Pit Automaton: "{2}, {T}: When you next activate an exhaust ability that isn't a mana ability this turn, copy it. You may choose
+# new targets for the copy." (CR 707.10c) On turn 3 Bot1 arms the Automaton (Moxen), casts Boommobile (Black Lotus) whose four
+# mana, only for abilities, pays its exhaust {X}{2}{R} with X = 1 aimed at Bot2. The copy gets a new target, Bot1: each player
+# takes 1 damage, and the Boommobile, which puts a +1/+1 counter on itself each time, has two.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Pit Automaton
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Boommobile
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pit Automaton.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Pit Automaton.Activate(Ability: When you next activate)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Boommobile.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Red)
+? Bot1.Mana = {R}{R}{R}{R} (Abilities)
+Bot1.Battlefield.Boommobile.Activate(Ability: Exhaust; Bot2; X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
+Bot1.Battlefield.Boommobile.Counters.PlusOnePlusOne = 2
+Bot1.Mana =
