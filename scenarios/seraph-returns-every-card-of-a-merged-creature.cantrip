@@ -1,0 +1,62 @@
+# Seraph damages a mutated creature that dies: "that card" is every card of the merged permanent (CR 730.3c, 400.7e), so both
+# Cubwarden and the Ornithopter it mutated onto come back under Bot1's control at the end step, and both are sacrificed when
+# Bot1 loses control of Seraph (Swords to Plowshares exiles it).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Seraph
+Swords to Plowshares
+Plains
+Island x20
+[Bot2 Deck]
+Plains
+Plains
+Ornithopter
+Black Lotus
+Cubwarden
+Island x14
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Seraph.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Plains#1.Activate
+Bot2.Hand.Cubwarden.Cast(Ornithopter; Ability: Mutate)
+Bot2.Pass
+Bot2.Modes(2)
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Seraph > Bot2)
+Bot2.Block(Ornithopter > Seraph)
+[T5 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Cubwarden.Power = 3
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Seraph)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard.Ornithopter.Power = 0
+Bot2.Graveyard.Cubwarden.Power = 3

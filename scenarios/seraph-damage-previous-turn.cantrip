@@ -1,0 +1,51 @@
+# Damage from a previous turn does not trigger Seraph when that creature dies later (CR 514.2).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Seraph
+Black Lotus
+Terror
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Hover Barrier
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Seraph.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Hover Barrier.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Seraph > Bot2)
+Bot2.Block(Hover Barrier > Seraph)
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Terror.Cast(Bot2.Battlefield.Hover Barrier)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard.Hover Barrier.Power = 0
