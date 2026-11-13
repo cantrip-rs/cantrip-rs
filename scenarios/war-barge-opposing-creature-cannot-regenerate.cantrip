@@ -1,0 +1,38 @@
+# War Barge can target an opponent's creature, and destroys it through a regeneration shield (CR 701.19c).
+[Bot1 Deck]
+Black Lotus x2
+Mox Pearl
+War Barge
+Island x20
+[Bot2 Deck]
+Ornithopter
+Welding Jar
+Black Lotus
+Disenchant
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.War Barge.Cast
+? Bot1.Mana =
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Welding Jar.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+! Bot1.Battlefield.War Barge.Activate(Bot2.Battlefield.Welding Jar)
+Bot1.Battlefield.War Barge.Activate(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Keywords = Flying; Islandwalk
+Bot2.Battlefield.Welding Jar.Activate(Bot2.Battlefield.Ornithopter)
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.War Barge)
+[T2 Bot2.Main2]
+[Expect]
+Bot2.Battlefield.Ornithopter = (absent)
+Bot2.Graveyard = Ornithopter; Disenchant; Black Lotus; Welding Jar

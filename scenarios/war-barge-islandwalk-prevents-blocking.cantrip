@@ -1,0 +1,34 @@
+# A creature granted islandwalk cannot be blocked while the defender controls an Island; another attacker can be blocked (CR 702.14c).
+[Bot1 Deck]
+Memnite x2
+Black Lotus x2
+Mox Pearl
+War Barge
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.War Barge.Cast
+? Bot1.Mana =
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.War Barge.Activate(Bot1.Battlefield.Memnite#1)
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite#1 > Bot2; Memnite#2 > Bot2)
+! Bot2.Block(Memnite > Memnite#1)
+Bot2.Block(Memnite > Memnite#2)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 19

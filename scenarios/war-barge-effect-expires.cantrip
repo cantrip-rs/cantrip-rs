@@ -1,0 +1,35 @@
+# Both islandwalk and the delayed trigger expire at cleanup, before the Barge leaves on the following turn (CR 514.2, 603.7b).
+[Bot1 Deck]
+Black Lotus x2
+Mox Pearl
+War Barge
+Ornithopter
+Island x20
+[Bot2 Deck]
+Black Lotus
+Disenchant
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.War Barge.Cast
+? Bot1.Mana =
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.War Barge.Activate(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Islandwalk
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.War Barge)
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Graveyard = War Barge; Black Lotus; Black Lotus
