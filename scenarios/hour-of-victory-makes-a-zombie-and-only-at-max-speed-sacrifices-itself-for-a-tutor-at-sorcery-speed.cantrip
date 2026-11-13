@@ -1,0 +1,87 @@
+# Hour of Victory {2}{B}: Start your engines! (CR 702.179); "When this enchantment enters, create a 2/2 black Zombie creature
+# token"; "Max speed - {1}{B}, Sacrifice this enchantment: Search your library for a card, put it into your hand, then
+# shuffle. Activate only as a sorcery." (CR 702.178a, 602.5d, 701.23). Black Lotus pays the {2}{B}; the Zombie arrives, and Bot1
+# has speed 1. Lightning Bolts on turns 1, 3 and 5 raise it to 2, 3, 4 (CR 702.179d). At speed 2 the ability is refused with
+# Mox Jet and Mox Ruby untapped to pay ({1}{B}); on turn 5 at speed 4, with an Ornithopter on the stack (not a sorcery's
+# timing) it is refused again, and once it resolves the ability is used: {1}{B} from the two Moxen is exactly paid (the pool
+# is empty), Hour of Victory is sacrificed and Time Walk is found (it is then the only card in hand); the Zombie stays.
+
+[Bot1 Deck]
+Black Lotus
+Hour of Victory
+Mountain
+Mox Jet
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Lightning Bolt
+Lightning Bolt
+Time Walk
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Hour of Victory.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+? Bot1.Battlefield = Hour of Victory; Mountain; Mox Jet; Mox Ruby; Zombie Token
+? Bot1.Battlefield.Zombie Token.Power = 2
+? Bot1.Battlefield.Zombie Token.Toughness = 2
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+! Bot1.Battlefield.Hour of Victory.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+! Bot1.Battlefield.Hour of Victory.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Battlefield.Hour of Victory.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Hour of Victory.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Time Walk)
+
+[Expect]
+Bot1.Battlefield = Mountain; Mox Jet; Mox Ruby; Ornithopter; Zombie Token
+Bot1.Graveyard = Hour of Victory; Lightning Bolt; Lightning Bolt; Lightning Bolt; Black Lotus
+Bot1.Speed = 4
+Bot1.Hand = Time Walk
