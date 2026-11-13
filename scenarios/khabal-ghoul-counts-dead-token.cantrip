@@ -1,0 +1,32 @@
+# A creature token that dies counts even after it ceases to exist in the graveyard (CR 700.4, 704.5d).
+[Bot1 Deck]
+Black Lotus x2
+Mox Pearl
+Mox Ruby
+Gleeful Demolition
+Shock
+Khabál Ghoul
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Gleeful Demolition.Cast(Mox Pearl)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Shock.Cast(Phyrexian Goblin Token)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Khabál Ghoul.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Khabál Ghoul.Counters.PlusOnePlusOne = 1

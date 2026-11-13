@@ -1,0 +1,46 @@
+# Creatures die on the opponent's turn, one in response to the end-step trigger; two counters are placed as one event, so Hardened Scales adds one (CR 122.6, 614.1a).
+[Bot1 Deck]
+Khabál Ghoul
+Black Lotus
+Mox Emerald
+Mox Ruby
+Hardened Scales
+Memnite
+Shock
+Island x20
+[Bot2 Deck]
+Memnite
+Mox Ruby
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Khabál Ghoul.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hardened Scales.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.End]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Khabál Ghoul.Counters.PlusOnePlusOne = 3
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Khabál Ghoul.Counters.PlusOnePlusOne = 3
+Bot1.Graveyard.Memnite.Power = 1
+Bot2.Graveyard.Memnite.Power = 1

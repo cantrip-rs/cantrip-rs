@@ -1,0 +1,32 @@
+# An animated land that dies before the Ghoul enters was a creature at death and is counted (CR 700.4).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Inkmoth Nexus
+Khabál Ghoul
+Shock
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Inkmoth Nexus.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Inkmoth Nexus.Activate(Ability: Add {C})
+Bot1.Battlefield.Inkmoth Nexus.Activate(Ability: {1})
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Inkmoth Nexus)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Khabál Ghoul.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Khabál Ghoul.Counters.PlusOnePlusOne = 1
