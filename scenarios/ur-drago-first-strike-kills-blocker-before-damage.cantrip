@@ -1,0 +1,52 @@
+# Ur-Drago's first strike kills Grizzly Bears before they can deal combat damage while a swampwalker attacks alongside it (CR 702.7b).
+
+[Bot1 Deck]
+Ur-Drago
+Black Lotus
+Black Lotus
+Mox Sapphire
+Swamp
+Plague Beetle
+Island x20
+
+[Bot2 Deck]
+Grizzly Bears
+Black Lotus
+Swamp
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Plague Beetle.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Ur-Drago.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ur-Drago > Bot2; Plague Beetle > Bot2)
+Bot2.Block(Grizzly Bears > Ur-Drago)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ur-Drago.Damage = 0
+Bot2.Life = 19
+Bot2.Graveyard = Grizzly Bears; Black Lotus

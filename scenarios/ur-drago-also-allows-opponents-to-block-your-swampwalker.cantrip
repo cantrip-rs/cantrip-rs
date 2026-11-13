@@ -1,0 +1,52 @@
+# Ur-Drago permits an opponent to block your swampwalking attacker, which retains swampwalk (CR 702.14c).
+
+[Bot1 Deck]
+Ur-Drago
+Swamp
+Plague Beetle
+Black Lotus
+Black Lotus
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Swamp
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Plague Beetle.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Plague Beetle > Bot2)
+! Bot2.Block(Ornithopter > Plague Beetle)
+[T5 Bot1.Main1]
+? Bot2.Life = 19
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Ur-Drago.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Plague Beetle.Keywords = Swampwalk
+Bot1.Attack(Plague Beetle > Bot2)
+Bot2.Block(Ornithopter > Plague Beetle)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield.Ornithopter.Damage = 1

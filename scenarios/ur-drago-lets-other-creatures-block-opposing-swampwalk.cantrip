@@ -1,0 +1,64 @@
+# Ur-Drago allows an opposing swampwalker to be blocked but leaves islandwalk effective (CR 702.14c).
+
+[Bot1 Deck]
+Ur-Drago
+Swamp
+Ornithopter
+Black Lotus
+Black Lotus
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Plague Beetle
+Swamp
+Island
+Grayscaled Gharial
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Plague Beetle.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Plague Beetle > Bot1)
+! Bot1.Block(Ornithopter > Plague Beetle)
+[T4 Bot2.Main2]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Grayscaled Gharial.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+? Bot1.Life = 19
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Ur-Drago.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Plague Beetle > Bot1; Grayscaled Gharial > Bot1)
+! Bot1.Block(Ornithopter > Grayscaled Gharial)
+Bot1.Block(Ornithopter > Plague Beetle)
+[T6 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot1.Battlefield.Ornithopter.Damage = 1
+Bot2.Battlefield.Plague Beetle.Damage = 0
