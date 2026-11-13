@@ -1,0 +1,34 @@
+# Pulse Tracker: "Whenever this creature attacks, each opponent loses 1 life." (CR 508.1m, 119.3) Bot1 attacks with it on turn 3 and Bot2 blocks with its Memnite: the trigger resolves
+# before blockers, so Bot2 loses exactly 1 (19) although no combat damage reaches it, and the two 1/1s trade.
+
+[Bot1 Deck]
+Mox Jet
+Pulse Tracker
+Island x5
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x6
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pulse Tracker.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Pulse Tracker > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Block(Memnite > Pulse Tracker)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 20
+Bot1.Graveyard = Pulse Tracker
+Bot2.Graveyard = Memnite

@@ -1,0 +1,8 @@
+{
+  "name": "Pulse Tracker",
+  "manaCost": "{B}",
+  "type": "Creature — Vampire Rogue",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Whenever this creature attacks, each opponent loses 1 life."
+}
