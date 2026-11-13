@@ -1,0 +1,34 @@
+# Rite of Replication may target a creature its controller controls too (CR 115.1): Bot1 copies their own Runeclaw Bear and ends
+# with the Bear and one token Bear, the token an unmodified copy of the printed card (CR 707.2).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Runeclaw Bear
+Rite of Replication
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Runeclaw Bear.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Rite of Replication.Cast(Bot1.Battlefield.Runeclaw Bear)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Sapphire; Runeclaw Bear; Runeclaw Bear
+Bot1.Battlefield.Runeclaw Bear#2.Token = true
+Bot1.Graveyard = Rite of Replication; Black Lotus
+Stack.Count = 0

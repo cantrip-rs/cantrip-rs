@@ -1,0 +1,45 @@
+# Rite of Replication has a single target (CR 115.1, 608.2b): Bot2 answers it by killing their own Llanowar Elves with a Lightning
+# Bolt, so the spell has no legal target as it resolves and does nothing (CR 608.2b): no token, whatever it would have made, and the
+# Rite goes to the graveyard. The Bolt is Bot2's.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Rite of Replication
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Forest
+Llanowar Elves
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Rite of Replication.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Mox Jet
+Bot2.Battlefield = Mox Emerald; Mox Ruby; Forest
+Bot1.Graveyard = Rite of Replication; Black Lotus
+Bot2.Graveyard = Llanowar Elves; Lightning Bolt
+Stack.Count = 0

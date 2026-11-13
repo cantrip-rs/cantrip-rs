@@ -1,0 +1,41 @@
+# Rite of Replication ({2}{U}{U}, kicker {5}): "Create a token that's a copy of target creature." Bot2 has a Llanowar Elves and a
+# Forest; the Forest is no creature, so it is refused as a target (CR 115.1) beside the Elves, which are copied (CR 707.2).
+# Cast without the kicker it makes exactly one token, under Bot1's control, which has the Elves' mana ability and is a token
+# (CR 111.1); Bot2's own Elves are untouched. Paid by a Black Lotus and a Mox Jet.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Rite of Replication
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.Rite of Replication.Cast(Bot2.Battlefield.Forest)
+Bot1.Hand.Rite of Replication.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Jet; Llanowar Elves
+[Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Llanowar Elves
+Bot1.Battlefield.Llanowar Elves.Token = true
+Bot2.Battlefield = Mox Emerald; Forest; Llanowar Elves
+Bot1.Graveyard = Rite of Replication; Black Lotus
+Stack.Count = 0

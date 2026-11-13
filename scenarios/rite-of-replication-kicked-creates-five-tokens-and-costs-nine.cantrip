@@ -1,0 +1,60 @@
+# Rite of Replication kicked ({2}{U}{U} plus {5}): "If this spell was kicked, create five of those tokens instead." Bot1's mana is a
+# Black Lotus (3), five Moxen and a Sol Ring (2), ten in all, but casting the Sol Ring taps a Mox, so nine are left, exactly the cost: the
+# pool is empty once it is paid. The target is Bot2's Runeclaw Bear: five token Bears come under Bot1's control, all copies of it,
+# beside Bot2's own Bear, which is no token.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Rite of Replication
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Runeclaw Bear
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Runeclaw Bear.Cast
+Bot2.Battlefield.Forest.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rite of Replication.Cast(Bot2.Battlefield.Runeclaw Bear; Kicked: 1)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Sol Ring.Activate
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Mox Sapphire; Mox Jet; Mox Pearl; Mox Ruby; Mox Emerald; Sol Ring; Runeclaw Bear; Runeclaw Bear; Runeclaw Bear; Runeclaw Bear; Runeclaw Bear
+Bot1.Battlefield.Runeclaw Bear#1.Token = true
+Bot1.Battlefield.Runeclaw Bear#2.Token = true
+Bot1.Battlefield.Runeclaw Bear#3.Token = true
+Bot1.Battlefield.Runeclaw Bear#4.Token = true
+Bot1.Battlefield.Runeclaw Bear#5.Token = true
+Bot2.Battlefield = Mox Emerald; Forest; Runeclaw Bear
+Bot1.Graveyard = Rite of Replication; Black Lotus
+Stack.Count = 0
