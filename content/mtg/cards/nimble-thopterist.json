@@ -1,0 +1,8 @@
+{
+  "name": "Nimble Thopterist",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Vedalken Artificer",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature enters, create a 1/1 colorless Thopter artifact creature token with flying."
+}

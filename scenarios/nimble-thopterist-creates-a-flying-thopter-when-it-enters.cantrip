@@ -1,0 +1,44 @@
+# Nimble Thopterist: "When this creature enters, create a 1/1 colorless Thopter artifact creature token with flying"
+# (CR 111.1). Cast off four Moxen on turn 1 ({3}{U}), the Thopterist (3/2) is joined by exactly one Thopter token: a
+# colorless 1/1 artifact creature with flying.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Nimble Thopterist
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Nimble Thopterist.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Nimble Thopterist.Power = 3
+Bot1.Battlefield.Nimble Thopterist.Toughness = 2
+Bot1.Battlefield.Thopter Token.Power = 1
+Bot1.Battlefield.Thopter Token.Toughness = 1
+Bot1.Battlefield.Thopter Token.Keywords = Flying
+Bot1.Battlefield.Thopter Token.Types = Artifact; Creature
+Bot1.Battlefield.Thopter Token.Colors = (absent)
+Bot1.Battlefield.Count = 6
