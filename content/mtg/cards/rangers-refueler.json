@@ -1,0 +1,8 @@
+{
+  "name": "Rangers' Refueler",
+  "manaCost": "{1}{U}",
+  "type": "Artifact — Vehicle",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever you activate an exhaust ability, draw a card.\nExhaust — {4}: This Vehicle becomes an artifact creature. Put a +1/+1 counter on it. (Activate each exhaust ability only once.)\nCrew 2"
+}
