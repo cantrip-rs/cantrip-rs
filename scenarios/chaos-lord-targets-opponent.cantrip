@@ -1,0 +1,35 @@
+# In a three-player game the upkeep trigger targets an opponent, not its controller (CR 115.1d).
+[Bot1 Deck]
+Chaos Lord
+Black Lotus x2
+Mox Ruby
+Memnite
+Shock
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Bot3 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Chaos Lord.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T4 Bot1.Upkeep]
+! Bot1.Target(Bot1)
+Bot1.Target(Bot3)
+[T4 Bot1.Main1]
+[Expect]
+Bot3.Battlefield.Chaos Lord.Power = 7

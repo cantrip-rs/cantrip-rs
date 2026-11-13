@@ -1,0 +1,11 @@
+{
+  "name": "Chaos Lord",
+  "manaCost": "{4}{R}{R}{R}",
+  "type": "Creature — Human",
+  "power": 7,
+  "toughness": 7,
+  "oracleText": "First strike\nAt the beginning of your upkeep, target opponent gains control of this creature if the number of permanents is even.\nThis creature can attack as though it had haste unless it entered this turn.",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

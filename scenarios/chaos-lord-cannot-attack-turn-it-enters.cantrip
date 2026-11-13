@@ -1,0 +1,40 @@
+# Chaos Lord cannot attack on its entry turn, although Gingerbrute can attack that turn because it has haste (CR 302.6).
+[Bot1 Deck]
+Chaos Lord
+Black Lotus
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Gingerbrute
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Gingerbrute.Cast
+Bot1.Pass
+Bot1.Battlefield.Gingerbrute.Activate(Ability: blocked)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Chaos Lord.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T1 Bot1.DeclareAttackers]
+! Bot1.Attack(Chaos Lord > Bot2)
+Bot1.Attack(Gingerbrute)
+[T1 Bot1.Main2]
+[Expect]
+Bot2.Life = 19
