@@ -1,0 +1,60 @@
+# Daring Mechanic: "{3}{W}: Put a +1/+1 counter on target Mount or Vehicle" (CR 115.1, 122.1a, 205.3m). Bot1's Brightfield Mustang is a Mount, so it
+# takes the counter and grows by one; Bot2's Savannah Lions is neither a Mount nor a Vehicle and is refused.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Daring Mechanic
+Brightfield Mustang
+Plains x14
+
+[Bot2 Deck]
+Mox Pearl
+Savannah Lions
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Daring Mechanic.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Brightfield Mustang.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Daring Mechanic.Activate(Bot2.Battlefield.Savannah Lions)
+Bot1.Battlefield.Daring Mechanic.Activate(Bot1.Battlefield.Brightfield Mustang)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Brightfield Mustang.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Brightfield Mustang.Power = 4
+Bot2.Battlefield.Savannah Lions.Counters.PlusOnePlusOne = (absent)

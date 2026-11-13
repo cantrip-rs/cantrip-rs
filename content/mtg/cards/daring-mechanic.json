@@ -1,0 +1,8 @@
+{
+  "name": "Daring Mechanic",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Artificer",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "{3}{W}: Put a +1/+1 counter on target Mount or Vehicle."
+}
