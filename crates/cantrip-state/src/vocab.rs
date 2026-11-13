@@ -1661,6 +1661,8 @@ counter_kinds! {
     Cube = 92, "cube", "Cube";
     Doom = 93, "doom", "Doom";
     Glyph = 94, "glyph", "Glyph";
+    Pin = 95, "pin", "Pin";
+    Sleight = 96, "sleight", "Sleight";
 
 }
 
@@ -2340,13 +2342,13 @@ mod carrion_counter_tests {
         assert_eq!(CounterKind::Film as usize, 64);
         assert_eq!(CounterKind::Peace as usize, 65);
         assert_eq!(CounterKind::Vow as usize, 91);
-        assert_eq!(CounterKind::COUNT, 95);
+        assert_eq!(CounterKind::COUNT, 97);
         assert!(!CounterKind::POWER_TOUGHNESS.iter().any(|(kind, _, _)| *kind == carrion));
     }
     #[test]
     fn early_set_counter_names_append_without_changing_existing_ids() {
         assert_eq!(CounterKind::Music as u8, 90);
-        for (kind, id, name, token) in [(CounterKind::Cube, 92, "cube", "Cube"), (CounterKind::Doom, 93, "doom", "Doom"), (CounterKind::Glyph, 94, "glyph", "Glyph")] {
+        for (kind, id, name, token) in [(CounterKind::Cube, 92, "cube", "Cube"), (CounterKind::Doom, 93, "doom", "Doom"), (CounterKind::Glyph, 94, "glyph", "Glyph"), (CounterKind::Pin, 95, "pin", "Pin"), (CounterKind::Sleight, 96, "sleight", "Sleight")] {
             assert_eq!(kind as usize, id);
             assert_eq!(CounterKind::ALL[id], kind);
             assert_eq!(kind.name(), name);assert_eq!(kind.token(), token);

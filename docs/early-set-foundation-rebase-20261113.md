@@ -18,7 +18,10 @@ ordinary draw step. Regression cases cover those interactions. The delayed
 combat test now creates its additional combat through the phase API.
 
 Counter IDs retain upstream's Vow at 91; Cube, Doom and Glyph append at 92, 93
-and 94. Existing quantity domains are retained. The new production generator
+and 94. Pin (95) and Sleight (96), needed by Voodoo Doll and Chromatic Armor,
+are now real shared prerequisites rather than a test-only counter overlay.
+They use the existing dense representation, adding two `i32` counter entries
+per object. Existing quantity domains are retained. The new production generator
 snapshot must be generated from this final API, including its capability markers
 and vocabulary, before reserving generator-ready cards.
 
