@@ -1,0 +1,43 @@
+# An artifact creature competes with a Mox during untap, but Voltaic Key can untap it later (CR 502.3).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Damping Field
+Voltaic Key
+Ornithopter
+Plains x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Damping Field.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Voltaic Key.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Attack(Ornithopter)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Choose(Mox Sapphire; Ornithopter)
+Bot1.Choose(Mox Sapphire)
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Tapped = true
+? Bot1.Battlefield.Mox Sapphire.Tapped = false
+? Bot1.Battlefield.Plains.Tapped = false
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Voltaic Key.Activate(Bot1.Battlefield.Ornithopter)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = false

@@ -1,0 +1,6 @@
+{
+  "name": "Damping Field",
+  "manaCost": "{2}{W}",
+  "type": "Enchantment",
+  "oracleText": "Players can't untap more than one artifact during their untap steps."
+}
