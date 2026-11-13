@@ -17,12 +17,6 @@ fn steal(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// II: "Creatures you control get +1/+1 and gain vigilance until end of turn."
-fn rally(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::pump_creatures_you_control_and_gain(g, item, 1, 1, Keyword::Vigilance);
-    Ok(())
-}
-
 /// "Up to one other target creature" (CR 115.1): a creature other than the one chosen for the first target, as "other"
 /// says.
 fn creature_other_than_the_first_target(q: &dyn Query, asker: &Asker, t: Target) -> bool {
@@ -42,7 +36,7 @@ pub static CARD: CardDef = CardDef {
             .targets(&[TargetSpec { min: 0, max: 2, ..targets::CREATURE }
                 .together(select::total_mana_value_at_most(6))
                 .labelled("Creatures to gain control of")]),
-        chapter(2, rally, "II \u{2014} Creatures you control get +1/+1 and gain vigilance until end of turn."),
+        chapter(2, effects::creatures_you_control_get_and_gain::<1, 1, { Keywords::of(&[Keyword::Vigilance]).0 }>, "II \u{2014} Creatures you control get +1/+1 and gain vigilance until end of turn."),
         chapter(3, fight, "III \u{2014} Target creature you control fights up to one other target creature.")
             .targets(&[targets::CREATURE_YOU_CONTROL, target(creature_other_than_the_first_target).optional()]),
     ],
