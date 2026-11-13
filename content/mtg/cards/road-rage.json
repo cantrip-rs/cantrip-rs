@@ -1,0 +1,6 @@
+{
+  "name": "Road Rage",
+  "manaCost": "{R}",
+  "type": "Instant",
+  "oracleText": "Road Rage deals X damage to target creature or planeswalker, where X is 2 plus the number of Mounts and Vehicles you control."
+}

@@ -1,0 +1,84 @@
+# Road Rage ({R}, "deals X damage to target creature or planeswalker, where X is 2 plus the number of Mounts and Vehicles you control"):
+# Bot2 has a Wall of Stone (0/8) and its own Smuggler's Copter, which never counts for Bot1. Turn 3: Bot1 controls one Mount (Caustic
+# Bronco), so the first Road Rage deals 3 to the Wall; the uncrewed Copter is no creature and is refused as a target. Bot1 then casts its own
+# Copter. Turn 5: two Mounts and Vehicles, X = 4: the Wall takes 4; and a third Road Rage kills Bot1's own Bronco (a creature of its own is a legal target).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Caustic Bronco
+Smuggler's Copter
+Road Rage
+Road Rage
+Road Rage
+Mountain
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Wall of Stone
+Smuggler's Copter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Caustic Bronco.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wall of Stone.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Smuggler's Copter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Road Rage.Cast(Bot2.Battlefield.Smuggler's Copter)
+Bot1.Hand.Road Rage.Cast(Bot2.Battlefield.Wall of Stone)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Wall of Stone.Damage = 3
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Road Rage.Cast(Bot2.Battlefield.Wall of Stone)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Wall of Stone.Damage = 4
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Road Rage.Cast(Bot1.Battlefield.Caustic Bronco)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Caustic Bronco; Road Rage; Road Rage; Road Rage
+
+[Expect]
+Bot2.Battlefield.Wall of Stone.Damage = 4
+Bot1.Battlefield = Mox Ruby; Mox Jet; Mox Pearl; Mountain; Smuggler's Copter
+Bot2.Battlefield = Mountain; Mox Ruby; Mox Jet; Mox Pearl; Mox Emerald; Wall of Stone; Smuggler's Copter
