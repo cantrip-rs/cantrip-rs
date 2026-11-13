@@ -1,0 +1,6 @@
+{
+  "name": "Crevasse",
+  "manaCost": "{2}{R}",
+  "type": "Enchantment",
+  "oracleText": "Creatures with mountainwalk can be blocked as though they didn't have mountainwalk."
+}

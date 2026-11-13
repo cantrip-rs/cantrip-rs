@@ -1,0 +1,48 @@
+# Magical Hack changes Crevasse to allow blocking swampwalk (CR 612.2, 702.14c).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Jet
+Bog Wraith
+Crevasse
+Mox Sapphire
+Magical Hack
+Mountain x20
+[Bot2 Deck]
+Swamp
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bog Wraith.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Crevasse.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Magical Hack.Cast(Bot1.Battlefield.Crevasse)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Mountain)
+Bot1.Modes(Swamp)
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bog Wraith)
+Bot2.Block(Memnite > Bog Wraith)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard.Memnite.Power = 1
+Bot1.Battlefield.Bog Wraith.Power = 3

@@ -1,0 +1,37 @@
+# A Mountain makes Canyon Wildcat unblockable until Crevasse enters; the same blocker can then block it (CR 702.14c).
+[Bot1 Deck]
+Black Lotus
+Canyon Wildcat
+Mountain x20
+[Bot2 Deck]
+Mountain
+Ornithopter
+Black Lotus
+Crevasse
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Canyon Wildcat.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Canyon Wildcat)
+! Bot2.Block(Ornithopter > Canyon Wildcat)
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Crevasse.Cast
+? Bot2.Mana =
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Canyon Wildcat)
+Bot2.Block(Ornithopter > Canyon Wildcat)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 18
+Bot2.Graveyard.Ornithopter.Power = 0
+Bot1.Battlefield.Canyon Wildcat.Power = 2
