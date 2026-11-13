@@ -1,0 +1,8 @@
+{
+  "name": "Maalfeld Twins",
+  "manaCost": "{5}{B}",
+  "type": "Creature — Zombie",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "When this creature dies, create two 2/2 black Zombie creature tokens."
+}

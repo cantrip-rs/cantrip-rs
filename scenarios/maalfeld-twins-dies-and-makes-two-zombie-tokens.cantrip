@@ -1,0 +1,65 @@
+# "When this creature dies, create two 2/2 black Zombie creature tokens" (CR 700.4, 111.1): Bot1 casts Maalfeld Twins (4/4) with Black Lotus and
+# three Moxen; Bot2's Damnation on turn 4 kills it and Bot1 ends with exactly two 2/2 black Zombie tokens - no more - under its own control.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Maalfeld Twins
+Island x15
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Damnation
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Maalfeld Twins.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Maalfeld Twins.Power = 4
+? Bot1.Battlefield.Maalfeld Twins.Toughness = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Damnation.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Maalfeld Twins; Black Lotus
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Zombie Token; Zombie Token
+Bot1.Battlefield.Zombie Token#1.Token = true
+Bot1.Battlefield.Zombie Token#1.Colors = Black
+Bot1.Battlefield.Zombie Token#1.Power = 2
+Bot1.Battlefield.Zombie Token#1.Toughness = 2
+Bot1.Battlefield.Zombie Token#1.Subtypes = Zombie
+Bot2.Battlefield = Mox Pearl
+Stack.Count = 0
