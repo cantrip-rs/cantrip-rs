@@ -1,16 +1,10 @@
 use cantrip_api::*;
-use cantrip_mechanics::{class, effects, replacements, triggers};
+use cantrip_mechanics::{class, cost_reduction, effects, replacements, triggers};
 use cantrip_oracle as oracle;
 
-/// Level 2: "Noncreature spells you cast cost {1} less to cast" (CR 601.2f, 716.2): asked of the spell's own characteristics as
-/// it is cast, only its controller's, and only once the Class has reached level 2; a generic reduction takes only the generic
-/// part of the cost (CR 118.7c).
+/// Level 2: "Noncreature spells you cast cost {1} less to cast" (CR 601.2f, 716.2): only once the Class has reached level 2.
 fn noncreature_spells_cost_one_less(q: &dyn Query, source: ObjectId, player: PlayerId, costed: Costed, _: &[Target]) -> CostDelta {
-    let Costed::Spell(spell) = costed else { return CostDelta::NONE };
-    if player != q.controller(source) || class::level(q, source) < 2 {
-        return CostDelta::NONE;
-    }
-    if q.chars(spell).is(CardType::Creature) { CostDelta::NONE } else { CostDelta::less(1) }
+    if class::level(q, source) < 2 { CostDelta::NONE } else { cost_reduction::noncreature_spells_you_cast(q, source, player, costed, 1) }
 }
 
 /// Level 3: "If a source you control would deal noncombat damage to an opponent or a permanent an opponent controls, it deals
