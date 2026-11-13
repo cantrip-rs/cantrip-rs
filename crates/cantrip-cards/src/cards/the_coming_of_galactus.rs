@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::effects::destroy_first_target;
+use cantrip_mechanics::effects::{self, destroy_first_target};
 use cantrip_mechanics::{targets, tokens, triggers};
 use cantrip_oracle as oracle;
 
@@ -21,12 +21,6 @@ pub static GALACTUS: CardDef = CardDef {
 
 pub static EXTRA: &[&CardDef] = &[&GALACTUS];
 
-/// II, III: "Each opponent loses 2 life" (CR 119.3).
-fn each_opponent_loses_2(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.each_opponent_loses_life(item.controller, 2);
-    Ok(())
-}
-
 /// IV: "Create Galactus."
 fn create_galactus(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     tokens::create(g, item.controller, &GALACTUS, 1)?;
@@ -36,8 +30,8 @@ fn create_galactus(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 pub static CARD: CardDef = CardDef {
     abilities: &[
         chapter(1, destroy_first_target, "I \u{2014} Destroy up to one target nonland permanent.").targets(&[up_to_one(targets::NONLAND_PERMANENT.filter)]),
-        chapter(2, each_opponent_loses_2, "II \u{2014} Each opponent loses 2 life."),
-        chapter(3, each_opponent_loses_2, "III \u{2014} Each opponent loses 2 life."),
+        chapter(2, effects::each_opponent_loses_2_life, "II \u{2014} Each opponent loses 2 life."),
+        chapter(3, effects::each_opponent_loses_2_life, "III \u{2014} Each opponent loses 2 life."),
         chapter(
             4,
             create_galactus,

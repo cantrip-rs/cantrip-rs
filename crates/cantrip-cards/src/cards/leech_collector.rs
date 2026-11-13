@@ -1,4 +1,5 @@
 use cantrip_api::*;
+use cantrip_mechanics::effects;
 use cantrip_mechanics::prepare::become_prepared;
 use cantrip_oracle as oracle;
 
@@ -7,15 +8,10 @@ pub static BLOODLETTING: CardDef = CardDef {
     name: "Bloodletting",
     cost: mana("{B}"),
     types: TypeSet::of(&[CardType::Sorcery]),
-    spell: spell(&[], each_opponent_loses_2_life),
+    spell: spell(&[], effects::each_opponent_loses_2_life),
     text: "Each opponent loses 2 life.",
     ..CardDef::BLANK
 };
-
-fn each_opponent_loses_2_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.each_opponent_loses_life(item.controller, 2);
-    Ok(())
-}
 
 /// "Whenever you gain life for the first time each turn" (CR 119.3, 603.2): life was gained, and none was before it this turn -
 /// the history is as it was just before this event, so it holds the earlier gains only. A turn's later gains don't trigger it
