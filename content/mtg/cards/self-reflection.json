@@ -1,0 +1,6 @@
+{
+  "name": "Self-Reflection",
+  "manaCost": "{4}{U}{U}",
+  "type": "Sorcery",
+  "oracleText": "Create a token that's a copy of target creature you control.\nFlashback {3}{U} (You may cast this card from your graveyard for its flashback cost. Then exile it.)"
+}

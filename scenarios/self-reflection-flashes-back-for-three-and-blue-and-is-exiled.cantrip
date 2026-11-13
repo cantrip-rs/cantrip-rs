@@ -1,0 +1,55 @@
+# Self-Reflection: "Flashback {3}{U}" (CR 702.34a). Bot1 casts it from hand for {4}{U}{U} on turn 1 (Black Lotus, Mox Jet, Mox Pearl and Mox Ruby)
+# copying a Memnite. On turn 3, with four mana but no blue (the three Moxen and a Mountain), it cannot be flashed back; with Mox Sapphire's blue
+# and three Moxen on turn 5 it is cast from the graveyard for exactly {3}{U} (the pool empty right after: four mana, not the hard-cast six), copying the
+# Memnite again; the flashed-back spell is exiled, not put into the graveyard. Bot1 ends with three Memnites.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Black Lotus
+Memnite
+Self-Reflection
+Mountain
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Self-Reflection.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Self-Reflection; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+! Bot1.Graveyard.Self-Reflection.Cast(Bot1.Battlefield.Memnite; Ability: Flashback; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Self-Reflection.Cast(Bot1.Battlefield.Memnite; Ability: Flashback)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Memnite; Memnite; Memnite; Mountain; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Graveyard = Black Lotus
+Exile = Self-Reflection
