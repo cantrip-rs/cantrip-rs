@@ -1,0 +1,42 @@
+# Gateway Sneak ({2}{U}, Black Lotus's {U}{U}{U}): when Bot1 plays Talon Gates of Madara, a Gate, "this creature can't be blocked this turn"
+# (CR 603.2, 509.1b), so Bot2's Ornithopter cannot block it (a refusal); it deals 1 combat damage to Bot2 (20 -> 19) and "draw a card"
+# (hand 5 after playing the Talon -> 6).
+
+[Bot1 Deck]
+Black Lotus
+Gateway Sneak
+Talon Gates of Madara
+Plains x4
+Plains x15
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Gateway Sneak.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Talon Gates of Madara.Play
+Bot1.Target()
+Bot1.Pass
+Bot1.Pass
+? Bot1.Hand.Count = 5
+Bot1.Attack(Gateway Sneak > Bot2)
+! Bot2.Block(Ornithopter > Gateway Sneak)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+? Bot1.Hand.Count = 6
+
+[Expect]
+Bot2.Life = 19
+Bot1.Hand.Count = 6

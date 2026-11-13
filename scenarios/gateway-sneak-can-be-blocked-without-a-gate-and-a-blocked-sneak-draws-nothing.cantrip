@@ -1,0 +1,36 @@
+# Without a Gate entering, Gateway Sneak (1/3) can be blocked: Bot2's Ornithopter (0/2) blocks it, so it deals no combat damage to a player
+# and Bot1 draws nothing (hand 5 after the turn's draw and a Plains played); a Plains is not a Gate (CR 509.1b, 510.2).
+
+[Bot1 Deck]
+Black Lotus
+Gateway Sneak
+Plains x5
+Plains x15
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Gateway Sneak.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+? Bot1.Hand.Count = 5
+Bot1.Attack(Gateway Sneak > Bot2)
+Bot2.Block(Ornithopter > Gateway Sneak)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Hand.Count = 5
+Bot2.Battlefield.Ornithopter.Damage = 1
