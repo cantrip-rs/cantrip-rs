@@ -1,0 +1,62 @@
+# Rangers' Aetherhive: "Whenever you activate an exhaust ability, create a 1/1 colorless Thopter artifact creature token with
+# flying." Bot1 activates Hog-Monkey's exhaust ability ({5}: Black Lotus's three, Mox Emerald and Mox Sapphire) and the trigger
+# makes one Thopter (7 permanents after the Lotus is sacrificed, plus the Thopter, is 8). On turn 5 a second try is refused
+# (CR 702.177a: each exhaust ability once) with the five Moxen untapped to pay, so there is no second Thopter.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Black Lotus
+Rangers' Aetherhive
+Hog-Monkey
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rangers' Aetherhive.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hog-Monkey.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 8
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Hog-Monkey.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 8
+Bot1.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Hog-Monkey.Activate(Ability: Exhaust)
+
+[Expect]
+Bot1.Battlefield.Hog-Monkey.Power = 5
+Bot1.Battlefield.Thopter Token.Keywords = Flying

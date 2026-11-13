@@ -1,0 +1,67 @@
+# Rangers' Aetherhive triggers only on "you activate": Bot2 activates Hog-Monkey's exhaust ability (Black Lotus, Mox Emerald and Mox Sapphire)
+# on turn 2 and Bot1 gets no Thopter. On turn 3 Llanowar Elves (power 1) crews the Aetherhive (Crew 1), which attacks and, with vigilance,
+# stays untapped; Bot2 takes 3.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Rangers' Aetherhive
+Llanowar Elves
+Forest
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Hog-Monkey
+Island x14
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rangers' Aetherhive.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Hog-Monkey.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Hog-Monkey.Activate
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Rangers' Aetherhive.Activate(Ability: Crew)
+Bot1.Choose(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Rangers' Aetherhive > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Rangers' Aetherhive.Tapped = false
+Bot2.Battlefield.Hog-Monkey.Power = 5

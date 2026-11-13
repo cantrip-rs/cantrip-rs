@@ -1,0 +1,11 @@
+{
+  "name": "Rangers' Aetherhive",
+  "manaCost": "{1}{G}{U}",
+  "type": "Artifact — Vehicle",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Vigilance\nWhenever you activate an exhaust ability, create a 1/1 colorless Thopter artifact creature token with flying.\nCrew 1 (Tap any number of creatures you control with total power 1 or more: This Vehicle becomes an artifact creature until end of turn.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}

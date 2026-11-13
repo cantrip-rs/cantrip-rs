@@ -1,0 +1,40 @@
+# Rangers' Aetherhive has Crew 1 (CR 702.122a): tapping creatures with total power 1 or more. Bot1's only creature, Ornithopter, has
+# power 0, so crewing is refused; with Savannah Lions (power 2, summoning sick, which a crew cost does not mind) it is offered
+# and the Aetherhive becomes an artifact creature.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Rangers' Aetherhive
+Ornithopter
+Savannah Lions
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rangers' Aetherhive.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Rangers' Aetherhive.Activate(Ability: Crew)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Rangers' Aetherhive.Activate(Ability: Crew)
+Bot1.Choose(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Rangers' Aetherhive.Types = Artifact; Creature
+Bot1.Battlefield.Ornithopter.Tapped = false
