@@ -1,0 +1,45 @@
+# With only one library card, milling two cannot be chosen and Deep Spawn must be sacrificed (CR 701.17b, 118.12a).
+[Bot1 Deck]
+Deep Spawn
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Island x1
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Deep Spawn.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Deep Spawn; Black Lotus

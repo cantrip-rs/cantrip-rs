@@ -1,0 +1,83 @@
+# Deep Spawn pays blue for shroud, taps, remains tapped through its next untap, and loses shroud at cleanup (CR 702.18a, 514.2).
+[Bot1 Deck]
+Deep Spawn
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Island x2
+Ancestral Recall
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Ornithopter
+Island x200
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Deep Spawn.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Deep Spawn.Activate(Mana: short)
+Bot1.Hand.Island.Play
+[T3 Bot1.BeginCombat]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Deep Spawn.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Deep Spawn.Tapped = true
+? Bot1.Battlefield.Deep Spawn.Keywords = Shroud; Trample
+Bot2.Battlefield.Mox Pearl.Activate
+! Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Deep Spawn)
+Bot2.Hand.Swords to Plowshares.Cast(Bot2.Battlefield.Ornithopter)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Deep Spawn.Keywords = Trample
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Deep Spawn.Tapped = true
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Deep Spawn.Tapped = false
