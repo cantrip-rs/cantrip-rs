@@ -1790,6 +1790,9 @@ pub trait Game: Query {
     /// `player`'s speed increases by `amount` (CR 702.179): from none it becomes `amount` (CR 702.179c), and it goes no
     /// higher than 4, the max speed (CR 702.179e; the Aetherdrift release notes: "can't increase it any higher").
     fn increase_speed(&mut self, player: PlayerId, amount: u8);
+    /// `player`'s speed is reduced by `amount`, but not below `minimum` (a card's "can't reduce their speed below 1"). A
+    /// player with no speed has none to reduce, and one already at or below `minimum` is unchanged.
+    fn reduce_speed(&mut self, player: PlayerId, amount: u8, minimum: u8);
     /// Whether the resolving effect's controller could cast `card` transformed now, from where it is (CR 608.2g,
     /// 712.11a): a double-faced card that is not modal, judged as its back face alone.
     fn could_cast_transformed_during_resolution(&mut self, card: ObjectId) -> bool;
