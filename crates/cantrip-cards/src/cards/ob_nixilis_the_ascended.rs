@@ -1,4 +1,5 @@
 use cantrip_api::*;
+use cantrip_mechanics::effects;
 use cantrip_mechanics::history;
 use cantrip_mechanics::tokens;
 use cantrip_mechanics::triggers::{EACH_END_STEP, THIS_ENTERS};
@@ -15,8 +16,7 @@ fn destroy_tapped_creatures(g: &mut dyn Game, item: &StackItem) -> Result<(), Su
         .flat_map(|&player| g.permanents_of(player))
         .filter(|&id| g.obj(id).tapped && g.chars(id).is(CardType::Creature))
         .collect();
-    let destroyed = g.destroy_all(&tapped);
-    g.gain_life(you, destroyed.count() as i32);
+    effects::destroy_all_and_gain_life_for_each_destroyed(g, you, &tapped);
     Ok(())
 }
 
