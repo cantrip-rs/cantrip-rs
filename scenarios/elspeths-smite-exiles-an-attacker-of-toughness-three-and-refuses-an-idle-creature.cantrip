@@ -1,0 +1,47 @@
+# Elspeth's Smite: "3 damage to target attacking or blocking creature. If that creature would die this turn, exile it instead."
+# Bot2 attacks on turn 4 with its Armored Warhorse (2/3) and keeps its Ornithopter home: the idle Ornithopter is refused, the
+# attacking Warhorse takes exactly 3 and is exiled instead of dying (CR 614.1a, 700.4), so it is not in Bot2's graveyard.
+# The cast costs {W}: with {W}{W} in the pool, one is left right after it (CR 601.2f).
+
+[Bot1 Deck]
+Plains
+Plains
+Elspeth's Smite
+Plains x17
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Armored Warhorse
+Ornithopter
+Plains x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Armored Warhorse.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Armored Warhorse > Bot1)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+! Bot1.Hand.Elspeth's Smite.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Hand.Elspeth's Smite.Cast(Bot2.Battlefield.Armored Warhorse)
+? Bot1.Mana = {W}
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 4
+Bot1.Graveyard = Elspeth's Smite
+Exile = Armored Warhorse
+Bot2.Graveyard = Black Lotus
+Bot2.Battlefield.Ornithopter.Tapped = false
+Bot1.Life = 20
