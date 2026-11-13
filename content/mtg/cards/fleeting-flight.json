@@ -1,0 +1,6 @@
+{
+  "name": "Fleeting Flight",
+  "manaCost": "{W}",
+  "type": "Instant",
+  "oracleText": "Put a +1/+1 counter on target creature. It gains flying until end of turn. Prevent all combat damage that would be dealt to it this turn."
+}

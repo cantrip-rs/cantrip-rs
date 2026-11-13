@@ -1,0 +1,46 @@
+# Fleeting Flight gives flying until end of turn (CR 702.9b, 611.2a). Bot1 casts it on its Isamaru (2/2, a 3/3 with the counter)
+# before attacking on turn 3: Bot2's Isamaru, which lacks flying and reach, may not block it (CR 509.1b), but Bot2's Ornithopter,
+# a flier, may (positive control) and dies to the 3 damage. Bot2 is not hit (20) and Isamaru takes no damage from the 0-power
+# blocker.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Isamaru, Hound of Konda
+Fleeting Flight
+Island x13
+
+[Bot2 Deck]
+Isamaru, Hound of Konda
+Ornithopter
+Mox Pearl
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Isamaru, Hound of Konda.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Fleeting Flight.Cast(Bot1.Battlefield.Isamaru, Hound of Konda)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Isamaru, Hound of Konda > Bot2)
+! Bot2.Block(Isamaru, Hound of Konda > Isamaru, Hound of Konda)
+Bot2.Block(Ornithopter > Isamaru, Hound of Konda)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Isamaru, Hound of Konda.Damage = 0

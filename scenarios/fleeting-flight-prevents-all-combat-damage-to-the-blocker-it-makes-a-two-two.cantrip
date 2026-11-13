@@ -1,0 +1,43 @@
+# Fleeting Flight: "Put a +1/+1 counter on target creature. It gains flying until end of turn. Prevent all combat damage that
+# would be dealt to it this turn." Bot2's Isamaru (2/2) attacks on turn 4 and Bot1 blocks with Memnite (1/1). Flight at {W} after
+# the block makes Memnite a 2/2 (the counter, CR 122.1) that takes no combat damage (CR 615.1): it kills Isamaru and lives with
+# no damage marked, and Bot1 is not hit by the blocked attacker (20).
+
+[Bot1 Deck]
+Plains
+Memnite
+Fleeting Flight
+Island x14
+
+[Bot2 Deck]
+Mox Pearl
+Isamaru, Hound of Konda
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Isamaru, Hound of Konda.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Isamaru, Hound of Konda > Bot1)
+Bot1.Block(Memnite > Isamaru, Hound of Konda)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Fleeting Flight.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Turn = 4
+Bot1.Life = 20
+Bot1.Battlefield.Memnite.Damage = 0
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot2.Graveyard = Isamaru, Hound of Konda
+Bot1.Graveyard = Fleeting Flight
