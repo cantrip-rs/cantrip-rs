@@ -1,0 +1,27 @@
+# Vampire Soulcaller: with no creature card in Bot1's graveyard the "return target creature card" trigger has no target and is not put on the stack (CR 603.3d), so nothing is asked on turn 1.
+# Bot2 controls no cards of note. Bot1 casts it with the Lotus, Mox Jet and Mox Pearl ({4}{B}) and the Lotus goes to the graveyard, which still holds no creature card.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Vampire Soulcaller
+Island x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Vampire Soulcaller.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Vampire Soulcaller
+Bot1.Graveyard = Black Lotus

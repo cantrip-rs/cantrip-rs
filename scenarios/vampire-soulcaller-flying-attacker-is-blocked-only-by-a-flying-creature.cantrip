@@ -1,0 +1,39 @@
+# Vampire Soulcaller: "Flying" (CR 702.9b). Bot1 casts it on turn 1 (the Lotus, Mox Jet and Mox Pearl) and attacks on turn 3: Bot2's Memnite can't block it (no flying, refused) while its
+# Ornithopter can (the positive control), so the Soulcaller's 3 damage kills the Ornithopter and Bot2 takes none.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Vampire Soulcaller
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x5
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Vampire Soulcaller.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Vampire Soulcaller > Bot2)
+! Bot2.Block(Memnite > Vampire Soulcaller)
+Bot2.Block(Ornithopter > Vampire Soulcaller)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield = Mox Jet; Mox Pearl; Vampire Soulcaller
