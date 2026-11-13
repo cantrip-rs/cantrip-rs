@@ -24,19 +24,16 @@ fn you_control_source(q: &dyn Query, e: &ContinuousEffect) -> bool {
     q.is_on_battlefield(e.source) && q.controller(e.source) == e.controller
 }
 
-/// "For as long as you control [this permanent]" (CR 611.2b), as a card's `lasting` entry that `Duration::AsLongAs` names:
-/// the effect's source is the same object still on the battlefield (a card that left is a new object, CR 400.7) and the
-/// effect's controller still controls it. Once it has left or another player controls it, the effect is over for good, though
-/// control come back. Spider-Woman, Secret Agent's "can't become untapped" and Extraction Specialist's "can't attack or
-/// block" last so.
+/// A current-state source-control predicate for a custom `Duration::AsLongAs` condition. It cannot reconstruct an
+/// interval broken before resolution. Use `Duration::WhileSourceControlled` for the ordinary uninterrupted duration.
 pub const YOU_CONTROL_SOURCE: Lasting = Lasting { text: "you control {source}", holds: you_control_source };
 
 /// "Gain control of target [permanent] for as long as you control this creature" (CR 611.2b): the ability's controller gains
-/// control of its first target, lasting while `YOU_CONTROL_SOURCE` holds - the card lists it in `lasting`. Aladdin (artifact)
+/// control of its first target for the uninterrupted `Duration::WhileSourceControlled` interval. Aladdin (artifact)
 /// and Thrull Champion (Thrull) print it.
 pub fn gain_control_of_target_while_you_control_source(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(object) = crate::targets::object(g, item, 0) else { return Ok(()) };
-    let duration = Duration::AsLongAs(item.ability.card, 0);
+    let duration = Duration::WhileSourceControlled;
     instruction(g, |g| {
         g.add_effect(item.object, object, EffectKind::Control(item.controller), duration);
     });
@@ -44,10 +41,10 @@ pub fn gain_control_of_target_while_you_control_source(g: &mut dyn Game, item: &
 }
 
 /// "[That creature] can't attack or block for as long as you control this [permanent]" (CR 508.1c, 509.1b, 611.2b): both
-/// restrictions on `object` last while `YOU_CONTROL_SOURCE` holds - the card lists it in `lasting`. Extraction Specialist (the
+/// restrictions on `object` use the uninterrupted `Duration::WhileSourceControlled` interval. Extraction Specialist (the
 /// creature it returned) and Possession Engine (the creature it took) print it.
 pub fn cant_attack_or_block_while_you_control_source(g: &mut dyn Game, item: &StackItem, object: ObjectId) {
-    let duration = Duration::AsLongAs(item.ability.card, 0);
+    let duration = Duration::WhileSourceControlled;
     instruction(g, |g| {
         g.add_effect(item.object, object, EffectKind::CantAttack, duration);
         g.add_effect(item.object, object, EffectKind::CantBlock, duration);

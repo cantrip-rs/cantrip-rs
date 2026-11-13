@@ -2009,6 +2009,10 @@ pub enum Duration {
     /// player's next untap step") - another player's untap step a permanent untaps in is not it (the Exhaustion ruling). A
     /// player who has left the game would have begun their turn, and it ends then (CR 800.4m).
     DuringNextUntapStepOf(PlayerId),
+    /// "For as long as you control [the source]" (CR 611.2b). The effect's controller must control the same source
+    /// continuously from the ability's creation on the stack. A lapse before resolution prevents the duration from
+    /// starting, unless control returns during resolution itself. Aladdin, Merieke Ri Berit and Orcish Squatters print it.
+    WhileSourceControlled,
 }
 
 impl Duration {

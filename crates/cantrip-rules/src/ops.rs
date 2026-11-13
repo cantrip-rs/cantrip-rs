@@ -5297,11 +5297,11 @@ pub fn lasting_holds(cx: &Cx, e: &cantrip_state::ContinuousEffect) -> bool {
     }
     match e.duration {
         Duration::AsLongAs(card, index) => cx.card(card).lasting.get(index as usize).is_none_or(|l| (l.holds)(cx, e)),
-        Duration::WhileSourceTapped | Duration::WhileSourceTappedAndControlled => {
+        Duration::WhileSourceTapped | Duration::WhileSourceTappedAndControlled | Duration::WhileSourceControlled => {
             live(cx.s(), e.source)
                 && cx.s().obj(e.source).zone.is(ZoneKind::Battlefield)
-                && cx.s().obj(e.source).tapped
-                && (e.duration != Duration::WhileSourceTappedAndControlled || cx.s().obj(e.source).controller == e.controller)
+                && (e.duration == Duration::WhileSourceControlled || cx.s().obj(e.source).tapped)
+                && (e.duration == Duration::WhileSourceTapped || cx.s().obj(e.source).controller == e.controller)
         }
         _ => true,
     }
@@ -5309,16 +5309,16 @@ pub fn lasting_holds(cx: &Cx, e: &cantrip_state::ContinuousEffect) -> bool {
 
 /// Whether this duration has a condition that can end without a zone change (CR 611.2b).
 fn conditional(duration: Duration) -> bool {
-    matches!(duration, Duration::AsLongAs(..) | Duration::WhileSourceTapped | Duration::WhileSourceTappedAndControlled | Duration::WhileTapped | Duration::WhileCounter(_))
+    matches!(duration, Duration::AsLongAs(..) | Duration::WhileSourceTapped | Duration::WhileSourceTappedAndControlled | Duration::WhileSourceControlled | Duration::WhileTapped | Duration::WhileCounter(_))
 }
 
-/// The common source-tapped durations' uninterrupted interval (CR 611.2b). The event history is the authority for a
-/// break before resolution; current tapped/control state alone cannot distinguish an untap followed by a retap. A
+/// The common source-dependent durations' uninterrupted interval (CR 611.2b). The event history is the authority for a
+/// break before resolution; current tapped/control state alone cannot distinguish an untap/retap or loss/regain of control. A
 /// complete condition may start again DURING this resolution: since it currently holds, its last affirmative
 /// transition after its last lapse is exactly the beginning of the current full interval, including a conjunction.
 /// Custom AsLongAs predicates are not reconstructed here: they still own their current-state condition only.
 fn source_interval_begins(cx: &Cx, e: &cantrip_state::ContinuousEffect) -> bool {
-    if !matches!(e.duration, Duration::WhileSourceTapped | Duration::WhileSourceTappedAndControlled) {
+    if !matches!(e.duration, Duration::WhileSourceTapped | Duration::WhileSourceTappedAndControlled | Duration::WhileSourceControlled) {
         return true;
     }
     // An immediate mana ability has its own declaration/cost/resolution boundaries. A nested activation must
@@ -5332,13 +5332,14 @@ fn source_interval_begins(cx: &Cx, e: &cantrip_state::ContinuousEffect) -> bool 
     };
     // Core readers of the raw log must notify loop detection/layer caches just as Query::history does.
     cantrip_api::history::note_read();
-    let controlled = e.duration == Duration::WhileSourceTappedAndControlled;
+    let tapped = e.duration != Duration::WhileSourceControlled;
+    let controlled = e.duration != Duration::WhileSourceTapped;
     let mut lapsed = None;
     let mut began = None;
     for record in cx.g.log.iter().skip(since as usize) {
         let transition = match record.event {
-            Event::Untapped { permanent } if permanent == e.source && record.serial >= tapped_since => Some(false),
-            Event::Tapped { permanent } if permanent == e.source && record.serial >= tapped_since => Some(true),
+            Event::Untapped { permanent } if permanent == e.source && tapped && record.serial >= tapped_since => Some(false),
+            Event::Tapped { permanent } if permanent == e.source && tapped && record.serial >= tapped_since => Some(true),
             Event::ControlChanged { permanent, controller, .. } if permanent == e.source && controlled => Some(controller == e.controller),
             Event::PhasedOut { permanent, .. } if permanent == e.source && (controlled || record.serial >= tapped_since) => Some(false),
             Event::PhasedIn { permanent } if permanent == e.source && (controlled || record.serial >= tapped_since) => Some(true),
@@ -5354,8 +5355,8 @@ fn source_interval_begins(cx: &Cx, e: &cantrip_state::ContinuousEffect) -> bool 
     lapsed.is_none_or(|end| began.is_some_and(|start| start > end && start >= resolution))
 }
 
-/// Whether an effect's duration begins as it would first apply (CR 611.2b). Source-tapped durations additionally ask
-/// the history: an interval ended before resolution does not revive merely because the source has been retapped.
+/// Whether an effect's duration begins as it would first apply (CR 611.2b). Source-dependent durations additionally ask
+/// the history: an interval ended before resolution does not revive merely because its condition currently holds.
 pub fn duration_begins(cx: &Cx, e: &cantrip_state::ContinuousEffect) -> bool {
     !matches!(e.duration, Duration::DuringControllersNextUntapSteps(0))
         && !source_departed(cx.s(), e) && lasting_holds(cx, e) && source_interval_begins(cx, e)

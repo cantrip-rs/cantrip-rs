@@ -393,7 +393,8 @@ card code must query the printed effect quantity at its specified time. Copying 
   schema and hash, including explicit adapters for supported older layouts. Removing stun or a prohibited untap emits none. `Query::can_untap` asks whether the untap is payable before replacements: stun still permits a
   cost (CR 118.11), while "can't become untapped" does not. Untap-step-only restrictions do not bar an untap cost.
   `Duration::WhileSourceTapped` (Ashnod's Battle Gear, Seasinger, Lwaxana Troi) and
-  `WhileSourceTappedAndControlled` (Rubinia Soulsinger) ask the history about an uninterrupted source interval
+  `WhileSourceTappedAndControlled` (Rubinia Soulsinger), and `WhileSourceControlled` (Aladdin, Merieke Ri Berit,
+  Orcish Squatters) ask the history about an uninterrupted source interval
   before first applying (CR 611.2b). `StackItem::tapped_since` starts at the source's final {T} cost; source control
   still counts from the ability's creation on the stack. A copy starts a fresh interval when created (CR 707.10).
   An interval broken and restored before resolution cannot revive that ability; the complete condition restarting
@@ -402,7 +403,7 @@ card code must query the printed effect quantity at its specified time. Copying 
   `mana_activation_x`; both context values restore after nested activations, suspension or failed payment. A
   condition broken during an immediate mana ability's costs still cannot revive before its own resolution. Custom `AsLongAs` predicates, `WhileCounter`, play `Expiry`, and `WhileSourceOnBattlefield` keep their
   existing current-state beginning checks; their arbitrary pre-resolution condition histories are not reconstructed
-  by these source-tapped duration types.
+  by these source-dependent duration types.
 - **Text-changing effects (612, layer 3)** are `EffectKind::ChangeText { from, to }`, a `Word` (a color word or a
   subtype) replaced by another. The layers change the type line; card code reads every word of its rules text through
   `Query::words` (`Words`, the changes in timestamp order unless one depends on another), so the card does what its changed text says. A token's

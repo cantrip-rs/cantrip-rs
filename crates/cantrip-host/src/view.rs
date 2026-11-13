@@ -1000,6 +1000,11 @@ impl<'a> Projector<'a> {
                     else { format!("{}'s", self.player_name(e.controller)) };
                 format!(" for as long as {from} remains tapped and under {whose} control")
             }
+            Duration::WhileSourceControlled => {
+                let whose = if e.controller == self.viewer { "your".to_string() }
+                    else { format!("{}'s", self.player_name(e.controller)) };
+                format!(" for as long as {from} remains under {whose} control")
+            }
             Duration::WhileSourceOnBattlefield => format!(" for as long as {from} remains on the battlefield"),
             Duration::AsLongAs(card, index) => self.game.cards.get(card).lasting.get(index as usize)
                 .map_or(String::new(), |l| format!(" for as long as {}", l.text.replace("{source}", from))),
@@ -2015,31 +2020,34 @@ mod tests {
 
     #[test]
     fn source_dependent_control_names_the_original_effect_controller() {
-        let cards = cantrip_engine::cards();
-        let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
-        let owner = PlayerId(0);
-        let mut obj = Obj::new(cards.find("Icy Manipulator").unwrap(), owner, Zone::BATTLEFIELD);
-        obj.tapped = true;
-        let source = game.state.push_obj(obj);
-        let target = game.state.push_obj(Obj::new(cards.find("Grizzly Bears").unwrap(), owner, Zone::BATTLEFIELD));
-        game.state.zone_push(Zone::BATTLEFIELD, source);
-        game.state.zone_push(Zone::BATTLEFIELD, target);
-        let timestamp = game.state.timestamp();
-        game.state.effect_push(ContinuousEffect { source, controller: owner, timestamp, affected: target,
-            kind: EffectKind::Control(owner), duration: Duration::WhileSourceTappedAndControlled, words: Words::NONE });
-        let names = vec!["A".to_string(), "B".to_string()];
-        let faces = HashSet::new();
-        for viewer in [owner, PlayerId(1), PUBLIC] {
-            let projector = Projector { game: &game, viewer, names: &names, conceded: &[false, false], faces: &faces };
-            let mut handles = HandleSpace::new();
-            let handle = handles.handle(target);
-            let shown = projector.describe(target, handle, None, &mut handles);
-            let expected = if viewer == owner {
-                "You control it for as long as Icy Manipulator remains tapped and under your control (Icy Manipulator)."
-            } else {
-                "A controls it for as long as Icy Manipulator remains tapped and under A's control (Icy Manipulator)."
-            };
-            assert_eq!(shown.granted_abilities.iter().map(|a| a.text.as_str()).collect::<Vec<_>>(), [expected]);
+        for duration in [Duration::WhileSourceTappedAndControlled, Duration::WhileSourceControlled] {
+            let cards = cantrip_engine::cards();
+            let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+            let owner = PlayerId(0);
+            let mut obj = Obj::new(cards.find("Icy Manipulator").unwrap(), owner, Zone::BATTLEFIELD);
+            obj.tapped = true;
+            let source = game.state.push_obj(obj);
+            let target = game.state.push_obj(Obj::new(cards.find("Grizzly Bears").unwrap(), owner, Zone::BATTLEFIELD));
+            game.state.zone_push(Zone::BATTLEFIELD, source);
+            game.state.zone_push(Zone::BATTLEFIELD, target);
+            let timestamp = game.state.timestamp();
+            game.state.effect_push(ContinuousEffect { source, controller: owner, timestamp, affected: target,
+                kind: EffectKind::Control(owner), duration, words: Words::NONE });
+            let names = vec!["A".to_string(), "B".to_string()];
+            let faces = HashSet::new();
+            for viewer in [owner, PlayerId(1), PUBLIC] {
+                let projector = Projector { game: &game, viewer, names: &names, conceded: &[false, false], faces: &faces };
+                let mut handles = HandleSpace::new();
+                let handle = handles.handle(target);
+                let shown = projector.describe(target, handle, None, &mut handles);
+                let expected = if viewer == owner {
+                    "You control it for as long as Icy Manipulator remains tapped and under your control (Icy Manipulator)."
+                } else {
+                    "A controls it for as long as Icy Manipulator remains tapped and under A's control (Icy Manipulator)."
+                };
+                let expected = if duration == Duration::WhileSourceControlled { expected.replace("tapped and under", "under") } else { expected.to_string() };
+                assert_eq!(shown.granted_abilities.iter().map(|a| a.text.as_str()).collect::<Vec<_>>(), [expected.as_str()]);
+            }
         }
     }
 
