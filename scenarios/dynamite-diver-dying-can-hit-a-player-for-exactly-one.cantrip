@@ -1,0 +1,39 @@
+# Dynamite Diver: its dies trigger can target a player (CR 115.4, "any target"). Bot2 bolts Bot1's Diver, so it dies under its
+# controller Bot1, who points the trigger at Bot2's face: exactly 1 damage (20 -> 19), nothing else is hurt.
+
+[Bot1 Deck]
+Mox Ruby
+Dynamite Diver
+Island x18
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dynamite Diver.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Dynamite Diver)
+Bot2.Pass
+Bot1.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 20
+Bot1.Graveyard = Dynamite Diver
+Bot2.Graveyard = Lightning Bolt

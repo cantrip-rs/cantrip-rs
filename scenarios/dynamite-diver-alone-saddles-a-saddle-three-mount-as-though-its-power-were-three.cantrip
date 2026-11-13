@@ -1,0 +1,55 @@
+# Dynamite Diver (printed power 1) "saddles Mounts ... as though its power were 2 greater" (CR 702.171): exactly the 3 that Dracosaur
+# Auxiliary's Saddle 3 asks. A Savannah Lions (power 2, one short) cannot saddle alone on turn 3 (refusal); the Diver alone can (positive
+# control, at the limit). The saddled, hasty Dracosaur attacks: 4 combat damage, and "attacks while saddled" deals 2 more to Bot2 (20 -> 14).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Dracosaur Auxiliary
+Dynamite Diver
+Savannah Lions
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dracosaur Auxiliary.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dynamite Diver.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Dracosaur Auxiliary.Activate(Ability: Saddle)
+! Bot1.Choose(Savannah Lions)
+Bot1.Choose(Dynamite Diver)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Dracosaur Auxiliary > Bot2)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Dynamite Diver.Tapped = true
+Bot1.Battlefield.Savannah Lions.Tapped = false

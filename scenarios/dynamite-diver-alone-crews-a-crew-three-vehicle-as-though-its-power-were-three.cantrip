@@ -1,0 +1,53 @@
+# Dynamite Diver (printed power 1) "crews Vehicles as though its power were 2 greater" (CR 702.122): its effective crew contribution is
+# exactly 3, the Crew 3 requirement of Clamorous Ironclad. A Savannah Lions (power 2, one short) cannot crew alone on turn 3 (refusal);
+# the Diver alone can (positive control, exactly at the limit) and the crewed Ironclad hits Bot2 for 6 (20 -> 14). The Lions, which
+# did not pay, stays untapped.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Clamorous Ironclad
+Dynamite Diver
+Savannah Lions
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Clamorous Ironclad.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dynamite Diver.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Clamorous Ironclad.Activate(Ability: Crew)
+! Bot1.Choose(Savannah Lions)
+Bot1.Choose(Dynamite Diver)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clamorous Ironclad.Types = Artifact; Creature
+Bot1.Attack(Clamorous Ironclad > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Dynamite Diver.Tapped = true
+Bot1.Battlefield.Savannah Lions.Tapped = false

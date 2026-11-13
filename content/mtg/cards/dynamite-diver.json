@@ -1,0 +1,12 @@
+{
+  "name": "Dynamite Diver",
+  "manaCost": "{R}",
+  "type": "Creature — Goblin Pilot",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "This creature saddles Mounts and crews Vehicles as though its power were 2 greater.\nWhen this creature dies, it deals 1 damage to any target.",
+  "keywords": [
+    "SaddlesAsThoughPowerTwoGreater",
+    "CrewsAsThoughPowerTwoGreater"
+  ]
+}
