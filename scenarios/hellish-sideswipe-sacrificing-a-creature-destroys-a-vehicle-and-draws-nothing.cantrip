@@ -1,0 +1,43 @@
+# Hellish Sideswipe: "Destroy target creature or Vehicle. If the sacrificed permanent was a Vehicle, draw a card." (CR 701.8,
+# 608.2h). Bot2's Dependable Quinjet is a Vehicle and no creature, so it is a legal target. With no artifact or creature to
+# sacrifice the Sideswipe cannot be cast, though a Swamp is there for its {B} (the refusal); with an Ornithopter (an artifact
+# creature, not a Vehicle) it is cast, the Ornithopter is sacrificed and the Quinjet destroyed, and no card is drawn.
+
+[Bot1 Deck]
+Swamp
+Hellish Sideswipe
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Dependable Quinjet
+Island x14
+
+[Actions]
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Dependable Quinjet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Hand.Hellish Sideswipe.Cast(Bot2.Battlefield.Dependable Quinjet)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 6
+Bot1.Hand.Hellish Sideswipe.Cast(Bot2.Battlefield.Dependable Quinjet)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Graveyard = Hellish Sideswipe; Ornithopter
+Bot2.Graveyard = Dependable Quinjet; Black Lotus
+Bot2.Battlefield.Count = 0
