@@ -1,0 +1,11 @@
+{
+  "name": "Gosta Dirk",
+  "manaCost": "{3}{W}{W}{U}{U}",
+  "type": "Legendary Creature — Human Warrior",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "First strike\nCreatures with islandwalk can be blocked as though they didn't have islandwalk.",
+  "keywords": [
+    "FirstStrike"
+  ]
+}
