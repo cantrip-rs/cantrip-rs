@@ -1,0 +1,61 @@
+# Mischievous Mystic {1}{U}, 2/1 Flying: "Whenever you draw your second card each turn, create a 1/1 blue Faerie creature token with flying"
+# (CR 121.2, 603.2, 111.1). Cast on turn 1 off Black Lotus. Bot2's own second card on turn 2 (its Ancestral Recall) makes nothing for Bot1.
+# On turn 3 the draw step's card is Bot1's first and Ancestral Recall's first card the second: one Faerie, and its third card makes no
+# more. On turn 5 only the draw step's first card: still one. Both fly (CR 702.9b): Bot2's Phyrexian Walker may block neither and Bot2 takes three.
+
+[Bot1 Deck]
+Black Lotus
+Mischievous Mystic
+Ancestral Recall
+Island
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Sapphire
+Phyrexian Walker
+Ancestral Recall
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mischievous Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Ancestral Recall.Cast(Bot2)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield = Mischievous Mystic
+[T3 Bot1.Main1]
+? Bot1.Battlefield = Mischievous Mystic
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield = Mischievous Mystic; Island; Faerie Token
+? Bot1.Battlefield.Faerie Token.Power = 1
+? Bot1.Battlefield.Faerie Token.Toughness = 1
+? Bot1.Battlefield.Faerie Token.Colors = Blue
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Mischievous Mystic > Bot2; Faerie Token > Bot2)
+! Bot2.Block(Bot2.Battlefield.Phyrexian Walker > Bot1.Battlefield.Mischievous Mystic)
+! Bot2.Block(Bot2.Battlefield.Phyrexian Walker > Bot1.Battlefield.Faerie Token)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mischievous Mystic; Island; Faerie Token
+Bot2.Life = 17

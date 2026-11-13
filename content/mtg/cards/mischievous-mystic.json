@@ -1,0 +1,11 @@
+{
+  "name": "Mischievous Mystic",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Human Wizard",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying\nWhenever you draw your second card each turn, create a 1/1 blue Faerie creature token with flying.",
+  "keywords": [
+    "Flying"
+  ]
+}

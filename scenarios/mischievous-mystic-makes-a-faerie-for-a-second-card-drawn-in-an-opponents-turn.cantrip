@@ -1,0 +1,34 @@
+# Mischievous Mystic: "Whenever you draw your second card each turn, create a 1/1 blue Faerie creature token with flying" (CR 121.2, 603.2). In Bot2's
+# upkeep on turn 2 Bot1 casts its own Ancestral Recall (an instant): those are Bot1's first three cards that turn, and the second makes one Faerie.
+# On turn 3 the count starts again and the draw step's card is only the first: still one Faerie.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mischievous Mystic
+Ancestral Recall
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mischievous Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield = Mischievous Mystic; Mox Sapphire; Faerie Token
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Mischievous Mystic; Mox Sapphire; Faerie Token
+Bot1.Hand.Count = 7
