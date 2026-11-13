@@ -1,0 +1,8 @@
+{
+  "name": "Greenbelt Guardian",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Elf Ranger",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{G}: Target creature gains trample until end of turn.\nExhaust — {3}{G}: Put three +1/+1 counters on this creature. (Activate each exhaust ability only once.)"
+}

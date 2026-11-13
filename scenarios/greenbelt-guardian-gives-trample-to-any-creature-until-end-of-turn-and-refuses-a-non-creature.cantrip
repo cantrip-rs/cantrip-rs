@@ -1,0 +1,47 @@
+# Greenbelt Guardian, {1}{G} 2/2: "{G}: Target creature gains trample until end of turn." Cast on turn 1 off Mox Emerald and Mox Jet.
+# Turn 3: Black Lotus gives GGG. Targeting Mox Jet (an artifact, not a creature) is refused with the green still in the pool; then the
+# Guardian itself and Bot2's Ornithopter each gain trample (one G each, one G left). Trample is gone again on turn 4 (until end of turn).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Black Lotus
+Greenbelt Guardian
+Forest x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Greenbelt Guardian.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Battlefield.Greenbelt Guardian.Activate(Bot1.Battlefield.Mox Jet; Ability: trample)
+Bot1.Battlefield.Greenbelt Guardian.Activate(Bot1.Battlefield.Greenbelt Guardian; Ability: trample)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Greenbelt Guardian.Keywords = Trample
+Bot1.Battlefield.Greenbelt Guardian.Activate(Bot2.Battlefield.Ornithopter; Ability: trample)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Keywords = Flying; Trample
+? Bot1.Mana = {G}
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+? Bot1.Battlefield.Greenbelt Guardian.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield.Greenbelt Guardian.Power = 2
+Bot1.Battlefield.Greenbelt Guardian.Toughness = 2

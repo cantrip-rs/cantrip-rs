@@ -1,0 +1,51 @@
+# Greenbelt Guardian: "Exhaust - {3}{G}: Put three +1/+1 counters on this creature" costs exactly {3}{G} and can be activated once only
+# (CR 702.177a). Turn 3: three sources are one short, refused; Mox Pearl is the fourth and pays it exactly (pool empty), 5/5.
+# Turn 5: four untapped sources and the ability is refused (once only), but the Guardian's other ability ({G}: trample) still works.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Greenbelt Guardian
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Greenbelt Guardian.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Greenbelt Guardian.Activate(Ability: Exhaust; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Greenbelt Guardian.Activate(Ability: Exhaust)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Greenbelt Guardian.Power = 5
+? Bot1.Battlefield.Greenbelt Guardian.Toughness = 5
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Greenbelt Guardian.Activate(Ability: Exhaust)
+Bot1.Battlefield.Greenbelt Guardian.Activate(Bot1.Battlefield.Greenbelt Guardian; Ability: trample)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Greenbelt Guardian.Keywords = Trample
+
+[Expect]
+Bot1.Battlefield.Greenbelt Guardian.Power = 5
+Bot1.Battlefield.Greenbelt Guardian.Toughness = 5

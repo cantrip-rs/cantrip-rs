@@ -1,0 +1,42 @@
+# Greenbelt Guardian's two costs each have a green symbol, not generic mana: "{G}: Target creature gains trample until end of
+# turn" and "Exhaust - {3}{G}: Put three +1/+1 counters on this creature". Turn 1: Black Lotus (green) pays for the Guardian.
+# Turn 3: five mana and none of it green (Mox Jet, Mox Ruby, Mox Pearl, Mox Sapphire and an Island), enough in all for
+# either, and both are refused: the Guardian stays a 2/2 without trample.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Greenbelt Guardian
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Greenbelt Guardian.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+? Bot1.Mana = {W}{U}{U}{B}{R}
+! Bot1.Battlefield.Greenbelt Guardian.Activate(Ability: Exhaust; Mana: short)
+! Bot1.Battlefield.Greenbelt Guardian.Activate(Bot1.Battlefield.Greenbelt Guardian; Ability: trample; Mana: short)
+
+[Expect]
+Bot1.Battlefield.Greenbelt Guardian.Power = 2
+Bot1.Battlefield.Greenbelt Guardian.Toughness = 2
+Bot1.Battlefield.Greenbelt Guardian.Keywords = (absent)
