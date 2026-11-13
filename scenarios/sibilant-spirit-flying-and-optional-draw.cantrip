@@ -1,0 +1,59 @@
+# The defending player accepts and declines the attack trigger on successive attacks; flying bars a ground blocker but allows a flyer (CR 603.2, 702.9b).
+[Bot1 Deck]
+Sibilant Spirit
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Gleemox
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Sibilant Spirit.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Sibilant Spirit)
+Bot2.Accept
+? Bot2.Hand.Count = 7
+! Bot2.Block(Memnite > Sibilant Spirit)
+Bot2.Block(Ornithopter > Sibilant Spirit)
+[T4 Bot2.BeginCombat]
+Bot2.Attack(Memnite)
+? Stack.Count = 0
+[T5 Bot1.BeginCombat]
+Bot1.Attack(Sibilant Spirit)
+Bot2.Decline
+? Bot2.Hand.Count = 7
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 15
