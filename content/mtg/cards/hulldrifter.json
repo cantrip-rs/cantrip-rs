@@ -1,0 +1,11 @@
+{
+  "name": "Hulldrifter",
+  "manaCost": "{3}{U}{U}",
+  "type": "Artifact — Vehicle",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flying\nWhen this Vehicle enters, draw two cards.\nCrew 3 (Tap any number of creatures you control with total power 3 or more: This Vehicle becomes an artifact creature until end of turn.)",
+  "keywords": [
+    "Flying"
+  ]
+}
