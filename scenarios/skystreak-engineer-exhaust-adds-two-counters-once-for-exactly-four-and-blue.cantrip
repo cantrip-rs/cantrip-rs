@@ -1,0 +1,55 @@
+# Skystreak Engineer: "Exhaust - {4}{U}: Put two +1/+1 counters on this creature." costs exactly {4}{U}: with four Moxen tapped
+# (Mox Jet, Ruby, Pearl, Sapphire) it is refused, and the fifth, Mox Emerald, pays it. It can be activated once only (CR 702.177a):
+# a second try on turn 5 with every Mox untapped again is refused. The 1/3 flier is a 3/5 afterwards and keeps flying.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Skystreak Engineer
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Skystreak Engineer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Skystreak Engineer.Power = 1
+? Bot1.Battlefield.Skystreak Engineer.Toughness = 3
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Skystreak Engineer.Activate(Ability: Exhaust; Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Skystreak Engineer.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Skystreak Engineer.Power = 3
+? Bot1.Battlefield.Skystreak Engineer.Toughness = 5
+? Bot1.Battlefield.Skystreak Engineer.Counters.PlusOnePlusOne = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Skystreak Engineer.Activate
+
+[Expect]
+Bot1.Battlefield.Skystreak Engineer.Power = 3
+Bot1.Battlefield.Skystreak Engineer.Keywords = Flying
