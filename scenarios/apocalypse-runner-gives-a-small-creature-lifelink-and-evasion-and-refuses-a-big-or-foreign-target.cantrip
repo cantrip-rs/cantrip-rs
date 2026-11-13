@@ -1,0 +1,63 @@
+# Apocalypse Runner (6/5 Vehicle, Crew 3): "{T}: Target creature you control with power 2 or less gains lifelink until end of turn and can't
+# be blocked this turn." Turn 1 off five Moxen: the Runner and a Savannah Lions. On turn 3 Bot1 also casts a Hill Giant (power 3): it is too
+# strong a target (CR 115.1), and Bot2's Ornithopter is not Bot1's, both refused. The Lions is accepted: Bot2's Ornithopter may not
+# block it (CR 509.1b), it deals 2 to Bot2 (18) and Bot1 gains 2 from lifelink (22, CR 702.15b).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Apocalypse Runner
+Savannah Lions
+Hill Giant
+Mountain x13
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Apocalypse Runner.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Apocalypse Runner.Activate(Ability: lifelink; Bot1.Battlefield.Hill Giant)
+! Bot1.Battlefield.Apocalypse Runner.Activate(Ability: lifelink; Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Apocalypse Runner.Activate(Ability: lifelink; Bot1.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Savannah Lions > Bot2)
+! Bot2.Block(Ornithopter > Savannah Lions)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22
+Bot1.Battlefield.Apocalypse Runner.Tapped = true
+Bot1.Battlefield.Savannah Lions.Keywords = Lifelink

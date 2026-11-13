@@ -1,0 +1,65 @@
+# Apocalypse Runner under Bot2's control, from turn 2 off five Moxen with a Savannah Lions. On turn 4 the Lions alone (power 2) cannot pay
+# Crew 3 (CR 702.122a), and Bot1's Lions is no legal target for "creature you control" (CR 115.1). Then a Hill Giant (power 3, exactly)
+# crews the Runner, an artifact creature that is untapped and attacks for 6: Bot1 is at 14.
+
+[Bot1 Deck]
+Mox Pearl
+Savannah Lions
+Island x15
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Apocalypse Runner
+Savannah Lions
+Hill Giant
+Mountain x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Apocalypse Runner.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+! Bot2.Battlefield.Apocalypse Runner.Activate(Ability: Crew)
+! Bot2.Battlefield.Apocalypse Runner.Activate(Ability: lifelink; Bot1.Battlefield.Savannah Lions)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Apocalypse Runner.Activate(Ability: Crew)
+Bot2.Choose(Hill Giant)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Apocalypse Runner.Types = Artifact; Creature
+? Bot2.Battlefield.Apocalypse Runner.Tapped = false
+Bot2.Attack(Apocalypse Runner > Bot1)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 14
+Bot2.Life = 20
