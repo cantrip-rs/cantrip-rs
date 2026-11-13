@@ -1,0 +1,8 @@
+{
+  "name": "Rocketeer Boostbuggy",
+  "manaCost": "{R}{G}",
+  "type": "Artifact — Vehicle",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Whenever this Vehicle attacks, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")\nExhaust — {3}: This Vehicle becomes an artifact creature. Put a +1/+1 counter on it. (Activate each exhaust ability only once.)\nCrew 1"
+}

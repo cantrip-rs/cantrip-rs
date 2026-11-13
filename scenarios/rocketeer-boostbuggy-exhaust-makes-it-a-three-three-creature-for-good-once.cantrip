@@ -1,0 +1,49 @@
+# Rocketeer Boostbuggy: "Exhaust - {3}: This Vehicle becomes an artifact creature. Put a +1/+1 counter on it." costs {3} (two
+# sources are refused, the third pays it) and, once resolved, the Vehicle stays an artifact creature with the counter (4/3
+# here): it attacks on turn 3 with no crew and makes its Treasure, Bot2 taking 4. The ability can be activated once only
+# (CR 702.177a): a second try on turn 5, with the three sources untapped, is refused.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Forest
+Rocketeer Boostbuggy
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rocketeer Boostbuggy.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Rocketeer Boostbuggy.Activate(Ability: Exhaust; Mana: short)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Rocketeer Boostbuggy.Activate(Ability: Exhaust)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rocketeer Boostbuggy.Types = Artifact; Creature
+? Bot1.Battlefield.Rocketeer Boostbuggy.Power = 4
+? Bot1.Battlefield.Rocketeer Boostbuggy.Toughness = 3
+Bot1.Pass
+Bot1.Attack(Rocketeer Boostbuggy > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+! Bot1.Battlefield.Rocketeer Boostbuggy.Activate(Ability: Exhaust)
+
+[Expect]
+Bot1.Battlefield.Rocketeer Boostbuggy.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Rocketeer Boostbuggy.Types = Artifact; Creature
+Bot1.Battlefield.Treasure Token.Tapped = false

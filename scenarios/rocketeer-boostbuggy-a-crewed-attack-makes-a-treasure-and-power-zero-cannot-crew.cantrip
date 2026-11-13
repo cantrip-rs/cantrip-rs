@@ -1,0 +1,52 @@
+# Rocketeer Boostbuggy: "Whenever this Vehicle attacks, create a Treasure token" and Crew 1 (CR 702.122a). Bot1's only creature,
+# Ornithopter (power 0), cannot crew it; once Llanowar Elves (power 1) is cast it can. The crewed 3/2 attacks: Bot1 gets the
+# Treasure (one more permanent, untapped) and Bot2 takes 3. Nothing is created before the attack, and nothing when only
+# Ornithopter attacks on turn 5 with the Vehicle uncrewed: it is this Vehicle's attack, not any attack.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Forest
+Rocketeer Boostbuggy
+Llanowar Elves
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rocketeer Boostbuggy.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Rocketeer Boostbuggy.Activate(Ability: Crew)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Rocketeer Boostbuggy.Activate(Ability: Crew)
+Bot1.Choose(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 6
+Bot1.Pass
+Bot1.Attack(Rocketeer Boostbuggy > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Count = 7
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Count = 7
+Bot2.Battlefield.Count = 0
+Bot1.Battlefield.Treasure Token.Tapped = false
