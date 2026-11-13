@@ -1,0 +1,43 @@
+# Only an artifact or creature "you control" is offered (CR 614.1c, 109.5). Bot1 controls just an Island (not an artifact or a
+# creature) while Bot2 has Llanowar Elves, so there is nothing to copy: no question is asked and the Shapethief enters as itself,
+# a 0/0, and dies (CR 704.5f). Bot1 pays with Black Lotus, which is sacrificed, leaving no artifact behind.
+
+[Bot1 Deck]
+Island
+Island
+Black Lotus
+Waxen Shapethief
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Waxen Shapethief.Cast
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Island; Island
+Bot1.Graveyard = Waxen Shapethief; Black Lotus
+Bot2.Battlefield = Forest; Llanowar Elves

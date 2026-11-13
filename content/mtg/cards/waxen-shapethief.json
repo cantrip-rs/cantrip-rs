@@ -1,0 +1,11 @@
+{
+  "name": "Waxen Shapethief",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Shapeshifter",
+  "power": 0,
+  "toughness": 0,
+  "oracleText": "Flash\nYou may have this creature enter as a copy of an artifact or creature you control.\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "keywords": [
+    "Flash"
+  ]
+}
