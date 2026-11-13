@@ -1,0 +1,71 @@
+# Maximum Overdrive: "Put a +1/+1 counter on target creature. It gains deathtouch and indestructible until end of turn."
+# Bot2 Bolts Bot1's Walking Corpse (2/2) on turn 2; Bot1 answers with Maximum Overdrive, paid exactly from two Moxen. The
+# counter makes it 3/3 (CR 122.1a), so the Bolt's 3 damage is lethal damage (CR 704.5g) but indestructible keeps it on the
+# battlefield (CR 702.12b). On turn 3 the keywords are gone (CR 514.2, "until end of turn") and the counter stays, so it is
+# a 3/3 with no damage; Bot2's second Bolt on turn 4 then destroys it.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Mox Pearl
+Walking Corpse
+Maximum Overdrive
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Walking Corpse.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Walking Corpse)
+Bot2.Pass
+! Bot1.Hand.Maximum Overdrive.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Maximum Overdrive.Cast(Bot1.Battlefield.Walking Corpse)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Walking Corpse.Power = 3
+? Bot1.Battlefield.Walking Corpse.Toughness = 3
+? Bot1.Battlefield.Walking Corpse.Keywords = Deathtouch; Indestructible
+? Bot1.Battlefield.Walking Corpse.Counters.PlusOnePlusOne = 1
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+? Bot1.Battlefield.Walking Corpse.Damage = 3
+? Bot1.Graveyard = Maximum Overdrive
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Walking Corpse.Power = 3
+? Bot1.Battlefield.Walking Corpse.Toughness = 3
+? Bot1.Battlefield.Walking Corpse.Damage = 0
+? Bot1.Battlefield.Walking Corpse.Keywords = (absent)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Walking Corpse)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Turn = 4
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Swamp
+Bot1.Graveyard = Walking Corpse; Maximum Overdrive

@@ -1,0 +1,53 @@
+# Maximum Overdrive targets "target creature", so an opponent's creature is a legal target too (CR 115.1): Bot1 puts the
+# counter on Bot2's Ornithopter (0/2), making it 1/3 with deathtouch and indestructible until end of turn. Bot1's Bolt (3
+# damage) is lethal damage to a 1/3 but indestructible keeps it (CR 702.12b). The counter is Bot2's permanent's, not Bot1's.
+# The Spell cannot target a noncreature permanent (a Mox): refused beside the creature it allows.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Lightning Bolt
+Maximum Overdrive
+Mountain
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Maximum Overdrive.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Maximum Overdrive.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = 
+? Bot2.Battlefield.Ornithopter.Power = 1
+? Bot2.Battlefield.Ornithopter.Toughness = 3
+? Bot2.Battlefield.Ornithopter.Keywords = Deathtouch; Flying; Indestructible
+? Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Damage = 3
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+? Bot2.Battlefield.Ornithopter.Power = 1
+? Bot2.Battlefield.Ornithopter.Toughness = 3
+
+[Expect]
+Turn = 4
+Bot2.Battlefield = Ornithopter
+Bot1.Graveyard = Lightning Bolt; Maximum Overdrive
