@@ -1,0 +1,44 @@
+# The end step trigger has an intervening "if an opponent lost life this turn" (CR 603.4, 119.3). Turn 1: nobody lost life, so no
+# counter (the check is made before turn 3's end step resolves anything). Turn 3: the attack costs Bot2 2 life, so Bloodthief (the
+# only Vampire) puts a counter on itself. Turn 5: no attack, no life lost that turn - the life lost on turn 3 does not count -
+# so it stays at one counter.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Stromkirk Bloodthief
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stromkirk Bloodthief.Cast
+[T1 Bot1.End]
+Bot1.Pass
+? Stack.Count = 0
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Stromkirk Bloodthief.Counters.PlusOnePlusOne = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Stromkirk Bloodthief > Bot2)
+[T3 Bot1.End]
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Stromkirk Bloodthief.Counters.PlusOnePlusOne = 1
+[T5 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Stromkirk Bloodthief.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Stromkirk Bloodthief.Power = 3

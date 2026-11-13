@@ -1,0 +1,62 @@
+# At the beginning of Bloodthief's controller's end step, if an opponent lost life this turn, a +1/+1 counter goes on a target Vampire
+# that player controls. Bot1 attacks unblocked with Bloodthief on turn 3 (Bot2 20 -> 18) with a second Vampire, a non-Vampire (Memnite)
+# and Bot2's Vampire Noble on the table: the counter may go on Queen's Bay Soldier (the refusals show the non-Vampire and the
+# opponent's Vampire are not candidates) and not on Bloodthief itself (CR 603.4, intervening "if").
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Stromkirk Bloodthief
+Queen's Bay Soldier
+Memnite
+Island x14
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Vampire Noble
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stromkirk Bloodthief.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Vampire Noble.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Queen's Bay Soldier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Stromkirk Bloodthief > Bot2)
+[T3 Bot1.End]
+! Bot1.Target(Bot1.Battlefield.Memnite)
+! Bot1.Target(Bot2.Battlefield.Vampire Noble)
+Bot1.Target(Bot1.Battlefield.Queen's Bay Soldier)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Queen's Bay Soldier.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Queen's Bay Soldier.Power = 3
+Bot1.Battlefield.Stromkirk Bloodthief.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Vampire Noble.Counters.PlusOnePlusOne = (absent)
