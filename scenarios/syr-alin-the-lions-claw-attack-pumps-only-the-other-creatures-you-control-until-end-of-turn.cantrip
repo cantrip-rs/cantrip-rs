@@ -1,0 +1,55 @@
+# Syr Alin, the Lion's Claw: "Whenever Syr Alin attacks, other creatures you control get +1/+1 until end of turn." (CR 611.2c.)
+# Bot1 pays exactly {3}{W}{W} on turn 1 (Black Lotus and two Mox Pearls). On turn 3 Syr Alin attacks with a Memnite and an
+# Ornithopter stays home: the trigger gives the Memnite (2/2) and the Ornithopter (1/3) +1/+1, not Syr Alin itself (still 4/4)
+# and not Bot2's Memnite (1/1). Syr Alin has first strike. Nothing blocks: 4 + 2 damage (20 - 6 = 14). On turn 4 the
+# pumps are gone (CR 514.2).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Pearl
+Syr Alin, the Lion's Claw
+Memnite
+Ornithopter
+Plains x15
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Syr Alin, the Lion's Claw.Cast(Spend: W, W, W, W, W)
+? Bot1.Mana =
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Syr Alin, the Lion's Claw > Bot2; Memnite > Bot2)
+? Bot1.Battlefield.Syr Alin, the Lion's Claw.Keywords = FirstStrike
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Syr Alin, the Lion's Claw.Power = 4
+? Bot1.Battlefield.Syr Alin, the Lion's Claw.Toughness = 4
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot2.Battlefield.Memnite.Power = 1
+? Bot2.Battlefield.Memnite.Toughness = 1
+? Bot2.Life = 14
+[T4 Bot2.Main1]
+
+[Expect]
+Turn = 4
+Bot2.Life = 14
+Bot1.Battlefield.Syr Alin, the Lion's Claw.Power = 4
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
