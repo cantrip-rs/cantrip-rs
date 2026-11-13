@@ -1337,6 +1337,19 @@ pub fn reveal_until_a_land_onto_battlefield_tapped(g: &mut dyn Game, player: Pla
     Ok(())
 }
 
+/// "Reveal cards from the top of your library until you reveal two land cards. Put those land cards onto the battlefield tapped
+/// and the rest on the bottom of your library in a random order" (CR 701.20, 401.4, 110.2a, 101.4): the cards are revealed
+/// together down to the second land card, or the whole library when it holds fewer than two; the lands enter together under
+/// `player`, tapped, and only the cards that were not one of them go to the bottom. U.S.S. Voyager, Lone Wanderer and Skyserpent
+/// Seeker print it.
+pub fn reveal_until_two_lands_onto_battlefield_tapped(g: &mut dyn Game, player: PlayerId) -> Result<(), Suspend> {
+    let (lands, rest) = reveal_until_n(g, player, 2, &|q, card| q.chars(card).is(CardType::Land));
+    let entering: Vec<(ObjectId, PlayerId, bool)> = lands.into_iter().map(|land| (land, player, true)).collect();
+    g.put_all_onto_battlefield_as(&entering)?;
+    rest_to_bottom_in_random_order(g, player, &rest);
+    Ok(())
+}
+
 /// "Exile cards from the top of your library until you exile a nonland card [that `qualifies`]" (CR 701.57a, 702.85a): each
 /// card is exiled one at a time, face up, from the top until one is a nonland card `qualifies` accepts, or the library
 /// is empty. Every card that really reached exile, in order (the qualifying one last), and the qualifying card if there
