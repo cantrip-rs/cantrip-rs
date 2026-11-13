@@ -1,0 +1,43 @@
+# Waxen Shapethief has flash and may enter as a copy of an artifact or creature you control (CR 614.1c, 707.2). Bot1 casts
+# Grizzly Bears on turn 1, then flashes the Shapethief in on Bot2's turn 2 with Black Lotus and Mox Sapphire for {3}{U} and
+# chooses the Bears: it enters as a second 2/2 Grizzly Bears, named so and with no trace of the Shapethief's 0/0.
+
+[Bot1 Deck]
+Forest
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Grizzly Bears
+Waxen Shapethief
+Forest
+Forest x14
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Waxen Shapethief.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Grizzly Bears)
+[Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Forest; Grizzly Bears; Grizzly Bears; Mox Ruby; Mox Sapphire
+Bot1.Battlefield.Grizzly Bears#1.Power = 2
+Bot1.Graveyard = Black Lotus

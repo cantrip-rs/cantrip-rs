@@ -1,0 +1,44 @@
+# "An artifact or creature you control" (CR 614.1c, 707.2): the Shapethief can copy a Mox Ruby. It enters as an artifact that is
+# not a creature, so the 0/0 does not kill it, and the untapped copy taps for {R} to cast a Lightning Bolt. Bot1 taps the first
+# Mox Ruby on turn 1, so the second one is the Shapethief's untapped copy.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Waxen Shapethief
+Lightning Bolt
+Forest
+Forest
+Forest x14
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+[T2 Bot2.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Waxen Shapethief.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Mox Ruby)
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[Bot2.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield = Mox Ruby; Mox Ruby; Mox Sapphire
+Bot1.Battlefield.Mox Ruby#2.Types = Artifact
+Bot1.Battlefield.Mox Ruby#2.Tapped = true
+Bot1.Graveyard = Lightning Bolt; Black Lotus

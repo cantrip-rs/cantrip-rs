@@ -1,0 +1,40 @@
+# "You may" (CR 614.1c): Bot1 has a Grizzly Bears to copy but declines, so the Shapethief enters as itself, a 0/0, and
+# state-based actions put it into the graveyard (CR 704.5f). The Bears stay.
+
+[Bot1 Deck]
+Forest
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Grizzly Bears
+Waxen Shapethief
+Forest
+Forest x14
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Waxen Shapethief.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Forest; Grizzly Bears; Mox Ruby; Mox Sapphire
+Bot1.Graveyard = Waxen Shapethief; Black Lotus
