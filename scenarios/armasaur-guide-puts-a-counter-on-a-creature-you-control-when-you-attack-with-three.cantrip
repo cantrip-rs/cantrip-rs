@@ -1,0 +1,51 @@
+# Armasaur Guide: "Whenever you attack with three or more creatures, put a +1/+1 counter on target creature you control" (CR 508.1,
+# 603.2, 122.1). On turn 3 Bot1 attacks with the Guide, Memnite and Ornithopter (three): the trigger takes a target, refusing
+# Bot2's Memnite (it is not Bot1's creature), and Bot1 chooses Memnite, which gets the counter (2/2) in time to connect. The Guide has
+# vigilance, so it stays untapped while the Memnite and Ornithopter tap. Combat damage: 4 + 2 + 0 = 6, Bot2 20 to 14.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Armasaur Guide
+Memnite
+Ornithopter
+Plains x10
+
+[Bot2 Deck]
+Memnite
+Island x10
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Armasaur Guide.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Armasaur Guide > Bot2; Memnite > Bot2; Ornithopter > Bot2)
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Armasaur Guide.Tapped = false
+? Bot1.Battlefield.Memnite.Tapped = true
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Armasaur Guide.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Armasaur Guide.Tapped = false
+Bot1.Battlefield.Ornithopter.Tapped = true
