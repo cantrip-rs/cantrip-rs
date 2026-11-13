@@ -1,0 +1,84 @@
+# Explosive Getaway {3}{R}{W}: "Exile up to one target artifact or creature. Return it to the battlefield under its owner's control at the beginning of the next end step. [It] deals 4 damage to each creature."
+# In turn 3 Bot1 exiles its own Ornithopter (an Island is no target: not an artifact or a creature), so the Ornithopter is out of the way of the 4 damage, which kills Bot2's Memnite (1/1) and its Dune Beetle (a 1/4, exactly 4 toughness)
+# and not its Aegis Turtle, a 0/5, one toughness more than the damage. The Ornithopter comes back as the end step begins, and nothing before it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Explosive Getaway
+Ornithopter
+Island x13
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Aegis Turtle
+Dune Beetle
+Memnite
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Dune Beetle.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Explosive Getaway.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Explosive Getaway.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+? Bot2.Battlefield = Aegis Turtle; Island; Mox Emerald; Mox Jet; Mox Sapphire
+? Bot2.Graveyard = Dune Beetle; Memnite
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter
+Bot1.Graveyard = Explosive Getaway
+Bot2.Battlefield = Aegis Turtle; Island; Mox Emerald; Mox Jet; Mox Sapphire
+Bot2.Graveyard = Dune Beetle; Memnite

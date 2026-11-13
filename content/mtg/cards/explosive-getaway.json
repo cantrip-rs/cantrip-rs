@@ -1,0 +1,6 @@
+{
+  "name": "Explosive Getaway",
+  "manaCost": "{3}{R}{W}",
+  "type": "Sorcery",
+  "oracleText": "Exile up to one target artifact or creature. Return it to the battlefield under its owner's control at the beginning of the next end step.\nExplosive Getaway deals 4 damage to each creature."
+}

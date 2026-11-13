@@ -1,0 +1,67 @@
+# Explosive Getaway {3}{R}{W}: "Exile up to one target artifact or creature. Return it to the battlefield under its owner's control at the
+# beginning of the next end step." An artifact that is no creature is a legal target (CR 115.1): on turn 3 Bot1 exiles Bot2's Sol Ring, which
+# is in exile until the end step begins and then returns under Bot2's control. Bot2's Memnite dies to the 4 damage.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Explosive Getaway
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Jet
+Sol Ring
+Memnite
+Island x17
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Explosive Getaway.Cast(Bot2.Battlefield.Sol Ring)
+Bot1.Pass
+Bot2.Pass
+? Exile = Sol Ring
+? Bot2.Battlefield = Island; Mox Jet
+? Bot2.Graveyard = Memnite
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+
+[Expect]
+Bot2.Battlefield = Island; Mox Jet; Sol Ring
+Bot2.Graveyard = Memnite
+Bot1.Graveyard = Explosive Getaway

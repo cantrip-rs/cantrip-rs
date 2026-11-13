@@ -1,0 +1,48 @@
+# Explosive Getaway {3}{R}{W}: "Exile up to one target artifact or creature. Return it to the battlefield under its owner's control at the beginning of the next end step. [It] deals 4 damage to each creature."
+# Cast with no target chosen (CR 601.2c), nothing is exiled and nothing is set to return (the exile zone stays empty through the end step), and the 4 damage is still dealt: it kills Bot1's own
+# Ornithopter (a 0/2).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Explosive Getaway
+Ornithopter
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Explosive Getaway.Cast
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Graveyard = Ornithopter; Explosive Getaway
+Exile.Count = 0
