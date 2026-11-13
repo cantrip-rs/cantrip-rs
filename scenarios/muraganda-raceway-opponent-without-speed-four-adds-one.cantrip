@@ -1,0 +1,56 @@
+# Muraganda Raceway on the other side: Max speed is about its controller's own speed (CR 702.178a, 702.179), which is
+# tracked per player. Bot2 plays its own Muraganda Raceway on turn 2 and has speed 1 (CR 702.179a) while Bot1, with a
+# Raceway of its own and three Lightning Bolts, reaches speed 4 on turn 5. Bot2's land adds only {C}.
+
+[Bot1 Deck]
+Muraganda Raceway
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Mountain x15
+
+[Bot2 Deck]
+Muraganda Raceway
+Island x19
+
+[Actions]
+Bot1.Hand.Muraganda Raceway.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Muraganda Raceway.Play
+? Bot2.Speed = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+? Bot2.Speed = 1
+Bot1.Pass
+! Bot2.Battlefield.Muraganda Raceway.Activate(Ability: {C}{C})
+Bot2.Battlefield.Muraganda Raceway.Activate(Ability: Add)
+
+[Expect]
+Turn = 5
+Bot1.Speed = 4
+Bot2.Speed = 1
+Bot2.Mana = {C}

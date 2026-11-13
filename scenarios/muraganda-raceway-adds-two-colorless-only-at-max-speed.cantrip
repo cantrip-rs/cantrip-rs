@@ -1,0 +1,61 @@
+# Muraganda Raceway: "Start your engines!", "{T}: Add {C}" and "Max speed — {T}: Add {C}{C}" (CR 702.178a: as long as your
+# speed is 4, the land has that ability; it is a mana ability, CR 605.1a). Bot1 plays it on turn 1 for speed 1
+# (CR 702.179a), and Lightning Bolts on turns 1, 3 and 5 raise it once each (CR 702.179d): 2, 3, then 4. At speed 3 it
+# adds {C} and the {C}{C} ability is not offered. At speed 4 on turn 5 it adds {C}{C}, which pay for a Mind Stone exactly.
+
+[Bot1 Deck]
+Muraganda Raceway
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Mind Stone
+Mountain
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Muraganda Raceway.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+! Bot1.Battlefield.Muraganda Raceway.Activate(Ability: {C}{C})
+Bot1.Battlefield.Muraganda Raceway.Activate
+? Bot1.Mana = {C}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+Bot1.Battlefield.Muraganda Raceway.Activate(Ability: {C}{C})
+? Bot1.Mana = {C}{C}
+Bot1.Hand.Mind Stone.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 5
+Stack.Count = 0
+Bot1.Speed = 4
+Bot1.Mana = 
+Bot1.Battlefield.Mind Stone.Tapped = false
+Bot1.Battlefield.Muraganda Raceway.Tapped = true
