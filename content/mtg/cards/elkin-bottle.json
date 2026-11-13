@@ -1,0 +1,6 @@
+{
+  "name": "Elkin Bottle",
+  "manaCost": "{3}",
+  "type": "Artifact",
+  "oracleText": "{3}, {T}: Exile the top card of your library. Until the beginning of your next upkeep, you may play that card."
+}

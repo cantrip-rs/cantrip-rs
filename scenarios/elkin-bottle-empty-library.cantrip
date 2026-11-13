@@ -1,0 +1,27 @@
+# With an empty library, the Bottle exiles nothing and creates no playable card.
+[Bot1 Deck]
+Elkin Bottle
+Black Lotus
+Black Lotus
+Island x4
+[Bot2 Deck]
+Island x7
+Forest
+Island x15
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Elkin Bottle.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Elkin Bottle.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Exile = 
+Bot1.Library.Count = 0
+Bot1.Battlefield.Elkin Bottle.Tapped = true
