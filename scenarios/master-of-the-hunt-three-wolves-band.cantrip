@@ -1,0 +1,69 @@
+# Three Wolves can form a single band (CR 702.22c).
+[Bot1 Deck]
+Master of the Hunt
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Black Lotus
+Island x20
+[Bot2 Deck]
+Black Lotus
+Island
+Hill Giant
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Master of the Hunt.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Hill Giant.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Master of the Hunt.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wolves of the Hunt.Power = 1
+? Bot1.Battlefield.Wolves of the Hunt.Toughness = 1
+? Bot1.Battlefield.Wolves of the Hunt.Colors = Green
+? Bot1.Battlefield.Wolves of the Hunt.Subtypes = Wolf
+? Bot1.Battlefield.Wolves of the Hunt.Types = Creature
+? Bot1.Battlefield.Wolves of the Hunt.Token = true
+? Bot1.Battlefield.Wolves of the Hunt.Tapped = false
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Master of the Hunt.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Master of the Hunt.Tapped = false
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Master of the Hunt.Activate
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.BeginCombat]
+Bot1.Attack(Wolves of the Hunt; Wolves of the Hunt; Wolves of the Hunt)
+Bot1.Choose(Wolves of the Hunt#2; Wolves of the Hunt#3)
+? Combat.Attackers = Wolves of the Hunt > Bot2 (band 1); Wolves of the Hunt > Bot2 (band 1); Wolves of the Hunt > Bot2 (band 1)
+[T7 Bot1.Main2]
+[Expect]
+Bot2.Life = 17
