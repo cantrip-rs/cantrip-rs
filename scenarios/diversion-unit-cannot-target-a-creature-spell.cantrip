@@ -1,0 +1,30 @@
+# Diversion Unit targets only an instant or sorcery spell: it is not offered against Bot2's Ornithopter (an artifact creature
+# spell) and the Unit stays on the battlefield.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Diversion Unit
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Diversion Unit.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+! Bot1.Battlefield.Diversion Unit.Activate(Stack.Ornithopter)
+
+[Expect]
+Bot1.Battlefield.Diversion Unit.Types = Artifact; Creature
