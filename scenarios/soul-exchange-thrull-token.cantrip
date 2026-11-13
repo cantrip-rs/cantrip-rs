@@ -1,0 +1,37 @@
+# A Thrull token exiled for the cost was a Thrull even though it ceases to exist before resolution (CR 400.7, 704.5d).
+[Bot1 Deck]
+Breeding Pit
+Black Lotus
+Mox Pearl
+Mox Jet
+Swamp
+Entomb
+Soul Exchange
+Grizzly Bears
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Breeding Pit.Cast
+[T2 Bot2.End]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+[T3 Bot1.Upkeep]
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Soul Exchange.Cast(Grizzly Bears)
+? Bot1.Mana =
+Bot1.Choose(Thrull Token)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 4
+Bot1.Battlefield.Grizzly Bears.Toughness = 4

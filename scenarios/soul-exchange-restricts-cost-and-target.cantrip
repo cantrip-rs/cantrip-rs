@@ -1,0 +1,54 @@
+# Soul Exchange requires a creature its caster controls and targets only a creature card in that player's graveyard (CR 118.8, 115.1a).
+[Bot1 Deck]
+Soul Exchange
+Entomb
+Swamp
+Mox Jet
+Gleemox
+Ornithopter
+Entomb
+Grizzly Bears
+Memnite
+Island x20
+[Bot2 Deck]
+Entomb
+Swamp
+Ornithopter
+Mox Ruby
+Redirect Lightning
+Island x3
+Hill Giant
+Island x20
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Hill Giant)
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+! Bot1.Hand.Soul Exchange.Cast(Grizzly Bears)
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Hand.Soul Exchange.Cast(Hill Giant)
+! Bot1.Hand.Soul Exchange.Cast(Entomb)
+Bot1.Hand.Soul Exchange.Cast(Grizzly Bears)
+? Bot1.Mana =
+Bot1.Choose(Ornithopter)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Tapped = false
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot2.Graveyard.Hill Giant.Power = 3
+Bot2.Battlefield.Ornithopter.Power = 0

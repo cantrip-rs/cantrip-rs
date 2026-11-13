@@ -1,0 +1,39 @@
+# An opponent's Containment Priest exiles the creature card Soul Exchange returns, so "that creature" never entered the
+# battlefield and the exiled card gets no +2/+2 counter although a Thrull was exiled for the cost (CR 614.1a, 400.7, 122.1).
+[Bot1 Deck]
+Black Lotus
+Entomb
+Basal Thrull
+Soul Exchange
+Gleemox
+Mox Jet
+Island x2
+Grizzly Bears
+Island x20
+[Bot2 Deck]
+Black Lotus
+Containment Priest
+Island x20
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Containment Priest.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Basal Thrull.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Soul Exchange.Cast(Grizzly Bears)
+? Bot1.Mana =
+Bot1.Choose(Basal Thrull)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Exile.Grizzly Bears.Subtypes = Bear
+Bot1.Battlefield = Gleemox; Mox Jet
+Bot1.Exile.Grizzly Bears.Counters.Plus2Plus2 = (absent)
