@@ -1,0 +1,55 @@
+# Twinblade Blessing: double strike deals first-strike damage first (CR 702.4b, 510.4). Bot1's Isamaru (2/2) is blocked by Bot2's
+# Grizzly Bears (2/2); Bot1 flashes the Aura onto Isamaru after blockers are declared with Black Lotus' mana: the Bears dies to the
+# 2 first-strike damage before it deals any, so Isamaru survives undamaged, where without the Aura both would die. No damage
+# carries over to Bot2 (a blocked creature stays blocked). Once the Aura is gone - Bot2 destroys it with Disenchant on turn 4 -
+# Isamaru loses double strike again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Isamaru, Hound of Konda
+Twinblade Blessing
+Island x3
+Island x16
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Grizzly Bears
+Disenchant
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Isamaru, Hound of Konda > Bot2)
+Bot2.Block(Grizzly Bears > Isamaru, Hound of Konda)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Twinblade Blessing.Cast(Bot1.Battlefield.Isamaru, Hound of Konda)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Graveyard = Grizzly Bears
+? Bot1.Battlefield.Isamaru, Hound of Konda.Damage = 0
+? Bot2.Life = 20
+[T4 Bot2.Main1]
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Twinblade Blessing)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Isamaru, Hound of Konda.Keywords = (absent)
+
+[Expect]
+Bot1.Graveyard = Twinblade Blessing; Black Lotus

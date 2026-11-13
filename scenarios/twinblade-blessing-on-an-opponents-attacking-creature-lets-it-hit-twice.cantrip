@@ -1,0 +1,33 @@
+# Twinblade Blessing: "Enchanted creature has double strike" whoever controls the creature (CR 303.4e). Bot2's Memnite (1/1) attacks
+# on turn 4 and Bot1 flashes the Aura onto it with Black Lotus' mana (kept untapped since turn 1): it deals 1 in the first-strike
+# damage step and 1 more in the regular one, so Bot1 goes 20 -> 18, where unenchanted it would take 1. The Aura stays under Bot1's
+# control on Bot2's creature.
+
+[Bot1 Deck]
+Black Lotus
+Twinblade Blessing
+Island x18
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Twinblade Blessing.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Keywords = DoubleStrike
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 20
+Bot1.Battlefield.Twinblade Blessing.AttachedTo = Memnite
