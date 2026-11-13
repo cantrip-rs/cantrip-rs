@@ -1158,6 +1158,15 @@ pub fn permanent_of_any_subtype(q: &dyn Query, asker: &Asker, t: Target, subtype
     matches!(t, Target::Object(id) if on_battlefield(q, id)
         && subtypes.iter().any(|&s| q.chars(id).has_subtype(words.subtype(s))))
 }
+
+fn mount_or_vehicle_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    permanent_of_any_subtype(q, asker, t, &[Subtype::Mount, Subtype::Vehicle])
+}
+
+/// "Target Mount or Vehicle" (CR 115.1, 205.3m, 301.7): a permanent of either type on the battlefield, any controller's, whether or not
+/// it is a creature right now. Lagorin, Soul of Alacria ("each of up to two") and Daring Mechanic print it.
+pub const MOUNT_OR_VEHICLE: TargetSpec = target(mount_or_vehicle_filter);
+
 /// "Target card from your graveyard" (CR 115.1): any card in the graveyard of the ability's controller, still the card that
 /// was there (CR 400.7). Eternal Witness, Emeritus of Abundance, Bala Ged Recovery, Cathartic Parting, Tamiyo, Collector of Tales
 /// and Quintorius Kand ("any number of target cards from your graveyard") print it.
