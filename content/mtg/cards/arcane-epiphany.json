@@ -1,0 +1,6 @@
+{
+  "name": "Arcane Epiphany",
+  "manaCost": "{3}{U}{U}",
+  "type": "Instant",
+  "oracleText": "This spell costs {1} less to cast if you control a Wizard.\nDraw three cards."
+}

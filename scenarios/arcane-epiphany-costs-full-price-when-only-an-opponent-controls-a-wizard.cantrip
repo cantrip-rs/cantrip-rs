@@ -1,0 +1,46 @@
+# The reduction is for a Wizard "you control" (CR 601.2f): Bot2's Erudite Wizard (Black Lotus's {U}{U}{U} on turn 2) does not make Bot1's Arcane
+# Epiphany cheaper. On turn 3 Bot1 has {U}{U}{U}{U} (Lotus and a Mox Sapphire), one short of {3}{U}{U}: refused (Mana: short). With a second Mox
+# Sapphire it is cast for exactly five and draws three cards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Arcane Epiphany
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Erudite Wizard
+Island x18
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Erudite Wizard.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Arcane Epiphany.Cast(Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Arcane Epiphany.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 7
+Bot1.Graveyard = Arcane Epiphany; Black Lotus

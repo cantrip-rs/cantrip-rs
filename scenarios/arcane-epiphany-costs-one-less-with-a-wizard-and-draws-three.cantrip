@@ -1,0 +1,39 @@
+# "This spell costs {1} less to cast if you control a Wizard. Draw three cards." Bot1 casts Erudite Wizard (a Wizard) off one Black Lotus, then
+# Arcane Epiphany for exactly {2}{U}{U} off the second Lotus and a Mox Sapphire: the pool is empty after the cast (CR 601.2f, 118.7a), and it
+# draws three cards (Hand 2 Islands + 3, Library 13 - 3), the second of which grows Erudite Wizard.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Erudite Wizard
+Arcane Epiphany
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Erudite Wizard.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Arcane Epiphany.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Library.Count = 10
+Bot1.Graveyard = Arcane Epiphany; Black Lotus; Black Lotus
+Bot1.Battlefield.Erudite Wizard.Counters.PlusOnePlusOne = 1
