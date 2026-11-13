@@ -1,0 +1,24 @@
+# The Last Ride (Crew 2): Bot1's Memnite has power 1, below the crew cost of 2, so the crew ability is refused and the
+# Vehicle stays a noncreature artifact (CR 702.122a); it is not -X/-X-ed to death, as only a creature is.
+
+[Bot1 Deck]
+Black Lotus
+The Last Ride
+Memnite
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.The Last Ride.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.The Last Ride.Activate(Ability: Crew 2)
+
+[Expect]
+Bot1.Battlefield = The Last Ride; Memnite
+Bot1.Life = 20

@@ -1,0 +1,74 @@
+# The Last Ride {B}, 13/13: "The Last Ride gets -X/-X, where X is your life total." A negative life total makes X 0, not a
+# negative number, so the Vehicle never grows past its printed 13/13 (CR 107.1b; the same ruling as Death's Shadow's). Bot1
+# starts at 1 life and on turn 1 casts Platinum Angel (Black Lotus, Sol Ring, Mox Jet and Mox Emerald) so it can't lose the game;
+# Bot2's Lightning Bolt on turn 2 takes Bot1 to -2. On turn 3 Bot1 casts The Last Ride from its Swamp and crews it with the
+# Angel: it is a 13/13 artifact creature, not a 15/15.
+
+[Life]
+Bot1: 1
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring
+Mox Jet
+Mox Pearl
+Mox Emerald
+Platinum Angel
+Swamp
+The Last Ride
+Swamp x12
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Platinum Angel.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = -2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.The Last Ride.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.The Last Ride.Activate(Ability: Crew 2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Result = InProgress
+Bot1.Life = -2
+Bot1.Battlefield.Platinum Angel.Tapped = true
+Bot1.Battlefield.The Last Ride.Types = Artifact; Creature
+Bot1.Battlefield.The Last Ride.Power = 13
+Bot1.Battlefield.The Last Ride.Toughness = 13
