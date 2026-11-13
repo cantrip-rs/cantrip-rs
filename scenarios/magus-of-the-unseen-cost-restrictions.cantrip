@@ -1,0 +1,46 @@
+# The ability requires both blue and one additional mana; the same artifact can be taken when the full cost is available (CR 602.2b).
+[Bot1 Deck]
+Magus of the Unseen
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Island x20
+[Bot2 Deck]
+Mox Emerald
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Magus of the Unseen.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Sapphire.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Magus of the Unseen.Activate(Bot2.Battlefield.Mox Emerald; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Magus of the Unseen.Activate(Bot2.Battlefield.Mox Emerald)
+? Bot1.Mana =
+[T6 Bot2.Main1]
+[T7 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Magus of the Unseen.Activate(Bot2.Battlefield.Mox Emerald; Mana: short)
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Magus of the Unseen.Activate(Bot2.Battlefield.Mox Emerald)
+? Bot1.Mana =
+[T9 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Mox Emerald.Tapped = false

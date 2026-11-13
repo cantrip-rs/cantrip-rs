@@ -1,0 +1,44 @@
+# Regaining the stolen artifact before cleanup causes Magus's delayed ability to tap it under its new controller (CR 603.7b).
+[Bot1 Deck]
+Magus of the Unseen
+Mox Sapphire
+Mox Pearl
+Memnite
+Island x20
+[Bot2 Deck]
+Memnite
+Black Lotus x2
+Act of Treason x2
+Mountain x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Magus of the Unseen.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+[T4 Bot2.Main1]
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Magus of the Unseen.Activate(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite#2.Tapped = false
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot2.Hand.Act of Treason.Cast(Bot1.Battlefield.Memnite#1)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Memnite.Tapped = false
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Act of Treason.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Battlefield.Memnite#2.Tapped = true
