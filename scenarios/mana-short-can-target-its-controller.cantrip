@@ -1,0 +1,28 @@
+# Mana Short may target its controller, tapping both of that player's lands and emptying only their pool (CR 115.1a).
+[Bot1 Deck]
+Mana Short
+Black Lotus
+Mox Jet
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mana Short.Cast(Bot1)
+? Bot1.Mana =
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield.Island#1.Tapped = true
+Bot1.Battlefield.Island#2.Tapped = true
+Bot2.Battlefield.Island.Tapped = false

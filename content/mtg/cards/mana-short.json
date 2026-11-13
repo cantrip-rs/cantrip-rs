@@ -1,0 +1,6 @@
+{
+  "name": "Mana Short",
+  "manaCost": "{2}{U}",
+  "type": "Instant",
+  "oracleText": "Tap all lands target player controls and that player loses all unspent mana."
+}

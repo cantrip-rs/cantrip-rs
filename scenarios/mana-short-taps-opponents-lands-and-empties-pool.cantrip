@@ -1,0 +1,40 @@
+# Mana Short taps all the target's lands, including Maze of Ith, then removes mana made in response (CR 701.26a, 106.4).
+[Bot1 Deck]
+Mana Short
+Black Lotus
+Island
+Ornithopter
+Island x20
+[Bot2 Deck]
+Forest
+Maze of Ith
+Mox Ruby
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Maze of Ith.Play
+Bot2.Pass
+! Bot1.Hand.Mana Short.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mana Short.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+? Bot2.Mana = {R}{G}
+Bot2.Pass
+Bot1.Pass
+? Bot2.Mana =
+[Expect]
+Bot2.Battlefield.Forest.Tapped = true
+Bot2.Battlefield.Maze of Ith.Tapped = true
+Bot1.Battlefield.Island.Tapped = false
+Bot1.Battlefield.Ornithopter.Tapped = false
