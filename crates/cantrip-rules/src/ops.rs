@@ -4539,8 +4539,7 @@ pub fn destroy_together(cx: &mut Cx, ids: &[ObjectId], reason: ZoneReason) -> Ve
     let moves: Vec<Moving> = ids
         .iter()
         .copied()
-        .filter(|&id| live(cx.s(), id) && cx.s().obj(id).zone.is(ZoneKind::Battlefield))
-        .filter(|&id| !layers::chars(cx.cards(), cx.s(), &cx.g.log, id).has(Keyword::Indestructible))
+        .filter(|&id| cx.can_destroy(id))
         .map(|id| Moving::to(id, Zone::graveyard(cx.s().obj(id).owner)))
         .collect();
     move_together(cx, &moves, reason)

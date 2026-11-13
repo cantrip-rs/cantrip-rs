@@ -173,6 +173,8 @@ mod entered_known_tests;
 #[cfg(test)]
 mod enters_attacking_tests;
 #[cfg(test)]
+mod destroy_selection_tests;
+#[cfg(test)]
 mod enter_rules_tests;
 #[cfg(test)]
 mod land_play_rules_tests;

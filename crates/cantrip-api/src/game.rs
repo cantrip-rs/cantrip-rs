@@ -358,6 +358,13 @@ pub trait Query {
         obj.became.is_none() && obj.zone.is(ZoneKind::Battlefield)
     }
 
+    /// Whether destroying this permanent is possible (CR 701.8a, 702.12b), for a direct instruction that chooses what
+    /// to destroy (Drop of Honey, Porphyry Nodes). This is not target legality: an indestructible permanent may be
+    /// targeted normally. Regeneration replaces destruction rather than prohibiting the choice.
+    fn can_destroy(&self, id: ObjectId) -> bool {
+        self.is_on_battlefield(id) && !self.chars(id).has(Keyword::Indestructible)
+    }
+
     /// Current controller in the expected public zone, or the source's last controller while absent (CR 608.2h).
     fn controller(&self, id: ObjectId) -> PlayerId {
         self.state().last_known(id).or_else(|| self.state().phased_last_known(id)).map_or(self.obj(id).controller, |last| last.controller)
