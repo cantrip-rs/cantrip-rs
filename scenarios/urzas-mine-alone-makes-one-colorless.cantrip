@@ -1,0 +1,18 @@
+# Without an Urza's Power-Plant and an Urza's Tower, Urza's Mine taps for exactly one colorless mana (CR 605.1a).
+[Bot1 Deck]
+Urza's Mine x2
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Urza's Mine.Play
+Bot1.Battlefield.Urza's Mine.Activate
+? Bot1.Mana = {C}
+? Bot1.Battlefield.Urza's Mine.Tapped = true
+! Bot1.Battlefield.Urza's Mine.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Urza's Mine.Play
+Bot1.Battlefield.Urza's Mine#1.Activate
+? Bot1.Mana = {C}
+[Expect]
+Bot1.Mana = {C}
