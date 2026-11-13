@@ -1,0 +1,6 @@
+{
+  "name": "Trade the Helm",
+  "manaCost": "{4}{U}",
+  "type": "Sorcery",
+  "oracleText": "Exchange control of target artifact or creature you control and target artifact or creature an opponent controls.\nCycling {2} ({2}, Discard this card: Draw a card.)"
+}
