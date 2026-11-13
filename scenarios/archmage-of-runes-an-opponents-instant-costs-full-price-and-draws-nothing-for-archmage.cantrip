@@ -1,0 +1,40 @@
+# Archmage of Runes reduces only its controller's spells: Bot2, with one Island, cannot cast Think Twice ({1}{U}) in turn 2, and a Bot2
+# instant (Opt, {U}, after its Island) draws no extra card for Bot1's Archmage (Bot1's hand stays as it was).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Lotus Petal
+Archmage of Runes
+Island x3
+Island x13
+
+[Bot2 Deck]
+Island
+Think Twice
+Opt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Lotus Petal.Activate(Color: Blue)
+Bot1.Hand.Archmage of Runes.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+! Bot2.Hand.Think Twice.Cast(Mana: short)
+Bot2.Hand.Opt.Cast
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Hand = Island; Island; Island

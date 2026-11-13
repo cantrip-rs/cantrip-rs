@@ -1,0 +1,8 @@
+{
+  "name": "Archmage of Runes",
+  "manaCost": "{3}{U}{U}",
+  "type": "Creature — Giant Wizard",
+  "power": 3,
+  "toughness": 6,
+  "oracleText": "Instant and sorcery spells you cast cost {1} less to cast.\nWhenever you cast an instant or sorcery spell, draw a card."
+}

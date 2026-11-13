@@ -1,0 +1,42 @@
+# Archmage of Runes: Bot1 casts it in turn 1 (Black Lotus, Mox Sapphire, Lotus Petal). In turn 3 Think Twice ({1}{U}) costs only {U} (one Mox
+# Sapphire), and casting it draws a card for Archmage before Think Twice draws its own; Brineborn Cutthroat ({1}{U}), a creature spell, is
+# not reduced, so a single {U} cannot pay for it, nor for Lunar Insight ({2}{U}) which costs only one less.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Lotus Petal
+Archmage of Runes
+Think Twice
+Brineborn Cutthroat
+Lunar Insight
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Lotus Petal.Activate(Color: Blue)
+Bot1.Hand.Archmage of Runes.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Brineborn Cutthroat.Cast(Mana: short)
+! Bot1.Hand.Lunar Insight.Cast(Mana: short)
+Bot1.Hand.Think Twice.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Brineborn Cutthroat; Island; Island; Island; Lunar Insight
+Bot1.Library.Count = 10
+Bot1.Graveyard = Think Twice; Lotus Petal; Black Lotus
