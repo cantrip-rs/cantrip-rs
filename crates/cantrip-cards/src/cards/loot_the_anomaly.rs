@@ -13,19 +13,13 @@ fn shrink_loot(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Activate only if there are seven or more cards in your graveyard." Threshold is an ability word (CR 207.2c); the
-/// card count is checked when activation is offered.
-fn has_threshold(q: &dyn Query, asker: &Asker) -> bool {
-    cantrip_mechanics::threshold(q, asker.controller)
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[ability(
         sacrifice(1, targets::filters::another_creature_or_planeswalker),
         shrink_loot,
         "Threshold — Sacrifice another creature or planeswalker: Loot gets -2/-0 until end of turn. Activate only if there are seven or more cards in your graveyard.",
     )
-    .condition(has_threshold)],
+    .condition(cantrip_mechanics::you_have_threshold)],
     damage_by_absolute_power: &[loot_assigns_absolute_power],
     ..oracle::LOOT_THE_ANOMALY
 };

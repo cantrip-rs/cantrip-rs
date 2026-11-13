@@ -7,12 +7,6 @@ fn minus_four_power(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
     chars.power = chars.power.map(|power| power - 4);
 }
 
-/// The threshold condition is an intervening "if" (CR 603.4): the core checks it as each upkeep begins and again as the
-/// ability resolves. The graveyard belongs to the Aura's controller.
-fn threshold(q: &dyn Query, asker: &Asker) -> bool {
-    cantrip_mechanics::threshold(q, asker.controller)
-}
-
 pub static CARD: CardDef = CardDef {
     enchant: Some(targets::CREATURE),
     abilities: &[triggered(
@@ -20,7 +14,7 @@ pub static CARD: CardDef = CardDef {
         exile_enchanted_creature,
         "At the beginning of each upkeep, if there are seven or more cards in your graveyard, exile enchanted creature.",
     )
-    .condition(threshold)],
+    .condition(cantrip_mechanics::you_have_threshold)],
     block_rules: &[enchanted_creature_cant_block],
     statics: &[
         static_ability(Layer::Type, attached_object, creature_type_alone::<{ lands::sub(Subtype::Salamander) }>, "Enchanted creature is a Salamander."),

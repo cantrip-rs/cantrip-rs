@@ -538,6 +538,13 @@ pub fn threshold(q: &dyn Query, player: PlayerId) -> bool {
     q.state().zone(Zone::graveyard(player)).len() >= 7
 }
 
+/// "If there are seven or more cards in your graveyard" / "activate only if ..." as a condition on an ability (CR 603.4, 602.5b):
+/// asked of the ability's controller as it triggers or is offered, and again as a trigger resolves. De-Evolve, Loot the Anomaly,
+/// Tersa Lightshatter and Kiora, the Rising Tide print it.
+pub fn you_have_threshold(q: &dyn Query, asker: &Asker) -> bool {
+    threshold(q, asker.controller)
+}
+
 /// "Tap an untapped creature you control" as a cost (CR 118.3): one creature its payer chooses, summoning sick or not,
 /// since it is not the {T} symbol of that creature (CR 107.5, 302.6). Earthcraft, Kyren Negotiations and Springleaf Drum
 /// print it.
