@@ -1,0 +1,52 @@
+# Cathedral grants a white-green legendary creature the ability, but not green legends or opposing white legends (CR 702.22b, 702.22c).
+[Bot1 Deck]
+Cathedral of Serra
+Mox Emerald
+Mox Pearl
+Reptil, Dinomorpher
+Rick Jones, Destined Sidekick
+Gaddock Teeg
+Black Lotus
+Island x13
+[Bot2 Deck]
+Mox Pearl
+Mox Emerald
+Isamaru, Hound of Konda
+Reptil, Dinomorpher
+Island x16
+[Actions]
+Bot1.Hand.Cathedral of Serra.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Reptil, Dinomorpher.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Reptil, Dinomorpher.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Isamaru, Hound of Konda.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rick Jones, Destined Sidekick.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gaddock Teeg.Cast
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Reptil, Dinomorpher > Bot2; Rick Jones, Destined Sidekick > Bot2)
+? Combat.Attackers = Reptil, Dinomorpher > Bot2; Rick Jones, Destined Sidekick > Bot2
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Gaddock Teeg > Bot2; Reptil, Dinomorpher > Bot2; Rick Jones, Destined Sidekick > Bot2)
+Bot1.Choose(Reptil, Dinomorpher; Rick Jones, Destined Sidekick)
+? Combat.Attackers = Gaddock Teeg > Bot2 (band 1); Reptil, Dinomorpher > Bot2 (band 1); Rick Jones, Destined Sidekick > Bot2 (band 1)
+[T8 Bot2.DeclareAttackers]
+Bot2.Attack(Isamaru, Hound of Konda > Bot1; Bot2.Battlefield.Reptil, Dinomorpher > Bot1)
+? Combat.Attackers = Isamaru, Hound of Konda > Bot1; Reptil, Dinomorpher > Bot1
+[Expect]
+Bot1.Battlefield.Gaddock Teeg.Colors = Green; White
