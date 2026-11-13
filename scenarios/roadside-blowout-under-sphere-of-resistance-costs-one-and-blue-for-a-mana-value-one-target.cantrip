@@ -1,0 +1,67 @@
+# Roadside Blowout: "This spell costs {2} less to cast if it targets a permanent with mana value 1." Bot2's Sphere of Resistance
+# ("Spells cost {1} more to cast") raises the {2}{U} to {3}{U} first, and the reduction then takes {2} of the generic mana
+# (CR 601.2f): with Llanowar Elves (mana value 1) as the target it costs exactly {1}{U}: the {U}{U} of an Island and a
+# Mox Sapphire pays it and the pool is empty after. The Elves return to Bot2's hand and Bot1 draws a card.
+
+[Bot1 Deck]
+Island
+Roadside Blowout
+Mox Sapphire
+Island
+Island
+Island
+Island
+Plains
+Island x11
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Sphere of Resistance
+Llanowar Elves
+Forest x15
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Sphere of Resistance.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Llanowar Elves.Power = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Mana = {U}{U}
+Bot1.Hand.Roadside Blowout.Cast(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Graveyard = Roadside Blowout
+Bot1.Hand.Count = 6
+Bot2.Battlefield = Forest; Mox Emerald; Mox Jet; Mox Ruby; Mox Pearl; Sphere of Resistance

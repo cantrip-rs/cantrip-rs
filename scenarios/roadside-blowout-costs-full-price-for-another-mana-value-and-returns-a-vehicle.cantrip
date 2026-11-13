@@ -1,0 +1,53 @@
+# Roadside Blowout: "This spell costs {2} less to cast if it targets a permanent with mana value 1." Bot2's Smuggler's
+# Copter has mana value 2, so the cast costs the full {2}{U}: with {U}{U}{R} in the pool it is paid and the pool is empty
+# after. An uncrewed Vehicle is a legal target (CR 205.3g); the Copter returns to Bot2's hand and Bot1 draws a card. Bot1's
+# own Ornithopter is a creature an opponent does not control, so it is refused as a target.
+
+[Bot1 Deck]
+Island
+Roadside Blowout
+Mox Sapphire
+Mox Ruby
+Ornithopter
+Island
+Island
+Island
+Island x11
+
+[Bot2 Deck]
+Mox Pearl
+Smuggler's Copter
+Island
+Island x17
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Smuggler's Copter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana = {U}{U}{R}
+! Bot1.Hand.Roadside Blowout.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Hand.Roadside Blowout.Cast(Bot2.Battlefield.Smuggler's Copter)
+? Bot1.Mana =
+Bot1.Pass
+[Bot1.Main2]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Graveyard = Roadside Blowout
+Bot1.Battlefield = Island; Mox Sapphire; Mox Ruby; Ornithopter
+Bot1.Hand.Count = 4
+Bot2.Battlefield = Island; Mox Pearl
