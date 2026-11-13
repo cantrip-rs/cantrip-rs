@@ -1,0 +1,57 @@
+# Roadside Assistance ({2}{W} Aura, Enchant creature or Vehicle): "When this Aura enters, create a 1/1 colorless Pilot creature
+# token with ... Enchanted permanent gets +1/+1 and has lifelink." Bot1 enchants its Grizzly Bears on turn 1: the Pilot token enters
+# (CR 111.1) and the Bears are a 3/3 with lifelink (CR 702.15). On turn 3 the Bears attack Bot2: 3 damage, and Bot1 gains 3.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Roadside Assistance
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Roadside Assistance.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pilot Token.Power = 1
+? Bot1.Battlefield.Grizzly Bears.Power = 3
+? Bot1.Battlefield.Grizzly Bears.Toughness = 3
+[T3 Bot1.Main1]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 17
+Bot1.Battlefield.Grizzly Bears.Keywords = Lifelink
+Bot1.Battlefield.Pilot Token.Types = Creature
+Bot1.Battlefield.Pilot Token.Power = 1
+Bot1.Battlefield.Pilot Token.Toughness = 1
