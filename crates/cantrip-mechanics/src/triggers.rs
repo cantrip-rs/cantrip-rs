@@ -1855,13 +1855,14 @@ pub fn legendary_creature_you_control_enters(q: &dyn Query, me: &Asker, event: &
 /// "Whenever a [subtype] you control enters" (CR 603.6a), `SUBTYPE` a `Subtype` as `u16` (`lands::sub`): a permanent under your
 /// control as it entered that has that subtype, this one included if it does, the type read through the words of the source's
 /// text (CR 612). Last Light of Durin's Day, Valakut, the Molten Pinnacle and Koth, Fire of Resistance's emblem print it, for
-/// Mountains, and Sarkhan, Dragon Ascendant and Roiling Dragonstorm (`DRAGON_YOU_CONTROL_ENTERS`) for Dragons.
+/// Mountains, and Sarkhan, Dragon Ascendant and Roiling Dragonstorm (`DRAGON_YOU_CONTROL_ENTERS`) for Dragons. The trigger is about the permanent
+/// that entered (`StackItem::subject`), which Kolodin, Triumph Caster's Mount and Vehicle abilities act on.
 pub fn of_subtype_you_control_enters<const SUBTYPE: u16>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
         Event::ZoneChange { new, to, .. }
             if to.is(ZoneKind::Battlefield) && q.controller(*new) == me.controller && q.chars(*new).has_subtype(crate::lands::word(q, me.source, SUBTYPE)) =>
         {
-            Fired::PLAIN
+            Fired::about(Target::Object(*new))
         }
         _ => None,
     }
@@ -2691,6 +2692,9 @@ pub const COMMANDER_YOU_CONTROL_ENTERS_OR_ATTACKS: Trigger =
     when_asked(EventMask(EventMask::ZONE_CHANGE.0 | EventMask::ATTACKS.0), commander_you_control_enters_or_attacks);
 /// "Whenever a Dragon you control enters" (CR 603.6a). Sarkhan, Dragon Ascendant and Roiling Dragonstorm print it.
 pub const DRAGON_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, of_subtype_you_control_enters::<{ crate::lands::sub(Subtype::Dragon) }>);
+/// "Whenever a Vehicle you control enters" (CR 603.6a): about the Vehicle that entered. Kolodin, Triumph Caster and Miles "Tails" Prower
+/// print it.
+pub const VEHICLE_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, of_subtype_you_control_enters::<{ crate::lands::sub(Subtype::Vehicle) }>);
 pub const OPPONENTS_CREATURE_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, opponents_creature_enters);
 pub const LEGENDARY_CREATURE_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, legendary_creature_you_control_enters);
 

@@ -285,6 +285,14 @@ pub fn your_of_subtype<const SUBTYPE: u16>(q: &dyn LayerQuery, source: ObjectId,
         && q.state().obj(affected).controller == q.state().obj(source).controller
 }
 
+/// "Mounts and Vehicles you control" (CR 613.1f, 205.3m, 301.7) as `StaticDef::affects`: every permanent under the source's controller's
+/// control that the earlier layers made a Mount or a Vehicle, creature or not, the types read through the words of the source's text
+/// (CR 612.2). Cloudspire Captain (+1/+1) and Kolodin, Triumph Caster (haste) print it.
+pub fn mounts_and_vehicles_you_control(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
+    let words = q.words(source);
+    (so_far.has_subtype(words.subtype(Subtype::Mount)) || so_far.has_subtype(words.subtype(Subtype::Vehicle))) && q.controller(affected) == q.controller(source)
+}
+
 /// "Other [subtype]s you control" (CR 613.1f, layer 6): `your_of_subtype` without the source itself. Coppercoat Vanguard
 /// (Humans), Lyra Dawnbringer (Angels) and Magda, Brazen Outlaw (Dwarves) print it.
 pub fn other_of_subtype_you_control<const SUBTYPE: u16>(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
