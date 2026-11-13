@@ -1149,6 +1149,16 @@ pub fn choose_a_card_name(g: &mut dyn Game, item: &StackItem, kind: NameKind, su
     Ok(Some(name))
 }
 
+/// "As this permanent enters, choose a nonland card name." (CR 614.12a, 201.3): recorded as the entering object's chosen name,
+/// for its other text to refer to (`GameState::chosen_card`). Kai Winn, Faithless Leader and Skyseer's Chariot print it.
+pub fn as_this_enters_choose_a_nonland_card_name(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
+    let ask = RequestKind::ChooseName { source: entering.object, looked_at: Vec::new(), suggestion: None, kind: NameKind::NONLAND };
+    if let Answer::Name(name) = g.ask(entering.controller, ask)? {
+        entering.chosen_card = name;
+    }
+    Ok(())
+}
+
 /// "Return target <permanent> to its owner's hand. Surveil N." as one spell's whole effect, for its first target.
 /// Banishing Betrayal (nonland permanent, surveil 1) and Ephara's Dispersal (creature, surveil 2) print it. A spell whose
 /// only target has become illegal does nothing at all (CR 608.2b), so there is no surveil then; otherwise the surveil
