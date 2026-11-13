@@ -1,0 +1,45 @@
+# Preventing all upkeep damage leaves Minion untapped; a prior unprevented upkeep deals five and taps it (CR 615.7).
+[Bot1 Deck]
+Minion of Leshrac
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Circle of Protection: Black
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Minion of Leshrac.Cast
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+[T3 Bot1.Main1]
+? Bot1.Life = 15
+? Bot1.Battlefield.Minion of Leshrac.Tapped = true
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Circle of Protection: Black.Cast
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Circle of Protection: Black.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Minion of Leshrac)
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Life = 15
+Bot1.Battlefield.Minion of Leshrac.Tapped = false
