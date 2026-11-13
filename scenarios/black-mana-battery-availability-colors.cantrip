@@ -1,0 +1,31 @@
+# An uncharged Battery can pay for black, but cannot pay for white, blue, red, or green (CR 601.2g, 106.4).
+[Bot1 Deck]
+Black Mana Battery
+Black Lotus
+Mox Pearl
+Savannah Lions
+Merfolk of the Pearl Trident
+Lightning Bolt
+Llanowar Elves
+Dark Ritual
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Black Mana Battery.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Savannah Lions.Cast(Mana: short)
+! Bot1.Hand.Merfolk of the Pearl Trident.Cast(Mana: short)
+! Bot1.Hand.Lightning Bolt.Cast(Bot2; Mana: short)
+! Bot1.Hand.Llanowar Elves.Cast(Mana: short)
+Bot1.Battlefield.Black Mana Battery.Activate(Ability: Remove any number; X: 0)
+Bot1.Pass
+? Bot1.Mana = {B}
+[Expect]
+Bot1.Battlefield.Black Mana Battery.Tapped = true

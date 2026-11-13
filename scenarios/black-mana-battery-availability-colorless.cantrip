@@ -1,0 +1,36 @@
+# Two other mana sources and an uncharged Battery cannot supply {2}{C} for World Breaker (CR 107.4c, 601.2g).
+[Bot1 Deck]
+Black Mana Battery
+Black Lotus
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Entomb
+Swamp
+World Breaker
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(World Breaker)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Black Mana Battery.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Graveyard.World Breaker.Activate(Mana: short)
+Bot1.Battlefield.Black Mana Battery.Activate(Ability: Remove any number; X: 0)
+Bot1.Pass
+? Bot1.Mana = {W}{U}{B}
+[Expect]
+Bot1.Graveyard.World Breaker.Power = 5
