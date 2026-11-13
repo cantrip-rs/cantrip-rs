@@ -1,7 +1,7 @@
 use cantrip_api::*;
 use cantrip_mechanics::statics::{plus_pt, your_of_subtype};
 use cantrip_mechanics::tokens::{self, SPIDER};
-use cantrip_mechanics::{lands, triggers};
+use cantrip_mechanics::{lands, permanents_with_subtype_you_control, triggers};
 use cantrip_oracle as oracle;
 
 /// "Create a 2/1 green Spider creature token with reach, then you gain 1 life for each Spider you control." (CR 608.2c, 119.3):
@@ -12,8 +12,8 @@ fn spider_then_life_for_each(g: &mut dyn Game, item: &StackItem) -> Result<(), S
     // A sentence ends (CR 608.2c): what the token did is judged before the count is made.
     g.end_sentence();
     let spider = g.words(item.object).subtype(Subtype::Spider);
-    let spiders = g.permanents_of(item.controller).into_iter().filter(|&id| g.chars(id).has_subtype(spider)).count();
-    g.gain_life(item.controller,(spiders) as i32);
+    let spiders = permanents_with_subtype_you_control(g, item.controller, spider);
+    g.gain_life(item.controller, spiders as i32);
     Ok(())
 }
 
