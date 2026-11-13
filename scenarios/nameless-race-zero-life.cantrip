@@ -1,0 +1,56 @@
+# Platinum Angel keeps the player in the game at zero life; they cannot pay one life (CR 119.4).
+[Life]
+Bot1: 3
+
+[Bot1 Deck]
+Platinum Angel
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Sol Ring
+Lightning Bolt
+Nameless Race
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Savannah Lions
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Platinum Angel.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 0
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Nameless Race.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Number(1)
+Bot1.Number(0)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 0
+Bot1.Graveyard.Nameless Race.Colors = Black

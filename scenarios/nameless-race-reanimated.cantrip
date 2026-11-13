@@ -1,0 +1,38 @@
+# Reanimate puts the creature onto the battlefield during resolution; its controller pays before Reanimate's life loss.
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Entomb
+Reanimate
+Island x3
+Nameless Race
+Island x15
+
+[Bot2 Deck]
+Mox Pearl
+Savannah Lions
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Nameless Race)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Reanimate.Cast(Bot1.Graveyard.Nameless Race)
+Bot1.Pass
+Bot2.Pass
+Bot1.Number(1)
+Bot1.Accept
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 15
+Bot1.Battlefield.Nameless Race.Power = 1
+Bot1.Battlefield.Nameless Race.Toughness = 1
