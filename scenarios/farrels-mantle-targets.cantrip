@@ -1,0 +1,31 @@
+# The attacker cannot target itself, but may target another creature controlled by either player (CR 115.1d).
+[Bot1 Deck]
+Black Lotus
+Farrel's Mantle
+Memnite
+Ornithopter
+Phyrexian Walker
+Plains x20
+[Bot2 Deck]
+Memnite
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Farrel's Mantle.Cast(Memnite)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Plains.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+! Bot1.Target(Bot1.Battlefield.Memnite)
+! Bot1.Target(Bot2.Battlefield.Plains)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Accept
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Memnite = (absent)
+Bot2.Life = 20

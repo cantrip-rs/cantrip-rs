@@ -1,0 +1,44 @@
+# If the animated artifact stops being a creature before resolution, its missing power is zero (CR 107.2, 208.3).
+[Bot1 Deck]
+Black Lotus x2
+Sol Ring
+Animate Artifact
+Farrel's Mantle
+Steel Wall
+Island
+Plains x20
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Ornithopter
+Disenchant
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Steel Wall.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Animate Artifact.Cast(Bot1.Battlefield.Sol Ring)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Farrel's Mantle.Cast(Bot1.Battlefield.Sol Ring)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Sol Ring > Bot2)
+Bot1.Target(Bot1.Battlefield.Steel Wall)
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Animate Artifact)
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Steel Wall.Damage = 2

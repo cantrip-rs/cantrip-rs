@@ -1,0 +1,27 @@
+# An unblocked enchanted creature may deal its power plus two to another creature instead of assigning combat damage (CR 603.2).
+[Bot1 Deck]
+Black Lotus
+Farrel's Mantle
+Memnite
+Ornithopter
+Plains x20
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Farrel's Mantle.Cast(Memnite)
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2; Ornithopter > Bot2)
+Bot1.Accept
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Ornithopter = (absent)
