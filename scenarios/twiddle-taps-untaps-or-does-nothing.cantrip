@@ -1,0 +1,41 @@
+# Twiddle can untap an artifact, tap an opponent's creature, or leave a land unchanged; an enchantment is not a legal target (CR 115.1, 608.2d).
+[Bot1 Deck]
+Twiddle x3
+Mox Sapphire x3
+Island x20
+[Bot2 Deck]
+Forest
+Mox Emerald
+Llanowar Elves
+Exploration
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Exploration.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+! Bot1.Hand.Twiddle.Cast(Bot2.Battlefield.Exploration)
+Bot1.Hand.Twiddle.Cast(Bot1.Battlefield.Mox Sapphire#1)
+? Bot1.Mana =
+Bot1.Modes(Untap)
+? Bot1.Battlefield.Mox Sapphire#1.Tapped = false
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Twiddle.Cast(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Modes(Tap)
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Twiddle.Cast(Bot2.Battlefield.Forest)
+? Bot1.Mana =
+Bot1.Modes(Do nothing)
+[Expect]
+Bot2.Battlefield.Forest.Tapped = true
+Bot2.Battlefield.Llanowar Elves.Tapped = true

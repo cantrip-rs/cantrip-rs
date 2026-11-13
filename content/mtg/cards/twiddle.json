@@ -1,0 +1,6 @@
+{
+  "name": "Twiddle",
+  "manaCost": "{U}",
+  "type": "Instant",
+  "oracleText": "You may tap or untap target artifact, creature, or land."
+}

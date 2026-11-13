@@ -1,0 +1,24 @@
+# The target's controller taps the land in response; Twiddle's controller then chooses Tap at resolution,
+# which leaves it tapped rather than toggling it (CR 608.2d, 701.26a).
+[Bot1 Deck]
+Twiddle
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Forest
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Twiddle.Cast(Bot2.Battlefield.Forest)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Forest.Activate
+? Bot2.Battlefield.Forest.Tapped = true
+Bot2.Pass
+Bot1.Modes(Tap)
+[Expect]
+Bot2.Battlefield.Forest.Tapped = true
