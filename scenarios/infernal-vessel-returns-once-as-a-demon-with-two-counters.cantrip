@@ -1,0 +1,42 @@
+# Infernal Vessel: "When this creature dies, if it wasn't a Demon, return it to the battlefield under its owner's control with two
+# +1/+1 counters on it. It's a Demon in addition to its other types" (CR 700.4, 603.4, 122.6, 205.1b). Bot2 Bolts the 2/1 Vessel:
+# it comes back a 4/3 Demon, still a Human Cleric, with exactly two +1/+1 counters (CR 122.6) and no damage on it (CR 400.7).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Infernal Vessel
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Infernal Vessel.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Infernal Vessel)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Infernal Vessel.Power = 4
+Bot1.Battlefield.Infernal Vessel.Toughness = 3
+Bot1.Battlefield.Infernal Vessel.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Infernal Vessel.Subtypes = Cleric; Demon; Human
+Bot1.Battlefield.Infernal Vessel.Damage = 0
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard = Lightning Bolt

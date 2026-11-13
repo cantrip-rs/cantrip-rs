@@ -1,0 +1,44 @@
+# Infernal Vessel: "if it wasn't a Demon" (CR 603.4, 603.10a). Bot2 Bolts the Vessel twice: the first death returns it a 4/3
+# Demon, the second (it was a Demon, as it last was on the battlefield) does not, so it stays in the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Infernal Vessel
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Infernal Vessel.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Infernal Vessel)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Infernal Vessel)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Infernal Vessel = (absent)
+Bot1.Graveyard = Infernal Vessel
+Bot2.Graveyard.Count = 2
