@@ -1,0 +1,6 @@
+{
+  "name": "Alacrian Armory",
+  "manaCost": "{3}{W}",
+  "type": "Artifact",
+  "oracleText": "Creatures you control get +0/+1 and have vigilance.\nAt the beginning of combat on your turn, choose up to one target Mount or Vehicle you control. Until end of turn, that permanent becomes saddled if it's a Mount and becomes an artifact creature if it's a Vehicle."
+}
