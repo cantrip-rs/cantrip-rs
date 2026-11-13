@@ -1,0 +1,19 @@
+# Revelation makes both players' hands public while it remains on the battlefield (CR 604.1).
+[Bot1 Deck]
+Revelation
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Revelation.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+# Cross-player hand visibility is asserted by revelation_visibility.rs at this position.
+[Expect]
+Bot1.Battlefield = Forest; Revelation
+# The World supertype is asserted by revelation_visibility.rs; the dump omits it.
