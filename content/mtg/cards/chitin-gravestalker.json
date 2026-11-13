@@ -1,0 +1,8 @@
+{
+  "name": "Chitin Gravestalker",
+  "manaCost": "{5}{B}",
+  "type": "Creature — Insect Warrior",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "This spell costs {1} less to cast for each artifact and/or creature card in your graveyard.\nCycling {2} ({2}, Discard this card: Draw a card.)"
+}

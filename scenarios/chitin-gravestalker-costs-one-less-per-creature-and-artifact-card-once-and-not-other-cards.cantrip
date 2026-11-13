@@ -1,0 +1,51 @@
+# Chitin Gravestalker: "This spell costs {1} less to cast for each artifact and/or creature card in your graveyard" (CR 601.2f,
+# 118.7a). Bot2 bolts Bot1's Dryad Arbor (a land creature card) and Memnite (an artifact creature card, counted once) on turn 2. On
+# turn 3 Bot1's Dark Ritual joins them, an instant, which must not count. The Gravestalker costs {3}{B}: Jet into Ritual makes
+# BBB, three mana, which is refused (it would cost {2}{B} if the Ritual counted, or if Memnite counted twice); Mox Ruby
+# makes four and it is cast, leaving the pool empty.
+
+[Bot1 Deck]
+Dryad Arbor
+Memnite
+Swamp
+Mox Jet
+Dark Ritual
+Chitin Gravestalker
+Mox Ruby
+Swamp x13
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Dryad Arbor.Play
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Dryad Arbor)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Chitin Gravestalker.Cast(Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Chitin Gravestalker.Cast
+? Bot1.Mana = 
+
+[Expect]
+Bot1.Graveyard = Dark Ritual; Memnite; Dryad Arbor
