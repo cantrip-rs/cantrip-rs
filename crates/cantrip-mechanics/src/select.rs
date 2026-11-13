@@ -147,6 +147,18 @@ pub const fn subtype_card(subtype: Subtype) -> Part {
     part(&(self::subtype as SelectFn), crate::lands::sub(subtype) as u32, "")
 }
 
+fn subtype_of_either_rule<const A: u16, const B2: u16>(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
+    let (a, b) = (crate::lands::word(q, choice.source, A), crate::lands::word(q, choice.source, B2));
+    Verdict::each(choice, |card| q.chars(card).has_subtype(a) || q.chars(card).has_subtype(b))
+}
+
+/// "A [subtype A] or [subtype B] card" (CR 205.3, 612.2): a card with either subtype, each read through the words of the text of
+/// the card that asks and a card as it is where it is. Caradora, Heart of Alacria searches for a Mount or Vehicle card, Open the
+/// Armory for an Aura or Equipment card.
+pub const fn subtype_card_of_either<const A: u16, const B2: u16>() -> Part {
+    part(&(subtype_of_either_rule::<A, B2> as SelectFn), 0, "")
+}
+
 fn color_rule(q: &dyn Query, choice: &Choice, color: u32) -> Verdict {
     let color = Color::ALL.get(color as usize).copied();
     Verdict::each(choice, |card| color.is_some_and(|color| q.chars(card).colors.has(color)))
