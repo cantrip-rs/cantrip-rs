@@ -1,0 +1,32 @@
+# Midnight Snack (CR 602.2b, 601.2f): "{2}{B}, Sacrifice this enchantment: ..." needs a black mana. Black Lotus pays for the
+# Snack itself; then Bot1 has three mana (Mox Ruby, Mox Pearl, Mox Sapphire) and no black source, so the ability is refused
+# for want of the {B}, and the Snack stays on the battlefield with Bot2 at 20.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Midnight Snack
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Midnight Snack.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Midnight Snack.Activate(Bot2; Mana: short)
+
+[Expect]
+Bot1.Battlefield = Midnight Snack; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot2.Life = 20

@@ -1,0 +1,45 @@
+# Midnight Snack (CR 119.3, 608.2h): life gained on an earlier turn does not count. Zuran Orb gains Bot1 2 life on turn 3; on
+# turn 5 the sacrifice ability resolves with X = 0 and Bot2 loses nothing (it is still sacrificed as the cost).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Midnight Snack
+Zuran Orb
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Midnight Snack.Cast
+Bot1.Hand.Zuran Orb.Cast
+Bot1.Hand.Island.Play
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Zuran Orb.Activate(Sacrifice: Island)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Midnight Snack.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot1.Life = 22
+Bot1.Graveyard = Midnight Snack; Island; Black Lotus

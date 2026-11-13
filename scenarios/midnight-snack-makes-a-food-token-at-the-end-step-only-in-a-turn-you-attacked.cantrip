@@ -1,0 +1,31 @@
+# Midnight Snack (CR 603.4, 508.1, 111.10b): "Raid — At the beginning of your end step, if you attacked this turn, create a Food
+# token." Black Lotus pays for it on turn 1; nothing attacked that turn (the Memnite is summoning-sick), so no Food. On turn 3
+# the Memnite attacks and the end step makes one Food token; on turn 5 nothing attacks and there is no second.
+
+[Bot1 Deck]
+Black Lotus
+Memnite
+Midnight Snack
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Midnight Snack.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield = Memnite; Midnight Snack
+Bot1.Attack(Memnite > Bot2)
+[T5 Bot1.Main1]
+? Bot1.Battlefield = Food Token; Memnite; Midnight Snack
+[T7 Bot1.Main1]
+? Bot1.Battlefield = Food Token; Memnite; Midnight Snack
+? Bot2.Life = 19
+
+[Expect]
+Turn = 7
