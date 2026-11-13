@@ -1,0 +1,31 @@
+# With two cards left in its controller's library, the Cap finds both and shuffles that library (CR 701.23, 609.3).
+[Bot1 Deck]
+Jester's Cap
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Island x6
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jester's Cap.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Jester's Cap.Activate(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search()
+Bot1.Search(Island; Island)
+[Expect]
+Exile = Island; Island
+Bot1.Library.Count = 0
+Bot1.Shuffles = 1
+Bot2.Shuffles = 0

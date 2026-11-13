@@ -1,0 +1,6 @@
+{
+  "name": "Jester's Cap",
+  "manaCost": "{4}",
+  "type": "Artifact",
+  "oracleText": "{2}, {T}, Sacrifice this artifact: Search target player's library for three cards and exile them. Then that player shuffles."
+}

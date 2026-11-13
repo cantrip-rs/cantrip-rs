@@ -1,0 +1,42 @@
+# The Cap costs two mana and itself, searches an opponent's library for exactly three cards, then that player shuffles (CR 701.23, 701.24a).
+[Bot1 Deck]
+Jester's Cap
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Island x8
+Forest
+Mountain
+Swamp
+Plains
+Island x12
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jester's Cap.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Jester's Cap.Activate(Bot2; Mana: short)
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Jester's Cap.Activate(Bot1.Battlefield.Mox Pearl)
+Bot1.Battlefield.Jester's Cap.Activate(Bot2)
+? Bot1.Mana =
+? Bot1.Graveyard = Jester's Cap; Black Lotus
+Bot1.Pass
+Bot2.Pass
+? Bot2.Shuffles = 0
+! Bot1.Search()
+! Bot1.Search(Forest; Mountain)
+! Bot1.Search(Forest; Mountain; Swamp; Plains)
+Bot1.Search(Forest; Mountain; Swamp)
+[Expect]
+Exile = Forest; Mountain; Swamp
+Bot2.Shuffles = 1
+Bot1.Shuffles = 0
+Bot1.Graveyard = Jester's Cap; Black Lotus
