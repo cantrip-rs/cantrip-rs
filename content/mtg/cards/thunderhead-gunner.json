@@ -1,0 +1,11 @@
+{
+  "name": "Thunderhead Gunner",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Shark Pirate",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Reach\nDiscard a card: Draw a card. Activate only as a sorcery and only once each turn.",
+  "keywords": [
+    "Reach"
+  ]
+}
