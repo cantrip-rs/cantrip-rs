@@ -1,0 +1,41 @@
+# Spectral Interference: the payer chooses (CR 118.12). Bot2 has four untapped Moxen but declines to pay {4}, so the Ornithopter
+# is countered and none of the Moxen is tapped.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Spectral Interference
+Island x4
+Island x13
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Ornithopter
+Swamp x14
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Spectral Interference.Cast(Ornithopter)
+Bot2.Pass
+Bot2.Decline
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Graveyard = Spectral Interference
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield.Mox Sapphire.Tapped = false
