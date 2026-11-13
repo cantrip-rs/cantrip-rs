@@ -1,0 +1,70 @@
+# Mindspring Merfolk: "Exhaust -- {X}{U}{U}, {T}: Draw X cards. Put a +1/+1 counter on each Merfolk creature you control." Firdoch
+# Core, a Kindred Artifact with Changeling (CR 702.73a), is a Merfolk without being a creature (CR 205.3d), and so gets no counter
+# (CR 608.2); once "{4}: This artifact becomes a 4/4 artifact creature until end of turn" makes one a creature, that one is a Merfolk
+# creature and gets a counter: 5/5. X = 0 draws nothing, and the counters still go on.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mindspring Merfolk
+Firdoch Core
+Firdoch Core
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mindspring Merfolk.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Firdoch Core.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Firdoch Core.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Firdoch Core#1.Activate(Ability: {4})
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firdoch Core#1.Power = 4
+? Bot1.Battlefield.Firdoch Core#2.Power = (absent)
+? Bot1.Hand.Count = 0
+Bot1.Battlefield.Mindspring Merfolk.Activate(X: 0)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island#2.Activate
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 5
+Bot1.Hand.Count = 0
+Bot1.Battlefield.Mindspring Merfolk.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Firdoch Core#1.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Firdoch Core#1.Power = 5
+Bot1.Battlefield.Firdoch Core#2.Counters.PlusOnePlusOne = (absent)
