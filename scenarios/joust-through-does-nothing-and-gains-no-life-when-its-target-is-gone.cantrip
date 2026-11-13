@@ -1,0 +1,36 @@
+# Joust Through's only target is checked as it resolves (CR 608.2b). Bot2's Isamaru attacks on turn 4; Bot1 targets it and Bot2
+# answers by bolting its own attacker. Isamaru is gone, the spell does not resolve at all, and Bot1 does not gain the 1 life
+# (20, with no combat damage dealt either).
+
+[Bot1 Deck]
+Plains
+Joust Through
+Island x14
+
+[Bot2 Deck]
+Mox Pearl
+Mox Ruby
+Isamaru, Hound of Konda
+Lightning Bolt
+Island x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Isamaru, Hound of Konda.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Isamaru, Hound of Konda > Bot1)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Joust Through.Cast(Bot2.Battlefield.Isamaru, Hound of Konda)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Isamaru, Hound of Konda)
+[T4 Bot2.Main2]
+
+[Expect]
+Turn = 4
+Bot1.Life = 20
+Bot1.Graveyard = Joust Through
+Bot2.Graveyard = Isamaru, Hound of Konda; Lightning Bolt
