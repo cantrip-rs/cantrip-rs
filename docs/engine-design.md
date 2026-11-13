@@ -1180,6 +1180,15 @@ opponents" sees one occurrence, individual observers see each loss. The return v
 not blocked losses, replaced gains or a replacement continuation's other actions. `each_opponent_loses_life` uses the same
 operation for equal amounts; single-player changes still apply and emit immediately.
 
+An instruction whose parts are different actions done at once, or whose player suffers several losses that are each their
+own occurrence, uses `Game::together` (`cantrip_api::Together`): Rottenmouth Viper's sacrifices, discards and 4-life losses
+"the appropriate number of times" (its rulings), and an exchange of life totals (CR 701.12c, `exchange::life_totals`). Each
+signed change of life is its own occurrence, never coalesced: replaced on its own through `prepare_life_changes` and
+announced as its own `LifeChange`, so "whenever an opponent loses life" (Bloodthirsty Conqueror) triggers for each and "one
+or more" once. The sacrifices and discards are one `move_together` (each move with its own reason), which carries the life
+changes: they are prepared and judged against the game before any move is made, applied with the moves and announced in
+their batch; the discards' own `Discarded` events follow, as every discard's do.
+
 Damage uses that same life preparation and application within the existing `ops::DamageBatch`, with the four phases
 of CR 120.4 kept distinct. Once every damage replacement and prevention has applied, the batch finalizes actual damage
 and each recipient's total excess, records all of that dealt damage in the existing history through `Cx::record_batch`,

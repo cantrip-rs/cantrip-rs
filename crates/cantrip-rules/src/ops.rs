@@ -274,10 +274,21 @@ fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec
 fn move_together_entering(cx: &mut Cx, moves: &[Moving], reason: ZoneReason, attacking: Option<Target>) -> (Vec<ObjectId>, Vec<ObjectId>) {
     // A simultaneous move, including its replacement bookkeeping, is one rules
     // instruction (CR 614.6, 603.2c), not one instruction per saved permanent.
-    cx.instruction(|cx| move_together_entering_event(cx, moves, reason, attacking), |_| true)
+    let (created, seen, _) = cx.instruction(|cx| move_together_entering_event(cx, moves, reason, attacking, &[]), |_| true);
+    (created, seen)
 }
 
-fn move_together_entering_event(cx: &mut Cx, moves: &[Moving], reason: ZoneReason, attacking: Option<Target>) -> (Vec<ObjectId>, Vec<ObjectId>) {
+/// The moves of `move_together_entering`, and with them the changes of life `life` of the same simultaneous action
+/// (`together`, CR 101.4), each its own occurrence: replaced and judged allowed against the game as it is before any of the
+/// moves or changes is made (CR 616.1, `prepare_life_changes`), applied with the moves and announced in their batch (CR
+/// 603.2c). The new objects, those seen by all as they moved, and the life lost.
+fn move_together_entering_event(
+    cx: &mut Cx,
+    moves: &[Moving],
+    reason: ZoneReason,
+    attacking: Option<Target>,
+    life: &[(PlayerId, i64)],
+) -> (Vec<ObjectId>, Vec<ObjectId>, i32) {
     // An object moves once however many times the batch names it: a permanent a spell targets twice ("destroy target
     // artifact and target creature" at an artifact creature, CR 115.3) is destroyed once (CR 400.7). The first move kept.
     // And an object that has changed zones or ceased to exist since it was named is not moved at all: it became a new
@@ -546,6 +557,10 @@ fn move_together_entering_event(cx: &mut Cx, moves: &[Moving], reason: ZoneReaso
         plans.push(Plan { m: *m, reason, old, from, to, requested_to, change, madness, entering, new, counts, counts_by, last_known, seen_by_all, components });
     }
     *cx.s().leaving_together.borrow_mut() = outer_leaving;
+    // The changes of life of the same action are replaced, and judged allowed, against the same game the moves were, before
+    // any of them is made (CR 101.4, 616.1): a permanent leaving in this action still stops or replaces them.
+    let mut life = prepare_life_changes(cx, life);
+    retain_life_changes(cx, &mut life);
     // The permanents regenerated, shielded or otherwise replaced instead of moving stay (CR 701.19a, 614.6): no attachment
     // of theirs ends for their sake.
     if !regenerating.is_empty() || !shielded.is_empty() || !replaced.is_empty() {
@@ -780,6 +795,7 @@ fn move_together_entering_event(cx: &mut Cx, moves: &[Moving], reason: ZoneReaso
     for permanent in entered {
         events.push(entered_event(cx, permanent));
     }
+    let lost = apply_life_changes(cx, life, &mut events);
     cx.emit_batch(&events, Some(crate::settle::Before { battlefield: &before, then: &then, seen_by_all: &seen }));
     for player in shuffled {
         cx.record(Event::Shuffled { player });
@@ -803,7 +819,7 @@ fn move_together_entering_event(cx: &mut Cx, moves: &[Moving], reason: ZoneReaso
     if left_battlefield {
         return_until_left(cx);
     }
-    (created, seen)
+    (created, seen, lost)
 }
 
 /// "If an effect or rule puts two or more cards into the same graveyard at the same time, the owner of those cards may
@@ -3633,27 +3649,46 @@ fn discard_moving(cx: &mut Cx, cards: &[ObjectId], paying: &[ObjectId], revealed
 /// Moves the cards of `discard_moving`, and returns what they became with the discard's events, to be announced as one
 /// batch.
 fn discard_events(cx: &mut Cx, cards: &[ObjectId], paying: &[ObjectId], revealed: bool) -> (Vec<ObjectId>, Vec<Event>) {
-    // CR 101.2: a card an opponent's spell or ability can't make its owner discard stays where it is.
-    let causer = cx.effect_controller();
-    let moves: Vec<Moving> = cards
-        .iter()
-        .filter(|&&c| causer.is_none_or(|by| cantrip_api::may_cause(&*cx, by, cx.s().obj(c).owner, cantrip_api::CauseKind::Discard)))
-        .map(|&c| Moving { pays_characteristic: paying.contains(&c), revealed, ..Moving::to(c, Zone::graveyard(cx.s().obj(c).owner)) })
-        .collect();
+    let moves = discard_moves(cx, cards, paying, revealed);
     let (new, seen) = move_together_seen(cx, &moves, ZoneReason::Discard);
-    // A card a replacement put into a hidden zone instead of its owner's graveyard (Library of Leng), and not revealed as it
-    // went (Wheel of Sun and Moon reveals it), has every characteristic undefined (CR 701.9c): the event says so, for the
-    // history and every ability that reads it.
-    let undefined: Vec<ObjectId> = moves
+    (new, discarded_events(cx, &moves, &seen))
+}
+
+/// The moves of a discard: each card still the card it was (CR 400.7) to its owner's graveyard - but one an opponent's spell
+/// or ability can't make its owner discard, which stays where it is (CR 101.2).
+fn discard_moves(cx: &Cx, cards: &[ObjectId], paying: &[ObjectId], revealed: bool) -> Vec<Moving> {
+    let causer = cx.effect_controller();
+    cards
         .iter()
-        .filter(|m| !seen.contains(&m.id))
-        .filter_map(|m| cx.s().obj(m.id).became)
-        .filter(|&n| matches!(cx.s().obj(n).zone.kind(), ZoneKind::Hand | ZoneKind::Library))
-        .collect();
-    // One event for the whole discard, so that "whenever you discard one or more cards" sees it once (CR 603.2c).
-    let events: Vec<Event> =
-        new.iter().map(|&card| Event::Discarded { player: cx.s().obj(card).owner, card, undefined: undefined.contains(&card) }).collect();
-    (new, events)
+        .filter(|&&c| live(cx.s(), c))
+        .filter(|&&c| causer.is_none_or(|by| cantrip_api::may_cause(cx, by, cx.s().obj(c).owner, cantrip_api::CauseKind::Discard)))
+        .map(|&c| Moving {
+            reason: Some(ZoneReason::Discard),
+            pays_characteristic: paying.contains(&c),
+            revealed,
+            ..Moving::to(c, Zone::graveyard(cx.s().obj(c).owner))
+        })
+        .collect()
+}
+
+/// The discard's own events once its `moves` are made: one for each card discarded, naming it where it went (CR 400.7),
+/// announced as one batch, so that "whenever you discard one or more cards" sees the discard once (CR 603.2c). A card a
+/// replacement put into a hidden zone instead of its owner's graveyard (Library of Leng), and not revealed as it went (not
+/// `seen`: Wheel of Sun and Moon reveals it), has every characteristic undefined (CR 701.9c): the event says so, for the
+/// history and every ability that reads it.
+fn discarded_events(cx: &Cx, moves: &[Moving], seen: &[ObjectId]) -> Vec<Event> {
+    let mut events: Vec<Event> = Vec::with_capacity(moves.len());
+    for m in moves {
+        // A card the moves left where it was (one a replacement had do nothing instead) became nothing; one named twice moved
+        // once.
+        let Some(card) = cx.s().obj(m.id).became else { continue };
+        if events.iter().any(|e| matches!(e, Event::Discarded { card: c, .. } if *c == card)) {
+            continue;
+        }
+        let undefined = !seen.contains(&m.id) && matches!(cx.s().obj(card).zone.kind(), ZoneKind::Hand | ZoneKind::Library);
+        events.push(Event::Discarded { player: cx.s().obj(card).owner, card, undefined });
+    }
+    events
 }
 
 /// Mills (CR 701.17): the top cards together, top first, so the second card milled ends up above the first unless their
@@ -4304,8 +4339,21 @@ pub fn each_opponent_loses_life(cx: &mut Cx, player: PlayerId, amount: i32) -> i
 /// before any of its life totals change, then announced as one event (CR 603.2c). Only the final losses count towards
 /// "life lost this way", not gains or the separate actions a replacement's continuation performs.
 pub fn lose_life_together(cx: &mut Cx, losses: &[(PlayerId, i32)]) -> i32 {
-    let losses: Vec<_> = losses.iter().filter(|&&(_, n)| n > 0).map(|&(player, n)| (player, -n)).collect();
-    let mut changes = prepare_life_changes(cx, &losses);
+    let mut merged: Vec<(PlayerId, i64)> = Vec::with_capacity(losses.len());
+    for &(player, n) in losses.iter().filter(|&&(_, n)| n > 0) {
+        match merged.iter_mut().find(|(p, _)| *p == player) {
+            Some(loss) => loss.1 -= i64::from(n),
+            None => merged.push((player, -i64::from(n))),
+        }
+    }
+    life_together(cx, &merged)
+}
+
+/// The changes of life of one simultaneous event, each its own occurrence (CR 101.4, 119.3): replaced and judged allowed
+/// (`prepare_life_changes`, `retain_life_changes`) before any of them applies, then announced together (CR 603.2c). The life
+/// lost.
+fn life_together(cx: &mut Cx, life: &[(PlayerId, i64)]) -> i32 {
+    let mut changes = prepare_life_changes(cx, life);
     retain_life_changes(cx, &mut changes);
     let mut events = Vec::with_capacity(changes.len());
     let total = apply_life_changes(cx, changes, &mut events);
@@ -4315,18 +4363,43 @@ pub fn lose_life_together(cx: &mut Cx, losses: &[(PlayerId, i32)]) -> i32 {
     total
 }
 
-/// Life results of one simultaneous event (CR 101.4, 120.4c, 616.1), with signed amounts. Losses are one amount per
-/// player; gains are already one per source (CR 119.9-10, 702.15e), never merged with losses or each other. Replacements
-/// run in APNAP order before any original life update, including when a replacement changes a result's sign.
-fn prepare_life_changes(cx: &mut Cx, changes: &[(PlayerId, i32)]) -> Vec<(PlayerId, i32)> {
+/// One instruction whose parts several players carry out at once (CR 101.4, `Game::together`): the sacrifices (CR 701.21a),
+/// the discards (CR 701.9) and the changes of life (CR 119.3) of `parts`, each change of life its own occurrence. Every
+/// replacement of every part is worked out against the game as it is before any of them happens, then they all happen and are
+/// announced together (CR 603.2c) - the discards' own events after them, as every discard's are (`discard_events`). The life
+/// lost.
+pub fn together(cx: &mut Cx, parts: cantrip_api::Together) -> i32 {
+    let life: Vec<(PlayerId, i64)> = parts.life.iter().filter(|&&(_, n)| n != 0).map(|&(player, n)| (player, i64::from(n))).collect();
+    let mut moves = discard_moves(cx, parts.discards, &[], false);
+    let discarding = moves.len();
+    moves.extend(sacrifice_moves(cx, parts.sacrifices));
+    if moves.is_empty() {
+        return life_together(cx, &life);
+    }
+    let (_, seen, lost) = cx.instruction(|cx| move_together_entering_event(cx, &moves, ZoneReason::Other, None, &life), |_| true);
+    let events = discarded_events(cx, &moves[..discarding], &seen);
+    if !events.is_empty() {
+        cx.emit_batch(&events, None);
+    }
+    lost
+}
+
+/// Life results of one simultaneous event (CR 101.4, 120.4c, 616.1), with signed amounts, each its own occurrence: a player
+/// who loses life "the appropriate number of times" (Rottenmouth Viper's rulings) suffers that many losses, each replaced on
+/// its own and announced as its own change, so "whenever a player loses life" triggers for each (CR 603.2c). A caller whose
+/// results are one loss for each player merges them first (`lose_life_together`); damage's are one loss for each player and
+/// one lifelink gain for each source (CR 119.9-10, 702.15e). Replacements run in APNAP order, each player's results in the
+/// order given, before any original life update, including when a replacement changes a result's sign.
+fn prepare_life_changes(cx: &mut Cx, changes: &[(PlayerId, i64)]) -> Vec<(PlayerId, i32)> {
     let mut prepared = Vec::with_capacity(changes.len());
     if changes.is_empty() {
         return prepared;
     }
     for player in cx.s().apnap() {
-        let loss: i64 = changes.iter().filter(|&&(p, n)| p == player && n < 0).map(|&(_, n)| i64::from(n)).sum();
-        let gains = changes.iter().filter(|&&(p, n)| p == player && n > 0).map(|&(_, n)| i64::from(n));
-        for amount in std::iter::once(loss).chain(gains) {
+        for &(p, amount) in changes {
+            if p != player {
+                continue;
+            }
             let delta = prepare_life_change(cx, player, amount);
             if delta != 0 {
                 prepared.push((player, delta));
@@ -4488,12 +4561,16 @@ pub fn sacrifice(cx: &mut Cx, player: PlayerId, ids: &[ObjectId]) -> Vec<ObjectI
 /// Several players sacrifice permanents at once (CR 701.21a, 101.4): each pair is who sacrifices and what, and each that
 /// player can't sacrifice (`sacrificeable`) stays. The new objects, in order.
 pub fn sacrifice_each(cx: &mut Cx, each: &[(PlayerId, ObjectId)]) -> Vec<ObjectId> {
-    let moves: Vec<Moving> = each
-        .iter()
-        .filter(|&&(player, id)| sacrificeable(cx, player, id))
-        .map(|&(_, id)| Moving::to(id, Zone::graveyard(cx.s().obj(id).owner)))
-        .collect();
+    let moves = sacrifice_moves(cx, each);
     move_together(cx, &moves, ZoneReason::Sacrifice)
+}
+
+/// The moves of `sacrifice_each`: each permanent its player can sacrifice (`sacrificeable`) to its owner's graveyard.
+fn sacrifice_moves(cx: &Cx, each: &[(PlayerId, ObjectId)]) -> Vec<Moving> {
+    each.iter()
+        .filter(|&&(player, id)| sacrificeable(cx, player, id))
+        .map(|&(_, id)| Moving { reason: Some(ZoneReason::Sacrifice), ..Moving::to(id, Zone::graveyard(cx.s().obj(id).owner)) })
+        .collect()
 }
 
 /// The objects among `ids` that are still the objects they were, for a verb that moves them (CR 400.7).

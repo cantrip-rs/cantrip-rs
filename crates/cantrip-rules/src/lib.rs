@@ -2928,6 +2928,10 @@ impl cantrip_api::Game for Cx<'_> {
         ops::lose_life_together(self, losses)
     }
 
+    fn together(&mut self, parts: cantrip_api::Together) -> i32 {
+        ops::together(self, parts)
+    }
+
     fn set_life_total(&mut self, player: PlayerId, total: i32) {
         let life = self.g.state.player(player).life;
         ops::change_life(self, player, i64::from(total) - i64::from(life));
