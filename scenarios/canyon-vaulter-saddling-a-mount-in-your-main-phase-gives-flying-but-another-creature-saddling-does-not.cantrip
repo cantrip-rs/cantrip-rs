@@ -1,0 +1,59 @@
+# Canyon Vaulter (3/1): "Whenever this creature saddles a Mount or crews a Vehicle during your main phase, that Mount or Vehicle gains flying until end of turn" (CR 702.171c,
+# 505.1, 603.2). Brightfield Mustang (Saddle 1, no flying): turn 3 Savannah Lions saddles it, not the Vaulter, so nothing happens; turn 5 the Vaulter saddles it (saddle is
+# sorcery speed, so always in a main phase) and the Mustang gains flying until end of turn.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Canyon Vaulter
+Savannah Lions
+Plains
+Brightfield Mustang
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Canyon Vaulter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Brightfield Mustang.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Brightfield Mustang.Activate
+Bot1.Choose(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Brightfield Mustang.Keywords = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Brightfield Mustang.Activate
+Bot1.Choose(Canyon Vaulter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Brightfield Mustang.Keywords = Flying
+Bot1.Battlefield.Brightfield Mustang.Saddled = true
+Bot1.Battlefield.Canyon Vaulter.Tapped = true
+Bot1.Battlefield.Savannah Lions.Tapped = false
