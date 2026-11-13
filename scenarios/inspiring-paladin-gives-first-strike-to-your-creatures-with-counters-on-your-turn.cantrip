@@ -1,0 +1,65 @@
+# Inspiring Paladin: "During your turn, creatures you control with +1/+1 counters on them have first strike." Bot1's Ajani's Pridemate
+# gets a +1/+1 counter from a Healing Salve on turn 1 (3/3) and has first strike on that turn and on turn 3, while a Memnite without a
+# counter cast on turn 3 does not (CR 613.1f). It has none on Bot2's turn 2. When Bot2 bolts the Paladin on turn 3 the Pridemate loses
+# first strike again: the grant is the Paladin's.
+
+[Bot1 Deck]
+Black Lotus
+Inspiring Paladin
+Mox Pearl
+Mox Sapphire
+Ajani's Pridemate
+Healing Salve
+Plains
+Memnite
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Inspiring Paladin.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ajani's Pridemate.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ajani's Pridemate.Keywords = (absent)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ajani's Pridemate.Power = 3
+? Bot1.Battlefield.Ajani's Pridemate.Keywords = FirstStrike
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Ajani's Pridemate.Keywords = (absent)
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+? Bot1.Battlefield.Ajani's Pridemate.Keywords = FirstStrike
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Inspiring Paladin)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ajani's Pridemate.Keywords = (absent)
+
+[Expect]
+Turn = 3
+Bot1.Graveyard = Inspiring Paladin; Healing Salve; Black Lotus
+Bot1.Battlefield.Ajani's Pridemate.Keywords = (absent)

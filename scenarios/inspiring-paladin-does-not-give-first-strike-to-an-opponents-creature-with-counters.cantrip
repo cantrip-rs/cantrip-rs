@@ -1,0 +1,53 @@
+# The Paladin's second ability is about creatures its controller controls (CR 613.1f). Bot2's Ajani's Pridemate has a +1/+1 counter
+# (Healing Salve on turn 2, a 3/3) and it is Bot1's turn 3 with the Paladin on the battlefield: it has no first strike.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Gleemox
+Inspiring Paladin
+Island x13
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Gleemox
+Ajani's Pridemate
+Healing Salve
+Island x11
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Inspiring Paladin.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Gleemox.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Ajani's Pridemate.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Gleemox.Activate(Color: White)
+Bot2.Hand.Healing Salve.Cast
+Bot2.Modes(1)
+Bot2.Target(Bot2)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Ajani's Pridemate.Power = 3
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Inspiring Paladin.Keywords = FirstStrike
+? Bot2.Battlefield.Ajani's Pridemate.Keywords = (absent)
+
+[Expect]
+Turn = 3
+Bot2.Battlefield.Ajani's Pridemate.Power = 3
