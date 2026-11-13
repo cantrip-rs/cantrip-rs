@@ -1,0 +1,38 @@
+# McCoy watches an opposing creature die; exiling its card before the end step prevents its return (CR 400.7).
+[Bot1 Deck]
+Black Lotus
+Dr. Leonard "Bones" McCoy
+Tormod's Crypt
+Island x20
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Ruby
+Goblin Piker
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Tormod's Crypt.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Goblin Piker.Cast
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Goblin Piker)
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Dr. Leonard "Bones" McCoy.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot2.Battlefield.Goblin Piker)
+[T2 Bot2.Main2]
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot2)
+[T2 Bot2.End]
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Battlefield.Goblin Piker = (absent)
+Exile = Goblin Piker; Lightning Bolt
