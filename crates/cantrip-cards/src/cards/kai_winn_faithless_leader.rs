@@ -1,16 +1,8 @@
 use cantrip_api::*;
 use cantrip_oracle as oracle;
 
+use cantrip_mechanics::effects::as_this_enters_choose_a_nonland_card_name;
 use cantrip_mechanics::library::object_has_name;
-
-/// "As Kai Winn enters, choose a nonland card name." (CR 614.12a, 201.3): recorded as the entering object's chosen name.
-fn choose_name(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
-    let Answer::Name(name) = g.ask(entering.controller, RequestKind::ChooseName {
-        source: entering.object, looked_at: Vec::new(), suggestion: None, kind: NameKind::NONLAND,
-    })? else { return Ok(()) };
-    entering.chosen_card = name;
-    Ok(())
-}
 
 fn chosen_spell_or_ability(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     let (object, player) = match event {
@@ -30,7 +22,7 @@ fn lose_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 }
 
 pub static CARD: CardDef = CardDef {
-    enters: Some(choose_name),
+    enters: Some(as_this_enters_choose_a_nonland_card_name),
     abilities: &[triggered(
         when_asked(EventMask(EventMask::SPELL_CAST.0 | EventMask::ABILITY_ACTIVATED.0 | EventMask::ZONE_CHANGE.0), chosen_spell_or_ability),
         lose_life,
