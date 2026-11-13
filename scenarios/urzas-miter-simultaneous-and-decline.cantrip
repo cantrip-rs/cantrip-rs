@@ -1,0 +1,41 @@
+# Simultaneous destruction of the Miter and two other controlled artifacts triggers three times; pay once and decline twice (CR 603.6c, 118.12).
+[Bot1 Deck]
+Urza's Miter
+Black Lotus
+Black Lotus
+Ornithopter
+Ornithopter
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Shatterstorm
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Urza's Miter.Cast
+? Bot1.Mana =
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter#1.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shatterstorm.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+? Bot1.Mana =
+? Stack.Count = 2
+Bot1.Decline
+Bot1.Decline
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Graveyard.Count = 5
+Bot2.Graveyard.Count = 4

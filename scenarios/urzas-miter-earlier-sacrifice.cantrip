@@ -1,0 +1,33 @@
+# A prior sacrifice does not prevent a later destroyed artifact from triggering in the same turn (CR 603.2, 701.21a).
+[Bot1 Deck]
+Urza's Miter
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Ornithopter
+Shatter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Urza's Miter.Cast
+? Bot1.Mana =
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Shatter.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[Expect]
+Bot1.Hand.Count = 2
+Bot1.Graveyard.Count = 4
