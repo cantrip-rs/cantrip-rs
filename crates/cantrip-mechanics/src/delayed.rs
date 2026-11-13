@@ -330,3 +330,14 @@ pub fn at_your_next_main_phase(g: &mut dyn Game, item: &StackItem, ability: u8, 
         subject,
     );
 }
+
+/// "Target creature gets +`P`/+0 until end of turn. When it dies this turn, [do something]" (CR 611.2a, 603.7c): the creature in
+/// target slot 0 gets +`P`/+0 and the card's delayed ability number 0 is set up fixed on that very object, so it triggers only
+/// when it dies (a creature that left and came back is a new object, CR 400.7). A target no longer legal as this resolves does
+/// nothing and sets up nothing (CR 608.2b). A Good Day to Die, Grim Javelineer and Turn Inside Out print it.
+pub fn target_creature_gets_plus_power_and_a_delayed_ability_for_when_it_dies<const P: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    crate::pump(g, item.object, creature, P, 0);
+    this_turn(g, item, creature);
+    Ok(())
+}
