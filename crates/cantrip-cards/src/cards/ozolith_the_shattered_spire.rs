@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::replacements::{plus_one_counters_applies, plus_one_counters_apply};
+use cantrip_mechanics::replacements::{plus_one_counters_applies, plus_one_counters_apply_to_proposal};
 use cantrip_mechanics::targets;
 use cantrip_mechanics::triggers::cycling;
 use cantrip_oracle as oracle;
@@ -16,10 +16,6 @@ fn applies(q: &dyn Query, asker: &Asker, proposal: &Proposal) -> bool {
     )
 }
 
-fn apply(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
-    plus_one_counters_apply(proposal, CounterKind::PlusOne);
-}
-
 fn put_counter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Target::Object(permanent) = item.target(0) {
         g.add_counters(permanent, CounterKind::PlusOne, 1);
@@ -34,6 +30,6 @@ pub static CARD: CardDef = CardDef {
             .targets(&[targets::ARTIFACT_OR_CREATURE_YOU_CONTROL]),
         cycling(mana("{2}"), "Cycling {2} ({2}, Discard this card: Draw a card.)"),
     ],
-    replacements: &[replacement(ReplacementKind::Counters, applies, apply, "puts one more +1/+1 counter")],
+    replacements: &[replacement(ReplacementKind::Counters, applies, plus_one_counters_apply_to_proposal, "puts one more +1/+1 counter")],
     ..oracle::OZOLITH_THE_SHATTERED_SPIRE
 };

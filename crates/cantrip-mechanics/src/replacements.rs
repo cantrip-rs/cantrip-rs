@@ -100,7 +100,10 @@ fn plus_one_counters_on_your_creatures(q: &dyn Query, asker: &Asker, proposal: &
     plus_one_counters_applies(q, asker, proposal, CounterKind::PlusOne, &[CardType::Creature])
 }
 
-fn plus_one_counters_apply_to_proposal(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
+/// "... that many plus one +1/+1 counters are put on it instead" (CR 122.6, 614.1a): one more +1/+1 counter, as a replacement's
+/// apply. Hardened Scales (through `PLUS_ONE_COUNTERS_ON_YOUR_CREATURES`), Ozolith, the Shattered Spire and Caradora, Heart
+/// of Alacria print it.
+pub fn plus_one_counters_apply_to_proposal(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
     plus_one_counters_apply(proposal, CounterKind::PlusOne);
 }
 
