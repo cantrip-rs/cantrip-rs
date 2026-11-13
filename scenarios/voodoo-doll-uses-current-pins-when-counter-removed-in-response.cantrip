@@ -1,0 +1,56 @@
+# The cost is fixed at activation, but the damage uses the counter count at resolution after Vampire Hexmage removes the pin (CR 608.2h).
+
+[Bot1 Deck]
+Voodoo Doll
+Black Lotus
+Black Lotus
+Sol Ring
+Swamp
+Island x20
+
+[Bot2 Deck]
+Vampire Hexmage
+Black Lotus
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Voodoo Doll.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Voodoo Doll.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Vampire Hexmage.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Voodoo Doll.Counters.Pin = 1
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Voodoo Doll.Activate(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Vampire Hexmage.Activate(Bot1.Battlefield.Voodoo Doll)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Voodoo Doll.Counters.Pin = (absent)
+Bot2.Graveyard = Vampire Hexmage; Black Lotus

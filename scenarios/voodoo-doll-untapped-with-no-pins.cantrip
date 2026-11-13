@@ -1,0 +1,22 @@
+# An untapped Doll with no pin counters is destroyed at its controller's end step and deals no damage (CR 107.1b).
+[Bot1 Deck]
+Voodoo Doll
+Black Lotus
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Voodoo Doll.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard = Voodoo Doll; Black Lotus; Black Lotus

@@ -1,0 +1,55 @@
+# The activated ability costs twice the pin count and uses last-known counters if the Doll is destroyed in response (CR 608.2h).
+
+[Bot1 Deck]
+Voodoo Doll
+Black Lotus
+Black Lotus
+Sol Ring
+Swamp
+Island x20
+
+[Bot2 Deck]
+Heritage Reclamation
+Black Lotus
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Voodoo Doll.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Voodoo Doll.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Voodoo Doll.Counters.Pin = 1
+Bot1.Battlefield.Sol Ring.Activate
+! Bot1.Battlefield.Voodoo Doll.Activate(Bot1.Battlefield.Swamp)
+Bot1.Battlefield.Voodoo Doll.Activate(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Heritage Reclamation.Cast
+Bot2.Modes(Destroy target artifact)
+Bot2.Target(Bot1.Battlefield.Voodoo Doll)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot1.Graveyard = Voodoo Doll; Black Lotus; Black Lotus
