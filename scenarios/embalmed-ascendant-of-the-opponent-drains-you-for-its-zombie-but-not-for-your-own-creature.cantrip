@@ -1,0 +1,85 @@
+# Embalmed Ascendant's max speed trigger is "whenever a creature YOU control dies" (CR 603.2, 603.10a): Bot2 casts it on turn 2 (speed 1, a
+# Zombie) and Lightning Bolts Bot1's face on turns 2, 4 and 6 to reach speed 4 (CR 702.179d). On turn 7 Bot1 Bolts its own Ornithopter:
+# nothing happens, the Ornithopter is not Bot2's. Bot1 then Bolts Bot2's Zombie: Bot2's Ascendant drains Bot1 for 1 and Bot2 gains 1.
+
+[Bot1 Deck]
+Mox Ruby
+Mountain
+Ornithopter
+Lightning Bolt
+Lightning Bolt
+Island x15
+
+[Bot2 Deck]
+Mountain
+Mox Pearl
+Mox Jet
+Mox Ruby
+Embalmed Ascendant
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Mountain x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Embalmed Ascendant.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Speed = 2
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Speed = 3
+[T6 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Speed = 4
+? Bot1.Life = 11
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 11
+? Bot2.Life = 20
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Zombie Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Speed = 4
+Bot1.Life = 10
+Bot2.Life = 21
+Bot1.Graveyard = Lightning Bolt; Ornithopter; Lightning Bolt

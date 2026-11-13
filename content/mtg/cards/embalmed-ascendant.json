@@ -1,0 +1,8 @@
+{
+  "name": "Embalmed Ascendant",
+  "manaCost": "{1}{W}{B}",
+  "type": "Creature — Zombie",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Start your engines! (If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.)\nWhen this creature enters, create a 2/2 black Zombie creature token.\nMax speed — Whenever a creature you control dies, each opponent loses 1 life and you gain 1 life."
+}

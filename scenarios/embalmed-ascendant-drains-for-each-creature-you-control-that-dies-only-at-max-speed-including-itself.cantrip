@@ -1,0 +1,86 @@
+# Embalmed Ascendant (1/2): "Start your engines!" and "When this creature enters, create a 2/2 black Zombie creature token." "Max speed
+# — Whenever a creature you control dies, each opponent loses 1 life and you gain 1 life." Cast on turn 1 it gives Bot1 speed 1 and a Zombie
+# (CR 702.179a); a Lightning Bolt to Bot2's face on each of turns 1, 3 and 5 raises the speed to 2, 3 and 4 (CR 702.179d). Bot2's turn-2
+# Bolt kills the Zombie at speed 2: no drain. On turn 6, at max speed, Bot2's Bolt kills the Ascendant itself, which sees its own death
+# (CR 603.10a) and drains Bot2 for 1 while Bot1 gains 1.
+
+[Bot1 Deck]
+Mountain
+Mox Pearl
+Mox Jet
+Mox Ruby
+Embalmed Ascendant
+Lightning Bolt
+Mountain
+Lightning Bolt
+Lightning Bolt
+Mountain x12
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Embalmed Ascendant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+? Bot1.Battlefield.Zombie Token.Power = 2
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Zombie Token)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 20
+? Bot2.Life = 17
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Embalmed Ascendant)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Speed = 4
+Bot1.Life = 21
+Bot2.Life = 10
+Bot1.Graveyard = Embalmed Ascendant; Lightning Bolt; Lightning Bolt; Lightning Bolt
