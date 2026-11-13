@@ -1,0 +1,9 @@
+{
+  "name": "Silken Strength",
+  "manaCost": "{1}{G}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature or Vehicle\nWhen this Aura enters, untap enchanted permanent.\nEnchanted permanent gets +1/+2 and has reach.",
+  "keywords": [
+    "Flash"
+  ]
+}

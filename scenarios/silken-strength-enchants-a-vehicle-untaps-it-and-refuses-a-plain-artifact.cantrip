@@ -1,0 +1,51 @@
+# Silken Strength: "Enchant creature or Vehicle" (CR 303.4a). A Mox is an artifact but not a Vehicle, so it is refused as a target
+# (with the mana for the spell paid). Bot1 taps its tapped Veloheart Bike for the {G} and enchants that Bike, which is no creature
+# right now (CR 301.7): the Aura untaps it, and once two Memnites crew it the 4/2 Vehicle is a 5/4 with reach.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Veloheart Bike
+Memnite
+Memnite
+Silken Strength
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Veloheart Bike.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Veloheart Bike.Activate(Ability: Add one mana of any color; Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Silken Strength.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Hand.Silken Strength.Cast(Bot1.Battlefield.Veloheart Bike)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Veloheart Bike.Tapped = false
+? Bot1.Battlefield.Veloheart Bike.Types.Count = 1
+Bot1.Battlefield.Veloheart Bike.Activate(Ability: Crew)
+Bot1.Choose(Memnite#1; Memnite#2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Veloheart Bike.Power = 5
+Bot1.Battlefield.Veloheart Bike.Toughness = 4
+Bot1.Battlefield.Veloheart Bike.Keywords = Reach

@@ -1,0 +1,66 @@
+# "When this Aura enters, untap enchanted permanent" (CR 701.26a): if the Aura has left the battlefield by the time the trigger
+# resolves, it untaps the permanent the Aura was attached to as it left (CR 608.2h). Bot1 flashes the Aura onto its tapped Grizzly
+# Bears on turn 4; with the trigger on the stack Bot2 Disenchants it, the Aura goes to the graveyard and the Bears fall back to a
+# tapped 2/2, but the trigger still untaps them, so they block Bot2's Memnite and kill it.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Silken Strength
+Swamp x16
+
+[Bot2 Deck]
+Memnite
+Mox Pearl
+Mox Ruby
+Disenchant
+Swamp x16
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+[T3 Bot1.Main2]
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silken Strength.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Silken Strength)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Silken Strength
+? Bot1.Battlefield.Grizzly Bears.Tapped = true
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Grizzly Bears.Tapped = false
+Bot1.Block(Grizzly Bears > Memnite)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Silken Strength
+Bot2.Graveyard = Memnite; Disenchant
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Damage = 1
+Bot1.Life = 20
+Bot2.Life = 18
+Stack.Count = 0
