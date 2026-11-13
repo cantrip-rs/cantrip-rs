@@ -1,0 +1,33 @@
+# Activation after blockers were declared is too late to trigger for that attack (CR 603.7).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Savannah Lions
+Delif's Cube
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Hand.Delif's Cube.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Savannah Lions > Bot2)
+[T3 Bot1.Blockers]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Delif's Cube.Activate(Bot1.Battlefield.Savannah Lions; Ability: This turn)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Delif's Cube.Counters.Cube = (absent)

@@ -1,0 +1,63 @@
+# The Cube spends its counter and two mana to regenerate its controller’s creature from lethal damage (CR 701.19a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Savannah Lions
+Delif's Cube
+Mox Ruby
+Opt
+Lightning Bolt
+Mountain
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Hand.Delif's Cube.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Delif's Cube.Activate(Bot2.Battlefield.Ornithopter; Ability: This turn)
+! Bot1.Battlefield.Delif's Cube.Activate(Bot1.Battlefield.Mox Pearl; Ability: This turn)
+Bot1.Battlefield.Delif's Cube.Activate(Bot1.Battlefield.Savannah Lions; Ability: This turn)
+? Bot1.Mana =
+Bot1.Attack(Savannah Lions > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+? Bot1.Battlefield.Delif's Cube.Counters.Cube = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Delif's Cube.Activate(Bot2.Battlefield.Ornithopter; Ability: Regenerate; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Delif's Cube.Activate(Bot1.Battlefield.Mox Pearl; Ability: Regenerate)
+Bot1.Battlefield.Delif's Cube.Activate(Bot1.Battlefield.Savannah Lions; Ability: Regenerate)
+? Bot1.Mana =
+? Bot1.Battlefield.Delif's Cube.Counters.Cube = (absent)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Savannah Lions.Tapped = true
+Bot1.Battlefield.Savannah Lions.Damage = 0
+Bot1.Battlefield.Delif's Cube.Counters.Cube = (absent)
