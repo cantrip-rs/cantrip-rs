@@ -1,0 +1,11 @@
+{
+  "name": "Skyseer's Chariot",
+  "manaCost": "{1}{W}",
+  "type": "Artifact — Vehicle",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\nAs this Vehicle enters, choose a nonland card name.\nActivated abilities of sources with the chosen name cost {2} more to activate.\nCrew 2",
+  "keywords": [
+    "Flying"
+  ]
+}

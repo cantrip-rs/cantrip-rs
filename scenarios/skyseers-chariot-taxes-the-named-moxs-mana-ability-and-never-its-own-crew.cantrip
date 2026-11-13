@@ -1,0 +1,54 @@
+# Skyseer's Chariot taxes every activated ability of a source with the chosen name, a mana ability too (CR 605.1a: it is not
+# excepted, as Anointed Peacekeeper's is). Bot1 names Mox Jet. With every other Mox tapped, Jet's {T}: Add {B} costs {2} more and is
+# refused (CR 602.2b, `Mana: short`); on turn 3 it is activated by paying {2} from Mox Pearl and Mox Sapphire, leaving only {B} in the
+# pool. The Chariot is not named, so Grizzly Bears crews it for nothing: nothing is tapped for it (the pool stays empty).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Skyseer's Chariot
+Grizzly Bears
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Skyseer's Chariot.Cast
+Bot1.Name(Mox Jet)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Mox Jet.Activate(Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Skyseer's Chariot.Activate(Ability: Crew)
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Skyseer's Chariot.Types = Artifact; Creature
+? Bot1.Mana = 
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+
+[Expect]
+Bot1.Mana = {B}
+Bot1.Battlefield.Mox Pearl.Tapped = true
+Bot1.Battlefield.Mox Sapphire.Tapped = true
+Bot1.Battlefield.Mox Jet.Tapped = true
+Bot1.Battlefield.Mox Ruby.Tapped = false
+Bot1.Battlefield.Mox Emerald.Tapped = false
