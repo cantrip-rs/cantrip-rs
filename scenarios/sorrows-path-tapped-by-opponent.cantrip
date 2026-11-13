@@ -1,0 +1,33 @@
+# An opponent tapping Sorrow's Path triggers damage to its controller and that player's creatures (CR 603.2).
+[Bot1 Deck]
+Sorrow's Path
+Ornithopter
+Island x20
+[Bot2 Deck]
+Black Lotus
+Icy Manipulator
+Mox Sapphire
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Sorrow's Path.Play
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Icy Manipulator.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Icy Manipulator.Activate(Sorrow's Path)
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Life = 18
+Bot1.Graveyard = Ornithopter
+Bot1.Battlefield.Sorrow's Path.Tapped = true
+Bot2.Battlefield.Memnite.Damage = 0
