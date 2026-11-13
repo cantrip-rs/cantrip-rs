@@ -1,0 +1,54 @@
+# Before Quagmire a Swamp prevents blocking Plague Beetle; afterward it may be blocked, retains swampwalk, and islandwalk still prevents a block (CR 702.14b, 609.4).
+[Bot1 Deck]
+Swamp
+Plague Beetle
+Mox Sapphire
+Grayscaled Gharial
+Mox Jet
+Mox Pearl
+Quagmire
+Swamp x20
+
+[Bot2 Deck]
+Swamp
+Island
+Ornithopter x2
+Forest x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Plague Beetle.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Grayscaled Gharial.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Plague Beetle > Bot2)
+! Bot2.Block(Ornithopter > Plague Beetle)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Quagmire.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Plague Beetle.Keywords = Swampwalk
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Plague Beetle > Bot2; Grayscaled Gharial > Bot2)
+! Bot2.Block(Ornithopter > Grayscaled Gharial)
+Bot2.Block(Ornithopter > Plague Beetle)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Plague Beetle.Power = 1
