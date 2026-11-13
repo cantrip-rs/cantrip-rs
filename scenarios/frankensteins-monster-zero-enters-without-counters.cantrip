@@ -1,0 +1,20 @@
+# X=0 needs no graveyard cards and the Monster enters as a 0/1 (CR 107.3a, 614.1c).
+[Bot1 Deck]
+Mox Jet
+Gleemox
+Frankenstein's Monster
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Frankenstein's Monster.Cast(X: 0)
+Bot1.Choose(Confirm X)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Frankenstein's Monster.Power = 0
+Bot1.Battlefield.Frankenstein's Monster.Toughness = 1
