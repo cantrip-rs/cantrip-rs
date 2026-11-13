@@ -1,0 +1,56 @@
+# A blocker tapped after blocks could not block the other attacker, so neither block changes: "could be blocked by" takes
+# into account whether the creatures are tapped (the 2009-10-01 ruling on Sorrow's Path's same test; CR 509.1a, 608.2c).
+[Bot1 Deck]
+General Jarkeld
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Phyrexian Walker
+Memnite
+Twiddle
+Plains x20
+
+[Bot2 Deck]
+Phyrexian Walker
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.General Jarkeld.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Phyrexian Walker; Memnite)
+Bot2.Block(Phyrexian Walker > Phyrexian Walker; Memnite > Memnite)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Twiddle.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Modes(Tap)
+? Bot2.Battlefield.Memnite.Tapped = true
+Bot1.Battlefield.General Jarkeld.Activate
+Bot1.Target(Bot1.Battlefield.Phyrexian Walker; Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.General Jarkeld.Tapped = true
+? Combat.Blocks = Memnite > Memnite; Phyrexian Walker > Phyrexian Walker
+
+[Expect]
