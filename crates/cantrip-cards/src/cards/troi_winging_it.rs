@@ -9,15 +9,10 @@ fn during_your_turn(q: &dyn Query, me: &Asker) -> bool {
     q.state().turn.active == me.controller
 }
 
-fn make_faerie(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &tokens::FAERIE, 1)?;
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
         AN_OPPONENT_DRAWS_A_CARD,
-        make_faerie,
+        tokens::create_a_faerie,
         "Whenever an opponent draws a card during your turn, create a 1/1 blue Faerie creature token with flying.",
     )
     .condition(during_your_turn)],

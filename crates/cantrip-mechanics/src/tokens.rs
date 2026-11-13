@@ -1242,7 +1242,7 @@ pub static INKLING: CardDef = CardDef {
     ..token!(Inkling)
 };
 
-/// The 1/1 blue Faerie creature token with flying. Faebloom Trick and Troi, Winging It make it.
+/// The 1/1 blue Faerie creature token with flying. Faebloom Trick, Troi, Winging It, Mischievous Mystic and others make it.
 pub static FAERIE: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::Blue)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -1252,6 +1252,13 @@ pub static FAERIE: CardDef = CardDef {
     text: "Flying",
     ..token!(Faerie)
 };
+
+/// "Create a 1/1 blue Faerie creature token with flying." (CR 111.1): one `FAERIE` under `item`'s controller, the card file
+/// listing it in its `EXTRA`. Troi, Winging It and Mischievous Mystic print it.
+pub fn create_a_faerie(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &FAERIE, 1)?;
+    Ok(())
+}
 
 /// The 1/1 blue and black Faerie creature token with flying. Pestered Wellguard and Glen Elendra's Answer make it.
 pub static FAERIE_BLUE_BLACK: CardDef = CardDef {
