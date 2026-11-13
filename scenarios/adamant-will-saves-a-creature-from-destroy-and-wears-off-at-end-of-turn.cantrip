@@ -1,0 +1,57 @@
+# Adamant Will: "Target creature gets +2/+2 and gains indestructible until end of turn." Bot2 casts Infernal Grasp on Bot1's
+# Isamaru (a 2/2) on turn 2; Bot1 responds with Adamant Will on it. The Will resolves first: Isamaru is a 4/4 with indestructible
+# (CR 702.12b) and when Infernal Grasp resolves its "destroy" does nothing, so Isamaru stays (Bot2 still loses 2 life).
+# On turn 3 the effects have ended at the cleanup step (CR 514.2): a 2/2 with no keyword.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Isamaru, Hound of Konda
+Adamant Will
+Plains x20
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Infernal Grasp
+Mox Ruby
+Swamp x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Infernal Grasp.Cast(Bot1.Battlefield.Isamaru, Hound of Konda)
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Adamant Will.Cast(Bot1.Battlefield.Isamaru, Hound of Konda)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Isamaru, Hound of Konda.Power = 4
+? Bot1.Battlefield.Isamaru, Hound of Konda.Toughness = 4
+? Bot1.Battlefield.Isamaru, Hound of Konda.Keywords = Indestructible
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+? Bot1.Battlefield.Isamaru, Hound of Konda.Power = 4
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Isamaru, Hound of Konda.Power = 2
+Bot1.Battlefield.Isamaru, Hound of Konda.Toughness = 2
+Bot1.Battlefield.Isamaru, Hound of Konda.Keywords = (absent)
+Bot1.Graveyard.Count = 1
+Bot2.Graveyard = Infernal Grasp
