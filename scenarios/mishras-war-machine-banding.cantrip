@@ -1,0 +1,34 @@
+# The machine bands with one nonbanding attacker but cannot band with two (CR 702.22c).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Mishra's War Machine
+Memnite
+Memnite
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite#1.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mishra's War Machine.Cast
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Accept
+Bot1.Choose(Island)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Mishra's War Machine > Bot2; Memnite#1 > Bot2; Memnite#2 > Bot2)
+! Bot1.Choose(Memnite#1; Memnite#2)
+Bot1.Choose(Memnite#1)
+? Combat.Attackers = Mishra's War Machine > Bot2 (band 1); Memnite > Bot2 (band 1); Memnite > Bot2
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 13

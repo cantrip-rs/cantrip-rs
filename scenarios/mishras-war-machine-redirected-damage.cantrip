@@ -1,0 +1,30 @@
+# Damage redirected to Ancient Adamantoise is not damage to the controller, so the machine remains untapped (CR 614.9).
+[Bot1 Deck]
+Mishra's War Machine
+Ancient Adamantoise
+Black Lotus x6
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Ancient Adamantoise.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Mishra's War Machine.Cast
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Mishra's War Machine.Tapped = false
+Bot1.Battlefield.Ancient Adamantoise.Damage = 3
+
