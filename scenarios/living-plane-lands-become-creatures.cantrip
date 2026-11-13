@@ -1,0 +1,41 @@
+# Lands of both players are 1/1 land creatures and retain their mana abilities; newly played lands cannot tap until controlled since the turn began (CR 302.6).
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Emerald
+Living Plane
+Plains
+Island x20
+[Bot2 Deck]
+Island
+Mountain x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Living Plane.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Forest.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+! Bot2.Battlefield.Island.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+? Bot1.Mana = {G}
+Bot1.Hand.Plains.Play
+! Bot1.Battlefield.Plains.Activate
+[Expect]
+Bot1.Battlefield.Forest.Types = Land; Creature
+Bot1.Battlefield.Forest.Power = 1
+Bot1.Battlefield.Forest.Toughness = 1
+Bot1.Battlefield.Plains.Types = Land; Creature
+Bot1.Battlefield.Plains.Power = 1
+Bot1.Battlefield.Plains.Toughness = 1
+Bot1.Battlefield.Mox Emerald.Types = Artifact
+Bot2.Battlefield.Island.Types = Land; Creature
+Bot2.Battlefield.Island.Power = 1
+Bot2.Battlefield.Island.Toughness = 1

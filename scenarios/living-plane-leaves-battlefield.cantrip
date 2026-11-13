@@ -1,0 +1,33 @@
+# Destroying Living Plane ends its continuous effect, leaving the lands and their mana abilities intact (CR 611.3b).
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Emerald
+Living Plane
+Island x20
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Disenchant
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Living Plane.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Forest.Types = Land; Creature
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Living Plane)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Forest.Types = Land
+Bot1.Battlefield.Forest.Power = (absent)
+Bot1.Graveyard = Living Plane; Black Lotus
