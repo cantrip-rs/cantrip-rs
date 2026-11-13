@@ -4,13 +4,6 @@ use cantrip_mechanics::triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT;
 use cantrip_mechanics::{effects, lands, sneak, statics};
 use cantrip_oracle as oracle;
 
-/// "Attacking Ninjas you control" (CR 506.4, 613.1f): an attacking creature of yours that is a Ninja, judged on what the earlier
-/// layers made it.
-fn attacking_ninjas_you_control(view: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
-    statics::attacking_creatures_you_control(view, source, affected, so_far)
-        && statics::your_of_subtype::<{ lands::sub(Subtype::Ninja) }>(view, source, affected, so_far)
-}
-
 /// "Create a 1/1 black Ninja creature token. Then if you control five or more Ninjas, that player loses half their life, rounded
 /// up" (CR 107.1a, 119.3): the Ninjas counted once the token is there, this Ninja and the token among them, and the damaged
 /// player the trigger's subject.
@@ -32,7 +25,7 @@ fn make_a_ninja_then_drain_half(g: &mut dyn Game, item: &StackItem) -> Result<()
 }
 
 pub static CARD: CardDef = CardDef {
-    statics: &[static_ability(Layer::Ability, attacking_ninjas_you_control, statics::have_deathtouch, "Attacking Ninjas you control have deathtouch.")],
+    statics: &[static_ability(Layer::Ability, statics::attacking_of_subtype_you_control::<{ lands::sub(Subtype::Ninja) }>, statics::have_deathtouch, "Attacking Ninjas you control have deathtouch.")],
     abilities: &[triggered(
         DEALS_COMBAT_DAMAGE_TO_PLAYER_EVENT,
         make_a_ninja_then_drain_half,

@@ -53,6 +53,13 @@ pub fn attacking_creatures_you_control(view: &dyn LayerQuery, source: ObjectId, 
         && state.attackers.iter().any(|a| a.id == affected)
 }
 
+/// "Attacking [subtype]s you control" (CR 506.4, 613.1f) as `StaticDef::affects`, `SUBTYPE` a `Subtype` as `u16` (`lands::sub`): an
+/// attacking creature of the source's controller that is that creature type as the earlier layers made it, the type read
+/// through the words of the source's text (CR 612.2). Dark Leo & Shredder (Ninjas) and Crossway Troublemakers (Vampires) print it.
+pub fn attacking_of_subtype_you_control<const SUBTYPE: u16>(view: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
+    attacking_creatures_you_control(view, source, affected, so_far) && your_of_subtype::<SUBTYPE>(view, source, affected, so_far)
+}
+
 /// "Creatures" / "all creatures" (CR 613.1f): every creature on the battlefield, whoever controls it, judged on what the
 /// earlier layers made the object. Intruder Alarm and Lavaleaper ("All creatures have haste") use it as
 /// `StaticDef::affects`.
