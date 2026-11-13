@@ -24,6 +24,8 @@ pub use cantrip_api as api;
 pub enum Payment {
     /// "Cumulative upkeep {1}": mana, the cost multiplied by the age counters.
     Mana(ManaCost),
+    /// Mana and life paid together for each age counter, as on Infernal Darkness (CR 702.24a).
+    ManaAndLife(ManaCost, u8),
     /// "Cumulative upkeep--Pay 1 life.": this much life for each age counter (CR 119.4).
     Life(u8),
     /// "Cumulative upkeep--Sacrifice a creature.": one permanent that passes the filter for each age counter, each a different
@@ -135,6 +137,10 @@ fn pay(g: &mut dyn Game, item: &StackItem, payment: Payment, age: u32) -> Result
     match payment {
         // A total with more hybrid symbols than a cost holds is not offered (`ManaCost::times`).
         Payment::Mana(mana) => paid_if(g, mana.times(age), |g, total| g.may_pay(payer, this, this, Cost::mana(total), &PAY)),
+        Payment::ManaAndLife(mana, life) => {
+            let total = mana.times(age).zip(u32::from(life).checked_mul(age));
+            paid_if(g, total, |g, (mana, life)| g.may_pay(payer, this, this, Cost { mana, life, ..Cost::NONE }, &PAY))
+        }
         Payment::Life(life) => g.may_pay(payer, this, this, Cost { life: u32::from(life) * age, ..Cost::NONE }, &PAY),
         Payment::Sacrifice(filter) => g.may_pay(payer, this, this, Cost::sacrifice(age, filter), &SACRIFICE),
         Payment::PutMinusOneMinusOneCounterOnThis => g.may_pay(payer, this, this, put_counters(CounterKind::MinusOne, age), &COUNTER_ON_THIS),
