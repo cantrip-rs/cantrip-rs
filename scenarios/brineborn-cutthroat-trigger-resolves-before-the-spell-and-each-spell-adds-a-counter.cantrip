@@ -1,0 +1,51 @@
+# Brineborn Cutthroat: "Whenever you cast a spell during an opponent's turn, put a +1/+1 counter on this creature" (CR 603.2, 601.2i, 405.2). In
+# Bot2's upkeep Bot1 casts a Lightning Bolt: the trigger goes on the stack above the Bolt and resolves first, so the Cutthroat has its counter while
+# the Bolt still waits. A second Bolt in response triggers again: two counters, a 4/3, and both Bolts hit Bot2.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Ruby
+Brineborn Cutthroat
+Lightning Bolt
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Brineborn Cutthroat.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Brineborn Cutthroat.Counters.PlusOnePlusOne = 1
+? Stack.Count = 1
+? Bot2.Life = 20
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Brineborn Cutthroat.Counters.PlusOnePlusOne = 2
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Brineborn Cutthroat.Power = 4
+Bot1.Battlefield.Brineborn Cutthroat.Toughness = 3

@@ -1,0 +1,55 @@
+# Brineborn Cutthroat {1}{U}, 2/1 flash: "Whenever you cast a spell during an opponent's turn, put a +1/+1 counter on this creature" (CR 603.2).
+# Bot1 flashes it in during Bot2's upkeep: casting it is no trigger (it was not yet on the battlefield). Bot2's own spells (free Ornithopter and Memnite)
+# give nothing; Bot1's Lightning Bolt in response gives one counter (a 3/2). On turn 3, Bot1's own turn, a second Bolt gives none.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Ruby
+Brineborn Cutthroat
+Lightning Bolt
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Brineborn Cutthroat.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Brineborn Cutthroat.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+? Bot1.Battlefield.Brineborn Cutthroat.Power = 2
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Brineborn Cutthroat.Counters.PlusOnePlusOne = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Brineborn Cutthroat.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Brineborn Cutthroat.Power = 3
+Bot1.Battlefield.Brineborn Cutthroat.Toughness = 2
