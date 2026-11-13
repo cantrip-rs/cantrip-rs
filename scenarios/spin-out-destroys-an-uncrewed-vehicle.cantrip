@@ -1,0 +1,45 @@
+# Spin Out: "Destroy target creature or Vehicle". A Vehicle that is not crewed is not a creature (CR 301.7a), but it is a
+# legal target by its Vehicle subtype. Bot2 casts Ripclaw Wrangler (Black Lotus's {B}{B}{B} and Mox Jet's {B}); Bot1 pays
+# {B}{B}{B} from its own Black Lotus.
+
+[Bot1 Deck]
+Black Lotus
+Spin Out
+Swamp x18
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Ripclaw Wrangler
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Ripclaw Wrangler.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Swamp)
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Ripclaw Wrangler.Types = Artifact
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Spin Out.Cast(Bot2.Battlefield.Ripclaw Wrangler)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot2.Graveyard = Ripclaw Wrangler; Black Lotus
+Bot1.Graveyard = Spin Out; Black Lotus; Swamp
