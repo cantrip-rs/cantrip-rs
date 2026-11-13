@@ -1,0 +1,49 @@
+# The source dies in response at power two; last-known power and combat relation let the ability put a counter on its blocker (CR 608.2b, 608.2h).
+[Bot1 Deck]
+Lesser Werewolf
+Black Lotus
+Mox Jet x3
+Mox Pearl
+Swamp x20
+[Bot2 Deck]
+Wall of Shields
+Black Lotus
+Ornithopter
+Black Lotus
+Bilbo's Deadly Slice
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lesser Werewolf.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wall of Shields.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lesser Werewolf > Bot2)
+Bot2.Block(Wall of Shields > Lesser Werewolf)
+! Bot1.Battlefield.Lesser Werewolf.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Lesser Werewolf.Activate(Bot2.Battlefield.Wall of Shields)
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Bilbo's Deadly Slice.Cast(Bot1.Battlefield.Lesser Werewolf)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Lesser Werewolf; Black Lotus
+? Bot2.Battlefield.Wall of Shields.Counters.Plus0Minus1 = 1
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Graveyard = Lesser Werewolf; Black Lotus
+Bot2.Battlefield.Wall of Shields.Counters.Plus0Minus1 = 1
