@@ -1,0 +1,12 @@
+{
+  "name": "Dracosaur Auxiliary",
+  "manaCost": "{4}{R}{R}",
+  "type": "Creature — Dinosaur Dragon Mount",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying, haste\nWhenever this creature attacks while saddled, it deals 2 damage to any target.\nSaddle 3 (Tap any number of other creatures you control with total power 3 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)",
+  "keywords": [
+    "Flying",
+    "Haste"
+  ]
+}

@@ -1,0 +1,45 @@
+# Dracosaur Auxiliary: attacking without being saddled does not trigger: the hasty 4/4
+# flyer attacks on turn 3 with nobody having paid the saddle cost, deals 4 (20 -> 16) and Bot2's Ornithopter takes no damage.
+# Control for the two saddled scenarios, where the same attack adds 2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Dracosaur Auxiliary
+Savannah Lions
+Zephyr Sprite
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dracosaur Auxiliary.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Dracosaur Auxiliary > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot2.Battlefield.Ornithopter.Damage = 0

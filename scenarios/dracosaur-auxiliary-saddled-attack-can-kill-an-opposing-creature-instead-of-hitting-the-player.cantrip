@@ -1,0 +1,61 @@
+# Dracosaur Auxiliary: the "attacks while saddled" trigger's 2 damage can go to a creature (any target, CR 115.4). Saddled by the
+# Lions and Sprite (3 total), it attacks and the trigger kills Bot2's Ornithopter (0/2); the Ornithopter cannot block a flyer anyway,
+# so Bot2 only takes the 4 combat damage (20 -> 16), proving the 2 went to the creature and not to the player.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Dracosaur Auxiliary
+Savannah Lions
+Zephyr Sprite
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dracosaur Auxiliary.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Dracosaur Auxiliary.Activate(Ability: Saddle)
+! Bot1.Choose(Savannah Lions)
+! Bot1.Choose(Zephyr Sprite)
+Bot1.Choose(Savannah Lions; Zephyr Sprite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Dracosaur Auxiliary > Bot2)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot2.Battlefield.Ornithopter = (absent)
+Bot2.Graveyard = Ornithopter

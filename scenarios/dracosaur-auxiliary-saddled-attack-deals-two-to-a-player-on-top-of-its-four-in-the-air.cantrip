@@ -1,0 +1,62 @@
+# Dracosaur Auxiliary (4/4 flying haste Mount, Saddle 3): the Lions (power 2) alone or the Sprite (power 1) alone cannot saddle it
+# (refusals, CR 702.171); together they total exactly 3 and do. It attacks saddled and "whenever this creature attacks while saddled,
+# it deals 2 damage to any target" (CR 508.1): aimed at Bot2, 4 combat damage + 2 = 6 (20 -> 14), and Bot2's Ornithopter is untouched.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Dracosaur Auxiliary
+Savannah Lions
+Zephyr Sprite
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dracosaur Auxiliary.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Dracosaur Auxiliary.Activate(Ability: Saddle)
+! Bot1.Choose(Savannah Lions)
+! Bot1.Choose(Zephyr Sprite)
+Bot1.Choose(Savannah Lions; Zephyr Sprite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Dracosaur Auxiliary > Bot2)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot2.Battlefield.Ornithopter.Damage = 0
+Bot1.Battlefield.Savannah Lions.Tapped = true
+Bot1.Battlefield.Zephyr Sprite.Tapped = true
