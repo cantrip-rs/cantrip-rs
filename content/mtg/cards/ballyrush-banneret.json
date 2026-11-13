@@ -1,0 +1,8 @@
+{
+  "name": "Ballyrush Banneret",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Kithkin Soldier",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Kithkin spells and Soldier spells you cast cost {1} less to cast."
+}
