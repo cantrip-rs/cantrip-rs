@@ -1,0 +1,30 @@
+# Thunderous Velocipede: "Each other Vehicle and creature you control enters with an additional +1/+1 counter on it if its mana value
+# is 4 or less." Smuggler's Copter is a Vehicle that is not a creature as it enters (CR 301.7), mana value 2: it enters with one
+# +1/+1 counter.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Thunderous Velocipede
+Smuggler's Copter
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thunderous Velocipede.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Smuggler's Copter.Types.Count = 1
+Bot1.Battlefield.Smuggler's Copter.Counters.PlusOnePlusOne = 1

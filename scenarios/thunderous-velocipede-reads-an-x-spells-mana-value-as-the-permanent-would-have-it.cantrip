@@ -1,0 +1,31 @@
+# Thunderous Velocipede: Walking Ballista cast with X = 3 has mana value 6 on the stack but 0 as it would exist on the
+# battlefield (CR 614.12, 202.3e), so it enters with one additional counter, not three: 3 + 1 = 4.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Thunderous Velocipede
+Walking Ballista
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thunderous Velocipede.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Walking Ballista.Cast(X: 3)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 4

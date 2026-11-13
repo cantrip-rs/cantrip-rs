@@ -1,0 +1,11 @@
+{
+  "name": "Thunderous Velocipede",
+  "manaCost": "{1}{G}{G}",
+  "type": "Artifact — Vehicle",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Trample\nEach other Vehicle and creature you control enters with an additional +1/+1 counter on it if its mana value is 4 or less. Otherwise, it enters with three additional +1/+1 counters on it.\nCrew 3",
+  "keywords": [
+    "Trample"
+  ]
+}

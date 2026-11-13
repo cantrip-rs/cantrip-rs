@@ -1,0 +1,40 @@
+# Thunderous Velocipede counts tokens as well as cards: Stampeding Scurryfoot (mana value 1) enters with a counter, and its exhaust adds
+# another and makes a 3/3 Elephant token that enters with one more (4/4: a token's mana value is 0).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Thunderous Velocipede
+Stampeding Scurryfoot
+Swamp
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thunderous Velocipede.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Stampeding Scurryfoot.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stampeding Scurryfoot.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Stampeding Scurryfoot.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Stampeding Scurryfoot.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Stampeding Scurryfoot.Power = 3
+Bot1.Battlefield.Elephant Token.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Elephant Token.Power = 4
+Bot1.Battlefield.Elephant Token.Toughness = 4

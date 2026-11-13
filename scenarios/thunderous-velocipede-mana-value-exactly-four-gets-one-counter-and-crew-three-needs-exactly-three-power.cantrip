@@ -1,0 +1,48 @@
+# Thunderous Velocipede: Kessig Recluse (mana value 4, 2/3) is "4 or less" so it enters with one counter only (3/4). Crew 3: Memnite (a 2/2
+# with its counter) is refused alone; Kessig Recluse (power exactly 3, summoning sick, which tapping for crew allows) crews it, and the Velocipede, a
+# 5/5 trampler, is a creature until end of turn.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Jet
+Thunderous Velocipede
+Kessig Recluse
+Memnite
+Swamp
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thunderous Velocipede.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Thunderous Velocipede.Activate(Ability: Crew)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kessig Recluse.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Thunderous Velocipede.Activate(Ability: Crew)
+Bot1.Choose(Kessig Recluse)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thunderous Velocipede.Types.Count = 2
+? Bot1.Battlefield.Thunderous Velocipede.Power = 5
+
+[Expect]
+Bot1.Battlefield.Kessig Recluse.Power = 3
+Bot1.Battlefield.Kessig Recluse.Toughness = 4
+Bot1.Battlefield.Kessig Recluse.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Kessig Recluse.Tapped = true
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Battlefield.Thunderous Velocipede.Keywords = Trample

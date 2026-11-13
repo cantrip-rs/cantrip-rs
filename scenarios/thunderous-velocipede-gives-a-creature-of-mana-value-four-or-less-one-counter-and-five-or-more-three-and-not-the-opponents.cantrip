@@ -1,0 +1,52 @@
+# Thunderous Velocipede: "Each other Vehicle and creature you control enters with an additional +1/+1 counter on it if its mana value is
+# 4 or less. Otherwise, it enters with three additional +1/+1 counters." Bot1's Memnite (mana value 0) enters as a 2/2 and Arrogant Wurm
+# (mana value 5, 4/4) as a 7/7. The Velocipede itself gets none (it is not "other"), and Bot2's Memnite, under Bot2's control, is still 1/1.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Thunderous Velocipede
+Arrogant Wurm
+Memnite
+Swamp
+Swamp x17
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thunderous Velocipede.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thunderous Velocipede.Counters.PlusOnePlusOne = (absent)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Arrogant Wurm.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Arrogant Wurm.Power = 7
+Bot1.Battlefield.Arrogant Wurm.Toughness = 7
+Bot1.Battlefield.Arrogant Wurm.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Thunderous Velocipede.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
