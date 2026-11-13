@@ -1,0 +1,5 @@
+{
+  "name": "Night Market",
+  "type": "Land",
+  "oracleText": "This land enters tapped. As it enters, choose a color.\n{T}: Add one mana of the chosen color.\nCycling {3} ({3}, Discard this card: Draw a card.)"
+}

@@ -1,0 +1,34 @@
+# Night Market: "Cycling {3}" (CR 702.29a) from the hand is {3} and discarding it to draw a card. It never enters the
+# battlefield, so no color is chosen and no land is played. Bot1 pays with three Moxen; the card it draws is the Forest on
+# top of the library. Cycling is refused while only two Moxen have been tapped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Night Market
+Island x3
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Night Market.Activate(Ability: Cycling; Mana: short)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Night Market.Activate(Ability: Cycling)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Graveyard = Night Market
+Bot1.Hand = Forest; Island; Island; Island
+Bot1.Battlefield.Count = 3

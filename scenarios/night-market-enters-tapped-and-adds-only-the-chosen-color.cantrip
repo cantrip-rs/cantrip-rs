@@ -1,0 +1,25 @@
+# Night Market: "This land enters tapped. As it enters, choose a color" (CR 614.1c) and "{T}: Add one mana of the chosen
+# color" (CR 605.1a, 607.2d). Bot1 plays it on turn 1 and chooses blue: it enters tapped and cannot be tapped (refused). On
+# turn 3 it adds blue and no other color (refused for red).
+
+[Bot1 Deck]
+Night Market
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Night Market.Play
+Bot1.Colors(Blue)
+? Bot1.Battlefield.Night Market.Tapped = true
+? Bot1.Battlefield.Night Market.ChosenColor = Blue
+! Bot1.Battlefield.Night Market.Activate(Color: Blue)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Night Market.Activate(Color: Red)
+Bot1.Battlefield.Night Market.Activate(Color: Blue)
+? Bot1.Mana = {U}
+
+[Expect]
+Bot1.Battlefield.Night Market.ChosenColor = Blue
+Bot1.Mana = {U}
