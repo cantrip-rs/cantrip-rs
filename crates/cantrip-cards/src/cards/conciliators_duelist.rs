@@ -4,13 +4,12 @@ use cantrip_mechanics::{delayed, effects, targets};
 use cantrip_oracle as oracle;
 
 /// "Draw a card. Each player loses 1 life." (CR 121.1, 119.3): the controller draws first; then every player still in the game
-/// loses 1 life, in turn order.
+/// loses 1 life, together (CR 101.4, 603.2c).
 fn draw_then_each_player_loses_1(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     effects::draw(g, item, 1)?;
     g.end_sentence();
-    for player in g.state().apnap().collect::<Vec<_>>() {
-        g.lose_life(player, 1);
-    }
+    let losses: Vec<(PlayerId, i32)> = g.state().apnap().map(|p| (p, 1)).collect();
+    g.lose_life_together(&losses);
     Ok(())
 }
 
