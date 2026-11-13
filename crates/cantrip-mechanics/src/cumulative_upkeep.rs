@@ -51,9 +51,9 @@ pub const PAY: Question = Question::new("CumulativeUpkeep", "pay {cost}, or sacr
 
 const SACRIFICE: Question = Question::new(
     "CumulativeUpkeepSacrifice",
-    "sacrifice a creature for each age counter, or sacrifice {subject}?",
+    "sacrifice a permanent for each age counter, or sacrifice {subject}?",
     CUMULATIVE,
-    "Sacrifice the creatures",
+    "Sacrifice the permanents",
     "Sacrifice it",
 )
 .no_default();
