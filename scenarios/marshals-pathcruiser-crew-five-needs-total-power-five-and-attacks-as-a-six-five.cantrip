@@ -1,0 +1,63 @@
+# Marshals' Pathcruiser (6/5, Crew 5): on turn 3 it is only an artifact. Bot1's Hill Giant alone (power 3) cannot crew
+# it, nor can the Hill Giant and Memnite (3 + 1 = 4, refused); the Hill Giant and Grizzly Bears (2, all summoning sick, which does
+# not matter for a crew cost) together are power 5 and crew it: an artifact creature until end of turn. On turn 5 they crew it
+# again and it attacks Bot2 for 6.
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Jet
+Hill Giant
+Grizzly Bears
+Marshals' Pathcruiser
+Memnite
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Marshals' Pathcruiser.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Island)
+? Bot1.Battlefield.Marshals' Pathcruiser.Types = Artifact
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Marshals' Pathcruiser.Activate(Ability: Crew)
+! Bot1.Choose(Hill Giant)
+! Bot1.Choose(Hill Giant; Memnite)
+Bot1.Choose(Hill Giant; Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Marshals' Pathcruiser.Types = Artifact; Creature
+? Bot1.Battlefield.Hill Giant.Tapped = true
+? Bot1.Battlefield.Grizzly Bears.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Battlefield.Marshals' Pathcruiser.Activate(Ability: Crew)
+Bot1.Choose(Hill Giant; Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Marshals' Pathcruiser > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14

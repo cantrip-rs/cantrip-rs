@@ -1,0 +1,51 @@
+# Marshals' Pathcruiser (6/5 Vehicle): "Exhaust — {W}{U}{B}{R}{G}: This Vehicle becomes an artifact creature. Put two
+# +1/+1 counters on it." On turn 1 Bot1 casts it with three Moxen and has Ruby and Emerald left, which is not five colors:
+# refused for mana. On turn 3 all five Moxen pay: it becomes a creature for good (no duration, CR 611.2a), 8/7 with two
+# counters, and still a Vehicle. Exhaust is once only (CR 702.177a): on turn 5 it is refused with all five Moxen untapped.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Marshals' Pathcruiser
+Island
+Forest
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Marshals' Pathcruiser.Cast
+Bot1.Search(Forest)
+! Bot1.Battlefield.Marshals' Pathcruiser.Activate(Ability: Exhaust; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+? Bot1.Battlefield.Marshals' Pathcruiser.Types = Artifact
+Bot1.Battlefield.Marshals' Pathcruiser.Activate(Ability: Exhaust)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Marshals' Pathcruiser.Activate(Ability: Exhaust)
+
+[Expect]
+Bot1.Battlefield.Marshals' Pathcruiser.Types = Artifact; Creature
+Bot1.Battlefield.Marshals' Pathcruiser.Subtypes = Vehicle
+Bot1.Battlefield.Marshals' Pathcruiser.Power = 8
+Bot1.Battlefield.Marshals' Pathcruiser.Toughness = 7
+Bot1.Battlefield.Marshals' Pathcruiser.Counters.PlusOnePlusOne = 2

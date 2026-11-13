@@ -1,0 +1,8 @@
+{
+  "name": "Marshals' Pathcruiser",
+  "manaCost": "{3}",
+  "type": "Artifact — Vehicle",
+  "power": 6,
+  "toughness": 5,
+  "oracleText": "When this Vehicle enters, search your library for a basic land card, reveal it, put it into your hand, then shuffle.\nExhaust — {W}{U}{B}{R}{G}: This Vehicle becomes an artifact creature. Put two +1/+1 counters on it. (Activate each exhaust ability only once.)\nCrew 5"
+}

@@ -1,0 +1,54 @@
+# Marshals' Pathcruiser: "When this Vehicle enters, search your library for a basic land card, reveal it, put it into
+# your hand, then shuffle." Bot1 casts it with three Moxen; the Savannah (a nonbasic land) is refused, the Forest is
+# found (positive control), revealed (CR 701.20) and put into the hand, not onto the battlefield. Bot2's own
+# Pathcruiser fetches for Bot2 and not for Bot1: Bot1's hand stays the same size.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Marshals' Pathcruiser
+Island x3
+Island x2
+Savannah
+Forest
+Island x8
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Marshals' Pathcruiser
+Island x3
+Island x2
+Mountain
+Island x8
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Marshals' Pathcruiser.Cast
+! Bot1.Search(Savannah)
+Bot1.Search(Forest)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Marshals' Pathcruiser.Cast
+Bot2.Search(Mountain)
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Forest
+Bot1.Revealed = Forest
+Bot2.Hand = Island; Island; Island; Island; Mountain
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Marshals' Pathcruiser
+Bot2.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Marshals' Pathcruiser
