@@ -1,0 +1,37 @@
+# Two red tokens do not outnumber the chosen player's one white nontoken permanent (CR 603.8).
+[Bot1 Deck]
+Black Lotus
+Call to Arms
+Plains x20
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Savannah Lions
+Frontline Rush
+Island x20
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Frontline Rush.Cast
+Bot2.Modes(Create two 1/1 red Goblin creature tokens.)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Call to Arms.Cast
+Bot1.Colors(White)
+Bot1.ChoosePlayer(Bot2)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Call to Arms.ChosenColor = White
+Bot2.Battlefield.Savannah Lions.Power = 3
+Bot2.Battlefield.Goblin Token#1.Token = true
+Bot2.Battlefield.Goblin Token#2.Token = true

@@ -1,0 +1,41 @@
+# A uniquely most common chosen color boosts white creatures of both players; nonwhite creatures are unaffected (CR 604.1).
+[Bot1 Deck]
+Black Lotus
+Call to Arms
+Savannah Lions
+Llanowar Elves
+Mox Emerald
+Plains x20
+[Bot2 Deck]
+Black Lotus
+Savannah Lions
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot1.Hand.Call to Arms.Cast
+? Bot1.Mana =
+Bot1.Colors(White)
+Bot1.ChoosePlayer(Bot2)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Call to Arms.ChosenColor = White
+Bot1.Battlefield.Savannah Lions.Power = 3
+Bot1.Battlefield.Savannah Lions.Toughness = 2
+Bot2.Battlefield.Savannah Lions.Power = 3
+Bot2.Battlefield.Savannah Lions.Toughness = 2
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Battlefield.Llanowar Elves.Toughness = 1

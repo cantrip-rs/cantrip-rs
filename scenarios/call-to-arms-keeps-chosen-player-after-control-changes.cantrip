@@ -1,0 +1,65 @@
+# After Call to Arms changes controller it still tracks the originally chosen player and keeps boosting white creatures.
+[Bot1 Deck]
+Call to Arms
+Black Lotus
+Mox Pearl
+Mox Ruby
+Savannah Lions
+Harmless Offering
+Mox Sapphire
+Plains x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Llanowar Elves
+Mox Emerald
+Savannah Lions
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves#1.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Call to Arms.Cast
+? Bot1.Mana = {W}
+Bot1.Colors(Green)
+Bot1.ChoosePlayer(Bot2)
+? Bot1.Battlefield.Call to Arms.ChosenColor = Green
+? Bot1.Battlefield.Call to Arms.ChosenPlayer = 2
+? Bot1.Battlefield.Savannah Lions.Power = 3
+? Bot1.Battlefield.Savannah Lions.Toughness = 2
+? Bot2.Battlefield.Llanowar Elves#1.Power = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Call to Arms)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Call to Arms.ChosenPlayer = 2
+Bot2.Battlefield.Call to Arms.ChosenColor = Green
+Bot1.Battlefield.Savannah Lions.Power = 3
+Bot2.Battlefield.Llanowar Elves#1.Power = 1

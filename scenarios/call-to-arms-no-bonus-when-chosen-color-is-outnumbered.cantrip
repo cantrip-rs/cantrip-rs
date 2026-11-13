@@ -1,0 +1,34 @@
+# The chosen color is present but another color is uniquely most common; white creatures get no bonus while the state trigger awaits resolution (CR 603.8).
+[Bot1 Deck]
+Black Lotus
+Call to Arms
+Plains x20
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Savannah Lions
+Gaddock Teeg
+Island x20
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Gaddock Teeg.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Call to Arms.Cast
+Bot1.Colors(Green)
+Bot1.ChoosePlayer(Bot2)
+? Bot2.Battlefield.Savannah Lions.Power = 2
+? Bot2.Battlefield.Savannah Lions.Toughness = 1
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Call to Arms; Black Lotus
