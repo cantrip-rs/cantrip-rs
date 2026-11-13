@@ -1,0 +1,8 @@
+{
+  "name": "Lifecraft Engine",
+  "manaCost": "{3}",
+  "type": "Artifact — Vehicle",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "As this Vehicle enters, choose a creature type.\nVehicle creatures you control are the chosen creature type in addition to their other types.\nEach creature you control of the chosen type other than this Vehicle gets +1/+1.\nCrew 3"
+}

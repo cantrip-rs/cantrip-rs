@@ -1,0 +1,50 @@
+# Lifecraft Engine naming Thopter affects "Vehicle creatures you control" and "creatures you control": Bot2's Smuggler's
+# Copter, crewed by Bot2's Memnite on turn 2, is an artifact creature but not a Thopter and not 4/4; it stays a 3/3 Vehicle. Bot2's
+# Memnite is not boosted either (it is no Thopter, and not Bot1's).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Lifecraft Engine
+Island x3
+Island x14
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Smuggler's Copter
+Memnite
+Island x3
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Lifecraft Engine.Cast
+Bot1.Pass
+Bot1.Modes(Thopter)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Smuggler's Copter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot2.Choose(Memnite)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot2.Battlefield.Smuggler's Copter.Types = Artifact; Creature
+Bot2.Battlefield.Smuggler's Copter.Subtypes = Vehicle
+Bot2.Battlefield.Smuggler's Copter.Power = 3
+Bot2.Battlefield.Memnite.Power = 1

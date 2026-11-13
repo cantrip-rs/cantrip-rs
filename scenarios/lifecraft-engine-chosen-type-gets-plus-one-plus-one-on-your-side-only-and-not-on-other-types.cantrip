@@ -1,0 +1,45 @@
+# Lifecraft Engine: "As this Vehicle enters, choose a creature type. ... Each creature you control of the chosen type other
+# than this Vehicle gets +1/+1." Bot1 casts it with three Moxen choosing Thopter. Bot1's Ornithopter (a 0/2 Thopter) is a
+# 1/3; Bot1's Memnite (a Construct) stays 1/1; Bot2's own Ornithopter, cast on turn 2, is not Bot1's creature and stays 0/2.
+# The Engine is not a creature while uncrewed, so it gets no bonus itself and has no creature type added.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Lifecraft Engine
+Ornithopter
+Memnite
+Island
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+? Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Lifecraft Engine.Cast
+Bot1.Pass
+Bot1.Modes(Thopter)
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Lifecraft Engine.Subtypes = Vehicle
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T2 Bot2.Main2]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Ornithopter.Power = 1

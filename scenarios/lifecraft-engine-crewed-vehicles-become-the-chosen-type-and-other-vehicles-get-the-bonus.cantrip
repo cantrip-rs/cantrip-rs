@@ -1,0 +1,65 @@
+# Lifecraft Engine (4/4 Vehicle, Crew 3) naming Thopter. Grizzly Bears (power 2) alone cannot crew it (refused); with Bot1's
+# Ornithopter, a Thopter that Engine makes a 1/3, they are power 3 and do. Crewed, the Engine is an artifact creature that is
+# also a Thopter ("Vehicle creatures you control are the chosen type", CR 205.1b) but it is "other than this Vehicle": it
+# stays 4/4. It then crews Bot1's Smuggler's Copter (Crew 1; a crewed Vehicle is a creature to pay it): the Copter, a
+# Vehicle only and with no bonus until then, is a Thopter and 4/4 (3/3 + 1/+1). On turn 5 the Engine is again just a
+# Vehicle.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Emerald
+Lifecraft Engine
+Grizzly Bears
+Ornithopter
+Smuggler's Copter
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Lifecraft Engine.Cast
+Bot1.Pass
+Bot1.Modes(Thopter)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter.Subtypes = Vehicle
+Bot1.Battlefield.Lifecraft Engine.Activate(Ability: Crew)
+! Bot1.Choose(Grizzly Bears)
+Bot1.Choose(Grizzly Bears; Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lifecraft Engine.Types = Artifact; Creature
+? Bot1.Battlefield.Lifecraft Engine.Subtypes = Thopter; Vehicle
+? Bot1.Battlefield.Lifecraft Engine.Power = 4
+? Bot1.Battlefield.Lifecraft Engine.Toughness = 4
+Bot1.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot1.Choose(Lifecraft Engine)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter.Subtypes = Thopter; Vehicle
+? Bot1.Battlefield.Smuggler's Copter.Power = 4
+? Bot1.Battlefield.Smuggler's Copter.Toughness = 4
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Lifecraft Engine.Types = Artifact
+? Bot1.Battlefield.Lifecraft Engine.Subtypes = Vehicle
+
+[Expect]
+Bot1.Battlefield.Smuggler's Copter.Types = Artifact
