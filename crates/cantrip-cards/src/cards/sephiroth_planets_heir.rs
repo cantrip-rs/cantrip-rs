@@ -7,10 +7,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
             THIS_ENTERS,
-            |g, item| {
-                effects::pump_creatures_your_opponents_control(g, item, -2, -2);
-                Ok(())
-            },
+            effects::creatures_your_opponents_control_get::<-2, -2>,
             "When Sephiroth enters, creatures your opponents control get -2/-2 until end of turn.",
         ),
         triggered(

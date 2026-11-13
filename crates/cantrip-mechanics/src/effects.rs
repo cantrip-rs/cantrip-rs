@@ -531,6 +531,13 @@ pub fn pump_creatures_your_opponents_control(g: &mut dyn Game, item: &StackItem,
     });
 }
 
+/// "Creatures your opponents control get +`P`/+`T` until end of turn" (CR 611.2c) as an ability's effect:
+/// `pump_creatures_your_opponents_control` with the numbers fixed. Sephiroth, Planet's Heir and Massacre Wurm print it with -2/-2.
+pub fn creatures_your_opponents_control_get<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    pump_creatures_your_opponents_control(g, item, P, T);
+    Ok(())
+}
+
 /// "Creatures you control gain trample and get +P/+T until end of turn" (CR 611.2c): `pump_creatures_you_control` and trample for
 /// each of them, the creatures being those on the battlefield as it resolves. The creatures, for what the rest of the sentence does
 /// to them. Craterclaw Colossus (+X/+0, X the artifacts you control), Craterhoof Behemoth (+X/+X, X the creatures) and Balmor,
@@ -2600,6 +2607,15 @@ pub fn damage_each_creature_dealt(g: &mut dyn Game, item: &StackItem, n: u32) ->
 pub fn damage_that_player(g: &mut dyn Game, item: &StackItem, n: u32) -> Result<(), Suspend> {
     if let Target::Player(p) = item.subject {
         g.damage(item.object, Target::Player(p), n);
+    }
+    Ok(())
+}
+
+/// "That player loses `N` life" (CR 119.3): the player a trigger fired about (`Fired::about(Target::Player(..))`, its subject). Kai
+/// Winn, Faithless Leader (3) and Massacre Wurm (2) print it.
+pub fn that_player_loses_life<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Target::Player(player) = item.subject {
+        g.lose_life(player, N);
     }
     Ok(())
 }
