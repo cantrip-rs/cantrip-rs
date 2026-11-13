@@ -1,0 +1,39 @@
+# Shelkin Brownie can target either player's creature and must tap to activate (CR 602.2b, 302.6).
+
+[Bot1 Deck]
+Shelkin Brownie
+Mox Emerald
+Mox Pearl
+Forest x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Shelkin Brownie.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Shelkin Brownie.Activate(Bot1.Battlefield.Mox Pearl)
+Bot1.Battlefield.Shelkin Brownie.Activate(Bot2.Battlefield.Ornithopter)
+? Bot1.Battlefield.Shelkin Brownie.Tapped = true
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Shelkin Brownie.Activate(Bot1.Battlefield.Shelkin Brownie)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Shelkin Brownie.Activate(Bot1.Battlefield.Shelkin Brownie)
+? Bot1.Battlefield.Shelkin Brownie.Tapped = true
+
+[Expect]
+Bot1.Battlefield.Shelkin Brownie.Tapped = true
