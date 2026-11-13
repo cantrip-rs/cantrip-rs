@@ -1,0 +1,52 @@
+# Haunted Hellride: "target creature you control" (CR 115.1). Llanowar Elves (power 1, the least Crew 1 asks) crews the Vehicle (tapped) and Bot1 attacks with the
+# now 3/3 Hellride alone. Bot2's Ornithopter is refused as the target; Bot1 chooses the Hellride itself, which is a creature
+# this turn: it becomes 4/3 with deathtouch and untaps while attacking, and the tapped Elves, not chosen, stays a tapped 1/1
+# (the untap is only "it"). Bot2 takes 4.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Haunted Hellride
+Llanowar Elves
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Haunted Hellride.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Haunted Hellride.Activate(Ability: Crew)
+Bot1.Choose(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Attack(Haunted Hellride > Bot2)
+! Bot1.Target(Ornithopter)
+Bot1.Target(Haunted Hellride)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Haunted Hellride.Power = 4
+? Bot1.Battlefield.Haunted Hellride.Toughness = 3
+? Bot1.Battlefield.Haunted Hellride.Keywords = Deathtouch
+? Bot1.Battlefield.Haunted Hellride.Tapped = false
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Battlefield.Llanowar Elves.Tapped = true

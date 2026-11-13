@@ -1,0 +1,42 @@
+# Haunted Hellride: "Whenever you attack, target creature you control gets +1/+0 and gains deathtouch until end of turn. Untap
+# it." Bot1 attacks with Savannah Lions alone - the uncrewed Vehicle is no creature (CR 301.7), so Lions is the only target and
+# is chosen without a question. It is a 3/1 with deathtouch, untapped though it attacked (the untap is the next sentence, CR 608.2c,
+# and an attacking creature stays attacking, CR 508.1f). Bot2 takes 3.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Haunted Hellride
+Savannah Lions
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Haunted Hellride.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot1.Attack(Savannah Lions > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Savannah Lions.Power = 3
+? Bot1.Battlefield.Savannah Lions.Toughness = 1
+? Bot1.Battlefield.Savannah Lions.Keywords = Deathtouch
+? Bot1.Battlefield.Savannah Lions.Tapped = false
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Haunted Hellride.Types = Artifact
