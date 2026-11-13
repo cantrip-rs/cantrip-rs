@@ -1,0 +1,8 @@
+{
+  "name": "Sita Varma, Masked Racer",
+  "manaCost": "{G}{U}",
+  "type": "Legendary Creature — Human Rogue",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Exhaust — {X}{G}{G}{U}: Put X +1/+1 counters on Sita Varma. Then you may have the base power and toughness of each other creature you control become equal to Sita Varma's power until end of turn. (Activate each exhaust ability only once.)"
+}

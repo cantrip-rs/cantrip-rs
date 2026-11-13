@@ -1,0 +1,70 @@
+# Sita Varma, Masked Racer: the base power and toughness change is a "may" (CR 608.2c, 611.2c). Bot1 activates it on turn 3 with X = 1 and declines: Sita
+# is a 3/4 and its Memnite is still a 1/1. Bot2 has its own Sita Varma: on turn 4 it activates it with X = 0 ({G}{G}{U}) and accepts, so Sita gets no counters
+# (still 2/3) and Bot2's Memnite becomes a 2/2; Bot1's Memnite is not touched by Bot2's ability.
+
+[Bot1 Deck]
+Mox Emerald x2
+Mox Sapphire
+Mox Pearl
+Sita Varma, Masked Racer
+Memnite
+Plains x14
+
+[Bot2 Deck]
+Mox Emerald x2
+Mox Sapphire
+Sita Varma, Masked Racer
+Memnite
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Emerald#1.Cast
+Bot1.Hand.Mox Emerald#1.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sita Varma, Masked Racer.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald#1.Cast
+Bot2.Hand.Mox Emerald#1.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Sita Varma, Masked Racer.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Sita Varma, Masked Racer.Activate(X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Battlefield.Sita Varma, Masked Racer.Power = 3
+? Bot1.Battlefield.Sita Varma, Masked Racer.Toughness = 4
+? Bot1.Battlefield.Memnite.Power = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Sita Varma, Masked Racer.Activate(X: 0)
+Bot2.Pass
+Bot1.Pass
+Bot2.Accept
+? Bot2.Battlefield.Sita Varma, Masked Racer.Power = 2
+? Bot2.Battlefield.Memnite.Power = 2
+? Bot2.Battlefield.Memnite.Toughness = 2
+? Bot1.Battlefield.Memnite.Power = 1
+
+[Expect]
+Bot2.Battlefield.Sita Varma, Masked Racer.Toughness = 3
+Bot1.Battlefield.Memnite.Toughness = 1
