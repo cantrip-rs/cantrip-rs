@@ -1,0 +1,65 @@
+# Angelic Destiny: "When enchanted creature dies, return this card to its owner's hand." Bot1's Bears wear it from turn 3; on turn 5
+# Bot1 destroys them with its own Terror, the Aura follows them to the graveyard (CR 704.5m) and the trigger goes on the stack. In
+# response Bot2 exiles the Aura from Bot1's graveyard with Cling to Dust: it is a new object (CR 400.7), so the trigger returns nothing
+# (the 2011-09-22 ruling) and the Destiny stays in exile, not in Bot1's hand.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Grizzly Bears
+Angelic Destiny
+Terror
+Plains x12
+
+[Bot2 Deck]
+Swamp
+Cling to Dust
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Angelic Destiny.Cast(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Terror.Cast(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Angelic Destiny; Terror; Grizzly Bears
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Cling to Dust.Cast(Bot1.Graveyard.Angelic Destiny)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand =
+Bot1.Graveyard = Terror; Grizzly Bears
+Exile = Angelic Destiny

@@ -1,0 +1,51 @@
+# Angelic Destiny: "Enchanted creature gets +4/+4, has flying and first strike, and is an Angel in addition to its other types."
+# Bot1's Grizzly Bears (2/2) wear it on turn 3: a 6/6 Bear Angel with flying and first strike (CR 613.1d, 613.4c), and it attacks
+# for exactly 6 in the air (Bot2's Plains-only deck has no blockers).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Grizzly Bears
+Angelic Destiny
+Plains x13
+
+[Bot2 Deck]
+Plains x22
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Angelic Destiny.Cast(Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 6
+? Bot1.Battlefield.Grizzly Bears.Toughness = 6
+? Bot1.Battlefield.Grizzly Bears.Keywords = FirstStrike; Flying
+? Bot1.Battlefield.Grizzly Bears.Subtypes = Angel; Bear
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14

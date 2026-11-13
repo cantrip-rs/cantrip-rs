@@ -1,0 +1,53 @@
+# Angelic Destiny: "When enchanted creature dies, return this card to its owner's hand." Bot1's Bears wear it from turn 3; on turn 5
+# Bot1 destroys them with its own Terror. The Aura went to the graveyard with its creature (CR 704.5m), and the trigger puts that card
+# back in Bot1's hand (CR 603.10a, 400.7f): Bot1's hand is the Destiny and its graveyard holds the Bears (under the Terror), not the Aura.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Grizzly Bears
+Angelic Destiny
+Terror
+Plains x12
+
+[Bot2 Deck]
+Plains x22
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Angelic Destiny.Cast(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 6
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Terror.Cast(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Angelic Destiny
+Bot1.Graveyard = Terror; Grizzly Bears
+
