@@ -1,0 +1,52 @@
+# "Attack YOU" (CR 508.1): a creature attacking Bot1's planeswalker does not attack Bot1, so Sabotage Strategist does nothing. Bot2's
+# Savannah Lions (power 2) attacks The Theorist, Jace Beleren on turn 4 and takes her from 3 loyalty to 1; weakened it would
+# have taken her to 2. Bot1 takes no damage.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Sabotage Strategist
+The Theorist, Jace Beleren
+Island x13
+
+[Bot2 Deck]
+Plains
+Savannah Lions
+Plains x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sabotage Strategist.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Theorist, Jace Beleren.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Savannah Lions > Bot1.Battlefield.The Theorist, Jace Beleren)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.The Theorist, Jace Beleren.Counters.Loyalty = 1

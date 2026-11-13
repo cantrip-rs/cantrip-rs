@@ -1,0 +1,12 @@
+{
+  "name": "Sabotage Strategist",
+  "manaCost": "{2}{U}{U}",
+  "type": "Creature — Vedalken Ranger",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, vigilance\nWhenever one or more creatures attack you, those creatures get -1/-0 until end of turn.\nExhaust — {5}{U}{U}: Put three +1/+1 counters on this creature. (Activate each exhaust ability only once.)",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

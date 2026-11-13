@@ -1,0 +1,48 @@
+# Sabotage Strategist belongs to Bot1. On turn 5 Bot2 attacks Bot3 with Savannah Lions: Bot1 is not the one attacked, so the Lions
+# keep their power 2 and Bot3 goes to 18 (the positive control). On turn 6 Bot3 attacks Bot1 with its own Savannah Lions: that
+# one is weakened to power 1 and Bot1 goes to 19.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Sabotage Strategist
+Island x17
+
+[Bot2 Deck]
+Plains
+Savannah Lions
+Plains x18
+
+[Bot3 Deck]
+Plains
+Savannah Lions
+Plains x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sabotage Strategist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot3.Main1]
+Bot3.Hand.Plains.Play
+Bot3.Battlefield.Plains.Activate
+Bot3.Hand.Savannah Lions.Cast
+[T5 Bot2.Main1]
+Bot2.Attack(Savannah Lions > Bot3)
+[T5 Bot2.Main2]
+? Bot3.Life = 18
+[T6 Bot3.Main1]
+Bot3.Attack(Savannah Lions > Bot1)
+[T6 Bot3.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot3.Life = 18

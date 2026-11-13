@@ -1,0 +1,73 @@
+# Sabotage Strategist (2/2 flying, vigilance): on turn 3 it attacks Bot2 for 2 and stays untapped (CR 702.20b). Its
+# Exhaust {5}{U}{U} (CR 702.177a) needs all seven mana: on turn 3 Bot1 has only six sources, and the try is refused. On turn 5 the seventh pays it, three +1/+1 counters
+# go on it making it a 5/5, and it can be activated once only: a second try on turn 7 with seven sources untapped is refused.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Sabotage Strategist
+Island x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sabotage Strategist.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Sabotage Strategist > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sabotage Strategist.Tapped = false
+[T3 Bot1.Main2]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Sabotage Strategist.Activate(Ability: Exhaust; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Sabotage Strategist.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sabotage Strategist.Counters.PlusOnePlusOne = 3
+? Bot1.Battlefield.Sabotage Strategist.Power = 5
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Sabotage Strategist.Activate
+
+[Expect]
+Bot1.Battlefield.Sabotage Strategist.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Sabotage Strategist.Keywords = Flying; Vigilance
+Bot2.Life = 18
