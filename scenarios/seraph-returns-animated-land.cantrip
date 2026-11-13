@@ -1,0 +1,49 @@
+# A damaged animated land returns as a land and is sacrificed when Seraph leaves (CR 603.7c).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Seraph
+Swords to Plowshares
+Plains
+Island x20
+[Bot2 Deck]
+Mishra's Factory
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Seraph.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mishra's Factory.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mishra's Factory.Activate(Ability: becomes a 2/2)
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Mishra's Factory > Bot1)
+Bot1.Block(Seraph > Mishra's Factory)
+[T4 Bot2.End]
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Mishra's Factory.Types = Land
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Seraph)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard = Mishra's Factory
