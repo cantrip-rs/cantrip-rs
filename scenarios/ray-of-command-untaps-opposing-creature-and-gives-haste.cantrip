@@ -1,0 +1,43 @@
+# Ray refuses your own creature and a land, untaps the opponent's tapped Elves, and gives haste so they can attack immediately (CR 115.1a, 702.10b).
+[Bot1 Deck]
+Ray of Command
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Memnite
+Island x20
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Llanowar Elves.Activate
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Ray of Command.Cast(Bot1.Battlefield.Memnite)
+! Bot1.Hand.Ray of Command.Cast(Bot2.Battlefield.Forest)
+Bot1.Hand.Ray of Command.Cast(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Tapped = false
+Bot1.Attack(Llanowar Elves > Bot2)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Llanowar Elves.Tapped = true
