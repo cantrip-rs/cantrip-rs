@@ -61,6 +61,13 @@ pub fn find_to_hand(g: &mut dyn Game, player: PlayerId, source: ObjectId, rule: 
     Ok(into_hand(g, player, &found, reveal))
 }
 
+/// "Search your library for a card, put that card into your hand, then shuffle" (CR 701.23): the spell or ability effect
+/// itself. Demonic Tutor, Dark Petition, Splinters Technique and Hour of Victory print it.
+pub fn search_for_a_card_to_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    find_to_hand(g, item.controller, item.object, crate::select::CARD, false)?;
+    Ok(())
+}
+
 /// "Search your library for [`rule`], put it onto the battlefield [tapped], then shuffle" (CR 701.23): the permanents that
 /// arrived. The basic land fetches (`select::BASIC_LAND_CARD`) and Crop Rotation (`select::LAND_CARD`) print it.
 pub fn find_to_battlefield(g: &mut dyn Game, player: PlayerId, source: ObjectId, rule: Selection, tapped: bool) -> Result<Vec<ObjectId>, Suspend> {
