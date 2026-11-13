@@ -1,0 +1,45 @@
+# Rover Blades: "Equipped creature has double strike. Equip {4}". Turn 1 Bot1 casts Grizzly Bears and the Blades. Turn 3
+# equip is paid with exactly {4} (the pool is empty right after), Bears attacks with double strike (the Blades is no
+# creature, so it deals its 2 damage twice: 4), and Bot2 goes from 20 to 16.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Grizzly Bears
+Rover Blades
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rover Blades.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Rover Blades.Activate(Ability: Equip; Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = DoubleStrike
+Bot1.Attack(Grizzly Bears > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16

@@ -1,0 +1,63 @@
+# Rover Blades is a Vehicle with its own double strike (2/2). Crew 2 is not met by Memnite (power 1, refused), but Grizzly Bears crews it on turn 3 and it is a creature, and an
+# Equipment that is a creature can't equip (CR 301.5c): its equip ability can be activated, but resolving it attaches nothing and Grizzly Bears gets no double strike. The Blades attacks
+# itself, double strike, for 4 (Bot2 20 -> 16); the next turn, no longer a creature, equip does attach.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Grizzly Bears
+Rover Blades
+Memnite
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rover Blades.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Rover Blades.Activate(Ability: Crew)
+! Bot1.Choose(Memnite)
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rover Blades.Types = Artifact; Creature
+Bot1.Battlefield.Rover Blades.Activate(Ability: Equip; Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+Bot1.Attack(Rover Blades > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Rover Blades.Activate(Ability: Equip; Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Keywords = DoubleStrike

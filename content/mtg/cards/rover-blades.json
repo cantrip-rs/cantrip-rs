@@ -1,0 +1,11 @@
+{
+  "name": "Rover Blades",
+  "manaCost": "{3}",
+  "type": "Artifact — Equipment Vehicle",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Double strike\nEquipped creature has double strike.\nEquip {4}\nCrew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn. Creatures can't be attached to other permanents.)",
+  "keywords": [
+    "DoubleStrike"
+  ]
+}
