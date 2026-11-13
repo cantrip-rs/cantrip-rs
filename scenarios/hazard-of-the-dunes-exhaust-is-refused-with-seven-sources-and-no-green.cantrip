@@ -1,0 +1,45 @@
+# Hazard of the Dunes, "Exhaust - {6}{G}: Put three +1/+1 counters on this creature": the {G} is a green symbol, not generic
+# mana. Turn 1: Black Lotus (green) and Mox Jet pay for the Hazard, Mox Ruby for Sol Ring. Turn 3: seven mana and none of it
+# green (Sol Ring's two, Mox Jet, Mox Ruby, Mox Pearl, Mox Sapphire and an Island) is enough in all, and the exhaust ability
+# is refused: the Hazard stays a 4/4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Sol Ring
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Hazard of the Dunes
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hazard of the Dunes.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+? Bot1.Mana = {W}{U}{U}{B}{R}{C}{C}
+! Bot1.Battlefield.Hazard of the Dunes.Activate(Ability: Exhaust; Mana: short)
+
+[Expect]
+Bot1.Battlefield.Hazard of the Dunes.Power = 4
+Bot1.Battlefield.Hazard of the Dunes.Toughness = 4

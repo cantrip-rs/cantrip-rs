@@ -1,0 +1,67 @@
+# Hazard of the Dunes, {3}{G} 4/4 reach, trample: "Exhaust - {6}{G}: Put three +1/+1 counters on this creature" (CR 702.177a).
+# Turn 1: Black Lotus (three green) and Mox Jet pay for it. Turn 3: Bot1 has only six sources (five Moxen and a Forest), the
+# activation is refused with all six in the pool. Turn 5 has a second Forest: seven sources pay it exactly (pool left empty),
+# the Hazard is a 7/7. Turn 7 has eight sources, but the ability has been used: refused (once only), the counters stay.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Hazard of the Dunes
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hazard of the Dunes.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hazard of the Dunes.Power = 4
+? Bot1.Battlefield.Hazard of the Dunes.Toughness = 4
+? Bot1.Battlefield.Hazard of the Dunes.Keywords = Reach; Trample
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Hazard of the Dunes.Activate(Ability: Exhaust; Mana: short)
+? Bot1.Battlefield.Hazard of the Dunes.Power = 4
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Hazard of the Dunes.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hazard of the Dunes.Power = 7
+? Bot1.Battlefield.Hazard of the Dunes.Toughness = 7
+[T7 Bot1.Main1]
+Bot1.Hand.Forest.Play
+! Bot1.Battlefield.Hazard of the Dunes.Activate
+
+[Expect]
+Bot1.Battlefield.Hazard of the Dunes.Power = 7
+Bot1.Battlefield.Hazard of the Dunes.Toughness = 7
+Bot1.Graveyard = Black Lotus

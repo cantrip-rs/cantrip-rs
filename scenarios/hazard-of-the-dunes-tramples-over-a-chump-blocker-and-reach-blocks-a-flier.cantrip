@@ -1,0 +1,48 @@
+# Hazard of the Dunes (cast turn 1 off the Lotus and Mox Jet) has trample and reach. Turn 3: it attacks and Bot2's 0/2 Ornithopter
+# blocks; 2 of the 4 damage is assigned to it and 2 trample over (CR 702.19b), Bot2 at 18. Turn 5: it stays home and Bot2's
+# Suntail Hawk (a 1/1 flier) attacks: reach lets it block the flier (CR 702.17b) and it kills the Hawk, Bot1 at 20.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Hazard of the Dunes
+Forest x20
+
+[Bot2 Deck]
+Mox Pearl
+Ornithopter
+Suntail Hawk
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hazard of the Dunes.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Hazard of the Dunes > Bot2)
+Bot2.Block(Ornithopter > Hazard of the Dunes)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Suntail Hawk.Cast
+Bot2.Pass
+Bot1.Pass
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Suntail Hawk > Bot1)
+Bot1.Block(Hazard of the Dunes > Suntail Hawk)
+[T6 Bot2.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 20
+Bot2.Graveyard = Suntail Hawk; Ornithopter

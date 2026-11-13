@@ -1,0 +1,12 @@
+{
+  "name": "Hazard of the Dunes",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Wurm",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Reach, trample\nExhaust — {6}{G}: Put three +1/+1 counters on this creature. (Activate each exhaust ability only once.)",
+  "keywords": [
+    "Reach",
+    "Trample"
+  ]
+}
