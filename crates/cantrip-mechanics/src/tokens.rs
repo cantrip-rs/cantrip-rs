@@ -741,6 +741,14 @@ pub fn create_an_ally(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
     Ok(())
 }
 
+/// "Create [COUNT] 1/1 red Goblin creature tokens" (CR 701.7, 111.1) as an ability's or spell's whole effect: every token is made
+/// at once under the controller of the resolving object, the card file listing `GOBLIN` in its `EXTRA`. Searslicer Goblin and
+/// Underfoot Underdogs make one; Frontline Rush and Goblin Surprise two; Goblin Warrens three.
+pub fn create_goblins<const COUNT: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &GOBLIN, COUNT)?;
+    Ok(())
+}
+
 /// The 1/1 red Goblin creature token. Frontline Rush and Den of the Bugbear make it.
 pub static GOBLIN: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::Red)),
