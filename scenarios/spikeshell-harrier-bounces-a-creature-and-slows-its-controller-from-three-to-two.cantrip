@@ -1,0 +1,73 @@
+# Spikeshell Harrier: "When this creature enters, return target creature or Vehicle an opponent controls to its owner's hand. If
+# that opponent's speed is greater than each other player's speed, reduce that opponent's speed by 1." Bot2 casts Burnout
+# Bashtronaut (speed 1, CR 704.5aa) and Bolts Bot1 on turns 2 and 4: speed 3 (CR 702.179d). Bot1 has no speed (0, CR 702.179f), so
+# on turn 5 the Harrier bounces the Bashtronaut and slows Bot2 to 2, by exactly one. It is the only legal target (Bot2's Mox Jet
+# is no creature or Vehicle, and the Harrier itself is no opponent's), so the trigger targets it without asking.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Spikeshell Harrier
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mountain
+Burnout Bashtronaut
+Lightning Bolt
+Lightning Bolt
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Burnout Bashtronaut.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Speed = 1
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Speed = 2
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Speed = 3
+? Bot1.Life = 14
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Spikeshell Harrier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Speed = 2
+Bot2.Hand = Burnout Bashtronaut; Island; Island; Island
+Bot2.Battlefield = Mountain; Mox Jet; Mox Ruby
+Bot1.Speed = (absent)

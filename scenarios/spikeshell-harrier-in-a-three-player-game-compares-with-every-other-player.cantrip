@@ -1,0 +1,90 @@
+# Spikeshell Harrier: "greater than each other player's speed" is every other player, not only its controller. In a three-player
+# game Bot2 (turn 2) and Bot3 (turn 3) each cast a Burnout Bashtronaut and Bolt Bot1: both have speed 2 (CR 702.179d), and Bot1
+# has none. On turn 4 the Harrier bounces Bot2's Bashtronaut but Bot2's speed is only equal to Bot3's, so it stays 2.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Spikeshell Harrier
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mountain
+Burnout Bashtronaut
+Lightning Bolt
+Island x15
+
+[Bot3 Deck]
+Mox Ruby
+Mox Jet
+Mountain
+Burnout Bashtronaut
+Lightning Bolt
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Burnout Bashtronaut.Cast
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+? Bot2.Speed = 2
+[T3 Bot3.Main1]
+Bot3.Hand.Mountain.Play
+Bot3.Hand.Mox Ruby.Cast
+Bot3.Battlefield.Mountain.Activate
+Bot3.Hand.Burnout Bashtronaut.Cast
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+Bot3.Battlefield.Mox Ruby.Activate
+Bot3.Hand.Lightning Bolt.Cast(Bot1)
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot3.Speed = 2
+[T4 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Spikeshell Harrier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Target(Bot2.Battlefield.Burnout Bashtronaut)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+
+[Expect]
+Bot2.Speed = 2
+Bot3.Speed = 2
+Bot1.Speed = (absent)
+Bot2.Battlefield = Mountain; Mox Ruby

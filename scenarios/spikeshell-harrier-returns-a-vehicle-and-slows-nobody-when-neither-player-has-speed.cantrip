@@ -1,0 +1,50 @@
+# Spikeshell Harrier: "target creature or Vehicle an opponent controls". Bot2's Smuggler's Copter is an uncrewed Vehicle (no
+# creature) and the only legal target; with no speed on either side (0, CR 702.179f) 0 is not greater than 0, so Bot2 stays with
+# no speed and none appears (CR 702.179a): the bounce happens, the slowing does not.
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Spikeshell Harrier
+Island x14
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Smuggler's Copter
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Smuggler's Copter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Spikeshell Harrier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Speed = (absent)
+Bot1.Speed = (absent)
+Bot2.Battlefield = Mox Jet; Mox Ruby

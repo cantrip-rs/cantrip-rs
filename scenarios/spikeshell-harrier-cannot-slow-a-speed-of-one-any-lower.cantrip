@@ -1,0 +1,50 @@
+# Spikeshell Harrier: "This effect can't reduce their speed below 1." Bot2's Burnout Bashtronaut gives it speed 1 (CR 704.5aa),
+# which is greater than Bot1's none (0, CR 702.179f), so the reduction applies but has no room: the Bashtronaut still returns to
+# its owner's hand and Bot2 keeps speed 1.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Spikeshell Harrier
+Island x14
+
+[Bot2 Deck]
+Mox Jet
+Mountain
+Burnout Bashtronaut
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Burnout Bashtronaut.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Speed = 1
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Spikeshell Harrier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Speed = 1
+Bot2.Hand = Burnout Bashtronaut; Island; Island; Island; Island; Island; Mox Jet
+Bot2.Battlefield = Mountain
