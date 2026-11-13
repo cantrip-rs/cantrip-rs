@@ -1,0 +1,50 @@
+# A delayed trigger's controller cannot sacrifice the Guard after its control changes (CR 701.21a).
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Kjeldoran Elite Guard
+Disenchant
+Lightning Bolt
+Plains x20
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Control Magic
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kjeldoran Elite Guard.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Control Magic.Cast(Bot1.Battlefield.Kjeldoran Elite Guard)
+[T4 Bot2.BeginCombat]
+Bot2.Battlefield.Kjeldoran Elite Guard.Activate(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Toughness = 3
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Disenchant.Cast(Bot2.Battlefield.Control Magic)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Kjeldoran Elite Guard.Power = 2
+Bot2.Graveyard = Memnite; Control Magic; Black Lotus
