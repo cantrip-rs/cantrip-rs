@@ -1,0 +1,8 @@
+{
+  "name": "Márton Stromgald",
+  "manaCost": "{2}{R}{R}",
+  "type": "Legendary Creature — Human Knight",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Whenever Márton Stromgald attacks, other attacking creatures get +1/+1 until end of turn for each attacking creature other than Márton Stromgald.\nWhenever Márton Stromgald blocks, other blocking creatures get +1/+1 until end of turn for each blocking creature other than Márton Stromgald."
+}

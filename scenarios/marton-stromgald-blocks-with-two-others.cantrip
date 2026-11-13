@@ -1,0 +1,48 @@
+# Márton blocks alongside two Ornithopters: both get +2/+2, Márton and the creature left home do not, and the bonus expires at cleanup (CR 509.1i, 611.2a).
+[Bot1 Deck]
+Márton Stromgald
+Black Lotus
+Mox Pearl
+Ornithopter x3
+Mountain x20
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears x2
+Forest x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Márton Stromgald.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears#1 > Bot1; Grizzly Bears#2 > Bot1)
+Bot1.Block(Márton Stromgald > Grizzly Bears#1; Ornithopter#1 > Grizzly Bears#2; Ornithopter#2 > Grizzly Bears#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Power = 2
+? Bot1.Battlefield.Ornithopter#1.Toughness = 4
+? Bot1.Battlefield.Ornithopter#2.Power = 2
+? Bot1.Battlefield.Ornithopter#3.Power = 0
+? Bot1.Battlefield.Márton Stromgald.Power = 1
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter#1.Power = 0
+? Bot1.Battlefield.Ornithopter#1.Toughness = 2
+[Expect]
+Bot1.Life = 20

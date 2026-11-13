@@ -1,0 +1,38 @@
+# Márton's attack trigger gives each other attacker +2/+2 for two other attackers, but not Márton or a creature left home; it expires at cleanup (CR 508.1m, 611.2a).
+[Bot1 Deck]
+Márton Stromgald
+Black Lotus
+Mox Pearl
+Ornithopter x3
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Márton Stromgald.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Márton Stromgald > Bot2; Ornithopter#1 > Bot2; Ornithopter#2 > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Power = 2
+? Bot1.Battlefield.Ornithopter#1.Toughness = 4
+? Bot1.Battlefield.Ornithopter#2.Power = 2
+? Bot1.Battlefield.Ornithopter#3.Power = 0
+? Bot1.Battlefield.Márton Stromgald.Power = 1
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Ornithopter#1.Power = 0
+? Bot1.Battlefield.Ornithopter#1.Toughness = 2
+[Expect]
+Bot2.Life = 15
