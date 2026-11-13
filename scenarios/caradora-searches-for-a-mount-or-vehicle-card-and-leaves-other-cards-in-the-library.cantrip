@@ -1,0 +1,40 @@
+# Caradora, Heart of Alacria: "when Caradora enters, you may search your library for a Mount or Vehicle card, reveal it, put it into your hand, then shuffle"
+# (CR 701.23). Bot1 casts it on turn one with Mox Pearl, Black Lotus (green) and nothing else: only a Mount or a Vehicle card may be found (an
+# Island, an artifact creature like Memnite, or two cards at once are refused); Brightfield Mustang, a Mount, is taken, and the Vehicle
+# Cloudspire Skycycle stays in the library, which was shuffled once and revealed to nobody but the Mustang.
+
+[Bot1 Deck]
+Mox Pearl
+Black Lotus
+Caradora, Heart of Alacria
+Island
+Island
+Island
+Island
+Memnite
+Brightfield Mustang
+Cloudspire Skycycle
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Caradora, Heart of Alacria.Cast
+Bot1.Pass
+Bot1.Accept
+! Bot1.Search(Island)
+! Bot1.Search(Memnite)
+! Bot1.Search(Brightfield Mustang; Cloudspire Skycycle)
+Bot1.Search(Brightfield Mustang)
+
+[Expect]
+Bot1.Hand = Brightfield Mustang; Island; Island; Island; Island
+Bot1.Revealed = Brightfield Mustang
+Bot1.Shuffles = 1
+Bot1.Library.Count = 12
+Bot1.Battlefield.Caradora, Heart of Alacria.Power = 4

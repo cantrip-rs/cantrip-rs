@@ -1,0 +1,8 @@
+{
+  "name": "Caradora, Heart of Alacria",
+  "manaCost": "{2}{G}{W}",
+  "type": "Legendary Creature — Human Knight",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "When Caradora enters, you may search your library for a Mount or Vehicle card, reveal it, put it into your hand, then shuffle.\nIf one or more +1/+1 counters would be put on a creature or Vehicle you control, that many plus one +1/+1 counters are put on it instead."
+}

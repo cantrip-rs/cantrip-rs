@@ -1,0 +1,58 @@
+# Caradora, Heart of Alacria: the extra counter is only for "a creature or Vehicle you control" (CR 122.6, 614.1a). Bot1 casts it on turn one with four Moxen
+# and declines the search, which shuffles nothing (CR 701.23). Bristly Bill's landfall counter (Bot1's turns three and five) goes on Bot2's Elvish Mystic
+# as one, since Bot2 controls it, and on Bot1's own Bristly Bill as two.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Mox Jet
+Caradora, Heart of Alacria
+Bristly Bill, Spine Sower
+Black Lotus
+Forest
+Forest
+Island x12
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Forest x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Caradora, Heart of Alacria.Cast
+Bot1.Pass
+Bot1.Decline
+? Bot1.Shuffles = 0
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Bristly Bill, Spine Sower.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Target(Bot2.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Target(Bristly Bill, Spine Sower)
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Shuffles = 0
+Bot2.Battlefield.Elvish Mystic.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Bristly Bill, Spine Sower.Counters.PlusOnePlusOne = 2

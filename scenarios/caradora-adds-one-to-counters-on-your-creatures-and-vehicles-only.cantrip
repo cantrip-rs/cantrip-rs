@@ -1,0 +1,58 @@
+# Caradora, Heart of Alacria: "if one or more +1/+1 counters would be put on a creature or Vehicle you control, that many plus one are put on it instead"
+# (CR 122.6, 614.1a). Bot1 casts it on turn one (four Moxen) and searches for Cloudspire Skycycle, a Vehicle. On turn three the first Skycycle's two counters
+# are divided one each between Memnite and Caradora, which take two apiece; on turn five a second Skycycle puts its two on the first one, an uncrewed
+# Vehicle and so no creature, gets three.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Mox Jet
+Caradora, Heart of Alacria
+Cloudspire Skycycle
+Memnite
+Cloudspire Skycycle
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Caradora, Heart of Alacria.Cast
+Bot1.Pass
+Bot1.Accept
+Bot1.Search(Cloudspire Skycycle)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cloudspire Skycycle.Cast
+Bot1.Divide(Memnite: 1; Caradora, Heart of Alacria: 1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Caradora, Heart of Alacria.Counters.PlusOnePlusOne = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cloudspire Skycycle.Cast
+Bot1.Divide(Cloudspire Skycycle: 2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Caradora, Heart of Alacria.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Cloudspire Skycycle#1.Counters.PlusOnePlusOne = 3
