@@ -1,0 +1,23 @@
+# With no charge counters, the Battery can tap for exactly one green mana (CR 605.1a).
+[Bot1 Deck]
+Green Mana Battery
+Black Lotus
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Green Mana Battery.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Green Mana Battery.Activate(Ability: Remove any number; X: 0)
+Bot1.Pass
+? Bot1.Mana = {G}
+[Expect]
+Bot1.Battlefield.Green Mana Battery.Tapped = true
+Bot1.Battlefield.Green Mana Battery.Counters.Charge = (absent)
