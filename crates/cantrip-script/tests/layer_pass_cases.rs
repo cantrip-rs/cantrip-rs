@@ -455,6 +455,10 @@ const INERT: &[(&str, &str)] = &[
         "Samut, the Driving Force",
         "its effect adds its controller's speed to the power, and the synthetic players have none (speed starts when a player's engine starts); its scenarios show the +X/+0 at speed 1 and 2 for its controller and for the opponent when Samut is theirs",
     ),
+    (
+        "Tempest Djinn",
+        "its effect counts the basic Islands its controller controls, and the synthetic boards hold none; its scenario shows +1/+0 for each basic Island, and none for an opponent's Island or a nonbasic one",
+    ),
 ];
 
 /// The contract of every static ability's effect (`StaticApply`), across the whole card table: applied to synthetic objects

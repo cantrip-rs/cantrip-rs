@@ -1,0 +1,41 @@
+# Tempest Djinn: "This creature gets +1/+0 for each basic Island you control" (CR 613.4c). Bot1 casts it with Black Lotus's {U}{U}{U}: a 0/4
+# with flying. Bot1's basic Island makes it 1/4; Bot2's basic Island adds nothing (it is not Bot1's), and neither does Bot1's Volcanic
+# Island, an Island that is not basic (CR 205.4, 205.3i). A Snow-Covered Island is basic and makes it 2/4.
+
+[Bot1 Deck]
+Black Lotus
+Tempest Djinn
+Island
+Volcanic Island
+Snow-Covered Island
+Island x2
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Tempest Djinn.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tempest Djinn.Power = 0
+Bot1.Hand.Island.Play
+? Bot1.Battlefield.Tempest Djinn.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+? Bot1.Battlefield.Tempest Djinn.Power = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Volcanic Island.Play
+? Bot1.Battlefield.Tempest Djinn.Power = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Snow-Covered Island.Play
+
+[Expect]
+Bot1.Battlefield.Tempest Djinn.Power = 2
+Bot1.Battlefield.Tempest Djinn.Toughness = 4
+Bot1.Battlefield.Tempest Djinn.Keywords = Flying
