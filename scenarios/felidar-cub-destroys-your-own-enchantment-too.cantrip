@@ -1,0 +1,43 @@
+# Felidar Cub: "Destroy target enchantment" - any enchantment, the Cub's controller's included (CR 115.1). Bot1 pacifies Bot2's Memnite
+# on turn 3 and on turn 5 sacrifices the Cub to destroy its own Pacifism: the Pacifism and the Cub are in Bot1's graveyard
+# (the Pacifism on top, destroyed after the Cub was sacrificed) and Bot2's Memnite is untouched.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Felidar Cub
+Pacifism
+Plains
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Memnite
+Plains x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Felidar Cub.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pacifism.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Felidar Cub.Activate(Bot1.Battlefield.Pacifism)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Mox Jet
+Bot1.Graveyard = Pacifism; Felidar Cub
+Bot2.Battlefield = Memnite
