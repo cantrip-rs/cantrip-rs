@@ -473,7 +473,7 @@ pub fn counters_on_each(g: &mut dyn Game, objects: &[ObjectId], kind: CounterKin
 /// (CR 612.2); all of them at once (CR 608.2, 101.4: one event, CR 603.2c). The permanents. Lyra, Archangel of Dawn
 /// (Angels) and Ajani, Nacatl Avenger (Cats) print it, with one +1/+1 counter: `plus_one_counter_on_each_of_subtype_you_control`.
 pub fn counters_on_each_of_subtype_you_control(g: &mut dyn Game, item: &StackItem, subtype: Subtype, kind: CounterKind, n: i32) -> Vec<ObjectId> {
-    of_subtype_you_control(g, item, subtype, false, kind, n)
+    of_subtype_you_control(g, item, subtype, false, false, kind, n)
 }
 
 /// "Other [subtype]s you control gain [keywords] until end of turn" (CR 611.2, 611.2c, 702): every permanent with the subtype that `item`'s
@@ -492,20 +492,27 @@ pub fn other_of_subtype_you_control_gain_until_end_of_turn<const SUBTYPE: u16, c
     Ok(())
 }
 
+/// "Put `n` `kind` counters on each [subtype] creature you control" (CR 122.1, 205.3, 608.2): `counters_on_each_of_subtype_you_control`
+/// for the permanents of the subtype that are creatures as it resolves, so a noncreature permanent with the subtype gets none. Mindspring
+/// Merfolk (Merfolk, +1/+1) and Avenger of Zendikar (Plant, +1/+1) print it.
+pub fn counters_on_each_creature_of_subtype_you_control(g: &mut dyn Game, item: &StackItem, subtype: Subtype, kind: CounterKind, n: i32) -> Vec<ObjectId> {
+    of_subtype_you_control(g, item, subtype, false, true, kind, n)
+}
+
 /// "Put `n` `kind` counters on each other [subtype] you control": `counters_on_each_of_subtype_you_control` without the
 /// source. Thalia's Lieutenant (Humans), Rescue Retriever (Soldiers), Camellia, the Seedmiser (Squirrels), Agent Phil
 /// Coulson and Doctor Spectrum (Heroes) and Vampire Socialite (Vampires) print it, with one +1/+1 counter:
 /// `plus_one_counter_on_each_other_of_subtype_you_control`.
 pub fn counters_on_each_other_of_subtype_you_control(g: &mut dyn Game, item: &StackItem, subtype: Subtype, kind: CounterKind, n: i32) -> Vec<ObjectId> {
-    of_subtype_you_control(g, item, subtype, true, kind, n)
+    of_subtype_you_control(g, item, subtype, true, false, kind, n)
 }
 
-fn of_subtype_you_control(g: &mut dyn Game, item: &StackItem, subtype: Subtype, other: bool, kind: CounterKind, n: i32) -> Vec<ObjectId> {
+fn of_subtype_you_control(g: &mut dyn Game, item: &StackItem, subtype: Subtype, other: bool, creature: bool, kind: CounterKind, n: i32) -> Vec<ObjectId> {
     let word = g.words(item.object).subtype(subtype);
     let objects: Vec<ObjectId> = g
         .permanents_of(item.controller)
         .into_iter()
-        .filter(|&id| !(other && id == item.object) && g.chars(id).has_subtype(word))
+        .filter(|&id| !(other && id == item.object) && (!creature || g.chars(id).is(CardType::Creature)) && g.chars(id).has_subtype(word))
         .collect();
     counters_on_each(g, &objects, kind, n);
     objects
