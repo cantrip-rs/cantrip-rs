@@ -1,0 +1,56 @@
+# Removing Rohgahh in response does not stop its upkeep ability from tapping and transferring the named Kobolds (CR 113.7a).
+[Bot1 Deck]
+Rohgahh of Kher Keep
+Black Lotus
+Mox Ruby x2
+Mox Jet
+Kobolds of Kher Keep
+Island
+Island x20
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Kobolds of Kher Keep
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Kobolds of Kher Keep.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rohgahh of Kher Keep.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Kobolds of Kher Keep.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Rohgahh of Kher Keep)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.ChoosePlayer(Bot2)
+[Expect]
+Exile = Rohgahh of Kher Keep
+Bot1.Life = 25
+Bot2.Battlefield.Kobolds of Kher Keep#1.Tapped = true
+Bot2.Battlefield.Kobolds of Kher Keep#2.Tapped = true
+Bot2.Battlefield.Kobolds of Kher Keep#1.Power = 0
+Bot2.Battlefield.Kobolds of Kher Keep#2.Power = 0

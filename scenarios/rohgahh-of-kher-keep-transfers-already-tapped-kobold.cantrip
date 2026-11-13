@@ -1,0 +1,67 @@
+# An already tapped Kobold is still included when Rohgahh transfers all named Kobolds (CR 608.2c).
+[Bot1 Deck]
+Rohgahh of Kher Keep
+Black Lotus
+Mox Ruby x2
+Mox Jet
+Kobolds of Kher Keep
+Island
+Island x20
+[Bot2 Deck]
+Kobolds of Kher Keep
+Mox Pearl
+Dispatch
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Kobolds of Kher Keep.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rohgahh of Kher Keep.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Kobolds of Kher Keep.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Kobolds of Kher Keep.Power = 2
+? Bot1.Battlefield.Kobolds of Kher Keep.Toughness = 3
+? Bot2.Battlefield.Kobolds of Kher Keep.Power = 0
+? Bot2.Battlefield.Kobolds of Kher Keep.Toughness = 1
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Dispatch.Cast(Bot1.Battlefield.Kobolds of Kher Keep)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Kobolds of Kher Keep.Tapped = true
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.PayCost
+Bot1.Decline
+? Bot1.Battlefield.Rohgahh of Kher Keep.Tapped = true
+? Bot1.Battlefield.Kobolds of Kher Keep.Tapped = true
+? Bot2.Battlefield.Kobolds of Kher Keep.Tapped = true
+Bot1.ChoosePlayer(Bot2)
+[Expect]
+Bot1.Battlefield.Rohgahh of Kher Keep = (absent)
+Bot1.Battlefield.Kobolds of Kher Keep = (absent)
+Bot2.Battlefield.Rohgahh of Kher Keep.Tapped = true
+Bot2.Battlefield.Kobolds of Kher Keep#1.Power = 2
+Bot2.Battlefield.Kobolds of Kher Keep#2.Power = 2

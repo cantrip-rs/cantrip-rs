@@ -1,0 +1,42 @@
+# Paying exactly {R}{R}{R} at upkeep keeps Rohgahh and its Kobold untapped and under their controller's control (CR 603.2).
+[Bot1 Deck]
+Rohgahh of Kher Keep
+Black Lotus
+Mox Ruby x3
+Kobolds of Kher Keep
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Kobolds of Kher Keep.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Rohgahh of Kher Keep.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield.Rohgahh of Kher Keep.Tapped = false
+Bot1.Battlefield.Kobolds of Kher Keep.Tapped = false
+Bot1.Battlefield.Kobolds of Kher Keep.Power = 2
