@@ -1,0 +1,24 @@
+# Each card drawn by the opponent triggers Underworld Dreams, even if hand size stays the same (CR 121.1).
+[Bot1 Deck]
+Winds of Change
+Black Lotus
+Mox Ruby
+Underworld Dreams
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Underworld Dreams.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Winds of Change.Cast
+Bot1.Pass
+[T1 Bot1.End]
+[Expect]
+Bot2.Life = 13
+Bot2.Hand.Count = 7

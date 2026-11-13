@@ -1,0 +1,27 @@
+# An empty hand is still shuffled into its owner's library (CR 701.24d).
+[Bot1 Deck]
+Winds of Change
+Mox Ruby x6
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Winds of Change.Cast
+Bot1.Pass
+[Expect]
+Bot1.Hand.Count = 0
+Bot1.Shuffles = 1
+Bot2.Shuffles = 1

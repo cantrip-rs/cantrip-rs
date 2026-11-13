@@ -1,0 +1,6 @@
+{
+  "name": "Winds of Change",
+  "manaCost": "{R}",
+  "type": "Sorcery",
+  "oracleText": "Each player shuffles the cards from their hand into their library, then draws that many cards."
+}

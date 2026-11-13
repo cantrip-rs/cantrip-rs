@@ -1,0 +1,24 @@
+# Bot1 has five cards in hand and Bot2 seven as Winds resolves. Each shuffles
+# their own hand into their library before drawing that same number (CR 608.2c).
+
+[Bot1 Deck]
+Winds of Change
+Mox Ruby
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Winds of Change.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot2.Hand.Count = 7
+Bot1.Shuffles = 1
+Bot2.Shuffles = 1
