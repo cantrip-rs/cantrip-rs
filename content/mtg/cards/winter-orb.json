@@ -1,0 +1,6 @@
+{
+  "name": "Winter Orb",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "As long as this artifact is untapped, players can't untap more than one land during their untap steps."
+}

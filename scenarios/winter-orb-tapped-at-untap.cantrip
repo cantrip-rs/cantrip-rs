@@ -1,0 +1,35 @@
+# A tapped Winter Orb does not limit lands as it untaps simultaneously with them (CR 502.3).
+[Bot1 Deck]
+Winter Orb
+Mox Pearl
+Mox Sapphire
+Island
+Forest
+Relic Barrier
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Winter Orb.Cast
+? Bot1.Mana =
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Relic Barrier.Cast
+Bot1.Pass
+Bot1.Battlefield.Relic Barrier.Activate(Winter Orb)
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Island.Tapped = false
+Bot1.Battlefield.Forest.Tapped = false
