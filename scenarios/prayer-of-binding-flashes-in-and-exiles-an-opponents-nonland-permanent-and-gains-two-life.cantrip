@@ -1,0 +1,54 @@
+# Prayer of Binding has flash (CR 702.8a): Bot1 casts it on Bot2's turn 2 for exactly {3}{W} from four Mox Pearls. Its enters
+# ability exiles "up to one target nonland permanent an opponent controls" (CR 610.3): Bot1's own Mox Pearl (a nonland permanent,
+# but not an opponent's) and Bot2's Plains (an opponent's permanent, but a land) are refused, Bot2's Mox Jet is exiled, and Bot2's
+# Memnite and Bot1's Moxen stay (two targets at once are refused, "up to one"). Bot1 gains 2 life (20 -> 22).
+
+[Bot1 Deck]
+Mox Pearl x4
+Prayer of Binding
+Island x16
+
+[Bot2 Deck]
+Mox Jet
+Memnite
+Plains
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Prayer of Binding.Cast(Spend: W, W, W, W)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Mox Pearl#1)
+! Bot1.Target(Bot2.Battlefield.Plains)
+! Bot1.Target(Bot2.Battlefield.Mox Jet; Bot2.Battlefield.Memnite)
+Bot1.Target(Bot2.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Exile = Mox Jet
+Bot1.Life = 22
+Bot2.Life = 20
+Bot2.Battlefield = Memnite; Plains
+Bot1.Battlefield = Mox Pearl; Mox Pearl; Mox Pearl; Mox Pearl; Prayer of Binding
