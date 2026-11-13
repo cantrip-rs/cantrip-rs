@@ -1,0 +1,64 @@
+# Starting Column: "Max speed — {T}, Sacrifice this artifact: Draw two cards, then discard a card." Bot1's speed is 1 from
+# the Column and rises with each Lightning Bolt on Bot1's own turns 1, 3 and 5. At speed 2 and 3 the sacrifice ability is
+# refused though the Column is untapped; at speed 4 on turn 5 it is offered. It draws two cards and Bot1 discards a
+# Mountain; the Column is in the graveyard too (the sacrifice is a cost).
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Starting Column
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Memnite
+Island
+Mountain
+Mountain
+Mountain x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Starting Column.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+! Bot1.Battlefield.Starting Column.Activate(Ability: draw two cards)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+! Bot1.Battlefield.Starting Column.Activate(Ability: draw two cards)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+Bot1.Battlefield.Starting Column.Activate(Ability: draw two cards)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mountain)
+
+[Expect]
+Bot1.Hand = Memnite; Island; Mountain
+Bot1.Graveyard = Mountain; Starting Column; Lightning Bolt; Lightning Bolt; Lightning Bolt; Black Lotus

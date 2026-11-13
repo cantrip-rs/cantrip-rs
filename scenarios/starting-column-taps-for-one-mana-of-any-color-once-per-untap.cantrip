@@ -1,0 +1,43 @@
+# Starting Column: "{T}: Add one mana of any color." Bot1 casts it on turn 1 with Sol Ring (colorless, colorless) and
+# Mox Jet, then taps it the same turn (a noncreature artifact has no summoning sickness) for red, exactly what a
+# Lightning Bolt needs (Bot1 has no other red source): Bot2 goes to 17. The Column is tapped now and cannot make a second
+# mana (refused). Speed is 1 from Start your engines! and 2 after the Bolt; the max-speed sacrifice ability is not on yet.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Sol Ring
+Starting Column
+Lightning Bolt
+Lightning Bolt
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Pearl
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Starting Column.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+Bot1.Battlefield.Starting Column.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Bot1.Mana =
+? Bot1.Speed = 2
+! Bot1.Battlefield.Starting Column.Activate(Color: Red)
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Mox Jet; Sol Ring; Starting Column
