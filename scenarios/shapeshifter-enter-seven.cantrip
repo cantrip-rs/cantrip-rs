@@ -1,0 +1,30 @@
+# Choosing the upper endpoint as Shapeshifter enters makes it 7/0 and state-based actions put it in its graveyard (CR 704.5f).
+[Bot1 Deck]
+Shapeshifter
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Shapeshifter.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Number(8)
+Bot1.Number(7)
+[Expect]
+Bot1.Graveyard = Shapeshifter; Black Lotus
