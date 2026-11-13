@@ -1,0 +1,52 @@
+# Exclusion Mage: "When this creature enters, return target creature an opponent controls to its owner's hand." Bot1 has an
+# Ornithopter of its own and Bot2 has a Llanowar Elves: only Bot2's can be the target, and it goes back to Bot2's hand (CR 400.3).
+# Bot1's Ornithopter and the Mage stay.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Exclusion Mage
+Ornithopter
+Island x30
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Hand.Exclusion Mage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Llanowar Elves = (absent)
+Bot2.Hand.Count = 7
+Bot2.Hand.Llanowar Elves.Colors = Green
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Exclusion Mage.Power = 2
+Bot1.Battlefield.Exclusion Mage.Toughness = 2
