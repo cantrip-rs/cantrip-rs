@@ -13,6 +13,14 @@ pub static THOPTER: CardDef = CardDef {
     ..token!(Thopter)
 };
 
+/// "Create a 1/1 colorless Thopter artifact creature token with flying." (CR 111.1): one `THOPTER` under `item`'s
+/// controller, the card file listing it in its `EXTRA`. Broadcast Rambler, Pia, Determined Rebuilder, Retrofitter Foundry,
+/// Saheeli, Consul of Oversight and Saheeli, Jewel of Avishkar print it.
+pub fn create_a_thopter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &THOPTER, 1)?;
+    Ok(())
+}
+
 /// The 1/1 colorless Drone artifact creature token with flying and "This token can block only creatures with flying." (CR 111).
 /// Pinnacle Emissary and Desculpting Blast create this exact token.
 pub static DRONE: CardDef = CardDef {
@@ -398,6 +406,14 @@ pub static PILOT: CardDef = CardDef {
     text: "This token crews Vehicles as though its power were 2 greater.",
     ..token!(Pilot)
 };
+
+/// "Create a 1/1 colorless Pilot creature token with \"This token saddles Mounts and crews Vehicles as though its power were 2
+/// greater.\"" (CR 111.1): one `PILOT_SADDLES_AND_CREWS` under `item`'s controller, the card file listing it in its
+/// `EXTRA`. Defend the Rider and Roadside Assistance print it as a whole effect.
+pub fn create_a_pilot(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &PILOT_SADDLES_AND_CREWS, 1)?;
+    Ok(())
+}
 
 /// The 1/1 colorless Pilot creature token: "This token saddles Mounts and crews Vehicles as though its power were 2
 /// greater." Defend the Rider, the Roads lands (Country Roads, Foul Roads, Reef Roads, Rocky Roads, Wild Roads),

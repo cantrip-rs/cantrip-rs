@@ -34,11 +34,6 @@ fn make_servo(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-fn make_thopter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    cantrip_mechanics::tokens::create(g, item.controller, &THOPTER, 1)?;
-    Ok(())
-}
-
 fn make_construct(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     cantrip_mechanics::tokens::create(g, item.controller, &CONSTRUCT, 1)?;
     Ok(())
@@ -48,7 +43,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         ability(cost("{3}"), untap_this, "{3}: Untap this artifact."),
         ability(cost("{2}, {T}"), make_servo, "{2}, {T}: Create a 1/1 colorless Servo artifact creature token."),
-        ability(cost("{1}, {T}").and(sacrifice(1, is_servo)), make_thopter, "{1}, {T}, Sacrifice a Servo: Create a 1/1 colorless Thopter artifact creature token with flying."),
+        ability(cost("{1}, {T}").and(sacrifice(1, is_servo)), cantrip_mechanics::tokens::create_a_thopter, "{1}, {T}, Sacrifice a Servo: Create a 1/1 colorless Thopter artifact creature token with flying."),
         ability(TAP.and(sacrifice(1, is_thopter)), make_construct, "{T}, Sacrifice a Thopter: Create a 4/4 colorless Construct artifact creature token."),
     ],
     ..oracle::RETROFITTER_FOUNDRY
