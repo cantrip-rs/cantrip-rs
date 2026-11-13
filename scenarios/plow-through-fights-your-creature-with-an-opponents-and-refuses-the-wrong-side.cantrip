@@ -1,0 +1,42 @@
+# Plow Through, first mode: "Target creature you control fights target creature an opponent controls." Bot1's Memnite and Bot2's
+# Memnite fight: each deals 1 damage to the other and both die. The first target must be Bot1's: Bot2's Memnite is refused
+# there, and Bot1's own Ornithopter is refused for the second, which must be an opponent's creature (the refusals).
+
+[Bot1 Deck]
+Mox Emerald
+Memnite
+Ornithopter
+Plow Through
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Plow Through.Cast
+Bot1.Modes(fights)
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Memnite)
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Emerald; Ornithopter
+Bot1.Graveyard = Memnite; Plow Through
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Memnite

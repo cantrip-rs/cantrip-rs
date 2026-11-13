@@ -1,0 +1,6 @@
+{
+  "name": "Plow Through",
+  "manaCost": "{G}",
+  "type": "Sorcery",
+  "oracleText": "Choose one —\n• Target creature you control fights target creature an opponent controls. (Each deals damage equal to its power to the other.)\n• Destroy target Vehicle."
+}

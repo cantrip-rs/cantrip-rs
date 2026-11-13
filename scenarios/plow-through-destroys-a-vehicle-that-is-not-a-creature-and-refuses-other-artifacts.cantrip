@@ -1,0 +1,40 @@
+# Plow Through, second mode: "Destroy target Vehicle." Bot2's Smuggler's Copter is a Vehicle that nobody has crewed, so it is
+# not a creature, and it is a legal target (CR 205.3g): it is destroyed. Bot2's Sol Ring is an artifact that is no Vehicle, and
+# is refused (the refusal), with the Copter beside it as the positive control. Sol Ring and Mox Pearl stay put.
+
+[Bot1 Deck]
+Mox Emerald
+Plow Through
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Sol Ring
+Smuggler's Copter
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Hand.Smuggler's Copter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Plow Through.Cast
+Bot1.Modes(Destroy target Vehicle)
+! Bot1.Target(Bot2.Battlefield.Sol Ring)
+Bot1.Target(Bot2.Battlefield.Smuggler's Copter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield = Mox Pearl; Sol Ring
+Bot2.Graveyard = Smuggler's Copter
+Bot1.Graveyard = Plow Through
