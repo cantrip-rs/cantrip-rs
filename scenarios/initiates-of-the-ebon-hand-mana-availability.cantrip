@@ -1,0 +1,27 @@
+# Red mana can be converted to one black mana, but cannot pay for white or blue spells through Initiates (CR 605.3a).
+[Bot1 Deck]
+Initiates of the Ebon Hand
+Mox Jet
+Mox Ruby
+Savannah Lions
+Merfolk of the Pearl Trident
+Dark Ritual
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Initiates of the Ebon Hand.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Hand.Savannah Lions.Cast(Mana: short)
+! Bot1.Hand.Merfolk of the Pearl Trident.Cast(Mana: short)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand.Activate
+? Bot1.Mana = {B}
+Bot1.Hand.Dark Ritual.Cast
+? Bot1.Mana =
+[Expect]
+Bot1.Mana = {B}{B}{B}

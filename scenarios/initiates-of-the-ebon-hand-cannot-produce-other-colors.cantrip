@@ -1,0 +1,38 @@
+# A colorless mana source and Initiates can produce black, but cannot pay any other colored cost (CR 605.3a).
+[Bot1 Deck]
+Swamp
+Wastes
+Initiates of the Ebon Hand
+Dark Ritual
+Hypnotic Specter
+Savannah Lions
+Merfolk of the Pearl Trident
+Llanowar Elves
+Raging Goblin
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Initiates of the Ebon Hand.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Hypnotic Specter.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Wastes.Play
+! Bot1.Hand.Savannah Lions.Cast(Mana: short)
+! Bot1.Hand.Merfolk of the Pearl Trident.Cast(Mana: short)
+! Bot1.Hand.Llanowar Elves.Cast(Mana: short)
+[T5 Bot1.Main1]
+! Bot1.Hand.Raging Goblin.Cast(Mana: short)
+Bot1.Battlefield.Wastes.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand.Activate
+? Bot1.Mana = {B}
+[Expect]
+Bot1.Battlefield.Hypnotic Specter.Power = 2

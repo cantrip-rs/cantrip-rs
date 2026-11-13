@@ -1,0 +1,45 @@
+# Three activations leave Initiates alive; the count resets next turn and a fourth schedules its sacrifice (CR 603.7, 605.3a).
+[Bot1 Deck]
+Initiates of the Ebon Hand
+Mox Jet
+Mox Ruby
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Initiates of the Ebon Hand.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand.Activate
+? Bot1.Mana = {B}
+Bot1.Battlefield.Initiates of the Ebon Hand.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand.Activate
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Initiates of the Ebon Hand.Power = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand.Activate
+? Bot1.Battlefield.Initiates of the Ebon Hand.Power = 1
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Initiates of the Ebon Hand.Power = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand.Activate
+? Bot1.Mana = {B}
+[T5 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+[Expect]
+Bot1.Graveyard = Initiates of the Ebon Hand

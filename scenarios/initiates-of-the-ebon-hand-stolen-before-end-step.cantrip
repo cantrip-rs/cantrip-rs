@@ -1,0 +1,39 @@
+# The delayed trigger's controller cannot sacrifice Initiates after an opponent gains control (CR 701.21a).
+[Bot1 Deck]
+Initiates of the Ebon Hand
+Mox Jet
+Mox Ruby
+Swamp x20
+[Bot2 Deck]
+Control Magic
+Black Lotus
+Mox Sapphire
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Initiates of the Ebon Hand.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand.Activate
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Control Magic.Cast(Bot1.Battlefield.Initiates of the Ebon Hand)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+[Expect]
+Bot2.Battlefield.Initiates of the Ebon Hand.Power = 1

@@ -1,0 +1,30 @@
+# Each Initiates tracks its own activations: three uses of each do not schedule either sacrifice (CR 603.7).
+[Bot1 Deck]
+Initiates of the Ebon Hand x2
+Mox Jet
+Mox Ruby
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Initiates of the Ebon Hand.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Initiates of the Ebon Hand.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand#1.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand#1.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand#1.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand#2.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand#2.Activate
+Bot1.Battlefield.Initiates of the Ebon Hand#2.Activate
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Initiates of the Ebon Hand#1.Power = 1
+Bot1.Battlefield.Initiates of the Ebon Hand#2.Power = 1

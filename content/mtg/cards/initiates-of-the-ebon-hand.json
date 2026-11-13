@@ -1,0 +1,8 @@
+{
+  "name": "Initiates of the Ebon Hand",
+  "manaCost": "{B}",
+  "type": "Creature — Cleric",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{1}: Add {B}. If this ability has been activated four or more times this turn, sacrifice this creature at the beginning of the next end step."
+}
