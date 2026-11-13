@@ -1,0 +1,57 @@
+# Mutant Surveyor: "{2}: +1/+1 until end of turn" needs the full {2}; "Max speed — {3}, Exile this card from your graveyard: Draw a
+# card" works only at speed 4 (CR 702.178a-b). Bot1 casts it on turn 1 with Mox Jet, Mox Ruby and Mox Pearl; the Mountain played
+# beside it gives one mana, a refusal for want of mana to pump (Mana: short). Speed is 1 (CR 704.5aa). Bot2's Bolt kills it on
+# turn 2; on turn 3 Bot1 has four mana for the {3} cost but only speed 1, so the graveyard ability is refused and the
+# card stays.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mutant Surveyor
+Mountain
+Mountain x15
+Memnite
+Ornithopter
+Mountain
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mutant Surveyor.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+Bot1.Battlefield.Mountain.Activate
+! Bot1.Battlefield.Mutant Surveyor.Activate(Ability: +1/+1; Mana: short)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Mutant Surveyor)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Mutant Surveyor
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+! Bot1.Graveyard.Mutant Surveyor.Activate
+
+[Expect]
+Turn = 3
+Bot1.Speed = 1
+Bot1.Graveyard = Mutant Surveyor
