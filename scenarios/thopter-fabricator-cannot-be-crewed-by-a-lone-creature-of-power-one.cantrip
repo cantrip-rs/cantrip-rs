@@ -1,0 +1,35 @@
+# Thopter Fabricator: Crew 2 needs total power 2 or greater (CR 702.122a). Bot1's only creature is Llanowar Elves, a 1/1, so on
+# turn 3 the crew ability is not offered.
+
+[Bot1 Deck]
+Forest
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Thopter Fabricator
+Llanowar Elves
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thopter Fabricator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Thopter Fabricator.Activate(Ability: Crew 2)
+
+[Expect]
+Bot1.Battlefield = Forest; Llanowar Elves; Mox Jet; Mox Ruby; Mox Sapphire; Thopter Fabricator
