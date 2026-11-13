@@ -1,0 +1,32 @@
+# Skycrash ("Destroy target artifact"): an artifact creature is an artifact (CR 205.2a), so Bot2's Ornithopter is a legal target and is
+# destroyed.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Skycrash
+Island x17
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Skycrash.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Ornithopter
+Bot1.Graveyard = Skycrash

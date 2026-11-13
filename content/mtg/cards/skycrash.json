@@ -1,0 +1,6 @@
+{
+  "name": "Skycrash",
+  "manaCost": "{1}{R}",
+  "type": "Instant",
+  "oracleText": "Destroy target artifact.\nCycling {R} ({R}, Discard this card: Draw a card.)"
+}

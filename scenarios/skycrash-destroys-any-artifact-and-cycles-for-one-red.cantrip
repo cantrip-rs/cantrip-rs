@@ -1,0 +1,66 @@
+# Skycrash ("Destroy target artifact", cycling {R}): on turn 1 Bot1 has only an Island and Mox Jet, no red source, so cycling {R} is not
+# offered. On turn 3 the first Skycrash refuses Bot2's Llanowar Elves (a creature, not an artifact) and destroys Bot2's Mox Sapphire; the
+# second destroys Bot1's own Mox Jet (a tapped one is still a target). On turn 5 the third is cycled for exactly {R} (the Mountain; the
+# pool empty after): it is discarded and a card drawn.
+
+[Bot1 Deck]
+Island
+Mox Jet
+Mox Ruby
+Skycrash
+Skycrash
+Skycrash
+Mountain
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Mox Sapphire
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Skycrash.Activate(Ability: Cycling; Mana: short)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Hand.Skycrash.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Hand.Skycrash.Cast(Bot2.Battlefield.Mox Sapphire)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Mox Sapphire
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Skycrash.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Skycrash; Mox Jet; Skycrash
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Skycrash.Activate(Ability: Cycling)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Hand.Count = 3
+
+[Expect]
+Bot1.Graveyard = Skycrash; Skycrash; Mox Jet; Skycrash
+Bot2.Graveyard = Mox Sapphire
+Bot2.Battlefield = Mox Emerald; Llanowar Elves
+Bot1.Hand = Island; Island; Island
