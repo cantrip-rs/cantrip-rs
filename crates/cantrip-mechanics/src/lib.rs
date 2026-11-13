@@ -762,6 +762,24 @@ pub fn exile_target_until_leaves_effect(g: &mut dyn Game, item: &StackItem) -> R
     Ok(())
 }
 
+/// "Exile up to one target nonland permanent an opponent controls until this enchantment leaves the battlefield. You gain 2
+/// life." (CR 610.3): the life is gained whether or not a target was chosen. A target that was chosen and is illegal as the
+/// ability resolves makes the whole ability not resolve, the life included (CR 608.2b, the rulings): the core never runs this.
+fn exile_target_until_leaves_and_you_gain_2_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    exile_target_until_leaves(g, item, 0);
+    effects::gain_life(g, item, 2)
+}
+
+/// "When this enchantment enters, exile up to one target nonland permanent an opponent controls until this enchantment leaves
+/// the battlefield. You gain 2 life." (`exile_target_until_leaves_and_you_gain_2_life`). Liminal Hold and Prayer of Binding
+/// print it.
+pub const ENTERS_EXILE_UP_TO_ONE_NONLAND_PERMANENT_AN_OPPONENT_CONTROLS_UNTIL_LEAVES_AND_YOU_GAIN_2_LIFE: AbilityDef = triggered(
+    triggers::THIS_ENTERS,
+    exile_target_until_leaves_and_you_gain_2_life,
+    "When this enchantment enters, exile up to one target nonland permanent an opponent controls until this enchantment leaves the battlefield. You gain 2 life.",
+)
+.targets(&[targets::NONLAND_PERMANENT_AN_OPPONENT_CONTROLS.between(0, 1)]);
+
 /// Airbend (CR 701.65a): exiles the resolving ability's legal targets together (`airbend_all`). Appa, Steadfast Guardian
 /// and Aang, Swift Savior print it.
 pub fn airbend(g: &mut dyn Game, item: &StackItem) {
