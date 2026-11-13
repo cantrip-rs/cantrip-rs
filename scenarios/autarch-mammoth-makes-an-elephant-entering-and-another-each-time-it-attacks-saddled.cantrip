@@ -1,0 +1,71 @@
+# Autarch Mammoth, {4}{G}{G} 5/5, Saddle 5: "When this creature enters and whenever it attacks while saddled, create a 3/3 green Elephant."
+# Turn 1: cast off the Lotus and three Moxen; entering makes one Elephant (power 3, summoning sick). Saddle 5 is refused with the Elephant alone
+# (3 power). Turn 3: with the Elephant and a Llanowar Elves (3 + 1 = 4) it is still refused; Grizzly Bears (2) and the Elephant (3) together pay Saddle 5, the Mammoth attacks saddled and a second Elephant is created
+# (Bot2 takes 5, at 15). Turn 5: it attacks unsaddled (the saddling ended with turn 3): no third Elephant, Bot2 at 10.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Autarch Mammoth
+Grizzly Bears
+Forest
+Llanowar Elves
+Forest x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Autarch Mammoth.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elephant Token.Power = 3
+? Bot1.Battlefield.Elephant Token.Toughness = 3
+? Bot1.Battlefield.Elephant Token#2 = (absent)
+! Bot1.Battlefield.Autarch Mammoth.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Autarch Mammoth.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Autarch Mammoth.Activate
+Bot1.Choose(Elephant Token; Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Autarch Mammoth > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elephant Token#2.Power = 3
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Autarch Mammoth.Saddled = true
+? Bot2.Life = 15
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Autarch Mammoth > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 10
+Bot1.Battlefield.Elephant Token#2.Power = 3
+Bot1.Battlefield.Elephant Token#3 = (absent)
+Bot1.Battlefield.Autarch Mammoth.Saddled = (absent)

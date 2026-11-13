@@ -1,0 +1,8 @@
+{
+  "name": "Autarch Mammoth",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Elephant Mount",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "When this creature enters and whenever it attacks while saddled, create a 3/3 green Elephant creature token.\nSaddle 5 (Tap any number of other creatures you control with total power 5 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)"
+}

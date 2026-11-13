@@ -1,0 +1,54 @@
+# Bot2 casts Autarch Mammoth on turn 2: its entering trigger gives Bot2 (not Bot1) an Elephant. On turn 4 Bot2 saddles it with Grizzly Bears and
+# the Elephant and attacks: a second Elephant for Bot2, Bot1 gets nothing and takes 5.
+
+[Bot1 Deck]
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Autarch Mammoth
+Grizzly Bears
+Forest
+Forest
+Forest x10
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Autarch Mammoth.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Elephant Token.Power = 3
+? Bot1.Battlefield.Elephant Token = (absent)
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Autarch Mammoth.Activate
+Bot2.Choose(Elephant Token; Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+Bot2.Attack(Autarch Mammoth > Bot1)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 15
+Bot2.Battlefield.Elephant Token#2.Power = 3
+Bot1.Battlefield.Elephant Token = (absent)
