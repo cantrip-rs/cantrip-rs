@@ -1,0 +1,8 @@
+{
+  "name": "Gaea's Liege",
+  "manaCost": "{3}{G}{G}{G}",
+  "type": "Creature — Avatar",
+  "power": "*",
+  "toughness": "*",
+  "oracleText": "As long as Gaea's Liege isn't attacking, its power and toughness are each equal to the number of Forests you control. As long as Gaea's Liege is attacking, its power and toughness are each equal to the number of Forests defending player controls.\n{T}: Target land becomes a Forest until this creature leaves the battlefield."
+}

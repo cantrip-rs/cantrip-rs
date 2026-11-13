@@ -1,0 +1,50 @@
+# The Liege counts its controller's Forests while idle and the defending player's Forests while attacking (CR 604.1).
+[Bot1 Deck]
+Gaea's Liege
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Forest
+Llanowar Elves
+Forest x20
+[Bot2 Deck]
+Forest x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gaea's Liege.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+? Bot1.Battlefield.Gaea's Liege.Power = 2
+? Bot1.Battlefield.Gaea's Liege.Toughness = 2
+? Bot1.Battlefield.Llanowar Elves.Power = 1
+? Bot1.Battlefield.Llanowar Elves.Toughness = 1
+Bot1.Attack(Llanowar Elves > Bot2)
+? Bot1.Battlefield.Gaea's Liege.Power = 2
+? Bot1.Battlefield.Gaea's Liege.Toughness = 2
+[T5 Bot1.Main1]
+Bot1.Attack(Gaea's Liege > Bot2; Llanowar Elves > Bot2)
+? Bot1.Battlefield.Gaea's Liege.Power = 1
+? Bot1.Battlefield.Gaea's Liege.Toughness = 1
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Gaea's Liege.Power = 2
+Bot1.Battlefield.Gaea's Liege.Toughness = 2
