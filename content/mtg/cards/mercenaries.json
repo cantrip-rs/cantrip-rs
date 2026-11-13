@@ -1,0 +1,8 @@
+{
+  "name": "Mercenaries",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Human Mercenary",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "{3}: The next time this creature would deal damage to you this turn, prevent that damage. Any player may activate this ability."
+}
