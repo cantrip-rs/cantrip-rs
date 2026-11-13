@@ -1,0 +1,37 @@
+# Sacrificing two Islands pays the upkeep even when a stun counter replaces the untap (CR 122.1d).
+[Bot1 Deck]
+Leviathan
+Show and Tell
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Cryogenic Stasis
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Leviathan)
+Bot2.Choose()
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cryogenic Stasis.Cast(Leviathan)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Leviathan.Counters.Stun = 1
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Island#1; Island#2)
+[Expect]
+Bot1.Battlefield.Leviathan.Tapped = true
+Bot1.Battlefield.Leviathan.Counters.Stun = (absent)
+Bot1.Graveyard.Island#2.Colors =
