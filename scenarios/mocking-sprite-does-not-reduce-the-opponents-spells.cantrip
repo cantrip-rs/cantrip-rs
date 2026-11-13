@@ -1,0 +1,41 @@
+# Mocking Sprite reduces only "spells you cast" (CR 601.2f, 118.7a): Bot1 controls it, so Bot2's Quick Study ({2}{U}, an instant) keeps
+# its full cost. Two Moxen are refused; with a third Mox, Bot2 pays all three and draws two cards.
+
+[Bot1 Deck]
+Black Lotus
+Mocking Sprite
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Quick Study
+Island x3
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mocking Sprite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+! Bot2.Hand.Quick Study.Cast(Mana: short)
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Quick Study.Cast
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Graveyard = Quick Study
+Bot2.Hand.Count = 6

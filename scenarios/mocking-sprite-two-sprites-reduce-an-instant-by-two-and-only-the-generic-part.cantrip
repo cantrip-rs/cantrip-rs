@@ -1,0 +1,48 @@
+# Two Mocking Sprites reduce Quick Study ({2}{U}) by {2} (CR 601.2f, 118.7a): the first Sprite is cast with Black Lotus, the second with
+# three Moxen. On turn 3 Bot1 pays the spell's {U} with the Mox Sapphire alone. A second Quick Study is refused: its cost is {U} again
+# and only the Mox Jet and Mox Pearl, which make no blue, are untapped, so a reduction takes only the generic part (CR 118.7c).
+
+[Bot1 Deck]
+Black Lotus
+Mocking Sprite
+Mocking Sprite
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Quick Study
+Quick Study
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mocking Sprite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mocking Sprite.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Quick Study.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Quick Study.Cast(Mana: short)
+
+[Expect]
+Bot1.Graveyard = Quick Study; Black Lotus
+Bot1.Hand.Count = 3

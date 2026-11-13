@@ -1,0 +1,11 @@
+{
+  "name": "Mocking Sprite",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Faerie Rogue",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying\nInstant and sorcery spells you cast cost {1} less to cast.",
+  "keywords": [
+    "Flying"
+  ]
+}
