@@ -1,0 +1,40 @@
+# Memory Guardian: "Affinity for artifacts" (CR 702.41a) costs {1} less for each artifact its caster controls, and "Flying".
+# Bot1 controls two Moxen and Bot2 one (Mox Jet): the Guardian costs {2}{U} (2 of its generic {4} off), not {1}{U}, so with
+# only the two Moxen the cast is not offered (the opponent's artifact does not count); with an Island as well it is cast for
+# exactly three mana, none left in the pool.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Memory Guardian
+Island x17
+
+[Bot2 Deck]
+Mox Jet
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Hand.Memory Guardian.Cast(Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Memory Guardian.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memory Guardian.Types = Artifact; Creature
+Bot1.Battlefield.Memory Guardian.Keywords = Flying
+Bot1.Battlefield.Memory Guardian.Power = 3
+Bot1.Battlefield.Memory Guardian.Toughness = 4

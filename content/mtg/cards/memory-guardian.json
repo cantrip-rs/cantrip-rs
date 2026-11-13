@@ -1,0 +1,11 @@
+{
+  "name": "Memory Guardian",
+  "manaCost": "{4}{U}",
+  "type": "Artifact Creature — Robot Artificer",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Affinity for artifacts (This spell costs {1} less to cast for each artifact you control.)\nFlying",
+  "keywords": [
+    "Flying"
+  ]
+}
