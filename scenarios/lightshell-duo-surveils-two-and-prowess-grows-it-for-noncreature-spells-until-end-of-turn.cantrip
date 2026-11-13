@@ -1,0 +1,47 @@
+# Lightshell Duo {3}{U}, 3/4: "When this creature enters, surveil 2" (CR 701.25) -- Bot1 keeps the Island on top and puts the Swamp into the graveyard.
+# Prowess (CR 702.108a): casting Mox Pearl, a noncreature spell, makes it 4/5 until end of turn; casting Ornithopter, a creature spell, does not.
+# The bonus is over in the next turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Lightshell Duo
+Mox Pearl
+Ornithopter
+Plains
+Plains
+Island
+Swamp
+Plains x12
+
+[Bot2 Deck]
+Mountain x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Lightshell Duo.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | Swamp)
+? Bot1.Battlefield.Lightshell Duo.Power = 3
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lightshell Duo.Power = 4
+? Bot1.Battlefield.Lightshell Duo.Toughness = 5
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lightshell Duo.Power = 4
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Lightshell Duo.Power = 3
+? Bot1.Battlefield.Lightshell Duo.Toughness = 4
+
+[Expect]
+Bot1.Graveyard = Swamp; Black Lotus
+Bot1.Library.Count = 12
