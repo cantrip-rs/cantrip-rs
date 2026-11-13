@@ -1,0 +1,50 @@
+# Midnight Mangler is a creature only during turns other than its controller's (CR 604.1): on Bot1's own turn 3 it is only an artifact (so it
+# cannot attack), but on Bot2's turn 4 it is a 3/3 artifact creature and blocks Bot2's attacking Grizzly
+# Bears (CR 509.1a), killing it and surviving with 2 damage.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Midnight Mangler
+Island x17
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Grizzly Bears
+Forest x12
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Midnight Mangler.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Midnight Mangler.Types = Artifact
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Block(Midnight Mangler > Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Battlefield.Grizzly Bears = (absent)
+Bot2.Graveyard = Grizzly Bears
+Bot1.Battlefield.Midnight Mangler.Damage = 2
