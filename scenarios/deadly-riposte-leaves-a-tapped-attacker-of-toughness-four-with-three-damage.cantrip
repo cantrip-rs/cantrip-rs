@@ -1,0 +1,43 @@
+# Deadly Riposte deals exactly 3 (CR 120.3): Bot2's tapped, attacking Ageless Guardian (1/4) survives with 3 damage marked. Bot1 gains
+# 2 and takes the Guardian's 1 combat damage: 20 + 2 - 1.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Deadly Riposte
+Plains x17
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Ageless Guardian
+Plains x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Ageless Guardian.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ageless Guardian > Bot1)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Deadly Riposte.Cast(Bot2.Battlefield.Ageless Guardian)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Turn = 4
+Bot1.Graveyard = Deadly Riposte
+Bot1.Life = 21
+Bot2.Battlefield.Ageless Guardian.Damage = 3
+Bot2.Battlefield.Ageless Guardian.Tapped = true

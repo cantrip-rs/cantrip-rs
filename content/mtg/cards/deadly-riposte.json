@@ -1,0 +1,6 @@
+{
+  "name": "Deadly Riposte",
+  "manaCost": "{1}{W}",
+  "type": "Instant",
+  "oracleText": "Deadly Riposte deals 3 damage to target tapped creature and you gain 2 life."
+}
