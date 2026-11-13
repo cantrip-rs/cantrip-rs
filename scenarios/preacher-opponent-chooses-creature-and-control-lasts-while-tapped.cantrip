@@ -1,0 +1,41 @@
+# Preacher's opponent chooses which of their creatures is targeted; keeping Preacher tapped keeps that creature until it untaps (CR 115.1c, 611.2b).
+[Bot1 Deck]
+Preacher
+Black Lotus
+Plains x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Preacher.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Preacher.Activate
+! Bot2.Target(Bot1.Battlefield.Preacher)
+! Bot2.Target(Bot2.Battlefield.Island)
+Bot2.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Preacher.Tapped = true
+! Bot1.Battlefield.Preacher.Activate
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Memnite.Power = 1
+[T5 Bot1.Untap]
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Preacher.Tapped = true
+? Bot1.Battlefield.Ornithopter.Power = 0
+[T7 Bot1.Untap]
+Bot1.Accept
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Preacher.Tapped = false
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Memnite.Power = 1

@@ -1,0 +1,42 @@
+# Untapping Preacher between two activations ends the first duration even if it is tapped again before resolution (CR 611.2b).
+[Bot1 Deck]
+Preacher
+Black Lotus
+Mox Emerald
+Quirion Ranger
+Forest
+Plains x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Preacher.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Quirion Ranger.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Preacher.Activate
+Bot2.Target(Memnite)
+Bot1.Battlefield.Quirion Ranger.Activate(Bot1.Battlefield.Preacher)
+Bot1.Choose(Forest)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Preacher.Tapped = false
+Bot1.Battlefield.Preacher.Activate
+Bot2.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Preacher.Tapped = true
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Memnite.Power = 1

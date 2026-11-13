@@ -1,0 +1,41 @@
+# If the opponent's chosen target leaves before resolution, the ability does nothing; a later activation can take another creature (CR 608.2b).
+[Bot1 Deck]
+Preacher
+Black Lotus
+Plains x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Mox Ruby
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Preacher.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Preacher.Activate
+Bot2.Target(Memnite)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Memnite.Power = 1
+? Bot2.Battlefield.Ornithopter.Power = 0
+[T5 Bot1.Untap]
+Bot1.Accept
+[T5 Bot1.Main1]
+Bot1.Battlefield.Preacher.Activate
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot2.Graveyard.Memnite.Power = 1

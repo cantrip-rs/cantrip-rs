@@ -1,0 +1,44 @@
+# Bolt Bend can change Preacher's target, but only to a creature controlled by the opponent originally chosen (CR 115.7a).
+[Bot1 Deck]
+Preacher
+Black Lotus
+Black Lotus
+Mox Ruby
+Bolt Bend
+Memnite
+Plains x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Steel Wall
+Mox Emerald
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Preacher.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Steel Wall.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Preacher.Activate
+Bot2.Target(Bot2.Battlefield.Memnite)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bolt Bend.Cast(Stack.Preacher)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Memnite.Power = 1

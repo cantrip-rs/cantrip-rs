@@ -1,0 +1,27 @@
+# In multiplayer only an opponent who controls a creature could choose the target, so Preacher's controller is not asked
+# which opponent chooses: Bot2 controls none, and Bot3 chooses (CR 601.7a, 602.3a, 601.2c).
+[Bot1 Deck]
+Preacher
+Black Lotus
+Plains x20
+[Bot2 Deck]
+Island x20
+[Bot3 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Preacher.Cast
+? Bot1.Mana =
+[T3 Bot3.Main1]
+Bot3.Hand.Ornithopter.Cast
+[T4 Bot1.Main1]
+Bot1.Battlefield.Preacher.Activate
+Bot3.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Preacher.Tapped = true
