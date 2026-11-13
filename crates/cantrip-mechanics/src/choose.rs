@@ -270,6 +270,33 @@ pub fn face_down_or_face_up_pile(
     Ok(if one_of(g, chooser, source, piles)? == 1 { (face_down, face_up) } else { (face_up, face_down) })
 }
 
+/// "Look at the top `N` cards of your library and separate them into a face-down pile and a face-up pile. An opponent chooses one
+/// of the piles. Put that pile into your hand and the other into your graveyard" (CR 700.3, 608.2c-d) as a whole ability effect:
+/// the controller looks at the cards (a library with fewer shows what it has, CR 609.3) and chooses the face-down pile, the
+/// rest being the face-up pile, either possibly empty; the opponent, chosen as it resolves and not targeted (CR 115.10a), sees
+/// the face-up pile's cards and only how many the face-down one holds, and chooses a pile even if it is empty. The face-up pile
+/// is public wherever it goes, the face-down pile never shown, even in the hand. The piles go to the hand, then the graveyard.
+/// Riddles in the Dark (four) and Curator of Destinies (five) print it.
+pub fn look_at_top_cards_separate_into_face_down_and_face_up_piles_opponent_chooses<const N: usize>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let you = item.controller;
+    let top = crate::top_of_library(g, you, N);
+    if top.is_empty() {
+        return Ok(());
+    }
+    let (face_down, face_up) = separate_face_down_and_face_up(g, you, item.object, top)?;
+    let opponents: Vec<PlayerId> = g.state().opponents(you).collect();
+    let verb = "decides which of the two piles you put into your hand; the other goes into your graveyard";
+    let Some(chooser) = player(g, you, item.object, opponents, verb, 0)? else { return Ok(()) };
+    let (keep, rest) = face_down_or_face_up_pile(g, chooser, item.object, face_down, face_up.clone())?;
+    if keep == face_up {
+        g.return_to_hand_revealed(&keep);
+    } else {
+        g.return_to_hand(&keep);
+    }
+    g.put_into_graveyard(&rest);
+    Ok(())
+}
+
 /// The face a card is cast as (CR 709.3, 715.3, 712.8a), chosen from `ways` (`Game::cast_ways_during_resolution`, narrowed to
 /// the ones the effect allows: a mana value, a type), as the player puts it on the stack. Nothing is asked when there is one;
 /// `None` when there is none. Uldaros Theorix, Beseech the Mirror and Bilbo, Thief in the Night print a restriction on the spell.
