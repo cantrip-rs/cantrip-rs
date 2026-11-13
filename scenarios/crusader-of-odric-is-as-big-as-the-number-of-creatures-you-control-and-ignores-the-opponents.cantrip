@@ -1,0 +1,43 @@
+# Crusader of Odric: "Crusader of Odric's power and toughness are each equal to the number of creatures you control." (CR 604.3,
+# 613.4a.) Bot1 pays exactly {2}{W} with Black Lotus. It counts itself (1/1 alone), then each creature Bot1 controls that
+# enters (a Memnite: 2/2, an Ornithopter: 3/3); the power and toughness move together. Bot2's Memnite entering on turn 2 does not
+# change it (still 3/3).
+
+[Bot1 Deck]
+Black Lotus
+Crusader of Odric
+Memnite
+Ornithopter
+Plains x16
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Crusader of Odric.Cast(Spend: W, W, W)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Crusader of Odric.Power = 1
+? Bot1.Battlefield.Crusader of Odric.Toughness = 1
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Crusader of Odric.Power = 2
+? Bot1.Battlefield.Crusader of Odric.Toughness = 2
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Crusader of Odric.Power = 3
+? Bot1.Battlefield.Crusader of Odric.Toughness = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+
+[Expect]
+Turn = 2
+Bot2.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Crusader of Odric.Power = 3
+Bot1.Battlefield.Crusader of Odric.Toughness = 3

@@ -1,0 +1,8 @@
+{
+  "name": "Crusader of Odric",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Soldier",
+  "power": "*",
+  "toughness": "*",
+  "oracleText": "Crusader of Odric's power and toughness are each equal to the number of creatures you control."
+}
