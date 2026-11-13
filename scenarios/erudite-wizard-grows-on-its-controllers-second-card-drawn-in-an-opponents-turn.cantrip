@@ -1,0 +1,39 @@
+# Erudite Wizard: "Whenever you draw your second card each turn, put a +1/+1 counter on this creature" (CR 121.2, 603.2). "Each turn" is every
+# turn, not only Bot1's: on turn 2 Bot2's Ancestral Recall makes Bot1 draw three, its first three cards that turn, and the second of them gives one
+# counter (the third none). On turn 3 the count starts again: the draw step's card is the first, and no more counter.
+
+[Bot1 Deck]
+Black Lotus
+Erudite Wizard
+Island x18
+
+[Bot2 Deck]
+Mox Sapphire
+Ancestral Recall
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Erudite Wizard.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Ancestral Recall.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+? Bot1.Hand.Count = 8
+? Bot1.Battlefield.Erudite Wizard.Counters.PlusOnePlusOne = 1
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Erudite Wizard.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Erudite Wizard.Power = 3
+Bot1.Battlefield.Erudite Wizard.Toughness = 4

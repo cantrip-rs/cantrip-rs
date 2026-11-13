@@ -1,0 +1,8 @@
+{
+  "name": "Erudite Wizard",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Human Wizard",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Whenever you draw your second card each turn, put a +1/+1 counter on this creature."
+}
