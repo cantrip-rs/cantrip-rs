@@ -1,0 +1,46 @@
+# High Fae Trickster: "You may cast spells as though they had flash" (CR 702.8a, 611.3a) is a static ability: it works only while the Trickster is on
+# the battlefield. Bot1 flashes it in during Bot2's upkeep and kills it with its own Lightning Bolt on turn 3; in Bot2's upkeep on turn 4 the
+# Ornithopter Bot1 drew is a creature spell without flash again and is refused.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Emerald
+Mox Ruby
+High Fae Trickster
+Lightning Bolt
+Ornithopter
+Plains x16
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.High Fae Trickster.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand = Lightning Bolt; Ornithopter
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(High Fae Trickster)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = High Fae Trickster; Lightning Bolt
+[T4 Bot2.Upkeep]
+! Bot1.Hand.Ornithopter.Cast
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Hand = Ornithopter
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire

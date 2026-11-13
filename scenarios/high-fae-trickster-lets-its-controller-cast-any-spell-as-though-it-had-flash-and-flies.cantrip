@@ -1,0 +1,62 @@
+# High Fae Trickster {3}{U}, 4/2 Flash, Flying: "You may cast spells as though they had flash" (CR 702.8a). In Bot2's upkeep Bot1's Ornithopter
+# (a creature spell) and Black Lotus (an artifact) have no flash and are refused; Bot1 flashes in the Trickster itself and may then cast both at once.
+# Only its controller's spells: in Bot1's upkeep on turn 3 Bot2's Memnite is still refused. The Trickster flies (CR 702.9b): Bot2's Phyrexian Walker
+# may not block it and Bot2 takes four.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+High Fae Trickster
+Ornithopter
+Black Lotus
+Plains x16
+
+[Bot2 Deck]
+Memnite
+Phyrexian Walker
+Mountain x5
+Mountain x10
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Upkeep]
+! Bot1.Hand.Ornithopter.Cast
+! Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.High Fae Trickster.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.High Fae Trickster.Power = 4
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Sapphire; Mox Pearl; Mox Jet; Mox Ruby; High Fae Trickster; Ornithopter; Black Lotus
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Upkeep]
+! Bot2.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(High Fae Trickster > Bot2)
+! Bot2.Block(Bot2.Battlefield.Phyrexian Walker > Bot1.Battlefield.High Fae Trickster)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot2.Hand.Memnite.Power = 1
