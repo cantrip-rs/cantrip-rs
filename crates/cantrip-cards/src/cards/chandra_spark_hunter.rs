@@ -1,5 +1,4 @@
 use cantrip_api::*;
-use cantrip_mechanics::crew::crew;
 use cantrip_mechanics::{effects, haste_until_end_of_turn, targets, tokens, triggers};
 use cantrip_oracle as oracle;
 
@@ -22,8 +21,7 @@ fn animate_vehicle(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 /// 0: "Create a 3/2 colorless Vehicle artifact token with crew 1."
 fn create_vehicle(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let vehicle = g.card_id(&VEHICLE);
-    g.create_tokens(vehicle, item.controller, 1, false)?;
+    tokens::create(g, item.controller, &tokens::VEHICLE_CREW_1, 1)?;
     Ok(())
 }
 
@@ -31,16 +29,6 @@ fn emblem(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     tokens::create_emblem(g, item.controller, &EMBLEM);
     Ok(())
 }
-
-/// The 3/2 colorless Vehicle artifact token with crew 1.
-pub static VEHICLE: CardDef = CardDef {
-    types: TypeSet::of(&[CardType::Artifact]),
-    power: Some(3),
-    toughness: Some(2),
-    abilities: &[crew(1, "Crew 1 (Tap any number of creatures you control with total power 1 or more: This Vehicle becomes an artifact creature until end of turn.)")],
-    text: "Crew 1",
-    ..token!(Vehicle)
-};
 
 /// The emblem: "Whenever an artifact you control enters, this emblem deals 3 damage to any target." The emblem is the damage's
 /// source (CR 114.4).
@@ -73,4 +61,4 @@ pub static CARD: CardDef = CardDef {
     ..oracle::CHANDRA_SPARK_HUNTER
 };
 
-pub static EXTRA: &[&CardDef] = &[&VEHICLE, &EMBLEM];
+pub static EXTRA: &[&CardDef] = &[&tokens::VEHICLE_CREW_1, &EMBLEM];
