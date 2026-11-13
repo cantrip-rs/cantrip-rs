@@ -1,0 +1,55 @@
+# Gilded Ghoda (2/2 Mount, Saddle 1): on turn 3 an Ornithopter (power 0) alone cannot saddle it (refusal: Saddle 1 needs total power 1 and
+# the Mount itself is not "other"); a Mother of Runes cast then can. The saddled Ghoda attacks and "whenever this creature attacks while
+# saddled" makes a Treasure (CR 702.171); the saddled state ends with the turn, so on turn 5 it attacks unsaddled and makes none:
+# one Treasure in all, and Bot2 took 2 twice (16).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Gilded Ghoda
+Ornithopter
+Mother of Runes
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gilded Ghoda.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Gilded Ghoda.Activate(Ability: Saddle)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mother of Runes.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gilded Ghoda.Activate(Ability: Saddle)
+Bot1.Choose(Mother of Runes)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Gilded Ghoda > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Treasure Token.Types = Artifact
+? Bot1.Battlefield.Count = 7
+[T5 Bot1.Main1]
+Bot1.Attack(Gilded Ghoda > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Count = 7

@@ -1,0 +1,8 @@
+{
+  "name": "Gilded Ghoda",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Horse Mount",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever this creature attacks while saddled, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")\nSaddle 1 (Tap any number of other creatures you control with total power 1 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)"
+}
