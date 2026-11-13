@@ -1,0 +1,48 @@
+# The upkeep trigger targets only an opponent's non-Wall creature; forestwalk lasts until the next upkeep (CR 603.2, 611.2a).
+[Bot1 Deck]
+Erhnam Djinn
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Ornithopter
+Forest
+Forest x20
+
+[Bot2 Deck]
+Ornithopter
+Wall of Wood
+Memnite
+Mox Emerald
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Erhnam Djinn.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Wall of Wood.Cast
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+! Bot1.Target(Bot2.Battlefield.Wall of Wood)
+! Bot1.Target(Count: 0)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Ornithopter.Keywords = Flying; Forestwalk
+[T4 Bot2.Main1]
+Bot1.Target(Bot2.Battlefield.Memnite)
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+[T5 Bot1.Main1]
+[Expect]
+Bot2.Battlefield.Memnite.Keywords = Forestwalk
