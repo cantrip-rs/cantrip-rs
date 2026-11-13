@@ -1,0 +1,48 @@
+# Reef Roads: "This land enters tapped unless you control a Mount or Vehicle" (CR 614.1d), and "{1}{U}, {T}, Sacrifice this land:
+# Create a 1/1 colorless Pilot creature token ... Activate only as a sorcery" (CR 602.5d, 111.1). Bot1 pays {2} for a
+# Smuggler's Copter, a Vehicle (CR 301.7), with Mox Sapphire and Mox Jet, so the land enters untapped. With {W}{R} from Mox
+# Pearl and Mox Ruby, two mana but no blue, the sacrifice is refused for its cost. On turn 3 it is refused in the upkeep,
+# though the Moxen could pay, and made in the main phase with {U}{W}, all of which it spends: the land goes to the
+# graveyard and a Pilot token arrives.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Ruby
+Mox Jet
+Smuggler's Copter
+Reef Roads
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Hand.Reef Roads.Play
+? Bot1.Battlefield.Reef Roads.Tapped = false
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Reef Roads.Activate(Ability: Sacrifice; Mana: short)
+[T3 Bot1.Upkeep]
+! Bot1.Battlefield.Reef Roads.Activate(Ability: Sacrifice)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Reef Roads.Activate(Ability: Sacrifice)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Mana =
+Bot1.Graveyard = Reef Roads
+Bot1.Battlefield.Pilot Token.Power = 1
+Bot1.Battlefield.Pilot Token.Toughness = 1

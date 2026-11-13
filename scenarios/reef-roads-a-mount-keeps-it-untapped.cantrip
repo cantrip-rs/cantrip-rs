@@ -1,0 +1,28 @@
+# Reef Roads: "This land enters tapped unless you control a Mount or Vehicle" (CR 614.1d): a Mount is enough, not only a
+# Vehicle. Bot1 casts a Caustic Bronco (a Snake Horse Mount creature, CR 205.3m) for {1}{B} with Mox Jet and Mox Pearl,
+# then plays Reef Roads, which enters untapped and adds {U}.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Caustic Bronco
+Reef Roads
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Caustic Bronco.Cast
+Bot1.Hand.Reef Roads.Play
+? Bot1.Battlefield.Reef Roads.Tapped = false
+Bot1.Battlefield.Reef Roads.Activate(Ability: Add)
+
+[Expect]
+Turn = 1
+Bot1.Mana = {U}
+Bot1.Battlefield.Reef Roads.Tapped = true
