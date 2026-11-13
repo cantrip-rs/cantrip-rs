@@ -1,0 +1,35 @@
+# Wreck Remover: "Cycling {2}" (CR 702.29a) from the hand is {2} and discarding it to draw a card. It never enters the
+# battlefield, so its trigger does not happen: there is no target to choose and Bot1 does not gain life. Bot1 pays with
+# two Moxen, and the card it draws is the Forest on top of the library.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Wreck Remover
+Island x2
+Mountain
+Island
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wreck Remover.Activate(Ability: Cycling)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Life = 20
+Bot1.Graveyard = Wreck Remover
+Bot1.Hand = Forest; Island; Island; Island; Mountain

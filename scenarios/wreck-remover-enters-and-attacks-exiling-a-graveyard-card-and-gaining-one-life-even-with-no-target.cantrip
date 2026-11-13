@@ -1,0 +1,52 @@
+# Wreck Remover: "Whenever this creature enters or attacks, exile up to one target card from a graveyard. You gain 1 life."
+# Bot1 casts it on turn 1 with Black Lotus and Mox Pearl, which leaves the Lotus in Bot1's graveyard; as it enters Bot1
+# chooses no target ("up to one") and still gains 1 life (CR 119.3), the Lotus staying. On turn 2 Bot2 plays its own Black
+# Lotus and uses it, and on turn 3 the attack trigger takes the card of Bot2's graveyard (any graveyard, not only the
+# opponent's or only one's own) and gains another life: Bot1 is at 22 and Bot2, who took three, at 17.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Wreck Remover
+Island x17
+
+[Bot2 Deck]
+Black Lotus
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wreck Remover.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+? Bot1.Graveyard = Black Lotus
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+[T3 Bot1.Main1]
+Bot1.Attack(Wreck Remover > Bot2)
+Bot1.Target(Bot2.Graveyard.Black Lotus)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+? Bot2.Graveyard = 
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot1.Life = 22
+Bot2.Life = 17
+Bot1.Graveyard = Black Lotus
+Bot2.Graveyard = 
+Exile = Black Lotus

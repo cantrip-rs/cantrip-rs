@@ -1,0 +1,8 @@
+{
+  "name": "Wreck Remover",
+  "manaCost": "{4}",
+  "type": "Artifact Creature — Construct",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Whenever this creature enters or attacks, exile up to one target card from a graveyard. You gain 1 life.\nCycling {2} ({2}, Discard this card: Draw a card.)"
+}

@@ -1,0 +1,54 @@
+# Wreck Remover: when the card it targets is gone as the trigger resolves, the ability's only target is illegal and it
+# does not resolve at all (CR 608.2b), so the life is not gained. Bot1 casts it on turn 1 with Black Lotus and Mox Pearl,
+# choosing no target and gaining 1 (21), leaving the Lotus in its graveyard. On turn 3 the attack trigger targets that
+# Lotus; Bot2, with Tormod's Crypt (cast on turn 2), sacrifices it in response to exile Bot1's graveyard. Bot1 stays at 21,
+# and Bot2 takes the three damage.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Wreck Remover
+Island x17
+
+[Bot2 Deck]
+Tormod's Crypt
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wreck Remover.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+[T2 Bot2.Main1]
+Bot2.Hand.Tormod's Crypt.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Wreck Remover > Bot2)
+Bot1.Target(Black Lotus)
+Bot1.Pass
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = 
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Life = 21
+Bot2.Life = 17
+Bot1.Graveyard = 
+Exile = Black Lotus
+Bot2.Graveyard = Tormod's Crypt
