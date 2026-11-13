@@ -1,0 +1,59 @@
+# Syphon Fuel {4}{B}: "Target creature gets -6/-6 until end of turn. You gain 2 life." Bot2's Abomination (2/6) is exactly
+# lethal for -6/-6: it dies (CR 704.5f, toughness 0 or less). Bot1 pays {4}{B} exactly from Black Lotus, Mox Jet and Mox Ruby
+# ({B}{B}{B} + {B} + {R}) and gains 2: 22 (CR 119.3). Bot2's Mox Jet, not a creature, is refused as a target.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Syphon Fuel
+Swamp x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Abomination
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Abomination.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Abomination.Toughness = 6
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Syphon Fuel.Cast(Bot2.Battlefield.Mox Jet)
+Bot1.Hand.Syphon Fuel.Cast(Bot2.Battlefield.Abomination)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Life = 22
+Bot2.Life = 20
+Bot2.Battlefield = Mox Jet; Mox Ruby
+Bot2.Graveyard = Abomination; Black Lotus
+Bot1.Graveyard = Syphon Fuel; Black Lotus
