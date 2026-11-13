@@ -1,0 +1,44 @@
+# Radiant Lotus: "Target player adds three mana of the chosen color for each artifact sacrificed this way." (CR 107.3a, 106.1b)
+# Bot1 has seven artifacts on turn 3 (five Moxen, Sol Ring and the Lotus), and sacrificing all
+# seven, the Lotus itself among them (tapped first, CR 602.2b), names Bot2: twenty-one green mana in Bot2's pool, none in Bot1's.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Sol Ring
+Radiant Lotus
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Radiant Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Radiant Lotus.Activate(X: 7; Target: Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Green)
+? Bot2.Mana = {G}{G}{G}{G}{G}{G}{G}{G}{G}{G}{G}{G}{G}{G}{G}{G}{G}{G}{G}{G}{G}
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield =
+Bot1.Graveyard.Count = 7
