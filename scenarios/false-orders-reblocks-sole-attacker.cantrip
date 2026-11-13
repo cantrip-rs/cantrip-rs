@@ -1,0 +1,30 @@
+# False Orders can reassign the blocker to the sole attacking creature, so both Memnites deal combat damage (CR 509.1h).
+[Bot1 Deck]
+Mox Ruby
+False Orders
+Memnite
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+! Bot1.Hand.False Orders.Cast(Bot1.Battlefield.Memnite)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Block(Memnite > Memnite)
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.False Orders.Cast(Bot2.Battlefield.Memnite)
+Bot1.Hand.False Orders.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Accept
+Bot1.Target(Bot2.Battlefield.Memnite)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard = Memnite; False Orders
+Bot2.Graveyard = Memnite
