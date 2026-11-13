@@ -1,0 +1,88 @@
+# "Whenever a Vampire you control dies" (CR 603.10a): Bot2's Damnation kills Crossway Troublemakers, Bot1's Barony Vampire and Bot2's own Barony
+# Vampire together. Crossway, leaving at the same time, sees both of Bot1's Vampires - itself and the Barony - and triggers twice; Bot2's
+# Vampire is not one Bot1 controls and triggers nothing. Bot1 accepts both: 4 life (20 -> 16) and two cards (the Swamp and an Island).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Crossway Troublemakers
+Barony Vampire
+Island
+Plains
+Swamp
+Island x11
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Barony Vampire
+Damnation
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Crossway Troublemakers.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Barony Vampire.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Barony Vampire.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Damnation.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+Bot1.Accept
+
+[Expect]
+Bot1.Life = 16
+Bot1.Hand = Island; Plains; Swamp; Island
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby
+Bot2.Battlefield = Mox Jet; Mox Pearl; Mox Ruby
+Stack.Count = 0

@@ -1,0 +1,8 @@
+{
+  "name": "Crossway Troublemakers",
+  "manaCost": "{5}{B}",
+  "type": "Creature — Vampire",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Attacking Vampires you control have deathtouch and lifelink. (Any amount of damage they deal to a creature is enough to destroy it. Damage dealt by those creatures also causes their controller to gain that much life.)\nWhenever a Vampire you control dies, you may pay 2 life. If you do, draw a card."
+}
