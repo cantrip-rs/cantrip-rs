@@ -1,0 +1,39 @@
+# Engine Rat: Deathtouch (CR 702.2). Bot1's 1/1 Rat attacks on turn 3; Bot2's Wall of Wood (0/3) blocks, and the Rat's one
+# damage - deathtouch - is lethal to the Wall (CR 702.2b, 704.5h). The Wall deals no damage, so the Rat survives and Bot2
+# loses nothing. Without deathtouch the Wall would have taken one damage and lived.
+
+[Bot1 Deck]
+Mox Jet
+Engine Rat
+Island x15
+
+[Bot2 Deck]
+Mox Emerald
+Wall of Wood
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Engine Rat.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Wall of Wood.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Engine Rat > Bot2)
+Bot2.Block(Wall of Wood > Engine Rat)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Wall of Wood
+Bot1.Battlefield.Engine Rat.Damage = 0
+Bot2.Life = 20
