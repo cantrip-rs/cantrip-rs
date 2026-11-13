@@ -1,0 +1,39 @@
+# Racers' Scoreboard, below max speed: Start your engines! sets Bot1's speed to 1 (CR 702.179a) and "Max speed — Spells you
+# cast cost {1} less" is not on yet, so with nothing in the pool Sol Ring cannot be cast for free: refused. The enters
+# trigger draws two (Mountain, Lightning Bolt) and Bot1 discards the Bolt, not the Mountain it just drew. With one Mox
+# Ruby's mana, the Sol Ring does cost its full {1}.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Racers' Scoreboard
+Sol Ring
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mountain
+Lightning Bolt
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Racers' Scoreboard.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+? Bot1.Speed = 1
+? Bot1.Graveyard = Lightning Bolt; Black Lotus
+! Bot1.Hand.Sol Ring.Cast(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Mox Jet; Racers' Scoreboard; Sol Ring

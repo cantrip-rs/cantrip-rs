@@ -1,0 +1,88 @@
+# Racers' Scoreboard: "Start your engines! When this artifact enters, draw two cards, then discard a card. Max speed —
+# Spells you cast cost {1} less to cast." Turn 1 Bot1 casts it with Black Lotus and Mox Ruby (exactly {4}), draws Mind Stone
+# and Island and discards the Island, then Lightning Bolts Bot2: speed 2 (speed 1 from the Scoreboard, one more for the
+# life lost on its controller's turn). Turn 3 (speed 3) Sol Ring costs {1}: the Mox's mana, the pool empty right after.
+# Turn 5, speed 4 after the Bolt, a second Sol Ring is free: the untapped Mox Ruby stays untapped. Mind Stone ({2}) then
+# costs exactly {1}: the Mox Ruby's mana pays it, the pool empty right after and the first Sol Ring untapped. On turn 6 it
+# costs Bot2, whose spells the Scoreboard does not touch, {1}: the pool is empty right after paying with a Mox Jet.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Racers' Scoreboard
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Mind Stone
+Island
+Sol Ring
+Sol Ring
+Mountain x10
+
+[Bot2 Deck]
+Mox Jet
+Sol Ring
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Racers' Scoreboard.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+? Bot1.Hand = Lightning Bolt; Lightning Bolt; Lightning Bolt; Mind Stone
+? Bot1.Graveyard = Island; Black Lotus
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Ruby.Tapped = false
+? Bot1.Battlefield.Sol Ring#2.Tapped = false
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mind Stone.Cast
+? Bot1.Mana =
+? Bot1.Battlefield.Sol Ring#1.Tapped = false
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Sol Ring.Cast
+? Bot2.Mana =
+
+[Expect]
+Bot1.Battlefield = Mountain; Mox Ruby; Racers' Scoreboard; Sol Ring; Sol Ring; Mind Stone
+Bot2.Battlefield = Mox Jet; Sol Ring

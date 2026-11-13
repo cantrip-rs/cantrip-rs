@@ -1,0 +1,6 @@
+{
+  "name": "Racers' Scoreboard",
+  "manaCost": "{4}",
+  "type": "Artifact",
+  "oracleText": "Start your engines! (If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.)\nWhen this artifact enters, draw two cards, then discard a card.\nMax speed — Spells you cast cost {1} less to cast."
+}
