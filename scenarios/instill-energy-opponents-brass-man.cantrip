@@ -1,0 +1,33 @@
+# The Aura's controller can untap an opponent's Brass Man on their own turn despite its untap-step restriction (CR 502.3, 701.26b).
+[Bot1 Deck]
+Instill Energy
+Mox Emerald
+Island x20
+[Bot2 Deck]
+Brass Man
+Mox Pearl
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Brass Man.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Brass Man > Bot1)
+[T4 Bot2.Main2]
+? Bot2.Battlefield.Brass Man.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Instill Energy.Cast(Bot2.Battlefield.Brass Man)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Instill Energy.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Brass Man.Tapped = false
+Bot1.Battlefield.Instill Energy.AttachedTo = Brass Man
+Bot1.Life = 19

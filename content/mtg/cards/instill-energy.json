@@ -1,0 +1,6 @@
+{
+  "name": "Instill Energy",
+  "manaCost": "{G}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature can attack as though it had haste.\n{0}: Untap enchanted creature. Activate only during your turn and only once each turn."
+}

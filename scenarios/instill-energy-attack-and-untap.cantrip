@@ -1,0 +1,45 @@
+# The enchanted creature can attack immediately but cannot use a tap ability while summoning sick; another creature cast this turn cannot attack; the Aura untaps once on each of its controller's turns and has no X cost (CR 302.6, 602.5).
+[Bot1 Deck]
+Instill Energy
+Llanowar Elves
+Forest
+Mox Emerald
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Instill Energy.Cast(Mox Emerald)
+Bot1.Hand.Instill Energy.Cast(Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Instill Energy.AttachedTo = Llanowar Elves
+! Bot1.Battlefield.Llanowar Elves.Activate
+[T1 Bot1.DeclareAttackers]
+! Bot1.Attack(Ornithopter > Bot2)
+Bot1.Attack(Llanowar Elves > Bot2)
+Bot1.Battlefield.Instill Energy.Activate
+? Bot1.Mana =
+? Bot1.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Tapped = false
+! Bot1.Battlefield.Instill Energy.Activate
+[T2 Bot2.Main1]
+! Bot1.Battlefield.Instill Energy.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Battlefield.Instill Energy.Activate
+! Bot1.Battlefield.Instill Energy.Activate(X: 1)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Llanowar Elves.Tapped = false

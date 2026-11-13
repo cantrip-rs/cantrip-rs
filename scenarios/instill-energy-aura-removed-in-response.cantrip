@@ -1,0 +1,32 @@
+# The ability uses the Aura's last known attachment if the Aura is destroyed in response (CR 303.4m, 608.2h).
+[Bot1 Deck]
+Instill Energy
+Llanowar Elves
+Forest
+Mox Emerald
+Island x20
+[Bot2 Deck]
+Black Lotus
+Disenchant
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Instill Energy.Cast(Llanowar Elves)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Battlefield.Instill Energy.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Instill Energy)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Tapped = false
+Bot1.Graveyard = Instill Energy
