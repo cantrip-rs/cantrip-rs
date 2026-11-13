@@ -879,6 +879,14 @@ fn artifact_or_creature_you_control_filter(q: &dyn Query, asker: &Asker, t: Targ
 /// "Target artifact" (CR 115.1). Abrade and Embereth Shieldbreaker print it.
 pub const ARTIFACT: TargetSpec = target(artifact_filter);
 
+fn other_artifact_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    artifact_filter(q, asker, t) && t != Target::Object(asker.source)
+}
+
+/// "Another target artifact" (CR 115.1, 109.5): an artifact on the battlefield other than the source of the ability, whoever
+/// controls it. Aetherjacket and Manifold Key print it.
+pub const OTHER_ARTIFACT: TargetSpec = target(other_artifact_filter);
+
 fn artifact_creature_filter(q: &dyn Query, _: &Asker, t: Target) -> bool {
     matches!(t, Target::Object(id) if on_battlefield(q, id) && q.chars(id).is(CardType::Artifact) && q.chars(id).is(CardType::Creature))
 }
