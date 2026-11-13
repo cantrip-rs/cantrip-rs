@@ -334,6 +334,14 @@ pub const CREATURE_OR_VEHICLE: TargetSpec = target(creature_or_vehicle_filter);
 /// "Target creature or Vehicle you control" (CR 115.1, 109.5). Perilous Snare prints it.
 pub const CREATURE_OR_VEHICLE_YOU_CONTROL: TargetSpec = target(creature_or_vehicle_you_control_filter);
 
+fn creature_or_vehicle_an_opponent_controls_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    matches!(t, Target::Object(id) if creature_or_vehicle(q, id) && q.controller(id) != asker.controller)
+}
+
+/// "Target creature or Vehicle an opponent controls" (CR 115.1, 109.5). Howler's Heavy, Roadside Blowout and Spikeshell
+/// Harrier print it.
+pub const CREATURE_OR_VEHICLE_AN_OPPONENT_CONTROLS: TargetSpec = target(creature_or_vehicle_an_opponent_controls_filter);
+
 /// "Creature or Spacecraft" (CR 205.3g), as Beyond the Quiet's "all creatures and Spacecraft" reads it too: a permanent
 /// on the battlefield that is a creature, or a Spacecraft whether or not it is a creature right now (it is one only while
 /// stationed).
