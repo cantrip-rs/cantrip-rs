@@ -415,6 +415,17 @@ pub static GNOME: CardDef = CardDef {
     ..token!(Gnome)
 };
 
+/// The 3/2 colorless Vehicle artifact token with crew 1 (CR 111, 301.7, 702.122). Chandra, Spark Hunter and Mu Yanling, Wind Rider
+/// make it.
+pub static VEHICLE_CREW_1: CardDef = CardDef {
+    types: TypeSet::of(&[CardType::Artifact]),
+    power: Some(3),
+    toughness: Some(2),
+    abilities: &[crate::crew::crew(1, "Crew 1 (Tap any number of creatures you control with total power 1 or more: This Vehicle becomes an artifact creature until end of turn.)")],
+    text: "Crew 1",
+    ..token!(Vehicle)
+};
+
 /// The 1/1 colorless Pilot creature token: "This token crews Vehicles as though its power were 2 greater." Shorikai,
 /// Genesis Engine and Reckoner Bankbuster make it.
 pub static PILOT: CardDef = CardDef {
