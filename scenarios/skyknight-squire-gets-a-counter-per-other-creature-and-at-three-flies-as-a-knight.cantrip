@@ -1,0 +1,67 @@
+# Skyknight Squire: "Whenever another creature you control enters, put a +1/+1 counter on this creature. As long as this creature has
+# three or more +1/+1 counters on it, it has flying and is a Knight in addition to its other types." The Squire itself entering gives
+# no counter. Bot1's Memnite and Ornithopter give counters one and two: it is a 3/3 with no flying and still a Cat Scout (the static
+# needs three). Isamaru gives the third: flying and a Knight (CR 613.1d, 613.1f), still a Cat Scout. The ability grants flying to
+# nothing else (Memnite has none), and Bot2's Memnite entering gives no counter (it is not Bot1's creature).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Skyknight Squire
+Memnite
+Ornithopter
+Isamaru, Hound of Konda
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Skyknight Squire.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Skyknight Squire.Power = 1
+? Bot1.Battlefield.Skyknight Squire.Keywords = (absent)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Skyknight Squire.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Skyknight Squire.Power = 2
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Skyknight Squire.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Skyknight Squire.Power = 3
+? Bot1.Battlefield.Skyknight Squire.Keywords = (absent)
+? Bot1.Battlefield.Skyknight Squire.Subtypes = Cat; Scout
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Skyknight Squire.Counters.PlusOnePlusOne = 3
+? Bot1.Battlefield.Skyknight Squire.Power = 4
+? Bot1.Battlefield.Skyknight Squire.Keywords = Flying
+? Bot1.Battlefield.Skyknight Squire.Subtypes = Cat; Knight; Scout
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+? Bot1.Battlefield.Memnite.Subtypes = Construct
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Skyknight Squire.Counters.PlusOnePlusOne = 3
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Skyknight Squire.Counters.PlusOnePlusOne = 3
