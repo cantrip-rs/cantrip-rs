@@ -1,0 +1,36 @@
+# Destroying the Clock in response to its draw-step trigger uses its last known doom counters for the damage (CR 608.2h).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Armageddon Clock
+Island x20
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Disenchant
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Armageddon Clock.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Draw]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Armageddon Clock)
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Graveyard.Armageddon Clock.Colors =
+Bot1.Life = 19
+Bot2.Life = 19

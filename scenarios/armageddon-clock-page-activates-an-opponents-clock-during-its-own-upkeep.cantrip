@@ -1,0 +1,47 @@
+# Browser
+# "Any player may activate this ability but only during any upkeep step" (CR 602.2): Bot1's page clicks the {4} ability of
+# the Clock Bot2 controls, in Bot1's own upkeep, paying with a Black Lotus and a Mox. The one doom counter Bot2's upkeep put on
+# it is removed, so Bot2's next upkeep brings it back to one and its draw step deals 1 to each player, not 2.
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Armageddon Clock
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Armageddon Clock.Cast
+[T5 Bot1.Upkeep]
+? Bot2.Battlefield.Armageddon Clock.Counters.Doom = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Armageddon Clock.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Armageddon Clock.Counters.Doom = (absent)
+[T6 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Armageddon Clock.Counters.Doom = 1
+Bot1.Life = 18
+Bot2.Life = 18

@@ -1,0 +1,32 @@
+# The Clock gains a doom counter on its controller's upkeep and deals that many damage to both players on their draw step.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Armageddon Clock
+Island x20
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Armageddon Clock.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Armageddon Clock.Counters.Doom = (absent)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Armageddon Clock.Counters.Doom = 1
+? Bot1.Life = 19
+? Bot2.Life = 19
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Armageddon Clock.Counters.Doom = 2
+Bot1.Life = 17
+Bot2.Life = 17

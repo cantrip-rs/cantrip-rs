@@ -1,0 +1,51 @@
+# An opponent may pay four repeatedly during an upkeep, removing one counter per activation; the ability is unavailable in main phases.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Armageddon Clock
+Island x20
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Mox Emerald
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Armageddon Clock.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot2.Battlefield.Armageddon Clock.Activate
+[T6 Bot2.Upkeep]
+? Bot1.Battlefield.Armageddon Clock.Counters.Doom = 2
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Armageddon Clock.Activate
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Armageddon Clock.Counters.Doom = 1
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Armageddon Clock.Activate
+? Bot2.Mana =
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Armageddon Clock.Counters.Doom = 1
+Bot1.Life = 16
+Bot2.Life = 16
