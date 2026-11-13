@@ -90,6 +90,13 @@ pub fn find_to_graveyard(g: &mut dyn Game, player: PlayerId, source: ObjectId, r
     Ok(into_graveyard(g, player, &found))
 }
 
+/// "Search your library for a card, put that card into your graveyard, then shuffle" (CR 701.23): the spell or ability effect
+/// itself. Entomb and Vile Entomber print it.
+pub fn search_for_a_card_to_graveyard(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    find_to_graveyard(g, item.controller, item.object, crate::select::CARD)?;
+    Ok(())
+}
+
 /// "Search your library for [`rule`], [reveal it,] then shuffle and put that card on top" (CR 701.23). Vampiric Tutor
 /// (`select::CARD`) and Worldly Tutor (`select::CREATURE_CARD`, revealed) print it.
 pub fn find_to_top(g: &mut dyn Game, player: PlayerId, source: ObjectId, rule: Selection, reveal: bool) -> Result<Vec<ObjectId>, Suspend> {
