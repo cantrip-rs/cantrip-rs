@@ -1,0 +1,26 @@
+# A departed end-step player has no Islands to tap and cannot be dealt damage (CR 800.4a).
+[Bot1 Deck]
+Monsoon
+Black Lotus
+Mox Emerald
+Island x20
+[Bot2 Deck]
+Island x20
+[Bot3 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Monsoon.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T2 Bot2.End]
+? Stack.Count = 1
+Bot2.Concede
+[T3 Bot3.Main1]
+[Expect]
+Bot2.Status = Lost
+Bot1.Life = 20
+Bot3.Life = 20

@@ -1,0 +1,6 @@
+{
+  "name": "Monsoon",
+  "manaCost": "{2}{R}{G}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of each player's end step, tap all untapped Islands that player controls and this enchantment deals X damage to the player, where X is the number of Islands tapped this way."
+}

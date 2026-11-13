@@ -1,0 +1,58 @@
+# Monsoon taps each active player's untapped Islands, including dual lands, and counts only newly tapped Islands (CR 603.2, 701.26a).
+[Bot1 Deck]
+Monsoon
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Island
+Tundra
+Mountain
+Island x20
+[Bot2 Deck]
+Island
+Tundra
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Monsoon.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+? Bot1.Life = 19
+? Bot1.Battlefield.Island.Tapped = true
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+? Bot2.Life = 19
+? Bot2.Battlefield.Island.Tapped = true
+Bot1.Hand.Tundra.Play
+[T3 Bot1.End]
+Bot1.Battlefield.Island.Activate
+[T4 Bot2.Main1]
+? Bot1.Life = 18
+? Bot1.Battlefield.Tundra.Tapped = true
+? Bot2.Battlefield.Island.Tapped = false
+Bot2.Hand.Tundra.Play
+[T5 Bot1.Main1]
+? Bot2.Life = 17
+? Bot2.Battlefield.Island.Tapped = true
+? Bot2.Battlefield.Tundra.Tapped = true
+? Bot1.Life = 18
+Bot1.Hand.Mountain.Play
+[T6 Bot2.Main1]
+[Expect]
+Bot1.Life = 16
+Bot1.Battlefield.Mountain.Tapped = false
+Bot2.Life = 17

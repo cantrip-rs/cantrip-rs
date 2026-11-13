@@ -1,0 +1,46 @@
+# An Island handed to the opponent is tapped, and counted, at that player's end step: Monsoon reads who controls each Island, not who owns it (CR 110.2, 701.26a).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Monsoon
+Harmless Offering
+Island
+Plains x20
+[Bot2 Deck]
+Swamp x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Monsoon.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Island)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Island
+[T4 Bot2.Main1]
+? Bot1.Life = 20
+? Bot2.Battlefield.Island.Tapped = false
+[T5 Bot1.Main1]
+[Expect]
+Bot2.Battlefield.Island.Tapped = true
+Bot2.Life = 19
+Bot1.Life = 20
