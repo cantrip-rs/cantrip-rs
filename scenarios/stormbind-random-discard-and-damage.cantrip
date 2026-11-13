@@ -1,0 +1,49 @@
+# Stormbind pays two mana and discards at random as a cost, then deals two damage to either player;
+# an artifact that is not a creature is not a legal target (CR 602.1, 115.4, 120.3).
+[Bot1 Deck]
+Stormbind
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Forest
+Mountain
+Island
+Plains x20
+[Bot2 Deck]
+Island x20
+[Dice]
+1; 2
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Stormbind.Cast
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Stormbind.Activate(Bot2; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Stormbind.Activate(Bot1.Battlefield.Mox Pearl)
+Bot1.Battlefield.Stormbind.Activate(Bot2)
+? Bot1.Mana =
+? Bot1.Graveyard = Forest
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Stormbind.Activate(Bot1)
+? Bot1.Mana =
+? Bot1.Graveyard = Island; Forest
+Bot1.Pass
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
