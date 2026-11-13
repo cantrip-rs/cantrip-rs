@@ -1,0 +1,8 @@
+{
+  "name": "Tolarian Terror",
+  "manaCost": "{6}{U}",
+  "type": "Creature — Serpent",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "This spell costs {1} less to cast for each instant and sorcery card in your graveyard.\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)"
+}

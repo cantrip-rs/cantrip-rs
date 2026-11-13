@@ -1,0 +1,47 @@
+# Tolarian Terror, {6}{U}: "This spell costs {1} less to cast for each instant and sorcery card in your graveyard" (CR 601.2f, 118.7a). On turn 1 Bot1 casts
+# Lightning Bolt (an instant) and Duress (a sorcery), so two cards count; the Black Lotus sacrificed on turn 3 is an artifact in the graveyard and counts for
+# nothing. On turn 3 Bot1 taps seven mana (Mountain {R}, Mox Jet {B}, Mox Sapphire {U}, Black Lotus {U}{U}{U}, Island {U}) and the Terror costs {4}{U} = five,
+# so two blue mana are left in the pool (the reduction of 2, not 1 and not 3). Ward is the second ability and does nothing here.
+
+[Bot1 Deck]
+Mountain
+Mox Jet
+Lightning Bolt
+Duress
+Tolarian Terror
+Black Lotus
+Mox Sapphire
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Duress.Cast(Bot2)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Tolarian Terror.Cast
+Bot1.Pass
+Bot1.Pass
+? Bot1.Mana = {U}{U}
+
+[Expect]
+Bot1.Battlefield.Tolarian Terror.Power = 5
+Bot1.Graveyard = Black Lotus; Duress; Lightning Bolt
+Bot1.Mana = {U}{U}
+Bot2.Life = 17

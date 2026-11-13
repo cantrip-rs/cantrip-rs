@@ -1,0 +1,53 @@
+# Tolarian Terror: "costs {1} less" reduces generic mana only (CR 118.7a, 601.2f), however many instant and sorcery cards are in the graveyard. On turn 1
+# Bot1 casts Emry, Lurker of the Loch (mill four) and Dredger's Insight (mill four) off a Mox Sapphire, a Mox Emerald and an Island, milling eight
+# instants and sorceries, then the Terror with a Black Lotus: eight less than {6}{U} would be below zero, but only the six generic come off, so it costs
+# {U} and two of the Lotus's three blue mana stay in the pool. (The Insight finds nothing to take among the milled cards.)
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Island
+Emry, Lurker of the Loch
+Dredger's Insight
+Tolarian Terror
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Duress
+Duress
+Duress
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Emry, Lurker of the Loch.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Dredger's Insight.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+? Bot1.Graveyard.Count = 8
+[T1 Bot1.Main2]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Tolarian Terror.Cast
+Bot1.Pass
+Bot1.Pass
+? Bot1.Mana = {U}{U}
+
+[Expect]
+Bot1.Battlefield.Tolarian Terror.Power = 5
+Bot1.Graveyard.Count = 9
+Bot1.Mana = {U}{U}
