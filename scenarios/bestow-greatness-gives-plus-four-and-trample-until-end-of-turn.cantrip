@@ -1,0 +1,46 @@
+# Bestow Greatness, {2}{G} instant: "Target creature gets +4/+4 and gains trample until end of turn" (CR 611.2a, 702.19). On turn 3
+# Bot1 pays it exactly with Mox Emerald, Mox Pearl and Mox Jet (the pool is left empty) and targets Bot2's Llanowar Elves, any
+# creature being legal; a Mox Emerald (not a creature) is refused. The Elves are a 5/5 with trample once it resolves, and a plain
+# 1/1 again on turn 5, the effect having ended with the turn.
+
+[Bot1 Deck]
+Bestow Greatness
+Mox Emerald
+Mox Pearl
+Mox Jet
+Forest x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Bestow Greatness.Cast(Bot1.Battlefield.Mox Emerald)
+Bot1.Hand.Bestow Greatness.Cast(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Llanowar Elves.Power = 5
+? Bot2.Battlefield.Llanowar Elves.Toughness = 5
+? Bot2.Battlefield.Llanowar Elves.Keywords = Trample
+[T5 Bot1.Main1]
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Power = 1
+Bot2.Battlefield.Llanowar Elves.Toughness = 1
+Bot2.Battlefield.Llanowar Elves.Keywords = (absent)
+Bot1.Graveyard = Bestow Greatness

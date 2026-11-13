@@ -1,0 +1,6 @@
+{
+  "name": "Bestow Greatness",
+  "manaCost": "{2}{G}",
+  "type": "Instant",
+  "oracleText": "Target creature gets +4/+4 and gains trample until end of turn."
+}

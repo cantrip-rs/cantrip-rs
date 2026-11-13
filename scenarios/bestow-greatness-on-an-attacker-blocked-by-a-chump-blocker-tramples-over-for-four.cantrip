@@ -1,0 +1,48 @@
+# Bestow Greatness on the caster's own attacker (CR 611.2a, 702.19b): Bot1's Llanowar Elves attack on turn 3 and Bot2's Birds of
+# Paradise (0/1) block. After blockers Bot1 casts Bestow Greatness on the Elves, a 5/5 trampler: one damage is assigned to the
+# Birds and the other four trample over to Bot2 (20 to 16), where a plain 1/1 Elves would have dealt its one damage to the Birds
+# and none to the player. The Birds die.
+
+[Bot1 Deck]
+Llanowar Elves
+Bestow Greatness
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Forest x20
+
+[Bot2 Deck]
+Forest
+Birds of Paradise
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Birds of Paradise.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Llanowar Elves > Bot2)
+Bot2.Block(Birds of Paradise > Llanowar Elves)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bestow Greatness.Cast(Bot1.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot2.Graveyard = Birds of Paradise
+Bot1.Battlefield.Llanowar Elves.Power = 5
+Bot1.Battlefield.Llanowar Elves.Keywords = Trample
