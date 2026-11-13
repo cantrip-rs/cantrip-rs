@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{effects, flashback, targets, top_of_library, trample_until_end_of_turn};
+use cantrip_mechanics::{effects, flashback, targets, top_of_library};
 use cantrip_oracle as oracle;
 
 /// "Surveil 2. You gain 2 life. If this spell was cast from a graveyard, exile it, then put it onto the battlefield
@@ -50,11 +50,7 @@ fn chapter_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// III: "Other creatures you control get +2/+2 and gain trample until end of turn." The creatures are those its controller
 /// controls as it resolves, not the Saga itself, and none that enters later (CR 611.2c).
 fn chapter_three(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    instruction(g, |g| {
-        for creature in effects::pump_other_creatures_you_control(g, item, 2, 2) {
-            trample_until_end_of_turn(g, item.object, creature);
-        }
-    });
+    effects::pump_other_creatures_you_control_and_gain(g, item, 2, 2, &[Keyword::Trample]);
     Ok(())
 }
 

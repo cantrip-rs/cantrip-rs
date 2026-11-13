@@ -357,6 +357,17 @@ pub fn pump_other_creatures_you_control(g: &mut dyn Game, item: &StackItem, powe
     others
 }
 
+/// "Other creatures you control get +`power`/+`toughness` and gain [keywords] until end of turn" (CR 611.2, 611.2c, 702): one
+/// instruction on the creatures `item`'s controller controls as it resolves but its source, and no creature that enters later.
+/// Esper Origins' chapter III (trample) and Pyrewood Gearhulk (vigilance and menace) print it.
+pub fn pump_other_creatures_you_control_and_gain(g: &mut dyn Game, item: &StackItem, power: i32, toughness: i32, keywords: &[Keyword]) {
+    instruction(g, |g| {
+        for creature in pump_other_creatures_you_control(g, item, power, toughness) {
+            g.add_effect(item.object, creature, EffectKind::AddKeywords(Keywords::of(keywords)), Duration::EndOfTurn);
+        }
+    });
+}
+
 /// "Creatures you control gain [keywords] until end of turn" (CR 611.2, 611.2c, 702): the creatures `item`'s controller controls
 /// as it resolves, and no creature that enters later. Bitter Reunion and Ingris Stingerquill print it with haste, Deafening
 /// Clarion with lifelink, Spectacular Spider-Man and Invasion of Gobakhan with hexproof and indestructible, and The Wind
