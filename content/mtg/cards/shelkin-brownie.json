@@ -1,0 +1,8 @@
+{
+  "name": "Shelkin Brownie",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Ouphe",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}: Target creature loses all \"bands with other\" abilities until end of turn."
+}
