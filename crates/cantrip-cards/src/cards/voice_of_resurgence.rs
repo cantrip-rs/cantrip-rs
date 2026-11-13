@@ -3,14 +3,6 @@ use cantrip_mechanics::triggers::THIS_DIES;
 use cantrip_mechanics::{lands, tokens};
 use cantrip_oracle as oracle;
 
-/// "This token's power and toughness are each equal to the number of creatures you control" (CR 604.3, 613.4a): a
-/// characteristic-defining ability that counts every creature its controller controls, itself included (the ruling).
-fn power_and_toughness_are_creatures_you_control(q: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
-    let n = lands::count_you_control(q, source, &|c| c.is(CardType::Creature));
-    chars.power = Some(n);
-    chars.toughness = Some(n);
-}
-
 /// The green and white Elemental creature token it makes (CR 111.4), whose size is the number of creatures its controller has.
 pub static ELEMENTAL: CardDef = CardDef {
     // White (bit 0) and green (bit 4).
@@ -18,7 +10,7 @@ pub static ELEMENTAL: CardDef = CardDef {
     types: TypeSet::of(&[CardType::Creature]),
     power: Some(0),
     toughness: Some(0),
-    statics: &[characteristic_defining(Layer::PtDefine, power_and_toughness_are_creatures_you_control, "This token's power and toughness are each equal to the number of creatures you control.").lost_pt(0, 0)],
+    statics: &[characteristic_defining(Layer::PtDefine, lands::power_and_toughness_are_creatures_you_control, "This token's power and toughness are each equal to the number of creatures you control.").lost_pt(0, 0)],
     ..token!(Elemental)
 };
 
