@@ -1,0 +1,72 @@
+# Vanguard Seraph: "Whenever you gain life for the first time each turn, surveil 1" (CR 603.2, 701.25a). On turn 1 Bot1 casts the
+# Seraph (a 3/3 flier) and gains 3 life with Healing Salve: the first gain surveils, and Bot1 puts the top card, Lightning Bolt,
+# into the graveyard. A second Salve the same turn gains life again and surveils nothing (the stack is empty, and the next card,
+# a third Healing Salve, stays on top). On turn 3 Bot1 draws that Salve and gains life again: a new turn, a new first gain, so it
+# surveils again and this time keeps the top Island.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Vanguard Seraph
+Mox Pearl
+Gleemox
+Healing Salve
+Healing Salve
+Lightning Bolt
+Healing Salve
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Vanguard Seraph.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 13
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt)
+? Bot1.Graveyard = Lightning Bolt; Healing Salve; Black Lotus
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 26
+? Stack.Count = 0
+? Bot1.Graveyard.Count = 4
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 29
+Bot1.Graveyard = Healing Salve; Healing Salve; Lightning Bolt; Healing Salve; Black Lotus
+Bot1.Battlefield.Vanguard Seraph.Power = 3
+Bot1.Battlefield.Vanguard Seraph.Toughness = 3
+Bot1.Battlefield.Vanguard Seraph.Keywords = Flying

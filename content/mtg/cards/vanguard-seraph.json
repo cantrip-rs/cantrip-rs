@@ -1,0 +1,11 @@
+{
+  "name": "Vanguard Seraph",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Angel Warrior",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\nWhenever you gain life for the first time each turn, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "keywords": [
+    "Flying"
+  ]
+}
