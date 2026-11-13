@@ -1,0 +1,49 @@
+# Shipwreck Dowser ({3}{U}{U}) with Black Lotus's {U}{U}{U}, Mox Sapphire and Mox Ruby: "return target instant or sorcery card from your
+# graveyard to your hand". Bot1's Lightning Bolt (an instant) is in its graveyard and Bot2's Firebolt (a sorcery) is in Bot2's: the Bolt is
+# the only legal target, so it comes back (in a hand of the two Islands, the Mox Jet and it), and Bot2's Firebolt stays (CR 115.1, 608.2b).
+
+[Bot1 Deck]
+Lightning Bolt
+Mox Ruby
+Black Lotus
+Mox Sapphire
+Shipwreck Dowser
+Mox Jet
+Island
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Firebolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Firebolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shipwreck Dowser.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Island; Island; Lightning Bolt; Mox Jet
+Bot2.Graveyard = Firebolt
+Bot1.Battlefield.Shipwreck Dowser.Power = 3

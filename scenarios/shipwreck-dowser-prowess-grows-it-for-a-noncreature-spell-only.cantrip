@@ -1,0 +1,43 @@
+# Shipwreck Dowser has prowess: it is 3/3, and Bot1's Lightning Bolt, a noncreature spell cast after it is on the battlefield, makes it 4/4
+# until end of turn (CR 702.108a); casting a creature spell (Ornithopter) beforehand does not, and the Dowser's own enters trigger has no card
+# to return from an empty graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Shipwreck Dowser
+Lightning Bolt
+Ornithopter
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Shipwreck Dowser.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Shipwreck Dowser.Power = 3
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Shipwreck Dowser.Power = 3
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Shipwreck Dowser.Power = 4
+
+[Expect]
+Bot1.Battlefield.Shipwreck Dowser.Power = 4
+Bot1.Battlefield.Shipwreck Dowser.Toughness = 4
+Bot2.Life = 17
