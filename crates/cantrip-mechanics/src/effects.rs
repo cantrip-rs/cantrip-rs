@@ -1151,6 +1151,14 @@ pub fn gain_life(g: &mut dyn Game, item: &StackItem, n: i32) -> Result<(), Suspe
     Ok(())
 }
 
+/// "Exile up to one target card from a graveyard. You gain N life" (CR 701.13, 119.3): the life is gained even when no target was
+/// chosen; a chosen target that is illegal as it resolves ends the whole ability first (CR 608.2b). Commander Raffi Musiker
+/// (two) and Wreck Remover (one) print it.
+pub fn exile_target_card_and_gain_life<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    crate::exile_target(g, item, 0);
+    gain_life(g, item, N)
+}
+
 /// "You gain life equal to the number of differently named lands you control" (CR 201.2a, 608.2c): counted as the
 /// ability resolves, two lands with the same name counting once. Species 8472 and Christine Chapel, Combat Medic print
 /// it, both on "when this creature enters".
