@@ -1,0 +1,40 @@
+# Painful Quandary: Bot2 casts Mox Jet (a noncreature spell triggers it too, CR 603.2) and chooses to discard an Island instead of losing 5 life (CR 608.2d, 701.9): it keeps 20 life; hand 8 drawn - 1 cast - 1 discarded = 6.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Painful Quandary
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Jet
+Island x23
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Painful Quandary.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Accept
+Bot2.Choose(Island)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot2.Hand.Count = 6
+Bot2.Graveyard = Island
+Bot2.Battlefield.Mox Jet.Tapped = false

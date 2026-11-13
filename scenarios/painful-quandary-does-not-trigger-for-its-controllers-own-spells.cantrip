@@ -1,0 +1,36 @@
+# Painful Quandary triggers only on spells an opponent casts (CR 603.2): on turn 3 Bot1 casts Ornithopter itself, nothing goes on the stack above it, Bot1 loses no life and is never asked to discard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Painful Quandary
+Island
+Island
+Island
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Painful Quandary.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Graveyard = Black Lotus

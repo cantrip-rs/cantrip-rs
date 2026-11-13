@@ -1,0 +1,45 @@
+# Painful Quandary ({3}{B}{B}): whenever an opponent casts a spell, that player loses 5 life unless they discard a card (CR 603.2, 608.2d).
+# Bot1 casts it on turn 1 (Black Lotus, Mox Jet and Mox Pearl pay); on turn 2 Bot2 casts Ornithopter, declines to discard and loses 5 (20 -> 15), keeping its hand (8 drawn, 1 cast = 7).
+# The trigger resolves before the spell, on top of it (the rulings).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Painful Quandary
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x23
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Painful Quandary.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Pass
+Bot2.Decline
+? Bot2.Life = 15
+? Bot2.Battlefield.Ornithopter = (absent)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 15
+Bot2.Hand.Count = 7
+Bot2.Graveyard.Count = 0
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Life = 20

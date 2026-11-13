@@ -1,0 +1,6 @@
+{
+  "name": "Painful Quandary",
+  "manaCost": "{3}{B}{B}",
+  "type": "Enchantment",
+  "oracleText": "Whenever an opponent casts a spell, that player loses 5 life unless they discard a card."
+}
