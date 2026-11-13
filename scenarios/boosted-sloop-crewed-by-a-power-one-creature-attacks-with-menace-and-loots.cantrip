@@ -1,0 +1,57 @@
+# Boosted Sloop (3/3 menace Vehicle, Crew 1): "Whenever you attack, draw a card, then discard a card." Cast on turn 1 off three Moxen.
+# On turn 3 it cannot be crewed with no creature to tap, then a summoning-sick Zephyr Sprite (power 1, exactly Crew 1) crews it and
+# the Sloop attacks (CR 702.122a). Bot1 draws the Swamp and then discards the Island from a hand of Island, Forest, Mountain and Swamp
+# (CR 603.2). Menace (CR 702.111b): Bot2's lone Ornithopter cannot block it, so all 3 damage goes through.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Boosted Sloop
+Zephyr Sprite
+Island
+Forest
+Mountain
+Swamp
+Island x9
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Boosted Sloop.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Boosted Sloop.Activate(Ability: Crew)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Boosted Sloop.Activate(Ability: Crew)
+Bot1.Choose(Zephyr Sprite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Boosted Sloop > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+! Bot2.Block(Ornithopter > Boosted Sloop)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Hand = Forest; Mountain; Swamp
+Bot1.Graveyard = Island
+Bot1.Battlefield.Boosted Sloop.Keywords = Menace

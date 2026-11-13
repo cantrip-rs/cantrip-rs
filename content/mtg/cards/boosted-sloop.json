@@ -1,0 +1,11 @@
+{
+  "name": "Boosted Sloop",
+  "manaCost": "{1}{U}{R}",
+  "type": "Artifact — Vehicle",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Menace\nWhenever you attack, draw a card, then discard a card.\nCrew 1 (Tap any number of creatures you control with total power 1 or more: This Vehicle becomes an artifact creature until end of turn.)",
+  "keywords": [
+    "Menace"
+  ]
+}

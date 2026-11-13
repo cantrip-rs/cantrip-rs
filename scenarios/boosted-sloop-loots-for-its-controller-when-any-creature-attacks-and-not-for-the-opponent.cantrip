@@ -1,0 +1,62 @@
+# Boosted Sloop's "Whenever you attack, draw a card, then discard a card" (CR 603.2, 508.1) belongs to its controller and needs only that
+# the controller attacked, not the Vehicle: Bot2 casts the Sloop and a Savannah Lions on turn 2. Bot1's own turn-3 attack with its Lions
+# makes Bot2 loot nothing (its graveyard stays empty). On turn 4 Bot2 attacks with the Lions alone, the Sloop uncrewed and at home,
+# and loots: it draws the Swamp and discards the Island.
+
+[Bot1 Deck]
+Mox Pearl
+Savannah Lions
+Plains x15
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Boosted Sloop
+Savannah Lions
+Island
+Forest
+Mountain
+Swamp
+Island x9
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Boosted Sloop.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Savannah Lions > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Graveyard.Count = 0
+? Bot2.Life = 18
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Savannah Lions > Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Island)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
+Bot2.Hand = Forest; Mountain; Swamp
+Bot2.Graveyard = Island
+Bot2.Battlefield.Boosted Sloop.Types = Artifact
