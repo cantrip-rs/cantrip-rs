@@ -1,0 +1,8 @@
+{
+  "name": "Mindspring Merfolk",
+  "manaCost": "{U}",
+  "type": "Creature — Merfolk Wizard",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Exhaust — {X}{U}{U}, {T}: Draw X cards. Put a +1/+1 counter on each Merfolk creature you control. (Activate each exhaust ability only once.)"
+}

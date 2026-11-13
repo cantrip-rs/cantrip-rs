@@ -1,0 +1,72 @@
+# Mindspring Merfolk (1/1 Merfolk Wizard, {U}): "Exhaust -- {X}{U}{U}, {T}: Draw X cards. Put a +1/+1 counter on each Merfolk creature
+# you control." On turn 3 Bot1 pays X = 2 (four mana exactly) and draws exactly two cards (hand 1 -> 3, after the turn's own draw);
+# each of Bot1's Merfolk (itself and Coral Merfolk) gets a counter (CR 122.1), but not Bot1's Memnite (an artifact creature that is not
+# a Merfolk) and not Bot2's Coral Merfolk (CR 608.2). On turn 5 it cannot be activated again (CR 702.177a).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Emerald
+Mindspring Merfolk
+Coral Merfolk
+Memnite
+Island x13
+
+[Bot2 Deck]
+Mox Sapphire
+Island
+Coral Merfolk
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Mindspring Merfolk.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Coral Merfolk.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Coral Merfolk.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 1
+Bot1.Battlefield.Mindspring Merfolk.Activate(X: 2)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Mindspring Merfolk.Activate(X: 2)
+
+[Expect]
+Bot1.Battlefield.Mindspring Merfolk.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Mindspring Merfolk.Power = 2
+Bot1.Battlefield.Coral Merfolk.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Coral Merfolk.Power = 3
+Bot1.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Coral Merfolk.Power = 2
