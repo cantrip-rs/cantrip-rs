@@ -1,0 +1,77 @@
+# Ingenious Leonin: "{3}{W}: Put a +1/+1 counter on another target attacking creature you control. If that creature is a Cat, it gains
+# first strike until end of turn." Bot1 casts the Leonin ({4}{W}) and a Savannah Lions (a Cat, 2/1) on turn 1. On turn 3 the Plains is
+# tapped in the main phase (its mana is lost), so at declare attackers only four non-white Moxen are left: {3}{W} cannot be paid (CR 107.4,
+# 601.2h) and the activation is refused. On turn 5 the Lions attacks beside the Leonin and Bot2's Armored Warhorse (2/3) blocks it:
+# the Leonin itself is refused (another, CR 115.1); the Lions is accepted and, as the ability resolves, is a 3/2 with first strike
+# (CR 122.1a, 205.3m, 702.7b), so it kills the Warhorse before it deals damage and takes none. The Plains and three Moxen pay exactly:
+# nothing is left in the pool.
+
+[Bot1 Deck]
+Plains
+Mox Jet
+Mox Ruby
+Mox Emerald
+Black Lotus
+Ingenious Leonin
+Savannah Lions
+Mox Sapphire
+Plains
+Plains x13
+
+[Bot2 Deck]
+Black Lotus
+Armored Warhorse
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ingenious Leonin.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Armored Warhorse.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Plains.Activate
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Savannah Lions > Bot2)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Ingenious Leonin.Activate(Bot1.Battlefield.Savannah Lions; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Savannah Lions > Bot2; Ingenious Leonin > Bot2)
+Bot2.Block(Armored Warhorse > Savannah Lions)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Ingenious Leonin.Activate(Bot1.Battlefield.Ingenious Leonin)
+Bot1.Battlefield.Ingenious Leonin.Activate(Bot1.Battlefield.Savannah Lions)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Savannah Lions.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Savannah Lions.Power = 3
+Bot1.Battlefield.Savannah Lions.Keywords = FirstStrike
+Bot1.Battlefield.Savannah Lions.Damage = 0
+Bot1.Battlefield.Ingenious Leonin.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Armored Warhorse = (absent)
+Bot2.Graveyard = Armored Warhorse; Black Lotus
+Bot2.Life = 14

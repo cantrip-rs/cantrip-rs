@@ -1,0 +1,8 @@
+{
+  "name": "Ingenious Leonin",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Cat Soldier",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "{3}{W}: Put a +1/+1 counter on another target attacking creature you control. If that creature is a Cat, it gains first strike until end of turn. (It deals combat damage before creatures without first strike.)"
+}

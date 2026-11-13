@@ -1,0 +1,54 @@
+# Ingenious Leonin: "{3}{W}: Put a +1/+1 counter on another target attacking creature you control. If that creature is a Cat, it gains
+# first strike until end of turn." On turn 3 Bot1 attacks with its Ornithopter only: the idle Savannah Lions (a Cat that would
+# match but is not attacking) and the idle Leonin itself are refused (CR 506.4, 115.1). The Ornithopter (not a Cat) is accepted and gets
+# the counter (a 1/3 flyer, so Bot2 takes exactly 1) but not first strike. Sources: two Plains, a Pearl and a Jet pay {3}{W} exactly.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Black Lotus
+Mox Jet
+Ingenious Leonin
+Savannah Lions
+Ornithopter
+Plains
+Plains x14
+
+[Bot2 Deck]
+Plains x22
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ingenious Leonin.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Ingenious Leonin.Activate(Bot1.Battlefield.Savannah Lions)
+! Bot1.Battlefield.Ingenious Leonin.Activate(Bot1.Battlefield.Ingenious Leonin)
+Bot1.Battlefield.Ingenious Leonin.Activate(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.Savannah Lions.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Ingenious Leonin.Counters.PlusOnePlusOne = (absent)
+Bot2.Life = 19
