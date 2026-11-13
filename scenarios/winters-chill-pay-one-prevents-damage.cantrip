@@ -1,0 +1,48 @@
+# Paying {1} prevents combat damage in both directions, while noncombat damage still gets through (CR 615.1).
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Prodigal Sorcerer
+Balduvian Bears
+Forest x20
+[Bot2 Deck]
+Snow-Covered Island
+Mox Sapphire
+Winter's Chill
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Prodigal Sorcerer.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Balduvian Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Balduvian Bears > Bot2)
+Bot2.Battlefield.Snow-Covered Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Winter's Chill.Cast(X: 1)
+Bot2.Target(Bot1.Battlefield.Balduvian Bears)
+Bot2.Pass
+? Bot2.Mana =
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.PayCost
+? Bot1.Mana =
+Bot1.Battlefield.Prodigal Sorcerer.Activate(Bot1.Battlefield.Balduvian Bears)
+Bot2.Block(Grizzly Bears > Balduvian Bears)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Balduvian Bears.Power = 2
+Bot1.Battlefield.Balduvian Bears.Damage = 1
+Bot2.Battlefield.Grizzly Bears.Damage = 0

@@ -1,0 +1,38 @@
+# With no snow lands, the caster cannot choose X=1 even though the opponent controls a snow land; X=0 is legal (CR 601.2b). 
+[Bot1 Deck]
+Black Lotus
+Snow-Covered Forest
+Balduvian Bears
+Grizzly Bears
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island
+Mox Sapphire
+Winter's Chill
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Balduvian Bears.Cast
+Bot1.Battlefield.Snow-Covered Forest.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Balduvian Bears > Bot2; Grizzly Bears > Bot2)
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Winter's Chill.Cast(X: 0)
+! Bot2.Hand.Winter's Chill.Cast(X: 1)
+Bot2.Pass
+? Bot2.Mana = {U}
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Black Lotus
+Bot1.Battlefield.Balduvian Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot2.Life = 16

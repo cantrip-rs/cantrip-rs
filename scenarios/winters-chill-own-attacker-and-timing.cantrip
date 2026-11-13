@@ -1,0 +1,32 @@
+# Winter's Chill targets its caster's attacking creature, and cannot be cast outside the permitted combat window (CR 601.3).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Snow-Covered Island
+Balduvian Bears
+Winter's Chill x2
+Island x20
+[Bot2 Deck]
+Island x24
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Snow-Covered Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Balduvian Bears.Cast
+! Bot1.Hand.Winter's Chill.Cast(X: 0)
+[T3 Bot1.Main1]
+Bot1.Attack(Balduvian Bears > Bot2)
+Bot1.Battlefield.Snow-Covered Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Winter's Chill.Cast(X: 1)
+Bot1.Target(Bot1.Battlefield.Balduvian Bears)
+Bot1.Pass
+? Bot1.Mana =
+[T3 Bot1.DeclareBlockers]
+! Bot1.Hand.Winter's Chill.Cast(X: 0)
+[T3 Bot1.Main2]
+! Bot1.Hand.Winter's Chill.Cast(X: 0)
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard = Balduvian Bears; Winter's Chill; Black Lotus
