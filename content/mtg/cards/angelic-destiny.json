@@ -1,0 +1,6 @@
+{
+  "name": "Angelic Destiny",
+  "manaCost": "{2}{W}{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +4/+4, has flying and first strike, and is an Angel in addition to its other types.\nWhen enchanted creature dies, return this card to its owner's hand."
+}

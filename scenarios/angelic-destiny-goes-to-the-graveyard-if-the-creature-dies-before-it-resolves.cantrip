@@ -1,0 +1,55 @@
+# Angelic Destiny: with the Aura spell on the stack aimed at Bot1's Grizzly Bears, Bot2 destroys the Bears in response with Terror
+# (a Mox Jet and a Swamp). The Aura has no legal target and is countered on resolution (CR 608.2b), so it goes to the graveyard: it was
+# never on the battlefield enchanting the creature, so it never triggers and is not returned to hand (the 2011-09-22 ruling).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Grizzly Bears
+Angelic Destiny
+Plains x13
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Terror
+Plains x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Angelic Destiny.Cast(Grizzly Bears)
+Bot1.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Terror.Cast(Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Hand =
+Bot1.Graveyard = Angelic Destiny; Grizzly Bears
+Bot2.Graveyard = Terror
