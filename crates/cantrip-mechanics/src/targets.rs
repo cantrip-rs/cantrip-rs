@@ -381,6 +381,14 @@ fn opponent_whose_turn_it_is_filter(q: &dyn Query, asker: &Asker, t: Target) -> 
 /// the opponent whenever the ability's controller is not the active player. Cmdr. Troi, Outgoing Empath prints it.
 pub const OPPONENT_WHOSE_TURN_IT_IS: TargetSpec = target(opponent_whose_turn_it_is_filter);
 pub const SPELL: TargetSpec = target(spell_filter);
+
+fn spell_you_control_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    spell_filter(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) == asker.controller)
+}
+
+/// "Target spell you control" (CR 115.1, 109.5): a spell on the stack, of any kind, that the ability's controller controls.
+/// Slick Imitator and Overloaded Mage-Ring (Invasion of Vryn's back face) print it.
+pub const SPELL_YOU_CONTROL: TargetSpec = target(spell_you_control_filter);
 fn spell_or_ability_with_a_single_target_filter(q: &dyn Query, _: &Asker, t: Target) -> bool {
     let state = q.state();
     let stack = &state.stack;
