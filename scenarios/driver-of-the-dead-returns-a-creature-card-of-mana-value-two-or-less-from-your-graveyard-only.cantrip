@@ -1,0 +1,72 @@
+# Driver of the Dead: "When this creature dies, return target creature card with mana value 2 or less from your graveyard to the battlefield." (CR 700.4, 603.6c, 400.3)
+# Bot1's graveyard holds Grizzly Bears (mana value exactly 2), Memnite (0) and Vampire Nighthawk (3, past the limit); Bot2's holds a Memnite of its own. Bot2 bolts the Driver on
+# turn 6: the Driver itself (mana value 4, already in the graveyard when the trigger goes on the stack), the Nighthawk and Bot2's Memnite are refused as targets, the Bears is accepted
+# and returns under Bot1's control; the Memnite stays in Bot1's graveyard and Bot2's Memnite in Bot2's.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Swamp
+Entomb
+Entomb
+Entomb
+Driver of the Dead
+Grizzly Bears
+Vampire Nighthawk
+Memnite
+Swamp x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Entomb
+Lightning Bolt
+Island x3
+Island
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Vampire Nighthawk)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Memnite)
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Driver of the Dead.Cast
+Bot1.Pass
+[T6 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Driver of the Dead)
+Bot2.Pass
+Bot1.Pass
+! Bot1.Target(Bot1.Graveyard.Driver of the Dead)
+! Bot1.Target(Bot1.Graveyard.Vampire Nighthawk)
+! Bot1.Target(Bot2.Graveyard.Memnite)
+Bot1.Target(Bot1.Graveyard.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Tapped = false
+Bot1.Graveyard = Driver of the Dead; Entomb; Memnite; Entomb; Vampire Nighthawk; Entomb; Black Lotus
+Bot2.Graveyard = Lightning Bolt; Entomb; Memnite

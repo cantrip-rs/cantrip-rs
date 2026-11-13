@@ -1,0 +1,8 @@
+{
+  "name": "Driver of the Dead",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Vampire",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature dies, return target creature card with mana value 2 or less from your graveyard to the battlefield."
+}
