@@ -9,11 +9,7 @@ use cantrip_oracle as oracle;
 fn raise(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(card) = targets::object(g, item, 0) else { return Ok(()) };
     let arrived = g.put_onto_battlefield(card, item.controller, false)?;
-    let until = Duration::AsLongAs(g.card_id(&CARD), 0);
-    instruction(g, |g| {
-        g.add_effect(item.object, arrived, EffectKind::CantAttack, until);
-        g.add_effect(item.object, arrived, EffectKind::CantBlock, until);
-    });
+    effects::cant_attack_or_block_while_you_control_source(g, item, arrived);
     Ok(())
 }
 

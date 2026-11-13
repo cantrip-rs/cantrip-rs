@@ -43,6 +43,17 @@ pub fn gain_control_of_target_while_you_control_source(g: &mut dyn Game, item: &
     Ok(())
 }
 
+/// "[That creature] can't attack or block for as long as you control this [permanent]" (CR 508.1c, 509.1b, 611.2b): both
+/// restrictions on `object` last while `YOU_CONTROL_SOURCE` holds - the card lists it in `lasting`. Extraction Specialist (the
+/// creature it returned) and Possession Engine (the creature it took) print it.
+pub fn cant_attack_or_block_while_you_control_source(g: &mut dyn Game, item: &StackItem, object: ObjectId) {
+    let duration = Duration::AsLongAs(item.ability.card, 0);
+    instruction(g, |g| {
+        g.add_effect(item.object, object, EffectKind::CantAttack, duration);
+        g.add_effect(item.object, object, EffectKind::CantBlock, duration);
+    });
+}
+
 /// "The number of counters on" an object (CR 122.1): counters of every kind, a +1/+1 and a -1/-1 counter both counted while
 /// state-based actions have not yet removed the pair (CR 704.5q). Read from the object as it last existed if it has left the
 /// battlefield (CR 608.2h). Jadzia Dax, Living Legacy and Savanti Romero, Time's Exile ask it of themselves. A count of one
