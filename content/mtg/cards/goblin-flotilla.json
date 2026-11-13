@@ -1,0 +1,11 @@
+{
+  "name": "Goblin Flotilla",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Goblin",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Islandwalk (This creature can't be blocked as long as defending player controls an Island.)\nAt the beginning of each combat, unless you pay {R}, whenever this creature blocks or becomes blocked by a creature this combat, that creature gains first strike until end of turn.",
+  "keywords": [
+    "Islandwalk"
+  ]
+}
