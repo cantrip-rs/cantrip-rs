@@ -1,0 +1,40 @@
+# Three blocked attackers are eligible; exactly two different attackers must be chosen (CR 115.1).
+[Bot1 Deck]
+General Jarkeld
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Phyrexian Walker
+Memnite
+Ornithopter
+Plains x20
+[Bot2 Deck]
+Phyrexian Walker
+Memnite
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.General Jarkeld.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Phyrexian Walker; Memnite; Ornithopter)
+Bot2.Block(Phyrexian Walker > Phyrexian Walker; Memnite > Memnite; Ornithopter > Ornithopter)
+Bot1.Battlefield.General Jarkeld.Activate
+! Bot1.Target(Count: 1)
+! Bot1.Target(Bot1.Battlefield.Phyrexian Walker; Bot1.Battlefield.Memnite; Bot1.Battlefield.Ornithopter)
+! Bot1.Target(Bot1.Battlefield.Memnite; Bot1.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Phyrexian Walker; Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Combat.Blocks = Memnite > Phyrexian Walker; Ornithopter > Ornithopter; Phyrexian Walker > Memnite
+[Expect]
