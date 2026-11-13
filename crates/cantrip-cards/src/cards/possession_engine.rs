@@ -26,6 +26,5 @@ pub static CARD: CardDef = CardDef {
         .targets(&[targets::CREATURE_AN_OPPONENT_CONTROLS]),
         crew(3, "Crew 3 (Tap any number of creatures you control with total power 3 or more: This Vehicle becomes an artifact creature until end of turn.)"),
     ],
-    lasting: &[effects::YOU_CONTROL_SOURCE],
     ..oracle::POSSESSION_ENGINE
 };
