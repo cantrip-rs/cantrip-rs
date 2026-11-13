@@ -1513,6 +1513,8 @@ public sealed class Decisions
             CardChoicePurposeView.ReturnToHand => prompt.Kind.Length > 0
                 ? $"{source}: return {many}{kind}(s) you control to their owner's hand."
                 : $"{source}: return {many} permanent(s) to their owner's hand.",
+            CardChoicePurposeView.Untap when prompt.CountKind == CountKindView.AsManyAsCan =>
+                $"{source}: choose as many permanents to untap as the untap restrictions allow.",
             CardChoicePurposeView.Untap => $"{source}: untap {many}{kind} permanent(s).",
             CardChoicePurposeView.Tap => $"{source}: tap {many}{kind} permanent(s) you control. Tapped, they cannot attack, block or tap for mana until they untap, so choose those you can best spare.",
             CardChoicePurposeView.Attach => $"{source}: attach {many}{kind} permanent(s) you control to the creature.",
@@ -1531,7 +1533,7 @@ public sealed class Decisions
                 $"{source}: choose {many}{kind} {(prompt.Count == 1 ? "copy" : "copies")} to cast{where} without paying their mana costs. The copies cease to exist if not cast.{budget}",
             CardChoicePurposeView.Play => $"{source}: choose {many}{kind} card(s) you may play this turn. The card's text says whether you pay its costs.",
             CardChoicePurposeView.Vote => $"{source}: cast your vote.",
-            CardChoicePurposeView.TapToPay => $"{source}: tap creatures to pay its cost.",
+            CardChoicePurposeView.TapToPay => $"{source}: tap eligible permanents to pay its cost.",
             // Permanents you control ("exile a creature you control", CR 118.3) are given up for good: those worth least.
             CardChoicePurposeView.ExileToPay when ChoiceIsOnBattlefield(client, prompt) =>
                 $"{source}: exile {many}{(kind.Length > 0 ? kind : " permanent")}(s) you control to pay for it. They are exiled for good, so choose those you can best spare.",

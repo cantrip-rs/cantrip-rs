@@ -140,6 +140,9 @@ public sealed record CardChoicePresentation(string Title, string Detail, string 
             // Sylvan Library: the cards each later paid for or put back, not the ones that go back.
             : prompt.Purpose == CardChoicePurposeView.PayLifeOrPutOnTop
                 ? $"{source}: choose {prompt.Count} cards in your hand drawn this turn - for each, pay {prompt.Life} life or put it on top of your library"
+            // AsManyAsCan is constrained by the selection verdict, not an exact Count (CR 502.3).
+            : prompt.Purpose == CardChoicePurposeView.Untap && prompt.CountKind == CountKindView.AsManyAsCan
+                ? $"{source}: choose as many permanents to untap as the untap restrictions allow"
             : prompt.Count == 1 && !prompt.UpTo ? $"{source}: choose {article} {kind}{from} to {verb}{budget}"
             : anyNumber ? $"{source}: choose any number of {many}{from} to {verb}{budget}"
             : $"{source}: choose {(prompt.UpTo ? "up to " : "")}{prompt.Count} {many}{from} to {verb}{budget}";
@@ -176,6 +179,8 @@ public sealed record CardChoicePresentation(string Title, string Detail, string 
                 ? $"{picked.Count} chosen  ·  total {total} {manaValue} of {prompt.MinimumManaValue}{where}"
             : prompt.MaximumTotalManaValue is { } most
                 ? $"{picked.Count} of {prompt.Count} chosen  ·  total mana value {manaValue} of {most} or less{where}"
+            : prompt.CountKind == CountKindView.AsManyAsCan
+                ? $"{picked.Count} chosen  ·  choose as many as the rules allow{where}"
             : ordered && prompt.Count > 1
                 ? prompt.Purpose == CardChoicePurposeView.Splice
                     ? $"{picked.Count} of {prompt.Count} chosen  ·  their text follows the spell in the order chosen{where}"

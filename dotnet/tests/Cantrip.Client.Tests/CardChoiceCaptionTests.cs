@@ -10,6 +10,31 @@ namespace Cantrip.Client.Tests;
 /// </summary>
 public sealed class CardChoiceCaptionTests
 {
+    [Fact]
+    public void Restricted_untapping_does_not_present_the_candidate_count_as_mandatory()
+    {
+        ObjectView artifact = Card(3, "Sol Ring", ZoneKindView.Battlefield, Me, CardTypeView.Artifact);
+        GameClient client = Seated([Spell(), artifact]);
+        ChooseCardsPromptMessage prompt = Choice(CardChoicePurposeView.Untap, 3, false, artifact);
+        prompt.CountKind = CountKindView.AsManyAsCan;
+        prompt.Kind = "permanent to untap";
+        prompt.Verdict.Complete = true;
+
+        CardChoicePresentation shown = CardChoicePresentation.Describe(client, prompt, [3]);
+
+        Assert.Contains("untap restrictions allow", shown.Title, StringComparison.Ordinal);
+        Assert.DoesNotContain("choose 3", shown.Title, StringComparison.Ordinal);
+        Assert.DoesNotContain("to untap to untap", shown.Title, StringComparison.Ordinal);
+        Assert.DoesNotContain("of 3", shown.Detail, StringComparison.Ordinal);
+        Assert.Equal("Untap 1", shown.Confirm);
+
+        prompt.CountKind = CountKindView.Exactly;
+        prompt.Kind = "artifact";
+        Assert.Contains("choose 3 artifacts", CardChoicePresentation.Describe(client, prompt, []).Title, StringComparison.Ordinal);
+        prompt.CountKind = CountKindView.UpTo;
+        Assert.Contains("choose up to 3 artifacts", CardChoicePresentation.Describe(client, prompt, []).Title, StringComparison.Ordinal);
+    }
+
     private static ObjectView Card(int handle, string name, ZoneKindView zone, int owner, CardTypeView type = CardTypeView.Creature) => new()
     {
         Handle = Handle(handle),
