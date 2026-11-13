@@ -603,6 +603,13 @@ fn equipment_you_control_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool
 /// "Target Equipment you control" (CR 115.1, 301.5). Super-Soldier Serum, Raubahn and Thorin print it.
 pub const EQUIPMENT_YOU_CONTROL: TargetSpec = target(equipment_you_control_filter);
 
+fn vehicle_you_control_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    matches!(t, Target::Object(id) if permanent(q, id) && q.controller(id) == asker.controller && q.chars(id).has_subtype(Subtype::Vehicle))
+}
+/// "Target Vehicle you control" (CR 115.1, 301.7): a permanent with the Vehicle subtype under the ability's controller. Guidelight
+/// Matrix prints it, and Chandra, Spark Hunter as "up to one" (`.optional()`).
+pub const VEHICLE_YOU_CONTROL: TargetSpec = target(vehicle_you_control_filter);
+
 /// A permanent that is still the object it was on the battlefield (CR 400.7): the start of every battlefield filter.
 pub fn permanent(q: &dyn Query, id: ObjectId) -> bool {
     on_battlefield(q, id)

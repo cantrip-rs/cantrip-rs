@@ -2,11 +2,6 @@ use cantrip_api::*;
 use cantrip_mechanics::{effects, haste_until_end_of_turn, targets, tokens, triggers};
 use cantrip_oracle as oracle;
 
-/// "Target Vehicle you control" (CR 115.1, 301.7): a permanent with the Vehicle subtype that its controller controls.
-fn vehicle_you_control(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    matches!(t, Target::Object(id) if targets::permanent(q, id) && q.controller(id) == asker.controller && q.chars(id).has_subtype(Subtype::Vehicle))
-}
-
 /// "At the beginning of combat on your turn, choose up to one target Vehicle you control. Until end of turn, it becomes an
 /// artifact creature and gains haste." Two continuous effects from this ability's source (CR 611.2a, 613.1d): the types it
 /// gains, and haste.
@@ -46,7 +41,7 @@ pub static CARD: CardDef = CardDef {
             animate_vehicle,
             "At the beginning of combat on your turn, choose up to one target Vehicle you control. Until end of turn, it becomes an artifact creature and gains haste.",
         )
-        .targets(&[up_to_one(vehicle_you_control)]),
+        .targets(&[targets::VEHICLE_YOU_CONTROL.optional()]),
         ability(loyalty(2), |g, item| effects::may_sacrifice_an_artifact_or_discard_to_draw(g, item, 1), "+2: You may sacrifice an artifact or discard a card. If you do, draw a card."),
         ability(loyalty(0), tokens::create_a_crew_1_vehicle, "0: Create a 3/2 colorless Vehicle artifact token with crew 1."),
         ability(loyalty(-7), emblem, "\u{2212}7: You get an emblem with \"Whenever an artifact you control enters, this emblem deals 3 damage to any target.\""),
