@@ -21,19 +21,12 @@ fn becomes_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Whenever this land attacks, other creatures you control get +1/+1 until end of turn." The creatures are those its controller
-/// controls as it resolves, not this land, and none that enters later (CR 611.2c).
-fn pump_others(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::pump_other_creatures_you_control(g, item, 1, 1);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     enters: Some(mana::enters_tapped),
     abilities: &[
         mana_ability(TAP, add_one_of(&[Color::Green, Color::White]), "{T}: Add {G} or {W}."),
         ability(cost("{2}{G}{W}"), becomes_creature, "{2}{G}{W}: This land becomes a 3/3 green and white Llama creature until end of turn. It's still a land."),
-        triggered(triggers::THIS_ATTACKS, pump_others, "Whenever this land attacks, other creatures you control get +1/+1 until end of turn."),
+        triggered(triggers::THIS_ATTACKS, effects::other_creatures_you_control_get::<1, 1>, "Whenever this land attacks, other creatures you control get +1/+1 until end of turn."),
     ],
     ..oracle::RESTLESS_PRAIRIE
 };

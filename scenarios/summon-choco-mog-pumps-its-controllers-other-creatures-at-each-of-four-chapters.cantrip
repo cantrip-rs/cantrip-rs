@@ -36,11 +36,13 @@ Bot1.Pass
 Bot2.Pass
 ? Bot1.Battlefield.Ornithopter.Power = 1
 ? Bot1.Battlefield.Summon: Choco/Mog.Counters.Lore = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 2
 ? Bot2.Battlefield.Phyrexian Walker.Power = 0
 [T5 Bot1.Main1]
 Bot1.Pass
 Bot2.Pass
 ? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 2
 Bot1.Hand.Memnite.Cast
 Bot1.Pass
 Bot2.Pass
