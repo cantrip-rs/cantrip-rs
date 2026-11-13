@@ -1,0 +1,33 @@
+# Elvish Refueler, "Exhaust - {1}{G}: Put a +1/+1 counter on this creature": the {G} is a green symbol, not generic mana.
+# Turn 1: Black Lotus (green) pays for the Refueler. Turn 3: three mana and none of it green (Mox Jet, Mox Ruby and an
+# Island), enough in all, and its first activation is refused: the Refueler stays a 2/3.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Elvish Refueler
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Elvish Refueler.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+? Bot1.Mana = {U}{B}{R}
+! Bot1.Battlefield.Elvish Refueler.Activate(Mana: short)
+
+[Expect]
+Bot1.Battlefield.Elvish Refueler.Power = 2
+Bot1.Battlefield.Elvish Refueler.Toughness = 3

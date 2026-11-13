@@ -1,0 +1,68 @@
+# CR 702.177b's example: Elvish Refueler allows an action only while its controller "haven't begun to activate an exhaust
+# ability this turn". Turn 3: Loot, the Pathfinder (haste) uses its exhaust mana ability (RRR) and the Refueler its exhaust, each
+# for the first time. Turn 5: the Refueler's exhaust is activated again as though it had not been, and while its {1}{G} is
+# being paid Loot's exhaust mana ability, used before, is refused: an exhaust ability has begun to be activated this turn. The
+# Moxen pay instead (4/5). Turn 7: Loot's mana ability is the first exhaust ability of that turn, so it is offered again
+# (RRR), and once it has been activated the Refueler's own exhaust is refused: a mana ability counts as an exhaust ability
+# activated this turn.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Black Lotus
+Elvish Refueler
+Forest
+Loot, the Pathfinder
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Elvish Refueler.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Loot, the Pathfinder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Loot, the Pathfinder.Activate(Ability: Add three mana; Color: Red)
+? Bot1.Mana = {R}{R}{R}
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Elvish Refueler.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Refueler.Power = 3
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Elvish Refueler.Activate
+! Bot1.Battlefield.Loot, the Pathfinder.Activate(Ability: Add three mana)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Refueler.Power = 4
+? Bot1.Battlefield.Elvish Refueler.Toughness = 5
+[T7 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Loot, the Pathfinder.Activate(Ability: Add three mana; Color: Red)
+! Bot1.Battlefield.Elvish Refueler.Activate
+
+[Expect]
+Bot1.Mana = {R}{R}{R}
+Bot1.Battlefield.Elvish Refueler.Power = 4

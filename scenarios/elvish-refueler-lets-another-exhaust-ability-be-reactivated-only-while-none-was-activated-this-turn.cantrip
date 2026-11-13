@@ -1,0 +1,81 @@
+# Elvish Refueler with Greenbelt Guardian ("Exhaust - {3}{G}: Put three +1/+1 counters"): both are cast on turn 1 (Lotus, Emerald, Jet).
+# Turn 3: the Refueler's own exhaust (3/4). Turn 5: the Guardian's exhaust is activated for the first time (5/5), and then the Refueler's
+# is refused with two Forests untapped (an exhaust ability has been activated this turn). Turn 7: the Refueler's is the first
+# exhaust ability of the turn, activated again as though it had not been (4/5), and then the Guardian's, already used on turn 5,
+# is refused with four Moxen untapped. Turn 9: the Guardian's is the first, activated again (8/8); the Refueler's is then refused.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Elvish Refueler
+Greenbelt Guardian
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Elvish Refueler.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Greenbelt Guardian.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Elvish Refueler.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Refueler.Power = 3
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Greenbelt Guardian.Activate(Ability: Exhaust)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Greenbelt Guardian.Power = 5
+! Bot1.Battlefield.Elvish Refueler.Activate
+[T7 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Elvish Refueler.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Refueler.Power = 4
+! Bot1.Battlefield.Greenbelt Guardian.Activate(Ability: Exhaust)
+[T9 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Greenbelt Guardian.Activate(Ability: Exhaust)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Greenbelt Guardian.Power = 8
+! Bot1.Battlefield.Elvish Refueler.Activate
+
+[Expect]
+Bot1.Battlefield.Greenbelt Guardian.Power = 8
+Bot1.Battlefield.Greenbelt Guardian.Toughness = 8
+Bot1.Battlefield.Elvish Refueler.Power = 4
+Bot1.Battlefield.Elvish Refueler.Toughness = 5

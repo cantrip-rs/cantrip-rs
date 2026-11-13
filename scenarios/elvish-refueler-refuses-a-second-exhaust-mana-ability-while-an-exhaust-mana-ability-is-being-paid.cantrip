@@ -1,0 +1,75 @@
+# CR 702.177b's own example, with the exhaust ability begun first a mana ability (which never goes on the stack, CR 605.3a):
+# Elvish Refueler and two Loot, the Pathfinders (the second a Spark Double copy). Turn 3: Loot #1's exhaust mana ability
+# (RRR) and the Refueler's exhaust are used. Turn 5: Spark Double copies Loot and its exhaust mana ability is used. Turn 7,
+# with an empty pool, Loot #1's exhaust mana ability is activated again under the Refueler's permission; while its {G} is
+# being paid, Loot #2's exhaust mana ability, used before, is refused: an exhaust ability has begun to be activated this
+# turn. Loot #1 cannot pay for itself either. A Forest pays the {G} and Loot #1 adds RRR.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Black Lotus
+Elvish Refueler
+Forest
+Loot, the Pathfinder
+Spark Double
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Elvish Refueler.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Loot, the Pathfinder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Loot, the Pathfinder.Activate(Ability: Add three mana; Color: Red)
+? Bot1.Mana = {R}{R}{R}
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Elvish Refueler.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Refueler.Power = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Spark Double.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Bot1.Battlefield.Loot, the Pathfinder)
+? Bot1.Battlefield.Loot, the Pathfinder#2.Power = 3
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Loot, the Pathfinder#2.Activate(Ability: Add three mana; Color: Red)
+? Bot1.Mana = {R}{R}{R}
+[T7 Bot1.Upkeep]
+Bot1.Battlefield.Mox Emerald.Activate
+[T7 Bot1.Main1]
+? Bot1.Mana =
+Bot1.Battlefield.Loot, the Pathfinder#1.Activate(Ability: Add three mana; Color: Red)
+! Bot1.Battlefield.Loot, the Pathfinder#2.Activate(Ability: Add three mana; Color: Green)
+! Bot1.Battlefield.Loot, the Pathfinder#1.Activate(Ability: Add three mana; Color: Green)
+Bot1.Battlefield.Forest.Activate
+
+[Expect]
+Bot1.Mana = {R}{R}{R}

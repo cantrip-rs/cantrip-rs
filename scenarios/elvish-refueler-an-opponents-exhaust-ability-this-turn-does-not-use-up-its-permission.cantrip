@@ -1,0 +1,75 @@
+# Elvish Refueler: "as long as you haven't activated an exhaust ability this turn" counts only its controller's activations
+# (CR 702.177b). Turn 3: Bot1 exhausts the Refueler (3/4). Turn 5, Bot1's turn: Bot1 passes in its first main phase and Bot2
+# activates its Greenbelt Guardian's exhaust ability there. With it still on the stack - an exhaust ability on top of the stack
+# that Bot2, not Bot1, has activated - Bot1 has activated none this turn, so it activates the Refueler's again in response as
+# though it had not been (4/5); both resolve (the Guardian 5/5).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Elvish Refueler
+Forest x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Greenbelt Guardian
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Elvish Refueler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Greenbelt Guardian.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Elvish Refueler.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Refueler.Power = 3
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Greenbelt Guardian.Activate(Ability: Exhaust)
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Elvish Refueler.Activate
+? Bot1.Mana =
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Elvish Refueler.Power = 4
+Bot1.Battlefield.Elvish Refueler.Toughness = 5
+Bot2.Battlefield.Greenbelt Guardian.Power = 5
+Stack.Count = 0

@@ -1,0 +1,57 @@
+# Elvish Refueler, {2}{G} 2/3: "During your turn, as long as you haven't activated an exhaust ability this turn, you may activate exhaust
+# abilities as though they haven't been activated" (CR 702.177b) and "Exhaust - {1}{G}: Put a +1/+1 counter on this creature."
+# Turn 1: Refueler is cast off Moxen. Turn 3: the exhaust is activated (3/4) and, with three Moxen untapped, a second activation the
+# same turn is refused (an exhaust ability has been activated this turn). Turn 4 (Bot2's turn): refused (not your turn).
+# Turn 5: it is activated again as though it had not been (4/5), the first exhaust ability of that turn; a second try is refused.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Elvish Refueler
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Elvish Refueler.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Elvish Refueler.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Refueler.Power = 3
+? Bot1.Battlefield.Elvish Refueler.Toughness = 4
+! Bot1.Battlefield.Elvish Refueler.Activate
+[T4 Bot2.Main1]
+Bot2.Pass
+! Bot1.Battlefield.Elvish Refueler.Activate
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Elvish Refueler.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Refueler.Power = 4
+? Bot1.Battlefield.Elvish Refueler.Toughness = 5
+! Bot1.Battlefield.Elvish Refueler.Activate
+
+[Expect]
+Bot1.Battlefield.Elvish Refueler.Power = 4
+Bot1.Battlefield.Elvish Refueler.Toughness = 5
