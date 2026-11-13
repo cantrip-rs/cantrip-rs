@@ -1,0 +1,63 @@
+# Cloudspire Skycycle (Vehicle 2/3, flying, Crew 1): "when this Vehicle enters, distribute two +1/+1 counters among one or two other target Vehicles
+# and/or creatures you control" (CR 601.2d). On turn one Bot1 casts one with Black Lotus and Mox Pearl: Memnite is the only other legal
+# target, so it takes both counters (a share of one, or of three, is refused). On turn three a second Skycycle (Mox Ruby, Mox Pearl, Plains,
+# Mountain) has two targets, the Memnite and the first Skycycle, an uncrewed Vehicle and so not a creature: one counter on each (a total of three is refused;
+# the Skycycle itself is not offered). On turn five a third one, with three other targets in play, puts both counters on the Skycycle that
+# is the one target chosen ("one or two": one is enough).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Black Lotus
+Memnite
+Cloudspire Skycycle
+Cloudspire Skycycle
+Plains
+Mountain
+Cloudspire Skycycle
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cloudspire Skycycle.Cast
+! Bot1.Divide(Memnite: 1)
+! Bot1.Divide(Memnite: 3)
+Bot1.Divide(Memnite: 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Cloudspire Skycycle.Cast
+! Bot1.Divide(Memnite: 1; Cloudspire Skycycle: 2)
+Bot1.Divide(Memnite: 1; Cloudspire Skycycle: 1)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Cloudspire Skycycle.Cast
+Bot1.Divide(Cloudspire Skycycle#2: 2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Memnite.Power = 4
+Bot1.Battlefield.Cloudspire Skycycle#1.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Cloudspire Skycycle#2.Counters.PlusOnePlusOne = 2

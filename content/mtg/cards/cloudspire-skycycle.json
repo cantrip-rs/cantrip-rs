@@ -1,0 +1,11 @@
+{
+  "name": "Cloudspire Skycycle",
+  "manaCost": "{2}{R}{W}",
+  "type": "Artifact — Vehicle",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying\nWhen this Vehicle enters, distribute two +1/+1 counters among one or two other target Vehicles and/or creatures you control.\nCrew 1",
+  "keywords": [
+    "Flying"
+  ]
+}
