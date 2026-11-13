@@ -1,0 +1,57 @@
+# Cloudspire Coordinator (3/1, "when this creature enters, scry 2"; "{T}: create X 1/1 Pilot tokens, where X is the number of Mounts and/or
+# Vehicles that entered the battlefield under your control this turn"): on turn one Bot1 casts it (Mox Ruby, Mox Pearl) and keeps the Plains
+# on top of its library, bottoming the Island (CR 701.22a). On turn three it casts a Bulwark Ox (a Mount) and a Cloudspire Skycycle (a Vehicle),
+# which puts its two counters on the Ox, then taps the Coordinator: X is 2, two Pilots, each 1/1 with the crewing and saddling ability.
+# The Coordinator, a Human Pilot, is neither.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Cloudspire Coordinator
+Black Lotus
+Bulwark Ox
+Cloudspire Skycycle
+Mox Sapphire
+Plains
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cloudspire Coordinator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains | Island)
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bulwark Ox.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Cloudspire Skycycle.Cast
+Bot1.Divide(Bulwark Ox: 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Cloudspire Coordinator.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Pilot Token#1.Power = 1
+Bot1.Battlefield.Pilot Token#2.Power = 1
+Bot1.Battlefield.Cloudspire Coordinator.Tapped = true
+Bot1.Battlefield.Count = 9
+Bot1.Battlefield.Bulwark Ox.Counters.PlusOnePlusOne = 2

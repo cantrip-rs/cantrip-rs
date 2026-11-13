@@ -1,0 +1,58 @@
+# Cloudspire Coordinator: X counts Mounts and Vehicles that entered "under your control this turn". On turn one Bot1 casts the Coordinator and an
+# Air Response Unit (a Vehicle, Black Lotus for white mana). On turn two Bot2 casts its own Air Response Unit and Bot1 taps the Coordinator in
+# response to nothing: Bot2's Vehicle is not Bot1's and Bot1's came last turn, so X is 0 and no Pilot is made. On turn three Bot1 casts a
+# Memnite (an artifact creature, not a Vehicle) and taps the Coordinator again: still none.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Cloudspire Coordinator
+Black Lotus
+Air Response Unit
+Memnite
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Pearl
+Black Lotus
+Air Response Unit
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cloudspire Coordinator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | Island)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Air Response Unit.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Air Response Unit.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Cloudspire Coordinator.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 4
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Cloudspire Coordinator.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Cloudspire Coordinator.Tapped = true
