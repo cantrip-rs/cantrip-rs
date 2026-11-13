@@ -10,16 +10,10 @@ fn destroy_and_gain_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspen
     effects::gain_life(g, item, 1)
 }
 
-/// "You draw a card and gain 2 life."
-fn draw_and_gain_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::draw(g, item, 1)?;
-    effects::gain_life(g, item, 2)
-}
-
 static MODAL: ModalDef = modes(&[
     mode(destroy_and_gain_one, "Destroy target creature with toughness 4 or greater. You gain 1 life.")
         .targets(&[targets::CREATURE_WITH_TOUGHNESS_4_OR_GREATER]),
-    mode(draw_and_gain_two, "You draw a card and gain 2 life."),
+    mode(effects::draw_a_card_and_gain_life::<2>, "You draw a card and gain 2 life."),
 ]);
 
 pub static CARD: CardDef = CardDef { spell: Some(SpellDef::MODAL), modal: Some(&MODAL), ..oracle::SURGICAL_PRECISION };

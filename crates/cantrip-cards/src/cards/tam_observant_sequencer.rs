@@ -2,19 +2,12 @@ use cantrip_api::*;
 use cantrip_mechanics::{effects, prepare, triggers};
 use cantrip_oracle as oracle;
 
-/// "You draw a card and gain 1 life." (CR 121.1, 119.1): one sentence, so the draw and the life gain are done in turn.
-fn draw_and_gain(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::draw(g, item, 1)?;
-    g.end_sentence();
-    effects::gain_life(g, item, 1)
-}
-
 /// Tam's prepare spell (CR 722): not a card here, only ever a copy.
 pub static DEEP_SIGHT: CardDef = CardDef {
     name: "Deep Sight",
     cost: mana("{G}{U}"),
     types: TypeSet::of(&[CardType::Sorcery]),
-    spell: spell(&[], draw_and_gain),
+    spell: spell(&[], effects::draw_a_card_and_gain_life::<1>),
     text: "You draw a card and gain 1 life.",
     ..CardDef::BLANK
 };

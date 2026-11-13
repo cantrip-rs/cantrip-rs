@@ -889,6 +889,14 @@ pub fn gain_life_then_draw<const LIFE: i32, const CARDS: u32>(g: &mut dyn Game, 
     draw(g, item, CARDS)
 }
 
+/// "You draw a card and gain N life" (CR 121.1, 119.1, 608.2c): one sentence, so the draw and the life gain are done in turn.
+/// Tam, Observant Sequencer's Deep Sight (one life), Spider-UK and Surgical Precision (two) and Vigorbloom Charm (three) print it.
+pub fn draw_a_card_and_gain_life<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    draw(g, item, 1)?;
+    g.end_sentence();
+    gain_life(g, item, N)
+}
+
 /// "You draw a card and lose 1 life" (CR 121.1, 119.3): the controller draws, then loses the life. Plumb the Forbidden,
 /// Robot Domination (before its counter) and Elegy Acolyte print it.
 pub fn draw_a_card_and_lose_1_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -1626,6 +1634,16 @@ pub fn add_one_mana_of_any_color(g: &mut dyn Game, item: &StackItem) -> Result<(
 pub fn each_opponent_discards_a_card(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let opponents: Vec<PlayerId> = g.state().apnap().filter(|&p| p != item.controller).collect();
     crate::each_discards_a_card(g, &opponents, item.object)?;
+    Ok(())
+}
+
+/// "Each opponent discards a card and loses N life" (CR 701.9, 119.3, 608.2c): the discard is the first sentence of the
+/// instruction, the life loss follows whether or not anyone could discard (ruling 2023-09-01), every opponent losing it
+/// together. Hopeless Nightmare and Arbiter of Woe print it of 2.
+pub fn each_opponent_discards_a_card_and_loses_life<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    each_opponent_discards_a_card(g, item)?;
+    g.end_sentence();
+    g.each_opponent_loses_life(item.controller, N);
     Ok(())
 }
 
