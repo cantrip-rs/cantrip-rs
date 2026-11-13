@@ -1,0 +1,48 @@
+# Two chosen creatures cost four mana together; an insufficient payment untaps neither, while the full payment untaps both (CR 118.12, 701.26b).
+[Bot1 Deck]
+Black Lotus
+Mudslide
+Mox Sapphire
+Mox Pearl
+Memnite
+Phyrexian Walker
+Sol Ring
+Island x20
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Mudslide.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Attack(Memnite; Phyrexian Walker > Bot2)
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite; Phyrexian Walker)
+Bot1.Battlefield.Sol Ring.Activate
+! Bot1.PayCost
+Bot1.Decline
+? Bot1.Battlefield.Memnite.Tapped = true
+? Bot1.Battlefield.Phyrexian Walker.Tapped = true
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite; Phyrexian Walker)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Battlefield.Phyrexian Walker.Tapped = false

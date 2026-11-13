@@ -1,0 +1,61 @@
+# Ground creatures stay tapped while flying creatures untap; each player can choose and pay or decline during their upkeep (CR 502.3, 603.2).
+[Bot1 Deck]
+Black Lotus
+Mudslide
+Mox Sapphire
+Mox Pearl
+Memnite
+Ornithopter
+Phyrexian Walker
+Island x20
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Memnite
+Ornithopter
+Island x24
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Mudslide.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite; Ornithopter > Bot2)
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite; Ornithopter > Bot1)
+[T5 Bot1.Upkeep]
+? Bot1.Battlefield.Memnite.Tapped = true
+? Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Ornithopter)
+! Bot1.Choose(Phyrexian Walker)
+! Bot1.Choose(Mox Pearl)
+! Bot1.Choose(Bot2.Battlefield.Memnite)
+Bot1.Choose(Bot1.Battlefield.Memnite)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+? Bot1.Mana =
+? Bot1.Battlefield.Memnite.Tapped = false
+[T6 Bot2.Upkeep]
+? Bot2.Battlefield.Memnite.Tapped = true
+? Bot2.Battlefield.Ornithopter.Tapped = false
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Bot2.Battlefield.Memnite)
+Bot2.Decline
+[Expect]
+Bot2.Battlefield.Memnite.Tapped = true
+Bot1.Battlefield.Memnite.Tapped = false
