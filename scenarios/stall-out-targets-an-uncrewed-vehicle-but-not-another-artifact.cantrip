@@ -1,0 +1,41 @@
+# Stall Out: "target creature or Vehicle". Bot2's Smuggler's Copter is a Vehicle that is not a creature (nobody crewed it) and is a
+# legal target (CR 205.3g): it is tapped and gets three stun counters, which also keeps it from untapping next turn (CR 122.1d).
+# Bot2's Sol Ring is an artifact that is neither, so it is refused as a target.
+
+[Bot1 Deck]
+Island
+Mox Pearl
+Stall Out
+Island x17
+
+[Bot2 Deck]
+Mox Pearl
+Sol Ring
+Smuggler's Copter
+Island x17
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Hand.Smuggler's Copter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Stall Out.Cast(Bot2.Battlefield.Sol Ring)
+Bot1.Hand.Stall Out.Cast(Bot2.Battlefield.Smuggler's Copter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Smuggler's Copter.Tapped = true
+Bot2.Battlefield.Smuggler's Copter.Counters.Stun = 3
+Bot2.Battlefield.Sol Ring.Counters.Stun = (absent)

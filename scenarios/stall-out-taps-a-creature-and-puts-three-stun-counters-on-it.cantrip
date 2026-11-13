@@ -1,0 +1,38 @@
+# Stall Out: "Tap target creature or Vehicle, then put three stun counters on it." Bot2's Ornithopter is tapped and gets three stun
+# counters. In Bot2's next untap step the stun counter is removed instead of untapping (CR 122.1d), so it stays tapped with two
+# counters. Bot1's own Ornithopter could be chosen too (any creature), but Bot2's Island is a land and is refused as a target.
+
+[Bot1 Deck]
+Island
+Mox Pearl
+Stall Out
+Island x17
+
+[Bot2 Deck]
+Ornithopter
+Island
+Island x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Stall Out.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Stall Out.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = 3
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = 2
+
+[Expect]
+Bot1.Graveyard = Stall Out
