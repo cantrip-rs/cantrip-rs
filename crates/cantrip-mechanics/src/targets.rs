@@ -107,6 +107,15 @@ fn any_target_other_than_those_chosen_filter(q: &dyn Query, asker: &Asker, t: Ta
 pub const ANY_TARGET_OTHER_THAN_THOSE_CHOSEN: TargetSpec = target(any_target_other_than_those_chosen_filter);
 pub const CREATURE: TargetSpec = target(creature_filter);
 
+/// "Target Wall creature" (CR 115.1, 205.3m): any controller's Wall creature on the battlefield.
+/// Glyph of Life and Glyph of Doom print it. The subtype is read through the source's text (CR 612.2).
+pub const WALL_CREATURE: TargetSpec = target(wall_creature_filter);
+
+fn wall_creature_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_filter(q, asker, t)
+        && matches!(t, Target::Object(id) if q.chars(id).has_subtype(q.words(asker.source).subtype(Subtype::Wall)))
+}
+
 /// "Creature defending player controls" for a trigger about an attacking creature (its subject): the ability refers to the
 /// attacking creature and a defending player, so that is the player the creature attacked, or the controller of the
 /// planeswalker or the protector of the battle it attacked as it attacked - still so once that planeswalker has changed
