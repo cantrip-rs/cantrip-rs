@@ -1,0 +1,8 @@
+{
+  "name": "Vampire Neonate",
+  "manaCost": "{B}",
+  "type": "Creature — Vampire",
+  "power": 0,
+  "toughness": 3,
+  "oracleText": "{2}, {T}: Each opponent loses 1 life and you gain 1 life."
+}

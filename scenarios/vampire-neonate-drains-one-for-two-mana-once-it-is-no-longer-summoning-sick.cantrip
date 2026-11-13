@@ -1,0 +1,44 @@
+# Vampire Neonate ({B}, 0/3): "{2}, {T}: Each opponent loses 1 life and you gain 1 life" (CR 119.3, 302.6, 602.5). On turn 1 it is summoning sick, so the ability is refused with the
+# mana for it available; on turn 3 two mana pay it exactly (the pool ends empty) and Bot2 is at 19, Bot1 at 21; tapped, it cannot be activated again.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Vampire Neonate
+Mox Sapphire
+Mox Emerald
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vampire Neonate.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Vampire Neonate.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Vampire Neonate.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Vampire Neonate.Activate
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 19
+Bot1.Battlefield.Vampire Neonate.Tapped = true
