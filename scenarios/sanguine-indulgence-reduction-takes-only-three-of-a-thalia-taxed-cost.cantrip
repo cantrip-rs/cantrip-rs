@@ -1,0 +1,53 @@
+# Sanguine Indulgence ({3}{B}): "This spell costs {3} less to cast if you've gained 3 or more life this turn." The reduction is {3}, not "all the generic mana" (CR 601.2f: increases
+# apply first, then reductions). With Bot2's Thalia, Guardian of Thraben adding {1} to noncreature spells, after Bot1 gains 3 life (Healing Salve, 20 -> 23) the spell costs
+# {4}{B} - {3} = {1}{B}: Mox Jet's {B} and the Swamp's {B} pay it all, and nothing is left in the pool.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Swamp
+Healing Salve
+Sanguine Indulgence
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Thalia, Guardian of Thraben
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Thalia, Guardian of Thraben.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Bot1.Mana =
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+? Bot1.Mana = {B}{B}
+Bot1.Hand.Sanguine Indulgence.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 23
+Bot1.Graveyard = Sanguine Indulgence; Healing Salve

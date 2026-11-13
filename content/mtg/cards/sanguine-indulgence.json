@@ -1,0 +1,6 @@
+{
+  "name": "Sanguine Indulgence",
+  "manaCost": "{3}{B}",
+  "type": "Sorcery",
+  "oracleText": "This spell costs {3} less to cast if you've gained 3 or more life this turn.\nReturn up to two target creature cards from your graveyard to your hand."
+}

@@ -1,0 +1,40 @@
+# Sanguine Indulgence: "This spell costs {3} less to cast if you've gained 3 or more life this turn." (CR 601.2f, 118.7) Two life is not three. Bot1's Moment of Craving shrinks their own Memnite (-2/-2,
+# so it dies) and gains 2 life (20 -> 22): with a single {B} left (the second Mox Jet) Sanguine Indulgence still costs {3}{B}, and casting it is refused.
+
+[Bot1 Deck]
+Memnite
+Mox Jet
+Mox Jet
+Mox Pearl
+Moment of Craving
+Island
+Island
+Sanguine Indulgence
+Island x20
+
+[Bot2 Deck]
+Island x23
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Moment of Craving.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Sanguine Indulgence.Cast(Mana: short)
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 22
+Bot1.Graveyard = Memnite; Moment of Craving
+Bot1.Hand = Island; Island; Sanguine Indulgence

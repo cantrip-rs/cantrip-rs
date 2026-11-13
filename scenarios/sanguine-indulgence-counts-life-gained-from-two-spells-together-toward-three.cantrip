@@ -1,0 +1,51 @@
+# Sanguine Indulgence: "This spell costs {3} less to cast if you've gained 3 or more life this turn." (CR 601.2f, 118.7, 119.3) The life gained is added up over the whole turn. Bot1 shrinks both of their own
+# Memnites with two Moments of Craving, gaining 2 life each time (20 -> 24, neither gain being 3 on its own). Sanguine Indulgence then costs just {B} (the Mox Jet, nothing left in the pool)
+# and brings both Memnites back to hand.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Memnite
+Memnite
+Moment of Craving
+Moment of Craving
+Sanguine Indulgence
+Island x20
+
+[Bot2 Deck]
+Island x23
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Moment of Craving.Cast(Bot1.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+Bot1.Hand.Moment of Craving.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 24
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sanguine Indulgence.Cast
+! Bot1.Target(Bot1.Graveyard.Black Lotus)
+! Bot1.Target(Bot1.Graveyard.Moment of Craving)
+Bot1.Target(Bot1.Graveyard.Memnite#1; Bot1.Graveyard.Memnite#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 24
+Bot1.Hand = Memnite; Memnite

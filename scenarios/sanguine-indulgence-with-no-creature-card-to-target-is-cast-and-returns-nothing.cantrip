@@ -1,0 +1,26 @@
+# Sanguine Indulgence: "Return up to two target creature cards from your graveyard to your hand." (CR 601.2c, 115.1a) "Up to two" includes none: with no creature card in any graveyard the spell is
+# still cast (Black Lotus and a Mox Jet pay the full {3}{B}, nothing was gained this turn), resolves and returns nothing; the Black Lotus in the graveyard is not a creature card.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Sanguine Indulgence
+Island x20
+
+[Bot2 Deck]
+Island x23
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Sanguine Indulgence.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Sanguine Indulgence; Black Lotus
+Bot1.Hand.Count = 4
