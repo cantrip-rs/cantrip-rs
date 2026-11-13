@@ -1,0 +1,75 @@
+# Risen Necroregent's "Max speed — At the beginning of your end step, create a 2/2 black Zombie creature token" works only
+# while it is on the battlefield (CR 702.178a, 113.6): unlike Mutant Surveyor's, it does not work from the graveyard. Cast on
+# turn 1 (speed 1), a Lightning Bolt to Bot2 on turns 1, 3 and 5 takes Bot1 to max speed on turn 5, and Bot1 then has Diabolic
+# Edict make itself sacrifice its only creature, the Necroregent. At max speed but with the card in the graveyard, the end
+# steps of turns 5 and 7 make no Zombie.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Risen Necroregent
+Lightning Bolt
+Diabolic Edict
+Lightning Bolt
+Lightning Bolt
+Mountain x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Risen Necroregent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Diabolic Edict.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Diabolic Edict; Risen Necroregent; Lightning Bolt; Lightning Bolt; Lightning Bolt; Black Lotus
+[T6 Bot2.Main1]
+? Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby
+[T8 Bot2.Main1]
+
+[Expect]
+Turn = 8
+Bot1.Speed = 4
+Bot2.Life = 11
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Battlefield.Count = 3

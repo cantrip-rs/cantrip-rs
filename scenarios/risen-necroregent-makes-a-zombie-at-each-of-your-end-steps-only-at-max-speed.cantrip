@@ -1,0 +1,81 @@
+# Risen Necroregent {4}{B}, 5/4: Start your engines!; "Max speed — At the beginning of your end step, create a 2/2 black Zombie
+# creature token" (CR 702.178a-b: a triggered ability granted to the card at speed 4). Cast on turn 1 (Black Lotus {B}{B}{B}
+# + Mox Jet + Mox Pearl, exactly {4}{B}), speed 1; a Lightning Bolt to Bot2 on turns 1, 3 and 5 (Mox Ruby) raises it once a
+# turn to 2, 3, 4 (CR 702.179d). The end steps of turns 1 and 3 make no Zombie. Turn 5's end step is the first at speed 4:
+# one Zombie. Bot2's end step on turn 6 makes none ("your end step"); turn 7's makes the second.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Risen Necroregent
+Lightning Bolt
+Mountain
+Lightning Bolt
+Lightning Bolt
+Mountain x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Risen Necroregent.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Count = 4
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Count = 4
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Count = 5
+? Bot1.Battlefield.Zombie Token.Power = 2
+? Bot1.Battlefield.Zombie Token.Toughness = 2
+? Bot1.Battlefield.Zombie Token.Colors = Black
+? Bot1.Battlefield.Zombie Token.Subtypes = Zombie
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Count = 5
+[T8 Bot2.Main1]
+? Bot1.Battlefield.Count = 6
+
+[Expect]
+Turn = 8
+Bot1.Speed = 4
+Bot2.Life = 11
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Risen Necroregent; Zombie Token; Zombie Token
