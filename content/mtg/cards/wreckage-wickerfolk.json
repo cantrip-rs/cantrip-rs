@@ -1,0 +1,11 @@
+{
+  "name": "Wreckage Wickerfolk",
+  "manaCost": "{1}{B}",
+  "type": "Artifact Creature — Scarecrow",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Flying\nWhen this creature enters, surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)",
+  "keywords": [
+    "Flying"
+  ]
+}

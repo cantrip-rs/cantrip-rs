@@ -1,0 +1,37 @@
+# Wreckage Wickerfolk {1}{B}: Flying; "When this creature enters, surveil 2." It is a 1/3 with flying. The top TWO cards are
+# looked at (CR 701.25a): Bot1 keeps Lightning Bolt on top and puts the second, Counterspell, into the graveyard, while the
+# third card (an Island) is not seen. Paid exactly from Mox Jet {B} and Mox Ruby {1}.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Wreckage Wickerfolk
+Island x4
+Lightning Bolt
+Counterspell
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wreckage Wickerfolk.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Lightning Bolt | Counterspell)
+? Bot1.Graveyard = Counterspell
+? Bot1.Library = Lightning Bolt; Island
+
+[Expect]
+Bot1.Graveyard = Counterspell
+Bot1.Library = Lightning Bolt; Island
+Bot1.Battlefield.Wreckage Wickerfolk.Power = 1
+Bot1.Battlefield.Wreckage Wickerfolk.Toughness = 3
+Bot1.Battlefield.Wreckage Wickerfolk.Keywords = Flying
