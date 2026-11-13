@@ -1,0 +1,49 @@
+# Burner Rocket's "Crew 1": cast on turn 1 off two Moxen beside an Ornithopter (power 0), whose enters trigger has the Ornithopter as its only
+# creature to target. On turn 3 the Ornithopter alone cannot crew it (refusal: total power 0 is under 1); a Zephyr Sprite (power exactly 1)
+# can, and the crewed Rocket attacks for its power of 3 (Bot2: 17). The Rocket is a creature only once crewed.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Ornithopter
+Burner Rocket
+Zephyr Sprite
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Burner Rocket.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Burner Rocket.Types = Artifact
+! Bot1.Battlefield.Burner Rocket.Activate(Ability: Crew)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Burner Rocket.Activate(Ability: Crew)
+Bot1.Choose(Zephyr Sprite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Burner Rocket > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Zephyr Sprite.Tapped = true
+Bot1.Battlefield.Ornithopter.Tapped = false

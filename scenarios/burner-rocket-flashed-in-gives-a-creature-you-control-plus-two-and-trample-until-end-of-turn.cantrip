@@ -1,0 +1,54 @@
+# Burner Rocket (3/1 flash Vehicle): flashed in during Bot2's turn 2 with two creatures of Bot1's (a Savannah Lions 2/1 and an Ornithopter 0/2)
+# and Bot2's Ornithopter on the battlefield. Its enters trigger targets "a creature you control": Bot2's Ornithopter is refused (and the
+# Rocket is no creature), Bot1's Lions is chosen and becomes a 4/1 with trample (CR 611.2a), the other creatures unchanged; on
+# turn 3 the effect has ended.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Savannah Lions
+Ornithopter
+Burner Rocket
+Island
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Burner Rocket.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+! Bot1.Target(Bot1.Battlefield.Burner Rocket)
+Bot1.Target(Bot1.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Savannah Lions.Power = 4
+? Bot1.Battlefield.Savannah Lions.Toughness = 1
+? Bot1.Battlefield.Savannah Lions.Keywords = Trample
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Power = 0
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Savannah Lions.Power = 2
+Bot1.Battlefield.Savannah Lions.Toughness = 1
+Bot1.Battlefield.Savannah Lions.Keywords = (absent)

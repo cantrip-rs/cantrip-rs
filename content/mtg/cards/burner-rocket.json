@@ -1,0 +1,11 @@
+{
+  "name": "Burner Rocket",
+  "manaCost": "{1}{R}",
+  "type": "Artifact — Vehicle",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Flash\nWhen this Vehicle enters, target creature you control gets +2/+0 and gains trample until end of turn.\nCrew 1 (Tap any number of creatures you control with total power 1 or more: This Vehicle becomes an artifact creature until end of turn.)",
+  "keywords": [
+    "Flash"
+  ]
+}
