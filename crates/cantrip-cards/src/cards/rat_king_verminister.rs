@@ -3,15 +3,6 @@ use cantrip_mechanics::triggers::YOUR_END_STEP;
 use cantrip_mechanics::{history, same_name, targets, tokens};
 use cantrip_oracle as oracle;
 
-/// A 1/1 black Rat creature token.
-pub static RAT: CardDef = CardDef {
-    colors: Some(ColorSet::of(Color::Black)),
-    types: TypeSet::of(&[CardType::Creature]),
-    power: Some(1),
-    toughness: Some(1),
-    ..token!(Rat)
-};
-
 /// A Rat, read through this card's words (CR 612): "Sacrifice three Rats".
 fn a_rat(q: &dyn Query, me: &Asker, id: ObjectId) -> bool {
     q.chars(id).has_subtype(q.words(me.source).subtype(Subtype::Rat))
@@ -20,7 +11,7 @@ fn a_rat(q: &dyn Query, me: &Asker, id: ObjectId) -> bool {
 /// "Create a 1/1 black Rat creature token and put a +1/+1 counter on Rat King" (CR 111.1, 122.1): the counter goes on Rat King
 /// if it is still on the battlefield as the object it was (CR 400.7).
 fn make_a_rat_and_grow(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &RAT, 1)?;
+    tokens::create(g, item.controller, &tokens::RAT, 1)?;
     g.end_sentence();
     g.add_counters(item.object, CounterKind::PlusOne, 1);
     Ok(())
@@ -61,4 +52,4 @@ pub static CARD: CardDef = CardDef {
     ..oracle::RAT_KING_VERMINISTER
 };
 
-pub static EXTRA: &[&CardDef] = &[&RAT];
+pub static EXTRA: &[&CardDef] = &[&tokens::RAT];

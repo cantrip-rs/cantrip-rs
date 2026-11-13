@@ -1171,6 +1171,16 @@ pub static BAT: CardDef = CardDef {
     ..token!(Bat)
 };
 
+/// The 1/1 black Rat creature token (CR 111.1). Rat King, Verminister and Revenge of the Rats make it; the card file lists it
+/// in its `EXTRA`.
+pub static RAT: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Black)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Rat)
+};
+
 /// The 1/1 black Rat creature token with "This token can't block." (CR 111.1, 509.1b). Song of Totentanz and Lord Skitter,
 /// Sewer King make it; the card file lists it in its `EXTRA`.
 pub static RAT_CANT_BLOCK: CardDef = CardDef {
