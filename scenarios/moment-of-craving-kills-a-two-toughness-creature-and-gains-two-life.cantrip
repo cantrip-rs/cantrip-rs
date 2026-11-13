@@ -1,0 +1,40 @@
+# "Target creature gets -2/-2 until end of turn. You gain 2 life" (CR 704.5f, 119.3): Moment of Craving, cast with Black Lotus mana, shrinks Bot2's
+# Grizzly Bears (2/2) to 0/0, which dies, and Bot1 gains exactly 2 life (20 -> 22). Bot2's life is untouched.
+
+[Bot1 Deck]
+Black Lotus
+Moment of Craving
+Island x18
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Moment of Craving.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears
+Bot1.Life = 22
+Bot2.Life = 20

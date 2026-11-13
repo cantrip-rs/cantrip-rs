@@ -1,0 +1,6 @@
+{
+  "name": "Moment of Craving",
+  "manaCost": "{1}{B}",
+  "type": "Instant",
+  "oracleText": "Target creature gets -2/-2 until end of turn. You gain 2 life."
+}

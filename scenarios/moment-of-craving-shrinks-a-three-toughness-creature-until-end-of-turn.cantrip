@@ -1,0 +1,49 @@
+# The -2/-2 is exactly two (CR 613.4c): Bot2's Centaur Courser (3/3) becomes a 1/1 and survives, Bot1 still gains 2 life, and at end of turn the Courser is
+# a 3/3 again.
+
+[Bot1 Deck]
+Black Lotus
+Moment of Craving
+Island x18
+
+[Bot2 Deck]
+Mox Pearl
+Mox Emerald
+Mox Jet
+Centaur Courser
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Centaur Courser.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Moment of Craving.Cast(Bot2.Battlefield.Centaur Courser)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Centaur Courser.Power = 1
+? Bot2.Battlefield.Centaur Courser.Toughness = 1
+? Bot1.Life = 22
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Centaur Courser.Power = 3
+Bot2.Battlefield.Centaur Courser.Toughness = 3
+Bot1.Life = 22
