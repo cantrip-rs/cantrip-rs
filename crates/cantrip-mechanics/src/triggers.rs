@@ -2409,6 +2409,14 @@ pub fn you_activate_a_loyalty_ability(q: &dyn Query, me: &Asker, event: &Event) 
     loyalty_ability_you_activated(q, me, event).and(Fired::PLAIN)
 }
 
+/// "Whenever you activate an exhaust ability" (CR 702.177a, 602.2, 603.2): any exhaust ability, of any permanent, that this
+/// ability's controller activates. It sees the activation, so the ability has not resolved and is triggered even if it is countered
+/// or its source is gone. Rangers' Refueler and Adrenaline Jockey print it.
+pub fn you_activate_an_exhaust_ability(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    let (_, player, def) = activation(q, event)?;
+    if player == me.controller && def.exhaust { Fired::PLAIN } else { None }
+}
+
 /// "Whenever an opponent activates an ability of an artifact, creature, or land [on the battlefield] that isn't a mana
 /// ability, ... to that player" (CR 602.2, 603.2): a permanent's ability (one that functions on the battlefield, not
 /// cycling from a hand or embalm from a graveyard), the permanent an artifact, creature or land as it was when the costs
@@ -2705,6 +2713,7 @@ pub const CREATURE_DEALS_COMBAT_DAMAGE_TO_YOU: Trigger = when_asked(EventMask::D
 pub const OPPONENT_ACTIVATES_ABILITY_OF_ARTIFACT_CREATURE_OR_LAND: Trigger =
     when_asked(EventMask::ABILITY_ACTIVATED, opponent_activates_ability_of_artifact_creature_or_land);
 pub const YOU_ACTIVATE_A_LOYALTY_ABILITY: Trigger = when_asked(EventMask::ABILITY_ACTIVATED, you_activate_a_loyalty_ability);
+pub const YOU_ACTIVATE_AN_EXHAUST_ABILITY: Trigger = when_asked(EventMask::ABILITY_ACTIVATED, you_activate_an_exhaust_ability);
 
 /// "Whenever this creature transforms into [this face]" (CR 701.27e): the ability is that face's, so it is there to see
 /// only once the permanent has turned over to it (CR 603.2, 603.6). A permanent that enters with this face up has not
