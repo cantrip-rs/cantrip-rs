@@ -1,0 +1,39 @@
+# The prevention lasts only this turn (CR 611.2a, 615.1) while the counter stays. Flight turns Bot1's Memnite into a 2/2 on turn 3;
+# on turn 4 Bot2's Isamaru (2/2) attacks into it and the block trades: Memnite takes 2 and dies with Isamaru.
+
+[Bot1 Deck]
+Plains
+Memnite
+Fleeting Flight
+Island x14
+
+[Bot2 Deck]
+Mox Pearl
+Isamaru, Hound of Konda
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Isamaru, Hound of Konda.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Fleeting Flight.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Toughness = 2
+[T4 Bot2.Main1]
+Bot2.Attack(Isamaru, Hound of Konda > Bot1)
+Bot1.Block(Memnite > Isamaru, Hound of Konda)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Turn = 4
+Bot1.Life = 20
+Bot1.Graveyard = Memnite; Fleeting Flight
+Bot2.Graveyard = Isamaru, Hound of Konda
