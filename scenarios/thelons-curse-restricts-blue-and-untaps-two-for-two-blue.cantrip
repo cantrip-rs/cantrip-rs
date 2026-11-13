@@ -1,0 +1,52 @@
+# The Curse holds blue creatures tapped, but not a black creature, and its upkeep choice untaps both blue
+# creatures for two blue mana (CR 502.3, 608.2d).
+[Bot1 Deck]
+Thelon's Curse
+Black Lotus
+Mox Sapphire
+Mox Jet
+Merfolk of the Pearl Trident
+Zealous Guardian
+Muck Rats
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Muck Rats.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thelon's Curse.Cast
+? Bot1.Mana = {G}
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Zealous Guardian.Cast
+[T5 Bot1.Main1]
+Bot1.Attack(Merfolk of the Pearl Trident; Zealous Guardian; Muck Rats > Bot2)
+[T7 Bot1.Upkeep]
+? Bot1.Battlefield.Merfolk of the Pearl Trident.Tapped = true
+? Bot1.Battlefield.Zealous Guardian.Tapped = true
+? Bot1.Battlefield.Muck Rats.Tapped = false
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Muck Rats)
+Bot1.Choose(Merfolk of the Pearl Trident; Zealous Guardian)
+Bot1.PayCost
+? Bot1.Mana =
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Merfolk of the Pearl Trident.Tapped = false
+Bot1.Battlefield.Zealous Guardian.Tapped = false
+Bot1.Mana =
