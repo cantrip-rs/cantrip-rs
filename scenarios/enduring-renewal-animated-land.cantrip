@@ -1,0 +1,34 @@
+# An animated land is a creature as it leaves the battlefield, so it returns even though it is a land in the graveyard (CR 603.10a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Enduring Renewal
+Mishra's Factory
+Lightning Bolt
+Mountain
+Plains
+Island x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Enduring Renewal.Cast
+? Bot1.Mana =
+Bot1.Hand.Mishra's Factory.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mishra's Factory.Activate(Ability: {1})
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Mishra's Factory)
+
+[Expect]
+Bot1.Hand = Mishra's Factory; Plains; Island
+Bot1.Graveyard = Lightning Bolt; Black Lotus

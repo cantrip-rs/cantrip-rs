@@ -1,0 +1,30 @@
+# Enduring Renewal reveals a noncreature and draws it instead of replacing the draw again (CR 614.5).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Enduring Renewal
+Plains x4
+Island x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Enduring Renewal.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+? Client.Bot2.OpponentHand = Island; Plains; Plains; Plains; Plains
+? Client.Bot1.OpponentHand =
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Library.Count = 19
+Bot1.Revealed = Island
+Client.Bot2.OpponentHand = Island; Plains; Plains; Plains; Plains
+Client.Bot1.OpponentHand =
