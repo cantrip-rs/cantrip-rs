@@ -1,0 +1,44 @@
+# The Path cannot swap a ground blocker onto a flying attacker, though both blockers are valid targets (CR 702.9b).
+[Bot1 Deck]
+Sorrow's Path
+Black Lotus
+Black Lotus
+Serendib Efreet
+Centaur Courser
+Island x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Sorrow's Path.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Serendib Efreet.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Centaur Courser.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Serendib Efreet; Centaur Courser)
+Bot2.Block(Ornithopter > Serendib Efreet; Memnite > Centaur Courser)
+Bot1.Battlefield.Sorrow's Path.Activate
+Bot1.Target(Memnite; Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+? Bot1.Battlefield.Serendib Efreet.Damage = 2
+? Bot1.Battlefield.Centaur Courser.Damage = 2
+Bot1.Pass
+Bot2.Pass
+? Combat.Blocks = Memnite > Centaur Courser; Ornithopter > Serendib Efreet
+[Expect]
+Bot1.Life = 17

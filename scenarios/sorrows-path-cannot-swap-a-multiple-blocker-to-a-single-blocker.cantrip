@@ -1,0 +1,56 @@
+# Blaze of Glory makes Grizzly Bears block all three attackers; Memnite cannot take over all its blocks.
+[Bot1 Deck]
+Sorrow's Path
+Black Lotus x3
+Centaur Courser
+Harrier Naga
+Nessian Courser
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Grizzly Bears
+Memnite
+Blaze of Glory
+Island x20
+[Actions]
+Bot1.Hand.Sorrow's Path.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Harrier Naga.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Nessian Courser.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Centaur Courser.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Centaur Courser; Harrier Naga; Nessian Courser)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Blaze of Glory.Cast(Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+Bot2.Block(Grizzly Bears > Centaur Courser; Grizzly Bears > Harrier Naga; Grizzly Bears > Nessian Courser; Memnite > Centaur Courser)
+Bot1.Battlefield.Sorrow's Path.Activate
+Bot1.Target(Grizzly Bears; Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Combat.Blocks = Grizzly Bears > Centaur Courser; Grizzly Bears > Harrier Naga; Grizzly Bears > Nessian Courser; Memnite > Centaur Courser
+[Expect]
+Bot1.Life = 18
