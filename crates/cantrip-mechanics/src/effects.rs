@@ -634,6 +634,16 @@ pub fn three_plus_one_counters_on_this(g: &mut dyn Game, item: &StackItem) -> Re
     Ok(())
 }
 
+/// "Put that many +1/+1 counters on [this permanent]" (CR 122.1, 603.2c) after a "whenever you ... one or more" trigger
+/// with `.once_per_batch()`: one counter for each object of the batch the trigger saw, counted even for one that has since
+/// left. The ability's source, not a new object once it has left the battlefield (CR 400.7). The whole effect of Marauding
+/// Mako's and Scrounging Skyray's triggers.
+pub fn that_many_plus_one_counters_on_this(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let many = g.event_objects(item).len() as i32;
+    g.add_counters(item.object, CounterKind::PlusOne, many);
+    Ok(())
+}
+
 /// "[This creature] gets +`P`/+`T` until end of turn" (CR 611.2a, 613.4c): a continuous effect from the ability's source, which
 /// does nothing once the source has left the battlefield (CR 400.7). Each resolution adds its own, and they stack. The whole
 /// effect of an ability of Attercop, Basking Rootwalla, Blazing Rootwalla, Boughside Wanderers, Burnout Bashtronaut, Desolation
