@@ -1,0 +1,38 @@
+# The attack trigger asks for two mana on resolution: paying prevents damage, and an unpayable later attack deals exactly three (CR 603.2, 118.12).
+[Bot1 Deck]
+Mox Jet
+Gleemox
+Hasran Ogress
+Memnite
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Hasran Ogress.Cast
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T5 Bot1.DeclareAttackers]
+? Bot1.Life = 20
+Bot1.Attack(Hasran Ogress > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.PayCost
+? Bot1.Mana =
+? Bot1.Life = 20
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Hasran Ogress > Bot2)
+[T7 Bot1.Main2]
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 13

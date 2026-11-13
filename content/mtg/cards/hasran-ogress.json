@@ -1,0 +1,8 @@
+{
+  "name": "Hasran Ogress",
+  "manaCost": "{B}{B}",
+  "type": "Creature — Ogre",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Whenever this creature attacks, it deals 3 damage to you unless you pay {2}."
+}

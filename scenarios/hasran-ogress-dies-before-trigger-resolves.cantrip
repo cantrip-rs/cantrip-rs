@@ -1,0 +1,29 @@
+# Killing the Ogress in response to its attack trigger does not stop it dealing damage using last known information (CR 113.7a).
+[Bot1 Deck]
+Mox Jet
+Gleemox
+Hasran Ogress
+Swamp x20
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Hasran Ogress.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Hasran Ogress > Bot2)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Hasran Ogress)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 20
+Bot1.Graveyard = Hasran Ogress
