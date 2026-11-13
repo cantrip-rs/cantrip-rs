@@ -1,0 +1,36 @@
+# A pump effect applied before the upkeep ability modifies the new base toughness (CR 613.4c).
+[Bot1 Deck]
+Wall of Tombstones
+Mox Jet
+Mox Emerald
+Walking Ballista x2
+Ornithopter
+Giant Growth
+Swamp x15
+
+[Bot2 Deck]
+Walking Ballista
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Walking Ballista.Cast(X: 0)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wall of Tombstones.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Walking Ballista.Cast(X: 0)
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Wall of Tombstones)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Wall of Tombstones.Power = 3
+Bot1.Battlefield.Wall of Tombstones.Toughness = 5
