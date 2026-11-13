@@ -1,0 +1,39 @@
+# Haunt the Network: "Create two 1/1 colorless Thopter artifact creature tokens with flying. Then the chosen player loses X
+# life and you gain X life, where X is the number of artifacts you control." Bot1 has Mox Sapphire and Mox Jet, and pays
+# the rest with Black Lotus, which sacrifices itself; Bot2 controls Mox Pearl and Ornithopter. X is counted after the
+# tokens exist (CR 608.2h) and counts only Bot1's artifacts: Mox Sapphire, Mox Jet and two Thopters, 4 - not the Lotus
+# that is gone, nor Bot2's two.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Black Lotus
+Haunt the Network
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Haunt the Network.Cast(Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Haunt the Network; Black Lotus
+Bot1.Battlefield.Count = 4
+Bot1.Battlefield.Thopter Token#1.Keywords = Flying
+Bot1.Battlefield.Thopter Token#2.Keywords = Flying
+Bot2.Life = 16
+Bot1.Life = 24

@@ -1,0 +1,6 @@
+{
+  "name": "Haunt the Network",
+  "manaCost": "{3}{U}{B}",
+  "type": "Sorcery",
+  "oracleText": "Choose target opponent. Create two 1/1 colorless Thopter artifact creature tokens with flying. Then the chosen player loses X life and you gain X life, where X is the number of artifacts you control."
+}

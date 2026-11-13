@@ -1,0 +1,43 @@
+# Haunt the Network's only target is the chosen opponent. When that opponent is an illegal target as it resolves (CR 608.2b),
+# it doesn't resolve: no Thopters are made and Bot1 gains nothing. Bot1 casts it at Bot2, who answers with Dawn's Truce,
+# giving themself hexproof. Bot1's Mox Sapphire and Mox Jet and Bot2's life stay as they were. Bot1 also can't name
+# themself: Haunt the Network is not offered with Bot1 as its target (CR 115.1, "target opponent").
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Black Lotus
+Haunt the Network
+Island x20
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Dawn's Truce
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Haunt the Network.Cast(Bot1)
+Bot1.Hand.Haunt the Network.Cast(Bot2)
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Dawn's Truce.Cast
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Haunt the Network; Black Lotus
+Bot1.Battlefield.Count = 2
+Bot2.Graveyard = Dawn's Truce
+Bot2.Life = 20
+Bot1.Life = 20
