@@ -14,8 +14,9 @@ pub fn life_totals(g: &mut dyn Game, a: PlayerId, b: PlayerId) -> u32 {
         return 0;
     }
     let difference = (before_a - before_b).abs();
-    g.lose_life(loser, difference);
-    g.gain_life(gainer, difference);
+    // One simultaneous change of both life totals (CR 701.12c, 101.4): replaced in APNAP order before either changes, and
+    // announced together.
+    g.together(Together { life: &[(loser, -difference), (gainer, difference)], ..Together::default() });
     (before_a - g.state().player(a).life).max(0).unsigned_abs()
 }
 
