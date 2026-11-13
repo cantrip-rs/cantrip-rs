@@ -1,0 +1,27 @@
+# Losing the flip removes the Djinn from combat but its attack still triggers Ingris to deal one damage (CR 603.2, 506.4).
+[Bot1 Deck]
+Mijae Djinn
+Ingris Stingerquill
+Black Lotus x2
+Mox Jet
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Dice]
+2
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Mijae Djinn.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ingris Stingerquill.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Mijae Djinn > Bot2)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Mijae Djinn.Tapped = true

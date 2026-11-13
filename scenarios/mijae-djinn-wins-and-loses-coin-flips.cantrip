@@ -1,0 +1,37 @@
+# The attack trigger loses on turn 3 and removes and taps the vigilant Djinn; a won flip on turn 5 leaves it attacking (CR 603.2, 506.4).
+[Bot1 Deck]
+Mijae Djinn
+Black Lotus
+Mox Pearl
+Dig Site Inventory
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Dice]
+2; 1
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Mijae Djinn.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dig Site Inventory.Cast(Mijae Djinn)
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Mijae Djinn > Bot2)
+? Stack.Count = 1
+? Bot1.Battlefield.Mijae Djinn.Tapped = false
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mijae Djinn.Tapped = true
+? Combat.Attackers.Count = 0
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Mijae Djinn > Bot2)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Mijae Djinn.Tapped = true
