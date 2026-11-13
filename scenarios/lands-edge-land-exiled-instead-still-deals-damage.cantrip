@@ -1,0 +1,32 @@
+# A discarded land exiled by Rest in Peace still pays the cost and makes Land's Edge deal damage.
+[Bot1 Deck]
+Black Lotus
+Land's Edge
+Mox Pearl
+Mox Sapphire
+Rest in Peace
+Mountain
+Plains
+Plains x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Land's Edge.Cast
+? Bot1.Mana =
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Rest in Peace.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Land's Edge.Activate(Bot2)
+Bot1.Choose(Mountain)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Life = 18
+Exile = Black Lotus; Mountain

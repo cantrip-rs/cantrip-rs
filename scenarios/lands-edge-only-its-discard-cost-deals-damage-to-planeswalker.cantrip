@@ -1,0 +1,37 @@
+# Sarkhan's discard does not trigger Land's Edge; discarding a land to its ability damages Sarkhan instead of a player.
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Land's Edge
+Sarkhan, Fireblood
+Mountain
+Island x20
+[Bot2 Deck]
+Mountain
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Land's Edge.Cast
+? Bot1.Mana =
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sarkhan, Fireblood.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Sarkhan, Fireblood.Activate(Ability: discard a card)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mountain)
+? Bot1.Life = 20
+? Bot2.Life = 20
+? Bot1.Battlefield.Sarkhan, Fireblood.Counters.Loyalty = 4
+[T2 Bot2.Main1]
+Bot2.Battlefield.Land's Edge.Activate(Bot1.Battlefield.Sarkhan, Fireblood)
+Bot2.Choose(Mountain)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Sarkhan, Fireblood.Counters.Loyalty = 2
+Bot1.Life = 20
+Bot2.Life = 20
