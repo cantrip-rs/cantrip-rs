@@ -1,0 +1,11 @@
+{
+  "name": "Mischievous Pup",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Dog",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Flash (You may cast this spell any time you could cast an instant.)\nWhen this creature enters, return up to one other target permanent you control to its owner's hand.",
+  "keywords": [
+    "Flash"
+  ]
+}

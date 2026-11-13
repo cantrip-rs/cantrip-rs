@@ -1,0 +1,40 @@
+# Mischievous Pup: "Flash. When this creature enters, return up to one other target permanent you control to its owner's hand"
+# (CR 400.3, 115.1). At the end of Bot2's turn 2 Bot1 cannot cast
+# the second Memnite, a creature without flash (a positive control), but the Pup's flash lets Bot1 cast the Pup then, and its
+# enters trigger returns the first Memnite to hand. The Pup stays, a 3/1 Dog; the Moxen stay.
+
+[Bot1 Deck]
+Mischievous Pup
+Memnite
+Memnite
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Plains x10
+
+[Bot2 Deck]
+Plains x13
+
+[Actions]
+Bot1.Hand.Memnite#1.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.End]
+! Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Mischievous Pup.Cast
+! Bot1.Target(Mischievous Pup)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Pearl; Mox Pearl; Mox Pearl; Mischievous Pup
+Bot1.Battlefield.Mischievous Pup.Power = 3
+Bot1.Battlefield.Mischievous Pup.Toughness = 1
+Bot1.Battlefield.Mischievous Pup.Keywords = Flash
+Bot1.Hand = Memnite; Memnite; Plains
