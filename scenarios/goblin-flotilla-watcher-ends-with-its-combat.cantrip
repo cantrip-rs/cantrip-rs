@@ -1,0 +1,58 @@
+# The unpaid Flotilla's "whenever ... this combat" lasts only through that combat: in an additional combat of the same turn,
+# with {R} paid, a creature blocking it does not gain first strike (CR 506.1, 603.7b, 500.8).
+
+[Bot1 Deck]
+Black Lotus
+Goblin Flotilla
+Black Lotus
+Combat Celebrant
+Mountain x20
+
+[Bot2 Deck]
+Black Lotus
+Wall of Wood
+Memnite
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Flotilla.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Combat Celebrant.Cast
+? Bot1.Mana =
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Wall of Wood.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Goblin Flotilla > Bot2; Combat Celebrant > Bot2)
+Bot1.Accept
+Bot2.Block(Memnite > Goblin Flotilla)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Keywords = FirstStrike
+[T3 Bot1.EndCombat]
+Bot1.Pass
+Bot2.Pass
+? Step = BeginCombat
+Bot1.Battlefield.Mountain.Activate
+Bot1.PayCost
+? Bot1.Mana =
+Bot1.Attack(Goblin Flotilla > Bot2)
+Bot2.Block(Wall of Wood > Goblin Flotilla)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Wall of Wood.Keywords = Defender
+
+[Expect]
+Bot2.Graveyard = Memnite; Black Lotus
+Bot2.Battlefield.Wall of Wood.Keywords = Defender
+Bot2.Life = 16

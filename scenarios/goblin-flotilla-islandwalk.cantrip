@@ -1,0 +1,24 @@
+# Islandwalk prevents blocking while the defending player controls an Island (CR 702.14c).
+[Bot1 Deck]
+Goblin Flotilla
+Black Lotus
+Mountain x20
+[Bot2 Deck]
+Ornithopter x2
+Island
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Flotilla.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Goblin Flotilla > Bot2)
+! Bot2.Block(Ornithopter#1 > Goblin Flotilla)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 18

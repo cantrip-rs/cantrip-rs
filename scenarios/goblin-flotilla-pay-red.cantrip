@@ -1,0 +1,33 @@
+# Paying red at the beginning of combat prevents the blocker from gaining first strike (CR 603.2).
+[Bot1 Deck]
+Goblin Flotilla
+Black Lotus
+Mountain
+Mountain x20
+[Bot2 Deck]
+Black Lotus
+Wall of Wood
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Flotilla.Cast
+? Bot1.Mana =
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Wall of Wood.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Battlefield.Mountain.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Goblin Flotilla > Bot2)
+Bot2.Block(Wall of Wood > Goblin Flotilla)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Wall of Wood.Keywords = Defender
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Wall of Wood.Damage = 2
