@@ -1,0 +1,38 @@
+# Herald of Faith (4/3 flying): "Whenever this creature attacks, you gain 2 life." (CR 508.1m, 603.2.)
+# Bot1 pays exactly {3}{W}{W} (Black Lotus and two Mox Pearls) on turn 1, then attacks on turns 3 and 5: each attack trigger gains
+# 2 life (20 -> 22 -> 24) and the unblocked 4/3 hits Bot2 for 4 each time. Nothing is gained on turn 1 or 2, before it attacks.
+
+[Bot1 Deck]
+Herald of Faith
+Black Lotus
+Mox Pearl x2
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Herald of Faith.Cast(Spend: W, W, W, W, W)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+? Bot1.Battlefield.Herald of Faith.Keywords = Flying
+[T3 Bot1.Main1]
+Bot1.Attack(Herald of Faith > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Life = 22
+? Bot2.Life = 16
+[T5 Bot1.Main1]
+Bot1.Attack(Herald of Faith > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 24
+Bot2.Life = 12
