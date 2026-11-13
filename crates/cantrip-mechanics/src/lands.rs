@@ -34,6 +34,18 @@ pub fn printed(n: u16) -> Subtype {
     Subtype::ALL.into_iter().find(|&s| s as u16 == n).expect("a subtype's number")
 }
 
+/// "Creatures with [landwalk] can be blocked as though they didn't have [landwalk]" (CR 702.14, 509.1b).
+/// Deadfall names forestwalk and Crevasse names mountainwalk. `TYPE` is `sub(Subtype::Forest)` or the
+/// other printed land type, read through the rule source's text (CR 612.2). Matching includes snow landwalk.
+pub fn named_landwalk_exception<const TYPE: u16>(q: &dyn Query, asker: &Asker, _: ObjectId, attacker: ObjectId) -> Keywords {
+    let chars = q.chars(attacker);
+    if !chars.is(CardType::Creature) { return Keywords::NONE; }
+    match Keyword::landwalk(word(q, asker.source, TYPE)) {
+        Some(walk) if chars.keywords.matches(walk) => Keywords::of(&[walk]),
+        _ => Keywords::NONE,
+    }
+}
+
 /// Whether `controller` controls a permanent with the land type `land_type`, through the layers (CR 305.6, 613). Arena of
 /// Glory, Castle Locthwain and Shifting Woodland's "unless you control a [land type]" and Cori Mountain Monastery's "unless
 /// you control a Plains or an Island" ask it.
