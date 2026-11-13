@@ -1,0 +1,44 @@
+# The Gate taps its enchanted land and gives only the controller's current attackers +2/-1 through cleanup (CR 611.2a).
+
+[Bot1 Deck]
+Tourach's Gate
+Black Lotus
+Swamp
+Ornithopter
+Memnite
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tourach's Gate.Cast(Bot1.Battlefield.Swamp)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Battlefield.Tourach's Gate.Activate(Ability: Tap enchanted)
+Bot1.Choose(Swamp)
+? Bot1.Battlefield.Swamp.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 1
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+! Bot1.Battlefield.Tourach's Gate.Activate(Ability: Tap enchanted)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot2.Life = 18

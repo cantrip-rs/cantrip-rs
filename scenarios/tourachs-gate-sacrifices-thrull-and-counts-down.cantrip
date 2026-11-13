@@ -1,0 +1,46 @@
+# A sacrificed Thrull puts three time counters on the Gate; one is removed each upkeep and the last causes sacrifice (CR 701.21a, 603.2).
+
+[Bot1 Deck]
+Tourach's Gate
+Basal Thrull
+Black Lotus
+Black Lotus
+Swamp
+Ornithopter
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Basal Thrull.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tourach's Gate.Cast(Bot1.Battlefield.Swamp)
+? Bot1.Mana = {B}
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tourach's Gate.AttachedTo = Swamp
+Bot1.Battlefield.Tourach's Gate.Activate(Ability: Sacrifice)
+! Bot1.Choose()
+! Bot1.Choose(Ornithopter)
+Bot1.Choose(Basal Thrull)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tourach's Gate.Counters.Time = 3
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Tourach's Gate.Counters.Time = 2
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Tourach's Gate.Counters.Time = 1
+[T7 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Tourach's Gate; Basal Thrull; Black Lotus; Black Lotus

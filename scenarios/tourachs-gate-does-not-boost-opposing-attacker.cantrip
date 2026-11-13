@@ -1,0 +1,39 @@
+# Activating the Gate during the opponent's combat leaves their attacker unchanged (CR 611.2c).
+
+[Bot1 Deck]
+Tourach's Gate
+Black Lotus
+Swamp
+Ornithopter
+Swamp x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tourach's Gate.Cast(Bot1.Battlefield.Swamp)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+Bot1.Battlefield.Tourach's Gate.Activate(Ability: Tap enchanted)
+Bot1.Choose(Swamp)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Ornithopter.Power = 0
