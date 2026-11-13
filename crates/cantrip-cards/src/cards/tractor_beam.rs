@@ -1,17 +1,10 @@
 use cantrip_api::*;
 use cantrip_mechanics::{
-    attach::{attached_object, attached_to_it, tap_attached},
+    attach::{attached_object, attached_to_it, tap_enchanted},
     targets,
     triggers::THIS_ENTERS,
 };
 use cantrip_oracle as oracle;
-
-/// "When this Aura enters, tap enchanted permanent." The permanent it is attached to as the trigger resolves (CR 303.4m,
-/// 608.2h).
-fn tap_enchanted(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tap_attached(g, item);
-    Ok(())
-}
 
 /// "Enchant creature or Spacecraft" (CR 303.4a): a Spacecraft whether or not it is a creature right now. "You control
 /// enchanted permanent" (CR 613.1b, layer 2): the Aura's controller controls what it is attached to, at the Aura's timestamp
