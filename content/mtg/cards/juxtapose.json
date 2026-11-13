@@ -1,0 +1,6 @@
+{
+  "name": "Juxtapose",
+  "manaCost": "{3}{U}",
+  "type": "Sorcery",
+  "oracleText": "You and target player exchange control of the creature you each control with the greatest mana value. Then exchange control of artifacts the same way. If two or more permanents a player controls are tied for greatest, their controller chooses one of them."
+}

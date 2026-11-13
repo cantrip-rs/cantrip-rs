@@ -1,0 +1,45 @@
+# With Juxtapose cast on Bot2's turn, the active player chooses first (CR 101.4).
+[Bot1 Deck]
+Tundra
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Teferi, Time Raveler
+Memnite
+Juxtapose
+Ornithopter
+Island x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Tundra.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Teferi, Time Raveler.Cast
+Bot1.Battlefield.Tundra.Activate(Ability: {U})
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Teferi, Time Raveler.Activate(Ability: +1)
+[T4 Bot2.Main1]
+Bot2.Pass
+Bot1.Hand.Juxtapose.Cast(Bot2)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Tundra.Activate(Ability: {U})
+Bot2.Choose(Ornithopter)
+Bot1.Choose(Memnite)
+Bot2.Choose(Memnite)
+Bot1.Choose(Mox Pearl)
+[T4 Bot2.Main2]
+[Expect]
+Turn = 4
+Bot2.Battlefield.Mox Pearl.Tapped = false
+Bot2.Battlefield.Ornithopter = (absent)

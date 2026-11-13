@@ -1,0 +1,44 @@
+# Each controller chooses one of their tied greatest creatures; a noncreature or the other player's creature is ineligible (CR 608.2d).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Sol Ring
+Memnite
+Ornithopter
+Juxtapose
+Island x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sol Ring.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Juxtapose.Cast(Bot2)
+? Bot1.Mana =
+! Bot1.Choose(Memnite; Ornithopter)
+! Bot1.Choose()
+! Bot1.Choose(Mox Sapphire)
+! Bot1.Choose(Bot2.Battlefield.Memnite)
+Bot1.Choose(Ornithopter)
+! Bot2.Choose(Memnite; Ornithopter)
+Bot2.Choose(Memnite)
+Bot1.Choose(Sol Ring)
+Bot2.Choose(Ornithopter)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield = Memnite; Memnite; Mox Jet; Mox Sapphire; Ornithopter
+Bot2.Battlefield = Ornithopter; Sol Ring

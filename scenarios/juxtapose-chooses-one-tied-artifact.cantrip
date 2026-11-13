@@ -1,0 +1,35 @@
+# Each controller exchanges only one of their greatest artifacts, even when two are tied (CR 701.12a).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Sol Ring
+Sol Ring
+Juxtapose
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Sol Ring.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Juxtapose.Cast(Bot2)
+? Bot1.Mana =
+! Bot1.Choose(Sol Ring#1; Sol Ring#2)
+! Bot1.Choose()
+Bot1.Choose(Sol Ring)
+Bot2.Choose(Mox Ruby)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Sapphire; Sol Ring
+Bot2.Battlefield = Sol Ring

@@ -1,0 +1,37 @@
+# The creature exchange comes first, so the received artifact creature may be exchanged back for a different artifact (CR 701.12a).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Sol Ring
+Memnite
+Juxtapose
+Island x20
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sol Ring.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Juxtapose.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Choose(Memnite)
+Bot2.Choose(Ornithopter)
+Bot1.Choose(Sol Ring)
+Bot2.Choose(Memnite)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield = Memnite; Mox Jet; Mox Sapphire; Ornithopter
+Bot2.Battlefield = Mox Ruby; Sol Ring
