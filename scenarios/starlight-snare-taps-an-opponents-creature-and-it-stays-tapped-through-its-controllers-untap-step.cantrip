@@ -1,0 +1,47 @@
+# Starlight Snare ({2}{U}, Black Lotus's {U}{U}{U}) on Bot2's Memnite: "When this Aura enters, tap enchanted creature" taps it, and "Enchanted
+# creature doesn't untap during its controller's untap step" keeps it tapped through Bot2's untap step on turn 4 (CR 303.4, 502.3), though
+# Bot2's other tapped permanent (Mox Ruby, the control) untaps. Bot2's Island is not a creature, so it is not a legal target (a refusal);
+# control stays with Bot2, since the Aura only taps.
+
+[Bot1 Deck]
+Black Lotus
+Starlight Snare
+Island x5
+Island x15
+
+[Bot2 Deck]
+Memnite
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Ruby.Activate
+? Bot2.Battlefield.Mox Ruby.Tapped = true
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+! Bot1.Hand.Starlight Snare.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Starlight Snare.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Tapped = true
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Mox Ruby.Tapped = false
+? Bot2.Battlefield.Memnite.Tapped = true
+
+[Expect]
+Bot2.Battlefield.Memnite.Tapped = true
+Bot2.Battlefield.Mox Ruby.Tapped = false
+Bot1.Battlefield.Starlight Snare.AttachedTo = Memnite
+Bot1.Battlefield.Memnite = (absent)
