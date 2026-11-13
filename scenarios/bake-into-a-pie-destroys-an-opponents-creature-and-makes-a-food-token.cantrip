@@ -1,0 +1,40 @@
+# Bake into a Pie (CR 701.8, 111.10b, 115.1): "Destroy target creature. Create a Food token." Bot1 pays {2}{B}{B} with Black
+# Lotus and Mox Jet. A noncreature artifact (Mox Ruby) is not a legal target and is refused with the mana there to pay; Bot2's
+# Ornithopter is destroyed and Bot1 gets the Food token (a colorless artifact).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Bake into a Pie
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Island
+Island
+Island
+Island
+Island
+Island
+Ornithopter
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Bake into a Pie.Cast(Bot2.Battlefield.Mox Ruby)
+Bot1.Hand.Bake into a Pie.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Food Token; Mox Jet
+Bot1.Graveyard = Bake into a Pie; Black Lotus
+Bot2.Battlefield = Mox Ruby
+Bot2.Graveyard = Ornithopter

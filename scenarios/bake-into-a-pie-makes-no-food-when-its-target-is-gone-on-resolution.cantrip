@@ -1,0 +1,42 @@
+# Bake into a Pie (CR 608.2b): with its only target illegal as it resolves (Bot2 exiles its own Ornithopter in response with
+# Swords to Plowshares) the spell does nothing: it is countered on resolution and Bot1 gets no Food token.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Bake into a Pie
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Island
+Island
+Island
+Island
+Island
+Ornithopter
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bake into a Pie.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet
+Bot1.Graveyard = Bake into a Pie; Black Lotus
+Exile = Ornithopter
