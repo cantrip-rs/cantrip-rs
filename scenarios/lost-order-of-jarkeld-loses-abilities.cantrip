@@ -1,0 +1,28 @@
+# Removing the characteristic-defining ability exposes the card's base power and toughness (CR 613.1f, 613.1g).
+[Bot1 Deck]
+Black Lotus x2
+Mox Pearl
+Lost Order of Jarkeld
+Frozen in Ice
+Plains x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lost Order of Jarkeld.Cast
+? Bot1.Mana =
+Bot1.ChoosePlayer(Bot2)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Frozen in Ice.Cast(Bot1.Battlefield.Lost Order of Jarkeld)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Lost Order of Jarkeld.Power = 1
+Bot1.Battlefield.Lost Order of Jarkeld.Toughness = 1

@@ -1,0 +1,53 @@
+# The chosen opponent's creatures determine both stats dynamically; other players' creatures do not (CR 604.3, 614.1c).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Lost Order of Jarkeld
+Memnite
+Plains x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Bot3 Deck]
+Memnite
+Ornithopter
+Mox Jet
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lost Order of Jarkeld.Cast
+? Bot1.Mana =
+Bot1.ChoosePlayer(Bot3)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Lost Order of Jarkeld.ChosenPlayer = 3
+? Bot1.Battlefield.Lost Order of Jarkeld.Power = 1
+? Bot1.Battlefield.Lost Order of Jarkeld.Toughness = 1
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot3.Main1]
+? Bot1.Battlefield.Lost Order of Jarkeld.Power = 1
+? Bot1.Battlefield.Lost Order of Jarkeld.Toughness = 1
+Bot3.Hand.Mox Jet.Cast
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lost Order of Jarkeld.Power = 1
+? Bot1.Battlefield.Lost Order of Jarkeld.Toughness = 1
+Bot3.Hand.Memnite.Cast
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lost Order of Jarkeld.Power = 2
+? Bot1.Battlefield.Lost Order of Jarkeld.Toughness = 2
+Bot3.Hand.Ornithopter.Cast
+Bot3.Pass
+[Expect]
+Bot1.Battlefield.Lost Order of Jarkeld.Power = 3
+Bot1.Battlefield.Lost Order of Jarkeld.Toughness = 3

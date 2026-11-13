@@ -1,0 +1,41 @@
+# A creature the chosen player owns but no longer controls is not counted (CR 604.3, 110.2): Control Magic takes the chosen opponent's only creature.
+[Bot1 Deck]
+Black Lotus x2
+Mox Pearl
+Mox Sapphire
+Lost Order of Jarkeld
+Control Magic
+Plains x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lost Order of Jarkeld.Cast
+? Bot1.Mana =
+Bot1.ChoosePlayer(Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Lost Order of Jarkeld.Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Control Magic.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Lost Order of Jarkeld.Power = 1
+Bot1.Battlefield.Lost Order of Jarkeld.Toughness = 1
