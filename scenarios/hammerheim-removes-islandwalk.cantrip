@@ -1,0 +1,49 @@
+# Hammerheim targets either player's creature, removes islandwalk through cleanup, and can target a creature with no landwalk (CR 611.2a).
+[Bot1 Deck]
+Hammerheim
+Mox Sapphire
+Grayscaled Gharial
+Ornithopter
+Island x20
+[Bot2 Deck]
+Mox Sapphire
+Grayscaled Gharial
+Island x20
+[Actions]
+Bot1.Hand.Hammerheim.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Grayscaled Gharial.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Hammerheim.Activate(Ability: Add {R})
+? Bot1.Mana = {R}
+! Bot1.Battlefield.Hammerheim.Activate(Ability: Add {R})
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Grayscaled Gharial.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Hammerheim.Activate(Bot2.Battlefield.Mox Sapphire; Ability: loses all landwalk)
+Bot1.Battlefield.Hammerheim.Activate(Bot2.Battlefield.Grayscaled Gharial; Ability: loses all landwalk)
+? Bot1.Battlefield.Hammerheim.Tapped = true
+? Bot1.Mana =
+! Bot1.Battlefield.Hammerheim.Activate(Bot1.Battlefield.Grayscaled Gharial; Ability: loses all landwalk)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grayscaled Gharial.Keywords = (absent)
+? Bot1.Battlefield.Grayscaled Gharial.Keywords = Islandwalk
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Grayscaled Gharial.Keywords = Islandwalk
+[T5 Bot1.Main1]
+Bot1.Battlefield.Hammerheim.Activate(Bot1.Battlefield.Grayscaled Gharial; Ability: loses all landwalk)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grayscaled Gharial.Keywords = (absent)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Hammerheim.Activate(Bot1.Battlefield.Ornithopter; Ability: loses all landwalk)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.Grayscaled Gharial.Keywords = Islandwalk
