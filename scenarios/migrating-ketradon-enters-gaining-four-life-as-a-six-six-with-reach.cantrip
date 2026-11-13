@@ -1,0 +1,39 @@
+# Migrating Ketradon (6/6 reach, {4}{G}{G}): "When this creature enters, you gain 4 life." Bot1 casts it with Black Lotus (GGG) and
+# three Moxen on turn 1 and, once it resolves and the trigger is let through, is at 24 life with a 6/6 that has reach. Bot2's life is
+# untouched: the trigger is Bot1's alone.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Migrating Ketradon
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Migrating Ketradon.Cast
+Bot1.Pass
+? Stack.Count = 1
+Bot2.Pass
+? Bot1.Life = 20
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 24
+Bot2.Life = 20
+Bot1.Battlefield.Migrating Ketradon.Power = 6
+Bot1.Battlefield.Migrating Ketradon.Toughness = 6
+Bot1.Battlefield.Migrating Ketradon.Keywords = Reach

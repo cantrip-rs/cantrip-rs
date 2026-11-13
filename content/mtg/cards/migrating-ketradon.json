@@ -1,0 +1,11 @@
+{
+  "name": "Migrating Ketradon",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Dinosaur",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Reach\nWhen this creature enters, you gain 4 life.\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "keywords": [
+    "Reach"
+  ]
+}

@@ -1,0 +1,30 @@
+# Migrating Ketradon, "Cycling {2}" (CR 702.29a): {2} and discarding it from the hand draw a card. It never enters the battlefield,
+# so "when this creature enters, you gain 4 life" does not happen: Bot1 stays at 20, with the Ketradon in the graveyard and the
+# top card of the library, the Forest, in hand.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Migrating Ketradon
+Island x4
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Migrating Ketradon.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Bot1.Graveyard = Migrating Ketradon
+Bot1.Hand = Island; Island; Island; Island; Forest
+Bot1.Battlefield = Mox Jet; Mox Ruby
