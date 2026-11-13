@@ -1,0 +1,52 @@
+# Kitesail Corsair has flying only while it is attacking (CR 506.4, 604.1, 702.9b), so Bot2's Corsair, untapped and not attacking, cannot
+# block Bot1's Mocking Sprite (flying) on turn 3: the Sprite deals 2 to Bot2. It can block a ground creature, though: Bot1's Runeclaw Bear
+# is blocked by it, the Bear dying to the Corsair's 2 damage and the Corsair to the Bear's.
+
+[Bot1 Deck]
+Black Lotus
+Mocking Sprite
+Mox Jet
+Mox Emerald
+Runeclaw Bear
+Island x22
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Kitesail Corsair
+Island x22
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mocking Sprite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Runeclaw Bear.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Kitesail Corsair.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Mocking Sprite > Bot2; Runeclaw Bear > Bot2)
+? Bot2.Battlefield.Kitesail Corsair.Keywords = (absent)
+! Bot2.Block(Kitesail Corsair > Mocking Sprite)
+Bot2.Block(Kitesail Corsair > Runeclaw Bear)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Graveyard = Kitesail Corsair
+Bot1.Graveyard = Runeclaw Bear; Black Lotus

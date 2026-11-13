@@ -1,0 +1,38 @@
+# Kitesail Corsair: "This creature has flying as long as it's attacking" (CR 506.4, 604.1, 702.9). Bot1 casts it with Black Lotus's {U}{U}{U}
+# (it has no flying then). Bot2's Runeclaw Bear, cast with its own Lotus, has no flying or reach. When the Corsair attacks on turn 3 it
+# has flying, so the Bear may not block it (CR 702.9b) and Bot2 takes 2. After combat it has no flying again.
+
+[Bot1 Deck]
+Black Lotus
+Kitesail Corsair
+Island x22
+
+[Bot2 Deck]
+Black Lotus
+Runeclaw Bear
+Island x22
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Kitesail Corsair.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Runeclaw Bear.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Kitesail Corsair.Keywords = (absent)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Kitesail Corsair > Bot2)
+? Bot1.Battlefield.Kitesail Corsair.Keywords = Flying
+! Bot2.Block(Runeclaw Bear > Kitesail Corsair)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Kitesail Corsair.Keywords = (absent)
+
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield.Runeclaw Bear.Damage = 0

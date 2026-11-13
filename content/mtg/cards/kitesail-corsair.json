@@ -1,0 +1,8 @@
+{
+  "name": "Kitesail Corsair",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Human Pirate",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "This creature has flying as long as it's attacking."
+}
