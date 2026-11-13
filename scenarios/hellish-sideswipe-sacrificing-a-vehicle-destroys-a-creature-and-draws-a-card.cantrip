@@ -1,0 +1,46 @@
+# Hellish Sideswipe {B}: "As an additional cost to cast this spell, sacrifice an artifact or creature. Destroy target
+# creature or Vehicle. If the sacrificed permanent was a Vehicle, draw a card." (CR 118.8, 701.8, 608.2h). Bot1 sacrifices
+# its Dependable Quinjet (a Vehicle that is no creature) and destroys its own Ornithopter: one of your own is a legal
+# target. The Mox Ruby (an artifact that is neither creature nor Vehicle) and the Swamp are refused as targets, and the
+# Swamp as the sacrifice too; the Quinjet is taken, and the card drawn leaves the hand at two cards after the Sideswipe is cast.
+
+[Bot1 Deck]
+Black Lotus
+Dependable Quinjet
+Swamp
+Hellish Sideswipe
+Ornithopter
+Mox Ruby
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Dependable Quinjet.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+! Bot1.Hand.Hellish Sideswipe.Cast(Bot1.Battlefield.Mox Ruby)
+! Bot1.Hand.Hellish Sideswipe.Cast(Bot1.Battlefield.Swamp)
+Bot1.Hand.Hellish Sideswipe.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Swamp.Activate
+! Bot1.Choose(Swamp)
+Bot1.Choose(Dependable Quinjet)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+? Bot1.Battlefield = Mox Ruby; Swamp
+? Bot1.Graveyard = Hellish Sideswipe; Ornithopter; Dependable Quinjet; Black Lotus
+
+[Expect]
+Bot1.Hand.Count = 2

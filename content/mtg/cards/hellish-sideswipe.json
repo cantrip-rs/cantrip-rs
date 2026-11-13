@@ -1,0 +1,6 @@
+{
+  "name": "Hellish Sideswipe",
+  "manaCost": "{B}",
+  "type": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, sacrifice an artifact or creature.\nDestroy target creature or Vehicle. If the sacrificed permanent was a Vehicle, draw a card."
+}
