@@ -1,0 +1,6 @@
+{
+  "name": "River's Rebuke",
+  "manaCost": "{4}{U}{U}",
+  "type": "Sorcery",
+  "oracleText": "Return all nonland permanents target player controls to their owner's hand."
+}
