@@ -1,0 +1,36 @@
+# A player with four cards casts an instant in response to the upkeep trigger; Storm World counts the three
+# cards remaining at resolution and deals one damage (CR 608.2h).
+[Bot1 Deck]
+Storm World
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Mox Jet
+Dark Ritual
+Memnite x4
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Storm World.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.Upkeep]
+? Bot2.Hand.Count = 4
+? Stack.Count = 1
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Dark Ritual.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Hand.Count = 3
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Life = 19
