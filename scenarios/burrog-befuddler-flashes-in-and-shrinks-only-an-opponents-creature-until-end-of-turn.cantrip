@@ -1,0 +1,51 @@
+# Burrog Befuddler: "Flash. When this creature enters, target creature an opponent controls gets -1/-0 until end of turn." Both
+# players have a Llanowar Elves; Bot1 flashes the Befuddler in on Bot2's turn and only Bot2's Elves can be the target: it
+# becomes 0/1 and Bot1's stays 1/1 (CR 611.2). The effect ends with the turn: on turn 4 Bot2's Elves are 1/1 again.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Emerald
+Llanowar Elves
+Burrog Befuddler
+Island x30
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Burrog Befuddler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves.Power = 0
+? Bot2.Battlefield.Llanowar Elves.Toughness = 1
+? Bot1.Battlefield.Llanowar Elves.Power = 1
+? Bot1.Battlefield.Burrog Befuddler.Power = 2
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Llanowar Elves.Power = 1
+
+[Expect]
+Stack.Count = 0
