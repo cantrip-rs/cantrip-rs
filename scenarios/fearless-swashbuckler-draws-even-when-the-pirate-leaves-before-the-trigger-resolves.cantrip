@@ -1,0 +1,65 @@
+# Fearless Swashbuckler: "if a Pirate and a Vehicle attacked this combat" is checked again as the ability resolves, and a creature that attacked
+# still counts once it has left. On turn three Bot1 attacks with the Swashbuckler and a crewed Air Response Unit; with the trigger on the stack
+# Bot2 kills the Swashbuckler with Lightning Bolt (Bot2 has Mox Ruby from its own turn). The Pirate did attack, so the trigger still draws three
+# cards (Forest, Mountain, Island, on top of the turn's Island) and discards two (Forest, Mountain). The Vehicle's 3 damage still goes through.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Air Response Unit
+Fearless Swashbuckler
+Memnite
+Island
+Forest
+Mountain
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Air Response Unit.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fearless Swashbuckler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Air Response Unit.Activate(Ability: Crew)
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Fearless Swashbuckler > Bot2; Air Response Unit > Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Fearless Swashbuckler)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Fearless Swashbuckler; Black Lotus
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Forest; Mountain)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Hand = Island; Island
+Bot1.Graveyard = Mountain; Forest; Fearless Swashbuckler; Black Lotus

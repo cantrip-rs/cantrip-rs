@@ -1,0 +1,11 @@
+{
+  "name": "Fearless Swashbuckler",
+  "manaCost": "{1}{U}{R}",
+  "type": "Creature — Fish Pirate",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Haste\nVehicles you control have haste.\nWhenever you attack, if a Pirate and a Vehicle attacked this combat, draw three cards, then discard two cards.",
+  "keywords": [
+    "Haste"
+  ]
+}

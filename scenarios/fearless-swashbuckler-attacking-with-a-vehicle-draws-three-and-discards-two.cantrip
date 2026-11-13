@@ -1,0 +1,53 @@
+# Fearless Swashbuckler (3/3 Fish Pirate, haste; "Vehicles you control have haste"): on turn one Bot1 casts it and an Air Response Unit (a 3/3 flying,
+# vigilance Vehicle, Crew 1), and Memnite crews the Vehicle. The Vehicle has haste from the Swashbuckler, so both attack on turn one:
+# a Pirate and a Vehicle attacked this combat, so "whenever you attack" draws three cards (Island, Forest, Mountain) and discards two
+# of them (Island, Forest), leaving the Mountain. Bot2 takes 3 + 3 = 6 (the Vehicle flies, Bot2 has no blockers) and is at 14.
+# Black Lotus pays {2} of the Vehicle and {1} of the Swashbuckler.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Air Response Unit
+Fearless Swashbuckler
+Memnite
+Island
+Forest
+Mountain
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Air Response Unit.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fearless Swashbuckler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Air Response Unit.Activate(Ability: Crew)
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Fearless Swashbuckler > Bot2; Air Response Unit > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island; Forest)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Hand = Mountain
+Bot1.Graveyard = Forest; Island; Black Lotus
