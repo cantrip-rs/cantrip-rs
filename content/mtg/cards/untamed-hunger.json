@@ -1,0 +1,6 @@
+{
+  "name": "Untamed Hunger",
+  "manaCost": "{2}{B}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +2/+1 and has menace. (It can't be blocked except by two or more creatures.)"
+}

@@ -1,0 +1,33 @@
+# Untamed Hunger ({2}{B}, Aura): "Enchant creature" (CR 303.4); enchanted creature gets +2/+1 and has menace (CR 613.4c, 702.111a). It is cast on Bot1's own Ornithopter
+# (0/2 flying), paid exactly with Mox Jet, Mox Pearl and Mox Ruby; a Mox is no legal target.
+
+[Bot1 Deck]
+Ornithopter
+Mox Jet
+Mox Pearl
+Mox Ruby
+Untamed Hunger
+Island x18
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Untamed Hunger.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Untamed Hunger.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Menace
+Bot1.Battlefield.Untamed Hunger.AttachedTo = Ornithopter

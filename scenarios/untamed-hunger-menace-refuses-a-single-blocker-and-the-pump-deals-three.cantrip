@@ -1,0 +1,40 @@
+# Untamed Hunger gives menace and +2/+1 (CR 702.111b, 613.4c): Bot1's Memnite (1/1) enchanted on turn 1 attacks on turn 3 as a 3/2. Bot2's Memnite cannot block it alone
+# (menace needs two or more blockers), nothing else blocks and the Memnite deals 3.
+
+[Bot1 Deck]
+Memnite
+Mox Jet
+Mox Pearl
+Mox Ruby
+Untamed Hunger
+Island x19
+
+[Bot2 Deck]
+Memnite
+Memnite
+Island x22
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Untamed Hunger.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+! Bot2.Block(Memnite#1 > Memnite)
+Bot2.Block(Count: 0)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Memnite.Tapped = true
