@@ -1,0 +1,48 @@
+# Cathedral grants Isamaru bands with other legendary creatures, allowing it to band with green Reptil; a white nonlegendary creature is refused as a bandmate, and their controller assigns the blocker's damage (CR 702.22c, 702.22h, 702.22k).
+[Bot1 Deck]
+Cathedral of Serra
+Mox Emerald
+Mox Pearl
+Reptil, Dinomorpher
+Isamaru, Hound of Konda
+Savannah Lions
+Black Lotus
+Island x14
+[Bot2 Deck]
+Forest
+Black Lotus
+Ulvenwald Oddity
+Island x17
+[Actions]
+Bot1.Hand.Cathedral of Serra.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Reptil, Dinomorpher.Cast
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Ulvenwald Oddity.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Savannah Lions > Bot2; Reptil, Dinomorpher > Bot2)
+? Combat.Attackers = Savannah Lions > Bot2; Reptil, Dinomorpher > Bot2
+[T5 Bot1.Main1]
+Bot1.Attack(Isamaru, Hound of Konda > Bot2; Reptil, Dinomorpher > Bot2; Savannah Lions > Bot2)
+! Bot1.Choose(Savannah Lions)
+Bot1.Choose(Reptil, Dinomorpher)
+? Combat.Attackers = Isamaru, Hound of Konda > Bot2 (band 1); Reptil, Dinomorpher > Bot2 (band 1); Savannah Lions > Bot2
+Bot2.Block(Ulvenwald Oddity > Isamaru, Hound of Konda)
+[T5 Bot1.Blockers]
+? Combat.Blocks = Ulvenwald Oddity > Isamaru, Hound of Konda; Ulvenwald Oddity > Reptil, Dinomorpher
+Bot1.AssignDamage(Ulvenwald Oddity > Isamaru, Hound of Konda: 4)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Graveyard.Isamaru, Hound of Konda.Power = 2
+Bot1.Battlefield.Reptil, Dinomorpher.Damage = 0
+Bot2.Life = 15
