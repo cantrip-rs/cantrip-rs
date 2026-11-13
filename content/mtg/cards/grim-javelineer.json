@@ -1,0 +1,8 @@
+{
+  "name": "Grim Javelineer",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Human Warrior",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Whenever you attack, target attacking creature gets +1/+0 until end of turn. When that creature dies this turn, surveil 1. (Look at the top card of your library. You may put that card into your graveyard.)"
+}

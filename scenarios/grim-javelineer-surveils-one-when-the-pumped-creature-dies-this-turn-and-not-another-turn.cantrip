@@ -1,0 +1,45 @@
+# Grim Javelineer: "When that creature dies this turn, surveil 1." Turn 3: Bot1 attacks with the Javelineer alone and it
+# targets itself (a 4/2); Bot2's Grizzly Bears (2/2) blocks, both die, and Bot1 surveils 1, putting the Swamp on top into the
+# graveyard. The Bears die too (4 damage).
+
+[Bot1 Deck]
+Black Lotus
+Grim Javelineer
+Swamp
+Swamp
+Swamp
+Island
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Grim Javelineer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Grim Javelineer > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Block(Grizzly Bears > Grim Javelineer)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Swamp)
+
+[Expect]
+Bot1.Graveyard = Swamp; Grim Javelineer; Black Lotus
+Bot2.Graveyard = Grizzly Bears
+Bot1.Library.Count = 11
