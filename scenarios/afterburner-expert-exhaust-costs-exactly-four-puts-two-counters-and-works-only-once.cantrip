@@ -1,0 +1,50 @@
+# Afterburner Expert, {2}{G} 4/2, "Exhaust - {2}{G}{G}: Put two +1/+1 counters on this creature" (CR 702.177a-b). Turn 1: Mox Emerald, Mox Jet and Mox
+# Ruby pay for it; with only the Black Lotus' {G}{G}{G} the exhaust is refused for want of mana, and with Mox Pearl's {W} added the {2}{G}{G} is paid
+# exactly (pool empty). It becomes a 6/4. Turn 3, with {G}{G}{B}{R}{W} available, the exhaust is refused: it has been activated.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Afterburner Expert
+Black Lotus
+Mox Pearl
+Forest
+Forest x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Afterburner Expert.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Battlefield.Afterburner Expert.Activate(Ability: Exhaust; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Afterburner Expert.Activate(Ability: Exhaust)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Afterburner Expert.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Afterburner Expert.Power = 6
+? Bot1.Battlefield.Afterburner Expert.Toughness = 4
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Afterburner Expert.Activate(Ability: Exhaust)
+
+[Expect]
+Bot1.Battlefield.Afterburner Expert.Power = 6

@@ -1,0 +1,86 @@
+# A creature that leaves the battlefield and returns is a new object (CR 400.7), so its exhaust ability can be activated again. Bot1 has two Afterburner
+# Experts. Turn 3: the first exhausts (6/4). Turn 5: Terror destroys it. Turn 7: the second's exhaust brings the first back as a fresh 4/2 (the second,
+# on the battlefield, does not function as a returner). Turn 9: the second's exhaust is refused (used), the returned first one's is not and makes it 6/4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Afterburner Expert
+Afterburner Expert
+Forest
+Terror
+Forest
+Forest
+Forest
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Afterburner Expert.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Afterburner Expert.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Afterburner Expert#1.Activate(Ability: Exhaust)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Afterburner Expert#1.Power = 6
+? Bot1.Battlefield.Afterburner Expert#2.Power = 4
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Terror.Cast(Bot1.Battlefield.Afterburner Expert#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Terror; Afterburner Expert; Black Lotus
+[T7 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Forest#3.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Afterburner Expert.Activate(Ability: Exhaust)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Afterburner Expert#2.Power = 4
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Afterburner Expert#1.Power = 6
+? Bot1.Battlefield.Afterburner Expert#2.Power = 4
+[T9 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Forest#3.Activate
+Bot1.Battlefield.Forest#4.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Afterburner Expert#1.Activate(Ability: Exhaust)
+Bot1.Battlefield.Afterburner Expert#2.Activate(Ability: Exhaust)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Afterburner Expert#1.Power = 6
+Bot1.Battlefield.Afterburner Expert#2.Power = 6

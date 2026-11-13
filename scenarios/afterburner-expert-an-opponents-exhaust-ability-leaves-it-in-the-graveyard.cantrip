@@ -1,0 +1,59 @@
+# "Whenever you activate an exhaust ability": only its owner's activations count. Bot1's Afterburner Expert is Shocked by Bot2 on turn 2 and sits in
+# Bot1's graveyard. On turn 6 Bot2 activates its Greenbelt Guardian's exhaust ({3}{G}, a 5/5 after it) and the Expert does not return.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Afterburner Expert
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Shock
+Greenbelt Guardian
+Forest
+Forest
+Forest
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Afterburner Expert.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Afterburner Expert)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Afterburner Expert
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest#1.Activate
+Bot2.Battlefield.Forest#2.Activate
+Bot2.Hand.Greenbelt Guardian.Cast
+Bot2.Pass
+Bot1.Pass
+[T6 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest#1.Activate
+Bot2.Battlefield.Forest#2.Activate
+Bot2.Battlefield.Forest#3.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Greenbelt Guardian.Activate(Ability: Exhaust)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Greenbelt Guardian.Power = 5
+Bot1.Graveyard = Afterburner Expert
+Bot1.Battlefield.Afterburner Expert = (absent)

@@ -1,0 +1,45 @@
+# Afterburner Expert's "Exhaust - {2}{G}{G}" needs two green: on turn 3, with {G}{B}{R}{W}{U} (a Forest and four Moxen), five mana
+# but only one source of green, the exhaust is refused (CR 601.2g, 602.2b); with the Black Lotus drawn that turn adding {G}{G}{G}
+# it is activated, and it puts two +1/+1 counters on the Expert.
+
+[Bot1 Deck]
+Forest
+Mox Jet
+Mox Ruby
+Afterburner Expert
+Mox Pearl
+Mox Sapphire
+Island
+Black Lotus
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Afterburner Expert.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Afterburner Expert.Activate(Ability: Exhaust; Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Afterburner Expert.Activate(Ability: Exhaust)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Afterburner Expert.Counters.PlusOnePlusOne = 2

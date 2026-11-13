@@ -1,0 +1,69 @@
+# "Whenever you activate an exhaust ability, return this card from your graveyard to the battlefield" (it functions only in the graveyard, CR 113.6m).
+# Turn 1: Bot1 casts the Afterburner Expert and then Shocks it with Mox Ruby: it is in the graveyard. Turn 3: Greenbelt Guardian is cast and its
+# non-exhaust {G} ability activated: the Expert stays. Turn 5: Guardian's exhaust {3}{G} is activated; the Expert's trigger goes above it on the stack
+# and resolves first (the Expert is back as a new 4/2 while the Guardian is still a 2/2), then the exhaust makes the Guardian a 5/5.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Afterburner Expert
+Shock
+Greenbelt Guardian
+Forest
+Forest
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Afterburner Expert.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Afterburner Expert)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Afterburner Expert; Shock
+? Bot1.Battlefield.Afterburner Expert = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Greenbelt Guardian.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Greenbelt Guardian.Activate(Bot1.Battlefield.Greenbelt Guardian; Ability: trample)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Greenbelt Guardian.Keywords = Trample
+? Bot1.Graveyard = Afterburner Expert; Shock
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Greenbelt Guardian.Activate(Ability: Exhaust)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Afterburner Expert.Power = 4
+? Bot1.Battlefield.Afterburner Expert.Toughness = 2
+? Bot1.Battlefield.Greenbelt Guardian.Power = 2
+? Bot1.Graveyard = Shock
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Greenbelt Guardian.Power = 5
+Bot1.Battlefield.Greenbelt Guardian.Toughness = 5
+Bot1.Battlefield.Afterburner Expert.Power = 4

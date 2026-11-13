@@ -1,0 +1,8 @@
+{
+  "name": "Afterburner Expert",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Goblin Artificer",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Exhaust — {2}{G}{G}: Put two +1/+1 counters on this creature. (Activate each exhaust ability only once.)\nWhenever you activate an exhaust ability, return this card from your graveyard to the battlefield."
+}
