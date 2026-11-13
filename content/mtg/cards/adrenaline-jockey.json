@@ -1,0 +1,8 @@
+{
+  "name": "Adrenaline Jockey",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Minotaur Pilot",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever a player casts a spell, if it's not their turn, this creature deals 4 damage to them.\nWhenever you activate an exhaust ability, put a +1/+1 counter on this creature."
+}

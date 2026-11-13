@@ -1,0 +1,48 @@
+# Adrenaline Jockey (3/3): "Whenever a player casts a spell, if it's not their turn, this creature deals 4 damage to them" (CR 603.2, 603.4).
+# Bot2 casts an Ornithopter on its own turn 2: it is their turn, so no damage (Bot2 stays at 20, positive control for the refusal-side
+# of the condition). On Bot1's turn 3 Bot2 casts a Lightning Bolt at Bot1 in response to nothing: not their turn, so the Jockey deals 4
+# to Bot2 (16), before the Bolt resolves and takes Bot1 to 17. Bot1's own turn-1 Jockey cast triggered nothing: it was not yet in play.
+
+[Bot1 Deck]
+Black Lotus
+Adrenaline Jockey
+Island x18
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Adrenaline Jockey.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 20
+? Bot1.Battlefield.Adrenaline Jockey.Power = 3
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 16
+? Bot1.Life = 20
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 16
+Bot1.Life = 17
+Bot2.Graveyard = Lightning Bolt

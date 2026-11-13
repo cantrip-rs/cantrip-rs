@@ -1,0 +1,41 @@
+# Adrenaline Jockey: "a player" includes its controller. Bot1 casts an Ornithopter on its own turn 1 after the Jockey is in play: its
+# turn, no damage (Bot1 stays at 20). On Bot2's turn 2 Bot1 casts a Lightning Bolt at Bot2: not Bot1's turn, so the Jockey deals 4
+# to Bot1 (16) off its own spell, and the Bolt still takes Bot2 to 17. Nothing is dealt to the other player.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Adrenaline Jockey
+Ornithopter
+Lightning Bolt
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Adrenaline Jockey.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 16
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 16
+Bot2.Life = 17

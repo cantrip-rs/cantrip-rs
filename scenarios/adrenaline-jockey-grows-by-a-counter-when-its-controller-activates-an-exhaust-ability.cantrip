@@ -1,0 +1,52 @@
+# Adrenaline Jockey: "Whenever you activate an exhaust ability, put a +1/+1 counter on this creature." Bot1 casts the Jockey on turn 1
+# (3/3). On turn 3 it casts a Hog-Monkey (Black Lotus) and pays its "Exhaust - {5}" with five Moxen: the activation puts a counter on the
+# Jockey (4/4, one counter; before it, casting the Monkey and tapping mana left it 3/3) and the Monkey gets its own two (5/4).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Adrenaline Jockey
+Hog-Monkey
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Adrenaline Jockey.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Hog-Monkey.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Battlefield.Adrenaline Jockey.Power = 3
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Hog-Monkey.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Adrenaline Jockey.Power = 4
+Bot1.Battlefield.Adrenaline Jockey.Toughness = 4
+Bot1.Battlefield.Adrenaline Jockey.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Hog-Monkey.Power = 5
+Bot1.Battlefield.Hog-Monkey.Counters.PlusOnePlusOne = 2
