@@ -1,0 +1,39 @@
+# Bloodtithe Collector: the intervening "if an opponent lost life this turn" (CR 603.4) means an opponent, not any player: Bot1 bolts itself, and the Collector enters with no trigger,
+# so Bot2 keeps all seven cards and is asked nothing.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Lightning Bolt
+Bloodtithe Collector
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x5
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bloodtithe Collector.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 20
+Bot2.Hand.Count = 7
+Bot2.Graveyard.Count = 0

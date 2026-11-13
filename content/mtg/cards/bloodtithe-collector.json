@@ -1,0 +1,11 @@
+{
+  "name": "Bloodtithe Collector",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Vampire Noble",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flying\nWhen this creature enters, if an opponent lost life this turn, each opponent discards a card.",
+  "keywords": [
+    "Flying"
+  ]
+}
