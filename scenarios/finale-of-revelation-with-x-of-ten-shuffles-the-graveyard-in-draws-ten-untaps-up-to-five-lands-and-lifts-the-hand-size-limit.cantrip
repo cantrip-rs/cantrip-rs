@@ -1,0 +1,82 @@
+# Finale of Revelation ({X}{U}{U}) with X = 10 (the boundary) takes the "instead" branch: Bot1 shuffles their graveyard (the
+# Black Lotus sacrificed to pay) into their library, draws ten cards, untaps up to five lands and has no maximum hand size for
+# the rest of the game (CR 402.2); the spell exiles itself last. It costs 12 mana (Lotus 3, three Moxen, Sol Ring 2, four
+# Islands). The untap is a choice, not a target, and the lands need not be Bot1's:
+# six chosen is one too many (CR 701.26b, "up to five"); Bot1 untaps three of their own Islands and both Islands Bot2
+# tapped on their turn, leaving their fourth Island, the Sol Ring and the Moxen tapped (a Sol Ring is no land). Bot1 holds ten
+# cards at the cleanup step and discards none, and the Lotus is back in the library, so the graveyard is empty. The limit is gone
+# for the rest of the game, not this turn alone: on turn 9 Bot1 draws an eleventh card and still discards nothing.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Island
+Island
+Island
+Island
+Finale of Revelation
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island#1.Activate
+Bot2.Battlefield.Island#2.Activate
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Finale of Revelation.Cast(X: 10)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Island#3.Activate
+Bot1.Battlefield.Island#4.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Bot1.Battlefield.Island#1; Bot1.Battlefield.Island#2; Bot1.Battlefield.Island#3; Bot1.Battlefield.Island#4; Bot2.Battlefield.Island#1; Bot2.Battlefield.Island#2)
+! Bot1.Choose(Bot1.Battlefield.Sol Ring)
+Bot1.Choose(Bot1.Battlefield.Island#1; Bot1.Battlefield.Island#2; Bot1.Battlefield.Island#3; Bot2.Battlefield.Island#1; Bot2.Battlefield.Island#2)
+? Bot1.Hand.Count = 10
+? Bot1.Battlefield.Island#1.Tapped = false
+? Bot1.Battlefield.Island#2.Tapped = false
+? Bot1.Battlefield.Island#3.Tapped = false
+? Bot1.Battlefield.Island#4.Tapped = true
+? Bot1.Battlefield.Sol Ring.Tapped = true
+? Bot1.Battlefield.Mox Sapphire.Tapped = true
+? Bot2.Battlefield.Island#1.Tapped = false
+? Bot2.Battlefield.Island#2.Tapped = false
+[T8 Bot2.Main1]
+? Bot1.Hand.Count = 10
+? Bot1.Graveyard.Count = 0
+[T10 Bot2.Main1]
+
+[Expect]
+Exile = Finale of Revelation
+Bot1.Hand.Count = 11
+Bot1.Graveyard.Count = 0
+Bot1.Library.Count = 2
+Stack.Count = 0

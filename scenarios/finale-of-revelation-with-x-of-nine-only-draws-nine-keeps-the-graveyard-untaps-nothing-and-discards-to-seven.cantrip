@@ -1,0 +1,56 @@
+# Finale of Revelation with X = 9, one below the boundary: Bot1 just draws nine cards. The graveyard is not shuffled in (the
+# Black Lotus sacrificed to pay stays there), no land untaps (the Islands stay tapped and no choice is asked), and there is
+# no exception to the maximum hand size (CR 402.2): Bot1 holds nine cards at the cleanup step and discards two (CR 514.1),
+# which join the Lotus in the graveyard. The spell exiles itself. (Mana paid: Lotus 3, three Moxen, Sol Ring 2, three Islands.)
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Island
+Island
+Island
+Finale of Revelation
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Finale of Revelation.Cast(X: 9)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Island#3.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 9
+? Bot1.Graveyard.Count = 1
+[T6 Bot2.Main1]
+
+[Expect]
+Exile = Finale of Revelation
+Bot1.Hand.Count = 7
+Bot1.Graveyard.Count = 3
+Bot1.Library.Count = 5
+Stack.Count = 0
+Bot1.Battlefield.Island#1.Tapped = true
+Bot1.Battlefield.Island#2.Tapped = true
+Bot1.Battlefield.Island#3.Tapped = true
