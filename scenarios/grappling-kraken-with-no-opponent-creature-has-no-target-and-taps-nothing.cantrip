@@ -1,0 +1,42 @@
+# Grappling Kraken: "Landfall -- Whenever a land you control enters, tap target creature an opponent controls and put a stun counter on it" (CR 603.3d).
+# Bot2 controls no creature when Bot1 plays an Island on turn 3, so the trigger has no legal target and is removed: Bot1's own untapped Ornithopter
+# and the Kraken are never chosen, and nothing gets a stun counter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Grappling Kraken
+Ornithopter
+Island
+Island x12
+
+[Bot2 Deck]
+Plains x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grappling Kraken.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+? Stack.Count = 0
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Ornithopter.Counters.Stun = (absent)
+Bot1.Battlefield.Grappling Kraken.Tapped = false
+Bot1.Battlefield.Grappling Kraken.Counters.Stun = (absent)

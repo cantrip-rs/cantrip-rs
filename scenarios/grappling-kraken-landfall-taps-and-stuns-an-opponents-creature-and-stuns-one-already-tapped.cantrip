@@ -1,0 +1,77 @@
+# Grappling Kraken {4}{U}{U}, 5/6: "Landfall -- Whenever a land you control enters, tap target creature an opponent controls and put a stun counter on it"
+# (CR 603.2, 122.1d, 701.26a). Bot2's own land on turn 2 is no land Bot1 controls, so it triggers nothing and its Memnite stays untapped. Bot1's
+# Island on turn 3 refuses Bot1's own Ornithopter and Kraken: Bot2's Memnite is tapped and stunned. Bot2's untap step on turn 4 removes the
+# counter instead of untapping it, so it is still tapped when Bot1's second Island on turn 5 targets it again (the ruling: an already tapped
+# creature may be targeted): it only gets a stun counter, and Bot2's untap step on turn 6 spends that one in turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Grappling Kraken
+Ornithopter
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Memnite
+Phyrexian Walker
+Plains x5
+Plains x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grappling Kraken.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Pass
+Bot2.Hand.Plains.Play
+? Stack.Count = 0
+? Bot2.Battlefield.Memnite.Tapped = false
+? Bot2.Battlefield.Memnite.Counters.Stun = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+! Bot1.Target(Bot1.Battlefield.Grappling Kraken)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Tapped = true
+? Bot2.Battlefield.Memnite.Counters.Stun = 1
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Memnite.Tapped = true
+? Bot2.Battlefield.Memnite.Counters.Stun = (absent)
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Tapped = true
+? Bot2.Battlefield.Memnite.Counters.Stun = 1
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Memnite.Tapped = true
+? Bot2.Battlefield.Memnite.Counters.Stun = (absent)
+
+[Expect]
+Bot2.Battlefield.Phyrexian Walker.Tapped = false
+Bot2.Battlefield.Phyrexian Walker.Counters.Stun = (absent)
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Grappling Kraken.Counters.Stun = (absent)
