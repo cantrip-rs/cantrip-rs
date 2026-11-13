@@ -1,0 +1,56 @@
+# Run Over's "costs {1} less" takes off one generic mana from the total cost, after cost increases are added (CR 601.2f): with Bot2's
+# Sphere of Resistance ("Spells cost {1} more to cast") out, Run Over targeting Bot1's Venomsac Lagac, a Mount, costs {1}{G} + {1} - {1}
+# = {1}{G}. Bot1 makes {G} and {B} before casting it and both are spent; Lagac's 2 power kills one of Bot2's Memnites.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Mox Jet
+Venomsac Lagac
+Run Over
+Island x3
+Island x20
+
+[Bot2 Deck]
+Memnite
+Mox Pearl
+Mox Ruby
+Sphere of Resistance
+Memnite
+Island x2
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Venomsac Lagac.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Sphere of Resistance.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Run Over.Cast
+Bot1.Target(Bot1.Battlefield.Venomsac Lagac)
+Bot1.Target(Bot2.Battlefield.Memnite#1)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield = Mox Pearl; Mox Ruby; Sphere of Resistance; Memnite
+Bot2.Graveyard = Memnite
+Bot1.Graveyard = Run Over

@@ -1,0 +1,49 @@
+# Run Over: Venomsac Lagac is a Lizard Mount, so Run Over targeting it costs {1} less. Bot1 casts Lagac on turn 1 with one Mox
+# Emerald and the Mox Jet; on turn 3 the second Mox Emerald alone pays the {G} (Mox Jet and the first Emerald stay untapped).
+# Lagac's 2 power is dealt to Bot2's Memnite, one of the two Bot2 has, which dies; the other stays.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Mox Jet
+Venomsac Lagac
+Run Over
+Island x3
+Island x20
+
+[Bot2 Deck]
+Memnite
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Venomsac Lagac.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Run Over.Cast
+Bot1.Target(Bot1.Battlefield.Venomsac Lagac)
+Bot1.Target(Bot2.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield = Memnite
+Bot2.Graveyard = Memnite
+Bot1.Graveyard = Run Over
+Bot1.Battlefield.Venomsac Lagac.Damage = 0
+Bot1.Battlefield.Mox Emerald#1.Tapped = false
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Battlefield.Mox Emerald#2.Tapped = true

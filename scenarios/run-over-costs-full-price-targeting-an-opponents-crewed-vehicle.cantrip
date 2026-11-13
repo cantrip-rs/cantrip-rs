@@ -1,0 +1,56 @@
+# Run Over: the discount is for "a Mount or Vehicle you control". Bot2's Smuggler's Copter, crewed by Bot2's Memnite during Bot1's
+# turn, is a 3/3 Vehicle creature an opponent controls, a legal second target, but Bot1 does not control it: Run Over still costs
+# {1}{G}, so the lone Mox Emerald does not cast it (the refusal). The Mox Jet drawn this turn pays the rest, and Bot1's Memnite
+# deals its 1 damage to the Copter, which survives with 1 damage.
+
+[Bot1 Deck]
+Mox Emerald
+Memnite
+Run Over
+Island x4
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Ruby
+Smuggler's Copter
+Memnite
+Island x3
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Smuggler's Copter.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot2.Choose(Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Smuggler's Copter.Types = Artifact; Creature
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Run Over.Cast(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Run Over.Cast
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Target(Bot2.Battlefield.Smuggler's Copter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Smuggler's Copter.Damage = 1
+Bot1.Graveyard = Run Over
