@@ -1,0 +1,8 @@
+{
+  "name": "Quarum Trench Gnomes",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Gnome",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}: If target Plains is tapped for mana, it produces colorless mana instead of white mana. (This effect lasts indefinitely.)"
+}

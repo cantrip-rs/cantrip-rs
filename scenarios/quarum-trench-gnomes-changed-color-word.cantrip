@@ -1,0 +1,44 @@
+# Sleight changes the Gnomes' white to blue: their lasting effect replaces blue, not white (CR 612.1).
+[Bot1 Deck]
+Quarum Trench Gnomes
+Tundra
+Sleight of Mind
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Tundra.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Quarum Trench Gnomes.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleight of Mind.Cast(Bot1.Battlefield.Quarum Trench Gnomes)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(White)
+Bot1.Colors(Blue)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Quarum Trench Gnomes.Activate(Bot1.Battlefield.Tundra)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Tundra.Activate(Ability: {W})
+? Bot1.Mana = {W}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Tundra.Activate(Ability: {U})
+? Bot1.Mana = {C}
+[Expect]
+Bot1.Mana = {C}
