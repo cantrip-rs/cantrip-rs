@@ -1,0 +1,23 @@
+# Marketback Walker cast for X = 0 costs nothing, enters with no counters as a 0/0 and is put into the graveyard by state-based
+# actions (CR 704.5f). Its "When this creature dies, draw a card for each +1/+1 counter on it" counts none (CR 603.10a): Bot1's
+# hand is exactly the six cards it had left after casting it (seven, minus the Walker), nothing drawn.
+
+[Bot1 Deck]
+Marketback Walker
+Island x6
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Marketback Walker.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield =
+? Bot1.Hand.Count = 6
+
+[Expect]
+Bot1.Graveyard = Marketback Walker
+Bot1.Hand.Count = 6
+Bot1.Library.Count = 14

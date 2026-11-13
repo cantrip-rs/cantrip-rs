@@ -1,0 +1,55 @@
+# Marketback Walker: "{4}: Put a +1/+1 counter on this creature." Bot1 casts it for X = 1 (two Moxen) on turn 1 with only
+# Mox Ruby and Mox Sapphire left (two mana, a short {4}): the ability is refused. On turn 3 four Moxen pay it exactly
+# (the pool is empty right after) and the 1/1 is a 2/2 with two counters. Bot2's Lightning Bolt then kills it on turn 4 and
+# Bot1 draws two cards, not the one it would have drawn before the grow.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Marketback Walker
+Island x3
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x3
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Marketback Walker.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Marketback Walker.Counters.PlusOnePlusOne = 1
+! Bot1.Battlefield.Marketback Walker.Activate(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Marketback Walker.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Marketback Walker.Counters.PlusOnePlusOne = 2
+? Bot1.Hand.Count = 3
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Marketback Walker)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Count = 5
+
+[Expect]
+Bot1.Graveyard = Marketback Walker

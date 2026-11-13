@@ -1,0 +1,69 @@
+# Marketback Walker ({X}{X}): "This creature enters with X +1/+1 counters on it. ... When this creature dies, draw a card
+# for each +1/+1 counter on it." Bot1 casts it for X = 2 (four mana: Black Lotus and Mox Sapphire) and it is a 2/2 with two
+# counters. Bot2's Lightning Bolt kills it on turn 2: Bot1 draws two cards, one per counter it had as it last
+# existed (CR 603.10a), and Bot2 draws none. Bot2's own Walker, cast for X = 1 in the same turn and Bolted by Bot1 back
+# on turn 3, draws Bot2 one card, and not Bot1 (turn 3: hand 4 + 2 drawn + the turn draw - Mox Ruby - the Bolt = 5).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Marketback Walker
+Lightning Bolt
+Mox Ruby
+Island x2
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Lightning Bolt
+Marketback Walker
+Island x3
+Island x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Marketback Walker.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Marketback Walker.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Marketback Walker.Power = 2
+? Bot1.Hand.Count = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Marketback Walker)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield = Mox Sapphire
+? Bot1.Hand.Count = 6
+? Bot2.Hand.Count = 4
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Marketback Walker.Cast(X: 1)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Marketback Walker.Counters.PlusOnePlusOne = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Marketback Walker)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Mox Ruby; Mox Jet; Mox Pearl
+? Bot2.Hand.Count = 4
+? Bot1.Hand.Count = 5
+
+[Expect]
+Bot2.Graveyard = Marketback Walker; Lightning Bolt
+Bot1.Graveyard = Lightning Bolt; Marketback Walker; Black Lotus

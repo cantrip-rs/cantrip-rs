@@ -1,0 +1,8 @@
+{
+  "name": "Marketback Walker",
+  "manaCost": "{X}{X}",
+  "type": "Artifact Creature — Construct",
+  "power": 0,
+  "toughness": 0,
+  "oracleText": "This creature enters with X +1/+1 counters on it.\n{4}: Put a +1/+1 counter on this creature.\nWhen this creature dies, draw a card for each +1/+1 counter on it."
+}
