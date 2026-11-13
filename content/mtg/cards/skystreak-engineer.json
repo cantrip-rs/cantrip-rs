@@ -1,0 +1,11 @@
+{
+  "name": "Skystreak Engineer",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Human Pilot",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Flying\nExhaust — {4}{U}: Put two +1/+1 counters on this creature. (Activate each exhaust ability only once.)",
+  "keywords": [
+    "Flying"
+  ]
+}
