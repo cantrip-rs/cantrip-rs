@@ -1,0 +1,39 @@
+# Countering the no-land state trigger makes it trigger again while there are still no lands.
+[Bot1 Deck]
+Mana Vortex
+Black Lotus
+Island
+Stifle
+Mox Sapphire
+Plains x20
+[Bot2 Deck]
+Mountain
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mana Vortex.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Island)
+[T4 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stifle.Cast(Stack.Mana Vortex)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Graveyard = Mana Vortex; Stifle; Island; Black Lotus
+Bot2.Graveyard = Mountain

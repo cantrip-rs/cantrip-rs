@@ -1,0 +1,56 @@
+# Stealing the Vortex while its no-land trigger is pending does not let its former controller sacrifice it.
+[Bot1 Deck]
+Mana Vortex
+Black Lotus
+Island
+Plains x20
+[Bot2 Deck]
+Opalescence
+Old Man of the Sea
+Black Lotus
+Black Lotus
+Mox Pearl
+Mox Emerald
+Giant Growth
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Opalescence.Cast
+? Bot2.Mana =
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Old Man of the Sea.Cast
+? Bot2.Mana =
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mana Vortex.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Island)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Giant Growth.Cast(Bot2.Battlefield.Old Man of the Sea)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Old Man of the Sea.Activate(Bot1.Battlefield.Mana Vortex)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Mana Vortex.Types = Enchantment; Creature
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Mana Vortex.Types = Enchantment; Creature
+? Stack.Count = 1
+[Handover Bot2.Pass]
+[Expect]
+Bot2.Battlefield.Mana Vortex.Types = Enchantment; Creature

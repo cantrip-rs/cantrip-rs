@@ -1,0 +1,34 @@
+# With no land the cast trigger counters Mana Vortex; declining a later trigger also counters it and leaves the land.
+[Bot1 Deck]
+Mana Vortex
+Mana Vortex
+Black Lotus
+Black Lotus
+Island
+Plains x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mana Vortex.Cast
+? Bot1.Mana =
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+[T1 Bot1.Main2]
+? Bot1.Graveyard = Mana Vortex; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mana Vortex.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield = Island
+Bot1.Graveyard = Mana Vortex; Black Lotus; Mana Vortex; Black Lotus
