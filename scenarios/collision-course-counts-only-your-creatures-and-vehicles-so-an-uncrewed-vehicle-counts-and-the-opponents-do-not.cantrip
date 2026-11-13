@@ -1,0 +1,72 @@
+# Collision Course, first mode: X is "the number of permanents you control that are creatures and/or Vehicles" (CR 301.7, 120.3).
+# Bot1 controls Savannah Lions, Aegis Turtle and an uncrewed Reckoner Bankbuster (a Vehicle that is not a creature): X is 3, so
+# Bot2's Aegis Turtle (0/5) is left with 3 damage. Bot2's own Turtle and uncrewed Air Response Unit do not count (that would be 5,
+# and the Turtle would die), and the damage mode will not target the uncrewed Vehicles, which are not creatures.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Savannah Lions
+Aegis Turtle
+Reckoner Bankbuster
+Collision Course
+Plains x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Aegis Turtle
+Air Response Unit
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aegis Turtle.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Reckoner Bankbuster.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Air Response Unit.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Collision Course.Cast
+Bot1.Modes(Collision Course deals X damage)
+! Bot1.Target(Bot1.Battlefield.Reckoner Bankbuster)
+! Bot1.Target(Bot2.Battlefield.Air Response Unit)
+Bot1.Target(Bot2.Battlefield.Aegis Turtle)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Aegis Turtle.Damage = 3
+Bot1.Graveyard = Collision Course
