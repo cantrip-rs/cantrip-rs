@@ -596,6 +596,17 @@ pub fn plus_one_counter_on_this(g: &mut dyn Game, item: &StackItem) -> Result<()
     Ok(())
 }
 
+/// "This Vehicle becomes an artifact creature. Put `N` +1/+1 counters on it" (CR 301.7, 611.2a, 122.1): with no duration said it
+/// stays an artifact creature for as long as it is on the battlefield, still a Vehicle, its printed power and toughness and the
+/// counters making it. Done to the permanent whose ability this is, so a Vehicle that has left the battlefield by the time the
+/// ability resolves is a new object and gets nothing (CR 400.7). The exhaust ability of Invasion Submersible (three counters) and
+/// Rangers' Refueler (one) is it.
+pub fn this_vehicle_becomes_artifact_creature_with_plus_one_counters<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.add_effect(item.object, item.object, EffectKind::AddTypes(TypeSet::of(&[CardType::Artifact, CardType::Creature])), Duration::Indefinite);
+    g.add_counters(item.object, CounterKind::PlusOne, N);
+    Ok(())
+}
+
 /// "Put two +1/+1 counters on [this permanent]" (CR 122.1, 201.5): the ability's source, not a new object once it has
 /// left the battlefield (CR 400.7). The whole effect of a trigger or ability of Brave Brawler, Demon Wall, Knight of Autumn,
 /// Loki Laufeyson, Serpent Specialist, Titanbones, Towering Heart, Viv Vision, Teen Synthezoid, Volcanic Villain and Ygra,
