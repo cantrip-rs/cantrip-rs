@@ -13,12 +13,8 @@ use cantrip_oracle as oracle;
 /// sacrifices all of those that can when there are not that many (CR 701.21a, 101.2).
 fn pox_plague(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let players: Vec<PlayerId> = g.state().apnap().filter(|&p| players::reached(g, p)).collect();
-    instruction(g, |g| {
-        for &player in &players {
-            let life = g.state().player(player).life;
-            g.lose_life(player,(life.max(0) / 2) as i32);
-        }
-    });
+    let losses: Vec<(PlayerId, i32)> = players.iter().map(|&player| (player, g.state().player(player).life.max(0) / 2)).collect();
+    g.lose_life_together(&losses);
     let mut discarding = Vec::new();
     for &player in &players {
         let half = g.state().zone(Zone::hand(player)).len() as u32 / 2;
