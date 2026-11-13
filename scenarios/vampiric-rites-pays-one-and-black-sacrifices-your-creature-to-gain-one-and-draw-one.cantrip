@@ -1,0 +1,55 @@
+# Vampiric Rites: "{1}{B}, Sacrifice a creature: You gain 1 life and draw a card." (CR 602.2, 118.8, 701.21) On turn 1 Mox Jet has paid for the Rites, so Bot1 has only red and white mana left and cannot
+# activate it ({B} is needed). On turn 3 Mox Jet and Mox Ruby pay exactly {1}{B} (the pool is empty after) and Bot1 sacrifices one of their own creatures - not Bot2's Memnite - gaining exactly 1 life
+# (20 -> 21) and drawing exactly one card. Mox Pearl alone cannot pay for a second activation.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Vampiric Rites
+Memnite
+Ornithopter
+Island
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vampiric Rites.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Vampiric Rites.Activate(Mana: short)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 2
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Vampiric Rites.Activate
+! Bot1.Choose(Bot2.Battlefield.Memnite)
+! Bot1.Choose(Bot1.Battlefield.Mox Pearl)
+Bot1.Choose(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+? Bot1.Hand.Count = 3
+! Bot1.Battlefield.Vampiric Rites.Activate(Mana: short)
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 21
+Bot1.Hand.Count = 3
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Ornithopter; Vampiric Rites
+Bot1.Graveyard = Memnite
+Bot2.Battlefield = Memnite
