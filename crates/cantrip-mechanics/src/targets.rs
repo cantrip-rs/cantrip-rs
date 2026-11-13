@@ -168,6 +168,13 @@ pub fn creature_with_power_at_most<const N: i32>(q: &dyn Query, asker: &Asker, t
 }
 /// "Target creature with power 2 or less". Escape Tunnel and Silverquill Charm print it.
 pub const CREATURE_WITH_POWER_2_OR_LESS: TargetSpec = target(creature_with_power_at_most::<2>);
+/// "Target creature you control with power 2 or less" (CR 115.1, 109.5, 208.1): a creature on the battlefield under the
+/// activating player's control whose power, as the layers make it, is at most 2, judged as it is chosen and again as the ability
+/// resolves (CR 608.2b). Underfoot Underdogs and Apocalypse Runner print it.
+pub fn creature_you_control_with_power_two_or_less_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_you_control_filter(q, asker, t) && creature_with_power_at_most::<2>(q, asker, t)
+}
+pub const CREATURE_YOU_CONTROL_WITH_POWER_2_OR_LESS: TargetSpec = target(creature_you_control_with_power_two_or_less_filter);
 /// "A creature with flying" (CR 702.9) as the layers give it now: a creature on the battlefield that has flying. Pick Your Poison
 /// sacrifices one; `CREATURE_WITH_FLYING` is the target slot. Bow of Nylea and Konstrari Charm print the target.
 pub fn has_flying_creature(q: &dyn Query, id: ObjectId) -> bool {
