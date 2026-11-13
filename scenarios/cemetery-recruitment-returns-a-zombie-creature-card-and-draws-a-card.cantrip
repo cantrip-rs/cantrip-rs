@@ -1,0 +1,44 @@
+# "If it's a Zombie card, draw a card": Walking Corpse (a Zombie) is returned to hand and Bot1 draws the top card of its library, an Island
+# (hand Island + Walking Corpse, library 13). Mox Jet and Mox Pearl pay Walking Corpse; Mox Ruby pays the Shock that kills it; Black Lotus'
+# BBB then pays Cemetery Recruitment ({1}{B}), leaving {B}.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Black Lotus
+Walking Corpse
+Shock
+Cemetery Recruitment
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Walking Corpse.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Walking Corpse)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Cemetery Recruitment.Cast(Bot1.Graveyard.Walking Corpse)
+? Bot1.Mana = {B}
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Island; Walking Corpse
+Bot1.Library.Count = 13

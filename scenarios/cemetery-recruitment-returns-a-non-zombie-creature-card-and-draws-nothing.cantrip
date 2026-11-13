@@ -1,0 +1,43 @@
+# "If it's a Zombie card, draw a card": Ornithopter (a Thopter) is returned to hand and nothing is drawn. Bot2's Ornithopter,
+# also in a graveyard, is not a legal target (CR 115.1a), and neither is the Shock. Mox Jet's B and Mox Pearl's 1 pay {1}{B}
+# exactly; Bot1's hand ends as Island + Ornithopter.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Ornithopter
+Shock
+Cemetery Recruitment
+Island
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Cemetery Recruitment.Cast(Bot1.Graveyard.Shock)
+Bot1.Hand.Cemetery Recruitment.Cast(Bot1.Graveyard.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Island; Ornithopter
+Bot1.Library.Count = 14
+Bot1.Graveyard = Cemetery Recruitment; Shock
