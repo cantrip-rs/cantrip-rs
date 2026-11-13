@@ -1,0 +1,8 @@
+{
+  "name": "Corsair Captain",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Human Pirate",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")\nOther Pirates you control get +1/+1."
+}

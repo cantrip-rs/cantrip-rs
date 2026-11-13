@@ -1,0 +1,59 @@
+# Corsair Captain: "When this creature enters, create a Treasure token. Other Pirates you control get +1/+1." Bot1 has a Fanatical
+# Firebrand (1/1 Goblin Pirate) and an Ornithopter (0/2 Thopter, not a Pirate) when the Captain enters: the Treasure arrives, the
+# Firebrand becomes 2/2, and the Captain (a Pirate itself), Ornithopter stay unboosted (CR 613.4c). Bot2's Fanatical Firebrand is
+# not "yours": it stays 1/1.
+
+[Bot1 Deck]
+Mox Ruby
+Black Lotus
+Fanatical Firebrand
+Corsair Captain
+Ornithopter
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Fanatical Firebrand
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Corsair Captain.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Fanatical Firebrand.Cast
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Corsair Captain; Fanatical Firebrand; Mox Ruby; Ornithopter; Treasure Token
+Bot1.Battlefield.Fanatical Firebrand.Power = 2
+Bot1.Battlefield.Fanatical Firebrand.Toughness = 2
+Bot1.Battlefield.Corsair Captain.Power = 2
+Bot1.Battlefield.Corsair Captain.Toughness = 2
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Fanatical Firebrand.Power = 1
+Bot2.Battlefield.Fanatical Firebrand.Toughness = 1
