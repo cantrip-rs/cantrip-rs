@@ -1,0 +1,8 @@
+{
+  "name": "Gastal Blockbuster",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Human Berserker",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature enters, you may sacrifice a creature or Vehicle. When you do, destroy target artifact an opponent controls."
+}

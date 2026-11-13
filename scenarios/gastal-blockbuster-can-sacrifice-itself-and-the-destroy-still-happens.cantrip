@@ -1,0 +1,40 @@
+# Gastal Blockbuster: "a creature or Vehicle" includes the Blockbuster itself (it is not "another"), and the reflexive destroy (CR 603.12)
+# still happens once it is gone. Turn 3 Bot1 has no other creature, sacrifices the Blockbuster and destroys Bot2's Mox Jet.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Gastal Blockbuster
+Forest x12
+
+[Bot2 Deck]
+Mox Jet
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gastal Blockbuster.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Gastal Blockbuster)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Gastal Blockbuster
+Bot2.Battlefield =
+Bot2.Graveyard = Mox Jet

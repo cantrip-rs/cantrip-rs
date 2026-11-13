@@ -1,0 +1,63 @@
+# Gastal Blockbuster: "When this creature enters, you may sacrifice a creature or Vehicle. When you do, destroy target artifact an opponent
+# controls." (CR 701.21a, 603.12). Turn 3 Bot1 sacrifices Memnite (an artifact creature: it is offered as a creature); Mox Jet (a
+# noncreature artifact) is not a legal sacrifice. The reflexive trigger's target must be an artifact Bot2 controls: Bot1's own Mox Ruby and
+# Bot2's Savannah Lions (a nonartifact creature) are refused, Bot2's Mox Jet is destroyed and Bot2's Mox Pearl is left alone. Sacrificing two (Memnite and Gastal itself) is refused: "a creature or Vehicle" is one.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Gastal Blockbuster
+Memnite
+Forest x12
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Savannah Lions
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gastal Blockbuster.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Mox Jet)
+! Bot1.Choose(Mox Ruby)
+! Bot1.Choose(Memnite; Gastal Blockbuster)
+Bot1.Choose(Memnite)
+! Bot1.Target(Mox Ruby)
+! Bot1.Target(Savannah Lions)
+! Bot1.Target(Memnite)
+Bot1.Target(Mox Jet)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Memnite
+Bot1.Battlefield.Gastal Blockbuster.Power = 3
+Bot2.Battlefield = Mox Pearl; Savannah Lions
+Bot2.Graveyard = Mox Jet
+Bot1.Battlefield.Count = 4

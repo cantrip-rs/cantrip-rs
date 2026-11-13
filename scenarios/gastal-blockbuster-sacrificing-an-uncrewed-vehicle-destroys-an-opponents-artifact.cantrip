@@ -1,0 +1,54 @@
+# Gastal Blockbuster: "you may sacrifice a creature or Vehicle" (CR 701.21a, 301.7). Smuggler's Copter is a Vehicle and, uncrewed, not a
+# creature, yet it is a legal sacrifice; Mox Sapphire (a noncreature, non-Vehicle artifact) is not. Sacrificing the Copter on turn 3 triggers
+# "when you do" and destroys Bot2's Mox Ruby, while the Blockbuster itself stays on the battlefield.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Smuggler's Copter
+Gastal Blockbuster
+Forest x12
+
+[Bot2 Deck]
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gastal Blockbuster.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Mox Sapphire)
+Bot1.Choose(Smuggler's Copter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Smuggler's Copter
+Bot1.Battlefield.Gastal Blockbuster.Power = 3
+Bot2.Battlefield =
+Bot2.Graveyard = Mox Ruby
