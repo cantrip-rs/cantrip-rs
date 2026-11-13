@@ -1,0 +1,58 @@
+# Endrider Catalyzer (3/1, Start your engines!): "Max speed — {T}: Add {R}{R}" (CR 702.178a, 605.1a). Bot1 casts it and a Savannah Lions on
+# turn 1 (speed 1); the Lions attacks into an empty board on turns 3, 5, 7 (speed 2, 3, 4; CR 702.179d) while the Catalyzer stays home.
+# On turn 7, at speed 3 (one short of max), tapping it for mana is refused; after the Lions' hit makes speed 4 it taps for exactly {R}{R}
+# (the pool holds both), which pays for a Lightning Bolt on Bot2: 20 - 3 x 2 - 3 = 11.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Endrider Catalyzer
+Savannah Lions
+Lightning Bolt
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Endrider Catalyzer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+[T3 Bot1.Main1]
+Bot1.Attack(Savannah Lions > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Speed = 2
+[T5 Bot1.Main1]
+Bot1.Attack(Savannah Lions > Bot2)
+[T5 Bot1.Main2]
+? Bot1.Speed = 3
+[T7 Bot1.Main1]
+! Bot1.Battlefield.Endrider Catalyzer.Activate
+Bot1.Attack(Savannah Lions > Bot2)
+[T7 Bot1.Main2]
+? Bot1.Speed = 4
+Bot1.Battlefield.Endrider Catalyzer.Activate
+? Bot1.Mana = {R}{R}
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 11
+Bot1.Speed = 4
+Bot1.Battlefield.Endrider Catalyzer.Tapped = true
+Bot1.Mana = {R}

@@ -1,0 +1,47 @@
+# Endrider Catalyzer's max speed ability is a {T} ability, so a Catalyzer that came under Bot1's control this turn cannot use it
+# (CR 302.6) even at max speed. A Goblin Surveyor starts Bot1's engines on turn 1 and attacks an empty board on turns 3, 5, 7 (speed 2,
+# 3, 4). Cast in turn 7's second main phase, at max speed, the Catalyzer's mana ability is refused; on turn 9 it taps for {R}{R}.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Goblin Surveyor
+Endrider Catalyzer
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Surveyor.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+[T3 Bot1.Main1]
+Bot1.Attack(Goblin Surveyor > Bot2)
+[T5 Bot1.Main1]
+Bot1.Attack(Goblin Surveyor > Bot2)
+[T7 Bot1.Main1]
+Bot1.Attack(Goblin Surveyor > Bot2)
+[T7 Bot1.Main2]
+? Bot1.Speed = 4
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Endrider Catalyzer.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Endrider Catalyzer.Activate
+[T9 Bot1.Main1]
+Bot1.Battlefield.Endrider Catalyzer.Activate
+
+[Expect]
+Bot1.Mana = {R}{R}
+Bot1.Battlefield.Endrider Catalyzer.Tapped = true
+Bot2.Life = 11

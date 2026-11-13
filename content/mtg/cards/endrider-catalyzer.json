@@ -1,0 +1,8 @@
+{
+  "name": "Endrider Catalyzer",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Human Warrior",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Start your engines! (If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.)\nMax speed — {T}: Add {R}{R}."
+}
