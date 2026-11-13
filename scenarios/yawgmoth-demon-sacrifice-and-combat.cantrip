@@ -1,0 +1,48 @@
+# Sacrificing one controlled artifact avoids the upkeep penalty; flying refuses a ground blocker and first strike kills a flying blocker before it deals damage (CR 702.9, 702.7).
+[Bot1 Deck]
+Black Lotus x2
+Mox Pearl
+Mox Ruby
+Yawgmoth Demon
+Island x20
+[Bot2 Deck]
+Black Lotus x2
+Mox Pearl x2
+Serra Angel
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Yawgmoth Demon.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Serra Angel.Cast
+[T3 Bot1.Upkeep]
+! Bot1.Choose(Mox Pearl; Mox Ruby)
+! Bot1.Choose(Grizzly Bears)
+Bot1.Choose(Mox Pearl)
+[T3 Bot1.DeclareAttackers]
+? Bot1.Life = 20
+? Bot1.Battlefield.Yawgmoth Demon.Tapped = false
+Bot1.Attack(Yawgmoth Demon > Bot2)
+! Bot2.Block(Grizzly Bears > Yawgmoth Demon)
+Bot2.Block(Serra Angel > Yawgmoth Demon)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Yawgmoth Demon.Damage = 0
+Bot1.Graveyard = Mox Pearl; Black Lotus; Black Lotus
+Bot2.Graveyard = Serra Angel; Black Lotus; Black Lotus

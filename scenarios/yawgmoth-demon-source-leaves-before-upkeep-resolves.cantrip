@@ -1,0 +1,26 @@
+# The Demon still deals 2 damage when its upkeep ability resolves after it has left the battlefield, using its last known information (CR 113.7a).
+[Bot1 Deck]
+Black Lotus x2
+Yawgmoth Demon
+Island x20
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Yawgmoth Demon.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Yawgmoth Demon)
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Life = 24
+Exile = Yawgmoth Demon

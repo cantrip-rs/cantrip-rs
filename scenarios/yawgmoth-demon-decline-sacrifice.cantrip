@@ -1,0 +1,26 @@
+# The upkeep choice may be declined despite an available artifact; the Demon taps and deals 2 damage to its controller (CR 603.2, 120.3).
+[Bot1 Deck]
+Black Lotus x2
+Mox Pearl
+Yawgmoth Demon
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Yawgmoth Demon.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+? Bot1.Life = 20
+? Bot1.Battlefield.Yawgmoth Demon.Tapped = false
+[T3 Bot1.Upkeep]
+Bot1.Choose()
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Life = 18
+Bot1.Battlefield.Yawgmoth Demon.Tapped = true
+Bot1.Battlefield.Mox Pearl.Tapped = false
