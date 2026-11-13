@@ -1,0 +1,42 @@
+# The Overlord and its other Kobold strike before blockers; opposing Kobolds and friendly non-Kobolds receive no ability (CR 702.7b).
+[Bot1 Deck]
+Kobold Overlord
+Crimson Kobolds
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Giant Growth
+Memnite
+Forest x20
+[Bot2 Deck]
+Memnite x2
+Crimson Kobolds
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Crimson Kobolds.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kobold Overlord.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Crimson Kobolds.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Crimson Kobolds.Keywords = FirstStrike
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+? Bot2.Battlefield.Crimson Kobolds.Keywords = (absent)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Kobold Overlord > Bot2; Crimson Kobolds > Bot2)
+Bot2.Block(Memnite#1 > Kobold Overlord; Memnite#2 > Crimson Kobolds)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Crimson Kobolds)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Kobold Overlord.Damage = 0
+Bot1.Battlefield.Crimson Kobolds.Damage = 0
+Bot2.Graveyard = Memnite; Memnite

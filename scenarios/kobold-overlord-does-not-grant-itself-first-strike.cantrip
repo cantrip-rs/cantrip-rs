@@ -1,0 +1,36 @@
+# Urborg removes first strike before the Looter copies an Overlord; the new Overlord ability does not grant itself first strike (CR 613.7, 702.7).
+[Bot1 Deck]
+Likeness Looter
+Kobold Overlord
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Urborg
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Urborg.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Likeness Looter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Likeness Looter.Activate(Ability: Draw a card)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Kobold Overlord)
+Bot1.Battlefield.Urborg.Activate(Ability: Target creature; Bot1.Battlefield.Likeness Looter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(first strike)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Likeness Looter.Activate(Ability: becomes a copy; X: 2)
+Bot1.Target(Kobold Overlord)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Kobold Overlord.Keywords = Flying

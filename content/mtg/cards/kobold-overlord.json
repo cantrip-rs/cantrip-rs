@@ -1,0 +1,11 @@
+{
+  "name": "Kobold Overlord",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Kobold",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "First strike\nOther Kobold creatures you control have first strike.",
+  "keywords": [
+    "FirstStrike"
+  ]
+}
