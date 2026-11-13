@@ -1,0 +1,6 @@
+{
+  "name": "Dream Coat",
+  "manaCost": "{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\n{0}: Enchanted creature becomes the color or colors of your choice. Activate only once each turn."
+}

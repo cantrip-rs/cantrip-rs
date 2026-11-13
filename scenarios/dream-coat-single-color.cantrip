@@ -1,0 +1,34 @@
+# Dream Coat replaces a creature's colors with one chosen color, for no mana, and the change persists (CR 611.2a).
+[Bot1 Deck]
+Mox Sapphire
+Ornithopter
+Dream Coat
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Dream Coat.Cast(Bot1.Battlefield.Mox Sapphire)
+Bot1.Hand.Dream Coat.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Dream Coat.Activate
+? Bot1.Mana =
+! Bot1.Modes(Count: 0)
+Bot1.Modes(Red)
+! Bot1.Battlefield.Dream Coat.Activate
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Ornithopter.Colors = Red
+Bot1.Battlefield.Dream Coat.Activate
+Bot1.Modes(Blue; Green)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Colors = Blue; Green
+Bot1.Battlefield.Dream Coat.Activate
+Bot1.Modes(White; Blue; Black; Red; Green)
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Dream Coat.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Colors = Black; Blue; Green; Red; White
