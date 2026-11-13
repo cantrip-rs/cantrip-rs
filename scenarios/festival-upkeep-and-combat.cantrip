@@ -1,0 +1,44 @@
+# Festival can be cast only in an opponent's upkeep; it stops that turn's creatures attacking, then expires (CR 601.3, 611.2c).
+[Bot1 Deck]
+Festival x2
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Island x20
+[Bot2 Deck]
+Mountain
+Raging Goblin
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+! Bot1.Hand.Festival.Cast
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Festival.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Raging Goblin.Cast
+Bot2.Pass
+! Bot1.Hand.Festival.Cast
+Bot1.Pass
+[T2 Bot2.BeginCombat]
+Bot2.Pass
+Bot1.Pass
+! Bot2.Attack
+[T3 Bot1.Upkeep]
+! Bot1.Hand.Festival.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Raging Goblin > Bot1)
+[Expect]
+Bot1.Graveyard = Festival
