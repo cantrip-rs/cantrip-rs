@@ -1,0 +1,46 @@
+# Firebrand Archer, a 2/1: "Whenever you cast a noncreature spell, this creature deals 1 damage to each opponent." With the Archer
+# on the battlefield Bot1 casts a Mox Ruby (an artifact, a noncreature spell): Bot2 is at 19. Casting a Fanatical Firebrand (a
+# creature spell) costs Bot2 nothing, and neither does Bot2's own Mox Ruby on turn 2 (the Archer's controller's spells only).
+
+[Bot1 Deck]
+Mox Ruby x3
+Firebrand Archer
+Fanatical Firebrand
+Mountain x12
+
+[Bot2 Deck]
+Mox Ruby
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Firebrand Archer.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 19
+[T2 Bot2.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 20
