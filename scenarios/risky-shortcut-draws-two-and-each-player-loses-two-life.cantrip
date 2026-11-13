@@ -1,0 +1,36 @@
+# Risky Shortcut {2}{B}: "Draw two cards. Each player loses 2 life." Bot1 draws exactly two cards (hand 5 -> 7 once Black
+# Lotus and Risky Shortcut have left it: the two Swamps on top come in) and both players lose 2: 18 each (CR 119.3).
+# Cast with a Black Lotus for {B}{B}{B}, paid exactly: the pool is empty afterwards.
+
+[Bot1 Deck]
+Black Lotus
+Risky Shortcut
+Swamp
+Island
+Memnite
+Ornithopter
+Mox Jet
+Swamp x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Mana = {B}{B}{B}
+Bot1.Hand.Risky Shortcut.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+? Bot2.Life = 18
+? Bot1.Hand.Count = 7
+
+[Expect]
+Turn = 1
+Bot1.Life = 18
+Bot2.Life = 18
+Bot1.Graveyard = Risky Shortcut; Black Lotus
+Bot1.Hand = Swamp; Island; Memnite; Ornithopter; Mox Jet; Swamp; Swamp
