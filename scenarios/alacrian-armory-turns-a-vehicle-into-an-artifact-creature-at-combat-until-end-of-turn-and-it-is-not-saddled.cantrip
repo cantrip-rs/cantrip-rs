@@ -1,0 +1,65 @@
+# Alacrian Armory's combat trigger on a Vehicle: Reckoner Bankbuster, uncrewed, becomes an artifact creature until end of turn
+# (CR 205.1b, 301.7, 611.2a) and, being a creature, takes the Armory's +0/+1 and vigilance, so it attacks as a 4/5 and stays untapped.
+# The Caustic Bronco that was not chosen is not saddled (the saddling is only "if it's a Mount"); by turn 5 the Bankbuster is
+# a plain artifact again.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Reckoner Bankbuster
+Caustic Bronco
+Plains
+Alacrian Armory
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Caustic Bronco.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Reckoner Bankbuster.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Reckoner Bankbuster.Types = Artifact
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Alacrian Armory.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Target(Bot1.Battlefield.Reckoner Bankbuster)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Reckoner Bankbuster.Types = Artifact; Creature
+? Bot1.Battlefield.Reckoner Bankbuster.Subtypes = Vehicle
+? Bot1.Battlefield.Reckoner Bankbuster.Power = 4
+? Bot1.Battlefield.Reckoner Bankbuster.Toughness = 5
+? Bot1.Battlefield.Reckoner Bankbuster.Keywords = Vigilance
+? Bot1.Battlefield.Caustic Bronco.Saddled = (absent)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Reckoner Bankbuster > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Reckoner Bankbuster.Tapped = false
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Reckoner Bankbuster.Types = Artifact
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Reckoner Bankbuster.Types = Artifact

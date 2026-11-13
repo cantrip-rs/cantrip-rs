@@ -1,0 +1,86 @@
+# Alacrian Armory: "Creatures you control get +0/+1 and have vigilance" (CR 613.4c, 702.20): Bot1's Savannah Lions and Caustic
+# Bronco gain both, Bot2's Savannah Lions neither. "At the beginning of combat on your turn, choose up to one target Mount or
+# Vehicle you control": Bot1's Savannah Lions (neither) and Bot2's Air Response Unit (a Vehicle, but not Bot1's) are refused, and the
+# Caustic Bronco, a Mount, becomes saddled until end of turn (CR 702.171b), which is gone again by turn 5. Lions attack and stay untapped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Caustic Bronco
+Savannah Lions
+Plains
+Alacrian Armory
+Plains x15
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Air Response Unit
+Savannah Lions
+Plains
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Caustic Bronco.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Air Response Unit.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Alacrian Armory.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+! Bot1.Target(Bot1.Battlefield.Savannah Lions)
+! Bot1.Target(Bot2.Battlefield.Air Response Unit)
+Bot1.Target(Bot1.Battlefield.Caustic Bronco)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Caustic Bronco.Saddled = true
+? Bot1.Battlefield.Caustic Bronco.Toughness = 3
+? Bot1.Battlefield.Savannah Lions.Toughness = 2
+? Bot1.Battlefield.Savannah Lions.Keywords = Vigilance
+? Bot2.Battlefield.Savannah Lions.Toughness = 1
+? Bot2.Battlefield.Savannah Lions.Keywords = (absent)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Savannah Lions > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Savannah Lions.Tapped = false
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Caustic Bronco.Saddled = (absent)
+
+[Expect]
+Bot1.Battlefield.Caustic Bronco.Keywords = Vigilance
+Bot2.Life = 18
