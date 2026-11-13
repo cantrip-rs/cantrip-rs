@@ -1,0 +1,42 @@
+# A dual Island can be sacrificed, but an opponent’s Island cannot (CR 701.21a). Elder Spawn’s controller sacrifices an Island at upkeep; at the next upkeep no Island is available, so it is sacrificed and deals 6 damage (CR 603.2, 701.21a).
+[Bot1 Deck]
+Elder Spawn
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Tundra
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Elder Spawn.Cast
+? Bot1.Mana =
+Bot1.Hand.Tundra.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Upkeep]
+! Bot1.Choose(Bot2.Battlefield.Island)
+Bot1.Choose(Tundra)
+? Bot1.Life = 20
+? Bot1.Graveyard = Tundra; Black Lotus
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Life = 14
+Bot1.Graveyard = Elder Spawn; Tundra; Black Lotus

@@ -1,0 +1,52 @@
+# If an opponent takes control in response to the upkeep trigger, its controller cannot sacrifice Elder Spawn but it still deals 6 damage (CR 701.21a, 113.7a).
+[Bot1 Deck]
+Elder Spawn
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Seasinger
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Elder Spawn.Cast
+? Bot1.Mana =
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Seasinger.Cast
+[T3 Bot1.Upkeep]
+Bot1.Choose(Island)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Battlefield.Seasinger.Activate(Bot1.Battlefield.Elder Spawn)
+Bot2.Pass
+Bot1.Choose()
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Life = 14
+Bot1.Graveyard = Island; Black Lotus
+Bot2.Battlefield.Elder Spawn.Power = 6
+Bot1.Battlefield.Island.Tapped = false

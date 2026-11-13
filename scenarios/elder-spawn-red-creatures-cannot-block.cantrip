@@ -1,0 +1,56 @@
+# Red and red-green creatures cannot block Elder Spawn; a green creature can (CR 509.1b).
+[Bot1 Deck]
+Elder Spawn
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Mountain Bandit
+Rip-Clan Crasher
+Llanowar Elves
+Forest x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Elder Spawn.Cast
+? Bot1.Mana =
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Mountain Bandit.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Rip-Clan Crasher.Cast
+[T3 Bot1.Upkeep]
+Bot1.Choose(Island)
+[T3 Bot1.Main1]
+Bot1.Attack(Elder Spawn > Bot2)
+! Bot2.Block(Mountain Bandit > Elder Spawn)
+! Bot2.Block(Rip-Clan Crasher > Elder Spawn)
+Bot2.Block(Llanowar Elves > Elder Spawn)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Graveyard = Llanowar Elves; Black Lotus
+Bot1.Battlefield.Elder Spawn.Damage = 1

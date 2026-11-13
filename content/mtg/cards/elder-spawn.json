@@ -1,0 +1,8 @@
+{
+  "name": "Elder Spawn",
+  "manaCost": "{4}{U}{U}{U}",
+  "type": "Creature — Spawn",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "At the beginning of your upkeep, unless you sacrifice an Island, sacrifice this creature and it deals 6 damage to you.\nThis creature can't be blocked by red creatures."
+}
