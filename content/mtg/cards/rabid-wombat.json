@@ -1,0 +1,11 @@
+{
+  "name": "Rabid Wombat",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Wombat",
+  "power": 0,
+  "toughness": 1,
+  "oracleText": "Vigilance\nThis creature gets +2/+2 for each Aura attached to it.",
+  "keywords": [
+    "Vigilance"
+  ]
+}

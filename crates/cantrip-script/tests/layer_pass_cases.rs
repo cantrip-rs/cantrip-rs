@@ -412,6 +412,10 @@ fn a_continued_part_depends_through_what_it_does() {
 /// The static abilities whose effect changes nothing on any object or raw state the check tries, each with why.
 const INERT: &[(&str, &str)] = &[
     (
+        "Rabid Wombat",
+        "its effect counts Auras attached to it, and the synthetic boards hold no attachments; its scenarios show two controllers' Auras, removal of an Aura, an Equipment on it and an Aura on another creature",
+    ),
+    (
         "Academy Instructor",
         "its effect counts Officer tokens its controller controls, and the synthetic boards hold none; a scenario of the card shows the +1/+0 for itself as an Officer token",
     ),

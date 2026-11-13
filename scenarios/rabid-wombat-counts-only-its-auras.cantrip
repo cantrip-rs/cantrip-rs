@@ -1,0 +1,41 @@
+# An Equipment on Wombat and an Aura on another creature do not count as Auras attached to Wombat (CR 604.1).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Rabid Wombat
+Bloodforged Battle-Axe
+Ornithopter
+Rancor
+Forest x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rabid Wombat.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bloodforged Battle-Axe.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Bloodforged Battle-Axe.Activate(Rabid Wombat)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rabid Wombat.Power = 2
+? Bot1.Battlefield.Rabid Wombat.Toughness = 1
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rancor.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Rabid Wombat.Power = 2
+Bot1.Battlefield.Rabid Wombat.Toughness = 1
+Bot1.Battlefield.Ornithopter.Power = 2
