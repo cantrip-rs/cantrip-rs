@@ -1,0 +1,55 @@
+# Lattice makes Phyrexian Arena an artifact, allowing Xenic Poltergeist to
+# animate it. When Lattice leaves, the animation still makes it an artifact
+# creature until the next upkeep (CR 611.2a, 613.1d).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Xenic Poltergeist
+Mycosynth Lattice
+Swamp x20
+[Bot2 Deck]
+Black Lotus
+Phyrexian Arena
+Mox Pearl
+Island
+Disenchant
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Xenic Poltergeist.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mycosynth Lattice.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Phyrexian Arena.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Xenic Poltergeist.Activate(Bot2.Battlefield.Phyrexian Arena)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Phyrexian Arena.Types = Enchantment; Artifact; Creature
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Mycosynth Lattice)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Battlefield.Phyrexian Arena.Types = Enchantment; Artifact; Creature
+Bot2.Battlefield.Phyrexian Arena.Power = 3
+Bot2.Battlefield.Phyrexian Arena.Toughness = 3
