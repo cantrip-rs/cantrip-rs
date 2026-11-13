@@ -1,0 +1,73 @@
+# "For as long as you control this Vehicle" (CR 611.2b): when Bot2's Disenchant destroys Possession Engine on turn 4 the stolen
+# Eager Cadet goes back to Bot2 (CR 613.1b) and the restriction on it ends: on turn 5 it blocks Bot1's Memnite and they
+# trade (CR 509.1b).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Memnite
+Zephyr Sprite
+Possession Engine
+Island
+Island x12
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Eager Cadet
+Devoted Hero
+Disenchant
+Plains
+Plains
+Plains
+Plains x12
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Eager Cadet.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Possession Engine.Cast
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Plains; Mox Pearl
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains#1.Activate
+Bot2.Battlefield.Plains#2.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Possession Engine)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield = Eager Cadet; Mox Pearl; Plains; Plains
+[T5 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Eager Cadet > Memnite)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Graveyard = Memnite; Possession Engine
+Bot2.Graveyard = Eager Cadet; Disenchant

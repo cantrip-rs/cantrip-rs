@@ -1,0 +1,74 @@
+# Possession Engine's enters trigger takes control of target creature an opponent controls (CR 115.1, 613.1b); Bot1's own
+# Memnite is refused as the target, Bot2's Eager Cadet is taken. While Bot1 controls the Engine the Cadet can't block on turn 4
+# (CR 509.1b) - Bot2's Devoted Hero hits Bot1 for 1 - nor attack on turn 5 (CR 508.1c), when Bot1's Memnite attacks alone for 1
+# (CR 611.2b).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Memnite
+Zephyr Sprite
+Possession Engine
+Island
+Island x12
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Eager Cadet
+Devoted Hero
+Plains
+Plains
+Plains
+Plains x12
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Eager Cadet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Devoted Hero.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Possession Engine.Cast
+Bot1.Pass
+! Bot1.Target(Memnite)
+Bot1.Target(Eager Cadet)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Eager Cadet.Tapped = false
+? Bot2.Battlefield = Plains; Mox Pearl; Devoted Hero
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Devoted Hero > Bot1)
+! Bot1.Block(Eager Cadet > Devoted Hero)
+[T5 Bot1.Main1]
+! Bot1.Attack(Eager Cadet > Bot2)
+Bot1.Attack(Memnite > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
+Bot1.Battlefield.Eager Cadet.Tapped = false
+Bot1.Battlefield.Memnite.Tapped = true

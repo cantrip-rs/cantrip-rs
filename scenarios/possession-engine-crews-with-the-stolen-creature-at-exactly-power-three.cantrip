@@ -1,0 +1,78 @@
+# Crew 3 (CR 702.122a): tapping creatures with total power 3 or more makes Possession Engine an artifact creature until end of
+# turn. Bot1's Memnite and Zephyr Sprite (power 2 together) and Memnite alone are refused; the stolen Hill Giant (power 3,
+# summoning sick, which crewing does not care about, and unable to attack or block, which it does not either) crews it
+# alone, exactly at the limit.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Memnite
+Zephyr Sprite
+Possession Engine
+Island
+Island x12
+
+[Bot2 Deck]
+Plains
+Mox Ruby
+Mox Jet
+Mox Pearl
+Hill Giant
+Plains
+Plains
+Plains x12
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Possession Engine.Cast
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hill Giant.Power = 3
+Bot1.Battlefield.Possession Engine.Activate(Ability: Crew)
+! Bot1.Choose(Memnite)
+! Bot1.Choose(Memnite; Zephyr Sprite)
+Bot1.Choose(Hill Giant)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Possession Engine.Types = Artifact; Creature
+? Bot1.Battlefield.Possession Engine.Power = 5
+
+[Expect]
+Bot1.Battlefield.Hill Giant.Tapped = true
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Battlefield.Zephyr Sprite.Tapped = false
