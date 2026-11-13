@@ -21,14 +21,7 @@ fn target_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
 /// "The exiled card's owner creates an X/X blue Illusion creature token, where X is the mana value of the exiled
 /// card."
 fn illusion_for_owner(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(&card) = g.exiled_with(g.linked(item)).first() else { return Ok(()) };
-    let owner = g.obj(card).owner;
-    let x = g.mana_value(card) as i32;
-    // The token is X/X as it is made (CR 111.4: the effect that creates it defines its characteristics, and those are its
-    // copiable values, CR 707.2): never a 0/0, not for a moment, so what triggers on it entering sees an X/X.
-    let values = Copiable::of(g.card_id(&ILLUSION)).sized(x, x);
-    g.create_token_copies_of(values, owner, 1)?;
-    Ok(())
+    cantrip_mechanics::effects::exiled_cards_owner_creates_x_x(g, item, &ILLUSION)
 }
 
 pub static CARD: CardDef = CardDef {

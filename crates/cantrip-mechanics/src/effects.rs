@@ -1990,6 +1990,20 @@ pub fn return_exiled_to_battlefield(g: &mut dyn Game, item: &StackItem) -> Resul
     Ok(())
 }
 
+/// "The exiled card's owner creates an X/X [token], where X is the mana value of the exiled card" (CR 607.2a, 111.4): the
+/// card exiled with the ability's source, as `exile_first_target_with_this` or `exile_with` linked it; with none exiled,
+/// no one creates anything. The token is `token` X/X as it is made (CR 111.4: the effect that creates it defines its
+/// characteristics, and those are its copiable values, CR 707.2), never a 0/0 for a moment, so what triggers on it
+/// entering sees an X/X. Skyclave Apparition (a blue Illusion) and Severance Priest (a white Spirit) print it.
+pub fn exiled_cards_owner_creates_x_x(g: &mut dyn Game, item: &StackItem, token: &'static CardDef) -> Result<(), Suspend> {
+    let Some(&card) = g.exiled_with(g.linked(item)).first() else { return Ok(()) };
+    let owner = g.obj(card).owner;
+    let x = g.mana_value(card) as i32;
+    let values = Copiable::of(g.card_id(token)).sized(x, x);
+    g.create_token_copies_of(values, owner, 1)?;
+    Ok(())
+}
+
 /// "Return target [card] from your graveyard to the battlefield" (CR 400.3): the first target, under the controller of the
 /// spell or ability, untapped; nothing if it is no longer a legal target (CR 608.2b), which for a lone required target
 /// means the spell or ability does not resolve at all. Emptiness, Ral Zarek, Guest Lecturer's −2, Primary Research, Recurring Nightmare,
