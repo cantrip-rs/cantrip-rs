@@ -1257,6 +1257,13 @@ pub fn create_a_treasure(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspe
     create_treasure(g, item.controller)
 }
 
+/// "Create a 3/2 colorless Vehicle artifact token with crew 1" as an effect (CR 111.1): one `VEHICLE_CREW_1` under the controller of the
+/// resolving spell or ability. Chandra, Spark Hunter and Mu Yanling, Wind Rider print it.
+pub fn create_a_crew_1_vehicle(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &VEHICLE_CREW_1, 1)?;
+    Ok(())
+}
+
 /// "Target player creates N Treasure tokens" (CR 111.10a): all at once, under the player the item targeted in `slot`, if that
 /// target is still legal (CR 608.2b). Ashling's Command (two) and Prismari Command (one) print it.
 pub fn target_player_creates_treasures(g: &mut dyn Game, item: &StackItem, slot: usize, n: u32) -> Result<(), Suspend> {
