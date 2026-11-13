@@ -1,0 +1,42 @@
+# Felidar Savior: "up to two" takes fewer (CR 115.1d, 601.2c): Bot1 names only the Ornithopter, which gets the one counter (a 1/3),
+# and the Memnite and Isamaru, though legal, are left as they were.
+
+[Bot1 Deck]
+Memnite
+Ornithopter
+Isamaru, Hound of Konda
+Mox Pearl
+Black Lotus
+Mox Sapphire
+Felidar Savior
+Plains x10
+
+[Bot2 Deck]
+Memnite
+Island x10
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Felidar Savior.Cast
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Isamaru, Hound of Konda.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Felidar Savior.Counters.PlusOnePlusOne = (absent)

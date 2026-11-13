@@ -1,0 +1,40 @@
+# Felidar Savior: "up to two" takes none (CR 115.1d): Bot1 chooses no target (Target()) and no creature gets a counter.
+
+[Bot1 Deck]
+Memnite
+Ornithopter
+Isamaru, Hound of Konda
+Mox Pearl
+Black Lotus
+Mox Sapphire
+Felidar Savior
+Plains x10
+
+[Bot2 Deck]
+Memnite
+Island x10
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Felidar Savior.Cast
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Isamaru, Hound of Konda.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)

@@ -1,0 +1,33 @@
+# Felidar Savior: lifelink (CR 702.15b). Bot1 casts it on turn 1 with no other creature to target: the trigger asks for nothing
+# and does nothing. On turn 3 it attacks and deals 2, so Bot2 goes from 20 to 18 and Bot1 from 20 to 22.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Felidar Savior
+Plains x10
+
+[Bot2 Deck]
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Felidar Savior.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Felidar Savior > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18
+Bot1.Battlefield.Felidar Savior.Counters.PlusOnePlusOne = (absent)
