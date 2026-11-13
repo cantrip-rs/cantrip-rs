@@ -860,6 +860,15 @@ pub fn may_pay_to_draw(g: &mut dyn Game, item: &StackItem, payment: Cost) -> Res
     Ok(())
 }
 
+/// "That player draws an additional card" (CR 121.1, 504.1, 603.2): the player the trigger's event is about - the one whose draw step began -
+/// draws one card, if still in the game. Howling Mine and Dictate of Kruphix print it.
+pub fn that_player_draws_an_additional_card(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(player) = item.subject.player() && g.state().in_game(player) {
+        g.draw(player, 1);
+    }
+    Ok(())
+}
+
 /// "You gain LIFE life and draw CARDS card(s)" (CR 119.3, 121.1): the controller gains the life, then draws. Candy Trail and
 /// Chevill, Bane of Monsters print it with 3 life and a card, Inspiring Overseer with 1 life and a card.
 pub fn gain_life_then_draw<const LIFE: i32, const CARDS: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
