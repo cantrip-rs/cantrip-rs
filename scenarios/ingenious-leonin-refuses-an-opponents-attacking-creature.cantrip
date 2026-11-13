@@ -1,0 +1,48 @@
+# Ingenious Leonin: "another target attacking creature you control" (CR 115.1, 109.5). On turn 4 Bot2 attacks with its Armored
+# Warhorse: Bot1 has four sources of mana in its pool, but the Warhorse is attacking and is not Bot1's, so it is refused as a target.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Black Lotus
+Mox Jet
+Ingenious Leonin
+Savannah Lions
+Ornithopter
+Plains
+Plains x14
+
+[Bot2 Deck]
+Black Lotus
+Armored Warhorse
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ingenious Leonin.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Armored Warhorse.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Armored Warhorse > Bot1)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Ingenious Leonin.Activate(Bot2.Battlefield.Armored Warhorse)
+
+[Expect]
+Turn = 4
+Bot2.Battlefield.Armored Warhorse.Counters.PlusOnePlusOne = (absent)
