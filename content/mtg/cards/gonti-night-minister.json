@@ -1,0 +1,8 @@
+{
+  "name": "Gonti, Night Minister",
+  "manaCost": "{2}{B}{B}",
+  "type": "Legendary Creature — Aetherborn Rogue",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Whenever a player casts a spell they don't own, that player creates a Treasure token.\nWhenever a creature deals combat damage to one of your opponents, its controller looks at the top card of that opponent's library and exiles it face down. They may play that card for as long as it remains exiled. Mana of any type can be spent to cast a spell this way."
+}

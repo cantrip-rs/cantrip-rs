@@ -1,0 +1,69 @@
+# Gonti, Night Minister only watches combat damage dealt to one of its controller's opponents. On turn 3 Bot1 attacks with Gonti
+# and Bot2 blocks with a Walking Corpse: the damage goes to a creature, not a player, so nothing is exiled and the Corpse dies.
+# On turn 4 Bot2's other Walking Corpse hits Bot1 (Gonti is still tapped): Bot1 is not Gonti's controller's opponent, so again
+# nothing is exiled from Bot1's library. Bot2 casting its own Mox Jets and Corpses (spells it owns) made no Treasure either.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Gonti, Night Minister
+Swamp x17
+
+[Bot2 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Walking Corpse
+Walking Corpse
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gonti, Night Minister.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet#1.Activate
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Hand.Walking Corpse.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet#3.Activate
+Bot2.Battlefield.Mox Jet#4.Activate
+Bot2.Hand.Walking Corpse.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Gonti, Night Minister > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Block(Walking Corpse > Gonti, Night Minister)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+? Bot2.Graveyard = Walking Corpse
+[T4 Bot2.Main1]
+Bot2.Attack(Walking Corpse > Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 18
+Exile.Count = 0
+Bot1.Library.Count = 12
+Bot1.Battlefield = Gonti, Night Minister; Mox Jet

@@ -1,0 +1,46 @@
+# Gonti, Night Minister (cast on turn 1 with Black Lotus and a Mox Jet) attacks on turn 3 and deals 3 combat damage to Bot2: its
+# controller looks at the top card of Bot2's library and exiles it face down (Bot2's library goes 12 -> 11). Bot1 casts that
+# Lightning Bolt from exile with its Mox Jet's black mana in place of {R} (any type of mana can be spent) - a spell Bot1 does not own -
+# so Bot1, the player who cast it, creates a Treasure token (CR 111.10a): Bot2 gets none, and Bot2 takes 3 from its own card. Casting its own Mox Jet and Gonti earlier made no Treasure.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Gonti, Night Minister
+Swamp x17
+
+[Bot2 Deck]
+Island x8
+Lightning Bolt
+Island x11
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gonti, Night Minister.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Treasure Token = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Gonti, Night Minister > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 1
+? Bot2.Library.Count = 11
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Gonti, Night Minister; Mox Jet; Treasure Token
+Bot2.Battlefield.Treasure Token = (absent)
+Exile.Count = 0
+Bot2.Life = 14
