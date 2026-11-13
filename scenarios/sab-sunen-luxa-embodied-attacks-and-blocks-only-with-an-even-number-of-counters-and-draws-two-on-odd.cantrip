@@ -1,0 +1,73 @@
+# Sab-Sunen, Luxa Embodied {3}{G}{U}: "Sab-Sunen can't attack or block unless it has an even number of counters on it. (Zero is even.)"
+# "At the beginning of your first main phase, put a +1/+1 counter on Sab-Sunen. Then if it has an odd number of counters on it, draw
+# two cards." (CR 508.1c, 509.1b, 122.1, 505.1a, 608.2c). Five Moxen pay for it on turn 1 (no counters, even). Turn 3: one counter,
+# odd: Bot1 draws two (Bot2 draws none), the 7/7 may not attack (only its Memnite could), and on turn 4 may not block Bot2's Memnite (refused,
+# the 1 damage goes through). Turn 5: two counters, even, no draw, it attacks as an 8/8 and Bot2 takes 8. Turn 7: three counters, odd:
+# two more cards.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Sab-Sunen, Luxa Embodied
+Memnite
+Plains x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sab-Sunen, Luxa Embodied.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sab-Sunen, Luxa Embodied.Power = 6
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sab-Sunen, Luxa Embodied.Power = 7
+? Bot1.Hand.Count = 3
+? Bot2.Hand.Count = 7
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Sab-Sunen, Luxa Embodied > Bot2)
+Bot1.Attack()
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+! Bot1.Block(Sab-Sunen, Luxa Embodied > Memnite)
+Bot1.Block(Count: 0)
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+? Bot1.Hand.Count = 4
+? Bot1.Battlefield.Sab-Sunen, Luxa Embodied.Power = 8
+Bot1.Pass
+Bot1.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Sab-Sunen, Luxa Embodied > Bot2)
+Bot1.Pass
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 12
+Bot1.Battlefield.Sab-Sunen, Luxa Embodied.Power = 9
+Bot1.Hand.Count = 7

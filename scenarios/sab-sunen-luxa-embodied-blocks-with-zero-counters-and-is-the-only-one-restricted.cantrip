@@ -1,0 +1,56 @@
+# Sab-Sunen, Luxa Embodied: "Zero is even" (CR 122.1, 509.1b): cast on turn 1 with no counters it may block, and does, Bot2's hasty Monastery
+# Swiftspear on turn 2 (no damage reaches Bot1, the 1/2 dies). The restriction is Sab-Sunen's alone: Bot2's Swiftspear and Bot1's own
+# Memnite are not held back by it (Memnite attacks on turn 3 while Sab-Sunen, with one counter, stays home, and Bot2 takes 1).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Sab-Sunen, Luxa Embodied
+Memnite
+Plains x14
+
+[Bot2 Deck]
+Mox Ruby
+Monastery Swiftspear
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sab-Sunen, Luxa Embodied.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Monastery Swiftspear.Cast
+Bot2.Attack(Monastery Swiftspear > Bot1)
+Bot1.Block(Sab-Sunen, Luxa Embodied > Monastery Swiftspear)
+[T3 Bot1.Main1]
+? Bot1.Life = 20
+? Bot2.Graveyard = Monastery Swiftspear
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Sab-Sunen, Luxa Embodied > Bot2)
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Sab-Sunen, Luxa Embodied.Power = 7
