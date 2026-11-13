@@ -1,0 +1,46 @@
+# Paying five creates a delayed choice on the next upkeep, granting swampwalk until cleanup (CR 603.7, 702.14a).
+[Bot1 Deck]
+Giant Slug
+Mox Jet
+Mox Pearl
+Black Lotus
+Swamp x20
+[Bot2 Deck]
+Swamp
+Ornithopter
+Swamp x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Giant Slug.Cast
+? Bot1.Mana =
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Giant Slug.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Giant Slug.Keywords = (absent)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Giant Slug > Bot2)
+Bot2.Block(Ornithopter > Giant Slug)
+[T5 Bot1.Upkeep]
+! Bot1.Modes(Count: 0)
+! Bot1.Modes(Plains; Island)
+Bot1.Modes(Swamp)
+[T5 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Giant Slug.Keywords = Swampwalk
+Bot1.Attack(Giant Slug > Bot2)
+! Bot2.Block(Ornithopter > Giant Slug)
+[T6 Bot2.Main1]
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Giant Slug.Keywords = (absent)
