@@ -500,6 +500,22 @@ pub fn plus_one_counter_on_each_creature_you_control(g: &mut dyn Game, item: &St
     Ok(())
 }
 
+/// "Put a +1/+1 counter on each creature you control. Those creatures gain [keywords] until end of turn" (CR 608.2, 122.1, 611.2,
+/// 611.2c, 702): the counters go on the creatures their controller has as it resolves, all at once (CR 101.4), and the next sentence
+/// affects those same creatures - none that enters later. `KEYWORDS` is a `Keywords` as `u128`
+/// (`Keywords::of(&[Keyword::Vigilance]).0`). Felidar Retreat (a mode; vigilance) and Song of Freyalise (chapter III; vigilance,
+/// trample and indestructible) print it.
+pub fn plus_one_counter_on_each_creature_you_control_which_gain_until_end_of_turn<const KEYWORDS: u128>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let creatures = counters_on_creatures_you_control(g, item.controller, CounterKind::PlusOne, 1);
+    g.end_sentence();
+    instruction(g, |g| {
+        for id in creatures {
+            g.add_effect(item.object, id, EffectKind::AddKeywords(Keywords(KEYWORDS)), Duration::EndOfTurn);
+        }
+    });
+    Ok(())
+}
+
 /// "Put a loyalty counter on each planeswalker you control": on the planeswalkers `item`'s controller controls as it resolves, all
 /// at once (CR 608.2, 101.4: one event; CR 306.5c, 122.1e: loyalty counters). Way of the Mentor, Way of the Necromancer and the Cat
 /// token of Worzel, the Protector ("{T}: Put a loyalty counter on each planeswalker you control") print it.
