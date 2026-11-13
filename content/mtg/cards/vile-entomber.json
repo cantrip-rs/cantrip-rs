@@ -1,0 +1,11 @@
+{
+  "name": "Vile Entomber",
+  "manaCost": "{2}{B}{B}",
+  "type": "Creature — Zombie Warlock",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Deathtouch (Any amount of damage this deals to a creature is enough to destroy it.)\nWhen this creature enters, search your library for a card, put that card into your graveyard, then shuffle.",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

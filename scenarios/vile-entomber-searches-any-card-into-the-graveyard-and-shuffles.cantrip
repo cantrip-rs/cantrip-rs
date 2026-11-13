@@ -1,0 +1,37 @@
+# Vile Entomber: "When this creature enters, search your library for a card, put that card into your graveyard, then shuffle." (CR 701.23, 603.6a) Bot1 casts it with Black Lotus and Mox Jet ({2}{B}{B}) and
+# searches for a Memnite, any card being allowed: it goes to the graveyard (not the hand), the library is shuffled once, and only Islands are left in the library.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Vile Entomber
+Island
+Island
+Island
+Island
+Memnite
+Island x15
+
+[Bot2 Deck]
+Island x23
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vile Entomber.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Shuffles = 0
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Memnite)
+
+[Expect]
+Stack.Count = 0
+Bot1.Shuffles = 1
+Bot1.Graveyard = Memnite; Black Lotus
+Bot1.Hand.Count = 4
+Bot1.Battlefield = Mox Jet; Vile Entomber
+Bot1.Library.Count = 15

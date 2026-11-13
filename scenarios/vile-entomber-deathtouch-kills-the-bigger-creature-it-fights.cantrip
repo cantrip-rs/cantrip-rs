@@ -1,0 +1,53 @@
+# Vile Entomber: "Deathtouch" (CR 702.2) Turn 3: Bot1's 2/2 attacks and Bot2's Hill Giant (3/3) blocks it. The Entomber deals only 2 damage, less than the Giant's toughness, but any damage from
+# a deathtouch source is lethal (CR 702.2b, 704.5h): the Giant dies, and so does the Entomber (3 damage on a 2/2). The ETB search takes a Memnite out of the library into the graveyard first.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Vile Entomber
+Island
+Island
+Island
+Island
+Memnite
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Hill Giant
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vile Entomber.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Memnite)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Vile Entomber > Bot2)
+Bot2.Block(Hill Giant > Vile Entomber)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Hill Giant
+Bot1.Graveyard = Vile Entomber; Memnite; Black Lotus
+Bot2.Life = 20
