@@ -1,0 +1,57 @@
+# Enchanting an already tapped creature puts no counter on it; later taps each put one -0/-2 counter on it
+# (CR 702.5a, 603.2, 122.1a). A noncreature cannot be enchanted and another attacker is unaffected.
+[Bot1 Deck]
+Spirit Shackle
+Mox Jet
+Gleemox
+Swamp x20
+[Bot2 Deck]
+Craw Wurm
+Memnite
+Black Lotus
+Black Lotus
+Forest x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Craw Wurm.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Craw Wurm > Bot1)
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Craw Wurm.Tapped = true
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+! Bot1.Hand.Spirit Shackle.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Spirit Shackle.Cast(Bot2.Battlefield.Craw Wurm)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spirit Shackle.AttachedTo = Craw Wurm
+? Bot2.Battlefield.Craw Wurm.Power = 6
+? Bot2.Battlefield.Craw Wurm.Toughness = 4
+[T6 Bot2.Main1]
+Bot2.Attack(Craw Wurm > Bot1; Memnite > Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Craw Wurm.Power = 6
+? Bot2.Battlefield.Craw Wurm.Toughness = 2
+? Bot2.Battlefield.Craw Wurm.Counters.Plus0Minus2 = 1
+? Bot2.Battlefield.Memnite.Toughness = 1
+[T8 Bot2.Main1]
+Bot2.Attack(Craw Wurm > Bot1)
+Bot2.Pass
+Bot1.Pass
+[T8 Bot2.Main2]
+[Expect]
+Bot2.Graveyard = Craw Wurm; Black Lotus; Black Lotus
+Bot1.Graveyard = Spirit Shackle
