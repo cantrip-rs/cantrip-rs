@@ -18,6 +18,26 @@ pub struct Roll {
     pub result: i32,
 }
 
+/// One token an effect asks for that enters attacking (CR 508.4): what it attacks, and what any further token made for it
+/// by a replacement may attack (CR 614.1a: Doubling Season's "twice that many of those tokens"). `others` is what the
+/// effect lets this entry's token attack: empty when the effect names exactly one ("attacking that opponent"), so every
+/// token made for the entry attacks `defender`; otherwise each further token's controller chooses among them ("that
+/// player or a planeswalker they control"; any player, planeswalker or battle where the effect names none,
+/// `Query::enter_attacking_targets`). A token a replacement adds of its own ("those tokens plus a Frog") is no token made
+/// for any entry: its controller chooses among everything it could attack.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct EntersAttacking {
+    pub defender: Target,
+    pub others: Vec<Target>,
+}
+
+impl EntersAttacking {
+    /// An entry whose effect names exactly what it attacks.
+    pub fn exactly(defender: Target) -> Self {
+        EntersAttacking { defender, others: Vec::new() }
+    }
+}
+
 /// The effect has asked a question that has no answer yet. Returned with `?` all the way out of the card's code; the
 /// engine records the question and runs the effect again once it is answered.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -1104,6 +1124,11 @@ pub trait Game: Query {
     /// Creates token copies entering attacking (CR 508.4, 707.2), tapped only when `tapped`. If `defender` is absent,
     /// each token's controller chooses what it attacks as it enters. Attacking state is visible to ETB abilities.
     fn create_token_copies_attacking(&mut self, values: Copiable, controller: PlayerId, count: u32, tapped: bool, defender: Option<Target>) -> Result<Vec<ObjectId>, Suspend>;
+    /// One token copy of these values for each of `entries`, all created together as one instruction (CR 101.4, 707.2,
+    /// 603.2c), each entering attacking what its own entry names (CR 508.4), tapped only when `tapped`: "for each
+    /// opponent, create a tapped token that's a copy of ... attacking that opponent" (Mardu Siegebreaker; Shredder, Shadow
+    /// Master; myriad). What the tokens a replacement makes attack is `EntersAttacking`'s.
+    fn create_token_copies_attacking_each(&mut self, values: Copiable, controller: PlayerId, tapped: bool, entries: &[EntersAttacking]) -> Result<Vec<ObjectId>, Suspend>;
     /// The player gets an emblem (CR 114.2): a new object in the command zone, owned by them, with the abilities
     /// of this definition. It never leaves.
     fn create_emblem(&mut self, def: CardId, player: PlayerId) -> ObjectId;
@@ -1405,6 +1430,13 @@ pub trait Game: Query {
     /// attackers, so nothing that watches attackers being declared sees them. They are put onto the battlefield
     /// together, as one instruction. Outside combat they are just tokens, tapped or not as `tapped` says.
     fn create_tokens_attacking(&mut self, tokens: &[(CardId, PlayerId)], tapped: bool, defender: Target) -> Result<Vec<ObjectId>, Suspend>;
+    /// One `token` of `controller`'s for each of `entries`, all created together as one instruction (CR 101.4, 603.2c),
+    /// each entering attacking what its own entry names (CR 508.4) - tapped when `tapped` - and never declared as an
+    /// attacker: "for each opponent, create a 1/1 ... token that's tapped and attacking that player" (Adeline, Resplendent
+    /// Cathar, Stampede Surfer; Hero of Bladehold's two Soldiers, each attacking what its controller chose). What watches
+    /// tokens entering sees one event. A replacement changes that one event (CR 614.1a): what the tokens it makes attack
+    /// is `EntersAttacking`'s, each chosen as the token enters.
+    fn create_tokens_attacking_each(&mut self, token: CardId, controller: PlayerId, tapped: bool, entries: &[EntersAttacking]) -> Result<Vec<ObjectId>, Suspend>;
     /// Creates tokens together whose text has `words` (CR 612.4), tapped when `tapped`, and attacking `attacking` if one is
     /// given (CR 508.4: tapped only if the effect says "tapped and attacking"). Every other
     /// way of creating tokens gives them the words of the text making them, so a text change reaches the colors and

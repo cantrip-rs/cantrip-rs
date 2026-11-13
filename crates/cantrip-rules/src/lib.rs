@@ -2569,6 +2569,10 @@ impl cantrip_api::Game for Cx<'_> {
         self.instruction(|cx| ops::set_attack_target(cx, attacker, defender), |_| true);
     }
 
+    fn create_token_copies_attacking_each(&mut self, values: Copiable, controller: PlayerId, tapped: bool, entries: &[EntersAttacking]) -> Result<Vec<ObjectId>, Suspend> {
+        ops::create_tokens_attacking_each(self, values.card, Some(values), controller, tapped, entries).map_err(|_| Suspend)
+    }
+
     fn enter_attacking(&mut self, entered: &[ObjectId], defender: Target) {
         ops::attack_with_tokens(self, entered, defender);
     }
@@ -2880,6 +2884,10 @@ impl cantrip_api::Game for Cx<'_> {
 
     fn create_tokens_attacking(&mut self, tokens: &[(CardId, PlayerId)], tapped: bool, defender: Target) -> Result<Vec<ObjectId>, Suspend> {
         ops::create_tokens_attacking(self, tokens, tapped, defender).map_err(|_| Suspend)
+    }
+
+    fn create_tokens_attacking_each(&mut self, token: CardId, controller: PlayerId, tapped: bool, entries: &[EntersAttacking]) -> Result<Vec<ObjectId>, Suspend> {
+        ops::create_tokens_attacking_each(self, token, None, controller, tapped, entries).map_err(|_| Suspend)
     }
 
     fn create_tokens_worded(&mut self, tokens: &[(CardId, PlayerId)], tapped: bool, attacking: Option<Target>, words: Words) -> Result<Vec<ObjectId>, Suspend> {

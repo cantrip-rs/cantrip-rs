@@ -2458,6 +2458,36 @@ pub fn create_token_copies_together(cx: &mut Cx, copies: &[(Copiable, PlayerId)]
     create_tokens_onto(cx, &tokens, false, Copies::Each(&values), &[], Words::NONE, None, None, None)
 }
 
+/// One token for each of `entries`, created together as one instruction (CR 101.4, 111.1) and each entering attacking
+/// what its own entry names (CR 508.4): "for each opponent, create a token ... attacking that player". They are one event,
+/// so what watches tokens entering sees them together (CR 603.2c), and each is attacking as its entry is matched
+/// (CR 603.6a); none was declared as an attacker (CR 506.3, 508.4), so nothing that triggers on attackers being declared
+/// sees it. A copy of `copy`'s values when there is one (CR 707.2: Mardu Siegebreaker; Shredder, Shadow Master; myriad),
+/// otherwise `card` with the words of the text making it (CR 612.4: Adeline, Resplendent Cathar; Hero of Bladehold;
+/// Stampede Surfer). A replacement changes the one event (CR 614.1a), and the tokens it makes are created with what the
+/// effect specifies, attacking included (the Chatterfang and Divine Visitation rulings): a further token made for an entry
+/// (Doubling Season's) attacks what that entry allows (`EntersAttacking::others`), and one the replacement adds of its own
+/// (Quina's Frog, Chatterfang's Squirrels) what its controller chooses (`enter_attacking_each`).
+pub fn create_tokens_attacking_each(cx: &mut Cx, card: CardId, copy: Option<Copiable>, controller: PlayerId, tapped: bool, entries: &[EntersAttacking]) -> R<Vec<ObjectId>> {
+    if entries.is_empty() {
+        return Ok(Vec::new());
+    }
+    let words = creating_words(cx, copy);
+    let card = copy.map_or(card, |values| values.card);
+    let tokens = vec![(card, controller); entries.len()];
+    create_tokens_onto(cx, &tokens, tapped, Copies::All(copy), &[], words, None, None, Some(AttackEntry::Each(entries)))
+}
+
+/// The words of the text creating tokens (CR 612.4, 612.2a): a token is what the text that makes it says, so a changed text
+/// makes tokens of the colors and creature types it names now - an ability's text as it was put on the stack
+/// (`Cx::own_text`, CR 113.7a). A copy is its copiable values, and takes none.
+fn creating_words(cx: &Cx, copy: Option<Copiable>) -> Words {
+    match cx.cause() {
+        Cause::Spell(source) | Cause::Ability { source, .. } if copy.is_none() => Query::words(cx, source),
+        _ => Words::NONE,
+    }
+}
+
 /// Creates tokens that are copies of a permanent (CR 707.2, 111.1): the permanent's copiable values, its own copy
 /// effect's exceptions included.
 pub fn create_token_copies(cx: &mut Cx, values: Copiable, controller: PlayerId, count: u32) -> R<Vec<ObjectId>> {
@@ -2647,10 +2677,14 @@ fn token_copy(cards: &CardTable, card: CardId, copy: Option<Copiable>, words: Wo
     cantrip_api::token_values(cards.get(card), card, words)
 }
 
-/// Whether an instruction names a defender or leaves its choice to the entering creature's controller (CR 508.4).
+/// Whether an instruction names a defender, one for each token, or leaves its choice to the entering creature's controller
+/// (CR 508.4).
 #[derive(Clone, Copy)]
-enum AttackEntry {
+enum AttackEntry<'a> {
     Defender(Target),
+    /// The token asked for at each position attacks what its entry names ("for each opponent, create a token ... attacking
+    /// that player").
+    Each(&'a [EntersAttacking]),
     Choose,
 }
 
@@ -2661,12 +2695,7 @@ pub fn create_tokens_batch(cx: &mut Cx, tokens: &[(CardId, PlayerId)], tapped: b
 }
 
 fn create_tokens_batch_attacking(cx: &mut Cx, tokens: &[(CardId, PlayerId)], tapped: bool, copy: Option<Copiable>, with: &[(CounterKind, i32)], attacking: Option<Target>) -> R<Vec<ObjectId>> {
-    // CR 612.4, 612.2a: a token is what the text that makes it says, so a changed text makes tokens of the colors and
-    // creature types it names now - an ability's text as it was put on the stack (`Cx::own_text`, CR 113.7a).
-    let words = match cx.cause() {
-        Cause::Spell(source) | Cause::Ability { source, .. } if copy.is_none() => Query::words(&*cx, source),
-        _ => Words::NONE,
-    };
+    let words = creating_words(cx, copy);
     create_tokens_worded(cx, tokens, tapped, copy, with, words, None, attacking)
 }
 
@@ -2714,7 +2743,7 @@ fn create_tokens_onto(
     words: Words,
     spell: Option<&StackItem>,
     host: Option<ObjectId>,
-    defender: Option<AttackEntry>,
+    defender: Option<AttackEntry<'_>>,
 ) -> R<Vec<ObjectId>> {
     // Replacements inspect copy exceptions and changed text too (CR 614.12).
     let proposed: Vec<(CardId, Option<Copiable>, PlayerId)> = tokens
@@ -2725,7 +2754,9 @@ fn create_tokens_onto(
     // CR 614.1a: how many of each there are is decided by what would replace the creation, before any of them is made. The
     // token a copy of a permanent spell becomes as it resolves is not created (CR 111.13, 707.10f), so nothing replaces it.
     let replaced = if spell.is_some() { None } else { replace::token_batch(cx, &proposed) };
-    let tokens = replaced.as_deref().unwrap_or(&proposed);
+    let tokens = replaced.as_ref().map_or(&proposed[..], |(tokens, _)| &tokens[..]);
+    // Which token asked for each one made is one of "those tokens" for, if any (`replace::token_batch`).
+    let stands_for = |place: usize| replaced.as_ref().map_or(Some(place), |(_, stands)| stands[place]);
     let before: Vec<ObjectId> = cx.s().battlefield().to_vec();
     // Tokens entering trigger no look-back ability (CR 603.10a).
     let then = crate::settle::Then::none();
@@ -2735,8 +2766,10 @@ fn create_tokens_onto(
     let mut attacking: Vec<ObjectId> = Vec::new();
     // CR 614.12, 101.4: tokens created together enter together. Each one's entering choices and replacements are worked
     // out before any of them is on the battlefield, so none sees another (Giada counts the Angels already there).
-    let mut arriving: Vec<(ObjectId, PlayerId, Entering, Option<PlayerId>)> = Vec::with_capacity(tokens.len());
-    for &(card, copy, controller) in tokens {
+    let mut arriving: Vec<(ObjectId, PlayerId, Entering, Option<PlayerId>, usize)> = Vec::with_capacity(tokens.len());
+    // The token asked for that each token made is one of "those tokens" for, once a replacement has changed the creation.
+    let mut places: Vec<Option<usize>> = Vec::with_capacity(tokens.len());
+    for (place, &(card, copy, controller)) in tokens.iter().enumerate() {
         let (card, copy, back_up, one_face) = token_faces(cx.cards(), card, copy);
         let turn = cx.s().turn.number;
         let timestamp = cx.st().timestamp();
@@ -2845,9 +2878,9 @@ fn create_tokens_onto(
         if change.attacking {
             attacking.push(id);
         }
-        arriving.push((id, controller, entering, change.put_by));
+        arriving.push((id, controller, entering, change.put_by, place));
     }
-    for (id, controller, entering, put_by) in arriving {
+    for (id, controller, entering, put_by, place) in arriving {
         let chosen = keep_chosen(cx, &entering);
         cx.st().update_obj(id, |o| {
             o.zone = Zone::BATTLEFIELD;
@@ -2880,6 +2913,7 @@ fn create_tokens_onto(
         events.extend(entered_attached(cx, id));
         events.extend(put);
         created.push(id);
+        places.push(stands_for(place));
     }
     // A replacement that has it arrive attacking (CR 614.1c, 508.4): in the combat as it arrives, as a permanent put there
     // by a move is (`move_together`).
@@ -2887,6 +2921,7 @@ fn create_tokens_onto(
     // chooses only once; an instruction that names a defender needs no choice.
     match defender {
         Some(AttackEntry::Defender(defender)) => enter_attacking(cx, &created, defender),
+        Some(AttackEntry::Each(entries)) => enter_attacking_each(cx, &created, &places, entries),
         Some(AttackEntry::Choose) => enter_attacking_by_choice(cx, &created),
         None if !attacking.is_empty() => enter_attacking_by_choice(cx, &attacking),
         None => {}
@@ -5026,6 +5061,77 @@ pub fn enter_attacking(cx: &mut Cx, entered: &[ObjectId], defender: Target) {
     }
 }
 
+/// `enter_attacking` for tokens created together with an entry each (`create_tokens_attacking_each`, CR 508.4). `places[i]`
+/// is the entry `created[i]` is one of "those tokens" for (`replace::token_batch`), none for a token a replacement added of
+/// its own. The first token made for an entry attacks its defender, as the effect says. A further one a replacement made
+/// for it (Doubling Season) attacks the defender too when the effect names exactly one ("attacking that opponent"), and
+/// otherwise what its controller chooses among what the entry allows ("that player or a planeswalker they control"). One
+/// a replacement added (Quina's Frog) is made for no entry, so the effect specifies nothing it attacks: its controller
+/// chooses among everything it could (`enter_attacking_by_choice`). Each choice is made as the token enters, before its
+/// entry is matched (CR 603.6a).
+fn enter_attacking_each(cx: &mut Cx, created: &[ObjectId], places: &[Option<usize>], entries: &[EntersAttacking]) {
+    let mut first = vec![true; entries.len()];
+    let mut by_defender: Vec<(Target, Vec<ObjectId>)> = Vec::new();
+    let mut added: Vec<ObjectId> = Vec::new();
+    for (&id, &place) in created.iter().zip(places) {
+        let Some(entry) = place.and_then(|place| entries.get(place).map(|entry| (place, entry))) else {
+            added.push(id);
+            continue;
+        };
+        let (place, entry) = entry;
+        let defender = if std::mem::replace(&mut first[place], false) || entry.others.is_empty() {
+            entry.defender
+        } else {
+            if !eligible_to_enter_attacking(cx, id) {
+                continue;
+            }
+            let controller = cx.s().obj(id).controller;
+            let candidates: Vec<Target> = entry.others.iter().copied().filter(|&t| cx.could_enter_attacking(controller, t)).collect();
+            match choose_entering_defender(cx, id, controller, candidates) {
+                Some(defender) => defender,
+                None => continue,
+            }
+        };
+        match by_defender.iter_mut().find(|(t, _)| *t == defender) {
+            Some((_, ids)) => ids.push(id),
+            None => by_defender.push((defender, vec![id])),
+        }
+    }
+    for (defender, ids) in by_defender {
+        enter_attacking(cx, &ids, defender);
+    }
+    enter_attacking_by_choice(cx, &added);
+}
+
+/// What a permanent entering attacking attacks, chosen by its controller among `candidates` (CR 508.4): asked only when
+/// there is a choice, and the first candidate when the question cannot be answered yet, the run going on and being
+/// replayed with the answer (`Cx::ask_rule`, as the graveyard order is). None when there is nothing to attack.
+fn choose_entering_defender(cx: &mut Cx, id: ObjectId, controller: PlayerId, candidates: Vec<Target>) -> Option<Target> {
+    match candidates[..] {
+        [] => None,
+        [only] => Some(only),
+        _ => {
+            let first = candidates[0];
+            let ask = RequestKind::ChooseTarget { replacing: None,
+                label: "Choose what it attacks as it enters attacking: a player, a planeswalker or a battle.",
+                slot_player: None,
+                together: None,
+                source: id,
+                purpose: Purpose::EnterAttacking,
+                candidates,
+                optional: false,
+                least: 1,
+                count: 1,
+                any_number: false,
+            };
+            match cx.ask_rule(controller, ask) {
+                Ok(Some(Answer::Targets(t))) => Some(t.first().copied().unwrap_or(first)),
+                _ => Some(first),
+            }
+        }
+    }
+}
+
 /// CR 506.3a-b,f: only a creature controlled by the attacking player can join this combat.
 fn eligible_to_enter_attacking(cx: &Cx, id: ObjectId) -> bool {
     if !cx.s().turn.attacked || !live(cx.s(), id) || !cx.s().obj(id).zone.is(ZoneKind::Battlefield)
@@ -5048,28 +5154,7 @@ fn enter_attacking_by_choice(cx: &mut Cx, entered: &[ObjectId]) {
         }
         let controller = cx.s().obj(id).controller;
         let candidates = cx.enter_attacking_targets(controller);
-        let defender = match candidates[..] {
-            [] => continue,
-            [only] => only,
-            _ => {
-                let ask = RequestKind::ChooseTarget { replacing: None,
-                    label: "Choose what it attacks as it enters attacking: a player, a planeswalker or a battle.",
-                    slot_player: None,
-                    together: None,
-                    source: id,
-                    purpose: Purpose::EnterAttacking,
-                    candidates: candidates.clone(),
-                    optional: false,
-                    least: 1,
-                    count: 1,
-                    any_number: false,
-                };
-                match cx.ask_rule(controller, ask) {
-                    Ok(Some(Answer::Targets(t))) => t.first().copied().unwrap_or(candidates[0]),
-                    _ => candidates[0],
-                }
-            }
-        };
+        let Some(defender) = choose_entering_defender(cx, id, controller, candidates) else { continue };
         enter_attacking(cx, &[id], defender);
     }
 }

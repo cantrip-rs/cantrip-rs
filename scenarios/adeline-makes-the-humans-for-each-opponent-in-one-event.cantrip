@@ -1,0 +1,50 @@
+# Three players: Adeline's "for each opponent, create a 1/1 white Human creature token that's tapped and attacking that player"
+# is one instruction, so the two Humans - one attacking Bot2, one attacking Bot3 - are created together in one event (CR 101.4),
+# and Mister Fantastic, Reed Richards' "Whenever one or more tokens you control enter" triggers once for them, not once for
+# each defender (CR 603.2c). Each Human is attacking its own opponent (CR 508.4).
+
+[Bot1 Deck]
+Black Lotus
+Adeline, Resplendent Cathar
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mister Fantastic, Reed Richards
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Adeline, Resplendent Cathar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mister Fantastic, Reed Richards.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[T4 Bot1.Main1]
+Bot1.Attack(Adeline, Resplendent Cathar > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Stack = Mister Fantastic, Reed Richards
+? Stack.Count = 1
+
+[Expect]
+Combat.Attackers = Adeline, Resplendent Cathar > Bot2; Human Token > Bot2; Human Token > Bot3

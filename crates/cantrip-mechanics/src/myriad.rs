@@ -6,7 +6,7 @@
 //!
 //! A card with myriad lists `TRIGGER` among its `abilities` and `EXILE` as its first `delayed` ability.
 
-use crate::combat::{choose_among, player_or_their_planeswalkers};
+use crate::combat::player_or_their_planeswalkers;
 use crate::triggers::THIS_ATTACKS;
 use cantrip_api::*;
 
@@ -39,52 +39,28 @@ fn choose_for(g: &mut dyn Game, you: PlayerId, source: ObjectId, opponent: Playe
 /// attacking that player or a planeswalker they control": the copy is of this creature as the ability resolves, or as it last
 /// existed if it has left (CR 707.2, 113.7a). The defending player is the one it was attacking, or the controller of the
 /// planeswalker it was attacking, as it became an attacking creature this combat (the rulings). The tokens all enter together,
-/// tapped (CR 614.1c), and are attacking (CR 508.4) - never declared as attackers, so nothing that triggers on attackers sees
-/// them, myriad itself included. A replacement that makes more tokens (Doubling Season) makes more of them for each opponent,
-/// and the controller chooses separately for each token what it attacks. The tokens are exiled at end of combat, if any was
+/// tapped (CR 614.1c), and are attacking as they enter (CR 508.4) - never declared as attackers, so nothing that triggers on
+/// attackers sees them, myriad itself included. A replacement changes the one creation event (CR 614.1a): a token made in
+/// place of an opponent's copy (Doubling Season's twice that many, Draconic Visitor's Dragon) is one of "those tokens" for
+/// that opponent, entering tapped and attacking (the Divine Visitation ruling), each further one attacking that player or a
+/// planeswalker they control as its controller chooses; a token the replacement adds of its own (Quina's Frog) attacks what
+/// its controller chooses (`Game::create_token_copies_attacking_each`). The tokens are exiled at end of combat, if any was
 /// created.
 fn create_copies(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let (me, you) = (item.object, item.controller);
     let Some(defending) = g.defending_player(me) else { return Ok(()) };
     let opponents: Vec<PlayerId> = g.state().opponents(you).filter(|&p| p != defending).collect();
-    let mut plan: Vec<(PlayerId, Target)> = Vec::new();
+    let mut entries: Vec<EntersAttacking> = Vec::new();
     for opponent in opponents {
-        if let Some(target) = choose_for(g, you, me, opponent)? {
-            plan.push((opponent, target));
+        if let Some(defender) = choose_for(g, you, me, opponent)? {
+            entries.push(EntersAttacking { defender, others: player_or_their_planeswalkers(g, opponent) });
         }
     }
-    if plan.is_empty() {
+    if entries.is_empty() {
         return Ok(());
     }
     let values = g.copiable_values(me);
-    let created = g.create_token_copies_tapped(values, you, plan.len() as u32, true)?;
-    // What was created is what took the place of the copies asked for (CR 614.1a): a replacement changes the one creation
-    // event's count and kind (Doubling Season makes twice as many, Draconic Visitor makes Dragons), so every token made is
-    // one of "those tokens", whatever it is, and enters tapped and attacking (the Divine Visitation ruling). They are shared
-    // out in turn order, each opponent getting an equal share and the first ones one more of any remainder.
-    let copies = created;
-    let (share, extra) = (copies.len() / plan.len(), copies.len() % plan.len());
-    let mut owners: Vec<usize> = Vec::with_capacity(copies.len());
-    for k in 0..plan.len() {
-        owners.extend(std::iter::repeat_n(k, share + usize::from(k < extra)));
-    }
-    let mut attacking: Vec<(Target, Vec<ObjectId>)> = Vec::new();
-    for (i, &token) in copies.iter().enumerate() {
-        let (opponent, first) = plan[owners[i]];
-        let target = if i == 0 || owners[i - 1] != owners[i] {
-            first
-        } else {
-            let candidates = player_or_their_planeswalkers(g, opponent);
-            choose_among(g, you, me, &candidates)?.unwrap_or(first)
-        };
-        match attacking.iter_mut().find(|(t, _)| *t == target) {
-            Some((_, tokens)) => tokens.push(token),
-            None => attacking.push((target, vec![token])),
-        }
-    }
-    for (target, tokens) in attacking {
-        g.enter_attacking(&tokens, target);
-    }
+    let copies = g.create_token_copies_attacking_each(values, you, true, &entries)?;
     if !copies.is_empty() {
         g.delayed_trigger_about(
             DelayedWhen::Step { step: Step::EndOfCombat, on_turn_of: None },

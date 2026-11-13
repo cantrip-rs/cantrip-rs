@@ -124,22 +124,15 @@ pub fn player_or_their_planeswalkers(g: &dyn Game, player: PlayerId) -> Vec<Targ
     out
 }
 
-/// One `token` of `you`'s for each of `attacking`, attacking (tapped when `tapped`) what that entry names (CR 508.4): the tokens that
-/// attack the same thing are created together (CR 101.4). The chosen targets come from `choose_among` or
-/// `choose_attack_target`, asked before any token is made. Hero of Bladehold and Adeline, Resplendent Cathar print it.
+/// One `token` of `you`'s for each of `attacking`, attacking (tapped when `tapped`) what that entry names (CR 508.4): all of
+/// them created together as one instruction (CR 101.4, 603.2c), whatever each attacks (`Game::create_tokens_attacking_each`).
+/// The effect names no defender ("tapped and attacking"): each target was chosen with `choose_attack_target` before any
+/// token is made, and a further token a replacement makes attacks what its controller chooses. Hero of Bladehold and The
+/// Last Ronin's Technique print it.
 pub fn create_attacking(g: &mut dyn Game, you: PlayerId, token: CardId, tapped: bool, attacking: &[Target]) -> Result<Vec<ObjectId>, Suspend> {
-    let mut made = Vec::new();
-    let mut done: Vec<Target> = Vec::new();
-    for &target in attacking {
-        if done.contains(&target) {
-            continue;
-        }
-        done.push(target);
-        let n = attacking.iter().filter(|&&t| t == target).count();
-        let tokens = vec![(token, you); n];
-        made.extend(g.create_tokens_attacking(&tokens, tapped, target)?);
-    }
-    Ok(made)
+    let others = g.enter_attacking_targets(you);
+    let entries: Vec<EntersAttacking> = attacking.iter().map(|&defender| EntersAttacking { defender, others: others.clone() }).collect();
+    g.create_tokens_attacking_each(token, you, tapped, &entries)
 }
 
 /// "Enchanted creature ... can't be blocked by more than one creature" (CR 509.1b): `blocker_limits` rule of an

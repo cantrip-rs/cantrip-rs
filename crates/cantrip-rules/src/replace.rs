@@ -1788,15 +1788,22 @@ pub fn draw_replaced(cx: &mut Cx, player: PlayerId) -> bool {
 /// Apply token-creation replacements to a creation, grouped by definition, copy and controller (CR 614.1a). Return the
 /// resulting counts and token types. The creation is one event: the tokens each player would create are replaced together,
 /// that player ordering the effects (CR 616.1), each asked once and applied once to all of them (`apply_to_parts`).
-pub fn token_batch(cx: &mut Cx, tokens: &[(CardId, Option<Copiable>, PlayerId)]) -> Option<Vec<(CardId, Option<Copiable>, PlayerId)>> {
+///
+/// Beside each token made is the token asked for that it is one of "those tokens" for (CR 614.1a: an effect that changes how
+/// many or what kind of tokens are made still makes those tokens), as its place in `tokens`: a run's tokens are dealt out
+/// over the places of its run in turn, so under Doubling Season each place asked for has two. A token an effect added to
+/// the event ("those tokens plus a [token]") stands for none.
+pub fn token_batch(cx: &mut Cx, tokens: &[(CardId, Option<Copiable>, PlayerId)]) -> Option<(Vec<(CardId, Option<Copiable>, PlayerId)>, Vec<Option<usize>>)> {
     if !possible(cx, None) {
         return None;
     }
-    // The runs of one definition, copy and controller, in the order given.
+    // The runs of one definition, copy and controller, in the order given, and where each starts.
     let mut groups: Vec<TokenCreation> = Vec::new();
+    let mut starts: Vec<usize> = Vec::new();
     let mut i = 0;
     while i < tokens.len() {
         let (token, copy, controller) = tokens[i];
+        starts.push(i);
         let mut count = 0u32;
         while i < tokens.len() && tokens[i] == (token, copy, controller) {
             count += 1;
@@ -1828,14 +1835,20 @@ pub fn token_batch(cx: &mut Cx, tokens: &[(CardId, Option<Copiable>, PlayerId)])
     }
     // Keep the final replacement’s token definition and copy values (CR 614.1a).
     let changed = !added.is_empty() || groups.iter().zip(&after).any(|(b, a)| a.count != b.count || a.token != b.token || a.copy != b.copy);
+    if !changed {
+        return None;
+    }
     let mut out: Vec<(CardId, Option<Copiable>, PlayerId)> = Vec::with_capacity(tokens.len());
-    for (b, a) in groups.iter().zip(&after) {
+    let mut stands_for: Vec<Option<usize>> = Vec::with_capacity(tokens.len());
+    for ((b, a), &start) in groups.iter().zip(&after).zip(&starts) {
         out.extend(std::iter::repeat((a.token, a.copy, b.controller)).take(a.count as usize));
+        stands_for.extend((0..a.count as usize).map(|t| Some(start + t % b.count as usize)));
     }
     for a in &added {
         out.extend(std::iter::repeat((a.token, a.copy, a.controller)).take(a.count as usize));
+        stands_for.extend(std::iter::repeat_n(None, a.count as usize));
     }
-    changed.then_some(out)
+    Some((out, stands_for))
 }
 
 /// Damage about to be dealt (CR 614.1a, 120.3): what remains of it once every effect has applied - how much, and whom it

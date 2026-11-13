@@ -1,0 +1,55 @@
+# Four players: Wyrm's Crossing Patrol attacks Bot2, and its myriad makes a copy attacking each of Bot3 and Bot4 (CR 702.116a).
+# Quina, Qu Gourmet makes that creation "those tokens plus a 1/1 green Frog" (CR 614.1a): each copy still attacks the opponent
+# it was made for, and the Frog, made for no opponent, enters tapped and attacking what Bot1 chooses (CR 508.4; the Chatterfang
+# rulings) - Bot3 here. Before the fix the tokens were shared out in creation order, so Bot4's copy went to Bot3.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Jet
+Black Lotus
+Quina, Qu Gourmet
+Wyrm's Crossing Patrol
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Bot4 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Quina, Qu Gourmet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot4.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wyrm's Crossing Patrol.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot4.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Wyrm's Crossing Patrol > Bot2)
+Bot1.Target(Bot3)
+Bot1.Target(Bot4)
+Bot1.Target(Bot3)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot4.Pass
+? Stack.Count = 0
+
+[Expect]
+Combat.Attackers.Count = 4
+Bot1.Battlefield.Frog Token.Tapped = true
+Combat.Attackers = Wyrm's Crossing Patrol > Bot2; Wyrm's Crossing Patrol > Bot3; Wyrm's Crossing Patrol > Bot4; Frog Token > Bot3
