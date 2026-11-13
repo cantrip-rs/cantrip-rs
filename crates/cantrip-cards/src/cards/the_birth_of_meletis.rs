@@ -1,13 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::library::find_to_hand;
-use cantrip_mechanics::{select, tokens};
+use cantrip_mechanics::{effects, tokens};
 use cantrip_oracle as oracle;
-
-/// "I — Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle." (CR 701.23).
-fn i_search_for_a_plains(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    find_to_hand(g, item.controller, item.object, select::BASIC_PLAINS_CARD, true)?;
-    Ok(())
-}
 
 /// The 0/4 colorless Wall artifact creature token with defender; The Birth of Meletis is the only printed card that makes it.
 pub static WALL: CardDef = CardDef {
@@ -36,7 +29,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         chapter(
             1,
-            i_search_for_a_plains,
+            effects::search_for_a_basic_plains_card,
             "I — Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.",
         ),
         chapter(
