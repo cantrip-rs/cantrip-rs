@@ -1,0 +1,9 @@
+{
+  "name": "Prayer of Binding",
+  "manaCost": "{3}{W}",
+  "type": "Enchantment",
+  "oracleText": "Flash\nWhen this enchantment enters, exile up to one target nonland permanent an opponent controls until this enchantment leaves the battlefield. You gain 2 life.",
+  "keywords": [
+    "Flash"
+  ]
+}

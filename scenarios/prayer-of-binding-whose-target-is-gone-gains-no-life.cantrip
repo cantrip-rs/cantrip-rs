@@ -1,0 +1,51 @@
+# Prayer of Binding: a target was chosen, so when it is no longer legal as the ability resolves the ability does not resolve
+# at all (CR 608.2b) and Bot1 gains no life (the ruling of 2024-11-08). Bot1 targets Bot2's Mox Ruby, then, holding priority,
+# destroys it with Disenchant: the enters ability finds its only target gone and does nothing. Bot1 stays at 20.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Prayer of Binding
+Disenchant
+Island x14
+
+[Bot2 Deck]
+Plains
+Mox Ruby
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Prayer of Binding.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Mox Ruby)
+? Stack.Count = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Disenchant.Cast(Bot2.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Mox Ruby
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Exile.Count = 0
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Prayer of Binding
+Bot2.Battlefield = Plains

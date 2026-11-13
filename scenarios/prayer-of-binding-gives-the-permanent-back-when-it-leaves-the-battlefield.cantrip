@@ -1,0 +1,50 @@
+# Prayer of Binding: the exile lasts only until the enchantment leaves the battlefield (CR 610.3). Bot1 exiles Bot2's Mox Ruby
+# (the only nonland permanent an opponent controls, but "up to one" still asks) and gains 2 (22), then destroys the
+# Prayer with Disenchant: the Mox Ruby returns to the battlefield under Bot2's control, a new object (CR 400.7), and nothing is
+# left in exile.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Prayer of Binding
+Disenchant
+Island x14
+
+[Bot2 Deck]
+Plains
+Mox Ruby
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Prayer of Binding.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+? Bot2.Battlefield = Plains
+? Exile.Count = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Prayer of Binding)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Plains; Mox Ruby
+Bot1.Life = 22
+Exile.Count = 0
