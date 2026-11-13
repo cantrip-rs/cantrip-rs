@@ -642,6 +642,15 @@ pub fn look_at_top_select(
     Ok(taken)
 }
 
+/// "Look at the top four cards of your library. You may reveal a creature card with power N or less from among them and put it into
+/// your hand. Put the rest on the bottom of your library in a random order." (CR 701.20a, 401.4) as a whole ability effect:
+/// `look_at_top_select` with `select::power_at_most(N)`. Squad Rallier (2) and Water Tribe Rallier (3) print it.
+pub fn look_at_top_four_may_take_creature_with_power_at_most<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let rule = crate::select::creature_cards(crate::select::up_to(1)).with(crate::select::power_at_most(N));
+    look_at_top_select(g, item.controller, item.object, 4, rule, true, Rest::BottomRandom)?;
+    Ok(())
+}
+
 /// "If it's a land card, you may put it onto the battlefield tapped" (CR 608.2d, 305.1) for a card just revealed or looked at as the
 /// ability resolves: asked only of a land card, and the permanent arrives tapped under its owner's control. Whether it entered - not
 /// whether the player said yes, so one a replacement effect stops (CR 614.6) did not. Risen Reef and Commander Spock print it.
