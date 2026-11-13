@@ -1,0 +1,8 @@
+{
+  "name": "Orcish Conscripts",
+  "manaCost": "{R}",
+  "type": "Creature — Orc",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "This creature can't attack unless at least two other creatures attack.\nThis creature can't block unless at least two other creatures block."
+}
