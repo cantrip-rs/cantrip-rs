@@ -1,0 +1,23 @@
+# With no charge counters, the Battery can tap for exactly one blue mana (CR 605.1a).
+[Bot1 Deck]
+Blue Mana Battery
+Black Lotus
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Blue Mana Battery.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Blue Mana Battery.Activate(Ability: Remove any number; X: 0)
+Bot1.Pass
+? Bot1.Mana = {U}
+[Expect]
+Bot1.Battlefield.Blue Mana Battery.Tapped = true
+Bot1.Battlefield.Blue Mana Battery.Counters.Charge = (absent)

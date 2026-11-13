@@ -1,0 +1,6 @@
+{
+  "name": "Blue Mana Battery",
+  "manaCost": "{4}",
+  "type": "Artifact",
+  "oracleText": "{2}, {T}: Put a charge counter on this artifact.\n{T}, Remove any number of charge counters from this artifact: Add {U}, then add an additional {U} for each charge counter removed this way."
+}
