@@ -1,0 +1,8 @@
+{
+  "name": "Soul-Shackled Zombie",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Zombie",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "When this creature enters, exile up to two target cards from a single graveyard. If at least one creature card was exiled this way, each opponent loses 2 life and you gain 2 life."
+}

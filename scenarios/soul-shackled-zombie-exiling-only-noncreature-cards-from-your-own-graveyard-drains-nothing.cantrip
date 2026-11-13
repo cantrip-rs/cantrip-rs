@@ -1,0 +1,51 @@
+# Soul-Shackled Zombie: the life changes only if a creature card was exiled (CR 608.2c). Bot1 exiles two noncreature cards from its own graveyard (its Cut Downs) with Bot2's creature cards in the other graveyard left alone: no one loses or gains life.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Cut Down
+Cut Down
+Soul-Shackled Zombie
+Island
+Island x13
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Cut Down.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Cut Down.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Soul-Shackled Zombie.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Graveyard.Cut Down)
+Bot1.Target(Bot1.Graveyard.Cut Down)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 2
+Bot2.Graveyard.Count = 2
+Bot1.Graveyard.Count = 1
+Bot1.Life = 20
+Bot2.Life = 20
