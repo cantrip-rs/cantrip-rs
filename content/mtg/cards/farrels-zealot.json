@@ -1,0 +1,8 @@
+{
+  "name": "Farrel's Zealot",
+  "manaCost": "{1}{W}{W}",
+  "type": "Creature — Human",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever this creature attacks and isn't blocked, you may have it deal 3 damage to target creature. If you do, this creature assigns no combat damage this turn."
+}

@@ -1,0 +1,37 @@
+# An unblocked Zealot may damage an opposing creature instead of assigning combat damage; the restriction ends that turn (CR 611.2a, 120.3).
+[Bot1 Deck]
+Black Lotus
+Farrel's Zealot
+Plains x20
+[Bot2 Deck]
+Black Lotus
+Wall of Stone
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Farrel's Zealot.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Wall of Stone.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Attack(Farrel's Zealot)
+! Bot1.Target(Plains)
+Bot1.Target(Wall of Stone)
+Bot1.Accept
+? Bot2.Battlefield.Wall of Stone.Damage = 3
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+[T5 Bot1.Main1]
+Bot1.Attack(Farrel's Zealot)
+Bot1.Target(Wall of Stone)
+Bot1.Decline
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield.Wall of Stone.Damage = 0

@@ -1,0 +1,26 @@
+# With no other creature, the Zealot targets itself: declining lets it deal combat damage, while accepting later kills it (CR 603.2, 704.5g).
+[Bot1 Deck]
+Black Lotus
+Farrel's Zealot
+Plains x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Farrel's Zealot.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Attack(Farrel's Zealot)
+Bot1.Decline
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+? Bot1.Battlefield.Farrel's Zealot.Damage = 0
+[T5 Bot1.Main1]
+Bot1.Attack(Farrel's Zealot)
+Bot1.Accept
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Graveyard.Farrel's Zealot.Colors = White
+Bot2.Life = 18
