@@ -905,6 +905,14 @@ fn creature_spell_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
 /// toughness 2 or less" starts from it.
 pub const CREATURE_SPELL: TargetSpec = target(creature_spell_filter);
 
+fn artifact_or_creature_spell_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    spell_filter(q, asker, t) && matches!(t, Target::Object(id) if q.chars(id).is(CardType::Artifact) || q.chars(id).is(CardType::Creature))
+}
+
+/// "Target artifact or creature spell" (CR 115.1a): a spell on the stack with the card type artifact, creature, or both (an artifact
+/// creature is one spell, not two). Spectral Interference and Voracious Greatshark print it.
+pub const ARTIFACT_OR_CREATURE_SPELL: TargetSpec = target(artifact_or_creature_spell_filter);
+
 fn noncreature_spell_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     spell_filter(q, asker, t) && matches!(t, Target::Object(id) if !q.chars(id).is(CardType::Creature))
 }
