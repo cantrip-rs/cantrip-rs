@@ -2,23 +2,12 @@ use cantrip_api::*;
 use cantrip_mechanics::{effects, prepare, targets, triggers};
 use cantrip_oracle as oracle;
 
-/// "Target creature you control gets +2/+0 and gains deathtouch until end of turn" (CR 611.2a), if it is still a legal
-/// target as this resolves (CR 608.2b).
-fn venomous_words(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
-    instruction(g, |g| {
-        cantrip_mechanics::pump(g, item.object, creature, 2, 0);
-        effects::gain_until_end_of_turn(g, item.object, creature, Keyword::Deathtouch);
-    });
-    Ok(())
-}
-
 /// Scathing Shadelock's prepare spell (CR 722): not a card here, only ever a copy.
 pub static VENOMOUS_WORDS: CardDef = CardDef {
     name: "Venomous Words",
     cost: mana("{B}"),
     types: TypeSet::of(&[CardType::Sorcery]),
-    spell: spell(&[targets::CREATURE_YOU_CONTROL], venomous_words),
+    spell: spell(&[targets::CREATURE_YOU_CONTROL], effects::target_creature_gets_and_gains_deathtouch::<2, 0>),
     text: "Target creature you control gets +2/+0 and gains deathtouch until end of turn.",
     ..CardDef::BLANK
 };
