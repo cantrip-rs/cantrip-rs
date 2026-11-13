@@ -1,0 +1,64 @@
+# Amonkhet Raceway: "Start your engines!", "{T}: Add {C}" and "Max speed — {T}: Target creature gains haste until end of
+# turn" (CR 702.178a: as long as your speed is 4, the land has that ability). Playing it on turn 1 gives Bot1 speed 1
+# (CR 702.179a); a Lightning Bolt on each of turns 1, 3 and 5 raises it once on each of those turns (CR 702.179d): 2, 3,
+# then 4. At speed 3 the haste ability is not offered though the land is untapped, and its mana ability is. At speed 4
+# it is, and gives a Memnite cast that turn haste, so that the Memnite attacks: Bot2 ends at 20 - 9 - 1 = 10.
+
+[Bot1 Deck]
+Amonkhet Raceway
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Memnite
+Mountain
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Amonkhet Raceway.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+! Bot1.Battlefield.Amonkhet Raceway.Activate(Ability: haste)
+Bot1.Battlefield.Amonkhet Raceway.Activate(Ability: Add)
+? Bot1.Mana = {C}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Amonkhet Raceway.Activate(Ability: haste; Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Memnite > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot1.Speed = 4
+Bot2.Life = 10
+Bot1.Battlefield.Amonkhet Raceway.Tapped = true
+Bot1.Battlefield.Memnite.Keywords = Haste
