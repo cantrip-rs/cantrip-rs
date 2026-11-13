@@ -1,0 +1,44 @@
+# Deathless Pilot: "This creature saddles Mounts ... as though its power were 2 greater" (CR 702.171c), so its 2 power
+# counts as 4. Caustic Bronco has Saddle 3: Isamaru (power 2) cannot saddle it alone (the refusal). Once the Pilot is cast
+# the Pilot alone can, and the Bronco is saddled. Black Lotus pays the Bronco; Mox Jet and Mox Ruby the Pilot.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Isamaru, Hound of Konda
+Caustic Bronco
+Deathless Pilot
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Caustic Bronco.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Caustic Bronco.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Deathless Pilot.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Caustic Bronco.Activate
+Bot1.Choose(Deathless Pilot)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Caustic Bronco.Saddled = true
+Bot1.Battlefield.Deathless Pilot.Tapped = True
+Bot1.Battlefield.Isamaru, Hound of Konda.Tapped = False

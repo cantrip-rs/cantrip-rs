@@ -1,0 +1,56 @@
+# Deathless Pilot: "{3}{B}: Return this card from your graveyard to your hand" works only from the graveyard (CR 113.6k):
+# on the battlefield it is refused, though a thousand mana would not offer it either. Bot2's Lightning Bolt kills the
+# Pilot on turn 2. On turn 3 Bot1 has Moxen Jet, Pearl and Ruby: three mana, one short (the refusal with `Mana: short`);
+# casting Mox Sapphire makes four, which pays it exactly - the pool is empty after - and the card is back in hand.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Deathless Pilot
+Swamp
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Deathless Pilot.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Deathless Pilot.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Deathless Pilot)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Deathless Pilot
+[T3 Bot1.Main1]
+! Bot1.Graveyard.Deathless Pilot.Activate(Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Graveyard.Deathless Pilot.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Deathless Pilot.Power = 2
+Bot1.Graveyard.Count = 0
