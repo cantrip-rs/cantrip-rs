@@ -1,0 +1,8 @@
+{
+  "name": "Molt Tender",
+  "manaCost": "{G}",
+  "type": "Creature — Insect Druid",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}: Mill a card. (Put the top card of your library into your graveyard.)\n{T}, Exile a card from your graveyard: Add one mana of any color."
+}

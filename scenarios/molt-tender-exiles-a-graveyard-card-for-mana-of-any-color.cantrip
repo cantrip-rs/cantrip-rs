@@ -1,0 +1,36 @@
+# Molt Tender: "{T}, Exile a card from your graveyard: Add one mana of any color." Black Lotus, sacrificed for the {G} that casts
+# the Tender on turn 1, is the card in Bot1's graveyard. On turn 3 the Tender taps and exiles it (Bot1 names the card) for one red
+# mana, which pays for Lightning Bolt at Bot2: the Lotus is in exile, the Bolt in the graveyard, Bot2 at 17. It is a mana ability: it
+# does not use the stack, and the Tender is tapped; it adds exactly one mana, not two.
+
+[Bot1 Deck]
+Black Lotus
+Molt Tender
+Lightning Bolt
+Island x4
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Molt Tender.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Molt Tender.Activate(Ability: Exile a card; Color: Red)
+Bot1.Choose(Black Lotus)
+? Stack.Count = 0
+? Bot1.Mana = {R}
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 17
+Exile = Black Lotus
+Bot1.Graveyard = Lightning Bolt
+Bot1.Battlefield.Molt Tender.Tapped = true

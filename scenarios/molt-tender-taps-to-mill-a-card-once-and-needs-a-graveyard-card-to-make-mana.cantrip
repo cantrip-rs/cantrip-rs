@@ -1,0 +1,34 @@
+# Molt Tender (G, 1/1): "{T}: Mill a card." Cast on turn 1 and summoning sick, it can tap on turn 3: with an empty graveyard its
+# mana ability's cost (exile a card from your graveyard) cannot be paid, so only the mill is possible (the refusal). Milling puts the
+# top card of the library, Memnite (the Island above it was drawn for the turn), into the graveyard. The Tender is tapped now: a
+# second mill, and the mana ability (which also taps it), are not offered this turn.
+
+[Bot1 Deck]
+Mox Emerald
+Molt Tender
+Island x6
+Memnite
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Molt Tender.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Molt Tender.Activate(Ability: Exile a card)
+Bot1.Battlefield.Molt Tender.Activate(Ability: Mill)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Memnite
+! Bot1.Battlefield.Molt Tender.Activate(Ability: Mill)
+! Bot1.Battlefield.Molt Tender.Activate(Ability: Exile a card)
+
+[Expect]
+Bot1.Graveyard = Memnite
+Bot1.Battlefield.Molt Tender.Tapped = true
+Bot1.Library.Count = 20
