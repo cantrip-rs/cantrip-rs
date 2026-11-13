@@ -1,0 +1,12 @@
+{
+  "name": "Strix Lookout",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Bird",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying, vigilance (Attacking doesn't cause this creature to tap.)\n{1}{U}, {T}: Draw a card, then discard a card.",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

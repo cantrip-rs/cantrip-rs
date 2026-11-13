@@ -1,0 +1,52 @@
+# Strix Lookout: "Flying, vigilance. {1}{U}, {T}: Draw a card, then discard a card." It attacks on turn 3 without tapping
+# (CR 702.20b) and still taps for its ability afterwards. Mox Jet's and Mox Pearl's two mana are not enough without blue (CR 107.4):
+# refused until Mox Sapphire is added. Bot1 draws the Lightning Bolt, then discards it (CR 701.9a).
+
+[Bot1 Deck]
+Black Lotus
+Strix Lookout
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Forest
+Mountain
+Island
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Strix Lookout.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+! Bot1.Battlefield.Strix Lookout.Activate(Mana: short)
+Bot1.Attack(Strix Lookout > Bot2)
+? Bot1.Battlefield.Strix Lookout.Tapped = false
+[Bot1.Main2]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Strix Lookout.Activate
+? Bot1.Mana =
+? Bot1.Battlefield.Strix Lookout.Tapped = true
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 19
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Hand = Forest; Island; Mountain
+Bot1.Battlefield.Strix Lookout.Keywords = Flying; Vigilance
