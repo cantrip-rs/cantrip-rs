@@ -1,0 +1,8 @@
+{
+  "name": "Helpful Hunter",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Cat",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "When this creature enters, draw a card."
+}
