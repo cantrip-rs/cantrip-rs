@@ -1,0 +1,50 @@
+# Demonic Junker: "If a creature you controlled was destroyed this way, put two +1/+1 counters on this Vehicle" (CR 701.8,
+# 702.12b, 608.2c). Bot1's slot takes its own Darksteel Myr, which is indestructible and is not destroyed, and Bot2's slot takes
+# Bot2's Ornithopter, which is. A creature was destroyed, and a creature Bot1 controlled was targeted, but none Bot1 controlled
+# was destroyed: the Junker gets no counters. Black Lotus pays the Myr; with Mox Jet, Mox Pearl, Mox Ruby, Mox Sapphire and the
+# Myr (five artifacts) the Junker costs {1}{B}, paid by Jet and Pearl.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Darksteel Myr
+Demonic Junker
+Swamp x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Darksteel Myr.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Demonic Junker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Darksteel Myr)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Black Lotus
+Bot1.Battlefield.Demonic Junker.Counters.PlusOnePlusOne = (absent)
+Bot2.Graveyard = Ornithopter

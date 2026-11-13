@@ -1,0 +1,57 @@
+# Demonic Junker: each slot is "up to one": Bot1 chooses no creature of their own and Bot2's Ornithopter, so only the Ornithopter
+# is destroyed and, no creature Bot1 controlled having been destroyed, the Junker gets no counters. Black Lotus and Mox Jet pay
+# the {3}{B} (Jet, two Memnites: three artifacts). "Crew 2": one Memnite (power 1) is not enough (the refusal), both together
+# are, and the Junker is then a 4/3 artifact creature.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Memnite
+Memnite
+Demonic Junker
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Ornithopter
+Mox Pearl
+Plains x5
+Plains x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Demonic Junker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+! Bot1.Target(Bot2)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Demonic Junker.Counters.PlusOnePlusOne = (absent)
+? Bot1.Battlefield.Demonic Junker.Types = Artifact
+Bot1.Battlefield.Demonic Junker.Activate(Ability: Crew 2)
+! Bot1.Choose(Memnite)
+Bot1.Choose(Memnite; Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Demonic Junker.Types = Artifact; Creature
+Bot1.Battlefield.Demonic Junker.Power = 4
+Bot1.Battlefield.Demonic Junker.Toughness = 3
+Bot1.Battlefield.Demonic Junker.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield = Mox Pearl
+Bot2.Graveyard = Ornithopter
+Bot1.Graveyard = Black Lotus
