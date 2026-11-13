@@ -1,0 +1,8 @@
+{
+  "name": "Crackling Cyclops",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Cyclops Wizard",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": "Whenever you cast a noncreature spell, this creature gets +3/+0 until end of turn."
+}
