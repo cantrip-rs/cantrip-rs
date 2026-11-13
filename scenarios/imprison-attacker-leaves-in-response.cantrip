@@ -1,0 +1,39 @@
+# Returning the attacker in response leaves the triggered ability on the stack; paying cannot affect the new object (CR 113.7a, 400.7).
+[Bot1 Deck]
+Imprison
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Unsummon
+Swamp x20
+[Bot2 Deck]
+Grizzly Bears
+Black Lotus
+Forest x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Imprison.Cast(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unsummon.Cast(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard.Imprison.Colors = Black
+Bot2.Hand.Grizzly Bears.Colors = Green

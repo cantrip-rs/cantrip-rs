@@ -1,0 +1,35 @@
+# Paying one removes the enchanted attacker from combat; declining the next attack destroys Imprison (CR 506.4, 603.2).
+[Bot1 Deck]
+Imprison
+Mox Jet
+Mox Pearl
+Swamp x20
+[Bot2 Deck]
+Grizzly Bears
+Black Lotus
+Forest x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Imprison.Cast(Grizzly Bears)
+? Bot1.Mana =
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T4 Bot2.Main2]
+? Bot1.Life = 20
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Decline
+[T6 Bot2.Main2]
+[Expect]
+Bot1.Life = 18
+Bot1.Graveyard.Imprison.Colors = Black

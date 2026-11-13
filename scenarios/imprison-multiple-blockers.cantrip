@@ -1,0 +1,34 @@
+# Removing one of two blockers leaves the attacker blocked (CR 509.1h, 509.3g).
+[Bot1 Deck]
+Imprison
+Mox Jet
+Mox Pearl
+Black Lotus
+Grizzly Bears
+Swamp x20
+[Bot2 Deck]
+Ornithopter x2
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Imprison.Cast(Bot2.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Ornithopter#1 > Grizzly Bears; Ornithopter#2 > Grizzly Bears)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 20
+Bot2.Battlefield.Ornithopter.Tapped = true
