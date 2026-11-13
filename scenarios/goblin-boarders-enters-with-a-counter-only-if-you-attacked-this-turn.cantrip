@@ -1,0 +1,57 @@
+# Goblin Boarders, a 3/2: "Raid -- This creature enters with a +1/+1 counter on it if you attacked this turn." Turn 1: Bot1 attacks
+# with a hasty Fanatical Firebrand, then casts Goblin Boarders in the second main phase: it enters with the counter, a 4/3.
+# Turn 3: with the attack of turn 1 behind it, a second Goblin Boarders cast before combat enters without one, a 3/2 (a
+# replacement effect, so it reads the attacks of this turn only).
+
+[Bot1 Deck]
+Mox Ruby x4
+Fanatical Firebrand
+Goblin Boarders
+Goblin Boarders
+Mountain x10
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Fanatical Firebrand > Bot2)
+[Bot1.Main2]
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Goblin Boarders.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Boarders.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Goblin Boarders.Power = 4
+? Bot1.Battlefield.Goblin Boarders.Toughness = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Goblin Boarders.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Boarders#2.Counters.PlusOnePlusOne = (absent)
+? Bot1.Battlefield.Goblin Boarders#2.Power = 3
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Goblin Boarders#1.Power = 4
+Bot1.Battlefield.Goblin Boarders#2.Power = 3

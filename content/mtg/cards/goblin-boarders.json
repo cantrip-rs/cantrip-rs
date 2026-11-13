@@ -1,0 +1,8 @@
+{
+  "name": "Goblin Boarders",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Goblin Pirate",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Raid — This creature enters with a +1/+1 counter on it if you attacked this turn."
+}
