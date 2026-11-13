@@ -18,13 +18,12 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// Each player discards their hand and returns to their hand each card they exiled this way: the cards still in exile that
-/// were exiled with the jar (a card that has left exile since is another object, CR 400.7).
+/// Each player discards their hand - every hand at once, one discard (CR 101.4, 701.9) - and returns to their hand each card
+/// they exiled this way: the cards still in exile that were exiled with the jar (a card that has left exile since is another
+/// object, CR 400.7).
 fn give_back(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let players: Vec<PlayerId> = g.state().apnap().collect();
-    for &p in &players {
-        g.discard_hand(p);
-    }
+    let hands: Vec<ObjectId> = g.state().apnap().flat_map(|p| g.state().zone(Zone::hand(p)).to_vec()).collect();
+    g.discard_together(&hands);
     let exiled = g.exiled_with(g.linked(item));
     g.return_to_hand(&exiled);
     Ok(())
