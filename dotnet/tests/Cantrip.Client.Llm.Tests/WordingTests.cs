@@ -28,6 +28,25 @@ public sealed class WordingTests
     }
 
     [Fact]
+    public void Bands_with_other_preserves_choices_without_ordinary_banding()
+    {
+        var chooser = new ScriptedChooser([0, 1]);
+        ObjectView first = In(Card(3, "Reptil", "{2}{G}"), ZoneKindView.Battlefield, Me);
+        ObjectView second = In(Card(4, "Rick Jones", "{W}"), ZoneKindView.Battlefield, Me);
+        var answer = Assert.IsType<CardsChosenAnswer>(new Decisions(chooser).Answer(Seated(first, second), new ChooseCardsPromptMessage
+        {
+            Player = Me, Source = Handle(9), Purpose = CardChoicePurposeView.Band,
+            Cards = [first.Handle, second.Handle], WithoutBanding = [first.Handle, second.Handle],
+            Verdict = new() { Addable = [first.Handle, second.Handle], Complete = true },
+            Count = 2, CountKind = CountKindView.UpTo,
+        }));
+
+        Assert.Equal(new[] { first.Handle, second.Handle }, answer.Cards);
+        Assert.Contains("bands with other", chooser.Asked[0].Heading, StringComparison.Ordinal);
+        Assert.DoesNotContain("has banding", chooser.Asked[0].Heading, StringComparison.Ordinal);
+    }
+
+    [Fact]
     public void Restricted_untapping_does_not_ask_the_model_for_an_exact_candidate_count()
     {
         var chooser = new ScriptedChooser([0]);
