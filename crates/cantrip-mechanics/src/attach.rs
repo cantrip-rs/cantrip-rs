@@ -211,6 +211,17 @@ fn attached_to_source(view: &dyn LayerQuery, source: ObjectId, subject: ObjectId
     view.state().obj(source).attached_to == Some(subject)
 }
 
+fn targeting_spell(_: &dyn LayerQuery, _: ObjectId, by: &Asker, _: &Chars) -> bool {
+    by.spell
+}
+
+/// "Enchanted creature can't be the target of spells" (CR 115.1a, 604.1), a rule of the Aura rather than shroud granted
+/// to its host. Activated and triggered abilities remain legal; the restriction follows the Aura's current attachment.
+/// Anti-Magic Aura and Spectral Shield print it. Losing the host's abilities does not remove the Aura's rule.
+pub const ENCHANTED_CANT_BE_TARGET_OF_SPELLS: TargetingRule = TargetingRule {
+    kind: TargetingRuleKind::Forbid(targeting_spell), applies: attached_to_source,
+};
+
 /// "Enchanted [permanent] can't be enchanted by other Auras" (CR 303.4) as a `CardDef::targeting_rules` entry
 /// (`TargetingRuleKind::NoOtherAuras`): no "has", so a rule of the Aura's, not an ability the permanent gains (CR 113.1a) - a
 /// permanent that loses all its abilities is still under it (CR 613.1f), and it ends as the Aura leaves or moves. Consecrate

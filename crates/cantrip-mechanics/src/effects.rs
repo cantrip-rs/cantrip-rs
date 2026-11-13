@@ -3071,11 +3071,27 @@ pub fn untap_other_creatures_you_control(g: &mut dyn Game, item: &StackItem) -> 
     Ok(())
 }
 
+/// "Put N [kind] counters on this permanent" (CR 122.1a), where KIND is CounterKind::X as usize.
+/// Armageddon Clock puts a doom counter and Time Bomb a time counter; Weather Maker puts a charge counter.
+/// The engine handles a source that has left, placement replacements and counter restrictions.
+pub fn counters_on_self<const KIND: usize, const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.add_counters(item.object, CounterKind::ALL[KIND], N);
+    Ok(())
+}
+
+/// "You gain life equal to the sacrificed creature's toughness" (CR 608.2h, 119.3), as Diamond Valley and Life Chisel
+/// print it. The first cost object is its original battlefield identity, so chars reads its last-known toughness.
+/// The ability's controller gains the life; a nonpositive toughness does not make that player lose life (CR 107.1b).
+pub fn gain_life_equal_sacrificed_creatures_toughness(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let amount = g.cost_objects(item).first().map_or(0, |&object| g.chars(object).toughness.unwrap_or(0)).max(0);
+    g.gain_life(item.controller, amount);
+    Ok(())
+}
+
 /// "Put N charge counters on this artifact" (CR 122.1a): the source itself, as the ability resolves. Weather Maker prints it
 /// with one, Starship Enterprise with four.
 pub fn charge_counters_on_self<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.add_counters(item.object, CounterKind::Charge, N);
-    Ok(())
+    counters_on_self::<{ CounterKind::Charge as usize }, N>(g, item)
 }
 
 /// "Draw that many cards" (CR 121.1, 608.2c): as many cards as the combat damage the trigger's event dealt to the player
