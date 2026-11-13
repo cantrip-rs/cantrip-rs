@@ -1,0 +1,5 @@
+{
+  "name": "Tolaria",
+  "type": "Legendary Land",
+  "oracleText": "{T}: Add {U}.\n{T}: Target creature loses banding and all \"bands with other\" abilities until end of turn. Activate only during any upkeep step."
+}
