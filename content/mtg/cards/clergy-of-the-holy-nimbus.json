@@ -1,0 +1,8 @@
+{
+  "name": "Clergy of the Holy Nimbus",
+  "manaCost": "{W}",
+  "type": "Creature — Human Cleric",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "If this creature would be destroyed, regenerate it.\n{1}: This creature can't be regenerated this turn. Only your opponents may activate this ability."
+}
