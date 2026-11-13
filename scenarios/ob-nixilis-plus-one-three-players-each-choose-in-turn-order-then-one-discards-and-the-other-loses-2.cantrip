@@ -1,0 +1,51 @@
+# Ob Nixilis, the Adversary +1 in a three-player game: "Each opponent loses 2 life unless they discard a card." Each opponent
+# chooses in turn order from Bot1 (CR 101.4) - Bot2 first, declining, then Bot3, discarding a Mountain - and only then are the
+# discard and the life loss done: Bot2 is at 18 with its hand whole, Bot3 at 20 with a card in its graveyard. That the losses
+# are one event is the Rust test each_opponent_loses_life_unless_together.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Ob Nixilis, the Adversary
+Island x13
+
+[Bot2 Deck]
+Mountain x14
+
+[Bot3 Deck]
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ob Nixilis, the Adversary.Cast
+Bot1.Modes(Cast without casualty)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Ob Nixilis, the Adversary.Activate(Ability: +1)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot2.Decline
+Bot3.Accept
+Bot3.Choose(Mountain)
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Hand.Count = 7
+Bot2.Graveyard.Count = 0
+Bot3.Life = 20
+Bot3.Hand.Count = 6
+Bot3.Graveyard.Count = 1
+Bot1.Life = 20
+Bot1.Battlefield.Ob Nixilis, the Adversary.Counters.Loyalty = 4

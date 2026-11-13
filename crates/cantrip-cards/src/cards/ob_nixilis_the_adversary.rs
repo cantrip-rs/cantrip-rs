@@ -27,25 +27,24 @@ fn copy(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 /// +1: "Each opponent loses 2 life unless they discard a card. If you control a Demon or Devil, you gain 2 life."
 /// Each opponent in turn order (CR 101.4) chooses whether to discard (nothing is asked of an empty hand, which cannot),
-/// then the discards happen together and the life is lost (CR 608.2d). The Demon or Devil is by the words of this card (CR 612).
+/// then the discards happen together and the life is lost together, one event (CR 608.2d, 603.2c). The Demon or Devil is by
+/// the words of this card (CR 612).
 fn plus_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let you = item.controller;
     let opponents: Vec<PlayerId> = g.state().apnap().filter(|&p| g.state().opponents(you).any(|o| o == p)).collect();
-    let (mut discards, mut losers) = (Vec::new(), Vec::new());
+    let (mut discards, mut losses) = (Vec::new(), Vec::new());
     for opponent in opponents {
         if !players::reached(g, opponent) {
             continue;
         }
         if g.state().zone(Zone::hand(opponent)).is_empty() || !effects::ask_may(g, opponent, item.object, Purpose::Ask(&DISCARD))? {
-            losers.push(opponent);
+            losses.push((opponent, 2));
         } else {
             discards.extend(choose_from_hand(g, opponent, item.object, 1)?);
         }
     }
     g.discard_together(&discards);
-    for player in losers {
-        g.lose_life(player, 2);
-    }
+    g.lose_life_together(&losses);
     g.end_sentence();
     let words = g.words(item.object);
     let (demon, devil) = (words.subtype(Subtype::Demon), words.subtype(Subtype::Devil));
