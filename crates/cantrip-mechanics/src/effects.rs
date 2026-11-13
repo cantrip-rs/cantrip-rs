@@ -947,6 +947,15 @@ pub fn draw_three_then_discard(g: &mut dyn Game, item: &StackItem) -> Result<(),
     Ok(())
 }
 
+/// "Draw three cards, then discard two cards" (CR 121.1, 701.9): the controller draws three, then chooses two cards of their
+/// hand, the three drawn included, and discards them. Oath of Jace, Ral, Crackling Wit, Sidequest: Card Collection and
+/// Fearless Swashbuckler print it.
+pub fn draw_three_then_discard_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.draw(item.controller, 3);
+    crate::discard_chosen(g, item.controller, item.object, 2)?;
+    Ok(())
+}
+
 /// "You may discard a card. If you do, draw `n` cards" (CR 701.9, 121.1): the controller chooses a card of their hand to
 /// discard or none; the draw follows a card that was actually discarded, and nothing is asked of an empty hand. Melded
 /// Moxite and Bitter Reunion draw two, Giott, King of the Dwarves and Lorehold, the Historian draw one.
