@@ -742,6 +742,27 @@ pub fn you_attack_with_total_power_at_least<const N: i32>(q: &dyn Query, me: &As
     }
 }
 
+/// "Whenever you gain life for the first time each turn" (CR 119.3, 603.2): life was gained, and none was before it this turn -
+/// the history is as it was just before this event, so it holds the earlier gains only. A turn's later gains don't trigger it
+/// (CR 603.2: the trigger event is the first gain itself, not a limit on how often it triggers). Leech Collector and Vanguard
+/// Seraph print it.
+pub fn you_gain_life_for_the_first_time_each_turn(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::LifeChange { player, delta } if *delta > 0 && *player == me.controller && q.history().life_gained(me.controller) == 0 => Fired::PLAIN,
+        _ => None,
+    }
+}
+
+/// "Whenever you attack with `N` or more creatures" (CR 508.1, 603.2): one trigger for the declaration of attackers, whose count
+/// is the creatures declared together, so a creature put onto the battlefield attacking afterwards (CR 508.4) is not in it.
+/// Military Intelligence (two) and Armasaur Guide (three) print it.
+pub fn you_attack_with_at_least<const N: u32>(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::AttackersDeclared { player, count } if *player == me.controller && *count >= N => Fired::PLAIN,
+        _ => None,
+    }
+}
+
 fn annihilate<const N: u8>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     annihilate_n(g, item, N)
 }
