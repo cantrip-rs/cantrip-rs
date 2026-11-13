@@ -1,0 +1,18 @@
+# With both Mine and Tower controlled, the Plant adds two colorless mana instead of one (CR 614.6).
+[Bot1 Deck]
+Urza's Power Plant
+Urza's Mine
+Urza's Tower
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Urza's Power Plant.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Urza's Mine.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Urza's Tower.Play
+Bot1.Battlefield.Urza's Power Plant.Activate
+? Bot1.Mana = {C}{C}
+[Expect]
+Bot1.Battlefield.Urza's Power Plant.Tapped = true

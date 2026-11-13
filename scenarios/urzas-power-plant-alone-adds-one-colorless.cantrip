@@ -1,0 +1,13 @@
+# Without a Mine or Tower, Urza's Power Plant taps to add exactly one colorless mana (CR 605.1a).
+[Bot1 Deck]
+Urza's Power Plant
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Urza's Power Plant.Play
+Bot1.Battlefield.Urza's Power Plant.Activate
+? Bot1.Mana = {C}
+! Bot1.Battlefield.Urza's Power Plant.Activate
+[Expect]
+Bot1.Battlefield.Urza's Power Plant.Tapped = true
