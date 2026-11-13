@@ -1,16 +1,10 @@
 use cantrip_api::*;
-use cantrip_mechanics::{attach::{attached_to_it, tap_attached}, targets, triggers};
+use cantrip_mechanics::{attach::{attached_to_it, tap_enchanted}, targets, triggers};
 use cantrip_oracle as oracle;
 
 const PAY: Question = Question::new(
     "Pay", "pay {cost} to untap the enchanted creature?", "", "Pay {cost}", "Don't pay",
 );
-
-/// The creature attached to the Aura when its enter trigger resolves (CR 303.4m, 701.26a).
-fn tap_enchanted(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tap_attached(g, item);
-    Ok(())
-}
 
 /// The upkeep player may pay even if control or attachment has since changed. The Aura's current attachment, or its
 /// last attachment if it left, identifies the creature to untap (CR 303.4m, 608.2h).

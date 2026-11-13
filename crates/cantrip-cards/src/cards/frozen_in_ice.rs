@@ -1,17 +1,10 @@
 use cantrip_api::*;
 use cantrip_mechanics::{
-    attach::{attached_object, attached_to_it, tap_attached},
+    attach::{attached_object, attached_to_it, tap_enchanted},
     targets,
     triggers::THIS_ENTERS,
 };
 use cantrip_oracle as oracle;
-
-/// "When this Aura enters, tap enchanted creature." The creature it is attached to as the trigger resolves (CR 303.4m,
-/// 608.2h).
-fn tap_enchanted(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tap_attached(g, item);
-    Ok(())
-}
 
 pub static CARD: CardDef = CardDef {
     enchant: Some(targets::CREATURE),

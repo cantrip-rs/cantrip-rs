@@ -1,16 +1,10 @@
 use cantrip_api::*;
 use cantrip_mechanics::{
-    attach::{attached_object, attached_to_it, tap_attached},
+    attach::{attached_object, attached_to_it, tap_enchanted},
     effects, statics, targets,
     triggers::THIS_ENTERS,
 };
 use cantrip_oracle as oracle;
-
-/// "When this Aura enters, tap enchanted creature." The permanent it is attached to as the trigger resolves (CR 303.4m, 608.2h).
-fn tap_enchanted(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tap_attached(g, item);
-    Ok(())
-}
 
 /// "Enchanted creature doesn't untap during its controller's untap step" is a rule of the Aura's (CR 502.3, 113.1a), not an ability of
 /// the creature. The "{5}: Untap this creature" the creature has is an ability it is given (CR 613.1f), activated by whoever controls

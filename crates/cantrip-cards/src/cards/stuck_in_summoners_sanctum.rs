@@ -1,16 +1,10 @@
 use cantrip_api::*;
 use cantrip_mechanics::{
-    attach::{attached_to_it, tap_attached},
+    attach::{attached_to_it, tap_enchanted},
     targets,
     triggers::THIS_ENTERS,
 };
 use cantrip_oracle as oracle;
-
-/// "When this Aura enters, tap enchanted permanent." The permanent it is attached to as the trigger resolves (CR 303.4m, 608.2h).
-fn tap_enchanted(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tap_attached(g, item);
-    Ok(())
-}
 
 /// "Enchanted permanent's activated abilities can't be activated" (CR 602.5, 605.1a): every activated ability of the
 /// permanent this Aura is attached to - mana abilities too - whoever would activate it. The Aura's rule, not an ability of
