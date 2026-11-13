@@ -1,0 +1,68 @@
+# Smoke limits each player to one creature in their untap step; a land untaps normally and a later spell untaps both creatures (CR 502.3).
+
+[Bot1 Deck]
+Smoke
+Mox Ruby
+Gleemox
+Ornithopter
+Crimson Kobolds
+Mountain
+Merciful Mandate
+Mox Pearl
+Mountain x15
+
+[Bot2 Deck]
+Ornithopter
+Crimson Kobolds
+Island x18
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Crimson Kobolds.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Smoke.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Crimson Kobolds.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Attack(Ornithopter > Bot2; Crimson Kobolds > Bot2)
+[T4 Bot2.Main1]
+Bot2.Attack(Ornithopter > Bot1; Crimson Kobolds > Bot1)
+! Bot1.Choose()
+! Bot1.Choose(Ornithopter; Crimson Kobolds)
+Bot1.Choose(Ornithopter)
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Tapped = false
+? Bot1.Battlefield.Crimson Kobolds.Tapped = true
+? Bot1.Battlefield.Mountain.Tapped = false
+Bot1.Attack(Ornithopter > Bot2)
+[Bot1.Main2]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Merciful Mandate.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Tapped = false
+? Bot1.Battlefield.Crimson Kobolds.Tapped = false
+! Bot2.Choose(Ornithopter; Crimson Kobolds)
+Bot2.Choose(Crimson Kobolds)
+[T6 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Crimson Kobolds.Tapped = false

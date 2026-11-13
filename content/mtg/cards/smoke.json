@@ -1,0 +1,6 @@
+{
+  "name": "Smoke",
+  "manaCost": "{R}{R}",
+  "type": "Enchantment",
+  "oracleText": "Players can't untap more than one creature during their untap steps."
+}
