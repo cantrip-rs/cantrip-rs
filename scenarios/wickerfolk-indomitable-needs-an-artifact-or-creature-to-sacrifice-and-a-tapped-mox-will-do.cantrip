@@ -1,0 +1,61 @@
+# Wickerfolk Indomitable's graveyard cast needs "sacrificing an artifact or creature": an artifact that is not a creature
+# will do. On turn 3 Bot1 casts Mox Jet, Mox Ruby and Mox Pearl; Mox Ruby is tapped for {R} first, then sacrificed (a tapped
+# permanent may be sacrificed); the {R} floating, Mox Jet {B}, Mox Pearl {W} and a Swamp's {B} pay {3}{B}. Two life are paid
+# (20 -> 18). Bot2 Bolts the first Wickerfolk on turn 2. (A land is refused, with the mana there to pay, in
+# wickerfolk-indomitable-sacrifices-a-nonartifact-creature-but-never-a-land.)
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Wickerfolk Indomitable
+Mox Jet
+Mox Ruby
+Mox Pearl
+Swamp x14
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Wickerfolk Indomitable.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Wickerfolk Indomitable)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana = {R}
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Graveyard.Wickerfolk Indomitable.Cast
+Bot1.Choose(Mox Ruby)
+? Bot1.Mana = 
+? Bot1.Life = 18
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Life = 18
+Bot1.Battlefield = Wickerfolk Indomitable; Mox Jet; Mox Pearl; Swamp; Swamp
+Bot1.Graveyard = Mox Ruby; Black Lotus

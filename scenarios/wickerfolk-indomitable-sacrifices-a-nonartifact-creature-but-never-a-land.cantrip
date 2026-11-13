@@ -1,0 +1,61 @@
+# Wickerfolk Indomitable's graveyard cast sacrifices "an artifact or creature" (CR 601.2h, 701.21a): on turn 3 Bot1 has six
+# black mana floating from two Dark Rituals and two Swamps, enough to pay {3}{B}, but controls only the two Swamps, lands that
+# are neither, so the cast is refused for want of a permanent to sacrifice. It then casts Dark Confidant ({1}{B}), a creature
+# that is not an artifact, and sacrifices it to cast the Wickerfolk: 2 life paid (20 -> 18) and the pool spent exactly.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Wickerfolk Indomitable
+Dark Ritual
+Dark Ritual
+Dark Confidant
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Wickerfolk Indomitable.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Wickerfolk Indomitable)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Swamp#2.Activate
+? Bot1.Mana = {B}{B}{B}{B}{B}{B}
+! Bot1.Graveyard.Wickerfolk Indomitable.Cast
+Bot1.Hand.Dark Confidant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Graveyard.Wickerfolk Indomitable.Cast
+Bot1.Choose(Dark Confidant)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Life = 18
+Bot1.Battlefield = Wickerfolk Indomitable; Swamp; Swamp
+Bot1.Graveyard = Dark Confidant; Dark Ritual; Dark Ritual; Black Lotus
