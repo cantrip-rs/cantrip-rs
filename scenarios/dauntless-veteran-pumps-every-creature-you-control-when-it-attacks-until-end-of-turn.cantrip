@@ -1,0 +1,80 @@
+# Dauntless Veteran: "Whenever this creature attacks, creatures you control get +1/+1 until end of turn." Bot1 attacks on turn 3
+# with the Veteran alone, leaving Isamaru at home. The trigger pumps both (the Veteran 3/3, Isamaru 3/3, CR 611.2a) but not Bot2's
+# Isamaru, which stays 2/2 (a positive control that only "creatures you control" are pumped). The affected set is fixed as the
+# ability resolves (CR 611.2c): a Soldier token Bot1 makes afterwards with Resolute Reinforcements (flash) is a plain 1/1. The
+# Veteran connects for 3 (Bot2 20 to 17), and the pump wears off at end of turn (CR 514.2): on turn 4 both are 2/2 again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Dauntless Veteran
+Isamaru, Hound of Konda
+Resolute Reinforcements
+Plains x10
+
+[Bot2 Deck]
+Mox Pearl
+Isamaru, Hound of Konda
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Dauntless Veteran.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Isamaru, Hound of Konda.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Dauntless Veteran > Bot2)
+? Stack.Count = 1
+? Bot1.Battlefield.Dauntless Veteran.Power = 2
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Dauntless Veteran.Power = 3
+? Bot1.Battlefield.Dauntless Veteran.Toughness = 3
+? Bot1.Battlefield.Isamaru, Hound of Konda.Power = 3
+? Bot1.Battlefield.Isamaru, Hound of Konda.Toughness = 3
+? Bot2.Battlefield.Isamaru, Hound of Konda.Power = 2
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Resolute Reinforcements.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Soldier Token.Power = 1
+? Bot1.Battlefield.Soldier Token.Toughness = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+[T4 Bot2.Upkeep]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Dauntless Veteran.Power = 2
+Bot1.Battlefield.Dauntless Veteran.Toughness = 2
+Bot1.Battlefield.Isamaru, Hound of Konda.Power = 2
+Bot1.Battlefield.Isamaru, Hound of Konda.Toughness = 2
+Bot1.Battlefield.Soldier Token.Power = 1
