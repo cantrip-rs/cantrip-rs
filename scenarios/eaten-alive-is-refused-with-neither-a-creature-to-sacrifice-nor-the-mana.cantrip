@@ -1,0 +1,32 @@
+# Eaten Alive (CR 601.2b, 118.8): with no creature to sacrifice the spell costs {B} plus {3}{B}, five mana. Bot1 has four (Black
+# Lotus and Mox Jet), one short, so it cannot be cast even at a legal target, Bot2's Ornithopter, which stays.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Eaten Alive
+Island x20
+
+[Bot2 Deck]
+Island
+Island
+Island
+Island
+Island
+Island
+Ornithopter
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Eaten Alive.Cast(Bot2.Battlefield.Ornithopter; Mana: short)
+
+[Expect]
+Bot1.Hand.Count = 6
+Bot2.Battlefield = Ornithopter

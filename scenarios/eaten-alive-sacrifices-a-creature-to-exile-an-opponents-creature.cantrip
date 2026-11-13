@@ -1,0 +1,39 @@
+# Eaten Alive (CR 601.2b, 701.21a, 701.13a): "As an additional cost to cast this spell, sacrifice a creature or pay {3}{B}. Exile
+# target creature or planeswalker." Bot1 has only Mox Jet's {B} for the spell and a Memnite, so the sacrifice is the way to pay.
+# Bot2's Mox Ruby (a noncreature artifact) is no legal target and is refused with the mana there; its Ornithopter is exiled.
+
+[Bot1 Deck]
+Mox Jet
+Memnite
+Eaten Alive
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Island
+Island
+Island
+Island
+Island
+Island
+Ornithopter
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Eaten Alive.Cast(Bot2.Battlefield.Mox Ruby)
+Bot1.Hand.Eaten Alive.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet
+Bot1.Graveyard = Eaten Alive; Memnite
+Bot2.Battlefield = Mox Ruby
+Exile = Ornithopter
