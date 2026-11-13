@@ -1,0 +1,54 @@
+# Pedal to the Metal ({X}{R}, "Target creature gets +X/+0 and gains first strike until end of turn"): on turn 1 Bot1 casts it with X = 2 on its
+# own Memnite, paying exactly {2}{R} (the pool empty after): a 3/1 with first strike. On turn 3 the Memnite is a plain 1/1 again (until end of
+# turn). A second Pedal with X = 0 ({R}) refuses Bot1's Mox Jet (not a creature) and takes Bot2's Memnite: +0/+0 and first strike.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Memnite
+Pedal to the Metal
+Pedal to the Metal
+Island
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pedal to the Metal.Cast(Bot1.Battlefield.Memnite; X: 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Memnite.Keywords = FirstStrike
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Pedal to the Metal.Cast(Bot1.Battlefield.Mox Jet; X: 0)
+Bot1.Hand.Pedal to the Metal.Cast(Bot2.Battlefield.Memnite; X: 0)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot2.Battlefield.Memnite.Power = 1
+? Bot2.Battlefield.Memnite.Toughness = 1
+? Bot2.Battlefield.Memnite.Keywords = FirstStrike
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Memnite.Keywords = FirstStrike
+Bot1.Graveyard = Pedal to the Metal; Pedal to the Metal

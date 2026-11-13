@@ -1,0 +1,6 @@
+{
+  "name": "Pedal to the Metal",
+  "manaCost": "{X}{R}",
+  "type": "Instant",
+  "oracleText": "Target creature gets +X/+0 and gains first strike until end of turn."
+}

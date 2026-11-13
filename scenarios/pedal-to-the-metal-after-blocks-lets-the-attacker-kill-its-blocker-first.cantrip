@@ -1,0 +1,58 @@
+# Pedal to the Metal cast after blockers: X = 1 makes Bot1's blocked Grizzly Bears a 3/2 with first strike (CR 702.7b), so it deals
+# 3 to Bot2's Hill Giant in the first-strike damage step and the Giant dies before it deals its regular damage: the Bears survive.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Mox Ruby
+Mox Pearl
+Pedal to the Metal
+Island x14
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Hill Giant
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Hill Giant > Grizzly Bears)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pedal to the Metal.Cast(Bot1.Battlefield.Grizzly Bears; X: 1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 3
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Hill Giant
+Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot1.Graveyard = Pedal to the Metal
+Bot2.Life = 20
