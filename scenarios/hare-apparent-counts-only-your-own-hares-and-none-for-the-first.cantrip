@@ -1,0 +1,55 @@
+# Only "other creatures you control named Hare Apparent" count (CR 201.2a). Bot2's own Hare Apparent (cast on turn 2, the first
+# for it, so no token) gives Bot1 nothing: Bot1's first Hare on turn 3 makes no token, and its second makes exactly one
+# Rabbit for the one Hare Bot1 controls, not two (positive control for the count).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Hare Apparent
+Hare Apparent
+Island x14
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Hare Apparent
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Hare Apparent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Hare Apparent; Mox Pearl; Mox Pearl
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Hare Apparent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Hare Apparent; Mox Pearl; Mox Pearl; Mox Pearl; Mox Pearl
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Hare Apparent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Hare Apparent; Hare Apparent; Mox Pearl; Mox Pearl; Mox Pearl; Mox Pearl; Rabbit Token
+Bot2.Battlefield = Hare Apparent; Mox Pearl; Mox Pearl

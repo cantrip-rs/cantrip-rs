@@ -1,0 +1,49 @@
+# Hare Apparent: "When this creature enters, create a number of 1/1 white Rabbit creature tokens equal to the number of other
+# creatures you control named Hare Apparent." On turn 1 Bot1 casts a first Hare (no other Hare, so no token; CR 111.1), then a
+# second (one other Hare: one Rabbit); on turn 3 a third, which counts the two others and makes two more Rabbits.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Hare Apparent
+Hare Apparent
+Hare Apparent
+Island x13
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Hare Apparent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Hare Apparent; Mox Pearl; Mox Pearl; Mox Pearl; Mox Pearl
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Hare Apparent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Hare Apparent; Hare Apparent; Mox Pearl; Mox Pearl; Mox Pearl; Mox Pearl; Rabbit Token
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Hare Apparent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Hare Apparent; Hare Apparent; Hare Apparent; Mox Pearl; Mox Pearl; Mox Pearl; Mox Pearl; Rabbit Token; Rabbit Token; Rabbit Token
