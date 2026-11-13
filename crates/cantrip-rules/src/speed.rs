@@ -20,6 +20,21 @@ pub fn increase(cx: &mut Cx, player: PlayerId, amount: u8) {
     set(cx, player, speed);
 }
 
+/// `player`'s speed is reduced by `amount`, but not below `minimum` ("This effect can't reduce their speed below 1", Spikeshell
+/// Harrier). A player with no speed has none to reduce (CR 702.179b, f: it is 0 only for an effect that reads it), and a
+/// player whose speed is already at or below `minimum` is unchanged, with no change to announce.
+pub fn reduce(cx: &mut Cx, player: PlayerId, amount: u8, minimum: u8) {
+    let p = *cx.s().player(player);
+    let Some(current) = p.speed else { return };
+    if p.lost || amount == 0 {
+        return;
+    }
+    let speed = current.saturating_sub(amount).max(minimum).min(current);
+    if speed != current {
+        set(cx, player, speed);
+    }
+}
+
 fn set(cx: &mut Cx, player: PlayerId, speed: u8) {
     cx.st().update_player(player, |pl| pl.speed = Some(speed));
     cx.emit(Event::SpeedChanged { player, speed });

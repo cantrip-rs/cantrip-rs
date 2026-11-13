@@ -3184,6 +3184,10 @@ impl cantrip_api::Game for Cx<'_> {
         speed::increase(self, player, amount);
     }
 
+    fn reduce_speed(&mut self, player: PlayerId, amount: u8, minimum: u8) {
+        speed::reduce(self, player, amount, minimum);
+    }
+
     fn damage_cant_be_prevented(&mut self) {
         let number = self.g.state.turn.number;
         self.g.state.update_turn(|t| t.no_prevention_turn = number);
