@@ -1,0 +1,49 @@
+# Roadside Blowout: "This spell costs {2} less to cast if it targets a permanent with mana value 1. Return target creature
+# or Vehicle an opponent controls to its owner's hand. Draw a card." Bot1 has only {U} from one Island. Bot2's Llanowar Elves
+# (mana value 1) is the target, so the spell costs {U} (CR 601.2c, 601.2f): the pool is empty right after. Bot2's Forest is a
+# land and Bot1's own Mox Sapphire is not an opponent's creature or Vehicle: both are refused as targets. The Elves return to
+# Bot2's hand and Bot1 draws a card.
+
+[Bot1 Deck]
+Island
+Roadside Blowout
+Mox Sapphire
+Island
+Island
+Island
+Island
+Plains
+Island x11
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x15
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+? Bot1.Mana = {U}
+! Bot1.Hand.Roadside Blowout.Cast(Bot2.Battlefield.Forest)
+! Bot1.Hand.Roadside Blowout.Cast(Bot1.Battlefield.Mox Sapphire)
+Bot1.Hand.Roadside Blowout.Cast(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+[Bot1.Main2]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Island; Mox Sapphire
+Bot1.Graveyard = Roadside Blowout
+Bot1.Hand.Count = 6
+Bot2.Battlefield = Forest
+Bot2.Hand.Count = 7

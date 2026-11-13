@@ -1,0 +1,6 @@
+{
+  "name": "Roadside Blowout",
+  "manaCost": "{2}{U}",
+  "type": "Sorcery",
+  "oracleText": "This spell costs {2} less to cast if it targets a permanent with mana value 1.\nReturn target creature or Vehicle an opponent controls to its owner's hand.\nDraw a card."
+}

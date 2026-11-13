@@ -1,0 +1,55 @@
+# Roadside Blowout: its only target has become illegal as it resolves, so the spell does nothing at all (CR 608.2b): Bot1 draws
+# no card. In response Bot2 returns its own Llanowar Elves to hand with Boomerang, so Bot1's hand is one card lighter than
+# if the spell had resolved.
+
+[Bot1 Deck]
+Island
+Roadside Blowout
+Mox Sapphire
+Island
+Island
+Island
+Island
+Plains
+Island x11
+
+[Bot2 Deck]
+Island
+Llanowar Elves
+Mox Emerald
+Mox Sapphire
+Boomerang
+Island
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Roadside Blowout.Cast(Bot2.Battlefield.Llanowar Elves)
+? Stack = Roadside Blowout
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Boomerang.Cast(Llanowar Elves)
+? Stack = Boomerang; Roadside Blowout
+[Bot1.Main2]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Hand.Count = 5
+Bot1.Graveyard = Roadside Blowout
+Bot2.Battlefield = Island; Mox Emerald; Mox Sapphire
+Bot2.Graveyard = Boomerang
