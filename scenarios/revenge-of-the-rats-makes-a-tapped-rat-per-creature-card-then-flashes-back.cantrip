@@ -1,0 +1,70 @@
+# Revenge of the Rats (CR 111.1, 404.1, 702.34a): "Create a tapped 1/1 black Rat creature token for each creature card in your
+# graveyard." Bot1 puts Ornithopter (Entomb) and Memnite (discarded to Faithless Looting) into its graveyard, so the spell
+# makes two tapped Rats, paid with Black Lotus and Mox Jet. The Looting and Entomb in the graveyard are not creature cards.
+# On turn 5 the flashback ({2}{B}{B}, Swamp, Mox Jet, Mox Ruby, Island) makes two more, counted again, and exiles the card.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Entomb
+Faithless Looting
+Memnite
+Black Lotus
+Revenge of the Rats
+Swamp
+Island
+Island
+Ornithopter
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite; Island)
+[T1 Bot1.Main2]
+? Bot1.Graveyard = Faithless Looting; Island; Memnite; Entomb; Ornithopter
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Revenge of the Rats.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield = Mox Jet; Mox Ruby; Rat Token; Rat Token; Swamp
+? Bot1.Battlefield.Rat Token#1.Tapped = true
+? Bot1.Battlefield.Rat Token#2.Tapped = true
+? Bot1.Battlefield.Rat Token#1.Power = 1
+? Bot1.Battlefield.Rat Token#1.Toughness = 1
+? Bot1.Battlefield.Rat Token#1.Colors = Black
+? Bot1.Battlefield.Rat Token#1.Subtypes = Rat
+? Bot1.Graveyard = Revenge of the Rats; Black Lotus; Faithless Looting; Island; Memnite; Entomb; Ornithopter
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Graveyard.Revenge of the Rats.Cast(Ability: Flashback)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Revenge of the Rats
+Bot1.Graveyard = Black Lotus; Faithless Looting; Island; Memnite; Entomb; Ornithopter
+Bot1.Battlefield.Rat Token#1.Tapped = false
+Bot1.Battlefield.Rat Token#3.Tapped = true
+Bot1.Battlefield.Rat Token#4.Tapped = true

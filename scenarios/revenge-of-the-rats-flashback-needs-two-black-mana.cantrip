@@ -1,0 +1,38 @@
+# Revenge of the Rats (CR 702.34a, 601.2f): its flashback cost is {2}{B}{B}. Faithless Looting discards it to Bot1's graveyard;
+# four Moxen then give four mana but only one black (Jet; Pearl, Sapphire and Emerald are not), so casting it with flashback is
+# refused for want of the second {B}, and it stays in the graveyard with no Rat made.
+
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Revenge of the Rats
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Revenge of the Rats; Island)
+? Bot1.Graveyard = Faithless Looting; Island; Revenge of the Rats
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Graveyard.Revenge of the Rats.Cast(Ability: Flashback; Mana: short)
+
+[Expect]
+Bot1.Graveyard = Faithless Looting; Island; Revenge of the Rats
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
