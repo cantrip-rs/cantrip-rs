@@ -846,6 +846,14 @@ pub fn lands_you_control(q: &dyn Query, player: PlayerId) -> usize {
     q.permanents_of(player).into_iter().filter(|&id| q.chars(id).is(CardType::Land)).count()
 }
 
+/// "If an opponent controls more lands than you" (CR 603.4, 109.4): the intervening "if" of an ability, true while some
+/// opponent controls more lands than the ability's controller, lands read through the layers. Checked as the ability would
+/// trigger and again as it resolves. Land Tax, Sunstar Expansionist and Ticket Tortoise print it.
+pub fn an_opponent_controls_more_lands(q: &dyn Query, asker: &Asker) -> bool {
+    let ours = lands_you_control(q, asker.controller);
+    q.state().opponents(asker.controller).any(|opponent| lands_you_control(q, opponent) > ours)
+}
+
 /// Deals damage to the target in `slot`, if it is still legal.
 pub fn damage_target(g: &mut dyn Game, item: &StackItem, slot: usize, amount: u32) {
     if g.target_legal(item, slot) {
