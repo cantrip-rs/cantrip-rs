@@ -1,0 +1,42 @@
+# Fake Your Own Death ({1}{B}): until end of turn the target creature gets +2/+0 and gains "When this creature dies, return it to the battlefield tapped under its owner's control and you create a Treasure token" (CR 611.2a, 603.6c, 111.10a).
+# Bot1 targets its own Ornithopter (0/2 becomes 2/2), then Lightning Bolt kills it: it comes back tapped as a new object (0/2, without the grant) and Bot1 gets an untapped Treasure.
+
+[Bot1 Deck]
+Ornithopter
+Mox Jet
+Mox Pearl
+Fake Your Own Death
+Mox Ruby
+Lightning Bolt
+Island
+Island x16
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Fake Your Own Death.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Treasure Token = (absent)
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Treasure Token.Tapped = false
+Bot1.Graveyard = Lightning Bolt; Fake Your Own Death
