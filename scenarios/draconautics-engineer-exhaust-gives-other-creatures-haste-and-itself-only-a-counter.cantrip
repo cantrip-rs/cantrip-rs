@@ -1,0 +1,47 @@
+# Draconautics Engineer (2/2): "Exhaust — {R}: Other creatures you control gain haste until end of turn. Put a +1/+1 counter on this creature."
+# Bot1 casts the Engineer and a Savannah Lions on turn 1 with a Black Lotus (the Lotus's third red mana pays the {R} exactly: the pool is empty
+# after). The Lions gains haste, the Engineer gets a counter (3/3) but not haste: it cannot attack (refusal), the Lions can and Bot2 goes to 18.
+# Haste ends with the turn: on turn 2 the Lions has no keyword.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Draconautics Engineer
+Savannah Lions
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Draconautics Engineer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Savannah Lions.Keywords = (absent)
+Bot1.Battlefield.Draconautics Engineer.Activate(Ability: Other creatures)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Savannah Lions.Keywords = Haste
+? Bot1.Battlefield.Draconautics Engineer.Keywords = (absent)
+? Bot1.Battlefield.Draconautics Engineer.Counters.PlusOnePlusOne = 1
+! Bot1.Attack(Draconautics Engineer > Bot2)
+Bot1.Attack(Savannah Lions > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Savannah Lions.Keywords = (absent)
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Draconautics Engineer.Power = 3
+Bot1.Battlefield.Draconautics Engineer.Toughness = 3

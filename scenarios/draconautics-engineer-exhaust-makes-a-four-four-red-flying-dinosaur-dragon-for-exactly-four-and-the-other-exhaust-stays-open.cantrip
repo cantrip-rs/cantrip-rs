@@ -1,0 +1,64 @@
+# Draconautics Engineer (2/2): "Exhaust — {3}{R}: Create a 4/4 red Dinosaur Dragon creature token with flying" and, separately, "Exhaust — {R}: Other
+# creatures you control gain haste until end of turn. Put a +1/+1 counter on this creature." Each exhaust ability is used once, independently.
+# Turn 3: with three Moxen (3 mana) the {3}{R} ability is refused; with a fourth (exactly {3}{R}) it is paid and the pool is empty after, and a 4/4
+# red flying Dinosaur Dragon token appears (CR 111.1). Turn 5 (the {3}{R} ability spent): the {R} ability still works - the token gets haste (not Bot2's
+# Ornithopter, which Bot1 does not control, nor the Engineer itself) and the Engineer grows to 3/3.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Draconautics Engineer
+Mox Sapphire
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Draconautics Engineer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Draconautics Engineer.Activate(Ability: Create a 4/4; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Draconautics Engineer.Activate(Ability: Create a 4/4)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Dinosaur Dragon Token.Power = 4
+? Bot1.Battlefield.Dinosaur Dragon Token.Toughness = 4
+? Bot1.Battlefield.Dinosaur Dragon Token.Colors = Red
+? Bot1.Battlefield.Dinosaur Dragon Token.Keywords = Flying
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Draconautics Engineer.Activate(Ability: Other creatures)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Dinosaur Dragon Token.Keywords = Flying; Haste
+Bot1.Battlefield.Draconautics Engineer.Keywords = (absent)
+Bot2.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.Draconautics Engineer.Power = 3

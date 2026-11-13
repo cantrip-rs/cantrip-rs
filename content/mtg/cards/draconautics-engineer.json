@@ -1,0 +1,8 @@
+{
+  "name": "Draconautics Engineer",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin Artificer",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Exhaust — {R}: Other creatures you control gain haste until end of turn. Put a +1/+1 counter on this creature. (Activate each exhaust ability only once.)\nExhaust — {3}{R}: Create a 4/4 red Dinosaur Dragon creature token with flying."
+}
