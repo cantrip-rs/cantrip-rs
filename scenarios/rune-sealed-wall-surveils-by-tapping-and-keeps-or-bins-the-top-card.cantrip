@@ -1,0 +1,56 @@
+# Rune-Sealed Wall: "Defender. {T}: Surveil 1." Cast on turn 1 with three Moxen it has summoning sickness (CR 302.6), so the
+# ability is not offered. On turn 3 Bot1 taps it and puts the Lightning Bolt (top card) into the graveyard (CR 701.25a); it
+# is tapped, so it cannot be activated again. On turn 5 it surveils the Plains
+# and leaves it on top, which Bot1 draws on turn 7.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Rune-Sealed Wall
+Island
+Island
+Island
+Forest
+Lightning Bolt
+Mountain
+Plains
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rune-Sealed Wall.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Rune-Sealed Wall.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Rune-Sealed Wall.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt)
+? Bot1.Graveyard = Lightning Bolt
+? Bot1.Battlefield.Rune-Sealed Wall.Tapped = true
+! Bot1.Battlefield.Rune-Sealed Wall.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Rune-Sealed Wall.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains | )
+[T7 Bot1.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Lightning Bolt
+Bot1.Hand = Forest; Island; Island; Island; Mountain; Plains
+Bot1.Battlefield.Rune-Sealed Wall.Keywords = Defender

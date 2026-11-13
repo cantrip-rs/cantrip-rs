@@ -1,0 +1,11 @@
+{
+  "name": "Rune-Sealed Wall",
+  "manaCost": "{2}{U}",
+  "type": "Artifact Creature — Wall",
+  "power": 0,
+  "toughness": 6,
+  "oracleText": "Defender\n{T}: Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "keywords": [
+    "Defender"
+  ]
+}
