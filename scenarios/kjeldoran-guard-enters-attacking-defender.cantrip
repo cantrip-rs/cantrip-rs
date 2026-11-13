@@ -1,0 +1,52 @@
+# A Guard entering attacking checks the chosen defender, not another opponent (CR 802.2a, 508.4).
+[Bot1 Deck]
+Mox Pearl x2
+Mox Ruby
+Black Lotus
+Kinscaer Sentry
+Ornithopter
+Sol Ring
+Jandor's Saddlebags
+Kjeldoran Guard
+Haste Magic
+Island x20
+[Bot2 Deck]
+Island x20
+[Bot3 Deck]
+Snow-Covered Island
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Kinscaer Sentry.Cast
+[T4 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Jandor's Saddlebags.Cast
+[T6 Bot3.Main1]
+Bot3.Hand.Snow-Covered Island.Play
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Kinscaer Sentry > Bot2; Ornithopter > Bot2)
+Bot1.Choose(Kjeldoran Guard)
+Bot1.Target(Bot3)
+? Combat.Attackers = Kinscaer Sentry > Bot2; Ornithopter > Bot2; Kjeldoran Guard > Bot3
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Jandor's Saddlebags.Activate(Bot1.Battlefield.Kjeldoran Guard)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Haste Magic.Cast(Bot1.Battlefield.Kjeldoran Guard)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+! Bot1.Battlefield.Kjeldoran Guard.Activate(Bot1.Battlefield.Ornithopter)
+[Expect]
+Bot1.Battlefield.Kjeldoran Guard.Tapped = false

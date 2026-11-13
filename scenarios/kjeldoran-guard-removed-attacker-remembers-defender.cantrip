@@ -1,0 +1,63 @@
+# Regeneration removes the Guard from combat; its former defender still determines the snow restriction (CR 802.2a).
+[Bot1 Deck]
+Kjeldoran Guard
+Mox Pearl
+Mox Emerald
+Black Lotus
+Sol Ring
+Jandor's Saddlebags
+Black Lotus
+Regeneration
+Plains x20
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Island x20
+[Bot3 Deck]
+Snow-Covered Island
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Kjeldoran Guard.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Jandor's Saddlebags.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot3.Main1]
+Bot3.Hand.Snow-Covered Island.Play
+[T4 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Regeneration.Cast(Bot1.Battlefield.Kjeldoran Guard)
+[T4 Bot1.DeclareAttackers]
+Bot1.Attack(Kjeldoran Guard > Bot3)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Regeneration.Activate
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Kjeldoran Guard)
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Jandor's Saddlebags.Activate(Bot1.Battlefield.Kjeldoran Guard)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+! Bot1.Battlefield.Kjeldoran Guard.Activate
+? Bot1.Battlefield.Kjeldoran Guard.Tapped = false
+[T7 Bot1.BeginCombat]
+Bot1.Battlefield.Kjeldoran Guard.Activate(Bot1.Battlefield.Kjeldoran Guard)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[Expect]
+Bot1.Battlefield.Kjeldoran Guard.Power = 2

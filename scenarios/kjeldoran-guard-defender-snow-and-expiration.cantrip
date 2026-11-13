@@ -1,0 +1,43 @@
+# A defending player's snow land prevents activation; the attacking player's does not. The pump and delayed sacrifice expire at cleanup (CR 602.5, 611.2a, 603.7b).
+[Bot1 Deck]
+Kjeldoran Guard
+Mox Pearl
+Mox Ruby
+Mountain
+Lightning Bolt
+Plains x20
+[Bot2 Deck]
+Snow-Covered Island
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kjeldoran Guard.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Island.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.BeginCombat]
+! Bot1.Battlefield.Kjeldoran Guard.Activate(Bot2.Battlefield.Ornithopter)
+[T4 Bot2.BeginCombat]
+Bot1.Battlefield.Kjeldoran Guard.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 1
+? Bot2.Battlefield.Ornithopter.Toughness = 3
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Kjeldoran Guard.Power = 1
+Bot1.Graveyard = Lightning Bolt

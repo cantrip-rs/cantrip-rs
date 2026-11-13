@@ -1,0 +1,53 @@
+# In multiplayer an attacking Guard checks the player it attacks, not another defender (CR 802.2a).
+[Bot1 Deck]
+Kjeldoran Guard
+Mox Pearl
+Mox Ruby
+Black Lotus
+Sol Ring
+Jandor's Saddlebags
+Ornithopter
+Plains x20
+[Bot2 Deck]
+Island x20
+[Bot3 Deck]
+Snow-Covered Island
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Jandor's Saddlebags.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Kjeldoran Guard.Cast
+[T3 Bot3.Main1]
+Bot3.Hand.Snow-Covered Island.Play
+[T4 Bot1.BeginCombat]
+Bot1.Attack(Kjeldoran Guard > Bot3)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Jandor's Saddlebags.Activate(Bot1.Battlefield.Kjeldoran Guard)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+! Bot1.Battlefield.Kjeldoran Guard.Activate(Bot1.Battlefield.Ornithopter)
+[T7 Bot1.BeginCombat]
+Bot1.Attack(Kjeldoran Guard > Bot2)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Jandor's Saddlebags.Activate(Bot1.Battlefield.Kjeldoran Guard)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Kjeldoran Guard.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+[Expect]
+Bot1.Battlefield.Ornithopter.Toughness = 3

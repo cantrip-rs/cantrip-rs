@@ -1,0 +1,54 @@
+# In an added combat the Guard is no longer attacking, so the snow-covered player it attacked in the turn's first combat is not its defending player: only an attack in this combat names it (CR 802.2a, 506.2). Another opponent without snow lands lets it activate.
+[Bot1 Deck]
+Kjeldoran Guard
+Mox Pearl
+Mox Ruby
+Black Lotus
+Black Lotus
+World at War
+Plains x20
+[Bot2 Deck]
+Island x20
+[Bot3 Deck]
+Snow-Covered Island
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Kjeldoran Guard.Cast
+[T3 Bot3.Main1]
+Bot3.Hand.Snow-Covered Island.Play
+[T4 Bot1.DeclareAttackers]
+Bot1.Attack(Kjeldoran Guard > Bot3)
+? Combat.Attackers = Kjeldoran Guard > Bot3
+[T4 Bot1.Main2]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.World at War.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Step = BeginCombat
+? Bot1.Battlefield.Kjeldoran Guard.Tapped = true
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Bot1.Battlefield.Kjeldoran Guard.Tapped = false
+Bot1.Battlefield.Kjeldoran Guard.Activate(Bot1.Battlefield.Kjeldoran Guard)
+? Turn = 4
+? Step = BeginCombat
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[Expect]
+Turn = 4
+Bot1.Battlefield.Kjeldoran Guard.Power = 2
+Bot1.Battlefield.Kjeldoran Guard.Tapped = true
