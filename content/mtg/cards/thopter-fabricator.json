@@ -1,0 +1,11 @@
+{
+  "name": "Thopter Fabricator",
+  "manaCost": "{2}{U}",
+  "type": "Artifact — Vehicle",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying\nWhenever you draw your second card each turn, create a 1/1 colorless Thopter artifact creature token with flying.\nCrew 2",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,58 @@
+# Thopter Fabricator: "Whenever you draw your second card each turn" makes a 1/1 flying Thopter (CR 121.2, 603.2). Cast off
+# Black Lotus on turn 1. Bot2's own second card on turn 2 (Opt) gives Bot1 nothing. On turn 3 the draw step's card is Bot1's
+# first (no Thopter), the first Opt's card is the second (one Thopter), and the second Opt's is the third (no more).
+
+[Bot1 Deck]
+Black Lotus
+Thopter Fabricator
+Island
+Opt
+Mox Sapphire
+Island
+Opt
+Island x3
+Plains x14
+
+[Bot2 Deck]
+Island
+Opt
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Thopter Fabricator.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Opt.Cast
+Bot2.Arrange(Island |)
+[T2 Bot2.Main2]
+? Bot1.Battlefield = Thopter Fabricator
+[T3 Bot1.Main1]
+? Bot1.Battlefield = Thopter Fabricator
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Arrange(Island |)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Island; Mox Sapphire; Thopter Fabricator; Thopter Token
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Arrange(Island |)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Island; Mox Sapphire; Thopter Fabricator; Thopter Token
+Bot1.Battlefield.Thopter Token.Types = Artifact; Creature
+Bot1.Battlefield.Thopter Token.Keywords = Flying
+Bot1.Battlefield.Thopter Token.Power = 1
+Bot1.Battlefield.Thopter Token.Toughness = 1

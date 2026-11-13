@@ -1,0 +1,49 @@
+# Thopter Fabricator (4/4 flying Vehicle, Crew 2): a lone Savannah Lions (power 2, summoning sick, which does not matter for a
+# crew cost) crews it on turn 3 (CR 702.122a); it is an artifact creature until end of turn, attacks in the air for 4, and Bot2
+# has no flying blocker.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Thopter Fabricator
+Savannah Lions
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thopter Fabricator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Thopter Fabricator.Types = Artifact
+Bot1.Battlefield.Thopter Fabricator.Activate(Ability: Crew)
+Bot1.Choose(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thopter Fabricator.Types = Artifact; Creature
+Bot1.Attack(Thopter Fabricator > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Thopter Fabricator.Keywords = Flying
+Bot1.Battlefield.Thopter Fabricator.Power = 4
+Bot1.Battlefield.Thopter Fabricator.Toughness = 4
+Bot1.Battlefield.Savannah Lions.Tapped = true
