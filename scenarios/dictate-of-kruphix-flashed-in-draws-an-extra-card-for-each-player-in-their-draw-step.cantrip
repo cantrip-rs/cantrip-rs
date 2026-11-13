@@ -1,0 +1,29 @@
+# Dictate of Kruphix has flash ({1}{U}{U}, Black Lotus's {U}{U}{U}): Bot1 casts it in Bot2's upkeep, and "At the beginning of each player's
+# draw step, that player draws an additional card" gives Bot2 two cards in Bot2's draw step (hand 7 -> 9) and, on turn 3, Bot1 two in Bot1's
+# (hand 5 -> 7), each the player whose step it is, not the enchantment's controller (CR 121.1, 504.1, 603.2, 702.8).
+
+[Bot1 Deck]
+Black Lotus
+Dictate of Kruphix
+Island x5
+Island x15
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Dictate of Kruphix.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot2.Hand.Count = 9
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 7
+
+[Expect]
+Bot1.Battlefield.Dictate of Kruphix.Keywords = Flash
+Bot1.Hand.Count = 7

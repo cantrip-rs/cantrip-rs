@@ -1,0 +1,9 @@
+{
+  "name": "Dictate of Kruphix",
+  "manaCost": "{1}{U}{U}",
+  "type": "Enchantment",
+  "oracleText": "Flash (You may cast this spell any time you could cast an instant.)\nAt the beginning of each player's draw step, that player draws an additional card.",
+  "keywords": [
+    "Flash"
+  ]
+}
