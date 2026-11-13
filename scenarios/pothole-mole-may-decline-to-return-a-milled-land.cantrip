@@ -1,0 +1,33 @@
+# Pothole Mole: the return is a "may". Choosing no card leaves all three milled cards, two lands among them, in the graveyard and
+# nothing new in hand.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Pothole Mole
+Island x3
+Forest
+Mountain
+Memnite
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Pothole Mole.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Memnite; Mountain; Forest
+Bot1.Hand = Island; Island; Island

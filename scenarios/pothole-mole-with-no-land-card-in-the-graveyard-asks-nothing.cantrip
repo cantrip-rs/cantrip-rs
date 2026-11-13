@@ -1,0 +1,33 @@
+# Pothole Mole: the mill puts Memnite, Ornithopter and Mox Pearl in the graveyard: no land card there, so the "may return a land
+# card" asks nothing (CR 608.2d: no choice is possible) and the Mole's trigger finishes on its own.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Pothole Mole
+Island x3
+Memnite
+Ornithopter
+Mox Pearl
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Pothole Mole.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Mox Pearl; Ornithopter; Memnite
+Bot1.Hand = Island; Island; Island

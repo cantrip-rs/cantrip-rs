@@ -1,0 +1,8 @@
+{
+  "name": "Pothole Mole",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Mole",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "When this creature enters, mill three cards, then you may return a land card from your graveyard to your hand. (To mill three cards, put the top three cards of your library into your graveyard.)"
+}

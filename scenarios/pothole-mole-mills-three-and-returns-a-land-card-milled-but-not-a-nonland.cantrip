@@ -1,0 +1,36 @@
+# Pothole Mole (2/3): "When this creature enters, mill three cards, then you may return a land card from your graveyard to your
+# hand." The mill puts Forest, Mountain and Memnite there; the choice is made after it, so a card just milled may be taken. Memnite
+# is not a land card (the refusal), Mountain is taken: it is in hand, and the Forest and Memnite stay in the graveyard.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Pothole Mole
+Island x3
+Forest
+Mountain
+Memnite
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Pothole Mole.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Memnite)
+Bot1.Choose(Mountain)
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Memnite; Forest
+Bot1.Hand = Island; Island; Island; Mountain
+Bot1.Library.Count = 20
