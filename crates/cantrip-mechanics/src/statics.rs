@@ -251,6 +251,16 @@ pub fn creature_type_alone<const SUBTYPE: u16>(view: &dyn LayerQuery, source: Ob
     }
 }
 
+/// "... is a [subtype] creature" with nothing else (CR 205.1a, 613.1d, layer 4) as a static ability's `StaticDef::apply`, `SUBTYPE` a
+/// `Subtype` as `u16` (`lands::sub`): its card types are replaced by creature alone and its subtypes by that one creature type (the
+/// subtypes of the card types it loses go with them); its supertypes stay. The subtype is a word of the source's text (CR 612.2).
+/// Eaten by Piranhas (Skeleton), Kenrith's Transformation (Elk), Witness Protection (Citizen) and Kaito, Bane of Nightmares (Ninja)
+/// print it.
+pub fn creature_of_subtype_alone<const SUBTYPE: u16>(view: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
+    chars.types = TypeSet::of(&[CardType::Creature]);
+    chars.subtypes = subtype_word(view, source, SUBTYPE).map_or(SubtypeSet::NONE, |word| SubtypeSet::of(&[word]));
+}
+
 /// The subtype a `Subtype as u16` number names, as `source`'s text has that word now (CR 612.2); `None` for a number that
 /// names no subtype. `also_a`, `your_of_subtype` and `other_of_subtype_you_control` read their `SUBTYPE` through it.
 pub(crate) fn subtype_word(view: &dyn LayerQuery, source: ObjectId, n: u16) -> Option<Subtype> {

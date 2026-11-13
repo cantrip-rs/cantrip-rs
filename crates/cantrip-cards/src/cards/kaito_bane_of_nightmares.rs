@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::statics::{base_pt, plus_pt};
+use cantrip_mechanics::statics::{base_pt, creature_of_subtype_alone, plus_pt};
 use cantrip_mechanics::{effects, ninjutsu::ninjutsu, surveil, targets};
 use cantrip_oracle as oracle;
 
@@ -14,13 +14,6 @@ fn ninja_form(view: &dyn LayerQuery, source: ObjectId, affected: ObjectId) -> bo
 
 fn affects(view: &dyn LayerQuery, source: ObjectId, affected: ObjectId, _: &Chars) -> bool {
     ninja_form(view, source, affected)
-}
-
-/// Layer 4: a replacement of his card types, not an addition (CR 613.1d): he stops being a planeswalker, and the
-/// subtype Kaito goes with it. He stays legendary: a supertype is not a card type.
-fn become_a_ninja_creature(q: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
-    chars.types = TypeSet::of(&[CardType::Creature]);
-    chars.subtypes = SubtypeSet::of(&[q.words(source).subtype(Subtype::Ninja)]);
 }
 
 // --- The abilities ------------------------------------------------------------------------------------------------
@@ -71,7 +64,7 @@ pub static CARD: CardDef = CardDef {
             .targets(&[targets::CREATURE]),
     ],
     statics: &[
-        static_ability(Layer::Type, affects, become_a_ninja_creature, "During your turn, as long as Kaito has one or more loyalty counters on him, he's a Ninja creature."),
+        static_ability(Layer::Type, affects, creature_of_subtype_alone::<{ cantrip_mechanics::lands::sub(Subtype::Ninja) }>, "During your turn, as long as Kaito has one or more loyalty counters on him, he's a Ninja creature."),
         static_ability(Layer::Ability, affects, cantrip_mechanics::statics::have_hexproof, "During your turn, as long as Kaito has one or more loyalty counters on him, he has hexproof.").continues(),
         static_ability(Layer::PtSet, affects, base_pt::<3, 4>, "During your turn, as long as Kaito has one or more loyalty counters on him, he's a 3/4.").continues(),
     ],
