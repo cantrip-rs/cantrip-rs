@@ -1,0 +1,33 @@
+# Declining payment taps the Ooze even when its damage is prevented (CR 615.1).
+[Bot1 Deck]
+Primordial Ooze
+Mox Ruby
+Mox Pearl
+Healing Salve
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Primordial Ooze.Cast
+? Bot1.Mana =
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Prevent the next 3 damage)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Primordial Ooze.Tapped = true
+Bot1.Battlefield.Primordial Ooze.Counters.PlusOnePlusOne = 1
+Prevented = 1 Primordial Ooze > Bot1 by Healing Salve

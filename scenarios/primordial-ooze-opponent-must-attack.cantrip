@@ -1,0 +1,26 @@
+# An opponent's Ooze must attack when able, after its controller pays for its upkeep (CR 508.1d).
+[Bot1 Deck]
+Island x20
+
+[Bot2 Deck]
+Primordial Ooze
+Mox Ruby
+Mountain x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Primordial Ooze.Cast
+? Bot2.Mana =
+[T4 Bot2.Upkeep]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.PayCost
+[T4 Bot2.DeclareAttackers]
+! Bot2.Attack()
+Bot2.Attack(Primordial Ooze > Bot1)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Battlefield.Primordial Ooze.Counters.PlusOnePlusOne = 1
