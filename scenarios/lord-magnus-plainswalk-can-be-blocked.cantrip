@@ -1,0 +1,44 @@
+# A Plains prevents blocking the plainswalker until Lord Magnus enters; another creature can then block it (CR 702.14).
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Zodiac Rooster
+Lord Magnus
+Island x20
+[Bot2 Deck]
+Plains
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Zodiac Rooster.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Zodiac Rooster > Bot2)
+! Bot2.Block(Ornithopter > Zodiac Rooster)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Lord Magnus.Cast
+? Bot1.Mana =
+[T5 Bot1.BeginCombat]
+Bot1.Attack(Zodiac Rooster > Bot2)
+Bot2.Block(Ornithopter > Zodiac Rooster)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 18
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Zodiac Rooster.Keywords = Plainswalk

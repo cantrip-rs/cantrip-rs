@@ -1,0 +1,49 @@
+# Lord Magnus deals first-strike damage and destroys Hill Giant before it can deal combat damage (CR 702.7b).
+[Bot1 Deck]
+Lord Magnus
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Forest
+Island x20
+[Bot2 Deck]
+Hill Giant
+Black Lotus
+Mox Emerald
+Jukai Messenger
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Lord Magnus.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Jukai Messenger.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Hill Giant.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Lord Magnus > Bot2)
+Bot2.Block(Hill Giant > Lord Magnus)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Lord Magnus.Damage = 0
+[T6 Bot2.BeginCombat]
+Bot2.Attack(Jukai Messenger > Bot1)
+Bot1.Block(Lord Magnus > Jukai Messenger)
+[T6 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Lord Magnus.Damage = 0
+Bot2.Graveyard = Jukai Messenger; Hill Giant; Black Lotus
+Bot2.Life = 20
