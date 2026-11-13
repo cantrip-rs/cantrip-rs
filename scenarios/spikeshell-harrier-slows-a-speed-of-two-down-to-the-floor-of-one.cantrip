@@ -1,0 +1,57 @@
+# Spikeshell Harrier: "reduce that opponent's speed by 1. This effect can't reduce their speed below 1." Bot2 casts Burnout
+# Bashtronaut (speed 1, CR 704.5aa) and Bolts Bot1 on turn 2: speed 2 (CR 702.179d). Bot1 has no speed (0, CR 702.179f), so on
+# turn 3 the Harrier bounces the Bashtronaut and slows Bot2 from 2 to exactly 1, the lowest the effect may leave it.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Spikeshell Harrier
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mountain
+Burnout Bashtronaut
+Lightning Bolt
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Burnout Bashtronaut.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Speed = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Spikeshell Harrier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Speed = 1
+Bot2.Battlefield = Mountain; Mox Ruby

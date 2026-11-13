@@ -1,0 +1,81 @@
+# Spikeshell Harrier: "return target creature or Vehicle an opponent controls to its owner's hand. If that opponent's speed is
+# greater than each other player's speed, reduce that opponent's speed by 1." "That opponent" is the one who controls the target,
+# not its owner. Bot2 steals Bot1's Memnite with Control Magic (CR 613.1b) and has speed 2 from Burnout Bashtronaut and a Bolt
+# (CR 704.5aa, 702.179d). On turn 5 the Harrier returns the Memnite to Bot1's hand and slows Bot2, its controller, from 2 to 1;
+# measured by its owner, Bot1 (no speed, 0 by CR 702.179f), nobody would be slowed.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Memnite
+Spikeshell Harrier
+Island x14
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Burnout Bashtronaut
+Lightning Bolt
+Control Magic
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Burnout Bashtronaut.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Speed = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Speed = 2
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Control Magic.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Memnite.Power = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Spikeshell Harrier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Speed = 1
+Bot1.Speed = (absent)
+Bot1.Hand = Island; Island; Memnite
+Bot2.Battlefield = Burnout Bashtronaut; Island; Mountain; Mox Jet; Mox Ruby; Mox Sapphire
+Bot2.Graveyard = Control Magic; Lightning Bolt

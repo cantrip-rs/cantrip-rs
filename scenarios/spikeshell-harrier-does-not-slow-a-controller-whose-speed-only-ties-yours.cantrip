@@ -1,0 +1,70 @@
+# Spikeshell Harrier: "If that opponent's speed is greater than each other player's speed" - a tie is not greater. Bot1 and Bot2
+# each cast a Burnout Bashtronaut and Bolt the other (turns 1 and 2): both have speed 2 (CR 702.179d). On turn 3 the Harrier
+# bounces Bot2's Bashtronaut and Bot2 keeps speed 2.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Burnout Bashtronaut
+Lightning Bolt
+Mox Sapphire
+Mox Jet
+Spikeshell Harrier
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mountain
+Burnout Bashtronaut
+Lightning Bolt
+Island x15
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Burnout Bashtronaut.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Burnout Bashtronaut.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Speed = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Spikeshell Harrier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Speed = 2
+Bot1.Speed = 2
+Bot2.Hand = Burnout Bashtronaut; Island; Island; Island

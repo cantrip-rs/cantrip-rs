@@ -1,0 +1,8 @@
+{
+  "name": "Spikeshell Harrier",
+  "manaCost": "{4}{U}",
+  "type": "Artifact Creature — Robot Turtle",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "When this creature enters, return target creature or Vehicle an opponent controls to its owner's hand. If that opponent's speed is greater than each other player's speed, reduce that opponent's speed by 1. This effect can't reduce their speed below 1."
+}
