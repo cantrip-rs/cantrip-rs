@@ -1,0 +1,30 @@
+# Spectral Interference ({1}{U}): "Counter target artifact or creature spell unless its controller pays {4}." Bot2's Mox Jet is an
+# artifact spell that is not a creature, and Bot2 has no mana to pay with: it is countered and never reaches the battlefield.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Spectral Interference
+Island x4
+Island x13
+
+[Bot2 Deck]
+Mox Jet
+Swamp x19
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+? Stack = Mox Jet
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Spectral Interference.Cast(Mox Jet)
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Graveyard = Spectral Interference
+Bot2.Graveyard = Mox Jet
+Bot2.Battlefield =

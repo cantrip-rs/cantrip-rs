@@ -1,0 +1,49 @@
+# Spectral Interference: "unless its controller pays {4}" (CR 118.12). Bot2 casts Ornithopter, an artifact creature (one spell
+# that is both of the things), with four Moxen left untapped. It taps all four while Interference resolves and pays: the
+# Ornithopter is not countered, and Bot1's Interference is spent.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Spectral Interference
+Island x4
+Island x13
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Ornithopter
+Swamp x14
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Ornithopter.Cast
+? Stack = Ornithopter
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Spectral Interference.Cast(Ornithopter)
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.PayCost
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Graveyard = Spectral Interference
+Bot2.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter
+Bot2.Graveyard =
+Bot2.Battlefield.Mox Emerald.Tapped = false
+Bot2.Battlefield.Mox Sapphire.Tapped = true

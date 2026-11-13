@@ -1,0 +1,33 @@
+# Spectral Interference: Llanowar Elves is a creature spell that is not an artifact. Bot2 taps its only Forest for it, so it has
+# nothing left to pay {4} with, and the Elves are countered.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Spectral Interference
+Island x4
+Island x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+? Stack = Llanowar Elves
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Spectral Interference.Cast(Llanowar Elves)
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Graveyard = Spectral Interference
+Bot2.Graveyard = Llanowar Elves
+Bot2.Battlefield = Forest

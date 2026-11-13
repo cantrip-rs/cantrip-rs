@@ -1,0 +1,6 @@
+{
+  "name": "Spectral Interference",
+  "manaCost": "{1}{U}",
+  "type": "Instant",
+  "oracleText": "Counter target artifact or creature spell unless its controller pays {4}."
+}
