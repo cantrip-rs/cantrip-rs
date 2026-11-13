@@ -1,0 +1,11 @@
+{
+  "name": "Voracious Greatshark",
+  "manaCost": "{3}{U}{U}",
+  "type": "Creature — Shark",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Flash (You may cast this spell any time you could cast an instant.)\nWhen this creature enters, counter target artifact or creature spell.",
+  "keywords": [
+    "Flash"
+  ]
+}

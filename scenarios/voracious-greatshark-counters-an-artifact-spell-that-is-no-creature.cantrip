@@ -1,0 +1,39 @@
+# Voracious Greatshark's trigger counters an artifact spell that is no creature (Bot2's Mox Pearl, CR 115.1d): flashed in against it with
+# Black Lotus's {U}{U}{U}, Mox Sapphire and Mox Ruby, the Shark leaves Bot2's Pearl in its graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Voracious Greatshark
+Island x3
+Island x15
+
+[Bot2 Deck]
+Mox Pearl
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+? Stack = Mox Pearl
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Voracious Greatshark.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Mox Pearl
+Bot2.Battlefield.Count = 0
+Bot1.Battlefield.Voracious Greatshark.Power = 5
+Stack.Count = 0

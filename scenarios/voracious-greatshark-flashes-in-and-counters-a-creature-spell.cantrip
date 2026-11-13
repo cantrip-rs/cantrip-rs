@@ -1,0 +1,47 @@
+# Voracious Greatshark ({3}{U}{U}: Black Lotus's {U}{U}{U}, Mox Sapphire, Mox Ruby) has flash: Bot1 casts it in response to Bot2's Grizzly
+# Bears. When it enters, "counter target artifact or creature spell" counters the Bears (CR 603.6a, 701.6a); the 5/4 Shark stays.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Voracious Greatshark
+Island x3
+Island x15
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+? Stack = Grizzly Bears
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Voracious Greatshark.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears
+Bot1.Battlefield.Voracious Greatshark.Power = 5
+Bot1.Battlefield.Voracious Greatshark.Toughness = 4
+Stack.Count = 0

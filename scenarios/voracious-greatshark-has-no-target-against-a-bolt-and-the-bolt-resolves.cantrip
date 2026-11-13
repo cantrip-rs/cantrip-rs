@@ -1,0 +1,44 @@
+# Bot2's Lightning Bolt is neither an artifact nor a creature spell: Voracious Greatshark, flashed in against it, has no legal target for its
+# trigger (it is not put on the stack, CR 603.3d) and the Bolt resolves, Bot1 going 20 -> 17; the Shark stays, a 5/4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Voracious Greatshark
+Island x3
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+? Stack = Lightning Bolt
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Voracious Greatshark.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack = Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Graveyard = Lightning Bolt
+Bot1.Battlefield.Voracious Greatshark.Power = 5
+Stack.Count = 0
