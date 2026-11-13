@@ -1,0 +1,34 @@
+# Merieke may target a creature its controller already controls; untapping her still destroys it (CR 115.1c).
+[Bot1 Deck]
+Merieke Ri Berit
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Memnite
+Vow to Erebor
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Merieke Ri Berit.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Merieke Ri Berit.Activate(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Vow to Erebor.Cast(Merieke Ri Berit)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard.Memnite.Power = 1
