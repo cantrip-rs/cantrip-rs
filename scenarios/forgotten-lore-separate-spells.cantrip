@@ -1,0 +1,28 @@
+# Each Forgotten Lore tracks its own choices. Paying with no unchosen cards skips the choice, then allows another payment decision.
+[Bot1 Deck]
+Black Lotus
+Forgotten Lore
+Forgotten Lore
+Forest x17
+
+[Bot2 Deck]
+Black Lotus
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Forgotten Lore.Cast(Bot2)
+? Bot1.Mana = {G}{G}
+Bot2.Choose(Black Lotus)
+Bot1.PayCost
+Bot1.Decline
+? Bot1.Hand = Black Lotus; Forest; Forest; Forest; Forest; Forgotten Lore
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Forgotten Lore.Cast(Bot2)
+Bot2.Choose(Black Lotus)
+Bot1.Decline
+[Expect]
+Bot1.Hand = Forest; Forest; Forest; Forest; Black Lotus
+Bot1.Graveyard = Forgotten Lore; Forgotten Lore

@@ -1,0 +1,32 @@
+# Forgotten Lore: the opponent chooses distinct cards from the caster's graveyard; paying repeats the choice before the last card returns.
+[Bot1 Deck]
+Black Lotus
+Lotus Petal
+Forgotten Lore x2
+Forest x16
+
+[Bot2 Deck]
+Black Lotus
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Lotus Petal.Activate(Color: Green)
+! Bot1.Hand.Forgotten Lore.Cast(Bot1)
+Bot1.Hand.Forgotten Lore.Cast(Bot2)
+? Bot1.Mana = {G}{G}{G}
+! Bot2.Choose()
+Bot2.Choose(Black Lotus)
+Bot1.PayCost
+! Bot2.Choose(Black Lotus)
+Bot2.Choose(Lotus Petal)
+Bot1.Decline
+? Bot1.Graveyard = Forgotten Lore; Black Lotus
+Bot1.Hand.Forgotten Lore.Cast(Bot2)
+Bot2.Choose(Black Lotus)
+Bot1.Decline
+[Expect]
+Bot1.Hand = Black Lotus; Forest; Forest; Forest; Lotus Petal
+Bot1.Graveyard = Forgotten Lore; Forgotten Lore
