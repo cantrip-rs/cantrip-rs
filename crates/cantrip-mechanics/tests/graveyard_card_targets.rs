@@ -52,6 +52,27 @@ static SOURCE: CardDef = CardDef {
 };
 
 #[test]
+fn graveyard_card_targets_reject_copies_of_cards_before_state_based_cleanup() {
+    let cards=Box::leak(Box::new(CardTable::new([&SOURCE,&CREATURE])));
+    let mut game=RulesGame::new(cards,&Setup { decks:vec![vec![],vec![]],..Default::default() });
+    let zone=Zone::graveyard(YOU);
+    let card=game.state.push_obj(Obj::new(cards.id_of(&CREATURE),YOU,zone));
+    game.state.zone_push(zone,card);
+    let mut copy=Obj::new(cards.id_of(&CREATURE),YOU,zone);
+    copy.card_copy=true;
+    let copy=game.state.push_obj(copy);
+    game.state.zone_push(zone,copy);
+    let source=game.state.push_obj(Obj::new(cards.id_of(&SOURCE),YOU,Zone::BATTLEFIELD));
+    game.state.zone_push(Zone::BATTLEFIELD,source);
+    let asker=Asker::new(source,YOU);
+    // A transient copy is not a card (CR108.2), even before CR704.5e removes it.
+    for filter in [CARD_IN_YOUR_GRAVEYARD.filter,CREATURE_CARD_IN_YOUR_GRAVEYARD.filter] {
+        assert!(filter(&game,&asker,Target::Object(card)));
+        assert!(!filter(&game,&asker,Target::Object(copy)));
+    }
+}
+
+#[test]
 fn graveyard_card_targets_exclude_tokens_during_resolution() {
     let cards = Box::leak(Box::new(CardTable::new([&SOURCE, &CREATURE, &LAND])));
     let mut game = RulesGame::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });

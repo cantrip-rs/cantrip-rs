@@ -1376,6 +1376,7 @@ pub fn card_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target, types: &[
         Target::Object(id) => {
             let obj = q.obj(id);
             obj.zone == Zone::graveyard(asker.controller)
+                && !obj.card_copy // A copy of a card is not a card (CR 108.2).
                 && !obj.token // A token is not a card, even before state-based actions remove it (CR 111.6).
                 && obj.became.is_none()
                 && (types.is_empty() || types.iter().any(|&ty| q.chars(id).is(ty)))
