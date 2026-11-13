@@ -21,16 +21,10 @@ fn another_creature_or_artifact_you_control_enters(q: &dyn Query, me: &Asker, ev
     }
 }
 
-/// "This creature deals 1 damage to each opponent" (CR 120.3).
-fn ping(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::damage_each_opponent(g, item, 1);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
         when_asked(EventMask::ZONE_CHANGE, another_creature_or_artifact_you_control_enters),
-        ping,
+        effects::damage_each_opponent_n::<1>,
         "Whenever another creature or artifact you control enters, this creature deals 1 damage to each opponent.",
     )],
     ways: &[warp::way(mana("{R}"), "Warp {R}")],

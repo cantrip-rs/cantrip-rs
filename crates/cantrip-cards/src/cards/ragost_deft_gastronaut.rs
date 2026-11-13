@@ -19,18 +19,11 @@ fn foods_too(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
     chars.subtypes = chars.subtypes.with(Subtype::Food);
 }
 
-/// "{1}, {T}, Sacrifice a Food: Ragost deals 3 damage to each opponent" (CR 120.3a): each opponent, not their planeswalkers or
-/// battles.
-fn damage_opponents(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::damage_each_opponent(g, item, 3);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         ability(
             cost("{1}, {T}").and(sacrifice(1, targets::filters::food)),
-            damage_opponents,
+            effects::damage_each_opponent_n::<3>,
             "{1}, {T}, Sacrifice a Food: Ragost deals 3 damage to each opponent.",
         ),
         // "At the beginning of each end step, if you gained life this turn" (CR 603.4): an intervening "if", checked as the

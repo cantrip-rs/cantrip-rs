@@ -1319,6 +1319,13 @@ pub fn damage_each_opponent(g: &mut dyn Game, item: &StackItem, n: u32) {
     g.damage_together(&hits);
 }
 
+/// "[This source] deals `N` damage to each opponent" as the whole effect of an ability or spell (CR 120.3, 102.2):
+/// `damage_each_opponent` with the amount printed. Black Waltz No. 3, Boltwave, Quark's Bar, Sabotender and Spitfire Lagac print it.
+pub fn damage_each_opponent_n<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    damage_each_opponent(g, item, N);
+    Ok(())
+}
+
 /// "[This source] deals `n` damage to each opponent and you gain `n` life" (CR 120.3, 119.3): `damage_each_opponent`, then the
 /// controller gains the life whether or not the damage was dealt (CR 608.2c). Extended Absence, Screeching Soulbreaker, Eye of
 /// Jace, Aurelia, the Law Above, Quintorius Kand, Sanctum Lurker, Ark of Hunger and Colossus of the Blood Age print it.

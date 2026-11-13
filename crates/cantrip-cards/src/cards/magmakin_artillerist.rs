@@ -11,17 +11,11 @@ fn that_much_damage_to_each_opponent(g: &mut dyn Game, item: &StackItem) -> Resu
     Ok(())
 }
 
-/// "When you cycle this card, it deals 1 damage to each opponent": the card, in the graveyard, deals it (CR 113.7a).
-fn one_damage_to_each_opponent(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::damage_each_opponent(g, item, 1);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(YOU_DISCARD, that_much_damage_to_each_opponent, "Whenever you discard one or more cards, this creature deals that much damage to each opponent.").once_per_batch(),
         cycling(mana("{1}{R}"), "Cycling {1}{R} ({1}{R}, Discard this card: Draw a card.)"),
-        triggered(YOU_CYCLE_THIS_CARD, one_damage_to_each_opponent, "When you cycle this card, it deals 1 damage to each opponent."),
+        triggered(YOU_CYCLE_THIS_CARD, effects::damage_each_opponent_n::<1>, "When you cycle this card, it deals 1 damage to each opponent."),
     ],
     ..oracle::MAGMAKIN_ARTILLERIST
 };

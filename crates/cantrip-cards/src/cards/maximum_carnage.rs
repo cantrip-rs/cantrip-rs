@@ -22,17 +22,11 @@ fn add_red(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// III - "This Saga deals 5 damage to each opponent." (CR 120.3).
-fn burn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::damage_each_opponent(g, item, 5);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         chapter(1, carnage, "I \u{2014} Until your next turn, each creature attacks each combat if able and attacks a player other than you if able."),
         chapter(2, add_red, "II \u{2014} Add {R}{R}{R}.").produces_mana(),
-        chapter(3, burn, "III \u{2014} This Saga deals 5 damage to each opponent."),
+        chapter(3, effects::damage_each_opponent_n::<5>, "III \u{2014} This Saga deals 5 damage to each opponent."),
     ],
     lasting_rules: &[LastingRule {
         text: "Until your next turn, each creature attacks each combat if able and attacks a player other than you if able.",
