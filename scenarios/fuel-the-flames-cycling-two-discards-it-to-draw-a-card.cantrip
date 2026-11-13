@@ -1,0 +1,37 @@
+# Fuel the Flames' "Cycling {2}" (CR 702.29a): with one Mox on the battlefield ({2} cannot be paid) the cycling is not offered (turn 1);
+# on turn 3 with two Moxen it is paid for exactly, the card is discarded as a cost and Bot1 draws the top card of the library,
+# an Island (the turn-3 draw before it was the Forest).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Fuel the Flames
+Island x4
+Forest
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Fuel the Flames.Activate(Ability: Cycling; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fuel the Flames.Activate(Ability: Cycling)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Fuel the Flames
+Bot1.Hand = Forest; Island; Island; Island; Island; Island
+Bot1.Library.Count = 10
