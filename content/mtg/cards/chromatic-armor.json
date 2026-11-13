@@ -1,0 +1,6 @@
+{
+  "name": "Chromatic Armor",
+  "manaCost": "{1}{W}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nAs this Aura enters, choose a color.\nThis Aura enters with a sleight counter on it.\nPrevent all damage that would be dealt to enchanted creature by sources of the last chosen color.\n{X}: Put a sleight counter on this Aura and choose a color. X is the number of sleight counters on this Aura."
+}
