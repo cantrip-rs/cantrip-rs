@@ -1,0 +1,42 @@
+# Damping Field lets each player untap only one artifact during their own untap step (CR 502.3).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Damping Field
+Plains x20
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Damping Field.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+! Bot1.Choose(Mox Pearl; Mox Sapphire)
+Bot1.Choose(Mox Jet)
+[T3 Bot1.Main1]
+! Bot2.Choose(Mox Ruby; Mox Emerald)
+Bot2.Choose(Mox Emerald)
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Battlefield.Mox Pearl.Tapped = true
+Bot1.Battlefield.Mox Sapphire.Tapped = true
+Bot2.Battlefield.Mox Emerald.Tapped = false
+Bot2.Battlefield.Mox Ruby.Tapped = true
