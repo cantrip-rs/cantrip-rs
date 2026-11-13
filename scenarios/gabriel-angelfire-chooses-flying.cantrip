@@ -1,0 +1,43 @@
+# Gabriel chooses flying; it expires at the next upkeep before choosing first strike (CR 611.2a).
+[Bot1 Deck]
+Gabriel Angelfire
+Black Lotus
+Mox Pearl
+Gleemox
+Mox Sapphire
+Mox Jet
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gabriel Angelfire.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Modes(flying)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Gabriel Angelfire.Keywords = Flying
+[T5 Bot1.Upkeep]
+? Bot1.Battlefield.Gabriel Angelfire.Keywords = (absent)
+Bot1.Modes(first strike)
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Gabriel Angelfire.Keywords = FirstStrike
