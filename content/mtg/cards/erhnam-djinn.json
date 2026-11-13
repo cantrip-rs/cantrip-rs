@@ -1,0 +1,8 @@
+{
+  "name": "Erhnam Djinn",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Djinn",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "At the beginning of your upkeep, target non-Wall creature an opponent controls gains forestwalk until your next upkeep. (It can't be blocked as long as defending player controls a Forest.)"
+}
