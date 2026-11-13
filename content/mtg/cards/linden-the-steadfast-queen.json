@@ -1,0 +1,11 @@
+{
+  "name": "Linden, the Steadfast Queen",
+  "manaCost": "{W}{W}{W}",
+  "type": "Legendary Creature — Human Noble",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Vigilance (Attacking doesn't cause this creature to tap.)\nWhenever a white creature you control attacks, you gain 1 life.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
