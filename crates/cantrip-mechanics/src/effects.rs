@@ -2046,6 +2046,33 @@ pub fn ask_may(g: &mut dyn Game, player: PlayerId, source: ObjectId, purpose: Pu
     Ok(g.ask(player, RequestKind::May { source, purpose })? == Answer::Yes)
 }
 
+/// One player's part of "[player] loses `life` life unless they discard a card" (CR 608.2d, 701.9, 119.3): a player with a card in
+/// hand chooses whether to discard one (`question`, a `May` a scenario answers with `Accept` or `Decline`) and then which; nothing
+/// is asked of an empty hand, which cannot, nor of a player the spell or ability of `causer` may not cause to discard (CR 101.2: Tamiyo,
+/// Collector of Tales), who cannot choose the impossible option (CR 608.2d), so that player loses the life. The choice goes into `discards` or `losses`
+/// (`Together`'s fields), for the caller to do the discards and the life loss together, one action (CR 101.4; `Game::together`).
+/// Ob Nixilis, the Adversary (each opponent) and Painful Quandary (the player who cast the spell) print it.
+pub fn choose_to_discard_a_card_or_lose_life(
+    g: &mut dyn Game,
+    causer: PlayerId,
+    player: PlayerId,
+    source: ObjectId,
+    question: &'static Question,
+    life: i32,
+    discards: &mut Vec<ObjectId>,
+    losses: &mut Vec<(PlayerId, i32)>,
+) -> Result<(), Suspend> {
+    if g.state().zone(Zone::hand(player)).is_empty()
+        || !may_cause(&*g, causer, player, CauseKind::Discard)
+        || !ask_may(g, player, source, Purpose::Ask(question))?
+    {
+        losses.push((player, -life));
+    } else {
+        discards.extend(crate::choose_from_hand(g, player, source, 1)?);
+    }
+    Ok(())
+}
+
 const PAY_TO_GAIN_LIFE: Question = Question::new("GainLife", "pay {cost} to gain 1 life?", "", "Pay {cost}", "Don't pay");
 
 /// "You may pay [cost]. If you do, you gain 1 life." (CR 608.2d, 118.12, 119.3) as the ability resolves: its controller is asked

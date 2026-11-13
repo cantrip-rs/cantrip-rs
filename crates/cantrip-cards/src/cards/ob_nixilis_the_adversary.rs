@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{casualty, choose_from_hand, effects, players, targets, tokens};
+use cantrip_mechanics::{casualty, effects, players, targets, tokens};
 use cantrip_mechanics::triggers::THIS_DIES;
 use cantrip_oracle as oracle;
 
@@ -37,11 +37,7 @@ fn plus_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         if !players::reached(g, opponent) {
             continue;
         }
-        if g.state().zone(Zone::hand(opponent)).is_empty() || !effects::ask_may(g, opponent, item.object, Purpose::Ask(&DISCARD))? {
-            losses.push((opponent, -2));
-        } else {
-            discards.extend(choose_from_hand(g, opponent, item.object, 1)?);
-        }
+        effects::choose_to_discard_a_card_or_lose_life(g, you, opponent, item.object, &DISCARD, 2, &mut discards, &mut losses)?;
     }
     g.together(Together { discards: &discards, life: &losses, ..Default::default() });
     g.end_sentence();

@@ -1,0 +1,52 @@
+# Bot2's Tamiyo, Collector of Tales: "Spells and abilities your opponents control can't cause you to discard cards" (CR 101.2).
+# Ob Nixilis, the Adversary +1: "Each opponent loses 2 life unless they discard a card." Bot2 cannot discard, so it is asked
+# nothing (`! Bot2.Accept`) and loses 2 life, keeping its hand.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Ob Nixilis, the Adversary
+Island x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Tamiyo, Collector of Tales
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Tamiyo, Collector of Tales.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ob Nixilis, the Adversary.Cast
+Bot1.Modes(Cast without casualty)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ob Nixilis, the Adversary.Activate(Ability: +1)
+Bot1.Pass
+Bot2.Pass
+! Bot2.Accept
+
+[Expect]
+Bot2.Life = 18
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield.Ob Nixilis, the Adversary.Counters.Loyalty = 4
