@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::chosen_type::{enters_choosing_a_creature_type, your_creatures_spells_and_cards};
+use cantrip_mechanics::chosen_type::{add_chosen_type, enters_choosing_a_creature_type, your_creatures_spells_and_cards};
 use cantrip_oracle as oracle;
 
 /// "Creatures you control are the chosen type in addition to their other types. The same is true for creature spells you
@@ -9,12 +9,6 @@ use cantrip_oracle as oracle;
 /// creature of that type entering (the ruling: with Metallic Mimic naming the same type, every creature enters with a
 /// counter). Its reach - what is a creature - can change as other layer-4 effects apply (Opalescence), and the dependency
 /// system orders them (CR 613.8). No type chosen (it entered with its abilities lost, CR 614.12), nothing is added.
-fn add_chosen_type(q: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
-    if let Some(chosen) = q.state().chosen_subtype(q.linked_to(source)) {
-        chars.subtypes = chars.subtypes.with(chosen);
-    }
-}
-
 pub static CARD: CardDef = CardDef {
     enters: Some(enters_choosing_a_creature_type),
     statics: &[static_ability(

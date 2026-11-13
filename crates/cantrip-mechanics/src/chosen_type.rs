@@ -57,6 +57,16 @@ pub fn creatures_you_control_of_chosen_type(q: &dyn LayerQuery, source: ObjectId
         && s.obj(affected).controller == s.obj(source).controller
 }
 
+/// "... [is/are] the chosen type in addition to [its/their] other types" (CR 205.1b, 613.1d): the `modify` of a type-changing
+/// static ability that adds the creature type chosen as the permanent entered and keeps the others. No type chosen (it
+/// entered with its abilities lost, CR 614.12): nothing is added. Arcane Adaptation, Roaming Throne and Lifecraft Engine
+/// print it.
+pub fn add_chosen_type(q: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
+    if let Some(chosen) = q.state().chosen_subtype(q.linked_to(source)) {
+        chars.subtypes = chars.subtypes.with(chosen);
+    }
+}
+
 /// "Creatures you control ... The same is true for creature spells you control and creature cards you own that aren't on
 /// the battlefield" (CR 611.3a, 613.1d): the `affects` of a static ability declared `.everywhere()`, judged on what the layers
 /// before made the object - a creature on the battlefield under the source's controller, a creature spell on the stack they
