@@ -1,0 +1,53 @@
+# Earthlore enchants only your land and taps it to strengthen an opposing blocker until cleanup (CR 303.4, 602.2b, 611.2a).
+[Bot1 Deck]
+Forest
+Mox Emerald
+Earthlore
+Memnite x2
+Island x20
+[Bot2 Deck]
+Island
+Memnite x2
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Earthlore.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Earthlore.Cast(Bot1.Battlefield.Forest)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Earthlore.AttachedTo = Forest
+Bot1.Attack(Memnite#1 > Bot2)
+Bot2.Block(Memnite#1 > Bot1.Battlefield.Memnite#1)
+! Bot1.Battlefield.Earthlore.Activate(Bot2.Battlefield.Memnite#2)
+Bot1.Battlefield.Earthlore.Activate(Bot2.Battlefield.Memnite#1)
+Bot1.Choose(Forest)
+? Bot1.Battlefield.Forest.Tapped = true
+! Bot1.Battlefield.Earthlore.Activate(Bot2.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite#1.Power = 2
+? Bot2.Battlefield.Memnite#1.Toughness = 3
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Memnite#1.Power = 1
+Bot2.Battlefield.Memnite#1.Toughness = 1
