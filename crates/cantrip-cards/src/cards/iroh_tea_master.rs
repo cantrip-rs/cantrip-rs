@@ -11,11 +11,6 @@ const ASK: Question = Question::new(
     "Don't",
 );
 
-/// "When Iroh enters, create a Food token." (CR 111.10b.)
-fn create_food(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create_food(g, item.controller)
-}
-
 /// "You may have target opponent gain control of target permanent you control." (CR 611.2, 608.2b.) Gaining control has no
 /// duration, so it lasts as long as the permanent stays on the battlefield. If either target is illegal as this resolves the
 /// ability does nothing and the choice is not offered (the card's ruling). "When you do, ..." (CR 603.12) is a reflexive
@@ -48,7 +43,7 @@ fn ally(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(THIS_ENTERS, create_food, "When Iroh enters, create a Food token."),
+        triggered(THIS_ENTERS, tokens::create_a_food_token, "When Iroh enters, create a Food token."),
         triggered(
             BEGINNING_OF_YOUR_COMBAT,
             give_control,

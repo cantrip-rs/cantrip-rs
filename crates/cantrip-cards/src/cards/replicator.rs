@@ -14,14 +14,9 @@ fn tapped_copy(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "When this artifact enters, create a Food token." (CR 111.10b).
-fn make_food(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create_food(g, item.controller)
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(THIS_ENTERS, make_food, "When this artifact enters, create a Food token."),
+        triggered(THIS_ENTERS, tokens::create_a_food_token, "When this artifact enters, create a Food token."),
         ability(cost("{2}, {T}"), tapped_copy, "{2}, {T}: Create a tapped token that's a copy of target token you control.")
             .targets(&[targets::TOKEN_YOU_CONTROL]),
     ],

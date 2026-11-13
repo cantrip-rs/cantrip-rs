@@ -2,13 +2,6 @@ use cantrip_api::*;
 use cantrip_mechanics::{choose, class, effects, targets, tokens, triggers};
 use cantrip_oracle as oracle;
 
-/// Level 1: "Whenever one or more creatures you control die, create a Food token. This ability triggers only once each turn."
-/// (CR 603.2c, 700.4, 603.10a): the creatures are judged as they last were on the battlefield; creatures that die together
-/// are one batch and trigger it once, and it triggers no more than once in a turn.
-fn create_food(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create_food(g, item.controller)
-}
-
 /// Level 2: "Whenever you sacrifice a permanent" (CR 701.21a), once the Class is level 2 (CR 716.2a): one trigger for each
 /// permanent, Scavenger's Talent itself included (read as it last was, level and all, CR 603.10a).
 fn you_sacrifice_a_permanent_at_level_two(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
@@ -53,9 +46,11 @@ fn sacrifice_three_to_reanimate(g: &mut dyn Game, item: &StackItem) -> Result<()
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
+        // Level 1 (CR 603.2c, 700.4, 603.10a): the creatures are judged as they last were on the battlefield; creatures that die
+        // together are one batch and trigger it once, and it triggers no more than once in a turn.
         triggered(
             triggers::CREATURE_YOU_CONTROL_DIES,
-            create_food,
+            tokens::create_a_food_token,
             "Whenever one or more creatures you control die, create a Food token. This ability triggers only once each turn.",
         )
         .once_per_batch()

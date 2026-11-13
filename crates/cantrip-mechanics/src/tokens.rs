@@ -287,6 +287,12 @@ pub fn create_food(g: &mut dyn Game, controller: PlayerId) -> Result<(), Suspend
     Ok(())
 }
 
+/// "Create a Food token" (CR 111.10b) as an effect: the resolving object's controller makes it. Heroic Feast, Hot Dog Cart, Iroh,
+/// Neelix, Scavenger's Talent, Canyon Crawler, Replicator, Gilded Goose, Midnight Snack and Bake into a Pie print it alone.
+pub fn create_a_food_token(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create_food(g, item.controller)
+}
+
 /// A 2/2 white Samurai creature token with vigilance. The Wandering Emperor's -1 and Experimental Synthesizer's sacrifice
 /// ability make it.
 pub static SAMURAI: CardDef = CardDef {
