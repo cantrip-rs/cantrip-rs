@@ -3,20 +3,13 @@ use cantrip_mechanics::triggers::creature_you_control_deals_combat_damage_to_pla
 use cantrip_mechanics::{effects, targets};
 use cantrip_oracle as oracle;
 
-/// "Target creature gets +1/+1 until end of turn. Draw a card."
-fn pump_and_draw(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::target_creature_gets::<1, 1>(g, item)?;
-    g.end_sentence();
-    effects::draw(g, item, 1)
-}
-
 /// "You may pay {W/B}. If you do, return this card from your graveyard to your hand."
 fn pay_to_return(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     effects::may_pay_to_return_this_to_hand(g, item, cost("{W/B}"))
 }
 
 pub static CARD: CardDef = CardDef {
-    spell: spell(&[targets::CREATURE], pump_and_draw),
+    spell: spell(&[targets::CREATURE], effects::target_creature_gets_then_draw_a_card::<1, 1>),
     abilities: &[
         // "One or more creatures ... deal combat damage to a player" (CR 603.2c): one trigger for each player the batch damaged.
         // It works only from the graveyard (CR 113.6b, 113.6m).
