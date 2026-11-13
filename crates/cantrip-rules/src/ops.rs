@@ -5087,14 +5087,17 @@ pub fn set_attack_target(cx: &mut Cx, attacker: ObjectId, defender: Target) {
     // member reselects the band.
     let band = current.band;
     let mut attackers = cx.s().attackers.clone();
+    let mut assignments = Vec::new();
     for a in attackers.iter_mut() {
         if a.id == attacker || (band != 0 && a.band == band) {
             a.target = defender;
             a.defending = defending;
             a.attacked_as = attacked_as;
+            assignments.push(Event::AttackAssigned { attacker: a.id, defender, defending });
         }
     }
     cx.st().set_attackers(attackers);
+    for assignment in assignments { cx.record(assignment); }
 }
 
 /// Permanents just put onto the battlefield attacking `defender` become attacking creatures (CR 506.3, 508.4), not declared
@@ -5116,7 +5119,7 @@ pub fn enter_attacking(cx: &mut Cx, entered: &[ObjectId], defender: Target) {
     // What it is attacked as (CR 506.4e): what the permanent is now; nothing, for a player.
     let attacked_as = defender.object().map_or(TypeSet::NONE, |d| attackable_types(&cx.chars(d)));
     let mut attackers = cx.s().attackers.clone();
-    let mut changed = false;
+    let mut assignments = Vec::new();
     for &id in entered {
         if !eligible_to_enter_attacking(cx, id) {
             continue;
@@ -5128,17 +5131,18 @@ pub fn enter_attacking(cx: &mut Cx, entered: &[ObjectId], defender: Target) {
             Some(at) => {
                 if attackers[at].target != defender {
                     attackers[at] = Attacker::new(id, defender, defending, attacked_as);
-                    changed = true;
+                    assignments.push(Event::AttackAssigned { attacker: id, defender, defending });
                 }
             }
             None => {
                 attackers.push(Attacker::new(id, defender, defending, attacked_as));
-                changed = true;
+                assignments.push(Event::AttackAssigned { attacker: id, defender, defending });
             }
         }
     }
-    if changed {
+    if !assignments.is_empty() {
         cx.st().set_attackers(attackers);
+        for assignment in assignments { cx.record(assignment); }
     }
 }
 

@@ -221,13 +221,15 @@ pub trait Query {
     /// attacks, or the controller of the planeswalker or the protector of the battle it attacks, as it began attacking
     /// (`Attacker::defending`) - so still once that planeswalker or battle has changed controller or protector, or been
     /// removed from combat (CR 506.4c) - and, once it is no longer attacking, the one it had when it attacked last
-    /// (`Event::Attacks::defending`). None for a creature that has not attacked.
+    /// (`Event::Attacks::defending`, or `Event::AttackAssigned` for entering attacking and reselected targets).
+    /// None for a creature that has never been attacking.
     fn defending_player(&self, attacker: ObjectId) -> Option<PlayerId> {
         if let Some(a) = self.state().attackers.iter().find(|a| a.id == attacker) {
             return Some(a.defending);
         }
         self.history().all().iter().rev().find_map(|r| match r.event {
-            crate::Event::Attacks { attacker: a, defending, .. } if a == attacker => Some(defending),
+            crate::Event::Attacks { attacker: a, defending, .. }
+            | crate::Event::AttackAssigned { attacker: a, defending, .. } if a == attacker => Some(defending),
             _ => None,
         })
     }
