@@ -1,0 +1,60 @@
+# Syphon Fuel's -6/-6 is exact: Bot2's Catacomb Crocodile (3/7) becomes -3/1 until end of turn and survives (toughness 1,
+# CR 704.5f), unlike a 6-toughness creature; Bot1 still gains 2 (22). On Bot2's turn 4 the effect has ended (CR 514.2) and
+# it is a 3/7 again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Syphon Fuel
+Swamp x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Catacomb Crocodile
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Catacomb Crocodile.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Syphon Fuel.Cast(Bot2.Battlefield.Catacomb Crocodile)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Catacomb Crocodile.Power = -3
+? Bot2.Battlefield.Catacomb Crocodile.Toughness = 1
+? Bot1.Life = 22
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Catacomb Crocodile.Power = 3
+? Bot2.Battlefield.Catacomb Crocodile.Toughness = 7
+
+[Expect]
+Turn = 4
+Bot2.Battlefield = Catacomb Crocodile; Mox Jet; Mox Ruby
+Bot1.Life = 22

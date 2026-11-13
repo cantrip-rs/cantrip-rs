@@ -1,0 +1,6 @@
+{
+  "name": "Syphon Fuel",
+  "manaCost": "{4}{B}",
+  "type": "Instant",
+  "oracleText": "Target creature gets -6/-6 until end of turn. You gain 2 life."
+}
