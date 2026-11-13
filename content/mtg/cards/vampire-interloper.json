@@ -1,0 +1,11 @@
+{
+  "name": "Vampire Interloper",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Vampire Scout",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying\nThis creature can't block.",
+  "keywords": [
+    "Flying"
+  ]
+}
