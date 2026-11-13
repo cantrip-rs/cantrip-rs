@@ -1,0 +1,54 @@
+# Spitfire Lagac, a 3/4: "Landfall -- Whenever a land you control enters, this creature deals 1 damage to each opponent." Bot1
+# casts it with four Mox Rubies, then plays a Mountain: Bot2 is at 19. Bot2 plays a Mountain of its own on turn 2 and is
+# not pinged back (Bot1's lands only); Bot1's second Mountain on turn 3 makes it 18.
+
+[Bot1 Deck]
+Mox Ruby x4
+Spitfire Lagac
+Mountain
+Mountain
+Mountain x10
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Spitfire Lagac.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 19
+? Bot1.Life = 20
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 20
