@@ -1,0 +1,36 @@
+# Luminous Rebuke at an untapped creature costs the full {4}{W} (CR 601.2f). Bot1's Black Lotus and Mox Pearl make four mana,
+# which is not enough for the untapped Ornithopter; casting Mox Sapphire for the fifth makes five and the spell destroys it. The pool is empty
+# right after, so no reduction applied.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Luminous Rebuke
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot2.Battlefield.Ornithopter.Tapped = false
+? Bot1.Mana = {W}{W}{W}{W}
+! Bot1.Hand.Luminous Rebuke.Cast(Bot2.Battlefield.Ornithopter; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Luminous Rebuke.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Turn = 3
+Bot1.Graveyard = Luminous Rebuke; Black Lotus
+Bot2.Graveyard = Ornithopter
