@@ -1,0 +1,8 @@
+{
+  "name": "Hungry Ghoul",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Zombie",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{1}, Sacrifice another creature: Put a +1/+1 counter on this creature."
+}
