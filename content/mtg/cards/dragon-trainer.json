@@ -1,0 +1,8 @@
+{
+  "name": "Dragon Trainer",
+  "manaCost": "{3}{R}{R}",
+  "type": "Creature — Human",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "When this creature enters, create a 4/4 red Dragon creature token with flying."
+}

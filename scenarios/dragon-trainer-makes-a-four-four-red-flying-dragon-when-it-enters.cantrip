@@ -1,0 +1,41 @@
+# Dragon Trainer, a 1/1: "When this creature enters, create a 4/4 red Dragon creature token with flying." Cast with Black Lotus
+# (RRR) and two Mox Rubies, it leaves a 4/4 red Dragon with flying beside it, under Bot1's control.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Dragon Trainer
+Mountain x14
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Dragon Trainer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dragon Token.Power = 4
+
+[Expect]
+Bot1.Battlefield = Dragon Token; Dragon Trainer; Mox Ruby; Mox Ruby
+Bot1.Battlefield.Dragon Token.Power = 4
+Bot1.Battlefield.Dragon Token.Toughness = 4
+Bot1.Battlefield.Dragon Token.Colors = Red
+Bot1.Battlefield.Dragon Token.Keywords = Flying
+Bot1.Battlefield.Dragon Trainer.Power = 1
+Bot2.Battlefield.Count = 0
