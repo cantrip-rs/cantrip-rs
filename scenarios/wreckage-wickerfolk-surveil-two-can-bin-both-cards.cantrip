@@ -1,0 +1,30 @@
+# Wreckage Wickerfolk's "When this creature enters, surveil 2" may put both cards into the graveyard (CR 701.25a): Bot1 bins
+# Lightning Bolt and Counterspell, and the Island that was third is now on top.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Wreckage Wickerfolk
+Island x4
+Lightning Bolt
+Counterspell
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wreckage Wickerfolk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt; Counterspell)
+
+[Expect]
+Bot1.Graveyard.Count = 2
+Bot1.Library = Island
