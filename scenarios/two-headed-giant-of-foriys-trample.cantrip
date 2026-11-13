@@ -1,0 +1,45 @@
+# The Giant assigns lethal damage to a 1/1 blocker and tramples over for three (CR 702.19b).
+[Bot1 Deck]
+Two-Headed Giant of Foriys
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Mountain x20
+
+[Bot2 Deck]
+Memnite
+Phyrexian Walker
+Phyrexian Walker
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Two-Headed Giant of Foriys.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Two-Headed Giant of Foriys)
+Bot2.Block(Memnite > Two-Headed Giant of Foriys)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Graveyard = Memnite
+Bot2.Life = 17

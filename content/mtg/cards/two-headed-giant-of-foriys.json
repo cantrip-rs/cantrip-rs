@@ -1,0 +1,11 @@
+{
+  "name": "Two-Headed Giant of Foriys",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Giant",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Trample\nThis creature can block an additional creature each combat.",
+  "keywords": [
+    "Trample"
+  ]
+}
