@@ -1,0 +1,61 @@
+# Arcanis the Omnipotent: "{T}: Draw three cards. {2}{U}{U}: Return Arcanis to its owner's hand." Cast on turn 1 with Black Lotus's blue
+# and three Moxen it has summoning sickness (CR 302.6): ! Activate. On turn 3 the {T} ability draws the Forest, Mountain and Plains
+# below the turn's draw (three cards, CR 121.1); {2}{U}{U} is refused with only the three Moxen (three mana of the four), and
+# offered once the Island adds the fourth and second blue: Arcanis returns to Bot1's hand (CR 400.3).
+[Bot1 Deck]
+Black Lotus
+Arcanis the Omnipotent
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Island
+Island
+Swamp
+Forest
+Mountain
+Plains
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Arcanis the Omnipotent.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Arcanis the Omnipotent.Activate(Ability: {T})
+[T3 Bot1.Main1]
+Bot1.Battlefield.Arcanis the Omnipotent.Activate(Ability: {T})
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Island; Island; Swamp; Forest; Mountain; Plains
+? Bot1.Battlefield.Arcanis the Omnipotent.Tapped = true
+! Bot1.Battlefield.Arcanis the Omnipotent.Activate(Ability: {T})
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Arcanis the Omnipotent.Activate(Ability: {2}{U}{U}; Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Arcanis the Omnipotent.Activate(Ability: {2}{U}{U})
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Arcanis the Omnipotent = (absent)
+Bot1.Hand = Arcanis the Omnipotent; Forest; Island; Mountain; Plains; Swamp

@@ -1,0 +1,8 @@
+{
+  "name": "Arcanis the Omnipotent",
+  "manaCost": "{3}{U}{U}{U}",
+  "type": "Legendary Creature — Wizard",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "{T}: Draw three cards.\n{2}{U}{U}: Return Arcanis to its owner's hand."
+}
