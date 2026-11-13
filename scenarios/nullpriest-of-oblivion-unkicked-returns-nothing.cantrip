@@ -1,0 +1,32 @@
+# Nullpriest of Oblivion: "When this creature enters, if it was kicked, ..." (CR 603.4, 702.33d). Bot1 Entombs a Memnite, then casts Nullpriest for {1}{B} without kicker: the Memnite
+# stays in the graveyard and nothing is asked for (no trigger goes on the stack).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Entomb
+Nullpriest of Oblivion
+Island
+Island
+Island
+Memnite
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+Bot1.Hand.Nullpriest of Oblivion.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Nullpriest of Oblivion
+Bot1.Graveyard = Entomb; Memnite; Black Lotus
+Bot1.Life = 20

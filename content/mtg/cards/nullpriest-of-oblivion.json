@@ -1,0 +1,12 @@
+{
+  "name": "Nullpriest of Oblivion",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Vampire Cleric",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Kicker {3}{B} (You may pay an additional {3}{B} as you cast this spell.)\nLifelink\nMenace (This creature can't be blocked except by two or more creatures.)\nWhen this creature enters, if it was kicked, return target creature card from your graveyard to the battlefield.",
+  "keywords": [
+    "Lifelink",
+    "Menace"
+  ]
+}
