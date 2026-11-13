@@ -1,0 +1,51 @@
+# Declining to sacrifice two available Islands destroys Psychic Allergy and leaves both lands (CR 701.8a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Psychic Allergy
+Island
+Island
+Llanowar Elves
+Mox Emerald
+Forest x20
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Elvish Mystic
+Mox Emerald
+Ornithopter
+Forest x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Psychic Allergy.Cast
+? Bot1.Mana =
+Bot1.Colors(Green)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T4 Bot2.Main1]
+? Bot2.Life = 18
+[T5 Bot1.Upkeep]
+Bot1.Decline
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Graveyard.Psychic Allergy.Colors = Blue
+Bot1.Battlefield.Island#1.Subtypes = Island
+Bot1.Battlefield.Island#2.Subtypes = Island

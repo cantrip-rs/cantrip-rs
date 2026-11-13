@@ -1,0 +1,40 @@
+# Magical Hack changes the upkeep cost to two Mountain lands (CR 612.2, 701.21a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Sapphire
+Psychic Allergy
+Magical Hack
+Mountain
+Mountain
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Psychic Allergy.Cast
+Bot1.Colors(Green)
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Magical Hack.Cast(Psychic Allergy)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Island)
+Bot1.Modes(Mountain)
+[T5 Bot1.Upkeep]
+Bot1.PayCost
+Bot1.Choose(Mountain#1; Mountain#2)
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Psychic Allergy.ChosenColor = Green
+Bot1.Graveyard.Mountain#1.Colors =
+Bot1.Graveyard.Mountain#2.Colors =
