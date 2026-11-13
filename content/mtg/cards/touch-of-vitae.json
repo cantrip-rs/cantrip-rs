@@ -1,0 +1,6 @@
+{
+  "name": "Touch of Vitae",
+  "manaCost": "{2}{G}",
+  "type": "Instant",
+  "oracleText": "Until end of turn, target creature gains haste and \"{0}: Untap this creature. Activate only once.\"\nDraw a card at the beginning of the next turn's upkeep."
+}

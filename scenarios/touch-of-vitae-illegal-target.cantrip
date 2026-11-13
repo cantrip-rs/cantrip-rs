@@ -1,0 +1,50 @@
+# A spell whose only target leaves in response has no delayed draw; a second copy resolves and draws next upkeep (CR 608.2b).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Swords to Plowshares
+Ornithopter
+Ornithopter
+Touch of Vitae
+Touch of Vitae
+Island x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Touch of Vitae.Cast(Bot1.Battlefield.Ornithopter#1)
+? Bot1.Mana =
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Touch of Vitae.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 0
+[T4 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Hand.Count = 1
+Bot1.Battlefield.Ornithopter.Keywords = Flying

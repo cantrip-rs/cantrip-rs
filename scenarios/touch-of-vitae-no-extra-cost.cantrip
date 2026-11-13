@@ -1,0 +1,49 @@
+# With no mana available, the granted ability untaps the creature without requiring any mana or life (CR 118.1).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Llanowar Elves
+Touch of Vitae
+Island x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Hand.Touch of Vitae.Cast(Bot1.Battlefield.Mox Emerald)
+Bot1.Hand.Touch of Vitae.Cast(Bot1.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Llanowar Elves > Bot2)
+? Bot1.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Battlefield.Llanowar Elves.Activate(Ability: Untap this creature)
+? Bot1.Mana =
+? Bot1.Life = 20
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Tapped = false
+! Bot1.Battlefield.Llanowar Elves.Activate(Ability: Untap this creature)
+[T2 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Count = 4
+! Bot1.Battlefield.Llanowar Elves.Activate(Ability: Untap this creature)
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 5
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot2.Life = 19
