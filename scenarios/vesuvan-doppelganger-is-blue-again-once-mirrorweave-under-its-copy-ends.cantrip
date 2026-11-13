@@ -1,0 +1,63 @@
+# With its upkeep trigger on the stack, Mirrorweave makes the Doppelganger (a copy of the Kobolds) a green Bears until end of
+# turn; the trigger then has it become a copy of the Bears, except it doesn't copy color, so it is green while Mirrorweave's
+# copy is beneath. Once Mirrorweave ends at cleanup it is a blue Bears: color left uncopied is whatever the values beneath
+# give, its own again, never a value fixed as it copied (CR 707.9c, 613.2a, 613.7).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Kobolds of Kher Keep
+Vesuvan Doppelganger
+Mirrorweave
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Kobolds of Kher Keep.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Vesuvan Doppelganger.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mirrorweave.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Grizzly Bears#1.Colors = Green
+? Bot1.Battlefield.Grizzly Bears#2.Colors = Green
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Kobolds of Kher Keep.Colors = Red
+Bot1.Battlefield.Grizzly Bears.Colors = Blue

@@ -1,0 +1,42 @@
+# The entry copy choice is not a target: the Doppelganger can copy an opponent's hexproof creature while retaining blue (CR 115.10a, 702.11b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Vesuvan Doppelganger
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Gladecover Scout
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Gladecover Scout.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Vesuvan Doppelganger.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+
+[Expect]
+Bot1.Battlefield.Gladecover Scout.Colors = Blue
+Bot1.Battlefield.Gladecover Scout.Keywords = Hexproof
+Bot1.Battlefield.Gladecover Scout.ManaValue = 1
+Bot1.Battlefield.Gladecover Scout.Subtypes = Elf; Scout

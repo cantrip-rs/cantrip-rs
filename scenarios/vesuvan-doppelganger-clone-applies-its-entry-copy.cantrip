@@ -1,0 +1,76 @@
+# A Clone copying a Doppelganger that entered with nothing to copy applies the Doppelganger's entry copy itself: it becomes a blue Bears
+# with the Doppelganger's upkeep ability, which triggers at its next upkeep (CR 707.9a, 707.9e, 614.12).
+
+[Bot1 Deck]
+Island
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Glorious Anthem
+Vesuvan Doppelganger
+Island
+Clone
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Glorious Anthem.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Vesuvan Doppelganger.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vesuvan Doppelganger.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Clone.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Bot1.Battlefield.Vesuvan Doppelganger)
+Bot1.Accept
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Battlefield.Grizzly Bears.Colors = Blue
+? Bot1.Battlefield.Grizzly Bears.Power = 3
+[T7 Bot1.Upkeep]
+Bot1.Target(Bot1.Battlefield.Vesuvan Doppelganger)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T7 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Vesuvan Doppelganger#1.Colors = Blue
+Bot1.Battlefield.Vesuvan Doppelganger#2.Colors = Blue
+Bot1.Battlefield.Vesuvan Doppelganger#2.Power = 1

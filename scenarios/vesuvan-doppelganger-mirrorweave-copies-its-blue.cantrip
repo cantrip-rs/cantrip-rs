@@ -1,0 +1,63 @@
+# Mirrorweave making each other creature a copy of the Doppelganger copies the blue it has then, fixed: the green Bears
+# and the red Kobolds both become blue Kobolds (CR 707.9b, 707.2; the Doppelganger's ruling).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Kobolds of Kher Keep
+Vesuvan Doppelganger
+Mirrorweave
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Kobolds of Kher Keep.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Vesuvan Doppelganger.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mirrorweave.Cast(Bot1.Battlefield.Kobolds of Kher Keep#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kobolds of Kher Keep#1.Colors = Blue
+? Bot1.Battlefield.Kobolds of Kher Keep#2.Colors = Blue
+? Bot2.Battlefield.Kobolds of Kher Keep.Colors = Blue
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Kobolds of Kher Keep#1.Colors = Red
+Bot1.Battlefield.Kobolds of Kher Keep#2.Colors = Blue
+Bot2.Battlefield.Grizzly Bears.Colors = Green

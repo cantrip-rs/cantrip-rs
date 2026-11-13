@@ -1,0 +1,63 @@
+# Ardyn, the Usurper makes a token copy of a Vesuvan Doppelganger card from Bot2's graveyard, "except it's a 5/5 black
+# Demon". The token has the Doppelganger's ability, so it may enter as a copy of a creature (CR 707.9a, 614.12): it copies
+# Grizzly Bears, a copy effect over Ardyn's that doesn't copy color - so its color is the one the copy beneath gives, black,
+# not the card's blue nor the Bears' green (CR 707.9c, 613.2a). The rest is the Bears': a 2/2 Bear, with the upkeep ability.
+#
+# Turn 1: Black Lotus and every Mox cast Ardyn ({5}{B}{B}{B}). Bot2 draws the Doppelganger on turn 2 and discards it to hand
+# size. Turn 3: Grizzly Bears from Mox Emerald and Mox Jet; at the beginning of combat Starscourge exiles the Doppelganger
+# and makes the token, which copies the Bears.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Ardyn, the Usurper
+Grizzly Bears
+Swamp x12
+
+[Bot2 Deck]
+Swamp x7
+Vesuvan Doppelganger
+Swamp x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ardyn, the Usurper.Cast
+[T3 Bot1.Main1]
+? Bot2.Graveyard = Vesuvan Doppelganger
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Graveyard.Vesuvan Doppelganger)
+Bot1.Accept
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears#2.Token = true
+Bot1.Battlefield.Grizzly Bears#2.Colors = Black
+Bot1.Battlefield.Grizzly Bears#2.Power = 2
+Bot1.Battlefield.Grizzly Bears#2.Subtypes = Bear
+Bot1.Battlefield.Grizzly Bears#1.Colors = Green
