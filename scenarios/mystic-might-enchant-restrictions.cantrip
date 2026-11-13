@@ -1,0 +1,29 @@
+# Mystic Might enchants only a land its controller controls, not another permanent or an opponent's land (CR 303.4).
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mystic Might
+Memnite
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Mystic Might.Cast(Bot1.Battlefield.Memnite)
+! Bot1.Hand.Mystic Might.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Mystic Might.Cast(Bot1.Battlefield.Island)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Mystic Might.AttachedTo = Island
