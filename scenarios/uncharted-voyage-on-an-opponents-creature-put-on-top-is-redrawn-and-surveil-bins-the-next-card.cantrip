@@ -1,0 +1,47 @@
+# Uncharted Voyage ({3}{U}, four Moxen) on Bot2's Memnite in turn 3: Memnite's owner Bot2 chooses the top of its library (Accept), so it draws
+# Memnite again in turn 4, and Bot1 then surveils 1: Lightning Bolt, the card on top of Bot1's library after its turn-3 draw, goes to the graveyard.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Uncharted Voyage
+Island
+Island
+Island
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Hand.Uncharted Voyage.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Uncharted Voyage.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot2.Accept
+Bot1.Arrange( | Lightning Bolt)
+? Bot2.Battlefield =
+? Bot2.Library.Count = 14
+[T4 Bot2.Main1]
+? Bot2.Hand.Memnite.Power = 1
+
+[Expect]
+Bot1.Graveyard = Uncharted Voyage; Lightning Bolt

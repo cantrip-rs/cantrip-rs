@@ -1,0 +1,46 @@
+# Uncharted Voyage on Bot2's Memnite in turn 3; its owner Bot2 chooses the bottom of its library (Decline), so its turn-4 draw is an Island.
+# Bot1 surveils 1 and keeps the Island on top of its library, which it draws in turn 5.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Uncharted Voyage
+Island
+Island
+Island
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Uncharted Voyage.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot2.Decline
+Bot1.Arrange(Lightning Bolt)
+[T4 Bot2.Main1]
+? Bot2.Hand = Island; Island; Island; Island; Island; Island; Island; Island
+[T5 Bot1.Main1]
+
+[Expect]
+Bot2.Library.Count = 13
+Bot1.Hand = Lightning Bolt; Island; Island; Island

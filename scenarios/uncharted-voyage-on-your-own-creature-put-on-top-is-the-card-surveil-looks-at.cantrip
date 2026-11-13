@@ -1,0 +1,38 @@
+# Uncharted Voyage on Bot1's own Memnite: Bot1, its owner, puts it on top of its library (Accept) and only then surveils 1 (CR 608.2c, the
+# second sentence), so the card it looks at is Memnite itself and it chooses to put it into the graveyard.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Uncharted Voyage
+Memnite
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Uncharted Voyage.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Arrange( | Memnite)
+
+[Expect]
+Bot1.Graveyard = Uncharted Voyage; Memnite
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
