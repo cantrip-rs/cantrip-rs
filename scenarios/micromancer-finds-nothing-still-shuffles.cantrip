@@ -1,0 +1,38 @@
+# Micromancer: accepting with no instant or sorcery of mana value 1 in the library (Counterspell is 2, Ornithopter is a
+# creature) finds nothing, yet the library is still shuffled (CR 701.23, 701.24): Bot1 searches for nothing and the hand does not change.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Micromancer
+Black Lotus
+Island
+Counterspell
+Ornithopter
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Micromancer.Cast
+Bot1.Pass
+Bot1.Accept
+Bot1.Search()
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Hand = Black Lotus; Island
+Bot1.Library.Count = 15
+Bot1.Shuffles = 1

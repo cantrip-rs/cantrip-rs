@@ -1,0 +1,49 @@
+# Micromancer {3}{U}, 3/3: "When this creature enters, you may search your library for an instant or sorcery card with mana value 1, reveal it,
+# put it into your hand, then shuffle" (CR 701.23, 202.3). Bot1's library offers Lightning Bolt (instant, 1), Repeal ({X}{U}: X is 0 in a library, so
+# 1, CR 202.3e) and Counterspell (2), Ornithopter (0, no instant) and Mother of Runes (1, no instant or sorcery): only the first two
+# are on offer; Bot1 takes Repeal and the Bolt stays. Bot2's own Lightning Bolt in its library is no card of Bot1's library: it cannot be taken.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Micromancer
+Island x2
+Lightning Bolt
+Repeal
+Counterspell
+Ornithopter
+Mother of Runes
+Island x8
+
+[Bot2 Deck]
+Lightning Bolt
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Micromancer.Cast
+Bot1.Pass
+Bot1.Accept
+! Bot1.Search(Counterspell)
+! Bot1.Search(Ornithopter)
+! Bot1.Search(Mother of Runes)
+! Bot1.Search(Lightning Bolt; Repeal)
+Bot1.Search(Repeal)
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Hand = Island; Island; Repeal
+Bot1.Revealed = Repeal
+Bot1.Shuffles = 1
+Bot2.Shuffles = 0
+Bot2.Library.Count = 13

@@ -1,0 +1,8 @@
+{
+  "name": "Micromancer",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Human Wizard",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When this creature enters, you may search your library for an instant or sorcery card with mana value 1, reveal it, put it into your hand, then shuffle."
+}
