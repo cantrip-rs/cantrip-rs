@@ -1,0 +1,79 @@
+# A broken control interval prevents the land gain, so a later combat still deals damage (CR 611.2b, 609.3).
+[Bot1 Deck]
+Orcish Squatters
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Lightning Bolt
+World at War
+Black Lotus
+Island
+Black Lotus
+Haste Magic
+Island x20
+[Bot2 Deck]
+Island
+Black Lotus
+Seasinger
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Orcish Squatters.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Seasinger.Cast
+[T11 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.World at War.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Orcish Squatters > Bot2)
+[T11 Bot1.Blockers]
+Bot1.Pass
+Bot2.Battlefield.Seasinger.Activate(Bot1.Battlefield.Orcish Squatters)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Orcish Squatters.Power = 2
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Seasinger)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Orcish Squatters.Power = 2
+? Bot2.Battlefield.Island.Tapped = false
+Bot1.Accept
+[T11 Bot1.Main2]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Haste Magic.Cast(Bot1.Battlefield.Orcish Squatters)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Step = BeginCombat
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Orcish Squatters > Bot2)
+Bot1.Decline
+[T11 Bot1.End]
+[Expect]
+Bot2.Battlefield.Island.Tapped = false
+Bot2.Life = 15

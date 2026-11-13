@@ -1,0 +1,8 @@
+{
+  "name": "Orcish Squatters",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Orc",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Whenever this creature attacks and isn't blocked, you may gain control of target land defending player controls for as long as you control this creature. If you do, this creature assigns no combat damage this turn."
+}
