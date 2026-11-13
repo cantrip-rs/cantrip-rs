@@ -1,0 +1,13 @@
+# With no other land, the entering Chasm must sacrifice itself (CR 701.21a).
+[Bot1 Deck]
+Glacial Chasm
+Forest x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Glacial Chasm.Play
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Count = 0
+Bot1.Graveyard = Glacial Chasm

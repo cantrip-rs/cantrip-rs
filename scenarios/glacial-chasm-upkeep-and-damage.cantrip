@@ -1,0 +1,71 @@
+# Chasm sacrifices another land, prevents both players' damage to its controller, and charges 2 then 4 life before being declined (CR 702.24a, 615.1).
+[Bot1 Deck]
+Plains
+Glacial Chasm
+Mox Ruby
+Ornithopter
+Shock x2
+Forest x20
+[Bot2 Deck]
+Mountain
+Shock
+Raging Goblin
+Island x20
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Raging Goblin.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Glacial Chasm.Play
+Bot1.Choose(Plains)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Tapped = false
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 20
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Raging Goblin > Bot1)
+[T4 Bot2.Main2]
+? Bot1.Life = 20
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Life = 18
+? Bot1.Battlefield.Glacial Chasm.Counters.Age = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Life = 14
+? Bot1.Battlefield.Glacial Chasm.Counters.Age = 2
+[T9 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T9 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+[Expect]
+Bot1.Life = 14
+Bot1.Graveyard = Glacial Chasm; Shock; Shock; Plains
