@@ -1,0 +1,6 @@
+{
+  "name": "Metamorphosis",
+  "manaCost": "{G}",
+  "type": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, sacrifice a creature.\nAdd X mana of any one color, where X is 1 plus the sacrificed creature's mana value. Spend this mana only to cast creature spells."
+}
