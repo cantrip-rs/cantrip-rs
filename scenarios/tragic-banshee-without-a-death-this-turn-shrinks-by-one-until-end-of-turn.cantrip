@@ -1,0 +1,74 @@
+# Tragic Banshee: "Morbid -- When this creature enters, target creature an opponent controls gets -1/-1 until end of turn. If a
+# creature died this turn, that creature gets -13/-13 until end of turn instead." Bot1 kills Bot2's Memnite with Cut Down on
+# Bot2's turn 2; by Bot1's turn 3 that is a different turn (CR 700.4: "this turn"), so the Banshee gives only -1/-1 (CR 611.2a)
+# to the Ornithopter the Banshee's controller picks, a -1/1 (CR 107.1b), leaving Bot2's Llanowar Elves alone; Bot1's own Memnite may not be chosen (CR 115.1). The shrink
+# lasts until end of turn (CR 514.2): on turn 4 the Ornithopter is a 0/2 again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Memnite
+Tragic Banshee
+Cut Down
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Memnite
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cut Down.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Memnite
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tragic Banshee.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = -1
+? Bot2.Battlefield.Ornithopter.Toughness = 1
+? Bot2.Battlefield.Llanowar Elves.Toughness = 1
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield = Llanowar Elves; Mox Emerald; Ornithopter
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Tragic Banshee.Power = 5

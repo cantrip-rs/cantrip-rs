@@ -1,0 +1,75 @@
+# Tragic Banshee: "Morbid -- When this creature enters, target creature an opponent controls gets -1/-1 until end of turn. If a
+# creature died this turn, that creature gets -13/-13 until end of turn instead." Bot2 fetches an indestructible 16/16 Impervious
+# Greatwurm with Natural Order on turn 2. On turn 3 Bot1 first kills Bot2's Memnite with Cut Down, then casts the Banshee: a
+# creature died this turn (CR 700.4), so the Greatwurm gets -13/-13 (CR 611.2a), a 3/3, and not the -14/-14 of both modifiers
+# together (CR 608.2c: "instead") - it is 16/16 again on turn 4 (CR 514.2).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Memnite
+Tragic Banshee
+Cut Down
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Llanowar Elves
+Natural Order
+Memnite
+Island
+Island
+Impervious Greatwurm
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Natural Order.Cast
+Bot2.Choose(Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+Bot2.Search(Impervious Greatwurm)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cut Down.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Memnite; Natural Order; Llanowar Elves; Black Lotus
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tragic Banshee.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Impervious Greatwurm.Power = 3
+? Bot2.Battlefield.Impervious Greatwurm.Toughness = 3
+? Bot1.Battlefield.Memnite.Power = 1
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Impervious Greatwurm.Power = 16
+Bot2.Battlefield.Impervious Greatwurm.Toughness = 16
+Bot1.Battlefield.Tragic Banshee.Toughness = 3
