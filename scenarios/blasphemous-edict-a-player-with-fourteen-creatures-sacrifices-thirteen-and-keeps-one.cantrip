@@ -1,0 +1,47 @@
+# "Each player sacrifices thirteen creatures of their choice" (CR 701.21a): a player with more than thirteen keeps the rest. Bot2 casts an Ornithopter from
+# the opening hand and one more each of its turns (turn 2 has 8, turn 14 has 14); on turn 15 Bot1 pays {B} (fourteen creatures, CR 118.9), and Bot2 sacrifices thirteen
+# of its fourteen and keeps one.
+
+[Bot1 Deck]
+Mox Jet
+Blasphemous Edict
+Island x20
+
+[Bot2 Deck]
+Ornithopter x14
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T6 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T8 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T10 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T12 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T14 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T15 Bot1.Main1]
+? Bot2.Battlefield.Count = 14
+Bot1.Hand.Blasphemous Edict.Cast(Ability: Pay {B})
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Count = 1
+Bot2.Graveyard.Count = 13
+Bot1.Battlefield = Mox Jet

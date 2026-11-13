@@ -1,0 +1,6 @@
+{
+  "name": "Blasphemous Edict",
+  "manaCost": "{3}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "You may pay {B} rather than pay this spell's mana cost if there are thirteen or more creatures on the battlefield.\nEach player sacrifices thirteen creatures of their choice."
+}

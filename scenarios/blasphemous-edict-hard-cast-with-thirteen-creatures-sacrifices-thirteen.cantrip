@@ -1,0 +1,58 @@
+# The alternative cost is optional (CR 118.9): with thirteen creatures (Bot1 5 Ornithopters, Bot2 8) Bot1 still pays the full {3}{B}{B} (Black Lotus
+# for BBB, Mox Jet for B, Mox Pearl for the generic mana) on turn 5. Each player sacrifices all their creatures, as each controls fewer than thirteen.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Blasphemous Edict
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Island x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Blasphemous Edict.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 2
+Bot2.Battlefield.Count = 0
+Bot1.Graveyard.Count = 7
+Bot2.Graveyard.Count = 8

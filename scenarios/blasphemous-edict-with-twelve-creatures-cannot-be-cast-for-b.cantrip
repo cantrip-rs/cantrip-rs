@@ -1,0 +1,48 @@
+# The alternative cost needs thirteen or more creatures (CR 118.9): with Bot1's 6 Ornithopters and Bot2's 6 there are twelve, so
+# paying {B} with Mox Jet is refused (Mox Jet is all the mana Bot1 has, so the full {3}{B}{B} is impossible too). Bot1 passes the
+# turn with the Edict still in hand and every creature on the battlefield.
+
+[Bot1 Deck]
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Mox Jet
+Blasphemous Edict
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Island
+Island x12
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Blasphemous Edict.Cast(Ability: Pay {B})
+
+[Expect]
+Bot1.Hand = Blasphemous Edict
+Bot1.Battlefield.Count = 7
+Bot2.Battlefield.Count = 6
