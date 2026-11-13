@@ -1,0 +1,6 @@
+{
+  "name": "Unstoppable Plan",
+  "manaCost": "{2}{U}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of your end step, untap all nonland permanents you control."
+}
