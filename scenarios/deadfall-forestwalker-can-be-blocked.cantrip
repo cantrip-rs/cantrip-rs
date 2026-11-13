@@ -1,0 +1,40 @@
+# A Forest makes forestwalk unblockable before Deadfall; afterward the same attacker can be blocked without losing forestwalk.
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Jukai Messenger
+Deadfall
+Island x20
+[Bot2 Deck]
+Forest
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Jukai Messenger.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Jukai Messenger > Bot2)
+! Bot2.Block(Ornithopter > Jukai Messenger)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Deadfall.Cast
+? Bot1.Mana =
+[T5 Bot1.BeginCombat]
+Bot1.Attack(Jukai Messenger > Bot2)
+Bot2.Block(Ornithopter > Jukai Messenger)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Jukai Messenger.Keywords = Forestwalk
+Bot2.Battlefield.Ornithopter.Damage = 1

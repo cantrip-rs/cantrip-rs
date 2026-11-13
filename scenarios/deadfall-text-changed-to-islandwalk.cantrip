@@ -1,0 +1,49 @@
+# Magical Hack changes Deadfall to disregard islandwalk while forestwalk remains effective (CR 612.2, 702.14c).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Magical Hack
+Deadfall
+Ornithopter
+Forest
+Island
+Island x20
+[Bot2 Deck]
+Mox Emerald
+Mox Sapphire
+Jukai Messenger
+Grayscaled Gharial
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Deadfall.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Magical Hack.Cast(Bot1.Battlefield.Deadfall)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Forest)
+Bot1.Modes(Island)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Jukai Messenger.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Grayscaled Gharial.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.BeginCombat]
+Bot2.Attack(Jukai Messenger > Bot1; Grayscaled Gharial > Bot1)
+! Bot1.Block(Ornithopter > Jukai Messenger)
+Bot1.Block(Ornithopter > Grayscaled Gharial)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Ornithopter.Damage = 1
+Bot2.Battlefield.Jukai Messenger.Keywords = Forestwalk

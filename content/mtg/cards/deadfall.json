@@ -1,0 +1,6 @@
+{
+  "name": "Deadfall",
+  "manaCost": "{2}{G}",
+  "type": "Enchantment",
+  "oracleText": "Creatures with forestwalk can be blocked as though they didn't have forestwalk."
+}

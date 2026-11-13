@@ -1,0 +1,39 @@
+# Deadfall applies to an opponent's forestwalker but leaves islandwalk intact when its controller has both basic land types.
+[Bot1 Deck]
+Black Lotus
+Deadfall
+Ornithopter
+Forest
+Island
+Island x20
+[Bot2 Deck]
+Mox Emerald
+Mox Sapphire
+Jukai Messenger
+Grayscaled Gharial
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Deadfall.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Jukai Messenger.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Grayscaled Gharial.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.BeginCombat]
+Bot2.Attack(Jukai Messenger > Bot1; Grayscaled Gharial > Bot1)
+! Bot1.Block(Ornithopter > Grayscaled Gharial)
+Bot1.Block(Ornithopter > Jukai Messenger)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Ornithopter.Damage = 1
+Bot2.Battlefield.Jukai Messenger.Keywords = Forestwalk
