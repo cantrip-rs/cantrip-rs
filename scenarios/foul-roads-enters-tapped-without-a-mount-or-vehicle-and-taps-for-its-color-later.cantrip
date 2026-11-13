@@ -1,0 +1,24 @@
+# Foul Roads: "This land enters tapped unless you control a Mount or Vehicle" (CR 614.1d) and "{T}: Add {B}" (CR 605.1a). Bot1
+# controls neither when it plays the land on turn 1, so it enters tapped and cannot be tapped for mana (refused). On turn 3 it
+# is untapped and adds {B} and nothing else.
+
+[Bot1 Deck]
+Foul Roads
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Foul Roads.Play
+? Bot1.Battlefield.Foul Roads.Tapped = true
+! Bot1.Battlefield.Foul Roads.Activate(Ability: Add)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Foul Roads.Tapped = false
+Bot1.Battlefield.Foul Roads.Activate(Ability: Add)
+? Bot1.Mana = {B}
+
+[Expect]
+Turn = 3
+Bot1.Mana = {B}
+Bot1.Battlefield.Foul Roads.Tapped = true
