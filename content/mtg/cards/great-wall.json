@@ -1,0 +1,6 @@
+{
+  "name": "Great Wall",
+  "manaCost": "{2}{W}",
+  "type": "Enchantment",
+  "oracleText": "Creatures with plainswalk can be blocked as though they didn't have plainswalk."
+}

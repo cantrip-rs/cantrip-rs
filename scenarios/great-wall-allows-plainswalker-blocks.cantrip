@@ -1,0 +1,41 @@
+# A Plains makes plainswalk unblockable before Great Wall; afterward the same attacker can be blocked (CR 702.14c).
+[Bot1 Deck]
+Black Lotus x2
+Zodiac Rooster
+Great Wall
+Forest x20
+[Bot2 Deck]
+Plains
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Zodiac Rooster.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Zodiac Rooster > Bot2)
+! Bot2.Block(Memnite > Zodiac Rooster)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Great Wall.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Zodiac Rooster > Bot2)
+Bot2.Block(Memnite > Zodiac Rooster)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard.Zodiac Rooster.Power = 2
+Bot2.Graveyard.Memnite.Power = 1
