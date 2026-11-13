@@ -1,0 +1,54 @@
+# Webstrike Elite: "Cycling {X}{G}{G}. When you cycle this card, destroy up to one target artifact or enchantment with mana value X."
+# Bot1 cycles it with X=2 (four Mox Emeralds pay {2}{G}{G}). Bot2's Sol Ring (mana value 1) is not a legal
+# target for X=2 (refused), Bot2's Crusade (mana value 2) is: it is destroyed, Sol Ring stays, and the Elite is in the graveyard.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Webstrike Elite
+Swamp x17
+
+[Bot2 Deck]
+Black Lotus
+Crusade
+Sol Ring
+Island x17
+
+[Actions]
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Crusade.Cast
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Webstrike Elite.Activate(Ability: Cycling; X: 2)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Target(Bot2.Battlefield.Sol Ring)
+Bot1.Target(Bot2.Battlefield.Crusade)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Webstrike Elite
+Bot2.Graveyard = Crusade; Black Lotus
+Bot2.Battlefield.Sol Ring.Tapped = false

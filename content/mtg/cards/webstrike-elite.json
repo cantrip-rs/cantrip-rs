@@ -1,0 +1,11 @@
+{
+  "name": "Webstrike Elite",
+  "manaCost": "{G}{G}",
+  "type": "Creature — Insect Archer",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Reach\nCycling {X}{G}{G} ({X}{G}{G}, Discard this card: Draw a card.)\nWhen you cycle this card, destroy up to one target artifact or enchantment with mana value X.",
+  "keywords": [
+    "Reach"
+  ]
+}

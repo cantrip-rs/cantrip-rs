@@ -1,0 +1,36 @@
+# Webstrike Elite (3/3 reach, {G}{G}): cast from two Forests on turn 3 it can block Bot2's attacking Ornithopter (flying 0/2) on
+# turn 4 and kills it; the Elite takes no damage.
+
+[Bot1 Deck]
+Forest
+Forest
+Webstrike Elite
+Swamp x17
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.Webstrike Elite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Webstrike Elite.Keywords = Reach
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+Bot1.Block(Webstrike Elite > Ornithopter)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot2.Graveyard = Ornithopter
+Bot1.Life = 20
+Bot1.Battlefield.Webstrike Elite.Damage = 0

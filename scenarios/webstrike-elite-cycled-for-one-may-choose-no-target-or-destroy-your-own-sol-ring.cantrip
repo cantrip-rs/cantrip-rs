@@ -1,0 +1,62 @@
+# "Destroy up to one target": Bot1 cycles an Elite with X=1 choosing no target (Bot2's Sol Ring, mana value 1, stays), then cycles the
+# second Elite with X=1 at its own Sol Ring: the artifact may be Bot1's own (CR 115.1), and it is destroyed. A Mox Jet (mana value 0)
+# is refused as a target at X=1. Each Elite draws its card.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Webstrike Elite
+Webstrike Elite
+Sol Ring
+Swamp x13
+
+[Bot2 Deck]
+Mox Jet
+Sol Ring
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Webstrike Elite.Activate(Ability: Cycling; X: 1)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Sol Ring.Activate
+! Bot1.Target(Bot2.Battlefield.Mox Jet)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Sol Ring.Tapped = false
+Bot1.Hand.Webstrike Elite.Activate(Ability: Cycling; X: 1)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Target(Bot1.Battlefield.Sol Ring)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Sol Ring; Webstrike Elite; Webstrike Elite
+Bot2.Battlefield.Count = 2

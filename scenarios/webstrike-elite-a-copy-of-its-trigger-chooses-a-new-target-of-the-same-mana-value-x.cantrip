@@ -1,0 +1,67 @@
+# Webstrike Elite's "When you cycle this card, destroy up to one target artifact or enchantment with mana value X" keeps the X
+# of the cycling cost paid when it is copied and its targets are chosen anew (CR 707.10, 115.7, 702.29c). Turn 3: Bot1 cycles
+# it for X=1 (three Mox Emeralds pay {1}{G}{G}), aiming the trigger at Bot2's first Sol Ring, and copies the trigger with
+# Kirol, Attentive First-Year (tapping its two Ornithopters): for the copy, Bot2's Mox Pearl (mana value 0) is refused and the
+# second Sol Ring (mana value 1) is chosen. Both Sol Rings are destroyed; the Mox Pearl stays.
+
+[Bot1 Deck]
+Black Lotus
+Kirol, Attentive First-Year
+Ornithopter
+Ornithopter
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Webstrike Elite
+Swamp x12
+
+[Bot2 Deck]
+Mox Pearl
+Sol Ring
+Sol Ring
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Kirol, Attentive First-Year.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Webstrike Elite.Activate(Ability: Cycling; X: 1)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Target(Bot2.Battlefield.Sol Ring#1)
+? Bot1.Mana =
+Bot1.Battlefield.Kirol, Attentive First-Year.Activate(Stack.Webstrike Elite)
+Bot1.Choose(Ornithopter; Ornithopter)
+! Bot1.Target(Bot2.Battlefield.Mox Pearl)
+Bot1.Target(Bot2.Battlefield.Sol Ring#2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield = Mox Pearl
+Bot2.Graveyard = Sol Ring; Sol Ring
+Bot1.Graveyard = Webstrike Elite; Black Lotus

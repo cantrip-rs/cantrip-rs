@@ -1,0 +1,43 @@
+# Webstrike Elite cycled with X=0 ({G}{G}, from two Forests) destroys an artifact with mana value 0: Bot2's Sol Ring (mana
+# value 1) is refused as a target, Bot2's Mox Jet (mana value 0) is the target (CR 202.3). The Elite is discarded and a card is drawn.
+
+[Bot1 Deck]
+Forest
+Forest
+Webstrike Elite
+Swamp x17
+
+[Bot2 Deck]
+Mox Jet
+Sol Ring
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Webstrike Elite.Activate(Ability: Cycling; X: 0)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest#2.Activate
+! Bot1.Target(Bot2.Battlefield.Sol Ring)
+Bot1.Target(Bot2.Battlefield.Mox Jet)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Webstrike Elite
+Bot2.Graveyard = Mox Jet
+Bot2.Battlefield = Sol Ring
+Bot1.Hand.Count = 6
