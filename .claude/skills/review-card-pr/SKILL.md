@@ -52,7 +52,8 @@ and fixes the overlap a reviewer would otherwise block each batch on:
 - a clamped or saturated count.
 
 Each fix is a `fixup!` of the commit it belongs to; a shared function that does not yet exist is its own `Mechanics:`
-commit before the cards that use it. The agent runs the scenarios of the cards it changed and reports what it changed,
+commit before the cards that use it. It never wraps a single existing shared call in a new function (thin glue, such as
+an effect that only calls `targets_fight(g, item, 0, 1)`): sharing is for real rules or game-state work. The agent runs the scenarios of the cards it changed and reports what it changed,
 card by card. The batch reviewers then start on the deduped commits.
 
 On PR #2855 (197 cards) about 85% of batches came back blocked, mostly on this overlap, and each blocked batch cost a
