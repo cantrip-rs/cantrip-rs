@@ -24,9 +24,8 @@ fn they_lose_3_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// "Whenever this Spacecraft attacks, each opponent discards a card. Each opponent who can't loses 3 life." (CR 101.4, 701.9,
 /// 119.3): the discards are made together, then each opponent who could not discard loses 3 life.
 fn each_opponent_discards_or_loses_3_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    for player in effects::each_opponent_discards_a_card_and_those_who_cant(g, item)? {
-        g.lose_life(player, 3);
-    }
+    let losses: Vec<(PlayerId, i32)> = effects::each_opponent_discards_a_card_and_those_who_cant(g, item)?.into_iter().map(|p| (p, 3)).collect();
+    g.lose_life_together(&losses);
     Ok(())
 }
 
