@@ -1,0 +1,39 @@
+# Charming Prince, first mode: "Scry 2." (CR 701.22.) Bot1 casts the Prince with two Moxes, chooses the scry mode and looks at the top two
+# cards, Lightning Bolt and Black Lotus: the Lotus stays on top and the Bolt goes to the bottom, so the library is Lotus,
+# Counterspell, Mountain, Bolt. No life is gained (the modes are alternatives, CR 700.2).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Charming Prince
+Plains
+Plains
+Plains
+Plains
+Lightning Bolt
+Black Lotus
+Counterspell
+Mountain
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Charming Prince.Cast
+Bot1.Pass
+Bot1.Modes(Scry 2)
+Bot1.Arrange(Black Lotus | Lightning Bolt)
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Life = 20
+Bot1.Library = Black Lotus; Counterspell; Mountain; Lightning Bolt
+Bot1.Battlefield.Charming Prince.Power = 2
+Bot1.Battlefield.Charming Prince.Toughness = 2

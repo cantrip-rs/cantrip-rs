@@ -1,0 +1,50 @@
+# Charming Prince, third mode: "Exile another target creature you own. Return it to the battlefield under your control at the beginning of
+# the next end step." Bot1's Savannah Lions is exiled until the end step and is back on the battlefield then. The Prince itself is not
+# "another" creature and Bot2's Memnite is not one Bot1 owns: both are refused as targets (CR 115.1); Bot1's own Memnite (also a
+# creature it owns, and one with nothing else to tell it apart) is a legal choice, so the Lions is picked from two. The Lions is in
+# exile in the second main phase, Bot1's Memnite stays, and no life is gained (CR 700.2).
+
+[Bot1 Deck]
+Plains
+Savannah Lions
+Plains
+Charming Prince
+Memnite
+Plains x15
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Charming Prince.Cast
+Bot1.Pass
+Bot1.Modes(Exile another target creature you own)
+! Bot1.Target(Charming Prince)
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Savannah Lions)
+[T3 Bot1.Main2]
+? Exile = Savannah Lions
+? Bot1.Battlefield = Plains; Plains; Memnite; Charming Prince
+? Bot1.Life = 20
+[T4 Bot2.Main1]
+
+[Expect]
+Turn = 4
+Exile.Count = 0
+Bot1.Battlefield = Plains; Plains; Memnite; Charming Prince; Savannah Lions
+Bot2.Battlefield = Memnite
