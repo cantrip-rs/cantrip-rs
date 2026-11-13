@@ -1,19 +1,12 @@
 use cantrip_api::*;
-use cantrip_mechanics::{library, select, statics, station, triggers::THIS_ENTERS};
+use cantrip_mechanics::{effects, statics, station, triggers::THIS_ENTERS};
 use cantrip_oracle as oracle;
 
 const SIX_PLUS: &str = "6+ | Flying";
 
-/// "Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle" (CR 701.23b, 701.20,
-/// 701.24): a basic land is searched for, the player may fail to find, and the search itself shuffles.
-fn fetch_plains(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    library::find_to_hand(g, item.controller, item.object, select::BASIC_PLAINS_CARD, true)?;
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(THIS_ENTERS, fetch_plains,
+        triggered(THIS_ENTERS, effects::search_for_a_basic_plains_card,
             "When this Spacecraft enters, search your library for a basic Plains card, reveal it, put it into your hand, then shuffle."),
         station::ability("Station (Tap another creature you control: Put charge counters equal to its power on this Spacecraft. Station only as a sorcery. It's an artifact creature at 6+.)"),
     ],

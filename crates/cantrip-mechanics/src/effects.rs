@@ -1300,6 +1300,14 @@ pub fn choose_a_card_name(g: &mut dyn Game, item: &StackItem, kind: NameKind, su
     Ok(Some(name))
 }
 
+/// "Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle." (CR 701.23): only a card
+/// with the basic supertype counts (CR 205.4c), Plains is read through the source's words (CR 612), and a search for a quality
+/// may find nothing (CR 701.23b). Gloryheath Lynx, Oberth-Class Starship and The Birth of Meletis print it as a whole effect.
+pub fn search_for_a_basic_plains_card(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    crate::library::find_to_hand(g, item.controller, item.object, crate::select::BASIC_PLAINS_CARD, true)?;
+    Ok(())
+}
+
 /// "As this permanent enters, choose a nonland card name." (CR 614.12a, 201.3): recorded as the entering object's chosen name,
 /// for its other text to refer to (`GameState::chosen_card`). Kai Winn, Faithless Leader and Skyseer's Chariot print it.
 pub fn as_this_enters_choose_a_nonland_card_name(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {

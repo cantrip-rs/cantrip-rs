@@ -4,11 +4,6 @@ use cantrip_oracle as oracle;
 
 pub use cantrip_mechanics::tokens::THOPTER;
 
-fn make_thopter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &THOPTER, 1)?;
-    Ok(())
-}
-
 /// "Target creature gets +X/+0 until end of turn, where X is the number of artifacts you control": X is counted once, as
 /// the ability resolves (CR 608.2h), and the target is pumped if it is still legal (CR 608.2b).
 fn pump_by_artifacts(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -21,7 +16,7 @@ fn pump_by_artifacts(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(triggers::THIS_ENTERS, make_thopter, "When Pia enters, create a 1/1 colorless Thopter artifact creature token with flying."),
+        triggered(triggers::THIS_ENTERS, tokens::create_a_thopter, "When Pia enters, create a 1/1 colorless Thopter artifact creature token with flying."),
         ability(
             cost("{5}{R}"),
             pump_by_artifacts,
