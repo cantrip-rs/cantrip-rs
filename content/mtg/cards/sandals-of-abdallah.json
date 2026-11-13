@@ -1,0 +1,6 @@
+{
+  "name": "Sandals of Abdallah",
+  "manaCost": "{4}",
+  "type": "Artifact",
+  "oracleText": "{2}, {T}: Target creature gains islandwalk until end of turn. When that creature dies this turn, destroy this artifact. (A creature with islandwalk can't be blocked as long as defending player controls an Island.)"
+}
