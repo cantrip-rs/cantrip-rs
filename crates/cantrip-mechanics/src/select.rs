@@ -246,6 +246,15 @@ fn legendary_creature(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
 /// "A legendary creature card" (CR 205.4). The Arkenstone's Seek the Heart and The Seriema search for it.
 pub const LEGENDARY_CREATURE: Part = part(&(legendary_creature as SelectFn), 0, "");
 
+fn instant_or_flash(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
+    Verdict::each(choice, |card| q.chars(card).is(CardType::Instant) || q.chars(card).has(Keyword::Flash))
+}
+
+/// "An instant card or a card with flash" (CR 205.2a, 702.8a): the card's types and keywords as they are where it is. A card that
+/// may be cast as though it had flash (Illusion Spinners) does not have the keyword. Mystical Teachings and Waterlogged Teachings
+/// search for it.
+pub const INSTANT_OR_FLASH: Part = part(&(instant_or_flash as SelectFn), 0, "");
+
 /// "A nonland card". Reckoner Shakedown chooses one from a revealed hand (`NONLAND_CARD`); Tidehollow Sculler, Elite
 /// Spellbinder and Deep Cavern Bat print the same quality.
 pub const NONLAND: Part = part(&(nonland as SelectFn), 0, "");
@@ -545,6 +554,10 @@ pub const fn land_cards(count: Count) -> Selection {
 
 /// "A legendary creature card", which may be left unfound (CR 701.23b): The Arkenstone's Seek the Heart and The Seriema.
 pub const LEGENDARY_CREATURE_CARD: Selection = Selection::of(up_to(1), &[LEGENDARY_CREATURE]).called("legendary creature");
+
+/// "An instant card or a card with flash", which may be left unfound (CR 701.23b): Mystical Teachings and Waterlogged Teachings
+/// search for it.
+pub const INSTANT_OR_FLASH_CARD: Selection = Selection::of(up_to(1), &[INSTANT_OR_FLASH]).called("instant or flash");
 
 /// `count` creature cards: Survival of the Fittest's and Worldly Tutor's one (`CREATURE_CARD`).
 pub const fn creature_cards(count: Count) -> Selection {

@@ -68,6 +68,13 @@ pub fn search_for_a_card_to_hand(g: &mut dyn Game, item: &StackItem) -> Result<(
     Ok(())
 }
 
+/// "Search your library for an instant card or a card with flash, reveal it, put it into your hand, then shuffle" (CR 701.23): the
+/// spell effect itself, the search free to find nothing (CR 701.23b). Mystical Teachings and Waterlogged Teachings print it.
+pub fn search_for_an_instant_or_flash_card_to_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    find_to_hand(g, item.controller, item.object, crate::select::INSTANT_OR_FLASH_CARD, true)?;
+    Ok(())
+}
+
 /// "Search your library for [`rule`], put it onto the battlefield [tapped], then shuffle" (CR 701.23): the permanents that
 /// arrived. The basic land fetches (`select::BASIC_LAND_CARD`) and Crop Rotation (`select::LAND_CARD`) print it.
 pub fn find_to_battlefield(g: &mut dyn Game, player: PlayerId, source: ObjectId, rule: Selection, tapped: bool) -> Result<Vec<ObjectId>, Suspend> {
