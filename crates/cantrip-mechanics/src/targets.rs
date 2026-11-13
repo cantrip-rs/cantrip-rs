@@ -1566,6 +1566,16 @@ pub fn nonland_permanent_card_in_your_graveyard(q: &dyn Query, asker: &Asker, t:
 /// "Target nonland permanent card from your graveyard". Loamcrafter Faun prints it.
 pub const NONLAND_PERMANENT_CARD_IN_YOUR_GRAVEYARD: TargetSpec = target(nonland_permanent_card_in_your_graveyard);
 
+/// "Target nonland permanent card with mana value 2 or less from your graveyard" (CR 115.1, 202.3): a land card is not one, and X in
+/// a graveyard is 0 (CR 202.3e). Wayspeaker Bodyguard (to your hand) and Sun-Blessed Healer (to the battlefield) print it.
+pub fn nonland_permanent_card_with_mana_value_2_or_less_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    matches!(t, Target::Object(id) if nonland_permanent_card_in_your_graveyard(q, asker, t) && q.mana_value(id) <= 2)
+}
+
+/// "Target nonland permanent card with mana value 2 or less from your graveyard". Wayspeaker Bodyguard and Sun-Blessed Healer print it.
+pub const NONLAND_PERMANENT_CARD_WITH_MANA_VALUE_2_OR_LESS_IN_YOUR_GRAVEYARD: TargetSpec =
+    target(nonland_permanent_card_with_mana_value_2_or_less_in_your_graveyard);
+
 /// "Target nonland permanent card with mana value 3 or less from your graveyard" (CR 115.1, 202.3): a land card, an
 /// Enchantment Land like Urza's Saga among them, is not one, and X in a graveyard is 0 (CR 202.3e). Zoraline, Cosmos Caller
 /// and Primary Research print it.
