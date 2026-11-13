@@ -1,0 +1,8 @@
+{
+  "name": "Ghazbán Ogre",
+  "manaCost": "{G}",
+  "type": "Creature — Ogre",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "At the beginning of your upkeep, if a player has more life than each other player, the player with the most life gains control of this creature."
+}
