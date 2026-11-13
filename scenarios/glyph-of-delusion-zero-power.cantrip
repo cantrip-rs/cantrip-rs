@@ -1,0 +1,29 @@
+# A blocked 0-power creature gets no glyph counters (CR 107.1b, 122.1).
+[Bot1 Deck]
+Glyph of Delusion
+Mox Sapphire
+Wall of Air
+Black Lotus
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Wall of Air.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+Bot1.Block(Wall of Air > Ornithopter)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Glyph of Delusion.Cast
+Bot1.Target(Wall of Air)
+Bot1.Target(Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Ornithopter.Counters.Glyph = (absent)

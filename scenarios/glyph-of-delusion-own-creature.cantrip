@@ -1,0 +1,39 @@
+# After combat, a player may target their own creature blocked by an opponent's Wall, but not another unblocked creature (CR 115.1a).
+[Bot1 Deck]
+Glyph of Delusion
+Mox Sapphire
+Black Lotus
+Grizzly Bears
+Memnite
+Island x20
+[Bot2 Deck]
+Steel Wall
+Mox Pearl
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Steel Wall.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2; Memnite > Bot2)
+Bot2.Block(Steel Wall > Grizzly Bears)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Glyph of Delusion.Cast
+! Bot1.Target(Memnite)
+Bot1.Target(Steel Wall)
+! Bot1.Target(Memnite)
+Bot1.Target(Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Counters.Glyph = 2
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Grizzly Bears.Counters.Glyph = 2
