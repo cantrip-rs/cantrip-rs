@@ -1,0 +1,46 @@
+# Coalstoke Gearhulk: when it enters it puts a creature card with mana value 4 or less from a graveyard onto the battlefield
+# under your control with a finality counter, and that creature gains menace, deathtouch and haste (Hill Giant has none of
+# them and attacks the turn it arrives, for 3), and it is exiled at the beginning of your next end step, which is this turn's.
+# The Gearhulk itself has its printed menace and deathtouch.
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Mox Ruby
+Island
+Mountain
+Entomb
+Coalstoke Gearhulk
+Hill Giant
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Hill Giant)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Coalstoke Gearhulk.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Attack(Hill Giant > Bot2)
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Hill Giant.Keywords = Deathtouch; Haste; Menace
+? Bot1.Battlefield.Hill Giant.Counters.Finality = 1
+[T2 Bot2.Main1]
+
+[Expect]
+Turn = 2
+Bot2.Life = 17
+Exile = Hill Giant
+Bot1.Graveyard = Black Lotus; Entomb
+Bot1.Battlefield.Coalstoke Gearhulk.Keywords = Deathtouch; Menace

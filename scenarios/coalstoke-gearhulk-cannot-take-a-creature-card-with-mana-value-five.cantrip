@@ -1,0 +1,40 @@
+# "Mana value 4 or less" (CR 202.3): Bot1's only creature card in any graveyard is Earth Elemental (mana value 5), which
+# Entomb put there, so Coalstoke Gearhulk's trigger has no target and nothing arrives. A creature card at exactly mana value 4
+# (Hill Giant) is taken in the other two Coalstoke Gearhulk scenarios.
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Mox Ruby
+Mountain
+Entomb
+Coalstoke Gearhulk
+Island x2
+Earth Elemental
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Earth Elemental)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Coalstoke Gearhulk.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+? Bot1.Graveyard = Black Lotus; Entomb; Earth Elemental
+? Bot1.Battlefield.Earth Elemental = (absent)
+[T2 Bot2.Main1]
+
+[Expect]
+Exile = 
+Bot1.Graveyard = Black Lotus; Entomb; Earth Elemental

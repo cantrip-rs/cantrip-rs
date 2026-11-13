@@ -1,0 +1,12 @@
+{
+  "name": "Coalstoke Gearhulk",
+  "manaCost": "{1}{B}{B}{R}{R}",
+  "type": "Artifact Creature — Construct",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Menace, deathtouch\nWhen this creature enters, put target creature card with mana value 4 or less from a graveyard onto the battlefield under your control with a finality counter on it. That creature gains menace, deathtouch, and haste. At the beginning of your next end step, exile that creature.",
+  "keywords": [
+    "Menace",
+    "Deathtouch"
+  ]
+}

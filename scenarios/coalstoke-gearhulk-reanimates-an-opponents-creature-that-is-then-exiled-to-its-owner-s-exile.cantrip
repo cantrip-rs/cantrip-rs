@@ -1,0 +1,54 @@
+# Coalstoke Gearhulk takes any graveyard, not only its controller's: Bot2's Entomb puts a Hill Giant in Bot2's graveyard and
+# Bot1's Gearhulk puts it onto the battlefield under Bot1's control, where it attacks Bot2 with haste and is exiled at the
+# beginning of Bot1's next end step (Hill Giant's owner is Bot2).
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Mox Ruby
+Mountain
+Coalstoke Gearhulk
+Island x15
+
+[Bot2 Deck]
+Mox Jet
+Island
+Entomb
+Island x5
+Hill Giant
+Island x11
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Hill Giant)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Coalstoke Gearhulk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hill Giant.Power = 3
+Bot1.Attack(Hill Giant > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Hill Giant.Keywords = Deathtouch; Haste; Menace
+[T4 Bot2.Main1]
+
+[Expect]
+Turn = 4
+Bot2.Life = 17
+Exile = Hill Giant
+Bot2.Graveyard = Entomb
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mountain; Coalstoke Gearhulk
