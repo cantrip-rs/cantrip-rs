@@ -1,0 +1,43 @@
+# Aatchik, Emerald Radian: "a 1/1 green Insect creature token for each artifact and/or creature card in your graveyard" counts
+# cards, not types (CR 700.1): Black Lotus (an artifact, sacrificed for the mana) and Memnite (an artifact creature that Entomb
+# put there) are two cards and make two Insects, and Entomb (an instant) makes none.
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Mox Emerald
+Mox Pearl
+Entomb
+Aatchik, Emerald Radian
+Island
+Memnite
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Aatchik, Emerald Radian.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Insect Token#1.Power = 1
+? Bot1.Battlefield.Insect Token#2.Power = 1
+? Bot1.Battlefield.Insect Token#3 = (absent)
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Graveyard = Black Lotus; Entomb; Memnite

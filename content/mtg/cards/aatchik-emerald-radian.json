@@ -1,0 +1,8 @@
+{
+  "name": "Aatchik, Emerald Radian",
+  "manaCost": "{3}{B}{B}{G}",
+  "type": "Legendary Creature — Insect Druid",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When Aatchik enters, create a 1/1 green Insect creature token for each artifact and/or creature card in your graveyard.\nWhenever another Insect you control dies, put a +1/+1 counter on Aatchik. Each opponent loses 1 life."
+}

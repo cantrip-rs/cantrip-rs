@@ -1,0 +1,81 @@
+# Aatchik, Emerald Radian says "another Insect you control": Bot1's Aatchik does not trigger when Bot2's Aatchik's Insect is
+# Bolted (Bot2's own Aatchik does, and drains Bot1 to 19 while it grows), and neither does the Aatchik that is itself an Insect
+# when it dies (Bot2 Bolts it on turn four: Bot2 does not lose life).
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Aatchik, Emerald Radian
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Mox Jet
+Black Lotus
+Mox Emerald
+Mox Pearl
+Aatchik, Emerald Radian
+Island
+Mox Ruby
+Lightning Bolt
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Aatchik, Emerald Radian.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Aatchik, Emerald Radian.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Insect Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Insect Token = (absent)
+? Bot1.Life = 19
+? Bot2.Life = 20
+? Bot2.Battlefield.Aatchik, Emerald Radian.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Aatchik, Emerald Radian.Counters.PlusOnePlusOne = (absent)
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Aatchik, Emerald Radian)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Aatchik, Emerald Radian = (absent)
+? Bot1.Battlefield.Insect Token.Power = 1
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 20

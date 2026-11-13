@@ -1,0 +1,44 @@
+# Aatchik, Emerald Radian: whenever another Insect you control dies it gets a +1/+1 counter and each opponent loses 1 life.
+# Bot1's Black Lotus in the graveyard makes one Insect; Bot1 Bolts it, and Aatchik is a 4/4 while Bot2 is at 19.
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Aatchik, Emerald Radian
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Aatchik, Emerald Radian.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Insect Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Insect Token = (absent)
+? Bot1.Battlefield.Aatchik, Emerald Radian.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Aatchik, Emerald Radian.Power = 4
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 19

@@ -1,0 +1,55 @@
+# Aatchik, Emerald Radian dealt lethal damage at the same time as another Insect it controls: its "whenever another Insect you control dies"
+# still triggers, looking back to before the event (CR 603.10a, and the ruling), so each opponent loses 1 life; the +1/+1 counter has no
+# Aatchik to go on (CR 400.7). Bot1's Black Lotus in its graveyard makes one Insect on turn one; Bot2's Slagstorm on turn two deals 3 to
+# each creature, killing the 3/3 Aatchik and the 1/1 Insect together. Bot2 is at 19.
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Mox Emerald
+Mox Pearl
+Aatchik, Emerald Radian
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mountain
+Slagstorm
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Aatchik, Emerald Radian.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Insect Token.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Slagstorm.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Aatchik, Emerald Radian = (absent)
+? Bot1.Battlefield.Insect Token = (absent)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 20
+Bot1.Graveyard = Aatchik, Emerald Radian; Black Lotus
