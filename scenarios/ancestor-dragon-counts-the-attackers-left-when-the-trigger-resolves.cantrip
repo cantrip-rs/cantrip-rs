@@ -1,0 +1,58 @@
+# Ancestor Dragon counts "each attacking creature" as the ability resolves (CR 608.2c): Bot1 attacks with the Dragon, the Memnite
+# and the Ornithopter, and Bot2 Lightning Bolts the attacking Memnite in response to the trigger. Only two creatures are still
+# attacking when it resolves, so Bot1 gains 2 (20 to 22), not 3. Bot2 then takes 5 from the Dragon (20 to 15, the Ornithopter deals 0).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Ancestor Dragon
+Memnite
+Ornithopter
+Plains x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ancestor Dragon.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ancestor Dragon > Bot2; Memnite > Bot2; Ornithopter > Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+? Bot1.Graveyard = Memnite; Black Lotus
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+[T3 Bot1.Main2]
+? Bot2.Life = 15
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 15

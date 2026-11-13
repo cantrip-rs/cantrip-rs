@@ -1,0 +1,11 @@
+{
+  "name": "Ancestor Dragon",
+  "manaCost": "{4}{W}{W}",
+  "type": "Creature — Dragon",
+  "power": 5,
+  "toughness": 6,
+  "oracleText": "Flying\nWhenever one or more creatures you control attack, you gain 1 life for each attacking creature.",
+  "keywords": [
+    "Flying"
+  ]
+}
