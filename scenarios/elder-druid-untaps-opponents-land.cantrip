@@ -1,0 +1,34 @@
+# The opponent can tap the targeted land in response; Elder Druid's controller chooses to untap it on resolution (CR 608.2d).
+[Bot1 Deck]
+Elder Druid
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Forest x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Elder Druid.Cast
+? Bot1.Mana =
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Elder Druid.Activate(Bot2.Battlefield.Island)
+? Bot1.Mana =
+Bot2.Battlefield.Island.Activate
+? Bot2.Battlefield.Island.Tapped = true
+Bot1.Modes(Untap)
+[Expect]
+Bot2.Battlefield.Island.Tapped = false

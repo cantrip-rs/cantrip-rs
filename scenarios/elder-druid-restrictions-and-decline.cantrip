@@ -1,0 +1,46 @@
+# Elder Druid needs green mana and cannot target an enchantment; it may decline to tap a legal land (CR 602.2, 115.1c, 608.2d).
+[Bot1 Deck]
+Elder Druid
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Forest x20
+[Bot2 Deck]
+Forest
+Wild Growth
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Elder Druid.Cast
+? Bot1.Mana =
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Wild Growth.Cast(Forest)
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Emerald.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Elder Druid.Activate(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Elder Druid.Activate(Wild Growth)
+Bot1.Battlefield.Elder Druid.Activate(Bot2.Battlefield.Forest)
+Bot1.Modes(Do nothing)
+[Expect]
+Bot2.Battlefield.Forest.Tapped = false

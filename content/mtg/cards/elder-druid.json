@@ -1,0 +1,8 @@
+{
+  "name": "Elder Druid",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Elf Cleric Druid",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{3}{G}, {T}: You may tap or untap target artifact, creature, or land."
+}

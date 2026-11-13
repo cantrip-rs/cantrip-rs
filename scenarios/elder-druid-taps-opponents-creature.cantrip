@@ -1,0 +1,36 @@
+# Elder Druid can tap an opponent’s nonartifact creature (CR 115.1c, 701.26a).
+[Bot1 Deck]
+Elder Druid
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Forest x20
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Elder Druid.Cast
+? Bot1.Mana =
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Elder Druid.Activate(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Modes(Tap)
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Tapped = true
