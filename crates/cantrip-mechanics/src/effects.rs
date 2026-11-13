@@ -1706,6 +1706,14 @@ pub fn target_player_mills<const N: u32>(g: &mut dyn Game, item: &StackItem) -> 
     Ok(())
 }
 
+/// "Mill N cards" (CR 701.17a): the top `N` cards of the controller's library, together; fewer from a smaller library, none from an
+/// empty one. Aftermath Analyst, Dark Matter Manipulator, Paramecia Coloniex and Seedship Broodtender (when they enter), Awaken the
+/// Honored Dead (chapter II) and Billowing Shriekmass print it (three).
+pub fn you_mill<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.mill(item.controller, N);
+    Ok(())
+}
+
 /// "Each opponent mills N cards" (CR 701.17a, 101.4): every opponent of the controller mills together, as one instruction.
 /// Aether Syphon and Psychic Corrosion print it (two).
 pub fn each_opponent_mills<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
