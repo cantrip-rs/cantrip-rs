@@ -1,0 +1,48 @@
+# Cancel: "Counter target spell." - not an ability. Bot1 pumps its Basking Rootwalla, an activated ability on the stack, and Bot2,
+# with {1}{U}{U} open, is offered no Cancel (no legal target, ! Cast); the pump resolves. Bot1 then casts an Ornithopter and
+# Bot2 counters it (the positive control): the creature card goes to its owner's graveyard and never reaches the battlefield.
+
+[Bot1 Deck]
+Forest
+Forest
+Basking Rootwalla
+Ornithopter
+Forest x16
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Mox Sapphire
+Cancel
+Island x16
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Basking Rootwalla.Cast
+Bot1.Battlefield.Forest.Activate
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Basking Rootwalla.Activate
+Bot1.Pass
+! Bot2.Hand.Cancel.Cast
+Bot1.Hand.Ornithopter.Cast
+? Bot1.Battlefield.Basking Rootwalla.Power = 3
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Hand.Cancel.Cast(Stack.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Ornithopter
+Bot1.Battlefield = Forest; Forest; Basking Rootwalla
+Bot2.Graveyard = Cancel

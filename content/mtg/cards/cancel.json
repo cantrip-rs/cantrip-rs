@@ -1,0 +1,6 @@
+{
+  "name": "Cancel",
+  "manaCost": "{1}{U}{U}",
+  "type": "Instant",
+  "oracleText": "Counter target spell."
+}
