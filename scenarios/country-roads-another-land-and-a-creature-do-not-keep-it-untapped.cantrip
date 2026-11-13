@@ -1,0 +1,24 @@
+# Country Roads: "This land enters tapped unless you control a Mount or Vehicle" (CR 614.1d): other permanents do not
+# count, only a Mount or Vehicle. Bot1 controls an Island and a Memnite (an artifact creature, not a Vehicle) when it plays
+# Country Roads on turn 3, so it enters tapped.
+
+[Bot1 Deck]
+Island
+Memnite
+Country Roads
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Country Roads.Play
+! Bot1.Battlefield.Country Roads.Activate(Ability: Add)
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Count = 3
+Bot1.Battlefield.Country Roads.Tapped = true

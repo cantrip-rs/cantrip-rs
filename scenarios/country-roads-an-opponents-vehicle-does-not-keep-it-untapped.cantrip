@@ -1,0 +1,29 @@
+# Country Roads: "This land enters tapped unless you control a Mount or Vehicle" (CR 614.1d): only the permanents its own
+# controller controls count. Bot2 casts a Smuggler's Copter (a Vehicle, CR 301.7) on turn 2 with two Moxen; on turn 3 Bot1
+# plays Country Roads and it enters tapped, though a Vehicle is on the battlefield.
+
+[Bot1 Deck]
+Country Roads
+Island x19
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Smuggler's Copter
+Island x17
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Smuggler's Copter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Country Roads.Play
+? Bot2.Battlefield.Smuggler's Copter.Subtypes = Vehicle
+! Bot1.Battlefield.Country Roads.Activate(Ability: Add)
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Country Roads.Tapped = true
