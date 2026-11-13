@@ -1,0 +1,51 @@
+# Battle Cry makes an opposing blocker get +0/+1 this turn, and neither that pump nor the delayed trigger lasts into the next turn (CR 603.7b, 611.2a, 514.2).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Memnite
+Steel Wall
+Battle Cry
+Island x18
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Steel Wall.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Battle Cry.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Grizzly Bears > Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+? Bot2.Battlefield.Grizzly Bears.Toughness = 3
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+? Bot2.Battlefield.Grizzly Bears.Toughness = 2
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Block(Steel Wall > Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Steel Wall.Power = 0
+? Bot1.Battlefield.Steel Wall.Toughness = 4
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Steel Wall.Power = 0
+Bot1.Battlefield.Steel Wall.Toughness = 4

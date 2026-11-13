@@ -1,0 +1,61 @@
+# Battle Cry untaps all of its controller's white creatures, including a multicolored one, but not a green creature or an opponent's white creature (CR 701.26b).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Isamaru, Hound of Konda
+Llanowar Elves
+Gaddock Teeg
+Battle Cry
+Mox Sapphire
+Island x16
+[Bot2 Deck]
+Mox Pearl
+Savannah Lions
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gaddock Teeg.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Savannah Lions > Bot1)
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Isamaru, Hound of Konda > Bot2; Llanowar Elves > Bot2; Gaddock Teeg > Bot2)
+[T5 Bot1.Attackers]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Battle Cry.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Isamaru, Hound of Konda.Tapped = false
+? Bot1.Battlefield.Gaddock Teeg.Tapped = false
+? Bot1.Battlefield.Llanowar Elves.Tapped = true
+? Bot2.Battlefield.Savannah Lions.Tapped = true
+[Expect]
+Bot1.Battlefield.Isamaru, Hound of Konda.Tapped = false
+Bot1.Battlefield.Gaddock Teeg.Tapped = false
+Bot1.Battlefield.Llanowar Elves.Tapped = true
+Bot2.Battlefield.Savannah Lions.Tapped = true

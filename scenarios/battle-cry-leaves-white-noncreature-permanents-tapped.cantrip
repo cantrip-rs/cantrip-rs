@@ -1,0 +1,37 @@
+# Battle Cry untaps only white creatures: Painter's Servant makes its controller's tapped Moxen white, and they stay tapped
+# because they are not creatures (CR 701.26b, 105.2).
+[Bot1 Deck]
+Island
+Painter's Servant
+Battle Cry
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Painter's Servant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(White)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Battle Cry.Cast
+? Bot1.Mana =
+? Bot1.Battlefield.Mox Pearl.Colors = White
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Mox Pearl.Tapped = true
+Bot1.Battlefield.Mox Sapphire.Tapped = true

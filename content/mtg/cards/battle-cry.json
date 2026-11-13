@@ -1,0 +1,6 @@
+{
+  "name": "Battle Cry",
+  "manaCost": "{2}{W}",
+  "type": "Instant",
+  "oracleText": "Untap all white creatures you control.\nWhenever a creature blocks this turn, it gets +0/+1 until end of turn."
+}
