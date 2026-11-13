@@ -1,0 +1,46 @@
+# Errantry restricts only its enchanted creature: two other creatures can attack together while it stays back (CR 508.1c).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Grizzly Bears
+Ornithopter
+Errantry
+Forest
+Ornithopter
+Forest x10
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter#1.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Errantry.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Errantry.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Grizzly Bears > Bot2; Ornithopter > Bot2)
+Bot1.Attack(Ornithopter#1; Ornithopter#2)
+? Combat.Attackers = Ornithopter > Bot2; Ornithopter > Bot2
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Errantry.AttachedTo = Grizzly Bears
+Bot1.Battlefield.Grizzly Bears.Power = 5
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot2.Life = 20
