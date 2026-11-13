@@ -1,0 +1,26 @@
+# Trip Up's cycling {2} (CR 702.29a): paying {2} and discarding it from the hand draws a card, the Mox Jet on top. With only an
+# Island's {U} the ability is not offered.
+
+[Bot1 Deck]
+Island
+Mox Pearl
+Trip Up
+Island x4
+Mox Jet
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+! Bot1.Hand.Trip Up.Activate(Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Trip Up.Activate
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Trip Up
+Bot1.Hand = Island; Island; Island; Island; Mox Jet
