@@ -1,4 +1,4 @@
-//! Exchange (CR 701.12): the keyword action, here for life totals (CR 701.12c).
+//! Exchange (CR 701.12): the keyword action, for life totals (CR 701.12c) and for control of two targets (CR 701.12b).
 
 use cantrip_api::*;
 
@@ -17,4 +17,15 @@ pub fn life_totals(g: &mut dyn Game, a: PlayerId, b: PlayerId) -> u32 {
     g.lose_life(loser, difference);
     g.gain_life(gainer, difference);
     (before_a - g.state().player(a).life).max(0).unsigned_abs()
+}
+
+/// "Exchange control of [target A] and [target B]" (CR 701.12a-b) for a spell or ability whose targets 0 and 1 are the two
+/// permanents: both must still be legal targets as it resolves, or the exchange can't be completed and none of it happens; two
+/// permanents one player controls exchange nothing. Auras and Equipment attached to them stay with their controllers.
+/// Switcheroo, Oko, Thief of Crowns, Bilbo's Burglar's Plot and Trade the Helm print it.
+pub fn control_of_two_targets(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let (Some(first), Some(second)) = (crate::targets::object(g, item, 0), crate::targets::object(g, item, 1)) {
+        g.exchange_control(item.object, first, second);
+    }
+    Ok(())
 }
