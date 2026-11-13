@@ -1,0 +1,54 @@
+# The Stronghold grants no banding to white legends or the opponent's red legends: neither pair can form a band (CR 702.22c).
+[Bot1 Deck]
+Mountain Stronghold
+Mox Pearl
+Isamaru, Hound of Konda
+Kytheon, Hero of Akros
+Benalish Hero
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Ragavan, Nimble Pilferer
+Isamaru, Hound of Konda
+Benalish Hero
+Island x20
+[Actions]
+Bot1.Hand.Mountain Stronghold.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Ragavan, Nimble Pilferer.Cast
+? Bot2.Mana =
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Isamaru, Hound of Konda.Cast
+? Bot2.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kytheon, Hero of Akros.Cast
+? Bot1.Mana =
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Benalish Hero.Cast
+? Bot2.Mana =
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Benalish Hero.Cast
+? Bot1.Mana =
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Benalish Hero > Bot1; Ragavan, Nimble Pilferer > Bot1; Isamaru, Hound of Konda > Bot1)
+Bot2.Choose()
+! Bot2.Choose
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Benalish Hero > Bot2; Isamaru, Hound of Konda > Bot2; Kytheon, Hero of Akros > Bot2)
+Bot1.Choose()
+! Bot1.Choose
+[T7 Bot1.Blockers]
+[Expect]
+Combat.Attackers = Benalish Hero > Bot2; Isamaru, Hound of Konda > Bot2; Kytheon, Hero of Akros > Bot2

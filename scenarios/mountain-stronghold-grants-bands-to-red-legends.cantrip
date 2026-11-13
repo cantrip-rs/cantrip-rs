@@ -1,0 +1,34 @@
+# Mountain Stronghold grants bands with other legendary creatures to red legends its controller controls; Ragavan and Isamaru can attack as a band (CR 702.22c).
+[Bot1 Deck]
+Mountain Stronghold
+Mox Ruby
+Mox Pearl
+Ragavan, Nimble Pilferer
+Isamaru, Hound of Konda
+Monastery Swiftspear
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mountain Stronghold.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ragavan, Nimble Pilferer.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Monastery Swiftspear.Cast
+? Bot1.Mana =
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Ragavan, Nimble Pilferer > Bot2; Isamaru, Hound of Konda > Bot2; Monastery Swiftspear > Bot2)
+! Bot1.Choose(Monastery Swiftspear)
+Bot1.Choose(Isamaru, Hound of Konda)
+[T5 Bot1.Blockers]
+? Combat.Attackers = Ragavan, Nimble Pilferer > Bot2 (band 1); Isamaru, Hound of Konda > Bot2 (band 1); Monastery Swiftspear > Bot2
+[Expect]
+Bot1.Battlefield.Ragavan, Nimble Pilferer.Power = 2
