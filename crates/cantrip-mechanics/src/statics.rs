@@ -119,6 +119,15 @@ pub fn life_above_starting_life(q: &dyn LayerQuery, source: ObjectId) -> i32 {
     player.life - player.starting_life
 }
 
+/// "... as long as you have `N` or more life" (CR 613.4c, 604.2) as a static ability's `StaticDef::affects`: only the source itself,
+/// and only while its controller's life total is `N` or more, whatever the life total they started with (the 2024-11-08 rulings
+/// of both cards). The layers ask again whenever characteristics are computed, so it turns on and off with the life total.
+/// Angel of Vitality (+2/+2) and Twinblade Paladin (double strike) print it at 25.
+pub fn itself_with_life_at_least<const N: i32>(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, _: &Chars) -> bool {
+    let state = q.state();
+    source == affected && state.player(state.obj(source).controller).life >= N
+}
+
 /// "... as long as you gained life this turn" (CR 611.3a, 119.3) as a static ability's `StaticDef::affects`: only the source itself,
 /// and only while its controller has gained life this turn. The layers ask again whenever characteristics are computed, so it
 /// turns on with the gain and off as the turn ends. Ulna Alley Shopkeep and Tenured Concocter print it.
