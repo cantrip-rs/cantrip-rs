@@ -1,0 +1,77 @@
+# Rise from the Wreck's targets are all cards "from your graveyard": Bot2's own Pothole Mole milled a Grizzly Bears into Bot2's graveyard,
+# and it is refused in the creature slot. Bot1's graveyard holds Llanowar Elves (it has a mana ability, so it is a creature card with
+# abilities: refused in the no-abilities slot), Tarmogoyf (its only ability is a static one, a characteristic-defining ability, with no
+# keyword and nothing in the ability list: refused too), Grizzly Bears and Memnite. Bot1 takes Bears for the creature slot and for the
+# no-abilities slot (one card, returned once); with no Mount or Vehicle card to choose the two other slots ask nothing; Elves and
+# Tarmogoyf stay in the graveyard.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Pothole Mole
+Rise from the Wreck
+Swamp
+Swamp
+Tarmogoyf
+Grizzly Bears
+Llanowar Elves
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Pothole Mole
+Swamp
+Swamp
+Swamp
+Memnite
+Memnite
+Grizzly Bears
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Pothole Mole.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Pothole Mole.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Memnite; Grizzly Bears; Memnite
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rise from the Wreck.Cast
+! Bot1.Target(Bot2.Graveyard.Grizzly Bears)
+Bot1.Target(Grizzly Bears)
+! Bot1.Target(Llanowar Elves)
+! Bot1.Target(Tarmogoyf)
+Bot1.Target(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Rise from the Wreck; Llanowar Elves; Tarmogoyf
+Bot1.Hand = Swamp; Swamp; Island; Grizzly Bears
+Bot2.Graveyard = Memnite; Grizzly Bears; Memnite

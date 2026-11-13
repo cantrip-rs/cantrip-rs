@@ -1,0 +1,54 @@
+# Rise from the Wreck: four independent "up to one target" slots from your graveyard (CR 115.3). Pothole Mole mills Venomsac Lagac
+# (a Lizard Mount creature with abilities), Veloheart Bike (a Vehicle) and Grizzly Bears (a creature with no abilities). Refused:
+# the Vehicle as the creature, the Bears as the Mount, the Lagac as the Vehicle, and the Lagac as the creature card with no
+# abilities. Chosen: the Lagac for both the creature and the Mount slots (returned once), the Bike, and the Bears.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Pothole Mole
+Rise from the Wreck
+Swamp
+Swamp
+Grizzly Bears
+Veloheart Bike
+Venomsac Lagac
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Pothole Mole.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Venomsac Lagac; Veloheart Bike; Grizzly Bears
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rise from the Wreck.Cast
+! Bot1.Target(Veloheart Bike)
+Bot1.Target(Venomsac Lagac)
+! Bot1.Target(Grizzly Bears)
+Bot1.Target(Venomsac Lagac)
+! Bot1.Target(Venomsac Lagac)
+Bot1.Target(Veloheart Bike)
+! Bot1.Target(Venomsac Lagac)
+Bot1.Target(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Rise from the Wreck
+Bot1.Hand = Swamp; Swamp; Island; Venomsac Lagac; Veloheart Bike; Grizzly Bears
