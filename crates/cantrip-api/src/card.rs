@@ -1008,7 +1008,8 @@ pub enum VariableCost {
     /// {X} (CR 601.2b, 107.3a): Immoral Bargain.
     SacrificeX(ObjectFilter),
     /// Sacrifice one or more permanents you control that pass the filter (CR 701.21a): as an optional additional cost, the
-    /// spell's `paid` is how many were. Plumb the Forbidden.
+    /// spell's `paid` is how many were (Plumb the Forbidden); on an activated ability, X announced as the ability is
+    /// activated (at least 1, up to the permanents there are), that many sacrificed, X what its effect reads (Radiant Lotus).
     SacrificeOneOrMore(ObjectFilter),
     /// "As an additional cost to cast this spell, you may sacrifice any number of [permanents]. This spell costs {N} less to
     /// cast for each permanent sacrificed this way" (Rottenmouth Viper): how many is announced as the spell is cast (CR
@@ -1057,6 +1058,7 @@ impl VariableCost {
             VariableCost::RemoveAnyNumberOfCounters(_) => "the number of counters you remove",
             VariableCost::BlightX => "the number of -1/-1 counters you put on a creature you control",
             VariableCost::TapX(_) => "the number of permanents you tap",
+            VariableCost::SacrificeX(_) | VariableCost::SacrificeOneOrMore(_) => "the number of permanents you sacrifice",
             _ => "",
         }
     }

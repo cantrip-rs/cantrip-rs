@@ -354,6 +354,22 @@ static ABILITY_WITH_VARIABLE_COUNTER_AND_SELF_SACRIFICE: CardDef = CardDef {
     name: "Cost Test Variable Counter And Self Sacrifice", types: TypeSet::of(&[CardType::Artifact]),
     abilities: &[ability(Cost { variable: Some(VariableCost::RemoveAnyNumberOfCounters(CounterKind::Charge)), sacrifice_self: true, ..Cost::NONE }, gain_three, "Remove any number of charge counters from this, sacrifice it: gain 3 life.")], ..CardDef::BLANK
 };
+fn gain_x(g: &mut dyn cantrip_api::Game, item: &StackItem) -> Result<(), Suspend> {
+    g.gain_life(item.controller, item.x as i32);
+    Ok(())
+}
+/// "Sacrifice one or more Bears: You gain 1 life for each Bear sacrificed this way." (Radiant Lotus's cost.)
+static ABILITY_SACRIFICING_ONE_OR_MORE: CardDef = CardDef {
+    name: "Cost Test One Or More", types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[ability(Cost { variable: Some(VariableCost::SacrificeOneOrMore(is_bear)), ..Cost::NONE }, gain_x, "Sacrifice one or more Bears: You gain 1 life for each Bear sacrificed this way.")],
+    ..CardDef::BLANK
+};
+/// "Sacrifice X Bears: You gain X life. X can't be 0." (Ruthless Technomancer's cost.)
+static ABILITY_SACRIFICING_X: CardDef = CardDef {
+    name: "Cost Test Sacrifice X", types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[ability(Cost { variable: Some(VariableCost::SacrificeX(is_bear)), ..Cost::NONE }, gain_x, "Sacrifice X Bears: You gain X life. X can't be 0.").x_cant_be_zero()],
+    ..CardDef::BLANK
+};
 static ABILITY_WITH_LOYALTY_AND_SELF_SACRIFICE: CardDef = CardDef {
     name: "Cost Test Loyalty And Self Sacrifice", types: TypeSet::of(&[CardType::Planeswalker]),
     abilities: &[ability(Cost { loyalty: Some(1), sacrifice_self: true, ..Cost::NONE }, gain_three, "+1, Sacrifice this: gain 3 life.")], ..CardDef::BLANK
@@ -864,7 +880,7 @@ static ARCANE_CHOOSE_PAIR: CardDef = CardDef {
 
 /// Your precombat main phase with priority, nothing anywhere.
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&CHOOSE_ONLY_SPELL, &LIFE_THEN_CHOOSE_SPELL, &GRANTED_CONTEXT_CHOOSE, &ARCANE_CHOOSE_PAIR, &FILLER, &BEAR, &DORK, &SEER, &GAZER, &RETURNER, &OFFER, &RECALL, &TITHE, &VOW, &RECOILER, &LIBRARIAN, &RITE, &GRAFT, &STOWER, &TOLL, &HOARD, &HIGH_LIFE, &IMPOSSIBLE_LIFE, &MASS_OFFER, &WITHERER, &RESOLUTION_LIFE_AND_SACRIFICE, &RESOLUTION_ONE_PAYMENT_ABILITY, &RESOLUTION_ONE_PAYMENT, &RESOLUTION_TWO_PAYMENTS, &TWO_DISTINCT_COSTS, &CHOSEN_DIFFERENT_COSTS, &MULTIKICK_DIFFERENT_COSTS, &MANA_FROM_PAID, &MANA_WITH_LIFE_AND_SACRIFICE, &MANA_WITH_LIFE_AND_DYNAMIC_SACRIFICE, &DYNAMIC_COLOR_STAR, &MANA_WITH_DYNAMIC_COLOR, &MANA_WITH_NESTED_DYNAMIC_SACRIFICE, &MANA_WITH_TAXED_DYNAMIC_SACRIFICE, &PLAYER_MANA_WITH_LIFE_AND_SACRIFICE, &TEMPORARY_PLAYER_GRANTER, &VANISHING_PLAYER_GRANTER, &GRANTED_COLOR_MANA, &SELF_COLOR_MANA, &RED_DORK, &TWO_SACRIFICE_COLOR_MANA, &RETURN_THEN_COLOR_MANA, &OVERLAPPING_COSTS, &MANA_AFTER_OTHER_SACRIFICE, &MANA_WITH_TWO_COSTS, &TAP_AND_SACRIFICE_COSTS, &SPELL_WITH_TWO_COSTS, &SPELL_WITH_TWO_ACTIONS, &OUTER_MANA_COST, &INNER_MANA_COST, &EXILE_SACRIFICES, &SPELL_WITH_OVERLAPPING_COSTS, &SPELL_WITH_TAP_AND_SACRIFICE, &PREVENT_SACRIFICES, &COLOR_MANA, &STATE_WATCHER, &PAYMENT_BOUNDARY, &LIFE_STAR, &SPELL_WITH_LIFE_AND_SACRIFICE, &REVERSE_LIFE_STAR, &SPELL_WITH_LIFE_AND_POWER_COST, &SPELL_WITH_MANA_AND_LIFE, &SPELL_WITH_TWO_MANA_AND_MIDPAYMENT_SACRIFICE, &SPELL_WITH_SNOW_MANA_AND_LIFE, &SPELL_WITH_MANA_RECEIPT_SACRIFICE, &SPELL_WITH_CONVOKE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_DELVE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_IMPROVISE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_WATERBEND_MIDPAYMENT_SACRIFICE, &TAP_BATCH_WATCHER, &SPELL_WITH_HARMONIZE, &SPELL_WITH_LIFE_AND_OPTIONAL_POWER, &LIFE_MANA_SOURCE, &SPELL_WITH_MANA_AND_OPTIONAL_POWER, &SPELL_WITH_MANA_AND_POWER_CHOICE, &SPELL_WITH_MANA_AND_DYNAMIC_BEHOLD, &SPELL_WITH_POWER_AND_OPTIONAL_LIFE, &ENERGY_STAR, &SPELL_WITH_ENERGY_AND_POWER_COST, &SPELL_WITH_COUNTER_AND_POWER_COST, &SPELL_WITH_BLIGHT_AND_POWER_COST, &SPELL_WITH_MANA_AND_GRAVEYARD_EXILE, &SPELL_WITH_MANA_AND_HAND_EXILE, &SPELL_WITH_MANA_AND_EVIDENCE, &SPELL_WITH_DISCARD_AND_GRAVEYARD_EXILE, &SPELL_WITH_DISCARD_AND_TARGET_EXILE, &SPELL_WITH_TARGET_EXILE_ONLY, &SPELL_WITH_DISCARD_AND_EXILE_CHOICE, &SPELL_WITH_LIFE_AND_EXILE_CHOICE, &SPELL_WITH_LIFE_AND_VARIABLE_SACRIFICE, &SPELL_WITH_BEHOLD_AND_DISCARD, &SPELL_WITH_SEVEN_DISCARDS, &SPELL_WITH_TEAMWORK_AND_SACRIFICE, &SPELL_WITH_CONVOKE_AND_SACRIFICE, &ABILITY_WITH_LIFE_AND_SACRIFICE, &ABILITY_WITH_TAP_AND_SELF_SACRIFICE, &ABILITY_WITH_TAP_AND_SELF_RETURN, &ABILITY_WITH_COUNTER_AND_SELF_SACRIFICE, &ABILITY_WITH_VARIABLE_COUNTER_AND_SELF_SACRIFICE, &ABILITY_WITH_LOYALTY_AND_SELF_SACRIFICE, &ABILITY_WITH_EXERT_AND_SELF_SACRIFICE, &ABILITY_WITH_UNATTACH_AND_TAP, &ABILITY_WITH_CRAFT_AND_LIFE, &ABILITY_WITH_LIFE_AND_LIBRARY_TOP, &ABILITY_WITH_LIFE_AND_RANDOM_LIBRARY, &ABILITY_WITH_RANDOM_AND_DYNAMIC_SACRIFICE, &EVIDENCE_CARD, &SPELL_WITH_TWO_GRAVEYARD_EXILES])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&CHOOSE_ONLY_SPELL, &LIFE_THEN_CHOOSE_SPELL, &GRANTED_CONTEXT_CHOOSE, &ARCANE_CHOOSE_PAIR, &FILLER, &BEAR, &DORK, &SEER, &GAZER, &RETURNER, &OFFER, &RECALL, &TITHE, &VOW, &RECOILER, &LIBRARIAN, &RITE, &GRAFT, &STOWER, &TOLL, &HOARD, &HIGH_LIFE, &IMPOSSIBLE_LIFE, &MASS_OFFER, &WITHERER, &RESOLUTION_LIFE_AND_SACRIFICE, &RESOLUTION_ONE_PAYMENT_ABILITY, &RESOLUTION_ONE_PAYMENT, &RESOLUTION_TWO_PAYMENTS, &TWO_DISTINCT_COSTS, &CHOSEN_DIFFERENT_COSTS, &MULTIKICK_DIFFERENT_COSTS, &MANA_FROM_PAID, &MANA_WITH_LIFE_AND_SACRIFICE, &MANA_WITH_LIFE_AND_DYNAMIC_SACRIFICE, &DYNAMIC_COLOR_STAR, &MANA_WITH_DYNAMIC_COLOR, &MANA_WITH_NESTED_DYNAMIC_SACRIFICE, &MANA_WITH_TAXED_DYNAMIC_SACRIFICE, &PLAYER_MANA_WITH_LIFE_AND_SACRIFICE, &TEMPORARY_PLAYER_GRANTER, &VANISHING_PLAYER_GRANTER, &GRANTED_COLOR_MANA, &SELF_COLOR_MANA, &RED_DORK, &TWO_SACRIFICE_COLOR_MANA, &RETURN_THEN_COLOR_MANA, &OVERLAPPING_COSTS, &MANA_AFTER_OTHER_SACRIFICE, &MANA_WITH_TWO_COSTS, &TAP_AND_SACRIFICE_COSTS, &SPELL_WITH_TWO_COSTS, &SPELL_WITH_TWO_ACTIONS, &OUTER_MANA_COST, &INNER_MANA_COST, &EXILE_SACRIFICES, &SPELL_WITH_OVERLAPPING_COSTS, &SPELL_WITH_TAP_AND_SACRIFICE, &PREVENT_SACRIFICES, &COLOR_MANA, &STATE_WATCHER, &PAYMENT_BOUNDARY, &LIFE_STAR, &SPELL_WITH_LIFE_AND_SACRIFICE, &REVERSE_LIFE_STAR, &SPELL_WITH_LIFE_AND_POWER_COST, &SPELL_WITH_MANA_AND_LIFE, &SPELL_WITH_TWO_MANA_AND_MIDPAYMENT_SACRIFICE, &SPELL_WITH_SNOW_MANA_AND_LIFE, &SPELL_WITH_MANA_RECEIPT_SACRIFICE, &SPELL_WITH_CONVOKE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_DELVE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_IMPROVISE_MIDPAYMENT_SACRIFICE, &SPELL_WITH_WATERBEND_MIDPAYMENT_SACRIFICE, &TAP_BATCH_WATCHER, &SPELL_WITH_HARMONIZE, &SPELL_WITH_LIFE_AND_OPTIONAL_POWER, &LIFE_MANA_SOURCE, &SPELL_WITH_MANA_AND_OPTIONAL_POWER, &SPELL_WITH_MANA_AND_POWER_CHOICE, &SPELL_WITH_MANA_AND_DYNAMIC_BEHOLD, &SPELL_WITH_POWER_AND_OPTIONAL_LIFE, &ENERGY_STAR, &SPELL_WITH_ENERGY_AND_POWER_COST, &SPELL_WITH_COUNTER_AND_POWER_COST, &SPELL_WITH_BLIGHT_AND_POWER_COST, &SPELL_WITH_MANA_AND_GRAVEYARD_EXILE, &SPELL_WITH_MANA_AND_HAND_EXILE, &SPELL_WITH_MANA_AND_EVIDENCE, &SPELL_WITH_DISCARD_AND_GRAVEYARD_EXILE, &SPELL_WITH_DISCARD_AND_TARGET_EXILE, &SPELL_WITH_TARGET_EXILE_ONLY, &SPELL_WITH_DISCARD_AND_EXILE_CHOICE, &SPELL_WITH_LIFE_AND_EXILE_CHOICE, &SPELL_WITH_LIFE_AND_VARIABLE_SACRIFICE, &SPELL_WITH_BEHOLD_AND_DISCARD, &SPELL_WITH_SEVEN_DISCARDS, &SPELL_WITH_TEAMWORK_AND_SACRIFICE, &SPELL_WITH_CONVOKE_AND_SACRIFICE, &ABILITY_WITH_LIFE_AND_SACRIFICE, &ABILITY_WITH_TAP_AND_SELF_SACRIFICE, &ABILITY_WITH_TAP_AND_SELF_RETURN, &ABILITY_WITH_COUNTER_AND_SELF_SACRIFICE, &ABILITY_WITH_VARIABLE_COUNTER_AND_SELF_SACRIFICE, &ABILITY_SACRIFICING_ONE_OR_MORE, &ABILITY_SACRIFICING_X, &ABILITY_WITH_LOYALTY_AND_SELF_SACRIFICE, &ABILITY_WITH_EXERT_AND_SELF_SACRIFICE, &ABILITY_WITH_UNATTACH_AND_TAP, &ABILITY_WITH_CRAFT_AND_LIFE, &ABILITY_WITH_LIFE_AND_LIBRARY_TOP, &ABILITY_WITH_LIFE_AND_RANDOM_LIBRARY, &ABILITY_WITH_RANDOM_AND_DYNAMIC_SACRIFICE, &EVIDENCE_CARD, &SPELL_WITH_TWO_GRAVEYARD_EXILES])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -3164,4 +3180,52 @@ fn mana_ability_can_pay_life_before_sacrificing_its_cost_object() {
     assert_eq!(g.state.player(YOU).life, 17);
     assert_eq!(g.state.player(YOU).pool.get(Mana::G), 8, "the callback reads the sacrificed creature after the life payment");
     assert!(g.state.obj(star).became.is_some());
+}
+
+/// Activates `source`, announces `announce` after checking the announcement's bounds, sacrifices `chosen` and resolves: what
+/// the variable sacrifice of an activated ability does (CR 107.3a, 601.2b and 601.2h by way of 602.2b).
+fn activate_variable_sacrifice(g: &mut Game, source: ObjectId, least: u32, most: u32, announce: u32, chosen: &[ObjectId]) {
+    let r = next(g);
+    let ability = option_of(g, &r, source).expect("the ability is offered");
+    answer(g, &r, Answer::Act(Action::of(&ability)));
+    let r = next(g);
+    match &r.kind {
+        RequestKind::PayCosts { announcing: true, least: l, most: m, governs, .. } => {
+            assert_eq!((*l, *m), (least, most), "the bounds of the announcement");
+            // Not an X paid in mana: the player is told what it counts, and no mana advice is given for it.
+            assert_eq!(*governs, "the number of permanents you sacrifice");
+        }
+        other => panic!("how many is announced as the ability is activated: {other:?}"),
+    }
+    answer(g, &r, Answer::Announce(announce));
+    let r = next(g);
+    let r = pay_first(g, r, |choices| choices.iter().position(|c| c.kind == CostPaymentKind::Sacrifice));
+    assert!(matches!(&r.kind, RequestKind::ChooseCards { purpose: Purpose::SacrificeCost, .. }), "the permanents are chosen as the cost is paid: {:?}", r.kind);
+    answer(g, &r, Answer::Cards(chosen.to_vec()));
+    resolve_all(g);
+}
+
+#[test]
+fn an_abilitys_sacrifice_one_or_more_announces_at_least_one_up_to_the_permanents_there_are() {
+    let mut g = game();
+    let source = put(&mut g, &ABILITY_SACRIFICING_ONE_OR_MORE, Zone::BATTLEFIELD);
+    let bears: Vec<ObjectId> = (0..3).map(|_| put(&mut g, &BEAR, Zone::BATTLEFIELD)).collect();
+    let life = g.state.player(YOU).life;
+    // One at least, never none (CR 701.21a); no more than the three Bears there are.
+    activate_variable_sacrifice(&mut g, source, 1, 3, 2, &bears[..2]);
+    assert!(bears[..2].iter().all(|&b| g.state.obj(b).became.is_some()), "the two chosen are sacrificed");
+    assert!(g.state.obj(bears[2]).became.is_none(), "the third stays");
+    assert_eq!(g.state.player(YOU).life, life + 2, "the effect reads how many were sacrificed");
+}
+
+#[test]
+fn an_abilitys_sacrifice_x_announces_x_up_to_the_permanents_there_are_and_not_zero_when_x_cant_be() {
+    let mut g = game();
+    let source = put(&mut g, &ABILITY_SACRIFICING_X, Zone::BATTLEFIELD);
+    let bears: Vec<ObjectId> = (0..2).map(|_| put(&mut g, &BEAR, Zone::BATTLEFIELD)).collect();
+    let life = g.state.player(YOU).life;
+    // "X can't be 0" (CR 107.3a): 1 at least; no more than the two Bears there are.
+    activate_variable_sacrifice(&mut g, source, 1, 2, 2, &bears);
+    assert!(bears.iter().all(|&b| g.state.obj(b).became.is_some()), "both are sacrificed");
+    assert_eq!(g.state.player(YOU).life, life + 2);
 }

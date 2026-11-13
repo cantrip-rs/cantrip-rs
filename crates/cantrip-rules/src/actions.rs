@@ -3072,7 +3072,12 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                     for object in tapped { scope.record(cx, spell, object, origin, component, CostPart::Variable); }
                     return Ok(false);
                 }
-                let (sacrifices, exiles, discards) = choose_variable_by(cx, player, spell, cost, amount, scope.paid_for(), &taken, scope.by())?;
+                // An ability's "sacrifice one or more" announced how many with its X (`activate`): that many are chosen.
+                let paying = match (scope, cost.variable) {
+                    (PaymentScope::Ability { .. }, Some(VariableCost::SacrificeOneOrMore(filter))) => Cost { variable: Some(VariableCost::SacrificeX(filter)), ..*cost },
+                    _ => *cost,
+                };
+                let (sacrifices, exiles, discards) = choose_variable_by(cx, player, spell, &paying, amount, scope.paid_for(), &taken, scope.by())?;
                 if matches!(scope, PaymentScope::Resolution { .. }) {
                     variable_paid = Some(count_u32(sacrifices.len() + exiles.len() + discards.cards.len()));
                 }
@@ -12104,6 +12109,17 @@ fn activate(
         }
         _ => None,
     };
+    // CR 107.3a, 601.2b by way of 602.2b: "Sacrifice X [permanents]" announces how many, up to the permanents there are that
+    // could be, once for every X of the ability (CR 107.3i: an {X} in its mana cost has announced it already); which ones
+    // are chosen as the cost is paid (CR 601.2h). "Sacrifice one or more [permanents]" is the same with at least one. The
+    // number is the ability's X, which its effect reads as "for each ... sacrificed this way".
+    if let Some(variable @ (VariableCost::SacrificeX(_) | VariableCost::SacrificeOneOrMore(_))) = whole.variable
+        && mana.x == 0
+    {
+        let least = if matches!(variable, VariableCost::SacrificeOneOrMore(_)) { 1 } else { u32::from(least_x(def.x_cant_be_zero)) };
+        let cap = count_u32(variable_candidates(cx, source, player, variable, paid, by).len());
+        item.x = announce_x(cx, player, source, mana, None, None, least, cap, false, 0, variable.governs())?;
+    }
     // CR 107.3a, 601.2b by way of 602.2b: "Tap X untapped [permanents] you control" announces X with the rest, once for every X
     // of the ability (CR 107.3i: an {X} in its mana cost has announced it already), and is then a cost that taps X of them,
     // chosen as the cost is paid (CR 601.2h).
