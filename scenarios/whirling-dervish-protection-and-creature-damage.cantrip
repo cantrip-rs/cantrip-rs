@@ -1,0 +1,31 @@
+# Protection from black prevents a black creature blocking; a colorless blocker can block, and creature damage does not trigger growth (CR 702.16, 603.4).
+[Bot1 Deck]
+Mox Emerald
+Gleemox
+Whirling Dervish
+Forest x20
+[Bot2 Deck]
+Black Lotus
+Gutter Skulk
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Whirling Dervish.Cast
+? Bot1.Mana =
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Gutter Skulk.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Whirling Dervish > Bot2)
+! Bot2.Block(Gutter Skulk > Whirling Dervish)
+Bot2.Block(Ornithopter > Whirling Dervish)
+[T4 Bot2.Upkeep]
+[Expect]
+Bot1.Battlefield.Whirling Dervish.Power = 1
+Bot1.Battlefield.Whirling Dervish.Toughness = 1
+Bot2.Life = 20

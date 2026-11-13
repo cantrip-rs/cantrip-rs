@@ -1,0 +1,22 @@
+# Only the Dervish that dealt damage grows at the end step (CR 603.4).
+[Bot1 Deck]
+Mox Emerald x2
+Black Lotus
+Whirling Dervish x2
+Forest x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Whirling Dervish.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Whirling Dervish.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Whirling Dervish#1 > Bot2)
+[T4 Bot2.Upkeep]
+[Expect]
+Bot1.Battlefield.Whirling Dervish#1.Power = 2
+Bot1.Battlefield.Whirling Dervish#2.Power = 1

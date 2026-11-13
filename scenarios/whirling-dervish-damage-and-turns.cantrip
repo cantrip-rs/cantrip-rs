@@ -1,0 +1,26 @@
+# Damage to an opponent triggers once at that turn's end; no damage on the next turn does not (CR 603.4).
+[Bot1 Deck]
+Mox Emerald
+Gleemox
+Whirling Dervish
+Forest x20
+[Bot2 Deck]
+Island x24
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Whirling Dervish.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Attack(Whirling Dervish > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+? Bot1.Battlefield.Whirling Dervish.Power = 1
+[T4 Bot2.Upkeep]
+? Bot1.Battlefield.Whirling Dervish.Power = 2
+[T5 Bot1.Upkeep]
+[Expect]
+Bot1.Battlefield.Whirling Dervish.Power = 2
+Bot1.Battlefield.Whirling Dervish.Toughness = 2

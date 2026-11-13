@@ -1,0 +1,27 @@
+# Two combat damage events in one turn still produce only one counter (CR 603.4).
+[Bot1 Deck]
+Mox Emerald
+Gleemox
+Whirling Dervish
+Black Lotus
+Raking Claws
+Forest x20
+[Bot2 Deck]
+Island x24
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Whirling Dervish.Cast
+? Bot1.Mana =
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Raking Claws.Cast(Whirling Dervish)
+Bot1.Attack(Whirling Dervish > Bot2)
+[T4 Bot2.Upkeep]
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Whirling Dervish.Power = 2
+Bot1.Battlefield.Whirling Dervish.Toughness = 2

@@ -1,0 +1,8 @@
+{
+  "name": "Whirling Dervish",
+  "manaCost": "{G}{G}",
+  "type": "Creature — Human Monk",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Protection from black\nAt the beginning of each end step, if this creature dealt damage to an opponent this turn, put a +1/+1 counter on it."
+}

@@ -1,0 +1,32 @@
+# After damage, control changes to the damaged player: no trigger; damage to the new controller's opponent triggers on that player's end step (CR 603.4).
+[Bot1 Deck]
+Mox Emerald
+Gleemox
+Whirling Dervish
+Forest x20
+[Bot2 Deck]
+Black Lotus
+Old Man of the Sea
+Island x22
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Whirling Dervish.Cast
+? Bot1.Mana =
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Old Man of the Sea.Cast
+[T5 Bot1.Main1]
+Bot1.Attack(Whirling Dervish > Bot2)
+[T5 Bot1.Main2]
+Bot2.Battlefield.Old Man of the Sea.Activate(Bot1.Battlefield.Whirling Dervish)
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Whirling Dervish.Power = 1
+Bot2.Attack(Whirling Dervish > Bot1)
+[T7 Bot1.Upkeep]
+[Expect]
+Bot1.Life = 19
+Bot2.Battlefield.Whirling Dervish.Power = 2
+Bot2.Battlefield.Whirling Dervish.Toughness = 2
