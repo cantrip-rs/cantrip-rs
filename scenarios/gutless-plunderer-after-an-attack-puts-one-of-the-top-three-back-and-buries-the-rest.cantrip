@@ -1,0 +1,47 @@
+# Gutless Plunderer: "Raid -- When this creature enters, if you attacked this turn, look at the top three cards of your library.
+# You may put one of those cards back on top of your library. Put the rest into your graveyard." Bot1 attacks with Memnite on
+# turn 3, then casts the Plunderer after combat (CR 508.1, 603.4): the top three cards are Lightning Bolt, Ponder and Forest;
+# the Forest goes back on top and the other two go to the graveyard, the fourth card, an Island, stays in the library
+# (CR 701.20a) - as does everything of Bot2's (its one graveyard card is the discard to hand size). Putting two back is refused (it is "one of those cards").
+
+[Bot1 Deck]
+Memnite
+Mox Jet
+Mox Ruby
+Mox Pearl
+Gutless Plunderer
+Island
+Island
+Island
+Lightning Bolt
+Ponder
+Forest
+Island x12
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gutless Plunderer.Cast
+! Bot1.Arrange(Forest; Ponder | Lightning Bolt)
+Bot1.Arrange(Forest | Lightning Bolt; Ponder)
+
+[Expect]
+Bot1.Graveyard = Ponder; Lightning Bolt
+Bot1.Library.Count = 13
+Bot1.Hand = Island; Island; Island
+Bot1.Battlefield = Gutless Plunderer; Memnite; Mox Jet; Mox Pearl; Mox Ruby
+Bot2.Graveyard = Swamp
+Bot2.Library.Count = 12
+Bot2.Life = 19

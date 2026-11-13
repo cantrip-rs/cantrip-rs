@@ -1,0 +1,43 @@
+# Gutless Plunderer: "Raid -- When this creature enters, if you attacked this turn, ..." On turn 3 Bot1 casts the Plunderer in the
+# first main phase, before it has attacked, so the ability does not trigger (CR 603.4): nothing is looked at and the library
+# stays whole. The Memnite attacks afterwards, which cannot make the ability trigger late.
+
+[Bot1 Deck]
+Memnite
+Mox Jet
+Mox Ruby
+Mox Pearl
+Gutless Plunderer
+Island
+Island
+Island
+Lightning Bolt
+Ponder
+Forest
+Island x12
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gutless Plunderer.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Library.Count = 15
+Bot2.Life = 19

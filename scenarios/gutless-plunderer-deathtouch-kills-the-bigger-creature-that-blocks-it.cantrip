@@ -1,0 +1,42 @@
+# Gutless Plunderer: "Deathtouch". Bot1 casts it on turn 1 with Black Lotus (no raid: it has not attacked, CR 603.4). On turn 3
+# it attacks and Bot2's Hill Giant (3/3) blocks: the Plunderer deals 2 damage, enough to destroy the Giant (CR 702.2b, 704.5h),
+# and the Giant's 3 damage destroys the Plunderer (CR 704.5g).
+
+[Bot1 Deck]
+Black Lotus
+Gutless Plunderer
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Hill Giant
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Gutless Plunderer.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Gutless Plunderer > Bot2)
+Bot2.Block(Hill Giant > Gutless Plunderer)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Hill Giant
+Bot1.Graveyard = Gutless Plunderer; Black Lotus
+Bot2.Life = 20
