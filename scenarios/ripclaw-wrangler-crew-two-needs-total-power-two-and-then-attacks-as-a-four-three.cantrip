@@ -1,0 +1,57 @@
+# Ripclaw Wrangler, "Crew 2": a Memnite (power 1) and an Ornithopter (power 0) total 1 and cannot crew it (refused); a second
+# Memnite makes exactly 2, and tapping the two Memnites crews it (CR 702.122a, 301.7): it becomes an artifact creature
+# until end of turn (types Artifact, Creature) and, having been under Bot1's control since turn 1, attacks as a 4/3 for 4: 16.
+# Its enters trigger makes Bot2 discard (here the Island Bot2 chooses).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Ripclaw Wrangler
+Memnite
+Memnite
+Ornithopter
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ripclaw Wrangler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Island)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Ripclaw Wrangler.Activate(Ability: Crew)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ripclaw Wrangler.Types = Artifact
+Bot1.Battlefield.Ripclaw Wrangler.Activate(Ability: Crew)
+Bot1.Choose(Memnite#1; Memnite#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ripclaw Wrangler.Types = Artifact; Creature
+? Bot1.Battlefield.Ripclaw Wrangler.Power = 4
+? Bot1.Battlefield.Ripclaw Wrangler.Toughness = 3
+Bot1.Attack(Ripclaw Wrangler > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+
+[Expect]
+Turn = 3
+Bot2.Life = 16
+Bot2.Graveyard = Island
+Bot1.Battlefield.Memnite#1.Tapped = true
+Bot1.Battlefield.Memnite#2.Tapped = true
+Bot1.Battlefield.Ornithopter.Tapped = false
