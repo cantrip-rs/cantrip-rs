@@ -1,0 +1,44 @@
+# An unblocked enchanted attacker may forgo combat damage for a random discard; declining on the next turn deals damage normally.
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Pearl
+Grizzly Bears
+Cloak of Confusion
+Swamp x20
+[Bot2 Deck]
+Plains
+Mountain
+Forest
+Island x20
+[Dice]
+2
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Cloak of Confusion.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot1.Accept
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+? Bot2.Graveyard.Count = 2
+? Bot2.Graveyard.Mountain.Colors =
+[T5 Bot1.BeginCombat]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot1.Decline
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 18
+Bot2.Graveyard.Count = 2
+Bot1.Battlefield.Cloak of Confusion.AttachedTo = Grizzly Bears

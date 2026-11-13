@@ -1203,3 +1203,35 @@ fn an_empty_card_name_is_refused() {
     });
     assert_eq!(read, Err("a card name must be chosen".to_string()), "an empty name was read");
 }
+
+/// Adventurers' Guildhouse and Cathedral of Serra give "bands with other legendary creatures" in its printed words (CR 702.22c).
+#[test]
+fn a_granted_band_ability_shows_its_printed_words() {
+    for (name, creature) in [
+        ("adventurers-guildhouse-legendary-band", "Reptil, Dinomorpher"),
+        ("cathedral-of-serra-legendary-band", "Isamaru, Hound of Konda"),
+    ] {
+        let mut shown = false;
+        play_looking(name, |_, views, _| {
+            for object in views[0].objects.iter().filter(|o| o.name == creature && o.zone == Some(cantrip_host::protocol::ZoneKindView::Battlefield)) {
+                assert!(object.granted_abilities.iter().all(|a| a.text != "BandsWithOthers"), "{name}: the placeholder is shown");
+                shown |= object.granted_abilities.iter().any(|a| a.text == "Bands with other legendary creatures");
+            }
+            false
+        });
+        assert!(shown, "{name}: {creature} never showed the granted band ability");
+    }
+}
+
+/// Cloak of Confusion's resolved choice (CR 510.1) is shown on the creature: it assigns no combat damage this turn.
+#[test]
+fn a_creature_that_assigns_no_combat_damage_says_so() {
+    let mut shown = false;
+    play_looking("cloak-of-confusion-random-discard", |_, views, _| {
+        for object in views[0].objects.iter().filter(|o| o.name == "Grizzly Bears" && o.zone == Some(cantrip_host::protocol::ZoneKindView::Battlefield)) {
+            shown |= object.granted_abilities.iter().any(|a| a.text.starts_with("Assigns no combat damage") && a.text.ends_with("this turn."));
+        }
+        false
+    });
+    assert!(shown, "the creature never said it assigns no combat damage");
+}
