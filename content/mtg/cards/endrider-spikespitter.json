@@ -1,0 +1,11 @@
+{
+  "name": "Endrider Spikespitter",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Human Mercenary",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Reach\nStart your engines! (If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.)\nMax speed — At the beginning of your upkeep, exile the top card of your library. You may play that card this turn.",
+  "keywords": [
+    "Reach"
+  ]
+}

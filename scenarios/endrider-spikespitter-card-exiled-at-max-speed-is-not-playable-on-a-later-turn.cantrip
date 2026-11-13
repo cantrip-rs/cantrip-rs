@@ -1,0 +1,52 @@
+# Endrider Spikespitter: "You may play that card this turn" (CR 611.2a): only during the turn of the upkeep that exiled it. Cast on
+# turn 1, it attacks an empty board on turns 3, 5, 7 (speed 2, 3, 4). Turn 9's upkeep exiles a Lightning Bolt that Bot1 leaves there;
+# turn 11's upkeep exiles a Mountain. With Mox Ruby untapped the turn-9 Bolt can no longer be cast, and the new Mountain is played.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Endrider Spikespitter
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Lightning Bolt
+Island
+Mountain
+Island x7
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Endrider Spikespitter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Endrider Spikespitter > Bot2)
+[T5 Bot1.Main1]
+Bot1.Attack(Endrider Spikespitter > Bot2)
+[T7 Bot1.Main1]
+Bot1.Attack(Endrider Spikespitter > Bot2)
+[T7 Bot1.Main2]
+? Bot1.Speed = 4
+[T9 Bot1.Main1]
+? Exile = Lightning Bolt
+[T11 Bot1.Main1]
+? Exile.Count = 2
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Exile.Mountain.Play
+
+[Expect]
+Bot2.Life = 11
+Exile = Lightning Bolt
+Bot1.Battlefield.Mountain.Tapped = false

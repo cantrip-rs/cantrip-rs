@@ -1,0 +1,57 @@
+# Endrider Spikespitter (3/4 reach, Start your engines!): "Max speed — At the beginning of your upkeep, exile the top card of your library.
+# You may play that card this turn" (CR 702.178a, 603.2). Cast on turn 1 (speed 1), it attacks an empty board on turns 3, 5, 7 for 3 each
+# (speed 2, 3, 4). At Bot1's turn-7 upkeep (speed 3) nothing is exiled; at the turn-9 upkeep (speed 4) the top card, a Lightning Bolt, is,
+# and Bot1 casts it from exile with its Mox Ruby for 3 more: 20 - 9 - 3 = 8. The draw step comes after and takes the next card.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Endrider Spikespitter
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Lightning Bolt
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Endrider Spikespitter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Endrider Spikespitter > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Speed = 2
+[T5 Bot1.Main1]
+Bot1.Attack(Endrider Spikespitter > Bot2)
+[T5 Bot1.Main2]
+? Bot1.Speed = 3
+[T7 Bot1.Main1]
+? Exile.Count = 0
+Bot1.Attack(Endrider Spikespitter > Bot2)
+[T7 Bot1.Main2]
+? Bot1.Speed = 4
+? Exile.Count = 0
+[T9 Bot1.Main1]
+? Exile = Lightning Bolt
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 8
+Exile.Count = 0
+Bot1.Graveyard = Lightning Bolt; Black Lotus

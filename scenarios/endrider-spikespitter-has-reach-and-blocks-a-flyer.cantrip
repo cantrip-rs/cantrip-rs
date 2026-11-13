@@ -1,0 +1,41 @@
+# Endrider Spikespitter's "Reach" (CR 702.17b): it can block a creature with flying. Bot1 casts it on turn 1; Bot2's Zephyr Sprite (1/1
+# flying) attacks on turn 4 and the Spikespitter blocks it: the Sprite dies and Bot1 takes no damage.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Endrider Spikespitter
+Island x17
+
+[Bot2 Deck]
+Mox Sapphire
+Zephyr Sprite
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Endrider Spikespitter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Zephyr Sprite.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Zephyr Sprite > Bot1)
+Bot1.Block(Endrider Spikespitter > Zephyr Sprite)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Graveyard = Zephyr Sprite
+Bot1.Battlefield.Endrider Spikespitter.Damage = 1
