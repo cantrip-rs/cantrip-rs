@@ -1,0 +1,11 @@
+{
+  "name": "Skyship Buccaneer",
+  "manaCost": "{3}{U}{U}",
+  "type": "Creature — Human Pirate",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Flying\nRaid — When this creature enters, if you attacked this turn, draw a card.",
+  "keywords": [
+    "Flying"
+  ]
+}

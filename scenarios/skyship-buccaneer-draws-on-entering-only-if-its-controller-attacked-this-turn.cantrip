@@ -1,0 +1,80 @@
+# Skyship Buccaneer {3}{U}{U}, 4/3 Flying: "Raid -- When this creature enters, if you attacked this turn, draw a card" (CR 207.2c, 603.4). The first one
+# enters on turn 1 before anything has attacked: no draw. On turn 3 Bot1's Ornithopter attacks and the second Buccaneer enters after combat:
+# Bot1 draws exactly one card (the Island under it). On turn 5 nothing attacks: the third Buccaneer enters with no draw, though Bot1 attacked
+# in an earlier turn. The first Buccaneer flies (CR 702.9b): Bot2's Phyrexian Walker may not block it and Bot2 takes four.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Ornithopter
+Skyship Buccaneer
+Skyship Buccaneer
+Island
+Skyship Buccaneer
+Island x10
+
+[Bot2 Deck]
+Phyrexian Walker
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Skyship Buccaneer.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2; Skyship Buccaneer > Bot2)
+! Bot2.Block(Bot2.Battlefield.Phyrexian Walker > Bot1.Battlefield.Skyship Buccaneer)
+! Bot2.Block(Bot2.Battlefield.Phyrexian Walker > Bot1.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Skyship Buccaneer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Island
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Skyship Buccaneer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Island
+Bot2.Life = 16
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Mox Sapphire; Ornithopter; Skyship Buccaneer; Skyship Buccaneer; Skyship Buccaneer
