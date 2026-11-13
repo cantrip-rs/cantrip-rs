@@ -1,0 +1,62 @@
+# Rise from the Wreck's "up to one target creature card with no abilities": Ninja Teen at level 3 says "Creature cards in your
+# graveyard have sneak {3}{B}", so a Grizzly Bears in the graveyard has sneak, an ability (CR 113.1, 113.6, 702.190a) - in the
+# main phase too, where sneak can't be used: a card has an ability whether or not it may be used now. Turn 1: Ninja Teen off
+# three Moxen. Turn 3: Black Lotus pays for levels 2 and 3, Grizzly Bears is cast and Lightning Bolted. Turn 5: Rise from the
+# Wreck takes the Bears for "target creature card"; the no-abilities slot is not asked at all. The Bears returns.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Black Lotus
+Ninja Teen
+Grizzly Bears
+Lightning Bolt
+Swamp
+Rise from the Wreck
+Swamp x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ninja Teen.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Ninja Teen.Activate(Ability: Level 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ninja Teen.Activate(Ability: Level 3)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Rise from the Wreck.Cast
+Bot1.Target(Grizzly Bears)
+! Bot1.Target
+
+[Expect]
+Bot1.Hand.Grizzly Bears.Colors = Green
+Bot1.Graveyard = Rise from the Wreck; Lightning Bolt; Black Lotus

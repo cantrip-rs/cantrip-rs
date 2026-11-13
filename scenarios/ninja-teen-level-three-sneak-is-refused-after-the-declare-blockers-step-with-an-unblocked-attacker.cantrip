@@ -1,0 +1,61 @@
+# Ninja Teen level 3: "Creature cards in your graveyard have sneak {3}{B}", and sneak is cast only in its caster's declare
+# blockers step (CR 702.190a): the card has it at other times, but may not use it. Bot1 levels it up to 3 on turn 3, bolts its own
+# Ornithopter into the graveyard (Bot2 drained to 19) and casts a second one. On turn 5 that Ornithopter attacks unblocked and
+# deals 1 (Bot2 at 18); in the combat damage step and in the end of combat step it is still an unblocked attacker to return
+# and every mana source is untapped, yet the graveyard Ornithopter's sneak is refused in both. It stays in the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Ninja Teen
+Ornithopter
+Ornithopter
+Lightning Bolt
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ninja Teen.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Ninja Teen.Activate(Ability: Level 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Ninja Teen.Activate(Ability: Level 3)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+Bot1.Hand.Ornithopter.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Attack(Ornithopter > Bot2)
+[T5 Bot1.CombatDamage]
+! Bot1.Graveyard.Ornithopter.Cast(Ability: Sneak {3}{B})
+[T5 Bot1.EndCombat]
+? Combat.Attackers = Ornithopter > Bot2
+! Bot1.Graveyard.Ornithopter.Cast(Ability: Sneak {3}{B})
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Battlefield.Ornithopter.Tapped = true

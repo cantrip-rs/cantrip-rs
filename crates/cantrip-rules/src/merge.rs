@@ -317,6 +317,10 @@ impl Query for AsText<'_> {
         self.q.goaders(creature)
     }
 
+    fn has_granted_way(&self, card: ObjectId) -> bool {
+        self.q.has_granted_way(card)
+    }
+
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
         self.q.producible_types(permanent)
     }

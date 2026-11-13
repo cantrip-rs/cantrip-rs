@@ -1,7 +1,7 @@
 # Norman Osborn transforms into Green Goblin ({1}{U}{B}{R}). Green Goblin gives each nonland card in the graveyard mayhem:
 # a card discarded this turn may be cast from the graveyard for its mana cost, and spells cast from the graveyard cost {2}
 # less. Wheel of Fortune discards Mind Stone, which is cast from the graveyard for {2} less: nothing, though only Mox Jet's one mana is left. The Wheel itself
-# was not discarded, so it has no mayhem (the refusal).
+# was not discarded, so its mayhem may not be used (the refusal): it has mayhem, but only a card discarded this turn is cast by it.
 
 [Bot1 Deck]
 Norman Osborn

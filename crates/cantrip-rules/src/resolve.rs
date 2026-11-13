@@ -289,6 +289,10 @@ impl Query for Given<'_> {
         self.q.goaders(creature)
     }
 
+    fn has_granted_way(&self, card: ObjectId) -> bool {
+        self.q.has_granted_way(card)
+    }
+
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
         self.q.producible_types(permanent)
     }
@@ -396,6 +400,10 @@ impl Query for Reader<'_> {
 
     fn goaders(&self, creature: ObjectId) -> Vec<PlayerId> {
         crate::static_rules::goaders(self, self.cards, creature)
+    }
+
+    fn has_granted_way(&self, card: ObjectId) -> bool {
+        crate::actions::has_granted_way(self, self.cards, card)
     }
 
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {

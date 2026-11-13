@@ -1930,7 +1930,10 @@ ability as the spell is cast, as a card's own way does through `CardDef::end_ste
 card's `delayed` abilities (`GrantedWay::end_step_rider`: warp's "exile this permanent at the beginning of the next end
 step", CR 702.185a), and the core creates it about the spell as it is cast, so it happens whether or not the granting
 permanent is still there. One that is a permission (`GrantedWay::permission`: Lurrus, Serra Paragon) is a route: the card
-is cast by it for its mana cost or any alternative cost, as by any permission. Any other is the one alternative cost of that
+is cast by it for its mana cost or any alternative cost, as by any permission. Any other is an ability the permanent gives
+the card (CR 113.6): its cost says which cards have it, and its `condition` when it may be used (mayhem's discard this
+turn, sneak's declare blockers step), so a card has it whether or not it may be used now - what "a card with no abilities"
+reads (`Query::has_granted_way`, Rise from the Wreck, Fang-Druid Summoner). It is the one alternative cost of that
 cast (CR 118.9a); additional costs and cost increases still apply to it (CR 118.9d). Whether X is announced follows from the
 cost the way names (CR 107.3a-b): a cost that is or includes the mana cost has its {X}; `Cost::NONE`, "without paying its
 mana cost", leaves X 0. A card with no mana cost may be cast that way (CR 118.6a). The host marks a cast for nothing

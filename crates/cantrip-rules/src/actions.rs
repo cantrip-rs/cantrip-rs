@@ -249,6 +249,10 @@ impl Query for AsSpell<'_> {
         self.q.goaders(creature)
     }
 
+    fn has_granted_way(&self, card: ObjectId) -> bool {
+        self.q.has_granted_way(card)
+    }
+
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
         self.q.producible_types(permanent)
     }
@@ -326,6 +330,10 @@ impl Query for WithWords<'_> {
 
     fn goaders(&self, creature: ObjectId) -> Vec<PlayerId> {
         self.q.goaders(creature)
+    }
+
+    fn has_granted_way(&self, card: ObjectId) -> bool {
+        self.q.has_granted_way(card)
     }
 
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
@@ -3736,6 +3744,10 @@ impl Query for Announcing<'_> {
         self.q.goaders(creature)
     }
 
+    fn has_granted_way(&self, card: ObjectId) -> bool {
+        self.q.has_granted_way(card)
+    }
+
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
         self.q.producible_types(permanent)
     }
@@ -3840,6 +3852,11 @@ impl Query for Watch<'_> {
     fn goaders(&self, creature: ObjectId) -> Vec<PlayerId> {
         self.w.told.set(true);
         self.q.goaders(creature)
+    }
+
+    fn has_granted_way(&self, card: ObjectId) -> bool {
+        self.w.told.set(true);
+        self.q.has_granted_way(card)
     }
 
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
@@ -4541,6 +4558,10 @@ impl Query for AsFace<'_> {
         self.cx.goaders(creature)
     }
 
+    fn has_granted_way(&self, card: ObjectId) -> bool {
+        self.cx.has_granted_way(card)
+    }
+
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
         self.cx.producible_types(permanent)
     }
@@ -5016,8 +5037,8 @@ pub fn granted_cast_cost(game: &crate::Game, player: PlayerId, option: &ActionOp
     let mut copy = advice_game(game);
     let cx = Cx { g: &mut copy, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
     match face {
-        Some(face) => (way.what.cost)(&AsFace { cx: &cx, spell: card, face }, &way.asker(), card, player),
-        None => (way.what.cost)(&cx, &way.asker(), card, player),
+        Some(face) => usable_cost(way.what, &AsFace { cx: &cx, spell: card, face }, &way.asker(), card, player),
+        None => usable_cost(way.what, &cx, &way.asker(), card, player),
     }
 }
 
@@ -7887,11 +7908,11 @@ fn land_plays(cx: &Cx, player: PlayerId, options: &mut Vec<ActionOption>) {
             if !way.what.lands || way.what.from != from {
                 continue;
             }
-            if front && (way.what.cost)(cx, &way.asker(), id, player).is_some() {
+            if front && usable_cost(way.what, cx, &way.asker(), id, player).is_some() {
                 options.push(ActionOption { granted_by: Some(way.grant), ..ActionOption::on(ActionKind::PlayLand, id, 0) });
             }
             if let Some(face) = back
-                && (way.what.cost)(&QueryAsFace { q: cx, cards: cx.cards(), spell: id, face }, &way.asker(), id, player).is_some()
+                && usable_cost(way.what, &QueryAsFace { q: cx, cards: cx.cards(), spell: id, face }, &way.asker(), id, player).is_some()
             {
                 options.push(ActionOption { granted_by: Some(way.grant), ..ActionOption::on(ActionKind::PlayLand, id, WAY_BACK_FACE) });
             }
@@ -8039,6 +8060,26 @@ fn given<T>(
         }
     }
     all
+}
+
+/// The cost `player` may cast `card` for by a way a permanent gives it now (CR 118.9, 601.3): its cost, where its condition
+/// holds (`GrantedWay::condition`: mayhem for a card discarded this turn, sneak in the declare blockers step).
+fn usable_cost(way: &GrantedWay, q: &dyn Query, asker: &Asker, card: ObjectId, player: PlayerId) -> Option<Cost> {
+    if way.condition.is_some_and(|holds| !holds(q, asker, card, player)) {
+        return None;
+    }
+    (way.cost)(q, asker, card, player)
+}
+
+/// `Query::has_granted_way`: a way a permanent or an emblem gives `card` that is no permission (`GrantedWay::permission`),
+/// from the zone the card is in, whose cost the card has there - asked with its owner as the one who would cast it, as "your
+/// graveyard" and "your hand" are its owner's (CR 404.1, 402.1).
+pub(crate) fn has_granted_way(q: &dyn Query, cards: &CardTable, card: ObjectId) -> bool {
+    let obj = q.state().obj(card);
+    let zone = obj.zone.kind();
+    granted_ways_of(cards, q.state(), q.events())
+        .iter()
+        .any(|w| !w.what.permission && w.what.from == zone && (w.what.cost)(q, &w.asker(), card, obj.owner).is_some())
 }
 
 /// The ways the permanents on the battlefield give cards in graveyards and hands to be cast (CR 604, 118.9).
@@ -8277,6 +8318,10 @@ impl Query for QueryAsFace<'_> {
         self.q.goaders(creature)
     }
 
+    fn has_granted_way(&self, card: ObjectId) -> bool {
+        self.q.has_granted_way(card)
+    }
+
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
         self.q.producible_types(permanent)
     }
@@ -8399,7 +8444,7 @@ impl Allows {
             Allows::Any => true,
             Allows::Exile(asker, c) => (c.allows)(q, &asker, card, player),
             Allows::Top(asker, f) => f(q, &asker, card),
-            Allows::Way(asker, w) => (w.cost)(q, &asker, card, player).is_some(),
+            Allows::Way(asker, w) => usable_cost(w, q, &asker, card, player).is_some(),
         }
     }
 }
@@ -8914,7 +8959,7 @@ impl<'a> Offer<'a> {
                 if way.what.flashback && !instant_or_sorcery(face) {
                     continue;
                 }
-                let Some(cost) = (way.what.cost)(q, &way.asker(), card, player) else { continue };
+                let Some(cost) = usable_cost(way.what, q, &way.asker(), card, player) else { continue };
                 if !can_pay_other(cx, card, player, &cost) || !extra_payable(cx, card, player, face) {
                     continue;
                 }
@@ -9885,7 +9930,7 @@ fn cast(
             // Judged on the face being cast, as the offer was.
             let view = AsFace { cx: &*cx, spell: card, face };
             let q: &dyn Query = if way == 0 { &*cx } else { &view };
-            match (granted.what.cost)(q, &granted.asker(), card, player) {
+            match usable_cost(granted.what, q, &granted.asker(), card, player) {
                 Some(cost) => cost,
                 None => return Err(Stop::Cancel),
             }

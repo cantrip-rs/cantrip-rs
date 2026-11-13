@@ -1,0 +1,58 @@
+# Rise from the Wreck's "up to one target creature card with no abilities" still finds a vanilla creature card beside permanents
+# that only could give it a way to be cast: Lurrus of the Dream-Den's "you may cast a permanent spell with mana value 2 or less
+# from your graveyard" is Lurrus's permission, no ability of the card (CR 113.6, 601.3), and Ninja Teen below level 3 gives
+# graveyard creature cards no sneak yet. Turn 1: Ninja Teen and Lurrus. Turn 3: Grizzly Bears is cast and Lightning Bolted.
+# Turn 5, with Lurrus's permission unused: Rise takes the Bears both for "target creature card" and for the no-abilities slot
+# (one card for two targets, CR 115.3), and it returns once.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Black Lotus
+Ninja Teen
+Lurrus of the Dream-Den
+Grizzly Bears
+Lightning Bolt
+Rise from the Wreck
+Swamp x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ninja Teen.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Lurrus of the Dream-Den.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rise from the Wreck.Cast
+Bot1.Target(Grizzly Bears)
+Bot1.Target(Grizzly Bears)
+
+[Expect]
+Bot1.Hand.Grizzly Bears.Colors = Green
+Bot1.Graveyard = Rise from the Wreck; Lightning Bolt; Black Lotus

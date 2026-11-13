@@ -34,7 +34,7 @@ fn granted_sneak_cost(q: &dyn Query, asker: &Asker, card: ObjectId, caster: Play
     if !sneak_castable(q, asker, card, caster) {
         return None;
     }
-    sneak::granted_cost(q, caster, mana("{3}{B}"))
+    Some(sneak::granted_cost(mana("{3}{B}")))
 }
 
 /// "You may cast creature spells from your graveyard using their sneak abilities": the sneak a creature card has itself.
@@ -42,7 +42,7 @@ fn own_sneak_cost(q: &dyn Query, asker: &Asker, card: ObjectId, caster: PlayerId
     if !sneak_castable(q, asker, card, caster) {
         return None;
     }
-    sneak::own_cost(q, caster, card)
+    sneak::own_cost(q, card)
 }
 
 pub static CARD: CardDef = CardDef {

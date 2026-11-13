@@ -1470,6 +1470,10 @@ impl Query for BoardThen<'_> {
         self.q.goaders(creature)
     }
 
+    fn has_granted_way(&self, card: ObjectId) -> bool {
+        self.q.has_granted_way(card)
+    }
+
     fn words(&self, id: ObjectId) -> Words {
         self.q.words(id)
     }

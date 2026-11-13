@@ -1,0 +1,51 @@
+# Rise from the Wreck's "up to one target creature card with no abilities": a Grizzly Bears in a graveyard while its owner
+# controls Underworld Breach ("Each nonland card in your graveyard has escape") has escape, an ability (CR 113.1, 113.6,
+# 702.138a), so it is no card with no abilities. Turn 1: Pothole Mole mills Llanowar Elves, Grizzly Bears and Tarmogoyf.
+# Turn 3: Breach, then Rise from the Wreck takes the Elves for "target creature card"; the no-abilities slot is not asked at
+# all, the Bears being the only vanilla creature card there. The Elves return; the Bears stay.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Pothole Mole
+Rise from the Wreck
+Underworld Breach
+Black Lotus
+Tarmogoyf
+Grizzly Bears
+Llanowar Elves
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Pothole Mole.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Llanowar Elves; Grizzly Bears; Tarmogoyf
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Underworld Breach.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rise from the Wreck.Cast
+Bot1.Target(Llanowar Elves)
+! Bot1.Target
+
+[Expect]
+Bot1.Hand = Island; Llanowar Elves
+Bot1.Graveyard = Rise from the Wreck; Black Lotus; Grizzly Bears; Tarmogoyf

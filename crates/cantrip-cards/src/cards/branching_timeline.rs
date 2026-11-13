@@ -61,6 +61,7 @@ mod tests {
         fn enchanting_forbidden(&self, _: ObjectId, _: ObjectId) -> bool { unreachable!() }
         fn can_untap(&self, _: ObjectId) -> bool { unreachable!() }
         fn goaders(&self, _: ObjectId) -> Vec<PlayerId> { unreachable!() }
+        fn has_granted_way(&self, _: ObjectId) -> bool { unreachable!() }
         fn state(&self) -> &GameState {
             &self.state
         }

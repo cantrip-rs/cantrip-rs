@@ -1490,6 +1490,26 @@ pub fn is_permanent_card(c: &Chars) -> bool {
     PERMANENT_CARD_TYPES.iter().any(|&t| c.is(t))
 }
 
+/// Whether the object has no abilities (CR 113.1, 113.3): "a creature card with no abilities" (Fang-Druid Summoner, Rise from
+/// the Wreck). A keyword, a static, replacement or characteristic-defining ability are abilities as much as activated and
+/// triggered ones, and only the activated and triggered ones are in `Chars::abilities`, so the card's rules text is read too:
+/// it prints none if its Oracle text is empty (flavor text is not rules text), unless it lost all
+/// abilities (CR 613.1f), and then the printed ones are gone. What it has been given where it is counts: an ability, a keyword,
+/// protection, "hexproof from", toxic, riot or an attack requirement - and a way to cast it a permanent gives it there (CR
+/// 113.6, 604.1: escape from Underworld Breach, `Query::has_granted_way`).
+pub fn has_no_abilities(q: &dyn Query, id: ObjectId) -> bool {
+    let chars = q.chars(id);
+    (q.card(chars.card).text.is_empty() || q.lost_all_abilities(id))
+        && chars.ability_count() == 0
+        && chars.keywords == Keywords::NONE
+        && !chars.has_protection()
+        && chars.hexproof_from.0 == 0
+        && chars.toxic == 0
+        && chars.riot == 0
+        && chars.must_attack == 0
+        && !q.has_granted_way(id)
+}
+
 /// How many permanent cards (CR 110.4a) are in a player's graveyard, each judged as it is there: an artifact, battle, creature,
 /// enchantment, land or planeswalker card; never a token. Diamond Weapon and Gran Pulse Ochu count them.
 pub fn permanent_cards_in_graveyard(q: &dyn Query, player: PlayerId) -> usize {

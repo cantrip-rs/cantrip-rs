@@ -1919,6 +1919,10 @@ impl Query for Game {
         static_rules::goaders(self, self.cards, creature)
     }
 
+    fn has_granted_way(&self, card: ObjectId) -> bool {
+        actions::has_granted_way(self, self.cards, card)
+    }
+
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
         actions::producible_types_in(self, permanent)
     }
@@ -1988,6 +1992,10 @@ impl Query for Cx<'_> {
 
     fn goaders(&self, creature: ObjectId) -> Vec<PlayerId> {
         static_rules::goaders(self, self.cards(), creature)
+    }
+
+    fn has_granted_way(&self, card: ObjectId) -> bool {
+        actions::has_granted_way(self, self.cards(), card)
     }
 
     fn mana_ability_x(&self) -> Option<u32> {

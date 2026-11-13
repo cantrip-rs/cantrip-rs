@@ -2335,12 +2335,19 @@ pub type TargetedCost = fn(&dyn Query, &Asker, &[Target]) -> Cost;
 
 /// The cost a card in a graveyard or a hand may be cast for by a static ability's say-so (CR 113.6, 118.9), or none when it
 /// may not be: asked of the granting permanent (`Asker`), the card (as the face being cast) and the player casting it.
-/// Underworld Breach's escape is the card's mana cost and exiling three other cards; mayhem is its mana cost for a card
-/// discarded this turn; a way for nothing would be `Cost::NONE`, "without paying its mana cost".
+/// Underworld Breach's escape is the card's mana cost and exiling three other cards; mayhem is its mana cost; a way for
+/// nothing would be `Cost::NONE`, "without paying its mana cost". For a way that is an ability the permanent gives the card
+/// (not `GrantedWay::permission`), `Some` says the card has it - asked with the card's owner as its caster,
+/// `Query::has_granted_way` - so when it may be used is no part of it but the way's `condition`, as a card's own way has
+/// its own (`WayDef::condition`).
 ///
 /// Whether X is announced follows from the cost (CR 107.3a-b): a cost that includes the card's mana cost has its {X}, and
 /// one that is neither the mana cost nor includes X ("without paying its mana cost") leaves 0 the only legal choice for X.
 pub type GrantedCost = fn(&dyn Query, &Asker, ObjectId, PlayerId) -> Option<Cost>;
+
+/// When a card may be cast by a way a permanent gives it (`GrantedWay::condition`), asked as `GrantedCost` is: mayhem's "if
+/// you discarded it this turn" (CR 702.187a), sneak's declare blockers step (CR 702.190a).
+pub type GrantedCondition = fn(&dyn Query, &Asker, ObjectId, PlayerId) -> bool;
 
 /// A way of casting cards from graveyards, or from a hand, that a permanent gives (CR 604, 118.9).
 #[derive(Clone, Copy)]
@@ -2387,8 +2394,12 @@ pub struct GrantedWay {
     /// beyond that move. A land played by the way (`lands`) is no spell, and gets none.
     pub spell_replacement: Option<u8>,
     /// As `WayDef::instant_speed`: the way is offered whenever an instant could be cast, whatever the card is (sneak, CR
-    /// 702.190a). The times it may be used at are the cost's: `cost` is `None` outside them.
+    /// 702.190a). The times it may be used at are the `condition`'s.
     pub instant_speed: bool,
+    /// As `WayDef::condition`: when the card may be cast by the way, apart from which cards have it (`cost`) - mayhem only for
+    /// a card discarded this turn (CR 702.187a), sneak only in its caster's declare blockers step (CR 702.190a). A card that
+    /// has the ability has it whether or not it may be used now (CR 113.6). None for any time.
+    pub condition: Option<GrantedCondition>,
     /// As `WayDef::enters_attacking`: a permanent spell cast by the way enters tapped and attacking what the creature its cost
     /// returned to hand was attacking (sneak, CR 702.190b).
     pub enters_attacking: bool,
@@ -2412,6 +2423,7 @@ impl GrantedWay {
         kind: WayKind::Other,
         spell_replacement: None,
         instant_speed: false,
+        condition: None,
         enters_attacking: false,
         end_step_rider: None,
     };

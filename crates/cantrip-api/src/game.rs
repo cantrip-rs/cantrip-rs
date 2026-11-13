@@ -787,6 +787,14 @@ pub trait Query {
     /// its source (CR 701.15b), whatever text the source has it from (CR 707.2, 613.2a) and while it has its abilities (CR
     /// 613.1f). A goaded creature attacks each combat if able and attacks a player other than each of them if able.
     fn goaders(&self, creature: ObjectId) -> Vec<PlayerId>;
+
+    /// Whether a permanent or an emblem gives `card`, where it is, an ability that is a way to cast it (CR 113.6, 604.1):
+    /// "each nonland card in your graveyard has escape" (Underworld Breach), flashback (Iroh, Grand Lotus; Lier, Disciple of
+    /// the Drowned), mayhem (Norman Osborn), warp, sneak, beam me up - while the card has it there, whether or not it may be
+    /// used now (`GrantedWay::condition`). A permission to cast it
+    /// ("you may cast ... from your graveyard", Lurrus of the Dream-Den) is the permanent's ability, not the card's, and is
+    /// no such ability. What "a card with no abilities" asks besides the card's own text (`targets::has_no_abilities`).
+    fn has_granted_way(&self, card: ObjectId) -> bool;
 }
 
 /// Changing the game.
