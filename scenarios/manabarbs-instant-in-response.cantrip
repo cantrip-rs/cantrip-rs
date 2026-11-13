@@ -1,0 +1,33 @@
+# After tapping a land, the player can respond to the trigger with an instant; the life gain resolves first (CR 117.7).
+[Bot1 Deck]
+Manabarbs
+Black Lotus
+Mox Ruby
+Mountain x20
+[Bot2 Deck]
+Plains
+Healing Salve
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Manabarbs.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+? Stack.Count = 1
+Bot2.Hand.Healing Salve.Cast
+Bot2.Modes(Target player gains 3 life)
+Bot2.Target(Bot2)
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 23
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Life = 22

@@ -1,0 +1,27 @@
+# A land sacrificed as part of its mana ability was tapped for mana and causes one trigger, not two for two mana (CR 603.2).
+[Bot1 Deck]
+Manabarbs
+Black Lotus
+Mox Ruby
+Mountain x20
+[Bot2 Deck]
+Dwarven Ruins
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Manabarbs.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Dwarven Ruins.Play
+[T4 Bot2.Main1]
+Bot2.Battlefield.Dwarven Ruins.Activate(Ability: Sacrifice)
+? Bot2.Mana = {R}{R}
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Life = 19
+Bot2.Graveyard = Dwarven Ruins

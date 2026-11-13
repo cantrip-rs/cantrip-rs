@@ -1,0 +1,40 @@
+# Two lands tapped while casting create separate triggers above the spell, each resolving for one damage (CR 603.3b).
+[Bot1 Deck]
+Manabarbs
+Black Lotus
+Mox Ruby
+Mountain x20
+[Bot2 Deck]
+Island x2
+Braingeyser
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Manabarbs.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Braingeyser.Cast(Bot2; X: 0)
+Bot2.Battlefield.Island#1.Activate
+Bot2.Battlefield.Island#2.Activate
+? Bot2.Mana =
+Bot2.Pass
+? Stack.Count = 3
+? Bot2.Life = 20
+Bot1.Pass
+? Bot2.Life = 19
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 18
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Life = 18
+Stack.Count = 0

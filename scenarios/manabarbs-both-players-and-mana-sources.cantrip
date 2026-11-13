@@ -1,0 +1,41 @@
+# A land tapped for mana triggers one damage to its activator; tapping a mana artifact does not (CR 603.2).
+[Bot1 Deck]
+Manabarbs
+Black Lotus
+Mox Ruby
+Mountain
+Island x20
+[Bot2 Deck]
+Island
+Mox Sapphire
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Manabarbs.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+? Bot1.Life = 20
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+? Bot2.Life = 20
+? Stack.Count = 0
+Bot2.Battlefield.Island.Activate
+? Bot2.Life = 20
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19

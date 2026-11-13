@@ -1,0 +1,6 @@
+{
+  "name": "Manabarbs",
+  "manaCost": "{3}{R}",
+  "type": "Enchantment",
+  "oracleText": "Whenever a player taps a land for mana, this enchantment deals 1 damage to that player."
+}
