@@ -1,0 +1,8 @@
+{
+  "name": "Vengeful Bloodwitch",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Vampire Warlock",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Whenever this creature or another creature you control dies, target opponent loses 1 life and you gain 1 life."
+}
