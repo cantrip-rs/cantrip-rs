@@ -1,0 +1,8 @@
+{
+  "name": "Leonin Vanguard",
+  "manaCost": "{W}",
+  "type": "Creature — Cat Soldier",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "At the beginning of combat on your turn, if you control three or more creatures, this creature gets +1/+1 until end of turn and you gain 1 life."
+}
