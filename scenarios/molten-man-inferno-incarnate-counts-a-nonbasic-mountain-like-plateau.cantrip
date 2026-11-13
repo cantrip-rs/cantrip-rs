@@ -1,0 +1,43 @@
+# Molten Man, Inferno Incarnate (0/0): "Molten Man gets +1/+1 for each Mountain you control" counts every land with the subtype
+# Mountain, basic or not (CR 205.3i, 305.6): Plateau is a nonbasic Mountain Plains. With only the Plateau he is a 1/1 as he
+# enters, so the 0/0 lives to fetch the library's basic Mountain, and with both Mountains he is a 2/2.
+
+[Bot1 Deck]
+Plateau
+Mox Ruby
+Black Lotus
+Molten Man, Inferno Incarnate
+Swamp
+Forest
+Forest
+Forest
+Mountain
+Forest x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plateau.Play
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Molten Man, Inferno Incarnate.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Molten Man, Inferno Incarnate.Power = 1
+? Bot1.Battlefield.Molten Man, Inferno Incarnate.Toughness = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Mountain)
+
+[Expect]
+Bot1.Battlefield.Molten Man, Inferno Incarnate.Power = 2
+Bot1.Battlefield.Molten Man, Inferno Incarnate.Toughness = 2
+Bot1.Battlefield.Mountain.Tapped = true
+Bot1.Library.Count = 11

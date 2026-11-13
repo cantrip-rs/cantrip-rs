@@ -12,22 +12,13 @@ fn search(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Molten Man gets +1/+1 for each Mountain you control" (CR 613.4c, layer 7c): the Mountains as the earlier layers made
-/// them, under the control of Molten Man's controller, his own text deciding what a Mountain is (CR 612).
-fn plus_one_per_mountain(view: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
-    let mountain = view.words(source).subtype(Subtype::Mountain);
-    let n = lands::count_you_control(view, source, &|c| c.has_subtype(mountain));
-    chars.power = chars.power.map(|v| v + n);
-    chars.toughness = chars.toughness.map(|v| v + n);
-}
-
 /// "Sacrifice a land" (CR 701.21a): its controller chooses one land they control, or the only one there is.
 fn sacrifice_a_land(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     sacrifice_chosen(g, item.controller, item.object, 1, |c| c.is(CardType::Land)).map(drop)
 }
 
 pub static CARD: CardDef = CardDef {
-    statics: &[static_ability(Layer::PtModify, itself, plus_one_per_mountain, "Molten Man gets +1/+1 for each Mountain you control.")],
+    statics: &[static_ability(Layer::PtModify, itself, lands::plus_per_subtype_you_control::<{ lands::sub(Subtype::Mountain) }, false, 1, 1>, "Molten Man gets +1/+1 for each Mountain you control.")],
     abilities: &[
         triggered(
             triggers::THIS_ENTERS,

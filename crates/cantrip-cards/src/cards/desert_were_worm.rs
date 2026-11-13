@@ -4,14 +4,6 @@ use cantrip_mechanics::statics::itself;
 use cantrip_mechanics::triggers::you_attack_with_total_power_at_least;
 use cantrip_oracle as oracle;
 
-/// "This creature gets +2/+0 for each Mountain you control" (CR 613.4c, layer 7c): the Mountains as the earlier layers made
-/// them, under the control of the Worm's controller, the Worm's own text deciding what a Mountain is (CR 612).
-fn plus_two_power_per_mountain(view: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
-    let mountain = view.words(source).subtype(Subtype::Mountain);
-    let n = lands::count_you_control(view, source, &|c| c.has_subtype(mountain));
-    chars.power = chars.power.map(|v| v + 2 * n);
-}
-
 /// The total power in "total power 12 or greater".
 const TOTAL_POWER: i32 = 12;
 
@@ -47,7 +39,7 @@ fn untap_attackers_and_extra_combat(g: &mut dyn Game, _: &StackItem) -> Result<(
 }
 
 pub static CARD: CardDef = CardDef {
-    statics: &[static_ability(Layer::PtModify, itself, plus_two_power_per_mountain, "This creature gets +2/+0 for each Mountain you control.")],
+    statics: &[static_ability(Layer::PtModify, itself, lands::plus_per_subtype_you_control::<{ lands::sub(Subtype::Mountain) }, false, 2, 0>, "This creature gets +2/+0 for each Mountain you control.")],
     abilities: &[triggered(
         when_asked(EventMask::ATTACKERS_DECLARED, attack_with_total_power_for_the_first_time_each_turn),
         untap_attackers_and_extra_combat,

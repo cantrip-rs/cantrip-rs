@@ -678,6 +678,17 @@ pub fn power_and_toughness_are_subtype_you_control<const SUBTYPE: u16>(q: &dyn L
     chars.toughness = Some(n);
 }
 
+/// "This creature gets +P/+T for each [basic] [land subtype] you control" (CR 613.4c, layer 7c): the permanents the source's
+/// controller has with the subtype (and, when `BASIC`, the basic supertype) as the earlier layers made them, the subtype being a
+/// word of the source's own text (CR 612). Desert Were-Worm counts Mountains for +2/+0, Molten Man Mountains for +1/+1 and Tempest
+/// Djinn basic Islands for +1/+0.
+pub fn plus_per_subtype_you_control<const SUBTYPE: u16, const BASIC: bool, const P: i32, const T: i32>(q: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
+    let subtype = q.words(source).subtype(printed(SUBTYPE));
+    let n = count_you_control(q, source, &|c| c.has_subtype(subtype) && (!BASIC || c.supertypes.basic));
+    chars.power = chars.power.map(|v| v + P * n);
+    chars.toughness = chars.toughness.map(|v| v + T * n);
+}
+
 /// "The number of differently named lands you control" (CR 201.2a-b): count the largest set of lands whose names do not
 /// overlap, including split cards and Rooms with multiple names, so the count is the true largest set whatever the order of the
 /// lands. Emil, Vastlands Roamer, Astute Terraformer, Branching Timeline, Cloak and Phaser and Deep Space Scan print it.
