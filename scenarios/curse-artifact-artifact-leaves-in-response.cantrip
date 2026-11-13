@@ -1,0 +1,26 @@
+# If the artifact is sacrificed in response to the upkeep trigger, its controller cannot sacrifice it again and takes 2 damage.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Curse Artifact
+Swamp x20
+[Bot2 Deck]
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Curse Artifact.Cast(Bot2.Battlefield.Black Lotus)
+? Bot1.Mana =
+[T4 Bot2.Upkeep]
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Life = 18
+Bot2.Graveyard.Black Lotus.Colors =
+Bot1.Graveyard.Curse Artifact.Colors = Black

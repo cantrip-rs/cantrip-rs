@@ -1,0 +1,29 @@
+# The enchanted artifact's controller may decline to sacrifice it and takes exactly 2 damage on their upkeep.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Curse Artifact
+Swamp x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+! Bot1.Hand.Curse Artifact.Cast(Bot1.Battlefield.Swamp)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Curse Artifact.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+[T4 Bot2.Upkeep]
+Bot2.Decline
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18
+Bot2.Battlefield.Ornithopter.Types = Artifact; Creature
+Bot1.Battlefield.Curse Artifact.AttachedTo = Ornithopter

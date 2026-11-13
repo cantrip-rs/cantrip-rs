@@ -1,0 +1,29 @@
+# Hithlain Rope cannot be sacrificed, so the upkeep player takes the damage and retains the artifact (CR 101.2, 701.21a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Curse Artifact
+Swamp x20
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Hithlain Rope
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Hithlain Rope.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Curse Artifact.Cast(Bot2.Battlefield.Hithlain Rope)
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield.Hithlain Rope.Types = Artifact
+Bot1.Battlefield.Curse Artifact.AttachedTo = Hithlain Rope

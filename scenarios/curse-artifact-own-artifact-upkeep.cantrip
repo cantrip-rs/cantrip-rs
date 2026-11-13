@@ -1,0 +1,25 @@
+# The Aura triggers on the artifact controller's upkeep, including its own controller's, and not on the opponent's upkeep.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Curse Artifact
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Curse Artifact.Cast(Bot1.Battlefield.Mox Pearl)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+? Bot1.Life = 20
+? Bot2.Life = 20
+[T3 Bot1.Upkeep]
+Bot1.Decline
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 20
+Bot1.Battlefield.Curse Artifact.AttachedTo = Mox Pearl
