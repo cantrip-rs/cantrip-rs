@@ -121,7 +121,8 @@ pub fn remove_a_minus_one_counter_from_this(g: &mut dyn Game, item: &StackItem) 
 /// "Target creature gets +`P`/+`T` until end of turn" (CR 611.2a), the creature being the ability's first target; nothing
 /// if it is no longer a legal target as the spell or ability resolves (CR 608.2b). Bedeck // Bedazzle, Collective
 /// Brutality, Dismember, Fervent Champion, Giant Growth, Grim Bauble, Harvester of Misery, Icy Reception, Last Gasp,
-/// Locust Spray, Proft, Stab, The Mightstone and Weakstone, Theorix Charm, Umezawa's Jitte and Shambling Ghast print it.
+/// Locust Spray, Proft, Stab, The Mightstone and Weakstone, Theorix Charm, Umezawa's Jitte and Shambling Ghast print it; Fang Guardian
+/// aims it at a Vehicle too, which a +P/+T effect reaches like any permanent.
 pub fn target_creature_gets<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some(creature) = crate::targets::object(g, item, 0) {
         crate::pump(g, item.object, creature, P, T);

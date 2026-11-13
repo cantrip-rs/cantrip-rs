@@ -333,10 +333,17 @@ fn creature_or_vehicle_you_control_filter(q: &dyn Query, asker: &Asker, t: Targe
     matches!(t, Target::Object(id) if creature_or_vehicle(q, id) && q.controller(id) == asker.controller)
 }
 
+fn other_creature_or_vehicle_you_control_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_or_vehicle_you_control_filter(q, asker, t) && t != Target::Object(asker.source)
+}
+
 /// "Target creature or Vehicle" (CR 115.1). Bounce Off prints it.
 pub const CREATURE_OR_VEHICLE: TargetSpec = target(creature_or_vehicle_filter);
 /// "Target creature or Vehicle you control" (CR 115.1, 109.5). Perilous Snare prints it.
 pub const CREATURE_OR_VEHICLE_YOU_CONTROL: TargetSpec = target(creature_or_vehicle_you_control_filter);
+/// "Another target creature or Vehicle you control" (CR 115.1, 109.5): a creature, or a Vehicle whether or not it is crewed
+/// right now, under your control, other than the source. Fang Guardian prints it.
+pub const OTHER_CREATURE_OR_VEHICLE_YOU_CONTROL: TargetSpec = target(other_creature_or_vehicle_you_control_filter);
 
 fn creature_or_vehicle_an_opponent_controls_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     matches!(t, Target::Object(id) if creature_or_vehicle(q, id) && q.controller(id) != asker.controller)
