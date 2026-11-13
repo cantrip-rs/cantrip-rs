@@ -1,0 +1,8 @@
+{
+  "name": "Xenic Poltergeist",
+  "manaCost": "{1}{B}{B}",
+  "type": "Creature — Spirit",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}: Until your next upkeep, target noncreature artifact becomes an artifact creature with power and toughness each equal to its mana value."
+}
