@@ -1,0 +1,6 @@
+{
+  "name": "Think Twice",
+  "manaCost": "{1}{U}",
+  "type": "Instant",
+  "oracleText": "Draw a card.\nFlashback {2}{U} (You may cast this card from your graveyard for its flashback cost. Then exile it.)"
+}

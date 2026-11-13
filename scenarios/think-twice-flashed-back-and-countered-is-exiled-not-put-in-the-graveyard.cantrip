@@ -1,0 +1,49 @@
+# Think Twice: "Flashback {2}{U}" (CR 702.34a): a spell cast with flashback is exiled instead of going anywhere else when it leaves the stack, so
+# when Bot2 Cancels the flashback Think Twice it goes to exile, not the graveyard, and Bot1 draws nothing from it.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Think Twice
+Island x16
+
+[Bot2 Deck]
+Black Lotus
+Cancel
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Think Twice.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Think Twice
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Graveyard.Think Twice.Cast(Ability: Flashback)
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Cancel.Cast(Stack.Think Twice)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Exile = Think Twice
+Bot1.Graveyard.Count = 0
+Bot1.Hand.Count = 5
+Bot2.Graveyard = Cancel; Black Lotus

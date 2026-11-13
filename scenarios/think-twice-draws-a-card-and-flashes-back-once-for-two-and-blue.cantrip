@@ -1,0 +1,43 @@
+# Think Twice: "Draw a card. Flashback {2}{U}" (CR 121.1, 702.34a). Cast for {1}{U} (two Moxen) it draws one card. With nothing left to pay, its
+# flashback from the graveyard is refused (Mana: short); with Black Lotus's three it is cast for exactly {2}{U}, draws again and is exiled instead of
+# going to the graveyard (CR 702.34a).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Black Lotus
+Think Twice
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Think Twice.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 5
+? Bot1.Graveyard = Think Twice
+! Bot1.Graveyard.Think Twice.Cast(Ability: Flashback; Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Graveyard.Think Twice.Cast(Ability: Flashback)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 5
+Exile = Think Twice
+Bot1.Graveyard = Black Lotus
+Bot1.Library.Count = 11
