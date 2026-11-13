@@ -12,8 +12,7 @@ fn mill_three(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// "Target creature or Spacecraft card from your graveyard" (CR 115.1, 205.3g): a card in the asker's own graveyard with the
 /// creature type or the Spacecraft subtype.
 fn creature_or_spacecraft_card_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    targets::card_in_your_graveyard(q, asker, t, &[])
-        && matches!(t, Target::Object(id) if q.chars(id).is(CardType::Creature) || q.chars(id).has_subtype(Subtype::Spacecraft))
+    targets::creature_card_or_subtype_card_in_your_graveyard(q, asker, t, Subtype::Spacecraft)
 }
 
 pub static CARD: CardDef = CardDef {

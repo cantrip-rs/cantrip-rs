@@ -1440,6 +1440,12 @@ pub fn card_in_your_graveyard_with_mana_value_at_most(q: &dyn Query, asker: &Ask
     card_in_your_graveyard(q, asker, t, types) && matches!(t, Target::Object(id) if q.mana_value(id) <= max)
 }
 
+/// "Target creature or [subtype] card from your graveyard" (CR 115.1, 205.3g): a card in the asker's own graveyard that is a creature card or has this
+/// subtype. Seedship Broodtender prints it with Spacecraft, Broodheart Engine with Vehicle.
+pub fn creature_card_or_subtype_card_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target, subtype: Subtype) -> bool {
+    card_in_your_graveyard(q, asker, t, &[]) && matches!(t, Target::Object(id) if q.chars(id).is(CardType::Creature) || q.chars(id).has_subtype(subtype))
+}
+
 fn creature_card_with_mana_value_3_or_less_in_your_graveyard_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     card_in_your_graveyard_with_mana_value_at_most(q, asker, t, &[CardType::Creature], 3)
 }
