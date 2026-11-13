@@ -1,0 +1,59 @@
+# Roadside Assistance can enchant a Vehicle that is not a creature (the enchanted permanent gets +1/+1 and lifelink whether or
+# not that matters yet, CR 301.7). Bot1 enchants Smuggler's Copter and the Pilot token, entering with it, crews it on turn 3 (CR
+# 702.122a): a 4/4 flier with lifelink, so the attack takes Bot2 from 20 to 16 and gives Bot1 4.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Smuggler's Copter
+Roadside Assistance
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Roadside Assistance.Cast(Bot1.Battlefield.Smuggler's Copter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter.Keywords = Flying; Lifelink
+? Bot1.Battlefield.Smuggler's Copter.Types = Artifact
+[T3 Bot1.Main1]
+Bot1.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot1.Choose(Pilot Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Smuggler's Copter.Power = 4
+? Bot1.Battlefield.Smuggler's Copter.Toughness = 4
+Bot1.Attack(Smuggler's Copter > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 24
+Bot2.Life = 16
+Bot1.Battlefield.Smuggler's Copter.Power = 4
