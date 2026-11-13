@@ -1,0 +1,61 @@
+# Skybox Ferry (4/4 flying Vehicle, Crew 2): turn 3 it is only an artifact, a lone Memnite (power 1) can't crew it, and
+# Grizzly Bears (power 2, summoning sick, which does not matter for a crew cost) can: the Ferry is an artifact creature
+# with flying until end of turn. The crew lasts one turn only (still just an artifact on turn 4, creature again once crewed
+# on turn 5), and on turn 5 the crewed Ferry attacks for 4 in the air.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Grizzly Bears
+Memnite
+Skybox Ferry
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Skybox Ferry.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Skybox Ferry.Types = Artifact
+Bot1.Battlefield.Skybox Ferry.Activate(Ability: Crew)
+! Bot1.Choose(Memnite)
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Skybox Ferry.Types = Artifact; Creature
+? Bot1.Battlefield.Skybox Ferry.Keywords = Flying
+? Bot1.Battlefield.Skybox Ferry.Power = 4
+? Bot1.Battlefield.Grizzly Bears.Tapped = true
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Skybox Ferry.Types = Artifact
+[T5 Bot1.Main1]
+Bot1.Battlefield.Skybox Ferry.Activate(Ability: Crew)
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Skybox Ferry > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Skybox Ferry.Tapped = true

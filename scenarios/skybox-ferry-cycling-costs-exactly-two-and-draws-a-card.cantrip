@@ -1,0 +1,29 @@
+# Skybox Ferry: "Cycling {2}". With a single Mox Jet on the battlefield there is only one mana to pay with and cycling is
+# refused; with a second Mox it is paid with exactly {2} (the pool is empty right after), the Ferry is discarded and the
+# top card of the library, Memnite, is drawn.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Skybox Ferry
+Island x4
+Memnite
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+! Bot1.Hand.Skybox Ferry.Activate(Ability: Cycling; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Skybox Ferry.Activate(Ability: Cycling)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Skybox Ferry
+Bot1.Hand = Island; Island; Island; Island; Memnite
