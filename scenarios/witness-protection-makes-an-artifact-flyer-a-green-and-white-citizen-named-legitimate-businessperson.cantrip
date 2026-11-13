@@ -1,0 +1,38 @@
+# Witness Protection on Bot1's own Ornithopter (a colorless 0/2 Artifact Creature - Thopter with flying): it becomes a green and white
+# Citizen creature with base power and toughness 1/1 named Legitimate Businessperson (layers 3, 4, 5, 7b), loses the artifact type and the
+# Thopter subtype with it (CR 205.1a, 613.1d), loses flying (layer 6), and the name Ornithopter with it (CR 612.8). Colors are both
+# green and white (CR 105.3), not either alone.
+
+[Bot1 Deck]
+Mox Sapphire
+Ornithopter
+Witness Protection
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Types = Artifact; Creature
+? Bot1.Battlefield.Ornithopter.Subtypes = Thopter
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+? Bot1.Battlefield.Ornithopter.Colors = (absent)
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Witness Protection.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Legitimate Businessperson.Types = Creature
+Bot1.Battlefield.Legitimate Businessperson.Subtypes = Citizen
+Bot1.Battlefield.Legitimate Businessperson.Colors = Green; White
+Bot1.Battlefield.Legitimate Businessperson.Power = 1
+Bot1.Battlefield.Legitimate Businessperson.Toughness = 1
+Bot1.Battlefield.Legitimate Businessperson.Keywords = (absent)
+Bot1.Battlefield.Witness Protection.Types = Enchantment

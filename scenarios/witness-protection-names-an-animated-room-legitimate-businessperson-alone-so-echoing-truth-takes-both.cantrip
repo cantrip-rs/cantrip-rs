@@ -1,0 +1,82 @@
+# Witness Protection "named Legitimate Businessperson" (CR 612.8): the enchanted creature has that name alone, none of the names it had. Under Bot2's
+# Opalescence its Room (Roaring Furnace // Steaming Sauna, cast as Roaring Furnace) is a creature, with the name of its unlocked door only. On turn 3
+# Bot1 enchants Memnite and then the Room with a Witness Protection each, so they are both Legitimate Businesspersons and no longer Roaring Furnace, and an Echoing
+# Truth on one returns both to Bot2's hand ("all other permanents with that name", CR 201.2) - Opalescence stays. Were the Room still named
+# for its door it would stay behind.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Witness Protection
+Witness Protection
+Echoing Truth
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Opalescence
+Roaring Furnace // Steaming Sauna
+Memnite
+Mox Emerald
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: W)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Opalescence.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Roaring Furnace // Steaming Sauna.Cast(Ability: Roaring Furnace)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Roaring Furnace.Types = Enchantment; Creature
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: U)
+Bot1.Hand.Witness Protection.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Witness Protection.Cast(Bot2.Battlefield.Roaring Furnace)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Legitimate Businessperson#1.Subtypes = Citizen
+? Bot2.Battlefield.Legitimate Businessperson#2.Subtypes = Citizen
+Bot1.Hand.Echoing Truth.Cast(Bot2.Battlefield.Legitimate Businessperson#1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Opalescence
+Bot2.Hand = Memnite; Roaring Furnace // Steaming Sauna
+Bot1.Graveyard = Witness Protection; Witness Protection; Echoing Truth; Black Lotus

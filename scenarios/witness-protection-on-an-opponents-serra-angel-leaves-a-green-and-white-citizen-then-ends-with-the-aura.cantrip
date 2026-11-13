@@ -1,0 +1,64 @@
+# Witness Protection on Bot2's Serra Angel (a white 4/4 Angel with flying and vigilance): it becomes a 1/1 green and white Citizen creature
+# named Legitimate Businessperson, with no flying and no vigilance, whoever controls it. On turn 4 Bot2 destroys the Aura with Disenchant:
+# the creature is a 4/4 white Angel named Serra Angel with flying and vigilance again (CR 613.7e: the effect ends with the Aura).
+[Bot1 Deck]
+Mox Sapphire
+Witness Protection
+Island x18
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Emerald
+Serra Angel
+Disenchant
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: W)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Serra Angel.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Serra Angel.Colors = White
+? Bot2.Battlefield.Serra Angel.Keywords = Flying; Vigilance
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Witness Protection.Cast(Bot2.Battlefield.Serra Angel)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Legitimate Businessperson.Colors = Green; White
+? Bot2.Battlefield.Legitimate Businessperson.Subtypes = Citizen
+? Bot2.Battlefield.Legitimate Businessperson.Power = 1
+? Bot2.Battlefield.Legitimate Businessperson.Keywords = (absent)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Witness Protection)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Serra Angel.Types = Creature
+Bot2.Battlefield.Serra Angel.Subtypes = Angel
+Bot2.Battlefield.Serra Angel.Colors = White
+Bot2.Battlefield.Serra Angel.Power = 4
+Bot2.Battlefield.Serra Angel.Keywords = Flying; Vigilance
+Bot1.Graveyard = Witness Protection
