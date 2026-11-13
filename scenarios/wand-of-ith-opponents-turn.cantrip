@@ -1,0 +1,27 @@
+# The untapped Wand cannot be activated on an opponent's turn even with its cost available (CR 602.1).
+[Bot1 Deck]
+Black Lotus x3
+Mox Pearl
+Wand of Ith
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wand of Ith.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+? Bot1.Mana = {W}{W}{W}
+? Bot1.Battlefield.Wand of Ith.Tapped = false
+! Bot1.Battlefield.Wand of Ith.Activate(Bot2)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Wand of Ith.Activate(Bot2)
+[Expect]
+Bot1.Battlefield.Wand of Ith.Tapped = true
