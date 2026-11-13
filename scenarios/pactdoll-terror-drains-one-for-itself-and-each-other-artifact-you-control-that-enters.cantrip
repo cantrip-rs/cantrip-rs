@@ -1,0 +1,57 @@
+# Pactdoll Terror {3}{B}: "Whenever this creature or another artifact you control enters, each opponent loses 1 life and you
+# gain 1 life." Turn 1, Black Lotus {B}{B}{B} + Mox Jet {B} pay exactly for it: it enters, 19 and 21 (itself counts); then
+# Bot1's Mox Ruby, another artifact, enters: 18 and 22. Bot1's Swamp (not an artifact) does nothing. On turn 2 Bot2's own Mox
+# Pearl enters, an artifact Bot2 controls: no trigger, the lives stay 18 and 22.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Pactdoll Terror
+Mox Ruby
+Swamp
+Swamp x15
+
+[Bot2 Deck]
+Mox Pearl
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pactdoll Terror.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Life = 21
+Bot1.Hand.Swamp.Play
+? Bot2.Life = 19
+? Bot1.Life = 21
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+? Bot1.Life = 22
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+? Bot2.Life = 18
+? Bot1.Life = 22
+
+[Expect]
+Turn = 2
+Bot2.Life = 18
+Bot1.Life = 22
+Bot2.Battlefield = Mox Pearl
