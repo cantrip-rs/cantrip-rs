@@ -2058,6 +2058,15 @@ pub fn of_subtype_you_control_dies<const SUBTYPE: u16>(q: &dyn Query, me: &Asker
     }
 }
 
+/// "Whenever another [subtype] you control dies" (CR 700.4, 603.10a): `of_subtype_you_control_dies` for a permanent other than this
+/// one. Boggart Cursecrafter (Goblins) and Aatchik, Emerald Radian (Insects) print it.
+pub fn another_of_subtype_you_control_dies<const SUBTYPE: u16>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::ZoneChange { old, .. } if *old == me.source => None,
+        _ => of_subtype_you_control_dies::<SUBTYPE>(q, me, event),
+    }
+}
+
 /// "Whenever you attack with one or more [subtype]s" (CR 508.1m, 603.2c): a creature its controller declares as an attacker that
 /// has the subtype, `SUBTYPE` a `Subtype` as `u16` (`lands::sub`), read through the words of the source's text (CR 612). The
 /// attackers declared together are one batch, so with `once_per_batch` the ability triggers once however many attack; each is
