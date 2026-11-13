@@ -1,0 +1,40 @@
+# "Destroy target creature or planeswalker": Bot2's Mox Emerald (an artifact) and Forest (a land) are refused as targets on turn 3, though
+# Bot1 has {1}{B}{B} available (CR 115.1, 601.2c). Bot1's own Llanowar Elves is accepted as a target - Hero's Downfall does not care
+# whose it is - and is destroyed.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Swamp
+Hero's Downfall
+Llanowar Elves
+Island x10
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp.Activate
+! Bot1.Hand.Hero's Downfall.Cast(Bot2.Battlefield.Mox Emerald)
+! Bot1.Hand.Hero's Downfall.Cast(Bot2.Battlefield.Forest)
+Bot1.Hand.Hero's Downfall.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Hero's Downfall; Llanowar Elves
+Bot2.Battlefield = Mox Emerald; Forest
