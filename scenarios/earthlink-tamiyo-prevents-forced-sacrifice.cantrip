@@ -1,0 +1,76 @@
+# Tamiyo prevents an opponent's ability from making its controller sacrifice lands, so no land choice is asked (CR 101.2).
+[Bot1 Deck]
+Earthlink
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Gleemox
+Lightning Bolt
+Swamp x20
+
+[Bot2 Deck]
+Ornithopter
+Island
+Forest
+Black Lotus
+Black Lotus
+Tamiyo, Collector of Tales
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Earthlink.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Tamiyo, Collector of Tales.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot2.Choose
+[T5 Bot1.End]
+[Expect]
+Bot2.Graveyard = Ornithopter; Black Lotus; Black Lotus
+Bot2.Battlefield.Island.Types = Land
+Bot2.Battlefield.Forest.Types = Land
+Bot1.Battlefield.Earthlink.Types = Enchantment

@@ -1,0 +1,85 @@
+# Zurgo protects a Warrior land token from sacrifice, so only the other land is sacrificed (CR 101.2).
+[Bot1 Deck]
+Earthlink
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Gleemox
+Lightning Bolt
+Swamp x20
+
+[Bot2 Deck]
+Mutavault
+Relm's Sketching
+Zurgo, Thunder's Decree
+Black Lotus
+Black Lotus
+Black Lotus
+Forest
+Mox Jet
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Earthlink.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[T2 Bot2.Main1]
+Bot2.Hand.Mutavault.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot2.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot2.Hand.Relm's Sketching.Cast(Bot2.Battlefield.Mutavault)
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Zurgo, Thunder's Decree.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+[T4 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.End]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mutavault#2.Activate(Ability: becomes)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Mutavault#2.Token = true
+? Bot2.Battlefield.Mutavault#2.Power = 2
+? Bot2.Battlefield.Mutavault#2.Keywords = CantBeSacrificed
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot2.Pass
+Bot1.Pass
+! Bot2.Choose
+[T5 Bot1.Upkeep]
+[Expect]
+Bot2.Battlefield.Mutavault.Token = true
+Bot2.Graveyard.Count = 6

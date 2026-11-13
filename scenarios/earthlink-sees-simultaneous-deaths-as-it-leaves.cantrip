@@ -1,0 +1,69 @@
+# Disk destroys Earthlink and two creatures together; both deaths trigger and sacrifice two lands (CR 603.6c, 603.10a).
+[Bot1 Deck]
+Earthlink
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Gleemox
+Lightning Bolt
+Swamp x20
+
+[Bot2 Deck]
+Island
+Forest
+Ornithopter
+Ornithopter
+Black Lotus
+Mox Sapphire
+Nevinyrral's Disk
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Earthlink.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Nevinyrral's Disk.Cast
+? Bot2.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Nevinyrral's Disk.Activate
+? Bot2.Mana =
+[T4 Bot2.End]
+[Expect]
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Forest; Island; Nevinyrral's Disk; Mox Sapphire; Ornithopter; Ornithopter; Black Lotus
+Bot1.Battlefield.Count = 0

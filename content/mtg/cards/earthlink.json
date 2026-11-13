@@ -1,0 +1,6 @@
+{
+  "name": "Earthlink",
+  "manaCost": "{3}{B}{R}{G}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of your upkeep, sacrifice this enchantment unless you pay {2}.\nWhenever a creature dies, that creature's controller sacrifices a land of their choice."
+}

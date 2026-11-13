@@ -1,0 +1,44 @@
+# The former controller cannot sacrifice Earthlink after giving it away in response to its upkeep trigger (CR 701.21a).
+[Bot1 Deck]
+Earthlink
+Black Lotus
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Valley Floodcaller
+Harmless Offering
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Earthlink.Cast
+Bot1.Hand.Valley Floodcaller.Cast
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.PayCost
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Bot1.Battlefield.Earthlink)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T5 Bot1.Main1]
+[Expect]
+Bot2.Battlefield.Earthlink.Types = Enchantment
