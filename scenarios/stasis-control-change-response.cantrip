@@ -1,0 +1,65 @@
+# After Mirrorform turns Stasis into a creature, Rubinia takes it in response to its upkeep trigger; the trigger's controller cannot sacrifice it (CR 701.21a).
+
+[Bot1 Deck]
+Island
+Black Lotus
+Black Lotus
+Black Lotus
+Stasis
+Mirrorform
+Plains x20
+
+[Bot2 Deck]
+Island
+Black Lotus
+Black Lotus
+Black Lotus
+Rubinia Soulsinger
+Grizzly Bears
+Plains x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Rubinia Soulsinger.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Stasis.Cast
+? Bot1.Mana = {U}
+Bot1.Pass
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mirrorform.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Rubinia Soulsinger.Activate(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+Bot1.Decline
+[T5 Bot1.Main1]
+
+[Expect]
+Bot2.Battlefield.Grizzly Bears#1.Power = 2
+Bot2.Battlefield.Grizzly Bears#2.Power = 2

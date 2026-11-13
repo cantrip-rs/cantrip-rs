@@ -1,0 +1,44 @@
+# Stasis skips untap steps but Voltaic Key can still untap a permanent during the main phase (CR 614.10).
+
+[Bot1 Deck]
+Island
+Island
+Mox Sapphire
+Mox Pearl
+Stasis
+Voltaic Key
+Black Lotus
+Plains x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Stasis.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Island.Activate
+Bot1.PayCost
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Mox Sapphire.Tapped = true
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Voltaic Key.Cast
+Bot1.Pass
+Bot1.Battlefield.Voltaic Key.Activate(Bot1.Battlefield.Mox Sapphire)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Mox Sapphire.Tapped = false
+Bot1.Battlefield.Stasis.Types = Enchantment

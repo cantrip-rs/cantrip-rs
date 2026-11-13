@@ -1,0 +1,40 @@
+# Both players skip untapping; Stasis remains when paid with one blue mana and is sacrificed at the next upkeep when no blue mana is available (CR 614.10, 118.12).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Pearl
+Stasis
+Plains x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Stasis.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+[T3 Bot1.Upkeep]
+? Bot1.Battlefield.Mox Sapphire.Tapped = true
+? Bot2.Battlefield.Island.Tapped = true
+Bot1.Battlefield.Island.Activate
+Bot1.PayCost
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Stasis.Types = Enchantment
+? Bot1.Mana =
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Stasis
+Bot1.Battlefield.Island.Tapped = true
+Bot2.Battlefield.Island.Tapped = true
