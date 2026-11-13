@@ -1,0 +1,40 @@
+# Seeker's Folly (CR 700.2, 611.2c, 704.5f): "Creatures your opponents control get -1/-1 until end of turn." Bot2's Memnite (1/1)
+# dies and its Ornithopter (0/2) is a -1/1 until end of turn, while Bot1's own Memnite is untouched.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Seeker's Folly
+Memnite
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Seeker's Folly.Cast
+Bot1.Modes(2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Ornithopter
+Bot2.Battlefield.Ornithopter.Power = -1
+Bot2.Battlefield.Ornithopter.Toughness = 1
+Bot2.Graveyard = Memnite
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1

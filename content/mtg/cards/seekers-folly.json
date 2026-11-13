@@ -1,0 +1,6 @@
+{
+  "name": "Seeker's Folly",
+  "manaCost": "{2}{B}",
+  "type": "Sorcery",
+  "oracleText": "Choose one —\n• Target opponent discards two cards.\n• Creatures your opponents control get -1/-1 until end of turn."
+}

@@ -1,0 +1,34 @@
+# Seeker's Folly (CR 700.2, 701.9): "Choose one — Target opponent discards two cards." The opponent chooses what to discard.
+# Bot1 cannot target itself (CR 115.1); Bot2 holds Plains, Mountain and five Islands and discards the Plains and the Mountain.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Seeker's Folly
+Island x20
+
+[Bot2 Deck]
+Plains
+Mountain
+Island x5
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Seeker's Folly.Cast
+Bot1.Modes(1)
+! Bot1.Target(Bot1)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Choose(Plains; Mountain)
+
+[Expect]
+Bot2.Hand.Count = 5
+Bot2.Graveyard = Mountain; Plains
+Bot1.Graveyard = Seeker's Folly
