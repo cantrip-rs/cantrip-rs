@@ -1,0 +1,46 @@
+# Counters added externally produce no mana before a type is noted, and later produce the last noted type (CR 106.1b).
+[Bot1 Deck]
+Jeweled Amulet
+Jefferies Tube
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Jeweled Amulet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Jefferies Tube.Cast
+Bot1.Battlefield.Jefferies Tube.Activate(Bot1.Battlefield.Jeweled Amulet; Ability: Put two)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Jeweled Amulet.Counters.Charge = 2
+Bot1.Battlefield.Jeweled Amulet.Activate(Ability: Remove a charge)
+? Bot1.Mana =
+? Bot1.Battlefield.Jeweled Amulet.Counters.Charge = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Jeweled Amulet.Activate(Ability: Remove a charge)
+? Bot1.Mana =
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Jeweled Amulet.Activate(Ability: Put a charge)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Jeweled Amulet.Activate(Ability: Remove a charge)
+? Bot1.Mana = {R}
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Jefferies Tube.Activate(Bot1.Battlefield.Jeweled Amulet; Ability: Put two)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Jeweled Amulet.Counters.Charge = 2
+Bot1.Battlefield.Jeweled Amulet.Activate(Ability: Remove a charge)
+? Bot1.Mana = {R}
+[Expect]
+Bot1.Battlefield.Jeweled Amulet.Counters.Charge = 1
