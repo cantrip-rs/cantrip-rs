@@ -1,0 +1,38 @@
+# Kalastria Highborn: "you may pay {B}" (CR 118.12, 608.2d) is black mana: as the trigger resolves Bot1 has only a Mox Ruby, makes {R}, and cannot pay with it (refused); it declines,
+# and nobody loses or gains life.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Kalastria Highborn
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Kalastria Highborn.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Kalastria Highborn)
+Bot2.Pass
+Bot1.Pass
+Bot1.Target(Bot2)
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.PayCost
+Bot1.Decline
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Graveyard = Kalastria Highborn; Black Lotus

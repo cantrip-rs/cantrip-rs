@@ -1,0 +1,43 @@
+# Kalastria Highborn: "Whenever this creature or another Vampire you control dies, ..." (CR 603.10a, 700.4): "this creature" is not
+# "this Vampire", so Kalastria Highborn triggers on its own death whatever its creature types were as it last was on the battlefield.
+# Bot2's Nameless Inversion gives it +3/-3 and takes all its creature types, keeping its abilities: it dies a 5/-1 with no
+# creature type and still triggers. Bot1 targets Bot2 and pays {B} with Mox Jet: Bot2 loses 2 (18) and Bot1 gains 2 (22).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Kalastria Highborn
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Nameless Inversion
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Kalastria Highborn.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Nameless Inversion.Cast(Bot1.Battlefield.Kalastria Highborn)
+Bot2.Pass
+Bot1.Pass
+Bot1.Target(Bot2)
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18
+Bot1.Battlefield.Mox Jet.Tapped = true
+Bot1.Graveyard = Kalastria Highborn; Black Lotus

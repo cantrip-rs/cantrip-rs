@@ -1,0 +1,8 @@
+{
+  "name": "Kalastria Highborn",
+  "manaCost": "{B}{B}",
+  "type": "Creature — Vampire Shaman",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever this creature or another Vampire you control dies, you may pay {B}. If you do, target player loses 2 life and you gain 2 life."
+}

@@ -1,0 +1,41 @@
+# Kalastria Highborn: "another Vampire you control" (CR 603.10a): Bot2 controls a Pulse Tracker (a Vampire, but not Bot1's). Bot1's Lightning Bolt kills it on turn 3 and nothing is asked of Bot1:
+# no payment, no drain (20 and 20).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Kalastria Highborn
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Pulse Tracker
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Kalastria Highborn.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Pulse Tracker.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Pulse Tracker)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Decline
+? Bot2.Battlefield =
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Battlefield = Mox Jet; Mox Ruby; Kalastria Highborn

@@ -1,0 +1,39 @@
+# Kalastria Highborn: "Whenever this creature or another Vampire you control dies, you may pay {B}. If you do, target player loses 2 life and you gain 2 life." (CR 603.10a, 608.2d, 119.3)
+# Bot1 casts it on turn 1 with the Lotus' {B}{B} (the third {B} is lost) and keeps Mox Jet untapped. Bot2's Lightning Bolt kills it on turn 2: Bot1 targets Bot2, pays {B} with Mox Jet,
+# Bot2 loses 2 (18) and Bot1 gains 2 (22).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Kalastria Highborn
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Kalastria Highborn.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Kalastria Highborn)
+Bot2.Pass
+Bot1.Pass
+Bot1.Target(Bot2)
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18
+Bot1.Battlefield.Mox Jet.Tapped = true
+Bot1.Graveyard = Kalastria Highborn; Black Lotus

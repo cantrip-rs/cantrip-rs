@@ -1,0 +1,63 @@
+# Kalastria Highborn: "this creature or another Vampire you control dies" (CR 700.4, 603.10a): Highborn and a Pulse Tracker die together to Bot2's Massacre Wurm (-2/-2), so Highborn triggers twice.
+# Bot1 pays {B} for the first (Mox Jet) and declines the second (Swamp stays untapped): one drain, Bot2 20 - 2 = 18 and Bot1 20 + 2 - 4 = 18 (the Wurm's own triggers cost Bot1 2 for each of its two creatures).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Kalastria Highborn
+Pulse Tracker
+Swamp
+Island
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Massacre Wurm
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Kalastria Highborn.Cast
+Bot1.Hand.Pulse Tracker.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Massacre Wurm.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Triggers(Massacre Wurm; Massacre Wurm)
+Bot1.Triggers(Kalastria Highborn; Kalastria Highborn)
+Bot1.Target(Bot2)
+Bot1.Target(Bot2)
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+Bot2.Pass
+Bot1.Pass
+Bot1.Decline
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
+Bot1.Battlefield.Mox Jet.Tapped = true
+Bot1.Battlefield.Swamp.Tapped = false

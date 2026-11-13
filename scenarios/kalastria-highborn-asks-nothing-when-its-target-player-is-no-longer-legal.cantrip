@@ -1,0 +1,49 @@
+# Kalastria Highborn: "you may pay {B}. If you do, target player loses 2 life and you gain 2 life." (CR 608.2b, 608.2d): Bot1 targets Bot2 with the trigger, and in response Bot2 casts Teferi's Protection
+# (protection from everything), so the target is illegal and the ability does not resolve: Bot1 is not asked to pay and Mox Jet stays untapped.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Kalastria Highborn
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Lightning Bolt
+Teferi's Protection
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Kalastria Highborn.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Kalastria Highborn)
+Bot2.Pass
+Bot1.Pass
+Bot1.Target(Bot2)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Teferi's Protection.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+! Bot1.Decline
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Battlefield.Mox Jet.Tapped = false
