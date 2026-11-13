@@ -1,0 +1,131 @@
+# Mutant Surveyor {2}{B}, 2/3: Start your engines!; "{2}: This creature gets +1/+1 until end of turn"; "Max speed — {3}, Exile
+# this card from your graveyard: Draw a card" (CR 702.178a-b: a static ability of the card that functions in the graveyard).
+# Cast on turn 1 (Mox Jet, Mox Ruby, Mox Pearl) it gives Bot1 speed 1 (CR 704.5aa); a Lightning Bolt to Bot2's face on each of
+# turns 1, 3 and 5 raises it once a turn: 2, 3, 4 (CR 702.179d). On turn 5 the {2} pump (Mox Jet and Mox Pearl, the pool empty) makes
+# it 3/4 until end of turn. Bot2's Bolt on turn 6 kills it (2/3 again: the pump ended; a 3/4 would have lived). On turn 7, at speed
+# 4, Bot1 exiles it from the graveyard for {3} and draws the card after the turn's draw, Memnite. Bot2 casts its own Surveyor on turn 2 and
+# Bolts it: at speed 1 on turn 4 it cannot use the graveyard ability, and Bot1's activation on turn 7 leaves Bot2's card in Bot2's graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mutant Surveyor
+Lightning Bolt
+Mountain
+Mountain
+Lightning Bolt
+Lightning Bolt
+Ornithopter
+Memnite
+Mountain x9
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mutant Surveyor
+Lightning Bolt
+Mountain
+Lightning Bolt
+Island x13
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mutant Surveyor.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 1
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Mutant Surveyor.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Speed = 1
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Mutant Surveyor)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Mutant Surveyor; Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 3
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+! Bot2.Graveyard.Mutant Surveyor.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Speed = 4
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mutant Surveyor.Activate(Ability: +1/+1)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mutant Surveyor.Power = 3
+? Bot1.Battlefield.Mutant Surveyor.Toughness = 4
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Mutant Surveyor.Power = 2
+? Bot1.Battlefield.Mutant Surveyor.Toughness = 3
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Mutant Surveyor)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Mutant Surveyor; Lightning Bolt; Lightning Bolt; Lightning Bolt
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Mutant Surveyor.Activate
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 7
+Bot1.Speed = 4
+Exile = Mutant Surveyor
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Lightning Bolt
+Bot2.Graveyard = Lightning Bolt; Mutant Surveyor; Lightning Bolt
+Bot1.Hand = Mountain; Ornithopter; Memnite
