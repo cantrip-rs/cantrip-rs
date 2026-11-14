@@ -1,0 +1,6 @@
+{
+  "name": "Teach by Example",
+  "manaCost": "{U/R}{U/R}",
+  "type": "Instant",
+  "oracleText": "({U/R} can be paid with either {U} or {R}.)\nWhen you next cast an instant or sorcery spell this turn, copy that spell. You may choose new targets for the copy."
+}
