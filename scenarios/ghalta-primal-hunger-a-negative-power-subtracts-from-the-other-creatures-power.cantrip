@@ -1,0 +1,56 @@
+# Ghalta, Primal Hunger {10}{G}{G}: "This spell costs {X} less to cast, where X is the total power of creatures you control." The
+# ruling: "If a creature's power is somehow less than 0, it subtracts from the total power of your other creatures." Bot1 controls a
+# Memnite (power 1) and an Aegis Turtle under Weakness (power -2): the total is -1, so X is 0 (CR 107.1b) and Ghalta costs all twelve.
+# Counting the Turtle as 0 would make X = 1 and let the eleven mana of three Black Lotuses and two Moxen pay; it is refused, and a
+# third Mox makes twelve.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Aegis Turtle
+Weakness
+Memnite
+Ghalta, Primal Hunger
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aegis Turtle.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Weakness.Cast(Bot1.Battlefield.Aegis Turtle)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana = {U}{B}{G}{G}{G}{G}{G}{G}{G}{G}{G}
+! Bot1.Hand.Ghalta, Primal Hunger.Cast(Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ghalta, Primal Hunger.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ghalta, Primal Hunger.Power = 12
+Bot1.Battlefield.Aegis Turtle.Power = -2
+Bot1.Battlefield.Memnite.Power = 1

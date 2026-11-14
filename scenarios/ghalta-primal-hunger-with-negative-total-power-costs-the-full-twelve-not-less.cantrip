@@ -1,0 +1,50 @@
+# Ghalta, Primal Hunger {10}{G}{G}: "This spell costs {X} less to cast, where X is the total power of creatures you control." Bot1's only
+# creature is an Aegis Turtle (0/5) under Weakness (-2/-1): power -2, so X = -2, a negative number a calculation uses as 0 (CR 107.1b),
+# and Ghalta still costs all twelve. Three Black Lotuses and the two untapped Moxen make eleven, which is refused; a third Mox makes
+# twelve and the cast resolves, so the clamp at zero is what decides it (a cost reduction of -2 as an unsigned number would make it free).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Aegis Turtle
+Weakness
+Ghalta, Primal Hunger
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aegis Turtle.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Weakness.Cast(Bot1.Battlefield.Aegis Turtle)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana = {U}{B}{G}{G}{G}{G}{G}{G}{G}{G}{G}
+! Bot1.Hand.Ghalta, Primal Hunger.Cast(Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ghalta, Primal Hunger.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ghalta, Primal Hunger.Power = 12
+Bot1.Battlefield.Aegis Turtle.Power = -2
