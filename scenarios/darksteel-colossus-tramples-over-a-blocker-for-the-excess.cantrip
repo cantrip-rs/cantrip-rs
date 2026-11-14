@@ -1,0 +1,42 @@
+# "Trample": Show and Tell puts Darksteel Colossus (11/11) onto the battlefield on turn 1. On turn 3 it attacks and Bot2's
+# Grizzly Bears (2/2) blocks: 2 damage is lethal to the Bears, so the other 9 trample over to Bot2 (20 -> 11), and the Colossus
+# takes 2.
+
+[Bot1 Deck]
+Darksteel Colossus
+Show and Tell
+Black Lotus
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Darksteel Colossus)
+Bot2.Choose(Island)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Darksteel Colossus > Bot2)
+Bot2.Block(Grizzly Bears > Darksteel Colossus)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 11
+Bot2.Graveyard = Grizzly Bears
+Bot1.Battlefield.Darksteel Colossus.Damage = 2

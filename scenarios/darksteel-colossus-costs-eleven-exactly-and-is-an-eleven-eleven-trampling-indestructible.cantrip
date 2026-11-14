@@ -1,0 +1,51 @@
+# Darksteel Colossus costs {11}. Bot1 builds up over three turns: four Moxen and Sol Ring on turn 1, Mox Emerald on turn 3
+# and Black Lotus and the Island on turn 5. On turn 5 the Lotus, five Moxen and Sol Ring make only ten mana, so the cast is
+# refused; the Island is the eleventh and it is cast for exactly {11}, leaving the pool empty. It is an 11/11 with trample
+# and indestructible.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Sol Ring
+Darksteel Colossus
+Island
+Mox Emerald
+Black Lotus
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Sol Ring.Activate
+! Bot1.Hand.Darksteel Colossus.Cast(Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Darksteel Colossus.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Darksteel Colossus.Power = 11
+Bot1.Battlefield.Darksteel Colossus.Toughness = 11
+Bot1.Battlefield.Darksteel Colossus.Keywords = Indestructible; Trample
+Bot1.Graveyard = Black Lotus
