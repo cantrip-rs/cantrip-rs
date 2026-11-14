@@ -1,0 +1,41 @@
+# Ruling 2024-09-20: "You'll still manifest dread even if this Equipment isn't on the battlefield when its first ability resolves." Bot2 destroys
+# the Windbreaker with Disenchant in response to its enters trigger: Bot1 still manifests dread (the Elves goes face down, the Bolt to the graveyard),
+# and the attach does nothing (CR 701.3b): the face-down 2/2 has no flying.
+
+[Bot1 Deck]
+Black Lotus
+Cursed Windbreaker
+Plains x6
+Llanowar Elves
+Lightning Bolt
+Plains x10
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Disenchant
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Cursed Windbreaker.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Cursed Windbreaker)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Llanowar Elves | Lightning Bolt)
+[Expect]
+Bot1.Graveyard = Lightning Bolt; Cursed Windbreaker; Black Lotus
+Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield..FaceDownName = Llanowar Elves
+Bot1.Battlefield..Power = 2
+Bot1.Battlefield..Keywords = (absent)

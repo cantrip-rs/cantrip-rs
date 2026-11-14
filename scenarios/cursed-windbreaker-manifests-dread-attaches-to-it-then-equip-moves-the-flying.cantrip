@@ -1,0 +1,49 @@
+# Cursed Windbreaker (2U): its enters trigger manifests dread (CR 701.62a) - of Llanowar Elves and Lightning Bolt the Elves goes face down as a
+# 2/2 and the Bolt to the graveyard - then attaches the Equipment to that creature (CR 701.3a), so the face-down creature has flying. Equip {3}
+# moves it to Memnite (1/1 gains flying) and the face-down creature loses it (CR 702.6a, 301.5c): refused with only two of the three sources
+# untapped, then paid with exactly three.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Cursed Windbreaker
+Memnite
+Plains
+Llanowar Elves
+Lightning Bolt
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Cursed Windbreaker.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Llanowar Elves | Lightning Bolt)
+? Bot1.Graveyard = Lightning Bolt; Black Lotus
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Llanowar Elves
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Keywords = Flying
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Cursed Windbreaker.Activate(Memnite)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Cursed Windbreaker.Activate(Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Cursed Windbreaker.AttachedTo = Memnite
+Bot1.Battlefield.Memnite.Keywords = Flying
+Bot1.Battlefield..Keywords = (absent)
