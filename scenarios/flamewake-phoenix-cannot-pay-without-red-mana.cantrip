@@ -1,0 +1,63 @@
+# Flamewake Phoenix's Ferocious cost is {R}: on turn 3 Bot1 pays for the Alpine Grizzly (power 4) with both Mox Rubies and the
+# Mox Emerald, so as the ability resolves at the beginning of combat its only mana is the UU its two Islands made. Paying is
+# not offered (blue mana can't pay {R}), and the Phoenix stays in the graveyard with the UU unspent.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Emerald
+Flamewake Phoenix
+Alpine Grizzly
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Flamewake Phoenix.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Attackers]
+Bot1.Attack(Flamewake Phoenix > Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Flamewake Phoenix)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.PayCost
+Bot1.Decline
+? Bot1.Mana = {U}{U}
+? Bot1.Graveyard = Flamewake Phoenix
+
+[Expect]
+Bot1.Graveyard = Flamewake Phoenix

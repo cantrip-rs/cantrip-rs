@@ -1,0 +1,64 @@
+# Flamewake Phoenix, a 2/2 flier with haste, "attacks each combat if able" (CR 508.1d): declaring no attackers is refused, and on turn 1 it hits for 2 (20 to 18). Bot2's Lightning Bolt kills it on turn 2. On turn 3 Bot1 casts an Alpine Grizzly (power 4), so at the beginning of combat Ferocious triggers from the graveyard and paying {R} (a Mox Ruby) returns it; with haste it attacks again for 2 (16).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Emerald
+Flamewake Phoenix
+Alpine Grizzly
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Flamewake Phoenix.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Attackers]
+! Bot1.Attack()
+Bot1.Attack(Flamewake Phoenix > Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Flamewake Phoenix)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Flamewake Phoenix
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+? Bot1.Battlefield.Flamewake Phoenix.Power = 2
+Bot1.Attack(Flamewake Phoenix > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Flamewake Phoenix.Keywords = Flying; Haste

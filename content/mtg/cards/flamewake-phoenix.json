@@ -1,0 +1,12 @@
+{
+  "name": "Flamewake Phoenix",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Phoenix",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, haste\nThis creature attacks each combat if able.\nFerocious — At the beginning of combat on your turn, if you control a creature with power 4 or greater, you may pay {R}. If you do, return this card from your graveyard to the battlefield.",
+  "keywords": [
+    "Flying",
+    "Haste"
+  ]
+}
