@@ -839,9 +839,8 @@ pub fn reveal_until_to_hand_rest_to_bottom(g: &mut dyn Game, player: PlayerId, q
 }
 
 /// "Reveal the top `count` cards of your library. Put a land card from among them onto the battlefield [tapped] and the
-/// rest into your graveyard" (CR 701.20, 404.3). A land must be chosen whenever one is revealed; revealing moves nothing,
-/// and the rest go to the graveyard together in their owner's chosen order. An empty library does nothing. Cavalier of
-/// Thorns prints it untapped; Hit It! prints it tapped.
+/// rest into your graveyard" (CR 701.20, 404.3): `reveal_top_select_onto_battlefield_rest_to_graveyard` for exactly one land
+/// card, which must be chosen whenever one is revealed. Cavalier of Thorns prints it untapped; Hit It! prints it tapped.
 pub fn reveal_top_land_to_battlefield_rest_to_graveyard(
     g: &mut dyn Game,
     player: PlayerId,
@@ -849,18 +848,39 @@ pub fn reveal_top_land_to_battlefield_rest_to_graveyard(
     count: usize,
     tapped: bool,
 ) -> Result<(), Suspend> {
+    reveal_top_select_onto_battlefield_rest_to_graveyard(g, player, source, count, crate::select::land_cards(crate::select::as_many_as_can(1)), tapped)?;
+    Ok(())
+}
+
+/// "Reveal the top `count` cards of your library. Put the cards `rule` allows from among them onto the battlefield and the
+/// rest into your graveyard" (CR 701.20, 400.3): revealing moves nothing; the chosen cards enter together (CR 110.2a), and
+/// every revealed card that was not put onto the battlefield goes to the graveyard together, in the order their owner
+/// chooses (CR 404.3) - a chosen card that could not enter (an Aura with nothing to enchant stays where it is, CR 303.4g)
+/// included. An empty library does nothing and a short one reveals what it has (CR 609.3). The permanents that arrived are
+/// returned. Cavalier of Thorns and Hit It! put one land card; Genesis Wave puts any number of permanent cards.
+pub fn reveal_top_select_onto_battlefield_rest_to_graveyard(
+    g: &mut dyn Game,
+    player: PlayerId,
+    source: ObjectId,
+    count: usize,
+    rule: Selection,
+    tapped: bool,
+) -> Result<Vec<ObjectId>, Suspend> {
     let revealed = top_of_library(g, player, count);
     if revealed.is_empty() {
-        return Ok(());
+        return Ok(Vec::new());
     }
     g.reveal(player, &revealed);
-    let land = crate::choose::select(g, player, source, Purpose::PutOntoBattlefield, revealed.clone(), crate::select::land_cards(crate::select::as_many_as_can(1)))?.first().copied();
-    if let Some(land) = land {
-        g.put_onto_battlefield_by(land, player, tapped, player)?;
-    }
-    let rest: Vec<ObjectId> = revealed.into_iter().filter(|&c| Some(c) != land).collect();
-    g.put_into_graveyard(&rest);
-    Ok(())
+    let chosen = crate::choose::select(g, player, source, Purpose::PutOntoBattlefield, revealed.clone(), rule)?;
+    let arrived = if chosen.is_empty() {
+        Vec::new()
+    } else {
+        let entering: Vec<_> = chosen.into_iter().map(|c| (c, player, tapped, player)).collect();
+        g.put_all_onto_battlefield_by(&entering, &[])?
+    };
+    // What entered is no longer the object revealed (CR 400.7), so it is not moved; what did not enter is.
+    g.put_into_graveyard(&revealed);
+    Ok(arrived)
 }
 
 /// "Reveal the top `count` cards of your library. You may put a card that passes `wanted` from among them into your hand.
