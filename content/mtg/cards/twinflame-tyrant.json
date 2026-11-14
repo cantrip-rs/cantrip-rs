@@ -1,0 +1,11 @@
+{
+  "name": "Twinflame Tyrant",
+  "manaCost": "{3}{R}{R}",
+  "type": "Creature — Dragon",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Flying\nIf a source you control would deal damage to an opponent or a permanent an opponent controls, it deals double that damage instead.",
+  "keywords": [
+    "Flying"
+  ]
+}
