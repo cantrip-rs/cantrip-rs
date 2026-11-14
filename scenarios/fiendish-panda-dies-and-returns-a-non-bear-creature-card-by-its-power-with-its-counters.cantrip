@@ -1,0 +1,87 @@
+# Fiendish Panda: "When this creature dies, return another target non-Bear creature card with mana value less than or equal to this
+# creature's power from your graveyard to the battlefield." The Panda gained a +1/+1 counter from Healing Salve on turn 1, so Bot2's
+# Lightning Bolt on turn 4 kills a 4/3: its last-known power is 4, one more than printed, so Hill Giant (mana value 4) is a legal
+# target. Grizzly Bears (a Bear), the Panda itself, Bot2's Memnite, Faithless Looting, a Mountain and Black Lotus are refused;
+# Bot1's own Memnite is also legal, Hill Giant is chosen and enters under Bot1's control.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Fiendish Panda
+Healing Salve
+Faithless Looting
+Hill Giant
+Memnite
+Faithless Looting
+Grizzly Bears
+Mountain
+Plains x20
+
+[Bot2 Deck]
+Mountain
+Faithless Looting
+Memnite
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fiendish Panda.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fiendish Panda.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Hill Giant; Memnite)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Memnite; Mountain)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears; Mountain)
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Fiendish Panda)
+Bot2.Pass
+Bot1.Pass
+! Bot1.Target(Bot1.Graveyard.Grizzly Bears)
+! Bot1.Target(Bot1.Graveyard.Fiendish Panda)
+! Bot1.Target(Bot2.Graveyard.Memnite)
+! Bot1.Target(Bot1.Graveyard.Faithless Looting)
+! Bot1.Target(Bot1.Graveyard.Mountain)
+! Bot1.Target(Bot1.Graveyard.Black Lotus)
+Bot1.Target(Bot1.Graveyard.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Hill Giant; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Graveyard = Fiendish Panda; Faithless Looting; Mountain; Grizzly Bears; Faithless Looting; Memnite; Healing Salve; Black Lotus
+Bot2.Life = 20

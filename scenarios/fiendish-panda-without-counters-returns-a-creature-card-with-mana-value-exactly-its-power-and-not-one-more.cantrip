@@ -1,0 +1,62 @@
+# Fiendish Panda: the Panda is a 3/2 with no counter when Bot2's Lightning Bolt kills it on turn 2, so its last-known power is 3: Gray Ogre
+# (mana value 3, exactly its power) and Memnite (0) are legal targets and Hill Giant (4, one over) is refused, with Faithless Looting,
+# a Mountain, Black Lotus and the Panda itself. Gray Ogre is chosen and enters under Bot1's control.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Fiendish Panda
+Faithless Looting
+Faithless Looting
+Mountain
+Gray Ogre
+Hill Giant
+Memnite
+Mountain
+Plains x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x21
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fiendish Panda.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Gray Ogre; Hill Giant)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite; Mountain)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Fiendish Panda)
+Bot2.Pass
+Bot1.Pass
+! Bot1.Target(Bot1.Graveyard.Hill Giant)
+! Bot1.Target(Bot1.Graveyard.Fiendish Panda)
+! Bot1.Target(Bot1.Graveyard.Faithless Looting)
+! Bot1.Target(Bot1.Graveyard.Mountain)
+! Bot1.Target(Bot1.Graveyard.Black Lotus)
+Bot1.Target(Bot1.Graveyard.Gray Ogre)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Gray Ogre; Mountain; Mox Jet; Mox Ruby
+Bot1.Graveyard = Fiendish Panda; Faithless Looting; Mountain; Memnite; Faithless Looting; Hill Giant; Black Lotus

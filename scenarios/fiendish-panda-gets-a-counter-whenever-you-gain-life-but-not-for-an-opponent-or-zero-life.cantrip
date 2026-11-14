@@ -1,0 +1,62 @@
+# Fiendish Panda: "Whenever you gain life, put a +1/+1 counter on this creature." On turn 1 Bot1 gains 3 life from Healing Salve and the
+# Panda (3/2) gets one counter and is a 4/3. On turn 2 Bot2 gains 3 life from its own Healing Salve: no counter. On turn 3 Swords to
+# Plowshares exiles Bot1's own Ornithopter (power 0): Bot1 gains 0 life, which is no life gained, so there is no counter either.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Fiendish Panda
+Healing Salve
+Swords to Plowshares
+Ornithopter
+Plains x20
+
+[Bot2 Deck]
+Healing Salve
+Plains
+Plains x21
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fiendish Panda.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fiendish Panda.Power = 3
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Healing Salve.Cast
+Bot2.Modes(Target player gains 3 life)
+Bot2.Target(Bot2)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 23
+? Bot1.Battlefield.Fiendish Panda.Counters.PlusOnePlusOne = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Bot1.Battlefield.Fiendish Panda.Counters.PlusOnePlusOne = 1
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 23
+Bot1.Battlefield.Fiendish Panda.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Fiendish Panda.Power = 4
+Bot1.Battlefield.Fiendish Panda.Toughness = 3

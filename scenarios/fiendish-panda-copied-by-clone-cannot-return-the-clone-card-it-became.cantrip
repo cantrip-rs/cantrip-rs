@@ -1,0 +1,81 @@
+# A Clone copying Fiendish Panda, at power 4 from a +1/+1 counter (Healing Salve's life gain), is Bolted and dies. "Another
+# target ... card" leaves out the card the dying permanent became in the graveyard (CR 400.7): the Clone card, a non-Bear
+# creature card of mana value 4 there, is not a legal target, while Memnite and Ornithopter are (two, so the target is asked).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Fiendish Panda
+Clone
+Memnite
+Ornithopter
+Healing Salve
+Plains x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain
+Lightning Bolt
+Mountain
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fiendish Panda.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Clone.Cast
+Bot1.Accept
+Bot1.Target(Bot1.Battlefield.Fiendish Panda)
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot1)
+[T7 Bot1.Main2]
+? Bot1.Battlefield.Fiendish Panda#2.Power = 4
+[T8 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Fiendish Panda#2)
+Bot2.Pass
+Bot1.Pass
+! Bot1.Target(Bot1.Graveyard.Clone)
+Bot1.Target(Bot1.Graveyard.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Fiendish Panda; Memnite; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Graveyard = Clone; Healing Salve; Ornithopter; Black Lotus
