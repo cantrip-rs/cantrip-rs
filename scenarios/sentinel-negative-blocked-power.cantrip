@@ -1,0 +1,37 @@
+# A blocked creature's negative power sets a negative base toughness; Sentinel dies as a state-based action (CR 107.1b, 613.4b, 704.5f).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Sentinel
+Depower
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Raging Goblin
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sentinel.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Raging Goblin.Cast
+[T2 Bot2.DeclareAttackers]
+Bot2.Attack(Raging Goblin > Bot1)
+Bot1.Block(Sentinel > Raging Goblin)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Depower.Cast(Bot2.Battlefield.Raging Goblin)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Raging Goblin.Power = -3
+Bot1.Battlefield.Sentinel.Activate(Bot2.Battlefield.Raging Goblin)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Sentinel; Depower; Black Lotus
+Bot2.Battlefield.Raging Goblin.Power = -3

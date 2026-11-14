@@ -1,0 +1,39 @@
+# Sentinel can target a creature it blocks; Giant Growth still modifies the newly set base toughness (CR 613.4b, 613.4c).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Sentinel
+Giant Growth
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Raging Goblin
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sentinel.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Raging Goblin.Cast
+[T2 Bot2.DeclareAttackers]
+Bot2.Attack(Raging Goblin > Bot1)
+Bot1.Block(Sentinel > Raging Goblin)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Sentinel)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sentinel.Activate(Bot2.Battlefield.Raging Goblin)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sentinel.Toughness = 5
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Sentinel.Toughness = 5

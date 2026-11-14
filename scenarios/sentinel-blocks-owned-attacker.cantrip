@@ -1,0 +1,38 @@
+# Sentinel targets a creature its controller owns after Harmless Offering gives it to the opponent (CR 115.1).
+[Bot1 Deck]
+Black Lotus x3
+Mox Pearl
+Sentinel
+Grizzly Bears
+Harmless Offering
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus#2.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sentinel.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Grizzly Bears)
+[T2 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Block(Sentinel > Grizzly Bears)
+Bot1.Battlefield.Sentinel.Activate(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sentinel.Toughness = 3
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Sentinel.Toughness = 3

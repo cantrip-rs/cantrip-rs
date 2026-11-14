@@ -1,0 +1,8 @@
+{
+  "name": "Sentinel",
+  "manaCost": "{4}",
+  "type": "Artifact Creature — Shapeshifter",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{0}: This creature's base toughness becomes equal to 1 plus the power of target creature blocking or blocked by this creature. (This effect lasts indefinitely.)"
+}
