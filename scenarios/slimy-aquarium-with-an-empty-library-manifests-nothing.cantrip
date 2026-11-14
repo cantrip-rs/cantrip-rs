@@ -1,0 +1,25 @@
+# Slimy Aquarium with Bot1's library empty: manifest dread has no card to look at (CR 701.62a), so no creature is made and
+# "put a +1/+1 counter on that creature" has nothing to put it on; the door still unlocks and no question is asked.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Underwater Tunnel // Slimy Aquarium
+Island x4
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Underwater Tunnel // Slimy Aquarium.Cast(Ability: Slimy Aquarium)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 2
+Bot1.Battlefield.Slimy Aquarium.Doors = Slimy Aquarium

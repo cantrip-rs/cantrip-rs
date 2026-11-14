@@ -1,0 +1,35 @@
+# Slimy Aquarium, "When you unlock this door, manifest dread, then put a +1/+1 counter on that creature" (CR 701.62a): cast as
+# its right door for {3}{U} (Black Lotus and a Mox Sapphire), of Llanowar Elves and Lightning Bolt the Elves goes face down as a 2/2
+# and the Bolt to the graveyard; the counter goes on the face-down permanent, a 3/3. The Underwater Tunnel door is locked, so
+# nothing surveils.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Underwater Tunnel // Slimy Aquarium
+Island x4
+Llanowar Elves
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Underwater Tunnel // Slimy Aquarium.Cast(Ability: Slimy Aquarium)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Llanowar Elves | Lightning Bolt)
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield..FaceDownName = Llanowar Elves
+Bot1.Battlefield..Counters.PlusOnePlusOne = 1
+Bot1.Battlefield..Power = 3
+Bot1.Battlefield..Toughness = 3
+Bot1.Battlefield.Slimy Aquarium.Doors = Slimy Aquarium
