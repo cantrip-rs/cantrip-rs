@@ -1,0 +1,54 @@
+# Frenzied Goblin, a 1/1: "Whenever this creature attacks, you may pay {R}. If you do, target creature can't block this turn." The target
+# is chosen as the trigger goes on the stack, before any payment, and a Mox is no creature to choose. Turn 3: the target is Bot2's
+# Ornithopter and Bot1 pays {R} (Mox Ruby) as the trigger resolves, so the Ornithopter can't block and the Goblin deals 1 (20 -> 19).
+# Turn 5: Bot1 declines: nothing is paid and the Ornithopter blocks (and survives, with 1 damage), so Bot2 stays at 19.
+
+[Bot1 Deck]
+Frenzied Goblin
+Mox Ruby x2
+Mountain x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Frenzied Goblin.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Frenzied Goblin > Bot2)
+! Bot1.Target(Bot1.Battlefield.Mox Ruby#2)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.PayCost
+! Bot2.Block(Ornithopter > Frenzied Goblin)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+[T5 Bot1.Main1]
+Bot1.Attack(Frenzied Goblin > Bot2)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot2.Block(Ornithopter > Frenzied Goblin)
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Mox Ruby#2.Tapped = false
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield.Ornithopter.Damage = 1
+Bot1.Battlefield.Frenzied Goblin.Power = 1
