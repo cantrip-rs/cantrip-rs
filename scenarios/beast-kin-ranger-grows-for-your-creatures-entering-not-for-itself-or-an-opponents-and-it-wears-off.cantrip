@@ -1,0 +1,41 @@
+# "Whenever another creature you control enters, this creature gets +1/+0 until end of turn" (CR 603.6a, 611.2a): the Ranger entering is not "another" (still 3/3), Bot1's
+# Memnite makes it 4/3, Bot2's Memnite entering on its own turn changes nothing, and at the start of Bot1's next turn the +1/+0 has ended (3/3 again).
+
+[Bot1 Deck]
+Black Lotus
+Beast-Kin Ranger
+Memnite
+Island x17
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Beast-Kin Ranger.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast-Kin Ranger.Power = 3
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast-Kin Ranger.Power = 4
+? Bot1.Battlefield.Beast-Kin Ranger.Toughness = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Beast-Kin Ranger.Power = 3
+[T3 Bot1.Upkeep]
+? Bot1.Battlefield.Beast-Kin Ranger.Power = 3
+
+[Expect]
+Bot1.Battlefield.Beast-Kin Ranger.Power = 3
+Bot1.Battlefield.Beast-Kin Ranger.Toughness = 3
+Bot1.Battlefield.Beast-Kin Ranger.Keywords = Trample

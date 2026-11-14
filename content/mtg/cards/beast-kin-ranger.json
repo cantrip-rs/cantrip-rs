@@ -1,0 +1,11 @@
+{
+  "name": "Beast-Kin Ranger",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Elf Ranger",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\nWhenever another creature you control enters, this creature gets +1/+0 until end of turn.",
+  "keywords": [
+    "Trample"
+  ]
+}

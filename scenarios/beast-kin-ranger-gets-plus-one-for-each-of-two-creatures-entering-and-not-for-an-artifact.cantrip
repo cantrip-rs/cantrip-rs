@@ -1,0 +1,42 @@
+# Beast-Kin Ranger, "Whenever another creature you control enters, this creature gets +1/+0 until end of turn" (CR 603.2, 603.6a, 611.2a): each of Bot1's two
+# Memnites entering triggers it once, and the two +1/+0 effects add up to 5/3. A Mox Emerald (an artifact, not a creature) entering afterwards does not trigger it.
+
+[Bot1 Deck]
+Black Lotus
+Beast-Kin Ranger
+Memnite
+Memnite
+Mox Emerald
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Beast-Kin Ranger.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast-Kin Ranger.Power = 4
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast-Kin Ranger.Power = 5
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Beast-Kin Ranger.Power = 5
+Bot1.Battlefield.Beast-Kin Ranger.Toughness = 3
