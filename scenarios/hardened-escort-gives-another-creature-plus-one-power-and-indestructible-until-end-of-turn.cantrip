@@ -1,0 +1,40 @@
+# Hardened Escort: "Whenever this creature attacks, another target creature you control gets +1/+0 and gains indestructible
+# until end of turn." Cast on turn 1 beside an Ornithopter (a 0/2 flier). On turn 3 the Escort attacks and the trigger gives the
+# Ornithopter +1/+0 and indestructible: not the Escort itself ("another"), and it is gone again on turn 5.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Hardened Escort
+Ornithopter
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hardened Escort.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Attack(Hardened Escort > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Indestructible
+? Bot1.Battlefield.Hardened Escort.Power = 2
+? Bot1.Battlefield.Hardened Escort.Keywords = (absent)
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Stack.Count = 0
