@@ -1,0 +1,46 @@
+# Each draw is revealed and resolved separately; one paid-for card goes to the graveyard, the others are drawn (CR 121.6b).
+[Bot1 Deck]
+Zur's Weirding
+Ancestral Recall
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Mountain x7
+Forest
+Plains
+Island
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Zur's Weirding.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Ancestral Recall.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Accept
+Bot1.Decline
+[T1 Bot1.Main2]
+[Expect]
+Bot1.Life = 18
+Bot2.Hand.Count = 9
+Bot2.Graveyard.Plains.Colors =

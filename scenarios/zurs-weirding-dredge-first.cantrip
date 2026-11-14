@@ -1,0 +1,44 @@
+# Choosing dredge before Weirding replaces the draw without revealing it or offering payment (CR 614.5, 702.52a).
+[Bot1 Deck]
+Zur's Weirding
+Entomb
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Golgari Grave-Troll
+Forest x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot1.Search(Golgari Grave-Troll)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Zur's Weirding.Cast
+Bot1.Pass
+[T2 Bot2.Draw]
+Bot1.Decline
+[T3 Bot1.Draw]
+Bot1.Replace(Golgari Grave-Troll)
+Bot1.Accept
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Hand.Golgari Grave-Troll.Power = 0
+Bot1.Graveyard.Count = 8
+Bot2.Life = 20

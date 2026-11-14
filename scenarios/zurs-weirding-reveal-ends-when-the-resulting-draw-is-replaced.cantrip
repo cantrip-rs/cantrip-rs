@@ -1,0 +1,65 @@
+# The revealed card stays revealed only while Weirding's effect needs it (CR 701.20a). Nobody pays for the first draw of
+# Bot1's Ancestral Recall, and one of two Words of Wind effects replaces the draw Weirding leaves (CR 614.5, 616.1f), so
+# the revealed Island stays on top of the library, hidden again: as the second draw's replacements are ordered, nobody
+# sees it.
+[Bot1 Deck]
+Island
+Sol Ring
+Black Lotus
+Mox Sapphire
+Zur's Weirding
+Words of Wind
+Ancestral Recall
+Island x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zur's Weirding.Cast
+Bot1.Pass
+[T2 Bot2.Draw]
+Bot1.Decline
+[T3 Bot1.Draw]
+Bot2.Decline
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Words of Wind.Cast
+Bot1.Pass
+[T4 Bot2.Draw]
+Bot1.Decline
+[T5 Bot1.Draw]
+Bot2.Decline
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Words of Wind.Activate
+Bot1.Pass
+Bot1.Battlefield.Words of Wind.Activate
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot1.Replace(Zur's Weirding)
+Bot2.Decline
+Bot1.Replace(Words of Wind)
+Bot1.Choose(Sol Ring)
+[Handover Bot1.Replace]
+
+[Expect]
+Bot2.Sees.Bot1.LibraryTop = (hidden)
+Bot1.Sees.Bot1.LibraryTop = (hidden)
+Bot1.Library.Count = 18
+Bot1.Revealed = Island; Island; Island
+Bot1.Battlefield.Sol Ring = (absent)

@@ -1,0 +1,41 @@
+# Either player may pay for the other player’s draw (CR 614.1a).
+[Bot1 Deck]
+Zur's Weirding
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Zur's Weirding.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Draw]
+Bot1.Accept
+[T2 Bot2.Main1]
+[T3 Bot1.Draw]
+Bot2.Accept
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
+Bot1.Graveyard.Island.Colors =
+Bot2.Graveyard.Island.Colors = 
+Bot2.Hand.Count = 7
