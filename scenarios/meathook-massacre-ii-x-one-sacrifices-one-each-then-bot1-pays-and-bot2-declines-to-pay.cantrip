@@ -1,0 +1,61 @@
+# Meathook Massacre II cast for X = 1 (six mana: a Black Lotus, a Mox Jet and two more Moxen for {1}{1}{B}{B}{B}{B}):
+# "each player sacrifices X creatures of their choice" (CR 701.21a, 101.4). Bot1 sacrifices a Memnite, keeping its Ornithopter,
+# and Bot2 an Ornithopter, keeping its Memnite. Both deaths trigger: Bot1 "may pay 3 life" for its own creature and does
+# (17 life), so its Memnite comes back under its control with a finality counter on it; Bot2 "may pay 3 life" for its
+# Ornithopter and declines (20 life), so Bot1 gets that Ornithopter, with a finality counter, under its control.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Memnite
+Ornithopter
+Meathook Massacre II
+Lightning Bolt
+Swamp x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x25
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Meathook Massacre II.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite)
+Bot2.Choose(Ornithopter)
+Bot2.Decline
+Bot1.Accept
+? Bot1.Life = 17
+? Bot2.Life = 20
+? Bot1.Battlefield.Memnite.Counters.Finality = 1
+? Bot1.Battlefield.Memnite.Tapped = false
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 20
+Bot1.Exile.Memnite.Power = 1
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot2.Graveyard.Count = 0
+Bot2.Battlefield = Memnite

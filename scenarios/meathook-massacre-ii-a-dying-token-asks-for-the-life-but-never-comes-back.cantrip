@@ -1,0 +1,43 @@
+# Meathook Massacre II (the rulings): "when a token creature dies, the ability triggers and the player has the option to pay 3 life,
+# but regardless of their choice, the token won't return" (CR 111.7, 700.4). Lingering Souls makes two Spirit tokens on turn 1; on
+# turn 3 Meathook Massacre II cast for X = 1 makes Bot1 sacrifice one of them. Bot1 is asked and pays (17 life), yet only one
+# Spirit is left: the sacrificed token did not return.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Lingering Souls
+Mox Jet
+Mox Ruby
+Mox Pearl
+Meathook Massacre II
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Meathook Massacre II.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Spirit Token.Power = 1
+Bot1.Battlefield = Meathook Massacre II; Mox Jet; Mox Pearl; Mox Ruby; Spirit Token
+Bot1.Graveyard = Black Lotus; Lingering Souls; Black Lotus

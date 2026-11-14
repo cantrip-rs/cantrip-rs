@@ -1,0 +1,53 @@
+# Meathook Massacre II's "return that card" is about the card the creature became in its owner's graveyard (CR 400.7): if it
+# has left the graveyard before the ability resolves, it is a new object and isn't returned. Bot1 casts Meathook Massacre II
+# for X = 1 and sacrifices its only creature, a Memnite. With the death trigger on the stack Bot1 casts Cling to Dust on that
+# Memnite (exiled, 3 life gained). The trigger then resolves: Bot1 may still pay 3 life and does (the life is paid as the
+# ability resolves, the rulings), but the Memnite stays in exile.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Memnite
+Meathook Massacre II
+Swamp
+Cling to Dust
+Swamp x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Meathook Massacre II.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Memnite.Power = 1
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Cling to Dust.Cast(Bot1.Graveyard.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+
+[Expect]
+Bot1.Life = 20
+Exile = Memnite
+Bot1.Exile.Memnite.Power = 1
+Bot1.Battlefield = Meathook Massacre II; Mox Jet; Mox Pearl; Mox Ruby; Swamp
+Bot1.Graveyard = Cling to Dust; Black Lotus

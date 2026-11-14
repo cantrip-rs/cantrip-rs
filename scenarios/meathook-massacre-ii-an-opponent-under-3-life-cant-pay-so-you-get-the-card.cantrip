@@ -1,0 +1,53 @@
+# Meathook Massacre II's "they may pay 3 life. If they don't, return that card under your control": a player with less life
+# than the payment can't pay it (CR 119.4, 118.3), so they aren't asked and the card comes back under Meathook's controller.
+# Bot1 casts Meathook Massacre II for X = 0. On its turn Bot2 pays 18 life for Toxic Deluge (X = 18), going to 2 life, and
+# its Memnite dies: Bot2 can't pay 3, so Bot1 gets the Memnite with a finality counter. The returned Memnite is a new object
+# that Toxic Deluge's -18/-18 doesn't affect (CR 400.7, 611.2c).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Meathook Massacre II
+Swamp x24
+
+[Bot2 Deck]
+Memnite
+Mox Jet
+Mox Ruby
+Mox Pearl
+Toxic Deluge
+Island x22
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Meathook Massacre II.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Power = 1
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Toxic Deluge.Cast(X: 18)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 2
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 2
+Bot1.Battlefield.Memnite.Counters.Finality = 1
+Bot1.Battlefield.Memnite.Power = 1
+Bot2.Battlefield = Mox Jet; Mox Ruby; Mox Pearl
+Bot2.Graveyard = Toxic Deluge
