@@ -46,7 +46,7 @@ Bot1.Hand.Lightning Helix.Cast(Bot2)
 Bot1.Pass
 Bot2.Pass
 ? Client.Bot1.Prompt.Title = You would gain 3 life: which applies first?
-Bot1.Replace(Boon Reflection)
+Bot1.Replace(2)
 
 [Expect]
 Turn = 5

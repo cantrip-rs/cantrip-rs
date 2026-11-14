@@ -54,7 +54,7 @@ fn game() -> (RulesGame, ObjectId, ObjectId) {
     let (source, creature, monolith) = (put(&SOURCE, THEM), put(&CREATURE, THEM), put(&MONOLITH, YOU));
     game.state.effect_push(ContinuousEffect {
         source: monolith, affected: source, controller: YOU,
-        kind: EffectKind::Replacement { card: cards.id_of(&MONOLITH), index: 0, to: Target::Object(creature), into: Target::None },
+        kind: EffectKind::Replacement { card: cards.id_of(&MONOLITH), index: 0, to: Target::Object(creature), into: Target::None, value: 0 },
         duration: Duration::EndOfTurn, timestamp: 1, words: Words::NONE,
     });
     game.state.update_turn(|t| t.number = 1);

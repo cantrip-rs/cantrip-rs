@@ -24,6 +24,7 @@ fn pentacle(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         index: 0,
         to: Target::Player(item.controller),
         into: Target::Object(creature),
+        value: 0,
     };
     g.add_effect(item.object, source, kind, Duration::EndOfTurn);
     Ok(())

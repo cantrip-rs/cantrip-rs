@@ -104,7 +104,7 @@ fn the_resolving_spell_is_instructing_only_while_its_own_instructions_are_carrie
     let (frame, spell) = resolving(&mut g, &[Target::Object(bear)]);
     let mut cx = cx(&mut g, frame);
     assert_eq!(Query::instructing(&cx).map(|i| i.object), Some(spell));
-    let words = WithWords { q: &cx, source: spell, words: Query::words(&cx, spell), into: Target::None };
+    let words = WithWords { q: &cx, source: spell, words: Query::words(&cx, spell), into: Target::None, value: 0 };
     assert_eq!(words.instructing().map(|i| i.object), Some(spell));
     cx.mana_source = Some(bear);
     assert!(Query::instructing(&cx).is_none(), "a mana ability's instructions are its own (CR 605.3b)");

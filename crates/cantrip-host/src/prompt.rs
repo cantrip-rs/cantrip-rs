@@ -1752,7 +1752,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                     (None, None) => String::new(),
                 },
                 sources: sources.iter().map(|&s| source_handle(game, handles, s)).collect(),
-                hints: hints.iter().map(|h| (*h).to_string()).collect(),
+                hints: hints.iter().map(|h| h.to_string()).collect(),
                 source_names: sources.iter().map(|&s| source_name(game, request.player, s)).collect(),
                 occurrence_order: false,
             })
@@ -2580,6 +2580,25 @@ mod tests {
     }
 
     #[test]
+    fn replacement_hints_and_indexes_survive_json_serialization() {
+        let (game, hand) = game_with(&["Llanowar Elves"]);
+        let player = game.state.seats().next().unwrap();
+        let request = Request { id: 1, player, may_cancel: false, kind: RequestKind::ChooseReplacement {
+            subject: None, life: None, sources: vec![hand[0], hand[0]],
+            hints: vec!["draw instead (value: 1)".into(), "draw instead (value: 3)".into()],
+            damage: None, turn: false, counters: Vec::new(), draw: true,
+        }};
+        let (payload, _) = prompt(&game, &request, &mut HandleSpace::new()).unwrap();
+        let json = serde_json::to_value(&payload).unwrap();
+        let text = json.to_string();
+        assert!(text.contains("draw instead (value: 1)"));
+        assert!(text.contains("draw instead (value: 3)"));
+        let PromptPayload::ChooseReplacementPromptMessage(p) = payload else { panic!("replacement prompt") };
+        assert_eq!(p.sources[0], p.sources[1]);
+        assert_eq!(p.hints, ["draw instead (value: 1)", "draw instead (value: 3)"]);
+    }
+
+    #[test]
     fn a_replacements_source_is_named_with_the_prompt_even_without_a_handle() {
         let (mut game, hand) = game_with(&["Llanowar Elves"]);
         let mut seats = game.state.seats();
@@ -2593,7 +2612,7 @@ mod tests {
                     subject: None,
                     life: None,
                     sources: vec![elves],
-                    hints: vec!["you skip this turn"],
+                    hints: vec!["you skip this turn".into()],
                     damage: None,
                     turn: true,
                     counters: Vec::new(),

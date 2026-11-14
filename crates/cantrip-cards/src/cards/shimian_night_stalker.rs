@@ -14,7 +14,7 @@ fn redirect(q: &dyn Query, asker: &Asker, _: ObjectId, proposal: &mut Proposal) 
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(attacker) = targets::object(g, item, 0) else { return Ok(()) };
     // Damage from the targeted creature's ability still has that source after it leaves (CR 113.7a, 608.2h).
-    g.add_effect(item.object, attacker, EffectKind::ReplacementRule { card: item.ability.card, index: 0 }, Duration::EndOfTurn);
+    g.add_effect(item.object, attacker, EffectKind::ReplacementRule { card: item.ability.card, index: 0, value: 0 }, Duration::EndOfTurn);
     Ok(())
 }
 

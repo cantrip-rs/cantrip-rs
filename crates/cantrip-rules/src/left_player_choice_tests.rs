@@ -85,7 +85,7 @@ fn a_rules_choice_of_a_player_who_left_is_made_by_the_next_player_in_turn_order(
         subject: None,
         life: Some(-1),
         sources: vec![trinket, trinket],
-        hints: vec!["", ""],
+        hints: vec!["".into(), "".into()],
         damage: None,
         turn: false,
         counters: Vec::new(),

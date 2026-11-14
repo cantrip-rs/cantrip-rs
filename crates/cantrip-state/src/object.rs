@@ -1876,10 +1876,15 @@ pub enum EffectKind {
     /// dealt to target creature of an opponent's choice instead" (Nova Pentacle). Its card's functions read it
     /// (`Query::redirected_to`); damage redirected to an object that has left the battlefield or is no longer a creature,
     /// planeswalker or battle is not redirected (CR 614.9). `Target::None` for every other replacement effect.
-    Replacement { card: CardId, index: u8, to: Target, into: Target },
+    ///
+    /// `value` is a number the effect's words fix as it is made (CR 608.2h), which each such effect keeps as its own, so
+    /// two made by the same card are told apart (CR 616.1): the X of Aladdin's Lamp's "look at the top X cards of your
+    /// library". Its card's functions read it (`Query::replacement_value`). 0 for every other replacement effect.
+    Replacement { card: CardId, index: u8, to: Target, into: Target, value: u32 },
     /// The same, about a player or the game and not an object ("if a card would be put into your graveyard from
-    /// anywhere this turn, exile it instead"): its `affected` object is only the source, and it outlives it.
-    ReplacementRule { card: CardId, index: u8 },
+    /// anywhere this turn, exile it instead"): its `affected` object is only the source, and it outlives it. `value` is
+    /// `Replacement`'s.
+    ReplacementRule { card: CardId, index: u8, value: u32 },
     /// "You may play lands and cast spells from your graveyard" (CR 305.1, 601.3) for the effect's controller. About the
     /// player, and outlives its `affected` object, which is only the source.
     PlayFromGraveyard,
@@ -2012,6 +2017,15 @@ impl EffectKind {
                 | EffectKind::ChoosesBlocks
         ) || matches!(self, EffectKind::Prevention { to, .. } if to.object().is_none())
             || matches!(self, EffectKind::Replacement { to, .. } if to != Target::None)
+    }
+
+    /// The number a lasting replacement effect's words fixed as it was made (`Replacement`'s `value`, CR 608.2h); 0 for
+    /// every other effect.
+    pub const fn replacement_value(self) -> u32 {
+        match self {
+            EffectKind::Replacement { value, .. } | EffectKind::ReplacementRule { value, .. } => value,
+            _ => 0,
+        }
     }
 }
 

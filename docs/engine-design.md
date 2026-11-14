@@ -2117,6 +2117,13 @@ deal damage to target creature this turn, that source deals that damage to you i
 `to` names whom the damage it prevents is dealt to: the core asks the effect only about damage to it (`replace.rs`), and its
 `affected` object is then the chosen source, which it outlives (CR 609.7a: a permanent spell chosen is followed to the
 permanent it becomes, `prevention::by_chosen_source`), so it ends only with its duration.
+`value` is a number the effect's words fix as it is made (CR 608.2h), kept by that one effect as Nova Pentacle's
+recipient `into` is: Aladdin's Lamp's X. Its functions read it as `Query::replacement_value`, answered by
+`WithWords::effect` for `applies`, `apply` and `damage` - hypothetical evaluation included - and by `Cx::effect_text`
+for `then`; two effects of one card are two candidates, each with its own number (CR 616.1), and a definition marked
+`show_captured_value` names it beside its hint when a player orders them. The number lives in the journaled
+`GameState.effects`, so it survives the source leaving, the effect being used up, nested replacements and replay. 0 for
+every other replacement effect.
 
 ### Alternative costs a permanent gives the spells a player casts
 

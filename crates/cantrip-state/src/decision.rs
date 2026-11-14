@@ -678,7 +678,7 @@ pub enum RequestKind {
         subject: Option<ObjectId>,
         life: Option<i32>,
         sources: Vec<ObjectId>,
-        hints: Vec<&'static str>,
+        hints: Vec<std::borrow::Cow<'static, str>>,
         damage: Option<DamageAbout>,
         turn: bool,
         counters: Vec<(CounterKind, i32)>,

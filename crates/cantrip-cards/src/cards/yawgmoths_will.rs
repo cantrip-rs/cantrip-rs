@@ -14,7 +14,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.add_effect(item.object, item.object, EffectKind::PlayFromGraveyard, Duration::EndOfTurn);
     // A sentence ends (CR 608.2c): the state triggers judge what it did before the next (`Game::end_sentence`).
     g.end_sentence();
-    g.add_effect(item.object, item.object, EffectKind::ReplacementRule { card: item.ability.card, index: 0 }, Duration::EndOfTurn);
+    g.add_effect(item.object, item.object, EffectKind::ReplacementRule { card: item.ability.card, index: 0, value: 0 }, Duration::EndOfTurn);
     Ok(())
 }
 

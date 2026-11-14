@@ -27,7 +27,7 @@ fn add_counters_plus_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspe
     g.add_player_effect(
         item.controller,
         item.object,
-        EffectKind::ReplacementRule { card: item.ability.card, index: 0 },
+        EffectKind::ReplacementRule { card: item.ability.card, index: 0, value: 0 },
         Duration::EndOfTurn,
     );
     Ok(())

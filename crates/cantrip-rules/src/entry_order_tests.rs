@@ -166,7 +166,7 @@ fn riot_is_ordered_with_its_own_replacement_and_either_may_apply_first() {
                 RequestKind::ChooseReplacement { sources, hints, .. } => {
                     assert_eq!(sources, &vec![land, land], "both are the land's own");
                     let riot = hints.iter().position(|h| h.starts_with("riot")).expect("riot is offered");
-                    assert!(hints.contains(&"This land enters tapped."), "its own is offered");
+                    assert!(hints.iter().any(|hint| hint == "This land enters tapped."), "its own is offered");
                     asked.push("order");
                     let pick = if riot_first { riot } else { 1 - riot };
                     g.answer(r.id, r.player, Answer::Index(pick as u8)).expect("a legal answer");

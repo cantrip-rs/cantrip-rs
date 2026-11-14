@@ -36,7 +36,7 @@ fn each_player_returns_a_permanent(g: &mut dyn Game, source: ObjectId) -> Result
 /// turn and used up by the one draw it replaces (CR 614.1a, 611.2). Each activation makes one; with several, the player
 /// chooses which applies to a draw (its ruling, CR 616.1).
 fn shield(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.add_player_effect(item.controller, item.object, EffectKind::ReplacementRule { card: item.ability.card, index: 0 }, Duration::EndOfTurn);
+    g.add_player_effect(item.controller, item.object, EffectKind::ReplacementRule { card: item.ability.card, index: 0, value: 0 }, Duration::EndOfTurn);
     Ok(())
 }
 

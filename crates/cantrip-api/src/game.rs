@@ -505,6 +505,14 @@ pub trait Query {
         Target::None
     }
 
+    /// The number the lasting replacement effect whose function is being asked fixed as it was made
+    /// (`EffectKind::Replacement`'s `value`, CR 608.2h): the X of Aladdin's Lamp's "look at the top X cards of your
+    /// library", each of its effects its own. Answered for its `applies` and `apply` and, through `Game`, its `then`; 0
+    /// outside such an effect's functions.
+    fn replacement_value(&self) -> u32 {
+        0
+    }
+
     /// The subject of the event a triggered ability triggered on (`Fired::subject`), for the filter of its targets: "target
     /// planeswalker that player controls", where the player is the one the damage was dealt to (CR 603.3d). `Target::None`
     /// outside a trigger's target filter.

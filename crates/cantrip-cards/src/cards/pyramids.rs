@@ -62,6 +62,7 @@ fn choose_one_destroy_target_aura_mode_1(
             index: 0,
             to: Target::None,
             into: Target::None,
+            value: 0,
         },
         Duration::EndOfTurn,
     );

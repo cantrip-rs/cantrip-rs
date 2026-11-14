@@ -21,7 +21,7 @@ fn cast_from_graveyard_and_exile_instead(g: &mut dyn Game, item: &StackItem) -> 
     g.add_effect(item.object, item.object, EffectKind::CastFromGraveyard, Duration::EndOfTurn);
     // Its first instruction ends at the "and" (CR 608.2c): the state triggers judge it before the second (`Game::end_sentence`).
     g.end_sentence();
-    g.add_effect(item.object, item.object, EffectKind::ReplacementRule { card: item.ability.card, index: 0 }, Duration::EndOfTurn);
+    g.add_effect(item.object, item.object, EffectKind::ReplacementRule { card: item.ability.card, index: 0, value: 0 }, Duration::EndOfTurn);
     Ok(())
 }
 

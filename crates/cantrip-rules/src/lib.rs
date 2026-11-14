@@ -377,9 +377,10 @@ pub struct Game {
     /// 113.7a). Off while the engine asks other abilities - triggers, replacement effects, state triggers, durations -
     /// in the middle of them: those are their own text, the source's now. Bookkeeping of a call, not of the game.
     pub(crate) own_text: std::cell::Cell<bool>,
-    /// The resolved replacement/prevention whose follow-up instructions are running. Bookkeeping of a call only;
-    /// other abilities asked during it read their own text, as with a resolving stack ability.
-    pub(crate) effect_words: std::cell::Cell<Option<(ObjectId, Words)>>,
+    /// The resolved replacement/prevention whose follow-up instructions are running: its source, the words it was made with,
+    /// and the number it fixed as it was made (`EffectKind::Replacement`'s `value`, `Query::replacement_value`). Bookkeeping
+    /// of a call only; other abilities asked during it read their own text, as with a resolving stack ability.
+    pub(crate) effect_words: std::cell::Cell<Option<(ObjectId, Words, u32)>>,
     /// The replacement effects that applied to the zone changes being worked out, with more to do once those have happened
     /// (`ReplacementDef::afterward`, CR 614.6), in the order they applied. Each move or creation keeps its own and does them
     /// once it is announced (`ops`). Bookkeeping of a call, not of the game.
@@ -1996,7 +1997,7 @@ impl<'a> Cx<'a> {
     /// Execute the remaining instructions of a resolved effect using its creation text.
     pub(crate) fn effect_text<T>(&mut self, effect: &ContinuousEffect, f: impl FnOnce(&mut Self) -> T) -> T {
         self.own_text(true, |cx| {
-            cx.g.effect_words.set(Some((effect.source, effect.words)));
+            cx.g.effect_words.set(Some((effect.source, effect.words, effect.kind.replacement_value())));
             f(cx)
         })
     }
@@ -2101,6 +2102,11 @@ impl Query for Game {
 }
 
 impl Query for Cx<'_> {
+    /// A lasting replacement effect's `then` reads the number it fixed (`Cx::effect_text`).
+    fn replacement_value(&self) -> u32 {
+        self.g.effect_words.get().map_or(0, |(_, _, value)| value)
+    }
+
     fn can_attach_to(&self, attachment: ObjectId, host: ObjectId) -> bool {
         crate::attach::host_allows(self, attachment, host, true)
     }
@@ -2210,7 +2216,7 @@ impl Query for Cx<'_> {
     /// (CR 113.7a, 612.1). A spell reads its own, which a text change on the stack does change.
     fn words(&self, id: ObjectId) -> Words {
         if self.g.own_text.get()
-            && let Some((source, words)) = self.g.effect_words.get()
+            && let Some((source, words, _)) = self.g.effect_words.get()
             && source == id
         {
             return words;

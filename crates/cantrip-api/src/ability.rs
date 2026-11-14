@@ -1310,10 +1310,16 @@ impl ReplacementDef {
 
 /// A replacement effect a resolving spell or ability makes for a while (CR 611.2), about the object it was made for.
 pub const fn granted_replacement(kind: ReplacementKind, applies: GrantedApplies, apply: GrantedApply, hint: &'static str) -> GrantedReplacementDef {
-    GrantedReplacementDef { hint, kind, applies, apply, then: None, damage: None, optional: None, once: false, text: "" }
+    GrantedReplacementDef { hint, show_captured_value: false, kind, applies, apply, then: None, damage: None, optional: None, once: false, text: "" }
 }
 
 impl GrantedReplacementDef {
+    /// Shows the number each of its effects fixed as it was made (`EffectKind::Replacement`'s `value`) beside its hint when a
+    /// player orders several (CR 616.1), so two effects of one source are told apart. Only for a number every player knows.
+    pub const fn show_captured_value(self) -> GrantedReplacementDef {
+        GrantedReplacementDef { show_captured_value: true, ..self }
+    }
+
     /// The effect controller chooses whether to apply it (CR 614.1a).
     pub const fn optional(self, question: &'static Question) -> GrantedReplacementDef {
         GrantedReplacementDef { optional: Some(question), ..self }

@@ -71,7 +71,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.end_sentence();
     g.add_lasting_rule(item, 0, Target::Object(creature), Duration::EndOfTurn);
     g.end_sentence();
-    let replacement = EffectKind::ReplacementRule { card: item.ability.card, index: 0 };
+    let replacement = EffectKind::ReplacementRule { card: item.ability.card, index: 0, value: 0 };
     let made = g.state().effects.iter().any(|e| e.kind == replacement && e.source == item.object && e.affected == creature);
     if !made {
         instruction(g, |g| g.add_effect(item.object, creature, replacement, Duration::EndOfTurn));

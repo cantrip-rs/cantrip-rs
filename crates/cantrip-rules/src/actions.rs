@@ -328,23 +328,30 @@ pub(crate) struct WithWords<'a> {
     /// For a lasting redirection effect's functions, the recipient it names (`EffectKind::Replacement`'s `into`, CR 614.9):
     /// what `Query::redirected_to` answers. `Target::None` otherwise.
     pub(crate) into: Target,
+    /// For a lasting replacement effect's functions, the number it fixed as it was made (`EffectKind::Replacement`'s
+    /// `value`, CR 608.2h): what `Query::replacement_value` answers. 0 otherwise.
+    pub(crate) value: u32,
 }
 
 impl<'a> WithWords<'a> {
     /// `q` read as the lasting effect `e`'s functions read it: its source's text through the words it was made with, and
-    /// the recipient a redirection effect names (`EffectKind::Replacement`'s `into`).
+    /// the recipient a redirection effect names and the number it fixed (`EffectKind::Replacement`'s `into` and `value`).
     pub(crate) fn effect(q: &'a dyn Query, e: &ContinuousEffect) -> WithWords<'a> {
         let into = match e.kind {
             EffectKind::Replacement { into, .. } => into,
             _ => Target::None,
         };
-        WithWords { q, source: e.source, words: e.words, into }
+        WithWords { q, source: e.source, words: e.words, into, value: e.kind.replacement_value() }
     }
 }
 
 impl Query for WithWords<'_> {
     fn redirected_to(&self) -> Target {
         self.into
+    }
+
+    fn replacement_value(&self) -> u32 {
+        self.value
     }
 
     fn can_attach_to(&self, attachment: ObjectId, host: ObjectId) -> bool {
@@ -9020,7 +9027,7 @@ fn alternatives_for(
             continue;
         }
         // One a resolved spell or ability made reads its source's text through the words it was made with (CR 612.1, 608.2h).
-        let with_words = given.words.map(|words| WithWords { q: judged, source: given.source, words, into: Target::None });
+        let with_words = given.words.map(|words| WithWords { q: judged, source: given.source, words, into: Target::None, value: 0 });
         let reads: &dyn Query = match &with_words {
             Some(view) => view,
             None => judged,
@@ -10421,7 +10428,7 @@ fn apply_next_spell_effects(cx: &mut Cx, player: PlayerId, spell: ObjectId) {
         // An alternative cost it gave the next spell is used up by the first it applies to, paid or not (CR 611.2c).
         EffectKind::SpellAlternative { card, index, player: whose, words } => {
             let asker = Asker { instance: None, source: e.source, controller: e.controller, by: None, spell: false };
-            let reads = WithWords { q: &*cx, source: e.source, words, into: Target::None };
+            let reads = WithWords { q: &*cx, source: e.source, words, into: Target::None, value: 0 };
             whose == player && (cx.card(card).lasting_spell_alternatives[index as usize].applies)(&reads, &asker, spell, player)
         }
         _ => false,
@@ -10674,7 +10681,7 @@ fn cast(
     // 400.7) - whatever becomes of the permanent that gave it, and of what it is a copy of.
     if let Some((g, controller, index)) = by.by.and_then(|g| spell_replacement_by(cx, g, player)) {
         let timestamp = cx.st().timestamp();
-        let kind = EffectKind::Replacement { card: g.ability.card, index, to: Target::None, into: Target::None };
+        let kind = EffectKind::Replacement { card: g.ability.card, index, to: Target::None, into: Target::None, value: 0 };
         cx.st().effect_push(ContinuousEffect { source: g.object, controller, timestamp, affected: spell, kind, duration: Duration::Indefinite, words: Words::NONE });
         cx.state_changed();
     }

@@ -12,7 +12,7 @@ fn applies(q: &dyn Query, _: &Asker, _: ObjectId, proposal: &Proposal) -> bool {
 
 /// The effect changes the rules until cleanup, including for creatures entering later (CR 611.2c).
 fn resolve(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.add_player_effect(item.controller, item.object, EffectKind::ReplacementRule { card: item.ability.card, index: 0 }, Duration::EndOfTurn);
+    g.add_player_effect(item.controller, item.object, EffectKind::ReplacementRule { card: item.ability.card, index: 0, value: 0 }, Duration::EndOfTurn);
     Ok(())
 }
 

@@ -37,6 +37,7 @@ fn if_target_plains_tapped_mana(
             index: 0,
             to: Target::None,
             into: Target::None,
+            value: 0,
         },
         Duration::Indefinite,
     );

@@ -184,7 +184,7 @@ pub fn damage_sources(q: &dyn Query) -> Vec<ObjectId> {
         let (about_it, names_source) = match e.kind {
             EffectKind::Replacement { card, index, .. } => (true, q.names_its_source(Waiting::Replacement(card, index))),
             // About a player: its `affected` object is only its source.
-            EffectKind::ReplacementRule { card, index } => (false, q.names_its_source(Waiting::Replacement(card, index))),
+            EffectKind::ReplacementRule { card, index, .. } => (false, q.names_its_source(Waiting::Replacement(card, index))),
             // About the object damage to which it prevents, or one it names more than so (Maze of Ith's creature, the chosen
             // source); one about no object - "all combat damage", damage to a player - has its source as `affected`.
             EffectKind::Prevention { card, index, to, .. } => {

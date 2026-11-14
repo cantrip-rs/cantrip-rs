@@ -2709,7 +2709,7 @@ impl<'s> Run<'s> {
     /// stack; every one must be named.
     /// Which applicable replacement effect applies first (CR 616.1), named by its source card or by part of the hint
     /// that effect supplies.
-    fn replacement(&self, step: &ActionStep, sources: &[ObjectId], hints: &[&'static str]) -> R<Answer> {
+    fn replacement(&self, step: &ActionStep, sources: &[ObjectId], hints: &[std::borrow::Cow<'static, str>]) -> R<Answer> {
         let named: Vec<&str> = step.positional().collect();
         let offered = || {
             sources.iter().zip(hints).map(|(&s, h)| format!("{} ({h})", self.game.known_name(s))).collect::<Vec<_>>().join(" | ")
@@ -2717,6 +2717,11 @@ impl<'s> Run<'s> {
         let [spec] = named[..] else {
             return fail(format!("line {}: Replace takes one effect, one of: {}", step.line, offered()));
         };
+        if let Ok(number) = spec.trim().parse::<usize>() {
+            return number.checked_sub(1).filter(|&i| i < sources.len())
+                .and_then(|i| u8::try_from(i).ok()).map(Answer::Index)
+                .ok_or_else(|| Fail(format!("line {}: choose an effect number from 1 to {}", step.line, sources.len())));
+        }
         let wanted = spec.trim().to_lowercase();
         // A source named with a copy number or a zone (`Ancient Adamantoise#2`, `Bot1.Battlefield.X`): two effects of
         // same-named permanents, told apart as everywhere else.

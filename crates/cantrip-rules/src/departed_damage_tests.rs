@@ -74,6 +74,7 @@ static ONCE_REDIRECT: CardDef = CardDef {
     types: TypeSet::of(&[CardType::Enchantment]),
     granted_replacements: &[GrantedReplacementDef {
         hint: "redirect the next damage",
+        show_captured_value: false,
         kind: ReplacementKind::Damage,
         applies: to_other,
         apply: to_affected,
@@ -204,7 +205,7 @@ fn redirect_once_to(destination: &'static CardDef, zone: Zone) -> (i32, u32, boo
     let to = game.state.push_obj(Obj::new(game.cards.id_of(destination), OTHER, zone));
     game.state.zone_push(zone, to);
     game.state.effect_push(ContinuousEffect {
-        source: redirector, affected: to, controller: YOU, kind: EffectKind::Replacement { card: game.cards.id_of(&ONCE_REDIRECT), index: 0, to: Target::None, into: Target::None },
+        source: redirector, affected: to, controller: YOU, kind: EffectKind::Replacement { card: game.cards.id_of(&ONCE_REDIRECT), index: 0, to: Target::None, into: Target::None, value: 0 },
         duration: Duration::EndOfTurn, timestamp: 1, words: Words::NONE,
     });
     let mut cx = cx(&mut game);
