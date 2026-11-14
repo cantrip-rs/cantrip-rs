@@ -1,0 +1,61 @@
+# An opposing artifact creature and an artifact set X to two while a nonartifact instant is ignored; a later sacrifice does not change X, and counters go to both players’ creatures (CR 601.2b, 601.2d).
+
+[Bot1 Deck]
+Spoils of War
+Black Lotus
+Ornithopter
+Lightning Bolt
+Mountain
+Swamp x20
+
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Memnite
+Ornithopter
+Mox Sapphire
+Opt
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Opt.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Spoils of War.Cast
+! Bot1.Divide(Bot2.Battlefield.Mox Sapphire: 2)
+! Bot1.Divide(Bot1.Battlefield.Ornithopter: 3)
+Bot1.Divide(Bot1.Battlefield.Ornithopter: 1; Bot2.Battlefield.Ornithopter: 1)
+? Bot1.Mana =
+? Stack.Spoils of War.X = 2
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1

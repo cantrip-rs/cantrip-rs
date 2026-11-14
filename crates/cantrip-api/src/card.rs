@@ -724,9 +724,21 @@ impl Asker {
     }
 }
 
+/// Who chooses this target slot instead of the spell or ability's controller.
+/// Cuombajj Witches and Preacher leave their effects controlled by the player
+/// activating them: an opponent choosing targets cannot bypass hexproof against
+/// that controller. With OneOf, the controller first chooses one eligible player.
+#[derive(Clone, Copy)]
+pub enum TargetChooser {
+    Player(fn(&dyn Query, &Asker) -> PlayerId),
+    OneOf(fn(&dyn Query, &Asker) -> Vec<PlayerId>),
+}
+
 /// One target slot (CR 115.1).
 #[derive(Clone, Copy)]
 pub struct TargetSpec {
+    /// None uses the normal chooser; otherwise the chosen player is retained with the stack item.
+    pub chooser: Option<TargetChooser>,
     pub min: u32,
     pub max: u32,
     pub filter: TargetFilter,
@@ -877,6 +889,9 @@ pub struct Cost {
     /// or only cards that pass its filter ("discard a creature card"), a cost that specifies a characteristic of the cards
     /// discarded (CR 701.9c, `ZoneChange::pays_characteristic`).
     pub discard: Discards,
+    /// Discard this many cards at random (CR 601.2h, 701.9b), after every nonrandom cost. Exact, never "as many as possible".
+    /// Coral Helm, Draconian Cylix and Stormbind use one. Chosen by the core's journalled random-choice authority.
+    pub discard_at_random: u8,
     /// Pay X life, X announced with the spell (CR 118.8, 601.2b): Toxic Deluge, Vicious Rivalry.
     pub pay_x_life: bool,
     /// Exile this many cards from your graveyard, other than the source (CR 702.138a escape, and "exile three cards
@@ -1149,6 +1164,7 @@ impl Cost {
             remove_counters_among,
             exile_self,
             discard,
+            discard_at_random,
             pay_x_life,
             exile_from_graveyard,
             exile_from_graveyard_of,
@@ -1190,6 +1206,7 @@ impl Cost {
             && remove_counters_among.is_none()
             && !exile_self
             && discard.is_none()
+            && discard_at_random == 0
             && !pay_x_life
             && exile_from_graveyard == 0
             && exile_from_graveyard_of.is_none()
@@ -1240,6 +1257,7 @@ impl Cost {
         c.remove_counters_among = self.remove_counters_among.map(|r| CountersAmong { count: r.count.saturating_mul(n), ..r }).filter(|_| n > 0);
         c.exile_from_hand = self.exile_from_hand.map(|(k, f)| (k.saturating_mul(n), f)).filter(|_| n > 0);
         c.discard = self.discard.times(n);
+        c.discard_at_random = self.discard_at_random.saturating_mul(n);
         c.permanents = self.permanents.map(|p| PermanentCost { count: p.count * u32::from(n), ..p }).filter(|_| n > 0);
         c
     }
@@ -1249,6 +1267,7 @@ impl Cost {
     /// spell is kicked.
     pub fn most_times(&self) -> u32 {
         let largest = [
+            u32::from(self.discard_at_random),
             u32::from(self.exile_from_graveyard),
             u32::from(self.energy),
             u32::from(self.blight),
@@ -1359,6 +1378,7 @@ impl Cost {
             c.exile_from_hand_for_less = other.exile_from_hand_for_less;
         }
         c.discard = self.discard.and(other.discard);
+        c.discard_at_random = self.discard_at_random.saturating_add(other.discard_at_random);
         c.permanents = match (self.permanents, other.permanents) {
             (Some(a), Some(b)) => {
                 // A tapped permanent chosen after the mana and one chosen before are not one choice.
@@ -1438,6 +1458,7 @@ impl Cost {
             remove_counters_among: None,
             exile_self: false,
             discard: Discards::NONE,
+            discard_at_random: 0,
             pay_x_life: false,
             exile_from_graveyard: 0,
             exile_from_graveyard_of: None,
@@ -1553,6 +1574,32 @@ pub(crate) const fn same_str(a: &str, b: &str) -> bool {
     true
 }
 
+/// The players an ability itself permits to activate it (CR 602.2). The asker names the source's current controller;
+/// `player` is the proposed activator. This replaces the default controller/owner permission, not costs or timing.
+pub type ActivationPlayers = fn(&dyn Query, &Asker, PlayerId) -> bool;
+
+/// An X value evaluated while a cost is announced (CR 107.3, 601.2b).
+/// `targets` are the targets already selected with a single-target action. A definition
+/// depending on targets must not also require X to select those targets.
+pub type XValue = fn(&dyn Query, &Asker, &[Target]) -> u32;
+
+/// A printed definition or upper bound for X. The core owns announcement and cost authority;
+/// the card supplies the number. No change to the engine's quantity types or per-object storage.
+#[derive(Clone, Copy)]
+pub enum XRule {
+    /// X is this value, rather than a value chosen by the controller: Chromatic Armor,
+    /// Voodoo Doll, Reflecting Mirror. Cost determination freezes the payment, not later effect reads.
+    Is(XValue),
+    /// X may be chosen up to this value: Winter's Chill's snow lands.
+    AtMost(XValue),
+    /// A named player's property defines X as the spell is cast: Spoils of War.
+    /// The caster chooses an eligible player; this is not a target.
+    OfPlayer {
+        players: fn(&dyn Query, &Asker, PlayerId) -> bool,
+        value: fn(&dyn Query, &Asker, PlayerId) -> u32,
+    },
+}
+
 /// An activated ability (CR 602). A card writes one with `ability` or `mana_ability` (`crate::ability`).
 #[derive(Clone, Copy)]
 pub struct ActivatedDef {
@@ -1563,6 +1610,13 @@ pub struct ActivatedDef {
     /// "Activate only as an instant" (CR 304.5, 602.5e): requires priority even for a mana ability (CR 605.3a).
     /// Ordinary mana abilities may also be activated while paying; this restriction does not change their classification.
     pub priority_only: bool,
+    /// Preserve the exact mana paid for this activation for a later note instruction.
+    /// Ice Cauldron and Jeweled Amulet use it; ordinary abilities allocate no receipt.
+    pub track_mana_spent: bool,
+    /// "Any player may activate" or "only [players] may activate" (CR 602.2): permission for this ability alone.
+    /// None means its source's controller (owner outside the battlefield). Conditions, costs and timing still apply.
+    /// The asker is the source's controller; the ability's condition and effect instead use its actual activator.
+    pub activators: Option<ActivationPlayers>,
     pub targets: &'static [TargetSpec],
     pub effect: Effect,
     /// A mana ability's own effect (CR 605.1a), where it does more than add the mana `adds` and `adds_any` list: it
@@ -1664,6 +1718,8 @@ pub struct ActivatedDef {
     /// (Crypt Rats, Crimson Hellkite, Atalya, Samite Master's modes), `XMana::ANY` for most. Written `.x_mana(..)`; held to
     /// the Oracle text by `cantrip-cards/tests/x_mana_matches_oracle.rs`.
     pub x_mana: XMana,
+    /// Its printed definition or upper bound for X (CR 107.3, 601.2b); None permits ordinary announced X.
+    pub x_rule: Option<XRule>,
     /// "This ability can't be copied" (CR 101.2, 707.10): no effect copies it while it is on the stack, and an effect that
     /// would does nothing (Gogo, Master of Mimicry).
     pub cant_be_copied: bool,
@@ -1707,6 +1763,8 @@ impl ActivatedDef {
         cost: Cost::NONE,
         timing: Timing::Instant,
         priority_only: false,
+        track_mana_spent: false,
+        activators: None,
         targets: &[],
         effect: no_effect,
         mana: None,
@@ -1738,6 +1796,7 @@ impl ActivatedDef {
         ninjutsu: false,
         x_cant_be_zero: false,
         x_mana: XMana::ANY,
+        x_rule: None,
         cant_be_copied: false,
         divide: None,
         special_action: false,
@@ -1769,6 +1828,7 @@ impl TriggeredDef {
     }
 
     pub const BLANK: TriggeredDef = TriggeredDef {
+        keyword_family: None,
         text: "",
         listens: EventMask(0),
         matches: no_match,
@@ -1866,9 +1926,16 @@ pub struct ManaCombinationEffect {
     pub colors: ColorSet,
 }
 
+/// Keyword families represented by triggered definitions rather than `Keywords` bits (CR 702.23, 702.24).
+/// A family is semantic metadata supplied by its shared keyword implementation, never inferred from display text.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+#[repr(u8)]
+pub enum KeywordFamily { Rampage, CumulativeUpkeep }
+
 /// A triggered ability (CR 603).
 #[derive(Clone, Copy)]
 pub struct TriggeredDef {
+    pub keyword_family: Option<KeywordFamily>,
     pub text: &'static str,
     pub listens: EventMask,
     pub matches: TriggerMatch,
@@ -2003,6 +2070,19 @@ pub enum AbilityDef {
     /// An ability of this creature allowing additional attackers to be blocked (CR 509.1a).
     /// Unlike a rule another permanent imposes, this is lost and copied as an ability.
     BlockAllowance(BlockAllowanceDef),
+    /// Parameterized banding keyword (CR 702.22), held in the ordinary ability slots.
+    BandsWithOthers(BandsWithOthersDef),
+}
+
+/// The named quality of "bands with other [quality]". The quality describes
+/// creatures independently of the holder: legendary creatures, or creatures
+/// named Wolves of the Hunt. The holder must itself match to form such a band.
+pub type BandQuality = fn(&dyn Query, ObjectId) -> bool;
+
+#[derive(Clone, Copy)]
+pub struct BandsWithOthersDef {
+    pub quality: BandQuality,
+    pub text: &'static str,
 }
 
 /// A creature's own ability to block additional attackers. `u32::MAX` means any number.
@@ -2045,6 +2125,7 @@ impl AbilityDef {
             AbilityDef::PlayRule(p) => p.text,
             AbilityDef::RegenerationBan(ban) => ban.text,
             AbilityDef::BlockAllowance(allowance) => allowance.text,
+            AbilityDef::BandsWithOthers(bands) => bands.text,
         }
     }
 }
@@ -2654,6 +2735,32 @@ pub type SpellRule = fn(&dyn Query, &Asker, PlayerId, ObjectId) -> bool;
 /// Lookout).
 pub type BlockRule = fn(&dyn Query, ObjectId, ObjectId, ObjectId) -> bool;
 
+/// The participants counted by a declaration restriction, not combat events.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum CombatRole { Attacker, Blocker }
+
+/// A restriction on companions in a complete declaration (CR 508.1c, 509.1b).
+/// Caverns of Despair counts all attackers/blockers, Errantry allows no other
+/// attacker, and Orcish Conscripts requires two others. The core snapshots
+/// membership, judges full declarations and maximizes requirements with it.
+#[derive(Clone, Copy)]
+pub struct CombatGroupRule {
+    pub role: CombatRole,
+    pub applies: fn(&dyn Query, &Asker, ObjectId) -> bool,
+    pub counted: fn(&dyn Query, &Asker, ObjectId, ObjectId) -> bool,
+    pub others_only: bool,
+    pub at_least: u32,
+    pub at_most: u32,
+}
+
+/// Landwalk ignored when judging this block (CR 509.1b, 609.4, 702.14c), not abilities removed from the attacker.
+/// Great Wall and Deadfall ignore their named landwalk; Staff of the Ages ignores every landwalk. The callback may
+/// restrict the blocker or attacker and reads named land types through the source's words (CR 612). Named basic
+/// landwalk references include their snow counterparts, as for other ability references (CR 702.1d).
+/// Every other blocking restriction still applies. Sources with no functioning abilities provide no exception.
+pub type LandwalkException = fn(&dyn Query, &Asker, ObjectId, ObjectId) -> Keywords;
+
+
 /// Additional attackers a blocker may block because of a static rule of this source (CR 509.1a).
 /// Unlike an ability granted to the blocker, the rule holds if the blocker loses its abilities.
 /// Brave the Sands and High Ground each permit a creature their controller controls to block one more.
@@ -2780,6 +2887,12 @@ pub type MustBeBlocked = fn(&dyn Query, ObjectId, ObjectId) -> bool;
 /// whose condition fails afterwards stays attacking (CR 506.4).
 pub type AttackRule = fn(&dyn Query, &Asker, ObjectId, Target) -> bool;
 
+/// Permission to ignore summoning sickness for one attack (CR 302.6, 508.1a,
+/// 609.4): Instill Energy and Chaos Lord. True permits this creature to attack
+/// this defender as though it had haste; it grants no keyword, no tap/untap
+/// cost permission, and overrides no other attack restriction.
+pub type AttackHasteRule = fn(&dyn Query, &Asker, ObjectId, Target) -> bool;
+
 /// A static ability that makes attacking cost something (CR 508.1d, 508.1h): "creatures can't attack you unless their
 /// controller pays {2} for each creature they control that's attacking you" (Propaganda, Ghostly Prison, Windborn Muse),
 /// "creatures can't attack you or planeswalkers you control unless their controller pays {1} for each of those creatures"
@@ -2791,6 +2904,19 @@ pub type AttackRule = fn(&dyn Query, &Asker, ObjectId, Target) -> bool;
 /// that attacks each combat if able need not attack where every attack open to it costs something (CR 508.1d).
 /// `cantrip_mechanics::statics` has the shared ones.
 pub type AttackCostRule = fn(&dyn Query, &Asker, ObjectId, Target) -> Option<ManaCost>;
+
+/// A fixed cost for each attack to which `applies` is true (CR 508.1h-j).
+/// Flooded Woodlands and Reclamation ask for a land per matching attacker;
+/// Leviathan asks for two Islands. The declaring player pays, with filters and
+/// self references read from this rule's source and linked text. All applicable
+/// costs are locked after attackers tap, before mana abilities, then paid by
+/// the ordinary cost scheduler in the payer's chosen order. Announced X and
+/// optional cost announcements are not part of this fixed-cost interface.
+#[derive(Clone, Copy)]
+pub struct AttackPayment {
+    pub applies: fn(&dyn Query, &Asker, ObjectId, Target) -> bool,
+    pub cost: Cost,
+}
 
 /// A static ability that says how many creatures may attack a given player, planeswalker or battle in one declaration of
 /// attackers (CR 508.1c): asked, while the object that has it is on the battlefield with its abilities, of every player,
@@ -3127,6 +3253,44 @@ pub type FaceUpBan = fn(&dyn Query, &Asker, ObjectId) -> bool;
 /// doesn't untap during its controller's untap step". A permanent's own, printed or granted, is `Keyword::DoesNotUntap`.
 pub type UntapBan = fn(&dyn Query, &Asker, ObjectId) -> bool;
 
+/// A limit on the active player's simultaneous untap (CR 502.3): Smoke limits
+/// creatures, Damping Field artifacts and Winter Orb lands. Every applicable
+/// limit constrains the same selection; a permanent of several kinds counts
+/// toward each. This is neither an untap ban nor a limit on untapping by effects.
+#[derive(Clone, Copy, Debug)]
+pub struct UntapLimit {
+    pub applies: fn(&dyn Query, &Asker, PlayerId) -> bool,
+    pub permanents: ObjectFilter,
+    pub amount: u32,
+}
+
+/// A static ability that skips a step for the players it names (CR 500.11, 614.10):
+/// Stasis skips every untap step; Necropotence skips its controller's draw step.
+/// The supported steps are Untap, Upkeep and Draw. No step begins, so neither
+/// its actions nor beginning triggers occur.
+#[derive(Clone, Copy, Debug)]
+pub struct SkipStep {
+    pub applies: fn(&dyn Query, &Asker, PlayerId) -> bool,
+    pub step: Step,
+}
+
+/// A maximum-hand-size change applied in timestamp order (CR 402.2, 613.11).
+#[derive(Clone, Copy, Debug)]
+pub enum HandSize {
+    Unlimited,
+    Set(u32),
+    Adjust(i32),
+}
+
+/// A static rule about a player's hand size: Cursed Rack sets a chosen opponent's;
+/// Jin-Gitaxias, Core Augur reduces opponents' sizes. It follows the source's
+/// current controller and stops when the source loses its abilities.
+#[derive(Clone, Copy, Debug)]
+pub struct HandSizeRule {
+    pub applies: fn(&dyn Query, &Asker, PlayerId) -> bool,
+    pub size: HandSize,
+}
+
 /// A static ability that says a permanent can't phase in (CR 702.26a, 101.2), asked of the permanent that would phase in:
 /// The City on the Edge of Forever's Human token, "Permanents can't phase in." A rule of the game, not an ability of the
 /// permanent that would phase in, so it holds whatever abilities that one has lost (CR 613.1f).
@@ -3277,6 +3441,9 @@ pub enum PlayRule {
     /// Benjamin Sisko, Besieged and Garruk's Horde. Every player sees the current top,
     /// subject to the announcement barrier of CR 401.5. This grants no play permission.
     RevealLibraryTop,
+    /// The selected players play with their hands revealed: Enduring Renewal, Revelation, Zur's Weirding.
+    /// The predicate is asked with the rule's source/controller and the player whose hand it opens.
+    HandRevealed(fn(&dyn Query, &Asker, PlayerId) -> bool),
     /// "As long as [condition], [rules]": the rules apply only while the condition holds, asked with the permanent as source
     /// and its controller. A Case's "Solved - [static ability]" means "As long as this Case is solved, [static ability]"
     /// (CR 702.169b): `cantrip_mechanics::solved::play_rules`.
@@ -3422,6 +3589,8 @@ pub struct CardDef {
     /// Life, Consume Spirit: `XMana::only(Mana::B)`; Emblazoned Golem: `XMana::COLORED_ONE_EACH`), `XMana::ANY` for most.
     /// Held to the Oracle text by `cantrip-cards/tests/x_mana_matches_oracle.rs`.
     pub x_mana: XMana,
+    /// Its printed definition or upper bound for X (CR 107.3, 601.2b); None permits ordinary announced X.
+    pub x_rule: Option<XRule>,
     /// Delayed abilities created as it is cast for a way, with no stack item of their own (CR 608.3g, 603.7a): a pair
     /// of the way (as `ways[n - 1]`) and the index in `delayed`. The ability triggers at the beginning of the next end
     /// step, aimed at the permanent the spell becomes: dash's "return it to its owner's hand" (CR 702.109a), blitz's.
@@ -3652,6 +3821,8 @@ pub struct CardDef {
     pub spell_rules: &'static [SpellRule],
     /// Its static abilities that limit blocking (CR 509.1b), while it is on the battlefield.
     pub block_rules: &'static [BlockRule],
+    /// Landwalk abilities ignored for a block, without removing those abilities (CR 609.4).
+    pub landwalk_exceptions: &'static [LandwalkException],
     /// Static rules that let a blocker block additional attackers (CR 509.1a).
     pub additional_blocks: &'static [AdditionalBlocks],
     /// Its static abilities that limit how many creatures may block an attacker (CR 509.1b), while it is on the battlefield.
@@ -3668,8 +3839,12 @@ pub struct CardDef {
     /// Its static abilities that forbid a creature to attack alone (CR 508.1c): each rule is false of the creature it is
     /// about, as Pet Sehlat's "This creature can't attack alone" is. Read as a declaration of exactly one attacker is judged.
     pub attack_alone_rules: &'static [AttackRule],
+    /// Count restrictions on complete attack/block declarations.
+    pub combat_groups: &'static [CombatGroupRule],
     /// Its static abilities that make attacking cost something (CR 508.1d, 508.1h), while it is on the battlefield.
     pub attack_costs: &'static [AttackCostRule],
+    /// Fixed costs, including nonmana components, for individual attacks.
+    pub attack_cost_rules: &'static [AttackPayment],
     /// Its static abilities that limit how many creatures may attack a player, planeswalker or battle (CR 508.1c), while
     /// it is on the battlefield with its abilities: Judoon Enforcers' and, while she is tapped, Mirri, Weatherlight
     /// Duelist's "No more than one creature can attack you each combat"; The Eternal Wanderer's and Tomik, Orzhov
@@ -3681,6 +3856,8 @@ pub struct CardDef {
     /// Its static abilities that goad creatures (CR 701.15a), while it is on the battlefield with its abilities: "All
     /// Tribbles ... are goaded". The goader is the source's controller (CR 701.15b).
     pub goads: &'static [GoadRule],
+    /// Attack-only exceptions to summoning sickness while this permanent has its abilities.
+    pub attacks_as_though_haste: &'static [AttackHasteRule],
     /// Its static abilities that change who can target what and whether ward triggers, while it is on the battlefield.
     pub targeting_rules: &'static [TargetingRule],
     /// Its static abilities that give players keyword abilities ("You have shroud", CR 702.18a), while it is on the
@@ -3752,6 +3929,12 @@ pub struct CardDef {
     /// Its static abilities that say permanents don't untap during their controllers' untap steps (CR 502.3), while it is on
     /// the battlefield with its abilities. See `UntapBan`.
     pub untap_bans: &'static [UntapBan],
+    /// Simultaneous untap limits while this permanent has its abilities. See `UntapLimit`.
+    pub untap_limits: &'static [UntapLimit],
+    /// Steps skipped while this permanent has its abilities. See `SkipStep`.
+    pub skip_steps: &'static [SkipStep],
+    /// Maximum hand size rules for players named by their predicates.
+    pub hand_size_rules: &'static [HandSizeRule],
     /// Its static abilities that say permanents can't phase in (CR 702.26a, 101.2), while it is on the battlefield with
     /// its abilities: The City on the Edge of Forever's Human token. See `PhaseInBan`.
     pub phase_in_bans: &'static [PhaseInBan],
@@ -3861,7 +4044,7 @@ impl CardDef {
         colors: None,
         color_identity: ColorSet::NONE,
         types: TypeSet::NONE,
-        supertypes: Supertypes { basic: false, legendary: false, snow: false },
+        supertypes: Supertypes { basic: false, legendary: false, snow: false, world: false },
         subtypes: SubtypeSet::NONE,
         power: None,
         toughness: None,
@@ -3887,6 +4070,7 @@ impl CardDef {
         late_targets: false,
         x_cant_be_zero: false,
         x_mana: XMana::ANY,
+        x_rule: None,
         additional_cost: None,
         additional_choice: &[],
         enters: None,
@@ -3955,6 +4139,7 @@ impl CardDef {
         cast_rules: &[],
         spell_rules: &[],
         block_rules: &[],
+        landwalk_exceptions: &[],
         additional_blocks: &[],
         blocker_limits: &[],
         block_capacities: &[],
@@ -3962,10 +4147,13 @@ impl CardDef {
         must_be_blocked: &[],
         attack_rules: &[],
         attack_alone_rules: &[],
+        combat_groups: &[],
         attack_costs: &[],
+        attack_cost_rules: &[],
         attack_limits: &[],
         attacks_despite_defender: &[],
         goads: &[],
+        attacks_as_though_haste: &[],
         targeting_rules: &[],
         player_keywords: &[],
         player_protection: &[],
@@ -3988,6 +4176,9 @@ impl CardDef {
         regeneration_bans: &[],
         face_up_bans: &[],
         untap_bans: &[],
+        untap_limits: &[],
+        skip_steps: &[],
+        hand_size_rules: &[],
         phase_in_bans: &[],
         cant_become_untapped: &[],
         damage_by_toughness: &[],
@@ -4062,14 +4253,18 @@ impl CardDef {
             (!self.cast_rules.is_empty(), "cast rules"),
             (!self.spell_rules.is_empty(), "spell rules"),
             (!self.block_rules.is_empty(), "block rules"),
+            (!self.landwalk_exceptions.is_empty(), "landwalk blocking exceptions"),
             (!self.additional_blocks.is_empty(), "additional blocks"),
             (!self.blocker_limits.is_empty(), "blocker limits"),
             (!self.block_capacities.is_empty(), "block capacities"),
             (!self.block_requirements.is_empty(), "block requirements"),
             (!self.must_be_blocked.is_empty(), "must be blocked"),
             (!self.attack_rules.is_empty(), "attack rules"),
+            (!self.attacks_as_though_haste.is_empty(), "attack-only haste permissions"),
             (!self.attack_alone_rules.is_empty(), "a rule against attacking alone"),
+            (!self.combat_groups.is_empty(), "combat group restrictions"),
             (!self.attack_costs.is_empty(), "attack costs"),
+            (!self.attack_cost_rules.is_empty(), "attack payments"),
             (!self.attack_limits.is_empty(), "attack limits"),
             (!self.attacks_despite_defender.is_empty(), "attacking despite defender"),
             (!self.goads.is_empty(), "static goads"),
@@ -4095,6 +4290,9 @@ impl CardDef {
             (!self.regeneration_bans.is_empty(), "regeneration bans"),
             (!self.face_up_bans.is_empty(), "face-up bans"),
             (!self.untap_bans.is_empty(), "untap bans"),
+            (!self.untap_limits.is_empty(), "untap limits"),
+            (!self.skip_steps.is_empty(), "skipped steps"),
+            (!self.hand_size_rules.is_empty(), "hand size rules"),
             (!self.phase_in_bans.is_empty(), "phase-in bans"),
             (!self.cant_become_untapped.is_empty(), "rules against becoming untapped"),
             (!self.damage_by_toughness.is_empty(), "damage by toughness"),
@@ -4283,6 +4481,12 @@ pub struct CardTable {
     /// Which cards have a control-changing static ability (CR 613.1b, `Layer::Control`): what tells whether control could
     /// change without working out the static sources.
     pub control_statics: Vec<bool>,
+    /// Printed Worlds and definitions that can change the world supertype in layer 4, including abilities they grant.
+    /// Checked on live game sources, never as a global card-table guard.
+    pub world_sensitive: Vec<bool>,
+    /// Definitions whose own activated abilities name different activators. Checked on live source texts; an ability
+    /// acquired from another source is checked separately through the layers' acquisition guard.
+    pub other_activators: Vec<bool>,
     /// Which cards could have a triggered ability that may look back in time (CR 603.10, `TriggeredDef::may_look_back`) of
     /// their own: one they print, one they list to give (`CardDef::delayed`), any a static ability of theirs could give
     /// themselves, or, for a Room, one a door prints (CR 709.5; `CardTable::new`) - the objects a look-back pass needs as
@@ -4301,6 +4505,8 @@ pub struct CardTable {
     /// Which cards have play rules, and whether any does: land plays look for them only when one might.
     pub play_rules: Vec<bool>,
     pub any_play_rules: bool,
+    /// Definitions that list continuous hand visibility, including rules they can grant. Checked on live sources.
+    pub hand_visibility: Vec<bool>,
     /// Which cards list a play rule to give (`AbilityDef::PlayRule` in `delayed`), and whether any does: what objects were
     /// given is looked for only when one might have been.
     pub grants_play_rules: Vec<bool>,
@@ -4342,6 +4548,10 @@ pub struct CardTable {
     /// functions off the battlefield (`TriggeredDef::functions`, CR 113.6): the only cards that `settle::collect_batch` asks of
     /// such an event in a hand, a graveyard, exile, a library or on the stack. False for every card printed so far.
     pub activation_triggers_elsewhere: Vec<bool>,
+    /// Per-card candidates for ordinary triggers on tapping for mana, read
+    /// against actual objects in the game; triggered mana abilities are separate.
+    pub mana_tap_observers: Vec<bool>,
+    pub mana_tap_observers_elsewhere: Vec<bool>,
     /// Per card: the fused split spell's target specs of a split card with fuse (CR 702.102b: the left half's, then the right
     /// half's), made once as the table is.
     pub fused_targets: Vec<Option<&'static [TargetSpec]>>,
@@ -4777,6 +4987,8 @@ impl CardTable {
         // A static ability given in layer 6 applies from there on (CR 613.1f): once given, in layer 6 itself, and from 7a on.
         // One of an earlier layer would come into being after its layer was done, and would be quietly absent: refused.
         for card in &cards {
+            assert!(card.skip_steps.iter().all(|rule| matches!(rule.step, Step::Untap | Step::Upkeep | Step::Draw)),
+                "{}: skipped steps currently support Untap, Upkeep and Draw", card.name);
             for ability in card.abilities.iter().chain(card.delayed) {
                 if let AbilityDef::Static(s) = ability {
                     assert!(s.layer >= Layer::Ability, "{}: a granted static ability applies in layer 6 or later (CR 613.1f)", card.name);
@@ -4868,6 +5080,11 @@ impl CardTable {
             .collect();
         let statics: Vec<bool> = cards.iter().map(|c| c.statics.iter().any(|s| !s.own)).collect();
         let control_statics: Vec<bool> = cards.iter().map(|c| c.statics.iter().any(|s| s.layer == Layer::Control)).collect();
+        let world_sensitive = cards.iter().map(|c| c.supertypes.world
+            || c.statics.iter().any(|s| s.layer == Layer::Type)
+            || c.delayed.iter().any(|a| matches!(a, AbilityDef::Static(s) if s.layer == Layer::Type))).collect();
+        let other_activators = cards.iter().map(|c| c.abilities.iter()
+            .any(|a| matches!(a, AbilityDef::Activated(d) if d.activators.is_some()))).collect();
         let looks_back = |a: &AbilityDef| matches!(a, AbilityDef::Triggered(t) if t.may_look_back());
         let look_back: Vec<bool> = cards
             .iter()
@@ -4901,6 +5118,15 @@ impl CardTable {
         let exile_statics = cards.iter().any(|c| c.statics.iter().any(|s| s.from == ZoneKind::Exile));
         let play_rules: Vec<bool> = cards.iter().map(|c| !c.play_rules.is_empty()).collect();
         let any_play_rules = play_rules.iter().any(|&s| s);
+        fn opens_hand(rule: &PlayRule) -> bool {
+            match rule {
+                PlayRule::HandRevealed(_) => true,
+                PlayRule::While(_, rules) => rules.iter().any(opens_hand),
+                _ => false,
+            }
+        }
+        let hand_visibility = cards.iter().map(|c| c.play_rules.iter().any(opens_hand)
+            || c.delayed.iter().any(|a| matches!(a, AbilityDef::PlayRule(d) if opens_hand(&d.rule)))).collect();
         let grants_play_rules: Vec<bool> = cards.iter().map(|c| c.delayed.iter().any(|a| matches!(a, AbilityDef::PlayRule(_)))).collect();
         let any_granted_play_rules = grants_play_rules.iter().any(|&g| g);
         let replaces: Vec<bool> = cards.iter().map(|c| !c.replacements.is_empty() || !c.preventions.is_empty()).collect();
@@ -4915,7 +5141,7 @@ impl CardTable {
         let designators: Vec<bool> = cards.iter().map(|c| c.ascend || c.storied).collect();
         let engines: Vec<bool> = cards.iter().map(|c| c.start_your_engines).collect();
         let block_rules: Vec<bool> =
-            cards.iter().map(|c| !c.block_rules.is_empty() || !c.blocker_limits.is_empty() || !c.block_capacities.is_empty() || !c.additional_blocks.is_empty()).collect();
+            cards.iter().map(|c| !c.block_rules.is_empty() || !c.landwalk_exceptions.is_empty() || !c.blocker_limits.is_empty() || !c.block_capacities.is_empty() || !c.additional_blocks.is_empty()).collect();
         let attack_rules: Vec<bool> = cards.iter().map(|c| !c.attack_rules.is_empty()).collect();
         let attack_alone_rules: Vec<bool> = cards.iter().map(|c| !c.attack_alone_rules.is_empty()).collect();
         let goads: Vec<bool> = cards.iter().map(|c| !c.goads.is_empty()).collect();
@@ -4944,6 +5170,16 @@ impl CardTable {
                 })
             })
             .collect();
+        let mana_tap_observers: Vec<bool> = cards.iter().map(|c| {
+            c.abilities.iter().chain(c.delayed).any(|a| matches!(a, AbilityDef::Triggered(t)
+                if !t.mana_ability && t.listens.intersects(EventMask::TAPPED_FOR_MANA)))
+                || c.statics.iter().any(|s| s.own && s.layer == Layer::Ability)
+        }).collect();
+        let mana_tap_observers_elsewhere: Vec<bool> = cards.iter().map(|c| {
+            c.abilities.iter().any(|a| matches!(a, AbilityDef::Triggered(t)
+                if !t.mana_ability && t.listens.intersects(EventMask::TAPPED_FOR_MANA)
+                && t.functions.0 & !crate::ability::ON_THE_BATTLEFIELD.0 != 0))
+        }).collect();
         let state_triggers: Vec<bool> = cards
             .iter()
             .map(|c| c.abilities.iter().chain(c.delayed).any(|a| matches!(a, AbilityDef::Triggered(t) if t.state.is_some())))
@@ -4982,6 +5218,8 @@ impl CardTable {
             functions_elsewhere,
             statics,
             control_statics,
+            world_sensitive,
+            other_activators,
             look_back,
             zone_words,
             zone_word_cards,
@@ -4990,6 +5228,7 @@ impl CardTable {
             exile_statics,
             play_rules,
             any_play_rules,
+            hand_visibility,
             grants_play_rules,
             any_granted_play_rules,
             replaces,
@@ -5005,6 +5244,8 @@ impl CardTable {
             mana_triggers,
             activation_triggers,
             activation_triggers_elsewhere,
+            mana_tap_observers,
+            mana_tap_observers_elsewhere,
             fused_targets,
             state_triggers,
             ability_grants,
@@ -5067,6 +5308,7 @@ impl CardTable {
                 table.state_triggers[front] |= triggered(|t| t.state.is_some());
                 table.mana_triggers[front] |= triggered(|t| t.mana_ability);
                 table.activation_triggers[front] |= triggered(|t| t.listens.intersects(EventMask::ABILITY_ACTIVATED));
+                table.mana_tap_observers[front] |= triggered(|t| !t.mana_ability && t.listens.intersects(EventMask::TAPPED_FOR_MANA));
                 let ids = (table.find(left.name), table.find(right.name));
                 table.halves[front] = Some((ids.0.expect("a door is in the card table"), ids.1.expect("a door is in the card table")));
                 // Both doors are printed on the Room card (CR 607.1, 709.5).
@@ -5213,21 +5455,27 @@ impl CardTable {
     /// object with no exception text anywhere - nearly every one - walks a plain list of its own and its components' cards,
     /// a small iterator; any other walks `texts_with_exclusions`, without the exclusions (which only the layers read), boxed
     /// so that the plain walk does not carry its size.
+    #[inline]
     pub fn texts<'a>(&self, s: &'a GameState, obj: &'a Obj) -> impl Iterator<Item = CardId> + use<'a> {
+        Self::texts_of(s, obj, self.current(obj))
+    }
+
+    /// The same text walk when the current definition is already known, preserving component and CDA exclusions.
+    #[inline]
+    pub fn texts_of<'a>(s: &'a GameState, obj: &'a Obj, card: CardId) -> impl Iterator<Item = CardId> + use<'a> {
         let copy = obj.copy.as_ref().filter(|_| obj.marks.face_down_as.is_none());
         let sources = copy.filter(|c| c.merged != 0).map_or(&[][..], |c| s.merged_sources(c));
-        let card = self.current(obj);
         if no_exception_texts(copy, sources) {
             Texts::Own(std::iter::once(card).chain(sources.iter().map(|v| v.card)))
         } else {
-            let all: Box<dyn Iterator<Item = CardId> + 'a> = Box::new(self.texts_with_exclusions(s, card, copy).map(|(card, _, _)| card));
+            let all: Box<dyn Iterator<Item = CardId> + 'a> = Box::new(Self::texts_with_exclusions(s, card, copy).map(|(card, _, _)| card));
             Texts::Excepted(all)
         }
     }
 
     /// The same text walk with its component of origin and CR 707.9d exclusions. An exception text belongs to the
     /// component whose values acquired it, not the card defining the quoted ability. No state beyond copiable values.
-    fn texts_with_exclusions<'a>(&self, s: &'a GameState, card: CardId, copy: Option<&'a Copiable>) -> impl Iterator<Item = (CardId, Option<CardId>, CdaExclusions)> + use<'a> {
+    fn texts_with_exclusions<'a>(s: &'a GameState, card: CardId, copy: Option<&'a Copiable>) -> impl Iterator<Item = (CardId, Option<CardId>, CdaExclusions)> + use<'a> {
         let sources = copy.filter(|c| c.merged != 0).map_or(&[][..], |c| s.merged_sources(c));
         let excluded = copy.map_or(CdaExclusions::NONE, Copiable::excluded_cdas);
         let merged_excluded = copy.map_or(CdaExclusions::NONE, Copiable::merged_excluded_cdas);
@@ -5273,7 +5521,7 @@ impl CardTable {
     /// The same walk for the values the layers are judging, including a face-down permanent as it would be face up
     /// (CR 708.8). This changes no row: the layers supply the effective primary card and copy values they already use.
     pub fn texts_linked_with_exclusions_of<'a>(&'a self, s: &'a GameState, id: ObjectId, card: CardId, copy: Option<&'a Copiable>) -> impl Iterator<Item = (CardId, Option<Linked>, CdaExclusions)> + use<'a> {
-        self.texts_with_exclusions(s, card, copy).map(move |(card, component, excluded)| {
+        Self::texts_with_exclusions(s, card, copy).map(move |(card, component, excluded)| {
             (card, component.map(|c| self.component_link(s, id, c)), excluded)
         })
     }
@@ -5378,7 +5626,7 @@ impl CardTable {
         match self.ability(ability) {
             AbilityDef::Activated(a) => a.modal,
             AbilityDef::Triggered(t) => t.modal,
-            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => None,
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => None,
         }
     }
 
@@ -5387,7 +5635,7 @@ impl CardTable {
     pub fn cost_choice_of(&self, ability: AbilityRef) -> &'static [ExtraCost] {
         match self.ability(ability) {
             AbilityDef::Activated(a) => a.cost_choice,
-            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => &[],
+            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => &[],
         }
     }
 

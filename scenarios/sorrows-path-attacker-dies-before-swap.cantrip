@@ -1,0 +1,49 @@
+# The tap trigger kills one attacker before the exchange; its blocker is reassigned, while the other leaves combat (CR 603.3).
+[Bot1 Deck]
+Sorrow's Path
+Black Lotus
+Black Lotus
+Grizzly Bears
+Centaur Courser
+Island x20
+[Bot2 Deck]
+Memnite
+Phyrexian Walker
+Island x20
+[Actions]
+Bot1.Hand.Sorrow's Path.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Centaur Courser.Cast
+? Bot1.Mana = {G}
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Phyrexian Walker.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Grizzly Bears; Centaur Courser)
+Bot2.Block(Memnite > Grizzly Bears; Phyrexian Walker > Centaur Courser)
+Bot1.Battlefield.Sorrow's Path.Activate
+! Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+! Bot1.Target(Count: 1)
+! Bot1.Target(Memnite; Memnite)
+Bot1.Target(Memnite; Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sorrow's Path.Tapped = true
+? Bot1.Life = 18
+? Bot1.Graveyard = Grizzly Bears; Black Lotus; Black Lotus
+? Bot1.Battlefield.Centaur Courser.Damage = 2
+? Bot2.Battlefield.Memnite.Damage = 0
+? Bot2.Battlefield.Phyrexian Walker.Damage = 0
+Bot1.Pass
+Bot2.Pass
+? Combat.Blocks = Memnite > Centaur Courser
+[Expect]
+Bot1.Life = 18

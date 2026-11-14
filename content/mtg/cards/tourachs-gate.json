@@ -1,0 +1,6 @@
+{
+  "name": "Tourach's Gate",
+  "manaCost": "{1}{B}{B}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant land you control\nSacrifice a Thrull: Put three time counters on this Aura.\nAt the beginning of your upkeep, remove a time counter from this Aura. If there are no time counters on this Aura, sacrifice it.\nTap enchanted land: Attacking creatures you control get +2/-1 until end of turn. Activate only if enchanted land is untapped."
+}

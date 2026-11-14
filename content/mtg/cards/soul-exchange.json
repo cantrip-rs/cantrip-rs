@@ -1,0 +1,6 @@
+{
+  "name": "Soul Exchange",
+  "manaCost": "{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, exile a creature you control.\nReturn target creature card from your graveyard to the battlefield. Put a +2/+2 counter on that creature if the exiled creature was a Thrull."
+}

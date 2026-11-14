@@ -1,0 +1,11 @@
+{
+  "name": "Ur-Drago",
+  "manaCost": "{3}{U}{U}{B}{B}",
+  "type": "Legendary Creature — Elemental",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "First strike\nCreatures with swampwalk can be blocked as though they didn't have swampwalk.",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

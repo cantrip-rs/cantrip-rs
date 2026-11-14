@@ -9,6 +9,7 @@ pub mod assist;
 pub mod assimilate;
 pub mod attach;
 pub mod bargain;
+pub mod banding;
 pub mod behold;
 pub mod blight;
 pub mod bestow;
@@ -1244,3 +1245,4 @@ pub fn hideaway(g: &mut dyn Game, item: &StackItem, count: usize) -> Result<(), 
 }
 
 pub mod commander;
+pub mod notes;

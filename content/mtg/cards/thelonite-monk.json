@@ -1,0 +1,8 @@
+{
+  "name": "Thelonite Monk",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Insect Monk Cleric",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "{T}, Sacrifice a green creature: Target land becomes a Forest. (This effect lasts indefinitely.)"
+}

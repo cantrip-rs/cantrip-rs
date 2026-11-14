@@ -8,7 +8,7 @@ pub static MARIT_LAGE: CardDef = CardDef {
     has_cost: false,
     colors: Some(ColorSet::of(Color::Black)),
     types: TypeSet::of(&[CardType::Creature]),
-    supertypes: Supertypes { basic: false, legendary: true, snow: false },
+    supertypes: Supertypes { basic: false, legendary: true, snow: false, world: false },
     subtypes: SubtypeSet::of(&[Subtype::Avatar]),
     power: Some(20),
     toughness: Some(20),

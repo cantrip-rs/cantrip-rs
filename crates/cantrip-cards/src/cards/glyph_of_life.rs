@@ -2,19 +2,6 @@ use cantrip_api::*;
 use cantrip_mechanics::{delayed, effects, targets};
 use cantrip_oracle as oracle;
 
-/// "Choose target Wall creature. Whenever that creature is dealt damage by an attacking creature this turn, you gain that much life." (CR 115.1).
-fn choose_target_wall_creature_whenever_target_0(
-    q: &dyn Query,
-    asker: &Asker,
-    t: Target,
-) -> bool {
-    matches!(
-        t, Target::Object(id) if cantrip_mechanics::targets::permanent(q, id) && ((q
-        .chars(id).has_subtype(q.words(asker.source).subtype(Subtype::Wall)) && q
-        .chars(id).is(CardType::Creature)))
-    )
-}
-
 /// "Whenever that creature is dealt damage by an attacking creature this turn" (CR 603.2). The subject is the Wall dealt the
 /// damage, so what several attackers deal it at once is one event for the total (`sums_per_subject`: CR 120.2, 603.2c).
 fn watch_1_event(q: &dyn Query, asker: &Asker, event: &Event) -> Option<Fired> {
@@ -47,7 +34,7 @@ fn choose_target_wall_creature_whenever(g: &mut dyn Game, item: &StackItem) -> R
 
 pub static CARD: CardDef = CardDef {
     spell: spell(
-        &[target(choose_target_wall_creature_whenever_target_0)],
+        &[targets::WALL_CREATURE],
         choose_target_wall_creature_whenever,
     ),
     delayed: &[

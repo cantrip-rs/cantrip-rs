@@ -104,3 +104,47 @@ fn a_maximum_hand_size_a_static_ability_gives_has_its_givers_timestamp() {
     effect(&mut game, bear, bear, EffectKind::MaximumHandSize(Some(4)));
     assert_eq!(maximum_hand_size(&cx(&mut game), YOU), Some(4), "a maximum made after the giver entered is newer");
 }
+
+const THEM:PlayerId=PlayerId(1);
+fn opponent(_: &dyn Query,a:&Asker,p:PlayerId)->bool{p!=a.controller}
+fn anyone(_: &dyn Query,_:&Asker,_:PlayerId)->bool{true}
+static RACK:CardDef=CardDef {name:"Cursed Rack hand-size fixture",types:TypeSet::of(&[CardType::Artifact]),hand_size_rules:&[HandSizeRule {applies:opponent,size:HandSize::Set(4)}],..CardDef::BLANK};
+static REDUCE:CardDef=CardDef {name:"Jin-Gitaxias hand-size fixture",hand_size_rules:&[HandSizeRule {applies:opponent,size:HandSize::Adjust(-7)}],..RACK};
+static ADD:CardDef=CardDef {name:"Hand-size addition fixture",hand_size_rules:&[HandSizeRule {applies:anyone,size:HandSize::Adjust(4)}],..RACK};
+static UNLIMITED:CardDef=CardDef {name:"Hand-size unlimited fixture",hand_size_rules:&[HandSizeRule {applies:anyone,size:HandSize::Unlimited}],..RACK};
+fn hand_game()->Game {
+    let cards=Box::leak(Box::new(CardTable::new([&RACK,&REDUCE,&ADD,&UNLIMITED,&BEAR])));
+    Game::new(cards,&Setup {decks:vec![vec![];3],..Default::default()})
+}
+#[test]
+fn a_static_hand_size_limit_follows_its_controller_and_stops_with_ability_loss(){
+    use cantrip_api::Game as Rules;
+    let mut g=hand_game();let rack=enter(&mut g,&RACK);
+    assert_eq!(maximum_hand_size(&cx(&mut g),YOU),Some(7));
+    for player in [THEM,PlayerId(2)] {assert_eq!(maximum_hand_size(&cx(&mut g),player),Some(4));}
+    g.state.update_obj(rack,|o|o.controller=THEM);
+    assert_eq!(maximum_hand_size(&cx(&mut g),YOU),Some(4));assert_eq!(maximum_hand_size(&cx(&mut g),THEM),Some(7));
+    cx(&mut g).add_effect(rack,rack,EffectKind::LoseAllAbilities,Duration::Indefinite);
+    assert_eq!(maximum_hand_size(&cx(&mut g),YOU),Some(7));
+}
+#[test]
+fn hand_size_adjustments_apply_in_timestamp_order_without_clamping_negative_intermediates(){
+    let mut g=hand_game();let rack=enter(&mut g,&RACK);enter(&mut g,&REDUCE);
+    assert_eq!(maximum_hand_size(&cx(&mut g),THEM),Some(0));enter(&mut g,&ADD);
+    assert_eq!(maximum_hand_size(&cx(&mut g),THEM),Some(1),"4 - 7 + 4 is 1, not 4");
+    let timestamp=g.state.timestamp();g.state.effect_push(ContinuousEffect {source:rack,controller:THEM,affected:rack,timestamp,kind:EffectKind::MaximumHandSize(Some(6)),duration:Duration::Indefinite,words:Words::NONE});
+    assert_eq!(maximum_hand_size(&cx(&mut g),THEM),Some(6));enter(&mut g,&REDUCE);
+    assert_eq!(maximum_hand_size(&cx(&mut g),THEM),Some(0));
+}
+#[test]
+fn unlimited_hand_sizes_and_later_setters_preserve_their_order(){
+    let mut g=hand_game();enter(&mut g,&RACK);enter(&mut g,&UNLIMITED);enter(&mut g,&REDUCE);
+    assert_eq!(maximum_hand_size(&cx(&mut g),THEM),None);enter(&mut g,&RACK);
+    assert_eq!(maximum_hand_size(&cx(&mut g),THEM),Some(4));
+}
+#[test]
+fn a_copied_static_hand_size_limit_applies_at_the_sources_timestamp(){
+    use cantrip_api::Game as Rules;
+    let mut g=hand_game();let bear=enter(&mut g,&BEAR);let card=g.cards.id_of(&RACK);
+    cx(&mut g).set_copy(bear,Copiable::of(card));assert_eq!(maximum_hand_size(&cx(&mut g),THEM),Some(4));
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Voodoo Doll",
+  "manaCost": "{6}",
+  "type": "Artifact",
+  "oracleText": "At the beginning of your upkeep, put a pin counter on this artifact.\nAt the beginning of your end step, if this artifact is untapped, destroy this artifact and it deals damage to you equal to the number of pin counters on it.\n{X}{X}, {T}: This artifact deals damage equal to the number of pin counters on it to any target. X is the number of pin counters on this artifact."
+}

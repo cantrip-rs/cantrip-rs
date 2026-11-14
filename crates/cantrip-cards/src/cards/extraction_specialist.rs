@@ -20,6 +20,5 @@ pub static CARD: CardDef = CardDef {
         "When this creature enters, return target creature card with mana value 2 or less from your graveyard to the battlefield. That creature can't attack or block for as long as you control this creature.",
     )
     .targets(&[targets::CREATURE_CARD_WITH_MANA_VALUE_2_OR_LESS_IN_YOUR_GRAVEYARD])],
-    lasting: &[effects::YOU_CONTROL_SOURCE],
     ..oracle::EXTRACTION_SPECIALIST
 };

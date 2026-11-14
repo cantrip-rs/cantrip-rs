@@ -14,6 +14,8 @@
 //! exactly in polynomial time.
 
 use std::collections::HashMap;
+#[cfg(test)]
+thread_local! { pub(crate) static GROUP_ATTACK_SEARCH_NODES: std::cell::Cell<usize> = const { std::cell::Cell::new(0) }; }
 
 use crate::{AttackCost, ManaCost, ObjectId, PlayerId, Target, count_u32};
 
@@ -51,6 +53,8 @@ pub struct AttackRules {
     pub alone_barred: Vec<ObjectId>,
     /// The most creatures that may attack each capped player, planeswalker or battle (CR 508.1c), one entry each.
     pub limits: Vec<(Target, u32)>,
+    /// Whole-declaration count restrictions (CR 508.1c), empty in ordinary games.
+    pub groups: Vec<crate::CombatGroup>,
     pub most: u32,
     pub suggested: Vec<(ObjectId, Target)>,
 }
@@ -151,6 +155,9 @@ impl AttackRules {
     /// The most requirements any declaration of `eligible` attacking among `targets` obeys without paying a cost (CR
     /// 508.1d), with one that does (`Assignment`).
     pub fn solve(&self, eligible: &[ObjectId], targets: &[Target], costs: &[AttackCost]) -> (u32, Vec<(ObjectId, Target)>) {
+        if !self.groups.is_empty() {
+            return self.solve_groups(eligible, targets, costs, &[], None, true).unwrap_or_default();
+        }
         let gains = self.gains(eligible, targets);
         let rows: Vec<&[u32]> = gains.iter().map(|r| &r[..]).collect();
         let Some(mut best) = Assignment::new(self, &rows, eligible, targets, costs, true, &[]) else { return Default::default() };
@@ -160,6 +167,179 @@ impl AttackRules {
             [(a, t)] if self.alone_barred.contains(&a) => self.not_alone(eligible, targets, costs, &gains, best.total(), a, t),
             _ => (best.total(), declaration),
         }
+    }
+
+    /// Exact branch-and-bound only for live group restrictions. Ordinary games
+    /// keep the polynomial assignment solver. Bounds count each remaining
+    /// creature's best attack; group maxima and impossible minima prune early.
+    fn solve_groups(
+        &self,
+        eligible: &[ObjectId],
+        targets: &[Target],
+        costs: &[AttackCost],
+        fixed: &[(ObjectId, Target)],
+        enough: Option<u32>,
+        free_only: bool,
+    ) -> Option<(u32, Vec<(ObjectId, Target)>)> {
+        for (i, &(a, t)) in fixed.iter().enumerate() {
+            if !eligible.contains(&a)
+                || !targets.contains(&t)
+                || self.bars(a, t)
+                || fixed[..i].iter().any(|x| x.0 == a)
+                || (free_only && !AttackCost::free(costs, a, t))
+            {
+                return None;
+            }
+        }
+        if self.limits.iter().any(|&(t, n)| count_u32(fixed.iter().filter(|x| x.1 == t).count()) > n) {
+            return None;
+        }
+        let mut options: Vec<_> = eligible
+            .iter()
+            .copied()
+            .filter(|a| !fixed.iter().any(|x| x.0 == *a))
+            .map(|a| {
+                let mut choices: Vec<_> = targets
+                    .iter()
+                    .copied()
+                    .filter(|&t| !self.bars(a, t) && (!free_only || AttackCost::free(costs, a, t)))
+                    .map(|t| (t, self.gain(a, t)))
+                    .collect();
+                choices.sort_by_key(|x| std::cmp::Reverse(x.1));
+                (a, choices)
+            })
+            .collect();
+        options.sort_by_key(|x| std::cmp::Reverse(x.1.first().map_or(0, |p| p.1)));
+        let mut after = vec![0; options.len() + 1];
+        for i in (0..options.len()).rev() {
+            after[i] = after[i + 1] + options[i].1.first().map_or(0, |p| p.1);
+        }
+        struct Search<'a> {
+            rules: &'a AttackRules,
+            options: &'a [(ObjectId, Vec<(Target, u32)>)],
+            after: &'a [u32],
+            enough: Option<u32>,
+            chosen: Vec<(ObjectId, Target)>,
+            best: Option<(u32, Vec<(ObjectId, Target)>)>,
+        }
+        impl Search<'_> {
+            fn done(&self) -> bool {
+                self.enough.is_some_and(|n| self.best.as_ref().is_some_and(|b| b.0 >= n))
+            }
+            fn go(&mut self, i: usize, gain: u32) {
+                #[cfg(test)]
+                GROUP_ATTACK_SEARCH_NODES.with(|n| n.set(n.get() + 1));
+                let has = |id| self.chosen.iter().any(|p| p.0 == id);
+                for g in &self.rules.groups {
+                    if !g.subjects.iter().any(|&id| has(id)) {
+                        continue;
+                    }
+                    let count = g.count(has);
+                    let more = g.members.iter().filter(|&&id| !has(id) && self.options[i..].iter().any(|p| p.0 == id && !p.1.is_empty())).count();
+                    if count > g.at_most || count + count_u32(more) < g.at_least {
+                        return;
+                    }
+                }
+                let valid = self.rules.groups.iter().all(|g| g.allows(has))
+                    && !(self.chosen.len() == 1 && self.rules.alone_barred.contains(&self.chosen[0].0));
+                if valid && self.best.as_ref().is_none_or(|b| gain > b.0) && self.enough.is_none_or(|n| gain >= n) {
+                    self.best = Some((gain, self.chosen.clone()));
+                }
+                if self.done() || i == self.options.len() {
+                    return;
+                }
+                let mut remaining = self.after[i];
+                for g in &self.rules.groups {
+                    // Once a subject is chosen, its maximum also bounds the
+                    // remaining requirement gain. A global cap can bound the
+                    // root too: every possible participant is a subject.
+                    if !g.subjects.iter().any(|&id| has(id)) && !self.options[i..].iter().all(|p| g.subjects.contains(&p.0)) {
+                        continue;
+                    }
+                    let mut room = g.at_most.saturating_sub(g.count(has));
+                    let mut bound = 0;
+                    for (id, choices) in &self.options[i..] {
+                        if !g.members.contains(id) {
+                            bound += choices.first().map_or(0, |p| p.1);
+                        } else if room > 0 {
+                            room -= 1;
+                            bound += choices.first().map_or(0, |p| p.1);
+                        }
+                    }
+                    remaining = remaining.min(bound);
+                }
+                let reach = gain + remaining;
+                if self.enough.is_some_and(|n| reach < n) || self.best.as_ref().is_some_and(|b| reach <= b.0) {
+                    return;
+                }
+                let (a, choices) = &self.options[i];
+                for &(t, g) in choices {
+                    if !self.rules.room(t, &self.chosen) {
+                        continue;
+                    }
+                    self.chosen.push((*a, t));
+                    self.go(i + 1, gain + g);
+                    self.chosen.pop();
+                    if self.done() {
+                        return;
+                    }
+                }
+                self.go(i + 1, gain);
+            }
+        }
+        let gain = self.obeyed(fixed);
+        let mut search = Search { rules: self, options: &options, after: &after, enough, chosen: fixed.to_vec(), best: None };
+        search.go(0, gain);
+        search.best
+    }
+
+    fn judge_groups(
+        &self,
+        eligible: &[ObjectId],
+        targets: &[Target],
+        costs: &[AttackCost],
+        attacks: &[(ObjectId, Target)],
+        addable: bool,
+    ) -> AttackVerdict {
+        let mut base = self.clone();
+        base.groups.clear();
+        // Base restrictions remain authoritative; group requirements need the
+        // exact group solver, rather than the ordinary assignment relaxation.
+        base.most = 0;
+        let mut verdict = base.judge(eligible, targets, costs, attacks, false);
+        let has = |id| attacks.iter().any(|p| p.0 == id);
+        let broken = self.groups.iter().find(|g| !g.allows(has));
+        if verdict.issue.is_none() {
+            if let Some(g) = broken {
+                verdict.issue = Some(AttackIssue {
+                    creature: g.subjects.iter().copied().find(|&id| has(id)).unwrap_or(ObjectId::NONE),
+                    words: "can't attack with this group".into(),
+                    other: None,
+                    rule: "508.1c",
+                });
+            } else if self.obeyed(attacks) < self.most {
+                verdict.issue = Some(AttackIssue {
+                    creature: attacks.first().map_or(ObjectId::NONE, |p| p.0),
+                    words: "must satisfy more attack requirements".into(),
+                    other: None,
+                    rule: "508.1d",
+                });
+            }
+        }
+        verdict.complete = verdict.issue.is_none();
+        verdict.free = false;
+        if addable {
+            for &a in eligible.iter().filter(|&&a| !has(a)) {
+                for &t in targets {
+                    let mut fixed = attacks.to_vec();
+                    fixed.push((a, t));
+                    if self.solve_groups(eligible, targets, costs, &fixed, Some(self.most), false).is_some() {
+                        verdict.addable.push((a, t));
+                    }
+                }
+            }
+        }
+        verdict
     }
 
     /// The most requirements a declaration obeys without paying a cost (CR 508.1d) where the best one of all, obeying
@@ -197,6 +377,7 @@ impl AttackRules {
     /// What the rules make of `attacks`, a declaration of `eligible` creatures attacking among `targets`, with what attacks
     /// cost (CR 508.1a-d); with `addable`, which attacks may be added on the way to a legal one too.
     pub fn judge(&self, eligible: &[ObjectId], targets: &[Target], costs: &[AttackCost], attacks: &[(ObjectId, Target)], addable: bool) -> AttackVerdict {
+        if !self.groups.is_empty() { return self.judge_groups(eligible, targets, costs, attacks, addable); }
         let issue = |creature, words: &str, other, rule| Some(AttackIssue { creature, words: words.to_string(), other, rule });
         let mut found = None;
         let mut mendable = true;

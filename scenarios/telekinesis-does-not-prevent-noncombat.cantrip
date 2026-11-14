@@ -1,0 +1,44 @@
+# Telekinesis prevents combat damage but not damage from the same creature's activated ability (CR 615.1).
+[Bot1 Deck]
+Telekinesis
+Mox Sapphire
+Gleemox
+Black Lotus
+Prodigal Sorcerer
+Quirion Ranger
+Mox Emerald
+Forest
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Quirion Ranger.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Prodigal Sorcerer.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Hand.Telekinesis.Cast(Prodigal Sorcerer)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Prodigal Sorcerer.Tapped = true
+Bot1.Battlefield.Quirion Ranger.Activate(Prodigal Sorcerer)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Prodigal Sorcerer.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Life = 19

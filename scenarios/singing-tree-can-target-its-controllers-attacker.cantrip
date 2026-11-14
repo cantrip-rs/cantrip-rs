@@ -1,0 +1,38 @@
+# The Tree can target its controller's attacking creature as well as an opponent's (CR 115.1c, 506.4).
+[Bot1 Deck]
+Singing Tree
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Memnite
+Forest x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Singing Tree.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Battlefield.Singing Tree.Activate(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 0
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Singing Tree.Tapped = true

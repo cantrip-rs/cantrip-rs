@@ -4,12 +4,12 @@ use cantrip_mechanics::{effects, goad, targets, triggers};
 
 /// "When Kang enters, choose target creature an opponent controls. Kang and that creature are goaded for as long as you
 /// control Kang." (CR 701.15, 611.2b): the chosen creature and Kang are goaded by Kang's controller until its controller
-/// no longer controls Kang - the `lasting` entry `YOU_CONTROL_SOURCE` reads that - and each is goaded once, a creature
+/// no longer controls Kang - the native source-control duration checks that - and each is goaded once, a creature
 /// already goaded by that player gaining nothing more (CR 701.15d). Two separate sentences, each judged before the next
 /// (CR 603.8, 608.2c).
 fn goad_kang_and_the_chosen(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(chosen) = targets::object(g, item, 0) else { return Ok(()) };
-    let until = Duration::AsLongAs(g.card_id(&CARD), 0);
+    let until = Duration::WhileSourceControlled;
     goad::goad_for(g, item, chosen, until);
     g.end_sentence();
     goad::goad_for(g, item, item.object, until);
@@ -39,6 +39,5 @@ pub static CARD: CardDef = CardDef {
         .targets(&[targets::CREATURE_YOU_CONTROL])
         .once_per_batch(),
     ],
-    lasting: &[effects::YOU_CONTROL_SOURCE],
     ..oracle::KANG_SUSPICIOUS_CAPTAIN
 };

@@ -1,0 +1,38 @@
+# A returned creature with protection from black gets the counter because putting it there does not target it (CR 118.8, 122.1).
+[Bot1 Deck]
+Black Lotus
+Entomb
+Basal Thrull
+Mox Jet
+Gleemox
+Soul Exchange
+Ornithopter
+White Knight
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(White Knight)
+Bot1.Hand.Basal Thrull.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Soul Exchange.Cast(White Knight)
+? Bot1.Mana =
+! Bot1.Choose()
+! Bot1.Choose(Basal Thrull; Ornithopter)
+Bot1.Choose(Basal Thrull)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.White Knight.Power = 4
+Bot1.Battlefield.White Knight.Toughness = 4
+Bot1.Exile.Basal Thrull.Subtypes = Thrull
+Bot1.Battlefield.Ornithopter.Power = 0

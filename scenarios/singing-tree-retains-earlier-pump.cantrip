@@ -1,0 +1,46 @@
+# An earlier Giant Growth still modifies power after the Tree sets base power (CR 613.4b, 613.4c).
+[Bot1 Deck]
+Singing Tree
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Giant Growth
+Forest
+Forest x20
+[Bot2 Deck]
+Savannah Lions
+Mox Pearl
+Plains x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Singing Tree.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Savannah Lions > Bot1)
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Giant Growth.Cast(Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Savannah Lions.Power = 5
+Bot1.Battlefield.Singing Tree.Activate(Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Savannah Lions.Power = 3
+? Bot2.Battlefield.Savannah Lions.Toughness = 4
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 17

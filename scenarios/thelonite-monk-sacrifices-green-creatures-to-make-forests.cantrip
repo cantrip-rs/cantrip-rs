@@ -1,0 +1,53 @@
+# The Monk taps and sacrifices a green creature to turn either player's land into a Forest indefinitely;
+# the snow supertype remains, and nonland targets and nongreen sacrifices are refused (CR 602.1, 305.7, 611.2a).
+[Bot1 Deck]
+Thelonite Monk
+Black Lotus
+Mox Pearl
+Mox Emerald
+Grizzled Leotau
+Island
+Ornithopter
+Forest x20
+[Bot2 Deck]
+Snow-Covered Island
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzled Leotau.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Thelonite Monk.Cast
+? Bot1.Mana =
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Thelonite Monk.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Thelonite Monk.Activate(Bot2.Battlefield.Snow-Covered Island)
+! Bot1.Choose(Ornithopter)
+Bot1.Choose(Grizzled Leotau)
+? Bot1.Battlefield.Thelonite Monk.Tapped = true
+? Bot1.Graveyard = Grizzled Leotau; Black Lotus
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Snow-Covered Island.Subtypes = Forest
+? Bot2.Battlefield.Snow-Covered Island.Supertypes = Basic; Snow
+! Bot1.Battlefield.Thelonite Monk.Activate(Bot1.Battlefield.Island)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Thelonite Monk.Activate(Bot1.Battlefield.Island)
+Bot1.Choose(Thelonite Monk)
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Island.Subtypes = Forest
+Bot1.Battlefield.Island.Supertypes = Basic
+Bot2.Battlefield.Snow-Covered Island.Subtypes = Forest
+Bot2.Battlefield.Snow-Covered Island.Supertypes = Basic; Snow

@@ -1,0 +1,54 @@
+# A blocker removed and reassigned blocks again, triggering Chub Toad a second time (CR 603.2).
+[Bot1 Deck]
+Sorrow's Path
+Black Lotus
+Black Lotus
+Trained Armodon
+Centaur Courser
+Island x20
+[Bot2 Deck]
+Memnite
+Chub Toad
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Sorrow's Path.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Trained Armodon.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Centaur Courser.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Chub Toad.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Trained Armodon; Centaur Courser)
+Bot2.Block(Memnite > Trained Armodon; Chub Toad > Centaur Courser)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Chub Toad.Power = 3
+Bot1.Battlefield.Sorrow's Path.Activate
+Bot1.Target(Memnite; Chub Toad)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+? Bot1.Battlefield.Trained Armodon.Damage = 2
+? Bot1.Battlefield.Centaur Courser.Damage = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Chub Toad.Power = 5
+? Combat.Blocks = Memnite > Centaur Courser; Chub Toad > Trained Armodon
+[Expect]
+Bot1.Life = 18

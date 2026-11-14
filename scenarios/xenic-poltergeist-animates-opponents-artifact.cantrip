@@ -1,0 +1,31 @@
+# The Poltergeist can animate an opponent's Sol Ring; the resulting artifact
+# creature has power and toughness equal to its mana value (CR 611.2a).
+[Bot1 Deck]
+Black Lotus
+Xenic Poltergeist
+Swamp x20
+[Bot2 Deck]
+Island
+Sol Ring
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Xenic Poltergeist.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Xenic Poltergeist.Activate(Bot2.Battlefield.Sol Ring)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Sol Ring.Types = Artifact; Creature
+Bot2.Battlefield.Sol Ring.Power = 1
+Bot2.Battlefield.Sol Ring.Toughness = 1
+Bot1.Battlefield.Xenic Poltergeist.Tapped = true

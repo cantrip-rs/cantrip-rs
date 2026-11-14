@@ -722,12 +722,13 @@ impl StateDump {
                     }
                     // Each resolved restriction on blocking it (CR 509.1b, 611.2c), while it lasts, in its card's words: an effect, not a
                     // keyword.
-                    let mut restrictions: Vec<&str> = s
+                    let mut restrictions: Vec<String> = s
                         .effects
                         .iter()
                         .filter_map(|e| match e.kind {
                             EffectKind::BlockRestriction { card, index } if e.affected == id => {
-                                game.cards.get(card).lasting_block_rules.get(index as usize).map(|r| r.text)
+                                game.cards.get(card).lasting_block_rules.get(index as usize)
+                                    .map(|r| cantrip_engine::text::changed_text(r.text, game.cards.get(card).name, e.words))
                             }
                             _ => None,
                         })
@@ -743,17 +744,17 @@ impl StateDump {
                     }
                     // Each resolved rule about an open set that takes it in now (CR 611.2c), in its card's words: an effect,
                     // not a keyword.
-                    let mut rules: Vec<&str> = s
+                    let mut rules: Vec<String> = s
                         .effects
                         .iter()
                         .filter_map(|e| match e.kind {
-                            EffectKind::LastingRule { card, index, about } => game
+                            EffectKind::LastingRule { card, index, .. } => game
                                 .cards
                                 .get(card)
                                 .lasting_rules
                                 .get(index as usize)
-                                .filter(|r| (r.applies)(game, &Asker::new(e.source, e.controller), about, id))
-                                .map(|r| r.text),
+                                .filter(|_| game.lasting_rule_applies(e, id))
+                                .map(|r| cantrip_engine::text::changed_text(r.text, game.cards.get(card).name, e.words)),
                             _ => None,
                         })
                         .collect();

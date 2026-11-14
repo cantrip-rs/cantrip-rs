@@ -1,0 +1,6 @@
+{
+  "name": "The Abyss",
+  "manaCost": "{3}{B}",
+  "type": "World Enchantment",
+  "oracleText": "At the beginning of each player's upkeep, destroy target nonartifact creature that player controls of their choice. It can't be regenerated."
+}

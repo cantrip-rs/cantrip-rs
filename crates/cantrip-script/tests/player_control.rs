@@ -165,6 +165,7 @@ static MOUNTAIN: CardDef = CardDef {
         basic: true,
         legendary: false,
         snow: false,
+        world: false,
     },
     subtypes: SubtypeSet::of(&[Subtype::Mountain]),
     ..CardDef::BLANK

@@ -1,0 +1,38 @@
+# Cast after combat, Venomous Breath creates no delayed destruction on the next turn (CR 603.7b).
+[Bot1 Deck]
+Venomous Breath
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Phyrexian Walker
+Island x20
+[Bot2 Deck]
+Crimson Kobolds
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Phyrexian Walker.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Crimson Kobolds.Cast
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Venomous Breath.Cast(Phyrexian Walker)
+? Bot1.Mana =
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Crimson Kobolds)
+Bot1.Block(Phyrexian Walker > Crimson Kobolds)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Phyrexian Walker.Toughness = 3
+Bot2.Battlefield.Crimson Kobolds.Toughness = 1

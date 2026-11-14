@@ -1,0 +1,42 @@
+# The Poltergeist turns its controller's Sol Ring into a 1/1 artifact creature,
+# and the effect has expired by that controller's next upkeep (CR 611.2a).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Sol Ring
+Xenic Poltergeist
+Memnite
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sol Ring.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Xenic Poltergeist.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Xenic Poltergeist.Activate(Bot1.Battlefield.Memnite)
+! Bot1.Battlefield.Xenic Poltergeist.Activate(Bot1.Battlefield.Xenic Poltergeist)
+Bot1.Battlefield.Xenic Poltergeist.Activate(Bot1.Battlefield.Sol Ring)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Xenic Poltergeist.Tapped = true
+? Bot1.Battlefield.Sol Ring.Types = Artifact; Creature
+? Bot1.Battlefield.Sol Ring.Power = 1
+? Bot1.Battlefield.Sol Ring.Toughness = 1
+[T4 Bot2.Upkeep]
+? Bot1.Battlefield.Sol Ring.Types = Artifact; Creature
+[T5 Bot1.Upkeep]
+? Bot1.Battlefield.Sol Ring.Types = Artifact
+[Expect]
+Bot1.Battlefield.Sol Ring.Power = (absent)

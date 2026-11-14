@@ -695,3 +695,48 @@ fn a_read_within_layer_seven_c_finds_the_base_power() {
     enter(&mut g, &SHRINK);
     assert_eq!(read(&g, counts), (Some(4), Some(1)));
 }
+
+
+/// CR 613.4a-d: setting one axis never snapshots the other; later changes to a CDA remain visible there.
+#[test]
+fn setting_one_axis_keeps_the_other_axis_independent_and_obeys_layer_order() {
+    let cards=Box::leak(Box::new(CardTable::new([&BEAR,&WALL,&DEFINED,&ANTHEM])));
+    let mut g=Game::new(cards,&Setup {decks:vec![Vec::new(),Vec::new()],..Default::default()});
+    let creature=enter(&mut g,&BEAR);let anthem=enter(&mut g,&ANTHEM);
+    effect(&mut g,creature,EffectKind::SetPower(0));
+    let c=g.chars(creature);assert_eq!((c.power,c.toughness,c.base_power),(Some(1),Some(3),Some(0)));
+    effect(&mut g,creature,EffectKind::SetToughness(7));
+    let c=g.chars(creature);assert_eq!((c.power,c.toughness,c.base_power),(Some(1),Some(8),Some(0)));
+    // Copying different printed P/T changes the unset base axis, not the selected power.
+    g.state.effects_retain(|e| !matches!(e.kind,EffectKind::SetToughness(_)));
+    let wall=g.cards.id_of(&WALL);g.state.update_obj(creature,|o|o.copy=Some(Copiable::of(wall)));
+    let c=g.chars(creature);assert_eq!((c.power,c.toughness),(Some(1),Some(4)));
+    let defined=g.cards.id_of(&DEFINED);g.state.update_obj(creature,|o|o.copy=Some(Copiable::of(defined)));
+    let c=g.chars(creature);assert_eq!((c.power,c.toughness),(Some(1),Some(7)));
+    effect(&mut g,creature,EffectKind::SwitchPt);
+    let c=g.chars(creature);assert_eq!((c.power,c.toughness),(Some(7),Some(1)));
+    // Removing the anthem still changes the independent axis under the switch.
+    g.state.zone_remove(Zone::BATTLEFIELD,anthem);
+    let c=g.chars(creature);assert_eq!((c.power,c.toughness),(Some(6),Some(0)));
+}
+
+/// CR 613.4b, 613.7: the last setting of each axis wins, with full signed native P/T and journalled rollback.
+#[test]
+fn one_axis_settings_respect_timestamps_signed_values_counters_and_rollback() {
+    let cards=Box::leak(Box::new(CardTable::new([&BEAR])));
+    let mut g=Game::new(cards,&Setup {decks:vec![Vec::new(),Vec::new()],..Default::default()});
+    let creature=enter(&mut g,&BEAR);
+    effect(&mut g,creature,EffectKind::SetPt(5,7));
+    effect(&mut g,creature,EffectKind::SetPower(-2));
+    let c=g.chars(creature);assert_eq!((c.power,c.toughness,c.base_power),(Some(-2),Some(7),Some(-2)));
+    effect(&mut g,creature,EffectKind::SetToughness(i32::MAX));
+    let mark=g.state.mark();let before=crate::loops::position(&g.state);
+    effect(&mut g,creature,EffectKind::SetPower(i32::MIN));
+    let c=g.chars(creature);assert_eq!((c.power,c.toughness),(Some(i32::MIN),Some(i32::MAX)));
+    assert_ne!(crate::loops::position(&g.state),before);
+    g.state.rollback(mark);assert_eq!(crate::loops::position(&g.state),before);
+    effect(&mut g,creature,EffectKind::SetPt(3,4));
+    let c=g.chars(creature);assert_eq!((c.power,c.toughness),(Some(3),Some(4)));
+    let mut cx=cx(&mut g);cx.doer=Some(YOU);cantrip_api::Game::add_counters(&mut cx,creature,CounterKind::PlusOne,2);
+    let c=cx.chars(creature);assert_eq!((c.power,c.toughness,c.base_power),(Some(5),Some(6),Some(3)));
+}

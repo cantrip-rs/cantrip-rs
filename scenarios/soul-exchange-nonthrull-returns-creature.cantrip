@@ -1,0 +1,38 @@
+# Exiling a non-Thrull returns a creature without a counter even when a Thrull remains in play (CR 118.8, 122.1).
+[Bot1 Deck]
+Black Lotus
+Entomb
+Basal Thrull
+Mox Jet
+Gleemox
+Soul Exchange
+Ornithopter
+Grizzly Bears
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+Bot1.Hand.Basal Thrull.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Soul Exchange.Cast(Grizzly Bears)
+? Bot1.Mana =
+! Bot1.Choose()
+! Bot1.Choose(Basal Thrull; Ornithopter)
+Bot1.Choose(Ornithopter)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Exile.Ornithopter.Power = 0
+Bot1.Battlefield.Basal Thrull.Power = 1

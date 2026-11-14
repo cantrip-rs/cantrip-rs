@@ -577,11 +577,23 @@ pub fn add_listed(g: &mut dyn Game, controller: PlayerId, def: &ActivatedDef, ch
 const fn activated(a: AbilityDef, method: &str) -> ActivatedDef {
     match a {
         AbilityDef::Activated(d) => d,
-        AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("{}", method),
+        AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => panic!("{}", method),
     }
 }
 
 impl AbilityDef {
+    /// The text defines X, rather than the activator choosing it (CR 107.3c).
+    pub const fn x_is(self, value: XValue) -> AbilityDef {
+        let def = activated(self, "only an activated ability defines X");
+        AbilityDef::Activated(ActivatedDef { x_rule: Some(XRule::Is(value)), ..def })
+    }
+
+    /// The text limits the X its activator may announce (CR 107.3a).
+    pub const fn x_at_most(self, value: XValue) -> AbilityDef {
+        let def = activated(self, "only an activated ability limits X");
+        AbilityDef::Activated(ActivatedDef { x_rule: Some(XRule::AtMost(value)), ..def })
+    }
+
     /// This mana ability reads its own X only as the amount of mana it produces (or the number of its colors chosen).
     /// Positive X never changes its possible mana types. Allows "could produce" to ignore the ability's costs (CR 106.7).
     pub const fn x_is_mana_amount(self) -> AbilityDef {
@@ -597,7 +609,7 @@ impl AbilityDef {
         match self {
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { targets, ..d }),
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { targets, ..t }),
-            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("a static ability has no targets"),
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => panic!("a static ability has no targets"),
         }
     }
 
@@ -608,7 +620,7 @@ impl AbilityDef {
         match self {
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { produces_mana: true, ..d }),
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { produces_mana: true, ..t }),
-            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("only an activated or triggered ability produces mana"),
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => panic!("only an activated or triggered ability produces mana"),
         }
     }
 
@@ -664,12 +676,29 @@ impl AbilityDef {
         AbilityDef::Activated(ActivatedDef { from, ..activated(self, "only an activated ability is given a zone this way") })
     }
 
+    /// "Only [players] may activate this ability" (CR 602.2). Replaces the default controller/owner permission.
+    /// The predicate reads the source's controller through its asker, and the proposed activator as its third argument.
+    pub const fn activated_by(self, players: ActivationPlayers) -> AbilityDef {
+        AbilityDef::Activated(ActivatedDef { activators: Some(players), ..activated(self, "only an activated ability has activators") })
+    }
+
+    /// "Any player may activate this ability" (CR 602.2). Its costs, conditions and timing are unchanged.
+    pub const fn any_player_may_activate(self) -> AbilityDef {
+        self.activated_by(|_, _, _| true)
+    }
+
+    /// The triggered keyword's family (CR 702.23, 702.24), set by its shared implementation for "has rampage" and
+    /// "doesn't have cumulative upkeep" queries. Display text and the trigger's function pointer are not classifiers.
+    pub const fn keyword_family(self, family: KeywordFamily) -> AbilityDef {
+        AbilityDef::Triggered(TriggeredDef { keyword_family: Some(family), ..triggered_def(self, "only a triggered keyword has this family") })
+    }
+
     /// "Activate only if ..." (CR 602.5b), or a triggered ability's intervening "if" (CR 603.4).
     pub const fn condition(self, condition: Condition) -> AbilityDef {
         match self {
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { condition: Some(condition), ..d }),
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { condition: Some(condition), ..t }),
-            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("a static ability has no condition"),
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => panic!("a static ability has no condition"),
         }
     }
 
@@ -687,7 +716,7 @@ impl AbilityDef {
     pub const fn only_if(self, only_if: Condition) -> AbilityDef {
         match self {
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { only_if: Some(only_if), ..t }),
-            AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("only a triggered ability triggers only if"),
+            AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => panic!("only a triggered ability triggers only if"),
         }
     }
 
@@ -696,7 +725,7 @@ impl AbilityDef {
     pub const fn pay_one_of(self, ways: &'static [ExtraCost]) -> AbilityDef {
         match self {
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { cost_choice: ways, ..d }),
-            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("only an activated ability has a cost"),
+            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => panic!("only an activated ability has a cost"),
         }
     }
 
@@ -706,12 +735,18 @@ impl AbilityDef {
             AbilityDef::Activated(_) if modal.max == ModalDef::COUNTED => panic!("an activated ability has no count for \"that many\" modes"),
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { modal: Some(modal), ..d }),
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { modal: Some(modal), ..t }),
-            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("a static ability has no modes"),
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => panic!("a static ability has no modes"),
         }
     }
 
-    /// The colors its mana of one chosen color may be, worked out when it is offered (CR 607.2a): "any of the exiled
-    /// card's colors".
+    /// Capture the exact mana paid to activate this ability, for its note instruction.
+    pub const fn tracks_mana_spent(self) -> AbilityDef {
+        let d = activated(self, "only an activated ability has an activation payment");
+        assert!(!d.is_mana_ability(), "a noted activation payment currently requires a stack ability");
+        AbilityDef::Activated(ActivatedDef { track_mana_spent: true, ..d })
+    }
+
+    /// The colors its mana of one chosen color may be, worked out when offered (CR 607.2a).
     pub const fn colors_from(self, colors_from: fn(&dyn crate::game::Query, &Asker) -> ColorSet) -> AbilityDef {
         AbilityDef::Activated(ActivatedDef { colors_from: Some(colors_from), ..activated(self, "only a mana ability names colors") })
     }
@@ -784,7 +819,7 @@ impl AbilityDef {
 const fn triggered_def(a: AbilityDef, method: &str) -> TriggeredDef {
     match a {
         AbilityDef::Triggered(t) => t,
-        AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => panic!("{}", method),
+        AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => panic!("{}", method),
     }
 }
 
@@ -867,7 +902,7 @@ impl AbilityDef {
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { divide: Some(divide), ..d }),
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { divide: Some(divide), ..t }),
             AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_)
-            | AbilityDef::BlockAllowance(_) => panic!("a static ability has no targets to divide among"),
+            | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => panic!("a static ability has no targets to divide among"),
         }
     }
 
@@ -901,20 +936,27 @@ pub const fn spell(targets: &'static [TargetSpec], effect: Effect) -> Option<Spe
 
 /// One target that passes the filter (CR 115.1).
 pub const fn target(filter: TargetFilter) -> TargetSpec {
-    TargetSpec { min: 1, max: 1, filter, label: "", if_kicked: None, together: None }
+    TargetSpec { min: 1, max: 1, filter, label: "", if_kicked: None, together: None, chooser: None }
 }
 
 /// "Up to one target" (CR 115.1d).
 pub const fn up_to_one(filter: TargetFilter) -> TargetSpec {
-    TargetSpec { min: 0, max: 1, filter, label: "", if_kicked: None, together: None }
+    TargetSpec { min: 0, max: 1, filter, label: "", if_kicked: None, together: None, chooser: None }
 }
 
 /// "Up to N targets" (CR 115.1d).
 pub const fn up_to(n: u32, filter: TargetFilter) -> TargetSpec {
-    TargetSpec { min: 0, max: n, filter, label: "", if_kicked: None, together: None }
+    TargetSpec { min: 0, max: n, filter, label: "", if_kicked: None, together: None, chooser: None }
 }
 
 impl TargetSpec {
+    pub const fn chosen_by(self, player: fn(&dyn crate::Query, &Asker) -> PlayerId) -> Self {
+        Self { chooser: Some(TargetChooser::Player(player)), ..self }
+    }
+    pub const fn chosen_by_one_of(self, players: fn(&dyn crate::Query, &Asker) -> Vec<PlayerId>) -> Self {
+        Self { chooser: Some(TargetChooser::OneOf(players)), ..self }
+    }
+
     /// The same slot, which may be left without a target ("up to").
     pub const fn optional(self) -> TargetSpec {
         TargetSpec { min: 0, ..self }

@@ -1,0 +1,6 @@
+{
+  "name": "Stormbind",
+  "manaCost": "{1}{R}{G}",
+  "type": "Enchantment",
+  "oracleText": "{2}, Discard a card at random: This enchantment deals 2 damage to any target."
+}

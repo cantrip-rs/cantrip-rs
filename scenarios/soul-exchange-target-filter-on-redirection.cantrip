@@ -1,0 +1,51 @@
+# Redirect Lightning offers legal alternative creature cards in Soul Exchange's controller's graveyard, excluding other zones and noncreature cards (CR 115.7a).
+[Bot1 Deck]
+Black Lotus
+Wheel of Fortune
+Grizzly Bears
+Memnite
+Hill Giant
+Island x2
+Soul Exchange
+Mox Jet
+Gleemox
+Ornithopter
+Mox Ruby
+Redirect Lightning
+Phyrexian Walker
+Island x20
+[Bot2 Deck]
+Grizzly Bears
+Ornithopter
+Island x5
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Soul Exchange.Cast(Bot1.Graveyard.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Choose(Ornithopter)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Redirect Lightning.Cast(Stack.Soul Exchange)
+Bot1.Modes(Pay 5 life)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Graveyard.Grizzly Bears)
+! Bot1.Target(Bot1.Graveyard.Wheel of Fortune)
+! Bot1.Target(Bot1.Battlefield.Mox Jet)
+! Bot1.Target(Bot1.Battlefield.Phyrexian Walker)
+Bot1.Target(Bot1.Graveyard.Memnite)
+[T1 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Graveyard.Grizzly Bears.Power = 2
+Bot2.Graveyard.Grizzly Bears.Power = 2

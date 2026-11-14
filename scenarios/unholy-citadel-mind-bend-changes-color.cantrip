@@ -1,0 +1,45 @@
+# Mind Bend changes black to white, so the defending player assigns damage to their white legends (CR 612.1, 702.22j).
+[Bot1 Deck]
+Unholy Citadel
+Isamaru, Hound of Konda
+Agent Maria Hill
+Mox Pearl x2
+Mox Sapphire
+Mind Bend
+Island x20
+[Bot2 Deck]
+Forest
+Black Lotus
+Ulvenwald Oddity
+Island x20
+[Actions]
+Bot1.Hand.Unholy Citadel.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mind Bend.Cast(Unholy Citadel)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Replace a color word)
+Bot1.Colors(Black)
+Bot1.Colors(White)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Agent Maria Hill.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Ulvenwald Oddity.Cast
+Bot2.Attack(Ulvenwald Oddity > Bot1)
+Bot1.Block(Isamaru, Hound of Konda > Ulvenwald Oddity; Agent Maria Hill > Ulvenwald Oddity)
+[T2 Bot2.Blockers]
+Bot1.AssignDamage(Ulvenwald Oddity > Isamaru, Hound of Konda: 4)
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Agent Maria Hill.Damage = 0
+Bot1.Graveyard = Isamaru, Hound of Konda; Mind Bend

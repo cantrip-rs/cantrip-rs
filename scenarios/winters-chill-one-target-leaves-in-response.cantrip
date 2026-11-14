@@ -1,0 +1,54 @@
+# One target leaves before resolution; the sole payment is for the remaining legal attacker, which survives without dealing combat damage (CR 608.2b).
+[Bot1 Deck]
+Black Lotus
+Snow-Covered Forest
+Balduvian Bears
+Grizzly Bears
+Ornithopter
+Mox Sapphire
+Unsummon
+Island x20
+[Bot2 Deck]
+Snow-Covered Island x2
+Mox Sapphire
+Winter's Chill
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Balduvian Bears.Cast
+Bot1.Battlefield.Snow-Covered Forest.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Snow-Covered Island.Play
+[T5 Bot1.Main1]
+Bot1.Attack(Balduvian Bears > Bot2; Grizzly Bears > Bot2)
+Bot2.Battlefield.Snow-Covered Island#1.Activate
+Bot2.Battlefield.Snow-Covered Island#2.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Winter's Chill.Cast(X: 2)
+! Bot2.Target(Count: 1)
+Bot2.Target(Bot1.Battlefield.Balduvian Bears; Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+? Bot2.Mana =
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unsummon.Cast(Bot1.Battlefield.Balduvian Bears)
+Bot1.Battlefield.Snow-Covered Forest.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+? Bot1.Mana =
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Unsummon; Black Lotus
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Hand.Balduvian Bears.Power = 2
+Bot2.Life = 20
