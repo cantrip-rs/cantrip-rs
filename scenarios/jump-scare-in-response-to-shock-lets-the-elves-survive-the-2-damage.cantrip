@@ -1,0 +1,43 @@
+# Jump Scare: "Until end of turn, target creature gets +2/+2 ..." Bot2 Shocks Bot1's 1/1 Llanowar Elves on turn 2; Bot1 answers with
+# Jump Scare, which resolves first (CR 405.5): the Elves are 3/3 when the 2 damage is dealt, so they survive (CR 704.5g). At the
+# cleanup the damage is removed and the effect ends together (CR 514.2), and on turn 3 they are a 1/1 again.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Llanowar Elves
+Jump Scare
+Island x16
+
+[Bot2 Deck]
+Mountain
+Shock
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jump Scare.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 3
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Shock
+? Bot1.Battlefield.Llanowar Elves.Toughness = 3
+[T3 Bot1.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Llanowar Elves; Mox Emerald; Mox Pearl
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Battlefield.Llanowar Elves.Toughness = 1
+Bot1.Graveyard = Jump Scare

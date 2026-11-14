@@ -1,0 +1,39 @@
+# Jump Scare: "Until end of turn, target creature gets +2/+2, gains flying, and becomes a Horror enchantment creature in addition
+# to its other types." Bot1 casts it on its Llanowar Elves (a 1/1 Elf Druid): a 3/3 flying Horror enchantment creature that is
+# still an Elf Druid (and a creature), refusing a noncreature target (a Mox). On turn 3 it is a 1/1 non-flying Elf Druid creature again.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Llanowar Elves
+Jump Scare
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Jump Scare.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Jump Scare.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 3
+? Bot1.Battlefield.Llanowar Elves.Toughness = 3
+? Bot1.Battlefield.Llanowar Elves.Keywords = Flying
+? Bot1.Battlefield.Llanowar Elves.Types = Creature; Enchantment
+? Bot1.Battlefield.Llanowar Elves.Subtypes = Druid; Elf; Horror
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Battlefield.Llanowar Elves.Toughness = 1
+Bot1.Battlefield.Llanowar Elves.Keywords = (absent)
+Bot1.Battlefield.Llanowar Elves.Types = Creature
+Bot1.Battlefield.Llanowar Elves.Subtypes = Druid; Elf
+Bot1.Graveyard = Jump Scare
+Stack.Count = 0
