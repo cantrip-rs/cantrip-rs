@@ -1232,6 +1232,15 @@ pub fn gain_life_for_differently_named_lands(g: &mut dyn Game, item: &StackItem)
     gain_life(g, item, n)
 }
 
+/// "It gains haste until end of turn" (CR 611.2a, 400.7a) as a triggered ability's callback: the trigger's subject
+/// (`StackItem::subject`), a spell on the stack gaining it for the permanent it becomes. Summon: Brynhildr ("the next creature
+/// spell you cast") and Carnelian Orb of Dragonkind ("a Dragon creature spell the mana was spent on") print it.
+pub fn subject_gains_haste_until_end_of_turn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Target::Object(subject) = item.subject else { return Ok(()) };
+    gain_until_end_of_turn(g, item.object, subject, Keyword::Haste);
+    Ok(())
+}
+
 /// "You gain life equal to its toughness" (CR 119.3, 608.2h) as a triggered ability's callback: the toughness of the trigger's
 /// subject (`StackItem::subject`, a permanent that entered or a creature that died) as the layers make it, or as it last
 /// existed on the battlefield if it has left. A permanent that is not a creature as the ability resolves has no toughness (CR 208.3) and
