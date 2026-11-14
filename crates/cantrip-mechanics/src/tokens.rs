@@ -755,6 +755,17 @@ pub fn create_goblins<const COUNT: u32>(g: &mut dyn Game, item: &StackItem) -> R
     Ok(())
 }
 
+/// "Create X [tokens], where X is the number of [subtype]s you control" (CR 701.7, 608.2h): X is counted as the ability resolves,
+/// before any token exists, through the layers, and the tokens are made together (CR 101.4). The subtype is read through the
+/// source's words, as the card's text says it (CR 612). The Unbeatable Squirrel Girl (Squirrels) and Krenko, Mob Boss (Goblins)
+/// print it.
+pub fn create_x_where_x_is_the_number_you_control(g: &mut dyn Game, item: &StackItem, def: &'static CardDef, subtype: Subtype) -> Result<(), Suspend> {
+    let subtype = g.words(item.object).subtype(subtype);
+    let x = crate::permanents_with_subtype_you_control(g, item.controller, subtype) as u32;
+    create(g, item.controller, def, x)?;
+    Ok(())
+}
+
 /// The 1/1 red Goblin creature token. Frontline Rush and Den of the Bugbear make it.
 pub static GOBLIN: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::Red)),
