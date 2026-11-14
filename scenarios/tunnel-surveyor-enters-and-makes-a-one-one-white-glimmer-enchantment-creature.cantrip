@@ -1,0 +1,45 @@
+# Tunnel Surveyor (2/2), "When this creature enters, create a 1/1 white Glimmer enchantment creature token": cast for {2}{U} from three
+# Mox Sapphires, the trigger resolves and Bot1 has the Surveyor and one token, a white 1/1 named Glimmer Token (the subtype names it,
+# CR 111.4) that is an enchantment creature. Bot2, who has no Surveyor, gets nothing.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Tunnel Surveyor
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tunnel Surveyor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Glimmer Token.Power = 1
+? Bot1.Battlefield.Glimmer Token.Toughness = 1
+? Bot1.Battlefield.Glimmer Token.Colors = White
+? Bot1.Battlefield.Glimmer Token.Token = true
+? Bot1.Battlefield.Tunnel Surveyor.Power = 2
+
+[Expect]
+Bot1.Battlefield = Glimmer Token; Mox Sapphire; Mox Sapphire; Mox Sapphire; Tunnel Surveyor
+Bot2.Battlefield.Count = 0

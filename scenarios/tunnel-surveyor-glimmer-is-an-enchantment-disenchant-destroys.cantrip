@@ -1,0 +1,44 @@
+# Tunnel Surveyor's Glimmer is an enchantment creature token (CR 111.4): after the Surveyor's enters trigger makes it on turn
+# 1, Bot2's Disenchant ("Destroy target artifact or enchantment") can target it and destroys it, so it ceases to exist (CR
+# 111.7). The Surveyor itself, a plain creature, is not a legal target.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Tunnel Surveyor
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Plains
+Disenchant
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tunnel Surveyor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Glimmer Token.Types = Enchantment; Creature
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains.Activate
+! Bot2.Hand.Disenchant.Cast(Tunnel Surveyor)
+Bot2.Hand.Disenchant.Cast(Glimmer Token)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Glimmer Token = (absent)
+Bot1.Battlefield.Tunnel Surveyor.Power = 2
+Bot2.Graveyard = Disenchant
