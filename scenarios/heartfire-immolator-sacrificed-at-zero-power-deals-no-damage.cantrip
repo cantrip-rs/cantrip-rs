@@ -1,0 +1,49 @@
+# Heartfire Immolator deals damage equal to its power as it last existed on the battlefield (CR 113.7a, 608.2h). Bot2 enchants
+# it with Weakness (-2/-1), so it is 0/1, and Bot2's own spell does not trigger Bot1's prowess. Sacrificed for {R} targeting
+# Bot2's Ornithopter, it deals no damage (CR 120.8): the Ornithopter has no damage marked and survives.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Ruby
+Heartfire Immolator
+Mountain x16
+
+[Bot2 Deck]
+Ornithopter
+Mox Jet
+Weakness
+Swamp x17
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Heartfire Immolator.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Weakness.Cast(Bot1.Battlefield.Heartfire Immolator)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Heartfire Immolator.Power = 0
+? Bot1.Battlefield.Heartfire Immolator.Toughness = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Heartfire Immolator.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Heartfire Immolator
+Bot2.Battlefield.Ornithopter.Damage = 0
+Stack.Count = 0
