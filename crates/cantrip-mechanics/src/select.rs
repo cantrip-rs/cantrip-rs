@@ -448,9 +448,16 @@ fn different_mana_values(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
 pub const DIFFERENT_MANA_VALUES: Part =
     set_part(&(different_mana_values as SelectFn), &(largest_different_mana_values as LargestFn), 0, "with different mana values");
 
+/// Whether some one card type is a type of every one of `objects`, each read as it is where it is (CR 205.2a, 205.2); vacuously
+/// so of none. `SHARE_A_CARD_TYPE`, All Good Things' "all cards exiled with this Saga share a card type" and The Tale of
+/// Tamiyo's "two cards that share a card type were milled" use it.
+pub fn objects_share_a_card_type(q: &dyn Query, objects: &[ObjectId]) -> bool {
+    CardType::ALL.into_iter().any(|t| objects.iter().all(|&c| q.chars(c).is(t)))
+}
+
 fn share_a_card_type(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
     let all_have = |t: CardType| choice.selected.iter().all(|&c| q.chars(c).is(t));
-    let complete = choice.selected.is_empty() || CardType::ALL.into_iter().any(all_have);
+    let complete = objects_share_a_card_type(q, &choice.selected);
     let addable = Bits::of(choice.candidates.len(), |i| {
         let candidate = q.chars(choice.candidates[i]);
         choice.selected.is_empty() || CardType::ALL.into_iter().any(|t| all_have(t) && candidate.is(t))
