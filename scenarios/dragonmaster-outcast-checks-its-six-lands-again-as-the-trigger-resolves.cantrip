@@ -1,0 +1,47 @@
+# Dragonmaster Outcast's "if you control six or more lands" is an intervening "if" (CR 603.4): checked as the upkeep begins
+# and again as the ability resolves. Bot1 has six lands at its turn 5 upkeep, so the ability triggers; in response Bot1
+# sacrifices Strip Mine to destroy a Mountain, leaving four lands, and the ability resolves without making a Dragon.
+
+[Bot1 Deck]
+Forest
+Fastbond
+Mountain
+Mountain
+Mountain
+Strip Mine
+Dragonmaster Outcast
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Fastbond.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Strip Mine.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Dragonmaster Outcast.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Battlefield.Strip Mine.Activate(Ability: Destroy; Bot1.Battlefield.Mountain#1)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Dragonmaster Outcast; Fastbond; Forest; Mountain; Mountain; Mountain
+Bot1.Graveyard = Mountain; Strip Mine
+Stack.Count = 0

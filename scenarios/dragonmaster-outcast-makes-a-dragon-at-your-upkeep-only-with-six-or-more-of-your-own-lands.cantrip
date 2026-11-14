@@ -1,0 +1,46 @@
+# Dragonmaster Outcast: Bot1 gets five lands out on turn 1 with Fastbond and casts the Outcast. At the turn 3 upkeep Bot1
+# controls five lands (Bot2's one land would make six if it counted), so no Dragon. Bot1 plays a sixth land on turn 3;
+# Bot2's upkeep on turn 4 makes nothing for Bot1, and Bot1's turn 5 upkeep, with exactly six lands, makes one 5/5 Dragon.
+
+[Bot1 Deck]
+Forest
+Fastbond
+Mountain
+Mountain
+Mountain
+Mountain
+Dragonmaster Outcast
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Fastbond.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Dragonmaster Outcast.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Count = 7
+Bot1.Hand.Mountain.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+? Bot1.Battlefield.Count = 8
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Count = 9
+Bot1.Battlefield.Dragon Token.Power = 5
+Bot1.Battlefield.Dragon Token.Keywords = Flying
+Stack.Count = 0
