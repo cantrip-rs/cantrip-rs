@@ -1,0 +1,52 @@
+# Springbloom Druid: "you may sacrifice a land. If you do, search ... up to two basic land cards" (CR 701.21a, 701.23). Bot1 has two Forests and sacrifices one: only a land of its own is
+# offered (not the Mox Emerald artifact, nor the Druid), only one land may be sacrificed, two basic lands are found and arrive tapped, and a creature card or a third land is not allowed.
+
+[Bot1 Deck]
+Forest
+Forest
+Mox Emerald
+Mox Jet
+Mox Ruby
+Springbloom Druid
+Elvish Mystic
+Elvish Mystic
+Mountain
+Plains
+Swamp
+Elvish Mystic x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Springbloom Druid.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Mox Emerald)
+! Bot1.Choose(Springbloom Druid)
+! Bot1.Choose(Forest; Forest#2)
+Bot1.Choose(Forest)
+! Bot1.Search(Elvish Mystic)
+! Bot1.Search(Mountain; Plains; Swamp)
+Bot1.Search(Mountain; Plains)
+? Bot1.Battlefield.Mountain.Tapped = true
+? Bot1.Battlefield.Plains.Tapped = true
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Forest; Mox Emerald; Mox Jet; Mox Ruby; Springbloom Druid; Mountain; Plains
+Bot1.Graveyard = Forest
+Bot1.Library.Count = 9
+Bot2.Library.Count = 12

@@ -1,0 +1,39 @@
+# Springbloom Druid, "up to two" (CR 701.23b): Bot1 sacrifices its Forest and the library holds a single basic land, a Mountain, so only that one is found and arrives tapped.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Jet
+Mox Ruby
+Springbloom Druid
+Elvish Mystic
+Elvish Mystic
+Mountain
+Elvish Mystic x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Springbloom Druid.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Forest)
+Bot1.Search(Mountain)
+? Bot1.Battlefield.Mountain.Tapped = true
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby; Springbloom Druid; Mountain
+Bot1.Graveyard = Forest
+Bot1.Library.Count = 10

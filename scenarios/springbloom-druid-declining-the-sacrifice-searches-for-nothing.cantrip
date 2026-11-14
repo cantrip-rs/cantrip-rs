@@ -1,0 +1,39 @@
+# Springbloom Druid, "if you do" (CR 701.21a): Bot1 declines to sacrifice its Forest, so the Forest stays and the library, which has basic lands in it, is not searched and loses no card.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Jet
+Mox Ruby
+Springbloom Druid
+Elvish Mystic
+Elvish Mystic
+Mountain
+Plains
+Elvish Mystic x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Springbloom Druid.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Forest; Mox Emerald; Mox Jet; Mox Ruby; Springbloom Druid
+Bot1.Graveyard.Count = 0
+Bot1.Library.Count = 11
+Bot1.Shuffles = 0
