@@ -1,0 +1,8 @@
+{
+  "name": "Sindbad",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Human",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}: Draw a card and reveal it. If it isn't a land card, discard it."
+}

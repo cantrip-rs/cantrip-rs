@@ -1,0 +1,45 @@
+# Alhammarret's Archive replaces Sindbad's draw with two draws, so neither replacement card is revealed or discarded (CR 614.6).
+
+[Bot1 Deck]
+Sindbad
+Alhammarret's Archive
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Island
+Island
+Lightning Bolt
+Grizzly Bears
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sindbad.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Alhammarret's Archive.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sindbad.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Island; Island; Lightning Bolt; Grizzly Bears
+Bot1.Graveyard = Black Lotus; Black Lotus

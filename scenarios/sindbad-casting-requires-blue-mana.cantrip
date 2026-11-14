@@ -1,0 +1,23 @@
+# Two black mana cannot pay Sindbad's blue symbol; adding blue permits the same cast (CR 202.1, 601.2h).
+[Bot1 Deck]
+Mox Jet x2
+Mox Sapphire
+Sindbad
+Island x26
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana = {B}{B}
+! Bot1.Hand.Sindbad.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sindbad.Cast
+? Bot1.Mana = {B}
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Sindbad.Tapped = false

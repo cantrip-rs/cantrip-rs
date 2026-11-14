@@ -1,0 +1,33 @@
+# Sindbad: its unreplaced draw is revealed, then only a nonland is discarded (CR 121.6c).
+# Two differently colored mana sources pay the exact casting cost; the tap ability has no mana cost.
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Sindbad
+Island x5
+Forest
+Island x20
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sindbad.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sindbad.Tapped = false
+! Bot1.Battlefield.Sindbad.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sindbad.Activate
+! Bot1.Battlefield.Sindbad.Activate
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Hand.Count = 6
+Bot1.Hand = Forest; Island; Island; Island; Island; Island
+Bot1.Graveyard.Count = 0
+Bot1.Mana =
+Bot1.Battlefield.Sindbad.Tapped = true
