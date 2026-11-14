@@ -136,6 +136,12 @@ pub enum Event {
     ResolutionCostObjectPaid { payment: u32, source: ObjectId, payer: PlayerId, object: ObjectId, receipt: u32 },
     /// An ability copy's serial and the serial it copied, including copies of copies.
     AbilityCopied { copy: u32, original: u32 },
+    /// An actual permanent sacrificed by an entering object's own replacement (CR 614.1c, 701.21a).
+    /// `entering` is its pre-entry identity; `text` is that replacement's linked card. The old sacrificed
+    /// object retains its last-known characteristics, and the entrant's `became` identifies its one new incarnation.
+    EntrySacrifice { entering: ObjectId, text: CardId, sacrificed: ObjectId },
+    /// An entry replacement stopped this attempt without a zone change. A later attempt of the same object is distinct.
+    EntryAttemptFailed { entering: ObjectId },
     /// A spell became cast (CR 601.2i), with how many spells its caster has cast this turn, this one included. `options` has a
     /// bit for each optional cost its abilities offer as it becomes cast (`TriggeredDef::cast_option`), in the order it has them,
     /// set where that cost was paid: the "when you cast this spell, if its cost was paid" of each instance reads its own (CR
@@ -587,6 +593,8 @@ impl Event {
             Event::Copied { copy, original, .. } => copy == object || original == object,
             Event::BecameTarget { target, by, .. } => by == object || target == Target::Object(object),
             Event::ZoneChange { old, new, .. } => old == object || new == object,
+            Event::EntrySacrifice { entering, sacrificed, .. } => entering == object || sacrificed == object,
+            Event::EntryAttemptFailed { entering } => entering == object,
             Event::Damage { source, target, .. } => source == object || target == Target::Object(object),
             Event::DamagePrevented { source, target, by, .. } => source == object || by == object || target == Target::Object(object),
             Event::Drew { card, .. } | Event::Discarded { card, .. } | Event::Revealed { card, .. } | Event::Looked { card, .. } | Event::Cycled { card, .. } | Event::Shown { card, .. } | Event::Randomized { card, .. } => {

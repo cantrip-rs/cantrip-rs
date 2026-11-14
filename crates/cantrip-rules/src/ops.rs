@@ -408,6 +408,11 @@ fn move_together_entering_event(
             }
             None => replace::zone_change(cx, proposed),
         };
+        // If an entry attempt is stopped without a move, close that attempt in the history. The same old object can
+        // later try to enter again, and its later entry must not inherit sacrifices made during this attempt (CR 400.7).
+        if entry.is_some() && (change.regenerated || change.shielded || change.replaced) {
+            cx.record(Event::EntryAttemptFailed { entering: m.id });
+        }
         // A regeneration shield replaced the destruction (CR 701.19a, 614.8): it never happens (CR 614.6), and the permanent
         // is regenerated instead, once every move is worked out.
         if change.regenerated {
@@ -1634,7 +1639,7 @@ fn copy_over(cx: &Cx, entering: &Entering) -> bool {
 
 /// The definition `entering` would have as it enters: the card a copy effect over it copies, else the face it enters
 /// with (a double-faced token's own copy values are its faces', CR 707.8a).
-fn entering_card(cx: &Cx, entering: &Entering) -> CardId {
+pub(crate) fn entering_card(cx: &Cx, entering: &Entering) -> CardId {
     match entering.copy {
         Some(c) if !cx.s().obj(entering.object).own_faces(&c) => c.card,
         _ => cx.cards().face(cx.s().obj(entering.object).card, entering.transformed),

@@ -2384,6 +2384,16 @@ impl cantrip_api::Game for Cx<'_> {
         self.left_battlefield(objects)
     }
 
+    fn sacrifice_as_enters(&mut self, entering: &Entering, player: PlayerId, permanents: &[ObjectId]) -> LeftBattlefield {
+        let text = self.cards().linked_card(ops::entering_card(self, entering));
+        let objects = ops::sacrifice(self, player, permanents);
+        let left = self.left_battlefield(objects);
+        for &sacrificed in left.permanents() {
+            self.record(Event::EntrySacrifice { entering: entering.object, text, sacrificed });
+        }
+        left
+    }
+
     fn sacrifice_each(&mut self, sacrifices: &[(PlayerId, ObjectId)]) -> LeftBattlefield {
         let objects = ops::sacrifice_each(self, sacrifices);
         self.left_battlefield(objects)
@@ -3505,3 +3515,6 @@ mod attack_haste_tests;
 
 #[cfg(test)]
 mod skip_step_tests;
+
+#[cfg(test)]
+mod entry_sacrifice_history_tests;

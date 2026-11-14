@@ -158,6 +158,14 @@ a search branch is a sibling path that shares everything above it.
 
 **The event history is the record the rules ask about the past** (`cantrip_api::history`, read with `q.history()`).
 
+An entry replacement that sacrifices permanents uses `Game::sacrifice_as_enters`: it delegates the simultaneous action to the
+ordinary sacrifice procedure and records only actual departing permanents with the entry's original identity and linked text
+(CR 614.1c, 607.2). `History::sacrificed_as_entered` reads their last-known battlefield rows for the entry or its one resulting
+battlefield incarnation (CR 400.7), without attaching a remembered count to the permanent. A stopped entry attempt closes its
+records so a later attempt of the same object cannot inherit them. Wood Elemental re-evaluates the
+land type named by its current text; Dracoplasm can read the sacrificed creatures' last-known power and toughness. The
+history-only record creates no trigger and follows the existing game-tree undo/redo and search history.
+
 Battlefield arrivals retain the player who put the object there in
 `Event::ZoneChange::put_by` (CR 110.2a, 608.2c), independently of its entering
 controller. Thelon's Chant and Tourach's Chant use this player. Existing zone-change

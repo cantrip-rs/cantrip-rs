@@ -405,6 +405,27 @@ impl<'a> History<'a> {
         })
     }
 
+    /// The last-known battlefield rows of permanents actually sacrificed by the linked text as this object
+    /// entered (CR 614.1c, 701.21a, 607.2). The entering identity is followed through exactly its entry move,
+    /// never through a later zone change (CR 400.7). During a prospective entry it is still the same identity.
+    /// Wood Elemental reads their land types; Dracoplasm reads their power and toughness.
+    pub fn sacrificed_as_entered(self, state: &'a GameState, by: Linked) -> impl Iterator<Item = &'a LastKnown> + 'a {
+        // The same pre-entry object may try again after a replacement stops an earlier attempt without moving it.
+        // A failed attempt closes only its own earlier records; later attempts start after that boundary.
+        let after_failure = self.records.iter().rposition(|r| match r.event {
+            Event::EntryAttemptFailed { entering } => entering == by.object || state.obj(entering).became == Some(by.object),
+            _ => false,
+        }).map_or(0, |at| at + 1);
+        self.records[after_failure..].iter().filter_map(move |r| match r.event {
+            Event::EntrySacrifice { entering, text, sacrificed }
+                if by.acquired == Acquired::OWN && text == by.text
+                    && ((entering == by.object && state.obj(entering).became.is_none())
+                        || (state.obj(entering).became == Some(by.object)
+                            && matches!(state.obj(by.object).zone.kind(), ZoneKind::Battlefield | ZoneKind::PhasedOut))) => state.last_known(sacrificed),
+            _ => None,
+        })
+    }
+
     /// How the spell on the stack as `spell` was cast, if it was cast this turn.
     pub fn cast_of(&self, spell: ObjectId) -> Option<&'a Cast> {
         self.casts().find(|c| c.spell == spell)

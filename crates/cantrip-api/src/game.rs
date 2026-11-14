@@ -968,6 +968,10 @@ pub trait Game: Query {
     /// they became (`LeftBattlefield`): "if you do" asks whether it is empty, and "for each creature sacrificed this way",
     /// "that many" count the permanents, a merged one once however many cards it became (CR 730.2, 730.3c).
     fn sacrifice(&mut self, player: PlayerId, permanents: &[ObjectId]) -> LeftBattlefield;
+    /// Sacrifices as the entering object's own replacement directs (CR 614.1c, 701.21a). The actual
+    /// sacrificed permanents are associated with this entry and its linked text in history; the result has the
+    /// same semantics as `sacrifice`. Wood Elemental and Dracoplasm ask what was sacrificed as they entered.
+    fn sacrifice_as_enters(&mut self, entering: &Entering, player: PlayerId, permanents: &[ObjectId]) -> LeftBattlefield;
     /// Several players sacrifice at once (CR 701.21a, 101.4): "each player sacrifices", each pair who sacrifices and what,
     /// each judged as `sacrifice` judges it. What was sacrificed, as `sacrifice` returns it.
     fn sacrifice_each(&mut self, sacrifices: &[(PlayerId, ObjectId)]) -> LeftBattlefield;
