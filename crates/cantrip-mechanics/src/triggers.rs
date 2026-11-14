@@ -2108,6 +2108,28 @@ pub fn creature_you_control_dies(q: &dyn Query, me: &Asker, event: &Event) -> Op
     }
 }
 
+/// "Whenever a creature you control dies, if it had counters on it" (CR 700.4, 603.4, 603.10a): `creature_you_control_dies`,
+/// narrowed to a creature that had counters of any kind as it last was on the battlefield. Each creature is its own event, so
+/// creatures dying together trigger once each. The trigger is about that creature (`Fired::about`), which `effects::
+/// put_the_subjects_counters_on_target` and `put_the_subjects_counters_on_this` read. Host of the Hereafter and Reluctant Role
+/// Model print it.
+pub fn creature_you_control_with_counters_dies(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    creature_you_control_dies(q, me, event)?;
+    match event {
+        Event::ZoneChange { old, .. } if q.obj(*old).counter_array().iter().any(|&n| n != 0) => Fired::about(Target::Object(*old)),
+        _ => None,
+    }
+}
+
+/// "Whenever another creature you control dies, if it had counters on it": `creature_you_control_with_counters_dies` for a
+/// creature other than the source. Buzzard-Wasp Colony prints it.
+pub fn another_creature_you_control_with_counters_dies(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::ZoneChange { old, .. } if *old == me.source => None,
+        _ => creature_you_control_with_counters_dies(q, me, event),
+    }
+}
+
 /// "Whenever a [subtype] you control dies" (CR 700.4, 603.10a), `SUBTYPE` a `Subtype` as `u16` (`lands::sub`), looked back on: a
 /// permanent that had that subtype as it last was on the battlefield (a creature or not, CR 109.2, 205.3), under the controller it
 /// last had, the type read through the words of the source's text (CR 612). This permanent too, if it is one. Bishop of Wings
@@ -2786,6 +2808,8 @@ pub const ANOTHER_CREATURE_DIES: Trigger = when(EventMask::ZONE_CHANGE, another_
 pub const CREATURE_AN_OPPONENT_CONTROLS_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_an_opponent_controls_dies);
 pub const CREATURE_YOU_CONTROL_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_you_control_dies);
 pub const ANOTHER_CREATURE_YOU_CONTROL_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, another_creature_you_control_dies);
+pub const CREATURE_YOU_CONTROL_WITH_COUNTERS_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_you_control_with_counters_dies);
+pub const ANOTHER_CREATURE_YOU_CONTROL_WITH_COUNTERS_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, another_creature_you_control_with_counters_dies);
 
 /// "Whenever a nontoken creature you control dies" (CR 700.4, 603.10a, 111.7): a creature you controlled as it died, one that was not
 /// a token, looked back on as it last was on the battlefield. This permanent too, if it is one. Zahur, Glory's Past prints it.
