@@ -2633,4 +2633,12 @@ mod tests {
         let chosen: Vec<_> = view.choices.iter().map(|c| (c.key.as_str(), c.value.as_str())).collect();
         assert_eq!(chosen, [("creature type", "Druid")]);
     }
+
+    /// A token has no mana cost unless the effect that creates it says so (CR 111.3, 202.1b): Stangg Twin shows none,
+    /// not "{0}".
+    #[test]
+    fn stangg_twin_shows_no_mana_cost() {
+        let twin = cantrip_engine::cards().get(cantrip_engine::card("Stangg Twin").unwrap());
+        assert_eq!(cost_text(twin), "");
+    }
 }

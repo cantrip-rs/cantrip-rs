@@ -1,0 +1,8 @@
+{
+  "name": "Stangg",
+  "manaCost": "{4}{R}{G}",
+  "type": "Legendary Creature — Human Warrior",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "When Stangg enters, create Stangg Twin, a legendary 3/4 red and green Human Warrior creature token. Exile that token when Stangg leaves the battlefield. Sacrifice Stangg when that token leaves the battlefield."
+}

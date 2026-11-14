@@ -18,13 +18,8 @@ fn escape_cost(q: &dyn Query, asker: &Asker, card: ObjectId, caster: PlayerId) -
     Some(escape::cost(def.cost, 3))
 }
 
-fn sacrifice_this(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.sacrifice(item.controller, &[item.object]);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     granted_ways: &[escape::granted(escape_cost)],
-    abilities: &[triggered(cantrip_mechanics::triggers::EACH_END_STEP, sacrifice_this, "At the beginning of the end step, sacrifice this enchantment.")],
+    abilities: &[triggered(cantrip_mechanics::triggers::EACH_END_STEP, cantrip_mechanics::effects::sacrifice_self, "At the beginning of the end step, sacrifice this enchantment.")],
     ..oracle::UNDERWORLD_BREACH
 };

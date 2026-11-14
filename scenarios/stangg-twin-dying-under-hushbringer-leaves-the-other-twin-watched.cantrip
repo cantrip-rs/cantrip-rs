@@ -1,0 +1,82 @@
+# Doubling Season makes two Twins and Mirror Gallery keeps both. Under Hushbringer one dies, which triggers nothing
+# ("leaves the battlefield" by dying, the Hushbringer ruling), so the delayed ability is not used up and still watches
+# the other Twin through the turns that follow (CR 603.7b, 603.7c). Exiling that Twin then sacrifices Stangg.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Gleemox
+Doubling Season
+Mirror Gallery
+Stangg
+Hushbringer
+Mountain x20
+
+[Bot2 Deck]
+Swamp
+Mountain
+Plains
+Terminate
+Swords to Plowshares
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Doubling Season.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mirror Gallery.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Stangg.Cast
+[T6 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Stangg Twin#2.Power = 3
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hushbringer.Cast
+[T8 Bot2.Main1]
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Terminate.Cast(Stangg Twin)
+[T8 Bot2.Main2]
+? Bot1.Battlefield.Stangg.Power = 3
+? Bot1.Battlefield.Stangg Twin#2 = (absent)
+? Bot1.Battlefield.Stangg Twin.Power = 3
+[T10 Bot2.Main1]
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Stangg Twin)
+[T10 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Stangg = (absent)
+Bot1.Graveyard.Stangg.Power = 3
+Bot1.Battlefield.Stangg Twin = (absent)
+Bot1.Battlefield.Hushbringer.Power = 1
