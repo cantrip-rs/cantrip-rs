@@ -11,6 +11,61 @@ namespace Cantrip.Client.Llm.Tests;
 /// </summary>
 public sealed class WordingTests
 {
+    [Fact]
+    public void Tapping_a_land_to_pay_does_not_tell_the_model_to_tap_creatures()
+    {
+        var chooser = new ScriptedChooser([0]);
+        ObjectView land = In(Card(3, "Forest", "{0}"), ZoneKindView.Battlefield, Me);
+        ObjectView other = In(Card(4, "Island", "{0}"), ZoneKindView.Battlefield, Me);
+        new Decisions(chooser).Answer(Seated(land, other), new ChooseCardsPromptMessage
+        {
+            Player = Me, Source = Handle(9), Purpose = CardChoicePurposeView.TapToPay,
+            Cards = [land.Handle, other.Handle], Verdict = new() { Addable = [land.Handle, other.Handle] }, Count = 1,
+        });
+
+        Assert.Contains("tap eligible permanents", chooser.Asked[0].Heading, StringComparison.Ordinal);
+        Assert.DoesNotContain("tap creatures", chooser.Asked[0].Heading, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void Bands_with_other_preserves_choices_without_ordinary_banding()
+    {
+        var chooser = new ScriptedChooser([0, 1]);
+        ObjectView first = In(Card(3, "Reptil", "{2}{G}"), ZoneKindView.Battlefield, Me);
+        ObjectView second = In(Card(4, "Rick Jones", "{W}"), ZoneKindView.Battlefield, Me);
+        var answer = Assert.IsType<CardsChosenAnswer>(new Decisions(chooser).Answer(Seated(first, second), new ChooseCardsPromptMessage
+        {
+            Player = Me, Source = Handle(9), Purpose = CardChoicePurposeView.Band,
+            Cards = [first.Handle, second.Handle], WithoutBanding = [first.Handle, second.Handle],
+            Verdict = new() { Addable = [first.Handle, second.Handle], Complete = true },
+            Count = 2, CountKind = CountKindView.UpTo,
+        }));
+
+        Assert.Equal(new[] { first.Handle, second.Handle }, answer.Cards);
+        Assert.Contains("bands with other", chooser.Asked[0].Heading, StringComparison.Ordinal);
+        Assert.DoesNotContain("has banding", chooser.Asked[0].Heading, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void Restricted_untapping_does_not_ask_the_model_for_an_exact_candidate_count()
+    {
+        var chooser = new ScriptedChooser([0]);
+        ObjectView artifact = In(Card(3, "Sol Ring", "{1}"), ZoneKindView.Battlefield, Me);
+        ObjectView second = In(Card(4, "Mox Jet", "{0}"), ZoneKindView.Battlefield, Me);
+        ObjectView third = In(Card(5, "Mox Pearl", "{0}"), ZoneKindView.Battlefield, Me);
+        ObjectView fourth = In(Card(6, "Mox Ruby", "{0}"), ZoneKindView.Battlefield, Me);
+        new Decisions(chooser).Answer(Seated(artifact, second, third, fourth), new ChooseCardsPromptMessage
+        {
+            Player = Me, Source = Handle(9), Purpose = CardChoicePurposeView.Untap,
+            Cards = [artifact.Handle, second.Handle, third.Handle, fourth.Handle],
+            Verdict = new() { Addable = [artifact.Handle, second.Handle, third.Handle, fourth.Handle] },
+            Count = 3, CountKind = CountKindView.AsManyAsCan, Kind = "permanent to untap",
+        });
+
+        Assert.Contains("untap restrictions allow", chooser.Asked[0].Heading, StringComparison.Ordinal);
+        Assert.DoesNotContain("untap 3", chooser.Asked[0].Heading, StringComparison.Ordinal);
+    }
+
     private static ObjectView In(ObjectView card, ZoneKindView zone, int owner)
     {
         card.Zone = zone;

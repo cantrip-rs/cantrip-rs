@@ -134,6 +134,10 @@ pub enum Event {
     ResolutionPaymentBegan { payment: u32, source: ObjectId, payer: PlayerId, resolving: Option<u32> },
     /// An object paid one component of that resolution payment, identified before any zone change.
     ResolutionCostObjectPaid { payment: u32, source: ObjectId, payer: PlayerId, object: ObjectId, receipt: u32 },
+    /// One locked total payment for a declaration of attackers (CR 508.1h-j).
+    CombatPaymentBegan { payment: u32, payer: PlayerId },
+    /// An object paid a component imposed by `source` for `attacker`'s attack.
+    CombatCostObjectPaid { payment: u32, source: ObjectId, attacker: ObjectId, payer: PlayerId, object: ObjectId, receipt: u32 },
     /// An ability copy's serial and the serial it copied, including copies of copies.
     AbilityCopied { copy: u32, original: u32 },
     /// A spell became cast (CR 601.2i), with how many spells its caster has cast this turn, this one included. `options` has a
@@ -159,7 +163,11 @@ pub enum Event {
         /// The old permanent this Aura enchanted when it left the battlefield (CR 400.7f): it left in this same move
         /// batch, or the Aura followed it to its owner's graveyard by the unattached-Aura state-based action (704.5m).
         /// Rules-derived from the actual moves after replacement, never inferred from a later unrelated move.
-        enchanted_left: Option<ObjectId> },
+        enchanted_left: Option<ObjectId>,
+        /// Continuous hand visibility on each side of this move. These are actual-time observations, not a later
+        /// query of a revealing source that may have left. The old and new sides can differ in a simultaneous batch.
+        from_revealed_hand: bool,
+        to_revealed_hand: bool },
     /// Damage was dealt. `controller` and `kind.colors()` are the source's as it dealt it (CR 120.3, 609.7): "damage red sources
     /// you controlled dealt this turn" counts a source that has since changed controller or color, or left (Temple of
     /// Power's ruling), and a spell's or an ability's source by what it was on the stack or the battlefield then.
@@ -201,6 +209,10 @@ pub enum Event {
     /// is not `AbilityAcquisition::OWN`: what tells independent identical acquisitions apart (CR 113.2c, 602.5b-c). It is no
     /// event of its own - nothing triggers on it and no kind files it.
     ActivatedAs { instance: AbilityAcquisition },
+    /// Exact mana paid for an opted-in activation; no trigger listens to this receipt.
+    ActivationManaPaid { serial: u32, value: u32 },
+    /// Information explicitly noted by an instruction (CR 607.2e). Payload and link are in GameState::noted_values.
+    ValueNoted { value: u32 },
     /// A creature was declared as an attacker (CR 508.1). `known` is the last-known row (`GameState::last_known`) that keeps
     /// its characteristics as it was declared, which "you attacked with a Rogue" asks of it once it has changed, left or
     /// changed controllers (`history::Attacked::chars`). `defending` is its defending player as it attacked (CR 508.5,
@@ -235,7 +247,7 @@ pub enum Event {
     Exerted { permanent: ObjectId, player: PlayerId },
     /// A permanent was tapped for mana (CR 106.12, 605.1b): a mana ability with {T} in its cost was activated by `player` and
     /// resolved. `produced` is the mana that ability added (CR 106.12a), of any restriction - not what the triggered mana
-    /// abilities it triggers add: "one mana of any type that land produced" reads it. Recorded for the history; the
+    /// abilities it triggers add: "one mana of any type that land produced" reads it. Ordinary observers use the stack;
     /// triggered mana abilities it triggers (`TriggeredDef::mana_ability`) resolve at once, where the tap happens, and only
     /// when it produced some mana (CR 106.12a).
     TappedForMana { permanent: ObjectId, player: PlayerId, produced: ManaTally },
@@ -277,15 +289,19 @@ pub enum Event {
     AttackersDeclared { player: PlayerId, count: u32 },
     /// A creature blocks an attacker (CR 509.1, 509.1g): one event for each blocker and each attacker it blocks, so an
     /// attacker blocked by two sees both, and a creature blocking several attackers (CR 509.1a) has one for each. `declared`
-    /// marks one event of each blocker: the first attacker it was declared to block. The other members of that attacker's
+    /// marks one event of each new blocker: the first attacker it was declared or caused to block. The other members of that attacker's
     /// band, which it blocks too (CR 702.22h), and the other attackers a creature that can block several was declared to
     /// block come as `declared: false`. "Whenever this creature blocks" (CR 509.3a) reads the declared one alone, triggering
     /// once however many it blocks; "whenever it blocks a creature" (CR 509.3b) and "becomes blocked by a creature" (CR 509.3d)
-    /// read each.
+    /// read each. An effect changing the attacker of an already-blocking creature emits `declared: false`.
     Blocks { blocker: ObjectId, attacker: ObjectId, declared: bool },
     /// An unblocked attacking creature became blocked (CR 509.3c): once for the creature, however many blockers
     /// were declared, or when an effect makes it blocked. Further blockers do not repeat the transition.
     BecameBlocked { attacker: ObjectId },
+    /// This creature had first strike or double strike as the first combat damage step began (CR 510.4).
+    /// Historical information, not damage dealt: a creature assigning no damage still has it. Reassignment and removal
+    /// of its last attacker must not discard the fact. A later combat phase has its own records.
+    CombatFirstStrike { creature: ObjectId },
     /// An attacking creature was not blocked (CR 509.1h): decided as the declare blockers step's blocks are made.
     Unblocked { attacker: ObjectId, defender: Target },
     /// A permanent became monstrous (CR 701.37a).
@@ -470,6 +486,10 @@ pub enum Event {
     /// permanent `permanent`, recorded after the permanent's zone change, which is the pair's one entering (CR 712.21's
     /// "one permanent"). `card` is no object any more, but part of the permanent (CR 400.7), as a mutating spell is.
     Melded { permanent: ObjectId, card: ObjectId },
+    /// A creature's combat target was assigned without declaring an attacker (CR 508.4, 508.5): it entered attacking,
+    /// or an effect reselected what it attacks. Recorded only, never an attack trigger. Retains its defender after
+    /// removal from combat, without making "whenever this creature attacks" see an undeclared attack.
+    AttackAssigned { attacker: ObjectId, defender: Target, defending: PlayerId },
 }
 
 /// Why a player loses the game (CR 104.3): what a "can't lose the game" or "don't lose the game for ..." effect is asked
@@ -572,7 +592,10 @@ impl Event {
             Event::AbilityCostObjectPaid { object: paid, .. } => paid == object,
             Event::ResolutionPaymentBegan { source, .. } => source == object,
             Event::ResolutionCostObjectPaid { source, object: paid, .. } => source == object || paid == object,
-            Event::AbilityCopied { .. } | Event::ActivatedAs { .. } => false,
+            Event::CombatPaymentBegan { .. } => false,
+            Event::CombatFirstStrike { creature } => creature == object,
+            Event::CombatCostObjectPaid { source, attacker, object: paid, .. } => source == object || attacker == object || paid == object,
+            Event::AbilityCopied { .. } | Event::ActivatedAs { .. } | Event::ActivationManaPaid { .. } | Event::ValueNoted { .. } => false,
             Event::PaidAlternative { spell, .. } | Event::PaidRepeatedly { spell, .. } => spell == object,
             Event::LandPlayed { land, .. } => land == object,
             Event::Copied { copy, original, .. } => copy == object || original == object,
@@ -589,7 +612,8 @@ impl Event {
             | Event::ModesChosen { source, .. }
             | Event::Done { source, .. } => source == object,
             Event::CrimeCommitted { by, .. } => by == object,
-            Event::Attacks { attacker, .. } | Event::Unblocked { attacker, .. } | Event::BecameBlocked { attacker } => attacker == object,
+            Event::Attacks { attacker, .. } | Event::AttackAssigned { attacker, .. }
+            | Event::Unblocked { attacker, .. } | Event::BecameBlocked { attacker } => attacker == object,
             Event::PaidToAttack { attacker, tapped, .. } => attacker == object || tapped == object,
             Event::Blocks { blocker, attacker, .. } => blocker == object || attacker == object,
             Event::ClassLevel { object: o, .. }
@@ -648,6 +672,10 @@ impl EventMask {
     pub const TRANSFORMED: EventMask = EventMask(1 << 15);
     pub const UNATTACHED: EventMask = EventMask(1 << 30);
     pub const TAPPED: EventMask = EventMask(1 << 29);
+    /// An activated mana ability with {T} resolved (CR 106.12). Ordinary
+    /// observers such as Manabarbs/Burning Earth use the stack; triggered mana
+    /// abilities still resolve immediately through their dedicated procedure.
+    pub const TAPPED_FOR_MANA: EventMask = EventMask(1 << 65);
     /// Becoming untapped is distinct from tapping, including for mask-only history queries.
     pub const UNTAPPED: EventMask = EventMask(1 << 64);
     pub const LIFE_CHANGE: EventMask = EventMask(1 << 16);
@@ -735,7 +763,7 @@ impl EventMask {
             Event::Looked { .. } => EventMask::LOOKED,
             Event::Countered { .. } => EventMask::COUNTERED,
             Event::AbilityActivated { .. } => EventMask::ABILITY_ACTIVATED,
-            Event::ActivatedAs { .. } => EventMask(0),
+            Event::ActivatedAs { .. } | Event::ActivationManaPaid { .. } | Event::ValueNoted { .. } => EventMask(0),
             // The alternative cost a cast was paid with is part of the cast's record.
             Event::Cast(_) | Event::PaidAlternative { .. } | Event::PaidRepeatedly { .. } => EventMask::CAST,
             Event::LandPlayed { .. } => EventMask::LAND_PLAYED,
@@ -799,6 +827,7 @@ impl EventMask {
             Event::Unattached { .. } => EventMask::UNATTACHED,
             Event::Attached { .. } => EventMask::ATTACHED,
             Event::Tapped { .. } => EventMask::TAPPED,
+            Event::TappedForMana { .. } => EventMask::TAPPED_FOR_MANA,
             Event::Untapped { .. } => EventMask::UNTAPPED,
             Event::TappedForTeamwork { .. } => EventMask::TAPPED_FOR_TEAMWORK,
             Event::Crewed { .. } => EventMask::CREWED,

@@ -11,7 +11,7 @@ pub static THE_VOID: CardDef = CardDef {
     has_cost: false,
     colors: Some(ColorSet::of(Color::Black)),
     types: TypeSet::of(&[CardType::Creature]),
-    supertypes: Supertypes { basic: false, legendary: true, snow: false },
+    supertypes: Supertypes { basic: false, legendary: true, snow: false, world: false },
     subtypes: SubtypeSet::of(&[Subtype::Horror, Subtype::Villain]),
     power: Some(5),
     toughness: Some(5),

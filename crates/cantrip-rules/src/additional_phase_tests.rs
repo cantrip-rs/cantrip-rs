@@ -335,7 +335,6 @@ fn later_groups_go_first_and_combat_then_main_keeps_its_printed_order() {
         steps(&g),
         [
             Step::Upkeep,
-            Step::Draw,
             Step::PrecombatMain,
             Step::Upkeep,
             Step::BeginCombat,
@@ -375,7 +374,6 @@ fn second_main_anchor_and_that_combat_trigger_ignore_the_ordinary_combat() {
         steps(&g),
         [
             Step::Upkeep,
-            Step::Draw,
             Step::PrecombatMain,
             Step::BeginCombat,
             Step::DeclareAttackers,

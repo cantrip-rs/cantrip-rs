@@ -127,24 +127,15 @@ fn check_once(cx: &mut Cx) -> R<bool> {
             continue;
         }
         if let Some(reason) = ops::loses_to_state_based_actions_given(cx, p, &commander_beaten) {
-            cx.st().update_player(p, |pl| {
-                pl.lost = true;
-                pl.drew_from_empty = false;
-            });
             leavers.push((p, reason));
             acted = true;
         } else if player.drew_from_empty {
             cx.st().update_player(p, |pl| pl.drew_from_empty = false);
         }
     }
-    // The monarch and the initiative pass on once every loser of this check has left, so none of them is passed one on
-    // the way (CR 725.4, 726.4, 800.4a).
-    if !leavers.is_empty() {
-        crate::designations::monarch_left(cx);
-        crate::designations::initiative_left(cx);
-    }
     // The game they lost is looked back on (CR 603.10f): as the board was before this check, whose actions all happen at
-    // once with the losses (CR 704.3) - a permanent dying in it still sees its controller's opponent lose.
+    // once with the losses (CR 704.3) - a permanent dying in it still sees its controller's opponent lose. Take it before
+    // marking anyone lost: that mark ends control effects, which must not change how this check judges the other SBAs.
     let lost_before = (!leavers.is_empty()).then(|| (cx.s().battlefield().to_vec(), Then::now(cx)));
     // CR 903.9a: a commander that entered graveyard or exile since the previous check may move to command zone now.
     let mut pending = Vec::new();
@@ -157,7 +148,7 @@ fn check_once(cx: &mut Cx) -> R<bool> {
     for id in pending {
         let owner = cx.s().obj(id).owner;
         cx.st().update_obj(id, |obj| obj.commander_return_pending = false);
-        if !cx.s().player(owner).lost
+        if !cx.s().player(owner).lost && !leavers.iter().any(|&(p, _)| p == owner)
             && matches!(cx.ask_rule(owner, RequestKind::May { source: id, purpose: Purpose::Optional })?, Some(Answer::Yes))
         {
             return_to_command.push(ops::Moving::to(id, Zone::COMMAND));
@@ -228,6 +219,7 @@ fn check_once(cx: &mut Cx) -> R<bool> {
     let mut unbestow = Vec::new();
     let mut sagas = Vec::new();
     let mut legends: Vec<(ObjectId, &'static str)> = Vec::new();
+    let mut worlds: Vec<(ObjectId, u32)> = Vec::new();
     let mut bound: Vec<crate::day_night::Bound> = Vec::new();
     let mut battles: Vec<(ObjectId, bool)> = Vec::new();
     let mut annihilate: Vec<(ObjectId, i32)> = Vec::new();
@@ -247,6 +239,7 @@ fn check_once(cx: &mut Cx) -> R<bool> {
             bound.push(crate::day_night::Bound { id, daybound });
         }
         let obj = cx.s().obj(id);
+        if chars.supertypes.world { worlds.push((id, obj.world_since)); }
         // CR 704.5j: not for a player for whom an effect says the legend rule doesn't apply (Hall of Echoes), nor for a
         // permanent a static ability exempts (Mirror Gallery).
         if chars.supertypes.legendary
@@ -401,8 +394,15 @@ fn check_once(cx: &mut Cx) -> R<bool> {
     // order its first permanent entered; decided on the same board as the other actions of this check (CR 704.3),
     // so a legend that is dying anyway may still be the one kept.
     let mut surplus = Vec::new();
+    // CR 704.5k: compare continuous world intervals, not layer timestamps. A tie for newest sends EVERY World to
+    // the graveyard, including older ones. This is neither destruction nor sacrifice and has no player choice.
+    if worlds.len() > 1 {
+        let newest = worlds.iter().map(|&(_, since)| since).max().unwrap();
+        let tied = worlds.iter().filter(|&&(_, since)| since == newest).count() > 1;
+        surplus.extend(worlds.iter().filter_map(|&(id, since)| (tied || since != newest).then_some(id)));
+    }
     if legends.len() > 1 {
-        for p in cx.s().apnap().collect::<Vec<_>>() {
+        for p in cx.s().apnap().filter(|p| !leaving.contains(p)).collect::<Vec<_>>() {
             let mine: Vec<(ObjectId, &'static str)> =
                 legends.iter().copied().filter(|&(id, _)| cx.s().obj(id).controller == p).collect();
             let mut asked: Vec<&'static str> = Vec::new();
@@ -479,10 +479,12 @@ fn check_once(cx: &mut Cx) -> R<bool> {
     // last existed with those objects there (CR 603.10a). The game goes on without them, or ends with the one left (CR
     // 104.2a).
     if let Some((battlefield, then)) = &lost_before {
+        // Every loser leaves in the same check. Until its other actions were judged and performed, their control effects
+        // still described that pre-check board. Now the loss procedure can end those effects and settle the new board.
+        for &(p, _) in &leavers {
+            cx.st().update_player(p, |pl| { pl.lost = true; pl.drew_from_empty = false; });
+        }
         lost_the_game(cx, &leavers, battlefield, then);
-    }
-    for (p, _) in leavers {
-        ops::leave_game(cx, p);
     }
 
     // CR 704.5t: a player on the bottommost room of a dungeon with none of its abilities on the stack completes it.
@@ -528,7 +530,7 @@ fn check_once(cx: &mut Cx) -> R<bool> {
 fn triggered(cx: &Cx, ability: AbilityRef) -> &'static TriggeredDef {
     match cx.cards().ability(ability) {
         AbilityDef::Triggered(t) => t,
-        AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => unreachable!("a triggered ability"),
+        AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) | AbilityDef::BandsWithOthers(_) => unreachable!("a triggered ability"),
     }
 }
 
@@ -576,15 +578,16 @@ fn choose_trigger_targets(
     all_of_few: bool,
     targets: &mut Vec<Target>,
     of: &mut Vec<u8>,
+    choosers: &mut Vec<Option<PlayerId>>,
     first_spec: u8,
 ) -> R<bool> {
-    choose_trigger_targets_after(cx, trigger, specs, all_of_few, targets, of, first_spec, false)
+    choose_trigger_targets_after(cx, trigger, specs, all_of_few, targets, of, choosers, first_spec, false)
 }
 
 #[allow(clippy::too_many_arguments)]
 fn choose_trigger_targets_after(
     cx: &mut Cx, trigger: &PendingTrigger, specs: &[TargetSpec], all_of_few: bool,
-    targets: &mut Vec<Target>, of: &mut Vec<u8>, first_spec: u8, after_divided: bool,
+    targets: &mut Vec<Target>, of: &mut Vec<u8>, choosers: &mut Vec<Option<PlayerId>>, first_spec: u8, after_divided: bool,
 ) -> R<bool> {
     // Asked as the ability it is (CR 607.5): one an effect gave its source reads only its own links.
     let asker = Asker { instance: None, source: trigger.source, controller: trigger.controller, by: layers::given_link(cx.cards(), cx.s(), trigger.source, trigger.ability, trigger.acquired), spell: false };
@@ -598,18 +601,22 @@ fn choose_trigger_targets_after(
     for (spec, slot_player, at) in &slots {
         let spec = &spec.when_kicked(kicked);
         let before = targets.len();
+        let mut selected_chooser = None;
         'slot: {
-            let candidates = crate::actions::target_candidates_with_text(
-                cx,
-                &asker,
-                spec,
-                if after_divided { &targets[..] } else if slots.len() > 1 { &targets[start..] } else { &[] },
-                trigger.subject,
-                *slot_player,
-                text,
-            );
             let counted = u32::from(trigger_counted(cx, trigger));
-            let own = crate::resolve::Given { q: &*cx, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None, text };
+            let earlier = if after_divided { &targets[..] } else if slots.len() > 1 { &targets[start..] } else { &[] };
+            let context = crate::resolve::Given { chooser: None, q: &*cx, earlier, subject: trigger.subject, slot_player: *slot_player, gift: false, x: None, text };
+            let eligible = crate::target_choices::eligible(&context, &asker, spec, counted);
+            let default = match trigger.subject {
+                Target::Player(p) if triggered(cx, trigger.ability).subject_chooses_targets && !cx.s().player(p).lost => p,
+                _ => trigger.controller,
+            };
+            let Some(chooser) = crate::target_choices::choose(cx, &asker, spec, eligible, default, false)? else { return Ok(false) };
+            if spec.chooser.is_some() {
+                selected_chooser = Some(chooser);
+            }
+            let own = crate::resolve::Given { chooser: spec.chooser.map(|_| chooser), q: &*cx, earlier, subject: trigger.subject, slot_player: *slot_player, gift: false, x: None, text };
+            let candidates = crate::actions::target_candidates_as(&own, &asker, spec);
             let (candidates, together) = crate::actions::within_together(&own, &asker, spec, counted, candidates);
             let (least, most) = spec.bounds(counted);
             if !crate::actions::enough_together(&own, &asker, &together, &candidates, least) {
@@ -652,10 +659,6 @@ fn choose_trigger_targets_after(
                 together,
             };
             // The ability's controller chooses its targets (CR 603.3d), unless it says that player does: the one it is about.
-            let chooser = match trigger.subject {
-                Target::Player(p) if triggered(cx, trigger.ability).subject_chooses_targets && !cx.s().player(p).lost => p,
-                _ => trigger.controller,
-            };
             if let Answer::Targets(chosen) = cx.ask_core(chooser, ask, false)? {
                 targets.extend(chosen);
             }
@@ -666,11 +669,16 @@ fn choose_trigger_targets_after(
         }
         // Each target with the spec it was chosen for (`StackItem::spec_of`), numbered across a modal ability's modes.
         of.resize(targets.len(), first_spec + at);
+        if let Some(player) = selected_chooser {
+            choosers.resize(targets.len(), None);
+            choosers[before..targets.len()].fill(Some(player));
+        }
     }
     while targets.len() > start && targets.last() == Some(&Target::None) {
         targets.pop();
     }
     of.truncate(targets.len());
+    choosers.truncate(targets.len());
     Ok(true)
 }
 
@@ -730,6 +738,7 @@ pub(crate) fn announce_trigger(cx: &mut Cx, trigger: PendingTrigger, by: Option<
     let asker = Asker { instance: None, source: trigger.source, controller: trigger.controller, by: layers::given_link(cx.cards(), cx.s(), trigger.source, trigger.ability, trigger.acquired), spell: false };
     let mut targets = Vec::new();
     let mut of: Vec<u8> = Vec::new();
+    let mut choosers: Vec<Option<PlayerId>> = Vec::new();
     let mut shares: Vec<u32> = Vec::new();
     let mut mask = 0u32;
     if let Some(modal) = def.modal {
@@ -777,7 +786,7 @@ pub(crate) fn announce_trigger(cx: &mut Cx, trigger: PendingTrigger, by: Option<
         let mut first_spec = 0u8;
         for (n, mode) in modal.modes.iter().enumerate() {
             for _ in 0..modal.times(mask, n) {
-                if !choose_trigger_targets(cx, &trigger, mode.targets, true, &mut targets, &mut of, first_spec)? {
+                if !choose_trigger_targets(cx, &trigger, mode.targets, true, &mut targets, &mut of, &mut choosers, first_spec)? {
                     return Ok(None);
                 }
                 first_spec += mode.targets.len() as u8;
@@ -801,10 +810,10 @@ pub(crate) fn announce_trigger(cx: &mut Cx, trigger: PendingTrigger, by: Option<
             crate::actions::Divided::Impossible => return Ok(None),
         }
         of.resize(targets.len(), 0);
-        if !choose_trigger_targets_after(cx, &trigger, &def.targets[1..], false, &mut targets, &mut of, 1, true)? {
+        if !choose_trigger_targets_after(cx, &trigger, &def.targets[1..], false, &mut targets, &mut of, &mut choosers, 1, true)? {
             return Ok(None);
         }
-    } else if !choose_trigger_targets(cx, &trigger, def.targets, false, &mut targets, &mut of, 0)? {
+    } else if !choose_trigger_targets(cx, &trigger, def.targets, false, &mut targets, &mut of, &mut choosers, 0)? {
         return Ok(None);
     }
     let mut item = StackItem { instance: AbilityAcquisition::OWN, event_amount: trigger.event_amount,
@@ -815,6 +824,7 @@ pub(crate) fn announce_trigger(cx: &mut Cx, trigger: PendingTrigger, by: Option<
         inline_targets: [Target::None; cantrip_state::INLINE_TARGETS],
         target_count: 0,
         inline_spec_of: [0; cantrip_state::INLINE_TARGETS],
+        target_choosers: Default::default(),
         x: trigger.count.unwrap_or(0),
         kicked: 0,
         counted: trigger_counted(cx, &trigger),
@@ -847,6 +857,7 @@ pub(crate) fn announce_trigger(cx: &mut Cx, trigger: PendingTrigger, by: Option<
         return Ok(None);
     }
     cx.st().set_item_targets(&mut item, &targets, &of, &shares);
+    cx.st().set_item_target_choosers(&mut item, &choosers);
     cx.st().stack_push(item);
     Ok(Some(targets))
 }
@@ -911,7 +922,10 @@ fn consider(
     let givers = std::cell::OnceCell::new();
     for (nth, ability) in chars.abilities().enumerate() {
         // Only a triggered ability is asked anything here.
-        let AbilityDef::Triggered(_) = cx.cards().ability(ability) else { continue };
+        let AbilityDef::Triggered(t) = cx.cards().ability(ability) else { continue };
+        // Triggered mana abilities resolve within the activation in
+        // `tapped_for_mana`, regardless of which event mask their matcher uses.
+        if t.mana_ability { continue; }
         let by = || {
             let given = *given.get_or_init(|| taken.is_some() || possible);
             if given { layers::given_link(cx.cards(), cx.s(), source, ability, acquired_at(nth)) } else { None }
@@ -922,7 +936,7 @@ fn consider(
         } else {
             None
         };
-        let given_text = crate::resolve::Given {
+        let given_text = crate::resolve::Given { chooser: None,
             q: cx,
             earlier: &[],
             subject: Target::None,
@@ -1522,18 +1536,30 @@ impl Query for BoardThen<'_> {
 /// however it was given (`could_have`). Where none could, the activation of a mana ability - the most frequent event - is only
 /// recorded in the history, not looked at for triggers: nothing it could trigger is left out.
 pub(crate) fn activation_watched(cx: &Cx) -> bool {
+    event_watched(cx, &cx.cards().activation_triggers, &cx.cards().activation_triggers_elsewhere,
+        |t| t.listens.intersects(EventMask::ABILITY_ACTIVATED))
+}
+
+/// Mana taps stay history-only while this game contains no ordinary observer.
+/// The same conservative guard covers copies, grants, Rooms, delayed abilities
+/// and other zones, without querying every permanent's characteristics.
+pub(crate) fn mana_tap_watched(cx: &Cx) -> bool {
+    event_watched(cx, &cx.cards().mana_tap_observers, &cx.cards().mana_tap_observers_elsewhere,
+        |t| !t.mana_ability && t.listens.intersects(EventMask::TAPPED_FOR_MANA))
+}
+
+fn event_watched(cx: &Cx, here: &[bool], elsewhere: &[bool], listens: fn(&TriggeredDef) -> bool) -> bool {
     let cards = cx.cards();
     let s = cx.s();
-    let listens = |t: &TriggeredDef| t.listens.intersects(EventMask::ABILITY_ACTIVATED);
     let watched = s.delayed.iter().any(|d| d.when.is_event() && matches!(cards.ability(d.ability), AbilityDef::Triggered(t) if listens(t)))
         || s.seats().any(|p| {
             [Zone::hand(p), Zone::graveyard(p), Zone::exile(p), Zone::library(p)]
                 .into_iter()
-                .any(|z| s.zone(z).iter().any(|&id| cards.activation_triggers_elsewhere[s.obj(id).card.0 as usize]))
+                .any(|z| s.zone(z).iter().any(|&id| elsewhere[s.obj(id).card.0 as usize]))
         })
-        || s.zone(Zone::STACK).iter().any(|&id| cards.activation_triggers_elsewhere[s.obj(id).card.0 as usize])
+        || s.zone(Zone::STACK).iter().any(|&id| elsewhere[s.obj(id).card.0 as usize])
         || {
-            let could = could_have(cx, &cards.activation_triggers, listens);
+            let could = could_have(cx, here, listens);
             s.battlefield().iter().chain(s.zone(Zone::COMMAND)).any(|&id| could(id))
         };
     // With `CANTRIP_VERIFY`: nothing the guard left out has such an ability now - a way of giving one that the guard misses is
@@ -1543,7 +1569,7 @@ pub(crate) fn activation_watched(cx: &Cx) -> bool {
         let has = |id: ObjectId| cx.chars(id).abilities().any(|a| matches!(cards.ability(a), AbilityDef::Triggered(t) if listens(t) && t.functions.contains(s.obj(id).zone.kind())));
         let elsewhere = s.seats().flat_map(|p| [Zone::hand(p), Zone::graveyard(p), Zone::exile(p), Zone::library(p)]).chain(std::iter::once(Zone::STACK));
         for id in s.battlefield().iter().chain(s.zone(Zone::COMMAND)).chain(elsewhere.flat_map(|z| s.zone(z).iter())) {
-            assert!(!has(*id), "{id:?} has an ability that triggers on an activation that nothing counted as able to give it (CR 603.2)");
+            assert!(!has(*id), "{id:?} has an event observer that nothing counted as able to give it (CR 603.2)");
         }
     }
     watched
@@ -1573,16 +1599,26 @@ pub(crate) fn could_have<'a>(cx: &'a Cx, table: &'a [bool], kind: fn(&TriggeredD
     }
 }
 
-/// `losses`, players who lost the game at once and are about to leave it (CR 104.3, 800.4a): recorded, and the abilities
-/// that trigger on them looked for (CR 603.2), looking back on `battlefield` as it was just before (CR 603.10f), as `then`
-/// took it. Their own abilities that trigger go with them as they leave (CR 800.4a).
+/// `losses`, players marked lost at once (CR 104.3, 800.4a): record their loss, settle its continuous consequences, collect
+/// its triggers looking back on the captured pre-loss board (CR 603.10f), then clear their objects and abilities. A control
+/// effect cannot leave a stored controller inconsistent with layer 2 while triggers are asked. Concession, Phage the Untouchable and ordinary lethal
+/// damage all use this procedure; their own abilities cannot survive their leaving (CR 800.4a).
 pub(crate) fn lost_the_game(cx: &mut Cx, losses: &[(PlayerId, LossReason)], battlefield: &[ObjectId], then: &Then) {
     let events: Vec<Event> = losses.iter().map(|&(player, reason)| Event::GameLost { player, reason }).collect();
     let start = cx.g.log.len();
     for &event in &events {
         cx.record(event);
     }
+    // Static control can no longer give these players anything (CR 800.4a); make that continuous change real before an
+    // event's triggers or a designation change asks the new board. The captured Then still supplies pre-loss controllers.
+    ops::settle_at_once(cx);
+    // All losers are marked before passing either designation, so neither is passed to another player leaving in this
+    // same check (CR 725.4, 726.4). Their loss is already in history when any consequences of leaving are recorded.
+    crate::designations::monarch_left(cx);
+    crate::designations::initiative_left(cx);
     collect_batch(cx, &events, Some(Before { battlefield, then, seen_by_all: &[] }), start);
+    // Collected before cleanup so a loser's own pending loss triggers are removed by the ordinary leave_game procedure.
+    for &(p, _) in losses { ops::leave_game(cx, p); }
 }
 
 /// How many mana that a "when that mana is spent" delayed ability rides (`DelayedWhen::ThatMana`) were spent to cast the
@@ -1602,11 +1638,11 @@ fn that_mana_spent(cx: &Cx, rider: u32, event: &Event) -> u32 {
 /// Every triggered ability this event triggers (CR 603.2).
 /// Ask the event of the watched object, but ask the creating ability's conditions of its actual source.
 pub(crate) fn delayed_fires(q: &dyn Query, d: &cantrip_state::Delayed, t: &TriggeredDef, asker: &Asker, event: &Event) -> Option<Fired> {
-    let own = crate::resolve::Given { q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None,
+    let own = crate::resolve::Given { chooser: None, q, earlier: &[], subject: Target::None, slot_player: None, gift: false, x: None,
         text: d.words.map(|w| (d.watched(), w)) };
     if d.when == DelayedWhen::WatchingThisTurn {
         let source_asker = Asker { source: d.source, ..*asker };
-        let source_text = crate::resolve::Given { text: d.words.map(|w| (d.source, w)), ..own };
+        let source_text = crate::resolve::Given { chooser: None, text: d.words.map(|w| (d.source, w)), ..own };
         if t.only_if.is_some_and(|c| !c(&source_text, &source_asker))
             || t.condition.is_some_and(|c| !c(&source_text, &source_asker)) { return None; }
         if let Some(asked) = t.asked { asked(&own, asker, event) } else { (t.matches)(&own, asker.source, event) }
@@ -1717,7 +1753,7 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                     // in an intervening "if" (CR 603.4). Its event is asked of the object it watches (`Delayed::watched`).
                     let asker = Asker { instance: None, source: d.watched(), controller: d.controller, by: delayed_link(cx, &d), spell: false };
                     // Its text is the one that created it (`Delayed::words`, CR 603.7, 113.7a), its source's now notwithstanding.
-                    let given = crate::resolve::Given {
+                    let given = crate::resolve::Given { chooser: None,
                         q: &*cx,
                         earlier: &[],
                         subject: Target::None,
@@ -2047,15 +2083,40 @@ pub(crate) fn delayed_turn(cx: &Cx, since: u32, of: Option<PlayerId>) -> Delayed
     }
 }
 
+/// CR 500.4 deadlines, also run for the untap step before its turn-based actions. Separate from step triggers so
+/// the untap step gains no new event or priority window.
+pub(crate) fn expire_step_deadlines(cx: &mut Cx, step: Step) {
+    let active = cx.s().turn.active;
+    // CR 500.4: deadlines expire before beginning-of-step triggers. A grant/effect made during this step waits
+    // for a later matching beginning; a skipped step never calls this procedure.
+    let begins = |duration: Duration| match duration {
+        Duration::UntilNextStepOf { step: s, player } | Duration::UntilEndOfNextStepOf { step: s, player } => s == step && player.is_none_or(|p| p == active),
+        _ => false,
+    };
+    let changed = cx.s().effects.iter().any(|e| begins(e.duration));
+    if changed {
+        cx.st().effects_retain(|e| !matches!(e.duration, Duration::UntilNextStepOf { .. }) || !begins(e.duration));
+        for at in 0..cx.s().effects.len() {
+            let e = cx.s().effects[at];
+            if matches!(e.duration, Duration::UntilEndOfNextStepOf { .. }) && begins(e.duration) {
+                cx.st().effect_set(at, ContinuousEffect { duration: Duration::EndOfStep, ..e });
+            }
+        }
+    }
+    let expires = |p: &cantrip_state::PlayPermission| p.player == active && match p.grant.expiry {
+        Expiry::UntilYourNextEndStep => step == Step::End,
+        Expiry::UntilYourNextStep(s) => s == step,
+        _ => false,
+    };
+    if cx.s().permissions.iter().any(expires) { cx.st().permissions_retain(|p| !expires(p)); }
+    if changed { ops::settle_lasting_and_control(cx); }
+}
+
 /// A step has begun: its "at the beginning of" abilities trigger, and so do the delayed abilities waiting for it,
 /// which are used up (CR 603.7c) unless they wait for each such step for the rest of the game.
 pub fn step_began(cx: &mut Cx, step: Step) {
     let active = cx.s().turn.active;
-    // CR 500.4: a duration of "until your next end step" ends as the step begins, before its abilities trigger; a
-    // permission granted during that step is for the next one.
-    if step == Step::End && cx.s().permissions.iter().any(|p| p.grant.expiry == Expiry::UntilYourNextEndStep) {
-        cx.st().permissions_retain(|p| !(p.grant.expiry == Expiry::UntilYourNextEndStep && p.player == active));
-    }
+    expire_step_deadlines(cx, step);
     let mut at = 0;
     while at < cx.s().delayed.len() {
         let d = cx.s().delayed[at];
@@ -2071,6 +2132,7 @@ pub fn step_began(cx: &mut Cx, step: Step) {
             DelayedWhen::PhaseStep { step: s, phase } => (s == step && cx.s().turn.phase_id == phase, true),
             DelayedWhen::NextTurnStep { step: s, player, after } => (s == step && player == active && cx.s().turn.number > after, true),
             DelayedWhen::ThisTurn
+            | DelayedWhen::ThisCombat
             | DelayedWhen::WatchingThisTurn
             | DelayedWhen::UntilEvent
             | DelayedWhen::UntilNextTurnOf(_)

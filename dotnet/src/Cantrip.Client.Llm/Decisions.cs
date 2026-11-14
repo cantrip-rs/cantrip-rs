@@ -1373,12 +1373,8 @@ public sealed class Decisions
 
         List<ViewHandle> chosen = [.. picks.Select(pick => prompt.Verdict.Addable[pick])];
 
-        // A band (CR 702.22c) has at most one creature without banding: the first picked stays.
-        if (prompt.Purpose == CardChoicePurposeView.Band)
-        {
-            List<ViewHandle> without = [.. chosen.Where(prompt.WithoutBanding.Contains).Skip(1)];
-            chosen.RemoveAll(without.Contains);
-        }
+        // Band legality includes bands with other (CR 702.22c): the server's selection verdict,
+        // applied by GameClient.Answer, judges the set. Ordinary banding's limit alone is insufficient.
 
         // Craft's "one or more" (CR 702.167a): an answer short of the least it takes is made up with the first ones offered.
         chosen.AddRange(prompt.Verdict.Addable.Where(card => !chosen.Contains(card)).Take(Math.Max(prompt.Minimum - chosen.Count, 0)));
@@ -1513,6 +1509,8 @@ public sealed class Decisions
             CardChoicePurposeView.ReturnToHand => prompt.Kind.Length > 0
                 ? $"{source}: return {many}{kind}(s) you control to their owner's hand."
                 : $"{source}: return {many} permanent(s) to their owner's hand.",
+            CardChoicePurposeView.Untap when prompt.CountKind == CountKindView.AsManyAsCan =>
+                $"{source}: choose as many permanents to untap as the untap restrictions allow.",
             CardChoicePurposeView.Untap => $"{source}: untap {many}{kind} permanent(s).",
             CardChoicePurposeView.Tap => $"{source}: tap {many}{kind} permanent(s) you control. Tapped, they cannot attack, block or tap for mana until they untap, so choose those you can best spare.",
             CardChoicePurposeView.Attach => $"{source}: attach {many}{kind} permanent(s) you control to the creature.",
@@ -1531,7 +1529,7 @@ public sealed class Decisions
                 $"{source}: choose {many}{kind} {(prompt.Count == 1 ? "copy" : "copies")} to cast{where} without paying their mana costs. The copies cease to exist if not cast.{budget}",
             CardChoicePurposeView.Play => $"{source}: choose {many}{kind} card(s) you may play this turn. The card's text says whether you pay its costs.",
             CardChoicePurposeView.Vote => $"{source}: cast your vote.",
-            CardChoicePurposeView.TapToPay => $"{source}: tap creatures to pay its cost.",
+            CardChoicePurposeView.TapToPay => $"{source}: tap eligible permanents to pay its cost.",
             // Permanents you control ("exile a creature you control", CR 118.3) are given up for good: those worth least.
             CardChoicePurposeView.ExileToPay when ChoiceIsOnBattlefield(client, prompt) =>
                 $"{source}: exile {many}{(kind.Length > 0 ? kind : " permanent")}(s) you control to pay for it. They are exiled for good, so choose those you can best spare.",
@@ -1541,7 +1539,7 @@ public sealed class Decisions
             CardChoicePurposeView.PreventDamageFrom => $"{source}: its prevention shield has {prompt.PreventLeft} damage left to prevent, and these sources would deal damage to what it shields at the same time. Choose the source whose damage it prevents first; what is left of the shield goes to the others, and the damage it can't prevent is dealt. Prevent first the damage that would hurt most: from a source with deathtouch or lifelink if the shield can prevent all of it, else the most damage.",
             CardChoicePurposeView.Craft => $"{source}: craft - choose {(prompt.Minimum > 0 ? $"{prompt.Minimum} or more" : many)}{(kind.Length > 0 ? kind : " other permanent or card")}(s) from among the permanents you control and the cards in your graveyard to exile with {source} as the cost of its craft ability; then it returns transformed. The materials are exiled for good, so choose those you can best spare, cards in your graveyard before permanents.",
             CardChoicePurposeView.PutOnBottom => $"You kept a hand after mulliganing: choose {many} card(s) to put on the bottom of your library.",
-            CardChoicePurposeView.Band => $"{source} has banding and is attacking: choose the other attackers that attack in a band with it, or none. A band may hold any number with banding but at most one without ({string.Join(", ", prompt.WithoutBanding.Select(card => GameText.Named(client, card)))} have none). A band is blocked as one: a creature blocking any of it blocks all of it, and you, not the blocker's controller, divide that blocker's damage among the band - so a valuable creature banded with one with banding can have the blockers' damage put on the other. But one blocker then stops the whole band.",
+            CardChoicePurposeView.Band => $"{source} is attacking: choose other attackers to band with it, or none. Only legal additions under banding or bands with other are offered. A band is blocked as one: a creature blocking any of it blocks all of it.",
             CardChoicePurposeView.Enlist => $"{source} has enlist and is attacking: you may tap one untapped creature you control that isn't attacking (and has haste or has been yours since the turn began), or none. If you tap one, {source} gets +X/+0 until end of turn, X that creature's power. The tapped creature can't block on your opponent's next turn if it stays tapped, so enlist with a creature that would not attack or block usefully anyway.",
             _ => $"{source}: choose {many}{kind} card(s).",
         };

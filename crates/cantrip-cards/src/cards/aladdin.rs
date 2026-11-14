@@ -9,6 +9,5 @@ pub static CARD: CardDef = CardDef {
         "{1}{R}{R}, {T}: Gain control of target artifact for as long as you control this creature.",
     )
     .targets(&[targets::ARTIFACT])],
-    lasting: &[effects::YOU_CONTROL_SOURCE],
     ..oracle::ALADDIN
 };

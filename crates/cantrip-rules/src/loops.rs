@@ -289,6 +289,7 @@ impl<'a> Canon<'a> {
         // Timestamps by their order (CR 613.7).
         stamps.clear();
         stamps.extend(s.zones.iter().flatten().map(|&id| s.obj(id).timestamp));
+        stamps.extend(s.zones.iter().flatten().filter_map(|&id| (s.obj(id).world_since != 0).then_some(s.obj(id).world_since)));
         stamps.extend(s.effects.iter().map(|e| e.timestamp));
         stamps.extend(s.counter_stamps.iter().map(|c| c.timestamp));
         // An activation retains its acquisition even when paying its cost removed that grant.
@@ -339,6 +340,7 @@ impl Hash for Name<'_> {
         let departed = |h: &mut H| {
             let mut o = *s.obj(id);
             o.timestamp = 0;
+            o.world_since = if o.world_since == 0 { 0 } else { (canon.rank(o.world_since) + 1) as u32 };
             o.became = None;
             o.last_known = None;
             o.attached_to = None;
@@ -494,6 +496,7 @@ fn write_position<H: Hasher>(s: &GameState, canon: &Canon, h: &mut H, hashed: bo
             )
                 .hash(h);
             o.timestamp = 0;
+            o.world_since = if o.world_since == 0 { 0 } else { (canon.rank(o.world_since) + 1) as u32 };
             o.became = None;
             o.attached_to = None;
             o.entered_with = None;

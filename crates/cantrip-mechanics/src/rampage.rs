@@ -20,5 +20,5 @@ fn grow<const N: u8>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
 
 /// "Rampage N" (CR 702.23a-c): list each printed instance separately among the creature's abilities.
 pub const fn trigger<const N: u8>(text: &'static str) -> AbilityDef {
-    triggered(when(EventMask::BECAME_BLOCKED, this_becomes_blocked), grow::<N>, text)
+    triggered(when(EventMask::BECAME_BLOCKED, this_becomes_blocked), grow::<N>, text).keyword_family(KeywordFamily::Rampage)
 }

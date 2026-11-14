@@ -331,6 +331,20 @@ every target of the slot illegal (Nethroi, Apex of Death's and Run Away Together
 keep the choice legal. The client keeps a total's running total in the caption (`Tally`), shows the rule's words, and offers
 only the candidates the host's verdict on those picked says may be added.
 
+Printed X definitions and limits belong to announcement/cost authority (`XRule`, CR 107.3, 601.2b/f), not a test in a
+resolving effect. `CardDef::x_rule` and an activated ability's `.x_is(value)` / `.x_at_most(value)` supply query callbacks;
+Chromatic Armor and Voodoo Doll read their counters, Reflecting Mirror reads its already-selected target's mana value,
+and Winter's Chill limits the chosen value by its caster's snow lands. Availability and target candidates use the same
+rule as actual casting/activation; a fixed X has no free-number prompt, and its cost is locked before mana abilities
+change the queried state. A target-dependent definition must not also require X to select that target. `OfPlayer` lets
+the caster pick an eligible player whose property defines X (Spoils of War); it uses the existing player-choice
+protocol, never turns that player into a target, and searches only those sparse values for availability. Ordinary X
+keeps its existing prompt cap; text-defined native values can exceed that UI cap. The existing `u32` X/mana and signed
+counter/P-T/life types are unchanged. These callbacks live on shared card/ability definitions, with no new object fields.
+The recorded cost value is not a universal substitute for a live text-defined value read by the effect (CR 107.3c):
+card code must query the printed effect quantity at its specified time. Copying retains the cost's announced X as before.
+
+
 ### Characteristics
 
 - **Computed on query** (`chars()`), through the layers (613), from the object's card, its counters and the
@@ -379,7 +393,8 @@ only the candidates the host's verdict on those picked says may be added.
   schema and hash, including explicit adapters for supported older layouts. Removing stun or a prohibited untap emits none. `Query::can_untap` asks whether the untap is payable before replacements: stun still permits a
   cost (CR 118.11), while "can't become untapped" does not. Untap-step-only restrictions do not bar an untap cost.
   `Duration::WhileSourceTapped` (Ashnod's Battle Gear, Seasinger, Lwaxana Troi) and
-  `WhileSourceTappedAndControlled` (Rubinia Soulsinger) ask the history about an uninterrupted source interval
+  `WhileSourceTappedAndControlled` (Rubinia Soulsinger), and `WhileSourceControlled` (Aladdin, Merieke Ri Berit,
+  Orcish Squatters) ask the history about an uninterrupted source interval
   before first applying (CR 611.2b). `StackItem::tapped_since` starts at the source's final {T} cost; source control
   still counts from the ability's creation on the stack. A copy starts a fresh interval when created (CR 707.10).
   An interval broken and restored before resolution cannot revive that ability; the complete condition restarting
@@ -388,7 +403,7 @@ only the candidates the host's verdict on those picked says may be added.
   `mana_activation_x`; both context values restore after nested activations, suspension or failed payment. A
   condition broken during an immediate mana ability's costs still cannot revive before its own resolution. Custom `AsLongAs` predicates, `WhileCounter`, play `Expiry`, and `WhileSourceOnBattlefield` keep their
   existing current-state beginning checks; their arbitrary pre-resolution condition histories are not reconstructed
-  by these source-tapped duration types.
+  by these source-dependent duration types.
 - **Text-changing effects (612, layer 3)** are `EffectKind::ChangeText { from, to }`, a `Word` (a color word or a
   subtype) replaced by another. The layers change the type line; card code reads every word of its rules text through
   `Query::words` (`Words`, the changes in timestamp order unless one depends on another), so the card does what its changed text says. A token's
@@ -1084,6 +1099,17 @@ land dies or is put into exile, return it", earthbend, CR 701.66a; its `matches`
 603.7c; dropped as a turn begins once that object has changed zones). Only the end of an "until" wait (`UntilEvent`) is
 no triggered ability (CR 610.3), so nothing stops it.
 
+A repeating event ability limited to the combat uses `DelayedWhen::ThisCombat`
+(Goblin Flotilla and Melee). It remains active through priority in the
+end-of-combat step, then expires as that combat phase ends, before an extra
+combat begins. Ending the phase or turn early also expires it; one created
+outside combat ends at cleanup at the latest. Continuous effects ending at
+the same boundary settle before the watcher is removed, so their resulting
+control-change events can still trigger it. An already pending trigger is not
+cancelled by the watcher's expiry. Source departure and ability loss do not
+remove a created watcher. Expiry uses the existing journalled delayed list;
+no per-object fields or quantity types change.
+
 `Game::delayed_trigger_with` exposes both existing typed roles for step-delayed abilities: an independent singular
 `subject` and one real-object list (`Delayed::members`, read through `event_objects` on its stack item). Infinite
 Authority carries the original enchanted creature separately from the opposing creature, including across its nested
@@ -1268,7 +1294,10 @@ and a choice given up is undone and the payer asked again. The parts only a spel
 craft's materials, a granted ability's "sacrifice the permanent that gives it") are never paid. The whole is paid together,
 and "if they do" asks whether they paid (CR 118.12). "You may pay {X}" where the text leaves X to the payer (CR 107.3f) is `Game::may_pay_x`
 (`actions::may_pay_x`): the same question with its `x`, raised and lowered (`IncreaseX`, `DecreaseX`) while mana is made, any
-X from 0 up, and the X paid is what it returns, for "when you do" to carry (Fire Lord Sozin). "You may pay {G} up to three
+X from 0 up, and the X paid is what it returns, for "when you do" to carry (Fire Lord Sozin). A variable source-counter
+removal uses the available-counter bound shared with storage-land activations (`source_counter_x_limit`), including
+fixed removals and repeated components. Its count is not capped by the mana-X picker, and a counter-only payment
+offers no mana abilities. Paying zero still returns `Some(0)`; declining returns `None`. "You may pay {G} up to three
 times" and "any number of times" are `Game::may_pay_times` (`actions::may_pay_times`): the same question with its `times`, the
 number raised and lowered from 1 to the most (`ANY_NUMBER_OF_TIMES`: what the mana cost's shape holds, `ManaCost::times`) and
 the mana that many times over paid at once, its number returned. "When you pay this cost one or more times" triggers once
@@ -1578,6 +1607,14 @@ check that saw it (704.5b: "since the last time state-based actions were checked
 who can't win (`CardDef::win_rules`) or who has an opponent who can't lose. A concession is the host's and is never stopped
 (104.3a). Every loss records `Event::GameLost` with its `LossReason`, and a draw `Event::GameDrawn` with its `DrawReason`,
 which the host tells each seat (`PlayerLostEvent`, `GameEndedEvent.DrawReason`).
+
+Concession, an effect's loss and a state-based loss share `settle::lost_the_game`: the loss is recorded before its
+continuous consequences, control is settled before collecting triggers, and `leave_game` removes the loser's objects
+and pending abilities (800.4a). Loss triggers ask the captured pre-loss battlefield and controllers (603.10f), even though
+the current board has already given back a creature controlled through the loser's Aura. A state-based check captures
+that board only when it has a loser, and marks all its losers after judging and performing its other actions (704.3);
+neither its legend-rule choices nor its commander-return choices are asked of a player leaving in that check. All
+simultaneous losers are marked before the monarch or initiative is passed, so neither passes to another loser.
 
 Loops are `loops.rs`'s (CR 104.4b, 732; `docs/rules-exceptions.md`, RX-4), watched in `GameState::loop_watch` and
 `GameState::loop_keys`, journalled like any other write. The engine finds one kind of loop only: a run of passes that
@@ -2863,7 +2900,11 @@ haste"), `EffectKind::BlockRestriction { card, index }`, which names the `index`
 card that made it - a `BlockRule` asked of each possible block, with the effect's `affected` object as its source, while the
 effect lasts, as `EffectKind::SpellCostChange` names a `lasting_cost_changes` entry. It is read beside the
 static block rules in `turn::can_block`, but from the effects, not from a source permanent's abilities, so neither the
-creature's nor the source's losing abilities ends it. `Chars::maximum_blockers` is the counterpart of `minimum_blockers`: a declaration giving an
+creature's nor the source's losing abilities ends it. The effect captures its creator's `Words` when it begins;
+`WithWords` supplies those words under the callback's affected-object argument, which still identifies the attacker.
+Tower of Coireall and Joven's Tools therefore use the text which created the restriction, not a later text change on
+their source or an unrelated text change on the targeted creature (CR 611.2c, 612.1).
+`Chars::maximum_blockers` is the counterpart of `minimum_blockers`: a declaration giving an
 attacker more blockers is refused (`validate`, CR 509.1b), and an attacker whose minimum is above its maximum (menace as well:
 the restrictions are cumulative) is offered no block at all (`turn::declare_blockers`). The question carries both per attacker
 (`DeclareBlockersPrompt::maximum_blockers`, 0 for any number); the web client sends at most that many of the creatures picked up
@@ -2909,8 +2950,11 @@ block this turn" and Headliner Scarlett's "creatures target player controls can'
 `about` is what the words named as it resolved ("target opponent", for Exhaustion's "creatures and lands target opponent
 controls don't untap during their next untap step"; "target player", for Headliner Scarlett), handed to `applies`. It is read
 beside each per-object effect (`static_rules::lasting_rules_on`: `turn::attack_rules`, `cant_block`, `untap_step`), from the effects and not from any object's abilities, so neither the source's nor the permanent's losing
-abilities ends it, and it outlives its source. A set the words fix as the effect resolves ("each attacking creature doesn't
-untap during its controller's next untap step", Tangle; "those creatures", Frost Breath) is an effect on each object instead:
+abilities ends it, and it outlives its source. `LastingRule` also captures its creation-time `Words`, read through `WithWords` by both `lasting_rules_on` and
+`lasting_rules_barring_attacks`. The objects' characteristics remain live; only the rule's words are fixed.
+Island Sanctuary's islandwalk exception thus survives a later Magical Hack of the enchantment. A set the words fix as
+the effect resolves ("each attacking creature doesn't untap during its controller's next untap step", Tangle;
+"those creatures", Frost Breath) is an effect on each object instead:
 `EffectKind::DoesntUntap`, weaker than `CantBecomeUntapped` (another untap still untaps it, CR 502.3), with
 `Duration::DuringItsControllersNextUntapStep` - whoever controls it at that untap step, per the Tamiyo, the Moon Sage ruling -
 or `Duration::DuringNextUntapStepOf(player)`, which applies in that player's untap step alone; both end as that untap step
@@ -2955,21 +2999,36 @@ that can block additional creatures (the validator's one-attacker-per-blocker ru
 
 ### Banding
 
-Banding (CR 702.22) is a core keyword, `Keyword::Banding` (Benalish Hero, Mesa Pegasus, plain cards). As attackers are
-declared (CR 508.1e, before they tap), `turn::declare_bands` asks the active player, for each attacker with banding not yet in a
-band, which other attackers attacking the same thing (CR 702.22d) and in no band join it: a `ChooseCards` of
-`Purpose::Band`, up to all of them, which `validate` refuses with more than one creature without banding (CR 702.22c). Each
-`Attacker` keeps its `band` number for the rest of combat (CR 702.22e); one that leaves combat is no longer `live` and so out
-of it (CR 702.22f). A creature declared blocking one member of a band blocks every member (CR 702.22h, `declare_blockers`), its
-restrictions judged on the declared block alone, as the rule's example has it. In the damage step each creature with a choice
-has a `DamageDivision`: an attacker blocked by two or more, or a trampler past lethal (CR 510.1c, 702.19b), and a blocker
-blocking two or more (CR 510.1d) - which only a band makes. Banding moves a division to the other player (`banding`): an
-attacker blocked by a creature with banding is divided by the defending player among its blockers, past lethal and none to
-the player (CR 702.22j); a blocker blocking a creature with banding by the attacking player among the creatures it blocks
-(CR 702.22k). The active player divides first, then each defending player (CR 510.1). The engine's suggestion for a banding
-division spares: all of it on one creature it would not kill, or on the one worth least by power and toughness; the client
-captions it as the opponent's creature's damage, and the attacking band carries its number to the view (`BAND 1` on the
-card). "Bands with other" (CR 702.22b) is not built: no card in content has it.
+Banding (CR 702.22) is a core keyword, `Keyword::Banding`. Parameterized
+"bands with other" abilities use `AbilityDef::BandsWithOthers` and a `BandQuality`
+predicate, constructed by `cantrip_mechanics::banding::with_others`. They occupy
+ordinary ability slots; there is no extra per-object state. A named quality
+(legendary creatures or creatures named Wolves of the Hunt) is independent of
+which permanent grants or holds the ability.
+
+As attackers are declared (CR 508.1e, before they tap), `turn::declare_bands`
+asks qualifying providers which unbanded attackers attacking the same defender
+join them. `banding::selection` accepts either ordinary banding with at most
+one nonbander, or a qualifying provider plus any number of creatures matching
+its quality (CR 702.22c-d). A partial selection may be completed by an unused
+provider. Declining forms no band. Each `Attacker` retains its band number after
+ability loss (CR 702.22e); leaving combat removes it from the band (702.22f).
+Blocking one member blocks every member, with restrictions judged on the
+declared block alone (702.22h).
+
+`banding::controls_assignment` moves a damage division to the other player:
+ordinary banding suffices, while a parameterized ability requires a qualifying
+holder and one other creature of the named quality. Unrelated members of the
+combat group do not invalidate that pair (CR 702.22j-k). The controller of the
+banding creatures assigns the opposing creature's damage without the usual
+lethal-order or trample constraints. The active player divides first, then each
+defending player (CR 510.1). The client receives the existing `DamageDivision`
+and band number. Suggestions still spare a creature where possible.
+
+`EffectKind::LoseBandsWithOthers` removes only parameterized instances at its
+layer timestamp. Losing ordinary banding also removes those instances, even
+when the creature had no ordinary banding instance (CR 702.22b). Later grants
+work normally; copying and losing all abilities use the ordinary ability list.
 
 ### Becoming blocked and rampage
 
@@ -2992,6 +3051,27 @@ lives in `cantrip_mechanics::combat::remove_from_combat_and_unblock`: it consult
 identify attackers that had become blocked by only the removed creature. A second blocker that left earlier still
 prevents this unblocking. Removal and unblocking are separate instructions; the attackers becoming unblocked together
 are one instruction. Moving through the search tree restores both the blocked flags and the transition history.
+
+`Game::change_blocks` is the separate authority for effects assigning or changing blocking relationships. Its inputs
+name creatures to remove from combat, pairs to end, and pairs to establish. Ending a pair alone preserves blocking
+and blocked status. Establishing a pair expands an attacking band and records per-creature block events, with the
+generic `declared` marker only when that creature becomes a blocker. A retained pair does not trigger again; removing
+and reassigning a blocker does, even if the new attacker is the same. The complete graph is installed before trigger
+collection. False Orders, Balduvian Warlord, General Jarkeld and Sorrow's Path need these distinctions. This mutation
+does not declare blockers or apply a declaration's costs and requirements; explicit "could block" checks belong
+before it, and are not supplied by this mutation API.
+
+`Game::block_reassignment_allowed` supplies those explicit conditions at resolution. It uses the existing
+`BlockRequirements` solver with every desired relationship as a required fact of the hypothetical assignment.
+Changed pairs use current evasion, protection and other pair restrictions; changed blockers use current capacities,
+and changed attackers use their current group limits. Band representatives satisfy automatic relationships without
+using extra block allowances. Unrelated existing pairs are retained without demanding that they could still be
+declared. Whole-blocker restrictions are checked, but declaration requirements, payments and untapped eligibility
+are not imposed anew. The query asks no player a question and changes no state.
+
+The shared `combat::swap_blocks` recipe reads the two cohorts and checks this authority before performing either
+exchange. `combat::choose_attacker_to_block` makes the non-target resolution choice for False Orders and Balduvian
+Warlord; its caller owns the preceding removal/unblocking instruction and any optional choice.
 
 ### The regular combat damage step
 
@@ -3055,6 +3135,10 @@ CR 510.4: the regular combat damage step after a first-strike step is for the at
 strike nor double strike as the first-strike step began, and those that have double strike now. `Attacker::first_strike` and
 `Block::first_strike` record which had one of them as that step began; a creature that loses first strike after dealing
 first-strike damage deals no more, and one that gains it only afterwards deals its damage in the regular step.
+The first-strike step also records `CombatFirstStrike` for battlefield creatures that have either ability then.
+It is history-only, with no trigger mask and no additional per-object state. Changing a block reads that combat's
+record when its old association is gone, preserving eligibility when Sorrow's Path reassigns a surviving blocker
+after its attacker left. New incarnations and a later combat do not inherit the fact.
 
 ### Landwalk
 
@@ -3605,8 +3689,6 @@ Game::add_phases accepts the current phase, a main-phase ordinal (CR 505.1b), or
 Returned identities support DelayedWhen::PhaseStep, such as World at War's "at the beginning of that combat".
 Game::add_combat_phase uses the same schedule. Combat boundaries expire combat-duration effects and mana before
 the next phase; ending the turn discards the remaining phase schedule and proceeds to cleanup.
-<<<<<<< HEAD
-=======
 
 ## Commander designation and fixed color identity (CR 903)
 
@@ -3656,4 +3738,113 @@ choices and the active player's exert prohibitions are collected before the simu
 The shared recipes for Combat Celebrant and Ahn-Crop Champion, Own the Day and World at War,
 untapping legal targets, and untapping all controlled lands call that authority. The recipes still
 select their own printed sets; simultaneous legality and replacement timing belong to the core.
->>>>>>> b019bdca5 (Engine: apply untaps simultaneously)
+
+### Blocking exceptions for landwalk (CR 609.4)
+
+`CardDef::landwalk_exceptions` names the landwalk abilities ignored for a particular
+blocker/attacker pair. Great Wall, Deadfall and Staff of the Ages use this same
+rules hook. The declaration's existing live blocking-rule sources supply it;
+loss of abilities and phasing therefore remove the exception, and copies retain
+it. The exception changes only the local landwalk test: it never edits the
+attacker's keywords or lifts flying, protection or other blocking restrictions.
+Named basic-landwalk references include their snow counterparts, consistently
+with the engine's other ability references. The source's `Asker` carries the
+controller and linked component for card predicates and text changes.
+
+
+### World intervals and state-based actions
+
+World permanents obey CR 704.5k. Their current continuous world-supertype interval
+has its own journalled `Obj::world_since` timestamp: ordinary layer timestamps
+can change while a permanent remains World. Acquisitions in a simultaneous batch
+share a value. The state-based action keeps the unique newest interval, or puts
+all Worlds into their owners' graveyards if newest is tied. World age is
+preserved through phasing and refreshed after actually losing and regaining the
+supertype. The interval's relative order and ties are included in canonical loop
+identity; absolute timestamp magnitudes are not.
+
+Synchronization follows whole instructions, ungrouped characteristics changes
+and recorded event batches. History-sensitive type-layer abilities are
+recalculated after history changes. Only the state-dependent presence of live
+world-sensitive definitions is cached, by epoch; the actual type result is not.
+The guard inspects game sources rather than asking whether the global card table
+contains any World.
+
+### An ability's explicit activators
+
+CR 602.2 permissions belong to `ActivatedDef::activators`, set by
+`.activated_by` or `.any_player_may_activate`. The permission callback reads the
+source's controller and a separate candidate player; the activated ability's
+condition, costs, stack controller and effect use the actual activator. Regular
+and mana activation, payment-window options and affordability share that
+authority. Per-definition metadata is checked on live texts, with acquired
+abilities supplied by the layers; unrelated opposing permanents need no
+characteristics calculation. Permission changes no timing, cost or activation
+limit, never allows sacrificing an opponent's permanent, and never lets it pay
+convoke/improvise. The source's own {T} uses its controller's summoning sickness.
+
+### Step-bound lifetimes
+
+The core owns CR 500.4 step deadlines. `UntilNextStepOf` expires before the step's
+beginning triggers; `UntilEndOfNextStepOf` changes to `EndOfStep` when it begins.
+The latter expires before the following step, including an early turn/combat
+end, and settles control before that step's triggers. Skipped steps do nothing.
+A play permission's `UntilYourNextStep` uses the same start boundary. Counted
+`DuringControllersNextUntapSteps` durations consume future untap steps in
+parallel, under the affected object's current controller, even when it is
+already untapped. These are journalled duration transitions, never card-owned
+counts of past events. Numeric representation and observation dimensions do not
+change.
+
+### Explicit unspent-mana loss
+
+`Game::empty_mana_pool` uses the existing state emptying authority at its longest
+intrinsic lifetime, ignoring static rules that keep mana only at step/phase
+boundaries. It clears ordinary/restricted pools and their duration, source and
+snow provenance together, and returns the lost types within native per-type
+bounds. It is separate from producing/doubling mana and from asking a player
+to activate a land's mana abilities. All state changes are journalled.
+
+### Random discard as a cost
+
+A `Cost::discard_at_random` component is scheduled after all nonrandom costs
+(CR 601.2h), and selects exact distinct cards with the recorded random-choice
+authority rather than asking the payer. The special-action path separates
+ordinary and random discards for the same ordering. Random discards cannot
+feed an earlier nonrandom graveyard cost. Selection, discard and typed payment
+receipts use the existing journal, movement and cost infrastructure.
+
+### Typed triggered-keyword families
+
+The rampage and cumulative-upkeep factories tag their `TriggeredDef` with a
+compact `KeywordFamily`. Queries inspect current layered ability references;
+labels and callback identity are never classifiers. Shared factories also tag
+instances granted from a card's delayed list. An Oracle-consistency test holds
+all implemented printed keywords to those tags. No historical counts or
+per-object family collections are stored.
+
+### Explicitly noted values
+
+An instruction that notes information (CR 607.2e) records `ValueNoted`, with an immutable
+`NotedValueRecord` in `GameState::noted_values`. The record carries the precise source incarnation,
+text and acquisition (`Linked`), plus typed mana or a sparse counter snapshot. A later instruction
+can capture the returned payload index; it must not substitute a later note for an earlier delayed
+instruction's snapshot. These records are journalled, cloned and hashed. They add no per-object or
+stack-item field, and events remain small. The unused arena has only an empty vector header.
+
+Ice Cauldron and Jeweled Amulet opt their first abilities into `tracks_mana_spent`. The cost scheduler
+already returns the exact mana spent on the activation's locked total; `ActivationManaPaid` records
+that pool with the actual stack serial after costs. It neither reconstructs the payment from X nor
+widens the compact `ManaSpent` source/type history tally. Nested payments and other activations have
+different receipts. Ordinary abilities allocate none. A payment becomes a linked note only when its
+note instruction resolves, so countering the ability does not replace the last note. Mana abilities
+cannot opt into this stack-activation receipt protocol.
+
+Shared `notes` recipes read those records for Ice Cauldron and Jeweled Amulet. Type-only notes keep
+kinds, including colorless, rather than paid amounts. Producing one mana chooses one of the noted
+kinds if necessary; a never-recorded or empty note produces nothing. Charge counters themselves do
+not carry information. Callback yields remain unknown to payment advice, while the existing
+could-produce authority executes the callback, including its choices and replacements. Tawnos's
+Coffin's counter note captures the original object's retained counters after exile, without putting
+counters on the exiled card. Carrying its independent delayed object groups, restoring counters on
+arrival and returning Auras attached still require their own interfaces.
