@@ -1,0 +1,31 @@
+# Ruby, Daring Tracker: "Whenever Ruby attacks while you control a creature with power 4 or greater, Ruby gets +2/+2 until end of
+# turn." Ruby's own power is 1, so on turn 1, with haste and no other creature, her attack puts nothing on the stack (the condition
+# false) and she deals 1: Bot2 is at 19.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Ruby, Daring Tracker
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ruby, Daring Tracker.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Ruby, Daring Tracker > Bot2)
+? Stack.Count = 0
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Ruby, Daring Tracker.Power = 1
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Ruby, Daring Tracker.Power = 1
+Bot1.Battlefield.Ruby, Daring Tracker.Toughness = 2

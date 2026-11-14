@@ -1,0 +1,53 @@
+# Ruby, Daring Tracker: the condition "while you control a creature with power 4 or greater" is checked as she attacks and not again
+# as the trigger resolves (it is not an intervening "if", CR 603.4). On turn 3 Bot1 controls Surrak, Elusive Hunter (a 4/3) and attacks
+# with Ruby; Bot2 answers the trigger with Lightning Bolt on Surrak, which dies, and Ruby is still a 3/4 and deals 3 (Bot2 at 17).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Black Lotus
+Ruby, Daring Tracker
+Surrak, Elusive Hunter
+Forest x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ruby, Daring Tracker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Surrak, Elusive Hunter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ruby, Daring Tracker > Bot2)
+? Stack.Count = 1
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Surrak, Elusive Hunter)
+Bot2.Pass
+? Stack.Count = 3
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Surrak, Elusive Hunter; Black Lotus
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ruby, Daring Tracker.Power = 3
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Ruby, Daring Tracker.Power = 3
+Bot1.Battlefield.Ruby, Daring Tracker.Toughness = 4

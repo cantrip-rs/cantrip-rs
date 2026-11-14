@@ -1,0 +1,11 @@
+{
+  "name": "Ruby, Daring Tracker",
+  "manaCost": "{R}{G}",
+  "type": "Legendary Creature — Human Scout",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Haste (This creature can attack and {T} as soon as it comes under your control.)\nWhenever Ruby attacks while you control a creature with power 4 or greater, Ruby gets +2/+2 until end of turn.\n{T}: Add {R} or {G}.",
+  "keywords": [
+    "Haste"
+  ]
+}

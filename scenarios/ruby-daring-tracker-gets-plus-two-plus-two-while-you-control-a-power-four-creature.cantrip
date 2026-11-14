@@ -1,0 +1,42 @@
+# Ruby, Daring Tracker: on turn 1 Bot1 casts Surrak, Elusive Hunter (a 4/3, power 4) with Black Lotus's green and Ruby with two Moxen, and
+# attacks with the hasty Ruby alone. The trigger is on the stack, resolves, and Ruby is a 3/4 that deals 3 to Bot2 (17); at end of
+# turn she is a 1/2 again.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Black Lotus
+Ruby, Daring Tracker
+Surrak, Elusive Hunter
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ruby, Daring Tracker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Surrak, Elusive Hunter.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Ruby, Daring Tracker > Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Ruby, Daring Tracker.Power = 3
+? Bot1.Battlefield.Ruby, Daring Tracker.Toughness = 4
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Ruby, Daring Tracker.Power = 1
+? Bot1.Battlefield.Ruby, Daring Tracker.Toughness = 2
+
+[Expect]
+Bot2.Life = 17

@@ -1,0 +1,40 @@
+# Ruby, Daring Tracker: "{T}: Add {R} or {G}." Hasty on turn 1, she can't tap for white, blue, black or colourless; tapped for red she
+# pays for Lightning Bolt (Bot2 at 17). On turn 3 she taps for green and pays for Giant Growth on herself (a 4/5 until end of turn);
+# attacking is no longer possible once she is tapped, so Bot2 stays at 17.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Ruby, Daring Tracker
+Lightning Bolt
+Giant Growth
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ruby, Daring Tracker.Cast
+! Bot1.Battlefield.Ruby, Daring Tracker.Activate(Color: White)
+! Bot1.Battlefield.Ruby, Daring Tracker.Activate(Color: Blue)
+! Bot1.Battlefield.Ruby, Daring Tracker.Activate(Color: Black)
+! Bot1.Battlefield.Ruby, Daring Tracker.Activate(Color: Colorless)
+Bot1.Battlefield.Ruby, Daring Tracker.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+[T3 Bot1.Main1]
+Bot1.Battlefield.Ruby, Daring Tracker.Activate(Color: Green)
+Bot1.Hand.Giant Growth.Cast(Ruby, Daring Tracker)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Ruby, Daring Tracker.Power = 4
+Bot1.Battlefield.Ruby, Daring Tracker.Toughness = 5
