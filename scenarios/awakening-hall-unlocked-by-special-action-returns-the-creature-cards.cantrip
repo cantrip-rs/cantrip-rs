@@ -1,0 +1,61 @@
+# Funeral Room // Awakening Hall cast as Funeral Room, then Awakening Hall unlocked by the special action for {6}{B}{B} (CR
+# 709.5e, 116.2m) rather than cast: "when you unlock this door" triggers all the same (CR 709.5f), and Bot1's Memnite, Bolted
+# on Bot2's turn (Funeral Room drained 1 for it), comes back from the graveyard untapped. The two Black Lotuses spent on the
+# unlock are not creature cards and stay in the graveyard. The Room now has both doors, Funeral Room's ability still on.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Funeral Room // Awakening Hall
+Memnite
+Black Lotus
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x30
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Funeral Room // Awakening Hall.Cast(Ability: Funeral Room)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 21
+? Bot2.Life = 19
+? Bot1.Graveyard = Memnite
+[T3 Bot1.Main1]
+Bot1.Battlefield.Funeral Room.Activate(Ability: right door)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Battlefield.Funeral Room // Awakening Hall.Doors = Funeral Room; Awakening Hall
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Battlefield = Funeral Room // Awakening Hall; Memnite; Mox Jet; Mox Ruby; Swamp
+Bot1.Graveyard = Black Lotus; Black Lotus
+Bot1.Life = 21
+Bot2.Life = 19
+Stack.Count = 0

@@ -1,0 +1,75 @@
+# Awakening Hall (the right door of Funeral Room // Awakening Hall, cast for {6}{B}{B}): "When you unlock this door, return all
+# creature cards from your graveyard to the battlefield." Bot2's Lightning Bolts kill Bot1's Memnite (turn 2) and Ornithopter
+# (turn 4) and one of Bot2's own Memnites. On turn 5 Bot1 casts the Hall with five Moxen and a Black Lotus (which goes to its
+# graveyard as the cost is paid): the Memnite and the Ornithopter come back together, the Black Lotus - no creature - stays in
+# the graveyard, and Bot2's Memnite in its own graveyard stays too.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Memnite
+Ornithopter
+Funeral Room // Awakening Hall
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mountain
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Memnite
+Island
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Funeral Room // Awakening Hall.Cast(Ability: Awakening Hall)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Awakening Hall; Memnite; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter
+Bot1.Graveyard = Black Lotus
+Bot2.Graveyard = Memnite; Lightning Bolt; Lightning Bolt; Lightning Bolt
+Stack.Count = 0
