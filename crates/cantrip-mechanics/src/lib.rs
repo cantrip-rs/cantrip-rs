@@ -762,6 +762,24 @@ pub fn exile_target_until_leaves_effect(g: &mut dyn Game, item: &StackItem) -> R
     Ok(())
 }
 
+/// "Exile up to one target nonland permanent an opponent controls until this enchantment leaves the battlefield. You gain 2
+/// life." (CR 610.3): the life is gained whether or not there was a target, or it is still legal (CR 608.2b makes only the
+/// illegal target's part not happen, and the exile here is its only part).
+fn exile_target_until_leaves_and_you_gain_2_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    exile_target_until_leaves(g, item, 0);
+    effects::gain_life(g, item, 2)
+}
+
+/// "When this enchantment enters, exile up to one target nonland permanent an opponent controls until this enchantment leaves
+/// the battlefield. You gain 2 life." (`exile_target_until_leaves_and_you_gain_2_life`). Liminal Hold and Prayer of Binding
+/// print it.
+pub const ENTERS_EXILE_UP_TO_ONE_NONLAND_PERMANENT_AN_OPPONENT_CONTROLS_UNTIL_LEAVES_AND_YOU_GAIN_2_LIFE: AbilityDef = triggered(
+    triggers::THIS_ENTERS,
+    exile_target_until_leaves_and_you_gain_2_life,
+    "When this enchantment enters, exile up to one target nonland permanent an opponent controls until this enchantment leaves the battlefield. You gain 2 life.",
+)
+.targets(&[targets::NONLAND_PERMANENT_AN_OPPONENT_CONTROLS.between(0, 1)]);
+
 /// Airbend (CR 701.65a): exiles the resolving ability's legal targets together (`airbend_all`). Appa, Steadfast Guardian
 /// and Aang, Swift Savior print it.
 pub fn airbend(g: &mut dyn Game, item: &StackItem) {
@@ -815,6 +833,12 @@ pub fn cast_from_your_graveyard(q: &dyn Query, spell: ObjectId, player: PlayerId
 /// Ajani, Nacatl Pariah, Emeritus of Truce, Oath of Druids and Stadium Headliner count it exactly so.
 pub fn creatures_you_control(q: &dyn Query, player: PlayerId) -> usize {
     q.permanents_of(player).into_iter().filter(|&id| q.chars(id).is(CardType::Creature)).count()
+}
+
+/// "The number of attacking creatures" (CR 508.1k, 611.2c): every creature attacking right now, whoever controls it, counted as
+/// the ability resolves. Marshal of the Lost and Raffine, Scheming Seer count it for their triggers, Jazal Goldmane for its pump.
+pub fn attacking_creatures(q: &dyn Query) -> usize {
+    q.state().battlefield().iter().filter(|&&id| q.is_attacking(id) && q.chars(id).is(CardType::Creature)).count()
 }
 
 /// "The number of [subtype]s [player] controls" (CR 205.3, 109.4): every permanent of that subtype they control, read through

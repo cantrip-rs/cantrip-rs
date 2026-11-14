@@ -119,6 +119,15 @@ pub fn target_creature_gets<const P: i32, const T: i32>(g: &mut dyn Game, item: 
     Ok(())
 }
 
+/// "Target creature gets +`P`/+`T` until end of turn. You gain `LIFE` life" (CR 611.2a, 119.3, 608.2b): both are lost if the target is no
+/// longer legal as the spell resolves, since a spell with only illegal targets does not resolve. Which creatures may be targeted is the
+/// card's own. Moment of Triumph (+2/+2, 2 life), Syphon Fuel (-6/-6, 2) and Locthwain Scorn (-3/-3, 2) print it.
+pub fn target_creature_gets_and_you_gain_life<const P: i32, const T: i32, const LIFE: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    target_creature_gets::<P, T>(g, item)?;
+    g.end_sentence();
+    gain_life(g, item, LIFE)
+}
+
 /// "Target creature gets +`P`/+`T` and gains first strike until end of turn" (CR 611.2a, 702.7): one instruction, the creature
 /// being the ability's first target; nothing if it is no longer a legal target as the spell resolves (CR 608.2b). Interjection
 /// (+2/+2), Molecular Modifier (+1/+0), Charge the Sanctum's single-target mode (+2/+0) and Riverguard's Reflexes (+2/+2) print it.
@@ -140,6 +149,19 @@ pub fn target_creature_gets_and_gains_deathtouch<const P: i32, const T: i32>(g: 
         instruction(g, |g| {
             crate::pump(g, item.object, creature, P, T);
             gain_until_end_of_turn(g, item.object, creature, Keyword::Deathtouch);
+        });
+    }
+    Ok(())
+}
+
+/// "Target creature gets +`P`/+`T` and gains indestructible until end of turn" (CR 611.2a, 702.12b): one instruction, the creature
+/// being the ability's first target; nothing if it is no longer a legal target as the spell or ability resolves (CR 608.2b).
+/// Dark Endurance (+2/+0), Masterful Flourish, Reigning Victor and Foot Elite (+1/+0) print it, and Adamant Will (+2/+2).
+pub fn target_creature_gets_and_gains_indestructible<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = crate::targets::object(g, item, 0) {
+        instruction(g, |g| {
+            crate::pump(g, item.object, creature, P, T);
+            gain_indestructible_until_end_of_turn(g, item.object, creature);
         });
     }
     Ok(())
@@ -321,15 +343,17 @@ pub fn creatures_target_player_controls_get<const TARGET: usize, const P: i32, c
     Ok(())
 }
 
-/// "Creatures you control get +`power`/+`toughness` and gain [a keyword] until end of turn" (CR 611.2, 611.2c): the creatures
-/// `item`'s controller controls as it resolves, and no creature that enters later. Silk, Web Weaver (+2/+2) and The Super Hero
-/// Civil War (+1/+1) print it with vigilance.
-pub fn pump_creatures_you_control_and_gain(g: &mut dyn Game, item: &StackItem, power: i32, toughness: i32, keyword: Keyword) {
+/// "Creatures you control get +`P`/+`T` and gain [keywords] until end of turn" (CR 611.2, 611.2c, 702): the creatures `item`'s
+/// controller controls as it resolves, and no creature that enters later. `KEYWORDS` is a `Keywords` as `u128`
+/// (`Keywords::of(&[Keyword::Vigilance]).0`). Silk, Web Weaver (+2/+2) and The Super Hero Civil War (+1/+1) print it with
+/// vigilance, Catharsis (+1/+1) with haste, Hakoda, Selfless Commander (+0/+5) and Make a Stand (+1/+0) with indestructible.
+pub fn creatures_you_control_get_and_gain<const P: i32, const T: i32, const KEYWORDS: u128>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     instruction(g, |g| {
-        for id in pump_creatures_you_control(g, item, power, toughness) {
-            gain_until_end_of_turn(g, item.object, id, keyword);
+        for id in pump_creatures_you_control(g, item, P, T) {
+            g.add_effect(item.object, id, EffectKind::AddKeywords(Keywords(KEYWORDS)), Duration::EndOfTurn);
         }
     });
+    Ok(())
 }
 
 /// "Other creatures you control get +`power`/+`toughness` until end of turn" (CR 611.2, 611.2c): the creatures `item`'s
@@ -355,6 +379,13 @@ pub fn pump_other_creatures_you_control_and_gain(g: &mut dyn Game, item: &StackI
             g.add_effect(item.object, creature, EffectKind::AddKeywords(Keywords::of(keywords)), Duration::EndOfTurn);
         }
     });
+}
+
+/// "Other creatures you control get +`P`/+`T` until end of turn" as a triggered ability's or chapter's whole effect:
+/// `pump_other_creatures_you_control` (CR 611.2, 611.2c). Restless Prairie, Summon: Choco/Mog and Syr Alin print it.
+pub fn other_creatures_you_control_get<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    pump_other_creatures_you_control(g, item, P, T);
+    Ok(())
 }
 
 /// "Creatures you control gain [keywords] until end of turn" (CR 611.2, 611.2c, 702): the creatures `item`'s controller controls
@@ -475,6 +506,22 @@ pub fn counters_on_creatures_you_control(g: &mut dyn Game, player: PlayerId, kin
 /// Denzilore Fatehold, Gavony Township, Origin of the Avengers (chapter III) and Wilderland Scrounger print it.
 pub fn plus_one_counter_on_each_creature_you_control(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     counters_on_creatures_you_control(g, item.controller, CounterKind::PlusOne, 1);
+    Ok(())
+}
+
+/// "Put a +1/+1 counter on each creature you control. Those creatures gain [keywords] until end of turn" (CR 608.2, 122.1, 611.2,
+/// 611.2c, 702): the counters go on the creatures their controller has as it resolves, all at once (CR 101.4), and the next sentence
+/// affects those same creatures - none that enters later. `KEYWORDS` is a `Keywords` as `u128`
+/// (`Keywords::of(&[Keyword::Vigilance]).0`). Felidar Retreat (a mode; vigilance) and Song of Freyalise (chapter III; vigilance,
+/// trample and indestructible) print it.
+pub fn plus_one_counter_on_each_creature_you_control_which_gain_until_end_of_turn<const KEYWORDS: u128>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let creatures = counters_on_creatures_you_control(g, item.controller, CounterKind::PlusOne, 1);
+    g.end_sentence();
+    instruction(g, |g| {
+        for id in creatures {
+            g.add_effect(item.object, id, EffectKind::AddKeywords(Keywords(KEYWORDS)), Duration::EndOfTurn);
+        }
+    });
     Ok(())
 }
 
@@ -707,6 +754,22 @@ pub fn destroy_all_creatures(g: &mut dyn Game, _: &StackItem) -> Result<(), Susp
     Ok(())
 }
 
+/// "Destroy [these permanents]. You gain 1 life for each [permanent] destroyed this way": one destroy event (CR 701.8a, 101.4) and one life
+/// gain for the number of permanents that really left the battlefield (CR 119.3, 608.2c): an indestructible permanent or a regeneration
+/// shield saves its own and buys no life, and nothing destroyed gains nothing. Fumigate and Ob Nixilis, the Ascended print it.
+pub fn destroy_all_and_gain_life_for_each_destroyed(g: &mut dyn Game, you: PlayerId, doomed: &[ObjectId]) {
+    let destroyed = g.destroy_all(doomed);
+    g.gain_life(you, destroyed.count() as i32);
+}
+
+/// "Destroy all creatures. You gain 1 life for each creature destroyed this way." (`destroy_all_and_gain_life_for_each_destroyed`).
+/// Fumigate prints it.
+pub fn destroy_all_creatures_and_gain_life_for_each_destroyed(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let creatures = creatures_on_the_battlefield(g);
+    destroy_all_and_gain_life_for_each_destroyed(g, item.controller, &creatures);
+    Ok(())
+}
+
 /// "Destroy all creatures. They can't be regenerated." (CR 701.19c). Wrath of God and Damnation print it.
 pub fn destroy_all_creatures_no_regen(g: &mut dyn Game, _: &StackItem) -> Result<(), Suspend> {
     let creatures = creatures_on_the_battlefield(g);
@@ -748,6 +811,18 @@ pub fn first_target_cant_block_this_turn(g: &mut dyn Game, item: &StackItem) -> 
 /// three.
 pub fn draw(g: &mut dyn Game, item: &StackItem, n: u32) -> Result<(), Suspend> {
     g.draw(item.controller, n);
+    Ok(())
+}
+
+const PAY_TO_DRAW: Question = Question::new("DrawCard", "pay {cost} to draw a card?", "", "Pay {cost}", "Don't pay");
+
+/// "You may pay [cost]. If you do, draw a card." (CR 608.2d, 118.12, 121.1) as the ability resolves: its controller is asked
+/// whether to pay `payment`, and draws one card only if they did. Venus, Torn Between Worlds ({U}), Uhura, Xenolinguist and Mentor
+/// of the Meek ({1}) print it.
+pub fn may_pay_to_draw(g: &mut dyn Game, item: &StackItem, payment: Cost) -> Result<(), Suspend> {
+    if g.may_pay(item.controller, item.object, item.object, payment, &PAY_TO_DRAW)? {
+        draw(g, item, 1)?;
+    }
     Ok(())
 }
 
@@ -1164,6 +1239,12 @@ pub const fn dies_gain_life<const N: i32>(text: &'static str) -> AbilityDef {
     triggered(crate::triggers::THIS_DIES, gain_life_amount::<N>, text)
 }
 
+/// "Whenever this creature attacks, you gain N life" (CR 508.1m, 603.2, 119.3). Shopkeeper's Bane and Herald of Faith print
+/// two; Teacher's Pest and the Equipment and spell that grant it print one.
+pub const fn attacks_gain_life<const N: i32>(text: &'static str) -> AbilityDef {
+    triggered(crate::triggers::THIS_ATTACKS, gain_life_amount::<N>, text)
+}
+
 fn gain_life_amount<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     gain_life(g, item, N)
 }
@@ -1188,6 +1269,16 @@ pub fn exile_target_card_and_gain_life<const N: i32>(g: &mut dyn Game, item: &St
 pub fn gain_life_for_differently_named_lands(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let n = crate::lands::differently_named_lands(g, item.controller) as i32;
     gain_life(g, item, n)
+}
+
+/// "You gain N life for each [subtype] you control" (CR 119.3, 608.2c): one gain of `PER` times the permanents of the subtype `TYPE`
+/// (`lands::sub`, read through the words of the source's text, CR 612) its controller controls as the ability resolves, a
+/// permanent that is no creature included. Archway Angel (2 per Gate), Landbind Ritual (2 per Plains), Honden of Cleansing Fire
+/// (2 per Shrine) and Nissa Revane (2 per Elf) print it.
+pub fn gain_life_for_each_subtype_you_control<const TYPE: u16, const PER: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let subtype = crate::lands::word(g, item.object, TYPE);
+    let n = crate::permanents_with_subtype_you_control(g, item.controller, subtype) as i32;
+    gain_life(g, item, PER * n)
 }
 
 /// "You gain life equal to its toughness" (CR 119.3, 608.2h) as a triggered ability's callback: the toughness of the trigger's
@@ -1503,6 +1594,19 @@ pub fn each_opponent_discards_a_card_and_those_who_cant(g: &mut dyn Game, item: 
 /// ability. Lightning Bolt (any target, 3), Shock (2), Flametongue Kavu (creature, 4) and Hired Claw (opponent, 1) print it.
 pub fn damage_first_target<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     crate::damage_target(g, item, 0, N);
+    Ok(())
+}
+
+/// "[Source] deals `N` damage to target creature. If that creature would die this turn, exile it instead" (CR 120.3, 614.1a, 611.2c,
+/// 700.4): the replacement is the spell's own effect on the target for the turn, made before the damage and whether or not the damage
+/// is dealt, so it also covers a death the damage does not cause; nothing if the target is no longer legal as the spell resolves
+/// (CR 608.2b). The card lists `replacements::EXILE_INSTEAD_OF_DYING` first among its `granted_replacements`. Which targets are
+/// allowed is the card's own. Feed the Flames (5), Pinecone Strike (3), Suplex (3), Wilt in the Heat (5) and Elspeth's Smite (3) print it.
+pub fn damage_target_exile_if_it_would_die<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = crate::targets::object(g, item, 0) {
+        crate::replacements::exile_if_it_would_die(g, item, 0, creature);
+        crate::damage_target(g, item, 0, N);
+    }
     Ok(())
 }
 
@@ -2482,7 +2586,8 @@ pub fn gain_until_end_of_turn(g: &mut dyn Game, source: ObjectId, target: Object
 /// `KEYWORDS` is a `Keywords` as `u128` (`Keywords::of(&[Keyword::Trample]).0`); the named `target_..._gains_...` effects here
 /// are this for one keyword set. Greenbelt Guardian (trample), Boros Charm and Raking Claws (double strike, through
 /// `target_gains_double_strike`), Widow's Bite and Tal'Shiar Operative (deathtouch), Daily Bugle Building and
-/// Item Shopkeep (menace), Oteclan Landmark (flying, through `first_target_gains_flying`) and Sylvan Safekeeper (shroud) print it.
+/// Item Shopkeep (menace), Oteclan Landmark (flying, through `first_target_gains_flying`), Sylvan Safekeeper (shroud) and
+/// Ajani, Caller of the Pride (flying and double strike) print it.
 pub fn first_target_gains_until_end_of_turn<const KEYWORDS: u128>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
     g.add_effect(item.object, creature, EffectKind::AddKeywords(Keywords(KEYWORDS)), Duration::EndOfTurn);

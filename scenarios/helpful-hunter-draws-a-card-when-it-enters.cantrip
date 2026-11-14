@@ -1,0 +1,32 @@
+# Helpful Hunter: "When this creature enters, draw a card." Cast on turn 1 off two Moxen (its {1}{W}); when it resolves and
+# enters (CR 603.6a) its controller draws exactly one card (CR 121.1): the Mountain on top of the library, one card fewer left.
+# Bot1 does not draw on turn 1 (the player who goes first skips it, CR 103.8a), so the Mountain is Helpful Hunter's alone.
+
+[Bot1 Deck]
+Helpful Hunter
+Mox Pearl
+Mox Sapphire
+Plains x4
+Mountain
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Helpful Hunter.Cast
+? Bot1.Mana =
+Bot1.Pass
+? Bot1.Hand.Count = 4
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Helpful Hunter; Mox Pearl; Mox Sapphire
+Bot1.Hand = Mountain; Plains; Plains; Plains; Plains
+Bot1.Library.Count = 10

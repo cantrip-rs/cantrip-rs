@@ -1,0 +1,50 @@
+# Guarded Heir: "When this creature enters, create two 3/3 white Knight creature tokens." Bot1 casts it on turn 1 for {5}{W}
+# (Black Lotus for white and three Moxen) and, once the Heir and then its enters trigger have resolved, controls the Heir and
+# two Knight tokens: 3/3 white Knight creatures that are tokens, with no abilities. The trigger waits on the stack until
+# then (a positive control that the tokens come from the trigger and not from the spell). Bot2 gets nothing (CR 111.2).
+
+[Bot1 Deck]
+Guarded Heir
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Plains x20
+
+[Bot2 Deck]
+Mox Jet
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Guarded Heir.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Knight Token = (absent)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Count = 6
+
+[Expect]
+Bot1.Battlefield = Guarded Heir; Knight Token; Knight Token; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Battlefield.Knight Token#1.Token = true
+Bot1.Battlefield.Knight Token#1.Colors = White
+Bot1.Battlefield.Knight Token#1.Power = 3
+Bot1.Battlefield.Knight Token#1.Toughness = 3
+Bot1.Battlefield.Knight Token#1.Keywords = (absent)
+Bot1.Battlefield.Knight Token#2.Power = 3
+Bot1.Battlefield.Knight Token#2.Toughness = 3
+Bot1.Battlefield.Guarded Heir.Power = 1
+Bot1.Battlefield.Guarded Heir.Toughness = 1
+Bot1.Battlefield.Guarded Heir.Keywords = Lifelink
+Bot2.Battlefield.Count = 0

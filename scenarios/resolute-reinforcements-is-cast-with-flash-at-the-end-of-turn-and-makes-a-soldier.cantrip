@@ -1,0 +1,43 @@
+# Resolute Reinforcements: flash (CR 702.8a) and "When this creature enters, create a 1/1 white Soldier creature token." Bot1 holds
+# two Moxen untapped through its own turn 1 and casts it in Bot2's end step on turn 2. A Helpful Hunter in the same hand, which
+# has no flash, is not castable then (a creature spell only at sorcery speed, CR 307.1, 601.3), the pair that shows the flash is
+# what allows it. The Reinforcements, a 1/1 Human Soldier, and the Soldier token it makes (1/1, white, a token) both end up on
+# Bot1's battlefield, and Bot2 gets nothing.
+
+[Bot1 Deck]
+Resolute Reinforcements
+Helpful Hunter
+Mox Pearl
+Mox Sapphire
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.End]
+! Bot1.Hand.Helpful Hunter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Resolute Reinforcements.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Soldier Token = (absent)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Helpful Hunter; Plains; Plains; Plains
+Bot1.Battlefield = Mox Pearl; Mox Sapphire; Resolute Reinforcements; Soldier Token
+Bot1.Battlefield.Soldier Token.Token = true
+Bot1.Battlefield.Soldier Token.Colors = White
+Bot1.Battlefield.Soldier Token.Power = 1
+Bot1.Battlefield.Soldier Token.Toughness = 1
+Bot1.Battlefield.Resolute Reinforcements.Token = (absent)
+Bot1.Battlefield.Resolute Reinforcements.Keywords = Flash
+Bot2.Battlefield.Count = 0

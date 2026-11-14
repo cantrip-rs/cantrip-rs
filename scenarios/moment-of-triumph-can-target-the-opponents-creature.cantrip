@@ -1,0 +1,28 @@
+# "Target creature" is any creature (CR 115.1): Bot1 casts Moment of Triumph on Bot2's Ornithopter, which becomes 2/4 until end
+# of turn; Bot1, the caster, gains the 2 life (22), not Bot2.
+
+[Bot1 Deck]
+Plains
+Moment of Triumph
+Plains x18
+
+[Bot2 Deck]
+Ornithopter
+Plains x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Moment of Triumph.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Life = 22
+Bot2.Life = 20
+Bot2.Battlefield.Ornithopter.Power = 2
+Bot2.Battlefield.Ornithopter.Toughness = 4

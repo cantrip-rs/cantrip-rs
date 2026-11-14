@@ -79,6 +79,17 @@ pub fn subtype_spells_you_cast<const N: u8, const TYPE: u16>(q: &dyn Query, sour
     if player == q.controller(source) && q.chars(spell).has_subtype(crate::lands::word(q, source, TYPE)) { CostDelta::less(N as u32) } else { CostDelta::NONE }
 }
 
+/// "[Subtype] spells and [subtype] spells you cast cost {`N`} less to cast" (CR 601.2f, 118.7a): a spell of the source's controller that is
+/// either subtype, or both, costs {`N`} less once (the Banneret ruling of 2024-11-08); the subtypes are read through the words of the
+/// source's text (CR 612). Gagh Slinger (Klingon and Warrior) and Ballyrush Banneret (Kithkin and Soldier) print it.
+pub fn either_subtype_spells_you_cast<const N: u8, const A: u16, const B: u16>(q: &dyn Query, source: ObjectId, player: PlayerId, costed: Costed, targets: &[Target]) -> CostDelta {
+    let first = subtype_spells_you_cast::<N, A>(q, source, player, costed, targets);
+    if first != CostDelta::NONE {
+        return first;
+    }
+    subtype_spells_you_cast::<N, B>(q, source, player, costed, targets)
+}
+
 /// "[Color] spells you cast cost {1} less to cast" (CR 601.2f, 118.7a): a spell of the source's controller that is that color as it is
 /// cast, the color read through the words of the source's text (CR 612); a generic reduction takes only the generic part. `COLOR` is
 /// `cost_reduction::color(Color::Red)` and so on. The Fire Crystal (red), The Water Crystal (blue) and The Wind Crystal (white) print it.

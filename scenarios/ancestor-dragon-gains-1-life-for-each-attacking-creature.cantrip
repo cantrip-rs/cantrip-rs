@@ -1,0 +1,51 @@
+# Ancestor Dragon: "Whenever one or more creatures you control attack, you gain 1 life for each attacking creature." Bot1 casts the
+# Dragon (a 5/6 flier) with a Memnite and an Ornithopter on turn 1 and attacks with all three on turn 3: one trigger, for three
+# attacking creatures, so Bot1 gains 3 (20 to 23) and the attack deals 5 + 1 + 0 (Bot2 20 to 14). The trigger is on the stack
+# before the attackers' damage and gains the life once (CR 603.2c: "one or more" triggers once for the whole declaration).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Ancestor Dragon
+Memnite
+Ornithopter
+Plains x10
+
+[Bot2 Deck]
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ancestor Dragon.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ancestor Dragon.Power = 5
+? Bot1.Battlefield.Ancestor Dragon.Toughness = 6
+? Bot1.Battlefield.Ancestor Dragon.Keywords = Flying
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ancestor Dragon > Bot2; Memnite > Bot2; Ornithopter > Bot2)
+? Stack.Count = 1
+? Bot1.Life = 20
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Life = 23
+[T3 Bot1.Main2]
+? Bot2.Life = 14
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 14

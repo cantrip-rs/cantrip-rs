@@ -1,0 +1,63 @@
+# Valkyrie's Call: "Whenever a nontoken, non-Angel creature you control dies, return that card to the battlefield under its owner's
+# control with a +1/+1 counter on it. It has flying and is an Angel in addition to its other types." Bot1 casts Isamaru (a 2/2 Dog)
+# and then the Call, and on turn 3 Lightning Bolts its own Isamaru. The dies trigger returns the card (a new object, CR 400.7) as a
+# 3/3: the +1/+1 counter, flying, and Angel added to the Dog it already is (CR 205.3, 613.1d), with its other characteristics kept
+# (legendary, a creature, white). Only the spent Bolt and Black Lotus are in the graveyard afterwards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Plains
+Valkyrie's Call
+Isamaru, Hound of Konda
+Lightning Bolt
+Plains x10
+
+[Bot2 Deck]
+Mountain x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Valkyrie's Call.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Valkyrie's Call.ManaValue = 5
+? Bot1.Battlefield.Isamaru, Hound of Konda.Power = 2
+? Bot1.Battlefield.Isamaru, Hound of Konda.Subtypes = Dog
+? Bot1.Battlefield.Isamaru, Hound of Konda.Keywords = (absent)
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Isamaru, Hound of Konda)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Graveyard = Isamaru, Hound of Konda; Lightning Bolt; Black Lotus
+? Bot1.Battlefield.Count = 4
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Graveyard = Lightning Bolt; Black Lotus
+? Bot1.Battlefield.Isamaru, Hound of Konda.Power = 3
+? Bot1.Battlefield.Isamaru, Hound of Konda.Toughness = 3
+? Bot1.Battlefield.Isamaru, Hound of Konda.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Isamaru, Hound of Konda.Keywords = Flying
+? Bot1.Battlefield.Isamaru, Hound of Konda.Subtypes = Angel; Dog
+? Bot1.Battlefield.Isamaru, Hound of Konda.Supertypes = Legendary
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Battlefield.Isamaru, Hound of Konda.Power = 3

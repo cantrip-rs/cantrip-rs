@@ -1,0 +1,66 @@
+# Felidar Retreat, second mode: "Put a +1/+1 counter on each creature you control. Those creatures gain vigilance until end of turn."
+# (CR 122.1, 611.2c, 702.20.) Bot1 casts the Retreat on turn 1 (Black Lotus WWW and Mox Jet, exactly {3}{W}) with a Memnite out. On turn 2 Bot2
+# plays a Memnite and an Island: the Island is not "a land you control" for Bot1, so nothing triggers. On turn 3 Bot1's Plains triggers it
+# and the counter mode makes Bot1's Memnite a 2/2 with vigilance, leaves Bot2's Memnite a 1/1 without it ("you control"), and an
+# Ornithopter cast afterwards gets neither (the creatures are fixed as the ability resolves). On turn 4 the counter stays and the vigilance is gone.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Memnite
+Felidar Retreat
+Ornithopter
+Plains
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Felidar Retreat.Cast(Spend: W, W, W, B)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Island.Play
+? Stack.Count = 0
+? Bot1.Battlefield.Memnite.Power = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Modes(Put a +1/+1 counter on each creature you control)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot1.Battlefield.Memnite.Keywords = Vigilance
+? Bot2.Battlefield.Memnite.Power = 1
+? Bot2.Battlefield.Memnite.Toughness = 1
+? Bot2.Battlefield.Memnite.Keywords = (absent)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot2.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2

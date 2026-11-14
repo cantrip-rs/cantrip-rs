@@ -1,0 +1,8 @@
+{
+  "name": "Hare Apparent",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Rabbit Noble",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, create a number of 1/1 white Rabbit creature tokens equal to the number of other creatures you control named Hare Apparent.\nA deck can have any number of cards named Hare Apparent."
+}

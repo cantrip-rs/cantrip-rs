@@ -732,6 +732,16 @@ pub fn power_and_toughness_are_lands_you_control(q: &dyn LayerQuery, source: Obj
     chars.toughness = Some(lands);
 }
 
+/// "[This creature]'s power and toughness are each equal to the number of creatures you control" as the `StaticDef::apply` of
+/// the ability (CR 604.3, 613.4a): characteristic-defining, so it applies in every zone, and it counts every creature its
+/// controller controls through the layers before the one being applied, the source itself included when it is one (see
+/// `count_you_control`). Crusader of Odric and the Elemental token of Voice of Resurgence print it.
+pub fn power_and_toughness_are_creatures_you_control(q: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
+    let creatures = count_you_control(q, source, &|c| c.is(CardType::Creature));
+    chars.power = Some(creatures);
+    chars.toughness = Some(creatures);
+}
+
 /// "Return target land card from your graveyard to the battlefield tapped" (Primal Witchstalker, Altanak, the Thrice-Called):
 /// the target at `slot`, if it is still a legal target (CR 608.2b), put onto the battlefield tapped (CR 110.5b) under its
 /// owner's control (CR 110.2a) - a card in your graveyard is your own.

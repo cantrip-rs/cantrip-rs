@@ -1,0 +1,70 @@
+# Ajani's Pridemate: "Whenever you gain life, put a +1/+1 counter on this creature." Bot1 casts it on turn 1 (a 2/2) and then
+# gains 3 life with Healing Salve: one counter, not three (3/3, CR 603.2c: one trigger per life gain event, however much). When
+# Bot2 gains 3 life with a Salve of their own on turn 2 the Pridemate does not change (a positive control that only its
+# controller's life gain counts), and a second Salve for Bot1 on turn 3 makes it a 4/4 with two counters.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Gleemox
+Ajani's Pridemate
+Healing Salve
+Healing Salve
+Plains x10
+
+[Bot2 Deck]
+Mox Pearl
+Healing Salve
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ajani's Pridemate.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ajani's Pridemate.Power = 2
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ajani's Pridemate.Power = 3
+? Bot1.Battlefield.Ajani's Pridemate.Toughness = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Healing Salve.Cast
+Bot2.Modes(1)
+Bot2.Target(Bot2)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 23
+? Stack.Count = 0
+? Bot1.Battlefield.Ajani's Pridemate.Power = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 26
+Bot2.Life = 23
+Bot1.Battlefield.Ajani's Pridemate.Power = 4
+Bot1.Battlefield.Ajani's Pridemate.Toughness = 4

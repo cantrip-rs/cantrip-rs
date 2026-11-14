@@ -1,17 +1,15 @@
 use cantrip_api::*;
 use cantrip_mechanics::targets;
-use cantrip_mechanics::{connive_n, triggers};
+use cantrip_mechanics::{attacking_creatures, connive_n, triggers};
 use cantrip_oracle as oracle;
 
 /// The target connives X, where X is the number of attacking creatures, counted as the ability resolves over every
 /// attacking creature, not only its controller's.
 fn connive_x(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
-    let attacking = g.state().battlefield().iter().filter(|&&id| g.is_attacking(id)).count();
-    if attacking < 1 {
-        return Ok(());
-    }
-    connive_n(g, creature, item.object, u32::try_from(attacking).unwrap_or(u32::MAX))
+    let attacking = u32::try_from(attacking_creatures(g)).unwrap_or(u32::MAX);
+    // The target is still an attacking creature (CR 608.2b), so X is at least 1.
+    connive_n(g, creature, item.object, attacking)
 }
 
 pub static CARD: CardDef = CardDef {

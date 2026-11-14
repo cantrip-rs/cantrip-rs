@@ -166,6 +166,12 @@ pub fn you_control_two_or_more_tapped_creatures(q: &dyn Query, asker: &Asker) ->
     q.permanents_of(asker.controller).into_iter().filter(|&id| q.obj(id).tapped && q.chars(id).is(CardType::Creature)).count() >= 2
 }
 
+/// An intervening "if you control three or more creatures" (CR 603.4), checked as the ability triggers and again as it
+/// resolves, off the board as it stands: the creatures need not be the same ones. Dundoolin Weaver and Leonin Vanguard print it.
+pub fn you_control_three_or_more_creatures(q: &dyn Query, asker: &Asker) -> bool {
+    crate::creatures_you_control(q, asker.controller) >= 3
+}
+
 /// An intervening "if it's on the battlefield" (CR 603.4), checked as the ability triggers and again as it resolves: the
 /// permanent is still the object that triggered (CR 400.7) and has not left. Animate Dead and Necromancy print it.
 pub fn this_is_on_the_battlefield(q: &dyn Query, asker: &Asker) -> bool {
@@ -738,6 +744,27 @@ pub fn you_attack_with_total_power_at_least<const N: i32>(q: &dyn Query, me: &As
         {
             Fired::PLAIN
         }
+        _ => None,
+    }
+}
+
+/// "Whenever you gain life for the first time each turn" (CR 119.3, 603.2): life was gained, and none was before it this turn -
+/// the history is as it was just before this event, so it holds the earlier gains only. A turn's later gains don't trigger it
+/// (CR 603.2: the trigger event is the first gain itself, not a limit on how often it triggers). Leech Collector and Vanguard
+/// Seraph print it.
+pub fn you_gain_life_for_the_first_time_each_turn(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::LifeChange { player, delta } if *delta > 0 && *player == me.controller && q.history().life_gained(me.controller) == 0 => Fired::PLAIN,
+        _ => None,
+    }
+}
+
+/// "Whenever you attack with `N` or more creatures" (CR 508.1, 603.2): one trigger for the declaration of attackers, whose count
+/// is the creatures declared together, so a creature put onto the battlefield attacking afterwards (CR 508.4) is not in it.
+/// Military Intelligence (two) and Armasaur Guide (three) print it.
+pub fn you_attack_with_at_least<const N: u32>(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::AttackersDeclared { player, count } if *player == me.controller && *count >= N => Fired::PLAIN,
         _ => None,
     }
 }
@@ -1835,6 +1862,17 @@ pub fn creature_with_power_four_or_more_you_control_enters(q: &dyn Query, me: &A
     creature_you_control_enters(q, me, event)?;
     let Event::ZoneChange { new, .. } = event else { return None };
     if q.chars(*new).power.is_some_and(|p| p >= 4) { Fired::PLAIN } else { None }
+}
+
+/// "Whenever another creature you control with power `MIN` or greater and `MAX` or less enters" (CR 603.6a): a creature other than this
+/// permanent, under your control as it entered, whose power as it is on the battlefield is within the bounds (inclusive). The static
+/// abilities that apply to it, the counters it entered with and what it entered as a copy of all count, and once triggered a later
+/// change to its power does not matter (the rulings on Mentor of the Meek). "Power 4 or greater" is `<4, { i32::MAX }>`, "power 2 or
+/// less" `<{ i32::MIN }, 2>`. Outcaster Trailblazer (4 or greater) and Mentor of the Meek (2 or less) print it.
+pub fn another_creature_you_control_with_power_between_enters<const MIN: i32, const MAX: i32>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    let fired = another_creature_you_control_enters(q, me, event)?;
+    let Target::Object(creature) = fired.subject else { return None };
+    q.chars(creature).power.is_some_and(|p| (MIN..=MAX).contains(&p)).then_some(fired)
 }
 
 /// "Whenever a legendary creature you control enters" (CR 603.6a): any legendary creature, this one included, under your

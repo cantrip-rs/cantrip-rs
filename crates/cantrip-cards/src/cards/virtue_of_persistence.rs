@@ -1,20 +1,11 @@
 use cantrip_api::*;
 use cantrip_mechanics::triggers::YOUR_UPKEEP;
-use cantrip_mechanics::{effects, pump, targets};
+use cantrip_mechanics::{effects, targets};
 use cantrip_oracle as oracle;
-
-/// "Target creature gets -3/-3 until end of turn. You gain 2 life." With its target illegal as it resolves none of it
-/// happens, the life gain included (CR 608.2b). A creature left with toughness 0 or less dies as a state-based action
-/// (CR 704.5f), and the life is gained either way.
-fn scorn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
-    pump(g, item.object, creature, -3, -3);
-    effects::gain_life(g, item, 2)
-}
 
 /// The Adventure (CR 715): Locthwain Scorn.
 pub static LOCTHWAIN_SCORN: CardDef = CardDef {
-    spell: spell(&[targets::CREATURE], scorn),
+    spell: spell(&[targets::CREATURE], effects::target_creature_gets_and_you_gain_life::<-3, -3, 2>),
     ..oracle::LOCTHWAIN_SCORN
 };
 

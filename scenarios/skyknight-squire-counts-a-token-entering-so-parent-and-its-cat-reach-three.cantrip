@@ -1,0 +1,53 @@
+# Skyknight Squire: "Whenever another creature you control enters, put a +1/+1 counter on this creature." A token entering counts too:
+# Prideful Parent entering gives one counter and the Cat token it creates gives a second, so the Squire is a 3/3 without flying (two
+# counters). A Memnite then gives the third and the Squire flies as a Knight, while the Parent (a Cat Beast with vigilance and no counters of its
+# own) is untouched.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Skyknight Squire
+Prideful Parent
+Memnite
+Island x14
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Skyknight Squire.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Skyknight Squire.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Prideful Parent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Cat Token; Mox Pearl; Mox Sapphire; Prideful Parent; Skyknight Squire
+? Bot1.Battlefield.Skyknight Squire.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Skyknight Squire.Power = 3
+? Bot1.Battlefield.Skyknight Squire.Keywords = (absent)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Skyknight Squire.Counters.PlusOnePlusOne = 3
+? Bot1.Battlefield.Skyknight Squire.Keywords = Flying
+? Bot1.Battlefield.Prideful Parent.Counters.PlusOnePlusOne = (absent)
+? Bot1.Battlefield.Prideful Parent.Keywords = Vigilance
+
+[Expect]
+Bot1.Battlefield.Skyknight Squire.Subtypes = Cat; Knight; Scout

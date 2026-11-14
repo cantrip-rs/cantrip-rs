@@ -1,0 +1,37 @@
+# "Target tapped creature" is any player's (CR 115.1): on turn 3 Bot1's Ornithopter (0/2, tapped by attacking) is the target and dies
+# of the 3 damage, Bot1 gains 2 (22). Bot2's untapped Ornithopter is not a legal target while Bot1's tapped one is.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Ornithopter
+Deadly Riposte
+Plains x16
+
+[Bot2 Deck]
+Ornithopter
+Plains x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+! Bot1.Hand.Deadly Riposte.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Hand.Deadly Riposte.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Graveyard = Ornithopter; Deadly Riposte
+Bot1.Life = 22
+Bot2.Battlefield.Ornithopter.Damage = 0

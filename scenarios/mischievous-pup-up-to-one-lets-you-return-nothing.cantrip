@@ -1,0 +1,33 @@
+# Mischievous Pup: "up to one other target permanent": Bot1 chooses no target (Target()), so nothing returns to hand (CR 601.2c).
+# The Pup, Memnite and all three Moxen stay on the battlefield.
+
+[Bot1 Deck]
+Mischievous Pup
+Memnite
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Plains x10
+
+[Bot2 Deck]
+Plains x13
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Mischievous Pup.Cast
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Pearl; Mox Pearl; Mox Pearl; Memnite; Mischievous Pup
+Bot1.Hand = Plains; Plains; Plains

@@ -1,0 +1,11 @@
+{
+  "name": "Herald of Faith",
+  "manaCost": "{3}{W}{W}",
+  "type": "Creature — Angel",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Flying\nWhenever this creature attacks, you gain 2 life.",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -119,6 +119,15 @@ pub fn life_above_starting_life(q: &dyn LayerQuery, source: ObjectId) -> i32 {
     player.life - player.starting_life
 }
 
+/// "... as long as you have `N` or more life" (CR 613.4c, 604.2) as a static ability's `StaticDef::affects`: only the source itself,
+/// and only while its controller's life total is `N` or more, whatever the life total they started with (the 2024-11-08 rulings
+/// of both cards). The layers ask again whenever characteristics are computed, so it turns on and off with the life total.
+/// Angel of Vitality (+2/+2) and Twinblade Paladin (double strike) print it at 25.
+pub fn itself_with_life_at_least<const N: i32>(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, _: &Chars) -> bool {
+    let state = q.state();
+    source == affected && state.player(state.obj(source).controller).life >= N
+}
+
 /// "... as long as you gained life this turn" (CR 611.3a, 119.3) as a static ability's `StaticDef::affects`: only the source itself,
 /// and only while its controller has gained life this turn. The layers ask again whenever characteristics are computed, so it
 /// turns on with the gain and off as the turn ends. Ulna Alley Shopkeep and Tenured Concocter print it.
@@ -383,6 +392,12 @@ pub fn have_indestructible(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
 /// Sky and Essence Channeler print it.
 pub fn have_flying_and_vigilance(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
     chars.keywords = chars.keywords.with(Keyword::Flying).with(Keyword::Vigilance);
+}
+
+/// "... has flying and first strike" (CR 702.9, 702.7, layer 6) as a static ability's `StaticDef::apply`: both in the one
+/// layer-6 effect. Wings of Aesthir, Wedgelight Rammer's 9+ striation and Angelic Destiny print it.
+pub fn have_flying_and_first_strike(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
+    chars.keywords = chars.keywords.with(Keyword::Flying).with(Keyword::FirstStrike);
 }
 
 /// "... has flying and haste" (CR 702.9, 702.10, layer 6). Detective's Phoenix and Whiplash Wordsmith print it.

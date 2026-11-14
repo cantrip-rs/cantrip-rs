@@ -1,0 +1,6 @@
+{
+  "name": "Joust Through",
+  "manaCost": "{W}",
+  "type": "Instant",
+  "oracleText": "Joust Through deals 3 damage to target attacking or blocking creature. You gain 1 life."
+}

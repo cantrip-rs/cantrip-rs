@@ -1,0 +1,49 @@
+# Fumigate: "Destroy all creatures. You gain 1 life for each creature destroyed this way." (CR 701.8a, 119.3.) Bot1 has two Memnites
+# and Bot2 an Ornithopter; on turn 3 Bot1 casts Fumigate with exactly {3}{W}{W} (Black Lotus WWW, Mox Pearl, Mox Jet) and all three die,
+# both players' creatures, for exactly 3 life (23): not 2 (own creatures only), not 1 (Bot2's only). Bot2 gains nothing, the
+# Moxes (not creatures) stay and Fumigate goes to the graveyard.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Memnite
+Memnite
+Fumigate
+Black Lotus
+Plains
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fumigate.Cast(Spend: W, W, W, W, B)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Life = 23
+Bot2.Life = 20
+Bot1.Battlefield = Mox Jet; Mox Pearl
+Bot1.Graveyard = Fumigate; Memnite; Memnite; Black Lotus
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Ornithopter

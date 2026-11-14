@@ -1,0 +1,38 @@
+# Felidar Retreat, first mode: "Create a 2/2 white Cat Beast creature token." (CR 111.4, 700.2.) Bot1 casts the Retreat on turn 1 with
+# makes one 2/2 white Cat Beast (not a 1/1, not a second token), and no counter lands on it (the modes are alternatives).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Felidar Retreat
+Plains
+Plains
+Plains
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Felidar Retreat.Cast(Spend: W, W, W, B)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Plains.Play
+Bot1.Modes(Create a 2/2 white Cat Beast creature token)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Battlefield.Cat Beast Token.Power = 2
+Bot1.Battlefield.Cat Beast Token.Toughness = 2
+Bot1.Battlefield.Cat Beast Token.Colors = White
+Bot1.Battlefield.Cat Beast Token.Subtypes = Beast; Cat
+Bot1.Battlefield.Count = 4
+Bot1.Battlefield.Cat Beast Token.Types = Creature

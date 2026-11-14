@@ -1,0 +1,80 @@
+# Twinblade Paladin: "As long as you have 25 or more life, this creature has double strike." On turn 3 Bot1 sacrifices two lands to
+# Zuran Orb (+2 each, two gains, two counters): at 24 life the Paladin has no double strike. Fountain of Youth gives the 1 that
+# makes exactly 25: now it has double strike and is a 6/6 (three counters), so its attack deals 12 to Bot2 in two combat damage
+# steps (CR 702.4, 510.4). On turn 4 Bot2's Lightning Bolt takes Bot1 to 22 and the Paladin loses it again (CR 613.1f).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Twinblade Paladin
+Zuran Orb
+Fountain of Youth
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mountain
+Mountain
+Lightning Bolt
+Mountain x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Zuran Orb.Cast
+Bot1.Hand.Fountain of Youth.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Twinblade Paladin.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Zuran Orb.Activate
+Bot1.Choose(Plains#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Zuran Orb.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 24
+? Bot1.Battlefield.Twinblade Paladin.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Twinblade Paladin.Keywords = (absent)
+Bot1.Battlefield.Fountain of Youth.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 25
+? Bot1.Battlefield.Twinblade Paladin.Counters.PlusOnePlusOne = 3
+? Bot1.Battlefield.Twinblade Paladin.Keywords = DoubleStrike
+? Bot1.Battlefield.Twinblade Paladin.Power = 6
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Twinblade Paladin > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 8
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot1.Battlefield.Twinblade Paladin.Keywords = (absent)
+Bot1.Battlefield.Twinblade Paladin.Power = 6

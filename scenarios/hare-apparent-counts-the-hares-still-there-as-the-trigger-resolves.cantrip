@@ -1,0 +1,45 @@
+# The Rabbits are counted as the trigger resolves, not as the Hare enters (CR 608.2h). Bot1 casts a second Hare Apparent with the first
+# already on the battlefield; with the trigger on the stack Bot2 bolts the first one. When the trigger resolves there is no other Hare
+# Apparent, so no Rabbit is created.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Hare Apparent
+Hare Apparent
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Hare Apparent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Hare Apparent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Hare Apparent#1)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Hare Apparent
+Bot1.Battlefield = Hare Apparent; Mox Pearl; Mox Pearl; Mox Pearl; Mox Pearl

@@ -1,0 +1,58 @@
+# Charming Prince, third mode: "Exile another target creature you own" - the creature need only be owned, not controlled, by its controller's
+# opponent (CR 108.3, 115.1). Bot2 takes Bot1's Savannah Lions with Control Magic on turn 2; on turn 3 the Prince exiles it (Control
+# Magic goes to Bot2's graveyard, CR 704.5m), and at the beginning of the next end step the Lions returns under Bot1's control (CR 603.7).
+# It is a new object, Bot2 does not get it back. It is the only legal target (the Prince is not another creature), so it is chosen without a prompt.
+
+[Bot1 Deck]
+Plains
+Savannah Lions
+Plains
+Charming Prince
+Plains x16
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Control Magic
+Island x2
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Control Magic.Cast(Bot1.Battlefield.Savannah Lions)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Savannah Lions.Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Charming Prince.Cast
+Bot1.Pass
+Bot1.Modes(Exile another target creature you own)
+[T3 Bot1.Main2]
+? Exile = Savannah Lions
+? Bot2.Graveyard = Control Magic
+[T4 Bot2.Main1]
+
+[Expect]
+Turn = 4
+Exile.Count = 0
+Bot1.Battlefield = Plains; Plains; Charming Prince; Savannah Lions
+Bot2.Battlefield = Island; Mox Sapphire; Mox Jet; Mox Ruby
+Bot2.Graveyard = Control Magic

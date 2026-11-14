@@ -1,0 +1,35 @@
+# Leonin Vanguard costs {W} (CR 601.2f): with {W}{W} produced, one is left after the cast. Bot1 controls only two creatures (the
+# Vanguard and an Ornithopter) beside a Mox Pearl, while Bot2 controls two Ornithopters: neither a noncreature permanent nor the
+# opponent's creatures count toward "three or more creatures you control" (CR 109.4), so there is no trigger: the Vanguard stays
+# 1/1 and Bot1 stays at 20 life.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Leonin Vanguard
+Ornithopter
+Plains x18
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Leonin Vanguard.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana = {W}
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter#1.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Leonin Vanguard.Power = 1
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Leonin Vanguard.Power = 1
+Bot1.Battlefield.Leonin Vanguard.Toughness = 1

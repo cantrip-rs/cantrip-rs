@@ -1,0 +1,6 @@
+{
+  "name": "Pacifism",
+  "manaCost": "{1}{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature can't attack or block."
+}

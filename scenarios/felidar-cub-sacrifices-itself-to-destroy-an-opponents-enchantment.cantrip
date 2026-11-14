@@ -1,0 +1,46 @@
+# Felidar Cub: "Sacrifice this creature: Destroy target enchantment." Bot2 pacifies its own Memnite on turn 2. On turn 3 Bot1's Cub is
+# sacrificed as the cost (CR 118.3, 701.21) and destroys the opponent's Pacifism (CR 701.8): both end up in their owners' graveyards.
+# A creature (Bot2's Memnite, Bot1's own Cub) is no legal target: refused (CR 115.1). Bot1 pays nothing else.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Felidar Cub
+Plains x17
+
+[Bot2 Deck]
+Mox Pearl
+Memnite
+Pacifism
+Plains x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Felidar Cub.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Pacifism.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Felidar Cub.Activate(Bot2.Battlefield.Memnite)
+! Bot1.Battlefield.Felidar Cub.Activate(Bot1.Battlefield.Felidar Cub)
+Bot1.Battlefield.Felidar Cub.Activate(Bot2.Battlefield.Pacifism)
+? Bot1.Graveyard = Felidar Cub
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Mox Jet
+Bot1.Graveyard = Felidar Cub
+Bot2.Battlefield = Mox Pearl; Plains; Memnite
+Bot2.Graveyard = Pacifism

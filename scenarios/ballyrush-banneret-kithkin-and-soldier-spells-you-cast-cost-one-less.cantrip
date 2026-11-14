@@ -1,0 +1,77 @@
+# Ballyrush Banneret: "Kithkin spells and Soldier spells you cast cost {1} less to cast." (CR 601.2f, 118.7a.) Each cast taps exactly
+# the reduced cost and the pool is checked right after: empty means the spell took that much and no more. T1 the Banneret itself ({1}{W})
+# pays in full (it is not on the battlefield as it is cast). T3 Kithkin Billyrider (a Kithkin, no Soldier, {2}{W}) and Bishop's Soldier
+# (a Soldier, {1}{W}) each cost {1} less. T5 Grizzly Bears ({1}{G}, neither) pays in full - the {1} not taken would show as a mana
+# left - and Reluctant Dounguard ({2}{W}, a Kithkin Soldier) costs {1} less once, not {2}. Bot2's Dounguard on turn 2 pays in
+# full too: the reduction is for spells Bot1 casts.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Emerald
+Ballyrush Banneret
+Reluctant Dounguard
+Bishop's Soldier
+Kithkin Billyrider
+Grizzly Bears
+Plains x12
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Reluctant Dounguard
+Plains x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ballyrush Banneret.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Reluctant Dounguard.Cast
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kithkin Billyrider.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bishop's Soldier.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Reluctant Dounguard.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Mana =
+Bot2.Mana =

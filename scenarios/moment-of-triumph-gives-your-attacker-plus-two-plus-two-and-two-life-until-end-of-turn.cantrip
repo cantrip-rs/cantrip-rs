@@ -1,0 +1,40 @@
+# Moment of Triumph: "Target creature gets +2/+2 until end of turn. You gain 2 life." Bot1's Ornithopter (0/2) attacks on turn 3
+# and, after the cast, is a 2/4 that deals 2 damage (Bot2 20 -> 18); Bot1 gains 2 (22). By Bot2's upkeep the effect has ended
+# (CR 514.2, 611.2a): the Ornithopter is 0/2 again.
+
+[Bot1 Deck]
+Plains
+Plains
+Ornithopter
+Moment of Triumph
+Plains x16
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Hand.Moment of Triumph.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+? Bot1.Life = 22
+[T4 Bot2.Upkeep]
+
+[Expect]
+Turn = 4
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Life = 22
+Bot2.Life = 18

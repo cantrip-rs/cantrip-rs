@@ -1,0 +1,65 @@
+# Sun-Blessed Healer: "Kicker {1}{W}. When this creature enters, if it was kicked, return target nonland permanent card with mana
+# value 2 or less from your graveyard to the battlefield." On turn 1 Bot1 casts Grizzly Bears (mana value 2) and Gray Ogre (3) and
+# on turn 2 Bot2's two Lightning Bolts kill them. On turn 3 the kicked Healer ({1}{W} twice: Mox Pearl, Plains, Mox Emerald and Mox
+# Sapphire, the pool empty right after) asks for a target: Gray Ogre is refused and Grizzly Bears, exactly mana value 2, is taken and
+# put onto the battlefield (not into the hand), untapped under Bot1's control. The Ogre and the sacrificed Black Lotus (mana value 0, also a legal target) stay in the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Grizzly Bears
+Gray Ogre
+Sun-Blessed Healer
+Plains
+Plains x12
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Gray Ogre.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Gray Ogre)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Grizzly Bears; Gray Ogre; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Sun-Blessed Healer.Cast(Kicked: 1)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Graveyard.Gray Ogre)
+Bot1.Target(Bot1.Graveyard.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Grizzly Bears.Tapped = false
+
+[Expect]
+Bot1.Battlefield = Grizzly Bears; Mox Emerald; Mox Pearl; Mox Sapphire; Plains; Sun-Blessed Healer
+Bot1.Graveyard = Gray Ogre; Black Lotus
+Bot1.Hand =

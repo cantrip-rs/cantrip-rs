@@ -1,0 +1,40 @@
+# Leonin Vanguard: "At the beginning of combat on your turn, if you control three or more creatures, this creature gets +1/+1
+# until end of turn and you gain 1 life." On turn 1 Bot1 controls two creatures (the Vanguard and an Ornithopter), one short of the
+# limit: no trigger (life 20). On turn 3 it casts a second Ornithopter, exactly three (CR 603.4): the Vanguard is 2/2 and Bot1
+# gains 1 life (CR 611.2a, 119.3). On Bot2's turn 4 (not "your turn") it does not trigger again, and the first pump has ended
+# (CR 514.2): the Vanguard is 1/1 and the life stays at 21.
+
+[Bot1 Deck]
+Plains
+Leonin Vanguard
+Ornithopter
+Ornithopter
+Plains x19
+
+[Bot2 Deck]
+Ornithopter
+Plains x21
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Leonin Vanguard.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Ornithopter#1.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+? Bot1.Life = 20
+? Bot1.Battlefield.Leonin Vanguard.Power = 1
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Leonin Vanguard.Power = 2
+? Bot1.Battlefield.Leonin Vanguard.Toughness = 2
+? Bot1.Life = 21
+[T4 Bot2.DeclareAttackers]
+? Bot1.Battlefield.Leonin Vanguard.Power = 1
+? Bot1.Battlefield.Leonin Vanguard.Toughness = 1
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 20
+Bot1.Battlefield.Leonin Vanguard.Power = 1

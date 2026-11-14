@@ -1,0 +1,72 @@
+# Valkyrie's Call: "nontoken" (CR 111.7, 700.4). Resolute Reinforcements makes a 1/1 Soldier token and is itself a nontoken 1/1
+# creature. On turn 3 Bot1 Bolts the Soldier token: it dies and nothing returns (a token that has left the battlefield is gone,
+# CR 111.7). On turn 5 the second Bolt kills Resolute Reinforcements itself and that nontoken creature returns as a 2/2 flying
+# Angel with a +1/+1 counter, a positive control that the Call works in the same game
+# (it enters again, so its own trigger makes a new Soldier token).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Valkyrie's Call
+Resolute Reinforcements
+Lightning Bolt
+Plains
+Lightning Bolt
+Plains x10
+
+[Bot2 Deck]
+Mountain x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Valkyrie's Call.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Resolute Reinforcements.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Soldier Token.Power = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Soldier Token)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Count = 5
+[T4 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Resolute Reinforcements)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Soldier Token.Power = 1
+? Bot1.Battlefield.Resolute Reinforcements.Power = 2
+? Bot1.Battlefield.Resolute Reinforcements.Keywords = Flash; Flying
+? Bot1.Battlefield.Resolute Reinforcements.Counters.PlusOnePlusOne = 1
+
+[Expect]
+Bot1.Battlefield.Resolute Reinforcements.Power = 2

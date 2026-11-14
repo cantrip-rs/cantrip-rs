@@ -1,0 +1,79 @@
+# Ajani, Caller of the Pride, -8: "Create X 2/2 white Cat creature tokens, where X is your life total." Ajani +1s on turns 1, 3 and
+# 5 (loyalty 7). On turn 7 the -8 cannot be paid with 7 loyalty (CR 606.6), so Bot1 +1s again to 8. On turn 9 Bot1 first Healing
+# Salves itself to 23 life, and the -8 makes 23 Cat tokens, each a 2/2 white Cat: X is the life total as the ability resolves
+# (CR 608.2h), not the 20 it started with. Ajani goes to the graveyard with no loyalty left (CR 704.5i).
+
+[Bot1 Deck]
+Black Lotus
+Ajani, Caller of the Pride
+Mox Pearl
+Healing Salve
+Plains x3
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ajani, Caller of the Pride.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ajani, Caller of the Pride.Activate(Ability: Put a +1/+1 counter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ajani, Caller of the Pride.Counters.Loyalty = 5
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Ajani, Caller of the Pride.Activate(Ability: Put a +1/+1 counter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ajani, Caller of the Pride.Counters.Loyalty = 6
+[T4 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Ajani, Caller of the Pride.Activate(Ability: Put a +1/+1 counter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ajani, Caller of the Pride.Counters.Loyalty = 7
+[T6 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T7 Bot1.Main1]
+! Bot1.Battlefield.Ajani, Caller of the Pride.Activate(Ability: Create X 2/2)
+Bot1.Battlefield.Ajani, Caller of the Pride.Activate(Ability: Put a +1/+1 counter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ajani, Caller of the Pride.Counters.Loyalty = 8
+[T8 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+Bot1.Battlefield.Ajani, Caller of the Pride.Activate(Ability: Create X 2/2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 24
+? Bot1.Battlefield.Cat Token#1.Power = 2
+? Bot1.Battlefield.Cat Token#23.Power = 2
+? Bot1.Battlefield.Cat Token#1.Toughness = 2
+? Bot1.Battlefield.Cat Token#1.Colors = White
+? Bot1.Battlefield.Cat Token#1.Subtypes = Cat
+? Bot1.Graveyard.Count = 3
+
+[Expect]
+Bot1.Life = 23
+Bot1.Battlefield.Count = 24
