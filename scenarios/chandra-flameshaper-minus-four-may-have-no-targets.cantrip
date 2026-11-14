@@ -1,0 +1,37 @@
+# Chandra, Flameshaper -4 (CR 107.1c, 601.2d, 606.4): "any number of target creatures and/or planeswalkers" includes zero, so
+# the -4 can be activated with nothing to damage: the loyalty cost is still paid (8 -> 4) and nothing is damaged.
+[Bot1 Deck]
+Black Lotus x3
+Chandra, Flameshaper
+Mountain x3
+Mountain x16
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Chandra, Flameshaper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Chandra, Flameshaper.Activate(Ability: Add)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mountain)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Chandra, Flameshaper.Activate(Ability: 8 damage)
+Bot1.Divide()
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Chandra, Flameshaper.Counters.Loyalty = 4
+Bot2.Life = 20
+Stack.Count = 0

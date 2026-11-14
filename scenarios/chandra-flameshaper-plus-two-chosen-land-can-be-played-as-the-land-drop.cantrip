@@ -1,0 +1,34 @@
+# Chandra, Flameshaper +2 (CR 305.1, 601.3): the three exiled cards are all Mountains and Bot1 chooses one. A chosen land may
+# be played this turn - as the land drop, since Bot1 has not played one - and the other two stay in exile.
+[Bot1 Deck]
+Black Lotus x3
+Chandra, Flameshaper
+Mountain x3
+Mountain x10
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Chandra, Flameshaper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Chandra, Flameshaper.Activate(Ability: Add)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mountain)
+? Exile.Count = 3
+Bot1.Exile.Mountain.Play
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Count = 2
+
+[Expect]
+Exile.Count = 2
+Bot1.Battlefield.Chandra, Flameshaper.Counters.Loyalty = 8

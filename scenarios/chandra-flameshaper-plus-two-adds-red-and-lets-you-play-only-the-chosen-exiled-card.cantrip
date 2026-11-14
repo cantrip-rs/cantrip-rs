@@ -1,0 +1,45 @@
+# Chandra, Flameshaper +2 (CR 606.4, 608.2c, 601.3): Bot1 casts her off two Black Lotuses and a Mountain (exactly 7), and the +2
+# adds RRR - the pool shows it - and exiles the top three cards: Lightning Bolt, Mountain and Mons's Goblin Raiders. Bot1 chooses
+# the Bolt and casts it with the new mana at Bot2 (20 -> 17); the other two stay in exile and cannot be played this turn.
+# Her loyalty is 6 + 2 = 8.
+[Bot1 Deck]
+Black Lotus x2
+Chandra, Flameshaper
+Mountain x4
+Lightning Bolt
+Mountain
+Mons's Goblin Raiders
+Mountain x10
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Chandra, Flameshaper.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = 
+Bot1.Battlefield.Chandra, Flameshaper.Activate(Ability: Add)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}{R}{R}
+Bot1.Choose(Lightning Bolt)
+? Exile = Mons's Goblin Raiders; Mountain; Lightning Bolt
+! Bot1.Exile.Mons's Goblin Raiders.Cast
+! Bot1.Exile.Mountain.Play
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+? Bot2.Life = 17
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Chandra, Flameshaper.Counters.Loyalty = 8
+Bot1.Graveyard = Lightning Bolt; Black Lotus; Black Lotus
