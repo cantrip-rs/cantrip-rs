@@ -1,0 +1,38 @@
+# Lionheart Glimmer: "Whenever you attack": on turn 4 Bot2 attacks with its Llanowar Elves (1 damage to Bot1), an attack by
+# an opponent, so Bot1's Glimmer gets no bonus.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Lionheart Glimmer
+Island x16
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lionheart Glimmer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Llanowar Elves > Bot1)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Lionheart Glimmer.Power = 2
+Bot1.Battlefield.Lionheart Glimmer.Toughness = 5
+Stack.Count = 0

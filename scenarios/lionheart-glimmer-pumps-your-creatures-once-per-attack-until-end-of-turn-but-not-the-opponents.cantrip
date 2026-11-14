@@ -1,0 +1,47 @@
+# Lionheart Glimmer: "Whenever you attack, creatures you control get +1/+1 until end of turn." On turn 3 Bot1 attacks with both
+# the Glimmer (2/5) and an Ornithopter (0/2): one attack, one trigger, so each of its creatures gets +1/+1 once (not once per
+# attacker) - the Glimmer 3/6, the Ornithopter 1/3 - and Bot2's own Ornithopter stays a 0/2. On turn 4 the bonus is gone.
+# Before the attack nothing is pumped.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Lionheart Glimmer
+Ornithopter
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lionheart Glimmer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Lionheart Glimmer.Power = 2
+? Bot1.Battlefield.Lionheart Glimmer.Toughness = 5
+Bot1.Attack(Lionheart Glimmer > Bot2; Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lionheart Glimmer.Power = 3
+? Bot1.Battlefield.Lionheart Glimmer.Toughness = 6
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot2.Battlefield.Ornithopter.Power = 0
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Lionheart Glimmer.Power = 2
+Bot1.Battlefield.Lionheart Glimmer.Toughness = 5
+Bot1.Battlefield.Ornithopter.Power = 0
+Stack.Count = 0
+Bot2.Life = 16
