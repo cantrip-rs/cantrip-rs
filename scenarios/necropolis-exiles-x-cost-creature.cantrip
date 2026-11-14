@@ -1,0 +1,32 @@
+# Ballista was cast with X=1, then its last counter was removed; in exile its mana value is zero (CR 202.3e).
+[Bot1 Deck]
+Black Lotus x2
+Mox Pearl
+Mox Sapphire
+Walking Ballista
+Necropolis
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Walking Ballista.Cast(X: 1)
+Bot1.Battlefield.Walking Ballista.Activate(Bot2; Ability: Remove a +1/+1 counter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Necropolis.Cast
+Bot1.Battlefield.Necropolis.Activate
+Bot1.Choose(Walking Ballista)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Necropolis.Power = 0
+Bot1.Battlefield.Necropolis.Toughness = 1
+Exile = Walking Ballista

@@ -1,0 +1,63 @@
+# Necropolis exiles a creature card as its cost and gets counters equal to its mana value (CR 602.2b, 122.1).
+# Both graveyards contain a creature; only its controller’s own creature can pay the cost.
+[Bot1 Deck]
+Necropolis
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Entomb
+Memnite
+Hill Giant
+Island x20
+[Bot2 Deck]
+Mox Jet
+Entomb
+Island x6
+Grizzly Bears
+Island x15
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Hill Giant)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Necropolis.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Grizzly Bears)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Necropolis.Activate
+! Bot1.Choose(Grizzly Bears)
+! Bot1.Choose(Entomb)
+Bot1.Choose(Hill Giant)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Necropolis.Power = 0
+? Bot1.Battlefield.Necropolis.Toughness = 5
+[T3 Bot1.Main1]
+! Bot1.Attack(Necropolis > Bot2)
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Necropolis.Toughness = 5
+Bot1.Graveyard = Black Lotus; Entomb
+Bot2.Graveyard = Entomb; Grizzly Bears
+Exile = Hill Giant

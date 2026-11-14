@@ -1,0 +1,63 @@
+# Teferi lets Bot2 move the exiled cost card to a graveyard while Necropolis's ability is on the stack.
+# Necropolis reads the exile incarnation's last-known mana value, not the card's new graveyard object (CR 608.2h, 400.7).
+[Bot1 Deck]
+Necropolis
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Entomb
+Memnite
+Hill Giant
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Teferi, Time Raveler
+Binding Negotiation
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Hill Giant)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Necropolis.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Teferi, Time Raveler.Cast
+Bot2.Battlefield.Teferi, Time Raveler.Activate(Ability: +1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Necropolis.Activate
+Bot1.Choose(Hill Giant)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Hand.Binding Negotiation.Cast(Bot1)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Choose()
+Bot2.Choose(Hill Giant)
+? Bot1.Graveyard = Hill Giant; Black Lotus; Entomb
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Necropolis.Power = 0
+Bot1.Battlefield.Necropolis.Toughness = 5
+Bot1.Graveyard = Hill Giant; Black Lotus; Entomb
