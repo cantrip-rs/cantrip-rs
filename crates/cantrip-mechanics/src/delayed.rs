@@ -163,6 +163,18 @@ pub fn at_next_end_step_about(g: &mut dyn Game, item: &StackItem, ability: u8, c
     );
 }
 
+/// "... at the beginning of the next end step" (CR 603.7) from a dies ability: sets up the card's delayed ability number `ABILITY`
+/// about the cards the dying permanent became in the graveyard, every card of it if it was a merged permanent (CR 730.3c, 603.7c). A
+/// token has ceased to exist by then (CR 111.7) and finds nothing, so nothing is set up. Leaving the graveyard before then makes
+/// it a different object (CR 400.7). Nine-Lives Familiar and Dr. Leonard "Bones" McCoy print it.
+pub fn at_next_end_step_about_what_it_became<const ABILITY: u8>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let cards = g.found_all_after_move(item.object);
+    if !cards.is_empty() {
+        at_next_end_step_about(g, item, ABILITY, &cards);
+    }
+    Ok(())
+}
+
 /// `at_next_end_step_about` for "at the beginning of the next upkeep" (CR 503.1, 603.7): the next upkeep step to begin,
 /// whoever's turn it is in, carrying the objects `created` (CR 603.7c). Firion, Wild Rose Warrior sacrifices its token then
 /// (`sacrifice_created`); The Eagles Are Coming! carries the creatures it returned.

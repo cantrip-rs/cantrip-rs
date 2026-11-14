@@ -16,17 +16,6 @@ fn watch_for_death(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "... at the beginning of the next end step" (CR 603.7): set up the second delayed ability about the card the
-/// dying creature became - every card of it, if it was a merged permanent (CR 730.3c). Leaving its graveyard before then makes
-/// it a different object (CR 400.7).
-fn return_at_end_step(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let cards = g.found_all_after_move(item.object);
-    if !cards.is_empty() {
-        delayed::at_next_end_step_about(g, item, 1, &cards);
-    }
-    Ok(())
-}
-
 /// "Return that card to the battlefield under its owner's control with a +1/+1 counter on it" (CR 603.7c, 122.6): each card the
 /// ability carries that is still the object it was, together.
 fn return_with_counter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -47,7 +36,7 @@ static MODAL: ModalDef = modes(&[
 pub static CARD: CardDef = CardDef {
     abilities: &[modal_triggered(triggers::THIS_ENTERS, &MODAL, "When Dr. McCoy enters, choose one — Return target non-Doctor permanent card from your graveyard to your hand; or choose up to one other target creature. When it dies this turn, return that card to the battlefield under its owner's control with a +1/+1 counter on it at the beginning of the next end step.")],
     delayed: &[
-        triggered(triggers::THIS_DIES, return_at_end_step, "When it dies this turn, return that card to the battlefield under its owner's control with a +1/+1 counter on it at the beginning of the next end step."),
+        triggered(triggers::THIS_DIES, delayed::at_next_end_step_about_what_it_became::<1>, "When it dies this turn, return that card to the battlefield under its owner's control with a +1/+1 counter on it at the beginning of the next end step."),
         delayed_trigger(return_with_counter, "Return that card to the battlefield under its owner's control with a +1/+1 counter on it."),
     ],
     ..oracle::DR_LEONARD_BONES_MCCOY
