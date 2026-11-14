@@ -1744,10 +1744,13 @@ pub fn each_end_step(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired>
     }
 }
 
+/// The upkeep of the controller of the permanent the source enchants. "Enchanted [permanent]" is a permanent on the
+/// battlefield (CR 109.2, 303.4m): an Aura left attached to a card in a graveyard (Dance of the Dead's enters ability
+/// countered) enchants no permanent, and the card's owner, its controller by CR 108.4a, is no enchanted permanent's controller.
 fn enchanted_controllers_upkeep(q: &dyn Query, source: ObjectId, event: &Event) -> Option<(ObjectId, PlayerId)> {
     match event {
         Event::StepBegan { step: Step::Upkeep } => {
-            let host = q.obj(source).attached_to?;
+            let host = q.obj(source).attached_to.filter(|&host| q.is_on_battlefield(host))?;
             let active = q.state().turn.active;
             (q.controller(host) == active).then_some((host, active))
         }
