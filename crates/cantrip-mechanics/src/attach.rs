@@ -275,6 +275,53 @@ pub fn tap_enchanted(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
     Ok(())
 }
 
+/// "It loses "enchant creature card in a graveyard" and gains "enchant creature put onto the battlefield with this Aura."
+/// Return enchanted creature card to the battlefield under your control and attach this Aura to it" - "put ... onto the
+/// battlefield tapped" when `TAPPED` (CR 110.5b). The enchant abilities change in layer 6 (CR 613.1f) for as long as the
+/// Aura is this object; the card enters under the ability's controller with the Aura attached to it, the creature put onto
+/// the battlefield with it (`Game::put_onto_battlefield_with_aura`). A card that can't enter leaves the Aura on a card it may
+/// no longer enchant, and the state-based actions put it into its owner's graveyard (CR 303.4c, 704.5m). Animate Dead returns
+/// the card untapped, Dance of the Dead puts it onto the battlefield tapped.
+pub fn put_enchanted_creature_card_onto_the_battlefield<const TAPPED: bool>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    instruction(g, |g| {
+        g.add_effect(item.object, item.object, EffectKind::LoseEnchant(item.ability.card), Duration::Indefinite);
+        g.add_effect(item.object, item.object, EffectKind::Enchant(item.ability.card), Duration::Indefinite);
+    });
+    let Some(card) = g.obj(item.object).attached_to else { return Ok(()) };
+    g.put_onto_battlefield_with_aura(card, item.controller, item.object, TAPPED)?;
+    Ok(())
+}
+
+/// "When this Aura leaves the battlefield, that creature's controller sacrifices it" (CR 701.21a): the creature put onto the
+/// battlefield with this Aura (`Game::put_onto_battlefield_with_aura`), if it is still that object (CR 400.7), sacrificed by
+/// whoever controls it as the ability resolves. Animate Dead, Necromancy and Dance of the Dead print it.
+pub fn sacrifice_creature_put_onto_the_battlefield_with_this(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let entered: Vec<ObjectId> =
+        g.state().battlefield().iter().copied().filter(|&id| g.obj(id).entered_with == Some(item.object)).collect();
+    let each: Vec<(PlayerId, ObjectId)> = entered.into_iter().map(|id| (g.controller(id), id)).collect();
+    g.sacrifice_each(&each);
+    Ok(())
+}
+
+const PAY_TO_UNTAP: Question = Question::new(
+    "Pay", "pay {cost} to untap the enchanted creature?", "", "Pay {cost}", "Don't pay",
+);
+
+/// "At the beginning of the upkeep of enchanted creature's controller, that player may pay [mana]. If the player does, untap
+/// that creature" (CR 118.12, 701.26b), for `ENCHANTED_PERMANENTS_CONTROLLERS_UPKEEP_HOST`: the upkeep player may pay even if
+/// control or attachment has since changed. The Aura's current attachment, or its last attachment if it left, identifies the
+/// creature to untap (CR 303.4m, 608.2h). Paralyze ({4}) and Dance of the Dead ({1}{B}) print it.
+pub fn upkeep_player_may_pay_to_untap_enchanted(g: &mut dyn Game, item: &StackItem, mana: Cost) -> Result<(), Suspend> {
+    let player = PlayerId(item.data[0] as u8);
+    if g.state().in_game(player) && g.may_pay(player, item.object, item.object, mana, &PAY_TO_UNTAP)? {
+        g.end_sentence();
+        if let Some(creature) = g.obj(item.object).attached_to {
+            g.untap(creature);
+        }
+    }
+    Ok(())
+}
+
 /// Living weapon (CR 702.92a): create a 0/0 black Phyrexian Germ creature token, then attach this Equipment to it.
 /// The Equipment attaches only if it is still on the battlefield and the token was made (CR 701.3b). Nettlecyst and
 /// Kaldra Compleat print it.

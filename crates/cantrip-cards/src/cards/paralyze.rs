@@ -1,22 +1,10 @@
 use cantrip_api::*;
-use cantrip_mechanics::{attach::{attached_to_it, tap_enchanted}, targets, triggers};
+use cantrip_mechanics::{attach::{self, attached_to_it, tap_enchanted}, targets, triggers};
 use cantrip_oracle as oracle;
 
-const PAY: Question = Question::new(
-    "Pay", "pay {cost} to untap the enchanted creature?", "", "Pay {cost}", "Don't pay",
-);
-
-/// The upkeep player may pay even if control or attachment has since changed. The Aura's current attachment, or its
-/// last attachment if it left, identifies the creature to untap (CR 303.4m, 608.2h).
+/// That player may pay {4}. If the player does, untap the creature.
 fn pay_to_untap(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let player = PlayerId(item.data[0] as u8);
-    if g.state().in_game(player) && g.may_pay(player, item.object, item.object, cost("{4}"), &PAY)? {
-        g.end_sentence();
-        if let Some(creature) = g.obj(item.object).attached_to {
-            g.untap(creature);
-        }
-    }
-    Ok(())
+    attach::upkeep_player_may_pay_to_untap_enchanted(g, item, cost("{4}"))
 }
 
 pub static CARD: CardDef = CardDef {

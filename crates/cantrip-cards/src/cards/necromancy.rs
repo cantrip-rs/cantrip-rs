@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{targets, triggers};
+use cantrip_mechanics::{attach, targets, triggers};
 use cantrip_oracle as oracle;
 
 /// It becomes an Aura with "enchant creature put onto the battlefield with Necromancy": the Aura subtype (CR 613.1d) and the
@@ -16,15 +16,6 @@ fn reanimate(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// That creature's controller sacrifices it.
-fn sacrifice_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let entered: Vec<ObjectId> =
-        g.state().battlefield().iter().copied().filter(|&id| g.obj(id).entered_with == Some(item.object)).collect();
-    let each: Vec<(PlayerId, ObjectId)> = entered.into_iter().map(|id| (g.controller(id), id)).collect();
-    g.sacrifice_each(&each);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     cast_as_though_flash: true,
     untimely_cleanup_rider: true,
@@ -33,7 +24,7 @@ pub static CARD: CardDef = CardDef {
         triggered(triggers::THIS_ENTERS, reanimate, "When this enchantment enters, if it's on the battlefield, it becomes an Aura with \"enchant creature put onto the battlefield with Necromancy.\" Put target creature card from a graveyard onto the battlefield under your control and attach this enchantment to it.")
             .targets(&[targets::CREATURE_CARD_IN_A_GRAVEYARD])
             .condition(triggers::this_is_on_the_battlefield),
-        triggered(triggers::THIS_LEAVES, sacrifice_creature, "When this enchantment leaves the battlefield, that creature's controller sacrifices it."),
+        triggered(triggers::THIS_LEAVES, attach::sacrifice_creature_put_onto_the_battlefield_with_this, "When this enchantment leaves the battlefield, that creature's controller sacrifices it."),
     ],
     ..oracle::NECROMANCY
 };
