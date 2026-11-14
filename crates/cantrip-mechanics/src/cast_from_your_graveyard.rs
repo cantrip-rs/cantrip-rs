@@ -1,7 +1,8 @@
 //! "You may cast this card from your graveyard. If you do, it enters with a finality counter on it" (CR 601.3, 614.1c, 122.1):
 //! a card's own permission to be cast from its owner's graveyard (`ExileCast` from `ZoneKind::Graveyard`, read off the card
 //! there only while it has its abilities, CR 613.1f), and its entry rider, which reads from the history whether the permanent
-//! was the spell cast by that permission. Hundred-Battle Veteran and Storied Veteran.
+//! was the spell cast by that permission. Hundred-Battle Veteran and Storied Veteran. A card whose permission costs more
+//! (Alien Symbiosis, Wickerfolk Indomitable, Quilled Greatwurm) takes `PERMISSION` with its own `additional` cost.
 
 use cantrip_api::*;
 
