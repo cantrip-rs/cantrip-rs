@@ -2093,9 +2093,17 @@ pub(crate) fn expire_step_deadlines(cx: &mut Cx, step: Step) {
         Duration::UntilNextStepOf { step: s, player } | Duration::UntilEndOfNextStepOf { step: s, player } => s == step && player.is_none_or(|p| p == active),
         _ => false,
     };
-    let changed = cx.s().effects.iter().any(|e| begins(e.duration));
+    let expires = |e: &ContinuousEffect| {
+        matches!(e.duration, Duration::UntilNextStepOf { .. }) && begins(e.duration)
+            || e.duration == Duration::UntilItsControllersNextUntapStep && step == Step::Untap
+                && cx.s().obj(e.affected).zone == Zone::BATTLEFIELD
+                && cx.s().obj(e.affected).controller == active
+    };
+    let changed = cx.s().effects.iter().any(|e| expires(e) || begins(e.duration));
     if changed {
-        cx.st().effects_retain(|e| !matches!(e.duration, Duration::UntilNextStepOf { .. }) || !begins(e.duration));
+        // Read every deadline against the same pre-expiry control state (CR 500.4).
+        let keep: Vec<bool> = cx.s().effects.iter().map(|e| !expires(e)).collect();
+        cx.st().effects_keep(&keep);
         for at in 0..cx.s().effects.len() {
             let e = cx.s().effects[at];
             if matches!(e.duration, Duration::UntilEndOfNextStepOf { .. }) && begins(e.duration) {

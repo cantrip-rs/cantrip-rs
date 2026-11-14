@@ -89,3 +89,30 @@ fn independent_untap_effects_advance_together_even_if_already_untapped_and_rollb
     untap_step(&mut cx(&mut g),YOU).unwrap();assert!(g.state.obj(id).tapped);
     untap_step(&mut cx(&mut g),YOU).unwrap();assert!(!g.state.obj(id).tapped);
 }
+
+#[test]
+fn controller_relative_start_deadline_follows_control_and_expires_simultaneously() {
+    let (mut g, id) = board();
+    add(&mut g, id, Duration::UntilItsControllersNextUntapStep);
+    cx(&mut g).add_effect(id, id, EffectKind::Control(THEM), Duration::UntilItsControllersNextUntapStep);
+    ops::settle_lasting_and_control(&mut cx(&mut g));
+    step(&mut g, YOU, Step::Untap);
+    assert!(g.chars(id).has(Keyword::Flying));
+    assert_eq!(g.state.obj(id).controller, THEM);
+    let mark = g.state.mark();
+    step(&mut g, THEM, Step::Untap);
+    assert!(!g.chars(id).has(Keyword::Flying));
+    assert_eq!(g.state.obj(id).controller, YOU);
+    g.state.rollback(mark);
+    assert_eq!(g.state.effects.len(), 2);
+}
+
+#[test]
+fn controller_relative_deadline_cannot_see_a_phased_out_permanent() {
+    let (mut g, id) = board();
+    add(&mut g, id, Duration::UntilItsControllersNextUntapStep);
+    crate::phasing::phase_out(&mut cx(&mut g), &[id], None, false);
+    step(&mut g, THEM, Step::Untap);
+    step(&mut g, YOU, Step::Untap);
+    assert!(g.state.effects.iter().any(|e| e.duration == Duration::UntilItsControllersNextUntapStep));
+}

@@ -1932,6 +1932,8 @@ pub enum Duration {
     /// Until the next matching step begins (CR 500.4). A skipped step never begins. `None` means any player's.
     /// Erhnam Djinn, Gabriel Angelfire and Xenic Poltergeist name their controller's next upkeep.
     UntilNextStepOf { step: Step, player: Option<PlayerId> },
+    /// Until the affected permanent's controller's next actual untap step begins (CR 500.4, 611.2a).
+    UntilItsControllersNextUntapStep,
     /// Through the next matching step (CR 611.2a). Becomes `EndOfStep` when it begins; Halfdane's next upkeep.
     UntilEndOfNextStepOf { step: Step, player: Option<PlayerId> },
     /// As long as the affected object stays where it is.

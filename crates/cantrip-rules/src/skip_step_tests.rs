@@ -28,13 +28,15 @@ fn skipping_untap_still_begins_the_turn_but_preserves_untap_deadlines_and_action
     g.state.update_obj(creature,|o|o.tapped=true);g.state.update_player(YOU,|p|p.lands_played=1);
     for (kind,duration) in [(EffectKind::AddKeywords(Keywords::of(&[Keyword::Flying])),Duration::UntilNextTurnOf(YOU)),
         (EffectKind::AddKeywords(Keywords::of(&[Keyword::Trample])),Duration::UntilNextStepOf{step:Step::Untap,player:Some(YOU)}),
-        (EffectKind::DoesntUntap,Duration::DuringControllersNextUntapSteps(2))] {cx(&mut g).add_effect(creature,creature,kind,duration);}
+        (EffectKind::DoesntUntap,Duration::DuringControllersNextUntapSteps(2)),
+        (EffectKind::AddKeywords(Keywords::of(&[Keyword::Haste])),Duration::UntilItsControllersNextUntapStep)] {cx(&mut g).add_effect(creature,creature,kind,duration);}
     begin(&mut g,YOU,Step::Untap);
     assert_eq!(g.state.player(YOU).turn_began,2);assert_eq!(g.state.player(YOU).lands_played,0);
     assert!(g.history().this_turn().iter().any(|r|matches!(r.event,Event::TurnBegan{player:YOU,..})));
     assert!(!g.chars(creature).has(Keyword::Flying));assert!(g.chars(creature).has(Keyword::Trample));
     assert!(g.state.obj(creature).marks.phased.is_none());assert!(g.state.obj(creature).tapped);
     assert!(g.state.effects.iter().any(|e|e.duration==Duration::DuringControllersNextUntapSteps(2)));
+    assert!(g.chars(creature).has(Keyword::Haste));
     assert_eq!(g.state.agenda.len(),1,"no priority is offered for the skipped step");
 }
 #[test]
@@ -99,6 +101,16 @@ fn an_additional_untap_respects_skips_without_beginning_another_turn(){
     assert_eq!(g.state.player(YOU).turn_began,turn_began);
     assert_eq!(g.state.player(YOU).lands_played,1);
     assert!(g.state.obj(creature).tapped);
+    assert!(g.state.obj(creature).marks.phased.is_none());
+    assert!(g.chars(creature).has(Keyword::Flying));
+}
+
+#[test]
+fn controller_relative_deadline_is_checked_before_phasing_in() {
+    let mut g=setup();let creature=put(&mut g,&CREATURE,YOU);
+    cx(&mut g).add_effect(creature,creature,EffectKind::AddKeywords(Keywords::of(&[Keyword::Flying])),Duration::UntilItsControllersNextUntapStep);
+    crate::phasing::phase_out(&mut cx(&mut g),&[creature],None,false);
+    begin(&mut g,YOU,Step::Untap);
     assert!(g.state.obj(creature).marks.phased.is_none());
     assert!(g.chars(creature).has(Keyword::Flying));
 }
