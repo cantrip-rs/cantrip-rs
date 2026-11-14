@@ -38,13 +38,16 @@ pub struct Frame {
     pub next_stage: u16,
     pub staged: bool,
     pub scratch: [u32; 4],
+    /// Start of this frame's first effect-reveal scope (CR 701.20a), retained across staged continuations.
+    /// None avoids scanning history on the ordinary path.
+    pub effect_reveal_start: Option<u32>,
     /// For a staged frame waiting on a question: a change with no event an earlier stage made that the state triggers have
     /// not judged yet (CR 603.8). The resolution goes on with it when answered, as a run never stopped would
     /// (`cantrip_rules::StateCheck`).
     pub unjudged: bool,
     /// Top cards at the start of an announcement or special action (CR 401.5).
     /// New top cards cannot be revealed or looked at before that procedure finishes.
-    pub library_tops: Option<Vec<Option<ObjectId>>>,
+    pub library_tops: Option<Box<[Option<ObjectId>]>>,
     /// The mana abilities being activated in this run, outermost first, each with its player, its source and the ability as
     /// the source had it when the activation began (CR 602.2a, 113.7a): begun and not yet activated, as one is while its costs
     /// are paid. A mana ability never goes on the stack (CR 605.3a), so this is where the position says one is under way -
@@ -68,6 +71,7 @@ impl Frame {
             next_stage: 0,
             staged: false,
             scratch: [0; 4],
+            effect_reveal_start: None,
             unjudged: false,
             library_tops: None,
             mana_abilities: Vec::new(),
@@ -94,6 +98,7 @@ impl Frame {
 impl PartialEq for Frame {
     fn eq(&self, other: &Frame) -> bool {
         self.position() == other.position() && self.library_tops == other.library_tops && self.mana_abilities == other.mana_abilities
+            && self.effect_reveal_start == other.effect_reveal_start
     }
 }
 
@@ -104,6 +109,7 @@ impl std::hash::Hash for Frame {
         self.position().hash(state);
         self.library_tops.hash(state);
         self.mana_abilities.hash(state);
+        self.effect_reveal_start.hash(state);
     }
 }
 
