@@ -617,7 +617,7 @@ public sealed class PromptPresentationTests
         option.ProducesAlternatives = [[ManaTypeView.Blue], [ManaTypeView.Colorless]];
         Assert.True(AutoMana.IsManaAbility(option));
         Assert.False(CardActions.IsIrreversibleActivation(option));
-        Assert.Contains("Add {U} or {C}", CardActions.Describe(client, option));
+        Assert.EndsWith("Add {U} or {C}...", CardActions.Describe(client, option));
     }
 
     [Fact]

@@ -203,6 +203,7 @@ public sealed class CardActions
         // ability's own choices drops that reason for it while keeping the others: this row is one combination, not
         // "and then it will want to know which". A row standing for every permanent the cost could take asks which.
         bool asks = option.HasX
+            || option.ProducesAlternatives.Count > 0
             || (option.ProducesOfAnyColorEach > 0 && combination is not { Count: > 0 })
             || anyPermanent;
 
