@@ -1,0 +1,54 @@
+# Savior of the Small: the intervening "if" is checked again as the ability resolves, and a Savior that has left the battlefield
+# is judged by the status it last had there (CR 603.4, 608.2h; the ruling: "use its tapped or untapped status as it last
+# existed on the battlefield"). Savior attacks on turn 3 and is tapped; with the trigger on the stack Bot2 destroys it with
+# Terror. The ability still resolves and Bot1 returns Memnite to hand.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Mox Ruby
+Savior of the Small
+Faithless Looting
+Memnite
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Terror
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Savior of the Small.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Memnite; Island)
+Bot1.Attack(Savior of the Small > Bot2)
+[T3 Bot1.Main2]
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Terror.Cast(Bot1.Battlefield.Savior of the Small)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Savior of the Small; Faithless Looting; Island
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Hand = Island; Island; Memnite
+Bot1.Graveyard = Savior of the Small; Faithless Looting; Island
+Bot2.Graveyard = Terror
