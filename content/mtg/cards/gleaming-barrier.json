@@ -1,0 +1,11 @@
+{
+  "name": "Gleaming Barrier",
+  "manaCost": "{2}",
+  "type": "Artifact Creature — Wall",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": "Defender\nWhen this creature dies, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "keywords": [
+    "Defender"
+  ]
+}

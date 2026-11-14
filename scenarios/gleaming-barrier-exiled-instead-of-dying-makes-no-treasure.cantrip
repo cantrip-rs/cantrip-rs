@@ -1,0 +1,36 @@
+# Gleaming Barrier: "When this creature dies, create a Treasure token." Exile is not dying (CR 700.4): Bot2's Swords to
+# Plowshares exiles it on turn 2 and Bot1 gets no Treasure (and gains 0 life, its power).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Gleaming Barrier
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gleaming Barrier.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Gleaming Barrier)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Exile.Gleaming Barrier.Power = 0
+Bot1.Battlefield = Mox Jet; Mox Ruby
+Bot1.Graveyard.Count = 0
+Bot1.Life = 20
