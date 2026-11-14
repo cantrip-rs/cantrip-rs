@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::cumulative_upkeep;
+use cantrip_mechanics::{cumulative_upkeep, mana};
 use cantrip_oracle as oracle;
 
 /// "If a land is tapped for mana, it produces colorless mana instead of any other type." (CR 604.1).
@@ -16,18 +16,6 @@ fn if_land_tapped_mana_produces_applies(
     false
 }
 
-/// "If a land is tapped for mana, it produces colorless mana instead of any other type." (CR 604.1).
-fn if_land_tapped_mana_produces_apply(
-    _: &dyn Query,
-    _: &Asker,
-    proposal: &mut Proposal,
-) {
-    let Proposal::ManaProduction(m) = proposal else { return };
-    let total = m.total();
-    m.mana = ManaPool::default();
-    m.mana.0[Mana::C as usize] = total;
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         cumulative_upkeep!(
@@ -39,7 +27,7 @@ pub static CARD: CardDef = CardDef {
         replacement(
             ReplacementKind::ManaProduction,
             if_land_tapped_mana_produces_applies,
-            if_land_tapped_mana_produces_apply,
+            mana::produce_colorless_instead,
             "If a land is tapped for mana, it produces colorless mana instead of any other type.",
         ),
     ],
