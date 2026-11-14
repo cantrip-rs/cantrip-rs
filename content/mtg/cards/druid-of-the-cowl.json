@@ -1,0 +1,8 @@
+{
+  "name": "Druid of the Cowl",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Elf Druid",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "{T}: Add {G}."
+}

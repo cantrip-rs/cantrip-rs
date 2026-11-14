@@ -1,0 +1,26 @@
+# {T}: Add {G}: summoning sickness keeps the Druid from tapping on turn 1 (refusal), on turn 3 it makes one {G}, and it is
+# tapped, so a second activation is refused until it untaps. It is a 1/3.
+
+[Bot1 Deck]
+Black Lotus
+Druid of the Cowl
+Forest x12
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Druid of the Cowl.Cast
+! Bot1.Battlefield.Druid of the Cowl.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Druid of the Cowl.Activate
+? Bot1.Mana = {G}
+! Bot1.Battlefield.Druid of the Cowl.Activate
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Druid of the Cowl.Tapped = true
+Bot1.Battlefield.Druid of the Cowl.Power = 1
+Bot1.Battlefield.Druid of the Cowl.Toughness = 3
