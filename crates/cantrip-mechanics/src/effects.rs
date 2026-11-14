@@ -1342,11 +1342,20 @@ pub fn gain_life_for_differently_named_lands(g: &mut dyn Game, item: &StackItem)
 /// ("that creature entered") print it.
 pub fn gain_life_equal_to_subject_toughness(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Target::Object(creature) = item.subject else { return Ok(()) };
+    gain_life_equal_to_toughness_of(g, item.controller, creature)
+}
+
+/// "You gain life equal to its toughness" (CR 119.3, 608.2h) for one creature, named by what the ability resolves with (a creature that died, one that entered, one that was
+/// sacrificed as a cost or by the effect): its toughness as the layers make it, or as it last existed on the battlefield if it has left. A permanent that is not a creature has no
+/// toughness (CR 208.3) and gains nothing; neither does a toughness not above zero. `gain_life_equal_to_subject_toughness` (the trigger's
+/// subject) and Tribute to Hunger (the creature the opponent sacrificed) use it.
+pub fn gain_life_equal_to_toughness_of(g: &mut dyn Game, player: PlayerId, creature: ObjectId) -> Result<(), Suspend> {
     let chars = g.chars(creature);
     if !chars.is(CardType::Creature) {
         return Ok(());
     }
-    gain_life(g, item, i32::from(chars.toughness.unwrap_or_default()).max(0))
+    g.gain_life(player, i32::from(chars.toughness.unwrap_or_default()).max(0));
+    Ok(())
 }
 
 /// "You gain 3 life" as an ability's callback: the Food ability "{2}, {T}, Sacrifice this permanent: You gain 3 life." (CR 111.10b)
