@@ -1,0 +1,52 @@
+# Crash Through: "Creatures you control gain trample until end of turn. Draw a card." Turn 1: Bot1's Goblin Assailant gains trample and a card is drawn
+# (the hand stays at 3: one card cast, one drawn). Turn 3: the trample has worn off; a second Crash Through gives the Assailant trample but not Bot2's Memnite, and
+# the Assailant (2 power) blocked by the Memnite (1 toughness) tramples over for 1.
+
+[Bot1 Deck]
+Mox Ruby x3
+Goblin Assailant
+Crash Through
+Crash Through
+Mountain
+Mountain x12
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Goblin Assailant.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Crash Through.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Assailant.Keywords = Trample
+? Bot1.Hand.Count = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Goblin Assailant.Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Crash Through.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Assailant.Keywords = Trample
+? Bot2.Battlefield.Memnite.Keywords = (absent)
+Bot1.Attack(Goblin Assailant > Bot2)
+Bot2.Block(Memnite > Goblin Assailant)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield = 
