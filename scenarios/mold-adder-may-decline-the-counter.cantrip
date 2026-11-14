@@ -1,0 +1,31 @@
+# Mold Adder, "you may": Bot1 declines the counter for Bot2's blue Ancestral Recall, so Mold Adder stays 1/1 (CR 603.5).
+
+[Bot1 Deck]
+Mold Adder
+Mox Emerald
+Island x13
+
+[Bot2 Deck]
+Mox Sapphire
+Ancestral Recall
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mold Adder.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Ancestral Recall.Cast(Bot2)
+Bot2.Pass
+Bot1.Pass
+Bot1.Decline
+? Bot1.Battlefield.Mold Adder.Counters.PlusOnePlusOne = (absent)
+? Bot1.Battlefield.Mold Adder.Power = 1
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Graveyard = Ancestral Recall

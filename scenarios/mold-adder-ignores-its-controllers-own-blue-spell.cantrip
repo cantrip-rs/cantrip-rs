@@ -1,0 +1,30 @@
+# Mold Adder says "an opponent casts": Bot1's own blue Ancestral Recall (Mox Sapphire) does not offer a counter: no trigger goes on the stack and no question is asked (CR 603.2).
+
+[Bot1 Deck]
+Mold Adder
+Mox Emerald
+Mox Sapphire
+Ancestral Recall
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mold Adder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+? Stack.Count = 0
+? Bot1.Battlefield.Mold Adder.Counters.PlusOnePlusOne = (absent)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Ancestral Recall

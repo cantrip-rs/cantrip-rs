@@ -1,0 +1,36 @@
+# Mold Adder, a blue and black spell triggers it once, not twice (CR 603.2c, 105.2): Bot2's Baleful Strix is both colors, and Bot1 is offered a single counter; there is
+# no second offer, so the counter count is 1.
+
+[Bot1 Deck]
+Mold Adder
+Mox Emerald
+Island x13
+
+[Bot2 Deck]
+Mox Jet
+Mox Sapphire
+Baleful Strix
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mold Adder.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Baleful Strix.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Mold Adder.Counters.PlusOnePlusOne = 1
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield = Baleful Strix; Mox Jet; Mox Sapphire

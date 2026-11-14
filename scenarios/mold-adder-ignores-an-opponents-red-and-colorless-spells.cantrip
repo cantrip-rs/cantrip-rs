@@ -1,0 +1,34 @@
+# Mold Adder only cares about blue and black (CR 105.1): Bot2's red Lightning Bolt (at Bot1) and colorless Ornithopter draw no offer, so Mold Adder stays 1/1.
+
+[Bot1 Deck]
+Mold Adder
+Mox Emerald
+Island x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Ornithopter
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mold Adder.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Mold Adder.Counters.PlusOnePlusOne = (absent)
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 17
+Bot2.Battlefield = Mountain; Ornithopter

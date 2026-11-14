@@ -1,0 +1,8 @@
+{
+  "name": "Mold Adder",
+  "manaCost": "{G}",
+  "type": "Creature — Fungus Snake",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Whenever an opponent casts a blue or black spell, you may put a +1/+1 counter on this creature."
+}

@@ -1,0 +1,31 @@
+# Mold Adder, "a blue or black spell": the black half (CR 105.1). Bot2 casts Dark Ritual (black); Bot1 accepts and Mold Adder is 2/2.
+
+[Bot1 Deck]
+Mold Adder
+Mox Emerald
+Island x13
+
+[Bot2 Deck]
+Mox Jet
+Dark Ritual
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mold Adder.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Dark Ritual.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+? Bot1.Battlefield.Mold Adder.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Mold Adder.Power = 2
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Graveyard = Dark Ritual
