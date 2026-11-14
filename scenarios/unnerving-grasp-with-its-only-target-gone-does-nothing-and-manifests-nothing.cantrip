@@ -1,0 +1,50 @@
+# Unnerving Grasp targeting Bot1's own Ornithopter: Bot2 kills the Ornithopter with Lightning Bolt in response, so the spell's only
+# target is illegal as it resolves and it does nothing at all (CR 608.2b) - the manifest dread does not happen either: Bot1's
+# library keeps its top card and no face-down creature appears.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Unnerving Grasp
+Ornithopter
+Island x4
+Llanowar Elves
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unnerving Grasp.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Unnerving Grasp; Ornithopter
+# 22 cards, 7 in the opening hand, one drawn on turn 3: a manifest dread would leave 12.
+Bot1.Library.Count = 14
+Bot1.Battlefield.Count = 4
