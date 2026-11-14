@@ -1,0 +1,49 @@
+# Goldvein Pick {2}, Equip {1}: "Equipped creature gets +1/+1." and "Whenever equipped creature deals combat damage to a
+# player, create a Treasure token." With every source tapped for the Pick and Mother of Runes, equip is refused (one mana short).
+# On turn 3 one Mox pays the equip {1}: the Memnite becomes 2/2 while Mother of Runes stays 1/1. Both attack Bot2 unblocked:
+# the equipped Memnite's 2 damage makes exactly one Treasure, the unequipped Mother's 1 makes none (Bot2: 20 - 3).
+
+[Bot1 Deck]
+Plains
+Mox Ruby
+Mox Pearl
+Memnite
+Mother of Runes
+Goldvein Pick
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mother of Runes.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Goldvein Pick.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Goldvein Pick.Activate(Ability: Equip; Memnite; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Goldvein Pick.Activate(Ability: Equip; Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot1.Battlefield.Mother of Runes.Power = 1
+Bot1.Attack(Memnite; Mother of Runes > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Treasure Token.Types = Artifact
+Bot1.Battlefield.Count = 7
+Bot1.Battlefield.Goldvein Pick.AttachedTo = Memnite
