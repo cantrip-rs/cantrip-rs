@@ -1266,6 +1266,31 @@ pub fn you_cast_a_spell(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fire
     }
 }
 
+/// "Whenever you cast a spell" (CR 603.2, 601.2i) for an ability that counts the spell's colors: the spell is the subject, and
+/// the number of colors it has as it is cast is carried as `data[0]`, for a trigger condition that asks about them (CR 603.2:
+/// Cornucopia's "a spell that's one or more colors"). What the ability does counts them again as it resolves
+/// (`colors_of_that_spell`). A colorless spell triggers it with a count of zero. Ramos, Dragon Engine and Ancient Cornucopia
+/// print it (Cornucopia only for a spell with one or more colors).
+pub fn you_cast_a_spell_counting_its_colors(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::SpellCast { spell, player, .. } if *player == me.controller => {
+            Some(Fired { subject: Target::Object(*spell), data: [q.chars(*spell).colors.iter().count() as u32, 0] })
+        }
+        _ => None,
+    }
+}
+
+/// "For each of that spell's colors", for an ability `you_cast_a_spell_counting_its_colors` put on the stack: the colors the
+/// spell has as the ability resolves, or as it last was on the stack if it has left (CR 608.2h), so a spell made another color
+/// in the meantime is counted as it now is, and one countered first as it was. Ramos, Dragon Engine and Ancient Cornucopia
+/// print it.
+pub fn colors_of_that_spell(q: &dyn Query, item: &StackItem) -> u32 {
+    match item.subject {
+        Target::Object(spell) => q.chars(spell).colors.iter().count() as u32,
+        _ => 0,
+    }
+}
+
 /// "Whenever you cast a spell" (CR 601.2i, 603.2) for an ability that does something with the spell cast: it is the trigger's
 /// subject (`Fired::about`), so the copy of "copy it" is of that spell. Flamehold Grappler's delayed ability and Jace Reawakened's
 /// print it.
@@ -2637,6 +2662,7 @@ pub const ENCHANTED_PLAYER_ATTACKED: Trigger = when(EventMask::ATTACKS, enchante
 pub const YOU_ATTACK: Trigger = when_asked(EventMask::ATTACKERS_DECLARED, you_attack);
 pub const INSTANT_OR_SORCERY_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST, you_cast_instant_or_sorcery);
 pub const YOU_CAST_A_SPELL: Trigger = when_asked(EventMask::SPELL_CAST, you_cast_a_spell);
+pub const YOU_CAST_A_SPELL_COUNTING_ITS_COLORS: Trigger = when_asked(EventMask::SPELL_CAST, you_cast_a_spell_counting_its_colors);
 
 /// "Whenever you cast a spell you don't own" (CR 603.2, 108.3): the spell's owner is not the player who cast it, whatever zone it
 /// was cast from or how it came to be theirs to cast. Nita, Forum Conciliator and Vaan, Street Thief print it.
