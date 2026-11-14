@@ -1,0 +1,8 @@
+{
+  "name": "Fear of Immobility",
+  "manaCost": "{4}{W}",
+  "type": "Enchantment Creature — Nightmare",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "When this creature enters, tap up to one target creature. If an opponent controls that creature, put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)"
+}

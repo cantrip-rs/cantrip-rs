@@ -1,0 +1,35 @@
+# Fear of Immobility: "When this creature enters, tap up to one target creature. If an opponent controls it, put a stun counter
+# on it." Cast on turn 3 (a Black Lotus for {W}{W}{W}, Mox Pearl and Mox Jet pay the {4}{W}), it taps Bot2's Ornithopter and
+# puts a stun counter on it (CR 701.26a, 122.1d).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Fear of Immobility
+Island x16
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fear of Immobility.Cast
+Bot1.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Ornithopter.Counters.Stun = 1
+Stack.Count = 0
