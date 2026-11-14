@@ -1,0 +1,38 @@
+# Gate Colossus: "Affinity for Gates" - {8} less {1} for each Gate you control. Bot1 plays Talon Gates of Madara (a Gate,
+# its own trigger has no creature to target) and taps Black Lotus and four Moxen for exactly seven mana: Gate Colossus
+# resolves, the pool is empty and the Gate is still untapped, so nothing but the discount paid for the eighth mana.
+# (The control, with no Gate, is the other cost scenario: it costs the full eight.)
+
+[Bot1 Deck]
+Talon Gates of Madara
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Gate Colossus
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Talon Gates of Madara.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Gate Colossus.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield = Talon Gates of Madara; Mox Pearl; Mox Jet; Mox Ruby; Mox Sapphire; Gate Colossus
+Bot1.Battlefield.Talon Gates of Madara.Tapped = false
