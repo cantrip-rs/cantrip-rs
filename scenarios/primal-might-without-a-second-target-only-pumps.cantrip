@@ -1,0 +1,55 @@
+# "Up to one target creature you don't control": with no second target Primal Might only pumps. Cast with X = 2, the Bears are a
+# 4/4 until end of turn and the Hill Giant takes no damage.
+
+[Bot1 Deck]
+Mox Emerald
+Forest
+Grizzly Bears
+Primal Might
+Black Lotus
+Mox Ruby
+Lightning Bolt
+Forest
+Forest x10
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Hill Giant
+Lightning Bolt
+Mountain x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Primal Might.Cast(X: 2)
+Bot1.Target(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 4
+Bot1.Battlefield.Grizzly Bears.Toughness = 4
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Bot2.Battlefield.Hill Giant.Damage = 0

@@ -1,0 +1,59 @@
+# The second target gone as Primal Might resolves (CR 608.2b): Bot1 Lightning Bolts the Hill Giant in response, so it dies first. The
+# Bears are still pumped (X = 2, a 4/4) and there is nothing to fight, so they are not damaged.
+
+[Bot1 Deck]
+Mox Emerald
+Forest
+Grizzly Bears
+Primal Might
+Black Lotus
+Mox Ruby
+Lightning Bolt
+Forest
+Forest x10
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Hill Giant
+Lightning Bolt
+Mountain x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Primal Might.Cast(X: 2)
+Bot1.Target(Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Hill Giant)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot2.Graveyard = Hill Giant; Black Lotus
+Bot1.Battlefield.Grizzly Bears.Power = 4
+Bot1.Battlefield.Grizzly Bears.Damage = 0

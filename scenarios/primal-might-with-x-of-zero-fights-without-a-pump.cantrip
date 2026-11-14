@@ -1,0 +1,54 @@
+# X is the one paid, and the pump is X on each side: Primal Might with X = 0 gives nothing, so the 2/2 Bears fight the 3/3 Hill Giant
+# as they are, deal 2 and die to its 3 (CR 701.14).
+
+[Bot1 Deck]
+Mox Emerald
+Forest
+Grizzly Bears
+Primal Might
+Black Lotus
+Mox Ruby
+Lightning Bolt
+Forest
+Forest x10
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Hill Giant
+Lightning Bolt
+Mountain x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Primal Might.Cast(X: 0)
+Bot1.Target(Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Grizzly Bears; Primal Might; Black Lotus
+Bot2.Battlefield.Hill Giant.Damage = 2
