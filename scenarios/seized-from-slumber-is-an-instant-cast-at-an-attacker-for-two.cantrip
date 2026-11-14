@@ -1,0 +1,30 @@
+# Seized from Slumber is an instant: on Bot2's turn 4 the Ornithopter attacks (it is tapped, having no vigilance) and Bot1,
+# holding only {W}{W}, casts it at the attacker for {1}{W} (the target is tapped, CR 601.2f) before blocks, destroying it so no
+# combat damage is dealt to Bot1.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Seized from Slumber
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Seized from Slumber.Cast(Bot2.Battlefield.Ornithopter)
+[T4 Bot2.End]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard = Seized from Slumber
+Bot2.Graveyard = Ornithopter
