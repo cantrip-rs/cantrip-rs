@@ -1,0 +1,28 @@
+# Chapter I with two milled cards that share no card type (an Island and a Lightning Bolt) draws nothing and does not repeat: two cards milled, none drawn (the third card in the graveyard is the sacrificed Black Lotus).
+# Bot1's hand stays at the five lands left after casting.
+
+[Bot1 Deck]
+Black Lotus
+The Tale of Tamiyo
+Island x5
+Island
+Lightning Bolt
+Mox Jet
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.The Tale of Tamiyo.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 3
+Bot1.Graveyard = Lightning Bolt; Island; Black Lotus
+Bot1.Hand.Count = 5
+Bot1.Library.Count = 16

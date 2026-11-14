@@ -1,0 +1,65 @@
+# The Tale of Tamiyo through all four chapters. Chapters I, II and III each mill two cards that share no type (Lightning Bolt and a planeswalker; a creature
+# and an Island; Mox Jet and Lightning Bolt), so nothing is drawn. Chapter IV (CR 714.2b), on turn 7: Bot1 targets a Lightning Bolt and Tamiyo, Collector of Tales (a
+# Tamiyo planeswalker card) in the graveyard, leaving the other Bolt, Tamiyo, Inquisitive Student (a creature, not a planeswalker, in the graveyard) and the rest
+# (any number of targets, 115.1d). Both are exiled and copied; Bot1 casts both copies with its mana (Mox Ruby's {R} for the Bolt, which hits Bot2 for 3, and four
+# Islands for the Scholar, which enters), and the Saga is sacrificed once its last chapter has resolved (CR 714.4).
+
+[Bot1 Deck]
+Black Lotus
+The Tale of Tamiyo
+Mox Ruby
+Island x4
+Lightning Bolt
+Tamiyo, Collector of Tales
+Island
+Tamiyo, Inquisitive Student
+Island
+Island
+Mox Jet
+Lightning Bolt
+Island
+Island x10
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.The Tale of Tamiyo.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 3
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 5
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 7
+[T7 Bot1.Main1]
+Bot1.Target(Bot1.Graveyard.Lightning Bolt#1; Bot1.Graveyard.Tamiyo, Collector of Tales)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+Bot1.Target(Bot2)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Turn = 7
+Bot2.Life = 17
+Bot1.Exile.Lightning Bolt.Colors = Red
+Bot1.Exile.Tamiyo, Collector of Tales.Colors = Blue; Green
+Bot1.Graveyard.Count = 6
+Bot1.Battlefield = Island; Island; Mox Ruby
+Stack.Count = 0
