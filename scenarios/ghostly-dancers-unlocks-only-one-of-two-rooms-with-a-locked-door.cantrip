@@ -1,0 +1,58 @@
+# Ghostly Dancers: "unlock a locked door of a Room you control": one door of one Room, chosen by Bot1, not a door of every Room.
+# Bot1 has Unholy Annex (cast on turn 1) and Roaring Furnace (cast on turn 3), each with its other door locked, and no enchantment
+# card in its graveyard (Black Lotus is an artifact): on turn 5 Ghostly Dancers can only unlock, and Bot1 picks Roaring Furnace, so
+# Steaming Sauna unlocks (CR 709.5f) and "When you unlock this door" on Roaring Furnace stays unused, while Unholy Annex keeps
+# Ritual Chamber locked. The Room fully unlocked (CR 709.5i) makes a Spirit through eerie, and Steaming Sauna's end step draws.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Plains
+Mox Jet
+Mox Ruby
+Sol Ring
+Unholy Annex // Ritual Chamber
+Roaring Furnace // Steaming Sauna
+Ghostly Dancers
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Roaring Furnace // Steaming Sauna.Cast(Ability: Roaring Furnace)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Ghostly Dancers.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Roaring Furnace)
+[T5 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Ghostly Dancers; Mox Jet; Mox Pearl; Mox Ruby; Plains; Roaring Furnace // Steaming Sauna; Sol Ring; Spirit Token; Unholy Annex
+Bot1.Battlefield.Roaring Furnace // Steaming Sauna.Doors = Roaring Furnace; Steaming Sauna
+Bot1.Battlefield.Unholy Annex.Doors = Unholy Annex
+Bot1.Hand = Island; Island

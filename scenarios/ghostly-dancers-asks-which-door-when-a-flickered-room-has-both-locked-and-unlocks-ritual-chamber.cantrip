@@ -1,0 +1,70 @@
+# Ghostly Dancers unlocking a door of a Room whose doors are both locked: "To unlock half of a permanent, a player chooses a locked
+# half" (CR 709.5f), so Bot1 is asked, not given the left door. Bot1's Unholy Annex (cast on turn 1) is exiled by Flickerwisp on turn
+# 3 and returns at that end step with neither half cast, so neither door unlocked (CR 709.5d). On turn 5 Bot1 has no enchantment card
+# in its graveyard (Black Lotus is an artifact), so Ghostly Dancers can only unlock; both halves are offered and Bot1 names Ritual
+# Chamber: it unlocks, "when you unlock this door" makes the 6/6 Demon (CR 709.5h), Unholy Annex stays locked and the Room is not
+# fully unlocked, so eerie makes no Spirit (CR 709.5i).
+# Annex's {2}{B} is Black Lotus, Mox Jet and a Mox Pearl; Flickerwisp's {1}{W}{W} the two Pearls and a Plains; the Dancers' {3}{W}{W}
+# the Pearls, both Plains and Mox Jet. Annex's turn 1 end step draws Flickerwisp.
+
+[Bot1 Deck]
+Black Lotus
+Unholy Annex // Ritual Chamber
+Mox Pearl
+Mox Pearl
+Mox Jet
+Plains
+Plains
+Flickerwisp
+Ghostly Dancers
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Hand.Flickerwisp.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Upkeep]
+? Bot1.Battlefield..Doors.Count = 0
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ghostly Dancers.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Name(Ritual Chamber)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Ritual Chamber.Doors = Ritual Chamber
+Bot1.Battlefield.Demon Token.Power = 6
+Bot1.Battlefield = Demon Token; Flickerwisp; Ghostly Dancers; Mox Jet; Mox Pearl; Mox Pearl; Plains; Plains; Ritual Chamber

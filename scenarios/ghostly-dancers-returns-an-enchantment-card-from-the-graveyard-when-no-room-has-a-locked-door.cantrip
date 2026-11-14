@@ -1,0 +1,55 @@
+# Ghostly Dancers: "When this creature enters, return an enchantment card from your graveyard to your hand or unlock a locked
+# door of a Room you control." Turn 1 Bot1 casts Unholy Annex // Ritual Chamber as Unholy Annex and destroys it with its own
+# Disenchant: the card is in the graveyard (an enchantment card). Turn 3 Bot1 casts Ghostly Dancers: Bot1 has no Room, so the
+# only option that can be done, returning an enchantment card, is done: the Room card is back in hand. (Flying: a 2/5 flyer.)
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Plains
+Sol Ring
+Unholy Annex // Ritual Chamber
+Disenchant
+Ghostly Dancers
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Disenchant; Unholy Annex // Ritual Chamber; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Ghostly Dancers.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Unholy Annex // Ritual Chamber
+Bot1.Graveyard = Disenchant; Black Lotus
+Bot1.Battlefield.Ghostly Dancers.Power = 2
+Bot1.Battlefield.Ghostly Dancers.Toughness = 5
+Bot1.Battlefield.Ghostly Dancers.Keywords = Flying
