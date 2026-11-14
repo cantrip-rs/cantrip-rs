@@ -1236,7 +1236,8 @@ total unchanged: each is announced on its own. But a player's life results are *
 any of them (CR 616.1, even one mandatory effect on each of two results), each is judged again after each applies (CR
 616.1f), and each `Proposal::LifeChange` shows whether it is the loss damage dealt to that player causes (`damage`, CR
 120.3a: not an effect's or a cost's loss, nor lifelink turned into a loss) and the net of the player's other results
-(`alongside`). "Damage that would reduce your life total to less than 1 reduces it to 1 instead" judges the event's net: [lose 5, gain 5] at 2
+(`alongside`). "Damage that would reduce your life total to less than 1 reduces it to 1 instead"
+(`cantrip_mechanics::replacements::damage_would_reduce_your_life_below`) judges the event's net: [lose 5, gain 5] at 2
 life does not apply, and at 2 life losing 5 and gaining 3 with Boon Reflection ends at 4 or 3 by the player's order.
 **One APNAP preparation pass covers all result kinds**, not a pass per kind: each affected
 player's life and poison, and the permanent counters whose recipients they control (CR 120.4c, 616.1). The next affected

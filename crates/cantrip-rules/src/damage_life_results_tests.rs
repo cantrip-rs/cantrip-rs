@@ -1,5 +1,5 @@
-//! A damage event's life results replaced as one event's (CR 120.3a, 120.4c, 616.1), over test cards printing "damage that
-//! would reduce your life total to less than 1 reduces it to 1 instead" (Ali from Cairo, Worship), "if you
+//! A damage event's life results replaced as one event's (CR 120.3a, 120.4c, 616.1), over test cards printing the shared
+//! "damage that would reduce your life total to less than 1 reduces it to 1 instead" (Ali from Cairo, Worship), "if you
 //! would gain life, you gain twice that much life instead" (Boon Reflection) and a prevention effect that gains the
 //! damage it prevented (Awe Strike, Reverse Damage): the loss knows it is damage's, each result sees the others of the
 //! event, the affected player chooses which applies first, and the prevention's gain is one of the event's results (CR
@@ -13,26 +13,10 @@ use cantrip_mechanics::{prevention, replacements};
 const YOU: PlayerId = PlayerId(0);
 const THEM: PlayerId = PlayerId(1);
 
-/// "Damage that would reduce your life total to less than 1": the loss damage dealt to you causes (CR 120.3a), judged with
-/// your other results of the event; not where you already have less than 1 (the rulings).
-fn below_one(q: &dyn Query, me: &Asker, proposal: &Proposal) -> bool {
-    let Proposal::LifeChange(l) = proposal else { return false };
-    let life = i64::from(q.state().player(l.player).life);
-    l.player == me.controller && l.damage && l.amount < 0 && life >= 1 && life + l.net() < 1
-}
-
-/// "... reduces it to 1 instead": the loss that leaves 1 with the event's other results.
-fn to_one(q: &dyn Query, _: &Asker, proposal: &mut Proposal) {
-    if let Proposal::LifeChange(l) = proposal {
-        let life = i64::from(q.state().player(l.player).life);
-        l.amount = (1 - life - l.alongside).max(i64::from(l.amount)).min(0) as i32;
-    }
-}
-
 static ALI: CardDef = CardDef {
     name: "Damage Life Results Ali",
     types: TypeSet::of(&[CardType::Enchantment]),
-    replacements: &[replacement(ReplacementKind::LifeChange, below_one, to_one, "damage reduces your life total to 1 instead")],
+    replacements: &[replacements::DAMAGE_CANT_REDUCE_YOUR_LIFE_BELOW_1],
     ..CardDef::BLANK
 };
 

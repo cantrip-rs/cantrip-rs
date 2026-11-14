@@ -445,6 +445,41 @@ fn loses_that_much_life(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
 pub const OPPONENTS_LOSE_LIFE_INSTEAD_OF_GAINING: ReplacementDef =
     replacement(ReplacementKind::LifeChange, opponent_would_gain_life, loses_that_much_life, "you lose that much life instead");
 
+/// "Damage that would reduce your life total to less than N reduces it to N instead" (CR 120.4c, 614.1a): whether it
+/// replaces this event - the life loss damage dealt to the effect's controller causes (`LifeChange::damage`, CR 120.3a),
+/// judged with that player's other life results of the same damage event (`LifeChange::net`): at 2 life, losing 5 and
+/// gaining 5 in the event reduces the total to nothing less than 1, and the effect does not apply (CR 120.4's Worship and
+/// Awe Strike example). A loss that is no damage's result - an effect's, a cost's - is not about damage (the rulings), and a
+/// player who already has less than N is dealt damage as normal (Fortune Thief's, Sustaining Spirit's and Elderscale Wurm's
+/// rulings). A card with a condition ("if you control a creature", Worship; "as long as you have 7 or more life", Elderscale
+/// Wurm; "until end of turn", Angel's Grace) asks it first, then this. Ali from Cairo, Fortune Thief, Sustaining Spirit,
+/// Worship, Angel's Grace and Serra the Benevolent's emblem print it at 1, Elderscale Wurm at 7.
+pub fn damage_would_reduce_your_life_below<const N: i32>(q: &dyn Query, asker: &Asker, proposal: &Proposal) -> bool {
+    let Proposal::LifeChange(l) = proposal else { return false };
+    let life = i64::from(q.state().player(l.player).life);
+    l.player == asker.controller && l.damage && l.amount < 0 && life >= i64::from(N) && life + l.net() < i64::from(N)
+}
+
+/// "... reduces it to N instead": the damage's loss becomes the one that leaves the life total at N with the event's other
+/// results - never more than it was, and never a gain. The damage itself is still dealt: it is not prevented, and lifelink
+/// and "whenever you're dealt damage" see all of it (the rulings); only the life it costs changes.
+pub fn reduces_your_life_to<const N: i32>(q: &dyn Query, _: &Asker, proposal: &mut Proposal) {
+    if let Proposal::LifeChange(l) = proposal {
+        let life = i64::from(q.state().player(l.player).life);
+        let loss = i64::from(N) - life - l.alongside;
+        // Between the loss as it was (below zero, `damage_would_reduce_your_life_below`) and none: within an i32.
+        l.amount = loss.max(i64::from(l.amount)).min(0) as i32;
+    }
+}
+
+/// [`damage_would_reduce_your_life_below`] at 1 with no other condition: Ali from Cairo, Fortune Thief and Sustaining Spirit.
+pub const DAMAGE_CANT_REDUCE_YOUR_LIFE_BELOW_1: ReplacementDef = replacement(
+    ReplacementKind::LifeChange,
+    damage_would_reduce_your_life_below::<1>,
+    reduces_your_life_to::<1>,
+    "damage reduces your life total to 1 instead",
+);
+
 /// "All damage that would be dealt to you and other permanents you control is dealt to this creature instead" (CR 614.1a,
 /// 120.3): whether it replaces this damage - to its controller, or to a permanent its controller controls other than
 /// itself, from any source. The damage is then dealt to it by the same source, and the effects not yet applied are judged
