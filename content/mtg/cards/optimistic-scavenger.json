@@ -1,0 +1,8 @@
+{
+  "name": "Optimistic Scavenger",
+  "manaCost": "{W}",
+  "type": "Creature — Human Scout",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Eerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, put a +1/+1 counter on target creature."
+}
