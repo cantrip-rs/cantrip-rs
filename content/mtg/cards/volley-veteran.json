@@ -1,0 +1,8 @@
+{
+  "name": "Volley Veteran",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Goblin Warrior",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "When this creature enters, it deals damage to target creature an opponent controls equal to the number of Goblins you control."
+}
