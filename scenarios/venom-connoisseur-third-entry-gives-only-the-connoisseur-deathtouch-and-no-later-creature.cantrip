@@ -1,0 +1,49 @@
+# Only the second resolution in a turn reaches every creature. Fyndhorn Elves, entering after it, are the third: only the
+# Connoisseur gains deathtouch again (it already had it), the new Elves gain nothing, and the creature that entered later
+# is not covered by the grant that was made before it arrived (CR 611.2c).
+
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Forest
+Venom Connoisseur
+Llanowar Elves
+Elvish Mystic
+Fyndhorn Elves
+Forest x10
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Venom Connoisseur.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Fyndhorn Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Venom Connoisseur.Keywords = Deathtouch
+Bot1.Battlefield.Llanowar Elves.Keywords = Deathtouch
+Bot1.Battlefield.Elvish Mystic.Keywords = Deathtouch
+Bot1.Battlefield.Fyndhorn Elves.Keywords = (absent)

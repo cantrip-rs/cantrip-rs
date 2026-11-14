@@ -1,0 +1,38 @@
+# Venom Connoisseur's Alliance ability resolves for the first time this turn when Bot1's Llanowar Elves enters: the
+# Connoisseur gains deathtouch until end of turn (CR 702.2b) and the Elves, which are not it, gain nothing. The
+# Connoisseur entering is not "another creature", so it started no trigger of its own.
+
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Forest
+Venom Connoisseur
+Llanowar Elves
+Elvish Mystic
+Fyndhorn Elves
+Forest x10
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Venom Connoisseur.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Venom Connoisseur.Keywords = (absent)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Venom Connoisseur.Keywords = Deathtouch
+Bot1.Battlefield.Llanowar Elves.Keywords = (absent)

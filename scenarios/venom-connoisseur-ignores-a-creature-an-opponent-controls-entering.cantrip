@@ -1,0 +1,33 @@
+# "Another creature you control" (CR 603.6a): Bot2 casts a Venom Connoisseur on its turn 2, then Bot1 flashes an Ambush
+# Viper into play with Black Lotus mana. The Viper is not Bot2's, so Bot2's Connoisseur gains nothing.
+
+[Bot1 Deck]
+Black Lotus
+Ambush Viper
+Plains x22
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Venom Connoisseur
+Forest x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Venom Connoisseur.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Ambush Viper.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Ambush Viper.Power = 2
+Bot2.Battlefield.Venom Connoisseur.Keywords = (absent)

@@ -1,0 +1,44 @@
+# The second resolution of Venom Connoisseur's Alliance ability in a turn gives every creature Bot1 controls deathtouch
+# until end of turn (CR 702.2b, 611.2c), the Connoisseur and both Elves it has seen enter. Llanowar Elves enter first (the
+# Connoisseur alone gains it, the Elves nothing), then Elvish Mystic: the second resolution reaches the Elves already out.
+
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Forest
+Venom Connoisseur
+Llanowar Elves
+Elvish Mystic
+Fyndhorn Elves
+Forest x10
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Venom Connoisseur.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Keywords = (absent)
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Venom Connoisseur.Keywords = Deathtouch
+Bot1.Battlefield.Llanowar Elves.Keywords = Deathtouch
+Bot1.Battlefield.Elvish Mystic.Keywords = Deathtouch

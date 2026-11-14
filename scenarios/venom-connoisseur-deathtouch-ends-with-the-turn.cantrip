@@ -1,0 +1,43 @@
+# Deathtouch from Venom Connoisseur lasts until end of turn only (CR 514.2): two creatures enter on turn 1, everyone has
+# deathtouch, and at the start of Bot2's turn 2 neither the Connoisseur nor an Elf has it.
+
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Forest
+Venom Connoisseur
+Llanowar Elves
+Elvish Mystic
+Fyndhorn Elves
+Forest x10
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Venom Connoisseur.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Keywords = Deathtouch
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Venom Connoisseur.Keywords = (absent)
+Bot1.Battlefield.Llanowar Elves.Keywords = (absent)
+Bot1.Battlefield.Elvish Mystic.Keywords = (absent)

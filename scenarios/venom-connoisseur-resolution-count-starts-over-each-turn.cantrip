@@ -1,0 +1,44 @@
+# The count of resolutions starts over each turn (CR 608.2): on turn 1 an Elf enters (the first resolution of that turn), and
+# on turn 3 another enters, which is again the first resolution of its turn. Only the Connoisseur gains deathtouch then;
+# the earlier Elf, which would be in the second-resolution group had the count carried over, gains nothing.
+
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Forest
+Venom Connoisseur
+Llanowar Elves
+Elvish Mystic
+Forest x10
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Venom Connoisseur.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Venom Connoisseur.Keywords = Deathtouch
+Bot1.Battlefield.Llanowar Elves.Keywords = (absent)
+Bot1.Battlefield.Elvish Mystic.Keywords = (absent)
