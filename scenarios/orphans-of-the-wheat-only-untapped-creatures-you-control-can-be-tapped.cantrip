@@ -1,0 +1,44 @@
+# Orphans of the Wheat: only untapped creatures its controller controls are offered. Memnite attacks with it and is tapped,
+# so it is refused, as are the attacking Orphans itself (no vigilance), a Mox (not a creature) and Bot2's Ornithopter. Only
+# Bot1's untapped Ornithopter can be chosen: Orphans is a 3/2, and Memnite stays a 1/1: 3 + 1 damage (Bot2 20 -> 16).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Orphans of the Wheat
+Memnite
+Ornithopter
+Island x17
+
+[Bot2 Deck]
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Orphans of the Wheat.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Orphans of the Wheat; Memnite)
+! Bot1.Choose(Memnite)
+! Bot1.Choose(Orphans of the Wheat)
+! Bot1.Choose(Mox Pearl)
+! Bot1.Choose(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Orphans of the Wheat.Power = 3
+Bot2.Life = 16
