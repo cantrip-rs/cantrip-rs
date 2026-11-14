@@ -145,6 +145,19 @@ pub fn target_creature_gets_and_gains_deathtouch<const P: i32, const T: i32>(g: 
     Ok(())
 }
 
+/// "Target creature gets +`P`/+`T` and gains menace until end of turn" (CR 611.2a, 702.111): one instruction, the creature being
+/// the ability's first target; nothing if it is no longer a legal target as the ability resolves (CR 608.2b). Battlesong
+/// Berserker (+1/+0), Belligerent of the Ball (+1/+0), Defiler of Flesh (+1/+1) and The Immortal Weapons (+2/+0) print it.
+pub fn target_creature_gets_and_gains_menace<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = crate::targets::object(g, item, 0) {
+        instruction(g, |g| {
+            crate::pump(g, item.object, creature, P, T);
+            gain_until_end_of_turn(g, item.object, creature, Keyword::Menace);
+        });
+    }
+    Ok(())
+}
+
 /// "Target creature gets +`P`/+`T` and gains haste until end of turn" (CR 611.2a, 702.10): one instruction, the creature
 /// being the ability's first target; nothing if it is no longer a legal target as the spell resolves (CR 608.2b). Wild Ride
 /// (+3/+0), Fame (+2/+0) and Kavaron Turbodrone (+1/+1) print it.
