@@ -1,0 +1,38 @@
+# Gilded Lotus: it untaps in Bot1's next untap step and is then tapped for three mana of a different color (green, CR 106.1);
+# it never adds colorless. The blue mana from turn one emptied at the end of that step (CR 500.4).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Gilded Lotus
+Swamp x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Gilded Lotus.Cast
+Bot1.Battlefield.Gilded Lotus.Activate(Color: Blue)
+[T3 Bot1.Main1]
+? Bot1.Mana =
+? Bot1.Battlefield.Gilded Lotus.Tapped = false
+! Bot1.Battlefield.Gilded Lotus.Activate(Color: Colorless)
+Bot1.Battlefield.Gilded Lotus.Activate(Color: Green)
+? Bot1.Mana = {G}{G}{G}
+
+[Expect]
+Bot1.Battlefield.Gilded Lotus.Tapped = true
+Bot1.Mana = {G}{G}{G}
