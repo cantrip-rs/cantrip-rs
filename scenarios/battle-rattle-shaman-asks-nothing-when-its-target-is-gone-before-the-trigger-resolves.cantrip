@@ -1,0 +1,45 @@
+# Battle-Rattle Shaman's trigger targets as it goes on the stack (CR 603.3d). Turn 3: Bot1 targets its Ornithopter and, holding
+# priority, Lightning Bolts it. With its only target gone the ability does not resolve (CR 608.2b): no "may" is asked, and the
+# Shaman stays 2/2. (Turn 1's trigger is targeted at the Ornithopter and declined.)
+
+[Bot1 Deck]
+Mox Ruby x4
+Mountain
+Ornithopter
+Battle-Rattle Shaman
+Lightning Bolt
+Mountain x12
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Battle-Rattle Shaman.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+? Stack.Count = 0
+? Bot1.Battlefield.Battle-Rattle Shaman.Power = 2
+
+[Expect]

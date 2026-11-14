@@ -1,0 +1,63 @@
+# Battle-Rattle Shaman: "At the beginning of combat on your turn, you may have target creature get +2/+0 until end of turn."
+# Turn 1: Bot1 casts an Ornithopter (0/2) and then the Shaman, pays exactly {3}{R}, targets the Ornithopter and accepts: 2/2 for
+# the combat, the Shaman itself still 2/2 (the unchanged half), and 0/2 again afterwards. Turn 2 (Bot2's combat) asks nothing.
+# Turn 3: Bot2's Ornithopter is a legal target and gets +2/+0 too. Turn 5: Bot1 targets the Shaman and declines, so it stays 2/2.
+
+[Bot1 Deck]
+Mox Ruby x4
+Ornithopter
+Battle-Rattle Shaman
+Mountain x14
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Battle-Rattle Shaman.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Accept
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Battle-Rattle Shaman.Power = 2
+? Bot1.Battlefield.Battle-Rattle Shaman.Toughness = 2
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+! Bot1.Target
+[T2 Bot2.Main2]
+? Bot1.Battlefield.Ornithopter.Power = 0
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Accept
+? Bot2.Battlefield.Ornithopter.Power = 2
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Power = 0
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Ornithopter.Power = 2
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Power = 0
+[T5 Bot1.Main1]
+Bot1.Target(Bot1.Battlefield.Battle-Rattle Shaman)
+Bot1.Decline
+? Bot1.Battlefield.Battle-Rattle Shaman.Power = 2
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Battle-Rattle Shaman.Power = 2
