@@ -1,0 +1,60 @@
+# Consuming Aberration: its power and toughness are defined by a characteristic-defining ability (CR 604.3), so once it loses all
+# abilities the stars are worth 0 (CR 208.2a, 208.5). It is a 1/1 on turn 3 with Bot2's Lightning Bolt in its graveyard; Bot2's
+# The Wondrous Wasp takes its abilities away on turn 4 and the 0/0 is put into Bot1's graveyard (CR 704.5f).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Mox Emerald
+Consuming Aberration
+Ornithopter
+Plains x15
+
+[Bot2 Deck]
+Mox Ruby
+Mox Sapphire
+Lightning Bolt
+The Wondrous Wasp
+Island x3
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Consuming Aberration.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Consuming Aberration.Power = 1
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.The Wondrous Wasp.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Target(Consuming Aberration)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Consuming Aberration
+Bot1.Battlefield.Count = 5

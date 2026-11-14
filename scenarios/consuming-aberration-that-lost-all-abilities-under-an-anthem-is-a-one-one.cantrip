@@ -1,0 +1,75 @@
+# Consuming Aberration: once it loses all abilities its characteristic-defining ability no longer sets its power and toughness,
+# and each star is worth 0 (CR 604.3, 208.2a): the Aberration is a 0/0 creature, here alive under Bot1's Glorious Anthem as a 1/1.
+# With Bot2's Lightning Bolt in its graveyard and the Island that casting the Anthem on turn 5 has Bot2 reveal and put there, the
+# Aberration is a 3/3 with the Anthem; Bot2's The Wondrous Wasp takes its abilities away on turn 6, and it is a 1/1 (the two cards
+# still in Bot2's graveyard no longer count).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Plains
+Consuming Aberration
+Glorious Anthem
+Plains x15
+
+[Bot2 Deck]
+Mox Ruby
+Mox Sapphire
+Lightning Bolt
+The Wondrous Wasp
+Island x3
+Island x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Hand.Consuming Aberration.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Consuming Aberration.Power = 1
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Plains#3.Activate
+Bot1.Hand.Glorious Anthem.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Consuming Aberration.Power = 3
+[T6 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.The Wondrous Wasp.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Target(Consuming Aberration)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Graveyard = Island; Lightning Bolt
+Bot1.Battlefield.Consuming Aberration.Power = 1
+Bot1.Battlefield.Consuming Aberration.Toughness = 1

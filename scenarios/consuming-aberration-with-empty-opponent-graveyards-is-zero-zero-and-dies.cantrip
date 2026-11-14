@@ -1,0 +1,37 @@
+# Consuming Aberration: its power and toughness are each the number of cards in its controller's opponents' graveyards (CR 604.3),
+# defined at every moment. With none there it is a 0/0 when it enters and the state-based action puts it into its owner's
+# graveyard (CR 704.5f); only the five Moxen stay on the battlefield.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Mox Emerald
+Consuming Aberration
+Ornithopter
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Consuming Aberration.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 5
+Bot1.Graveyard = Consuming Aberration
+Bot2.Library.Count = 13

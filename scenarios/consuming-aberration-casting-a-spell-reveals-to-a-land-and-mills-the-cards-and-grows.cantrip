@@ -1,0 +1,69 @@
+# Consuming Aberration: "Whenever you cast a spell, each opponent reveals cards from the top of their library until they reveal a land
+# card, then puts those cards into their graveyard." and "power and toughness are each equal to the number of cards in your opponents'
+# graveyards". Bot2's Bolt is in its graveyard, so the Aberration is 1/1 on entering (casting it does not trigger it). Casting an
+# Ornithopter then has Bot2 reveal Lightning Bolt, Ornithopter and an Island (the land last) and put all three into its graveyard:
+# four cards, a 4/4, with the rest of Bot2's library untouched.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Mox Emerald
+Consuming Aberration
+Ornithopter
+Plains x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Island
+Lightning Bolt
+Ornithopter
+Island
+Mountain
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Consuming Aberration.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot2.Library.Count = 14
+? Bot2.Graveyard = Lightning Bolt
+? Bot1.Battlefield.Consuming Aberration.Power = 1
+? Bot1.Battlefield.Consuming Aberration.Toughness = 1
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Graveyard.Count = 4
+Bot2.Graveyard = Island; Ornithopter; Lightning Bolt; Lightning Bolt
+Bot2.Library.Count = 11
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Consuming Aberration.Power = 4
+Bot1.Battlefield.Consuming Aberration.Toughness = 4
