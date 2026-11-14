@@ -235,6 +235,19 @@ pub fn target_creature_gets_and_gains_hexproof<const P: i32, const T: i32>(g: &m
     Ok(())
 }
 
+/// "Target creature gets +`P`/+`T` and gains lifelink until end of turn" (CR 611.2a, 702.15): one instruction, the creature
+/// being the ability's first target; nothing if it is no longer a legal target as the spell or ability resolves (CR 608.2b).
+/// Give In to Violence (+2/+2) and Reverent Howl's second mode (+2/+2) print it.
+pub fn target_creature_gets_and_gains_lifelink<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = crate::targets::object(g, item, 0) {
+        instruction(g, |g| {
+            crate::pump(g, item.object, creature, P, T);
+            gain_lifelink_until_end_of_turn(g, item.object, creature);
+        });
+    }
+    Ok(())
+}
+
 /// "One or two target creatures each get +`P`/+`T` until end of turn" (CR 611.2a): every target still legal as the spell
 /// resolves (CR 608.2b), pumped as one instruction. Appeal to Eirdu (+2/+1), Opera Love Song's mode (+2/+0) and Spiritcall
 /// Enthusiast's Scrollboost (+2/+2) print it.
