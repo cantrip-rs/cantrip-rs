@@ -1,0 +1,59 @@
+# Under Camouflage a creature that can block an additional creature may be put into two piles, and one that can't, into one
+# only (CR 509.1a): Two-Headed Giant of Foriys goes in both of Bot2's piles and blocks both attackers; Phyrexian Walker, in
+# the first, is not offered for the second. The first pile goes to Ravine Raider (the die's face 1, the first attacker),
+# which has menace (CR 702.111b): the two creatures in its pile can block it together, so both do.
+[Bot1 Deck]
+Camouflage
+Swamp
+Forest
+Ravine Raider
+Memnite
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Two-Headed Giant of Foriys
+Phyrexian Walker
+Mox Ruby
+Black Lotus
+Mountain
+Island
+Island
+Island x10
+
+[Dice]
+1
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Ravine Raider.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Two-Headed Giant of Foriys.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Attack(Ravine Raider > Bot2; Memnite > Bot2)
+Bot1.Hand.Camouflage.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Two-Headed Giant of Foriys; Phyrexian Walker)
+! Bot2.Choose(Phyrexian Walker)
+Bot2.Choose(Two-Headed Giant of Foriys)
+? Combat.Blocks = Two-Headed Giant of Foriys > Ravine Raider; Phyrexian Walker > Ravine Raider; Two-Headed Giant of Foriys > Memnite
+? Combat.Blocks.Count = 3
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Memnite; Ravine Raider; Camouflage
+Bot2.Life = 20
+Bot2.Battlefield.Two-Headed Giant of Foriys.Damage = 2

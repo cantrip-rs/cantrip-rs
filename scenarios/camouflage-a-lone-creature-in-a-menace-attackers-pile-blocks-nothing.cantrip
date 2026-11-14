@@ -1,0 +1,49 @@
+# Under Camouflage Bot2's one creature, Phyrexian Walker, goes in the first of two piles, and nothing is left for the second,
+# which Bot2 is not asked about. The first pile goes to Ravine Raider (the die's face 1, the first attacker), which has
+# menace (CR 702.111b): the Walker alone can't block it (CR 509.1b), so no creature blocks and Bot2 is asked nothing more.
+# Both attackers are unblocked (CR 509.1h).
+[Bot1 Deck]
+Camouflage
+Swamp
+Forest
+Ravine Raider
+Memnite
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Phyrexian Walker
+Island
+Island
+Island
+Island
+Island
+Island
+Island x10
+
+[Dice]
+1
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Ravine Raider.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Attack(Ravine Raider > Bot2; Memnite > Bot2)
+Bot1.Hand.Camouflage.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Phyrexian Walker)
+! Bot2.Block(Phyrexian Walker > Ravine Raider)
+! Bot2.Block
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Combat.Blocks.Count = 0

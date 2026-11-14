@@ -1,0 +1,62 @@
+# Camouflage replaces Bot2's declaration of blockers this turn (CR 614.1a, 509.1): Bot2 makes one pile for each of Bot1's two
+# attackers, each pile goes to a different attacker at random (the die's face 2 gives the first pile to the second attacker,
+# Ornithopter), and each creature in a pile blocks the attacker its pile was given if it can. Phyrexian Walker and Kobolds of
+# Kher Keep, given the flying Ornithopter, can't block it (CR 702.9b) and block nothing; Crimson Kobolds, given Memnite,
+# blocks it; Crookshank Kobolds, in no pile, blocks nothing, and Bot2 is not also asked to declare blockers. Bot1's creatures are no one's to put in a pile. Camouflage can't
+# be cast in Bot1's main phase, nor in Bot2's declare attackers step (CR 601.3: "your declare attackers step"), and on Bot1's
+# next turn Bot2 declares blockers as usual: the effect lasted that turn only (CR 611.2a, 514.2).
+[Bot1 Deck]
+Camouflage
+Camouflage
+Forest
+Forest
+Memnite
+Ornithopter
+Island
+Island x10
+
+[Bot2 Deck]
+Phyrexian Walker
+Kobolds of Kher Keep
+Crimson Kobolds
+Crookshank Kobolds
+Island x14
+
+[Dice]
+2
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Hand.Kobolds of Kher Keep.Cast
+Bot2.Hand.Crimson Kobolds.Cast
+Bot2.Hand.Crookshank Kobolds.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+! Bot1.Hand.Camouflage.Cast
+Bot1.Attack(Memnite > Bot2; Ornithopter > Bot2)
+Bot1.Hand.Camouflage.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot2.Choose(Memnite)
+Bot2.Choose(Phyrexian Walker; Kobolds of Kher Keep)
+Bot2.Choose(Crimson Kobolds)
+! Bot2.Block
+? Combat.Blocks = Crimson Kobolds > Memnite
+? Combat.Blocks.Count = 1
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Phyrexian Walker > Bot1)
+Bot2.Pass
+! Bot1.Hand.Camouflage.Cast
+[T5 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Crookshank Kobolds > Memnite)
+[T5 Bot1.CombatDamage]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Crookshank Kobolds; Crimson Kobolds

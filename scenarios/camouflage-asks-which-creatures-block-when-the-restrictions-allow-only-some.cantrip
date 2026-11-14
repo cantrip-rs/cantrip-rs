@@ -1,0 +1,61 @@
+# Under Camouflage each creature in a pile blocks the attacker the pile went to if it can (CR 509.1b): the blocks the piles
+# make must still be a legal set together, so where the restrictions on the whole forbid some of them, as many are made as
+# can be (CR 509.1c), the defending player choosing which. The first pile (the die's face 1) goes to Ravine Raider, which
+# has menace (CR 702.111b): Phyrexian Walker alone in it can't block it. The second goes to Memnite, which Alpha Authority
+# lets no more than one creature block (CR 509.1b): of the two Kobolds in it one blocks, and Bot2 is asked which - not none, not both,
+# not a creature from the other pile, not the lone Walker against the Raider.
+[Bot1 Deck]
+Camouflage
+Alpha Authority
+Black Lotus
+Swamp
+Forest
+Ravine Raider
+Memnite
+Island x10
+
+[Bot2 Deck]
+Phyrexian Walker
+Kobolds of Kher Keep
+Crimson Kobolds
+Island
+Island
+Island
+Island
+Island x10
+
+[Dice]
+1
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Ravine Raider.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Hand.Kobolds of Kher Keep.Cast
+Bot2.Hand.Crimson Kobolds.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Alpha Authority.Cast(Memnite)
+Bot1.Attack(Ravine Raider > Bot2; Memnite > Bot2)
+Bot1.Hand.Camouflage.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Phyrexian Walker)
+Bot2.Choose(Kobolds of Kher Keep; Crimson Kobolds)
+! Bot2.Block(Kobolds of Kher Keep > Memnite; Crimson Kobolds > Memnite)
+! Bot2.Block(Phyrexian Walker > Ravine Raider)
+! Bot2.Block(Phyrexian Walker > Memnite)
+! Bot2.Block(Count: 0)
+Bot2.Block(Crimson Kobolds > Memnite)
+? Combat.Blocks = Crimson Kobolds > Memnite
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Graveyard = Crimson Kobolds
