@@ -1,0 +1,54 @@
+# Derelict Attic // Widow's Walk: "When you unlock this door, you draw two cards and you lose 2 life." Casting the Room as
+# Derelict Attic unlocks that door (CR 709.5): Bot1 draws two cards (Hand 4 -> 6, the Lotus and the Room having left it, Library
+# 13 -> 11) and loses 2 (20 -> 18). Unlocking Widow's Walk in turn 3 is a different door's unlocking, so the Attic's text does not
+# trigger again: Life stays 18 and nothing is drawn beyond the turn-3 draw step (Library 11 -> 10).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Derelict Attic // Widow's Walk
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Derelict Attic // Widow's Walk.Cast(Ability: Derelict Attic)
+Bot1.Pass
+? Stack.Count = 1
+Bot1.Pass
+[T1 Bot1.Main2]
+? Stack.Count = 0
+? Bot1.Hand.Count = 6
+? Bot1.Library.Count = 11
+? Bot1.Life = 18
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 7
+? Bot1.Library.Count = 10
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Derelict Attic.Activate(Ability: right door)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Derelict Attic // Widow's Walk.Doors = Derelict Attic; Widow's Walk
+? Stack.Count = 0
+[T3 Bot1.Main2]
+? Bot1.Hand.Count = 4
+? Bot1.Library.Count = 10
+? Bot1.Life = 18
+
+[Expect]
+Bot1.Life = 18
+Bot1.Hand.Count = 4

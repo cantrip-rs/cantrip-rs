@@ -1,0 +1,59 @@
+# Widow's Walk: the Room has the abilities of its unlocked doors only (CR 709.5). Cast as Derelict Attic in turn 1 it gives an
+# attacker nothing: Bot1's Memnite attacks alone in turn 3 and stays a 1/1 with no keyword (Bot2 20 -> 19). Unlocking Widow's
+# Walk after combat (the Moxen and a Plains pay its {3}{B}) gives it the ability: in turn 5 the Memnite attacks alone and is a
+# 2/1 with deathtouch (Bot2 19 -> 17).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Derelict Attic // Widow's Walk
+Memnite
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Derelict Attic // Widow's Walk.Cast(Ability: Derelict Attic)
+Bot1.Pass
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+? Stack.Count = 0
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Derelict Attic.Activate(Ability: right door)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Derelict Attic // Widow's Walk.Doors = Derelict Attic; Widow's Walk
+[T5 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Keywords = Deathtouch
+[T5 Bot1.Main2]
+? Bot2.Life = 17
+
+[Expect]
+Bot2.Life = 17
