@@ -1,0 +1,34 @@
+# The haste goes to a Dragon creature spell the Orb's own mana was spent on (CR 603.7a, 106.3): Bot1 pays Mons's Goblin Raiders
+# (a Goblin creature, not a Dragon) with the Orb's {R}, and a Firespitter Whelp (a Dragon) with a second Black Lotus's three red
+# mana, none of it the Orb's. Neither has haste (the keyword checks), so neither is asked to attack on turn 1 and Bot2 stays at 20.
+
+[Bot1 Deck]
+Black Lotus x2
+Carnelian Orb of Dragonkind
+Mons's Goblin Raiders
+Firespitter Whelp
+Mountain x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Red)
+Bot1.Hand.Carnelian Orb of Dragonkind.Cast
+Bot1.Battlefield.Carnelian Orb of Dragonkind.Activate
+Bot1.Hand.Mons's Goblin Raiders.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Firespitter Whelp.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Firespitter Whelp.Keywords = Flying
+? Bot1.Battlefield.Mons's Goblin Raiders.Keywords = (absent)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
