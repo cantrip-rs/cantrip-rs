@@ -46,7 +46,7 @@ static SOURCE: CardDef = CardDef {
     types: TypeSet::of(&[CardType::Artifact]),
     granted_preventions: &[GrantedPreventionDef {
         hint: "prevent red damage", damage: "red damage", of_it: None,
-        applies: prevents, then: None, text: "Prevent all red damage.",
+        applies: prevents, then: None, gain_prevented: false, text: "Prevent all red damage.",
     }],
     granted_replacements: &[
         granted_replacement(ReplacementKind::Damage, replaces, replace, "replace red damage").then(after),

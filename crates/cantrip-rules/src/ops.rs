@@ -420,7 +420,7 @@ fn move_together_entering_event(
         proposals.extend(life.iter().filter_map(|&(player, amount)| {
             let delta = amount as i32;
             (delta != 0 && cx.s().in_game(player) && !blocked(cx, player, delta) && !life_total_cant_change(cx.s(), player))
-                .then_some(Proposal::LifeChange(LifeChange { player, amount: delta }))
+                .then_some(Proposal::LifeChange(LifeChange::of(player, delta)))
         }));
         let replacements_possible = replace::mixed_life_and_zone(cx, &mut proposals, &dependencies);
         Some((proposals, component_indices, replacements_possible))
@@ -4253,11 +4253,16 @@ impl DamageBatch {
     /// Finish and announce one damage event. First finalize the actual damage and collect its triggers (CR 120.4b),
     /// before any result-choice suspension can remove their sources or change their controllers (CR 603.3a).
     /// Then prepare every result in one APNAP pass (CR 120.4c, 616.1), with one loss per player but one lifelink gain
-    /// per source (CR 119.9-10, 702.15e). No original result applies until all its replacements are prepared.
+    /// per source (CR 119.9-10, 702.15e), and one gain per prevention effect that gains the damage it prevented (CR 120.4's
+    /// example); a player's life results are replaced together, as one event's. No original result applies until all its
+    /// replacements are prepared.
     /// Finally apply and record the results, collecting only their triggers then (CR 120.4d, 603.2c); the already
     /// recorded dealt-damage events are neither recorded nor collected twice.
     pub fn finish(&mut self, cx: &mut Cx, events: &mut Vec<Event>) {
-        if events.is_empty() {
+        // A prevention effect's "you gain life equal to the damage prevented this way" is a result of the event even where
+        // it prevented all of the damage (CR 120.4's Awe Strike example).
+        let prevention_gains = if self.prevented.is_empty() { Vec::new() } else { replace::prevention_gains(cx, &self.prevented) };
+        if events.is_empty() && prevention_gains.is_empty() {
             return;
         }
         // Excess is a recipient's total across the whole simultaneous event, not one assignment's (CR 120.10).
@@ -4271,19 +4276,22 @@ impl DamageBatch {
         // Both trigger phases keep the boundary from before this instruction, even across replacement continuations.
         let start = cx.record_batch(events);
         let damage_count = events.len();
-        settle::collect_batch(cx, events, None, start);
+        if damage_count > 0 {
+            settle::collect_batch(cx, events, None, start);
+        }
 
-        let mut life = std::mem::take(&mut self.life);
-        life.extend(std::mem::take(&mut self.lifelink).into_iter().map(|(_, controller, amount)| (controller, amount)));
+        // Each result: its player, its signed amount, and whether it is the loss damage dealt to them causes (CR 120.3a).
+        let mut life: Vec<(PlayerId, i64, bool)> = std::mem::take(&mut self.life).into_iter().map(|(p, amount)| (p, amount, true)).collect();
+        life.extend(std::mem::take(&mut self.lifelink).into_iter().map(|(_, controller, amount)| (controller, amount, false)));
+        life.extend(prevention_gains.into_iter().map(|(p, amount)| (p, amount, false)));
         let mut changes = Vec::with_capacity(life.len());
         let mut counters = std::mem::take(&mut self.counters);
-        while let Some(player) = counters.next_player(cx, |player| life.iter().any(|&(p, _)| p == player)) {
-            if let Some(at) = life.iter().position(|&(p, _)| p == player) {
-                let (_, amount) = life.remove(at);
-                let delta = prepare_life_change(cx, player, amount);
-                if delta != 0 {
-                    changes.push((player, delta));
-                }
+        while let Some(player) = counters.next_player(cx, |player| life.iter().any(|&(p, ..)| p == player)) {
+            if life.iter().any(|&(p, ..)| p == player) {
+                // All of a player's life results of the event are replaced together (CR 120.4c, 616.1).
+                let mut results = Vec::new();
+                life.retain(|&(p, amount, damage)| if p == player { results.push((amount, damage)); false } else { true });
+                prepare_damage_life(cx, player, &results, &mut changes);
             } else {
                 counters.prepare_next(cx, player, counters::How::Effect);
             }
@@ -4617,6 +4625,28 @@ fn prepare_life_changes(cx: &mut Cx, changes: &[(PlayerId, i64)]) -> Vec<(Player
         }
     }
     prepared
+}
+
+/// One player's life results of one damage event (CR 120.4c), signed, each with whether it is the loss the damage dealt to
+/// them causes (CR 120.3a): judged as `prepare_life_change` judges one change - a gain the player can't have, a loss they
+/// can't have or a life total that can't change is no result, before the effects and of what they leave (CR 119.7-8) - but
+/// replaced together, as results of one event (`replace::damage_life_results`, CR 616.1). What is left of each, in order,
+/// is added to `changes`.
+fn prepare_damage_life(cx: &mut Cx, player: PlayerId, results: &[(i64, bool)], changes: &mut Vec<(PlayerId, i32)>) {
+    let allowed = |cx: &Cx, amount: i32| amount != 0 && cx.s().in_game(player) && !blocked(cx, player, amount) && !life_total_cant_change(cx.s(), player);
+    if !replace::possible(cx, None) {
+        changes.extend(results.iter().map(|&(amount, _)| amount as i32).filter(|&amount| allowed(cx, amount)).map(|amount| (player, amount)));
+        return;
+    }
+    let mut proposals: Vec<Proposal> = results.iter().filter_map(|&(amount, damage)| {
+        let amount = amount as i32;
+        allowed(cx, amount).then_some(Proposal::LifeChange(LifeChange { player, amount, damage, alongside: 0 }))
+    }).collect();
+    replace::damage_life_results(cx, &mut proposals);
+    changes.extend(proposals.into_iter().filter_map(|p| match p {
+        Proposal::LifeChange(l) if l.amount != 0 && cx.s().in_game(player) && !blocked(cx, player, l.amount) => Some((player, l.amount)),
+        _ => None,
+    }));
 }
 
 /// A later replacement's continuation may remove a player or change a prohibition. Judge every final prohibition

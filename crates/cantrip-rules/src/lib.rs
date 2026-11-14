@@ -114,6 +114,8 @@ mod can_gain_life_tests;
 #[cfg(test)]
 mod life_together_tests;
 #[cfg(test)]
+mod damage_life_results_tests;
+#[cfg(test)]
 mod return_at_once_tests;
 #[cfg(test)]
 mod linked_text_tests;

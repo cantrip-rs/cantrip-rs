@@ -224,10 +224,38 @@ pub struct TokenCreation {
 /// (CR 120.3f) or as a life total is set to a number (CR 119.5). `amount` is signed: more than zero is a gain, less a loss,
 /// so "that player loses that much life instead" turns one into the other. An effect that leaves it at zero leaves no
 /// event (CR 119.10). A player who can't gain life meets no replacement of a gain (CR 119.7).
+///
+/// A damage event's life results (CR 120.4c) are each their own `LifeChange` - the one loss the damage dealt to a player
+/// causes, each lifelink gain, and the gain of a prevention effect that prevented some of that damage
+/// (`GrantedPreventionDef::gain_prevented`) - and are replaced together: the affected player orders every effect that
+/// would modify any of their results (CR 616.1), and each result shows the others (`alongside`), so "damage that would
+/// reduce your life total to less than 1 reduces it to 1 instead" judges what the whole event would do to the life total
+/// (the Worship and Awe Strike example of CR 120.4).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct LifeChange {
     pub player: PlayerId,
     pub amount: i32,
+    /// This is the life loss that damage dealt to `player` causes (CR 120.3a), however the effects applied so far have
+    /// changed its amount: what "damage that would reduce your life total" is about. False for any other gain or loss -
+    /// an effect's, a cost's, lifelink's (even one an effect has turned into a loss), a prevention effect's gain. Set by
+    /// the core, never by a replacement.
+    pub damage: bool,
+    /// The net of `player`'s other life results in the same damage event (CR 120.4c), as the effects applied so far have
+    /// left them: a gain above zero, a loss below. Zero for a change that is no damage event's result. Set by the core
+    /// each time the effects are asked, never by a replacement.
+    pub alongside: i64,
+}
+
+impl LifeChange {
+    /// A gain or loss of life that is no damage event's result: an effect's, a cost's, a life total set to a number.
+    pub const fn of(player: PlayerId, amount: i32) -> Self {
+        LifeChange { player, amount, damage: false, alongside: 0 }
+    }
+
+    /// What the event would do to `player`'s life total in all: this change and the others of the same damage event.
+    pub fn net(&self) -> i64 {
+        i64::from(self.amount) + self.alongside
+    }
 }
 
 /// A permanent tapped for mana producing it (CR 106.12, 106.12b): all the mana the mana ability produces as it resolves,
@@ -499,6 +527,12 @@ pub struct GrantedPreventionDef {
     /// What the effect does besides preventing the damage (CR 615.5; see [`PreventionThen`]): "If damage is prevented this
     /// way, Deflecting Palm deals that much damage to that source's controller." None for an effect that only prevents.
     pub then: Option<PreventionThen>,
+    /// "You gain life equal to the damage prevented this way" (Reverse Damage, Awe Strike, Hallow): the effect's controller
+    /// gains the damage it prevented of the event as one more life result of that same damage event (CR 120.4, its Worship
+    /// and Awe Strike example: [5 damage is dealt to the defending player, the defending player gains 5 life]), replaced
+    /// with the event's other results (CR 120.4c, 616.1), not after it as the rest of an effect is (CR 615.5, `then`). One
+    /// gain for the event, however many of its parts the effect prevented; none where it prevented nothing.
+    pub gain_prevented: bool,
     /// The effect's words, as its card's Oracle text prints them - the sentence that makes it and, for one with more to do,
     /// the rest (CR 615.5): what tells whether it refers to its own source while it waits to apply (CR 609.7a: an object a
     /// waiting prevention effect refers to; `CardTable::names_its_source`) - Deflecting Palm's "Deflecting Palm deals that

@@ -8,16 +8,11 @@ fn reverse(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// Gain life equal to the damage actually prevented (CR 615.5).
-fn gain_prevented(g: &mut dyn Game, asker: &Asker, _: ObjectId, parts: &[Prevented]) {
-    let amount = Prevented::total(parts) as i32;
-    g.gain_life(asker.controller,(amount) as i32);
-}
-
 pub static CARD: CardDef = CardDef {
     spell: spell(&[], reverse),
     granted_preventions: &[GrantedPreventionDef {
-        then: Some(gain_prevented),
+        // "You gain life equal to the damage prevented this way": part of the damage event (CR 120.4's Awe Strike example).
+        gain_prevented: true,
         text: "The next time a source of your choice would deal damage to you this turn, prevent that damage. You gain life equal to the damage prevented this way.",
         ..prevention::FROM_CHOSEN_SOURCE
     }],

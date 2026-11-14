@@ -822,7 +822,8 @@ fn prevents_all(cx: &Cx, c: &Candidate) -> bool {
         Origin::GrantedPrevention(timestamp) => cx.s().effects.iter().any(|e| {
             e.timestamp == timestamp
                 && matches!(e.kind, EffectKind::Prevention { card, index, shield: Shield::All, .. }
-                    if cx.cards().get(card).granted_preventions[index as usize].then.is_none())
+                    if cx.cards().get(card).granted_preventions[index as usize].then.is_none()
+                        && !cx.cards().get(card).granted_preventions[index as usize].gain_prevented)
         }),
         _ => false,
     }
@@ -1247,10 +1248,11 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
                             }
                         }
                     }
-                    // CR 615.5: the rest of the effect, once the event has been dealt; and the use of a "next time" (CR 615.8).
-                    let then = cx.cards().get(card).granted_preventions[index as usize].then;
+                    // CR 615.5: the rest of the effect, once the event has been dealt; the use of a "next time" (CR 615.8); and
+                    // the life it gains as part of the event (CR 120.4, `prevention_gains`).
+                    let def = &cx.cards().get(card).granted_preventions[index as usize];
                     if prevented > 0
-                        && (then.is_some() || shield == Shield::NextTime)
+                        && (def.then.is_some() || def.gain_prevented || shield == Shield::NextTime)
                         && let Some(uses) = uses.as_deref_mut()
                     {
                         match uses.iter_mut().find(|u| u.effect.timestamp == timestamp) {
@@ -1309,6 +1311,36 @@ fn mixed_occurrence(cx: &Cx, proposal: Proposal, occurrence: usize) -> Replaceme
 /// Prepare the replacements of simultaneous life and zone events together. Choose one replacement at a time and then
 /// re-evaluate APNAP, so a continuation or concession can introduce an earlier player's next choice (CR 101.4d).
 pub(crate) fn mixed_life_and_zone(cx: &mut Cx, proposals: &mut [Proposal], dependencies: &[(usize, usize)]) -> bool {
+    schedule(cx, proposals, dependencies, false)
+}
+
+/// Prepare the life results of one damage event (CR 120.4c): the loss its damage causes a player (`LifeChange::damage`),
+/// lifelink's gains and a prevention effect's gain, each its own occurrence. They are results of one event, so the
+/// affected player chooses among every effect that would modify any of their results, one at a time (CR 616.1, 616.1f) -
+/// even a single mandatory one on each of two results, since applying one can change whether the other applies - and
+/// each result is judged with the others as they now stand (`LifeChange::alongside`). Whether any replacement was possible.
+pub(crate) fn damage_life_results(cx: &mut Cx, proposals: &mut [Proposal]) -> bool {
+    schedule(cx, proposals, &[], true)
+}
+
+/// Each pending life change of a damage event sees the net of its player's other results (`LifeChange::alongside`).
+fn see_alongside(pending: &mut [MixedOccurrence]) {
+    for at in 0..pending.len() {
+        let Proposal::LifeChange(l) = pending[at].proposal else { continue };
+        let alongside = pending.iter().enumerate()
+            .filter(|&(other, _)| other != at)
+            .filter_map(|(_, o)| match o.proposal {
+                Proposal::LifeChange(o) if o.player == l.player => Some(i64::from(o.amount)),
+                _ => None,
+            })
+            .sum();
+        if let Proposal::LifeChange(l) = &mut pending[at].proposal {
+            l.alongside = alongside;
+        }
+    }
+}
+
+fn schedule(cx: &mut Cx, proposals: &mut [Proposal], dependencies: &[(usize, usize)], one_event: bool) -> bool {
     // In the common case with no applicable replacement machinery, avoid building or scanning pending lineages.
     if !proposals.iter().any(|p| match p {
         Proposal::ZoneChange(z) => zone_change_possible(cx, z),
@@ -1338,6 +1370,9 @@ pub(crate) fn mixed_life_and_zone(cx: &mut Cx, proposals: &mut [Proposal], depen
                 Proposal::LifeChange(l) if !cx.s().in_game(l.player) => l.amount = 0,
                 _ => {}
             }
+        }
+        if one_event {
+            see_alongside(&mut pending);
         }
         let mut options = Vec::new();
         for at in 0..pending.len() {
@@ -1370,6 +1405,15 @@ pub(crate) fn mixed_life_and_zone(cx: &mut Cx, proposals: &mut [Proposal], depen
             options.push((at, actor, mixed_has_choice(cx, &part.proposal, &found)));
         }
         if options.is_empty() { break; }
+        // One event's results: a player with effects on two or more of their results chooses which applies first (CR 616.1).
+        if one_event && options.len() > 1 {
+            let affected: Vec<PlayerId> = options.iter().map(|&(at, _, _)| affected(cx, &pending[at].proposal)).collect();
+            for i in 0..options.len() {
+                if affected.iter().enumerate().any(|(j, &p)| j != i && p == affected[i]) {
+                    options[i].2 = true;
+                }
+            }
+        }
         // One mandatory replacement requires no outer choice. Apply it in full, including its contained
         // instructions, before returning to outer choices (CR 616.1f–g).
         let chosen_at = if let Some(&(at, _, _)) = options.iter().find(|(_, _, choice)| !choice) { at } else {
@@ -1834,6 +1878,20 @@ fn damage_can_be_prevented(cx: &Cx, d: &DamageEvent) -> bool {
 pub(crate) struct PreventionUse {
     effect: ContinuousEffect,
     parts: Vec<Prevented>,
+}
+
+/// The life the prevention effects that prevented some of a damage event gain as part of it ("you gain life equal to the
+/// damage prevented this way", `GrantedPreventionDef::gain_prevented`): one gain for each such effect, by its controller
+/// (CR 609.1), of all it prevented of the event, in the order the effects first applied. CR 615.5 has the rest of a
+/// prevention effect take place immediately after the prevention; CR 120.4's Worship and Awe Strike example places this
+/// gain in the damage event itself ([5 damage is dealt to the defending player, the defending player gains 5 life]), so
+/// it is one of the event's life results (CR 120.4c), replaced with the others and announced with them.
+pub(crate) fn prevention_gains(cx: &Cx, uses: &[PreventionUse]) -> Vec<(PlayerId, i64)> {
+    uses.iter().filter_map(|u| {
+        let EffectKind::Prevention { card, index, .. } = u.effect.kind else { return None };
+        cx.cards().get(card).granted_preventions[index as usize].gain_prevented
+            .then(|| (u.effect.controller, u.parts.iter().map(|p| i64::from(p.amount)).sum()))
+    }).collect()
 }
 
 /// The rest of the prevention effects that prevented some of a damage event, once it has been dealt and announced, in the
@@ -2710,7 +2768,7 @@ pub fn life_change(cx: &mut Cx, player: PlayerId, amount: i32) -> i32 {
     if !possible(cx, None) {
         return amount;
     }
-    let mut proposal = Proposal::LifeChange(LifeChange { player, amount });
+    let mut proposal = Proposal::LifeChange(LifeChange::of(player, amount));
     apply(cx, &mut proposal);
     match proposal {
         Proposal::LifeChange(l) => l.amount,

@@ -25,6 +25,7 @@ pub static CARD: CardDef = CardDef {
             of_it: None,
             applies: prevention::from_chosen_source_of_colors::<GREEN>,
             then: None,
+            gain_prevented: false,
             text: "The next time a green source of your choice would deal damage to you this turn, prevent that damage.",
         },
     ],

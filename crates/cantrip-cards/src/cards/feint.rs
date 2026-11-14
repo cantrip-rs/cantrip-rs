@@ -89,6 +89,7 @@ pub static CARD: CardDef = CardDef {
             of_it: None,
             applies: made_2_applies,
             then: None,
+            gain_prevented: false,
             text: "Prevent all combat damage that would be dealt this turn by that creature and each creature blocking it.",
         },
     ],

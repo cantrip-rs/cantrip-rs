@@ -23,6 +23,7 @@ const DAMAGE_TO_CREATURES_YOU_CONTROL: GrantedPreventionDef = GrantedPreventionD
     of_it: None,
     applies: dealt_to_creature_you_control,
     then: None,
+    gain_prevented: false,
     text: "Prevent all damage that would be dealt to creatures you control this turn.",
 };
 

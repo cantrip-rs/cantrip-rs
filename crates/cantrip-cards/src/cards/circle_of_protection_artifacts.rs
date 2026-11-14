@@ -22,6 +22,7 @@ pub static CARD: CardDef = CardDef {
         of_it: None,
         applies: artifact_source,
         then: None,
+        gain_prevented: false,
         text: "The next time an artifact source of your choice would deal damage to you this turn, prevent that damage.",
     }],
     ..oracle::CIRCLE_OF_PROTECTION_ARTIFACTS

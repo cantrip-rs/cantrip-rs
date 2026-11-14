@@ -113,7 +113,7 @@ static SOURCE: CardDef = CardDef {
         replacement(ReplacementKind::ManaProduction, mana_only, mana_apply, "Goblin mana"),
         mana_type_replacement(elf_types, "Elf mana is {B}"),
     ],
-    granted_preventions: &[GrantedPreventionDef { hint: "Goblin shield", damage: "damage", of_it: None, applies: shielded, then: None, text: "" }],
+    granted_preventions: &[GrantedPreventionDef { hint: "Goblin shield", damage: "damage", of_it: None, applies: shielded, then: None, gain_prevented: false, text: "" }],
     delayed: &[triggered(when(EventMask::SPELL_CAST, delayed_cast), nothing, "This turn, whenever a Goblin spell is cast, do nothing.")],
     ..CardDef::BLANK
 };

@@ -28,7 +28,7 @@ fn only_positive_life_gains_of_the_controller_are_replaced() {
     let applies = card.replacements[0].applies;
     let me = PlayerId(0);
     let asker = Asker::new(ObjectId(0), me);
-    let event = |player, amount| Proposal::LifeChange(LifeChange { player, amount });
+    let event = |player, amount| Proposal::LifeChange(LifeChange::of(player, amount));
     assert!(applies(&UnusedQuery, &asker, &event(me, 1)));
     assert!(!applies(&UnusedQuery, &asker, &event(me, 0)));
     assert!(!applies(&UnusedQuery, &asker, &event(me, -1)));

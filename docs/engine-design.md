@@ -1225,8 +1225,20 @@ concession at its recorded cursor: an owner's departure removes their borrowed D
 player still in the game (CR 800.4a, 800.4d).
 
 Noninfect player damage is a combined loss per player; lifelink is a separate gain per source, summed across that
-source's recipients, never across different sources (CR 119.9-10, 702.15e). Losses and gains are not netted, even if they
-leave a life total unchanged. **One APNAP preparation pass covers all result kinds**, not a pass per kind: each affected
+source's recipients, never across different sources (CR 119.9-10, 702.15e). A prevention effect that gains "life equal to
+the damage prevented this way" (`GrantedPreventionDef::gain_prevented`: Reverse Damage, Awe Strike) adds one more gain to
+the event, by its controller, even where it prevented all the damage: CR 615.5 has the rest of a prevention effect follow the
+prevention, but CR 120.4's Worship and Awe Strike example makes this gain part of the damage event ([5 damage is dealt to the
+defending player, the defending player gains 5 life]), so it is replaced and announced with the other results; a `then`
+(Deflecting Palm's damage) still runs after the event. Losses and gains are not netted as events, even if they leave a life
+total unchanged: each is announced on its own. But a player's life results are **replaced as one event's**
+(`replace::damage_life_results`, the mixed scheduler with `OrderReplacementOccurrences`): the player orders every effect on
+any of them (CR 616.1, even one mandatory effect on each of two results), each is judged again after each applies (CR
+616.1f), and each `Proposal::LifeChange` shows whether it is the loss damage dealt to that player causes (`damage`, CR
+120.3a: not an effect's or a cost's loss, nor lifelink turned into a loss) and the net of the player's other results
+(`alongside`). "Damage that would reduce your life total to less than 1 reduces it to 1 instead" judges the event's net: [lose 5, gain 5] at 2
+life does not apply, and at 2 life losing 5 and gaining 3 with Boon Reflection ends at 4 or 3 by the player's order.
+**One APNAP preparation pass covers all result kinds**, not a pass per kind: each affected
 player's life and poison, and the permanent counters whose recipients they control (CR 120.4c, 616.1). The next affected
 player is read again after each prepared occurrence: if a continuation or concession returns a still-unprepared counter
 recipient to an earlier player, outstanding choices restart APNAP (CR 101.4d). Permanent and
