@@ -1,0 +1,6 @@
+{
+  "name": "Glimmerburst",
+  "manaCost": "{3}{U}",
+  "type": "Instant",
+  "oracleText": "Draw two cards. Create a 1/1 white Glimmer enchantment creature token."
+}
