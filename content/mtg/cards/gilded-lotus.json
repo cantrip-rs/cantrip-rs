@@ -1,0 +1,6 @@
+{
+  "name": "Gilded Lotus",
+  "manaCost": "{5}",
+  "type": "Artifact",
+  "oracleText": "{T}: Add three mana of any one color."
+}
