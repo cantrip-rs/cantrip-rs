@@ -1,0 +1,26 @@
+# With no Swamp the Denizen taps, and the opponent may decline to take it (CR 608.2d).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Jet
+Mox Pearl
+Infernal Denizen
+Island x20
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Infernal Denizen.Cast
+[T5 Bot1.Upkeep]
+Bot2.Decline
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Infernal Denizen.Tapped = true

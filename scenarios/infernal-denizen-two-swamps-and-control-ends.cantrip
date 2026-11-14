@@ -1,0 +1,47 @@
+# Two Swamps pay the upkeep; the tap ability takes an opposing creature until the Denizen leaves (CR 611.2b).
+[Bot1 Deck]
+Swamp
+Swamp
+Swamp
+Black Lotus
+Black Lotus
+Mox Jet
+Infernal Denizen
+Island x20
+[Bot2 Deck]
+Ornithopter
+Mox Pearl
+Swords to Plowshares
+Island x20
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Hand.Infernal Denizen.Cast
+[T7 Bot1.Upkeep]
+Bot1.Choose(Swamp#1; Swamp#2)
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Infernal Denizen.Tapped = false
+? Bot1.Battlefield.Swamp.Tapped = false
+Bot1.Battlefield.Infernal Denizen.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Tapped = false
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Infernal Denizen)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Graveyard = Swamp; Swamp; Black Lotus; Black Lotus
+Bot2.Battlefield.Ornithopter.Tapped = false

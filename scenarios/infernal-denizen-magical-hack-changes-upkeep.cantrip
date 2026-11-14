@@ -1,0 +1,40 @@
+# Magical Hack changes the Denizen's Swamp word to Forest before upkeep resolves (CR 612.2).
+[Bot1 Deck]
+Forest
+Swamp
+Black Lotus
+Black Lotus
+Mox Jet
+Mox Sapphire
+Infernal Denizen
+Magical Hack
+Island x20
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Infernal Denizen.Cast
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Magical Hack.Cast(Bot1.Battlefield.Infernal Denizen)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Swamp)
+Bot1.Modes(Forest)
+Bot1.Choose(Forest)
+Bot2.Decline
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Graveyard = Forest; Magical Hack; Black Lotus; Black Lotus
+Bot1.Battlefield.Swamp.Tapped = false
+Bot1.Battlefield.Infernal Denizen.Tapped = true

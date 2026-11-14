@@ -1,0 +1,36 @@
+# If the source leaves before upkeep resolves and no creature remains, there is nothing for the opponent to take (CR 611.2b).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Jet
+Mox Pearl
+Infernal Denizen
+Island x20
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Infernal Denizen.Cast
+[T5 Bot1.Upkeep]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Infernal Denizen)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot2.Accept
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Infernal Denizen = (absent)
+Bot1.Life = 25
