@@ -1,0 +1,23 @@
+# Selesnya Guildgate: once it has untapped it taps for {G} on one turn and {W} on the next (the color is chosen as the ability is
+# activated, CR 605.1a), never for another color or for colorless.
+
+[Bot1 Deck]
+Selesnya Guildgate
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Selesnya Guildgate.Play
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Selesnya Guildgate.Activate(Color: Blue)
+! Bot1.Battlefield.Selesnya Guildgate.Activate(Color: Colorless)
+Bot1.Battlefield.Selesnya Guildgate.Activate(Color: Green)
+? Bot1.Mana = {G}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Selesnya Guildgate.Activate(Color: White)
+? Bot1.Mana = {W}
+
+[Expect]
+Bot1.Battlefield.Selesnya Guildgate.Tapped = true
