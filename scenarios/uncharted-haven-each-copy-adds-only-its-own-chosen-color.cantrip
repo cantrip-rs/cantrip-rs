@@ -1,0 +1,30 @@
+# Uncharted Haven: "As this land enters, choose a color. {T}: Add one mana of the chosen color." The color is kept on each
+# permanent (CR 607.2d): Bot1 plays one on turn 1 choosing green and a second on turn 3 choosing white. On turn 5 the first adds
+# green but not white, the second white but not green.
+
+[Bot1 Deck]
+Uncharted Haven
+Uncharted Haven
+Island x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Uncharted Haven.Play
+Bot1.Colors(Green)
+[T3 Bot1.Main1]
+Bot1.Hand.Uncharted Haven.Play
+Bot1.Colors(White)
+? Bot1.Battlefield.Uncharted Haven#1.ChosenColor = Green
+? Bot1.Battlefield.Uncharted Haven#2.ChosenColor = White
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Uncharted Haven#1.Activate(Color: White)
+Bot1.Battlefield.Uncharted Haven#1.Activate(Color: Green)
+! Bot1.Battlefield.Uncharted Haven#2.Activate(Color: Green)
+Bot1.Battlefield.Uncharted Haven#2.Activate(Color: White)
+? Bot1.Mana = {W}{G}
+
+[Expect]
+Bot1.Battlefield.Uncharted Haven#1.Tapped = true
+Bot1.Battlefield.Uncharted Haven#2.Tapped = true
