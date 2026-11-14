@@ -1,0 +1,94 @@
+# Dropkick Bomber: "Other Goblins you control get +1/+1." and "{R}: Until end of turn, another target Goblin you control gains flying
+# and 'When this creature deals combat damage, sacrifice it.'" Turn 1: Bot1 pays {2}{R} for the Bomber (2/3, not buffing itself) and
+# {1}{R} for a Goblin Assailant (3/3 with the lord; Bot2's own Assailant stays 2/2). Turn 3: targets that are refused (the opponent's
+# Goblin, the Bomber itself, a Mox); the first Assailant gets flying (a Goblin can't block it) and is sacrificed once it deals
+# combat damage, the Bomber's player taking nothing. A second Assailant given the same ability but not attacked loses it at end of turn
+# (turn 4) and attacks safely on turn 5.
+
+[Bot1 Deck]
+Mox Ruby x5
+Dropkick Bomber
+Goblin Assailant x2
+Ornithopter
+Mountain x11
+
+[Bot2 Deck]
+Mox Ruby x2
+Goblin Assailant
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Dropkick Bomber.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Battlefield.Mox Ruby#5.Activate
+Bot1.Hand.Goblin Assailant.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dropkick Bomber.Power = 2
+? Bot1.Battlefield.Dropkick Bomber.Toughness = 3
+? Bot1.Battlefield.Goblin Assailant.Power = 3
+? Bot1.Battlefield.Goblin Assailant.Toughness = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Goblin Assailant.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Goblin Assailant.Power = 2
+? Bot2.Battlefield.Goblin Assailant.Toughness = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+! Bot1.Battlefield.Dropkick Bomber.Activate(Bot2.Battlefield.Goblin Assailant)
+! Bot1.Battlefield.Dropkick Bomber.Activate(Bot1.Battlefield.Dropkick Bomber)
+! Bot1.Battlefield.Dropkick Bomber.Activate(Bot1.Battlefield.Mox Ruby#2)
+Bot1.Battlefield.Dropkick Bomber.Activate(Bot1.Battlefield.Goblin Assailant)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Assailant.Keywords = Flying
+? Bot1.Battlefield.Dropkick Bomber.Keywords = (absent)
+? Bot2.Battlefield.Goblin Assailant.Keywords = (absent)
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Goblin Assailant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Battlefield.Dropkick Bomber.Activate(Bot1.Battlefield.Goblin Assailant#2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Assailant#2.Keywords = Flying
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Goblin Assailant#1 > Bot2)
+[T3 Bot1.DeclareBlockers]
+! Bot2.Block(Goblin Assailant > Goblin Assailant#1)
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Graveyard.Count = 1
+? Bot1.Battlefield.Goblin Assailant.Keywords = Flying
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Goblin Assailant.Keywords = (absent)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Goblin Assailant > Bot2)
+[T5 Bot1.Main2]
+? Bot2.Life = 14
+? Bot1.Graveyard.Count = 1
+
+[Expect]
+Bot1.Battlefield.Goblin Assailant.Power = 3
+Bot1.Battlefield.Dropkick Bomber.Power = 2

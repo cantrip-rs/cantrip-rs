@@ -1,0 +1,8 @@
+{
+  "name": "Dropkick Bomber",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Goblin Warrior",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Other Goblins you control get +1/+1.\n{R}: Until end of turn, another target Goblin you control gains flying and \"When this creature deals combat damage, sacrifice it.\""
+}
