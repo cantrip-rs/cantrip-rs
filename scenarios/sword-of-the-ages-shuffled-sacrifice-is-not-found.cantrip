@@ -1,0 +1,38 @@
+# A creature shuffled into a hidden library as its cost is paid cannot be found, but its last power counts (CR 400.7j, 608.2h).
+[Bot1 Deck]
+Sword of the Ages
+Blightsteel Colossus
+Show and Tell
+Black Lotus x2
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Blightsteel Colossus)
+Bot2.Choose(Island)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sword of the Ages.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sword of the Ages.Activate(Bot2; X: 1)
+Bot1.Choose(Blightsteel Colossus)
+
+[Expect]
+Bot2.Life = 9
+Exile = Sword of the Ages
+Bot1.Library.Blightsteel Colossus.Power = 11

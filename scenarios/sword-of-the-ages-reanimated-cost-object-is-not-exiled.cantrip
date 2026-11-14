@@ -1,0 +1,52 @@
+# A sacrificed creature reanimated in response is a new object, and its last power still counts (CR 400.7, 608.2h).
+# Sword of the Ages {6}: Artifact
+#   This artifact enters tapped.
+#   {T}, Sacrifice this artifact and any number of creatures you control: This artifact deals X damage to any target, where X is the total power of the creatures sacrificed this way, then exile this artifact and those creature cards.
+
+[Bot1 Deck]
+Sword of the Ages
+Memnite
+Ornithopter
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Shallow Grave
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sword of the Ages.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sword of the Ages.Tapped = true
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sword of the Ages.Activate(Bot2; X: 1)
+Bot1.Choose(Memnite)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Shallow Grave.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19
+Exile = Sword of the Ages
+Bot1.Battlefield.Memnite.Power = 1

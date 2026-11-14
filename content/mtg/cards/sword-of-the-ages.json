@@ -1,0 +1,6 @@
+{
+  "name": "Sword of the Ages",
+  "manaCost": "{6}",
+  "type": "Artifact",
+  "oracleText": "This artifact enters tapped.\n{T}, Sacrifice this artifact and any number of creatures you control: This artifact deals X damage to any target, where X is the total power of the creatures sacrificed this way, then exile this artifact and those creature cards."
+}
