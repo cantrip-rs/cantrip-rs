@@ -1,0 +1,40 @@
+# Piranha Fly's flying (CR 702.9b): attacking on turn 3, Bot2's Memnite, which has neither flying nor reach, can't block it,
+# while Bot2's Ornithopter (0/2 flying) can. The Fly deals its 2 damage to the Ornithopter, which dies, and Bot2 stays at 20.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Piranha Fly
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Piranha Fly.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Piranha Fly > Bot2)
+! Bot2.Block(Memnite > Piranha Fly)
+Bot2.Block(Ornithopter > Piranha Fly)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield.Memnite.Tapped = false
+Bot1.Battlefield.Piranha Fly.Tapped = true
