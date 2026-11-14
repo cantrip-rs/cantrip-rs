@@ -1,0 +1,36 @@
+# Cynical Loner, Survival: "At the beginning of your second main phase, if this creature is tapped, you may search your library
+# for a card, put it into your graveyard, then shuffle." Bot1 casts the Loner on turn 1 (Mox Jet and Mox Ruby), attacks with it on
+# turn 3 (no vigilance, so it is tapped) and at the second main phase accepts and takes the Lightning Bolt out of its library into
+# its graveyard: any card is a legal find. The library shrinks by one and Bot2 took 3.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Cynical Loner
+Swamp x4
+Swamp x12
+Lightning Bolt
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cynical Loner.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Cynical Loner.Tapped = false
+Bot1.Attack(Cynical Loner > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Cynical Loner.Tapped = true
+Bot1.Accept
+Bot1.Search(Lightning Bolt)
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt
+Bot1.Hand.Count = 5
+Bot1.Library.Count = 11
+Bot2.Life = 17

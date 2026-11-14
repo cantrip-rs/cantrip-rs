@@ -1,0 +1,30 @@
+# Cynical Loner, Survival's "if this creature is tapped" (CR 603.4): Bot1 does not attack on turn 3, so the Loner is untapped at
+# the beginning of the second main phase and nothing is asked: the refusal, and the library stays whole.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Cynical Loner
+Swamp x4
+Swamp x12
+Lightning Bolt
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cynical Loner.Cast
+Bot2.Pass
+[T3 Bot1.Main2]
+Bot1.Pass
+! Bot1.Accept
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Library.Count = 12
+Bot1.Battlefield.Cynical Loner.Tapped = false

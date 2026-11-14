@@ -1,0 +1,31 @@
+# Cynical Loner, Survival: the search is a "may". Bot1 attacks on turn 3 and declines at the second main phase: nothing is put into
+# the graveyard and the library is not searched or shuffled (12 cards after the turn-3 draw).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Cynical Loner
+Swamp x4
+Swamp x12
+Lightning Bolt
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cynical Loner.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Cynical Loner > Bot2)
+[T3 Bot1.Main2]
+Bot1.Decline
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Hand.Count = 5
+Bot1.Library.Count = 12
+Bot2.Life = 17

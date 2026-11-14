@@ -1,0 +1,8 @@
+{
+  "name": "Cynical Loner",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Human Survivor",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "This creature can't be blocked by Glimmers.\nSurvival — At the beginning of your second main phase, if this creature is tapped, you may search your library for a card, put it into your graveyard, then shuffle."
+}
