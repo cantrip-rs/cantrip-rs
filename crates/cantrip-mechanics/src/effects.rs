@@ -1991,6 +1991,19 @@ pub fn sacrifice_this_unless_pay(g: &mut dyn Game, item: &StackItem, payment: Co
     Ok(())
 }
 
+/// "You may pay {X}. When you do, ..." (CR 107.3f, 118.12, 603.12): the ability's controller chooses X as they pay it, 0 included;
+/// paying it, whatever X, is doing it, and the reflexive ability (the card's first `delayed` one) triggers carrying X and `subject`,
+/// its targets chosen as it goes on the stack. Declining is not doing it: nothing triggers. Electro, Assaulting Battery,
+/// Tester of the Tangential, Fire Lord Sozin and Wildborn Preserver print it; `question` is the card's own wording of the payment.
+pub fn may_pay_x_then_when_you_do(g: &mut dyn Game, item: &StackItem, card: &'static CardDef, question: &'static Question, subject: Target) -> Result<(), Suspend> {
+    let you = item.controller;
+    if let Some(x) = g.may_pay_x(you, item.object, item.object, cost("{X}"), question)? {
+        let this = g.card_id(card);
+        g.reflexive_trigger_counted(item.object, you, AbilityRef::delayed(this, 0), subject, x);
+    }
+    Ok(())
+}
+
 /// "Untap this [permanent]" (CR 701.26): the ability's source. Basalt Monolith and Grim Monolith print it.
 pub fn untap_self(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.untap(item.object);

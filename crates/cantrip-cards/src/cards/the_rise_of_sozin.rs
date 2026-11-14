@@ -25,12 +25,7 @@ const PAY_X: Question = Question::new(
 /// they pay (CR 107.3f), 0 included; paying it, whatever X, is doing it, and the reflexive ability (CR 603.12) triggers carrying
 /// that X and the player the damage was dealt to. Declining is not doing it: nothing triggers.
 fn combat_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let you = item.controller;
-    if let Some(x) = g.may_pay_x(you, item.object, item.object, cost("{X}"), &PAY_X)? {
-        let me = g.card_id(&BACK);
-        g.reflexive_trigger_counted(item.object, you, AbilityRef::delayed(me, 0), item.subject, x);
-    }
-    Ok(())
+    effects::may_pay_x_then_when_you_do(g, item, &BACK, &PAY_X, item.subject)
 }
 
 /// "... put any number of target creature cards with total mana value X or less from that player's graveyard onto the

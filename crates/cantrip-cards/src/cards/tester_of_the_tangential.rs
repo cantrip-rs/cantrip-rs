@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::triggers::BEGINNING_OF_YOUR_COMBAT;
-use cantrip_mechanics::{increment, targets};
+use cantrip_mechanics::{effects, increment, targets};
 use cantrip_oracle as oracle;
 
 const PAY_X: Question = Question::new(
@@ -16,12 +16,7 @@ const PAY_X: Question = Question::new(
 /// (CR 107.3f), 0 included; paying is doing it, whatever X, and the reflexive ability (CR 603.12) triggers carrying X.
 /// Declining is not doing it: nothing triggers. The target is chosen when the reflexive ability goes on the stack.
 fn pay_x(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let you = item.controller;
-    if let Some(x) = g.may_pay_x(you, item.object, item.object, cost("{X}"), &PAY_X)? {
-        let this = g.card_id(&CARD);
-        g.reflexive_trigger_counted(item.object, you, AbilityRef::delayed(this, 0), Target::None, x);
-    }
-    Ok(())
+    effects::may_pay_x_then_when_you_do(g, item, &CARD, &PAY_X, Target::None)
 }
 
 /// "Move X +1/+1 counters from this creature onto another target creature" (CR 122.5): each counter is removed from this

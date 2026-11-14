@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::triggers::{INSTANT_OR_SORCERY_YOU_CAST, THIS_LEAVES};
-use cantrip_mechanics::{damage_target, targets};
+use cantrip_mechanics::{damage_target, effects, targets};
 use cantrip_oracle as oracle;
 
 const PAY_X: Question = Question::new(
@@ -30,12 +30,7 @@ fn add_red(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// included. Paying is doing it, and the reflexive ability (CR 603.12) triggers carrying X, with its target chosen as it goes
 /// on the stack (the rulings).
 fn pay_x(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let you = item.controller;
-    if let Some(x) = g.may_pay_x(you, item.object, item.object, cost("{X}"), &PAY_X)? {
-        let this = g.card_id(&CARD);
-        g.reflexive_trigger_counted(item.object, you, AbilityRef::delayed(this, 0), Target::None, x);
-    }
-    Ok(())
+    effects::may_pay_x_then_when_you_do(g, item, &CARD, &PAY_X, Target::None)
 }
 
 /// "He deals X damage to target player" (CR 120.3): Electro, as he last existed on the battlefield (CR 113.7a), deals the X
