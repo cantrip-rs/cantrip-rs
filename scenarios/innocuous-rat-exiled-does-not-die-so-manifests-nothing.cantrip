@@ -1,0 +1,41 @@
+# Innocuous Rat: "When this creature dies" needs it to be put into a graveyard from the battlefield (CR 700.4). Bot2's Swords to
+# Plowshares exiles it instead, so nothing manifests: no Arrange prompt, Bot1's library is untouched and nothing face down is on
+# its battlefield. (Bot1 gains 1 life from the Swords, 21.)
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Innocuous Rat
+Swamp x4
+Guerrilla Gorilla
+Lightning Bolt
+Swamp x13
+
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Plains x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Innocuous Rat.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Innocuous Rat)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 21
+Bot1.Exile.Innocuous Rat.Power = 1
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Count = 2
+Bot1.Library.Count = 15
