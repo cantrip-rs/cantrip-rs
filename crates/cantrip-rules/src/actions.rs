@@ -290,6 +290,10 @@ impl Query for AsSpell<'_> {
         self.q.token_chars(card, copy)
     }
 
+    fn copiable_colors(&self, id: ObjectId) -> ColorSet {
+        self.q.copiable_colors(id)
+    }
+
     fn card_id(&self, def: &'static CardDef) -> CardId {
         self.q.card_id(def)
     }
@@ -374,6 +378,10 @@ impl Query for WithWords<'_> {
 
     fn token_chars(&self, card: CardId, copy: Option<Copiable>) -> Chars {
         self.q.token_chars(card, copy)
+    }
+
+    fn copiable_colors(&self, id: ObjectId) -> ColorSet {
+        self.q.copiable_colors(id)
     }
 
     fn card_id(&self, def: &'static CardDef) -> CardId {
@@ -3801,6 +3809,10 @@ impl Query for Announcing<'_> {
         self.q.token_chars(card, copy)
     }
 
+    fn copiable_colors(&self, id: ObjectId) -> ColorSet {
+        self.q.copiable_colors(id)
+    }
+
     fn card_id(&self, def: &'static CardDef) -> CardId {
         self.q.card_id(def)
     }
@@ -3914,6 +3926,10 @@ impl Query for Watch<'_> {
 
     fn token_chars(&self, card: CardId, copy: Option<Copiable>) -> Chars {
         self.q.token_chars(card, copy)
+    }
+
+    fn copiable_colors(&self, id: ObjectId) -> ColorSet {
+        self.q.copiable_colors(id)
     }
 
     fn card_id(&self, def: &'static CardDef) -> CardId {
@@ -4619,6 +4635,10 @@ impl Query for AsFace<'_> {
 
     fn token_chars(&self, card: CardId, copy: Option<Copiable>) -> Chars {
         self.cx.token_chars(card, copy)
+    }
+
+    fn copiable_colors(&self, id: ObjectId) -> ColorSet {
+        self.cx.copiable_colors(id)
     }
 
     fn card_id(&self, def: &'static CardDef) -> CardId {
@@ -8392,6 +8412,10 @@ impl Query for QueryAsFace<'_> {
 
     fn token_chars(&self, card: CardId, copy: Option<Copiable>) -> Chars {
         self.q.token_chars(card, copy)
+    }
+
+    fn copiable_colors(&self, id: ObjectId) -> ColorSet {
+        self.q.copiable_colors(id)
     }
 
     fn card_id(&self, def: &'static CardDef) -> CardId {

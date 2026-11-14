@@ -700,9 +700,16 @@ fn move_together_entering_event(
                 into_library.push((to.player, group));
             }
         }
+        // A copy effect that didn't copy color left it the colors of the values beneath (CR 707.9c), which its other effects
+        // ending once it is gone no longer change: it keeps the copiable values it last had (CR 400.7), what a copy of it as it
+        // last existed copies.
+        let kept = cx.s().obj(m.id).copy.filter(Copiable::color_uncopied).map(|c| c.colored(layers::copiable_colors(cx.cards(), cx.s(), m.id)));
         cx.st().update_obj(m.id, |o| {
             o.became = Some(new_id);
             o.last_known = Some(row);
+            if kept.is_some() {
+                o.copy = kept;
+            }
         });
         // "Reveal it and shuffle it into its owner's library instead" (CR 701.20a, 701.24a).
         if change.reveal {
@@ -1336,6 +1343,7 @@ pub fn prepare_entry(cx: &mut Cx, entering: &mut Entering) -> R<()> {
         let def = cx.cards().get(copy.card);
         if let Some(enters_as_copy) = def.enters_as_copy {
             enters_as_copy(cx, entering)?;
+            entering_keeps_colors(cx, entering, copy, face);
         }
         let card = entering.copy.map_or(copy.card, |c| c.card);
         if cx.cards().get(card).enters.is_some() {
@@ -1588,6 +1596,16 @@ fn entry_replacements(cx: &mut Cx, entering: &mut Entering, proposed: ZoneChange
     let change = crate::replace::entry(cx, proposed, entering);
     cx.entering = outer;
     change
+}
+
+/// A copy replacement that doesn't copy color (CR 707.9c, `Copiable::uncopied_color`), applied over the copy an earlier copy
+/// replacement or the token's creation made it (CR 614.12, 707.9e: a Clone copying a Vesuvan Doppelganger that copies nothing,
+/// Ardyn's black Demon token of a Doppelganger card): those copy effects never end, so its colors are theirs, `before`'s,
+/// fixed (CR 613.2a). Over its own face alone, the layers read its own colors beneath (`GameState::copy_beneath`).
+fn entering_keeps_colors(cx: &Cx, entering: &mut Entering, before: Copiable, face: CardId) {
+    let Some(copy) = entering.copy.filter(Copiable::color_uncopied) else { return };
+    let card = if before.is_own_faces() { face } else { before.card };
+    entering.copy = Some(copy.colored(layers::token_chars(cx.cards(), card, Some(before)).colors));
 }
 
 /// A card's `enters` is ordered as one of the replacements any of which may be chosen (CR 616.1e). One that has it enter

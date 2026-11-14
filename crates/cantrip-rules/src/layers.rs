@@ -616,6 +616,8 @@ struct ObjCtx<'a> {
     card: CardId,
     def: &'static CardDef,
     copy: Option<&'a Copiable>,
+    /// The colors of the values beneath `copy` where it doesn't copy color (`Copiable::uncopied_color`, CR 707.9c).
+    kept_colors: Option<ColorSet>,
     /// The values of a merged permanent's other components (CR 702.140e), whose abilities it has: those its copiable values
     /// carry (`Copiable::merged`).
     sources: &'a [Copiable],
@@ -639,6 +641,9 @@ impl ObjCtx<'_> {
         chars.spell = self.spell;
         if self.room {
             doors(cards, self.card, self.obj.marks.doors, self.copy, &mut chars);
+        }
+        if let Some(colors) = self.kept_colors {
+            chars.colors = colors;
         }
         if !self.sources.is_empty() {
             merged_abilities(cards, self.sources, self.copy.map_or(CdaExclusions::NONE, Copiable::merged_excluded_cdas), &mut chars);
@@ -703,7 +708,9 @@ fn object<'a>(cards: &CardTable, state: &'a GameState, id: ObjectId) -> Object<'
     // card-only cache can hold, as they are the object's. In every other zone the card has both halves (CR 709.4).
     let room = def.is_room() && obj.zone.is(ZoneKind::Battlefield);
     let sources = crate::merge::sources(state, copy);
-    let o = ObjCtx { id, obj, card, def, copy, sources, room, spell, on_battlefield: false, in_exile: false, has_counters: false, has_hone: false };
+    // A copy effect that doesn't copy color leaves the colors of the values beneath it (CR 707.9c, 613.2a).
+    let kept_colors = copy.filter(|c| c.color_uncopied()).map(|c| values_colors(cards, state, id, Some(c), u32::MAX));
+    let o = ObjCtx { id, obj, card, def, copy, kept_colors, sources, room, spell, on_battlefield: false, in_exile: false, has_counters: false, has_hone: false };
     // An object that has ceased to be itself - changed zones or ceased to exist - is as it last was (CR 400.7, 608.2h,
     // 603.10).
     if let Some(last) = state.last_known(id) {
@@ -1338,6 +1345,34 @@ fn static_sources<'a>(cards: &CardTable, state: &'a GameState) -> std::cell::Ref
         made.epoch = state.epoch;
     }
     state.static_sources.borrow()
+}
+
+/// The colors the copiable values `id` has give it in layer 1 (CR 613.2a, 707.2): what a copy of it copies as its color
+/// (`Query::copiable_colors`).
+pub fn copiable_colors(cards: &CardTable, state: &GameState, id: ObjectId) -> ColorSet {
+    values_colors(cards, state, id, state.obj(id).copy.as_ref(), u32::MAX)
+}
+
+/// The colors `values`, held at `level` of `id`'s copy chain (`GameState::copy_beneath`), give it in layer 1 - `None` its
+/// own: as `object` and `ObjCtx::start` read them, but where a copy effect doesn't copy color (CR 707.9c), the colors of
+/// the values beneath it, as they are now (CR 613.2a, 613.7).
+fn values_colors(cards: &CardTable, state: &GameState, id: ObjectId, values: Option<&Copiable>, level: u32) -> ColorSet {
+    let obj = state.obj(id);
+    if values.is_some_and(Copiable::color_uncopied) {
+        return match state.copy_beneath(id, level) {
+            Some((prior, at)) => values_colors(cards, state, id, prior.as_ref(), at),
+            None => values_colors(cards, state, id, None, 0),
+        };
+    }
+    let card = match values {
+        Some(c) if !obj.own_faces(c) => c.card,
+        _ => cards.face(obj.card, obj.transformed),
+    };
+    let mut chars = initial(cards, card, values);
+    if cards.get(card).is_room() && obj.zone.is(ZoneKind::Battlefield) {
+        doors(cards, card, obj.marks.doors, values, &mut chars);
+    }
+    chars.colors
 }
 
 /// The copiable values of `card` as an object has them before any layer applies: the card's own, or a copy effect's

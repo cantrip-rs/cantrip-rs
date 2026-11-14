@@ -1131,6 +1131,23 @@ impl GameState {
         }
     }
 
+    /// The values beneath the copiable values `id` holds at `level` of its copy chain (`effect_remove`): those the copy
+    /// effect latest in timestamp order before `level` was applied over, with that effect's timestamp, or `None` where no
+    /// copy effect is before it - the values are the ones it entered with, over its own. `level` is a copy effect's
+    /// timestamp for the values it was applied over, and `u32::MAX` for the object's own (`Obj::copy`). A merge between
+    /// keeps the values under it as its own (CR 730.2a), so the copy effect below it is the one that made them. What a copy
+    /// effect that doesn't copy a characteristic leaves it as (CR 707.9c, 613.2a: `Copiable::uncopied_color`).
+    pub fn copy_beneath(&self, id: ObjectId, level: u32) -> Option<(Option<Copiable>, u32)> {
+        self.effects
+            .iter()
+            .filter(|e| e.affected == id && e.timestamp < level)
+            .filter_map(|e| match e.kind {
+                EffectKind::RestoreCopy(prior) => Some((prior, e.timestamp)),
+                _ => None,
+            })
+            .max_by_key(|&(_, t)| t)
+    }
+
     /// The color chosen for `by`'s object (CR 607.2d), to `by`, one of its abilities: only if `by` is linked to the ability
     /// that chose it. A resolving ability asks with `Query::linked`; a static, mana or triggered ability of the object's text
     /// with `Query::linked_to`.

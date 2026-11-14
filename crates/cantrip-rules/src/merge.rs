@@ -365,6 +365,10 @@ impl Query for AsText<'_> {
         self.q.token_chars(card, copy)
     }
 
+    fn copiable_colors(&self, id: ObjectId) -> ColorSet {
+        self.q.copiable_colors(id)
+    }
+
     fn lost_all_abilities(&self, id: ObjectId) -> bool {
         self.q.lost_all_abilities(id)
     }

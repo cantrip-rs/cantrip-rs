@@ -1054,6 +1054,9 @@ impl Copiable {
     pub const STATED_FACES_OF: u16 = 1 << 7;
     /// "Except it's [power]/[toughness]" (`sized`): `stated_pt` is its power and toughness.
     pub const STATED_PT: u16 = 1 << 8;
+    /// "Except it doesn't copy that creature's color" (`uncopied_color`): the copy effect leaves color alone, so its colors
+    /// are those the values it was applied over give (CR 707.9c, 613.2a).
+    pub const STATED_UNCOPIED_COLOR: u16 = 1 << 9;
     /// The bits that are no exception.
     const STATED_FACES: u16 = Copiable::STATED_BACK_UP | Copiable::STATED_OWN_FACES | Copiable::STATED_FACES_OF;
 
@@ -1247,7 +1250,25 @@ impl Copiable {
     /// "Except it's [color]."
     pub fn colored(mut self, colors: ColorSet) -> Copiable {
         self.colors = Some(colors);
+        self.stated &= !Copiable::STATED_UNCOPIED_COLOR;
         self.exclude_cdas(CdaExclusions::COLOR)
+    }
+
+    /// "Except it doesn't copy that creature's color" (CR 707.9c): color is left out of the copying, so the copy's colors are
+    /// whatever the copiable values it is applied over give in layer 1 - the object's own, or those of an earlier copy
+    /// effect, and other ones again once that effect ends (CR 613.2a, 613.7) - not a value fixed as it began. The copied
+    /// object's color indicator and color-defining ability are not copied (CR 707.9d). Vesuvan Doppelganger, the one printed
+    /// card that says it. What a copy of these values copies is the colors they give then (CR 707.9b; the Doppelganger's
+    /// ruling: "will copy Vesuvan Doppelganger's color"), fixed (`Query::copiable_values`).
+    pub fn uncopied_color(mut self) -> Copiable {
+        self.colors = None;
+        self.stated |= Copiable::STATED_UNCOPIED_COLOR;
+        self.exclude_cdas(CdaExclusions::COLOR)
+    }
+
+    /// Whether color is not copied (`uncopied_color`).
+    pub fn color_uncopied(&self) -> bool {
+        self.stated & Copiable::STATED_UNCOPIED_COLOR != 0
     }
 
     /// "Except it's [power]/[toughness]."

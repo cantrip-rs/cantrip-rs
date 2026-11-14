@@ -443,7 +443,17 @@ pub trait Query {
             Some(c) => c,
             None => Copiable::of(self.chars(id).card),
         };
+        // A copy effect that didn't copy color left the colors beneath it (CR 707.9c): a copy of this copies the colors that
+        // gives it now, as a fixed value (CR 707.9b; Vesuvan Doppelganger's ruling).
+        let values = if values.color_uncopied() { values.colored(self.copiable_colors(id)) } else { values };
         values.from_faces(front, obj.transformed)
+    }
+
+    /// The colors an object's copiable values give it in layer 1 (CR 613.2a, 707.2), before any other effect: where a copy
+    /// effect doesn't copy color (`Copiable::uncopied_color`, CR 707.9c), those of the values beneath it. Implemented by the
+    /// rules host.
+    fn copiable_colors(&self, _id: ObjectId) -> ColorSet {
+        panic!("copiable colors require a rules-host query")
     }
 
     /// The cards `player` owns outside the game (CR 400.11, 108.3b) - in a match, their sideboard (CR 100.4, 400.11a) - in

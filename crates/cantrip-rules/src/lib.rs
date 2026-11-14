@@ -266,6 +266,8 @@ mod counters_removed_tests;
 #[cfg(test)]
 mod room_copy_tests;
 #[cfg(test)]
+mod uncopied_color_tests;
+#[cfg(test)]
 mod many_static_sources_tests;
 mod replace;
 mod resolve;
@@ -1980,6 +1982,10 @@ impl Query for Game {
         layers::token_chars(self.cards, card, copy)
     }
 
+    fn copiable_colors(&self, id: ObjectId) -> ColorSet {
+        layers::copiable_colors(self.cards, self.state(), id)
+    }
+
     fn lost_all_abilities(&self, id: ObjectId) -> bool {
         layers::lost_all_abilities(self.cards, &self.state, &self.log, id)
     }
@@ -2069,6 +2075,10 @@ impl Query for Cx<'_> {
             Some(e) if e.object == id => e.mana_value,
             _ => cantrip_api::mana_value_of(&|card| self.card(card), self.state(), id, &self.chars(id)),
         }
+    }
+
+    fn copiable_colors(&self, id: ObjectId) -> ColorSet {
+        layers::copiable_colors(self.g.cards, &self.g.state, id)
     }
 
     fn lost_all_abilities(&self, id: ObjectId) -> bool {

@@ -337,6 +337,10 @@ impl Query for Given<'_> {
         self.q.token_chars(card, copy)
     }
 
+    fn copiable_colors(&self, id: ObjectId) -> ColorSet {
+        self.q.copiable_colors(id)
+    }
+
     fn lost_all_abilities(&self, id: ObjectId) -> bool {
         self.q.lost_all_abilities(id)
     }
@@ -448,6 +452,10 @@ impl Query for Reader<'_> {
 
     fn token_chars(&self, card: CardId, copy: Option<Copiable>) -> Chars {
         layers::token_chars(self.cards, card, copy)
+    }
+
+    fn copiable_colors(&self, id: ObjectId) -> ColorSet {
+        layers::copiable_colors(self.cards, self.state(), id)
     }
 
     fn lost_all_abilities(&self, id: ObjectId) -> bool {
