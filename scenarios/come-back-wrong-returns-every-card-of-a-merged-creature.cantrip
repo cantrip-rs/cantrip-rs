@@ -1,0 +1,45 @@
+# Come Back Wrong destroys a merged permanent (Cubwarden mutated over Ornithopter): both cards are creature cards put into
+# Bot2's graveyard this way, and the effect finds each of them (CR 730.3c), so both return under Bot1's control.
+
+[Bot1 Deck]
+Black Lotus
+Come Back Wrong
+Island x18
+
+[Bot2 Deck]
+Plains
+Black Lotus
+Ornithopter
+Cubwarden
+Plains x16
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Cubwarden.Cast(Ornithopter; Ability: Mutate)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+? Bot2.Battlefield.Cubwarden.Power = 3
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Come Back Wrong.Cast(Target: Cubwarden)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Cubwarden; Ornithopter
+? Bot2.Graveyard = Black Lotus
+
+[T4 Bot2.Upkeep]
+
+[Expect]
+Bot2.Graveyard = Ornithopter; Cubwarden; Black Lotus
+Bot1.Battlefield.Count = 0

@@ -1,0 +1,42 @@
+# Come Back Wrong targets only creatures: an uncrewed Smuggler's Copter is refused (the spell is otherwise castable, with the Lotus's
+# black mana in the pool). Crewed by Llanowar Elves it is a creature, a legal target and destroyed, but the card in the graveyard is
+# an artifact, not a creature card (CR 701.8a, 301.7), so it is not returned and no sacrifice is set up. The Elves stay tapped.
+
+[Bot1 Deck]
+Forest
+Llanowar Elves
+Smuggler's Copter
+Black Lotus
+Mox Pearl
+Mox Jet
+Come Back Wrong
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Smuggler's Copter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Hand.Come Back Wrong.Cast(Target: Smuggler's Copter)
+Bot1.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Come Back Wrong.Cast(Target: Smuggler's Copter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Come Back Wrong; Smuggler's Copter; Black Lotus
+[T4 Bot2.Upkeep]
+
+[Expect]
+Bot1.Graveyard = Come Back Wrong; Smuggler's Copter; Black Lotus
+Bot1.Battlefield = Forest; Llanowar Elves; Mox Jet; Mox Pearl

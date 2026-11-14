@@ -1,0 +1,31 @@
+# Come Back Wrong may target a creature of the caster's own: Bot1's Llanowar Elves is destroyed and returns under Bot1's control
+# (CR 701.8a), a new object that is summoning sick, so it cannot tap for mana the turn it returns. It is sacrificed at Bot1's end
+# step and Bot1's graveyard holds it.
+
+[Bot1 Deck]
+Forest
+Llanowar Elves
+Black Lotus
+Come Back Wrong
+Forest x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Come Back Wrong.Cast(Target: Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Forest; Llanowar Elves
+! Bot1.Battlefield.Llanowar Elves.Activate
+[T4 Bot2.Upkeep]
+
+[Expect]
+Bot1.Graveyard = Llanowar Elves; Come Back Wrong; Black Lotus
+Bot1.Battlefield = Forest
