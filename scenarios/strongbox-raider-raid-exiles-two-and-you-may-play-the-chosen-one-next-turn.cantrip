@@ -1,0 +1,52 @@
+# Strongbox Raider, a 5/2: "Raid -- When this creature enters, if you attacked this turn, exile the top two cards of your library. Choose one of them. Until the end of your
+# next turn, you may play that card." Turn 3: Bot1 attacks with its Memnite, then casts the Raider in the second main phase; the Lightning Bolt and the Mountain on top are
+# exiled, only Bot1's library is touched, and Bot1 chooses the Bolt. On turn 5 the Bolt is cast from exile, but the Mountain, which was not chosen, may not be played.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Memnite
+Strongbox Raider
+Mountain
+Mountain
+Mountain
+Island
+Lightning Bolt
+Mountain
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Strongbox Raider.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+? Exile = Lightning Bolt; Mountain
+? Bot2.Library.Count = 12
+[T5 Bot1.Main1]
+! Bot1.Exile.Mountain.Play
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+
+[Expect]
+Bot2.Life = 16
+Exile = Mountain
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Battlefield = Mox Ruby; Memnite; Mountain; Strongbox Raider
