@@ -1,0 +1,53 @@
+# Loot, Exuberant Explorer {4}{G}{G}, {T}: it counts lands, and the limit is "less than or equal to": with two Forests Bot1 can't choose
+# Spinner of Souls (mana value 3), one over the limit, and can choose Grizzly Bears (mana value 2), exactly at it. The four Moxen are
+# not lands and do not raise the limit (six mana sources, two lands), nor does Bot2's Island, a land Bot1 does not control. The rest go
+# to the bottom, Spinner among them.
+
+[Bot1 Deck]
+Loot, Exuberant Explorer
+Black Lotus
+Forest
+Forest
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Spinner of Souls
+Grizzly Bears
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Loot, Exuberant Explorer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Loot, Exuberant Explorer.Activate
+! Bot1.Choose(Spinner of Souls)
+Bot1.Choose(Grizzly Bears)
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Forest; Forest; Mox Emerald; Mox Ruby; Mox Jet; Mox Pearl; Loot, Exuberant Explorer; Grizzly Bears
+Bot1.Looked = Spinner of Souls; Grizzly Bears; Island; Island; Island; Island
+Bot1.Library.Count = 12
+Bot2.Battlefield = Island

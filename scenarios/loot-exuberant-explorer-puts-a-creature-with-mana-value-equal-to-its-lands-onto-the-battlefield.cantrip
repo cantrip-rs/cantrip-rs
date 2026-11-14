@@ -1,0 +1,57 @@
+# Loot, Exuberant Explorer {4}{G}{G}, {T}: "Look at the top six cards of your library. You may reveal a creature card with mana value
+# less than or equal to the number of lands you control from among them and put it onto the battlefield. Put the rest on the bottom
+# in a random order." Bot1 controls exactly three Forests (and three Moxen, which are not lands): Hill Giant (mana value 4) and Sol
+# Ring (not a creature) can't be chosen, Spinner of Souls (mana value exactly 3) can and enters. The other five go to the bottom.
+
+[Bot1 Deck]
+Loot, Exuberant Explorer
+Black Lotus
+Forest
+Forest
+Forest
+Mox Emerald
+Mox Ruby
+Mox Jet
+Hill Giant
+Sol Ring
+Spinner of Souls
+Savannah Lions
+Island
+Island
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Loot, Exuberant Explorer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Forest#3.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Loot, Exuberant Explorer.Activate
+! Bot1.Choose(Hill Giant)
+! Bot1.Choose(Sol Ring)
+! Bot1.Choose(Spinner of Souls; Savannah Lions)
+Bot1.Choose(Spinner of Souls)
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Forest; Forest; Forest; Mox Emerald; Mox Ruby; Mox Jet; Loot, Exuberant Explorer; Spinner of Souls
+Bot1.Battlefield.Loot, Exuberant Explorer.Tapped = true
+Bot1.Battlefield.Spinner of Souls.Tapped = false
+Bot1.Looked = Hill Giant; Sol Ring; Spinner of Souls; Savannah Lions; Island; Island
+Bot1.Library.Count = 13

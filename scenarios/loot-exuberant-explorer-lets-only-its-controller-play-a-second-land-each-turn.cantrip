@@ -1,0 +1,34 @@
+# Loot, Exuberant Explorer: "You may play an additional land on each of your turns" (CR 305.2). Bot1 plays two Forests in its turn
+# and is refused a third; Bot2, whose lands the Explorer does not help, is refused a second Island on its own turn, and then plays
+# its one land per turn only.
+
+[Bot1 Deck]
+Black Lotus
+Loot, Exuberant Explorer
+Forest
+Forest
+Forest
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Loot, Exuberant Explorer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Hand.Forest.Play
+! Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+! Bot2.Hand.Island.Play
+
+[Expect]
+Turn = 2
+Bot1.LandsPlayed = 2
+Bot1.Battlefield = Forest; Forest; Loot, Exuberant Explorer
+Bot2.LandsPlayed = 1
+Bot2.Battlefield = Island
