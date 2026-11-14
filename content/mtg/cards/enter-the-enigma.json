@@ -1,0 +1,6 @@
+{
+  "name": "Enter the Enigma",
+  "manaCost": "{U}",
+  "type": "Sorcery",
+  "oracleText": "Target creature can't be blocked this turn.\nDraw a card."
+}
