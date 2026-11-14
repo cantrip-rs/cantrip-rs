@@ -1,0 +1,36 @@
+# Cloudblazer ({3}{W}{U}, 2/2 flyer): "When this creature enters, you gain 2 life and draw two cards." Cast on turn nine from
+# three Plains and two Islands; the trigger resolves to 22 life and two more cards in hand (seven opening + four draws - five lands - Cloudblazer + two = 7). Bot2 is untouched (negative control).
+
+[Bot1 Deck]
+Plains x3
+Island x2
+Cloudblazer
+Plains x12
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Cloudblazer.Cast
+[T9 Bot1.Main2]
+? Stack.Count = 0
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 20
+Bot1.Hand.Count = 7
+Bot1.Battlefield.Cloudblazer.Keywords = Flying

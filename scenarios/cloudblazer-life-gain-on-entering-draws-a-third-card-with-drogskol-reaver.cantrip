@@ -1,0 +1,44 @@
+# Cloudblazer: "When this creature enters, you gain 2 life and draw two cards" is one life-gain event (CR 119.9), so with Bot1's
+# Drogskol Reaver ("Whenever you gain life, draw a card") out it triggers the Reaver once: two cards from Cloudblazer and one more
+# from the Reaver. Bot1 casts both on turn 1 off four Black Lotuses; the one card left in hand becomes four.
+
+[Bot1 Deck]
+Black Lotus x4
+Drogskol Reaver
+Cloudblazer
+Island
+Island x30
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Ability: Sacrifice; Color: White)
+Bot1.Battlefield.Black Lotus#1.Activate(Ability: Sacrifice; Color: Blue)
+Bot1.Battlefield.Black Lotus#1.Activate(Ability: Sacrifice; Color: Blue)
+Bot1.Hand.Drogskol Reaver.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Ability: Sacrifice; Color: White)
+Bot1.Hand.Cloudblazer.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+? Bot1.Hand.Count = 3
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 22
+Bot1.Hand.Count = 4
+Bot1.Library.Count = 27
+Bot2.Life = 20
