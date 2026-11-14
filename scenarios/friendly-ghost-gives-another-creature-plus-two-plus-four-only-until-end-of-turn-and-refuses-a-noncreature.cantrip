@@ -1,0 +1,39 @@
+# Friendly Ghost: "Flying. When this creature enters, target creature gets +2/+4 until end of turn." Cast on turn 3 (a Black Lotus
+# for {W}{W}{W} and a Mox Pearl pay the {3}{W}), its trigger targets Bot2's Ornithopter, which becomes a 2/6 (a noncreature artifact
+# is refused as a target); the Ghost itself stays a 2/4 flier. At the next turn the Ornithopter is a 0/2 again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Friendly Ghost
+Island x17
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Friendly Ghost.Cast
+Bot1.Pass
+! Bot1.Target(Bot1.Battlefield.Mox Pearl)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 2
+? Bot2.Battlefield.Ornithopter.Toughness = 6
+? Bot1.Battlefield.Friendly Ghost.Power = 2
+? Bot1.Battlefield.Friendly Ghost.Toughness = 4
+? Bot1.Battlefield.Friendly Ghost.Keywords = Flying
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Stack.Count = 0

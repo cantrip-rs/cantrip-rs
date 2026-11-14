@@ -1,0 +1,29 @@
+# Friendly Ghost: "When this creature enters, target creature gets +2/+4 until end of turn." The creature may be the Ghost itself
+# (it is a creature as its trigger goes on the stack, and the only one, so the target is chosen for Bot1): a 4/8 flier this turn, a 2/4 again on the next.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Friendly Ghost
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Friendly Ghost.Cast
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Friendly Ghost.Power = 4
+? Bot1.Battlefield.Friendly Ghost.Toughness = 8
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Friendly Ghost.Power = 2
+Bot1.Battlefield.Friendly Ghost.Toughness = 4
+Stack.Count = 0
