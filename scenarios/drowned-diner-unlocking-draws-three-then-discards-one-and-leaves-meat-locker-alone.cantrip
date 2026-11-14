@@ -1,0 +1,49 @@
+# Drowned Diner, "When you unlock this door, draw three cards, then discard a card" (CR 121.1, 701.9): Meat Locker was cast on
+# turn 1 (no creature to target, so its ability never goes on the stack), and on turn 3 Bot1 pays Drowned Diner's {3}{U}{U} unlock cost
+# (a special action, CR 116.2m) with Black Lotus
+# and a Mox Sapphire. Only the right door's ability triggers (Meat Locker's "when you unlock this door" is not asked again): the
+# Ornithopter Bot2 controls is not stunned, and Bot1's hand grows by three then shrinks by one.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Sapphire
+Black Lotus
+Meat Locker // Drowned Diner
+Island x16
+
+[Bot2 Deck]
+Ornithopter x4
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire#1.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Meat Locker // Drowned Diner.Cast(Ability: Meat Locker)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Meat Locker.Activate(Ability: right door)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Counters.Stun = (absent)
+
+[Expect]
+# 2 in hand after turn 1, +1 turn-3 draw, -1 Mox cast, +3 -1 from the door.
+Bot1.Hand.Count = 4
+Bot1.Graveyard.Count = 2
+Bot1.Battlefield.Meat Locker // Drowned Diner.Doors.Count = 2
