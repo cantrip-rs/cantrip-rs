@@ -1,0 +1,8 @@
+{
+  "name": "Garna, Bloodfist of Keld",
+  "manaCost": "{1}{B}{R}{R}",
+  "type": "Legendary Creature — Human Berserker",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Whenever another creature you control dies, draw a card if it was attacking. Otherwise, Garna deals 1 damage to each opponent."
+}

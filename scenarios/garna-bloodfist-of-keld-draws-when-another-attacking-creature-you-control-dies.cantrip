@@ -1,0 +1,46 @@
+# Garna, Bloodfist of Keld: "Whenever another creature you control dies, draw a card if it was attacking." Bot1's Memnite
+# attacks and trades with Bot2's blocking Savannah Lions: Bot1 draws a card, once - the Lions dying is Bot2's creature and sets
+# nothing off, and Bot2 takes no damage (life stays 20), so the other branch did not run.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Garna, Bloodfist of Keld
+Memnite
+Plains x16
+
+[Bot2 Deck]
+Mox Pearl
+Savannah Lions
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Garna, Bloodfist of Keld.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Savannah Lions > Memnite)
+[T3 Bot1.Main2]
+? Stack =
+
+[Expect]
+Bot1.Library.Count = 11
+Bot1.Graveyard = Memnite; Black Lotus
+Bot2.Graveyard = Savannah Lions
+Bot2.Life = 20
