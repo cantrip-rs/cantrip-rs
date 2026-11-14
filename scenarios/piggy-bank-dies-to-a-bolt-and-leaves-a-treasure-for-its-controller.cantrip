@@ -1,0 +1,41 @@
+# Piggy Bank, "When this creature dies, create a Treasure token" (CR 700.4, 603.6c): Bot1 casts it on turn 1 and on turn 3 Bot2's
+# Lightning Bolt kills it (3 damage on a 3/2). It is in the graveyard and its controller Bot1, not the Bolt's caster Bot2, has the
+# Treasure, untapped.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Piggy Bank
+Island x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Piggy Bank.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Piggy Bank)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Piggy Bank
+? Bot2.Battlefield = Mountain
+
+[Expect]
+Bot1.Graveyard = Piggy Bank
+Bot2.Graveyard = Lightning Bolt
+Bot1.Battlefield = Mox Ruby; Mox Jet; Mox Pearl; Mox Sapphire; Treasure Token

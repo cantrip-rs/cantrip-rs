@@ -1,0 +1,8 @@
+{
+  "name": "Piggy Bank",
+  "manaCost": "{1}{R}",
+  "type": "Artifact Creature — Boar Toy",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature dies, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")"
+}
