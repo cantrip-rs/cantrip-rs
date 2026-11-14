@@ -1,0 +1,42 @@
+# "Whenever equipped creature deals combat damage to a player": combat damage to a creature is not to a player (CR 510.1b).
+# Bot1's Memnite, equipped on turn 3 (2/2 with the Pick), is blocked by Bot2's Ornithopter and kills it, and Bot2's life is
+# untouched: no Treasure is created.
+
+[Bot1 Deck]
+Plains
+Mox Ruby
+Memnite
+Goldvein Pick
+Plains x12
+
+[Bot2 Deck]
+Island
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Goldvein Pick.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Goldvein Pick.Activate(Ability: Equip; Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Ornithopter > Bot1.Battlefield.Memnite)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Count = 4
+Bot1.Battlefield.Treasure Token = (absent)
