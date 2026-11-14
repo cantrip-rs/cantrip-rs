@@ -1,0 +1,33 @@
+# Leyline of Transformation: "If this card is in your opening hand, you may begin the game with it on the battlefield" (CR 103.6a). Bot1 accepts and, as it
+# enters, chooses Merfolk (CR 614.12a); creatures Bot1 controls and creature cards it owns off the battlefield are Merfolk besides their other types (CR 613.1d,
+# 205.1b): the Llanowar Elves it casts on turn 1 and the Doomed Traveler still in its hand. Bot2's own Doomed Traveler is not Bot1's, and keeps its types alone.
+
+[Bot1 Deck]
+Leyline of Transformation
+Llanowar Elves
+Doomed Traveler
+Forest
+Island x3
+Island x15
+
+[Bot2 Deck]
+Doomed Traveler
+Island x20
+
+[Actions]
+Bot1.Accept
+Bot1.Modes(Merfolk)
+? Bot1.Battlefield.Leyline of Transformation.ChosenSubtype = Merfolk
+? Bot1.Hand.Llanowar Elves.Subtypes = Druid; Elf; Merfolk
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Subtypes = Druid; Elf; Merfolk
+Bot1.Hand.Doomed Traveler.Subtypes = Human; Merfolk; Soldier
+Bot2.Hand.Doomed Traveler.Subtypes = Human; Soldier
+Bot1.Battlefield.Leyline of Transformation.Subtypes = (absent)

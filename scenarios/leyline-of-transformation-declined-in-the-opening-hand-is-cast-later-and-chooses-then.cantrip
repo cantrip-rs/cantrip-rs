@@ -1,0 +1,33 @@
+# Leyline of Transformation declined in the opening hand (CR 103.6a) stays in Bot1's hand and does nothing there: the Llanowar Elves in its hand are no Merfolk.
+# Cast on turn 3 (Black Lotus and Mox Sapphire pay {2}{U}{U}) it chooses a type as it enters, Goblin this time: the Elves in hand become a Goblin besides their
+# types, and the choice is made once, as it enters, not again.
+
+[Bot1 Deck]
+Leyline of Transformation
+Llanowar Elves
+Black Lotus
+Mox Sapphire
+Island x4
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Decline
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+? Bot1.Hand.Llanowar Elves.Subtypes = Druid; Elf
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Leyline of Transformation.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Goblin)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Leyline of Transformation.ChosenSubtype = Goblin
+
+[Expect]
+Bot1.Hand.Llanowar Elves.Subtypes = Druid; Elf; Goblin
