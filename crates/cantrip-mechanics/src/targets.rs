@@ -1756,6 +1756,11 @@ pub mod filters {
     pub fn creature_or_enchantment(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
         q.chars(id).is(CardType::Creature) || q.chars(id).is(CardType::Enchantment)
     }
+    /// "Another creature or enchantment" (CR 701.21a): a creature or enchantment other than the source of the cost. Popular
+    /// Egotist and Diversion Specialist sacrifice one.
+    pub fn another_creature_or_enchantment(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
+        id != asker.source && creature_or_enchantment(q, asker, id)
+    }
     /// Any permanent: Fear of Isolation returns one. Never a discard cost's filter: a filter there names a characteristic of the
     /// cards (CR 701.9c), and "discard a card" is `discard_cards`.
     pub fn any(_: &dyn Query, _: &Asker, _: ObjectId) -> bool {
