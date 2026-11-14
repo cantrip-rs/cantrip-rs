@@ -1,0 +1,51 @@
+# Burnished Hart {3}: "{3}, Sacrifice this creature: Search your library for up to two basic land cards, put them onto the
+# battlefield tapped, then shuffle." With every Mox tapped for the Hart, the ability is refused (short of {3}). On turn 3 three
+# Moxen pay it: the Hart is sacrificed, only basic lands may be found (not a Tropical Island) and no more than two, and the
+# Forest and the Island enter tapped.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Burnished Hart
+Plains
+Plains
+Plains
+Plains
+Tropical Island
+Forest
+Island
+Forest
+Plains x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Burnished Hart.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Burnished Hart.Activate(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Burnished Hart.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Tropical Island)
+! Bot1.Search(Forest#1; Forest#2; Island)
+Bot1.Search(Forest#1; Island)
+? Bot1.Battlefield.Forest.Tapped = true
+? Bot1.Battlefield.Island.Tapped = true
+
+[Expect]
+Bot1.Graveyard = Burnished Hart
+Bot1.Battlefield = Forest; Island; Mox Emerald; Mox Jet; Mox Ruby

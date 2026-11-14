@@ -1,0 +1,8 @@
+{
+  "name": "Burnished Hart",
+  "manaCost": "{3}",
+  "type": "Artifact Creature — Elk",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{3}, Sacrifice this creature: Search your library for up to two basic land cards, put them onto the battlefield tapped, then shuffle."
+}
