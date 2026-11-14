@@ -1,0 +1,45 @@
+# Ghostly Dancers: "return an enchantment card from your graveyard": one card, chosen by Bot1 as the ability resolves, not every
+# enchantment card there. Thought Scour mills Oblivion Ring and Banishing Light into Bot1's graveyard on turn 1, then Ghostly
+# Dancers enters; with no Room to unlock the first option is the one done: Bot1 picks Banishing Light, which goes to hand while
+# Oblivion Ring stays in the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Plains
+Mox Sapphire
+Thought Scour
+Ghostly Dancers
+Island
+Oblivion Ring
+Banishing Light
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Thought Scour; Banishing Light; Oblivion Ring
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Ghostly Dancers.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Banishing Light)
+[T1 Bot1.Main1]
+? Stack.Count = 0
+
+[Expect]
+Bot1.Hand = Island; Island; Banishing Light
+Bot1.Graveyard = Black Lotus; Thought Scour; Oblivion Ring

@@ -1,0 +1,66 @@
+# Ghostly Dancers: "return an enchantment card from your graveyard to your hand or unlock a locked door of a Room you control".
+# Bot1's Thought Scour mills Bot2's Oblivion Ring on turn 1, and Bot2 casts Grand Entryway on turn 2, its Elegant Rotunda door
+# still locked: an enchantment card in an opponent's graveyard and a Room with a locked door an opponent controls. Bot1 has no
+# enchantment card in its own graveyard and no Room. On turn 5 Ghostly Dancers enters with neither option possible (CR 608.2d), so
+# nothing happens: Oblivion Ring stays in Bot2's graveyard and Bot2's Elegant Rotunda stays locked.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Thought Scour
+Ghostly Dancers
+Island x14
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Grand Entryway // Elegant Rotunda
+Island x4
+Oblivion Ring
+Island x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Island; Oblivion Ring
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grand Entryway // Elegant Rotunda.Cast(Ability: Grand Entryway)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Ghostly Dancers.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot2.Graveyard = Island; Oblivion Ring
+Bot2.Hand = Island; Island; Island; Island; Island; Island
+Bot2.Battlefield.Grand Entryway.Doors = Grand Entryway
+Bot1.Battlefield = Ghostly Dancers; Island; Island; Mox Jet; Mox Pearl; Mox Sapphire; Plains

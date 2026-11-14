@@ -1,0 +1,98 @@
+# Ghostly Dancers, Eerie: "Whenever an enchantment you control enters and whenever you fully unlock a Room, create a 3/1 white
+# Spirit creature token with flying." Turn 1 Bot1 casts Dancers: no enchantment card in its graveyard and no Room, so neither
+# option of its enters ability can be done and nothing happens. Bot2's Unholy Annex // Ritual Chamber entering on turn 2 and fully
+# unlocked on turn 4 (an enchantment and a Room Bot1 does not control) make nothing. Bot1's own Annex entering on turn 3 makes one
+# Spirit (the Dancers' own entering made none: it was not on the battlefield to see it, and it is no enchantment), and unlocking
+# Ritual Chamber on turn 5 (CR 709.5i) makes another, besides the Demon of the door itself.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Plains
+Mox Jet
+Mox Jet
+Sol Ring
+Ghostly Dancers
+Unholy Annex // Ritual Chamber
+Island x12
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Unholy Annex // Ritual Chamber
+Swamp
+Swamp
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Ghostly Dancers.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Count = 6
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 6
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spirit Token.Power = 3
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp#1.Activate
+Bot2.Battlefield.Swamp#2.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Unholy Annex.Activate(Ability: right door)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Unholy Annex.Activate(Ability: right door)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Demon Token; Ghostly Dancers; Mox Jet; Mox Jet; Mox Pearl; Plains; Sol Ring; Spirit Token; Spirit Token; Unholy Annex // Ritual Chamber

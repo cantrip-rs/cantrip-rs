@@ -1,0 +1,65 @@
+# Ghostly Dancers: "return an enchantment card from your graveyard to your hand or unlock a locked door", the same turn 5 as ghostly-dancers-offers-both-options-and-unlocking-the-last-door-makes-a-demon-and-an-eerie-spirit,
+# but Bot1 picks the first option: the enchantment card in the graveyard returns to hand (a Room card, no enchantment entering) and the
+# Room on the battlefield keeps Ritual Chamber locked: no Demon, no Spirit.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Plains
+Sol Ring
+Unholy Annex // Ritual Chamber
+Disenchant
+Unholy Annex // Ritual Chamber
+Ghostly Dancers
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Ghostly Dancers.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Ghostly Dancers; Mox Jet; Mox Pearl; Plains; Sol Ring; Unholy Annex
+Bot1.Battlefield.Unholy Annex.Doors = Unholy Annex
+Bot1.Hand = Island; Unholy Annex // Ritual Chamber
+Bot1.Graveyard = Disenchant; Black Lotus

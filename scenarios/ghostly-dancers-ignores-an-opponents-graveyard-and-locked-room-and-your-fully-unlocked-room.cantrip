@@ -1,0 +1,94 @@
+# Ghostly Dancers: "return an enchantment card from your graveyard to your hand or unlock a locked door of a Room you control".
+# Neither option reaches past its owner's words. Bot1's Thought Scour mills Bot2's Oblivion Ring on turn 1, and Bot2 casts Grand
+# Entryway on turn 2, its Elegant Rotunda door still locked: an enchantment card in an opponent's graveyard and a Room with a locked
+# door an opponent controls. Bot1's own Grand Entryway // Elegant Rotunda is fully unlocked on turn 3, a Room you control with no
+# locked door, and a second Thought Scour mills Bot1's Banishing Light. On turn 5 Ghostly Dancers enters: the only option that can
+# be done (CR 608.2d) is returning Banishing Light, so it is done without asking which option (`! Bot1.Modes`): a fully unlocked
+# Room of yours and a Room of an opponent's are not "a locked door of a Room you control". Oblivion Ring stays in Bot2's graveyard
+# and Bot2's Elegant Rotunda stays locked. (ghostly-dancers-does-nothing-with-only-an-opponents-enchantment-card-and-locked-room
+# shows the opponent's enchantment card is no option either.)
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Thought Scour
+Grand Entryway // Elegant Rotunda
+Ghostly Dancers
+Thought Scour
+Island
+Banishing Light
+Island x12
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Grand Entryway // Elegant Rotunda
+Island x4
+Oblivion Ring
+Island x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Island; Oblivion Ring
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grand Entryway // Elegant Rotunda.Cast(Ability: Grand Entryway)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grand Entryway // Elegant Rotunda.Cast(Ability: Grand Entryway)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Grand Entryway.Activate(Ability: right door)
+Bot1.Target()
+? Bot1.Battlefield.Grand Entryway // Elegant Rotunda.Doors = Grand Entryway; Elegant Rotunda
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Thought Scour; Island; Banishing Light; Thought Scour
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Ghostly Dancers.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.Modes
+[T5 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Island; Banishing Light
+Bot2.Graveyard = Island; Oblivion Ring
+Bot2.Hand = Island; Island; Island; Island; Island; Island
+Bot2.Battlefield.Grand Entryway.Doors = Grand Entryway
+Bot1.Battlefield.Grand Entryway // Elegant Rotunda.Doors = Grand Entryway; Elegant Rotunda

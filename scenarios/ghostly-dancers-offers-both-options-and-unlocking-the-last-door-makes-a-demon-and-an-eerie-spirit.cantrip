@@ -1,0 +1,70 @@
+# Ghostly Dancers: "return an enchantment card from your graveyard to your hand or unlock a locked door of a Room you control".
+# On turn 5 Bot1 has an enchantment card in the graveyard (the first Unholy Annex // Ritual Chamber, destroyed by Disenchant) and a
+# Room with a locked door (the second, cast as Unholy Annex), so both options are offered and Bot1 picks the door: Ritual Chamber is
+# unlocked without paying (CR 709.5f), which triggers its "When you unlock this door, create a 6/6 black Demon creature token with
+# flying" and, the Room being fully unlocked (CR 709.5i), Dancers' eerie: a 3/1 white Spirit creature token with flying. The
+# enchantment card stays in the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Plains
+Sol Ring
+Unholy Annex // Ritual Chamber
+Disenchant
+Unholy Annex // Ritual Chamber
+Ghostly Dancers
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Ghostly Dancers.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Demon Token; Ghostly Dancers; Mox Jet; Mox Pearl; Plains; Sol Ring; Spirit Token; Unholy Annex // Ritual Chamber
+Bot1.Battlefield.Unholy Annex // Ritual Chamber.Doors = Unholy Annex; Ritual Chamber
+Bot1.Battlefield.Demon Token.Power = 6
+Bot1.Battlefield.Spirit Token.Power = 3
+Bot1.Battlefield.Spirit Token.Toughness = 1
+Bot1.Battlefield.Spirit Token.Keywords = Flying
+Bot1.Graveyard = Disenchant; Unholy Annex // Ritual Chamber; Black Lotus
