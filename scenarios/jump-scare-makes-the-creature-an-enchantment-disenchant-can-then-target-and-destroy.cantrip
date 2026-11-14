@@ -1,0 +1,46 @@
+# Jump Scare: "... becomes a Horror enchantment creature in addition to its other types." On turn 3 Bot1 casts it on its Llanowar
+# Elves. While Jump Scare is on the stack the Elves are not yet an enchantment, so Bot2's Disenchant ("Destroy target artifact or
+# enchantment") can't target them; once it has resolved they are one (CR 205.1b, 613.1d), and the Disenchant destroys them.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Llanowar Elves
+Jump Scare
+Island x16
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Disenchant
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jump Scare.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+! Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Llanowar Elves.Types = Creature; Enchantment
+Bot1.Pass
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Emerald; Mox Pearl
+Bot1.Graveyard = Llanowar Elves; Jump Scare
+Bot2.Graveyard = Disenchant
