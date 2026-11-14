@@ -1,20 +1,13 @@
 use cantrip_api::*;
 use cantrip_mechanics::triggers::YOU_DRAW_A_CARD;
-use cantrip_mechanics::{effects, power_up, targets};
+use cantrip_mechanics::{effects, lands, power_up, statics, targets};
 use cantrip_oracle as oracle;
-
-/// "If you control another Hero" (CR 603.4): a permanent of its controller's other than this one with the Hero subtype, read
-/// through the words of this card's text (CR 612); checked as the ability would trigger and again as it resolves.
-fn control_another_hero(q: &dyn Query, asker: &Asker) -> bool {
-    let hero = q.words(asker.source).subtype(Subtype::Hero);
-    q.permanents_of(asker.controller).into_iter().any(|id| id != asker.source && q.chars(id).has_subtype(hero))
-}
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(YOU_DRAW_A_CARD, effects::damage_first_target::<1>, "Whenever you draw a card, if you control another Hero, Human Torch deals 1 damage to target opponent.")
             .targets(&[targets::OPPONENT])
-            .condition(control_another_hero),
+            .condition(statics::you_control_another::<{ lands::sub(Subtype::Hero) }>),
         power_up::ability(
             cost("{6}{R}"),
             effects::three_plus_one_counters_on_this,

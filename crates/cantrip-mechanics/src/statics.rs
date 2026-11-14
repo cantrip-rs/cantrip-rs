@@ -367,6 +367,18 @@ pub fn itself_while_you_control_a<const SUBTYPE: u16>(view: &dyn LayerQuery, sou
     state.battlefield().iter().any(|&id| state.obj(id).controller == you && view.chars(id).has_subtype(word))
 }
 
+/// "If you control another [subtype]" / "as long as you control another [subtype]" (CR 603.4, 604.1) as a condition asked of the
+/// ability's controller, `SUBTYPE` a `Subtype` as `u16` (`lands::sub`): another permanent than the source, under that player's
+/// control, with that creature type as the layers have it now, read through the words of the source's text (CR 612.2); an
+/// opponent's does not count. As an intervening "if" (`AbilityDef::condition`) it is asked as the ability would trigger and again as
+/// it resolves. Dwynen's Elite (Elf), Human Torch (Hero) and Thranduil's Company (Elf) print it.
+pub fn you_control_another<const SUBTYPE: u16>(q: &dyn Query, asker: &Asker) -> bool {
+    let Some(word) = Subtype::ALL.into_iter().find(|&s| s as u16 == SUBTYPE).map(|printed| q.words(asker.source).subtype(printed)) else {
+        return false;
+    };
+    q.permanents_of(asker.controller).into_iter().any(|id| id != asker.source && q.chars(id).has_subtype(word))
+}
+
 /// "You may cast this spell as though it had flash if you control a [subtype]" (CR 307.5, 702.8) as `CardDef::flash_if`,
 /// `SUBTYPE` a `Subtype` as `u16` (`lands::sub`): asked of the player who would cast it as the casting begins, and not again
 /// (the rulings). A [subtype] is a permanent with that creature type, read through the words of the card's text (CR 612); an
