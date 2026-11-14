@@ -1,0 +1,31 @@
+# Bottomless Pool, cast as the left door: "When you unlock this door, return up to one target creature to its owner's hand." (CR 709.5h: a
+# door cast as the Room is unlocked as it enters). Bot1's own Ornithopter is a legal target (not only an opponent's) and goes back to its hand;
+# the Room keeps only Bottomless Pool unlocked, with Locker Room still locked.
+
+[Bot1 Deck]
+Mox Sapphire
+Ornithopter
+Bottomless Pool // Locker Room
+Island x4
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bottomless Pool // Locker Room.Cast(Ability: Bottomless Pool)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bottomless Pool.Doors = Bottomless Pool
+[Expect]
+Bot1.Hand = Island; Island; Island; Island; Ornithopter
+Bot1.Battlefield = Bottomless Pool; Mox Sapphire
