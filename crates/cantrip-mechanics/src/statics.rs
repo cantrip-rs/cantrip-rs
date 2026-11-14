@@ -331,6 +331,13 @@ pub fn other_of_subtype_you_control<const SUBTYPE: u16>(q: &dyn LayerQuery, sour
     affected != source && your_of_subtype::<SUBTYPE>(q, source, affected, so_far)
 }
 
+/// "Other [subtype] creatures you control" (CR 613.1f, layer 6, 205.3m): `other_of_subtype_you_control` limited to permanents the
+/// earlier layers made creatures, the subtype read through the words of the source's text (CR 612.2). Kobold Overlord, Kobold
+/// Taskmaster and Kobold Drill Sergeant (Kobolds) and Dwynen, Gilt-Leaf Daen and Elvish Archdruid (Elves) print it.
+pub fn other_creatures_of_subtype_you_control<const SUBTYPE: u16>(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
+    so_far.is(CardType::Creature) && other_of_subtype_you_control::<SUBTYPE>(q, source, affected, so_far)
+}
+
 /// "As long as you control another [subtype], this creature has ..." (CR 604.1, 613.1f) as `StaticDef::affects`, `SUBTYPE` a
 /// `Subtype` as `u16` (`lands::sub`): only the source itself, and only while its controller controls another permanent with
 /// that creature type, as the earlier layers made it, the type read through the words of the source's text (CR 612.2). Its own
