@@ -1,0 +1,46 @@
+# Paranormal Analyst, "Whenever you manifest dread, put a card you put into your graveyard this way into your hand" (CR 701.62b):
+# Bot1 casts Twist Reality for its manifest dread mode. Of Llanowar Elves and Lightning Bolt, the Elves goes face down as a 2/2 and the Bolt into
+# the graveyard (CR 701.62a), and the Analyst's trigger puts that Bolt into Bot1's hand. Twist Reality, which was not put into the graveyard this way,
+# stays in the graveyard.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Paranormal Analyst
+Twist Reality
+Island x2
+Llanowar Elves
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Paranormal Analyst.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Twist Reality.Cast
+Bot1.Modes(Manifest dread)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Llanowar Elves | Lightning Bolt)
+
+[Expect]
+Bot1.Hand = Island; Island; Lightning Bolt
+Bot1.Graveyard = Twist Reality
+Bot1.Battlefield..FaceDown = true
+Stack.Count = 0

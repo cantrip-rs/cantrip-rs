@@ -1,0 +1,48 @@
+# Paranormal Analyst's "whenever you manifest dread" is about its controller only (CR 603.2): Bot2 manifests dread with its own Twist Reality, putting
+# a Lightning Bolt into its graveyard, and Bot1's Analyst does not trigger - nothing goes on the stack and Bot1's hand is unchanged.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Paranormal Analyst
+Island x4
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Twist Reality
+Island x3
+Island
+Llanowar Elves
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Paranormal Analyst.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Twist Reality.Cast
+Bot2.Modes(Manifest dread)
+Bot2.Pass
+Bot1.Pass
+Bot2.Arrange(Llanowar Elves | Lightning Bolt)
+? Stack.Count = 0
+
+[Expect]
+Bot2.Graveyard = Twist Reality; Lightning Bolt
+Bot1.Hand.Count = 4
+Stack.Count = 0

@@ -1,0 +1,67 @@
+# Paranormal Analyst, "put a card you put into your graveyard this way into your hand": with Grafdigger's Cage out, manifest dread puts both
+# looked-at cards into the graveyard (the Cage keeps the creature card from entering, CR 701.40f). In response to the Analyst's ability,
+# Bot1's Scavenging Ooze exiles the Lightning Bolt: it is a new object (CR 400.7) and was not put there this way, so the only card the
+# ability can put into the hand is Llanowar Elves, and it does, with nothing to choose (the ruling).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Mox Emerald
+Grafdigger's Cage
+Paranormal Analyst
+Scavenging Ooze
+Island
+Twist Reality
+Llanowar Elves
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Grafdigger's Cage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Paranormal Analyst.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Scavenging Ooze.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Twist Reality.Cast
+Bot1.Modes(Manifest dread)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Lightning Bolt | Llanowar Elves)
+? Stack.Count = 1
+? Bot1.Graveyard = Twist Reality; Lightning Bolt; Llanowar Elves; Black Lotus
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Scavenging Ooze.Activate(Bot1.Graveyard.Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Twist Reality; Llanowar Elves; Black Lotus
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Gone.Lightning Bolt)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Llanowar Elves
+Bot1.Exile.Lightning Bolt.Colors = Red
+Bot1.Graveyard = Twist Reality; Black Lotus
+Stack.Count = 0

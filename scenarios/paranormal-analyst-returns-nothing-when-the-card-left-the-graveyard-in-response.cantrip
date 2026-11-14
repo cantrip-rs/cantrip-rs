@@ -1,0 +1,59 @@
+# Paranormal Analyst, "put a card you put into your graveyard this way into your hand": a card that has left the graveyard before the ability
+# resolves is a new object and can't be put into the hand (CR 400.7; the ruling). Bot1's Twist Reality manifests Llanowar Elves and puts
+# Lightning Bolt into the graveyard; with the Analyst's ability on the stack, Bot1 exiles its own graveyard with Tormod's Crypt, so the ability
+# finds nothing: the Bolt stays in exile (with the rest of the graveyard, the sacrificed Crypt included) and Bot1's hand keeps only the Island it drew.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Paranormal Analyst
+Twist Reality
+Tormod's Crypt
+Island
+Llanowar Elves
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Paranormal Analyst.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Twist Reality.Cast
+Bot1.Modes(Manifest dread)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Llanowar Elves | Lightning Bolt)
+? Stack.Count = 1
+? Bot1.Graveyard = Twist Reality; Lightning Bolt
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Island
+Bot1.Exile.Lightning Bolt.Colors = Red
+Bot1.Graveyard =
+Bot1.Battlefield..FaceDown = true
+Stack.Count = 0

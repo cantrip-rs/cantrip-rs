@@ -1,0 +1,44 @@
+# Paranormal Analyst with both looked-at cards put into the graveyard (CR 701.62a, 701.40f): Grafdigger's Cage keeps a card from entering from the library
+# (its ruling: manifesting from a library is impossible), so neither Llanowar Elves nor Lightning Bolt is manifested and both go to the graveyard. The
+# Analyst's ability lets Bot1 choose either of them - "a card you put into your graveyard this way" - and it takes the Bolt; the Elves stay in the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Grafdigger's Cage
+Paranormal Analyst
+Twist Reality
+Llanowar Elves
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Grafdigger's Cage.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Paranormal Analyst.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Twist Reality.Cast
+Bot1.Modes(Manifest dread)
+Bot1.Pass
+Bot1.Arrange(Lightning Bolt | Llanowar Elves)
+Bot1.Choose(Lightning Bolt)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Lightning Bolt
+Bot1.Graveyard = Twist Reality; Llanowar Elves; Black Lotus
+Bot1.Library.Count = 10
+Stack.Count = 0
