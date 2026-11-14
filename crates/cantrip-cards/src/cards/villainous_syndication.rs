@@ -1,13 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::{effects, targets, triggers};
+use cantrip_mechanics::{effects, lands, targets, triggers, untapped_subtype_you_control};
 use cantrip_oracle as oracle;
-
-/// "Tap an untapped Villain you control" (CR 602.2b): any untapped permanent of its controller's with the creature type, a
-/// creature that came under their control this turn included (CR 302.6 limits only its own {T} abilities). The word is read
-/// through this enchantment's text (CR 612).
-fn untapped_villain_you_control(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
-    q.controller(id) == asker.controller && !q.obj(id).tapped && q.chars(id).has_subtype(q.words(asker.source).subtype(Subtype::Villain))
-}
 
 /// "Mill a card. Put a plan counter on this enchantment." (CR 701.13, 122.6) The counter goes only on this enchantment
 /// while it is still there (CR 400.7).
@@ -28,7 +21,7 @@ fn reanimate(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 pub static CARD: CardDef = CardDef {
     abilities: &[
         ability(
-            tap_untapped(1, untapped_villain_you_control),
+            tap_untapped(1, untapped_subtype_you_control::<{ lands::sub(Subtype::Villain) }>),
             mill_and_plan,
             "Tap an untapped Villain you control: Mill a card. Put a plan counter on this enchantment. Activate only as a sorcery.",
         )

@@ -517,6 +517,15 @@ pub fn untapped_artifact_you_control(q: &dyn Query, asker: &Asker, id: ObjectId)
     q.controller(id) == asker.controller && !q.obj(id).tapped && q.chars(id).is(CardType::Artifact)
 }
 
+/// "Tap three untapped [creature type]s you control" as the permanents a cost taps (CR 602.2b, 118.3): any untapped permanent of its
+/// controller's with the creature type `SUBTYPE` (`lands::sub`) as the layers made it, a changeling included, the source itself among them
+/// if it has the type, and one that came under their control this turn too (CR 302.6 limits only a creature's own {T} ability). The type
+/// is read through the words of the text of the object that asks (CR 612.2). High Perfect Morcant and Lathril, Blade of the Elves (Elves),
+/// Q, Your Illustrious Host (Faeries) and Villainous Syndication (Villains) print it.
+pub fn untapped_subtype_you_control<const SUBTYPE: u16>(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
+    q.controller(id) == asker.controller && !q.obj(id).tapped && q.chars(id).has_subtype(lands::word(q, asker.source, SUBTYPE))
+}
+
 /// Delirium (an ability word, CR 207.2c): four or more card types among the cards in `player`'s graveyard. Fear of Missing Out and
 /// Unholy Heat read it; a static ability asks the same of a `LayerQuery` with `statics::itself_with_delirium`.
 pub fn delirium(q: &dyn Query, player: PlayerId) -> bool {
