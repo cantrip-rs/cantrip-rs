@@ -1,0 +1,12 @@
+{
+  "name": "Treetop Snarespinner",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Spider",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Reach (This creature can block creatures with flying.)\nDeathtouch (Any amount of damage this deals to a creature is enough to destroy it.)\n{2}{G}: Put a +1/+1 counter on target creature you control. Activate only as a sorcery.",
+  "keywords": [
+    "Reach",
+    "Deathtouch"
+  ]
+}

@@ -1,0 +1,65 @@
+# Treetop Snarespinner (CR 602.5d, 122.1a): "{2}{G}: Put a +1/+1 counter on target creature you control. Activate only as a sorcery." On turn 3 Bot1 casts it
+# (Black Lotus and Mox Jet), then pays {2}{G} with Mox Emerald, Mox Ruby and Mox Pearl at sorcery speed: Bot2's Memnite is refused as the target, and
+# Bot1's Memnite becomes a 2/2.
+
+[Bot1 Deck]
+Black Lotus
+Memnite
+Treetop Snarespinner
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Treetop Snarespinner.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Treetop Snarespinner.Activate(Bot2.Battlefield.Memnite)
+Bot1.Battlefield.Treetop Snarespinner.Activate(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Treetop Snarespinner.Power = 1
+Bot1.Battlefield.Treetop Snarespinner.Toughness = 4
+Bot1.Battlefield.Treetop Snarespinner.Keywords = Deathtouch; Reach
+Bot2.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Memnite.Toughness = 1
