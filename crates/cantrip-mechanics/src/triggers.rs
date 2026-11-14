@@ -1597,6 +1597,24 @@ pub fn this_dies(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired
     }
 }
 
+/// "Whenever a creature dealt damage by this [creature] this turn dies" (CR 603.2, 603.10a): a creature that was dealt damage
+/// (more than 0) this turn by the ability's source dies, the creature its subject. Sengir Vampire, Axelrod Gunnarson and
+/// Predator Ooze print it.
+pub fn creature_dealt_damage_by_this_dies(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    let Event::ZoneChange { old, from, to, .. } = event else { return None };
+    if from.is(ZoneKind::Battlefield)
+        && to.is(ZoneKind::Graveyard)
+        && q.chars(*old).is(CardType::Creature)
+        && q.history().this_turn().iter().any(|r| {
+            matches!(r.event, Event::Damage { source, target: Target::Object(target), amount, .. }
+                if source == me.source && target == *old && amount > 0)
+        })
+    {
+        return Fired::about(Target::Object(*old));
+    }
+    None
+}
+
 /// `this_dies` for an ability about the card now in the graveyard, a new object (CR 400.7), its subject: "return it to its
 /// owner's hand", "put him on the bottom of his owner's library". Rancor and The Spot, Living Portal print it.
 pub fn this_dies_about_the_card(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
@@ -2693,6 +2711,7 @@ pub const NONCREATURE_SPELL_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST
 pub const NONCREATURE_SPELL_YOU_CAST_ABOUT_IT: Trigger = when_asked(EventMask::SPELL_CAST, noncreature_spell_you_cast_about_it);
 pub const YOU_CAST_A_SPELL_FROM_EXILE: Trigger = when_asked(EventMask::SPELL_CAST, you_cast_a_spell_from_exile);
 pub const THIS_DIES: Trigger = when(EventMask::ZONE_CHANGE, this_dies);
+pub const CREATURE_DEALT_DAMAGE_BY_THIS_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_dealt_damage_by_this_dies);
 pub const THIS_ENTERS_OR_DIES: Trigger = when(EventMask::ZONE_CHANGE, this_enters_or_dies);
 pub const ATTACHED_CREATURE_DIES: Trigger = when(EventMask::ZONE_CHANGE, attached_creature_dies);
 pub const ATTACHED_CREATURE_DIES_ABOUT_IT: Trigger = when(EventMask::ZONE_CHANGE, attached_creature_dies_about_it);
