@@ -1,0 +1,35 @@
+# Electroduplicate (CR 608.2b): Bot1 casts it targeting the Raiders and, in response, Lightning Bolts its own Raiders. The only
+# target is illegal as Electroduplicate resolves, so it does nothing: no token is made.
+[Bot1 Deck]
+Black Lotus x3
+Mons's Goblin Raiders
+Electroduplicate
+Lightning Bolt
+Mountain x2
+Mountain x10
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Mons's Goblin Raiders.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Electroduplicate.Cast(Bot1.Battlefield.Mons's Goblin Raiders)
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Mons's Goblin Raiders)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 0
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Graveyard = Electroduplicate; Mons's Goblin Raiders; Lightning Bolt; Black Lotus; Black Lotus; Black Lotus

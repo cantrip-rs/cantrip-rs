@@ -1,0 +1,42 @@
+# Electroduplicate's flashback {2}{R}{R} (CR 702.34a, 707.9a): after the spell from hand, Bot1 flashes it back targeting the token
+# it made. The new token copies the first token, so it has the same haste and sacrifice ability as copiable values (not only an
+# effect's haste): both tokens attack and are sacrificed at the end step. Electroduplicate is exiled, not put back in the graveyard.
+[Bot1 Deck]
+Black Lotus x3
+Mons's Goblin Raiders
+Electroduplicate
+Mountain x2
+Mountain x10
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Mons's Goblin Raiders.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Electroduplicate.Cast(Bot1.Battlefield.Mons's Goblin Raiders)
+Bot1.Pass
+Bot2.Pass
+Bot1.Graveyard.Electroduplicate.Cast(Bot1.Battlefield.Mons's Goblin Raiders#2; Ability: Flashback)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 1
+? Bot1.Battlefield.Mons's Goblin Raiders#3.Token = true
+? Bot1.Battlefield.Mons's Goblin Raiders#3.Keywords = Haste
+Bot1.Attack(Mons's Goblin Raiders#2; Mons's Goblin Raiders#3 > Bot2)
+[T1 Bot1.Main2]
+? Bot2.Life = 18
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 18
+Exile.Count = 1
+Bot1.Battlefield = Mons's Goblin Raiders
