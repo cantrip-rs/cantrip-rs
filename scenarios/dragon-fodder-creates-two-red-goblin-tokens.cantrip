@@ -1,0 +1,34 @@
+# Dragon Fodder ({1}{R} sorcery): create two 1/1 red Goblin creature tokens, no target asked (CR 115.1), the pool empty after
+# paying exactly {1}{R}. Bot2 gets none.
+
+[Bot1 Deck]
+Mox Ruby x2
+Dragon Fodder
+Mountain x17
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Dragon Fodder.Cast
+? Bot1.Mana =
+! Bot1.Target
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 4
+Bot1.Battlefield.Goblin Token#1.Power = 1
+Bot1.Battlefield.Goblin Token#1.Toughness = 1
+Bot1.Battlefield.Goblin Token#1.Token = true
+Bot1.Battlefield.Goblin Token#1.Colors = Red
+Bot1.Battlefield.Goblin Token#1.Subtypes = Goblin
+Bot1.Battlefield.Goblin Token#2.Token = true
+Bot2.Battlefield.Count = 0
+Bot1.Graveyard = Dragon Fodder
