@@ -1,0 +1,67 @@
+# One permanent spell of each type, so an enchantment (Sylvan Library) and a planeswalker (Wrenn and Six) are both cast from the graveyard in
+# the same turn, but the instant that Bot2's Hymn to Tourach discarded (Lightning Bolt) is not a permanent spell and stays put.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Muldrotha, the Gravetide
+Thought Scour
+Forest
+Sylvan Library
+Wrenn and Six
+Lightning Bolt
+Mox Ruby
+Forest x12
+
+[Bot2 Deck]
+Mox Jet
+Swamp
+Hymn to Tourach
+Island x21
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Muldrotha, the Gravetide.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Hymn to Tourach.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Graveyard.Sylvan Library.Cast(Ability: cast an enchantment spell)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Wrenn and Six.Cast(Ability: cast a planeswalker spell)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Graveyard.Lightning Bolt.Cast
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt; Thought Scour; Black Lotus
+Bot1.Battlefield.Count = 8

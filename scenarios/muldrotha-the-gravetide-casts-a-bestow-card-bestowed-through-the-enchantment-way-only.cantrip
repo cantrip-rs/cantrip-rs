@@ -1,0 +1,57 @@
+# Muldrotha's ruling (2020-11-10): "if you cast a creature spell from your graveyard, you can cast a card with bestow as an
+# enchantment spell", and a permission lets the card be cast for an alternative cost of its own (CR 118.9, 601.3). Bestowed, the
+# spell is an Aura enchantment spell and no creature spell (CR 702.103b), so Springheart Nantuko, milled by Thought Scour, may be
+# cast bestowed through the enchantment way and not through the creature way. It enchants Llanowar Elves, a 2/2.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Muldrotha, the Gravetide
+Thought Scour
+Forest
+Springheart Nantuko
+Forest
+Llanowar Elves
+Forest x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Muldrotha, the Gravetide.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forest.Activate
+! Bot1.Graveyard.Springheart Nantuko.Cast(Bot1.Battlefield.Llanowar Elves; Ability: Bestow (During each of your turns, you may cast a creature spell)
+Bot1.Graveyard.Springheart Nantuko.Cast(Bot1.Battlefield.Llanowar Elves; Ability: Bestow (During each of your turns, you may cast an enchantment spell)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Springheart Nantuko.AttachedTo = Llanowar Elves
+Bot1.Battlefield.Springheart Nantuko.Types = Enchantment
+Bot1.Battlefield.Llanowar Elves.Power = 2
+Bot1.Battlefield.Llanowar Elves.Toughness = 2

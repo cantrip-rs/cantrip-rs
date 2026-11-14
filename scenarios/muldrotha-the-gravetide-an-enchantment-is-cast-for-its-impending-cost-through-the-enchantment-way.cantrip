@@ -1,0 +1,62 @@
+# A way Muldrotha gives is a permission, so a card cast by it may be cast for an alternative cost of its own instead of its mana
+# cost (the ruling, CR 118.9, 601.3). Thought Scour mills Overlord of the Hauntwoods and Elvish Mystic. On turn 3 Bot1 casts the
+# Mystic through the creature way, so the Overlord (an enchantment creature) is left only the enchantment way, and casts it through
+# that for its impending cost {1}{G}{G} (CR 702.176a): it enters with four time counters, not a creature, and makes its Everywhere
+# land token.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Muldrotha, the Gravetide
+Thought Scour
+Forest
+Overlord of the Hauntwoods
+Elvish Mystic
+Forest
+Forest
+Forest x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Muldrotha, the Gravetide.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Elvish Mystic.Cast(Ability: cast a creature spell)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Graveyard.Overlord of the Hauntwoods.Cast(Ability: Impending)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Thought Scour; Black Lotus
+Bot1.Battlefield.Overlord of the Hauntwoods.Counters.Time = 4
+Bot1.Battlefield.Overlord of the Hauntwoods.Types = Enchantment
+Bot1.Battlefield.Everywhere.Tapped = true

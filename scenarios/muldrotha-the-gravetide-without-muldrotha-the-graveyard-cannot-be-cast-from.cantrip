@@ -1,0 +1,51 @@
+# Muldrotha grants its permission only while it is on the battlefield. Bot2 exiles it with Swords to Plowshares on turn 2, and on turn 3
+# neither the creature nor the land in Bot1's graveyard (Elvish Mystic, Forest) can be used any more.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Muldrotha, the Gravetide
+Thought Scour
+Forest
+Elvish Mystic
+Forest
+Mox Ruby
+Llanowar Elves
+Forest x12
+
+[Bot2 Deck]
+Plains
+Swords to Plowshares
+Island x21
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Muldrotha, the Gravetide.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Muldrotha, the Gravetide)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Graveyard.Elvish Mystic.Cast
+! Bot1.Graveyard.Forest.Play
+
+[Expect]
+Bot1.Graveyard = Thought Scour; Forest; Elvish Mystic; Black Lotus

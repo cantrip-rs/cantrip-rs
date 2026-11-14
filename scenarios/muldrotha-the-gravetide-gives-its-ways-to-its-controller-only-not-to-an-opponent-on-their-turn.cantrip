@@ -1,0 +1,50 @@
+# Muldrotha's ways are its controller's ("During each of your turns, you may ... from your graveyard"): on its own turn 2 Bot2
+# sacrifices its Black Lotus and may not cast it back from its graveyard by Bot1's Muldrotha, though it is Bot2's turn and the
+# Lotus is an artifact card in its owner's graveyard. On turn 3 Bot1 casts its own sacrificed Black Lotus by the artifact way.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Muldrotha, the Gravetide
+Thought Scour
+Forest
+Forest x15
+
+[Bot2 Deck]
+Black Lotus
+Island x23
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Muldrotha, the Gravetide.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+? Bot2.Graveyard = Black Lotus
+! Bot2.Graveyard.Black Lotus.Cast(Ability: cast an artifact spell)
+[T3 Bot1.Main1]
+Bot1.Graveyard.Black Lotus.Cast(Ability: cast an artifact spell)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Black Lotus
+Bot1.Battlefield.Black Lotus.Tapped = false

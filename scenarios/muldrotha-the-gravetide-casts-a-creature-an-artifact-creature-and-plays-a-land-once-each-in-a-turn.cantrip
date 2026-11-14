@@ -1,0 +1,68 @@
+# Muldrotha, the Gravetide: "During each of your turns, you may play a land and cast a permanent spell of each permanent type from your
+# graveyard. (If a card has multiple permanent types, choose one as you play it.)" Bot1 casts it on turn 1 with a Thought Scour
+# (milling Elvish Mystic and Ornithopter and drawing a Forest), and Bot2's Hymn to Tourach discards the Forest. On turn 3 Bot1 casts Elvish
+# Mystic as a creature, is refused a second creature spell by that way (Ornithopter as a creature), casts it as an artifact instead
+# (a way of its own), and plays the Forest, each from the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Muldrotha, the Gravetide
+Thought Scour
+Forest
+Elvish Mystic
+Ornithopter
+Forest
+Mox Ruby
+Forest x12
+
+[Bot2 Deck]
+Mox Jet
+Swamp
+Hymn to Tourach
+Island x21
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Muldrotha, the Gravetide.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Hymn to Tourach.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Graveyard.Elvish Mystic.Cast(Ability: cast a creature spell)
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Graveyard.Ornithopter.Cast(Ability: cast a creature spell)
+Bot1.Graveyard.Ornithopter.Cast(Ability: cast an artifact spell)
+Bot1.Pass
+Bot2.Pass
+Bot1.Graveyard.Forest.Play
+
+[Expect]
+Bot1.Graveyard = Thought Scour; Black Lotus
+Bot1.Battlefield.Count = 9

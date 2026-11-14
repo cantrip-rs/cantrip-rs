@@ -1,0 +1,62 @@
+# Exploration (cast from the graveyard through the enchantment way) gives a second land play on turn 3. Bot1 plays a Forest from the
+# graveyard through Muldrotha's land way and is refused a second one from the graveyard though the land drop is there (the way is used up),
+# and then plays the Forest from its hand, which no way gave.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Muldrotha, the Gravetide
+Thought Scour
+Forest
+Exploration
+Forest
+Forest
+Forest
+Forest x12
+
+[Bot2 Deck]
+Mox Jet
+Swamp
+Hymn to Tourach
+Island x21
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Muldrotha, the Gravetide.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Hymn to Tourach.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Graveyard.Exploration.Cast(Ability: cast an enchantment spell)
+Bot1.Pass
+Bot2.Pass
+Bot1.Graveyard.Forest.Play
+! Bot1.Graveyard.Forest.Play
+Bot1.Hand.Forest.Play
+
+[Expect]
+Bot1.Battlefield.Count = 8
