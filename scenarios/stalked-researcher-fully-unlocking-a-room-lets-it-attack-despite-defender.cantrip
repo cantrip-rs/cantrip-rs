@@ -1,0 +1,63 @@
+# Stalked Researcher, "Eerie - ... whenever you fully unlock a Room, this creature can attack this turn as though it didn't have
+# defender": Unholy Annex cast on turn 1 gives it that permission for turn 1 only (it is summoning sick then). On turn 3 Bot1 unlocks
+# Ritual Chamber, the Room's other door (CR 709.5h), and the Researcher attacks for 3 (Bot2 20 -> 17) while the 6/6 Demon the unlock
+# made, summoning sick, stays home.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Jet
+Stalked Researcher
+Unholy Annex // Ritual Chamber
+Swamp
+Swamp x19
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stalked Researcher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Unholy Annex.Activate(Ability: right door)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Stalked Researcher > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17

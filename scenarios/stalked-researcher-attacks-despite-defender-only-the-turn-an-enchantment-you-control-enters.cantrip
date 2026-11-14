@@ -1,0 +1,58 @@
+# Stalked Researcher (3/3 defender), "Eerie - Whenever an enchantment you control enters ..., this creature can attack this turn as though
+# it didn't have defender": on turn 3 nothing has entered, so only a Memnite (the positive control, which makes the declaration happen)
+# may attack and Stalked Researcher may not; on turn 5 Bot1's Flood enters, the trigger resolves and it attacks with Memnite
+# (Bot2 20 -> 19 -> 15); on turn 7 the permission has ended with turn 5, so it may not attack again.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Stalked Researcher
+Flood
+Memnite
+Island
+Island x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stalked Researcher.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Attack(Stalked Researcher > Bot2)
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flood.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Stalked Researcher; Memnite > Bot2)
+[T5 Bot1.Main2]
+? Bot2.Life = 15
+[T7 Bot1.Main1]
+! Bot1.Attack(Stalked Researcher > Bot2)
+Bot1.Attack(Memnite > Bot2)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
