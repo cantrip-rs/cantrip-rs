@@ -1,0 +1,35 @@
+# Neither additional cost of Betrayer's Bargain can be paid (CR 601.2b, 118.3): Bot1 has three Moxen - {1}{R} plus {2} is four mana -
+# and no creature or enchantment to sacrifice (an artifact is neither), so it is not offered though Bot2 has an Ornithopter to
+# target. The positive controls are betrayers-bargain-sacrifices-an-enchantment-and-pays-only-two-then-exiles-your-own-creature and
+# betrayers-bargain-pays-two-instead-of-sacrificing-five-damage-leaves-a-crab-and-a-bolt-exiles-it: the same spell cast with a
+# sacrifice or with four mana.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Betrayer's Bargain
+Island x16
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Betrayer's Bargain.Cast(Mana: short)
+? Bot1.Mana = {W}{B}{R}
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Graveyard.Count = 0
+Bot2.Battlefield = Ornithopter

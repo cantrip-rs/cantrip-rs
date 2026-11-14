@@ -1,0 +1,37 @@
+# "As an additional cost to cast this spell, sacrifice a creature or enchantment or pay {2}" (CR 601.2b, 118.8). Bot1 sacrifices
+# its Fastbond (an enchantment) and so pays only {1}{R} (Mox Ruby and Mox Emerald), and aims "5 damage to target creature" at its own
+# Ornithopter, which would die and is exiled instead (CR 614.1a): it never reaches the graveyard. A Mox (an artifact, not a creature
+# or an enchantment) is not a legal sacrifice.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Fastbond
+Ornithopter
+Betrayer's Bargain
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Fastbond.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Betrayer's Bargain.Cast(Ornithopter)
+Bot1.Modes(Sacrifice a creature or enchantment)
+! Bot1.Choose(Mox Ruby)
+Bot1.Choose(Fastbond)
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Ornithopter
+Bot1.Graveyard = Betrayer's Bargain; Fastbond
+Bot1.Battlefield = Mox Ruby; Mox Emerald
+Bot1.Mana =
