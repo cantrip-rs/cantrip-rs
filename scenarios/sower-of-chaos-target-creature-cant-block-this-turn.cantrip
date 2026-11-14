@@ -1,0 +1,56 @@
+# Sower of Chaos, a 4/3: "{2}{R}: Target creature can't block this turn." Turn 3: Bot1 pays {2}{R} (three Mox Rubies) so Bot2's Ornithopter
+# can't block, and the attacking Sower of Chaos is unblocked. Turn 5: no activation, and the Ornithopter blocks it (the effect ended).
+
+[Bot1 Deck]
+Mox Ruby x4
+Sower of Chaos
+Mountain x2
+Mountain x10
+
+[Bot2 Deck]
+Ornithopter
+Island x23
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Sower of Chaos.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Sower of Chaos.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Sower of Chaos > Bot2)
+! Bot2.Block(Ornithopter > Sower of Chaos)
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T5 Bot1.Main1]
+Bot1.Attack(Sower of Chaos > Bot2)
+Bot2.Block(Ornithopter > Sower of Chaos)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot2.Battlefield.Ornithopter = (absent)

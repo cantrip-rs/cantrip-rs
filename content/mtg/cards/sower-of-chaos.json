@@ -1,0 +1,8 @@
+{
+  "name": "Sower of Chaos",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Devil",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "{2}{R}: Target creature can't block this turn."
+}
