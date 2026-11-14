@@ -687,12 +687,21 @@ pub fn power_and_toughness_are_subtype_you_control<const SUBTYPE: u16>(q: &dyn L
 /// overlap, including split cards and Rooms with multiple names, so the count is the true largest set whatever the order of the
 /// lands. Emil, Vastlands Roamer, Astute Terraformer, Branching Timeline, Cloak and Phaser and Deep Space Scan print it.
 pub fn differently_named_lands(q: &dyn Query, player: PlayerId) -> usize {
+    differently_named_lands_matching(q, player, &|_| true)
+}
+
+/// "The number of [lands of some kind] with different names you control" (CR 201.2a-b): `differently_named_lands` among the
+/// lands `matching` accepts, judged on what each is now. Maze's End counts its Gates with it.
+pub fn differently_named_lands_matching(q: &dyn Query, player: PlayerId, matching: &dyn Fn(&Chars) -> bool) -> usize {
     let names: Vec<Vec<&'static str>> = q
         .state()
         .battlefield()
         .iter()
         .copied()
-        .filter(|&id| q.obj(id).controller == player && q.chars(id).is(CardType::Land))
+        .filter(|&id| q.obj(id).controller == player && {
+            let chars = q.chars(id);
+            chars.is(CardType::Land) && matching(&chars)
+        })
         .map(|id| crate::library::object_names(q, id))
         .collect();
     crate::select::largest_name_set(&names).len()
