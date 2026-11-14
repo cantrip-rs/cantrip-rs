@@ -1,0 +1,39 @@
+# Tetravite's own ability forbids Auras; the same Aura may enchant Tetravus (CR 303.4).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Tetravus
+Mox Sapphire
+Flight
+Flight
+Island x30
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Tetravus.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Decline
+Bot1.PayCost(X: 1)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Flight.Cast(Bot1.Battlefield.Tetravite Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Flight.Colors = Blue
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flight.Cast(Bot1.Battlefield.Tetravus)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Flight.AttachedTo = Tetravus
+Bot1.Battlefield.Tetravite Token.Keywords = Flying

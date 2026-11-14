@@ -1,0 +1,42 @@
+# A copy of Tetravus's creation ability makes tokens with the same linked ability (CR 607.2c, 707.10).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Tetravus
+Return the Favor
+Island x30
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Tetravus.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Decline
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Return the Favor.Cast
+Bot1.Modes(Copy target)
+Bot1.Target(Stack.Tetravus)
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost(X: 1)
+Bot1.PayCost(X: 1)
+[T3 Bot1.Draw]
+? Bot1.Battlefield = Tetravus; Tetravite Token; Tetravite Token
+? Bot1.Battlefield.Tetravus.Counters.PlusOnePlusOne = 1
+[T5 Bot1.Upkeep]
+Bot1.PayCost
+Bot1.Choose(Tetravite Token#1; Tetravite Token#2)
+Bot1.Decline
+[T5 Bot1.Draw]
+[Expect]
+Bot1.Battlefield.Tetravus.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Tetravite Token = (absent)

@@ -1,0 +1,50 @@
+# Grilka gives Tetravus an unrelated token-making ability. Its Treasures are not linked to Tetravus's printed trigger (CR 607.1, 607.5).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Tetravus
+Island x30
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Grilka, Widowed Warrior
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Tetravus.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Decline
+Bot1.PayCost(X: 1)
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Grilka, Widowed Warrior.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Target(Bot1.Battlefield.Tetravus)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Tetravus > Bot1)
+[T4 Bot2.Main2]
+? Bot2.Battlefield = Grilka, Widowed Warrior; Tetravus; Treasure Token; Treasure Token; Treasure Token
+[T5 Bot1.Upkeep]
+Bot1.PayCost
+! Bot1.Choose(Treasure Token#1)
+Bot1.Choose(Tetravite Token)
+Bot1.Decline
+[T5 Bot1.Draw]
+[Expect]
+Bot1.Battlefield.Tetravus.Counters.PlusOnePlusOne = 3
+Bot2.Battlefield = Grilka, Widowed Warrior; Treasure Token; Treasure Token; Treasure Token

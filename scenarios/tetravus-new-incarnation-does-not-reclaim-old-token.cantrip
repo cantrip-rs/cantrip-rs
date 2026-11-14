@@ -1,0 +1,36 @@
+# A blinked Tetravus is a new object and cannot reclaim a token created by the old incarnation (CR 400.7, 607.2c).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Tetravus
+Daydream
+Island x30
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Tetravus.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Decline
+Bot1.PayCost(X: 1)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Daydream.Cast(Bot1.Battlefield.Tetravus)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Upkeep]
+Bot1.PayCost
+Bot1.Decline
+[T5 Bot1.Draw]
+[Expect]
+Bot1.Battlefield.Tetravus.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Tetravite Token.Power = 1

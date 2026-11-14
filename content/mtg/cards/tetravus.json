@@ -1,0 +1,9 @@
+{
+  "name": "Tetravus",
+  "manaCost": "{6}",
+  "type": "Artifact Creature — Construct",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying\nThis creature enters with three +1/+1 counters on it.\nAt the beginning of your upkeep, you may remove any number of +1/+1 counters from this creature. If you do, create that many 1/1 colorless Tetravite artifact creature tokens. They each have flying and \"This token can't be enchanted.\"\nAt the beginning of your upkeep, you may exile any number of tokens created with this creature. If you do, put that many +1/+1 counters on this creature.",
+  "keywords": ["Flying"]
+}

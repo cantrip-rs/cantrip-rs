@@ -1,0 +1,77 @@
+# Likeness Looter copies Tetravus twice. Its second acquisition cannot reclaim a token from its first (CR 607.5).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Pearl
+Likeness Looter
+Tetravus
+Ashnod's Transmogrant
+Black Lotus
+Black Lotus
+Black Lotus
+Dig Site Inventory
+Island x25
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Likeness Looter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ashnod's Transmogrant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ashnod's Transmogrant.Activate(Bot1.Battlefield.Likeness Looter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Likeness Looter.Activate(Ability: Draw a card)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Tetravus)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Likeness Looter.Activate(Ability: becomes a copy; X: 6)
+Bot1.Target(Bot1.Graveyard.Tetravus)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Upkeep]
+Bot1.Decline
+Bot1.PayCost(X: 1)
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+[T7 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Tetravus.Activate(Ability: becomes a copy; X: 6)
+Bot1.Target(Bot1.Graveyard.Tetravus)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dig Site Inventory.Cast(Bot1.Battlefield.Tetravus)
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Upkeep]
+Bot1.Triggers(exile any; remove any)
+Bot1.PayCost(X: 1)
+Bot1.PayCost
+! Bot1.Choose(Tetravite Token#1)
+Bot1.Choose(Tetravite Token#2)
+[T9 Bot1.Draw]
+[Expect]
+Bot1.Battlefield.Tetravus.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Tetravite Token.Power = 1

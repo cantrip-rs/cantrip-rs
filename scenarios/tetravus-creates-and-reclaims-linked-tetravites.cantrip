@@ -1,0 +1,34 @@
+# At upkeep Tetravus exchanges two counters for two Tetravites, then reclaims them on a later upkeep (CR 607.2c, 118.12).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Tetravus
+Island x30
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Tetravus.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Decline
+Bot1.PayCost(X: 2)
+[T3 Bot1.Draw]
+? Bot1.Battlefield.Tetravus.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Tetravus.Keywords = Flying
+? Bot1.Battlefield.Tetravite Token#1.Toughness = 1
+? Bot1.Battlefield.Tetravite Token#1.Tapped = false
+? Bot1.Battlefield = Tetravus; Tetravite Token; Tetravite Token
+[T5 Bot1.Upkeep]
+Bot1.PayCost
+Bot1.Choose(Tetravite Token#1; Tetravite Token#2)
+Bot1.Decline
+[T5 Bot1.Draw]
+[Expect]
+Bot1.Battlefield.Tetravus.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield = Tetravus
