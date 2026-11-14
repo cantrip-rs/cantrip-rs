@@ -1,0 +1,32 @@
+# Diamond Mare choosing green: "Whenever you cast a spell of the chosen color" is about spells Bot1 casts. Bot2's green
+# Llanowar Elves, cast on Bot2's turn, gains Bot1 nothing (20 after the Mare) and Bot2 nothing (20): Bot2 controls no Mare.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Diamond Mare
+Swamp x17
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Diamond Mare.Cast
+Bot1.Colors(Green)
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Llanowar Elves.Power = 1
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
