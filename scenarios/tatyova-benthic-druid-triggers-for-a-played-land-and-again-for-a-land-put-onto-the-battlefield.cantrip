@@ -1,0 +1,47 @@
+# Tatyova, Benthic Druid: landfall triggers whenever a land enters under its controller, however it gets there (CR 603.2, 207.2c),
+# not only when one is played. Bot1 plays Evolving Wilds (a land, one trigger: 21 life and a card), then sacrifices it to put a
+# Forest from its library onto the battlefield, which is a second land entering and a second trigger (22 life and another card).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Tatyova, Benthic Druid
+Evolving Wilds
+Island
+Island
+Forest x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tatyova, Benthic Druid.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+Bot1.Hand.Evolving Wilds.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Evolving Wilds.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Forest)
+? Bot1.Battlefield.Forest.Tapped = true
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 22
+Bot1.Hand.Count = 4
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Graveyard = Evolving Wilds; Black Lotus

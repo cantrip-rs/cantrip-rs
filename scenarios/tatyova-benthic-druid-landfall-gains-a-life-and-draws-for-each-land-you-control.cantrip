@@ -1,0 +1,59 @@
+# Tatyova, Benthic Druid: "Landfall - Whenever a land you control enters, you gain 1 life and draw a card." Bot1's Forest played
+# after Tatyova gains a life and draws a card, and so does the Island played on turn 3. A Mox Ruby entering (no land) and Bot2's
+# Island (a land another player controls) do not, and neither does Tatyova's own entering, since no land entered.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Tatyova, Benthic Druid
+Forest
+Island
+Mox Ruby
+Swamp x4
+Mountain x4
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tatyova, Benthic Druid.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+? Bot1.Hand.Count = 3
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+? Bot1.Hand.Count = 2
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+? Bot1.Hand.Count = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 21
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 3
+Bot1.Hand.Island.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+? Bot1.Hand.Count = 3
+
+[Expect]
+Bot1.Life = 22
+Bot1.Hand.Count = 3
+Bot2.Life = 20
