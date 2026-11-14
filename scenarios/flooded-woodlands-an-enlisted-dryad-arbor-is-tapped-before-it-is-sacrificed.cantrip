@@ -1,0 +1,46 @@
+# Under Bot2's Flooded Woodlands, Bot1 attacks with Llanowar Elves (green: a land to sacrifice) and Coalition Skyknight
+# (white: free), Skyknight enlisting Dryad Arbor, Bot1's only land (CR 702.154a). The Arbor pays both: tapped for the
+# enlist, then sacrificed for the Elves (CR 508.1j, 601.2h). Sacrificed first it could not be tapped, and the payment
+# would be taken back with nothing asked, so the sacrifice waits for the tap and no order is asked: Bot2 takes 1 and 3.
+
+[Bot1 Deck]
+Dryad Arbor
+Black Lotus
+Black Lotus
+Llanowar Elves
+Coalition Skyknight
+Island x10
+
+[Bot2 Deck]
+Island
+Black Lotus
+Mox Jet
+Flooded Woodlands
+Island x10
+
+[Actions]
+Bot1.Hand.Dryad Arbor.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Hand.Coalition Skyknight.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Flooded Woodlands.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Llanowar Elves; Coalition Skyknight)
+Bot1.Choose(Dryad Arbor)
+Bot1.Choose(Dryad Arbor)
+? Combat.Attackers = Llanowar Elves > Bot2; Coalition Skyknight > Bot2
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot2.Life = 16
+Bot1.Graveyard = Dryad Arbor; Black Lotus; Black Lotus
+Bot1.Battlefield.Coalition Skyknight.Power = 3
