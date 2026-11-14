@@ -10,17 +10,10 @@ fn klingon_or_warrior_enters(q: &dyn Query, me: &Asker, event: &Event) -> Option
         .or_else(|| this_or_another_of_subtype_you_control_enters::<{ lands::sub(Subtype::Warrior) }>(q, me, event))
 }
 
-/// "creatures you control gain lifelink until end of turn" (CR 611.2c, 702.15): each creature its controller controls
-/// as the ability resolves.
-fn gain_lifelink(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::creatures_you_control_gain(g, item, &[Keyword::Lifelink]);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
         when_asked(EventMask::ZONE_CHANGE, klingon_or_warrior_enters),
-        gain_lifelink,
+        effects::creatures_you_control_gain_until_end_of_turn::<{ Keywords::of(&[Keyword::Lifelink]).0 }>,
         "Whenever this creature or another Klingon or Warrior you control enters, creatures you control gain lifelink until end of turn.",
     )],
     ..oracle::INDELICATE_HEALER

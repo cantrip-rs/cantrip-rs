@@ -462,12 +462,25 @@ pub fn creatures_you_control_where_gain(g: &mut dyn Game, item: &StackItem, keyw
 /// type `wanted` accepts as `item` resolves, none that enters or comes to qualify later gaining anything. Basri, Tomorrow's
 /// Champion's "Cats you control" (a Kindred Artifact with changeling is one) and Synchronized Charge's creatures print it.
 pub fn permanents_you_control_where_gain(g: &mut dyn Game, item: &StackItem, keywords: &[Keyword], wanted: impl Fn(&dyn Game, ObjectId) -> bool) {
+    permanents_you_control_where_gain_set(g, item, Keywords::of(keywords), wanted);
+}
+
+fn permanents_you_control_where_gain_set(g: &mut dyn Game, item: &StackItem, keywords: Keywords, wanted: impl Fn(&dyn Game, ObjectId) -> bool) {
     let permanents: Vec<ObjectId> = g.permanents_of(item.controller).into_iter().filter(|&id| wanted(&*g, id)).collect();
     instruction(g, |g| {
         for id in permanents {
-            g.add_effect(item.object, id, EffectKind::AddKeywords(Keywords::of(keywords)), Duration::EndOfTurn);
+            g.add_effect(item.object, id, EffectKind::AddKeywords(keywords), Duration::EndOfTurn);
         }
     });
+}
+
+/// "Creatures you control gain [keywords] until end of turn" as the whole effect of an ability or spell (CR 611.2, 611.2c,
+/// 702): `creatures_you_control_gain` with the keywords printed, `KEYWORDS` a `Keywords` as `u128`
+/// (`Keywords::of(&[Keyword::Haste]).0`). Bitter Reunion (haste), Deafening Clarion and Indelicate Healer (lifelink), Summon:
+/// Fat Chocobo (trample) and Terror of Mount Velus (double strike) print it.
+pub fn creatures_you_control_gain_until_end_of_turn<const KEYWORDS: u128>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    permanents_you_control_where_gain_set(g, item, Keywords(KEYWORDS), |g, id| g.chars(id).is(CardType::Creature));
+    Ok(())
 }
 
 /// "Other creatures you control gain [keywords] until end of turn" (CR 611.2, 611.2c, 702): `creatures_you_control_gain` for the
