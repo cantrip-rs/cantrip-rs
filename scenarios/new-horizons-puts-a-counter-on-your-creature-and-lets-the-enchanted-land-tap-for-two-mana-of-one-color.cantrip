@@ -1,0 +1,41 @@
+# New Horizons: "Enchant land". "When this Aura enters, put a +1/+1 counter on target creature you control": Bot1's Ornithopter, the only creature
+# Bot1 controls, becomes a 1/3, and Bot2's Ornithopter stays 0/2. "Enchanted land has "{T}: Add two mana of any one color."":
+# Maze of Ith has no mana ability of its own, so with the Aura one tap adds two mana of one chosen color, and tapped it can't be
+# tapped again. New Horizons can't enchant a creature.
+
+[Bot1 Deck]
+Black Lotus
+Maze of Ith
+Ornithopter
+New Horizons
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Maze of Ith.Play
+! Bot1.Battlefield.Maze of Ith.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Hand.New Horizons.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Hand.New Horizons.Cast(Bot1.Battlefield.Maze of Ith)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = 
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Maze of Ith.Activate(Color: Blue)
+? Bot1.Mana = {U}{U}
+! Bot1.Battlefield.Maze of Ith.Activate(Color: Blue)
+
+[Expect]
+Bot1.Battlefield.New Horizons.AttachedTo = Maze of Ith

@@ -1,0 +1,30 @@
+# New Horizons: "You can cast New Horizons even if you control no creatures" (its ruling): the trigger has no target and is removed
+# (CR 603.3d), and the Aura still enters. "Enchanted land has "{T}: Add two mana of any one color."": the land is Bot2's Maze of Ith, so
+# Bot2, its controller, taps it for two mana of one color; Bot1, who controls the Aura but not the land, can't.
+
+[Bot1 Deck]
+Black Lotus
+New Horizons
+Island x20
+
+[Bot2 Deck]
+Maze of Ith
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Maze of Ith.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.New Horizons.Cast(Bot2.Battlefield.Maze of Ith)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = 
+! Bot1.Battlefield.Maze of Ith.Activate
+[T4 Bot2.Main1]
+Bot2.Battlefield.Maze of Ith.Activate(Color: Red)
+? Bot2.Mana = {R}{R}
+
+[Expect]
+Bot2.Battlefield.Maze of Ith.Tapped = true
