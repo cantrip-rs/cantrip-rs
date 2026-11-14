@@ -1,0 +1,63 @@
+# Vicious Clown: "Whenever another creature you control with power 2 or less enters, this creature gets +2/+0 until end of turn"
+# (CR 603.6a, 611.2a). In turn 1 the Clown's own entering does nothing (another creature), but Bot1's Runeclaw Bear (power 2, exactly
+# at the limit) makes it a 4/3. In turn 3 (the boost is gone) a Hill Giant (power 3, one over) leaves it a 2/3 and an Ornithopter
+# (power 0) makes it 4/3 again.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Vicious Clown
+Runeclaw Bear
+Hill Giant
+Ornithopter
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Vicious Clown.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vicious Clown.Power = 2
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Runeclaw Bear.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vicious Clown.Power = 4
+? Bot1.Battlefield.Vicious Clown.Toughness = 3
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Vicious Clown.Power = 2
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vicious Clown.Power = 2
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vicious Clown.Power = 4
+
+[Expect]
+Bot1.Battlefield.Vicious Clown.Power = 4
