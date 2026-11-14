@@ -17,9 +17,8 @@ pub fn controller_manifests_dread(g: &mut dyn Game, item: &StackItem) -> Result<
     manifest_dread(g, item.controller, item.object)
 }
 
-/// Manifest dread as `manifest_dread` does, answering the face-down permanent it made ("manifest dread, then attach this
-/// Equipment to that creature": Dissection Tools), or `None` when the
-/// library was empty.
+/// Manifest dread as `manifest_dread` does, answering the face-down permanent it made (see `manifest_dread_then_attach`), or
+/// `None` when the library was empty.
 pub fn manifest_dread_object(g: &mut dyn Game, player: PlayerId, source: ObjectId) -> Result<Option<ObjectId>, Suspend> {
     let looked = top_of_library(g, player, 2);
     if looked.is_empty() {
@@ -53,4 +52,15 @@ pub fn manifest_dread_object(g: &mut dyn Game, player: PlayerId, source: ObjectI
     let in_graveyard: Vec<ObjectId> = moved.into_iter().filter(|&c| g.obj(c).zone == Zone::graveyard(player)).collect();
     g.manifested_dread(player, &in_graveyard);
     Ok(made)
+}
+
+/// "Manifest dread, then attach this Equipment to that creature" (CR 701.62a, 701.3a): the Equipment's controller manifests
+/// dread and the Equipment is attached to the face-down creature it made. The attach does nothing when the Equipment or the
+/// creature is gone or the creature is no longer a legal host (CR 701.3b, 301.5c), and a library with no card manifests
+/// nothing. Cursed Windbreaker and Dissection Tools print it.
+pub fn manifest_dread_then_attach(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = manifest_dread_object(g, item.controller, item.object)? {
+        g.attach(item.object, creature);
+    }
+    Ok(())
 }
