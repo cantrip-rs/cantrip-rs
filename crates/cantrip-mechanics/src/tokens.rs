@@ -1296,6 +1296,15 @@ pub static WHITE_FLYING_SPIRIT: CardDef = CardDef {
     ..token!(Spirit)
 };
 
+/// "Create a 1/1 white Spirit creature token with flying" (CR 111.1) for the ability's controller, as the body of a spell or
+/// ability, the controller being the one it has as it resolves (a leaves-the-battlefield trigger: as the creature left, CR 603.10a):
+/// the card file lists `tokens::WHITE_FLYING_SPIRIT` in its `EXTRA`. Bishop of Wings, Doomed Traveler, Kykar, Zephyr
+/// Awakener and Staff of the Storyteller print it.
+pub fn create_a_white_flying_spirit(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &WHITE_FLYING_SPIRIT, 1)?;
+    Ok(())
+}
+
 /// The 1/1 white Bird creature token with flying. Wingblade Disciple, Seller of Songbirds, Emeria Angel and Aether Channeler
 /// make it.
 pub static BIRD: CardDef = CardDef {

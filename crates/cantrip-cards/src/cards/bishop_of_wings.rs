@@ -10,17 +10,10 @@ fn gain_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Whenever an Angel you control dies, create a 1/1 white Spirit creature token with flying." (CR 603.10a, 111.2): one token
-/// per Angel, made for the ability's controller.
-fn spirit(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &tokens::WHITE_FLYING_SPIRIT, 1)?;
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(when_asked(EventMask::ZONE_CHANGE, of_subtype_you_control_enters::<{ lands::sub(Subtype::Angel) }>), gain_life, "Whenever an Angel you control enters, you gain 4 life."),
-        triggered(when_asked(EventMask::ZONE_CHANGE, of_subtype_you_control_dies::<{ lands::sub(Subtype::Angel) }>), spirit, "Whenever an Angel you control dies, create a 1/1 white Spirit creature token with flying."),
+        triggered(when_asked(EventMask::ZONE_CHANGE, of_subtype_you_control_dies::<{ lands::sub(Subtype::Angel) }>), tokens::create_a_white_flying_spirit, "Whenever an Angel you control dies, create a 1/1 white Spirit creature token with flying."),
     ],
     ..oracle::BISHOP_OF_WINGS
 };
