@@ -1,0 +1,60 @@
+# Erratic Apparition (1/3 flying, vigilance) has Eerie (CR 207.2c): "Whenever an enchantment you control enters and whenever you fully unlock a Room, this
+# creature gets +1/+1 until end of turn". Turn 1: Unholy Annex enters (2/4) and the bonus ends with the turn (1/3 on turn 3). Turn 3: unlocking Ritual
+# Chamber (CR 709.5i, the Room is now fully unlocked) makes it 2/4 again. The stacking scenario has two enchantments enter in one turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Erratic Apparition
+Unholy Annex // Ritual Chamber
+Island
+Mox Jet
+Swamp
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Erratic Apparition.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Erratic Apparition.Power = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Erratic Apparition.Power = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Erratic Apparition.Power = 2
+? Bot1.Battlefield.Erratic Apparition.Toughness = 4
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Erratic Apparition.Power = 1
+? Bot1.Battlefield.Erratic Apparition.Toughness = 3
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Unholy Annex.Activate(Ability: right door)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Erratic Apparition.Power = 2
+Bot1.Battlefield.Erratic Apparition.Toughness = 4

@@ -1,0 +1,65 @@
+# Both halves of Eerie say "you" (CR 603.2): Bot1's Erratic Apparition stays 1/3 when Bot2's Unholy Annex enters on turn 2, when Bot2 unlocks Ritual Chamber
+# on turn 4 (its Room fully unlocked), and when Bot1's own Memnite, a creature, enters on turn 3. The growth scenarios are the positive controls.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Erratic Apparition
+Memnite
+Island x2
+Island x14
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Unholy Annex // Ritual Chamber
+Swamp
+Swamp
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Erratic Apparition.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Count = 5
+? Bot1.Battlefield.Erratic Apparition.Power = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+? Bot1.Battlefield.Erratic Apparition.Power = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Unholy Annex.Activate(Ability: right door)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Erratic Apparition.Power = 1
+Bot1.Battlefield.Erratic Apparition.Toughness = 3
+Bot2.Battlefield.Unholy Annex // Ritual Chamber.Doors = Unholy Annex; Ritual Chamber
