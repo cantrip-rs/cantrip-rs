@@ -2811,6 +2811,10 @@ pub enum LastingRuleKind {
     /// 701.15b), but no creature becomes goaded (the rulings), so a second such rule, or a goad by the same player, is a
     /// requirement of its own. Maximum Carnage, Kardur, Doomscourge.
     MustAttackPlayerOtherThanYou,
+    /// "Must be blocked [this turn] if able" (CR 509.1c): one requirement on each attacker the rule takes in, obeyed by any creature
+    /// blocking it, however many do (as `CardDef::must_be_blocked` of a printed ability), and so none of an attacker no creature may
+    /// block. A rule of the game about an open set, so it reaches creatures that arrive later (CR 611.2c). Joraga Invocation.
+    MustBeBlocked,
     /// "Doesn't untap during [its controller's] untap step" (CR 502.3), as `EffectKind::DoesntUntap` reads it: in the untap
     /// step of the player who controls the permanent, and with `Duration::DuringNextUntapStepOf`, only in that player's.
     /// Exhaustion, Mana Vapors.

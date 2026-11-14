@@ -72,6 +72,7 @@ static MENACE: CardDef = creature("Must Block Test Menace", Keywords::of(&[Keywo
 static FLYER: CardDef = creature("Must Block Test Flyer", Keywords::of(&[Keyword::Flying]));
 static LONE: CardDef = creature("Must Block Test Lone", Keywords::of(&[Keyword::CantBeBlockedByMoreThanOne]));
 static LURE: CardDef = CardDef { block_requirements: &[lures], ..creature("Must Block Test Lure", Keywords::NONE) };
+static RULE_BAIT: CardDef = CardDef { name: "Must Block Test Rule Bait", lasting_rules: &[LastingRule { text: "Creatures must be blocked this turn if able.", rule: LastingRuleKind::MustBeBlocked, applies: affected_creatures }], ..CardDef::BLANK };
 static BAIT: CardDef = CardDef { must_be_blocked: &[must_be_blocked], ..creature("Must Block Test Bait", Keywords::NONE) };
 static MENACE_BAIT: CardDef = CardDef { must_be_blocked: &[must_be_blocked], ..creature("Must Block Test Menace Bait", Keywords::of(&[Keyword::Menace])) };
 static UNBLOCKABLE: CardDef = creature("Must Block Test Unblockable", Keywords::of(&[Keyword::CantBeBlocked]));
@@ -86,7 +87,7 @@ static RESTRICTING: CardDef = CardDef {
 };
 
 fn table() -> &'static CardTable {
-    Box::leak(Box::new(CardTable::new([&FILLER, &PROVOKE, &BEAR, &TWO_BLOCKS, &ANY_BLOCKS, &DYNAMIC_BLOCKS, &GOBLIN_ATTACKER, &BLOCK_WITNESS, &SHARED_BLOCKS, &GRANT_BLOCKS, &RULE_BLOCKS, &MENACE, &FLYER, &LONE, &LURE, &BAIT, &MENACE_BAIT, &UNBLOCKABLE, &HASTY, &RESTRICTING])))
+    Box::leak(Box::new(CardTable::new([&FILLER, &PROVOKE, &BEAR, &TWO_BLOCKS, &ANY_BLOCKS, &DYNAMIC_BLOCKS, &GOBLIN_ATTACKER, &BLOCK_WITNESS, &SHARED_BLOCKS, &GRANT_BLOCKS, &RULE_BLOCKS, &RULE_BAIT, &MENACE, &FLYER, &LONE, &LURE, &BAIT, &MENACE_BAIT, &UNBLOCKABLE, &HASTY, &RESTRICTING])))
 }
 
 /// A game of two on turn 1, P0's deck starting with three Provokes, and `permanents` on the battlefield.
@@ -396,6 +397,28 @@ fn two_attackers_that_must_be_blocked_with_one_blocker_obey_the_most_possible() 
     assert_eq!(rules(&ask).most, 1);
     assert!(!legal(&g, &ask, &[]));
     assert!(legal(&g, &ask, &[(x, a)]) && legal(&g, &ask, &[(x, b)]));
+}
+
+/// A resolved "creatures must be blocked this turn if able" (CR 509.1c, 611.2c, `LastingRuleKind::MustBeBlocked`): one requirement
+/// for each attacker it takes in, obeyed by any creature blocking that attacker; declaring no block is refused. Two such effects
+/// make two requirements on each attacker, and an attacker no creature may block is required nothing.
+#[test]
+fn a_resolved_rule_that_creatures_must_be_blocked_is_one_requirement_on_each_attacker() {
+    for effects in [1usize, 2] {
+        let (mut g, ids) = game(&[(&BEAR, P0), (&BEAR, P0), (&BEAR, P1), (&BEAR, P1)]);
+        let (a, b, x, y) = (ids[0], ids[1], ids[2], ids[3]);
+        let card = g.cards.id_of(&RULE_BAIT);
+        for _ in 0..effects { put_block_effect(&mut g, a, a, EffectKind::LastingRule { card, index: 0, about: Target::None }); }
+        let ask = declare(&mut g, &[], &[a, b]);
+        assert_eq!(rules(&ask).required.len(), 2 * effects);
+        assert!(!legal(&g, &ask, &[]));
+        assert!(!legal(&g, &ask, &[(x, a)]) && !legal(&g, &ask, &[(x, b), (y, b)]));
+        assert!(legal(&g, &ask, &[(x, a), (y, b)]));
+    }
+    let (mut g, ids) = game(&[(&FLYER, P0), (&BEAR, P1)]);
+    let card = g.cards.id_of(&RULE_BAIT);
+    put_block_effect(&mut g, ids[0], ids[0], EffectKind::LastingRule { card, index: 0, about: Target::None });
+    assert!(attack(&mut g, &[], &[ids[0]]).is_none());
 }
 
 fn put_block_effect(g: &mut Game, source: ObjectId, affected: ObjectId, kind: EffectKind) {

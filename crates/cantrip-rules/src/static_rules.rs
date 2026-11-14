@@ -974,6 +974,17 @@ pub fn block_requirements(cx: &Cx, allowed: &[(ObjectId, ObjectId)]) -> Vec<Requ
             }
         }
     }
+    // "Must be blocked this turn if able" from a resolved rule about an open set (`LastingRuleKind::MustBeBlocked`): one requirement
+    // for each such effect that takes in an attacker some block is allowed for, as the static one above (CR 509.1c, 611.2c).
+    let mut asked: Vec<ObjectId> = Vec::new();
+    for &(_, attacker) in allowed {
+        if !asked.contains(&attacker) {
+            asked.push(attacker);
+            for _ in lasting_rules_on(cx, cx.cards(), attacker, LastingRuleKind::MustBeBlocked) {
+                required.push(RequiredBlock { blocker: None, attacker: Some(attacker) });
+            }
+        }
+    }
     required
 }
 
