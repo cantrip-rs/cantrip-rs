@@ -204,17 +204,23 @@ pub fn creature_types_among_non_borg(q: &dyn Query, source: ObjectId, player: Pl
         .count()
 }
 
-/// "Creatures you control have total power N or greater" (CR 208.1, 613.4): the current, modified power of every
-/// creature `player` controls, attacking or not. Negative powers subtract from the total (CR 107.1b). Cantankerous
-/// Captain checks after its pump resolves; Hologram Janeway checks only when you attack (`AbilityDef::only_if`, not
-/// an intervening "if", CR 603.4).
-pub fn creatures_have_total_power_at_least(q: &dyn Query, player: PlayerId, minimum: i32) -> bool {
+/// "The total power of creatures you control" (CR 208.1, 613.4): the current, modified power of every creature `player`
+/// controls, attacking or not, added up. Negative powers subtract from the total (CR 107.1b), so it can be below zero.
+/// Ghalta, Primal Hunger reduces its cost by it; `creatures_have_total_power_at_least` compares it.
+pub fn total_power_of_creatures_you_control(q: &dyn Query, player: PlayerId) -> i64 {
     q.permanents_of(player)
         .into_iter()
         .map(|id| q.chars(id))
         .filter(|c| c.is(CardType::Creature))
         .map(|c| i64::from(c.power.unwrap_or(0)))
-        .sum::<i64>() >= i64::from(minimum)
+        .sum()
+}
+
+/// "Creatures you control have total power N or greater" (CR 208.1, 613.4): `total_power_of_creatures_you_control` is at
+/// least `minimum`. Cantankerous Captain checks after its pump resolves; Hologram Janeway checks only when you attack
+/// (`AbilityDef::only_if`, not an intervening "if", CR 603.4).
+pub fn creatures_have_total_power_at_least(q: &dyn Query, player: PlayerId, minimum: i32) -> bool {
+    total_power_of_creatures_you_control(q, player) >= i64::from(minimum)
 }
 
 /// "Activate only during your turn" (CR 602.5b), and "if it's your turn" on an alternative cost (CR 118.9): the
