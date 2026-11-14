@@ -1308,6 +1308,13 @@ pub fn create_a_treasure(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspe
     create_treasure(g, item.controller)
 }
 
+/// "Create N Treasure tokens" as an ability's or spell's whole effect (CR 111.10a, 701.7): all N at once under the controller of
+/// the resolving object, the card file listing `TREASURE` in its `EXTRA`. Rapacious Dragon creates two.
+pub fn create_treasures<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create_by_rule(g, item.controller, &TREASURE, N, false)?;
+    Ok(())
+}
+
 /// "Create a 3/2 colorless Vehicle artifact token with crew 1" as an effect (CR 111.1): one `VEHICLE_CREW_1` under the controller of the
 /// resolving spell or ability. Chandra, Spark Hunter and Mu Yanling, Wind Rider print it.
 pub fn create_a_crew_1_vehicle(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
