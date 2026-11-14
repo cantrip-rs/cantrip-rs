@@ -1,0 +1,36 @@
+# Gnarlback Rhino draws only for a spell that targets it (CR 601.2c): Bot1 casts Lightning Bolt at Bot2 with the Rhino on the battlefield, and the Rhino's
+# controller draws nothing. Casting the Rhino itself (it has no target) draws nothing either: Library stays at 8.
+
+[Bot1 Deck]
+Gnarlback Rhino
+Black Lotus
+Mox Emerald
+Mox Ruby
+Lightning Bolt
+Island
+Island
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Gnarlback Rhino.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 8
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Hand = Island; Island
+Bot1.Library.Count = 8

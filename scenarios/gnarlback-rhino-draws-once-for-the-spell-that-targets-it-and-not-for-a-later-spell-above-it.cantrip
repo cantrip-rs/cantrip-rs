@@ -1,0 +1,45 @@
+# Gnarlback Rhino (CR 601.2c, 603.2): Bot1 Bolts their own Rhino, which draws a card, then while that Bolt is still on the stack casts a second Bolt at Bot2.
+# The second spell does not target the Rhino, so it draws nothing even with the first spell below it on the stack: one card in all (library 13 -> 12).
+
+[Bot1 Deck]
+Gnarlback Rhino
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby#1.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Gnarlback Rhino.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt#1.Cast(Bot1.Battlefield.Gnarlback Rhino)
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 3
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 12
+[T1 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 17
+Bot1.Library.Count = 12
+Bot1.Battlefield.Gnarlback Rhino.Toughness = 4

@@ -1,0 +1,34 @@
+# Gnarlback Rhino has trample (CR 702.19b, 702.19c): blocked by Bot2's Ornithopter (0/2), the 4/4 Rhino assigns lethal damage, 2, to the
+# blocker and the other 2 to Bot2. Without trample Bot2 would take none.
+
+[Bot1 Deck]
+Gnarlback Rhino
+Black Lotus
+Mox Emerald
+Island x10
+
+[Bot2 Deck]
+Ornithopter
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Gnarlback Rhino.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Gnarlback Rhino > Bot2)
+Bot2.Block(Ornithopter > Gnarlback Rhino)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Gnarlback Rhino.Damage = 0

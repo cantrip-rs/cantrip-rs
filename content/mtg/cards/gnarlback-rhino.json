@@ -1,0 +1,11 @@
+{
+  "name": "Gnarlback Rhino",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Rhino",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\nWhenever you cast a spell that targets this creature, draw a card.",
+  "keywords": [
+    "Trample"
+  ]
+}

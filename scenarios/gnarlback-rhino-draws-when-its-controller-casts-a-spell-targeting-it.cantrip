@@ -1,0 +1,39 @@
+# Gnarlback Rhino, "whenever you cast a spell that targets this creature, draw a card" (CR 603.2, 601.2c): Bot1 Bolts their own Rhino, and the
+# trigger on the cast draws a card before the Bolt resolves (the 4/4 survives it). Library 8 -> 7.
+
+[Bot1 Deck]
+Gnarlback Rhino
+Black Lotus
+Mox Emerald
+Mox Ruby
+Lightning Bolt
+Island
+Island
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Gnarlback Rhino.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Gnarlback Rhino)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 7
+? Bot1.Battlefield.Gnarlback Rhino.Toughness = 4
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island; Island; Island
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Library.Count = 7
