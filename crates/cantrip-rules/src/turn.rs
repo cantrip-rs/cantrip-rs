@@ -1000,7 +1000,7 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
                     AttackOption::Enlist => (&ENLIST_COST, Some(o.tapped)),
                     AttackOption::Exert => (&EXERT_COST, None),
                 };
-                fixed.push(crate::static_rules::LockedAttackPayment { source: o.attacker, attacker: o.attacker, chosen, by: None, cost });
+                fixed.push(crate::static_rules::LockedAttackPayment { source: o.attacker, attacker: o.attacker, chosen, by: None, cost: *cost, grouped_attackers: Vec::new(), group_rule: None });
             }
         }
         // CR 508.1h: the total cost to attack, locked in now; mana abilities activated while paying it (CR 508.1i) change

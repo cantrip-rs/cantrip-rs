@@ -13,16 +13,27 @@ static FILLER: CardDef = CardDef { name: "Combat payment filler", types: TypeSet
 static BEAR: CardDef = CardDef { name: "Combat payment attacker", types: TypeSet::of(&[CardType::Creature]), power: Some(2), toughness: Some(2), ..CardDef::BLANK };
 static LAND: CardDef = CardDef { name: "Combat payment Island", subtypes: SubtypeSet::of(&[Subtype::Island]), ..FILLER };
 static FOREST: CardDef = CardDef { name: "Combat payment Forest", subtypes: SubtypeSet::of(&[Subtype::Forest]), ..FILLER };
-static TAX: CardDef = CardDef { name: "Combat payment land tax", types: TypeSet::of(&[CardType::Enchantment]), attack_cost_rules: &[AttackPayment { applies: all, cost: Cost::sacrifice(1, land) }], ..CardDef::BLANK };
-static LEVIATHAN: CardDef = CardDef { name: "Combat payment two Islands", attack_cost_rules: &[AttackPayment { applies: this, cost: Cost::sacrifice(2, island) }], ..BEAR };
-static LINKED: CardDef = CardDef { name: "Combat payment source-sensitive tax", attack_cost_rules: &[AttackPayment { applies: all, cost: Cost::sacrifice(1, linked_land) }], ..TAX };
-static MIXED: CardDef = CardDef { name: "Combat payment mixed tax", attack_cost_rules: &[AttackPayment { applies: all, cost: Cost::sequence(&[Cost::sacrifice(1, land), Cost::sacrifice(1, island)]) }], ..TAX };
-static MANA_TAX: CardDef = CardDef { name: "Combat payment removable mana tax", attack_cost_rules: &[AttackPayment { applies: all, cost: cost("{1}").and(Cost::sacrifice(1, land)) }], abilities: &[mana_ability(SACRIFICE_THIS, add(Mana::C), "Sacrifice this: Add {C}.")], ..TAX };
+static TAX: CardDef = CardDef { name: "Combat payment land tax", types: TypeSet::of(&[CardType::Enchantment]), attack_cost_rules: &[AttackPayment { applies: all, cost: Cost::sacrifice(1, land), grouped: false }], ..CardDef::BLANK };
+static GROUPED_TAX: CardDef = CardDef { name: "Grouped land tax", attack_cost_rules: &[AttackPayment { applies: all, cost: Cost::sacrifice(1, land), grouped: true }], ..TAX };
+static LEVIATHAN: CardDef = CardDef { name: "Combat payment two Islands", attack_cost_rules: &[AttackPayment { applies: this, cost: Cost::sacrifice(2, island), grouped: false }], ..BEAR };
+static LINKED: CardDef = CardDef { name: "Combat payment source-sensitive tax", attack_cost_rules: &[AttackPayment { applies: all, cost: Cost::sacrifice(1, linked_land), grouped: false }], ..TAX };
+static MIXED: CardDef = CardDef { name: "Combat payment mixed tax", attack_cost_rules: &[AttackPayment { applies: all, cost: Cost::sequence(&[Cost::sacrifice(1, land), Cost::sacrifice(1, island)]), grouped: false }], ..TAX };
+static MANA_TAX: CardDef = CardDef { name: "Combat payment removable mana tax", attack_cost_rules: &[AttackPayment { applies: all, cost: cost("{1}").and(Cost::sacrifice(1, land)), grouped: false }], abilities: &[mana_ability(SACRIFICE_THIS, add(Mana::C), "Sacrifice this: Add {C}.")], ..TAX };
 static LAND_CREATURE: CardDef = CardDef { name: "Combat payment land creature", types: TypeSet::of(&[CardType::Land, CardType::Creature]), ..BEAR };
 fn noop(_: &mut dyn Rules, _: &StackItem) -> Result<(), Suspend> { Ok(()) }
+// The Gitrog Monster's land-card death trigger distinguishes one sacrifice batch from two.
+fn land_dies(q: &dyn Query, _: &Asker, event: &Event) -> Option<Fired> {
+    match *event {
+        Event::ZoneChange { old, from, to, .. } if from.is(ZoneKind::Battlefield) && to.is(ZoneKind::Graveyard) && q.chars(old).is(CardType::Land) => Fired::PLAIN,
+        _ => None,
+    }
+}
+static GITROG_WATCHER: CardDef = CardDef { name: "Gitrog-style land death watcher", types: TypeSet::of(&[CardType::Creature]),
+    abilities: &[triggered(when_asked(EventMask::ZONE_CHANGE, land_dies), noop, "Whenever one or more land cards are put into your graveyard from anywhere, draw a card.").once_per_batch()], ..BEAR };
+
 static RECRUITER: CardDef = CardDef { name: "Combat payment enlist", abilities: &[paid_as_it_attacks(AttackOption::Enlist, noop, "Enlist")], ..BEAR };
 fn game() -> Game {
-    let cards = Box::leak(Box::new(CardTable::new([&FILLER,&BEAR,&LAND,&FOREST,&TAX,&LEVIATHAN,&LINKED,&MIXED,&MANA_TAX,&LAND_CREATURE,&RECRUITER])));
+    let cards = Box::leak(Box::new(CardTable::new([&FILLER,&BEAR,&LAND,&FOREST,&TAX,&GROUPED_TAX,&LEVIATHAN,&LINKED,&MIXED,&MANA_TAX,&LAND_CREATURE,&RECRUITER,&GITROG_WATCHER])));
     let filler = cards.id_of(&FILLER);
     let mut g = Game::new(cards, &Setup { decks: vec![vec![filler;20];2], shuffle: false, ..Default::default() });
     g.verify = true;
@@ -131,4 +142,36 @@ fn sacrificing_an_enlist_payment_first_cannot_later_tap_its_old_identity() {
     choose(&mut g,&[l]);let r=next(&mut g);assert!(matches!(r.kind,RequestKind::DeclareAttackers{..}));
     assert!(g.state.obj(l).became.is_none());assert!(!g.state.obj(l).tapped);assert!(!g.state.obj(a).tapped);
     assert!(!g.events().iter().any(|r|matches!(r.event,Event::CombatPaymentBegan{..}|Event::CombatCostObjectPaid{..})));
+}
+
+#[test]
+fn flooded_style_two_attacker_cost_is_one_land_sacrifice_event() {
+    let mut g=game();let watcher=put(&mut g,&GITROG_WATCHER,A);put(&mut g,&GROUPED_TAX,B);
+    let attackers=[put(&mut g,&BEAR,A),put(&mut g,&BEAR,A)];let lands=[put(&mut g,&LAND,A),put(&mut g,&FOREST,A)];
+    attack(&mut g,&attackers);choose(&mut g,&lands);g.run();
+    let ordering = match g.pending().map(|r| &r.kind) { Some(RequestKind::OrderTriggers { sources, .. }) => sources.iter().filter(|&&s| s==watcher).count(), _ => 0 };
+    let triggers=ordering + g.state.triggers.iter().filter(|t|t.source==watcher).count()
+        + g.state.stack.iter().filter(|i|i.object==watcher && i.kind==StackKind::Triggered).count();
+    assert_eq!(triggers,1,"the simultaneous sacrifice of both lands triggers Gitrog once");
+}
+
+#[test]
+fn grouped_cost_sources_remain_separate_and_keep_attacker_receipts() {
+    let mut g=game();let watcher=put(&mut g,&GITROG_WATCHER,A);
+    let taxes=[put(&mut g,&GROUPED_TAX,B),put(&mut g,&GROUPED_TAX,B)];
+    let attackers=[put(&mut g,&BEAR,A),put(&mut g,&BEAR,A)];
+    let lands=[put(&mut g,&LAND,A),put(&mut g,&LAND,A),put(&mut g,&FOREST,A),put(&mut g,&FOREST,A)];
+    attack(&mut g,&attackers);
+    let mut r=next(&mut g);
+    if let RequestKind::ChooseCostPayment{ref choices,..}=r.kind {
+        assert_eq!(choices.len(),2,"each source's grouped cost is independently orderable");
+        answer(&mut g,r,Answer::CostPayment(0));r=next(&mut g);
+    }
+    assert!(matches!(r.kind,RequestKind::ChooseCards {purpose:Purpose::SacrificeCost,..}));
+    answer(&mut g,r,Answer::Cards(lands[..2].to_vec()));choose(&mut g,&lands[2..]);g.run();
+    let order=match g.pending().map(|r|&r.kind) {Some(RequestKind::OrderTriggers{sources,..})=>sources.iter().filter(|&&s|s==watcher).count(),_=>0};
+    let triggers=order+g.state.triggers.iter().filter(|t|t.source==watcher).count()+g.state.stack.iter().filter(|i|i.object==watcher&&i.kind==StackKind::Triggered).count();
+    assert_eq!(triggers,2,"each rule source has its own simultaneous sacrifice event");
+    let receipts:Vec<_>=g.events().iter().filter_map(|r|match r.event {Event::CombatCostObjectPaid{source,attacker,object,..}=>Some((source,attacker,object)),_=>None}).collect();
+    assert_eq!(receipts,vec![(taxes[0],attackers[0],lands[0]),(taxes[0],attackers[1],lands[1]),(taxes[1],attackers[0],lands[2]),(taxes[1],attackers[1],lands[3])]);
 }

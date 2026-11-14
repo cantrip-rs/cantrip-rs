@@ -2914,6 +2914,9 @@ pub type AttackCostRule = fn(&dyn Query, &Asker, ObjectId, Target) -> Option<Man
 pub struct AttackPayment {
     pub applies: fn(&dyn Query, &Asker, ObjectId, Target) -> bool,
     pub cost: Cost,
+    /// The rule makes one permanent payment for all matching attacks (for example, sacrifice a land for each).
+    /// Its cost must be a single permanent component; different rule sources remain separate payments.
+    pub grouped: bool,
 }
 
 /// A static ability that says how many creatures may attack a given player, planeswalker or battle in one declaration of

@@ -422,7 +422,10 @@ pub(crate) struct LockedAttackPayment {
     pub attacker: ObjectId,
     pub chosen: Option<ObjectId>,
     pub by: Option<Linked>,
-    pub cost: &'static Cost,
+    pub cost: Cost,
+    /// Each permanent in a grouped component is attributed to its corresponding attack.
+    pub grouped_attackers: Vec<ObjectId>,
+    pub group_rule: Option<&'static AttackPayment>,
 }
 
 pub(crate) struct LockedAttackCosts {
@@ -448,7 +451,20 @@ pub(crate) fn lock_attack_costs(cx: &Cx, attacks: &[(ObjectId, Target)]) -> Lock
             }
             for rule in def.attack_cost_rules {
                 if (rule.applies)(cx, &asker, attacker, target) {
-                    total.fixed.push(LockedAttackPayment { source, attacker, chosen: None, by, cost: &rule.cost });
+                    if rule.grouped && rule.cost.permanents.is_some() {
+                        let per = rule.cost.permanents.unwrap().count;
+                        if let Some(group) = total.fixed.iter_mut().find(|p| p.source == source && p.by == by
+                            && p.group_rule.is_some_and(|r| std::ptr::eq(r, rule))) {
+                            if let Some(component) = group.cost.permanents.as_mut() { component.count += per; }
+                            group.grouped_attackers.extend(std::iter::repeat_n(attacker, per as usize));
+                        } else {
+                            total.fixed.push(LockedAttackPayment { source, attacker, chosen: None, by, cost: rule.cost,
+                                grouped_attackers: vec![attacker; per as usize], group_rule: Some(rule) });
+                        }
+                    } else {
+                        total.fixed.push(LockedAttackPayment { source, attacker, chosen: None, by, cost: rule.cost,
+                            grouped_attackers: Vec::new(), group_rule: None });
+                    }
                     total.mana = total.mana.plus(&rule.cost.total_mana());
                     taxed = true;
                 }
