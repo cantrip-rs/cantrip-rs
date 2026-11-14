@@ -1084,9 +1084,10 @@ pub trait Game: Query {
     /// Returns the new object.
     fn put_onto_battlefield_attacking(&mut self, object: ObjectId, controller: PlayerId, defender: Target, counters: &[(CounterKind, i32)]) -> Result<ObjectId, Suspend>;
     /// Puts an object onto the battlefield and attaches an Aura already on the battlefield to it, which now
-    /// enchants "the creature put onto the battlefield with this Aura" (Animate Dead, Necromancy). Returns the new
+    /// enchants "the creature put onto the battlefield with this Aura" (Animate Dead, Necromancy). It enters tapped when
+    /// `tapped` (CR 110.5b: Dance of the Dead's "put enchanted creature card onto the battlefield tapped"). Returns the new
     /// object; nothing is attached if the Aura has left or the object did not arrive.
-    fn put_onto_battlefield_with_aura(&mut self, object: ObjectId, controller: PlayerId, aura: ObjectId) -> Result<ObjectId, Suspend>;
+    fn put_onto_battlefield_with_aura(&mut self, object: ObjectId, controller: PlayerId, aura: ObjectId, tapped: bool) -> Result<ObjectId, Suspend>;
     /// Puts an object onto the battlefield under `controller` attached to `host` (CR 303.4f, 303.4i, 301.5e): "return this card from
     /// your graveyard to the battlefield attached to target creature". The effect names what an Aura enchants, so its controller
     /// chooses nothing; an Aura `host` is not a legal object for (its enchant ability, protection from it) stays where it is

@@ -2532,8 +2532,8 @@ impl cantrip_api::Game for Cx<'_> {
         ops::put_onto_battlefield_attacking(self, object, controller, defender, counters).map_err(|_| Suspend)
     }
 
-    fn put_onto_battlefield_with_aura(&mut self, object: ObjectId, controller: PlayerId, aura: ObjectId) -> Result<ObjectId, Suspend> {
-        let new = self.put_onto_battlefield(object, controller, false)?;
+    fn put_onto_battlefield_with_aura(&mut self, object: ObjectId, controller: PlayerId, aura: ObjectId, tapped: bool) -> Result<ObjectId, Suspend> {
+        let new = self.put_onto_battlefield(object, controller, tapped)?;
         if new != object && live(&self.g.state, aura) && self.g.state.obj(aura).zone.is(ZoneKind::Battlefield) {
             self.g.state.update_obj(new, |o| o.entered_with = Some(aura));
             ops::attach(self, aura, new);

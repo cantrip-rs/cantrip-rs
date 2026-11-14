@@ -11,7 +11,7 @@ fn reanimate(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         g.add_effect(item.object, item.object, EffectKind::Enchant(item.ability.card), Duration::Indefinite);
     });
     if let Some(card) = targets::object(g, item, 0) {
-        g.put_onto_battlefield_with_aura(card, item.controller, item.object)?;
+        g.put_onto_battlefield_with_aura(card, item.controller, item.object, false)?;
     }
     Ok(())
 }

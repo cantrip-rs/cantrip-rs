@@ -12,7 +12,7 @@ fn return_enchanted(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         g.add_effect(item.object, item.object, EffectKind::Enchant(item.ability.card), Duration::Indefinite);
     });
     let Some(card) = g.obj(item.object).attached_to else { return Ok(()) };
-    g.put_onto_battlefield_with_aura(card, item.controller, item.object)?;
+    g.put_onto_battlefield_with_aura(card, item.controller, item.object, false)?;
     Ok(())
 }
 
