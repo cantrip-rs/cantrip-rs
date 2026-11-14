@@ -1,0 +1,11 @@
+{
+  "name": "Razorkin Hordecaller",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Human Clown Berserker",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Haste\nWhenever you attack, create a 1/1 red Gremlin creature token.",
+  "keywords": [
+    "Haste"
+  ]
+}

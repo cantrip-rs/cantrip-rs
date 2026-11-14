@@ -1,0 +1,60 @@
+# Razorkin Hordecaller: "Whenever you attack" triggers once per attack, however many creatures attack (CR 603.2c), and only for its
+# controller's own attack. Bot1 casts it in turn 1 and attacks (one Gremlin). In turn 3 Bot1 attacks with the Hordecaller and the
+# Gremlin together and gets exactly one more (the Gremlin is 1/1, so 5 damage in all: Bot2 is at 11 after 16 - 5). In turn 4 Bot2
+# attacks with an Ornithopter and Bot1 makes none (battlefield: five Moxen, the Hordecaller, two Gremlins = 8).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Razorkin Hordecaller
+Island x14
+
+[Bot2 Deck]
+Island
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Razorkin Hordecaller.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Razorkin Hordecaller > Bot2)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+? Bot1.Battlefield.Count = 7
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Razorkin Hordecaller > Bot2; Gremlin Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+? Bot1.Battlefield.Count = 8
+? Bot2.Life = 11
+[T4 Bot2.Main1]
+Bot2.Attack(Ornithopter > Bot1)
+Bot2.Pass
+Bot1.Pass
+[Bot2.Main2]
+? Bot1.Battlefield.Count = 8
+
+[Expect]
+Bot2.Life = 11
+Bot1.Life = 20

@@ -1,0 +1,42 @@
+# Razorkin Hordecaller: "Haste. Whenever you attack, create a 1/1 red Gremlin creature token." (CR 508.2a, 603.2). Bot1 casts it
+# for {4}{R} in turn 1 and, thanks to haste, attacks with it at once. The Gremlin is made once the attackers are declared so it is
+# not attacking: Bot2 loses only the Hordecaller's 4 (16). The token is a 1/1 red creature.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Razorkin Hordecaller
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Razorkin Hordecaller.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Razorkin Hordecaller > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gremlin Token.Power = 1
+? Bot1.Battlefield.Gremlin Token.Toughness = 1
+? Bot1.Battlefield.Gremlin Token.Types = Creature
+? Bot1.Battlefield.Gremlin Token.Colors = Red
+[Bot1.Main2]
+? Bot2.Life = 16
+
+[Expect]
+Bot2.Life = 16
