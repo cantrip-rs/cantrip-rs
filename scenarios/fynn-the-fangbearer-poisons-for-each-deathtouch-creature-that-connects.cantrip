@@ -1,0 +1,38 @@
+# Fynn, "a creature you control with deathtouch": another creature, Baleful Strix (flying, deathtouch), triggers it too (CR 603.2). Both attack Bot2 together, so there are
+# two triggers and four poison counters (CR 122.1); Fynn's own is not the only one that counts.
+
+[Bot1 Deck]
+Fynn, the Fangbearer
+Baleful Strix
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fynn, the Fangbearer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Baleful Strix.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Fynn, the Fangbearer > Bot2; Baleful Strix > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Poison = 4
+Bot1.Poison = 0

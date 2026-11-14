@@ -1,0 +1,38 @@
+# Fynn, "a creature you control": an opponent's deathtouch creature that hurts Bot1 gives no poison (CR 603.2). Bot2's Baleful Strix attacks Bot1 on turn 4.
+
+[Bot1 Deck]
+Fynn, the Fangbearer
+Mox Emerald
+Mox Ruby
+Island x14
+
+[Bot2 Deck]
+Baleful Strix
+Mox Jet
+Mox Sapphire
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fynn, the Fangbearer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Baleful Strix.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Baleful Strix > Bot1)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Poison = 0
+Bot2.Poison = 0

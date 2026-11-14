@@ -1,0 +1,11 @@
+{
+  "name": "Fynn, the Fangbearer",
+  "manaCost": "{1}{G}",
+  "type": "Legendary Creature — Human Warrior",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Deathtouch (Any amount of damage this deals to a creature is enough to destroy it.)\nWhenever a creature you control with deathtouch deals combat damage to a player, that player gets two poison counters. (A player with ten or more poison counters loses the game.)",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

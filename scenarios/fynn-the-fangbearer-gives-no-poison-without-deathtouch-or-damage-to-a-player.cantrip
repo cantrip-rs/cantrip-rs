@@ -1,0 +1,45 @@
+# Fynn, the Fangbearer needs deathtouch and damage to a player (CR 603.2, 702.2): Grizzly Bears (no deathtouch) connects with Bot2 and gives no poison, and when Fynn is blocked
+# by Ornithopter its damage goes to a creature, so the player gets none either. Bot2 is at 18 and has no poison throughout.
+
+[Bot1 Deck]
+Fynn, the Fangbearer
+Grizzly Bears
+Mox Emerald
+Black Lotus
+Island
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Fynn, the Fangbearer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block()
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+? Bot2.Poison = 0
+[T5 Bot1.Main1]
+Bot1.Attack(Fynn, the Fangbearer > Bot2)
+Bot2.Block(Ornithopter > Fynn, the Fangbearer)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Poison = 0
+Bot1.Poison = 0

@@ -1,0 +1,28 @@
+# Fynn, the Fangbearer is a creature you control with deathtouch (CR 603.2, 702.2): when it deals combat damage to Bot2, that player gets two poison counters (CR 122.1).
+# Bot2 is also at 19 life, since poison is in addition to the damage.
+
+[Bot1 Deck]
+Fynn, the Fangbearer
+Mox Emerald
+Mox Ruby
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fynn, the Fangbearer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Fynn, the Fangbearer > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Poison = 2
+Bot1.Poison = 0
