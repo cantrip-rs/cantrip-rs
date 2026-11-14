@@ -1,0 +1,53 @@
+# Gleaming Barrier {2} (0/4, defender): "When this creature dies, create a Treasure token." Bot2's Lightning Bolt deals 3 to it
+# on turn 2: it survives and there is no Treasure. On turn 4 Bot2's Disenchant destroys it (artifact creature): it dies and
+# Bot1, who controlled it, gets the Treasure, which taps for mana of any color.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Gleaming Barrier
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Lightning Bolt
+Disenchant
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gleaming Barrier.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Gleaming Barrier)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Gleaming Barrier
+? Bot1.Graveyard.Count = 0
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Gleaming Barrier)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Gleaming Barrier
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Treasure Token
+? Bot2.Battlefield = Mox Ruby; Mox Pearl
+Bot1.Battlefield.Treasure Token.Activate(Color: B)
+? Bot1.Mana = {B}
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl
+Bot1.Graveyard = Gleaming Barrier

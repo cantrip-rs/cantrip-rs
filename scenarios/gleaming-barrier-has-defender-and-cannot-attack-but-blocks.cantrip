@@ -1,0 +1,41 @@
+# Gleaming Barrier (0/4): "Defender" (CR 702.3b): it cannot attack, but it can block. On turn 3 it may not attack, beside the
+# positive control of Bot1's Memnite, which does attack for 1. On turn 4 it blocks Bot2's attacking Memnite and takes 1 damage
+# (0/4: it lives, no Treasure), and Bot1 takes none.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Gleaming Barrier
+Memnite
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gleaming Barrier.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Attackers]
+! Bot1.Attack(Gleaming Barrier > Bot2)
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Block(Gleaming Barrier > Memnite)
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Gleaming Barrier.Damage = 1
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19
+Bot1.Battlefield = Mox Jet; Mox Ruby; Gleaming Barrier; Memnite
