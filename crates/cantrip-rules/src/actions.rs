@@ -2446,7 +2446,8 @@ fn choose_variable_permanents(cx: &mut Cx, player: PlayerId, source: ObjectId, v
 
 /// Pays the permanents part of a cost, once the rest is paid. `ability` is the activated ability whose cost it is: the
 /// permanents its cost exiles are "exiled with" its source, linked to the other abilities of its text (CR 406.6, 607.2a). A
-/// spell's are not: that rule is of abilities.
+/// permanent spell's are linked by the caller to the spell, and so to the permanent it becomes (CR 607.2q); an instant's or a
+/// sorcery's are not, that rule being of abilities (CR 607.2a).
 fn pay_permanents(cx: &mut Cx, player: PlayerId, cost: &Cost, chosen: &[ObjectId], ability: Option<Linked>, pending: &mut Vec<ObjectId>) -> Vec<(usize, ObjectId)> {
     if !cost.components.is_empty() {
         let mut parts = Vec::new();
@@ -3521,7 +3522,15 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                     }
                     way_paid.extend(selected.iter().copied().map(|id| (component, id)));
                 }
-                let paid = pay_permanents(cx, player, cost, &selected, scope.linked(), &mut Vec::new());
+                // A permanent spell's cost exile is linked to the spell, so to the permanent it becomes (CR 607.2q,
+                // `ExileLink::is_by_in`); an instant's or sorcery's is not, a spell being no ability (CR 607.2a).
+                let exiled_by = match scope {
+                    PaymentScope::Spell if { let chars = cx.chars(spell); !chars.is(CardType::Instant) && !chars.is(CardType::Sorcery) } => {
+                        Some(Query::text_linked(cx, spell))
+                    }
+                    _ => scope.linked(),
+                };
+                let paid = pay_permanents(cx, player, cost, &selected, exiled_by, &mut Vec::new());
                 if paid.len() != selected.len() { return Err(Stop::Cancel); }
                 let paid: Vec<(usize, ObjectId)> = paid.into_iter().map(|(_, object)| (component, object)).collect();
                 for (index, (component, object)) in paid.into_iter().enumerate() {
