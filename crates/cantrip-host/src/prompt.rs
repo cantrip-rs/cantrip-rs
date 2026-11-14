@@ -544,6 +544,7 @@ fn purpose_view(purpose: Purpose, opening: bool) -> CardChoicePurposeView {
         | Purpose::Color
         | Purpose::Optional
         | Purpose::Ask(_)
+        | Purpose::AskDamage(..)
         | Purpose::EndTurn
         | Purpose::RevealForMiracle(_)
         | Purpose::CastForMiracleCost(_)
@@ -766,7 +767,7 @@ fn miracle_prompt(game: &Game, player: i32, handle: ViewHandle, purpose: Purpose
         }
         _ => unreachable!("only miracle's questions are worded here"),
     };
-    MayPrompt { player, source: handle, verb: verb.into(), amount: 0, question, detail, yes: yes.into(), no: no.into(), no_default }
+    MayPrompt { player, source: handle, verb: verb.into(), amount: 0, question, detail, yes: yes.into(), no: no.into(), no_default, ..MayPrompt::default() }
 }
 
 /// What a card of the request is cast as, for the face choice: its name and its cost.
@@ -785,6 +786,14 @@ fn damage_words(game: &Game, asked: PlayerId, d: DamageAbout) -> String {
         _ => "nothing".to_string(),
     };
     format!("{} damage from {} to {to}", d.amount, game.name(d.source))
+}
+
+/// Damage in words as `damage_words` has it, for a player who need not control what it would be dealt to: a permanent is
+/// named with whose it is ("3 damage from Pyroclasm to your opponent's Ornithopter"), so two of the same name are told apart.
+fn damage_words_owned(game: &Game, asked: PlayerId, d: DamageAbout) -> String {
+    let Target::Object(id) = d.to else { return damage_words(game, asked, d) };
+    let whose = if game.state.obj(id).controller == asked { "your" } else { "your opponent's" };
+    format!("{} damage from {} to {whose} {}", d.amount, game.name(d.source), game.name(id))
 }
 
 /// Counters about to be put on a permanent, in words: "2 +1/+1 counters would be put on Walking Ballista".
@@ -1328,17 +1337,29 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                 kind: kind.words(),
             })
         }
-        RequestKind::May { source, purpose: Purpose::Ask(question) } => PromptPayload::MayPromptMessage(MayPrompt {
-            player,
-            source: source_handle(game, handles, *source),
-            verb: question.verb.into(),
-            amount: i32::from(question.amount),
-            question: question.ask.into(),
-            detail: question.detail.into(),
-            yes: question.yes.into(),
-            no: question.no.into(),
-            no_default: !question.yes_is_default,
-        }),
+        RequestKind::May { source, purpose: purpose @ (Purpose::Ask(question) | Purpose::AskDamage(question, _)) } => {
+            // An optional replacement of damage, asked once for each creature a spell would damage, says which one this is.
+            let (event, subject) = match purpose {
+                Purpose::AskDamage(_, d) => (
+                    damage_words_owned(game, request.player, *d),
+                    match d.to { Target::Object(id) => source_handle(game, handles, id), _ => ViewHandle::NONE },
+                ),
+                _ => (String::new(), ViewHandle::NONE),
+            };
+            PromptPayload::MayPromptMessage(MayPrompt {
+                player,
+                source: source_handle(game, handles, *source),
+                verb: question.verb.into(),
+                amount: i32::from(question.amount),
+                question: question.ask.into(),
+                detail: question.detail.into(),
+                yes: question.yes.into(),
+                no: question.no.into(),
+                no_default: !question.yes_is_default,
+                event,
+                subject,
+            })
+        }
         RequestKind::May { source, purpose: purpose @ (Purpose::RevealForMiracle(_) | Purpose::CastForMiracleCost(_)) } => {
             PromptPayload::MayPromptMessage(miracle_prompt(game, player, source_handle(game, handles, *source), *purpose))
         }
@@ -2338,6 +2359,37 @@ mod tests {
         let asked = ask(&game, them);
         assert!(asked.sources[0].is_none(), "a gone source has no handle in a fresh view");
         assert_eq!(asked.source_names, vec!["Llanowar Elves".to_string()]);
+    }
+
+    /// An optional replacement of damage, asked once for each creature damaged (Blood of the Martyr and Pyroclasm), says
+    /// which creature, whose, how much and from what, and hands the creature's handle (CR 614.1a); a plain worded "you may"
+    /// says none of it.
+    #[test]
+    fn an_optional_damage_replacement_says_which_damage_it_is_about() {
+        static REDIRECT: Question = Question::new("Redirect", "have that damage dealt to you instead?", "", "Redirect", "Decline").no_default();
+        let (mut game, hand) = game_with(&["Llanowar Elves", "Lightning Bolt"]);
+        let mut seats = game.state.seats();
+        let (me, them) = (seats.next().expect("a seat"), seats.next().expect("a seat"));
+        let (elves, bolt) = (hand[0], hand[1]);
+        game.state.objects[elves.index()].zone = Zone::BATTLEFIELD;
+        let ask = |game: &Game, player: PlayerId, purpose: Purpose| {
+            let request = Request { id: 1, player, kind: RequestKind::May { source: bolt, purpose }, may_cancel: false };
+            let mut handles = HandleSpace::new();
+            match prompt(game, &request, &mut handles).expect("a prompt").0 {
+                PromptPayload::MayPromptMessage(p) => (p, handles.handle(elves)),
+                other => panic!("{other:?}"),
+            }
+        };
+        let damage = DamageAbout { source: bolt, to: Target::Object(elves), amount: 3 };
+        let (asked, handle) = ask(&game, me, Purpose::AskDamage(&REDIRECT, damage));
+        assert_eq!(asked.event, "3 damage from Lightning Bolt to your Llanowar Elves");
+        assert_eq!(asked.subject, handle);
+        assert_eq!((asked.question.as_str(), asked.yes.as_str(), asked.no_default), ("have that damage dealt to you instead?", "Redirect", true));
+        assert_eq!(ask(&game, them, Purpose::AskDamage(&REDIRECT, damage)).0.event, "3 damage from Lightning Bolt to your opponent's Llanowar Elves");
+        let to_player = ask(&game, me, Purpose::AskDamage(&REDIRECT, DamageAbout { to: Target::Player(them), ..damage })).0;
+        assert_eq!((to_player.event.as_str(), to_player.subject), ("3 damage from Lightning Bolt to your opponent", ViewHandle::NONE));
+        let plain = ask(&game, me, Purpose::Ask(&REDIRECT)).0;
+        assert_eq!((plain.event.as_str(), plain.subject), ("", ViewHandle::NONE));
     }
 }
 

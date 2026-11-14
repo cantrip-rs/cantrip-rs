@@ -2141,7 +2141,9 @@ public sealed partial class MainPage
                 title += $" ({lore.Count} lore counters)";
             }
 
-            Ask(title, prompt.Detail, prompt.Yes, prompt.No, yesIsPrimary: !prompt.NoDefault);
+            // An optional replacement of damage is asked once for each creature damaged (Blood of the Martyr and Pyroclasm):
+            // the damage this one is about, and whose creature it would be dealt to.
+            Ask(title, string.Join("  ·  ", new[] { prompt.Event, prompt.Detail }.Where(part => part.Length > 0)), prompt.Yes, prompt.No, yesIsPrimary: !prompt.NoDefault);
             return;
         }
 

@@ -1960,10 +1960,12 @@ public sealed class Decisions
             string question = prompt.Question.Contains("{source}", StringComparison.Ordinal)
                 ? prompt.Question.Replace("{source}", source, StringComparison.Ordinal)
                 : $"{source}: {prompt.Question}";
+            // An optional replacement of damage names the damage it is asked about: one question per creature damaged.
+            string about = prompt.Event.Length > 0 ? $" (about {prompt.Event})" : string.Empty;
             string detail = prompt.Detail.Length > 0 ? $" {prompt.Detail}." : string.Empty;
             return new MayChosenAnswer
             {
-                Accept = Yes($"{question}{detail} Yes is \"{prompt.Yes}\", no is \"{prompt.No}\". Do you say yes?"),
+                Accept = Yes($"{question}{about}{detail} Yes is \"{prompt.Yes}\", no is \"{prompt.No}\". Do you say yes?"),
             };
         }
 

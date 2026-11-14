@@ -1822,6 +1822,18 @@ public sealed class MayPromptMessage : PromptPayload
     [Key(8)]
     public bool NoDefault { get; set; }
 
+    /// <summary>
+    /// For an optional replacement of damage (CR 614.1a), the damage it would replace, in words ("3 damage from Pyroclasm
+    /// to your opponent's Ornithopter"): Blood of the Martyr asks once for each creature, and this says which one. Empty
+    /// for any other "you may".
+    /// </summary>
+    [Key(9)]
+    public string Event { get; set; } = string.Empty;
+
+    /// <summary>The object that damage would be dealt to, or no handle (damage to a player, or no damage).</summary>
+    [Key(10)]
+    public ViewHandle Subject { get; set; }
+
     /// <summary>Not doing it: "you may" never has to be taken up.</summary>
     public override AnswerPayload Default() => new MayChosenAnswer { Accept = false };
 }

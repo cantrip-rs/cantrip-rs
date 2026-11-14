@@ -1437,6 +1437,18 @@ pub struct MayPrompt {
     /// Neither answer is the default a player passing through prompts takes.
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub no_default: bool,
+    /// What an optional replacement of damage would replace (`Purpose::AskDamage`, CR 614.1a), in words as
+    /// `ChooseReplacementPrompt::event` has them ("3 damage from Pyroclasm to your opponent's Ornithopter"); empty for any
+    /// other "you may".
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub event: String,
+    /// The object that damage would be dealt to, or no handle (a player, or no damage).
+    #[serde(default, skip_serializing_if = "no_handle")]
+    pub subject: ViewHandle,
+}
+
+fn no_handle(handle: &ViewHandle) -> bool {
+    handle.is_none()
 }
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]

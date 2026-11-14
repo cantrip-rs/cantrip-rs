@@ -864,8 +864,14 @@ fn choose(cx: &mut Cx, proposal: &Proposal, found: &[Candidate]) -> Option<usize
 /// player who orders the effects (CR 616.1): "if a creature an opponent controls would die, you may exile it instead" is the
 /// effect's controller's choice. When the question has no answer yet the run goes on as if they did and is replayed with the
 /// answer (see `Cx::ask_core`).
-fn takes(cx: &mut Cx, you: PlayerId, source: ObjectId, question: &'static Question) -> bool {
-    !matches!(cx.ask_core(you, RequestKind::May { source, purpose: Purpose::Ask(question) }, false), Ok(Answer::No))
+/// A replacement of damage says which damage it is about (`Purpose::AskDamage`): a player asked once for each of several
+/// creatures is told which one each question is for.
+fn takes(cx: &mut Cx, you: PlayerId, source: ObjectId, question: &'static Question, about: Option<&Proposal>) -> bool {
+    let purpose = match about {
+        Some(Proposal::Damage(d)) => Purpose::AskDamage(question, DamageAbout { source: d.source, to: d.target, amount: d.amount }),
+        _ => Purpose::Ask(question),
+    };
+    !matches!(cx.ask_core(you, RequestKind::May { source, purpose }, false), Ok(Answer::No))
 }
 
 /// Runs what an effect does to the game as it applies (`ReplacementThen`): the modified event, every part of which meets only
@@ -1048,7 +1054,7 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
             }
             Origin::Granted(timestamp) => {
                 let Some((&e, def)) = granted(cx, timestamp) else { continue };
-                if def.optional.is_some_and(|q| !takes(cx, e.controller, source, q)) {
+                if def.optional.is_some_and(|q| !takes(cx, e.controller, source, q, Some(&*proposal))) {
                     if group_once { return Some(DamageProgress::Expanded { added, applied }); }
                     continue;
                 }
@@ -1285,7 +1291,7 @@ fn printed_controller(cx: &Cx, source: ObjectId, index: u8, proposal: &Proposal)
 fn printed_taken(cx: &mut Cx, source: ObjectId, index: u8, proposal: &Proposal) -> bool {
     let Some(question) = printed_replacement(cx, source, index).optional else { return true };
     let controller = printed_controller(cx, source, index, proposal);
-    takes(cx, controller, source, question)
+    takes(cx, controller, source, question, Some(proposal))
 }
 
 /// Both standing and lasting effects use the same optional-choice procedure (CR 614.1a).
@@ -1437,7 +1443,8 @@ fn apply_to_each_part(cx: &mut Cx, parts: &mut Vec<Proposal>) {
             }
             Origin::Granted(timestamp) => {
                 let Some((&e, def)) = granted(cx, timestamp) else { continue };
-                if def.optional.is_some_and(|q| !takes(cx, e.controller, source, q)) { continue; }
+                // Only a damage replacement is about damage, and damage never comes here (`damage_event`).
+                if def.optional.is_some_and(|q| !takes(cx, e.controller, source, q, None)) { continue; }
                 let mut took = false;
                 for j in (0..parts.len()).filter(|&j| meets(j)) {
                     let mut added = Vec::new();
@@ -2388,7 +2395,12 @@ fn damage_event_inner(
                 .filter(|g| formed_candidates(cx, &parts, g).contains(&candidate))
                 .map(|g| eligibility(cx, &parts, g, key))
                 .collect();
-            if def.optional.is_some_and(|q| !takes(cx, effect.controller, candidate.source, q)) {
+            // A once-only effect takes the whole event (CR 614.1a): it is about one damage only when the event is one.
+            let about = match snapshots.as_slice() {
+                [one] => Some(Proposal::Damage(aggregate(&parts, one).event)),
+                _ => None,
+            };
+            if def.optional.is_some_and(|q| !takes(cx, effect.controller, candidate.source, q, about.as_ref())) {
                 for selected in snapshots {
                     for i in selected { if !parts[i].applied.contains(&key) { parts[i].applied.push(key); } }
                 }
@@ -3091,6 +3103,38 @@ mod tests {
         assert!(cx.s().player(them).lost);
         assert!(cx.s().agenda[frame].pending.is_none(), "no one is asked about an impossible redirection");
         assert_eq!((parts[0].event.target, parts[0].event.amount), (Target::Player(ME), 0), "the printed effect applies");
+    }
+
+    /// An optional damage replacement's question names the damage it is about, as the effects so far have left it
+    /// (`Purpose::AskDamage`): Blood of the Martyr asked for each creature Pyroclasm would damage says which one.
+    #[test]
+    fn an_optional_damage_replacement_asks_about_its_damage() {
+        static PRINTED_OPTIONAL: CardDef = CardDef {
+            name: "Printed optional damage probe",
+            replacements: &[replacement(ReplacementKind::Damage, damage_to_me, no_damage, "deal no damage").optional(&SKIP)],
+            ..CardDef::BLANK
+        };
+        for def in [&LASTING_DAMAGE, &ONCE_DAMAGE, &PRINTED_OPTIONAL] {
+            let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, def])));
+            let deck = std::iter::repeat_n(table.id_of(&FILLER), 17).collect();
+            let mut g = Game::new(table, &crate::Setup { decks: vec![deck, Vec::new()], ..Default::default() });
+            let them = PlayerId(1);
+            let source = g.state.push_obj(Obj::new(table.id_of(def), them, Zone::BATTLEFIELD));
+            g.state.zone_push(Zone::BATTLEFIELD, source);
+            g.state.frame_push(Frame::new(FrameKind::Settle));
+            let card = g.cards.id_of(def);
+            let frame = g.state.agenda.len() - 1;
+            let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+            if def.replacements.is_empty() {
+                cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0 }, Duration::EndOfTurn);
+            }
+            let event = DamageEvent { source, target: Target::Player(ME), amount: 2, combat: false, heal_marked: false, shielded: None };
+            damage_event(&mut cx, &[event], &mut Vec::new(), &mut Vec::new());
+            let asked = cx.s().agenda[frame].pending.clone().expect("the effect's controller is asked");
+            assert_eq!(asked.player, them);
+            let RequestKind::May { purpose: Purpose::AskDamage(question, about), .. } = asked.kind else { panic!("{:?}", asked.kind) };
+            assert_eq!((question.verb, about), ("Skip", DamageAbout { source, to: Target::Player(ME), amount: 2 }), "{}", def.name);
+        }
     }
 
     #[test]

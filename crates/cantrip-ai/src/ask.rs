@@ -80,7 +80,8 @@ fn options(
 
 /// A `Purpose` by name: its variant, and for a question its verb.
 pub(crate) fn purpose_name(p: &Purpose) -> String {
-    if let Purpose::Ask(q) = p {
+    // A worded question is the same question whatever damage it is about.
+    if let Purpose::Ask(q) | Purpose::AskDamage(q, _) = p {
         return format!("Ask:{}", q.verb);
     }
     let debug = format!("{p:?}");
@@ -571,7 +572,7 @@ pub(crate) fn ask_of(
         RequestKind::May { source: s, purpose } => {
             source = r(*s);
             let verb = match purpose {
-                Purpose::Ask(q) => q.verb.to_string(),
+                Purpose::Ask(q) | Purpose::AskDamage(q, _) => q.verb.to_string(),
                 _ => String::new(),
             };
             AskKind::May {

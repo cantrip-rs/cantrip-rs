@@ -1523,6 +1523,10 @@ pub enum Purpose {
     Optional,
     /// A "you may" worded by the card or rule that asks it: the question, and what each answer does.
     Ask(&'static Question),
+    /// An optional replacement of damage (CR 614.1a), worded as `Ask` is, with the damage it would replace as the effects
+    /// applied so far have left it: Blood of the Martyr asked once for each creature Pyroclasm would deal damage to says
+    /// which creature, how much and from what.
+    AskDamage(&'static Question, DamageAbout),
     /// "The player whose turn it is may end the turn" (CR 724.1): Obeka, Brute Chronologist.
     EndTurn,
     /// The rest of the C# engine's purposes (CardChoicePurpose), one for one.

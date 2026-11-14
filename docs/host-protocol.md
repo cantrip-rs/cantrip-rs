@@ -158,6 +158,13 @@ as a yes-or-no `MayPromptMessage` whose question's verb is `Exert`. A creature c
 for another. Then the costs are locked in and paid (CR 508.1h-j); a creature to be enlisted that was tapped for mana
 meanwhile makes the declaration illegal, and the declaration of attackers is asked again (CR 733.1). Version 207.
 
+**An optional replacement of damage says which damage.** "You may have that damage dealt to you instead" (Blood of the
+Martyr, CR 614.1a) is asked once for each part of the damage it could replace - each creature Pyroclasm would damage - as a
+worded `MayPromptMessage` (`Purpose::AskDamage` in the engine) whose `Event` is that damage in words, as the effects so far
+have left it ("2 damage from Pyroclasm to your opponent's Ornithopter"), and whose `Subject` is the object it would be dealt
+to (no handle for a player). Both are empty for any other "you may". The web client shows `Event` as the prompt's detail.
+Version 234.
+
 **Checking a declaration of blockers.** A declaration of blockers (`DeclareBlockersPromptMessage`) is judged by one validator
 in the engine (`BlockRequirements::judge`, `crates/cantrip-state/src/blocks.rs`) against every restriction, requirement and
 cost (CR 509.1a-d): each block allowed, each creature blocking as many attackers as it may, each attacker within its fewest
