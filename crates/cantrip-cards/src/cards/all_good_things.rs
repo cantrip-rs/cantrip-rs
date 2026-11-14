@@ -18,8 +18,7 @@ fn draw_two_then_exile(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
 /// some card type is on every one of them; with no cards exiled (Binding Negotiation took them) that holds vacuously.
 fn chapter_four(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let exiled = g.exiled_with(g.linked(item));
-    let share = CardType::ALL.iter().any(|&t| exiled.iter().all(|&c| g.chars(c).is(t)));
-    if share {
+    if select::objects_share_a_card_type(&*g, &exiled) {
         effects::gain_life(g, item, 10)?;
     }
     Ok(())
