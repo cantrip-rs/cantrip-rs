@@ -1,0 +1,45 @@
+# Wardens of the Cycle: morbid is an intervening "if a creature died this turn" (CR 603.4). Nothing dies on turns 1 to 4, so neither
+# Bot1's end step on turn 1 nor on turn 3 puts a trigger on the stack, Bot2's end step is not "your end step", and Bot1's life and
+# hand are untouched.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Pearl
+Forest
+Wardens of the Cycle
+Mox Ruby
+Lightning Bolt
+Forest x13
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Wardens of the Cycle.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+? Stack.Count = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.End]
+? Stack.Count = 0
+[T3 Bot1.End]
+? Stack.Count = 0
+? Bot1.Life = 20
+
+[Expect]
+Bot1.Life = 20
+Bot1.Hand.Count = 3

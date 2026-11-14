@@ -1,0 +1,8 @@
+{
+  "name": "Wardens of the Cycle",
+  "manaCost": "{1}{B}{G}{G}",
+  "type": "Creature — Elf Warlock",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Morbid — At the beginning of your end step, if a creature died this turn, choose one —\n• You gain 2 life.\n• You draw a card and you lose 1 life."
+}

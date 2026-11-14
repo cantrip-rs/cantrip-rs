@@ -1,0 +1,51 @@
+# Wardens of the Cycle: "Morbid — At the beginning of your end step, if a creature died this turn, choose one — You gain 2 life; or
+# You draw a card and you lose 1 life." Bot1 casts the Wardens off Mox Jet, Mox Emerald, Mox Pearl and a Forest. On turn 2 Bot2
+# casts an Ornithopter; on turn 3 Bot1 kills it with Lightning Bolt (a creature of the opponent's dies: morbid counts any creature),
+# and at the end step chooses the first mode: 2 life, and no card drawn.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Pearl
+Forest
+Wardens of the Cycle
+Mox Ruby
+Lightning Bolt
+Forest x13
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Wardens of the Cycle.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Hand.Count = 1
+[T3 Bot1.End]
+Bot1.Modes(1)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+? Bot1.Hand.Count = 1
+
+[Expect]
+Bot1.Life = 22
+Bot1.Hand.Count = 1
