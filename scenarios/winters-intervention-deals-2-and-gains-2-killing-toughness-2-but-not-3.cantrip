@@ -1,0 +1,44 @@
+# Winter's Intervention ({1}{B}) deals exactly 2 damage to target creature and its controller gains 2 life (CR 120.3, 119.1):
+# it kills Bot2's Ornithopter (toughness 2, the limit) and, at 2 damage, leaves Bot2's Phyrexian Walker (toughness 3) alive
+# with that damage on it. Each cast gains 2: 20 -> 22 -> 24. Four Mox Jets pay, two for each cast, checked emptied each time.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Winter's Intervention
+Winter's Intervention
+Swamp x12
+
+[Bot2 Deck]
+Ornithopter
+Phyrexian Walker
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Phyrexian Walker.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Winter's Intervention.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Winter's Intervention.Cast(Bot2.Battlefield.Phyrexian Walker)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield.Phyrexian Walker.Damage = 2
+Bot2.Battlefield.Phyrexian Walker.Toughness = 3
+Bot1.Life = 24
+Bot2.Life = 20
+Bot1.Graveyard = Winter's Intervention; Winter's Intervention
