@@ -1,0 +1,36 @@
+# Promising Stairs: "At the beginning of your upkeep, surveil 1." Bot1 casts it on turn 1 (Black Lotus for {2}{U}) and, with one
+# name among its unlocked doors, never wins (a count of "one or more" would). At turn 3's upkeep the top card, Lightning Bolt, is put into
+# the graveyard (surveil, CR 701.25a), so the draw step takes the card under it, Island; at turn 5's upkeep the top card is kept.
+
+[Bot1 Deck]
+Black Lotus
+Central Elevator // Promising Stairs
+Island x5
+Lightning Bolt
+Island x14
+
+[Bot2 Deck]
+Island x26
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Central Elevator // Promising Stairs.Cast(Ability: Promising Stairs)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt)
+? Bot1.Graveyard = Lightning Bolt; Black Lotus
+? Result = InProgress
+[T3 Bot1.Draw]
+? Bot1.Hand = Island; Island; Island; Island; Island; Island
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+[T5 Bot1.Draw]
+[Expect]
+Result = InProgress
+Bot1.Graveyard = Lightning Bolt; Black Lotus

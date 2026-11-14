@@ -1,0 +1,123 @@
+# Promising Stairs counts "different names among unlocked doors of Rooms you control" (CR 201.2b, 709.5): two Rooms with the same
+# unlocked doors give their names once. Bot1 unlocks eight doors, but two Bottomless Pool // Locker Room cards share theirs: Promising
+# Stairs and Unholy Annex on turn 1 (Black Lotus, three Moxen), both Bottomless Pools on turn 3, the first Locker Room on turn 5,
+# Ritual Chamber on turn 7, the second Locker Room on turn 9 and Central Elevator on turn 11. At turn 13's upkeep eight doors are
+# unlocked with six different names among them, and Bot1 does not win (counting each door would). The surveil keeps the top card.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Central Elevator // Promising Stairs
+Unholy Annex // Ritual Chamber
+Bottomless Pool // Locker Room
+Bottomless Pool // Locker Room
+Swamp
+Island x16
+
+[Bot2 Deck]
+Island x26
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Central Elevator // Promising Stairs.Cast(Ability: Promising Stairs)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Bottomless Pool // Locker Room | )
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Bottomless Pool // Locker Room.Cast(Ability: Bottomless Pool)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Bottomless Pool // Locker Room.Cast(Ability: Bottomless Pool)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Bottomless Pool#1.Activate(Ability: right door)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Unholy Annex.Activate(Ability: right door)
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Bottomless Pool.Activate(Ability: right door)
+Bot1.Pass
+Bot2.Pass
+[T11 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+[T11 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Promising Stairs.Activate(Ability: left door)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bottomless Pool // Locker Room#1.Doors = Bottomless Pool; Locker Room
+? Bot1.Battlefield.Bottomless Pool // Locker Room#2.Doors = Bottomless Pool; Locker Room
+? Bot1.Battlefield.Central Elevator // Promising Stairs.Doors = Central Elevator; Promising Stairs
+? Bot1.Battlefield.Unholy Annex // Ritual Chamber.Doors = Unholy Annex; Ritual Chamber
+[T13 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+[T13 Bot1.Draw]
+[Expect]
+Result = InProgress

@@ -1,0 +1,41 @@
+# Central Elevator's search for "a Room card that doesn't have the same name as a Room you control" has nothing to take when the only Room card in the
+# library has a name already in play (CR 201.2a, 701.23b). Turn 1: Bot1 casts Unholy Annex (Black Lotus), then Central Elevator (four Moxen). The library's
+# only Room card is a second Unholy Annex // Ritual Chamber, which shares the Annex's name: no card is added to the hand and the library keeps its 13 cards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Unholy Annex // Ritual Chamber
+Central Elevator // Promising Stairs
+Unholy Annex // Ritual Chamber
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Central Elevator // Promising Stairs.Cast(Ability: Central Elevator)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand =
+? Bot1.Library.Count = 13
+[Expect]
+Bot1.Battlefield.Central Elevator.Doors = Central Elevator
