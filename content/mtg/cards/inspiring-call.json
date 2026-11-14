@@ -1,0 +1,6 @@
+{
+  "name": "Inspiring Call",
+  "manaCost": "{2}{G}",
+  "type": "Instant",
+  "oracleText": "Draw a card for each creature you control with a +1/+1 counter on it. Those creatures gain indestructible until end of turn. (Damage and effects that say \"destroy\" don't destroy them.)"
+}

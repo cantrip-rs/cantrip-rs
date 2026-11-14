@@ -1,0 +1,65 @@
+# Inspiring Call counts "each creature you control with a +1/+1 counter on it": Bot1's two Botanical Brawlers (two counters
+# each) are two cards, and only they gain indestructible until end of turn (CR 702.12b, 611.2c); Bot1's Ornithopter has no
+# counter, and Bot2's Botanical Brawler has counters but is not Bot1's, so neither is counted or given it. Bot1's hand is
+# empty before the spell, so the two Plains drawn show the count.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Pearl
+Botanical Brawler
+Botanical Brawler
+Mox Emerald
+Ornithopter
+Inspiring Call
+Plains x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Botanical Brawler
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Botanical Brawler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Botanical Brawler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Botanical Brawler.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Inspiring Call.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Plains; Plains
+Bot1.Battlefield.Botanical Brawler#1.Keywords = Indestructible; Trample
+Bot1.Battlefield.Botanical Brawler#2.Keywords = Indestructible; Trample
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot2.Battlefield.Botanical Brawler.Keywords = Trample

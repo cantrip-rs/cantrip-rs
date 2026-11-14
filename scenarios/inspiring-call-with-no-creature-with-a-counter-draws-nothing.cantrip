@@ -1,0 +1,26 @@
+# Inspiring Call with only a counterless Ornithopter among Bot1's creatures: no card is drawn and nothing gains indestructible
+# The hand keeps its four untouched Plains.
+# (the control for inspiring-call-draws-per-your-creature-with-a-counter-and-makes-only-those-indestructible).
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Inspiring Call
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Inspiring Call.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains
+Bot1.Battlefield.Ornithopter.Keywords = Flying

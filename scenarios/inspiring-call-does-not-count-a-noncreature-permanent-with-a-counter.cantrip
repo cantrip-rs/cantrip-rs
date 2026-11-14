@@ -1,0 +1,52 @@
+# Inspiring Call counts only creatures with a +1/+1 counter: Bot1's Mutavault gets Cloudbound Moogle's counter on turn 1 while it is
+# animated, and on turn 3 it is a land again, not a creature (CR 611.2a, 122.1), so it is neither counted nor given indestructible: no
+# card is drawn (the turn 3 Plains is the only card in hand). Counting it would draw a second Plains.
+
+[Bot1 Deck]
+Mutavault
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Emerald
+Cloudbound Moogle
+Inspiring Call
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mutavault.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mutavault.Activate(Ability: {1})
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cloudbound Moogle.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Mutavault)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mutavault.Counters.PlusOnePlusOne = 1
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Mutavault.Types = Land
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Inspiring Call.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Inspiring Call; Black Lotus
+Bot1.Hand = Plains
+Bot1.Battlefield.Mutavault.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Mutavault.Keywords = (absent)

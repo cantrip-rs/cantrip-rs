@@ -1,0 +1,48 @@
+# Inspiring Call counts a creature with exactly one +1/+1 counter (CR 122.1): Cloudbound Moogle puts its one counter on Bot1's
+# Ornithopter, so one card is drawn (the Plains drawn joins the one left in hand) and only the Ornithopter, not the
+# counterless Moogle, gains indestructible until end of turn (CR 702.12b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Emerald
+Ornithopter
+Cloudbound Moogle
+Plains
+Inspiring Call
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cloudbound Moogle.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Inspiring Call.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Plains; Plains
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Indestructible
+Bot1.Battlefield.Cloudbound Moogle.Keywords = Flying
