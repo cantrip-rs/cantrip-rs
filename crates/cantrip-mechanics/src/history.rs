@@ -309,6 +309,12 @@ pub fn creatures_died_this_turn(q: &dyn Query, under: Option<PlayerId>) -> usize
         .count()
 }
 
+/// "If a creature died this turn" as a condition (CR 603.4, 700.4): any creature's, a token's included, asked of the history as the
+/// trigger event happens and again as the ability resolves. Osai Vultures, Scorpion, Seething Striker and Slumbering Cerberus print it.
+pub fn a_creature_died_this_turn(q: &dyn Query, _: &Asker) -> bool {
+    creatures_died_this_turn(q, None) > 0
+}
+
 /// "If you gained life this turn" (CR 603.4, 119.3): whether `player` has gained any life this turn. Ocelot Pride's and
 /// Enlightened Confidant's intervening ifs print it.
 pub fn gained_life_this_turn(q: &dyn Query, player: PlayerId) -> bool {
