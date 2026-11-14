@@ -1705,6 +1705,10 @@ pub mod filters {
     pub fn creature(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
         q.chars(id).is(CardType::Creature)
     }
+    /// "A creature or enchantment" (CR 118.8): a permanent that is a creature, an enchantment or both. Final Vengeance sacrifices one; Case of the Locked Hothouse casts them from the top of the library.
+    pub fn creature_or_enchantment(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
+        q.chars(id).is(CardType::Creature) || q.chars(id).is(CardType::Enchantment)
+    }
     /// Any permanent: Fear of Isolation returns one. Never a discard cost's filter: a filter there names a characteristic of the
     /// cards (CR 701.9c), and "discard a card" is `discard_cards`.
     pub fn any(_: &dyn Query, _: &Asker, _: ObjectId) -> bool {
