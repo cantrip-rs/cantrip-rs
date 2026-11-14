@@ -60,6 +60,10 @@ pub fn attacking_of_subtype_you_control<const SUBTYPE: u16>(view: &dyn LayerQuer
     attacking_creatures_you_control(view, source, affected, so_far) && your_of_subtype::<SUBTYPE>(view, source, affected, so_far)
 }
 
+/// "Attacking creatures you control get +1/+0." (CR 613.4c, layer 7c): Goblin Oriflamme and Orcish Oriflamme print it.
+pub const ATTACKING_CREATURES_YOU_CONTROL_GET_PLUS_ONE_POWER: StaticDef =
+    static_ability(Layer::PtModify, attacking_creatures_you_control, plus_pt::<1, 0>, "Attacking creatures you control get +1/+0.");
+
 /// "Creatures" / "all creatures" (CR 613.1f): every creature on the battlefield, whoever controls it, judged on what the
 /// earlier layers made the object. Intruder Alarm and Lavaleaper ("All creatures have haste") use it as
 /// `StaticDef::affects`.
