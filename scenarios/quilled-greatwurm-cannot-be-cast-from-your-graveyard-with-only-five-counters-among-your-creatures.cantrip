@@ -1,0 +1,68 @@
+# The graveyard cast needs six counters "from among creatures you control" (CR 118.3: a cost can't be paid without the resources to
+# pay it fully). Same game as the one that casts it with exactly six, except that the Memnite stays home on turn 3: Bot2's Weakness
+# makes the first Greatwurm a 5/6, it deals 5 and gets five counters, and the second Greatwurm - discarded by Bot2's Mind Twist - can't
+# be cast on turn 5 though Black Lotus #2 and four Moxen pay for all {4}{G}{G}. The Memnite never dealt damage, so it has no counter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Quilled Greatwurm
+Memnite
+Quilled Greatwurm
+Mox Pearl
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Weakness
+Mind Twist
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Quilled Greatwurm#1.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Weakness.Cast(Bot1.Battlefield.Quilled Greatwurm)
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mind Twist.Cast(Bot1; X: 1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Quilled Greatwurm; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Quilled Greatwurm > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Quilled Greatwurm.Counters.PlusOnePlusOne = 5
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana = {W}{B}{R}{G}{G}{G}{G}
+! Bot1.Graveyard.Quilled Greatwurm.Cast
+
+[Expect]
+Turn = 5
+Bot1.Graveyard = Black Lotus; Quilled Greatwurm; Black Lotus
+Bot1.Battlefield.Quilled Greatwurm.Counters.PlusOnePlusOne = 5
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)

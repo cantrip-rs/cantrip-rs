@@ -1,0 +1,64 @@
+# Quilled Greatwurm: "Whenever a creature you control deals combat damage during your turn": the damage must be combat damage and
+# dealt on its controller's turn. On turn 3 Bot1's Bite Down has the Greatwurm deal 7 damage to one of Bot2's Grizzly Bears (CR 120.2,
+# not combat damage): no counter. On turn 4 it blocks the other Bear, dealing 7 combat damage during Bot2's turn: none either. On turn 5 it
+# attacks and deals the same amount of combat damage during Bot1's own turn: seven counters.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Quilled Greatwurm
+Bite Down
+Island x22
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Grizzly Bears
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Quilled Greatwurm.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bite Down.Cast
+Bot1.Target(Bot1.Battlefield.Quilled Greatwurm)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears#1)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Grizzly Bears; Black Lotus
+? Bot1.Battlefield.Quilled Greatwurm.Counters.PlusOnePlusOne = (absent)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Block(Quilled Greatwurm > Grizzly Bears)
+[T4 Bot2.Main2]
+? Bot2.Graveyard = Grizzly Bears; Grizzly Bears; Black Lotus
+? Bot1.Battlefield.Quilled Greatwurm.Damage = 2
+? Bot1.Battlefield.Quilled Greatwurm.Counters.PlusOnePlusOne = (absent)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Quilled Greatwurm > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Quilled Greatwurm.Counters.PlusOnePlusOne = 7
+Bot2.Life = 13

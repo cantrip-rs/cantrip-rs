@@ -1,0 +1,11 @@
+{
+  "name": "Quilled Greatwurm",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Wurm",
+  "power": 7,
+  "toughness": 7,
+  "oracleText": "Trample\nWhenever a creature you control deals combat damage during your turn, put that many +1/+1 counters on it. (It must survive to get the counters.)\nYou may cast this card from your graveyard by removing six counters from among creatures you control in addition to paying its other costs.",
+  "keywords": [
+    "Trample"
+  ]
+}

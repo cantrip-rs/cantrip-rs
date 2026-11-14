@@ -1,0 +1,81 @@
+# Quilled Greatwurm {4}{G}{G}, a 7/7 trampler: "Whenever a creature you control deals combat damage during your turn, put that many +1/+1
+# counters on it." and "You may cast this card from your graveyard by removing six counters from among creatures you control in addition
+# to paying its other costs." Bot1 casts a Memnite and the Greatwurm on turn 1 (Black Lotus {G}{G}{G}, Mox Emerald, Mox Jet, Mox Ruby),
+# holding the second Greatwurm. Bot2's Weakness (-2/-1) makes the first a 5/6 and its Mind Twist for 1 discards the second, Bot1's only
+# card. On turn 3 both attack unblocked: the Greatwurm deals 5 and gets five counters, the Memnite deals 1 and gets one - six counters, exactly
+# enough among the two creatures. On turn 5 the second Greatwurm is cast from the graveyard (Black Lotus #2 and four Moxen pay {4}{G}{G}),
+# removing all six: five from the first and the Memnite's (CR 118.3, 601.2f).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Quilled Greatwurm
+Memnite
+Quilled Greatwurm
+Mox Pearl
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Weakness
+Mind Twist
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Quilled Greatwurm#1.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Weakness.Cast(Bot1.Battlefield.Quilled Greatwurm)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Quilled Greatwurm.Power = 5
+Bot2.Hand.Mind Twist.Cast(Bot1; X: 1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Quilled Greatwurm; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Quilled Greatwurm > Bot2; Memnite > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Quilled Greatwurm.Counters.PlusOnePlusOne = 5
+? Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+? Bot2.Life = 14
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Quilled Greatwurm.Cast
+Bot1.RemoveCounters(Quilled Greatwurm: 5; Memnite: 1)
+? Bot1.Mana = {G}
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 5
+Bot1.Battlefield.Quilled Greatwurm#1.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Quilled Greatwurm#1.Power = 5
+Bot1.Battlefield.Quilled Greatwurm#2.Power = 7
+Bot1.Graveyard = Black Lotus; Black Lotus
+Bot2.Life = 14

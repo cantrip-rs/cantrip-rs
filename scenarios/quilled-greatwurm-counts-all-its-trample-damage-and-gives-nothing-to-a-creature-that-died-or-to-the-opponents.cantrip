@@ -1,0 +1,55 @@
+# Quilled Greatwurm: "Whenever a creature you control deals combat damage during your turn, put that many +1/+1 counters on it. (It must
+# survive to get the counters.)" On turn 3 Bot1 attacks with the Greatwurm and a Memnite. One of Bot2's Grizzly Bears blocks the
+# Greatwurm, which assigns 2 to it and tramples 5 over to Bot2: it dealt 7 at once and gets seven counters (CR 510.2, 702.19b). The other
+# Bear blocks the Memnite: the Memnite deals 1 and is killed by the Bear's 2, so it has no counter to get; the surviving Bear
+# dealt combat damage during Bot1's turn too, but it is not Bot1's creature and gets none.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Quilled Greatwurm
+Memnite
+Island x21
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Grizzly Bears
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Quilled Greatwurm.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Quilled Greatwurm > Bot2; Memnite > Bot2)
+Bot2.Block(Grizzly Bears#1 > Quilled Greatwurm; Grizzly Bears#2 > Memnite)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Quilled Greatwurm.Counters.PlusOnePlusOne = 7
+Bot1.Battlefield.Quilled Greatwurm.Power = 14
+Bot1.Graveyard = Memnite; Black Lotus
+Bot2.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = (absent)
+Bot2.Graveyard = Grizzly Bears; Black Lotus
+Bot2.Life = 15
