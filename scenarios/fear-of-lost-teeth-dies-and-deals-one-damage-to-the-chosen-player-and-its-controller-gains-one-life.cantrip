@@ -1,0 +1,37 @@
+# Fear of Lost Teeth (1/1): "When this creature dies, it deals 1 damage to any target and you gain 1 life." Bot1 casts it on turn 1 and
+# Bot2 kills it with Lightning Bolt on turn 2. A land is no "any target" (refused); Bot1 aims the trigger at Bot2 (20 -> 19) and gains 1
+# (20 -> 21), the 1 damage dealt by the Fear itself even though it has left the battlefield (CR 120.3, 119.3, 113.7a).
+
+[Bot1 Deck]
+Mox Jet
+Fear of Lost Teeth
+Swamp x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x13
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fear of Lost Teeth.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Fear of Lost Teeth)
+Bot2.Pass
+Bot1.Pass
+! Bot1.Target(Bot2.Battlefield.Mox Ruby)
+Bot1.Target(Bot2)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 21
+Bot1.Battlefield.Fear of Lost Teeth = (absent)
+Bot1.Graveyard = Fear of Lost Teeth

@@ -1,0 +1,44 @@
+# Fear of Lost Teeth's death trigger aimed at a creature: Bot2 bolts the Fear, Bot1 targets Bot2's Llanowar Elves (1/1) with "it deals 1
+# damage to any target" and the Elves die (CR 120.3, 704.5g); Bot1 still gains 1 (20 -> 21) and Bot2 is not touched (20).
+
+[Bot1 Deck]
+Mox Jet
+Fear of Lost Teeth
+Swamp x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Llanowar Elves
+Lightning Bolt
+Mountain x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fear of Lost Teeth.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Fear of Lost Teeth)
+Bot2.Pass
+Bot1.Pass
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot1.Life = 21
+Bot2.Battlefield.Llanowar Elves = (absent)
+Bot2.Graveyard = Llanowar Elves; Lightning Bolt
+Bot1.Graveyard = Fear of Lost Teeth

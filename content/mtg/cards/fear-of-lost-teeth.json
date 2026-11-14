@@ -1,0 +1,8 @@
+{
+  "name": "Fear of Lost Teeth",
+  "manaCost": "{B}",
+  "type": "Enchantment Creature — Nightmare",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "When this creature dies, it deals 1 damage to any target and you gain 1 life."
+}
