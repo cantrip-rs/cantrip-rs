@@ -1,0 +1,69 @@
+# Vile Mutilator's enters trigger: "each opponent sacrifices a nontoken enchantment of their choice, then sacrifices a nontoken
+# creature of their choice" (CR 701.21a, 101.4). Bot2 has a Bad Moon, a Circle of Protection: Green and a Memnite. It is asked
+# which enchantment goes, choosing the Bad Moon, and exactly one is sacrificed - the Circle stays - and then its only creature,
+# the Memnite, goes without a question. Bot1 pays the additional cost with its own Memnite.
+
+[Bot1 Deck]
+Swamp
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Black Lotus
+Memnite
+Island
+Vile Mutilator
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Bad Moon
+Circle of Protection: Green
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Bad Moon.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Circle of Protection: Green.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Vile Mutilator.Cast
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Bad Moon)
+! Bot2.Choose
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Circle of Protection: Green; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby
+Bot2.Graveyard = Memnite; Bad Moon
+Stack.Count = 0

@@ -1,0 +1,54 @@
+# Vile Mutilator's enters trigger: "each opponent sacrifices ... a nontoken creature of their choice" (CR 701.21a, 101.4). Bot2
+# has a Memnite and an Ornithopter and no enchantment: the enchantment sacrifice finds nothing and Bot2 is asked which
+# creature goes, choosing the Ornithopter; the Memnite stays. Bot1 pays the additional cost with its own Memnite.
+
+[Bot1 Deck]
+Swamp
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Black Lotus
+Memnite
+Island
+Vile Mutilator
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x30
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Vile Mutilator.Cast
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Memnite
+Bot2.Graveyard = Ornithopter
+Bot1.Graveyard = Memnite; Black Lotus
+Stack.Count = 0

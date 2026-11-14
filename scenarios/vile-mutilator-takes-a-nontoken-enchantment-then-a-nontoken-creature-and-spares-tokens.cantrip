@@ -1,0 +1,76 @@
+# Vile Mutilator: "As an additional cost to cast this spell, sacrifice a creature or enchantment. When this creature enters,
+# each opponent sacrifices a nontoken enchantment of their choice, then sacrifices a nontoken creature of their choice."
+# (CR 701.21a, 101.4, 118.8). Bot1 pays the additional cost with its Memnite. Bot2 has Spirit of the Labyrinth (an
+# enchantment creature), a Memnite, and a Bird token wearing a Royal Role token (a token enchantment). The enchantment is
+# sacrificed first and it is the Spirit alone, the Role being a token, so no question is asked; the creature is sacrificed
+# second and it is the Memnite alone - the Spirit is already gone and the Bird is a token - so again no question is
+# asked (a creature first would offer the Spirit too). The Bird and its Role are left.
+
+[Bot1 Deck]
+Swamp
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Black Lotus
+Memnite
+Island
+Vile Mutilator
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Emerald
+Black Lotus
+Spirit of the Labyrinth
+Memnite
+Gysahl Greens
+Island
+Royal Treatment
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Spirit of the Labyrinth.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Gysahl Greens.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Royal Treatment.Cast(Bot2.Battlefield.Bird Token)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Vile Mutilator.Cast
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot2.Choose
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Memnite; Black Lotus
+Bot1.Battlefield.Vile Mutilator.Tapped = false
+Bot1.Battlefield.Vile Mutilator.Keywords = Flying; Trample
+Bot2.Battlefield = Bird Token; Mox Emerald; Mox Pearl; Royal
+Bot2.Graveyard = Memnite; Spirit of the Labyrinth; Royal Treatment; Gysahl Greens; Black Lotus
+Stack.Count = 0

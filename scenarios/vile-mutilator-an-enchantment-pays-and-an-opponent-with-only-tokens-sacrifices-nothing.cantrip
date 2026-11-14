@@ -1,0 +1,63 @@
+# Vile Mutilator: "...sacrifice a creature or enchantment" (CR 118.8) can be an enchantment: Bot1, with no creature, pays it
+# with its Bad Moon. "Each opponent sacrifices a nontoken enchantment ... then ... a nontoken creature" (CR 701.21a): Bot2 has
+# only a Bird token wearing a Royal Role token, an enchantment token and a creature token, so it sacrifices nothing and is
+# asked nothing.
+
+[Bot1 Deck]
+Swamp
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Black Lotus
+Bad Moon
+Island
+Vile Mutilator
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Gysahl Greens
+Island x5
+Royal Treatment
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bad Moon.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Gysahl Greens.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Royal Treatment.Cast(Bot2.Battlefield.Bird Token)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Vile Mutilator.Cast
+Bot1.Choose(Bad Moon)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot2.Choose
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Pearl; Mox Ruby; Swamp; Vile Mutilator
+Bot1.Graveyard = Bad Moon; Black Lotus
+Bot2.Battlefield = Bird Token; Royal
+Stack.Count = 0

@@ -1,0 +1,12 @@
+{
+  "name": "Vile Mutilator",
+  "manaCost": "{5}{B}{B}",
+  "type": "Creature — Demon",
+  "power": 6,
+  "toughness": 5,
+  "oracleText": "As an additional cost to cast this spell, sacrifice a creature or enchantment.\nFlying, trample\nWhen this creature enters, each opponent sacrifices a nontoken enchantment of their choice, then sacrifices a nontoken creature of their choice.",
+  "keywords": [
+    "Flying",
+    "Trample"
+  ]
+}
