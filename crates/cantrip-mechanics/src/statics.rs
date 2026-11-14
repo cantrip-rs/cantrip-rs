@@ -126,7 +126,13 @@ pub fn itself(_: &dyn LayerQuery, source: ObjectId, affected: ObjectId, _: &Char
 /// it. Elenda, Saint of Dusk and Righteous Valkyrie ask it for "at least N more than your starting life total".
 pub fn life_above_starting_life(q: &dyn LayerQuery, source: ObjectId) -> i32 {
     let state = q.state();
-    let player = state.player(state.obj(source).controller);
+    player_life_above_starting_life(state, state.obj(source).controller)
+}
+
+/// The same for a named player, for a condition that is not a layer's (an activated ability's "Activate only if you have at least
+/// N life more than your starting life total", CR 602.5b, which is asked of the game state when the ability is offered).
+pub fn player_life_above_starting_life(state: &GameState, player: PlayerId) -> i32 {
+    let player = state.player(player);
     player.life - player.starting_life
 }
 
