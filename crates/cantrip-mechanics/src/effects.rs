@@ -3589,3 +3589,17 @@ pub fn deal_damage_for_drained_life(g: &mut dyn Game, source: ObjectId, target: 
     }
     dealt.into_iter().map(|(recipient, total)| total.min(before.cap(g, recipient).max(0))).sum()
 }
+
+/// "This creature gains shroud until end of turn and doesn't untap during your next untap step. Tap it" (CR 702.18a, 611.2a,
+/// 502.3, 701.26a): three sentences in order (CR 608.2c), each about the ability's source, the second only while it is still the
+/// same permanent (CR 400.7). Deep Spawn and Homarid Warrior print it.
+pub fn this_gains_shroud_doesnt_untap_next_untap_step_then_taps(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    gain_until_end_of_turn(g, item.object, item.object, Keyword::Shroud);
+    g.end_sentence();
+    if is_live(g, item.object) {
+        g.add_effect(item.object, item.object, EffectKind::DoesntUntap, Duration::DuringNextUntapStepOf(item.controller));
+    }
+    g.end_sentence();
+    g.tap_together(&[item.object]);
+    Ok(())
+}

@@ -368,3 +368,11 @@ pub fn source_of_colors<const COLORS: u8>(q: &dyn Query, choice: &Choice, _: u32
 pub fn from_chosen_source_of_colors<const COLORS: u8>(q: &dyn Query, asker: &Asker, affected: ObjectId, d: &DamageEvent) -> bool {
     by_chosen_source(q, affected, d) && is_of_colors::<COLORS>(q, asker.source, d.source)
 }
+
+/// A `PreventionDef::applies` for "prevent all damage that would be dealt to enchanted creature by sources of the chosen color"
+/// (CR 615.1, 303.4m): damage dealt to the creature the Aura is attached to by a source of the color the Aura's controller
+/// chose as it entered (`Entering::chosen_color`). Prismatic Ward and Chromatic Armor print it.
+pub fn enchanted_creature_from_sources_of_chosen_color(q: &dyn Query, asker: &Asker, e: &DamageEvent) -> bool {
+    q.state().chosen_color(q.linked_to(asker)).is_some_and(|chosen| q.chars(e.source).colors.has(chosen))
+        && matches!(e.target, Target::Object(o) if q.attached_to(asker.source) == Some(o))
+}
