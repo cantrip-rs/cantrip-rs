@@ -1,0 +1,11 @@
+{
+  "name": "Mindsparker",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Elemental",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "First strike (This creature deals combat damage before creatures without first strike.)\nWhenever an opponent casts a white or blue instant or sorcery spell, this creature deals 2 damage to that player.",
+  "keywords": [
+    "FirstStrike"
+  ]
+}
