@@ -1,0 +1,58 @@
+# Probe: the creature becomes an illegal target (Snakeskin Veil) before Fiery Annihilation resolves; ruling 2024-11-08: the
+# Equipment is not exiled.
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Fiery Annihilation
+Island x16
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Alpine Grizzly
+Coral Sword
+Mox Emerald
+Snakeskin Veil
+Island x16
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Alpine Grizzly.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Coral Sword.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Alpine Grizzly.Power = 5
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fiery Annihilation.Cast
+Bot1.Target(Alpine Grizzly)
+Bot1.Target(Coral Sword)
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Snakeskin Veil.Cast(Bot2.Battlefield.Alpine Grizzly)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Battlefield.Alpine Grizzly.Power = 6
+Bot1.Graveyard = Fiery Annihilation
