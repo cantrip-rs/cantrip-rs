@@ -1,0 +1,86 @@
+# "Creature or planeswalker": Bot2's Liliana of the Veil (3 loyalty) is a legal target on turn 3 and 3 damage removes all her loyalty (CR 120.3c), so she
+# is exiled instead of dying (CR 704.5i, 614.1a). Turn 3 Dragonfire leaves Bot2's Fortress Crab with 3 damage, the damage wearing off at end of turn and
+# the replacement with it (CR 611.2c): the two Lightning Bolts on turn 5 kill the Crab, which goes to the graveyard, not exile.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mountain
+Scorching Dragonfire
+Scorching Dragonfire
+Lightning Bolt
+Lightning Bolt
+Mountain x13
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Fortress Crab
+Liliana of the Veil
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Fortress Crab.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Scorching Dragonfire.Cast(Bot2.Battlefield.Fortress Crab)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Fortress Crab.Damage = 3
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Battlefield.Mox Jet#3.Activate
+Bot2.Battlefield.Mox Jet#4.Activate
+Bot2.Hand.Liliana of the Veil.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Scorching Dragonfire.Cast(Bot2.Battlefield.Liliana of the Veil)
+Bot1.Pass
+Bot2.Pass
+? Exile = Liliana of the Veil
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Fortress Crab)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Fortress Crab)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Liliana of the Veil
+Bot2.Graveyard = Fortress Crab; Black Lotus
