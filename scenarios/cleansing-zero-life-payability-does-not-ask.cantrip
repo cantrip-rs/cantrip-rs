@@ -1,0 +1,35 @@
+# The first player saves a land; Platinum Emperion's controller cannot pay and is not asked to choose zero lands (CR 118.3).
+[Bot1 Deck]
+Forest
+Black Lotus
+Cleansing
+Island x20
+[Bot2 Deck]
+Mishra's Workshop
+Black Lotus x2
+Platinum Emperion
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mishra's Workshop.Play
+Bot2.Hand.Black Lotus#1.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Mishra's Workshop.Activate
+Bot2.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Platinum Emperion.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Cleansing.Cast
+Bot1.Choose(Mishra's Workshop)
+! Bot2.Choose
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 20
+Bot2.Battlefield.Mishra's Workshop.Types = Land
+Bot1.Graveyard.Forest.Colors =

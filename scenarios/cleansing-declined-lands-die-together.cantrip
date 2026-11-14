@@ -1,0 +1,24 @@
+# Neither player pays: both lands are destroyed.
+[Bot1 Deck]
+Black Lotus
+Cleansing
+Plains
+Island x20
+[Bot2 Deck]
+Forest
+Island x24
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Cleansing.Cast
+Bot1.Choose()
+Bot2.Choose()
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Graveyard.Plains.Colors =
+Bot2.Graveyard.Forest.Colors =

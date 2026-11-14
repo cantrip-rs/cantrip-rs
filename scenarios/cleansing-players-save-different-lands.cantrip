@@ -1,0 +1,24 @@
+# Each player chooses all the lands they pay for in turn order, including another player's land.
+[Bot1 Deck]
+Black Lotus
+Cleansing
+Plains
+Island x20
+[Bot2 Deck]
+Forest
+Island x24
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Cleansing.Cast
+Bot1.Choose(Forest)
+Bot2.Choose(Plains)
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
+Bot1.Battlefield.Plains.Types = Land
+Bot2.Battlefield.Forest.Types = Land

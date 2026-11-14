@@ -1,0 +1,36 @@
+# Platinum Angel keeps its controller in the game at zero life. A player at one life can pay for exactly one land; the next player can save the other (CR 118.3b, 118.12a, 101.4).
+[Bot1 Deck]
+Mishra's Workshop
+Black Lotus x3
+Platinum Angel
+Cleansing
+Island x20
+[Bot2 Deck]
+Forest
+Island x24
+[Life]
+Bot1: 1
+[Actions]
+Bot1.Hand.Mishra's Workshop.Play
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus#2.Cast
+Bot1.Battlefield.Mishra's Workshop.Activate
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Platinum Angel.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Cleansing.Cast
+Bot1.Choose(Mishra's Workshop)
+Bot2.Choose(Forest)
+[Expect]
+Bot1.Life = 0
+Bot2.Life = 19
+Bot1.Battlefield.Mishra's Workshop.Types = Land
+Bot2.Battlefield.Forest.Types = Land
+Bot1.Battlefield.Platinum Angel.Power = 4
+Result = InProgress
