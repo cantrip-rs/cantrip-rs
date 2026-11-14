@@ -1,0 +1,40 @@
+# Only your untapped Forests may be sacrificed; two give Wood Elemental 2/2 (CR 701.21a, 614.1c).
+[Bot1 Deck]
+Forest
+Forest
+Bayou
+Island
+Wood Elemental
+Black Lotus
+Mox Emerald
+Island x20
+[Bot2 Deck]
+Forest
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Bayou.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Wood Elemental.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Choose(Bot1.Battlefield.Forest#1)
+! Bot1.Choose(Bot2.Battlefield.Forest)
+! Bot1.Choose(Island)
+Bot1.Choose(Bot1.Battlefield.Forest#2; Bayou)
+[Expect]
+Bot1.Battlefield.Wood Elemental.Power = 2
+Bot1.Battlefield.Wood Elemental.Toughness = 2
+Bot1.Battlefield.Forest.Tapped = true
+Bot2.Battlefield.Forest.Tapped = false
+Bot1.Graveyard.Count = 3

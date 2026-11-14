@@ -1,0 +1,27 @@
+# Returning Wood Elemental from the graveyard still requires the entry sacrifice (CR 614.1c).
+[Bot1 Deck]
+Mountain
+Faithless Looting
+Black Lotus
+Animate Dead
+Wood Elemental
+Forest
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Wood Elemental; Island)
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Animate Dead.Cast(Bot1.Graveyard.Wood Elemental)
+Bot1.Choose(Forest)
+[Expect]
+Bot1.Battlefield.Wood Elemental.Power = 0
+Bot1.Battlefield.Wood Elemental.Toughness = 1
+Bot1.Battlefield.Forest = (absent)

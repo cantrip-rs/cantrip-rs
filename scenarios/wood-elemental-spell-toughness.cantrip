@@ -1,0 +1,39 @@
+# With no entry yet, Wood Elemental is 0/0 as a spell, so Doran does not reduce its cost (CR 604.3).
+[Bot1 Deck]
+Doran, Besieged by Time
+Black Lotus
+Forest
+Wood Elemental
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Doran, Besieged by Time.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wood Elemental.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Choose(Forest)
+[Expect]
+Bot1.Battlefield.Wood Elemental.Toughness = 1

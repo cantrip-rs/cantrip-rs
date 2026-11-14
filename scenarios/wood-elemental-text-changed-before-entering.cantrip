@@ -1,0 +1,34 @@
+# Magical Hack changes the resolving spell's Forest words to Island, so an untapped Island can be sacrificed and counted (CR 612.2, 400.7a).
+[Bot1 Deck]
+Wood Elemental
+Island
+Magical Hack
+Black Lotus
+Mox Sapphire
+Mox Emerald
+Mox Jet
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wood Elemental.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Magical Hack.Cast(Stack.Wood Elemental)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Forest)
+Bot1.Modes(Island)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+[Expect]
+Bot1.Battlefield.Wood Elemental.Power = 1
+Bot1.Battlefield.Wood Elemental.Toughness = 1
+Bot1.Graveyard = Island; Magical Hack; Black Lotus
