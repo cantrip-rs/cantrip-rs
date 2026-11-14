@@ -1,0 +1,66 @@
+# Cult Healer, Eerie: "Whenever an enchantment you control enters and whenever you fully unlock a Room, this creature gains
+# lifelink until end of turn." Turn 1: Cult Healer is cast, then Ornithopter (an artifact creature entering: no lifelink),
+# then Unholy Annex // Ritual Chamber as its left door, Unholy Annex (an enchantment entering: lifelink). On turn 3 the
+# lifelink is gone (until end of turn). On turn 5 Ritual Chamber is unlocked, the Room's other door (CR 709.5i, fully
+# unlocked): lifelink again, and Cult Healer attacks into Bot2: Bot1 gains the 3 damage as life. (Unholy Annex has Bot1 lose 2 life at its
+# end step with no Demon, on turns 1 and 3: 20 - 2 - 2 + 3 = 19.)
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Cult Healer
+Ornithopter
+Black Lotus
+Unholy Annex // Ritual Chamber
+Swamp
+Mox Ruby
+Island x12
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cult Healer.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+? Bot1.Battlefield.Cult Healer.Keywords = (absent)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cult Healer.Keywords = Lifelink
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Cult Healer.Keywords = (absent)
+Bot1.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Unholy Annex.Activate(Ability: right door)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cult Healer.Keywords = Lifelink
+Bot1.Attack(Cult Healer > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 17

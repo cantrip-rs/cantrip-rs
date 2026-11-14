@@ -1,0 +1,66 @@
+# Cult Healer, Eerie: both halves say "you": "an enchantment you control enters" and "you fully unlock a Room". Bot1's Cult Healer
+# is on the battlefield while Bot2 casts Unholy Annex // Ritual Chamber as Unholy Annex on turn 2 (an enchantment entering under
+# Bot2's control) and unlocks Ritual Chamber on turn 4 (Bot2 fully unlocking its Room): Cult Healer gains no lifelink either time.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Cult Healer
+Island x16
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Unholy Annex // Ritual Chamber
+Swamp
+Swamp
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cult Healer.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot2.Battlefield.Unholy Annex.Doors = Unholy Annex
+? Bot1.Battlefield.Cult Healer.Keywords = (absent)
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp#1.Activate
+Bot2.Battlefield.Swamp#2.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Unholy Annex.Activate(Ability: right door)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Unholy Annex // Ritual Chamber.Doors = Unholy Annex; Ritual Chamber
+? Bot2.Battlefield.Demon Token.Power = 6
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Cult Healer.Keywords = (absent)
