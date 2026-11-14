@@ -1,0 +1,38 @@
+# Surrak (5) is alone on Bot1's side; Bot2's Hill Giant (3) makes eight between them but "creatures you control" counts
+# only Bot1's five, so nothing triggers at the beginning of combat on Bot1's turn 3.
+
+[Bot1 Deck]
+Black Lotus
+Surrak, the Hunt Caller
+Mox Ruby
+Forest x17
+
+[Bot2 Deck]
+Black Lotus
+Hill Giant
+Mountain
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Surrak, the Hunt Caller.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.BeginCombat]
+? Stack.Count = 0
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Hill Giant.Power = 3
+Bot1.Battlefield.Surrak, the Hunt Caller.Keywords = (absent)

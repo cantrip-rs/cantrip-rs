@@ -1,0 +1,37 @@
+# The target is any creature Bot1 controls, Surrak included: with Surrak (5) and Hill Giant (3) at eight total power, the
+# ability targets Surrak and he gains haste while the Hill Giant does not.
+
+[Bot1 Deck]
+Black Lotus
+Surrak, the Hunt Caller
+Mox Ruby
+Black Lotus
+Hill Giant
+Forest x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Surrak, the Hunt Caller.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Target(Bot1.Battlefield.Surrak, the Hunt Caller)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Surrak, the Hunt Caller.Keywords = Haste
+Bot1.Battlefield.Hill Giant.Keywords = (absent)

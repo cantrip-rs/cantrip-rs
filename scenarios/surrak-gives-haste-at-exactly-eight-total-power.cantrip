@@ -1,0 +1,40 @@
+# Formidable: Surrak (5) and Hill Giant (3) are exactly eight total power at the beginning of combat on Bot1's turn 3. The
+# Hill Giant came under Bot1's control this turn, so haste lets it attack; Surrak, who is not the target, gains nothing.
+
+[Bot1 Deck]
+Black Lotus
+Surrak, the Hunt Caller
+Mox Ruby
+Black Lotus
+Hill Giant
+Forest x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Surrak, the Hunt Caller.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Surrak, the Hunt Caller.Power = 5
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Target(Bot1.Battlefield.Hill Giant)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Hill Giant.Keywords = Haste
+Bot1.Battlefield.Surrak, the Hunt Caller.Keywords = (absent)
