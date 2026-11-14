@@ -1,0 +1,44 @@
+# Diversion Specialist's cost needs another creature or enchantment (CR 602.2, 118.3): alone on the battlefield with its {1}
+# available (a Mox Ruby's mana is in the pool, Moxen being artifacts), it cannot be activated, and only once an Ornithopter
+# is there can it be.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Mox Jet
+Diversion Specialist
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Diversion Specialist.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana = {B}
+! Bot1.Battlefield.Diversion Specialist.Activate
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Diversion Specialist.Activate
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Ornithopter
+Exile.Count = 1
+Stack.Count = 0

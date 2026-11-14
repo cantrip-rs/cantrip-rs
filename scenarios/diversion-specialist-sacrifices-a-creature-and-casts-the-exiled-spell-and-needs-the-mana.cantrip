@@ -1,0 +1,58 @@
+# Diversion Specialist's cost is {1} plus a sacrifice (CR 602.2): with every Mox tapped it cannot be activated though an
+# Ornithopter is there to sacrifice. Next turn Bot1 sacrifices that Ornithopter (a creature; Bot2's Ornithopter is not offered
+# and stays) and casts the exiled Lightning Bolt at Bot2 with the Mox Ruby, so the Pearl paid the {1} and nothing else is spent.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Diversion Specialist
+Ornithopter
+Island
+Island
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Ornithopter
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Diversion Specialist.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+! Bot1.Battlefield.Diversion Specialist.Activate(Mana: short)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Diversion Specialist.Activate
+? Bot1.Mana =
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt; Ornithopter
+Bot2.Battlefield.Count = 1
+Exile.Count = 0
+Bot1.Battlefield.Mox Sapphire.Tapped = false
+Bot1.Battlefield.Mox Emerald.Tapped = false
+Stack.Count = 0
