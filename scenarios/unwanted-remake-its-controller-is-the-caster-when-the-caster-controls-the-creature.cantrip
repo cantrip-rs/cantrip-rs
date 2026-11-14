@@ -1,0 +1,31 @@
+# Unwanted Remake: "its controller" is whoever controls the creature, which here is Bot1 itself: Bot1 destroys its own Memnite and
+# Bot1 manifests dread (Gorilla face down, Bolt to the graveyard), and Bot2 does not.
+
+[Bot1 Deck]
+Mox Pearl
+Memnite
+Unwanted Remake
+Island
+Island
+Island
+Island
+Guerrilla Gorilla
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Unwanted Remake.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Arrange(Guerrilla Gorilla | Lightning Bolt)
+[T1 Bot1.End]
+
+[Expect]
+Bot1.Battlefield.Count = 2
+Bot1.Graveyard.Count = 3
+Bot2.Battlefield.Count = 0
