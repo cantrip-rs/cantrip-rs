@@ -1442,6 +1442,13 @@ impl Query for BoardThen<'_> {
         self.then.on_board(id).map_or_else(|| self.q.chars(id), |r| r.1)
     }
 
+    fn mana_value(&self, id: ObjectId) -> u32 {
+        match self.then.on_board(id) {
+            Some(r) => mana_value_of(&|card| self.card(card), self.state(), id, &r.1),
+            None => self.q.mana_value(id),
+        }
+    }
+
     fn token_chars(&self, card: CardId, copy: Option<Copiable>) -> Chars {
         self.q.token_chars(card, copy)
     }

@@ -1756,11 +1756,12 @@ pub(crate) fn as_cast<T>(cx: &mut Cx, card: ObjectId, face: Option<CardId>, play
 }
 
 /// Runs `f` with `entering` judged as it would exist on the battlefield (CR 614.12) by every effect that reads it
-/// (`Query::chars`, `Query::lost_all_abilities`): the replacement effects that modify how it enters ("creatures your opponents
+/// (`Query::chars`, `Query::mana_value`, `Query::lost_all_abilities`): the replacement effects that modify how it enters ("creatures your opponents
 /// control enter tapped") and the rules that limit the counters it enters with (CR 122.6). Worked out only where some effect
 /// could read it - a replacement effect that could apply, or counters to put on it - and where it could be other than its
 /// card's own values where it is: a static ability that could apply to it there (its own or another's), a copy effect or a
-/// face it enters with, an effect on it, or a Room (CR 709.5: on the battlefield only its unlocked doors).
+/// face it enters with, an effect on it, a Room (CR 709.5: on the battlefield only its unlocked doors), or an X it has as a
+/// spell (CR 202.3e: 0 on the battlefield).
 ///
 /// Judged again after each replacement that changes how it enters (`rejudge_entering`).
 fn judged_entering<T>(cx: &mut Cx, entering: &Entering, counters: bool, f: impl FnOnce(&mut Cx) -> T) -> T {
@@ -1771,7 +1772,10 @@ fn judged_entering<T>(cx: &mut Cx, entering: &Entering, counters: bool, f: impl 
     }
     let id = entering.object;
     let obj = cx.s().obj(id);
+    // The X a spell has where it is counts in its mana value there (`mana_value_of`), and is 0 on the battlefield (CR 202.3e).
+    let x = if obj.zone.is(ZoneKind::Stack) { obj.x } else { cx.s().left_stack(id).map_or(0, |item| item.x) };
     let differs = layers::static_sources_present(cx.cards(), cx.s())
+        || x != 0
         || cx.cards().statics[cx.cards().face(obj.card, entering.transformed).0 as usize]
         || entering.copy.is_some()
         || entering.becomes.is_some()

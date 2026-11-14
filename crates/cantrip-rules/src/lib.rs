@@ -1291,8 +1291,8 @@ pub(crate) struct Cx<'a> {
     /// The source of the mana ability running (CR 106.3, 605): what produces the mana it adds. None outside one, where the
     /// mana a resolving spell or ability adds is that spell's or the ability's source's.
     pub mana_source: Option<ObjectId>,
-    /// A permanent about to enter the battlefield, as it would exist there (CR 614.12): what `Query::chars` and
-    /// `Query::lost_all_abilities` answer of it while the effects that modify how it enters are judged
+    /// A permanent about to enter the battlefield, as it would exist there (CR 614.12): what `Query::chars`,
+    /// `Query::mana_value` and `Query::lost_all_abilities` answer of it while the effects that modify how it enters are judged
     /// (`ops::judged_entering`).
     pub entering: Option<ops::WouldExist>,
     /// The replacement effects that have had their one opportunity at the event whose modified event is being carried out
@@ -2043,6 +2043,15 @@ impl Query for Cx<'_> {
 
     fn token_chars(&self, card: CardId, copy: Option<Copiable>) -> Chars {
         layers::token_chars(self.g.cards, card, copy)
+    }
+
+    /// A permanent about to enter has the mana value it would have on the battlefield (CR 614.12): an {X} in its cost is 0
+    /// there (CR 202.3e), whatever was chosen for it as a spell.
+    fn mana_value(&self, id: ObjectId) -> u32 {
+        match self.entering {
+            Some(e) if e.object == id => e.mana_value,
+            _ => cantrip_api::mana_value_of(&|card| self.card(card), self.state(), id, &self.chars(id)),
+        }
     }
 
     fn lost_all_abilities(&self, id: ObjectId) -> bool {

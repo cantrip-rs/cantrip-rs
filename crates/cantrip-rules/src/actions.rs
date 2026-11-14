@@ -8350,6 +8350,10 @@ impl Query for QueryAsFace<'_> {
         if id == self.spell { layers::chars_as_face(self.cards, self.q.state(), self.q.events(), id, self.face) } else { self.q.chars(id) }
     }
 
+    fn mana_value(&self, id: ObjectId) -> u32 {
+        if id == self.spell { mana_value_of(&|card| self.card(card), self.state(), id, &self.chars(id)) } else { self.q.mana_value(id) }
+    }
+
     fn token_chars(&self, card: CardId, copy: Option<Copiable>) -> Chars {
         self.q.token_chars(card, copy)
     }

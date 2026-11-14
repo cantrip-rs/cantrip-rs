@@ -357,6 +357,10 @@ impl Query for AsText<'_> {
         self.q.chars(id)
     }
 
+    fn mana_value(&self, id: ObjectId) -> u32 {
+        self.q.mana_value(id)
+    }
+
     fn token_chars(&self, card: CardId, copy: Option<Copiable>) -> Chars {
         self.q.token_chars(card, copy)
     }

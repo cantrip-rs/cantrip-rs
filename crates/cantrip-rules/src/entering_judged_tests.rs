@@ -409,3 +409,54 @@ fn a_bestowed_aura_applies_its_enters_with_once() {
     ops::apply_own_entering(&mut cx, &mut e, P0, false);
     assert_eq!(e.counters[CounterKind::PlusOne as usize], 2);
 }
+
+/// "Each creature you control enters with an additional +1/+1 counter on it for each 1 of its mana value" - a test stand-in
+/// for what Thunderous Velocipede reads.
+fn your_creature_enters(q: &dyn Query, asker: &Asker, proposal: &Proposal) -> bool {
+    matches!(proposal, Proposal::ZoneChange(z)
+        if z.to.is(ZoneKind::Battlefield) && z.object != asker.source && z.controller == asker.controller && q.chars(z.object).is(CardType::Creature))
+}
+
+fn counters_for_its_mana_value(q: &dyn Query, _: &Asker, proposal: &mut Proposal) {
+    if let Proposal::ZoneChange(z) = proposal {
+        z.counters[CounterKind::PlusOne as usize] += q.mana_value(z.object) as i32;
+    }
+}
+
+static GROWER: CardDef = CardDef {
+    name: "Judged Grower",
+    types: TypeSet::of(&[CardType::Enchantment]),
+    replacements: &[replacement(ReplacementKind::ZoneChange, your_creature_enters, counters_for_its_mana_value, "")],
+    ..CardDef::BLANK
+};
+/// {X}{1}: mana value 1 + X on the stack, 1 on the battlefield.
+static X_CREATURE: CardDef = CardDef {
+    name: "Judged X Creature",
+    types: TypeSet::of(&[CardType::Creature]),
+    cost: ManaCost { generic: 1, x: 1, ..ManaCost::ZERO },
+    power: Some(0),
+    toughness: Some(0),
+    ..CardDef::BLANK
+};
+
+/// A permanent spell cast with X = 3 is judged as it enters with the mana value it would have on the battlefield, where X is
+/// 0 (CR 614.12, 202.3e): 1, not the 4 it has on the stack - with nothing else about it that would differ there, and with a
+/// static ability on the battlefield that has it worked out as it would exist.
+#[test]
+fn an_x_spell_entering_has_the_mana_value_it_would_have_on_the_battlefield() {
+    for with_static in [false, true] {
+        let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&GROWER, &X_CREATURE, &ANIMATOR])));
+        let mut game = Game::new(table, &Setup { decks: vec![Vec::new(), Vec::new()], ..Default::default() });
+        put(&mut game, table, &GROWER, Zone::BATTLEFIELD, P0);
+        if with_static {
+            put(&mut game, table, &ANIMATOR, Zone::BATTLEFIELD, P0);
+        }
+        let spell = put(&mut game, table, &X_CREATURE, Zone::STACK, P0);
+        game.state.update_obj(spell, |o| o.x = 3);
+        let mut cx = cx(&mut game);
+        assert_eq!(cx.mana_value(spell), 4, "on the stack");
+        let moves = [Moving { entering: Some(entering(spell, P0, false)), ..Moving::to(spell, Zone::BATTLEFIELD) }];
+        let new = ops::move_together(&mut cx, &moves, ZoneReason::Resolve)[0];
+        assert_eq!(cx.s().obj(new).counters(CounterKind::PlusOne), 1, "with a static ability there: {with_static}");
+    }
+}
