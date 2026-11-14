@@ -1,0 +1,55 @@
+# An unrelated creature dying does not fire the delayed trigger; the watched creature dying does (CR 603.2).
+[Bot1 Deck]
+Sandals of Abdallah
+Black Lotus
+Mox Pearl
+Mox Ruby
+Phyrexian Walker
+Memnite
+Mountain
+Lightning Bolt
+Lightning Bolt
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sandals of Abdallah.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Sandals of Abdallah.Activate(Bot1.Battlefield.Phyrexian Walker)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Phyrexian Walker.Keywords = Islandwalk
+? Bot1.Battlefield.Sandals of Abdallah.Tapped = true
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sandals of Abdallah.Tapped = true
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Sandals of Abdallah; Phyrexian Walker; Lightning Bolt; Memnite; Lightning Bolt; Black Lotus

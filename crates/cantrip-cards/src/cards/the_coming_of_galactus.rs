@@ -10,7 +10,7 @@ pub static GALACTUS: CardDef = CardDef {
     has_cost: false,
     colors: Some(ColorSet::of(Color::Black)),
     types: TypeSet::of(&[CardType::Creature]),
-    supertypes: Supertypes { basic: false, legendary: true, snow: false },
+    supertypes: Supertypes { basic: false, legendary: true, snow: false, world: false },
     subtypes: SubtypeSet::of(&[Subtype::Elder, Subtype::Alien]),
     power: Some(16),
     toughness: Some(16),

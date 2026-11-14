@@ -1,0 +1,43 @@
+# An opponent sacrifices a land for a black attacker while a white creature attacks for free (CR 508.1h).
+[Bot1 Deck]
+Reclamation
+Black Lotus
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Swamp
+Hired Poisoner
+Mox Pearl
+Savannah Lions
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Reclamation.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Hired Poisoner.Cast
+? Bot2.Mana =
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Hired Poisoner > Bot1; Savannah Lions > Bot1)
+Bot2.Choose(Swamp)
+[T4 Bot2.Main2]
+? Bot1.Life = 17
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Hired Poisoner > Bot1)
+[T6 Bot2.Main2]
+[Expect]
+Bot1.Life = 17
+Bot2.Graveyard = Swamp

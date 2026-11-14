@@ -1,0 +1,38 @@
+# A creature that is both black and white still costs a land to attack (CR 105.2b, 508.1h).
+[Bot1 Deck]
+Reclamation
+Black Lotus x2
+Mox Pearl
+Mox Jet
+Tidehollow Sculler
+Swamp
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Reclamation.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tidehollow Sculler.Cast
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Tidehollow Sculler > Bot2)
+Bot1.Choose(Swamp)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard = Swamp; Black Lotus; Black Lotus

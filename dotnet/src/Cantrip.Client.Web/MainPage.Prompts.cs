@@ -1407,6 +1407,16 @@ public sealed partial class MainPage
             // CR 310.9a, 310.12a: a battle's protector, chosen as it enters, or again when it has none (CR 704.5x).
             Prompt($"{source}: choose who protects it", "Its protector defends it, and can't attack it; anyone else facing them may.");
         }
+        else if (prompt.Verb == "Define X")
+        {
+            // The text defines X; the caster chooses which eligible player's
+            // values it uses. Show the definition, without making the player
+            // appear to announce X or assuming every definition counts cards.
+            string definition = client.Object(prompt.Source)?.OracleText ?? string.Empty;
+            Prompt($"{source}: choose a player to determine X", definition.Length > 0
+                ? definition
+                : "The spell's text determines X using the player you choose.");
+        }
         else
         {
             Prompt($"{source}: choose an opponent", $"The player you choose {action}");

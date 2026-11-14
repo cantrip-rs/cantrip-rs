@@ -1,0 +1,40 @@
+# Destroying the stolen creature makes Ray's delayed ability trigger once; its old incarnation cannot be tapped (CR 603.7, 400.7).
+[Bot1 Deck]
+Ray of Command
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Memnite
+Mox Ruby
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ray of Command.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+? Delayed.Count = 0
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard.Memnite.Power = 1

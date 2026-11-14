@@ -24,19 +24,16 @@ fn you_control_source(q: &dyn Query, e: &ContinuousEffect) -> bool {
     q.is_on_battlefield(e.source) && q.controller(e.source) == e.controller
 }
 
-/// "For as long as you control [this permanent]" (CR 611.2b), as a card's `lasting` entry that `Duration::AsLongAs` names:
-/// the effect's source is the same object still on the battlefield (a card that left is a new object, CR 400.7) and the
-/// effect's controller still controls it. Once it has left or another player controls it, the effect is over for good, though
-/// control come back. Spider-Woman, Secret Agent's "can't become untapped" and Extraction Specialist's "can't attack or
-/// block" last so.
+/// A current-state source-control predicate for a custom `Duration::AsLongAs` condition. It cannot reconstruct an
+/// interval broken before resolution. Use `Duration::WhileSourceControlled` for the ordinary uninterrupted duration.
 pub const YOU_CONTROL_SOURCE: Lasting = Lasting { text: "you control {source}", holds: you_control_source };
 
 /// "Gain control of target [permanent] for as long as you control this creature" (CR 611.2b): the ability's controller gains
-/// control of its first target, lasting while `YOU_CONTROL_SOURCE` holds - the card lists it in `lasting`. Aladdin (artifact)
+/// control of its first target for the uninterrupted `Duration::WhileSourceControlled` interval. Aladdin (artifact)
 /// and Thrull Champion (Thrull) print it.
 pub fn gain_control_of_target_while_you_control_source(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(object) = crate::targets::object(g, item, 0) else { return Ok(()) };
-    let duration = Duration::AsLongAs(item.ability.card, 0);
+    let duration = Duration::WhileSourceControlled;
     instruction(g, |g| {
         g.add_effect(item.object, object, EffectKind::Control(item.controller), duration);
     });
@@ -44,10 +41,10 @@ pub fn gain_control_of_target_while_you_control_source(g: &mut dyn Game, item: &
 }
 
 /// "[That creature] can't attack or block for as long as you control this [permanent]" (CR 508.1c, 509.1b, 611.2b): both
-/// restrictions on `object` last while `YOU_CONTROL_SOURCE` holds - the card lists it in `lasting`. Extraction Specialist (the
+/// restrictions on `object` use the uninterrupted `Duration::WhileSourceControlled` interval. Extraction Specialist (the
 /// creature it returned) and Possession Engine (the creature it took) print it.
 pub fn cant_attack_or_block_while_you_control_source(g: &mut dyn Game, item: &StackItem, object: ObjectId) {
-    let duration = Duration::AsLongAs(item.ability.card, 0);
+    let duration = Duration::WhileSourceControlled;
     instruction(g, |g| {
         g.add_effect(item.object, object, EffectKind::CantAttack, duration);
         g.add_effect(item.object, object, EffectKind::CantBlock, duration);
@@ -3037,11 +3034,27 @@ pub fn untap_other_creatures_you_control(g: &mut dyn Game, item: &StackItem) -> 
     Ok(())
 }
 
+/// "Put N [kind] counters on this permanent" (CR 122.1a), where KIND is CounterKind::X as usize.
+/// Armageddon Clock puts a doom counter and Time Bomb a time counter; Weather Maker puts a charge counter.
+/// The engine handles a source that has left, placement replacements and counter restrictions.
+pub fn counters_on_self<const KIND: usize, const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.add_counters(item.object, CounterKind::ALL[KIND], N);
+    Ok(())
+}
+
+/// "You gain life equal to the sacrificed creature's toughness" (CR 608.2h, 119.3), as Diamond Valley and Life Chisel
+/// print it. The first cost object is its original battlefield identity, so chars reads its last-known toughness.
+/// The ability's controller gains the life; a nonpositive toughness does not make that player lose life (CR 107.1b).
+pub fn gain_life_equal_sacrificed_creatures_toughness(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let amount = g.cost_objects(item).first().map_or(0, |&object| g.chars(object).toughness.unwrap_or(0)).max(0);
+    g.gain_life(item.controller, amount);
+    Ok(())
+}
+
 /// "Put N charge counters on this artifact" (CR 122.1a): the source itself, as the ability resolves. Weather Maker prints it
 /// with one, Starship Enterprise with four.
 pub fn charge_counters_on_self<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.add_counters(item.object, CounterKind::Charge, N);
-    Ok(())
+    counters_on_self::<{ CounterKind::Charge as usize }, N>(g, item)
 }
 
 /// "Draw that many cards" (CR 121.1, 608.2c): as many cards as the combat damage the trigger's event dealt to the player

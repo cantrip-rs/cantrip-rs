@@ -221,13 +221,15 @@ pub trait Query {
     /// attacks, or the controller of the planeswalker or the protector of the battle it attacks, as it began attacking
     /// (`Attacker::defending`) - so still once that planeswalker or battle has changed controller or protector, or been
     /// removed from combat (CR 506.4c) - and, once it is no longer attacking, the one it had when it attacked last
-    /// (`Event::Attacks::defending`). None for a creature that has not attacked.
+    /// (`Event::Attacks::defending`, or `Event::AttackAssigned` for entering attacking and reselected targets).
+    /// None for a creature that has never been attacking.
     fn defending_player(&self, attacker: ObjectId) -> Option<PlayerId> {
         if let Some(a) = self.state().attackers.iter().find(|a| a.id == attacker) {
             return Some(a.defending);
         }
         self.history().all().iter().rev().find_map(|r| match r.event {
-            crate::Event::Attacks { attacker: a, defending, .. } if a == attacker => Some(defending),
+            crate::Event::Attacks { attacker: a, defending, .. }
+            | crate::Event::AttackAssigned { attacker: a, defending, .. } if a == attacker => Some(defending),
             _ => None,
         })
     }
@@ -264,6 +266,12 @@ pub trait Query {
             Some(AbilityDef::Triggered(def)) => Some(def),
             _ => None,
         }
+    }
+
+    /// Whether the object's current abilities include a triggered keyword family, after grants, copies and ability
+    /// loss (CR 613.1f). Multiple instances still constitute one "has" test; their triggers remain independent.
+    fn has_keyword_family(&self, object: ObjectId, family: crate::KeywordFamily) -> bool {
+        self.chars(object).abilities().any(|a| self.triggered_ability(a).is_some_and(|t| t.keyword_family == Some(family)))
     }
 
     /// An object's rules information after every continuous effect (CR 613). A phased-out source is read as it last
@@ -348,6 +356,13 @@ pub trait Query {
     fn is_on_battlefield(&self, id: ObjectId) -> bool {
         let obj = self.obj(id);
         obj.became.is_none() && obj.zone.is(ZoneKind::Battlefield)
+    }
+
+    /// Whether destroying this permanent is possible (CR 701.8a, 702.12b), for a direct instruction that chooses what
+    /// to destroy (Drop of Honey, Porphyry Nodes). This is not target legality: an indestructible permanent may be
+    /// targeted normally. Regeneration replaces destruction rather than prohibiting the choice.
+    fn can_destroy(&self, id: ObjectId) -> bool {
+        self.is_on_battlefield(id) && !self.chars(id).has(Keyword::Indestructible)
     }
 
     /// Current controller in the expected public zone, or the source's last controller while absent (CR 608.2h).
@@ -471,6 +486,11 @@ pub trait Query {
     fn gift_assumed(&self) -> bool {
         false
     }
+
+    /// The player chosen to choose this target slot (Preacher's "they control"),
+    /// retained from announcement when the target is checked on resolution.
+    /// This never replaces the spell/ability's controller for targeting legality.
+    fn target_chooser(&self) -> Option<PlayerId> { None }
 
     fn slot_opponent(&self) -> Option<PlayerId> {
         None
@@ -807,6 +827,14 @@ impl From<MoveReason> for ZoneReason {
     }
 }
 
+/// A color or number reselected by a permanent's resolving ability (CR 607.2d).
+/// Kept with the choosing ability's link; this does not make the value copiable.
+#[derive(Clone, Copy, Debug)]
+pub enum ChosenValue {
+    Color(Color),
+    Number(u32),
+}
+
 pub trait Game: Query {
     /// Asks `player` a question. The first time, the effect stops here (`Err(Suspend)`); once answered, the effect
     /// runs again from its start and this returns the answer.
@@ -1121,6 +1149,19 @@ pub trait Game: Query {
     /// Makes an attacking creature unblocked by an effect (CR 509.1h), rather than by declaring no blockers.
     /// This does not trigger "attacks and isn't blocked" (CR 509.3g). False Orders and Imprison use it.
     fn become_unblocked(&mut self, attacker: ObjectId);
+    /// Changes blocking relationships as one instruction (CR 509.3). Remove the named creatures from combat first,
+    /// end the specified (blocker, attacker) pairs, then establish the new pairs. Ending a pair alone preserves both
+    /// the creature's blocking status and the attacker's blocked status. Banding expands new blocks automatically.
+    /// Existing pairs retained by the change do not trigger again; removing a blocker from combat and reassigning it
+    /// does. False Orders, Balduvian Warlord, General Jarkeld and Sorrow's Path use this authority.
+    /// This carries out the effect, without declaring blockers or checking declaration restrictions, costs or requirements.
+    /// A recipe with an explicit "could block" condition must check it separately before making the change.
+    fn change_blocks(&mut self, remove_from_combat: &[ObjectId], ending: &[(ObjectId, ObjectId)], starting: &[(ObjectId, ObjectId)]);
+    /// Whether a proposed reassignment obeys current blocking restrictions, including the capacities of the changed
+    /// blockers and the group limits of the changed attackers. Unchanged unrelated relationships stay fixed facts;
+    /// declaration-only untapped eligibility, costs and requirements are not imposed. General Jarkeld and Sorrow's Path
+    /// explicitly ask this before changing their blocks. The query changes no state and asks no player a question.
+    fn block_reassignment_allowed(&self, ending: &[(ObjectId, ObjectId)], starting: &[(ObjectId, ObjectId)]) -> bool;
     /// Creates token copies entering attacking (CR 508.4, 707.2), tapped only when `tapped`. If `defender` is absent,
     /// each token's controller chooses what it attacks as it enters. Attacking state is visible to ETB abilities.
     fn create_token_copies_attacking(&mut self, values: Copiable, controller: PlayerId, count: u32, tapped: bool, defender: Option<Target>) -> Result<Vec<ObjectId>, Suspend>;
@@ -1502,6 +1543,13 @@ pub trait Game: Query {
     /// object's alone: a new object the permanent becomes has no chosen name (CR 400.7), and a later choice for the same
     /// object replaces the earlier one. Nothing if the permanent is no longer on the battlefield.
     fn remember_chosen_name(&mut self, by: Linked, name: CardId);
+    /// Reselect a color or number, replacing the earlier choice of the linked text.
+    /// Nothing if its permanent has left the battlefield. See `ChosenValue`.
+    fn remember_chosen(&mut self, by: Linked, value: ChosenValue);
+    /// Record an instruction's noted value with its linked ability (CR 607.2e).
+    /// The source may already have left: a delayed instruction can still name its original incarnation.
+    /// Returns its immutable payload index for later instructions to capture exactly this snapshot.
+    fn note_value(&mut self, by: Linked, value: NotedValue) -> u32;
     /// An object chosen as `by`, an ability of a permanent, resolves (CR 607.2d), remembered by that permanent: Zenos yae
     /// Galvus's "choose a creature an opponent controls", read by its linked "when the chosen creature leaves the
     /// battlefield". Kept with that ability (`Chosen`) as `remember_chosen_name` keeps a name: the abilities linked to it read
@@ -1562,6 +1610,10 @@ pub trait Game: Query {
     /// independently choose each unit, in successive wire-sized requests. Wizard's Rockets and
     /// Vivi Ornitier use this exact procedure. It never summarizes an opaque caller's later steps.
     fn add_mana_in_any_combination(&mut self, asker: &Asker, colors: ColorSet, count: u32) -> Result<(), Suspend>;
+    /// The player loses all unspent mana (CR 106.4, 609.1): normal, restricted and extended-duration mana alike.
+    /// Unlike step/phase emptying, this ignores rules keeping mana as steps and phases end. Returns the lost types,
+    /// within the native per-type quantity bound, for an instruction such as Drain Power's "add the mana lost".
+    fn empty_mana_pool(&mut self, player: PlayerId) -> ManaPool;
     /// Adds mana that lasts until the end of combat (CR 106.4, 500.5a): not lost as the steps before it end.
     fn add_mana_until_end_of_combat(&mut self, player: PlayerId, mana: Mana, amount: u32);
     /// Adds mana that lasts until the end of the turn (CR 106.4, 500.5a): not lost as the steps and phases before it end.
@@ -1732,7 +1784,8 @@ pub trait Game: Query {
     /// question that raises and lowers it and makes mana, any X from 0 up. `cost` is the cost with its {X}
     /// (`cost("{X}")`), and `question` what paying does, as for `may_pay`. The X paid, or `None` when the payer declined:
     /// "when you do" asks whether it was paid (CR 603.12), and a reflexive ability that reads X is given it
-    /// (`reflexive_trigger_counted`).
+    /// (`reflexive_trigger_counted`). A variable source-counter removal chooses only counters actually available,
+    /// including fixed removals in the same cost; it asks for no mana abilities unless the cost also includes mana.
     fn may_pay_x(&mut self, payer: PlayerId, source: ObjectId, subject: ObjectId, cost: crate::card::Cost, question: &'static Question) -> Result<Option<u32>, Suspend>;
     /// `may_pay` for a cost with a part whose size the payer sets as they pay it ("you may discard one or more land cards",
     /// `VariableCost::DiscardOneOrMore`): how many that part took, or `None` when the payer declined - the "that many" of a

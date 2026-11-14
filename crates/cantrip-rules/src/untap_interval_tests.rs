@@ -170,6 +170,57 @@ fn control(g: &mut Game, source: ObjectId, player: PlayerId) {
         Duration::Indefinite,
     );
 }
+
+fn source_control_duration(_: &Game) -> Duration {
+    Duration::WhileSourceControlled
+}
+
+#[test]
+fn source_control_lost_and_regained_before_resolution_never_starts() {
+    let mut g = game();
+    let source = put(&mut g, &HOLDER, YOU, false);
+    let target = put(&mut g, &HOLDER, THEM, false);
+    let serial = interval(&mut g, source);
+    control(&mut g, source, THEM);
+    control(&mut g, source, YOU);
+    let frame = begin_resolution(&mut g, serial);
+    let duration = source_control_duration(&g);
+    apply(&mut g, frame, source, target, duration);
+    assert_eq!(g.chars(target).power, Some(2), "the source-control interval ended before resolution");
+}
+
+#[test]
+fn source_control_is_independent_of_tapping_and_ends_permanently_on_control_loss() {
+    let mut g = game();
+    let source = put(&mut g, &HOLDER, YOU, false);
+    let target = put(&mut g, &HOLDER, THEM, false);
+    let serial = interval(&mut g, source);
+    let frame = begin_resolution(&mut g, serial);
+    let duration = source_control_duration(&g);
+    apply(&mut g, frame, source, target, duration);
+    assert_eq!(g.chars(target).power, Some(4));
+    crate::ops::tap(&mut cx(&mut g), source);
+    crate::ops::untap(&mut cx(&mut g), source);
+    assert_eq!(g.chars(target).power, Some(4), "this duration does not require remaining tapped");
+    control(&mut g, source, THEM);
+    assert_eq!(g.chars(target).power, Some(2));
+    control(&mut g, source, YOU);
+    assert_eq!(g.chars(target).power, Some(2), "an expired control interval never revives");
+}
+
+#[test]
+fn source_control_can_begin_again_when_the_condition_returns_during_resolution() {
+    let mut g = game();
+    let source = put(&mut g, &HOLDER, YOU, false);
+    let target = put(&mut g, &HOLDER, THEM, false);
+    let serial = interval(&mut g, source);
+    control(&mut g, source, THEM);
+    let frame = begin_resolution(&mut g, serial);
+    control(&mut g, source, YOU);
+    let duration = source_control_duration(&g);
+    apply(&mut g, frame, source, target, duration);
+    assert_eq!(g.chars(target).power, Some(4));
+}
 fn untap_events(g: &Game) -> Vec<ObjectId> {
     g.log
         .iter()

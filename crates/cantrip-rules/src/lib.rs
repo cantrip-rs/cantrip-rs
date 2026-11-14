@@ -5,6 +5,9 @@
 
 pub mod tree;
 mod actions;
+mod x_rules;
+#[cfg(test)]
+mod computed_x_tests;
 #[cfg(test)]
 mod ability_acquisition_identity_tests;
 #[cfg(test)]
@@ -60,6 +63,10 @@ mod layers;
 mod library_visibility;
 #[cfg(test)]
 mod library_visibility_tests;
+mod world;
+mod hand_visibility;
+#[cfg(test)]
+mod hand_visibility_tests;
 mod loops;
 mod merge;
 #[cfg(test)]
@@ -67,6 +74,9 @@ mod merge_tests;
 #[cfg(test)]
 mod read_ahead_tests;
 mod ops;
+mod combat_changes;
+#[cfg(test)]
+mod combat_changes_tests;
 mod phasing;
 #[cfg(test)]
 mod any_color_spell_tests;
@@ -162,6 +172,8 @@ mod entering_judged_tests;
 mod entered_known_tests;
 #[cfg(test)]
 mod enters_attacking_tests;
+#[cfg(test)]
+mod destroy_selection_tests;
 #[cfg(test)]
 mod enter_rules_tests;
 #[cfg(test)]
@@ -272,6 +284,7 @@ mod static_rule_source_tests;
 #[cfg(test)]
 mod transformed_cast_tests;
 mod turn;
+mod untap_limits;
 #[cfg(test)]
 mod cant_become_untapped_tests;
 #[cfg(test)]
@@ -324,6 +337,9 @@ pub struct Game {
     /// event, which is already recorded so that the continuous effects that read the history see it (CR 603.10). None
     /// otherwise.
     pub(crate) history_end: Option<usize>,
+    /// Derived presence of world-sensitive live definitions, keyed only on state. Actual world characteristics may
+    /// read event history and are never cached here. Not part of the game state, journal, or loop identity.
+    world_interest: std::cell::Cell<Option<(u64, bool)>>,
     /// Where the state triggers stand in the run of a resolution (`StateCheck`). Bookkeeping of a call, not of the game.
     pub(crate) check: StateCheck,
     /// What the offer of the actions a player may take asks of the spells cards would be (`actions::SpellsAsCast`), while
@@ -426,6 +442,7 @@ impl Clone for Game {
             verify: self.verify,
             max_events: self.max_events,
             history_end: self.history_end,
+            world_interest: Default::default(),
             check: StateCheck::NONE,
             spells_as_cast: Default::default(),
             own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), mana_activation_x: None, mana_rider: 0, mana_interval: None,
@@ -447,6 +464,7 @@ impl Game {
             verify: false,
             max_events: self.max_events,
             history_end: self.history_end,
+            world_interest: Default::default(),
             check: StateCheck::NONE,
             spells_as_cast: Default::default(),
             own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None,
@@ -589,7 +607,7 @@ impl Game {
             t.priority = chooser;
         });
 
-        let mut game = Game { state, log: Vec::new(), tree: tree::Tree::new(), at: tree::NodeId::ROOT, cards, verify: false, max_events: MAX_GAME_EVENTS, history_end: None, check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() };
+        let mut game = Game { state, log: Vec::new(), tree: tree::Tree::new(), at: tree::NodeId::ROOT, cards, verify: false, max_events: MAX_GAME_EVENTS, history_end: None, world_interest: Default::default(), check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() };
         // CR 103.2b: the companion chosen as the deck was built is revealed once the starting player is known, if the starting
         // deck - the library as dealt - fulfils its condition; one that doesn't is a sideboard card, and nothing is said of it.
         for (p, id) in companions {
@@ -1033,7 +1051,7 @@ impl Game {
         let state = self.state.clone_with_journal_from(floor);
         let root = self.tree.next();
         let tree = tree::Tree::rooted(root, (state.mark(), self.log.len()));
-        Game { state, log: self.log.clone(), tree, at: root, cards: self.cards, verify: self.verify, max_events: self.max_events, history_end: None, check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() }
+        Game { state, log: self.log.clone(), tree, at: root, cards: self.cards, verify: self.verify, max_events: self.max_events, history_end: None, world_interest: Default::default(), check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() }
     }
 
     /// Gives the game's generator another seed (`GameState::reseed`): a fork for search that must not shuffle or roll
@@ -1171,6 +1189,17 @@ impl Game {
         self.chars(id).name
     }
 
+    /// Whether a resolved rule about an open set applies to `id` now (CR 611.2c): the same callback as the rules ask,
+    /// through the words captured when the effect began. Projections and diagnostic dumps must not ask it through the
+    /// source's later text. Island Sanctuary's attack exception and Falter's blocking restriction use this interface.
+    pub fn lasting_rule_applies(&self, effect: &ContinuousEffect, id: ObjectId) -> bool {
+        let EffectKind::LastingRule { card, index, about } = effect.kind else { return false };
+        self.cards.get(card).lasting_rules.get(index as usize).is_some_and(|rule| {
+            let reads = actions::WithWords { q: self, source: effect.source, words: effect.words };
+            (rule.applies)(&reads, &Asker::new(effect.source, effect.controller), about, id)
+        })
+    }
+
     /// The name of what an object is to one who knows every card, as a script or a log does: its name (`name`), but for a
     /// card exiled face down, which has none (CR 406.3a), its card's. Never what a player is shown.
     pub fn known_name(&self, id: ObjectId) -> &'static str {
@@ -1251,6 +1280,11 @@ impl Game {
     /// which the pool shows as that source's.
     pub fn mana_told_apart(&self, player: PlayerId) -> Vec<cantrip_state::ManaPart> {
         static_rules::mana_told_apart(self, self.cards, player)
+    }
+
+    /// Continuous public hand visibility, independent of a one-time reveal action.
+    pub fn revealed_hands(&self) -> u8 {
+        hand_visibility::mask(self, self.cards)
     }
 
     /// Whether `player` may look at the top card of their library any time (CR 401.2), as a permanent they control says.
@@ -1523,6 +1557,7 @@ impl<'a> Cx<'a> {
         // instruction, once it is done (`ops::as_one_instruction`).
         if self.s().settle_held.get() == 0 {
             ops::settle_combat(self);
+            world::sync(self); hand_visibility::sync(self);
         }
         let check = &mut self.g.check;
         if check.depth == 0 {
@@ -1573,7 +1608,7 @@ impl<'a> Cx<'a> {
                 Duration::DuringControllersNextTurn(self.g.state.turn.number)
             }
             // Only the untap step reads it, of a permanent's untapping.
-            Duration::DuringItsControllersNextUntapStep => {
+            Duration::DuringItsControllersNextUntapStep | Duration::DuringControllersNextUntapSteps(_) => {
                 debug_assert!(kind == EffectKind::DoesntUntap, "only an effect on untapping lasts until its controller's next untap step");
                 duration
             }
@@ -1689,8 +1724,9 @@ impl<'a> Cx<'a> {
         ops::settle_at_once(self);
         let start = self.g.log.len();
         for &event in events {
-            self.record(event);
+            self.record_only(event);
         }
+        if self.s().settle_held.get() == 0 { world::sync(self); hand_visibility::sync(self); }
         start
     }
 
@@ -1714,6 +1750,12 @@ impl<'a> Cx<'a> {
         }
     }
     pub fn record(&mut self, event: Event) {
+        self.record_only(event);
+        if self.s().settle_held.get() == 0 { world::sync(self); hand_visibility::sync(self); }
+    }
+
+    /// A batch appends all its events before history-dependent characteristics are synchronized.
+    fn record_only(&mut self, event: Event) {
         let turn = self.g.state.turn;
         let cause = self.cause();
         let serial = self.g.log.len() as u32;
@@ -1875,9 +1917,9 @@ impl<'a> Cx<'a> {
         })
     }
 
-    /// The creation text retained by a granted ability, replacement or prevention (CR 611.2c, 113.7a).
+    /// The creation text retained by a granted ability, replacement, prevention or lasting rule (CR 611.2c, 113.7a).
     pub(crate) fn granting_words(&self, source: ObjectId, kind: EffectKind) -> Words {
-        if matches!(kind, EffectKind::AddAbility(_) | EffectKind::Replacement { .. } | EffectKind::ReplacementRule { .. } | EffectKind::Prevention { .. }) {
+        if matches!(kind, EffectKind::AddAbility(_) | EffectKind::Replacement { .. } | EffectKind::ReplacementRule { .. } | EffectKind::Prevention { .. } | EffectKind::LastingRule { .. } | EffectKind::BlockRestriction { .. }) {
             Query::words(self, source)
         } else { Words::NONE }
     }
@@ -2429,6 +2471,20 @@ impl cantrip_api::Game for Cx<'_> {
         ops::remember_chosen(self, by, cantrip_state::Kept::Name(name));
     }
 
+    fn note_value(&mut self, by: Linked, value: NotedValue) -> u32 {
+        let value = self.st().noted_value_push(NotedValueRecord { by, value });
+        self.record(Event::ValueNoted { value });
+        value
+    }
+
+    fn remember_chosen(&mut self, by: Linked, value: ChosenValue) {
+        let value = match value {
+            ChosenValue::Color(color) => cantrip_state::Kept::Color(color),
+            ChosenValue::Number(number) => cantrip_state::Kept::Number(number),
+        };
+        ops::remember_chosen(self, by, value);
+    }
+
     fn remember_chosen_object(&mut self, by: Linked, object: ObjectId) {
         ops::remember_chosen(self, by, cantrip_state::Kept::Object(object));
     }
@@ -2591,6 +2647,14 @@ impl cantrip_api::Game for Cx<'_> {
 
     fn become_unblocked(&mut self, attacker: ObjectId) {
         ops::set_blocked(self, attacker, false);
+    }
+
+    fn change_blocks(&mut self, remove_from_combat: &[ObjectId], ending: &[(ObjectId, ObjectId)], starting: &[(ObjectId, ObjectId)]) {
+        combat_changes::change_blocks(self, remove_from_combat, ending, starting);
+    }
+
+    fn block_reassignment_allowed(&self, ending: &[(ObjectId, ObjectId)], starting: &[(ObjectId, ObjectId)]) -> bool {
+        turn::block_reassignment_allowed(self, ending, starting)
     }
 
     fn put_onto_battlefield_transformed(&mut self, object: ObjectId, controller: PlayerId, tapped: bool) -> Result<ObjectId, Suspend> {
@@ -2949,6 +3013,17 @@ impl cantrip_api::Game for Cx<'_> {
 
     fn add_mana_in_any_combination(&mut self, asker: &Asker, colors: ColorSet, count: u32) -> Result<(), Suspend> {
         actions::add_in_any_combination(self, asker, colors, count)
+    }
+
+    fn empty_mana_pool(&mut self, player: PlayerId) -> ManaPool {
+        let mut lost = self.g.state.player(player).pool;
+        for (_, restricted) in self.g.state.restricted_of(player) {
+            for (total, amount) in lost.0.iter_mut().zip(restricted.0) { *total = total.saturating_add(amount); }
+        }
+        // `Turn` is the longest intrinsic mana lifetime. An explicit loss is unrelated to step/phase boundaries,
+        // so no static `mana_kept` rule applies. This also removes source, snow and restriction provenance.
+        self.g.state.empty_mana(player, ManaLasts::Turn);
+        lost
     }
 
     fn become_day(&mut self) -> Result<(), Suspend> {
@@ -3426,3 +3501,44 @@ mod non_target_attachment_tests;
 
 #[cfg(test)]
 mod copy_retarget_tests;
+
+#[cfg(test)]
+#[path = "empty_mana_tests.rs"]
+mod empty_mana_tests;
+
+#[cfg(test)]
+#[path = "keyword_family_tests.rs"]
+mod keyword_family_tests;
+
+#[cfg(test)]
+mod untap_limit_tests;
+
+#[cfg(test)]
+mod nonmana_mana_tap_tests;
+
+#[cfg(test)]
+mod attack_haste_tests;
+
+#[cfg(test)]
+mod skip_step_tests;
+
+mod banding;
+
+#[cfg(test)]
+mod banding_tests;
+#[cfg(test)]
+mod combat_delayed_tests;
+
+#[cfg(test)]
+mod combat_group_tests;
+
+#[cfg(test)]
+mod combat_payment_tests;
+
+mod target_choices;
+
+#[cfg(test)]
+mod target_choice_tests;
+
+#[cfg(test)]
+mod noted_value_tests;

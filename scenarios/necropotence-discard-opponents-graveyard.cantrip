@@ -1,0 +1,35 @@
+# Discard triggers exile the discarded cards, leaving an opponent’s same-named graveyard card alone (CR 603.2).
+[Bot1 Deck]
+Black Lotus
+Necropotence
+Mox Ruby
+Faithless Looting
+Swamp
+Swamp
+Swamp
+Forest
+Mountain
+Island x20
+[Bot2 Deck]
+Swamp x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Necropotence.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Swamp; Swamp)
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard = Swamp
+Exile = Swamp; Swamp
+Bot1.Life = 20

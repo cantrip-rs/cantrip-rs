@@ -1,0 +1,35 @@
+# Its controller can activate the shield, which prevents the creature's own noncombat damage to them (CR 615.1).
+[Bot1 Deck]
+Mercenaries
+Black Lotus x2
+Mox Pearl
+Mox Ruby
+Quicksilver Dagger
+Island
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mercenaries.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Quicksilver Dagger.Cast(Bot1.Battlefield.Mercenaries)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mercenaries.Activate(Ability: {3})
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mercenaries.Activate(Bot1; Ability: {T})
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 20

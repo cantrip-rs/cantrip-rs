@@ -37,6 +37,10 @@ fn after(g: &mut dyn cantrip_api::Game, asker: &Asker, _: ObjectId, _: &Proposal
     }
 }
 
+fn red_objects(q: &dyn Query, asker: &Asker, _: Target, id: ObjectId) -> bool {
+    red_word(q, asker, id)
+}
+
 static SOURCE: CardDef = CardDef {
     name: "Effect Text Source",
     types: TypeSet::of(&[CardType::Artifact]),
@@ -48,6 +52,11 @@ static SOURCE: CardDef = CardDef {
         granted_replacement(ReplacementKind::Damage, replaces, replace, "replace red damage").then(after),
     ],
     replacements: &[replacement(ReplacementKind::LifeChange, observe_live_text, |_, _, _| {}, "observe current text")],
+    lasting_rules: &[
+        LastingRule { text: "Red creatures can't attack you.", rule: LastingRuleKind::CantAttackYou, applies: red_objects },
+        LastingRule { text: "Red creatures can't block.", rule: LastingRuleKind::CantBlock, applies: red_objects },
+        LastingRule { text: "Red creatures don't untap.", rule: LastingRuleKind::DoesntUntap, applies: red_objects },
+    ],
     ..CardDef::BLANK
 };
 static RED: CardDef = CardDef {
@@ -135,4 +144,28 @@ fn an_object_replacement_also_retains_its_creation_text() {
     change(&mut cx, source, Color::Blue, Color::Green);
     cantrip_api::Game::damage(&mut cx, blue, Target::Player(YOU), 3);
     assert_eq!(cx.s().player(YOU).life, 23);
+}
+
+#[test]
+fn lasting_rules_keep_empty_and_changed_creation_text_while_membership_stays_live() {
+    for changed_before in [false, true] {
+        let (mut g, source, red, blue) = table(); let mut cx = cx(&mut g);
+        if changed_before { change(&mut cx, source, Color::Red, Color::Blue); }
+        let card = cx.s().obj(source).card;
+        for index in 0..3 {
+            cantrip_api::Game::add_player_effect(&mut cx, YOU, source,
+                EffectKind::LastingRule { card, index, about: Target::Player(YOU) }, Duration::EndOfTurn);
+        }
+        change(&mut cx, source, if changed_before { Color::Blue } else { Color::Red }, Color::Green);
+        let (matching, other) = if changed_before { (blue, red) } else { (red, blue) };
+        for kind in [LastingRuleKind::CantBlock, LastingRuleKind::DoesntUntap] {
+            assert_eq!(crate::static_rules::lasting_rules_on(&cx, cx.cards(), matching, kind).count(), 1);
+            assert_eq!(crate::static_rules::lasting_rules_on(&cx, cx.cards(), other, kind).count(), 0);
+        }
+        assert_eq!(crate::static_rules::lasting_rules_barring_attacks(&cx, cx.cards(), &[matching, other], &[Target::Player(YOU)]), vec![(matching, Target::Player(YOU))]);
+        assert_eq!(Query::words(&cx, source).color(Color::Red), Color::Green, "the source's live words are unchanged by the rule query");
+        // The set remains open: the text is captured, not the objects' colors.
+        cantrip_api::Game::add_effect(&mut cx, source, matching, EffectKind::SetColors(ColorSet::of(Color::Green)), Duration::EndOfTurn);
+        assert_eq!(crate::static_rules::lasting_rules_on(&cx, cx.cards(), matching, LastingRuleKind::CantBlock).count(), 0);
+    }
 }

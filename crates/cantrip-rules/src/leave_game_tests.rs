@@ -37,6 +37,7 @@ static MIND: CardDef = CardDef {
     name: "Leave Test Mind",
     types: TypeSet::of(&[CardType::Enchantment]),
     subtypes: SubtypeSet::of(&[Subtype::Aura]),
+    enchant: Some(cantrip_mechanics::targets::CREATURE),
     statics: &[control_changing(enchanted, "")],
     ..CardDef::BLANK
 };
@@ -44,6 +45,21 @@ static MIND: CardDef = CardDef {
 const P1: PlayerId = PlayerId(0);
 const P2: PlayerId = PlayerId(1);
 const P3: PlayerId = PlayerId(2);
+
+fn loss_with_a_stolen_creature(q: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
+    let Event::GameLost { player, .. } = *event else { return None };
+    q.state().battlefield().iter().any(|&id| q.chars(id).name == BEAR.name && q.controller(id) == player)
+        .then(|| Fired::about(Target::Player(player))).flatten()
+}
+
+fn no_effect(_: &mut dyn cantrip_api::Game, _: &StackItem) -> Result<(), Suspend> { Ok(()) }
+
+static LOSS_WITNESS: CardDef = CardDef {
+    name: "Pre-loss control witness", types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[triggered(when(EventMask::GAME_OVER, loss_with_a_stolen_creature), no_effect,
+        "Whenever a player loses the game, if they controlled a Leave Test Bear just before losing, observe that loss.")],
+    ..CardDef::BLANK
+};
 
 fn cx(game: &mut Game) -> Cx<'_> {
     Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
@@ -60,6 +76,108 @@ fn put(game: &mut Game, def: &'static CardDef, owner: PlayerId, controller: Play
     game.state.zone_push(Zone::BATTLEFIELD, id);
     game.state.see_statics();
     id
+}
+
+/// A remaining player's Aura controlled by the leaver exposes both halves of CR
+/// 800.4a: the Bear returns before any post-loss query, and the old controller is
+/// still visible to a loss ability's look-back (CR 603.10f).
+fn loss_settles_control_and_keeps_the_pre_loss_board(reason: LossReason) {
+    let table = Box::leak(Box::new(CardTable::new([&MIND, &BEAR, &LOSS_WITNESS])));
+    let deck = vec![table.id_of(&BEAR); 10];
+    let mut game = Game::new(table, &Setup { decks: vec![deck; 3], ..Default::default() });
+    let bear = put(&mut game, &BEAR, P2, P2);
+    let mind = put(&mut game, &MIND, P1, P3);
+    let witness = put(&mut game, &LOSS_WITNESS, P1, P1);
+    put(&mut game, &LOSS_WITNESS, P3, P3);
+    game.state.update_obj(mind, |o| o.attached_to = Some(bear));
+    let mut cx = cx(&mut game);
+    crate::ops::settle_control(&mut cx);
+    assert_eq!(cx.s().obj(bear).controller, P3);
+    match reason {
+        LossReason::Conceded => crate::ops::concede(&mut cx, P3),
+        LossReason::Effect => crate::ops::lose_game(&mut cx, P3),
+        LossReason::Life => {
+            cx.st().update_player(P3, |p| p.life = 0);
+            assert!(crate::settle::state_based_actions(&mut cx).unwrap());
+        }
+        _ => unreachable!(),
+    }
+    assert!(cx.s().player(P3).lost);
+    assert!(!cx.s().player(P1).lost && !cx.s().player(P2).lost);
+    assert_eq!(cx.s().obj(bear).controller, P2);
+    assert!(cx.s().battlefield().contains(&bear));
+    assert!(!cx.s().battlefield().contains(&mind));
+    assert!(cx.s().triggers.iter().any(|t| t.source == witness && t.controller == P1 && t.subject == Target::Player(P3)),
+        "loss trigger must see the Bear's pre-loss controller for {reason:?}");
+    assert!(cx.g.log.iter().any(|r| r.event == Event::GameLost { player: P3, reason }));
+    assert!(!cx.s().triggers.iter().any(|t| t.controller == P3), "the leaver's own loss triggers must be removed");
+}
+
+#[test]
+fn concession_settles_control_and_keeps_pre_loss_trigger_state() {
+    loss_settles_control_and_keeps_the_pre_loss_board(LossReason::Conceded);
+}
+
+#[test]
+fn effect_loss_settles_control_and_keeps_pre_loss_trigger_state() {
+    loss_settles_control_and_keeps_the_pre_loss_board(LossReason::Effect);
+}
+
+#[test]
+fn sba_loss_settles_control_and_keeps_pre_loss_trigger_state() {
+    loss_settles_control_and_keeps_the_pre_loss_board(LossReason::Life);
+}
+
+#[test]
+fn simultaneous_losses_are_recorded_before_control_and_designation_changes() {
+    let p4 = PlayerId(3);
+    let table = Box::leak(Box::new(CardTable::new([&MIND, &BEAR, &LOSS_WITNESS])));
+    let deck = vec![table.id_of(&BEAR); 10];
+    let mut game = Game::new(table, &Setup { decks: vec![deck; 4], ..Default::default() });
+    let bear = put(&mut game, &BEAR, P2, P2);
+    let mind = put(&mut game, &MIND, P1, P3);
+    let witness = put(&mut game, &LOSS_WITNESS, P1, P1);
+    put(&mut game, &LOSS_WITNESS, P3, P3);
+    put(&mut game, &LOSS_WITNESS, p4, p4);
+    game.state.update_obj(mind, |o| o.attached_to = Some(bear));
+    let mut cx = cx(&mut game);
+    crate::ops::settle_control(&mut cx);
+    cx.st().update_player(P3, |p| { p.life = 0; p.monarch = true; });
+    cx.st().update_player(p4, |p| { p.life = 0; p.initiative = true; });
+    let start = cx.g.log.len();
+    assert!(crate::settle::state_based_actions(&mut cx).unwrap());
+    assert!(cx.s().player(P3).lost && cx.s().player(p4).lost);
+    assert!(!cx.s().player(P1).lost && !cx.s().player(P2).lost);
+    assert_eq!(cx.s().obj(bear).controller, P2);
+    assert!(cx.s().player(P1).monarch && cx.s().player(P1).initiative);
+    assert!(cx.s().triggers.iter().any(|t| t.source == witness && t.subject == Target::Player(P3)));
+    assert!(!cx.s().triggers.iter().any(|t| t.controller == P3 || t.controller == p4));
+    let events = &cx.g.log[start..];
+    let losses: Vec<_> = events.iter().enumerate().filter_map(|(i, r)| matches!(r.event, Event::GameLost { .. }).then_some(i)).collect();
+    assert_eq!(losses.len(), 2);
+    for (i, record) in events.iter().enumerate() {
+        if matches!(record.event, Event::ControlChanged { permanent, .. } if permanent == bear)
+            || matches!(record.event, Event::BecameMonarch { .. } | Event::TookInitiative { .. }) {
+            assert!(i > losses[1], "all losses precede their consequences");
+        }
+    }
+}
+
+#[test]
+fn the_last_opponent_leaving_settles_control_and_ends_the_game() {
+    let table = Box::leak(Box::new(CardTable::new([&MIND, &BEAR, &LOSS_WITNESS])));
+    let deck = vec![table.id_of(&BEAR); 10];
+    let mut game = Game::new(table, &Setup { decks: vec![deck; 2], ..Default::default() });
+    let bear = put(&mut game, &BEAR, P1, P1);
+    let mind = put(&mut game, &MIND, P1, P2);
+    put(&mut game, &LOSS_WITNESS, P1, P1);
+    game.state.update_obj(mind, |o| o.attached_to = Some(bear));
+    let mut cx = cx(&mut game);
+    crate::ops::settle_control(&mut cx);
+    assert_eq!(cx.s().obj(bear).controller, P2);
+    crate::ops::concede(&mut cx, P2);
+    assert!(cx.s().is_over());
+    assert_eq!(cx.s().obj(bear).controller, P1);
 }
 
 /// P3's Anthem is before P3's Bear in the battlefield's list, so leaving one at a time would take the Bear's row with the

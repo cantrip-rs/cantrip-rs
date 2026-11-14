@@ -1,0 +1,8 @@
+{
+  "name": "Merieke Ri Berit",
+  "manaCost": "{W}{U}{B}",
+  "type": "Legendary Creature — Human",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Merieke Ri Berit doesn't untap during your untap step.\n{T}: Gain control of target creature for as long as you control Merieke Ri Berit. When Merieke Ri Berit leaves the battlefield or becomes untapped, destroy that creature. It can't be regenerated."
+}

@@ -1,0 +1,31 @@
+# Quagmire also lets its controller block an opponent's swampwalker despite controlling a Swamp (CR 609.4, 702.14b).
+[Bot1 Deck]
+Quagmire
+Black Lotus
+Swamp
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Swamp
+Plague Beetle
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Quagmire.Cast
+? Bot1.Mana =
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Plague Beetle.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Plague Beetle > Bot1)
+Bot1.Block(Ornithopter > Plague Beetle)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Ornithopter.Damage = 1

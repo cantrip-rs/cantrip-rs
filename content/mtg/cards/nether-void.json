@@ -1,0 +1,6 @@
+{
+  "name": "Nether Void",
+  "manaCost": "{3}{B}",
+  "type": "World Enchantment",
+  "oracleText": "Whenever a player casts a spell, counter it unless that player pays {3}."
+}

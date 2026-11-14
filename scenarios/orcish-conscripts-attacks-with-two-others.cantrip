@@ -1,0 +1,26 @@
+# Conscripts cannot attack alone or with one other creature, but can attack with two others (CR 508.1c).
+[Bot1 Deck]
+Orcish Conscripts
+Mox Ruby
+Memnite x2
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Orcish Conscripts.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Orcish Conscripts > Bot2; Alone: yes)
+! Bot1.Attack(Orcish Conscripts > Bot2; Memnite#1 > Bot2)
+Bot1.Attack(Orcish Conscripts > Bot2; Memnite#1 > Bot2; Memnite#2 > Bot2)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 16

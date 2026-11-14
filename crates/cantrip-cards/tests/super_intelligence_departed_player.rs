@@ -18,7 +18,7 @@ fn departed_upkeep_player_is_not_instructed_to_draw() {
     game.state.see_statics();
     game.state.update_player(departed, |p| { p.lost = true; p.drew_from_empty = false; });
     // The ability triggered during the departed player's upkeep, before control changed and they left.
-    let item = StackItem { event_amount: None,
+    let item = StackItem { target_choosers: Span::default(), event_amount: None,
         kind: StackKind::Triggered, object: aura,
         ability: AbilityRef { card: card("Super Intelligence").unwrap(), index: 0 }, controller,
         inline_targets: [Target::None; INLINE_TARGETS], target_count: 0, inline_spec_of: [0; INLINE_TARGETS],

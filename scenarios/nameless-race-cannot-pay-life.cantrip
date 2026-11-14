@@ -1,0 +1,43 @@
+# A player whose life total cannot change cannot pay life as Nameless Race enters (CR 119.8).
+[Bot1 Deck]
+Nameless Race
+Black Lotus
+Black Lotus
+Mox Jet
+Mox Pearl
+Teferi's Protection
+Swamp x20
+
+[Bot2 Deck]
+Mox Pearl
+Savannah Lions
+Mother of Runes
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Teferi's Protection.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Nameless Race.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Number(1)
+Bot1.Number(0)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard.Nameless Race.Colors = Black

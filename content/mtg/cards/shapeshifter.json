@@ -1,0 +1,8 @@
+{
+  "name": "Shapeshifter",
+  "manaCost": "{6}",
+  "type": "Artifact Creature — Shapeshifter",
+  "power": "*",
+  "toughness": "7-*",
+  "oracleText": "As this creature enters, choose a number between 0 and 7.\nAt the beginning of your upkeep, you may choose a number between 0 and 7.\nShapeshifter's power is equal to the last chosen number and its toughness is equal to 7 minus that number."
+}

@@ -702,6 +702,7 @@ public sealed partial class MainPage
             BlockersDeclaredAnswer blocks => $"{nameof(BlockersDeclaredAnswer)} {string.Join(",", blocks.Blocks.Select(b => $"{b.Blocker.Value}>{b.Attacker.Value}"))}".TrimEnd(),
             CountersRemovedAnswer removed =>
                 $"{nameof(CountersRemovedAnswer)} {string.Join("; ", removed.Removals.Select(r => $"{r.Object.Value} {r.Counter} {r.Count}"))}".TrimEnd(),
+            PlayerChosenAnswer chosen => $"{nameof(PlayerChosenAnswer)} {chosen.Player}",
             TargetsDividedAnswer divided =>
                 $"{nameof(TargetsDividedAnswer)} {string.Join("; ", divided.Shares.Select(s => $"{(s.Target.IsPlayer ? $"player {s.Target.Player}" : $"object {s.Target.Object.Value}")} {s.Amount}"))}".TrimEnd(),
             { } answer => answer.GetType().Name,

@@ -1,0 +1,60 @@
+# Guardian Scalelord targets Liliana in the graveyard; Ghost Vacuum exiles her before the ability resolves.
+# The ability has no legal target and does not resolve (CR 608.2b).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Faithless Looting
+Guardian Scalelord
+Forest
+Liliana of the Veil
+Rancor
+Forest
+Forest
+Plains x10
+
+[Bot2 Deck]
+Ghost Vacuum
+Mox Emerald
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Liliana of the Veil; Rancor)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Guardian Scalelord.Cast
+Bot1.Pass
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Ghost Vacuum.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Graveyard.Faithless Looting.Cast(Ability: Flashback)
+Bot1.Choose(Forest; Forest)
+Bot1.Attack(Guardian Scalelord > Bot2)
+Bot1.Target(Liliana of the Veil)
+Bot1.Pass
+Bot2.Battlefield.Ghost Vacuum.Activate(Ability: Exile target; Bot1.Graveyard.Liliana of the Veil)
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Faithless Looting; Liliana of the Veil
+Bot2.Life = 16

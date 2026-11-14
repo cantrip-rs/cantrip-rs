@@ -52,6 +52,27 @@ static SOURCE: CardDef = CardDef {
 };
 
 #[test]
+fn graveyard_card_targets_reject_copies_of_cards_before_state_based_cleanup() {
+    let cards=Box::leak(Box::new(CardTable::new([&SOURCE,&CREATURE])));
+    let mut game=RulesGame::new(cards,&Setup { decks:vec![vec![],vec![]],..Default::default() });
+    let zone=Zone::graveyard(YOU);
+    let card=game.state.push_obj(Obj::new(cards.id_of(&CREATURE),YOU,zone));
+    game.state.zone_push(zone,card);
+    let mut copy=Obj::new(cards.id_of(&CREATURE),YOU,zone);
+    copy.card_copy=true;
+    let copy=game.state.push_obj(copy);
+    game.state.zone_push(zone,copy);
+    let source=game.state.push_obj(Obj::new(cards.id_of(&SOURCE),YOU,Zone::BATTLEFIELD));
+    game.state.zone_push(Zone::BATTLEFIELD,source);
+    let asker=Asker::new(source,YOU);
+    // A transient copy is not a card (CR108.2), even before CR704.5e removes it.
+    for filter in [CARD_IN_YOUR_GRAVEYARD.filter,CREATURE_CARD_IN_YOUR_GRAVEYARD.filter] {
+        assert!(filter(&game,&asker,Target::Object(card)));
+        assert!(!filter(&game,&asker,Target::Object(copy)));
+    }
+}
+
+#[test]
 fn graveyard_card_targets_exclude_tokens_during_resolution() {
     let cards = Box::leak(Box::new(CardTable::new([&SOURCE, &CREATURE, &LAND])));
     let mut game = RulesGame::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
@@ -65,7 +86,7 @@ fn graveyard_card_targets_exclude_tokens_during_resolution() {
     put(&CREATURE, YOU, Zone::graveyard(YOU));
     put(&LAND, YOU, Zone::graveyard(YOU));
     put(&CREATURE, THEM, Zone::graveyard(THEM));
-    game.state.stack_push(StackItem { instance: AbilityAcquisition::OWN, event_amount: None,
+    game.state.stack_push(StackItem { target_choosers: Span::default(), instance: AbilityAcquisition::OWN, event_amount: None,
         kind: StackKind::Triggered, object: source, ability: AbilityRef::delayed(cards.id_of(&SOURCE), 0), controller: YOU,
         inline_targets: [Target::None; INLINE_TARGETS], target_count: 0, inline_spec_of: [0; INLINE_TARGETS],
         x: 0, kicked: 0, counted: 0, paid: 0, modes: 0, way: 0, choice: 0,

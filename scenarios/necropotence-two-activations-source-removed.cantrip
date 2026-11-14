@@ -1,0 +1,51 @@
+# Two activations return their own cards at end step even if Necropotence leaves the battlefield (CR 603.7a).
+[Bot1 Deck]
+Black Lotus
+Necropotence
+Mox Ruby
+Faithless Looting
+Swamp
+Swamp
+Swamp
+Forest
+Mountain
+Island x20
+[Bot2 Deck]
+Black Lotus
+Disenchant
+Plains x5
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Necropotence.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Necropotence.Activate
+? Bot1.Life = 19
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Top = Mountain
+? Exile.Count = 1
+Bot1.Battlefield.Necropotence.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+? Exile.Count = 2
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Necropotence)
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Hand = Faithless Looting; Forest; Mountain; Swamp; Swamp; Swamp
+Exile.Count = 0
+Bot1.Graveyard.Necropotence.Colors = Black
+Bot1.Life = 18

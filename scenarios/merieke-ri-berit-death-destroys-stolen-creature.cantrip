@@ -1,0 +1,40 @@
+# Merieke's death ends control immediately, then her delayed trigger destroys the returned creature (CR 611.2b, 603.7).
+[Bot1 Deck]
+Merieke Ri Berit
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Shock
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Merieke Ri Berit.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Merieke Ri Berit.Activate(Bot2.Battlefield.Memnite)
+? Bot1.Battlefield.Merieke Ri Berit.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Merieke Ri Berit)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Power = 1
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard.Memnite.Power = 1
+Bot1.Graveyard.Merieke Ri Berit.Power = 1

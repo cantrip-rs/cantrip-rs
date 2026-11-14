@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::triggers::{PROWESS, THIS_ENTERS};
-use cantrip_mechanics::{effects, targets};
+use cantrip_mechanics::targets;
 use cantrip_oracle as oracle;
 
 /// "Tap up to one target creature. It doesn't untap during its controller's untap step for as long as you control Ty
@@ -11,7 +11,7 @@ fn block(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
     g.tap(creature);
     g.end_sentence();
-    let until = Duration::AsLongAs(g.card_id(&CARD), 0);
+    let until = Duration::WhileSourceControlled;
     g.add_effect(item.object, creature, EffectKind::DoesntUntap, until);
     Ok(())
 }
@@ -26,6 +26,5 @@ pub static CARD: CardDef = CardDef {
         )
         .targets(&[targets::CREATURE.optional()]),
     ],
-    lasting: &[effects::YOU_CONTROL_SOURCE],
     ..oracle::TY_LEE_CHI_BLOCKER
 };

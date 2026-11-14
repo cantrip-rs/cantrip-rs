@@ -1,0 +1,41 @@
+# Two black attackers cost their controller two lands, chosen when attackers are declared (CR 508.1h).
+[Bot1 Deck]
+Reclamation
+Black Lotus x2
+Mox Pearl
+Hired Poisoner x2
+Forest
+Plains
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Reclamation.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Hired Poisoner.Cast
+Bot1.Pass
+Bot1.Hand.Hired Poisoner.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Attack(Hired Poisoner#1 > Bot2; Hired Poisoner#2 > Bot2)
+Bot1.Choose(Forest)
+Bot1.Choose(Plains)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Plains; Forest; Black Lotus; Black Lotus
+Bot1.Battlefield.Island.Types = Land
+Bot2.Life = 18

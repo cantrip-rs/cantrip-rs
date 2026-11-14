@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{effects, triggers};
+use cantrip_mechanics::triggers;
 use cantrip_oracle as oracle;
 
 /// "At end of combat, gain control of all creatures blocking this creature for as long as you control this creature." (CR 608.2, 611.2a).
@@ -14,7 +14,7 @@ fn gain_control_all_creatures_blocking(
             .filter(|&id| q.chars(id).is(CardType::Creature))
             .collect::<Vec<ObjectId>>()
     };
-    let duration = Duration::AsLongAs(g.card_id(&CARD), 0);
+    let duration = Duration::WhileSourceControlled;
     instruction(g, |g| {
         for &object in &objects {
             g.add_effect(item.object, object, EffectKind::Control(item.controller), duration);
@@ -29,6 +29,5 @@ pub static CARD: CardDef = CardDef {
         gain_control_all_creatures_blocking,
         "At end of combat, gain control of all creatures blocking this creature for as long as you control this creature.",
     )],
-    lasting: &[effects::YOU_CONTROL_SOURCE],
     ..oracle::THE_WRETCHED
 };

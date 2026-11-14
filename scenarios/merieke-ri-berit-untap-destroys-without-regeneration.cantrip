@@ -1,0 +1,48 @@
+# Merieke stays tapped in her untap step; untapping her leaves the victim controlled until the delayed trigger destroys it despite regeneration (CR 701.8a).
+[Bot1 Deck]
+Merieke Ri Berit
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Vow to Erebor
+Island x20
+[Bot2 Deck]
+Drudge Skeletons
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Merieke Ri Berit.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Drudge Skeletons.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Merieke Ri Berit.Activate(Bot2.Battlefield.Drudge Skeletons)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Merieke Ri Berit.Tapped = true
+? Bot1.Battlefield.Drudge Skeletons.Power = 1
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Drudge Skeletons.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Vow to Erebor.Cast(Merieke Ri Berit)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Drudge Skeletons.Power = 1
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard.Drudge Skeletons.Power = 1
+Bot1.Battlefield.Merieke Ri Berit.Tapped = false
