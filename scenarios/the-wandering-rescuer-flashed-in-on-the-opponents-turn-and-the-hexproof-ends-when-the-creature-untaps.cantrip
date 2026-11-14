@@ -1,0 +1,52 @@
+# The Wandering Rescuer has flash: Bot1 casts it in Bot2's turn four, convoking three Ornithopters. Their hexproof stops Bot2's
+# Lightning Bolt then. After Bot1's untap step they are untapped, have no hexproof any more and the Bolt can target one.
+
+[Bot1 Deck]
+Ornithopter
+Ornithopter
+Ornithopter
+The Wandering Rescuer
+Plains
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain
+Mountain
+Mountain
+Mountain
+Mountain
+Mountain x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.The Wandering Rescuer.Cast(Convoke: Ornithopter, Ornithopter, Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.The Wandering Rescuer.Types = Creature
+? Bot1.Battlefield.Ornithopter#1.Keywords = Flying; Hexproof
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#1)
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter#1.Keywords = Flying
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.The Wandering Rescuer.Types = Creature
+Bot2.Graveyard = Lightning Bolt
+Bot1.Battlefield.Count = 5

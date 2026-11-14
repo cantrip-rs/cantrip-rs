@@ -1,0 +1,53 @@
+# The Wandering Rescuer has double strike (3 damage twice, 20 -> 14) and gives hexproof to OTHER tapped creatures only: once it
+# attacks it is tapped but has no hexproof, so Bot2's Lightning Bolt can target it (it survives: 3 damage on a 3/4). The
+# Ornithopter that stayed home untapped has none either.
+
+[Bot1 Deck]
+Ornithopter
+Ornithopter
+Ornithopter
+The Wandering Rescuer
+Plains
+Plains
+Ornithopter
+Plains x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain
+Mountain
+Mountain
+Mountain
+Mountain
+Mountain x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.The Wandering Rescuer.Cast(Convoke: Ornithopter, Ornithopter, Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Attack(The Wandering Rescuer > Bot2)
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.The Wandering Rescuer)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Wandering Rescuer.Damage = 3
+? Bot1.Battlefield.The Wandering Rescuer.Tapped = true
+? Bot1.Battlefield.The Wandering Rescuer.Keywords = DoubleStrike; Flash
+? Bot1.Battlefield.Ornithopter#4.Keywords = Flying
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot2.Graveyard = Lightning Bolt; Mountain

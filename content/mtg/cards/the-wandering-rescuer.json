@@ -1,0 +1,13 @@
+{
+  "name": "The Wandering Rescuer",
+  "manaCost": "{3}{W}{W}",
+  "type": "Legendary Creature — Human Samurai Noble",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flash\nConvoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nDouble strike\nOther tapped creatures you control have hexproof.",
+  "keywords": [
+    "Flash",
+    "DoubleStrike"
+  ],
+  "convoke": true
+}

@@ -1,0 +1,54 @@
+# The Wandering Rescuer, {3}{W}{W} with convoke: three Ornithopters tapped to pay {3} and two Plains for {W}{W}. "Other tapped
+# creatures you control have hexproof": Bot2's Lightning Bolt cannot target any of the three tapped Ornithopters, but the fourth
+# Ornithopter is untapped, has no hexproof and dies to it.
+
+[Bot1 Deck]
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+The Wandering Rescuer
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Lightning Bolt
+Mountain
+Mountain
+Mountain
+Mountain
+Mountain x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.The Wandering Rescuer.Cast(Convoke: Ornithopter, Ornithopter, Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+Bot2.Battlefield.Mountain.Activate
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#1)
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#2)
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#3)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#4)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.The Wandering Rescuer.Types = Creature
+Bot1.Battlefield.Ornithopter#1.Tapped = true
+Bot1.Battlefield.Ornithopter#1.Keywords = Flying; Hexproof
+Bot1.Battlefield.Ornithopter#4 = (absent)
+Bot1.Battlefield.The Wandering Rescuer.Keywords = DoubleStrike; Flash
+Bot2.Graveyard = Lightning Bolt
