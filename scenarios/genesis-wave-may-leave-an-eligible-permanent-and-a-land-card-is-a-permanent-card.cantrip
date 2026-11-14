@@ -1,0 +1,42 @@
+# Genesis Wave with X = 2 ("You may put any number of permanent cards with mana value X or less"): the top two are Forest (a land
+# card is a permanent card, mana value 0) and Sol Ring (mana value 1); both are eligible, only the Forest is taken, and Sol Ring,
+# which Bot1 declines, goes to the graveyard with the rest. The third card, Memnite (eligible, never revealed), stays on top. Paid with
+# Black Lotus (GGG) and two Moxen. CR 701.20, 205.2a, 202.3e, 400.3.
+
+[Bot1 Deck]
+Genesis Wave
+Black Lotus
+Mox Emerald
+Mox Ruby
+Island
+Island
+Island
+Forest
+Sol Ring
+Memnite
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Genesis Wave.Cast(X: 2)
+Bot1.Pass
+Bot1.Choose(Forest)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Forest; Mox Emerald; Mox Ruby
+Bot1.Graveyard = Genesis Wave; Sol Ring; Black Lotus
+Bot1.Revealed.Count = 2
+Bot1.Library.Count = 11
+Bot1.LandsPlayed = 0

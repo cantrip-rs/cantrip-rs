@@ -1,0 +1,42 @@
+# Genesis Wave with X = 3 and only two cards in the library: it reveals both (CR 609.3). Sol Ring (mana value 1) can be put onto the
+# battlefield; Serra Angel (mana value 5) cannot and goes to the graveyard with the rest. Bot1 puts the Sol Ring onto the
+# battlefield, so the library is left empty. Paid with Black Lotus (GGG) and three Moxen.
+
+[Bot1 Deck]
+Genesis Wave
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Jet
+Island
+Island
+Sol Ring
+Serra Angel
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Genesis Wave.Cast(X: 3)
+Bot1.Pass
+! Bot1.Choose(Serra Angel)
+Bot1.Choose(Sol Ring)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby; Sol Ring
+Bot1.Graveyard = Genesis Wave; Serra Angel; Black Lotus
+Bot1.Revealed.Count = 2
+Bot1.Library.Count = 0

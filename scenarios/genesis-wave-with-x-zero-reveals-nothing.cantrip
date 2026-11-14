@@ -1,0 +1,30 @@
+# Genesis Wave with X = 0 reveals no cards, asks nothing and moves nothing; the top card, Mox Jet (mana value 0, a permanent card
+# that would qualify), stays in the library. Paid with Black Lotus alone. CR 701.20, 107.3f.
+
+[Bot1 Deck]
+Genesis Wave
+Black Lotus
+Island
+Island
+Island
+Island
+Island
+Mox Jet
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Genesis Wave.Cast(X: 0)
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = 
+Bot1.Graveyard = Genesis Wave; Black Lotus
+Bot1.Library.Count = 13
+Bot2.Library.Count = 13
