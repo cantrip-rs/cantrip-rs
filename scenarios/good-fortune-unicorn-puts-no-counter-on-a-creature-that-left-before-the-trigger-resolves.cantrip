@@ -1,0 +1,54 @@
+# Good-Fortune Unicorn: "put a +1/+1 counter on that creature" means the object that entered (CR 603.6a, 400.7). On turn 3 Bot1's
+# Memnite enters and, with the Unicorn's trigger on the stack, Bot1 returns it to hand with Unsummon: the trigger resolves and
+# puts no counter on anything (CR 608.2b). Cast again, the Memnite is a new object and its own trigger gives it one counter, not two.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Forest
+Good-Fortune Unicorn
+Memnite
+Unsummon
+Island
+Forest x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Good-Fortune Unicorn.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Unsummon.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Good-Fortune Unicorn.Counters.PlusOnePlusOne = (absent)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Good-Fortune Unicorn.Counters.PlusOnePlusOne = (absent)
+Bot1.Graveyard = Unsummon
