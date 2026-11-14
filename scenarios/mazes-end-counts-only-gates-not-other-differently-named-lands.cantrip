@@ -1,0 +1,56 @@
+# Maze's End: "If you control ten or more Gates with different names, you win the game" counts Gates only (CR 205.3i): other
+# lands with different names do not make up the ten. With Exploration Bot1 has eight differently named Guildgates and an Island
+# in play after five turns; the ability fetches a ninth, Simic Guildgate. Ten differently named lands, nine Gates: no win.
+[Bot1 Deck]
+Exploration
+Mox Emerald
+Maze's End
+Azorius Guildgate
+Boros Guildgate
+Dimir Guildgate
+Golgari Guildgate
+Gruul Guildgate
+Izzet Guildgate
+Orzhov Guildgate
+Island
+Selesnya Guildgate
+Simic Guildgate
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Exploration.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Maze's End.Play
+Bot1.Hand.Azorius Guildgate.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Boros Guildgate.Play
+Bot1.Hand.Dimir Guildgate.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Golgari Guildgate.Play
+Bot1.Hand.Gruul Guildgate.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Izzet Guildgate.Play
+Bot1.Hand.Orzhov Guildgate.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T11 Bot1.Main1]
+Bot1.Hand.Selesnya Guildgate.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Azorius Guildgate.Activate(Color: White)
+Bot1.Battlefield.Boros Guildgate.Activate(Color: Red)
+Bot1.Battlefield.Maze's End.Activate(Ability: Return)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 11
+Bot1.Search(Simic Guildgate)
+
+[Expect]
+Result = InProgress
+Bot1.Battlefield.Simic Guildgate.Subtypes = Gate
+Bot1.Battlefield.Count = 12

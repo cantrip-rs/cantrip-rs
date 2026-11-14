@@ -1,0 +1,59 @@
+# Maze's End counts the "Gates with different names" that YOU control: Bot1 has eight differently named Guildgates in play
+# and fetches a ninth, Simic Guildgate, while Bot2 controls the tenth name, Rakdos Guildgate. Bot1 controls nine Gates with
+# different names (CR 201.2a) and Bot2's Gate does not make it ten, so nobody wins (CR 104.2b).
+
+[Bot1 Deck]
+Exploration
+Mox Emerald
+Maze's End
+Azorius Guildgate
+Boros Guildgate
+Dimir Guildgate
+Golgari Guildgate
+Gruul Guildgate
+Izzet Guildgate
+Orzhov Guildgate
+Selesnya Guildgate
+Simic Guildgate
+Island x9
+
+[Bot2 Deck]
+Rakdos Guildgate
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Exploration.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Maze's End.Play
+Bot1.Hand.Azorius Guildgate.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Rakdos Guildgate.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Boros Guildgate.Play
+Bot1.Hand.Dimir Guildgate.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Golgari Guildgate.Play
+Bot1.Hand.Gruul Guildgate.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Izzet Guildgate.Play
+Bot1.Hand.Orzhov Guildgate.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Selesnya Guildgate.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Azorius Guildgate.Activate(Color: White)
+Bot1.Battlefield.Boros Guildgate.Activate(Color: Red)
+Bot1.Battlefield.Maze's End.Activate(Ability: Return)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 10
+? Bot2.Battlefield.Rakdos Guildgate.Subtypes = Gate
+Bot1.Search(Simic Guildgate)
+
+[Expect]
+Result = InProgress
+Bot1.Battlefield.Simic Guildgate.Subtypes = Gate
+Bot1.Battlefield.Count = 11
+Bot2.Battlefield.Rakdos Guildgate.Subtypes = Gate
