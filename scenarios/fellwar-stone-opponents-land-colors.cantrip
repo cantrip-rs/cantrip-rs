@@ -1,0 +1,44 @@
+# CR 106.7: the Stone reads opponents' lands, even tapped, and ignores our lands and their nonland mana sources.
+[Bot1 Deck]
+Fellwar Stone
+Mox Jet
+Mox Pearl
+Plains
+Island x25
+[Bot2 Deck]
+Mox Ruby
+Evolving Wilds
+Mountain
+Island x25
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fellwar Stone.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Evolving Wilds.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+! Bot1.Battlefield.Fellwar Stone.Activate(Color: White)
+! Bot1.Battlefield.Fellwar Stone.Activate(Color: Red)
+Bot1.Battlefield.Fellwar Stone.Activate
+? Bot1.Mana =
+? Bot1.Battlefield.Fellwar Stone.Tapped = true
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Fellwar Stone.Activate(Color: Red)
+? Bot1.Mana = {R}
+? Bot1.Battlefield.Fellwar Stone.Tapped = true
+[Expect]
+Bot1.Battlefield.Plains.Tapped = false
+Bot2.Battlefield.Mountain.Tapped = true
