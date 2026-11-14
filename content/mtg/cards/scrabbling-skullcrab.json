@@ -1,0 +1,8 @@
+{
+  "name": "Scrabbling Skullcrab",
+  "manaCost": "{U}",
+  "type": "Creature — Crab Skeleton",
+  "power": 0,
+  "toughness": 3,
+  "oracleText": "Eerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, target player mills two cards. (They put the top two cards of their library into their graveyard.)"
+}

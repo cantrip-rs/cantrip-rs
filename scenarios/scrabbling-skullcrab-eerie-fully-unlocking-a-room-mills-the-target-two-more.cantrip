@@ -1,0 +1,65 @@
+# Scrabbling Skullcrab, "... whenever you fully unlock a Room, target player mills two cards": Unholy Annex cast as its left door
+# enters (an enchantment, CR 709.5d): Bot2 mills two (20 -> 18 cards in its library). On turn 3 Bot1 unlocks Ritual Chamber, the other
+# door, so the Room is fully unlocked (CR 709.5h): Bot2 mills exactly two more (after drawing for turn 2: 17 -> 15; its graveyard
+# holds the four milled cards and the one it discarded to hand size on turn 2).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Jet
+Scrabbling Skullcrab
+Unholy Annex // Ritual Chamber
+Swamp
+Swamp x19
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Scrabbling Skullcrab.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Library.Count = 18
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Unholy Annex.Activate(Ability: right door)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Library.Count = 15
+Bot2.Graveyard.Count = 5
