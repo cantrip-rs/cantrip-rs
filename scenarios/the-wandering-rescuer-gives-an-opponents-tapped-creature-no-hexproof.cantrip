@@ -1,0 +1,47 @@
+# "Other tapped creatures you control": Bot2's Ornithopter attacks in turn four and stays tapped through Bot1's turn five, yet
+# has no hexproof (the ability is only for its controller's creatures), so Bot1's Lightning Bolt can target and kill it.
+
+[Bot1 Deck]
+Ornithopter
+Ornithopter
+Ornithopter
+The Wandering Rescuer
+Plains
+Plains
+Mountain
+Lightning Bolt
+Plains x12
+
+[Bot2 Deck]
+Ornithopter
+Plains
+Plains x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.The Wandering Rescuer.Cast(Convoke: Ornithopter, Ornithopter, Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Plains
+Bot2.Graveyard = Ornithopter
