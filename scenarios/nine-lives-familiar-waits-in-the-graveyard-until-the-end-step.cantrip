@@ -1,0 +1,36 @@
+# Nine-Lives Familiar: the return is "at the beginning of the next end step" (CR 603.7), not at once. After Bot2's Bolt and the dies
+# trigger have resolved, the Familiar is still in Bot1's graveyard in turn 2's main phase.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Pearl
+Nine-Lives Familiar
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nine-Lives Familiar.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nine-Lives Familiar)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Nine-Lives Familiar = (absent)
+Bot1.Graveyard = Nine-Lives Familiar

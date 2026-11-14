@@ -1,0 +1,43 @@
+# Nine-Lives Familiar: "When this creature dies, if it had a revival counter on it, return it to the battlefield with one fewer
+# revival counter on it at the beginning of the next end step" (CR 603.7, 603.10a, 122.6). On Bot1's turn 3 Bot2 Bolts the Familiar;
+# at the turn 3 end step it comes back under Bot1's control, untapped, with seven counters (not eight, not six) and no damage.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Pearl
+Nine-Lives Familiar
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nine-Lives Familiar.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nine-Lives Familiar)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Nine-Lives Familiar.Counters.Revival = 7
+Bot1.Battlefield.Nine-Lives Familiar.Tapped = false
+Bot1.Battlefield.Nine-Lives Familiar.Damage = 0
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard = Lightning Bolt

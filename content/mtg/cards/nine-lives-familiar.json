@@ -1,0 +1,8 @@
+{
+  "name": "Nine-Lives Familiar",
+  "manaCost": "{1}{B}{B}",
+  "type": "Creature — Cat",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "This creature enters with eight revival counters on it if you cast it.\nWhen this creature dies, if it had a revival counter on it, return it to the battlefield with one fewer revival counter on it at the beginning of the next end step."
+}

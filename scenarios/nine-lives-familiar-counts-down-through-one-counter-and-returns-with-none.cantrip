@@ -1,0 +1,87 @@
+# Nine-Lives Familiar: "return it ... with one fewer revival counter" (CR 122.6, 603.10a), down to none. Bot2 Bolts the Familiar in each of its turns 2 through 16: it comes back each time with one fewer counter (8 down to 7, ... 1 to 0). The seventh death had one counter on it, so it returns, with none: on turn 17 it is on the battlefield with no revival counter.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Pearl
+Nine-Lives Familiar
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt x9
+Mountain x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nine-Lives Familiar.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nine-Lives Familiar)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nine-Lives Familiar)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T6 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nine-Lives Familiar)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T8 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nine-Lives Familiar)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T10 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nine-Lives Familiar)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T12 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nine-Lives Familiar)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T14 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nine-Lives Familiar)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T16 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nine-Lives Familiar)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T17 Bot1.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Nine-Lives Familiar.Counters.Revival = (absent)
+Bot1.Battlefield.Nine-Lives Familiar.Damage = 0
+Bot1.Graveyard.Count = 3
+Bot2.Graveyard.Count = 8

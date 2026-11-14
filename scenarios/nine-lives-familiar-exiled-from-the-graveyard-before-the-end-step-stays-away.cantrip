@@ -1,0 +1,48 @@
+# Nine-Lives Familiar: the delayed return is about that very card, only while it is still where the text left it (CR 603.7c, 400.7).
+# Bot2 Bolts the Familiar, lets the dies trigger resolve, then exiles Bot1's graveyard with Tormod's Crypt; at the end step nothing
+# returns, and the card is in exile.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Pearl
+Nine-Lives Familiar
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Tormod's Crypt
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nine-Lives Familiar.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Tormod's Crypt.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nine-Lives Familiar)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Nine-Lives Familiar = (absent)
+Bot1.Graveyard.Count = 0
+Exile = Nine-Lives Familiar
+Bot2.Graveyard.Count = 2
+Bot1.Battlefield.Count = 3

@@ -1,0 +1,47 @@
+# Nine-Lives Familiar: the counters come only "if you cast it" (CR 614.1c), and the return only "if it had a revival counter on it"
+# (CR 603.4). Bot1 Entombs its Familiar and Reanimates it (losing 3 life): it is a 1/1 with no counter. Bot2's Bolt kills it and
+# it does not come back at the end step.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Entomb
+Reanimate
+Island
+Island
+Island
+Nine-Lives Familiar
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Nine-Lives Familiar)
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Reanimate.Cast(Bot1.Graveyard.Nine-Lives Familiar)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Nine-Lives Familiar)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Nine-Lives Familiar = (absent)
+Bot1.Graveyard = Nine-Lives Familiar; Reanimate; Entomb
+Bot1.Life = 17
