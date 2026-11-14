@@ -2307,6 +2307,10 @@ impl cantrip_api::Game for Cx<'_> {
         ops::draw_cards(self, player, count);
     }
 
+    fn draw_with_receipt(&mut self, player: PlayerId, count: u32) -> Vec<ObjectId> {
+        ops::draw_cards_with_receipt(self, player, count)
+    }
+
     fn would_connive(&mut self, creature: ObjectId, count: u32) {
         replace::would_connive(self, creature, count);
     }

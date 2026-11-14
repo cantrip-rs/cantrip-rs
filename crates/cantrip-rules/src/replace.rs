@@ -954,15 +954,21 @@ fn apply(cx: &mut Cx, proposal: &mut Proposal) {
 /// damage, noting in `uses` the prevention effects that have more to do once its event has been dealt (`PreventionUse`).
 /// Each effect is its own text, its source's now, though a resolving ability's instructions made the event (`Cx::own_text`).
 fn apply_to(cx: &mut Cx, proposal: &mut Proposal, entry: Option<&mut Entering>, uses: Option<&mut Vec<PreventionUse>>) {
+    apply_to_observed(cx, proposal, entry, uses, None);
+}
+
+/// An optional receipt of actual applications, not value comparisons: replacing an instruction with the same count
+/// still replaces it (CR 121.6c), while declining an optional replacement leaves the instruction's own draws intact.
+fn apply_to_observed(cx: &mut Cx, proposal: &mut Proposal, entry: Option<&mut Entering>, uses: Option<&mut Vec<PreventionUse>>, observed: Option<&mut bool>) {
     // Damage is formed with its whole event (`damage_event_inner`); what an effect adds to damage reaches here never.
-    let _ = cx.instruction(|cx| cx.own_text(false, |cx| apply_each(cx, proposal, entry, uses, false, None)), |_| true);
+    let _ = cx.instruction(|cx| cx.own_text(false, |cx| apply_each(cx, proposal, entry, uses, false, None, observed)), |_| true);
 }
 
 enum DamageProgress {
     Expanded { added: Vec<DamageComponent>, applied: Vec<Applied> },
 }
 
-fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Entering>, mut uses: Option<&mut Vec<PreventionUse>>, group_once: bool, mut selected: Option<Candidate>) -> Option<DamageProgress> {
+fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Entering>, mut uses: Option<&mut Vec<PreventionUse>>, group_once: bool, mut selected: Option<Candidate>, mut observed: Option<&mut bool>) -> Option<DamageProgress> {
     let mut applied: Vec<Applied> = cx.lineage.clone();
     let mut commander_declined_to: [Option<Zone>; 8] = [None; 8];
     loop {
@@ -1240,6 +1246,9 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
                     }
                 }
             }
+        }
+        if let Some(applied) = observed.as_deref_mut() {
+            *applied = true;
         }
         if is_prevention(origin)
             && let (Proposal::Damage(before), Proposal::Damage(after)) = (start, *proposal)
@@ -1748,6 +1757,21 @@ pub fn draw_count(cx: &mut Cx, player: PlayerId, count: u32) -> u32 {
     apply(cx, &mut proposal);
     match proposal {
         Proposal::DrawInstruction(d) => d.count,
+        _ => unreachable!("an effect cannot change the kind of the event"),
+    }
+}
+
+/// The instruction's modified count, and whether a replacement actually applied. Neither declining an optional
+/// effect nor finding a replacement of a different event counts. No receipt is stored in the game state.
+pub fn draw_count_with_receipt(cx: &mut Cx, player: PlayerId, count: u32) -> (u32, bool) {
+    if !possible(cx, None) {
+        return (count, false);
+    }
+    let mut proposal = Proposal::DrawInstruction(DrawInstruction { player, count });
+    let mut replaced = false;
+    apply_to_observed(cx, &mut proposal, None, None, Some(&mut replaced));
+    match proposal {
+        Proposal::DrawInstruction(d) => (d.count, replaced),
         _ => unreachable!("an effect cannot change the kind of the event"),
     }
 }
@@ -2409,7 +2433,7 @@ fn damage_event_inner(
             let progress = cx.instruction(
                 |cx| {
                     cx.own_text(false, |cx| {
-                        apply_each(cx, &mut proposal, None, Some(uses), true, Some(candidate))
+                        apply_each(cx, &mut proposal, None, Some(uses), true, Some(candidate), None)
                     })
                 },
                 |_| true,
@@ -2585,11 +2609,42 @@ mod tests {
     static LIMITER: CardDef =
         CardDef { name: "Limiter", types: TypeSet::of(&[CardType::Enchantment]), cant_draw: &[one_each_turn], ..CardDef::BLANK };
 
+    fn your_draw_instruction(_: &dyn Query, asker: &Asker, proposal: &Proposal) -> bool {
+        matches!(proposal, Proposal::DrawInstruction(d) if d.player == asker.controller && d.count > 0)
+    }
+    fn one_more_draw(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
+        if let Proposal::DrawInstruction(d) = proposal { d.count += 1; }
+    }
+    static COUNT_BOOSTER: CardDef = CardDef {
+        name: "Draw receipt count booster",
+        replacements: &[replacement(ReplacementKind::DrawInstruction, your_draw_instruction, one_more_draw, "draws one more")],
+        ..DOUBLER
+    };
+    static COUNT_SAME: CardDef = CardDef {
+        name: "Draw receipt unchanged count",
+        replacements: &[replacement(ReplacementKind::DrawInstruction, your_draw_instruction, nothing_changes, "draws the same number instead")],
+        ..DOUBLER
+    };
+    static COUNT_OPTIONAL: CardDef = CardDef {
+        name: "Draw receipt optional count",
+        replacements: &[replacement(ReplacementKind::DrawInstruction, your_draw_instruction, one_more_draw, "may draw one more").optional(&ASK)],
+        ..DOUBLER
+    };
+    fn first_draw(q: &dyn Query, asker: &Asker, proposal: &Proposal) -> bool {
+        you_would_draw(q, asker, proposal) && q.history().drawn(asker.controller) == 0
+    }
+    static FIRST_DOUBLER: CardDef = CardDef {
+        name: "Draw receipt first draw doubler",
+        replacements: &[replacement(ReplacementKind::Draw, first_draw, instead, "draws two the first time").then(draw_two)],
+        ..DOUBLER
+    };
+
     /// A game whose first player has each of `cards` in the zone beside it, a hand of seven Fillers and ten more in the
     /// library, and a frame whose run is given `answers`.
     fn game(cards: &[(&'static CardDef, Zone)], answers: Vec<Answer>) -> Game {
         let table: &'static CardTable =
-            Box::leak(Box::new(CardTable::new([&FILLER, &DOUBLER, &GAINER, &GRAVE_GAINER, &LIMITER, &DENIER, &PEACE])));
+            Box::leak(Box::new(CardTable::new([&FILLER, &DOUBLER, &GAINER, &GRAVE_GAINER, &LIMITER, &DENIER, &PEACE,
+                &COUNT_BOOSTER, &COUNT_SAME, &COUNT_OPTIONAL, &FIRST_DOUBLER])));
         let deck: Vec<CardId> = std::iter::repeat_n(table.id_of(&FILLER), 17).collect();
         let mut game = Game::new(table, &crate::Setup { decks: vec![deck, Vec::new()], ..Default::default() });
         for &(def, to) in cards {
@@ -2610,6 +2665,90 @@ mod tests {
         assert!(cx.s().agenda[frame].pending.is_none(), "every question was answered");
         let s = cx.s();
         (s.zone(Zone::hand(ME)).len(), s.zone(Zone::library(ME)).len(), s.player(ME).life)
+    }
+
+    fn draw_receipt(game: &mut Game, count: u32) -> Vec<ObjectId> {
+        let frame = game.state.agenda.len() - 1;
+        let mut cx = Cx { g: game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        let cards = cantrip_api::Game::draw_with_receipt(&mut cx, ME, count);
+        assert!(cx.s().agenda[frame].pending.is_none(), "every question was answered");
+        cards
+    }
+
+    #[test]
+    fn draw_receipt_returns_the_drawn_incarnations_in_draw_order() {
+        let mut game = game(&[], vec![]);
+        let before = game.state.zone(Zone::library(ME)).to_vec();
+        let cards = draw_receipt(&mut game, 2);
+        let recorded: Vec<_> = game.history().this_turn().iter().filter_map(|r| match r.event {
+            Event::Drew { player: ME, card } => Some(card), _ => None,
+        }).collect();
+        assert_eq!(cards.len(), 2);
+        assert_eq!(cards, recorded);
+        assert!(cards.iter().all(|id| game.state.zone(Zone::hand(ME)).contains(id) && !before.contains(id)));
+    }
+
+    #[test]
+    fn draw_receipt_excludes_replacement_draws_without_suppressing_them() {
+        let mut game = game(&[(&DOUBLER, Zone::BATTLEFIELD)], vec![]);
+        assert!(draw_receipt(&mut game, 1).is_empty());
+        assert_eq!(game.history().drawn(ME), 2);
+        assert_eq!(game.state.zone(Zone::hand(ME)).len(), 9);
+    }
+
+    #[test]
+    fn draw_receipt_retains_a_later_unreplaced_draw_of_the_same_instruction() {
+        let mut game = game(&[(&FIRST_DOUBLER, Zone::BATTLEFIELD)], vec![]);
+        let cards = draw_receipt(&mut game, 2);
+        assert_eq!(game.history().drawn(ME), 3);
+        assert_eq!(cards.len(), 1);
+        assert!(matches!(game.history().this_turn().last().unwrap().event, Event::Drew { card, .. } if cards == [card]));
+    }
+
+    #[test]
+    fn draw_receipt_excludes_a_nondraw_replacement() {
+        let mut game = game(&[(&GAINER, Zone::BATTLEFIELD)], vec![]);
+        assert!(draw_receipt(&mut game, 1).is_empty());
+        assert_eq!(game.history().drawn(ME), 0);
+        assert_eq!(game.state.player(ME).life, 21);
+    }
+
+    #[test]
+    fn draw_receipt_records_instruction_replacement_even_when_its_count_is_unchanged() {
+        for (definition, actual) in [(&COUNT_BOOSTER, 2), (&COUNT_SAME, 1)] {
+            let mut game = game(&[(definition, Zone::BATTLEFIELD)], vec![]);
+            assert!(draw_receipt(&mut game, 1).is_empty());
+            assert_eq!(game.history().drawn(ME), actual);
+        }
+    }
+
+    #[test]
+    fn draw_receipt_distinguishes_a_declined_instruction_replacement() {
+        for (answer, receipts, actual) in [(Answer::No, 1, 1), (Answer::Yes, 0, 2)] {
+            let mut game = game(&[(&COUNT_OPTIONAL, Zone::BATTLEFIELD)], vec![answer]);
+            assert_eq!(draw_receipt(&mut game, 1).len(), receipts);
+            assert_eq!(game.history().drawn(ME), actual);
+        }
+    }
+
+    #[test]
+    fn draw_receipt_is_not_erased_by_an_unrelated_replacement() {
+        let mut game = game(&[(&PEACE, Zone::BATTLEFIELD)], vec![]);
+        assert_eq!(draw_receipt(&mut game, 1).len(), 1);
+    }
+
+    #[test]
+    fn draw_receipt_handles_draw_limits_and_empty_libraries() {
+        let mut limited = game(&[(&LIMITER, Zone::BATTLEFIELD)], vec![]);
+        assert_eq!(draw_receipt(&mut limited, 2).len(), 1);
+        assert_eq!(limited.history().drawn(ME), 1);
+        assert!(draw_receipt(&mut limited, 1).is_empty());
+        let mut empty = game(&[], vec![]);
+        assert_eq!(draw_receipt(&mut empty, 10).len(), 10);
+        assert!(draw_receipt(&mut empty, 0).is_empty());
+        assert!(!empty.state.player(ME).drew_from_empty);
+        assert!(draw_receipt(&mut empty, 1).is_empty());
+        assert!(empty.state.player(ME).drew_from_empty);
     }
 
     /// A copy of a merged permanent carries exception texts on both its topmost and lower components. Replacement

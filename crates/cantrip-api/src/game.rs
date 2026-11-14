@@ -852,6 +852,11 @@ pub trait Game: Query {
     fn still_in_game(&mut self, player: PlayerId) -> bool;
 
     fn draw(&mut self, player: PlayerId, count: u32);
+    /// Draw cards, returning only the original draws for their follow-up actions (CR 121.6c), as on Sindbad and
+    /// Fa'adiyah Seer. Cards drawn by a replacement are excluded, even if the replacement draws the same number.
+    /// Each returned identity is the incarnation the draw put into its destination, in draw order. An instruction-level
+    /// replacement of the draw count excludes its whole replacement instruction; ordinary draw events still happen.
+    fn draw_with_receipt(&mut self, player: PlayerId, count: u32) -> Vec<ObjectId>;
     /// Applies the replacement effects of `creature` conniving N (CR 701.50): "instead you draw a card, then that creature
     /// connives" (Leader, Super-Genius) draws the card, once for each such effect (CR 614.5); the connive itself is the
     /// caller's (`cantrip_mechanics::connive_n`).

@@ -3518,18 +3518,23 @@ pub fn resolve_copy_as_token(cx: &mut Cx, item: &StackItem, at: usize) -> R<()> 
 
 /// Draws a card (CR 121): from an empty library, nothing is drawn and the player will lose (CR 704.5b).
 pub fn draw(cx: &mut Cx, player: PlayerId) {
+    let _ = draw_with_receipt(cx, player);
+}
+
+/// The original draw's identity, never the cards a replacement draws (CR 121.6c).
+fn draw_with_receipt(cx: &mut Cx, player: PlayerId) -> Option<ObjectId> {
     // CR 121.2b, 614.17c: a card the player can't draw is not drawn, and no replacement effect replaces the draw that can't
     // happen (Spirit of the Labyrinth's ruling), so neither does a player who can't draw from an empty library lose for it.
     if crate::static_rules::cant_draw(&*cx, cx.cards(), player, 1) {
-        return;
+        return None;
     }
     // CR 121.6: a replacement applies even with no cards in the library to draw.
     if replace::draw_replaced(cx, player) {
-        return;
+        return None;
     }
     let Some(&top) = cx.s().zone(Zone::library(player)).first() else {
         cx.st().update_player(player, |p| p.drew_from_empty = true);
-        return;
+        return None;
     };
     let card = move_to_for(cx, top, Zone::hand(player), ZoneReason::Draw);
     // Miracle (CR 702.94a): "you may reveal this card from your hand as you draw it" if it is the first card drawn this
@@ -3562,6 +3567,7 @@ pub fn draw(cx: &mut Cx, player: PlayerId) {
         }
     }
     cx.emit(Event::Drew { player, card });
+    Some(card)
 }
 
 /// A card's miracle ability, named for the question whether to reveal it, when it has only one (CR 702.94a).
@@ -3598,7 +3604,22 @@ fn which_miracle(cx: &mut Cx, player: PlayerId, card: ObjectId, miracles: &[cant
 /// An instruction to draw `count` cards (CR 121.2): effects that change how many apply first (CR 121.2a), before any
 /// of the individual draws, which are then made one at a time.
 pub fn draw_cards(cx: &mut Cx, player: PlayerId, count: u32) {
-    for n in 0..replace::draw_count(cx, player, count) {
+    let _ = draw_cards_receipted::<false>(cx, player, count);
+}
+
+/// CR 121.6c: Sindbad and Fa'adiyah Seer act only on their own unreplaced draws.
+pub fn draw_cards_with_receipt(cx: &mut Cx, player: PlayerId, count: u32) -> Vec<ObjectId> {
+    draw_cards_receipted::<true>(cx, player, count)
+}
+
+fn draw_cards_receipted<const RECEIPT: bool>(cx: &mut Cx, player: PlayerId, count: u32) -> Vec<ObjectId> {
+    let (count, replaced) = if RECEIPT {
+        replace::draw_count_with_receipt(cx, player, count)
+    } else {
+        (replace::draw_count(cx, player, count), false)
+    };
+    let mut cards = Vec::new();
+    for n in 0..count {
         // Cards are drawn one at a time (CR 121.2): what a draw changed with no event (a replacement effect used up) is a
         // point of the game the state triggers see before the next.
         if n > 0 {
@@ -3609,8 +3630,12 @@ pub fn draw_cards(cx: &mut Cx, player: PlayerId, count: u32) {
             }
             cx.judge_if_due();
         }
-        draw(cx, player);
+        let card = draw_with_receipt(cx, player);
+        if RECEIPT && !replaced {
+            cards.extend(card);
+        }
     }
+    cards
 }
 
 pub fn discard(cx: &mut Cx, card: ObjectId) {
