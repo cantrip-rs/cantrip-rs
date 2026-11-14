@@ -1,0 +1,6 @@
+{
+  "name": "Sporogenic Infection",
+  "manaCost": "{1}{B}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nWhen this Aura enters, target player sacrifices a creature of their choice other than enchanted creature.\nWhen enchanted creature is dealt damage, destroy it."
+}

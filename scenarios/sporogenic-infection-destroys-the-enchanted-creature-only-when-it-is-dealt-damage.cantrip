@@ -1,0 +1,56 @@
+# "When enchanted creature is dealt damage, destroy it" (CR 120.2, 701.8a). Bot2's Phyrexian Walker (0/3) is enchanted ({1}{B}: Mox Jet and
+# Mox Pearl) and Bot2 sacrifices its Ornithopter. A Shock ({R}: Mox Ruby) at Bot1's own Memnite on turn 3 does not trigger it: the
+# Walker stays. On turn 5 a Shock deals 2 to the 0/3 Walker, which would survive: the trigger destroys it.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Sporogenic Infection
+Shock
+Shock
+Memnite
+Swamp x20
+
+[Bot2 Deck]
+Phyrexian Walker
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sporogenic Infection.Cast(Bot2.Battlefield.Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Phyrexian Walker
+? Bot2.Graveyard = Ornithopter
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Phyrexian Walker; Ornithopter
+Bot1.Graveyard.Count = 4
+Stack.Count = 0

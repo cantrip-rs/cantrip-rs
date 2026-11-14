@@ -1,0 +1,48 @@
+# Probe: Sporogenic Infection enchants Bot2's Memnite; with its enters trigger (targeting Bot2) on the stack, Bot2 Disenchants
+# the Aura. "Enchanted creature" is the Memnite by last-known information (CR 608.2h), so Bot2 must sacrifice its Ornithopter,
+# the only creature other than it, with no choice.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Sporogenic Infection
+Swamp x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Plains
+Mox Pearl
+Disenchant
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sporogenic Infection.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Sporogenic Infection)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield = Memnite; Mox Pearl; Plains
+Bot2.Graveyard = Ornithopter; Disenchant
+Bot1.Graveyard = Sporogenic Infection
+Stack.Count = 0

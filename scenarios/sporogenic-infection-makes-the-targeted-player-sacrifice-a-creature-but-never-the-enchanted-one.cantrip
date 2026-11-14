@@ -1,0 +1,42 @@
+# Sporogenic Infection ({1}{B}: Mox Jet, Mox Ruby) enchants Bot2's Memnite and its enters trigger targets Bot2, who also has an
+# Ornithopter and a Phyrexian Walker: the enchanted Memnite is not a choice, so Bot2 sacrifices the Walker (its choice) and keeps the
+# Memnite and the Ornithopter. Bot1's own Memnite is untouched (the player targeted, not Bot1, sacrifices).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Sporogenic Infection
+Memnite
+Swamp x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Phyrexian Walker
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sporogenic Infection.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Phyrexian Walker)
+
+[Expect]
+Bot2.Battlefield = Memnite; Ornithopter
+Bot2.Graveyard = Phyrexian Walker
+Bot1.Battlefield = Memnite; Mox Jet; Mox Ruby; Sporogenic Infection
+Stack.Count = 0
