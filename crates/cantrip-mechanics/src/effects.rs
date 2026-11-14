@@ -667,6 +667,13 @@ pub fn subtype_you_control_get(g: &mut dyn Game, item: &StackItem, subtype: Subt
     subtypes_you_control_get(g, item, [subtype, subtype], power, toughness)
 }
 
+/// "Dragons you control get +N/+0 until end of turn" (CR 611.2, 611.2c): `subtype_you_control_get` over Dragon, a word of the source's
+/// text (CR 612). Ran and Shaw (+2/+0) and Lathliss, Dragon Queen (+1/+0) print it.
+pub fn dragons_you_control_get_plus_n_zero<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    subtype_you_control_get(g, item, Subtype::Dragon, N, 0);
+    Ok(())
+}
+
 /// "[Subtype] and [subtype] you control get +`power`/+`toughness` until end of turn" (CR 109.2, 611.2c): the permanents, of any
 /// card type, that the ability's controller controls as it resolves and that have either subtype (a Klingon Warrior once),
 /// the source among them, and none that enters later. A noncreature one is pumped too and keeps it if it is animated later

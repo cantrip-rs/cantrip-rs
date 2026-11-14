@@ -23,13 +23,6 @@ fn copy_not_legendary(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
     Ok(())
 }
 
-/// "Dragons you control get +2/+0 until end of turn." (CR 611.2, 611.2c): `effects::subtype_you_control_get` over Dragon, a word of
-/// this card's text (CR 612).
-fn dragons_get_plus_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::subtype_you_control_get(g, item, Subtype::Dragon, 2, 0);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         firebending::trigger::<2>("Firebending 2"),
@@ -39,7 +32,7 @@ pub static CARD: CardDef = CardDef {
             "When Ran and Shaw enter, if you cast them and there are three or more Dragon and/or Lesson cards in your graveyard, create a token that's a copy of Ran and Shaw, except it's not legendary.",
         )
         .condition(three_dragon_or_lesson_cards_in_your_graveyard),
-        ability(cost("{3}{R}"), dragons_get_plus_two, "{3}{R}: Dragons you control get +2/+0 until end of turn."),
+        ability(cost("{3}{R}"), effects::dragons_you_control_get_plus_n_zero::<2>, "{3}{R}: Dragons you control get +2/+0 until end of turn."),
     ],
     ..oracle::RAN_AND_SHAW
 };
