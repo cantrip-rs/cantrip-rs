@@ -1,0 +1,46 @@
+# Barbarian Guides activated during Bot1's end step: the end step has already begun, so "the next end step" is Bot2's
+# turn's (CR 603.7a, 513.1), and Memnite stays on the battlefield until then. Its snow plainswalk lasts "until end of
+# turn" (CR 514.2): gone in Bot2's upkeep, with Memnite still there; at Bot2's end step it returns to Bot1's hand.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Barbarian Guides
+Memnite
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Barbarian Guides.Cast
+Bot1.Pass
+[T3 Bot1.End]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Barbarian Guides.Activate(Memnite)
+Bot1.Pass
+Bot1.Modes(Plains)
+? Bot1.Battlefield.Memnite.Keywords = SnowPlainswalk
+[T4 Bot2.Upkeep]
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+? Bot1.Battlefield.Memnite.Tapped = false
+[T4 Bot2.End]
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite = (absent)
+Bot1.Hand = Memnite; Mountain; Mountain; Mountain
