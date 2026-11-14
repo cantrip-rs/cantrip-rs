@@ -1,0 +1,46 @@
+# Appendage Amalgam's "whenever this creature attacks, surveil 1" (CR 701.25a) on two attacks: on turn 3 Bot1 keeps the Forest
+# on top of its library (nothing goes to the graveyard) and draws it on turn 5; on turn 5 the attack triggers again and the
+# Plains now on top goes to the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Appendage Amalgam
+Island x3
+Swamp
+Forest
+Plains
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Appendage Amalgam.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Appendage Amalgam > Bot2)
+Bot1.Arrange(Forest |)
+[T3 Bot1.Main2]
+? Bot1.Graveyard.Count = 0
+? Bot1.Library.Count = 14
+? Bot2.Life = 17
+[T5 Bot1.Main1]
+? Bot1.Hand.Forest.Colors.Count = 0
+Bot1.Attack(Appendage Amalgam > Bot2)
+Bot1.Arrange(| Plains)
+[T5 Bot1.Main2]
+? Bot1.Graveyard = Plains
+
+[Expect]
+Bot1.Graveyard = Plains
+Bot1.Library.Count = 12
+Bot2.Life = 14

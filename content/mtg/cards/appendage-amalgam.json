@@ -1,0 +1,11 @@
+{
+  "name": "Appendage Amalgam",
+  "manaCost": "{2}{B}",
+  "type": "Enchantment Creature — Horror",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flash\nWhenever this creature attacks, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "keywords": [
+    "Flash"
+  ]
+}

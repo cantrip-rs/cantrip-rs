@@ -1,0 +1,43 @@
+# Appendage Amalgam: "Flash. Whenever this creature attacks, surveil 1." Bot1 holds three Moxen untapped through turn 1 and
+# flashes the Amalgam in on Bot2's turn 2 (CR 702.8a), paying {2}{B} with Mox Jet, Mox Sapphire and Mox Ruby. On turn 3 it attacks and
+# surveils exactly one card (CR 701.25a): the Forest on top goes to the graveyard while the Plains under it stays in the library, and
+# the Amalgam's 3 damage reaches Bot2. Nothing is surveilled before the attack.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Appendage Amalgam
+Island x3
+Swamp
+Forest
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot1.Hand.Appendage Amalgam.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Appendage Amalgam.Types = Enchantment; Creature
+[T3 Bot1.Main1]
+? Bot1.Library.Count = 13
+? Bot1.Graveyard.Count = 0
+Bot1.Attack(Appendage Amalgam > Bot2)
+Bot1.Arrange(| Forest)
+[T3 Bot1.Main2]
+? Bot1.Graveyard = Forest
+? Bot1.Library.Count = 12
+
+[Expect]
+Bot1.Graveyard = Forest
+Bot1.Library.Count = 12
+Bot2.Life = 17
