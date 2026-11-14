@@ -638,6 +638,15 @@ pub fn look_for_an_artifact<const N: usize>(g: &mut dyn Game, item: &StackItem) 
     Ok(())
 }
 
+/// "Look at the top `COUNT` cards of your library. You may reveal a creature card with power `POWER` or less from among them and put it
+/// into your hand. Put the rest on the bottom of your library in a random order." (CR 701.20a, 401.4) as an ability's whole effect
+/// (`look_at_top_select`): the power as `select::power_at_most` reads it through `q.chars`, which includes power-defining abilities (CR 604.3). Water Tribe Rallier (4, 3)
+/// and Living Phone (5, 2) print it.
+pub fn look_for_a_creature_with_power_at_most<const COUNT: usize, const POWER: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    look_at_top_select(g, item.controller, item.object, COUNT, crate::select::creature_cards(crate::select::up_to(1)).with(crate::select::power_at_most(POWER)), true, Rest::BottomRandom)?;
+    Ok(())
+}
+
 /// `look_at_top` with the cards that may be taken told by a selection rule (`crate::select`: how many, of what quality), asked
 /// with `choose::select`: "Look at the top four cards of your library. You may reveal a creature card with mana value 3 or less
 /// from among them and put it into your hand. Put the rest on the bottom of your library in a random order." The cards looked at
