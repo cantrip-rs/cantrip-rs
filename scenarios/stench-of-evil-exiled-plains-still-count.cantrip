@@ -1,0 +1,28 @@
+# A destroyed Plains Rest in Peace sends to exile instead of the graveyard was still destroyed this way (CR 701.8a;
+# Indomitable Creativity's ruling of 2017-02-09), so its controller is still dealt 1 damage.
+[Bot1 Deck]
+Black Lotus x2
+Stench of Evil
+Island x20
+[Bot2 Deck]
+Mox Pearl x2
+Rest in Peace
+Plains
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl#1.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Rest in Peace.Cast
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Stench of Evil.Cast
+[Expect]
+Bot2.Life = 19
+Exile = Plains; Black Lotus; Black Lotus; Stench of Evil

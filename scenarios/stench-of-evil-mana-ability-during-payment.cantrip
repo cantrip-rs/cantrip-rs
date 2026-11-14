@@ -1,0 +1,28 @@
+# The affected player can activate a surviving mana ability while deciding how many destroyed Plains to pay for (CR 608.2g).
+[Bot1 Deck]
+Black Lotus x2
+Stench of Evil
+Island x20
+[Bot2 Deck]
+Black Lotus
+Plains x2
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Plains.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Stench of Evil.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.PayCost(Times: 1)
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19
+Bot2.Mana = {B}
+Bot2.Graveyard = Plains; Plains; Black Lotus

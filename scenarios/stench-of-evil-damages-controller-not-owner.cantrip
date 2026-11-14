@@ -1,0 +1,26 @@
+# The destroyed Plains was owned by Bot1 but controlled by Bot2, who takes its damage (CR 608.2h).
+[Bot1 Deck]
+Black Lotus x3
+Plains
+Harmless Offering
+Stench of Evil
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus#2.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Plains)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Stench of Evil.Cast
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19
+Bot1.Graveyard = Stench of Evil; Plains; Black Lotus; Black Lotus; Harmless Offering; Black Lotus
