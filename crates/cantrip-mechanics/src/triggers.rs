@@ -319,6 +319,40 @@ fn you_unlock_this_door(q: &dyn Query, source: ObjectId, event: &Event, door: u8
     }
 }
 
+/// "Whenever you fully unlock a Room" (CR 709.5i): the Room permanent has one unlocked designation and gets the other, or has
+/// neither and gains both. Read as the unlock is matched, a Room that now has both doors unlocked after the event gave it one
+/// of them (an unlock of a door it already had triggers nothing: `unlock_door` records no event). Cult Healer and Ghostly
+/// Dancers print it, with eerie.
+pub fn you_fully_unlock_a_room(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::DoorUnlocked { permanent, player, .. }
+            if *player == me.controller && q.state().obj(*permanent).marks.doors == DOOR_LEFT | DOOR_RIGHT =>
+        {
+            Fired::PLAIN
+        }
+        _ => None,
+    }
+}
+
+/// "Whenever an enchantment you control enters" (CR 603.6a): any enchantment, this one included, under your control as it
+/// entered, the Room permanents among them. Eerie prints it.
+pub fn enchantment_you_control_enters(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::ZoneChange { new, to, .. }
+            if to.is(ZoneKind::Battlefield) && q.controller(*new) == me.controller && q.chars(*new).is(CardType::Enchantment) =>
+        {
+            Fired::about(Target::Object(*new))
+        }
+        _ => None,
+    }
+}
+
+/// Eerie (an ability word): "Whenever an enchantment you control enters and whenever you fully unlock a Room" (CR 603.2,
+/// 603.6a, 709.5i). Several enchantments entering together each trigger it (the 2024-09-20 ruling).
+pub fn eerie(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    enchantment_you_control_enters(q, me, event).or_else(|| you_fully_unlock_a_room(q, me, event))
+}
+
 /// "When you cast this spell" (CR 603.2, 601.2i): the spell itself, from wherever it was cast. Sage of the Skies and
 /// every cascade card print it.
 pub fn cast_this_spell(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
@@ -2645,6 +2679,7 @@ pub const THIS_ENTERS_IF_CAST: Trigger = when(EventMask::ZONE_CHANGE, this_enter
 pub const LANDFALL: Trigger = when_asked(EventMask::ZONE_CHANGE, landfall);
 pub const YOU_UNLOCK_THIS_RIGHT_DOOR: Trigger = when(EventMask::DOOR_UNLOCKED, you_unlock_this_right_door);
 pub const YOU_UNLOCK_THIS_LEFT_DOOR: Trigger = when(EventMask::DOOR_UNLOCKED, you_unlock_this_left_door);
+pub const EERIE: Trigger = when_asked(EventMask(EventMask::ZONE_CHANGE.0 | EventMask::DOOR_UNLOCKED.0), eerie);
 pub const YOU_SCRY: Trigger = when_asked(EventMask::SCRIED, you_scry);
 pub const YOU_SURVEIL: Trigger = when_asked(EventMask::SURVEILLED, you_surveil);
 pub const YOU_SCRY_OR_SURVEIL: Trigger = when_asked(EventMask(EventMask::SCRIED.0 | EventMask::SURVEILLED.0), you_scry_or_surveil);
