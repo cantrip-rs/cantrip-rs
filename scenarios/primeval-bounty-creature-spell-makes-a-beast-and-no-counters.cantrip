@@ -1,0 +1,45 @@
+# Primeval Bounty, {5}{G} enchantment: "Whenever you cast a creature spell, create a 3/3 green Beast creature token" (CR 603.2,
+# 111.1). Two Black Lotuses pay for the Bounty (GGGGGG); Mox Emerald and Mox Pearl pay for Grizzly Bears. The cast trigger makes a
+# 3/3 green Beast before the Bears resolve, and since the Bears are not a noncreature spell no counters go on anything.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Primeval Bounty
+Grizzly Bears
+Mox Emerald
+Mox Pearl
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Primeval Bounty.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Primeval Bounty
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast Token.Power = 3
+? Bot1.Battlefield.Beast Token.Toughness = 3
+? Bot1.Battlefield.Beast Token.Colors = Green
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Beast Token.Counters.PlusOnePlusOne = (absent)
+Bot1.Life = 20

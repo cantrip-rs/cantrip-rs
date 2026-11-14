@@ -1,0 +1,55 @@
+# Primeval Bounty: "Whenever you cast a noncreature spell, put three +1/+1 counters on target creature you control" (CR 603.2,
+# 122.1). On turn 3 Bot1 casts Giant Growth (Mox Emerald) on the Grizzly Bears, and the cast trigger targets the Beast token
+# instead: the trigger's target is chosen independently of the spell's. The Beast gets three counters (6/6) and the Bears just
+# the pump (6/5); no second Beast is made, since Giant Growth is not a creature spell.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Primeval Bounty
+Grizzly Bears
+Mox Emerald
+Mox Pearl
+Giant Growth
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Primeval Bounty.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Beast Token)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast Token.Counters.PlusOnePlusOne = 3
+? Bot1.Battlefield.Beast Token.Power = 6
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Grizzly Bears.Power = 5
+Bot1.Battlefield.Grizzly Bears.Toughness = 5
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Beast Token.Power = 6
+Bot1.Battlefield.Beast Token.Toughness = 6

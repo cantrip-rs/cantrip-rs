@@ -1,0 +1,6 @@
+{
+  "name": "Primeval Bounty",
+  "manaCost": "{5}{G}",
+  "type": "Enchantment",
+  "oracleText": "Whenever you cast a creature spell, create a 3/3 green Beast creature token.\nWhenever you cast a noncreature spell, put three +1/+1 counters on target creature you control.\nLandfall — Whenever a land you control enters, you gain 3 life."
+}
