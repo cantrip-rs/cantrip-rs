@@ -1184,6 +1184,13 @@ pub fn permanent_of_subtype_you_control<const SUBTYPE: u16>(q: &dyn Query, asker
         && q.controller(id) == asker.controller
         && q.chars(id).has_subtype(crate::lands::word(q, asker.source, SUBTYPE)))
 }
+
+/// "Another target [creature type] you control" (CR 115.1, 109.5, 205.3m): `permanent_of_subtype_you_control` other than the source
+/// itself. Dropkick Bomber (Goblin), Earth Kingdom Protectors (Ally) and Tributary Vaulter (Merfolk) print it.
+pub fn another_permanent_of_subtype_you_control<const SUBTYPE: u16>(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    t != Target::Object(asker.source) && permanent_of_subtype_you_control::<SUBTYPE>(q, asker, t)
+}
+
 /// "Target [type], [type], or [type]" (CR 115.1, 205.3): a permanent on the battlefield, any controller's, with at least one of
 /// the creature types `subtypes` as the layers made it. Each type is read through the words of the text of the object that asks
 /// (CR 612.2). Phoenix Down (Skeleton, Spirit, Zombie) and Animal Sanctuary (Bird, Cat, Dog, Goat, Ox, Snake) print it.
