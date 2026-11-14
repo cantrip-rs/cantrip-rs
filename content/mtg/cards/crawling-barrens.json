@@ -1,0 +1,5 @@
+{
+  "name": "Crawling Barrens",
+  "type": "Land",
+  "oracleText": "{T}: Add {C}.\n{4}: Put two +1/+1 counters on this land. Then you may have it become a 0/0 Elemental creature until end of turn. It's still a land."
+}

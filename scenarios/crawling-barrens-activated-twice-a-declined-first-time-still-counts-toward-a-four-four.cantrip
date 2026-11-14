@@ -1,0 +1,47 @@
+# Crawling Barrens activated twice in one turn (eight mana: four Moxen, Black Lotus and its own {C}): the first time Bot1
+# declines to animate it - two +1/+1 counters, still a plain land - and the second time accepts: two more counters, four in
+# all, and a 0/0 Elemental creature land with them is a 4/4 (CR 613.4b-c). The counters stay when the turn ends; the creature
+# does not (CR 514.2).
+
+[Bot1 Deck]
+Crawling Barrens
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Crawling Barrens.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Crawling Barrens.Activate(Ability: Add)
+? Bot1.Mana = {W}{U}{B}{R}{G}{G}{G}{C}
+Bot1.Battlefield.Crawling Barrens.Activate(Ability: Put two)
+Bot1.Pass
+Bot1.Decline
+? Bot1.Battlefield.Crawling Barrens.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Crawling Barrens.Types = Land
+Bot1.Battlefield.Crawling Barrens.Activate(Ability: Put two)
+Bot1.Pass
+Bot1.Accept
+? Bot1.Battlefield.Crawling Barrens.Types = Land; Creature
+? Bot1.Battlefield.Crawling Barrens.Power = 4
+? Bot1.Battlefield.Crawling Barrens.Toughness = 4
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Crawling Barrens.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Crawling Barrens.Types = Land

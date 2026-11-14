@@ -1,0 +1,63 @@
+# Crawling Barrens "becomes a 0/0 Elemental creature ... It's still a land": an effect that says something is "still a [type]"
+# keeps all the object's prior types and subtypes (CR 205.1b), creature types included, rather than replacing them. Bot1
+# animates the Barrens (a 2/2 Elemental), then Glamer Gifter makes it a base 4/4 of every creature type until end of turn
+# (a 6/6 with its two counters). Animated a second time it gains Elemental again but keeps every other creature type, and the
+# newer 0/0 base under four counters makes it a 4/4 (CR 613.4b-c, 613.7).
+
+[Bot1 Deck]
+Crawling Barrens
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Glamer Gifter
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Crawling Barrens.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Crawling Barrens.Activate(Ability: Put two)
+Bot1.Pass
+Bot1.Accept
+? Bot1.Battlefield.Crawling Barrens.Subtypes = Elemental
+? Bot1.Battlefield.Crawling Barrens.Power = 2
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Glamer Gifter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Crawling Barrens)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Crawling Barrens.Subtypes = (every creature type)
+? Bot1.Battlefield.Crawling Barrens.Power = 6
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Crawling Barrens.Activate(Ability: Put two)
+Bot1.Pass
+Bot1.Accept
+
+[Expect]
+Bot1.Battlefield.Crawling Barrens.Types = Land; Creature
+Bot1.Battlefield.Crawling Barrens.Subtypes = (every creature type)
+Bot1.Battlefield.Crawling Barrens.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Crawling Barrens.Power = 4
+Bot1.Battlefield.Crawling Barrens.Toughness = 4

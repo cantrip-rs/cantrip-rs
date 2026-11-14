@@ -1,0 +1,45 @@
+# Crawling Barrens, {4}: Put two +1/+1 counters on this land. Then you may have it become a 0/0 Elemental creature until end of turn.
+# It's still a land. Bot1 pays with four Moxen and accepts: it has two +1/+1 counters and is a colorless 2/2
+# Elemental land creature (the counters on a 0/0 base, CR 613.4b-c), it attacks Bot2 for 2 as it has been under Bot1's control since the
+# turn began (turn three; it entered on turn one). In the cleanup step the effect ends (CR 514.2): it is a plain land again with
+# its two counters, which stay.
+
+[Bot1 Deck]
+Crawling Barrens
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Crawling Barrens.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Crawling Barrens.Activate(Ability: Put two)
+Bot1.Pass
+Bot1.Accept
+? Bot1.Battlefield.Crawling Barrens.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Crawling Barrens.Types = Land; Creature
+? Bot1.Battlefield.Crawling Barrens.Subtypes = Elemental
+? Bot1.Battlefield.Crawling Barrens.Colors = (absent)
+? Bot1.Battlefield.Crawling Barrens.Power = 2
+? Bot1.Battlefield.Crawling Barrens.Toughness = 2
+Bot1.Attack(Crawling Barrens > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Crawling Barrens.Types = Land
+Bot1.Battlefield.Crawling Barrens.Counters.PlusOnePlusOne = 2
