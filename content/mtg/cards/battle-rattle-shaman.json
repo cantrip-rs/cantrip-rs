@@ -1,0 +1,8 @@
+{
+  "name": "Battle-Rattle Shaman",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Goblin Shaman",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "At the beginning of combat on your turn, you may have target creature get +2/+0 until end of turn."
+}
