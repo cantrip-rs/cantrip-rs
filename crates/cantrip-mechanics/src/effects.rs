@@ -3081,6 +3081,13 @@ pub fn attached_creature_gets<const P: i32, const T: i32>(g: &mut dyn Game, item
     Ok(())
 }
 
+/// "This creature can attack this turn as though it didn't have defender" (CR 702.3b, 609.4). Krotiq Nestguard, Vodalian War
+/// Machine and Stalked Researcher print it.
+pub fn this_can_attack_as_though_it_didnt_have_defender(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.add_effect(item.object, item.object, EffectKind::CanAttackDespiteDefender, Duration::EndOfTurn);
+    Ok(())
+}
+
 /// "This creature gets +P/+T until end of turn" (CR 611.2a). Fallen Angel, Astute Terraformer and Super-Skrull print it.
 pub fn pump_self<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     this_gets::<P, T>(g, item)
