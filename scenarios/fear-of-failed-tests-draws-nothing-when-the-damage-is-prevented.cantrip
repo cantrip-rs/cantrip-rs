@@ -1,0 +1,42 @@
+# A trigger needs damage actually dealt (CR 615.6): Bot2 casts Fog ("Prevent all combat damage that would be dealt this turn") after
+# blockers, so Fear of Failed Tests deals no damage to Bot2, no trigger, no cards; Bot2's life stays 20 and Bot1's library 13.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Fear of Failed Tests
+Island x3
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Fog
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fear of Failed Tests.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Fear of Failed Tests)
+[T3 Bot1.DeclareBlockers]
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Fog.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+[Expect]
+Bot1.Library.Count = 13
+Bot2.Graveyard = Fog
