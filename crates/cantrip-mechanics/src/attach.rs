@@ -191,6 +191,13 @@ pub fn attached_object(view: &dyn LayerQuery, source: ObjectId, affected: Object
     view.state().obj(source).attached_to == Some(affected)
 }
 
+/// A static ability's `affects` for "During your turn, equipped creature ..." (CR 604.1, 613.1f): the creature the Equipment is
+/// attached to, only while the Equipment's controller is the active player (CR 102.1), asked again whenever characteristics are
+/// computed. Dragoon's Lance and Quick-Draw Katana print it.
+pub fn attached_object_during_your_turn(view: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
+    view.state().turn.active == view.state().obj(source).controller && attached_object(view, source, affected, so_far)
+}
+
 /// "Equipped creature ... can't be blocked" (CR 509.1b) as a `CardDef::block_rules` entry: no "has", so a rule of the
 /// Equipment's, not an ability the creature gains (CR 113.1a). A creature that loses all its abilities is still under it
 /// (CR 613.1f), and it is no ability of the creature's for anything that asks ("creatures with no abilities"). Cryptic Coat
