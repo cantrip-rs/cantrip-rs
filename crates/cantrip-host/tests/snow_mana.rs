@@ -51,7 +51,7 @@ fn snow_pool_payment_flags_and_forged_quality_round_trip() {
 
 #[test]
 fn real_mana_undo_restores_the_captured_quality_rows() {
-    static SNOW: CardDef = CardDef { name: "Undo snow land", supertypes: Supertypes { basic: false, legendary: false, snow: true }, abilities: &[mana_ability(TAP, add(Mana::U), "{T}: Add {U}.")], ..LAND };
+    static SNOW: CardDef = CardDef { name: "Undo snow land", supertypes: Supertypes { basic: false, legendary: false, snow: true, world: false }, abilities: &[mana_ability(TAP, add(Mana::U), "{T}: Add {U}.")], ..LAND };
     let cards = Box::leak(Box::new(CardTable::new([&LAND, &SNOW])));
     let mut g = Game::new(cards, &Setup { decks: vec![vec![cards.id_of(&LAND); 20]; 2], ..Default::default() });
     while !g.state.agenda.is_empty() { g.state.frame_remove(0); }

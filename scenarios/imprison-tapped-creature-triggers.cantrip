@@ -1,0 +1,39 @@
+# Paying to tap and remove the enchanted blocker also triggers its own becomes-tapped ability (CR 603.2, 509.1h).
+[Bot1 Deck]
+Imprison
+Mox Jet
+Mox Pearl
+Black Lotus
+Grizzly Bears
+Memnite
+Swamp x20
+[Bot2 Deck]
+Wanderbrine Preacher
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Wanderbrine Preacher.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Imprison.Cast(Bot2.Battlefield.Wanderbrine Preacher)
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2; Memnite > Bot2)
+Bot2.Block(Wanderbrine Preacher > Grizzly Bears)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+? Bot1.Mana =
+? Bot2.Battlefield.Wanderbrine Preacher.Tapped = true
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield.Wanderbrine Preacher.Tapped = true

@@ -1,0 +1,36 @@
+# On an opponent's turn Touch can target their creature; the unused ability and haste expire, and its caster draws at the next upkeep (CR 611.2a, 603.7b).
+
+[Bot1 Deck]
+Black Lotus
+Touch of Vitae
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Touch of Vitae.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Keywords = Flying; Haste
+? Bot1.Hand.Count = 5
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 6
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+! Bot2.Battlefield.Ornithopter.Activate(Ability: Untap this creature)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand.Count = 7
+Bot2.Battlefield.Ornithopter.Keywords = Flying

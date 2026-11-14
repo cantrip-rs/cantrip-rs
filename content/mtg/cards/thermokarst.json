@@ -1,0 +1,6 @@
+{
+  "name": "Thermokarst",
+  "manaCost": "{1}{G}{G}",
+  "type": "Sorcery",
+  "oracleText": "Destroy target land. If that land was a snow land, you gain 1 life."
+}

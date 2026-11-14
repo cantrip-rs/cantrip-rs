@@ -177,6 +177,40 @@ pub fn remove_from_combat_and_unblock(g: &mut dyn Game, blocker: ObjectId) {
     });
 }
 
+/// Assign an existing creature to block a chosen attacker as an effect, rather than declaring it as a blocker.
+/// False Orders and Balduvian Warlord print this instruction. The choice is not a target. The caller supplies the
+/// attacking population and performs any preceding removal/unblocking instruction.
+pub fn choose_attacker_to_block(g: &mut dyn Game, asker: &Asker, blocker: Option<ObjectId>, attackers: &[ObjectId]) -> Result<(), Suspend> {
+    let Some(blocker) = blocker.filter(|&b| is_live(g,b)) else { return Ok(()) };
+    let candidates = attackers.iter().copied().filter(|&a| is_live(g,a) && g.is_attacking(a)
+        && g.defending_player(a) == Some(g.controller(blocker))).map(Target::Object).collect();
+    if let Some(Target::Object(attacker)) = crate::choose::one_target(g,asker.controller,asker.source,candidates,"Choose an attacking creature to block")? {
+        g.change_blocks(&[],&[],&[(blocker,attacker)]);
+    }
+    Ok(())
+}
+
+/// Exchange the blocking associations of two attackers (General Jarkeld) or of two blockers (Sorrow's Path).
+/// Each instruction explicitly requires that the exchanged assignments could be made. Shared unchanged edges stay
+/// shared for Jarkeld; Sorrow's Path removes both creatures from combat before assigning their new blocks.
+pub fn swap_blocks(g: &mut dyn Game, first: Option<ObjectId>, second: Option<ObjectId>, attacking: bool) {
+    let (Some(first),Some(second)) = (first,second) else { return };
+    if first == second || !is_live(g,first) || !is_live(g,second) { return; }
+    if attacking {
+        if !g.is_attacking(first) || !g.is_attacking(second) || !g.is_blocked(first) || !g.is_blocked(second) { return; }
+    } else if !g.is_blocking(first) || !g.is_blocking(second) { return; }
+    let ending: Vec<_> = g.state().blocks.iter().filter(|b| {
+        let id = if attacking { b.attacker } else { b.blocker }; id == first || id == second
+    }).map(|b| (b.blocker,b.attacker)).collect();
+    let starting: Vec<_> = ending.iter().map(|&(b,a)| {
+        if attacking { (b,if a == first {second} else {first}) }
+        else { (if b == first {second} else {first},a) }
+    }).collect();
+    if !g.block_reassignment_allowed(&ending,&starting) { return; }
+    if attacking { g.change_blocks(&[],&ending,&starting); }
+    else { g.change_blocks(&[first,second],&ending,&starting); }
+}
+
 /// "During combat" (CR 506.1): any step of the combat phase, beginning of combat through end of combat. Yuriko, Blade of the
 /// Mighty ("During combat, players can't cast spells") and Jade Statue print it.
 pub fn during_combat(q: &dyn Query) -> bool {

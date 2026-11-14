@@ -1,0 +1,40 @@
+# A land costs one life to retain, and the Wand targets either player only on its controller's turn (CR 602.1, 701.20a).
+[Bot1 Deck]
+Black Lotus x3
+Mox Pearl
+Wand of Ith
+Island x20
+[Bot2 Deck]
+Island x20
+[Dice]
+1; 1
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wand of Ith.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+! Bot1.Battlefield.Wand of Ith.Activate(Bot1.Battlefield.Mox Pearl)
+Bot1.Battlefield.Wand of Ith.Activate(Bot2)
+? Bot1.Mana =
+Bot2.PayCost
+? Bot2.Life = 19
+? Bot2.Hand.Count = 7
+[T1 Bot1.End]
+? Bot2.Graveyard =
+? Bot2.Hand.Count = 7
+[T2 Bot2.Main1]
+! Bot1.Battlefield.Wand of Ith.Activate(Bot2)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Wand of Ith.Activate(Bot1)
+Bot1.PayCost
+[T3 Bot1.End]
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19

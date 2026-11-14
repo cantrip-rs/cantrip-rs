@@ -1,0 +1,35 @@
+# Aurelia creates a second combat; Disharmony can be cast on its attacker in that combat (CR 601.3).
+[Bot1 Deck]
+Disharmony
+Aurelia, the Warleader
+Black Lotus x2
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Aurelia, the Warleader.Cast
+? Bot1.Mana =
+Bot1.Attack(Aurelia, the Warleader > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Aurelia, the Warleader > Bot2)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Disharmony.Cast(Aurelia, the Warleader)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+[Expect]
+Bot2.Life = 17

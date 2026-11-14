@@ -1,0 +1,46 @@
+# Shyft chooses several colors at its upkeep, keeps them across turns when it declines, and can change again
+# at a later upkeep; at least one color is required (CR 105.2, 603.2, 611.2a).
+[Bot1 Deck]
+Shyft
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Shyft.Cast
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Accept
+! Bot1.Modes(Count: 0)
+Bot1.Modes(Red, Green)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Shyft.Colors = Green; Red
+[T5 Bot1.Upkeep]
+Bot1.Decline
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Shyft.Colors = Green; Red
+[T7 Bot1.Upkeep]
+Bot1.Accept
+Bot1.Modes(White)
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Shyft.Colors = White

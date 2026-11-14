@@ -1,0 +1,43 @@
+# A player at 11 life cannot pay 13 life for Worldspine Wurm and must discard it (CR 119.4, 701.9a).
+[Bot1 Deck]
+Black Lotus x4
+Mox Pearl
+Wand of Ith
+Lightning Bolt x3
+Island x20
+[Bot2 Deck]
+Worldspine Wurm x7
+Island x20
+[Dice]
+1
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wand of Ith.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Wand of Ith.Activate(Bot2)
+[T9 Bot1.End]
+[Expect]
+Bot2.Life = 11
+Bot2.Hand.Count = 6
+Bot2.Revealed = Worldspine Wurm
+Bot2.Shuffles = 1

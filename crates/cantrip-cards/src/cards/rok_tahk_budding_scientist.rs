@@ -10,7 +10,7 @@ pub static MURF: CardDef = CardDef {
     has_cost: false,
     colors: Some(ColorSet::of(Color::Green)),
     types: TypeSet::of(&[CardType::Creature]),
-    supertypes: Supertypes { basic: false, legendary: true, snow: false },
+    supertypes: Supertypes { basic: false, legendary: true, snow: false, world: false },
     subtypes: SubtypeSet::of(&[Subtype::Ooze, Subtype::Slug]),
     power: Some(0),
     toughness: Some(1),

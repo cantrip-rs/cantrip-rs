@@ -1,0 +1,27 @@
+# An empty hand has no card to reveal, pay for, or discard (CR 701.20a).
+[Bot1 Deck]
+Black Lotus x3
+Mox Pearl x3
+Wand of Ith
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wand of Ith.Cast
+Bot1.Pass
+? Bot1.Hand.Count = 0
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Wand of Ith.Activate(Bot1)
+[T1 Bot1.End]
+[Expect]
+Bot1.Life = 20
+Bot1.Hand.Count = 0
+

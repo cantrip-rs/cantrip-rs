@@ -1,0 +1,27 @@
+# A zero-mana-value nonland can be retained by paying zero life (CR 119.4b, 202.3).
+[Bot1 Deck]
+Black Lotus x2
+Mox Pearl
+Wand of Ith
+Island x20
+[Bot2 Deck]
+Mox Ruby x7
+Island x20
+[Dice]
+1
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wand of Ith.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Wand of Ith.Activate(Bot2)
+Bot2.PayCost
+[T1 Bot1.End]
+[Expect]
+Bot2.Life = 20
+Bot2.Hand.Count = 7

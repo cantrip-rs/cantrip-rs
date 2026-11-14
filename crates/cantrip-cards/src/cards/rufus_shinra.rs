@@ -8,7 +8,7 @@ pub static DARKSTAR: CardDef = CardDef {
     has_cost: false,
     colors: Some(ColorSet(0b00101)),
     types: TypeSet::of(&[CardType::Creature]),
-    supertypes: Supertypes { basic: false, legendary: true, snow: false },
+    supertypes: Supertypes { basic: false, legendary: true, snow: false, world: false },
     subtypes: SubtypeSet::of(&[Subtype::Dog]),
     power: Some(2),
     toughness: Some(2),

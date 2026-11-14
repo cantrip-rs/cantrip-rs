@@ -1,0 +1,38 @@
+# Imprison counters the enchanted creature's nonmana tap ability when its controller pays one, and destroys itself if they decline (CR 603.2, 701.6a).
+[Bot1 Deck]
+Imprison
+Mox Jet
+Mox Pearl
+Swamp x20
+[Bot2 Deck]
+Prodigal Sorcerer
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Prodigal Sorcerer.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Imprison.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Imprison.Cast(Bot2.Battlefield.Prodigal Sorcerer)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Imprison.AttachedTo = Prodigal Sorcerer
+[T4 Bot2.Main1]
+Bot2.Battlefield.Prodigal Sorcerer.Activate(Bot1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+? Bot1.Mana =
+? Bot1.Life = 20
+[T6 Bot2.Main1]
+Bot2.Battlefield.Prodigal Sorcerer.Activate(Bot1)
+Bot1.Decline
+[T6 Bot2.Main2]
+[Expect]
+Bot1.Life = 19
+Bot1.Graveyard.Imprison.Colors = Black

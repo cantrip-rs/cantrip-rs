@@ -1,0 +1,50 @@
+# Wither reduces the target's power before the second instruction reads it (CR 608.2c, 702.80a).
+[Bot1 Deck]
+Tracker
+Barbed Bloodletter
+Black Lotus
+Black Lotus
+Mox Emerald
+Gleemox
+Forest x20
+[Bot2 Deck]
+Craw Wurm
+Black Lotus
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Tracker.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Craw Wurm.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Barbed Bloodletter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Tracker.Activate(Bot2.Battlefield.Craw Wurm)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Tracker.Damage = 3
+Bot2.Battlefield.Craw Wurm.Counters.MinusOneMinusOne = 3
+Bot2.Battlefield.Craw Wurm.Power = 3

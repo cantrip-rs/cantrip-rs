@@ -1,0 +1,37 @@
+# With no cards in hand and exactly three other permanents, three damage sacrifices all three without a choice (CR 701.21a).
+[Bot1 Deck]
+Black Lotus x2
+Mox Jet
+Mox Ruby
+Oath of Lim-Dûl
+Lightning Bolt
+Swamp
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Oath of Lim-Dûl.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose
+[Expect]
+Bot1.Battlefield = Oath of Lim-Dûl
+Bot1.Life = 17

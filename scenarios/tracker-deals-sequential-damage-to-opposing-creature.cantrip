@@ -1,0 +1,42 @@
+# Tracker pays GG and taps to damage an opposing first striker; it then takes that creature's power in damage.
+# A noncreature is refused as a target (CR 115.1c, 608.2c).
+[Bot1 Deck]
+Tracker
+Black Lotus
+Mox Emerald
+Mox Pearl
+Forest x20
+[Bot2 Deck]
+White Knight
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Tracker.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.White Knight.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Tracker.Activate(Bot2.Battlefield.White Knight; Mana: short)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+! Bot1.Battlefield.Tracker.Activate(Bot1.Battlefield.Forest)
+Bot1.Battlefield.Tracker.Activate(Bot2.Battlefield.White Knight)
+? Bot1.Mana = {W}
+? Bot1.Battlefield.Tracker.Tapped = true
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Tracker; Black Lotus
+Bot2.Graveyard = White Knight; Black Lotus

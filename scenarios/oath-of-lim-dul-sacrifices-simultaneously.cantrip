@@ -1,0 +1,51 @@
+# Elas and two other creatures are sacrificed together, so Elas sees both other creatures die (CR 700.4, 603.10a).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Oath of Lim-Dûl
+Swamp
+Memnite
+Ornithopter
+Elas il-Kor, Sadistic Pilgrim
+Island x20
+[Bot2 Deck]
+Lightning Bolt
+Mountain
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Oath of Lim-Dûl.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Elas il-Kor, Sadistic Pilgrim.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Elas il-Kor, Sadistic Pilgrim; Memnite; Ornithopter)
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 17

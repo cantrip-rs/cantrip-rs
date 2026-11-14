@@ -49,11 +49,16 @@ pub struct GameState {
     pub members: Vec<ObjectId>,
     /// Immutable receipt details referenced by history events; append-only and journalled.
     pub cost_receipts: Vec<CostReceiptDetails>,
+    /// Immutable noted values and opted-in activation payments, named by history records.
+    pub noted_values: Vec<crate::NotedValueRecord>,
     /// The targets of stack items with more than `INLINE_TARGETS` of them, each with the spec it was chosen for
     /// (`StackItem::spill` names a run of it). Append-only, journaled.
     pub spill_targets: Vec<Target>,
     /// Parallel to `spill_targets`: the spec each was chosen for.
     pub spill_specs: Vec<u8>,
+    /// Optional per-target players chosen during a target announcement. Immutable
+    /// current stack configuration, like target specs and shares; not a history counter.
+    pub target_chooser_arena: Vec<Option<PlayerId>>,
     /// What represents each merged permanent besides its own card (CR 730.2), every version of it (`merged_objects` names the
     /// one an object has now). Append-only, journaled; empty in a game where nothing has merged.
     pub merges: Vec<Merge>,
@@ -93,6 +98,8 @@ pub struct GameState {
     /// permanent (CR 122.1j): until one has, the layers skip looking for static sources, and hone counters, at all. Only
     /// ever set, so it can be stale only towards looking.
     pub statics_seen: bool,
+    /// Hands whose current continuous public interval has already been announced to history. One bit per seat.
+    pub shown_hands: u8,
     pub agenda: Vec<Frame>,
     pub rng: Rng,
     pub next_timestamp: u32,
@@ -137,6 +144,8 @@ pub struct GameState {
     /// The layers' work for one position and history (`cantrip_rules::layers`): each layer's application order (CR 613.8) and
     /// the characteristics worked out with it. Derived, shared by a clone until either moves on; no part of the position.
     pub layer_pass: LayerCache,
+    /// Conservative live-source interest in continuous hand visibility, derived for one position epoch.
+    pub hand_visibility_interest: std::cell::Cell<Option<(u64, bool)>>,
 }
 
 /// The layers' cache (`GameState::layer_pass`): passes the rules crate made, each for its own position and history.
@@ -257,6 +266,7 @@ pub struct DerivedAside {
     chars_epoch: u64,
     static_sources: StaticSources,
     layer_pass: Vec<std::rc::Rc<dyn std::any::Any>>,
+    hand_visibility_interest: Option<(u64, bool)>,
 }
 
 impl GameState {
@@ -270,6 +280,7 @@ impl GameState {
             chars_epoch: self.chars_epoch,
             static_sources: self.static_sources.replace(StaticSources::none()),
             layer_pass: std::mem::take(&mut *self.layer_pass.0.borrow_mut()),
+            hand_visibility_interest: self.hand_visibility_interest.replace(None),
         }
     }
 
@@ -281,6 +292,7 @@ impl GameState {
         self.chars_epoch = aside.chars_epoch;
         *self.static_sources.borrow_mut() = aside.static_sources;
         *self.layer_pass.0.borrow_mut() = aside.layer_pass;
+        self.hand_visibility_interest.set(aside.hand_visibility_interest);
     }
 
     fn position(
@@ -295,7 +307,7 @@ impl GameState {
         (&Vec<PendingTrigger>, &Vec<Delayed>, &Vec<PlayPermission>),
         (&Vec<Attacker>, &Vec<ObjectId>, &Vec<Block>, &Vec<ExtraTurn>, &Vec<ScheduledPhase>, (&LoopWatch, &Vec<LoopKey>)),
         &Vec<Frame>,
-        (&Rng, u32, &Outcome, bool, &Vec<ObjectId>, &Vec<StackItem>, (&Vec<Target>, &Vec<u8>, &Vec<u32>), (&Vec<Merge>, &Vec<Vec<Copiable>>, &Vec<(ObjectId, u32)>)),
+        (&Rng, u32, &Outcome, (bool, u8), &Vec<ObjectId>, &Vec<StackItem>, (&Vec<Target>, &Vec<u8>, &Vec<u32>, &Vec<Option<PlayerId>>), (&Vec<Merge>, &Vec<Vec<Copiable>>, &Vec<(ObjectId, u32)>)),
     ) {
         (
             (&self.players, &self.restricted_mana, &self.counter_stamps, &self.mana_from),
@@ -311,10 +323,10 @@ impl GameState {
                 &self.rng,
                 self.next_timestamp,
                 &self.outcome,
-                self.unsettled,
+                (self.unsettled, self.shown_hands),
                 &self.members,
                 &self.left_stack,
-                (&self.spill_targets, &self.spill_specs, &self.share_arena),
+                (&self.spill_targets, &self.spill_specs, &self.share_arena, &self.target_chooser_arena),
                 (&self.merges, &self.merged_sources, &self.merged_objects),
             ),
         )
@@ -328,7 +340,7 @@ impl PartialEq for GameState {
         // stack items of the spells cast (`StackItem::cast_known`), and by the history's declarations of attackers
         // (`Event::Attacks::known`); the rows themselves are compared, not hashed, since every move, every cast and every
         // attacker declared adds one.
-        self.position() == other.position() && self.last_known == other.last_known && self.cost_receipts == other.cost_receipts
+        self.position() == other.position() && self.last_known == other.last_known && self.cost_receipts == other.cost_receipts && self.noted_values == other.noted_values
     }
 }
 
@@ -337,6 +349,8 @@ impl Eq for GameState {}
 impl std::hash::Hash for GameState {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
         self.position().hash(state);
+        // Ordinary games keep the existing position hash and allocate no note payload.
+        if !self.noted_values.is_empty() { self.noted_values.hash(state); }
     }
 }
 
@@ -418,7 +432,9 @@ pub enum Undo {
     LastKnownPopped(Box<LastKnown>),
     LeftStackPushed,
     LeftStackPopped(Box<StackItem>),
-    /// Members appended since the list was this long.
+    /// An immutable value captured by a note or an opted-in activation.
+    NotedValuePushed,
+    NotedValuePopped(Box<crate::NotedValueRecord>),
     CostReceiptPushed,
     CostReceiptPopped(Box<CostReceiptDetails>),
     MembersPushed(u32),
@@ -427,6 +443,8 @@ pub enum Undo {
     TargetsSpilled(usize),
     TargetsUnspilled(Vec<Target>, Vec<u8>),
     /// Shares appended since the arena was this long.
+    TargetChoosersPushed(usize),
+    TargetChoosersPopped(Vec<Option<PlayerId>>),
     SharesPushed(usize),
     SharesPopped(Vec<u32>),
     /// Merge versions appended since the arena was this long.
@@ -449,6 +467,7 @@ pub enum Undo {
     LoopKeyWords(u32, Option<Vec<u64>>),
     LoopKeysSet(Vec<LoopKey>),
     StaticsSeen(bool),
+    ShownHands(u8),
     FramePushed,
     FramePopped(Frame),
     FrameRemoved(u32, Frame),
@@ -482,6 +501,8 @@ impl Undo {
                 | Undo::MembersPopped(_)
                 | Undo::TargetsSpilled(_)
                 | Undo::TargetsUnspilled(..)
+                | Undo::TargetChoosersPushed(_)
+                | Undo::TargetChoosersPopped(_)
                 | Undo::SharesPushed(_)
                 | Undo::SharesPopped(_)
                 | Undo::MergesPushed(_)
@@ -502,6 +523,7 @@ impl Undo {
                 | Undo::Rng(_)
                 | Undo::Timestamp(_)
                 | Undo::Unsettled(_)
+                | Undo::ShownHands(_)
                 | Undo::ManaFromPushed
                 | Undo::ManaFromSet(..)
                 | Undo::ManaFromRemoved(..)
@@ -541,8 +563,10 @@ impl GameState {
             left_stack: Vec::new(),
             members: Vec::new(),
             cost_receipts: Vec::new(),
+            noted_values: Vec::new(),
             spill_targets: Vec::new(),
             spill_specs: Vec::new(),
+            target_chooser_arena: Vec::new(),
             share_arena: Vec::new(),
             merges: Vec::new(),
             merged_sources: Vec::new(),
@@ -558,6 +582,7 @@ impl GameState {
             outside_supply: Vec::new(),
             minimum_deck_size: 0,
             statics_seen: false,
+            shown_hands: 0,
             agenda: Vec::new(),
             rng: Rng::new(seed),
             next_timestamp: 1,
@@ -574,6 +599,7 @@ impl GameState {
             settle_held: std::cell::Cell::new(0),
             returning: std::cell::Cell::new(false),
             layer_pass: LayerCache::default(),
+            hand_visibility_interest: std::cell::Cell::new(None),
         }
     }
 
@@ -1301,6 +1327,14 @@ impl GameState {
     /// Records a fact of this turn.
 
 
+    /// Add immutable noted data and journal its allocation.
+    pub fn noted_value_push(&mut self, record: crate::NotedValueRecord) -> u32 {
+        let id = self.noted_values.len() as u32;
+        self.noted_values.push(record);
+        self.log(Undo::NotedValuePushed);
+        id
+    }
+
     /// Add immutable receipt provenance and journal its allocation.
     pub fn cost_receipt_push(&mut self, receipt: CostReceiptDetails) -> u32 {
         let id = self.cost_receipts.len() as u32;
@@ -1460,6 +1494,22 @@ impl GameState {
     /// The run of the target arena a stack item with more than `INLINE_TARGETS` targets names.
     fn spilled(item: &StackItem) -> std::ops::Range<usize> {
         item.spill..item.spill + item.target_count as usize
+    }
+
+    pub fn target_choosers(&self, item: &StackItem) -> &[Option<PlayerId>] {
+        let span = item.target_choosers;
+        &self.target_chooser_arena[span.start as usize..(span.start + span.len) as usize]
+    }
+    pub fn target_chooser(&self, item: &StackItem, slot: usize) -> Option<PlayerId> {
+        self.target_choosers(item).get(slot).copied().flatten()
+    }
+    /// Keep the chosen players with this announcement, parallel to its target occurrences. Ordinary declarations allocate nothing here.
+    pub fn set_item_target_choosers(&mut self, item: &mut StackItem, players: &[Option<PlayerId>]) {
+        if players.iter().all(Option::is_none) { item.target_choosers = Span::default(); return; }
+        let start = self.target_chooser_arena.len();
+        self.target_chooser_arena.extend_from_slice(players);
+        self.log(Undo::TargetChoosersPushed(start));
+        item.target_choosers = Span { start: start as u32, len: players.len() as u32 };
     }
 
     /// A stack item's targets, in the order chosen (CR 601.2c): those it holds, or all of them from the arena.
@@ -1775,6 +1825,14 @@ impl GameState {
         let old = self.outcome;
         self.outcome = outcome;
         self.log(Undo::Outcome(old));
+    }
+
+    pub fn set_shown_hands(&mut self, mask: u8) {
+        if self.shown_hands != mask {
+            let old = self.shown_hands;
+            self.shown_hands = mask;
+            self.log(Undo::ShownHands(old));
+        }
     }
 
     pub fn set_unsettled(&mut self) {
@@ -2159,6 +2217,8 @@ impl GameState {
                 self.left_stack.pop();
             }
             Undo::LeftStackPopped(item) => self.left_stack.push(*item),
+            Undo::NotedValuePushed => { self.noted_values.pop(); }
+            Undo::NotedValuePopped(record) => self.noted_values.push(*record),
             Undo::CostReceiptPushed => { self.cost_receipts.pop(); }
             Undo::CostReceiptPopped(receipt) => self.cost_receipts.push(*receipt),
             Undo::MembersPushed(len) => self.members.truncate(len as usize),
@@ -2167,6 +2227,8 @@ impl GameState {
                 self.spill_targets.truncate(len);
                 self.spill_specs.truncate(len);
             }
+            Undo::TargetChoosersPushed(len) => self.target_chooser_arena.truncate(len),
+            Undo::TargetChoosersPopped(players) => self.target_chooser_arena.extend(players),
             Undo::SharesPushed(len) => self.share_arena.truncate(len),
             Undo::SharesPopped(shares) => self.share_arena.extend(shares),
             Undo::MergesPushed(len) => self.merges.truncate(len as usize),
@@ -2200,6 +2262,7 @@ impl GameState {
                 self.loop_keys = old;
             }
             Undo::StaticsSeen(old) => self.statics_seen = old,
+            Undo::ShownHands(old) => self.shown_hands = old,
             Undo::FramePushed => {
                 self.agenda.pop();
             }
@@ -2276,7 +2339,9 @@ impl GameState {
             Undo::LastKnownPopped(_) => Undo::LastKnownPushed,
             Undo::LeftStackPushed => Undo::LeftStackPopped(Box::new(*self.left_stack.last().expect("an item"))),
             Undo::LeftStackPopped(_) => Undo::LeftStackPushed,
+            Undo::NotedValuePushed => Undo::NotedValuePopped(Box::new(self.noted_values.last().expect("noted value").clone())),
             Undo::CostReceiptPushed => Undo::CostReceiptPopped(Box::new(*self.cost_receipts.last().expect("receipt"))),
+            Undo::NotedValuePopped(_) => Undo::NotedValuePushed,
             Undo::CostReceiptPopped(_) => Undo::CostReceiptPushed,
             Undo::MembersPushed(len) => Undo::MembersPopped(self.members[*len as usize..].to_vec()),
             Undo::MembersPopped(_) => Undo::MembersPushed(self.members.len() as u32),
@@ -2284,6 +2349,8 @@ impl GameState {
                 self.spill_targets[*len..].to_vec(),
                 self.spill_specs[*len..].to_vec(),
             ),
+            Undo::TargetChoosersPushed(len) => Undo::TargetChoosersPopped(self.target_chooser_arena[*len..].to_vec()),
+            Undo::TargetChoosersPopped(_) => Undo::TargetChoosersPushed(self.target_chooser_arena.len()),
             Undo::SharesPushed(len) => Undo::SharesPopped(self.share_arena[*len..].to_vec()),
             Undo::SharesPopped(_) => Undo::SharesPushed(self.share_arena.len()),
             Undo::MergesPushed(len) => Undo::MergesPopped(self.merges[*len as usize..].to_vec()),
@@ -2304,6 +2371,7 @@ impl GameState {
             Undo::LoopKeyWords(at, _) => Undo::LoopKeyWords(*at, self.loop_keys[*at as usize].words.clone()),
             Undo::LoopKeysSet(_) => Undo::LoopKeysSet(self.loop_keys.clone()),
             Undo::StaticsSeen(_) => Undo::StaticsSeen(self.statics_seen),
+            Undo::ShownHands(_) => Undo::ShownHands(self.shown_hands),
             Undo::FramePushed => Undo::FramePopped(self.agenda.last().expect("a frame").clone()),
             Undo::FramePopped(_) => Undo::FramePushed,
             Undo::FrameRemoved(at, _) => Undo::FrameInserted(*at),
@@ -2337,6 +2405,7 @@ mod tests {
             inline_targets: [Target::None; INLINE_TARGETS],
             target_count: 0,
             inline_spec_of: [0; INLINE_TARGETS],
+            target_choosers: Default::default(),
             x: 0,
             kicked: 0,
             counted: 0,
@@ -2397,6 +2466,20 @@ mod tests {
     }
 
     #[test]
+    fn noted_values_survive_copy_undo_redo_and_change_the_position_hash() {
+        use std::hash::{Hash,Hasher};
+        fn hash(s:&GameState)->u64 { let mut h=std::collections::hash_map::DefaultHasher::new();s.hash(&mut h);h.finish() }
+        let mut state=GameState::new(2,1);let mark=state.mark();let empty_hash=hash(&state);
+        let by=Linked {object:ObjectId(0),text:CardId(0),acquired:Acquired::OWN};
+        let record=crate::NotedValueRecord {by,value:crate::NotedValue::Counters(vec![(CounterKind::Charge,50000)])};
+        let id=state.noted_value_push(record.clone()) as usize;let noted_hash=hash(&state);assert_ne!(noted_hash,empty_hash);
+        let mut fork=state.clone_with_journal();assert_eq!(fork,state);
+        let(undos,redos)=state.step_back(mark);assert!(state.noted_values.is_empty());assert_eq!(hash(&state),empty_hash);
+        state.step_forward(undos,redos);assert_eq!(state.noted_values[id],record);assert_eq!(hash(&state),noted_hash);
+        fork.rollback(mark);assert!(fork.noted_values.is_empty());assert_eq!(state.noted_values[id],record);
+    }
+
+    #[test]
     fn receipt_details_survive_clone_rollback_and_redo_without_index_narrowing() {
         let mut state = GameState::new(2, 1);
         let mark = state.mark();
@@ -2411,6 +2494,24 @@ mod tests {
         copy.rollback(mark);
         assert!(copy.cost_receipts.is_empty());
         assert_eq!(state.cost_receipts[id], receipt);
+    }
+
+    #[test]
+    fn target_chooser_configuration_survives_copy_undo_and_redo() {
+        let mut state=GameState::new(3,1);let mark=state.mark();let mut original=item();
+        state.set_item_targets(&mut original,&[Target::Player(PlayerId(1)),Target::Player(PlayerId(2))],&[0,1],&[]);
+        state.set_item_target_choosers(&mut original,&[Some(PlayerId(1)),Some(PlayerId(2))]);state.stack_push(original);
+        let mut copied=original;copied.controller=PlayerId(2);state.stack_push(copied);
+        let mut fork=state.clone_with_journal();let (undos,redos)=state.step_back(mark);
+        assert!(state.target_chooser_arena.is_empty());assert!(state.stack.is_empty());state.step_forward(undos,redos);
+        assert_eq!(state.target_choosers(state.stack.last().unwrap()),&[Some(PlayerId(1)),Some(PlayerId(2))]);
+        copied.narrow_target_choosers(1,1);assert_eq!(state.target_chooser(&copied,0),Some(PlayerId(2)));
+        fork.rollback(mark);assert!(fork.target_chooser_arena.is_empty());assert_eq!(state.target_chooser(&original,0),Some(PlayerId(1)));
+    }
+    #[test]
+    fn ordinary_targets_allocate_no_chooser_configuration() {
+        let mut state=GameState::new(2,1);let mut spell=item();state.set_item_target_choosers(&mut spell,&[None,None]);
+        assert!(state.target_choosers(&spell).is_empty());assert_eq!(state.target_chooser_arena.capacity(),0);
     }
 
     /// Past `INLINE_TARGETS` a stack item's targets and specs are in the game's arena, and its shares in theirs, read back whole; changing one

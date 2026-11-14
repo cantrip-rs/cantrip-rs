@@ -104,7 +104,7 @@ fn copy_nonlegendary(g: &mut dyn Rules, item: &StackItem) -> Result<(), Suspend>
 static WALKER: CardDef = CardDef {
     name: "Casualty Walker",
     types: TypeSet::of(&[CardType::Planeswalker]),
-    supertypes: Supertypes { basic: false, legendary: true, snow: false },
+    supertypes: Supertypes { basic: false, legendary: true, snow: false, world: false },
     loyalty: Some(3),
     optional_cost: Some(casualty::X),
     labels: LABELS,

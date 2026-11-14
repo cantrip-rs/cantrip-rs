@@ -1,0 +1,30 @@
+# A nonmana ability without a tap symbol does not trigger Imprison (CR 603.2).
+[Bot1 Deck]
+Imprison
+Mox Jet
+Swamp x20
+[Bot2 Deck]
+Drudge Skeletons
+Black Lotus
+Swamp x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Drudge Skeletons.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Imprison.Cast(Drudge Skeletons)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Drudge Skeletons.Activate
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Imprison.AttachedTo = Drudge Skeletons
+Bot2.Battlefield.Drudge Skeletons.Tapped = false

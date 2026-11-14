@@ -1,0 +1,33 @@
+# An unblocked Necrite targets a creature the defending player controls, then may sacrifice itself to destroy it (CR 509.1h, 701.8a, 701.21a).
+[Bot1 Deck]
+Black Lotus
+Necrite
+Ornithopter
+Swamp x20
+[Bot2 Deck]
+Ornithopter
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Necrite.Cast
+? Bot1.Mana =
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Attackers]
+Bot1.Attack(Necrite > Bot2; Ornithopter > Bot2)
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+! Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Accept
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard.Necrite.Colors = Black
+Bot2.Graveyard.Ornithopter.Colors =
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot2.Life = 20

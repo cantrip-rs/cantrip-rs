@@ -1,0 +1,8 @@
+{
+  "name": "Lesser Werewolf",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Werewolf",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "{B}: If this creature's power is 1 or more, it gets -1/-0 until end of turn and put a -0/-1 counter on target creature blocking or blocked by this creature. Activate only during the declare blockers step."
+}

@@ -1,0 +1,57 @@
+# With no black mana remaining, white mana cannot pay the ability; three earlier black payments work (CR 107.4a).
+[Bot1 Deck]
+Lesser Werewolf
+Black Lotus
+Mox Jet x3
+Mox Pearl
+Swamp x20
+[Bot2 Deck]
+Wall of Shields
+Black Lotus
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lesser Werewolf.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wall of Shields.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lesser Werewolf > Bot2)
+Bot2.Block(Wall of Shields > Lesser Werewolf)
+! Bot1.Battlefield.Lesser Werewolf.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Lesser Werewolf.Activate(Bot2.Battlefield.Wall of Shields)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lesser Werewolf.Power = 1
+? Bot1.Battlefield.Lesser Werewolf.Toughness = 4
+? Bot2.Battlefield.Wall of Shields.Counters.Plus0Minus1 = 1
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Lesser Werewolf.Activate(Bot2.Battlefield.Wall of Shields)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lesser Werewolf.Power = 0
+? Bot2.Battlefield.Wall of Shields.Counters.Plus0Minus1 = 2
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Lesser Werewolf.Activate(Bot2.Battlefield.Wall of Shields)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lesser Werewolf.Power = 0
+? Bot2.Battlefield.Wall of Shields.Counters.Plus0Minus1 = 2
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Lesser Werewolf.Activate(Bot2.Battlefield.Wall of Shields; Mana: short)
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Lesser Werewolf.Power = 2
+Bot2.Battlefield.Wall of Shields.Counters.Plus0Minus1 = 2

@@ -1,0 +1,26 @@
+# The enchanted creature's tap mana ability produces mana without triggering Imprison (CR 605.1a).
+[Bot1 Deck]
+Imprison
+Mox Jet
+Swamp x20
+[Bot2 Deck]
+Llanowar Elves
+Forest
+Forest x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Imprison.Cast(Llanowar Elves)
+? Bot1.Mana =
+[T4 Bot2.Main1]
+Bot2.Battlefield.Llanowar Elves.Activate
+? Bot2.Mana = {G}
+? Stack.Count = 0
+[Expect]
+Bot1.Battlefield.Imprison.AttachedTo = Llanowar Elves
+Bot2.Battlefield.Llanowar Elves.Tapped = true

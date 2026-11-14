@@ -1,0 +1,60 @@
+# When the target leaves before resolution, the ability does nothing; a later activation resolves normally
+# on the recast creature (CR 608.2b, 400.7).
+[Bot1 Deck]
+Tracker
+Black Lotus
+Mox Emerald
+Forest x20
+[Bot2 Deck]
+White Knight
+Black Lotus
+Black Lotus
+Mox Sapphire
+Unsummon
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Tracker.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot2.Hand.White Knight.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Tracker.Activate(Bot1.Battlefield.Forest)
+Bot1.Battlefield.Tracker.Activate(Bot2.Battlefield.White Knight)
+? Bot1.Mana =
+? Bot1.Battlefield.Tracker.Tapped = true
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Unsummon.Cast(Bot2.Battlefield.White Knight)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tracker.Damage = 0
+[T4 Bot2.Main1]
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.White Knight.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Tracker.Activate(Bot2.Battlefield.White Knight)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Tracker; Black Lotus
+Bot2.Graveyard = White Knight; Black Lotus; Unsummon; Black Lotus

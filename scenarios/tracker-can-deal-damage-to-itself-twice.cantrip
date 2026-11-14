@@ -1,0 +1,36 @@
+# Tracker may target itself; indestructible lets it survive the two separate three-damage instructions
+# with six damage marked (CR 608.2c, 702.12b).
+[Bot1 Deck]
+Tracker
+Black Lotus
+Mox Emerald
+Gleemox
+Revitalizing Repast
+Forest x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Tracker.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Revitalizing Repast.Cast(Bot1.Battlefield.Tracker)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Tracker.Activate(Bot1.Battlefield.Tracker)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Tracker.Damage = 6
+Bot1.Battlefield.Tracker.Tapped = true

@@ -1,0 +1,6 @@
+{
+  "name": "Tower of Coireall",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "{T}: Target creature can't be blocked by Walls this turn."
+}

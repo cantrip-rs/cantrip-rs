@@ -1,0 +1,84 @@
+# Blue creatures stay tapped through untap steps; each upkeep player may pay {U} to untap their own, while nonblue creatures untap normally (CR 502.3, 603.2).
+[Bot1 Deck]
+Black Lotus
+Thelon's Curse
+Mox Sapphire
+Mox Pearl
+Mox Ruby
+Merfolk of the Pearl Trident
+Memnite
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Merfolk of the Pearl Trident
+Memnite
+Island
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thelon's Curse.Cast
+? Bot1.Mana = {G}
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Merfolk of the Pearl Trident.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Attack(Merfolk of the Pearl Trident; Memnite > Bot2)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Attack(Merfolk of the Pearl Trident; Memnite > Bot1)
+[T5 Bot1.Upkeep]
+? Bot1.Battlefield.Merfolk of the Pearl Trident.Tapped = true
+? Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Bot1.Battlefield.Memnite)
+! Bot1.Choose(Bot2.Battlefield.Merfolk of the Pearl Trident)
+Bot1.Choose(Bot1.Battlefield.Merfolk of the Pearl Trident)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.PayCost
+? Bot1.Mana =
+? Bot1.Battlefield.Merfolk of the Pearl Trident.Tapped = false
+[T6 Bot2.Upkeep]
+? Bot2.Battlefield.Merfolk of the Pearl Trident.Tapped = true
+? Bot2.Battlefield.Memnite.Tapped = false
+Bot2.Battlefield.Llanowar Elves.Activate
+Bot2.Pass
+Bot1.Pass
+! Bot2.Choose(Llanowar Elves)
+Bot2.Choose(Bot2.Battlefield.Merfolk of the Pearl Trident)
+! Bot2.PayCost
+Bot2.Decline
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Merfolk of the Pearl Trident.Tapped = true
+[T8 Bot2.Upkeep]
+? Bot2.Battlefield.Merfolk of the Pearl Trident.Tapped = true
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Bot2.Battlefield.Merfolk of the Pearl Trident)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.PayCost
+? Bot2.Mana =
+[Expect]
+Bot2.Battlefield.Merfolk of the Pearl Trident.Tapped = false

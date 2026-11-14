@@ -1,0 +1,8 @@
+{
+  "name": "Mijae Djinn",
+  "manaCost": "{R}{R}{R}",
+  "type": "Creature — Djinn",
+  "power": 6,
+  "toughness": 3,
+  "oracleText": "Whenever this creature attacks, flip a coin. If you lose the flip, remove this creature from combat and tap it."
+}

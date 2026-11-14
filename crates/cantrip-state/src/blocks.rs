@@ -120,6 +120,10 @@ impl BlockRequirements {
                 return issue(a, format!("can't be blocked except by {} or more", creatures(least)), None, "509.1b", true);
             }
         }
+        let has = |id| blocks.iter().any(|p| p.0 == id);
+        if let Some(g) = self.groups.iter().find(|g| !g.allows(has)) {
+            return issue(g.subjects.iter().copied().find(|&id| has(id)).unwrap_or(ObjectId::NONE), "can't block with this group".into(), None, "509.1b", g.count(has) <= g.at_most);
+        }
         if self.obeyed(blocks) < self.most {
             // A requirement left unobeyed by a creature that obeys none, so the caption names a creature that can still obey
             // it; any unobeyed one where every such creature obeys another.
@@ -172,6 +176,9 @@ impl BlockRequirements {
         };
         for &(_, a) in fixed {
             add(a, &mut targets);
+        }
+        if !self.groups.is_empty() {
+            for &(b,a) in allowed { if usable(b,a) && open(b,a) { add(a,&mut targets); } }
         }
         for r in &self.required {
             for &(b, a) in allowed {
@@ -263,6 +270,8 @@ impl BlockRequirements {
 
         struct Search<'a> {
             blockers: &'a [Blocker],
+            groups: &'a [crate::CombatGroup],
+            fixed: &'a [(ObjectId,ObjectId)],
             limits: &'a [(u32, u32)],
             best_after: &'a [u32],
             able_after: &'a [Vec<u32>],
@@ -319,6 +328,15 @@ impl BlockRequirements {
                 // An attacker blocked by fewer than it may be needs that many more of the creatures still to come.
                 if self.counts.iter().zip(self.limits).enumerate().any(|(t, (&n, &(least, _)))| n > 0 && n < least && self.able_after[i][t] < least - n) {
                     return;
+                }
+                if !self.groups.is_empty() {
+                    let has = |id| self.fixed.iter().any(|p| p.0 == id) || self.chosen.iter().any(|p| self.blockers[p.0].id == id);
+                    for g in self.groups {
+                        if !g.subjects.iter().any(|&id| has(id)) { continue; }
+                        let n = g.count(has);
+                        let more = g.members.iter().filter(|&&id| !has(id) && self.blockers[i..].iter().any(|b| b.id == id)).count();
+                        if n > g.at_most || n + count_u32(more) < g.at_least { return; }
+                    }
                 }
                 // A whole declaration is judged by what it obeys, nothing more.
                 if i == self.blockers.len() {
@@ -383,6 +401,8 @@ impl BlockRequirements {
         }
         let mut search = Search {
             blockers: &blockers,
+            groups: &self.groups,
+            fixed,
             limits: &limits,
             best_after: &best_after,
             able_after: &able_after,

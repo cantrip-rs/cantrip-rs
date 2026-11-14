@@ -1,0 +1,42 @@
+# An earlier activated ability remains on the stack when Imprison counters the enchanted creature's ability (CR 701.6a).
+[Bot1 Deck]
+Imprison
+Mox Jet
+Mox Pearl
+Swamp x20
+[Bot2 Deck]
+Prodigal Sorcerer x2
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Prodigal Sorcerer.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Imprison.Cast(Prodigal Sorcerer)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Prodigal Sorcerer.Cast
+[T6 Bot2.Main1]
+Bot2.Battlefield.Prodigal Sorcerer#2.Activate(Bot2)
+Bot2.Battlefield.Prodigal Sorcerer#1.Activate(Bot1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+[T6 Bot2.Main2]
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19
+Bot1.Battlefield.Imprison.AttachedTo = Prodigal Sorcerer

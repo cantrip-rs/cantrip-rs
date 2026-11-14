@@ -22,7 +22,7 @@ static LEGENDARY_SORCERY: CardDef = CardDef {
     oracle: true,
     has_cost: true,
     types: TypeSet::of(&[CardType::Sorcery]),
-    supertypes: Supertypes { basic: false, legendary: true, snow: false },
+    supertypes: Supertypes { basic: false, legendary: true, snow: false, world: false },
     ..CardDef::BLANK
 };
 
@@ -31,7 +31,7 @@ static LEGENDARY_INSTANT: CardDef = CardDef { name: "Probe Legendary Instant", t
 
 /// A split card's halves (CR 709.3): "Probe Legend Half", a legendary sorcery, and "Probe Plain Half", a sorcery.
 static LEGEND_HALF: CardDef = CardDef { name: "Probe Legend Half", ..LEGENDARY_SORCERY };
-static PLAIN_HALF: CardDef = CardDef { name: "Probe Plain Half", supertypes: Supertypes { basic: false, legendary: false, snow: false }, ..LEGENDARY_SORCERY };
+static PLAIN_HALF: CardDef = CardDef { name: "Probe Plain Half", supertypes: Supertypes { basic: false, legendary: false, snow: false, world: false }, ..LEGENDARY_SORCERY };
 static SPLIT: CardDef = CardDef { name: "Probe Legend Half // Probe Plain Half", split: Some((&LEGEND_HALF, &PLAIN_HALF)), ..PLAIN_HALF };
 
 /// A modal double-faced card (CR 712.11b): "Probe Plain Front", a sorcery, and its back face "Probe Legend Back", a legendary
@@ -47,7 +47,7 @@ static COSTLY_LEGENDARY_SORCERY: CardDef = CardDef { name: "Probe Costly Legenda
 static PLAIN_WALKER: CardDef = CardDef {
     name: "Probe Plain Walker",
     types: TypeSet::of(&[CardType::Planeswalker]),
-    supertypes: Supertypes { basic: false, legendary: false, snow: false },
+    supertypes: Supertypes { basic: false, legendary: false, snow: false, world: false },
     loyalty: Some(3),
     ..LEGENDARY_SORCERY
 };

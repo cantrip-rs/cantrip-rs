@@ -1,0 +1,32 @@
+# The targeted opponent names a different card, so the revealed top card goes to their graveyard and they take two damage (CR 701.20a, 120.3).
+[Bot1 Deck]
+Black Lotus x2
+Mox Pearl
+Vexing Arcanix
+Island x20
+[Bot2 Deck]
+Forest x7
+Plains
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Vexing Arcanix.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+! Bot1.Battlefield.Vexing Arcanix.Activate(Bot1.Battlefield.Vexing Arcanix)
+Bot1.Battlefield.Vexing Arcanix.Activate(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Name(Forest)
+[Expect]
+Bot2.Revealed.Count = 1
+Bot2.Life = 18
+Bot2.Graveyard = Island
+Bot2.Hand.Plains.Colors =

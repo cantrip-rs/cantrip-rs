@@ -1,0 +1,8 @@
+{
+  "name": "Shyft",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Shapeshifter",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "At the beginning of your upkeep, you may have this creature become the color or colors of your choice. (This effect lasts indefinitely.)"
+}

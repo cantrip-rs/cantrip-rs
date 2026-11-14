@@ -1,0 +1,38 @@
+# Disharmony can target its controller's untapped vigilant attacker; it leaves combat even though it was not tapped (CR 506.4).
+[Bot1 Deck]
+Disharmony
+Serra Angel
+Ornithopter
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Serra Angel.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.Disharmony.Cast(Bot1.Battlefield.Serra Angel)
+Bot1.Attack(Serra Angel > Bot2)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Disharmony.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Hand.Disharmony.Cast(Bot1.Battlefield.Serra Angel)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Serra Angel.Tapped = false
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Serra Angel.Power = 4

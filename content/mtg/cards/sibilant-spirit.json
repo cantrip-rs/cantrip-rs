@@ -1,0 +1,11 @@
+{
+  "name": "Sibilant Spirit",
+  "manaCost": "{5}{U}",
+  "type": "Creature — Spirit",
+  "power": 5,
+  "toughness": 6,
+  "oracleText": "Flying\nWhenever this creature attacks, defending player may draw a card.",
+  "keywords": [
+    "Flying"
+  ]
+}

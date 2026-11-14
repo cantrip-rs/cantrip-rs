@@ -1,0 +1,6 @@
+{
+  "name": "Psychic Allergy",
+  "manaCost": "{3}{U}{U}",
+  "type": "Enchantment",
+  "oracleText": "As this enchantment enters, choose a color.\nAt the beginning of each opponent's upkeep, this enchantment deals X damage to that player, where X is the number of nontoken permanents of the chosen color they control.\nAt the beginning of your upkeep, destroy this enchantment unless you sacrifice two Islands."
+}

@@ -1,0 +1,25 @@
+# A player leaving while an earlier player chooses is skipped for the remaining choices (CR 800.4a, 101.4).
+[Bot1 Deck]
+Black Lotus
+Pox
+Island x20
+[Bot2 Deck]
+Island x20
+[Bot3 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Pox.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot2.Concede
+Bot1.Choose(Island; Island)
+Bot3.Choose(Island; Island; Island)
+[Expect]
+Bot1.Life = 13
+Bot2.Status = Lost
+Bot3.Life = 13
+Bot1.Hand.Count = 4
+Bot3.Hand.Count = 4

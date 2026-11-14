@@ -1,0 +1,32 @@
+# The target names Island before the library is revealed; the matching card goes into their hand without damage (CR 701.20a).
+[Bot1 Deck]
+Black Lotus x2
+Mox Pearl
+Vexing Arcanix
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Vexing Arcanix.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+? Bot1.Library.Top = Island
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Vexing Arcanix.Activate(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Revealed = (absent)
+? Stack.Count = 1
+Bot1.Name(Island)
+[Expect]
+Bot1.Revealed.Count = 1
+Bot1.Library.Count = 15
+Bot1.Hand.Count = 5
+Bot1.Life = 20
+Result = InProgress
