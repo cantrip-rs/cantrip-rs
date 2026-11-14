@@ -1,0 +1,40 @@
+# Don't Make a Sound counters a creature spell (the other kind of spell from Lightning Bolt) when its controller cannot pay {2}: Bot2 casts Aegis
+# Turtle with Mox Sapphire, holding only Mox Jet, whose one mana it makes while asked, so paying {2} is not offered (! Bot2.PayCost). The Turtle
+# is countered and Bot1 does not surveil (CR 118.12, 701.25): the library is still 12 cards.
+
+[Bot1 Deck]
+Island
+Island
+Don't Make a Sound
+Island x5
+Island x12
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Aegis Turtle
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Don't Make a Sound.Cast(Aegis Turtle)
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+! Bot2.PayCost
+
+[Expect]
+Bot2.Graveyard = Aegis Turtle
+Bot1.Graveyard = Don't Make a Sound
+Bot1.Library.Count = 12
