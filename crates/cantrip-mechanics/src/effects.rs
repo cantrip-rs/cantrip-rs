@@ -964,6 +964,14 @@ pub fn draw_a_card_and_lose_1_life(g: &mut dyn Game, item: &StackItem) -> Result
     Ok(())
 }
 
+/// "You draw two cards and you lose 2 life" (CR 121.1, 119.3): the controller draws, then loses the life, which is lost even when
+/// the library was empty (CR 121.4). Night's Whisper, Thunder of Unity (chapter I) and Derelict Attic print it.
+pub fn draw_two_cards_and_lose_2_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.draw(item.controller, 2);
+    g.lose_life(item.controller, 2);
+    Ok(())
+}
+
 /// "Draw N cards, then put two cards from your hand on top of your library in any order" (CR 121.1, 401.4): the two are
 /// chosen together (CR 608.2d) and put back one at a time in the order chosen, so the last chosen ends on top; either may be
 /// a card that was already in hand (ruling 2024-06-07), not only one of the N just drawn. Brainsurge (four), Brainstorm and
