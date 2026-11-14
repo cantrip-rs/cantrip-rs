@@ -1,0 +1,44 @@
+# Kykar, Zephyr Awakener: "Whenever you cast a noncreature spell, choose one - ... Create a 1/1 white Spirit creature token with
+# flying." Bot1 casts Kykar off four Moxen on turn 1, then casts Mox Emerald (a noncreature spell): the trigger goes on the stack
+# above the Mox; with no other creature to exile only the second mode is legal, so it is chosen without asking, and Bot1 gets a 1/1 white Spirit with flying.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Kykar, Zephyr Awakener
+Mox Emerald
+Black Lotus
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kykar, Zephyr Awakener.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spirit Token.Power = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Spirit Token.Colors = White
+Bot1.Battlefield.Spirit Token.Toughness = 1
+Bot1.Battlefield.Spirit Token.Keywords = Flying
+Bot1.Battlefield.Spirit Token.Token = true
+Bot1.Battlefield.Count = 7

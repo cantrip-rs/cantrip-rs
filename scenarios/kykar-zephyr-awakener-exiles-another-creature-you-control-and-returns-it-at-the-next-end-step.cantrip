@@ -1,0 +1,54 @@
+# Kykar, Zephyr Awakener: "Exile another target creature you control. Return that card to the battlefield under its owner's control at
+# the beginning of the next end step." Bot1 casts Kykar off four Moxen and an Ornithopter (a creature spell: no trigger, only the
+# Ornithopter is on the stack), then Mox Emerald: both modes are now legal, Bot1 chooses the first and the Ornithopter, the only
+# creature but Kykar herself ("another"), is the target chosen. It is in exile for the rest of the turn and back on the battlefield
+# after the end step.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Kykar, Zephyr Awakener
+Ornithopter
+Mox Emerald
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kykar, Zephyr Awakener.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+? Stack = Ornithopter
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Modes(1)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+? Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Kykar, Zephyr Awakener
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+? Exile = Ornithopter
+[T2 Bot2.Main1]
+? Exile.Count = 0
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Count = 7

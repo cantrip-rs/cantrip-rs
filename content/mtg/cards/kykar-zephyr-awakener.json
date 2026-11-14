@@ -1,0 +1,11 @@
+{
+  "name": "Kykar, Zephyr Awakener",
+  "manaCost": "{2}{W}{U}",
+  "type": "Legendary Creature — Bird Wizard",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flying\nWhenever you cast a noncreature spell, choose one —\n• Exile another target creature you control. Return that card to the battlefield under its owner's control at the beginning of the next end step.\n• Create a 1/1 white Spirit creature token with flying.",
+  "keywords": [
+    "Flying"
+  ]
+}

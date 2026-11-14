@@ -1,0 +1,62 @@
+# Kykar, Zephyr Awakener: the trigger is independent of its source once on the stack. In response to it Bot2's Swords to Plowshares
+# exiles Kykar (Bot1 gains 3), and the trigger still resolves and exiles the Ornithopter, which returns at the beginning of the next
+# end step: the delayed ability does not depend on Kykar being on the battlefield.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Kykar, Zephyr Awakener
+Ornithopter
+Mox Emerald
+Plains x13
+
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kykar, Zephyr Awakener.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Kykar, Zephyr Awakener)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 23
+? Exile = Kykar, Zephyr Awakener
+Bot2.Pass
+Bot1.Pass
+? Exile = Kykar, Zephyr Awakener; Ornithopter
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+? Exile = Kykar, Zephyr Awakener; Ornithopter
+[T4 Bot2.Main1]
+
+[Expect]
+Stack.Count = 0
+Exile = Kykar, Zephyr Awakener
+Bot1.Life = 23
+Bot1.Battlefield.Ornithopter.Tapped = false

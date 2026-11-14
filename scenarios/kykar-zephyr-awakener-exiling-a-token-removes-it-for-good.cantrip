@@ -1,0 +1,49 @@
+# Kykar, Zephyr Awakener: Mox Emerald makes a Spirit token (the only legal mode: no other creature to exile), then Black Lotus
+# (a second noncreature spell) exiles that token with the first mode. A token that has left the battlefield ceases to exist
+# (CR 111.7), so nothing returns at the beginning of the end step and Bot1 is left with Kykar and the Moxen.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Kykar, Zephyr Awakener
+Mox Emerald
+Black Lotus
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kykar, Zephyr Awakener.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spirit Token.Power = 1
+Bot1.Hand.Black Lotus.Cast
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spirit Token = (absent)
+? Exile.Count = 0
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Kykar, Zephyr Awakener; Mox Emerald; Black Lotus
