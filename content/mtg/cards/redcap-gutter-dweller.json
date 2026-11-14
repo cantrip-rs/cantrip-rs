@@ -1,0 +1,11 @@
+{
+  "name": "Redcap Gutter-Dweller",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Goblin Warrior",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Menace\nWhen this creature enters, create two 1/1 black Rat creature tokens with \"This token can't block.\"\nAt the beginning of your upkeep, you may sacrifice another creature. If you do, put a +1/+1 counter on this creature and exile the top card of your library. You may play that card this turn.",
+  "keywords": [
+    "Menace"
+  ]
+}

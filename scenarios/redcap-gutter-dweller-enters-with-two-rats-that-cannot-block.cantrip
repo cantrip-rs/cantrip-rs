@@ -1,0 +1,37 @@
+# Redcap Gutter-Dweller: when it enters it creates exactly two 1/1 black Rat tokens that can't block, and it has menace.
+
+[Bot1 Deck]
+Redcap Gutter-Dweller
+Black Lotus
+Mountain x5
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Redcap Gutter-Dweller.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 4
+Bot1.Battlefield.Redcap Gutter-Dweller.Keywords = Menace
+Bot1.Battlefield = Mountain; Rat Token; Rat Token; Redcap Gutter-Dweller
+Bot1.Battlefield.Rat Token#1.Power = 1
+Bot1.Battlefield.Rat Token#2.Power = 1
+Bot1.Battlefield.Rat Token#1.Toughness = 1
+Bot1.Battlefield.Rat Token#2.Toughness = 1
+Bot1.Battlefield.Rat Token#1.Keywords = CantBlock
+Bot1.Battlefield.Rat Token#2.Keywords = CantBlock
+Bot1.Battlefield.Rat Token#1.Colors = Black

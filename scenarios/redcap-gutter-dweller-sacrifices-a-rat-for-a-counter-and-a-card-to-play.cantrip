@@ -1,0 +1,46 @@
+# Redcap Gutter-Dweller: at Bot1's upkeep it may sacrifice another creature (never itself). Sacrificing a Rat puts a +1/+1 counter on
+# it and exiles the top of the library, Mox Ruby, which Bot1 may then cast from exile this turn.
+
+[Bot1 Deck]
+Redcap Gutter-Dweller
+Black Lotus
+Mountain x5
+Mox Ruby
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Redcap Gutter-Dweller.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Redcap Gutter-Dweller)
+! Bot1.Choose(Rat Token; Rat Token)
+Bot1.Choose(Rat Token)
+? Bot1.Battlefield.Redcap Gutter-Dweller.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Redcap Gutter-Dweller.Power = 4
+? Bot1.Battlefield.Count = 3
+? Exile = Mox Ruby
+? Stack.Count = 0
+[T3 Bot1.Main1]
+Bot1.Exile.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Mox Ruby.Tapped = false
+Bot1.Battlefield.Count = 4

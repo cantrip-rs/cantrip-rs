@@ -1,0 +1,38 @@
+# Redcap Gutter-Dweller: the sacrifice is optional. Declining at the upkeep leaves both Rats, gives it no counter and exiles nothing: the
+# Mox Ruby on top of the library is drawn as usual.
+
+[Bot1 Deck]
+Redcap Gutter-Dweller
+Black Lotus
+Mountain x5
+Mox Ruby
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Redcap Gutter-Dweller.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[T3 Bot1.Main1]
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot1.Battlefield.Count = 4
+Bot1.Battlefield.Redcap Gutter-Dweller.Power = 3
+Bot1.Hand = Mountain; Mountain; Mountain; Mountain; Mox Ruby
