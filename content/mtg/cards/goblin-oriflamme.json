@@ -1,0 +1,6 @@
+{
+  "name": "Goblin Oriflamme",
+  "manaCost": "{1}{R}",
+  "type": "Enchantment",
+  "oracleText": "Attacking creatures you control get +1/+0."
+}
