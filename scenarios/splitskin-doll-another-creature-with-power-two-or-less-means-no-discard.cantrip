@@ -1,0 +1,36 @@
+# Splitskin Doll: "Then discard a card unless you control another creature with power 2 or less." Bot1 controls Gray Ogre, power
+# exactly 2, the boundary that still counts, so Bot1 draws Mox Ruby and discards nothing (no discard is asked, and the hand and graveyard counts show it).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Black Lotus
+Gray Ogre
+Splitskin Doll
+Island
+Island
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Gray Ogre.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Splitskin Doll.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+[T1 Bot1.End]
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Graveyard.Count = 1

@@ -1,0 +1,35 @@
+# Splitskin Doll, "When this creature enters, draw a card. Then discard a card unless you control another creature with power 2 or
+# less." (CR 121.2, 701.9). Alone on the battlefield (the Doll is itself a 2/1 but is not "another"): Bot1 draws Mox Ruby and must
+# discard a card of its hand, chosen freely (the drawn card is not forced), here Mox Ruby back out of the hand.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Splitskin Doll
+Island
+Island
+Island
+Island
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Splitskin Doll.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 5
+Bot1.Choose(Mox Ruby)
+[T1 Bot1.End]
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Graveyard.Count = 1
+Bot1.Graveyard.Mox Ruby.Colors.Count = 0

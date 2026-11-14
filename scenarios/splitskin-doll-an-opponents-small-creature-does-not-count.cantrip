@@ -1,0 +1,38 @@
+# Splitskin Doll: "another creature" you control. Bot2's Memnite (a 1/1) is on the battlefield but is not Bot1's, so the discard
+# is not waived: Bot1 draws Mox Ruby and discards it. Bot2 casts Memnite on turn 2, and the Doll is cast on turn 3.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Splitskin Doll
+Island
+Island
+Island
+Island
+Island
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Splitskin Doll.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mox Ruby)
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Graveyard.Count = 1
+Bot2.Battlefield.Memnite.Power = 1
