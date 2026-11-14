@@ -661,7 +661,7 @@ fn resolve_inner(cx: &mut Cx, summarize_terminal_mana: bool) -> R<Flow> {
                     copy: if item.way == WAY_BESTOW || item.way == WAY_PROTOTYPE { cx.s().obj(item.object).copy } else { None },
                     prepared: false,
                     chosen_color: None,
-                    chosen_subtype: None,
+                    chosen_subtype: None, chosen_subtype_pair: None,
                     chosen_player: None,
                     chosen_card: None,
                     chosen_option: None,

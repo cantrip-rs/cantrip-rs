@@ -1160,6 +1160,11 @@ impl GameState {
         self.obj(by.object).marks.choices.subtype(by)
     }
 
+    /// Two ordered subtypes chosen for this object by its linked text (CR 607.2d).
+    pub fn chosen_subtype_pair(&self, by: Linked) -> Option<[Subtype; 2]> {
+        self.obj(by.object).marks.choices.subtype_pair(by)
+    }
+
     /// The player chosen for `by`'s object, to `by` (`chosen_color`).
     pub fn chosen_player(&self, by: Linked) -> Option<PlayerId> {
         self.obj(by.object).marks.choices.player(by)
@@ -2411,6 +2416,24 @@ mod tests {
         fork.rollback(start);
         // At the start the real order was 0 1 2 3 4 5; each object stands where the one it replaced stood.
         assert_eq!(fork.zone(library), &[ids[3], ids[0], ids[4], ids[1], ids[2], ids[5]][..]);
+    }
+
+    #[test]
+    fn ordered_subtype_choices_survive_clone_undo_and_redo() {
+        let mut state = GameState::new(2, 1);
+        let text = CardId(4);
+        let id = state.push_obj(Obj::new(text, PlayerId(0), Zone::BATTLEFIELD));
+        let by = Linked { object: id, text, acquired: Acquired::OWN };
+        let mark = state.mark();
+        state.update_obj(id, |obj| obj.marks.choices = Choices::entered(text, Entered {
+            subtype_pair: Some([Subtype::Forest, Subtype::Island]), ..Default::default()
+        }));
+        let clone = state.clone_with_journal();
+        assert_eq!(clone.chosen_subtype_pair(by), Some([Subtype::Forest, Subtype::Island]));
+        let (undos, redos) = state.step_back(mark);
+        assert_eq!(state.chosen_subtype_pair(by), None);
+        state.step_forward(undos, redos);
+        assert_eq!(state.chosen_subtype_pair(by), Some([Subtype::Forest, Subtype::Island]));
     }
 
     #[test]

@@ -1455,6 +1455,10 @@ pub enum WordUse {
     Replaced,
     /// The word that replaces it ("... with another", CR 612.1).
     Replacing,
+    /// First of two ordered subtype choices. Append variants: observation encodes their ordinal.
+    FirstChosen,
+    /// Second of two ordered subtype choices.
+    SecondChosen,
 }
 
 /// What a choice of colors is for (CR 105.1), as far as the chooser needs to know to choose well.
@@ -1762,3 +1766,16 @@ pub enum Answer {
     Index(u8),
 }
 
+
+#[cfg(test)]
+mod word_use_tests {
+    use super::WordUse;
+    #[test]
+    fn subtype_choice_purpose_ordinals_remain_stable_for_observations() {
+        assert_eq!(WordUse::Chosen as u8, 0);
+        assert_eq!(WordUse::Replaced as u8, 1);
+        assert_eq!(WordUse::Replacing as u8, 2);
+        assert_eq!(WordUse::FirstChosen as u8, 3);
+        assert_eq!(WordUse::SecondChosen as u8, 4);
+    }
+}

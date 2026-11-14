@@ -237,6 +237,8 @@ pub const CHOSEN_KEPT: usize = 2;
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum Kept {
     Name(CardId),
+    /// Two ordered subtype choices made by one text as it entered (CR 607.2d).
+    SubtypePair([Subtype; 2]),
     Object(ObjectId),
     Player(PlayerId),
     /// On an emblem, no choice but what its text names: the object whose ability made it, as the object it was then (CR
@@ -282,6 +284,7 @@ pub struct Choices {
 pub struct Entered {
     pub color: Option<Color>,
     pub subtype: Option<Subtype>,
+    pub subtype_pair: Option<[Subtype; 2]>,
     pub player: Option<PlayerId>,
     pub card: Option<CardId>,
     pub option: Option<ChosenOption>,
@@ -326,7 +329,7 @@ impl ChoiceRecord for Choices {
             option: made.option,
             number: made.number,
             object: made.object,
-            kept: [made.card.map(|card| own(Kept::Name(card))), None],
+            kept: [made.card.map(|card| own(Kept::Name(card))), made.subtype_pair.map(|pair| own(Kept::SubtypePair(pair)))],
         }
     }
 
@@ -350,7 +353,11 @@ impl ChoiceRecord for Choices {
             Kept::Name(card) if Some(c.text) == self.by && c.acquired == Acquired::OWN => Some(card),
             _ => None,
         });
-        (self.by, Entered { color: self.color, subtype: self.subtype, player: self.player, card, option: self.option, number: self.number, object: self.object })
+        let subtype_pair = self.kept.iter().flatten().find_map(|c| match c.value {
+            Kept::SubtypePair(pair) if Some(c.text) == self.by && c.acquired == Acquired::OWN => Some(pair),
+            _ => None,
+        });
+        (self.by, Entered { color: self.color, subtype: self.subtype, subtype_pair, player: self.player, card, option: self.option, number: self.number, object: self.object })
     }
 
     fn objects_raw(&self) -> [Option<ObjectId>; 1 + CHOSEN_KEPT] {
@@ -390,6 +397,11 @@ impl Choices {
     /// The creature or land type chosen, to `by`.
     pub fn subtype(&self, by: Linked) -> Option<Subtype> {
         self.entered_to(by)?.subtype
+    }
+
+    /// Two ordered subtypes chosen by the linked text (CR 607.2d).
+    pub fn subtype_pair(&self, by: Linked) -> Option<[Subtype; 2]> {
+        self.kept_to(by, |k| match k { Kept::SubtypePair(pair) => Some(pair), _ => None })
     }
 
     /// The player chosen, to `by`: as the permanent entered, or by `by` as it resolved or as the permanent transformed.
@@ -3341,6 +3353,25 @@ mod tests {
         let by_copy = Chosen { value: CardId(6), text: CardId(4), acquired: copy };
         assert_eq!(by_copy.to(by(CardId(4), copy)), Some(CardId(6)));
         assert_eq!(by_copy.to(by(CardId(4), Acquired::OWN)), None);
+    }
+
+    #[test]
+    fn ordered_subtypes_are_typed_linked_and_do_not_enlarge_choices() {
+        assert_eq!(std::mem::size_of::<Kept>(), 8);
+        assert_eq!(std::mem::size_of::<Choices>(), 72);
+        assert_eq!(std::mem::size_of::<Obj>(), 880);
+        let text = CardId(4);
+        let own = Linked { object: ObjectId(2), text, acquired: Acquired::OWN };
+        let pair = [Subtype::Forest, Subtype::Island];
+        let choices = Choices::entered(text, Entered { subtype_pair: Some(pair), card: Some(CardId(9)), ..Default::default() });
+        assert_eq!(choices.subtype_pair(own), Some(pair));
+        assert_eq!(choices.subtype(own), None);
+        assert_eq!(choices.number(own), None);
+        assert_eq!(choices.card(own), Some(CardId(9)));
+        assert_eq!(choices.entered_raw().1.subtype_pair, Some(pair));
+        assert_eq!(choices.subtype_pair(Linked { text: CardId(5), ..own }), None);
+        let copy = Acquired { by: AcquiredBy::Copy, stamp: 7, part: 0 };
+        assert_eq!(choices.subtype_pair(Linked { acquired: copy, ..own }), None);
     }
 
     /// Each ability that chose a name keeps its own (CR 607.2d): a second ability's name doesn't take the first's place, the

@@ -1373,7 +1373,13 @@ impl<'a> Projector<'a> {
             choices.push(ChoiceView { key: "color".into(), value: color.name().to_string(), ..Default::default() });
         }
         if let Some(sub) = s.chosen_subtype(text) {
-            choices.push(ChoiceView { key: "creature type".into(), value: sub.name().to_string(), ..Default::default() });
+            let key = crate::text::subtype_kind(sub);
+            choices.push(ChoiceView { key: key.into(), value: sub.name().to_string(), ..Default::default() });
+        }
+        if let Some([first, second]) = s.chosen_subtype_pair(text) {
+            for (ordinal, sub) in [("first", first), ("second", second)] {
+                choices.push(ChoiceView { key: format!("{ordinal} {}", crate::text::subtype_kind(sub)), value: sub.name().to_string(), ..Default::default() });
+            }
         }
         if let Some(p) = s.chosen_player(text) {
             choices.push(ChoiceView { key: "player".into(), value: seat(p).to_string(), ..Default::default() });

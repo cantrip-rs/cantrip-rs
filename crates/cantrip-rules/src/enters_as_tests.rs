@@ -387,7 +387,7 @@ fn an_aura_with_no_enchant_ability_may_enchant_anything() {
         copy: None,
         prepared: false,
         chosen_color: None,
-        chosen_subtype: None,
+        chosen_subtype: None, chosen_subtype_pair: None,
         chosen_player: None,
         chosen_card: None,
         chosen_option: None,

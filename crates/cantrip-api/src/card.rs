@@ -80,6 +80,8 @@ pub struct Entering {
     /// The color or type chosen as it enters (CR 614.12), kept on the permanent.
     pub chosen_color: Option<Color>,
     pub chosen_subtype: Option<Subtype>,
+    /// Two ordered subtypes chosen as it enters (CR 614.12a, 607.2d).
+    pub chosen_subtype_pair: Option<[Subtype; 2]>,
     /// The player chosen as it enters (CR 614.12a): True-Name Nemesis.
     pub chosen_player: Option<PlayerId>,
     /// The card name chosen as it enters (CR 614.12a).

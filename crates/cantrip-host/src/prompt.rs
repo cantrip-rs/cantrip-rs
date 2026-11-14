@@ -1281,7 +1281,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
             at_most: 1,
             heading: subtype_heading(game.name(*source), choices, *purpose),
             detail: match purpose {
-                WordUse::Chosen => String::new(),
+                WordUse::Chosen | WordUse::FirstChosen | WordUse::SecondChosen => String::new(),
                 WordUse::Replaced => "Every instance of it in the target's text is replaced".into(),
                 WordUse::Replacing => "It replaces every instance of the first in the target's text".into(),
             },
@@ -2433,9 +2433,15 @@ fn options_heading(game: &Game, modes: &[Label]) -> Option<String> {
 /// bots read it by), and for a word of a text change (CR 612.1), after the spell's name, which word it is - the one replaced, or the one replacing it -
 /// and its kind, a creature type or a basic land type.
 fn subtype_heading(source: &str, choices: &[Subtype], purpose: WordUse) -> String {
-    let kind = if choices.first().is_some_and(|s| s.is_creature_type()) { "creature type" } else { "basic land type" };
+    let kind = if !choices.is_empty() && choices.iter().all(|s| matches!(s, Subtype::Plains | Subtype::Island | Subtype::Swamp | Subtype::Mountain | Subtype::Forest)) {
+        "basic land type"
+    } else {
+        choices.first().copied().map_or("subtype", crate::text::subtype_kind)
+    };
     match purpose {
         WordUse::Chosen => format!("Choose a {kind}"),
+        WordUse::FirstChosen => format!("Choose the first {kind}"),
+        WordUse::SecondChosen => format!("Choose the second {kind}"),
         WordUse::Replaced => format!("{source}: choose the {kind} to replace"),
         WordUse::Replacing => format!("{source}: choose the {kind} that replaces it"),
     }

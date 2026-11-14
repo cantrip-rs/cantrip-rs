@@ -538,6 +538,10 @@ only the candidates the host's verdict on those picked says may be added.
   `Game::entering_chars(&Entering)`, the same `as_it_would_exist` over the entry as it stands. The copiable values a copy
   effect gave a land whose subtype is set, other than abilities, stay: CR 305.7 lists copiable effects among the sources of
   the abilities it loses, against the abilities other effects granted, which it keeps.
+- **Ordered subtype choices (CR 614.12a, 607.2d)**: an entering permanent can choose a typed pair of subtypes.
+  `Entering::chosen_subtype_pair` is kept in the existing linked `Choices` record and read through
+  `GameState::chosen_subtype_pair`; the pair is not a copiable value, and each new object chooses for itself. The host
+  presents both values in order and labels their subtype families. A single chosen subtype uses its existing record.
 - **The order of a permanent's entering replacements (CR 616.1c-e)**: a replacement that has it enter as a copy applies
   first, then one that has it enter back face up (daybound at night, judged on the copy, `ops::enters_by_daybound`), then
   the rest. A card's own copy replacement is its typed `CardDef::enters_as_copy` (built with

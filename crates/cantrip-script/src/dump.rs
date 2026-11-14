@@ -893,6 +893,10 @@ impl StateDump {
                     if let Some(subtype) = s.chosen_subtype(own) {
                         d.set(format!("{key}.ChosenSubtype"), subtype.name());
                     }
+                    if let Some([first, second]) = s.chosen_subtype_pair(own) {
+                        d.set(format!("{key}.FirstChosenSubtype"), first.name());
+                        d.set(format!("{key}.SecondChosenSubtype"), second.name());
+                    }
                     for kind in CounterKind::ALL {
                         let n = obj.counters(kind);
                         if n != 0 {
@@ -1015,7 +1019,7 @@ const PERMANENT_KEYS: &[&str] = &[
     "Tapped", "Toxic", "Riot", "FaceDown", "FaceDownName", "Token", "Prototyped", "Transformed", "ManaValue", "X", "Doors", "Prepared", "AttachedTo", "Monstrous",
     "Solved", "Suspected", "Saddled", "Exerted", "GoadedBy", "MustAttack", "CantBeBlocked", "BlockRestriction", "DoesntUntap", "LastingRules", "ChosenPlayer", "ChosenOption", "ChosenNumber", "ChosenObject",
     "ChosenModes", "ChosenName", "ClassLevel", "Types", "Supertypes", "Subtypes", "Colors", "Keywords", "HexproofFrom",
-    "ProtectionFrom", "ProtectionFromSubtypes", "ProtectionFromManaValue", "ProtectionFromColoredSpells", "Power", "Toughness", "Damage", "SummoningSick", "ChosenColor", "ChosenSubtype",
+    "ProtectionFrom", "ProtectionFromSubtypes", "ProtectionFromManaValue", "ProtectionFromColoredSpells", "Power", "Toughness", "Damage", "SummoningSick", "ChosenColor", "ChosenSubtype", "FirstChosenSubtype", "SecondChosenSubtype",
 ];
 
 /// The keys the dump writes of a card in a hand, a graveyard, a library, a sideboard or exile, after `BotN.<zone>.<name>.`,
