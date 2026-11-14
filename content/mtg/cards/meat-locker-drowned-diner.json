@@ -1,0 +1,18 @@
+{
+  "name": "Meat Locker // Drowned Diner",
+  "oracleText": "",
+  "halves": [
+    {
+      "name": "Meat Locker",
+      "manaCost": "{2}{U}",
+      "type": "Enchantment — Room",
+      "oracleText": "When you unlock this door, tap up to one target creature and put two stun counters on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)\n(You may cast either half. That door unlocks on the battlefield. As a sorcery, you may pay the mana cost of a locked door to unlock it.)"
+    },
+    {
+      "name": "Drowned Diner",
+      "manaCost": "{3}{U}{U}",
+      "type": "Enchantment — Room",
+      "oracleText": "When you unlock this door, draw three cards, then discard a card.\n(You may cast either half. That door unlocks on the battlefield. As a sorcery, you may pay the mana cost of a locked door to unlock it.)"
+    }
+  ]
+}

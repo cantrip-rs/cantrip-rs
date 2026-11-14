@@ -1,0 +1,37 @@
+# Meat Locker's "up to one target creature": choosing no target is allowed (CR 601.2c), so the door still unlocks and the
+# ability does nothing - the Ornithopter Bot2 controls is neither tapped nor stunned and the Room is on the battlefield.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Meat Locker // Drowned Diner
+Island x16
+
+[Bot2 Deck]
+Ornithopter x4
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Meat Locker // Drowned Diner.Cast(Ability: Meat Locker)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = false
+Bot2.Battlefield.Ornithopter.Counters.Stun = (absent)
+Bot1.Battlefield.Meat Locker.Doors = Meat Locker
