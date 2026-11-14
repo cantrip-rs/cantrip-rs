@@ -1,0 +1,6 @@
+{
+  "name": "Betrayer's Bargain",
+  "manaCost": "{1}{R}",
+  "type": "Instant",
+  "oracleText": "As an additional cost to cast this spell, sacrifice a creature or enchantment or pay {2}.\nBetrayer's Bargain deals 5 damage to target creature. If that creature would die this turn, exile it instead."
+}
