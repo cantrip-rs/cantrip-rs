@@ -1,0 +1,38 @@
+# Sure Strike targets a creature only (CR 115.1): a Mox Ruby and a player are refused. Bot1 then targets its own Ornithopter
+# and, holding priority, Lightning Bolts it. With its only target gone, Sure Strike does not resolve (CR 608.2b): it goes to
+# the graveyard and nothing gets +3/+0 or first strike.
+
+[Bot1 Deck]
+Mox Ruby x4
+Ornithopter
+Sure Strike
+Lightning Bolt
+Mountain x14
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+! Bot1.Hand.Sure Strike.Cast(Bot1.Battlefield.Mox Ruby#4)
+! Bot1.Hand.Sure Strike.Cast(Bot2)
+Bot1.Hand.Sure Strike.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Sure Strike; Ornithopter; Lightning Bolt
+Stack.Count = 0
