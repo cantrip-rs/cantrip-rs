@@ -1,0 +1,38 @@
+# Grievous Wound: a 0/2 Ornithopter attacking the enchanted Bot2 on turn 3 deals no damage (CR 120.3, 510.1a: a creature with 0
+# power assigns none), so Bot2 is not "dealt damage" and loses nothing (20). The Memnite attacking beside it (1 damage, 19 left, then
+# half of 19 rounded up is 10) is the positive control: Bot2 ends at 9.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Ornithopter
+Memnite
+Grievous Wound
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Grievous Wound.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+[T5 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 9

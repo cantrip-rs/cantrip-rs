@@ -1489,7 +1489,7 @@ pub fn lose_half_their_life(g: &mut dyn Game, player: PlayerId) {
 }
 
 /// "They lose half their life, rounded up" of a trigger whose subject is the damaged player (see `lose_half_their_life`):
-/// Unstoppable Slasher's whole ability.
+/// Unstoppable Slasher's whole ability, and Grievous Wound's.
 pub fn subject_player_loses_half_their_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Target::Player(player) = item.subject {
         lose_half_their_life(g, player);

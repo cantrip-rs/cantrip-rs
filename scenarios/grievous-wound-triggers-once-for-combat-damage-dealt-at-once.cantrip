@@ -1,0 +1,34 @@
+# Grievous Wound: two Memnites (1/1) attack the enchanted Bot2 together on turn 3. The combat damage is dealt at once (2 in all, 18
+# left), and the ability triggers once: they lose half of 18 (9), leaving 9. Triggering twice would leave 4 (CR 603.2c; ruling
+# 2024-09-20 "triggers only once").
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Memnite
+Memnite
+Grievous Wound
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Grievous Wound.Cast(Bot2)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite#1 > Bot2; Memnite#2 > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 9

@@ -1,0 +1,6 @@
+{
+  "name": "Grievous Wound",
+  "manaCost": "{3}{B}{B}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant player\nEnchanted player can't gain life.\nWhenever enchanted player is dealt damage, they lose half their life, rounded up."
+}

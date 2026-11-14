@@ -1,0 +1,48 @@
+# Grievous Wound: "Enchanted player can't gain life." (CR 119.7). Bot1 enchants Bot2. On turn 3 a Healing Salve gaining life for
+# Bot2 resolves and does nothing (still 20), while the same mode for Bot1, who is not enchanted, gains 3 (23).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Pearl
+Mox Pearl
+Grievous Wound
+Healing Salve
+Healing Salve
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Grievous Wound.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 20

@@ -1,0 +1,47 @@
+# Grievous Wound: "Whenever enchanted player is dealt damage, they lose half their life, rounded up." (CR 120.2, 603.2). Bot1 enchants
+# Bot2 on turn 1. On turn 3 a Lightning Bolt at Bot1 itself (not enchanted) changes only its life (17), the control. A second
+# Bolt at Bot2 (not combat damage) leaves it at 17, then the trigger resolves after the damage (ruling 2024-09-20): half of 17
+# rounded up is 9, leaving 8.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Ruby
+Grievous Wound
+Lightning Bolt
+Lightning Bolt
+Swamp x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Grievous Wound.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+? Bot2.Life = 20
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 8
