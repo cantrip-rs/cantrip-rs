@@ -1,0 +1,24 @@
+# A red instant is not an enchanted creature, so its damage is not prevented (CR 615.1).
+[Bot1 Deck]
+Black Lotus
+Wall of Putrid Flesh
+Swamp x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Wall of Putrid Flesh.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Wall of Putrid Flesh)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Wall of Putrid Flesh.Damage = 3

@@ -1,0 +1,22 @@
+# Three blue mana cannot pay the black symbol; adding black makes the same cast legal (CR 202.1, 601.2h).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Wall of Putrid Flesh
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+? Bot1.Mana = {U}{U}{U}
+! Bot1.Hand.Wall of Putrid Flesh.Cast(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wall of Putrid Flesh.Cast
+? Bot1.Mana = {U}
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Wall of Putrid Flesh.Tapped = false
+Bot1.Graveyard = Black Lotus

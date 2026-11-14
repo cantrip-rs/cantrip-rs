@@ -1,0 +1,31 @@
+# The Wall also prevents damage from its controller's enchanted creature, after its sacrifice (CR 615.1, 113.7a).
+[Bot1 Deck]
+Black Lotus
+Wall of Putrid Flesh
+Mox Ruby
+Mox Sapphire
+Fanatical Firebrand
+Flight
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Wall of Putrid Flesh.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flight.Cast(Bot1.Battlefield.Fanatical Firebrand)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Fanatical Firebrand.Activate(Bot1.Battlefield.Wall of Putrid Flesh)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Wall of Putrid Flesh.Damage = 0

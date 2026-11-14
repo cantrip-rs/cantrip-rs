@@ -1,0 +1,33 @@
+# Defender forbids attacking and protection from white forbids Swords to Plowshares; Ornithopter is a legal control (CR 702.3, 702.16).
+[Bot1 Deck]
+Black Lotus
+Wall of Putrid Flesh
+Ornithopter
+Swamp x20
+
+[Bot2 Deck]
+Mox Pearl
+Ornithopter
+Swords to Plowshares
+Plains x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Wall of Putrid Flesh.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+! Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Wall of Putrid Flesh)
+Bot2.Hand.Swords to Plowshares.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Wall of Putrid Flesh > Bot2)
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Wall of Putrid Flesh.Damage = 0
+Exile = Ornithopter

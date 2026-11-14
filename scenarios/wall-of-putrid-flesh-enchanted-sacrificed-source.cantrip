@@ -1,0 +1,35 @@
+# An enchanted creature sacrificed to deal damage uses its last-known enchanted state (CR 113.7a, 615.1).
+[Bot1 Deck]
+Black Lotus
+Wall of Putrid Flesh
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Sapphire
+Fanatical Firebrand
+Flight
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Wall of Putrid Flesh.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Fanatical Firebrand.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Flight.Cast(Bot2.Battlefield.Fanatical Firebrand)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Fanatical Firebrand.Keywords = Flying; Haste
+Bot2.Battlefield.Fanatical Firebrand.Activate(Bot1.Battlefield.Wall of Putrid Flesh)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Wall of Putrid Flesh.Damage = 0

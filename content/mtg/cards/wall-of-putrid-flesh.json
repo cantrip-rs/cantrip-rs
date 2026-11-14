@@ -1,0 +1,11 @@
+{
+  "name": "Wall of Putrid Flesh",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Wall",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Defender (This creature can't attack.)\nProtection from white\nPrevent all damage that would be dealt to this creature by enchanted creatures.",
+  "keywords": [
+    "Defender"
+  ]
+}
