@@ -1,0 +1,44 @@
+# Grand Entryway // Elegant Rotunda: "up to two target creatures". Bot1 controls three creatures (Memnite, Ornithopter and the
+# Glimmer). Choosing all three is refused; choosing none is allowed, and no creature gets a counter.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Memnite
+Ornithopter
+Grand Entryway // Elegant Rotunda
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grand Entryway // Elegant Rotunda.Cast(Ability: Grand Entryway)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Grand Entryway.Activate(Ability: right door)
+! Bot1.Target(Memnite; Ornithopter; Glimmer Token)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Grand Entryway // Elegant Rotunda.Doors = Grand Entryway; Elegant Rotunda
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Glimmer Token.Counters.PlusOnePlusOne = (absent)

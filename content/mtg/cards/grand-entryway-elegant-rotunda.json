@@ -1,0 +1,18 @@
+{
+  "name": "Grand Entryway // Elegant Rotunda",
+  "oracleText": "",
+  "halves": [
+    {
+      "name": "Grand Entryway",
+      "manaCost": "{1}{W}",
+      "type": "Enchantment — Room",
+      "oracleText": "When you unlock this door, create a 1/1 white Glimmer enchantment creature token.\n(You may cast either half. That door unlocks on the battlefield. As a sorcery, you may pay the mana cost of a locked door to unlock it.)"
+    },
+    {
+      "name": "Elegant Rotunda",
+      "manaCost": "{2}{W}",
+      "type": "Enchantment — Room",
+      "oracleText": "When you unlock this door, put a +1/+1 counter on each of up to two target creatures.\n(You may cast either half. That door unlocks on the battlefield. As a sorcery, you may pay the mana cost of a locked door to unlock it.)"
+    }
+  ]
+}
