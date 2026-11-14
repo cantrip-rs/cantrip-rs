@@ -169,3 +169,23 @@ lasting reveal would give.
 **Cards and cases it covers.** Every activated ability activated from a hand or a library, mana abilities included:
 cycling and typecycling, channel, ninjutsu, transmute, the Spirit Guides, Urban Retreat and the other "from your hand"
 abilities. The lasting reveals of behold, splice and miracle (also CR 701.20a) are not covered.
+
+### RX-8: Game of Chaos stops offering "flip again" once the doubled stake would take a life total past 2^24
+
+| Rule | Category | Decided by | Date |
+| --- | --- | --- | --- |
+| CR 119.3, 705.1; Game of Chaos's text | beyond practical scale | jschibel | 2026-11-14 |
+
+**What the rules say.** Game of Chaos goes on for as long as each flip's winner chooses to flip again, and the life
+stakes double with each flip, with no limit: after 31 flips a stake no longer fits in 32 bits.
+
+**What the engine does instead, and why.** After each flip, the winner is asked whether to flip again only while the
+next, doubled stake - gained or lost by either player - would leave both players' life totals within 2^24 (16,777,216)
+of zero; otherwise the spell ends as if the winner had stopped. Every flip that happens is exact. The bound is reached
+only after some 23 flips from 20 life, and it keeps each total far inside the engine's 32-bit life totals and life
+changes with room for what may follow: the difference of two totals (an exchange of life totals, Mirror Universe), and
+several gain or loss doublers (Boon Reflection, Bloodletter of Aclazotz) applied to a stake. The bound is computed in the card's own file
+(`game_of_chaos.rs`, `LIFE_BOUND`); nothing shared is widened or changed for it.
+
+**Cards and cases it covers.** Game of Chaos only. A later card whose own doubling stakes can push life past 32 bits
+within a game may cite this decision.

@@ -1,0 +1,27 @@
+# Boon Reflection replaces the winner's gain independently of the simultaneous loss (CR 614.1a, 101.4).
+[Bot1 Deck]
+Black Lotus x3
+Boon Reflection
+Game of Chaos
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Dice]
+1
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Boon Reflection.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Game of Chaos.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+? Bot2.Life = 19
+Bot1.Decline
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 19
