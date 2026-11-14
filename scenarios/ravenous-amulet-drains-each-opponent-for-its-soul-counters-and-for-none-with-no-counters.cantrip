@@ -1,0 +1,65 @@
+# Ravenous Amulet {4}, {T}, Sacrifice this artifact: "Each opponent loses life equal to the number of soul counters on this
+# artifact." The Amulet is gone when the ability resolves, so the counters are read as it last had them (CR 608.2h).
+# Turn 1: Bot1 sacrifices a Memnite for a soul counter (Amulet at 1). Turn 3: the Amulet is untapped again; Bot1 sacrifices a
+# second Memnite (2 counters), and on turn 5 pays exactly {4} (four Moxen, Sapphire stays untapped) and sacrifices it: Bot2 loses 2.
+# Bot2's life is 20 - 2 = 18; the Amulet is in the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Ravenous Amulet
+Memnite
+Memnite
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ravenous Amulet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Ravenous Amulet.Activate(Ability: Draw a card)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ravenous Amulet.Counters.Soul = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Ravenous Amulet.Activate(Ability: Draw a card)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ravenous Amulet.Counters.Soul = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Ravenous Amulet.Activate(Ability: Each opponent loses)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 20
+Bot1.Graveyard = Ravenous Amulet; Memnite; Memnite
+Bot1.Battlefield.Mox Sapphire.Tapped = false

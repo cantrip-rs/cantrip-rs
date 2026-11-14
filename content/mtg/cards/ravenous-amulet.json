@@ -1,0 +1,6 @@
+{
+  "name": "Ravenous Amulet",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "{1}, {T}, Sacrifice a creature: Draw a card and put a soul counter on this artifact. Activate only as a sorcery.\n{4}, {T}, Sacrifice this artifact: Each opponent loses life equal to the number of soul counters on this artifact."
+}
