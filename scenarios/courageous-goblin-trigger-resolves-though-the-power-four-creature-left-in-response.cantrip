@@ -1,0 +1,58 @@
+# Courageous Goblin: "...while you control a creature with power 4 or greater" is part of the trigger event, checked as the Goblin attacks and
+# not again on resolution (no intervening "if", CR 603.4). On turn 3 Bot2 kills the Sower of Chaos with Lightning Bolt in response to the
+# trigger: it still resolves, a 3/2 Goblin with menace.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby x3
+Courageous Goblin
+Sower of Chaos
+Mountain x12
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Courageous Goblin.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Sower of Chaos.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Courageous Goblin > Bot2)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Sower of Chaos)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Sower of Chaos = (absent)
+Bot1.Battlefield.Courageous Goblin.Power = 3
+Bot1.Battlefield.Courageous Goblin.Toughness = 2
+Bot1.Battlefield.Courageous Goblin.Keywords = Menace

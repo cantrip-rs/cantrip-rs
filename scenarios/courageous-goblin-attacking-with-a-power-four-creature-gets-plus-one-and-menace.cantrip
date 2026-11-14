@@ -1,0 +1,70 @@
+# Courageous Goblin, a 2/2: "Whenever this creature attacks while you control a creature with power 4 or greater, it gets +1/+0 and gains
+# menace until end of turn." Turn 3: Bot1 attacks with the Goblin while Sower of Chaos (4/3) stays home: a 3/2 with menace. Bot2's Lightning
+# Bolt kills the Sower on turn 4; on turn 5 the Goblin attacks with no power-4 creature under Bot1's control and is a plain 2/2 (the turn-3
+# bonus ended, and no trigger).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby x3
+Courageous Goblin
+Sower of Chaos
+Mountain x12
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Courageous Goblin.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Sower of Chaos.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Courageous Goblin > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Courageous Goblin.Power = 3
+? Bot1.Battlefield.Courageous Goblin.Toughness = 2
+? Bot1.Battlefield.Courageous Goblin.Keywords = Menace
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Sower of Chaos)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Sower of Chaos = (absent)
+? Bot1.Battlefield.Courageous Goblin.Power = 2
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Courageous Goblin > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Courageous Goblin.Power = 2
+Bot1.Battlefield.Courageous Goblin.Keywords = (absent)
+Bot2.Life = 15
