@@ -1,0 +1,52 @@
+# A merged token dies while Leyline exiles its card component: the exiled component is not in a graveyard (CR 730.3e).
+[Bot1 Deck]
+Leyline of the Void
+Krovikan Vampire
+Black Lotus
+Mox Jet
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Ornithopter
+Black Lotus x2
+Mox Pearl x2
+Cubwarden x2
+Island x20
+[Actions]
+Bot1.Accept
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Krovikan Vampire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Hand.Cubwarden#1.Cast(Ornithopter; Ability: Mutate)
+Bot2.Pass
+Bot2.Modes(2)
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Cubwarden.Cast(Cat Token#1; Ability: Mutate)
+Bot2.Pass
+Bot2.Modes(2)
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Krovikan Vampire > Bot2)
+Bot2.Block(Cat Token#1 > Krovikan Vampire)
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Cubwarden = (absent)
+Bot2.Exile.Cubwarden.Power = 3

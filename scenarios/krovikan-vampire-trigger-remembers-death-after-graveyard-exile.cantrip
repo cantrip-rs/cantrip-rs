@@ -1,0 +1,47 @@
+# A graveyard card exiled before the end step cannot return, but the historical death still triggers (CR 603.4, 400.7).
+[Bot1 Deck]
+Krovikan Vampire
+Black Lotus
+Mox Jet
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Grizzly Bears
+Forest
+Black Lotus
+Tormod's Crypt
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Krovikan Vampire.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Tormod's Crypt.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Krovikan Vampire > Bot2)
+Bot2.Block(Grizzly Bears > Krovikan Vampire)
+[T3 Bot1.Main2]
+Bot1.Pass
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot2)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Grizzly Bears = (absent)
+Exile = Black Lotus; Grizzly Bears; Tormod's Crypt
+Bot1.Battlefield.Krovikan Vampire.Power = 3

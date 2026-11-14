@@ -1,0 +1,74 @@
+# Multiple returned cards are sacrificed when their source leaves (CR 603.7c, 701.21a).
+[Bot1 Deck]
+Krovikan Vampire
+Black Lotus
+Mox Jet
+Mox Pearl
+Forest
+Hard-Hitting Question
+Mox Ruby
+Shock
+Island x20
+[Bot2 Deck]
+Grizzly Bears
+Forest
+Black Lotus x2
+Wall of Bone
+Mox Emerald
+Go for the Throat
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Krovikan Vampire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Wall of Bone.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Hard-Hitting Question.Cast
+Bot1.Target(Krovikan Vampire)
+Bot1.Target(Wall of Bone)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Wall of Bone.Damage = 3
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Krovikan Vampire > Bot2)
+Bot2.Block(Grizzly Bears > Krovikan Vampire)
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Wall of Bone)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+? Bot1.Battlefield.Wall of Bone.Toughness = 4
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Go for the Throat.Cast(Bot1.Battlefield.Krovikan Vampire)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Grizzly Bears = (absent)
+Bot1.Battlefield.Wall of Bone = (absent)
+Bot2.Graveyard.Grizzly Bears.Power = 2
+Bot2.Graveyard.Wall of Bone.Toughness = 4
