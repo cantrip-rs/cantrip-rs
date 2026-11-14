@@ -1,0 +1,55 @@
+# Cultivator's Caravan, Crew 3: one creature of power 3 or more crews it alone, and a creature that came under its controller's
+# control this turn may crew it (crewing is not a {T} cost, CR 702.122a, 302.6). It is an artifact, not a creature, until crewed,
+# and a 5/5 artifact creature until end of turn after (CR 702.122b). Bot1 casts it turn 1 (Black Lotus, two Moxen). On turn 3
+# Bot1 casts Su-Chi (4/4) and crews with it at once; the Caravan attacks for 5. On turn 5 it is an artifact alone again.
+
+[Bot1 Deck]
+Island
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Cultivator's Caravan
+Su-Chi
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cultivator's Caravan.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cultivator's Caravan.Types = Artifact
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Su-Chi.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Cultivator's Caravan.Activate(Ability: Crew)
+Bot1.Choose(Su-Chi)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Su-Chi.Tapped = true
+? Bot1.Battlefield.Cultivator's Caravan.Types = Artifact; Creature
+? Bot1.Battlefield.Cultivator's Caravan.Power = 5
+Bot1.Attack(Cultivator's Caravan > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 15
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Cultivator's Caravan.Types = Artifact
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Cultivator's Caravan.Types = Artifact
