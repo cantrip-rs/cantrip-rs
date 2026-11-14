@@ -1,0 +1,38 @@
+# Flickerwisp returns the enchantment as a new object; it chooses a new ordered pair (CR 400.7, 614.12a).
+[Bot1 Deck]
+Black Lotus x2
+Illusionary Terrain
+Flickerwisp
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Illusionary Terrain.Cast
+Bot1.Modes(Forest)
+Bot1.Modes(Island)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Illusionary Terrain.FirstChosenSubtype = Forest
+? Bot1.Battlefield.Illusionary Terrain.SecondChosenSubtype = Island
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Flickerwisp.Cast
+Bot1.Target(Illusionary Terrain)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+? Exile = Illusionary Terrain
+[Bot1.End]
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Mountain)
+Bot1.Modes(Forest)
+[T2 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Illusionary Terrain.FirstChosenSubtype = Mountain
+Bot1.Battlefield.Illusionary Terrain.SecondChosenSubtype = Forest
+Exile.Count = 0

@@ -1,0 +1,80 @@
+# Choosing Forest then Island changes both players' basic Forests, including snow lands, but not a nonbasic Forest; upkeep is paid then declined (CR 305.7, 702.24a).
+[Bot1 Deck]
+Snow-Covered Forest
+Illusionary Terrain
+Mox Sapphire
+Gleemox
+Mox Pearl
+Forest
+Island
+Island x20
+[Bot2 Deck]
+Snow-Covered Forest
+Tropical Island
+Island x20
+[Actions]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Hand.Illusionary Terrain.Cast
+? Bot1.Mana =
+Bot1.Modes(Forest)
+! Bot1.Modes(Forest)
+Bot1.Modes(Island)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Illusionary Terrain.FirstChosenSubtype = Forest
+? Bot1.Battlefield.Illusionary Terrain.SecondChosenSubtype = Island
+? Bot1.Battlefield.Snow-Covered Forest.Subtypes = Island
+? Bot1.Battlefield.Snow-Covered Forest.Supertypes = Basic; Snow
+Bot1.Battlefield.Snow-Covered Forest.Activate
+? Bot1.Mana = {U}
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Forest.Play
+? Bot2.Battlefield.Snow-Covered Forest.Subtypes = Island
+? Bot2.Battlefield.Snow-Covered Forest.Supertypes = Basic; Snow
+Bot2.Battlefield.Snow-Covered Forest.Activate
+? Bot2.Mana = {U}
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.PayCost(X: 1)
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Illusionary Terrain.Counters.Age = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+? Bot1.Battlefield.Forest.Subtypes = Island
+? Bot1.Battlefield.Forest.Supertypes = Basic
+[T4 Bot2.Main1]
+Bot2.Hand.Tropical Island.Play
+? Bot2.Battlefield.Tropical Island.Subtypes = Forest; Island
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+! Bot1.PayCost
+Bot1.Battlefield.Forest.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Illusionary Terrain.Counters.Age = 2
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Graveyard = Illusionary Terrain
+Bot1.Battlefield.Snow-Covered Forest.Subtypes = Forest
+Bot1.Battlefield.Snow-Covered Forest.Supertypes = Basic; Snow
+Bot2.Battlefield.Snow-Covered Forest.Subtypes = Forest

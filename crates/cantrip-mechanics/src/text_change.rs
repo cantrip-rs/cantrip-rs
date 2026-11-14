@@ -30,9 +30,15 @@ pub fn color_word(g: &mut dyn Game, player: PlayerId, source: ObjectId) -> Resul
 
 /// "One basic land type with another" (CR 612.2): the land type, then a different one it becomes, chosen by `player`.
 pub fn basic_land_type(g: &mut dyn Game, player: PlayerId, source: ObjectId) -> Result<(Word, Word), Suspend> {
-    let from = one_subtype(g, player, source, BASIC_LAND_TYPES.to_vec(), WordUse::Replaced)?;
-    let to = one_subtype(g, player, source, BASIC_LAND_TYPES.into_iter().filter(|&s| s != from).collect(), WordUse::Replacing)?;
+    let (from, to) = two_basic_land_types(g, player, source, WordUse::Replaced, WordUse::Replacing)?;
     Ok((Word::Subtype(from), Word::Subtype(to)))
+}
+
+/// A basic land type, then a different one, chosen by `player`, each asked as its `purpose` says.
+pub fn two_basic_land_types(g: &mut dyn Game, player: PlayerId, source: ObjectId, first: WordUse, second: WordUse) -> Result<(Subtype, Subtype), Suspend> {
+    let one = one_subtype(g, player, source, BASIC_LAND_TYPES.to_vec(), first)?;
+    let other = one_subtype(g, player, source, BASIC_LAND_TYPES.into_iter().filter(|&s| s != one).collect(), second)?;
+    Ok((one, other))
 }
 
 /// One color of `choices`.

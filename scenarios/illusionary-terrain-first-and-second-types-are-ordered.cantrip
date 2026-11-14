@@ -1,0 +1,28 @@
+# Choosing Island then Forest converts basic Islands, not Forests (CR 305.7, 607.2d).
+[Bot1 Deck]
+Island
+Forest
+Mox Sapphire x2
+Illusionary Terrain
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Illusionary Terrain.Cast
+Bot1.Modes(Island)
+! Bot1.Modes(Island)
+Bot1.Modes(Forest)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Illusionary Terrain.FirstChosenSubtype = Island
+? Bot1.Battlefield.Illusionary Terrain.SecondChosenSubtype = Forest
+? Bot1.Battlefield.Island.Subtypes = Forest
+Bot1.Battlefield.Island.Activate
+? Bot1.Mana = {G}
+[Expect]
+Bot1.Battlefield.Island.Subtypes = Forest

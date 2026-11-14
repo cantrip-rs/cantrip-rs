@@ -1,0 +1,29 @@
+# Yavimaya enters later but its type addition changes which lands Terrain affects, so dependency makes it apply first (CR 613.8a).
+[Bot1 Deck]
+Mountain
+Mox Sapphire x2
+Illusionary Terrain
+Island x20
+[Bot2 Deck]
+Yavimaya, Cradle of Growth
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Illusionary Terrain.Cast
+Bot1.Modes(Forest)
+Bot1.Modes(Island)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mountain.Subtypes = Mountain
+[T2 Bot2.Main1]
+Bot2.Hand.Yavimaya, Cradle of Growth.Play
+? Bot1.Battlefield.Mountain.Subtypes = Island
+Bot1.Battlefield.Mountain.Activate
+? Bot1.Mana = {U}
+[Expect]
+Bot1.Battlefield.Mountain.Subtypes = Island
+Bot2.Battlefield.Yavimaya, Cradle of Growth.Subtypes = Forest

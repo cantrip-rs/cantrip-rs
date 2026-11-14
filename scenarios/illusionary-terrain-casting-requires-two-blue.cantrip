@@ -1,0 +1,26 @@
+# One blue and one white cannot pay {U}{U}; another blue makes the same cast legal (CR 601.2h).
+[Bot1 Deck]
+Mox Sapphire x2
+Mox Pearl
+Illusionary Terrain
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana = {W}{U}
+! Bot1.Hand.Illusionary Terrain.Cast(Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Illusionary Terrain.Cast
+? Bot1.Mana = {W}
+Bot1.Modes(Forest)
+Bot1.Modes(Island)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Illusionary Terrain.FirstChosenSubtype = Forest
+Bot1.Battlefield.Illusionary Terrain.SecondChosenSubtype = Island

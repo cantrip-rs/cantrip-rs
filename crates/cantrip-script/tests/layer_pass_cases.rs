@@ -469,6 +469,36 @@ fn no_static_ability_takes_a_value_from_its_object() {
     assert!(untested.is_empty(), "changed nothing anywhere it was tried, so untested:\n{}", untested.join("\n"));
 }
 
+// The contract checker must exercise a typed pair and still detect an effect that illegally reads the affected object.
+fn bad_with_chosen_pair(q: &dyn LayerQuery, source: ObjectId, c: &mut Chars) {
+    if q.state().chosen_subtype_pair(q.linked_to(source)).is_some() {
+        c.power = c.power.map(|p| p + p);
+    }
+}
+static BAD_CHOSEN_PAIR: CardDef = CardDef {
+    name: "Probe Bad Chosen Pair",
+    types: TypeSet::of(&[CardType::Enchantment]),
+    statics: &[static_ability(Layer::PtModify, creatures, bad_with_chosen_pair, "Uses the chosen pair and doubles power.")],
+    ..CardDef::BLANK
+};
+
+#[test]
+fn chosen_pair_contract_scene_exercises_real_effect_and_detects_bad_object_read() {
+    let (mut game, ids) = board(&[("Illusionary Terrain", BF, 1), ("Forest", BF, 2)]);
+    let text = game.cards.linked_card(game.state.obj(ids[0]).card);
+    let choices = <cantrip_state::Choices as cantrip_state::ChoiceRecord>::entered(text, cantrip_state::Entered {
+        subtype_pair: Some([Subtype::Forest, Subtype::Island]), ..Default::default()
+    });
+    game.state.update_obj(ids[0], |o| o.marks.choices = choices);
+    assert!(game.chars(ids[1]).has_subtype(Subtype::Island), "the chosen-pair effect actually changes a Forest");
+    let names = ["Illusionary Terrain", "Grizzly Bears", "Llanowar Elves", "Taiga", "Forest", "Sol Ring", "Mox Ruby"];
+    let table = Box::leak(Box::new(CardTable::new(cantrip_cards::all().into_iter()
+        .filter(|card| names.contains(&card.name)).chain([&BAD_CHOSEN_PAIR]))));
+    let found = apply_contract_check(table);
+    assert!(!found.inert.iter().any(|s| s.starts_with("Illusionary Terrain (")), "{}", found.inert.join("\n"));
+    assert!(found.breaches.iter().any(|s| s.starts_with("Probe Bad Chosen Pair (")), "{}", found.breaches.join("\n"));
+}
+
 fn plus_its_power_from_chars(_: &dyn LayerQuery, _: ObjectId, c: &mut Chars) {
     // Against the contract: its power read from the object it is given.
     c.power = c.power.map(|p| p + p);
