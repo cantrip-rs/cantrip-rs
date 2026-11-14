@@ -1,0 +1,37 @@
+# Bottomless Pool's target is a creature, yours or an opponent's: on turn 3 Bot1 casts the Pool (Mox Sapphire) with Bot2's Ornithopter in play, and
+# the Mox Sapphire (an artifact, not a creature) and the Pool itself (an enchantment) are refused as targets, then Bot2's Ornithopter is taken and goes
+# back to Bot2's hand (CR 400.3, its owner's), not Bot1's.
+
+[Bot1 Deck]
+Mox Sapphire
+Bottomless Pool // Locker Room
+Island x5
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x6
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield = Ornithopter
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bottomless Pool // Locker Room.Cast(Ability: Bottomless Pool)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Mox Sapphire)
+! Bot1.Target(Bot1.Battlefield.Bottomless Pool)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Hand = Island; Island; Island; Island; Island; Island; Island; Ornithopter
+Bot2.Battlefield = 
+Bot1.Battlefield = Bottomless Pool; Mox Sapphire

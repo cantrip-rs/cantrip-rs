@@ -1,0 +1,36 @@
+# "Up to one target creature": two are refused (`!` line), and Bot1 may choose none (`Bot1.Target()`). The ability is still put on the stack and resolves, and both Bot1's and Bot2's
+# Ornithopters stay on the battlefield (the control for the scenarios that choose one).
+
+[Bot1 Deck]
+Mox Sapphire
+Ornithopter
+Bottomless Pool // Locker Room
+Island x4
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x6
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bottomless Pool // Locker Room.Cast(Ability: Bottomless Pool)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Ornithopter; Bot2.Battlefield.Ornithopter)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield = Bottomless Pool; Mox Sapphire; Ornithopter
+Bot2.Battlefield = Ornithopter
+Stack.Count = 0

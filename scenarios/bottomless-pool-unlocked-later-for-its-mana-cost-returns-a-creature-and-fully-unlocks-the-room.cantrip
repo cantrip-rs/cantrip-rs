@@ -1,0 +1,45 @@
+# Bottomless Pool as the second door (CR 709.5e, 709.5h): Bot1 casts Locker Room first ({4}{U}: Black Lotus, three Moxen), on turn 3 pays {U} to unlock the
+# Pool as a special action, and "when you unlock this door" returns Bot2's Ornithopter. Before it the Room shows only Locker Room; after it the Room has both
+# doors unlocked (CR 709.5i).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Bottomless Pool // Locker Room
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island x6
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bottomless Pool // Locker Room.Cast(Ability: Locker Room)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Locker Room.Doors = Locker Room
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Locker Room.Activate(Ability: left door)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield = 
+Bot2.Hand = Island; Island; Island; Island; Island; Island; Island; Ornithopter
+Bot1.Battlefield.Bottomless Pool // Locker Room.Doors = Bottomless Pool; Locker Room
