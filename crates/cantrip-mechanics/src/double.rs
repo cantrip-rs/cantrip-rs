@@ -30,6 +30,15 @@ pub fn each_kind_of_counter(g: &mut dyn Game, permanents: &[ObjectId]) {
     g.add_counters_together(&puts);
 }
 
+/// "Double the number of each kind of counter on [each of up to N] target [permanents]" (CR 701.10e, 608.2b): every target that
+/// is still legal as the ability resolves, each count of each kind read before any is doubled and all the counters put on at
+/// once. Chief Miles O'Brien (one target) and Zimone, Paradox Sculptor (up to two) print it.
+pub fn each_kind_of_counter_on_each_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let targets = crate::targets::legal_objects(g, item);
+    each_kind_of_counter(g, &targets);
+    Ok(())
+}
+
 /// Double the number of `kind` counters on each creature `player` controls.
 pub fn counters_on_creatures_you_control(g: &mut dyn Game, player: PlayerId, kind: CounterKind) {
     let creatures: Vec<ObjectId> =
