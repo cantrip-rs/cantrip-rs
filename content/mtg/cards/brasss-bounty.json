@@ -1,0 +1,6 @@
+{
+  "name": "Brass's Bounty",
+  "manaCost": "{6}{R}",
+  "type": "Sorcery",
+  "oracleText": "For each land you control, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")"
+}
