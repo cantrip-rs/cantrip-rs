@@ -1,0 +1,11 @@
+{
+  "name": "Stalked Researcher",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Human Wizard",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Defender\nEerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, this creature can attack this turn as though it didn't have defender.",
+  "keywords": [
+    "Defender"
+  ]
+}
