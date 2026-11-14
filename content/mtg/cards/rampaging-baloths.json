@@ -1,0 +1,11 @@
+{
+  "name": "Rampaging Baloths",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Beast",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Trample\nLandfall — Whenever a land you control enters, create a 4/4 green Beast creature token.",
+  "keywords": [
+    "Trample"
+  ]
+}

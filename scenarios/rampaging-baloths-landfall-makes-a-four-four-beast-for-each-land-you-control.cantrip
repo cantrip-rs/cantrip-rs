@@ -1,0 +1,46 @@
+# Rampaging Baloths, {4}{G}{G} 6/6 trample: "Landfall — Whenever a land you control enters, create a 4/4 green Beast creature
+# token" (CR 603.2, 111.1). Two Black Lotuses (GGGGGG) pay for it. Bot1's Forest makes a 4/4 green Beast without trample (the
+# Baloths' own Trample is not the token's); Bot2's Island on turn 2 is not a land Bot1 controls, so no second Beast; Bot1's
+# turn-3 Forest makes a second one.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Rampaging Baloths
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Rampaging Baloths.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rampaging Baloths.Keywords = Trample
+? Bot1.Battlefield.Count = 1
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast Token.Power = 4
+? Bot1.Battlefield.Beast Token.Toughness = 4
+? Bot1.Battlefield.Beast Token.Colors = Green
+? Bot1.Battlefield.Beast Token.Keywords = (absent)
+? Bot1.Battlefield.Count = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Pass
+? Bot1.Battlefield.Count = 3
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Beast Token#1.Power = 4
+Bot1.Battlefield.Beast Token#2.Power = 4
+Bot2.Battlefield.Count = 1
