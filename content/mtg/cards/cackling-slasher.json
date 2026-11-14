@@ -1,0 +1,11 @@
+{
+  "name": "Cackling Slasher",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Human Assassin",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Deathtouch\nThis creature enters with a +1/+1 counter on it if a creature died this turn.",
+  "keywords": [
+    "Deathtouch"
+  ]
+}
