@@ -1,0 +1,11 @@
+{
+  "name": "Apothecary Stomper",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Elephant",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Vigilance (Attacking doesn't cause this creature to tap.)\nWhen this creature enters, choose one —\n• Put two +1/+1 counters on target creature you control.\n• You gain 4 life.",
+  "keywords": [
+    "Vigilance"
+  ]
+}

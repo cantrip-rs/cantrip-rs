@@ -1,0 +1,42 @@
+# The Stomper is itself a creature its controller controls when the enters trigger is put on the stack, so it is the only legal target and is chosen: two +1/+1 counters make it 6/6.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Black Lotus
+Apothecary Stomper
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Apothecary Stomper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Put two +1/+1 counters)
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Bot1.Battlefield.Apothecary Stomper.Power = 6
+Bot1.Battlefield.Apothecary Stomper.Toughness = 6
+Bot1.Battlefield.Apothecary Stomper.Counters.PlusOnePlusOne = 2
