@@ -1,0 +1,20 @@
+# Maze's End: "This land enters tapped" (CR 614.1d) - on the turn Bot1 plays it, it cannot add {C} (a tapped land can't pay its
+# own {T} cost) - and "{T}: Add {C}": untapped on Bot1's next turn it adds one colorless mana.
+
+[Bot1 Deck]
+Maze's End
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Maze's End.Play
+! Bot1.Battlefield.Maze's End.Activate(Ability: Add)
+? Bot1.Battlefield.Maze's End.Tapped = true
+[T3 Bot1.Main1]
+Bot1.Battlefield.Maze's End.Activate(Ability: Add)
+
+[Expect]
+Bot1.Battlefield.Maze's End.Tapped = true
+Bot1.Mana = {C}

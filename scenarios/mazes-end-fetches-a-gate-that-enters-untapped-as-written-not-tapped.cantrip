@@ -1,0 +1,37 @@
+# Maze's End says "put it onto the battlefield", not tapped: a Gate with no enters-tapped text of its own (Talon Gates of Madara) arrives
+# untapped and can be tapped for mana at once - unlike the Guildgates, which enter tapped by their own text (CR 614.1d). Its "up to one
+# target creature phases out" enters trigger has no creature to choose.
+
+[Bot1 Deck]
+Maze's End
+Mox Jet
+Mox Ruby
+Mox Pearl
+Island x3
+Island x8
+Talon Gates of Madara
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Maze's End.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Maze's End.Activate(Ability: Return)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Island; Island; Island; Island; Maze's End
+! Bot1.Search(Island)
+Bot1.Search(Talon Gates of Madara)
+
+[Expect]
+Bot1.Battlefield.Talon Gates of Madara.Tapped = false
+Bot1.Battlefield.Talon Gates of Madara.Subtypes = Gate
+Result = InProgress

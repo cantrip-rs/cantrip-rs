@@ -1,0 +1,38 @@
+# Maze's End on its second turn: "{3}, {T}, Return this land to its owner's hand" is paid as the ability is activated, so the
+# land is already in Bot1's hand when it resolves; then "Search your library for a Gate card, put it onto the battlefield, then
+# shuffle": a Gate may be taken (Azorius Guildgate, which enters tapped - it is one more land, not an untapped one), a
+# non-Gate card (Island) is refused. With one Gate only, the ten-different-Gates condition is false and the game goes on.
+
+[Bot1 Deck]
+Maze's End
+Mox Jet
+Mox Ruby
+Mox Pearl
+Island x3
+Island x8
+Azorius Guildgate
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Maze's End.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Maze's End.Activate(Ability: Return)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Island; Island; Island; Island; Maze's End
+! Bot1.Search(Island)
+Bot1.Search(Azorius Guildgate)
+
+[Expect]
+Bot1.Battlefield.Azorius Guildgate.Tapped = true
+Bot1.Battlefield.Azorius Guildgate.Subtypes = Gate
+Result = InProgress

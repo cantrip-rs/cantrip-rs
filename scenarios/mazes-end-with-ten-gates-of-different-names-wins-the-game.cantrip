@@ -1,0 +1,56 @@
+# Maze's End with Exploration (two land drops a turn) and nine differently named Guildgates in play after five turns: its
+# ability fetches the tenth, Simic Guildgate - ten Gates with different names (CR 201.2a), so "you win the game" (CR 104.2b)
+# applies. The Maze's End was returned to hand as the cost, so it is not one of the Gates; the Gate it fetches is counted.
+
+[Bot1 Deck]
+Exploration
+Mox Emerald
+Maze's End
+Azorius Guildgate
+Boros Guildgate
+Dimir Guildgate
+Golgari Guildgate
+Gruul Guildgate
+Izzet Guildgate
+Orzhov Guildgate
+Rakdos Guildgate
+Selesnya Guildgate
+Simic Guildgate
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Exploration.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Maze's End.Play
+Bot1.Hand.Azorius Guildgate.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Boros Guildgate.Play
+Bot1.Hand.Dimir Guildgate.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Golgari Guildgate.Play
+Bot1.Hand.Gruul Guildgate.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Izzet Guildgate.Play
+Bot1.Hand.Orzhov Guildgate.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Rakdos Guildgate.Play
+[T11 Bot1.Main1]
+Bot1.Hand.Selesnya Guildgate.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Azorius Guildgate.Activate(Color: White)
+Bot1.Battlefield.Boros Guildgate.Activate(Color: Red)
+Bot1.Battlefield.Maze's End.Activate(Ability: Return)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 11
+Bot1.Search(Simic Guildgate)
+
+[Expect]
+Result = Bot1 won
+Bot1.Battlefield.Count = 12
