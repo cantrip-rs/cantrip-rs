@@ -1,0 +1,8 @@
+{
+  "name": "Reluctant Role Model",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Survivor",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Survival — At the beginning of your second main phase, if this creature is tapped, put a flying, lifelink, or +1/+1 counter on it.\nWhenever this creature or another creature you control dies, if it had counters on it, put those counters on up to one target creature."
+}
