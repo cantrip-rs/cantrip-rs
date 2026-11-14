@@ -1,0 +1,23 @@
+# Dimir Guildgate: once it has untapped it taps for {U} on one turn and {B} on the next (the color is chosen as the ability is
+# activated, CR 605.1a), never for another color or for colorless.
+
+[Bot1 Deck]
+Dimir Guildgate
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Dimir Guildgate.Play
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Dimir Guildgate.Activate(Color: Green)
+! Bot1.Battlefield.Dimir Guildgate.Activate(Color: Colorless)
+Bot1.Battlefield.Dimir Guildgate.Activate(Color: Blue)
+? Bot1.Mana = {U}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Dimir Guildgate.Activate(Color: Black)
+? Bot1.Mana = {B}
+
+[Expect]
+Bot1.Battlefield.Dimir Guildgate.Tapped = true
