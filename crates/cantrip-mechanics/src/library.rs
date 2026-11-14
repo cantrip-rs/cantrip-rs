@@ -76,6 +76,14 @@ pub fn find_to_battlefield(g: &mut dyn Game, player: PlayerId, source: ObjectId,
     onto_battlefield(g, player, found, tapped)
 }
 
+/// "Search your library for up to two basic land cards, put them onto the battlefield tapped, then shuffle." (CR 701.23, 701.24)
+/// as a whole spell or ability effect: fewer may be found, or none, and the library is shuffled either way. Encroaching
+/// Dragonstorm, New Generations Technique and Ordeal of Nylea print it.
+pub fn search_for_two_basic_lands_onto_the_battlefield_tapped(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    find_to_battlefield(g, item.controller, item.object, crate::select::basic_land_cards(crate::select::up_to(2)), true)?;
+    Ok(())
+}
+
 /// "Search your library for [`rule`], put it into your graveyard, then shuffle" (CR 701.23). Entomb (`select::CARD`) and
 /// Goblin Engineer (`select::ARTIFACT_CARD`) print it.
 pub fn find_to_graveyard(g: &mut dyn Game, player: PlayerId, source: ObjectId, rule: Selection) -> Result<Vec<ObjectId>, Suspend> {
