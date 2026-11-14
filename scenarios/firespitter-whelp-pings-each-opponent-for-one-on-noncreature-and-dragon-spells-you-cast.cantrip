@@ -1,0 +1,58 @@
+# Firespitter Whelp: "Whenever you cast a noncreature or Dragon spell, this creature deals 1 damage to each opponent" (CR 603.2,
+# 120.3). Only Bot1's own casts count: Bot2's Mox Ruby (a noncreature spell) leaves Bot2 at 20, and Bot1's Memnite (a creature
+# spell that is not a Dragon) does nothing. Bot1's Lightning Bolt (noncreature) triggers it for 1 before the Bolt's 3 (20 to 19
+# to 16), and the second Firespitter Whelp (a Dragon creature spell) triggers it for 1 more (16 to 15). It resolves before the
+# spell that caused it, so the Whelp spell is still on the stack at 15.
+
+[Bot1 Deck]
+Black Lotus x2
+Firespitter Whelp x2
+Memnite
+Lightning Bolt
+Mox Ruby
+Mountain x14
+
+[Bot2 Deck]
+Mox Ruby
+Mountain x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Red)
+Bot1.Hand.Firespitter Whelp.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+? Bot2.Life = 20
+? Bot1.Battlefield.Firespitter Whelp.Keywords = Flying
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot2.Life = 20
+? Bot1.Battlefield.Firespitter Whelp.Keywords = Flying
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Firespitter Whelp.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 15
+? Stack.Count = 1
+
+[Expect]
+Bot2.Life = 15
