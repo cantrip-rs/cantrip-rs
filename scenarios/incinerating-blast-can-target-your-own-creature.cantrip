@@ -1,0 +1,42 @@
+# Incinerating Blast "target creature": Bot1's own Memnite is a legal target and dies to the 6 damage; Bot1 then discards the Lightning Bolt and draws.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Incinerating Blast
+Lightning Bolt
+Memnite
+Island
+Mountain
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Incinerating Blast.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+
+[Expect]
+Bot1.Battlefield.Memnite = (absent)
+Bot1.Graveyard = Memnite; Incinerating Blast; Lightning Bolt; Black Lotus

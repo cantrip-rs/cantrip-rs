@@ -1,0 +1,6 @@
+{
+  "name": "Incinerating Blast",
+  "manaCost": "{4}{R}",
+  "type": "Sorcery",
+  "oracleText": "Incinerating Blast deals 6 damage to target creature.\nYou may discard a card. If you do, draw a card."
+}
