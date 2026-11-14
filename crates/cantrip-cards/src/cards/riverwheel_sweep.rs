@@ -10,9 +10,7 @@ use cantrip_oracle as oracle;
 /// next turn (CR 514.2).
 fn tap_stun_and_impulse(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     effects::tap_and_stun::<3>(g, item)?;
-    let grant = PlayGrant { instead: None, lands: true, expiry: Expiry::EndOfYourNextTurn, ..PlayGrant::CAST };
-    library::exile_top_choose_one_may_play(g, item.controller, item.object, 2, grant)?;
-    Ok(())
+    library::exile_top_two_choose_one_play_until_end_of_next_turn(g, item)
 }
 
 pub static CARD: CardDef = CardDef { spell: spell(&[targets::CREATURE], tap_stun_and_impulse), ..oracle::RIVERWHEEL_SWEEP };
