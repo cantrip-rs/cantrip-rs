@@ -1,0 +1,8 @@
+{
+  "name": "Enduring Tenacity",
+  "manaCost": "{2}{B}{B}",
+  "type": "Enchantment Creature — Snake Glimmer",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Whenever you gain life, target opponent loses that much life.\nWhen Enduring Tenacity dies, if it was a creature, return it to the battlefield under its owner's control. It's an enchantment. (It's not a creature.)"
+}

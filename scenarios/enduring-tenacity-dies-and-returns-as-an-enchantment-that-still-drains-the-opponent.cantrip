@@ -1,0 +1,52 @@
+# Enduring Tenacity's two abilities together. Bot2's Lightning Bolt kills the 4/3 on turn 2 (its toughness is 3) and it returns to the
+# battlefield as an enchantment, no longer a creature. On turn 3 Bot1's Witherbloom Charm gains 5 and the returned Tenacity, which still
+# has its first ability, makes Bot2 lose 5 (20 -> 15).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+Enduring Tenacity
+Witherbloom Charm
+Swamp x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Enduring Tenacity.Cast
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Enduring Tenacity.Types = Enchantment; Creature
+? Bot1.Battlefield.Enduring Tenacity.Power = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Enduring Tenacity)
+Bot2.Pass
+[T2 Bot2.Main2]
+? Bot1.Battlefield.Enduring Tenacity.Types = Enchantment
+? Bot1.Graveyard = Black Lotus
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Witherbloom Charm.Cast
+Bot1.Modes(You gain 5 life)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 25
+? Bot2.Life = 15
+
+[Expect]
+Bot1.Life = 25
+Bot2.Life = 15
+Bot1.Battlefield.Enduring Tenacity.Types = Enchantment

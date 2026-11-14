@@ -1,0 +1,68 @@
+# "Whenever you gain life, target opponent loses that much life." Bot1 casts Enduring Tenacity in turn 1 (Black Lotus and Mox Jet pay
+# {2}{B}{B}). Turn 3: Healing Salve on Bot1 gains 3 and Bot2 loses 3 (20 -> 17), then Witherbloom Charm gains 5 and Bot2 loses that
+# much, 5 (17 -> 12): the amount follows the life gained (CR 119.3). Bot1 ends 20 + 3 + 5 = 28. Turn 4: Bot2's own Healing Salve gains Bot2 3
+# (12 -> 15), and Bot1's Tenacity does not trigger for a life gain that is not Bot1's: Bot1 stays at 28.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+Mox Pearl
+Enduring Tenacity
+Witherbloom Charm
+Healing Salve
+Swamp x13
+
+[Bot2 Deck]
+Mox Pearl
+Healing Salve
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Enduring Tenacity.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Bot2.Life = 17
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Witherbloom Charm.Cast
+Bot1.Modes(You gain 5 life)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 28
+? Bot2.Life = 12
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Healing Salve.Cast
+Bot2.Modes(Target player gains 3 life)
+Bot2.Target(Bot2)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+? Stack.Count = 0
+? Bot2.Life = 15
+? Bot1.Life = 28
+
+[Expect]
+Bot1.Life = 28
+Bot2.Life = 15
