@@ -1,0 +1,56 @@
+# Savage Ventmaw ({4}{R}{G}, 4/4 flyer): "Whenever this creature attacks, add {R}{R}{R}{G}{G}{G}. Until end of turn, you
+# don't lose this mana as steps and phases end." Bot1 casts it on turn 7 from four lands and two Moxen. Before it attacks
+# on turn 9 the pool is empty (the mana comes from the attack trigger only). It attacks: all six mana (three red, three
+# green) are in the pool through combat and in the second main phase, none lost with the steps, 4 flying damage lands (20
+# to 16), and the pool is empty again on Bot2's turn.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mountain
+Forest
+Island
+Island
+Savage Ventmaw
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Savage Ventmaw.Cast
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main1]
+? Bot1.Mana =
+[T9 Bot1.DeclareAttackers]
+Bot1.Attack(Savage Ventmaw > Bot2)
+[T9 Bot1.DeclareBlockers]
+? Bot1.Mana = {R}{R}{R}{G}{G}{G} lasting {R}{R}{R}{G}{G}{G}
+[T9 Bot1.Main2]
+? Bot1.Mana = {R}{R}{R}{G}{G}{G} lasting {R}{R}{R}{G}{G}{G}
+? Bot2.Life = 16
+[T10 Bot2.Main1]
+? Bot1.Mana =
+
+[Expect]
+Bot1.Mana =
+Bot2.Life = 16
+Bot1.Battlefield.Savage Ventmaw.Keywords = Flying

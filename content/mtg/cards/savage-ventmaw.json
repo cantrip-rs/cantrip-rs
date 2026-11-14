@@ -1,0 +1,11 @@
+{
+  "name": "Savage Ventmaw",
+  "manaCost": "{4}{R}{G}",
+  "type": "Creature — Dragon",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying\nWhenever this creature attacks, add {R}{R}{R}{G}{G}{G}. Until end of turn, you don't lose this mana as steps and phases end.",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,50 @@
+# Savage Ventmaw: the six mana its attack trigger adds is kept through the steps and phases of the turn (CR 106.4, 500.5) and can
+# be spent like any other: on turn 9 Bot1 attacks (4 flying damage, 20 to 16) and in its second main phase casts Fireball for
+# X = 5 with that mana alone - {R} and five generic from {R}{R}{G}{G}{G} - for 5 more damage (16 to 11), leaving the pool empty.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mountain
+Forest
+Island
+Island
+Savage Ventmaw
+Fireball
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Savage Ventmaw.Cast
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.DeclareAttackers]
+Bot1.Attack(Savage Ventmaw > Bot2)
+[T9 Bot1.Main2]
+? Bot2.Life = 16
+Bot1.Hand.Fireball.Cast(X: 5)
+Bot1.Target(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 11
+Bot1.Graveyard = Fireball
