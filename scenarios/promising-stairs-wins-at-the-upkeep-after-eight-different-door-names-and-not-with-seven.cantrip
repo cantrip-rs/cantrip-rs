@@ -1,0 +1,127 @@
+# Promising Stairs: "At the beginning of your upkeep, surveil 1. You win the game if there are eight or more different names among unlocked doors of
+# Rooms you control." The four Rooms there are give exactly eight names, so Bot1 unlocks them one door at a time: Promising Stairs and Unholy Annex on
+# turn 1 (Black Lotus, three Moxen), Bottomless Pool and Roaring Furnace on turn 3, Locker Room on turn 5, Ritual Chamber on turn 7 (six names), Steaming
+# Sauna on turn 9 (seven) and, last, Central Elevator on turn 11 (eight). At each of the upkeeps of turns 3 to 11 the count is below eight and the game goes on,
+# in particular at turn 11's with seven (an `>= 7` would win there); at turn 13's, with eight, Bot1 wins. Central Elevator is unlocked last because its search
+# shuffles the library, and nothing it could find remains there. The surveil keeps the top card each time.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Central Elevator // Promising Stairs
+Unholy Annex // Ritual Chamber
+Bottomless Pool // Locker Room
+Roaring Furnace // Steaming Sauna
+Swamp
+Island x16
+
+[Bot2 Deck]
+Island x26
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Central Elevator // Promising Stairs.Cast(Ability: Promising Stairs)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Promising Stairs.Doors = Promising Stairs
+? Bot1.Battlefield.Unholy Annex.Doors = Unholy Annex
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Roaring Furnace // Steaming Sauna | )
+? Result = InProgress
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bottomless Pool // Locker Room.Cast(Ability: Bottomless Pool)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Roaring Furnace // Steaming Sauna.Cast(Ability: Roaring Furnace)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+? Result = InProgress
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Bottomless Pool.Activate(Ability: right door)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+? Result = InProgress
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Unholy Annex.Activate(Ability: right door)
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+? Result = InProgress
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Roaring Furnace.Activate(Ability: right door)
+Bot1.Pass
+Bot2.Pass
+[T11 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+? Result = InProgress
+[T11 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Promising Stairs.Activate(Ability: left door)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T13 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+[Expect]
+Result = Bot1 won

@@ -1,0 +1,49 @@
+# Central Elevator: "When you unlock this door, search your library for a Room card that doesn't have the same name as a Room you control, reveal it,
+# put it into your hand, then shuffle." Bot1 casts Unholy Annex (Black Lotus), then Central Elevator (four Moxen) on turn 1. The library holds a second
+# Unholy Annex // Ritual Chamber (the same name as the Annex in play, refused), an Island (not a Room card, refused), Roaring Furnace // Steaming Sauna
+# and Bottomless Pool // Locker Room: taking both is refused (up to one card), and Bottomless Pool is taken and revealed (library 13 -> 12, one more card in the hand).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Unholy Annex // Ritual Chamber
+Central Elevator // Promising Stairs
+Unholy Annex // Ritual Chamber
+Bottomless Pool // Locker Room
+Roaring Furnace // Steaming Sauna
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Central Elevator // Promising Stairs.Cast(Ability: Central Elevator)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Unholy Annex // Ritual Chamber)
+! Bot1.Search(Island)
+! Bot1.Search(Bottomless Pool // Locker Room; Roaring Furnace // Steaming Sauna)
+Bot1.Search(Bottomless Pool // Locker Room)
+? Bot1.Hand = Bottomless Pool // Locker Room
+? Bot1.Revealed = Bottomless Pool // Locker Room
+? Bot1.Library.Count = 12
+[Expect]
+Bot1.Battlefield.Central Elevator.Doors = Central Elevator

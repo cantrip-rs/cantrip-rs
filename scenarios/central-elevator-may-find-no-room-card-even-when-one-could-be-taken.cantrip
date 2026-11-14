@@ -1,0 +1,28 @@
+# "Search your library for a Room card": the search may find nothing even when a Room card could be taken (CR 701.23b). Bot1 casts Central Elevator on
+# turn 1 (Black Lotus and a Mox Sapphire), a Bottomless Pool // Locker Room card is in the library and Bot1 takes none: the library keeps its 13 cards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Central Elevator // Promising Stairs
+Island x4
+Bottomless Pool // Locker Room
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Central Elevator // Promising Stairs.Cast(Ability: Central Elevator)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Search()
+[Expect]
+Bot1.Library.Count = 13
+Bot1.Hand = Island; Island; Island; Island
