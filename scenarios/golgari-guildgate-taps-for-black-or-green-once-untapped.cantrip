@@ -1,0 +1,23 @@
+# Golgari Guildgate: once it has untapped it taps for {B} on one turn and {G} on the next (the color is chosen as the ability is
+# activated, CR 605.1a), never for another color or for colorless.
+
+[Bot1 Deck]
+Golgari Guildgate
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Golgari Guildgate.Play
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Golgari Guildgate.Activate(Color: Red)
+! Bot1.Battlefield.Golgari Guildgate.Activate(Color: Colorless)
+Bot1.Battlefield.Golgari Guildgate.Activate(Color: Black)
+? Bot1.Mana = {B}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Golgari Guildgate.Activate(Color: Green)
+? Bot1.Mana = {G}
+
+[Expect]
+Bot1.Battlefield.Golgari Guildgate.Tapped = true
