@@ -1,0 +1,52 @@
+# Immersturm Predator: "exile up to one target card from a graveyard and put a +1/+1 counter on this creature." With a target
+# chosen that is gone as the ability resolves, the ability does not resolve and none of it happens: no counter (CR 608.2b; the
+# ruling of 2024-11-08). The Predator attacks on turn 3 and its trigger targets Bot2's Brainstorm; in response Bot2 exiles that
+# Brainstorm itself with Cling to Dust. The Predator stays a 3/3 and deals 3.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Immersturm Predator
+Island x17
+
+[Bot2 Deck]
+Island
+Mox Jet
+Brainstorm
+Cling to Dust
+Island x12
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Immersturm Predator.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Brainstorm.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Island; Island)
+? Bot2.Graveyard = Brainstorm
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Immersturm Predator > Bot2)
+Bot1.Target(Bot2.Graveyard.Brainstorm)
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Cling to Dust.Cast(Bot2.Graveyard.Brainstorm)
+Bot2.Pass
+Bot1.Pass
+? Exile = Brainstorm
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Immersturm Predator.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Immersturm Predator.Power = 3

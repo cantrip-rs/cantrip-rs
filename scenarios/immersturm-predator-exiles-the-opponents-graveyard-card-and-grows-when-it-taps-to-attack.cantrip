@@ -1,0 +1,48 @@
+# Immersturm Predator: "Whenever this creature becomes tapped, exile up to one target card from a graveyard and put a +1/+1 counter
+# on this creature." Bot1 casts it on turn 1 (a Black Lotus and a Mountain, so the Lotus is in Bot1's graveyard). Bot2 casts a
+# Brainstorm on turn 2. On turn 3 the Predator attacks, which taps it: the trigger exiles Bot2's Brainstorm (not Bot1's Lotus) and
+# the counter makes it 4/4 before damage, so Bot2 takes 4. Bot1's graveyard is untouched.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Immersturm Predator
+Island x17
+
+[Bot2 Deck]
+Island
+Brainstorm
+Island x13
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Immersturm Predator.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Immersturm Predator.Power = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Brainstorm.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Island; Island)
+? Bot2.Graveyard = Brainstorm
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Immersturm Predator > Bot2)
+! Bot1.Target(Bot1.Battlefield.Immersturm Predator)
+! Bot1.Target(Bot1.Battlefield.Mountain)
+Bot1.Target(Bot2.Graveyard.Brainstorm)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot2.Graveyard = 
+Exile = Brainstorm
+Bot1.Graveyard = Black Lotus
+Bot1.Battlefield.Immersturm Predator.Counters.PlusOnePlusOne = 1
