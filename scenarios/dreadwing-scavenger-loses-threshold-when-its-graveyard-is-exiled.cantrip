@@ -1,0 +1,54 @@
+# Dreadwing Scavenger's threshold is a static ability checked continuously (CR 207.2c, 611.3a): it is a 3/3 with deathtouch
+# only "as long as" seven or more cards are in its controller's graveyard. On turn 1 Bot1 fills its graveyard to eight (Black
+# Lotus, the Scavenger's loot, two Thought Scours on itself). On turn 2 Bot2's Tormod's Crypt exiles that graveyard, and the
+# Scavenger is a 2/2 flier without deathtouch again at once.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Dreadwing Scavenger
+Thought Scour
+Thought Scour
+Island
+Island
+Island x30
+
+[Bot2 Deck]
+Tormod's Crypt
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Ability: Sacrifice; Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dreadwing Scavenger.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+? Bot1.Graveyard.Count = 2
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 5
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 8
+? Bot1.Battlefield.Dreadwing Scavenger.Power = 3
+? Bot1.Battlefield.Dreadwing Scavenger.Keywords = Deathtouch; Flying
+[T2 Bot2.Main1]
+Bot2.Hand.Tormod's Crypt.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Dreadwing Scavenger.Power = 2
+Bot1.Battlefield.Dreadwing Scavenger.Toughness = 2
+Bot1.Battlefield.Dreadwing Scavenger.Keywords = Flying
