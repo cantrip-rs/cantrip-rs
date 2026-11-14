@@ -1,0 +1,11 @@
+{
+  "name": "Lathril, Blade of the Elves",
+  "manaCost": "{2}{B}{G}",
+  "type": "Legendary Creature — Elf Noble",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nWhenever Lathril deals combat damage to a player, create that many 1/1 green Elf Warrior creature tokens.\n{T}, Tap ten untapped Elves you control: Each opponent loses 10 life and you gain 10 life.",
+  "keywords": [
+    "Menace"
+  ]
+}

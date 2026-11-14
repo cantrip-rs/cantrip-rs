@@ -1,0 +1,66 @@
+# Lathril, Blade of the Elves: the ten must be Elves you control. On turn 7 Bot1 has Llanowar Elves, Elvish Mystic, seven Elf Warrior
+# tokens and Lathril, an Ornithopter (not an Elf, drawn instead of Fyndhorn Elves) and Bot2's Llanowar Elves is on the other side:
+# the nine untapped Elves besides Lathril that Bot1 controls are one short, with Ornithopter and the opponent's Elf not counting, and the
+# ability is refused.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Lathril, Blade of the Elves
+Forest
+Llanowar Elves
+Elvish Mystic
+Giant Growth
+Ornithopter
+Elvish Lookout
+Forest x13
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x22
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Lathril, Blade of the Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lathril, Blade of the Elves > Bot2)
+Bot1.Battlefield.Elvish Mystic.Activate
+Bot1.Hand.Giant Growth.Cast(Lathril, Blade of the Elves)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Lathril, Blade of the Elves > Bot2)
+[T7 Bot1.Main1]
+! Bot1.Battlefield.Lathril, Blade of the Elves.Activate
+
+[Expect]
+Bot2.Life = 13
+Bot1.Life = 20
+Bot2.Battlefield.Llanowar Elves.Tapped = false

@@ -1,0 +1,57 @@
+# Lathril, Blade of the Elves: only combat damage dealt to a player makes tokens. Bot2's Wrenn and Six (loyalty 3, cast with Mox Ruby and
+# Mox Emerald) is attacked by Lathril on turn 3: it loses 2 loyalty (CR 120.3c) and Bot1 creates nothing, and Bot2's life is
+# untouched.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Lathril, Blade of the Elves
+Forest
+Llanowar Elves
+Elvish Mystic
+Giant Growth
+Fyndhorn Elves
+Elvish Lookout
+Forest x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Wrenn and Six
+Island x21
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Lathril, Blade of the Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Wrenn and Six.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lathril, Blade of the Elves > Bot2.Battlefield.Wrenn and Six)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Battlefield.Wrenn and Six.Counters.Loyalty = 1
+Bot1.Battlefield.Count = 6

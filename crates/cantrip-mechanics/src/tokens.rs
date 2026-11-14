@@ -1523,7 +1523,7 @@ pub static ELF: CardDef = CardDef {
     ..token!(Elf)
 };
 
-/// The 1/1 green Elf Warrior creature token (CR 111.1, 111.4). Elfsworn Giant and Dwynen's Elite make it.
+/// The 1/1 green Elf Warrior creature token (CR 111.1, 111.4). Elfsworn Giant, Dwynen's Elite and Lathril make it.
 pub static ELF_WARRIOR: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::Green)),
     types: TypeSet::of(&[CardType::Creature]),

@@ -1,0 +1,52 @@
+# Lathril, Blade of the Elves: the tokens are as many as the combat damage dealt (CR 603.10a: the trigger reads it as it was dealt, and
+# CR 120.3), not Lathril's printed 2 power. On turn 3 Lathril attacks, Elvish Mystic's mana pays for Giant Growth (+3/+3) in the declare
+# attackers step, and Lathril, a 5/6, deals 5: Bot2 goes to 15 and Bot1 creates five Elf Warrior tokens.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Lathril, Blade of the Elves
+Forest
+Llanowar Elves
+Elvish Mystic
+Giant Growth
+Fyndhorn Elves
+Elvish Lookout
+Forest x13
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Lathril, Blade of the Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lathril, Blade of the Elves > Bot2)
+Bot1.Battlefield.Elvish Mystic.Activate
+Bot1.Hand.Giant Growth.Cast(Lathril, Blade of the Elves)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 15
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Count = 11
+Bot1.Graveyard = Giant Growth; Black Lotus
+Bot1.Battlefield.Elf Warrior Token#1.Subtypes = Elf; Warrior

@@ -1,0 +1,51 @@
+# Lathril, Blade of the Elves: "Whenever Lathril deals combat damage to a player, create that many 1/1 green Elf Warrior creature
+# tokens." On turn 1 Bot1 casts Lathril with Mox Jet, Mox Emerald and Black Lotus, then Llanowar Elves and Elvish Mystic with the
+# mana left over. On turn 3 Lathril attacks Bot2, who has no creatures, and deals 2 combat damage: Bot2 goes to 18 and Bot1 creates
+# two Elf Warrior tokens, 1/1 green Elf Warriors.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Lathril, Blade of the Elves
+Forest
+Llanowar Elves
+Elvish Mystic
+Giant Growth
+Fyndhorn Elves
+Elvish Lookout
+Forest x13
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Lathril, Blade of the Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lathril, Blade of the Elves > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield = Elf Warrior Token; Elf Warrior Token; Elvish Mystic; Forest; Lathril, Blade of the Elves; Llanowar Elves; Mox Emerald; Mox Jet
+Bot1.Battlefield.Elf Warrior Token#1.Colors = Green
+Bot1.Battlefield.Elf Warrior Token#1.Power = 1
+Bot1.Battlefield.Elf Warrior Token#1.Toughness = 1
+Bot1.Battlefield.Elf Warrior Token#2.Power = 1

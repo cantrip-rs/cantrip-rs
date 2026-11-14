@@ -1,0 +1,58 @@
+# Lathril, Blade of the Elves has menace (CR 702.110): one Ornithopter alone cannot block her (the block is refused), two can. The
+# tokens come only from combat damage dealt to a player (CR 120.2), not to creatures: with both Ornithopters blocking Lathril deals her
+# 2 damage to them, no Elf Warrior is created and Bot2 stays at 20.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Lathril, Blade of the Elves
+Forest
+Llanowar Elves
+Elvish Mystic
+Giant Growth
+Fyndhorn Elves
+Elvish Lookout
+Forest x13
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x22
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Lathril, Blade of the Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter#1.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lathril, Blade of the Elves > Bot2)
+[T3 Bot1.DeclareBlockers]
+! Bot2.Block(Ornithopter#1 > Lathril, Blade of the Elves)
+Bot2.Block(Ornithopter#1 > Lathril, Blade of the Elves; Ornithopter#2 > Lathril, Blade of the Elves)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Lathril, Blade of the Elves.Damage = 0
