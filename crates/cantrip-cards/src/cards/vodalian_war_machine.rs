@@ -2,12 +2,6 @@ use cantrip_api::*;
 use cantrip_oracle as oracle;
 use cantrip_mechanics::{behold, effects, triggers};
 
-/// "Tap an untapped Merfolk you control: This creature can attack this turn as though it didn't have defender." (CR 611.2a).
-fn can_attack_as_though_no_defender(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.add_effect(item.object, item.object, EffectKind::CanAttackDespiteDefender, Duration::EndOfTurn);
-    Ok(())
-}
-
 /// An untapped Merfolk can pay either ability (CR 118.3).
 fn untapped_merfolk(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
     !q.state().obj(id).tapped && behold::merfolk(q, asker, id)
@@ -49,7 +43,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         ability(
             tap_untapped(1, untapped_merfolk),
-            can_attack_as_though_no_defender,
+            effects::this_can_attack_as_though_it_didnt_have_defender,
             "Tap an untapped Merfolk you control: This creature can attack this turn as though it didn't have defender.",
         ),
         ability(
