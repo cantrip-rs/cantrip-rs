@@ -1459,6 +1459,17 @@ pub fn owner_puts_first_target_on_top_or_bottom(g: &mut dyn Game, item: &StackIt
     owner_puts_on_top_or_bottom(g, item.object, creature)
 }
 
+/// "Target [permanent]'s owner puts it on their choice of the top or bottom of their library. Surveil `N`." as a spell's whole
+/// effect: the owner chooses (`owner_puts_on_top_or_bottom`), then the caster surveils (CR 701.25), a new sentence (CR 608.2c). With
+/// its only target illegal the spell does nothing at all, so there is no surveil then (CR 608.2b). Lost in Space (artifact or
+/// creature) and Vanish from Sight (nonland permanent) print it.
+pub fn owner_puts_first_target_on_top_or_bottom_then_surveil<const N: usize>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(permanent) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    owner_puts_on_top_or_bottom(g, item.object, permanent)?;
+    g.end_sentence();
+    crate::effects::surveil(g, item, N)
+}
+
 /// "Mill `count` cards, then return [`rule`] from your graveyard to your hand" (CR 701.17, 608.2c): the choice is made from the
 /// whole graveyard as the mill left it, a card just milled included, and is not a target. One is returned whenever the rule
 /// finds one, unless `rule` lets none be chosen (an "up to one" for a "you may": Say Its Name). Takenuma, Abandoned Mire (a
