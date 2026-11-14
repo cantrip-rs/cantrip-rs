@@ -1,0 +1,9 @@
+{
+  "name": "Goblin Firebomb",
+  "manaCost": "{1}",
+  "type": "Artifact",
+  "oracleText": "Flash\n{7}, {T}, Sacrifice this artifact: Destroy target permanent.",
+  "keywords": [
+    "Flash"
+  ]
+}

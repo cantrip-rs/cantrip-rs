@@ -1,0 +1,49 @@
+# Goblin Firebomb: "{7}, {T}, Sacrifice this artifact: Destroy target permanent." The sacrifice is a cost, paid as it is
+# activated (CR 602.2b, 601.2h), so the Firebomb is gone whatever the ability does; "destroy" does nothing to an indestructible
+# permanent (CR 702.12b). On turn 3 Bot1 pays seven (Black Lotus for three, four Moxen) aimed at Bot2's Darksteel Citadel, which
+# stays; the Firebomb is in the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Goblin Firebomb
+Black Lotus
+Mox Emerald
+Island x13
+
+[Bot2 Deck]
+Darksteel Citadel
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Goblin Firebomb.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Darksteel Citadel.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Goblin Firebomb.Activate(Bot2.Battlefield.Darksteel Citadel)
+? Bot1.Graveyard = Goblin Firebomb; Black Lotus
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Darksteel Citadel
+Bot2.Graveyard.Count = 0
+Bot1.Graveyard = Goblin Firebomb; Black Lotus
