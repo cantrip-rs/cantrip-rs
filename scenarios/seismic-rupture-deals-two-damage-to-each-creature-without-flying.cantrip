@@ -1,0 +1,47 @@
+# Seismic Rupture: "Seismic Rupture deals 2 damage to each creature without flying." Bot1's Memnite (1/1) and Bot2's Memnite die, Bot2's
+# Phyrexian Walker (0/3) survives with 2 damage, and Bot2's Ornithopter (0/2, flying) is untouched: every creature
+# without flying, whoever's it is, takes the damage together.
+
+[Bot1 Deck]
+Mox Ruby x3
+Memnite
+Seismic Rupture
+Mountain x12
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Phyrexian Walker
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Phyrexian Walker.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Seismic Rupture.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Memnite; Seismic Rupture
+Bot2.Graveyard = Memnite
+Bot2.Battlefield = Ornithopter; Phyrexian Walker
+Bot2.Battlefield.Phyrexian Walker.Damage = 2
+Bot2.Battlefield.Ornithopter.Damage = 0
