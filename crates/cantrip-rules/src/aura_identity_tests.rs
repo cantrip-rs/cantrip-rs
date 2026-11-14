@@ -272,6 +272,8 @@ fn graveyard_position() -> (Game, ObjectId, ObjectId) {
     let card = g.state.obj(former).became.unwrap();
     let aura = put(&mut g, &GRAVEYARD_AURA);
     g.state.update_obj(aura, |o| o.attached_to = Some(card));
+    assert!(!cx(&mut g).battlefield_source_is_enchanted(card), "graveyard objects are outside the battlefield-source contract");
+    assert!(cantrip_mechanics::targets::is_enchanted(&cx(&mut g), card), "the current-only query still sees the Aura");
     assert!(
         crate::attach::host_allows(&cx(&mut g), aura, card, false),
         "a legal graveyard-card attachment, not an illegal forced position"
@@ -314,4 +316,95 @@ fn simultaneous_graveyard_card_and_aura_departure_is_not_battlefield_exception()
     ];
     crate::ops::move_together(&mut cx(&mut g), &moves, ZoneReason::Other);
     assert_no_origin(&mut g, aura, card);
+}
+
+#[test]
+fn source_enchantment_uses_the_simultaneous_departure_view() {
+    let (mut g, h, a) = position();
+    assert!(cx(&mut g).battlefield_source_is_enchanted(h));
+    moved(&mut g, &[a, h], Zone::graveyard(YOU), ZoneReason::Destroy);
+    assert!(cx(&mut g).battlefield_source_is_enchanted(h));
+    assert_eq!(cx(&mut g).attached_to(a), None);
+    let row = crate::ops::last_known_of(&mut cx(&mut g), h);
+    assert!(row.enchanted, "a later damage snapshot retains the departed source's fact");
+}
+
+#[test]
+fn source_enchantment_distinguishes_aura_removed_before_departure_and_equipment() {
+    let (mut g, h, a) = position();
+    moved(&mut g, &[a], Zone::graveyard(YOU), ZoneReason::Other);
+    let equipment = put(&mut g, &EQUIPMENT);
+    g.state.update_obj(equipment, |o| o.attached_to = Some(h));
+    assert!(!cx(&mut g).battlefield_source_is_enchanted(h));
+    moved(&mut g, &[h], Zone::graveyard(YOU), ZoneReason::Other);
+    assert!(!cx(&mut g).battlefield_source_is_enchanted(h));
+}
+
+#[test]
+fn source_enchantment_tracks_phasing() {
+    let (mut g, h, _) = position();
+    crate::phasing::phase_out(&mut cx(&mut g), &[h], None, false);
+    assert!(cx(&mut g).battlefield_source_is_enchanted(h));
+}
+
+#[test]
+fn source_enchantment_uses_the_attachments_current_copied_type_at_departure() {
+    let (mut g, h, a) = position();
+    let equipment = g.cards.id_of(&EQUIPMENT);
+    g.state.update_obj(a, |o| o.copy = Some(Copiable::of(equipment)));
+    assert!(!cx(&mut g).battlefield_source_is_enchanted(h));
+    moved(&mut g, &[h], Zone::graveyard(YOU), ZoneReason::Other);
+    let aura = g.cards.id_of(&AURA);
+    g.state.update_obj(a, |o| o.copy = Some(Copiable::of(aura)));
+    assert!(!cx(&mut g).battlefield_source_is_enchanted(h), "later type changes cannot rewrite the departure view");
+
+    let (mut g, h, a) = position();
+    let aura = g.cards.id_of(&AURA);
+    g.state.update_obj(a, |o| o.copy = Some(Copiable::of(aura)));
+    moved(&mut g, &[h], Zone::graveyard(YOU), ZoneReason::Other);
+    let equipment = g.cards.id_of(&EQUIPMENT);
+    g.state.update_obj(a, |o| o.copy = Some(Copiable::of(equipment)));
+    assert!(cx(&mut g).battlefield_source_is_enchanted(h));
+}
+
+#[test]
+fn source_enchantment_survives_simultaneous_ceasing_to_exist() {
+    let (mut g, h, a) = position();
+    crate::ops::cease_together(&mut cx(&mut g), &[(Zone::BATTLEFIELD, a), (Zone::BATTLEFIELD, h)]);
+    assert!(cx(&mut g).battlefield_source_is_enchanted(h));
+}
+
+#[test]
+fn source_enchantment_uses_layered_aura_subtypes_at_departure() {
+    let (mut g, h, a) = position();
+    Rules::add_effect(&mut cx(&mut g), a, a, EffectKind::LoseSubtypesOf(CardType::Enchantment), Duration::Indefinite);
+    assert!(!cx(&mut g).battlefield_source_is_enchanted(h));
+    moved(&mut g, &[h], Zone::graveyard(YOU), ZoneReason::Other);
+    assert!(!cx(&mut g).battlefield_source_is_enchanted(h));
+
+    let (mut g, h, a) = position();
+    let equipment = g.cards.id_of(&EQUIPMENT);
+    g.state.update_obj(a, |o| o.copy = Some(Copiable::of(equipment)));
+    Rules::add_effect(&mut cx(&mut g), a, a, EffectKind::AddSubtype(Subtype::Aura), Duration::Indefinite);
+    assert!(cx(&mut g).battlefield_source_is_enchanted(h));
+    moved(&mut g, &[h], Zone::graveyard(YOU), ZoneReason::Other);
+    assert!(cx(&mut g).battlefield_source_is_enchanted(h));
+}
+
+#[test]
+fn aura_phased_out_separately_no_longer_enchants_a_live_host() {
+    let (mut g, h, a) = position();
+    crate::phasing::phase_out(&mut cx(&mut g), &[a], None, false);
+    assert!(!cx(&mut g).battlefield_source_is_enchanted(h));
+    moved(&mut g, &[h], Zone::graveyard(YOU), ZoneReason::Other);
+    assert!(!cx(&mut g).battlefield_source_is_enchanted(h));
+}
+
+#[test]
+fn aura_controller_does_not_change_enchanted_status() {
+    let (mut g, h, a) = position();
+    g.state.update_obj(a, |o| o.controller = PlayerId(1));
+    assert!(cx(&mut g).battlefield_source_is_enchanted(h));
+    moved(&mut g, &[h], Zone::graveyard(YOU), ZoneReason::Other);
+    assert!(cx(&mut g).battlefield_source_is_enchanted(h));
 }

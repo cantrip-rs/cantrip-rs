@@ -443,7 +443,7 @@ fn move_together_entering_event(
         });
         // Whatever it leaves, it is as it last existed there (CR 400.7, 608.2h, 113.7a): what an ability of it, or one it
         // created, reads once it is gone.
-        let last_known = last_known_of(cx, m.id);
+        let last_known = if from.is(ZoneKind::Battlefield) { departure_known_of(cx, m.id) } else { last_known_of(cx, m.id) };
         let turn = cx.s().turn.number;
         let entering = to.is(ZoneKind::Battlefield);
         let from_stack = entering && from.is(ZoneKind::Stack);
@@ -2556,7 +2556,7 @@ pub fn cease_to_exist(cx: &mut Cx, zone: Zone, id: ObjectId) {
 /// end together): each one's last-known information is taken before any of them is gone, so none misses the effects of
 /// another (a Glorious Anthem leaving with the creatures it pumped).
 pub fn cease_together(cx: &mut Cx, objects: &[(Zone, ObjectId)]) {
-    let rows: Vec<LastKnown> = objects.iter().map(|&(_, id)| last_known_of(cx, id)).collect();
+    let rows: Vec<LastKnown> = objects.iter().map(|&(zone, id)| if zone.is(ZoneKind::Battlefield) { departure_known_of(cx, id) } else { last_known_of(cx, id) }).collect();
     for (&(zone, id), row) in objects.iter().zip(rows) {
         let row = cx.st().last_known_push(row);
         cx.st().zone_remove(zone, id);
@@ -2574,6 +2574,15 @@ pub fn cease_together(cx: &mut Cx, objects: &[(Zone, ObjectId)]) {
 pub fn last_known_of(cx: &mut Cx, id: ObjectId) -> LastKnown {
     let chars = layers::source_chars(cx.cards(), cx.s(), &cx.g.log, id);
     last_known_from(cx, id, &chars)
+}
+
+/// Capture the attachment relationship before a simultaneous departure or phasing (CR 303.4b, 608.2h).
+/// Only actual battlefield exits pay for this scan; entries, attacks, and damage snapshots do not.
+pub(crate) fn departure_known_of(cx: &mut Cx, id: ObjectId) -> LastKnown {
+    let enchanted = cx.battlefield_source_is_enchanted(id);
+    let mut row = last_known_of(cx, id);
+    row.enchanted = enchanted;
+    row
 }
 
 /// The history's record of `permanent` as it entered (CR 603.6a, 614.12), asked once every permanent entering with it is
@@ -2634,6 +2643,7 @@ pub fn last_known_from(cx: &mut Cx, id: ObjectId, c: &Chars) -> LastKnown {
         hexproof_from: c.hexproof_from,
         must_attack: c.must_attack,
         attacking: cx.s().attackers.iter().any(|a| a.id == id),
+        enchanted: cx.s().last_known(id).or_else(|| cx.s().phased_last_known(id)).is_some_and(|last| last.enchanted),
         blocked_creatures,
         blocking_creatures,
         mana_value: cantrip_api::mana_value_of(&|card| cx.cards().get(card), cx.s(), id, c),

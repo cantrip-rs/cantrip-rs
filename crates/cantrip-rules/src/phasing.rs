@@ -61,7 +61,7 @@ fn phase_out_event(cx: &mut Cx, permanents: &[ObjectId], until_leaves: Option<Ob
     let all: Vec<(ObjectId, bool)> = direct.iter().map(|&id| (id, false)).chain(indirect.iter().map(|&id| (id, true))).collect();
     // CR 608.2h, 702.26b,d,g: every source's information is captured against the same phased-in board, attachments
     // and effects included, before combat removal or a duration ending changes that board.
-    let snapshots: Vec<_> = all.iter().map(|&(id, indirect)| (id, indirect, crate::ops::last_known_of(cx, id))).collect();
+    let snapshots: Vec<_> = all.iter().map(|&(id, indirect)| (id, indirect, crate::ops::departure_known_of(cx, id))).collect();
     let leaving = |id: ObjectId| all.iter().any(|&(a, _)| a == id);
     let phasing: Vec<ObjectId> = all.iter().map(|&(id, _)| id).collect();
     crate::ops::remove_from_combat(cx, &phasing);

@@ -638,8 +638,8 @@ pub fn permanent(q: &dyn Query, id: ObjectId) -> bool {
     on_battlefield(q, id)
 }
 
-/// "Enchanted" (CR 303.4b, 303.4e): an Aura is attached to the object, whoever controls the Aura. Enchanted Being's prevention and
-/// Ramses Overdark's "target enchanted creature" read it.
+/// "Enchanted" (CR 303.4b, 303.4e): an Aura is attached to the object, whoever controls the Aura.
+/// Ramses Overdark's "target enchanted creature" reads it.
 pub fn is_enchanted(q: &dyn Query, id: ObjectId) -> bool {
     q.state().battlefield().iter().any(|&a| q.state().obj(a).attached_to == Some(id) && q.chars(a).has_subtype(Subtype::Aura))
 }

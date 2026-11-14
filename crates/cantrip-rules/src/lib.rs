@@ -1134,6 +1134,7 @@ impl Game {
                     hexproof_from: c.hexproof_from,
                     must_attack: c.must_attack,
                     attacking: false,
+                    enchanted: false,
                     blocked_creatures: Default::default(),
                     blocking_creatures: Default::default(),
                     mana_value,

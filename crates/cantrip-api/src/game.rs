@@ -667,6 +667,22 @@ pub trait Query {
         (h.became.is_none() && h.zone.is(ZoneKind::Battlefield)).then_some(host)
     }
 
+    /// Whether a battlefield source is enchanted now, or was when it last left or phased out (CR 303.4b,
+    /// 608.2h, 113.7a). This does not capture enchantment of objects in other zones. Wall of Putrid Flesh asks
+    /// this of a departed damage source; Rayne, Academy Chancellor asks it of her source when her triggered ability
+    /// resolves. This does not change `attached_to`'s current-only contract.
+    fn battlefield_source_is_enchanted(&self, source: ObjectId) -> bool {
+        let s = self.state();
+        if source.index() >= s.objects.len() { return false; }
+        if let Some(known) = s.last_known(source).or_else(|| s.phased_last_known(source)) {
+            known.enchanted
+        } else {
+            s.obj(source).zone.is(ZoneKind::Battlefield)
+                && s.battlefield().iter().any(|&a| self.obj(a).attached_to == Some(source)
+                    && self.chars(a).has_subtype(Subtype::Aura))
+        }
+    }
+
     /// Whether a creature was declared as an attacker this turn (CR 508.1): still attacking or not, but still the
     /// object that attacked.
     fn attacked_this_turn(&self, id: ObjectId) -> bool {

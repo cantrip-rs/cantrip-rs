@@ -2383,6 +2383,8 @@ pub struct LastKnown {
     /// It was an attacking creature (CR 506.3) as it last was on the battlefield: combat forgets a permanent that leaves it, so
     /// "whenever an attacking creature you control dies" asks this (CR 603.10a).
     pub attacking: bool,
+    /// Whether an Aura enchanted this object as it left or phased out (CR 303.4b, 608.2h).
+    pub enchanted: bool,
     /// Exact incarnations this object was blocking, and creatures blocking it, at this snapshot (CR 608.2h, 113.7a).
     /// Runs of the existing immutable `GameState::members` arena; no fixed blocker limit or per-card remembered state.
     /// Source queries use these only after leaving its expected battlefield zone; current relationships stay separate.
