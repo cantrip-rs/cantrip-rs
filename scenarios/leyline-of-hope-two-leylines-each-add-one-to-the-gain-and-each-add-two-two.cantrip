@@ -1,0 +1,38 @@
+# Each Leyline of Hope applies on its own: with two out (both accepted), Lightning Helix's 3 becomes 3 + 1 + 1 = 5 (CR 616.1:
+# each replacement applies once), 22 -> 27, 7 above the starting 20, and the two statics stack: Bot1's Memnite is 1/1 +2/+2 +2/+2
+# = 5/5.
+
+[Bot1 Deck]
+Leyline of Hope
+Leyline of Hope
+Memnite
+Mox Pearl
+Mox Ruby
+Lightning Helix
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Life]
+Bot1: 22
+
+[Actions]
+Bot1.Accept
+Bot1.Accept
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Replace(Leyline of Hope)
+[T1 Bot1.Main1]
+? Stack.Count = 0
+
+[Expect]
+Bot1.Life = 27
+Bot1.Battlefield.Memnite.Power = 5
+Bot1.Battlefield.Memnite.Toughness = 5

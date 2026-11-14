@@ -1,0 +1,37 @@
+# Leyline of Hope: Bot1 declines to begin the game with it on the battlefield (CR 103.6a), so it stays in hand and does nothing:
+# Lightning Helix gains exactly 3 (24 -> 27, no "plus 1"), and although 27 is 7 above the starting 20, no creature is pumped
+# (the control for the accepting scenarios).
+
+[Bot1 Deck]
+Leyline of Hope
+Memnite
+Mox Pearl
+Mox Ruby
+Lightning Helix
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Life]
+Bot1: 24
+
+[Actions]
+Bot1.Decline
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main1]
+? Stack.Count = 0
+
+[Expect]
+Bot1.Life = 27
+Bot2.Life = 17
+Bot1.Hand.Leyline of Hope.Colors = White
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1

@@ -1,0 +1,40 @@
+# Leyline of Hope: "If this card is in your opening hand, you may begin the game with it on the battlefield" (CR 103.6a): Bot1
+# accepts. "If you would gain life, you gain that much life plus 1 instead" (CR 614.1a): Bot1 (at 22) casts Lightning Helix and
+# gains 3 + 1 = 4, 26 (once, not once per damaged object: Bot2 takes the 3). 26 is only 6 above the starting 20, so "at least 7"
+# is not met (CR 103.4): Bot1's Memnite stays 1/1, and so does Bot2's.
+# The controls: leyline-of-hope-creatures-get-plus-two-at-exactly-seven-above-starting-life-and-lose-it-below,
+# leyline-of-hope-declined-in-the-opening-hand-gains-three-and-pumps-nothing.
+
+[Bot1 Deck]
+Leyline of Hope
+Memnite
+Mox Pearl
+Mox Ruby
+Lightning Helix
+Island x15
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Life]
+Bot1: 22
+
+[Actions]
+Bot1.Accept
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main1]
+? Stack.Count = 0
+
+[Expect]
+Bot1.Life = 26
+Bot2.Life = 17
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
