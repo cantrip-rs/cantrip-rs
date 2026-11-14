@@ -1,0 +1,8 @@
+{
+  "name": "Vicious Clown",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Human Clown",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Whenever another creature you control with power 2 or less enters, this creature gets +2/+0 until end of turn."
+}
