@@ -1,0 +1,48 @@
+# Only a Glimmer that is a creature stops Fear of the Dark. Enduring Vitality (3/3) is killed by Bot1's Lightning Bolt on turn 3 and
+# returns as an enchantment, no longer a creature, so Bot2 controls a Glimmer but no Glimmer creature: the Fear attacks, the intervening
+# "if" holds (CR 603.4) and it gains menace and deathtouch for the turn. Bot2 takes 5 (20 -> 15).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Fear of the Dark
+Lightning Bolt
+Swamp x15
+
+[Bot2 Deck]
+Black Lotus
+Enduring Vitality
+Forest x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fear of the Dark.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Enduring Vitality.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Enduring Vitality)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Enduring Vitality.Types = Enchantment
+Bot1.Attack(Fear of the Dark > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Fear of the Dark.Keywords = Deathtouch; Menace
+? Bot2.Life = 15
+
+[Expect]
+Bot2.Battlefield.Enduring Vitality.Types = Enchantment
+Bot1.Battlefield.Fear of the Dark.Keywords = Deathtouch; Menace
+Bot2.Life = 15

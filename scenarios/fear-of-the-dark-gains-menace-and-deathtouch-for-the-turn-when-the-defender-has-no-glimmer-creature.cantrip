@@ -1,0 +1,34 @@
+# Fear of the Dark (5/5): "Whenever this creature attacks, if defending player controls no Glimmer creatures, it gains menace and
+# deathtouch until end of turn." Bot2 controls no creature, so the intervening "if" holds (CR 603.4) and the attacking Fear gets both
+# keywords for the turn (CR 702.111, 702.2, 611.2a). It has neither before the attack, and neither once the turn is over.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Fear of the Dark
+Swamp x16
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fear of the Dark.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Fear of the Dark.Keywords = (absent)
+Bot1.Attack(Fear of the Dark > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Fear of the Dark.Keywords = Deathtouch; Menace
+? Bot2.Life = 15
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Fear of the Dark.Keywords = (absent)
+Bot2.Life = 15

@@ -1,0 +1,40 @@
+# Fear of the Dark's intervening "if defending player controls no Glimmer creatures" (CR 603.4) is false when Bot2 controls Enduring
+# Vitality, a Glimmer creature (3/3): the ability does not trigger, so the attacking Fear gains neither menace nor deathtouch.
+# Bot2 does not block, so the Fear's 5 damage takes Bot2 to 15.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Fear of the Dark
+Swamp x16
+
+[Bot2 Deck]
+Black Lotus
+Enduring Vitality
+Forest x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fear of the Dark.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Enduring Vitality.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Fear of the Dark > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Fear of the Dark.Keywords = (absent)
+? Bot2.Life = 15
+
+[Expect]
+Bot2.Battlefield.Enduring Vitality.Types = Enchantment; Creature
+Bot1.Battlefield.Fear of the Dark.Keywords = (absent)
+Bot2.Life = 15

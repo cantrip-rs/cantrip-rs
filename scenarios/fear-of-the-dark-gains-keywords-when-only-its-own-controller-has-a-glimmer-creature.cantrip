@@ -1,0 +1,42 @@
+# Only a Glimmer creature the defending player controls stops Fear of the Dark (CR 603.4): Bot1 controls Enduring Tenacity, a Glimmer
+# creature (4/3), but Bot2, the defending player, has none, so the attacking Fear still gains menace and deathtouch for the turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Fear of the Dark
+Enduring Tenacity
+Swamp x15
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fear of the Dark.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Enduring Tenacity.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Enduring Tenacity.Types = Enchantment; Creature
+Bot1.Attack(Fear of the Dark > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Fear of the Dark.Keywords = Deathtouch; Menace
+? Bot2.Life = 15
+
+[Expect]
+Bot1.Battlefield.Fear of the Dark.Keywords = Deathtouch; Menace
+Bot2.Life = 15

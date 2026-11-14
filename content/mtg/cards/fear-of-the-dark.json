@@ -1,0 +1,8 @@
+{
+  "name": "Fear of the Dark",
+  "manaCost": "{4}{B}",
+  "type": "Enchantment Creature — Nightmare",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Whenever this creature attacks, if defending player controls no Glimmer creatures, it gains menace and deathtouch until end of turn. (A creature with menace can't be blocked except by two or more creatures.)"
+}
