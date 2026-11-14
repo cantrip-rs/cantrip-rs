@@ -20,12 +20,6 @@ fn another_rat_you_control_enters(q: &dyn Query, me: &Asker, event: &Event) -> O
     }
 }
 
-/// "Create a 1/1 black Rat creature token with 'This token can't block.'" (CR 111.1, 509.1b)
-fn make_rat(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &tokens::RAT_CANT_BLOCK, 1)?;
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
@@ -36,7 +30,7 @@ pub static CARD: CardDef = CardDef {
         .targets(&[targets::CARD_IN_AN_OPPONENTS_GRAVEYARD.optional()]),
         triggered(
             BEGINNING_OF_YOUR_COMBAT,
-            make_rat,
+            tokens::create_rats_that_cant_block::<1>,
             "At the beginning of combat on your turn, create a 1/1 black Rat creature token with \"This token can't block.\"",
         ),
     ],
