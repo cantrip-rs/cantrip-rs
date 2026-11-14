@@ -1,0 +1,46 @@
+# Each Eerie trigger resolves on its own and adds its own +1/+1 (CR 611.2a, 613.4c): on turn 3 Bot1 casts Unholy Annex (with Black Lotus) and Rancor on
+# the Apparition (with Mox Emerald), two enchantments entering, so the Apparition is 3/5 from Eerie alone and 5/5 with Rancor's +2/+0.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Emerald
+Erratic Apparition
+Unholy Annex // Ritual Chamber
+Rancor
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Erratic Apparition.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Erratic Apparition.Power = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rancor.Cast(Bot1.Battlefield.Erratic Apparition)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Erratic Apparition.Power = 5
+Bot1.Battlefield.Erratic Apparition.Toughness = 5
