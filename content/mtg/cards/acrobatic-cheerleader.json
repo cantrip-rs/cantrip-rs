@@ -1,0 +1,8 @@
+{
+  "name": "Acrobatic Cheerleader",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Survivor",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Survival — At the beginning of your second main phase, if this creature is tapped, put a flying counter on it. This ability triggers only once."
+}

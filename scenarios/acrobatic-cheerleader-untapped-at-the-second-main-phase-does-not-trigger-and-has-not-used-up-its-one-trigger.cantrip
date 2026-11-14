@@ -1,0 +1,34 @@
+# Acrobatic Cheerleader, Survival: "if this creature is tapped" is an intervening "if" (CR 603.4), checked when the second main
+# phase begins. It does not attack on turn 3, so it is untapped and the ability does not trigger (nothing on the stack, no counter).
+# That leaves its one trigger unused: on turn 5 it attacks, is tapped at the second main phase and gets the flying counter.
+
+[Bot1 Deck]
+Plains
+Mox Jet
+Acrobatic Cheerleader
+Island x17
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Acrobatic Cheerleader.Cast
+[T3 Bot1.Main2]
+? Stack.Count = 0
+? Bot1.Battlefield.Acrobatic Cheerleader.Tapped = false
+? Bot1.Battlefield.Acrobatic Cheerleader.Counters.Flying = (absent)
+[T5 Bot1.Main1]
+Bot1.Attack(Acrobatic Cheerleader > Bot2)
+[T5 Bot1.Main2]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Acrobatic Cheerleader.Counters.Flying = 1
+Stack.Count = 0
+Bot2.Life = 18
