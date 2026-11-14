@@ -11,6 +11,12 @@ pub fn manifest_dread(g: &mut dyn Game, player: PlayerId, source: ObjectId) -> R
     manifest_dread_object(g, player, source).map(|_| ())
 }
 
+/// "Manifest dread" by the controller of the spell or ability (CR 701.62a): the effect of Abhorrent Oculus's upkeep trigger, Turn
+/// Inside Out's delayed one and Unsettling Twins's enters trigger.
+pub fn controller_manifests_dread(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    manifest_dread(g, item.controller, item.object)
+}
+
 /// Manifest dread as `manifest_dread` does, answering the face-down permanent it made ("manifest dread, then attach this
 /// Equipment to that creature": Dissection Tools), or `None` when the
 /// library was empty.
