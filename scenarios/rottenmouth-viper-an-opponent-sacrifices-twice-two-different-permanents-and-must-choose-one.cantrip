@@ -1,0 +1,49 @@
+# Rottenmouth Viper's punishment, one choice for each blight counter: a permanent already chosen to sacrifice is not chosen
+# again, and each sacrifice or discard chosen is exactly one, never none (the rulings, CR 101.4). On turn 1 the Viper enters
+# with one counter and Bot2 discards a card; it may not discard nothing. On turn 2 Bot2 casts Memnite and Ornithopter. On turn
+# 3 the Viper attacks with its second counter and Bot2 chooses to sacrifice twice: it may not sacrifice nothing, and after
+# choosing Memnite the second sacrifice is Ornithopter. Both go at once, and the Viper's 6 combat damage takes Bot2 to 14.
+
+[Bot1 Deck]
+Island
+Black Lotus
+Show and Tell
+Rottenmouth Viper
+Island x10
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Lightning Bolt x15
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Rottenmouth Viper)
+Bot2.Choose()
+Bot2.Modes(Discard a card)
+! Bot2.Choose()
+Bot2.Choose(Lightning Bolt)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Rottenmouth Viper > Bot2)
+Bot2.Modes(Sacrifice a nonland permanent)
+! Bot2.Choose()
+Bot2.Choose(Memnite)
+Bot2.Modes(Sacrifice a nonland permanent)
+Bot2.Choose(Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot2.Graveyard = Ornithopter; Memnite; Lightning Bolt
+Bot2.Battlefield.Count = 0
+Bot2.Life = 14
