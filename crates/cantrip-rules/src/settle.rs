@@ -1824,9 +1824,11 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                         text: d.words.map(|w| (d.source, w)),
                     };
                     // One that looks back is asked of the game as it was just before the events (CR 603.10a, `BoardThen`).
+                    let group_leaves = d.when == DelayedWhen::AnyOfObjectsLeaves;
+                    let looks_back = group_leaves || cx.cards().looks_back(d.ability, event, seen);
                     let board_then;
                     let own: &dyn Query = match board {
-                        Some(then) if cx.cards().looks_back(d.ability, event, seen) => {
+                        Some(then) if looks_back => {
                             board_then = BoardThen { q: &given, then };
                             &board_then
                         }
@@ -1844,8 +1846,14 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                         // A delayed triggered mana ability never goes on the stack: it resolves as the mana ability that
                         // triggered it does (CR 605.1b, 605.4a), in `tapped_for_mana`.
                         && !t.mana_ability
-                        && t.listens.intersects(mask)
-                        && let Some(fired) = delayed_fires(own, &d, t, &asker, event)
+                        && (group_leaves || t.listens.intersects(mask))
+                        && let Some(fired) = (if group_leaves {
+                            // This mode's event is fixed by the rules, not by the delayed effect definition.
+                            let matched = matches!(event, Event::ZoneChange { old, from, .. }
+                                if from.is(ZoneKind::Battlefield) && cx.s().members(d.members).contains(old));
+                            (matched && t.only_if.is_none_or(|c| c(own, &asker))
+                                && t.condition.is_none_or(|c| c(own, &asker))).then_some(Fired::default())
+                        } else { delayed_fires(own, &d, t, &asker, event) })
                         // The end of an "until" exile is no triggered ability but the second one-shot effect the rules create
                         // immediately after the event (CR 610.3), so nothing that stops abilities triggering stops it, and the
                         // event that ends the wait always uses it up below. A "this turn" delayed ability is a triggered ability
@@ -1860,7 +1868,7 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                                     controller: d.controller,
                                     def: t,
                                     permanent: false,
-                                    looks_back: cx.cards().looks_back(d.ability, event, seen),
+                                    looks_back,
                                 },
                             ))
                     {
@@ -2206,7 +2214,8 @@ pub fn step_began(cx: &mut Cx, step: Step) {
             | DelayedWhen::UntilNextTurnOf(_)
             | DelayedWhen::NextThisTurn
             | DelayedWhen::WhenEvent
-            | DelayedWhen::ThatMana(_) => {
+            | DelayedWhen::ThatMana(_)
+            | DelayedWhen::AnyOfObjectsLeaves => {
                 (false, false)
             }
         };

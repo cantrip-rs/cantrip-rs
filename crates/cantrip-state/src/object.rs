@@ -2414,6 +2414,11 @@ pub enum DelayedWhen {
     /// Path of Ancestry's rulings: two of its mana spent are two triggers, on one spell or two), and is gone once none of
     /// that mana is left in a pool. Path of Ancestry, Pyromancer's Goggles, Primal Wellspring and Second City print it.
     ThatMana(u32),
+    /// The next time any captured object leaves the battlefield, trigger once with no event payload (CR 603.7b-e,
+    /// 603.10a). The members are exact object identities, captured with `delayed_trigger_about`; all matching
+    /// departures have the same outcome. Stangg uses this for its created Twins; Mechtitan Core (not yet implemented)
+    /// prints the same "when that token leaves the battlefield".
+    AnyOfObjectsLeaves,
 }
 
 impl DelayedWhen {
@@ -2428,12 +2433,13 @@ impl DelayedWhen {
                 | DelayedWhen::NextThisTurn
                 | DelayedWhen::WhenEvent
                 | DelayedWhen::ThatMana(_)
+                | DelayedWhen::AnyOfObjectsLeaves
         )
     }
 
     /// Whether the first event it triggers on uses it up (CR 603.7b): "until", "when you next" and "when [event]".
     pub fn once(self) -> bool {
-        matches!(self, DelayedWhen::UntilEvent | DelayedWhen::NextThisTurn | DelayedWhen::WhenEvent)
+        matches!(self, DelayedWhen::UntilEvent | DelayedWhen::NextThisTurn | DelayedWhen::WhenEvent | DelayedWhen::AnyOfObjectsLeaves)
     }
 }
 

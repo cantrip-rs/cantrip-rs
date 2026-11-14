@@ -883,6 +883,7 @@ impl<'a> Projector<'a> {
                         | DelayedWhen::ExtraTurnStep { .. }
                         | DelayedWhen::NextTurnStep { .. }
                         | DelayedWhen::WhenEvent
+                        | DelayedWhen::AnyOfObjectsLeaves
                         | DelayedWhen::ThatMana(_)
                 )
         }) {
@@ -2048,6 +2049,31 @@ fn protection_words(c: &Chars, names: &[String]) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn captured_group_departure_is_shown_as_pending_for_its_controller() {
+        fn nothing(_: &mut dyn cantrip_api::Game, _: &StackItem) -> Result<(), Suspend> { Ok(()) }
+        static SOURCE: CardDef = CardDef {
+            name: "Group departure source",
+            delayed: &[delayed_trigger(nothing, "When that token leaves, do something.")],
+            ..CardDef::BLANK
+        };
+        let cards = Box::leak(Box::new(CardTable::new([&SOURCE])));
+        let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+        let source = game.state.push_obj(Obj::new(cards.id_of(&SOURCE), PlayerId(0), Zone::BATTLEFIELD));
+        game.state.zone_push(Zone::BATTLEFIELD, source);
+        let members = game.state.members_push(&[source]);
+        game.state.delayed_push(cantrip_state::Delayed { when: DelayedWhen::AnyOfObjectsLeaves, source, controller: PlayerId(0),
+            ability: AbilityRef::delayed(cards.id_of(&SOURCE), 0), subject: Target::None, members, since: 0,
+            acquired: Acquired::OWN, words: None, unless: None });
+        let names = vec!["A".to_string(), "B".to_string()]; let faces = HashSet::new();
+        for viewer in [PlayerId(0), PlayerId(1), PUBLIC] {
+            let projector = Projector { game: &game, viewer, names: &names, conceded: &[false, false], faces: &faces };
+            let mut handles = HandleSpace::new();
+            let summary = projector.summarise(PlayerId(0), &mut handles);
+            assert!(summary.pending_effects.iter().any(|s| s.contains("When that token leaves, do something.")));
+        }
+    }
+
     fn captured_projection_game() -> (Game, ObjectId, ObjectId, ObjectId) {
         fn applies(q: &dyn Query, asker: &Asker, _: Target, id: ObjectId) -> bool {
             let land = q.words(asker.source).subtype(Subtype::Island);

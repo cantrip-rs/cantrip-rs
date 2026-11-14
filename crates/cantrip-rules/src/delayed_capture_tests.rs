@@ -65,9 +65,16 @@ static WATCHER: CardDef = CardDef {
         triggered(when_asked(EventMask::TAPPED, watched_tap), nothing, "Whenever it is tapped this turn.").condition(creator_is_instant).only_if(creator_is_instant),
     ], ..CardDef::BLANK
 };
+fn suppress_departures(_: &dyn Query, _: &Asker, event: &Event, triggering: &Triggering) -> bool {
+    triggering.looks_back && matches!(event, Event::ZoneChange { from, .. } if from.is(ZoneKind::Battlefield))
+}
+static HUSH_GROUP: CardDef = CardDef { name: "Group suppression fixture", types: TypeSet::of(&[CardType::Artifact]), trigger_rules: &[suppress_departures], ..CardDef::BLANK };
 static PLAIN: CardDef = CardDef { name: "Delayed capture control", delayed: &[delayed_trigger(nothing, "Do nothing.")], ..CardDef::BLANK };
+fn never(_: &dyn Query, _: &Asker) -> bool { false }
+static NEVER_IF: CardDef = CardDef { name: "Group intervening-if fixture", delayed: &[delayed_trigger(nothing, "Do nothing.").only_if(never)], ..CardDef::BLANK };
+static NEVER_COND: CardDef = CardDef { name: "Group condition fixture", delayed: &[delayed_trigger(nothing, "Do nothing.").condition(never)], ..CardDef::BLANK };
 fn game() -> Game {
-    let cards = Box::leak(Box::new(CardTable::new([&AUTHORITY, &AURA, &BODY, &PLAIN, &WATCHER])));
+    let cards = Box::leak(Box::new(CardTable::new([&AUTHORITY, &AURA, &BODY, &PLAIN, &WATCHER, &HUSH_GROUP, &NEVER_IF, &NEVER_COND])));
     let mut g = Game::new(cards, &Setup { decks: vec![vec![]; 2], ..Default::default() });
     while !g.state.agenda.is_empty() { g.state.frame_remove(0); }
     g.state.update_turn(|t| { t.number = 3; t.active = YOU; t.priority = YOU; t.set_step(Step::PrecombatMain); });
@@ -358,4 +365,130 @@ fn this_turn_watching_keeps_event_payload_and_captured_words_until_cleanup() {
     assert!(g.state.delayed.is_empty());
     cx(&mut g).emit(Event::Tapped { permanent: watched });
     assert_eq!(g.state.triggers.len(), 2);
+}
+
+fn group_delay(g: &mut Game, source: ObjectId, controller: PlayerId, members: &[ObjectId]) {
+    let ability = AbilityRef::delayed(g.state.obj(source).card, 0);
+    cx(g).delayed_trigger_about(DelayedWhen::AnyOfObjectsLeaves, source, controller, ability, members);
+}
+
+#[test]
+fn group_departure_consumes_once_before_countering_and_carries_provenance() {
+    let mut g = game(); let source = put(&mut g, &PLAIN, Zone::BATTLEFIELD);
+    let a = put(&mut g, &BODY, Zone::BATTLEFIELD); let b = put(&mut g, &BODY, Zone::BATTLEFIELD);
+    let unrelated = put(&mut g, &BODY, Zone::BATTLEFIELD);
+    group_delay(&mut g, source, THEM, &[a, b]);
+    let delayed = g.state.delayed[0];
+    cx(&mut g).exile_all(&[unrelated]); assert!(g.state.triggers.is_empty());
+    cx(&mut g).exile_all(&[a]);
+    assert!(g.state.delayed.is_empty()); assert_eq!(g.state.triggers.len(), 1);
+    let t = g.state.triggers[0];
+    assert_eq!(t.source, source); assert_eq!(t.controller, THEM); assert_eq!(t.subject, Target::None);
+    assert_eq!(t.data, [0, 0]); assert_eq!(t.words, delayed.words); assert_eq!(t.acquired, delayed.acquired);
+    assert_eq!(t.since, Some(delayed.since)); assert_eq!(g.state.members(t.members), &[a, b]);
+    g.state.frame_push(Frame::new(FrameKind::Priority)); g.state.frame_push(Frame::new(FrameKind::Settle)); g.run();
+    assert_eq!(g.state.stack.len(), 1); let item = g.state.stack[0];
+    assert_eq!(item.object, source); assert_eq!(item.controller, THEM); assert_eq!(g.state.members(item.members), &[a, b]);
+    cx(&mut g).exile_all(&[b]); assert!(g.state.triggers.is_empty()); assert_eq!(g.state.stack.len(), 1);
+    cx(&mut g).counter_item(source, 0);
+    assert!(g.state.stack.is_empty()); assert!(g.state.obj(source).became.is_none());
+}
+
+#[test]
+fn group_departures_are_once_per_instance_and_simultaneous_events_match_once() {
+    let mut g = game(); let source = put(&mut g, &PLAIN, Zone::BATTLEFIELD);
+    let a = put(&mut g, &BODY, Zone::BATTLEFIELD); let b = put(&mut g, &BODY, Zone::BATTLEFIELD);
+    let c = put(&mut g, &BODY, Zone::BATTLEFIELD); let d = put(&mut g, &BODY, Zone::BATTLEFIELD);
+    group_delay(&mut g, source, YOU, &[a, b]); group_delay(&mut g, source, YOU, &[c, d]);
+    cx(&mut g).exile_all(&[a, b]);
+    assert_eq!(g.state.triggers.len(), 1); assert_eq!(g.state.delayed.len(), 1);
+    assert_eq!(g.state.members(g.state.delayed[0].members), &[c, d]);
+    cx(&mut g).exile_all(&[c]); assert_eq!(g.state.triggers.len(), 2); assert!(g.state.delayed.is_empty());
+    assert_eq!(g.state.members(g.state.triggers[0].members), &[a, b]);
+    assert_eq!(g.state.members(g.state.triggers[1].members), &[c, d]);
+}
+
+#[test]
+fn group_departure_outlives_source_and_restores_on_rollback() {
+    let mut g = game(); let source = put(&mut g, &PLAIN, Zone::BATTLEFIELD);
+    let a = put(&mut g, &BODY, Zone::BATTLEFIELD); let b = put(&mut g, &BODY, Zone::BATTLEFIELD);
+    group_delay(&mut g, source, THEM, &[a, b]);
+    cx(&mut g).exile_all(&[source]); crate::turn::cleanup(&mut cx(&mut g)).unwrap();
+    assert_eq!(g.state.delayed.len(), 1);
+    let mark = g.state.mark();
+    cx(&mut g).exile_all(&[a]); assert_eq!(g.state.triggers.len(), 1); assert!(g.state.delayed.is_empty());
+    g.state.rollback(mark); assert_eq!(g.state.delayed.len(), 1); assert!(g.state.triggers.is_empty());
+    assert_eq!(g.state.members(g.state.delayed[0].members), &[a, b]);
+    cx(&mut g).exile_all(&[b]); assert_eq!(g.state.triggers.len(), 1);
+    assert_eq!(g.state.triggers[0].source, source); assert_eq!(g.state.triggers[0].controller, THEM);
+}
+
+#[test]
+fn group_departure_matches_when_source_leaves_together_and_ignores_old_incarnation() {
+    let mut g = game(); let source = put(&mut g, &PLAIN, Zone::BATTLEFIELD);
+    let a = put(&mut g, &BODY, Zone::BATTLEFIELD);
+    group_delay(&mut g, source, YOU, &[a]); cx(&mut g).exile_all(&[source, a]);
+    assert_eq!(g.state.triggers.len(), 1); assert!(g.state.delayed.is_empty());
+    let moved = g.state.obj(a).became.unwrap();
+    let new = cx(&mut g).put_onto_battlefield(moved, YOU, false).unwrap();
+    group_delay(&mut g, source, YOU, &[a]); cx(&mut g).exile_all(&[new]);
+    assert_eq!(g.state.triggers.len(), 1);
+}
+
+#[test]
+fn group_departure_looks_back_at_suppression_and_suppressed_event_does_not_consume() {
+    let mut g = game(); let source = put(&mut g, &PLAIN, Zone::BATTLEFIELD);
+    let hush = put(&mut g, &HUSH_GROUP, Zone::BATTLEFIELD);
+    let a = put(&mut g, &BODY, Zone::BATTLEFIELD); let b = put(&mut g, &BODY, Zone::BATTLEFIELD);
+    group_delay(&mut g, source, YOU, &[a, b]); cx(&mut g).exile_all(&[a, hush]);
+    assert!(g.state.triggers.is_empty()); assert_eq!(g.state.delayed.len(), 1);
+    cx(&mut g).exile_all(&[b]); assert_eq!(g.state.triggers.len(), 1); assert!(g.state.delayed.is_empty());
+}
+
+#[test]
+fn group_departure_keeps_creating_words_and_acquisition() {
+    let mut g = game(); let source = put(&mut g, &PLAIN, Zone::BATTLEFIELD);
+    let watched = put(&mut g, &BODY, Zone::BATTLEFIELD);
+    let ability = AbilityRef::delayed(g.state.obj(source).card, 0);
+    let mut item = crate::actions::stack_item(StackKind::Triggered, source, ability, YOU, &[]);
+    item.acquired = Acquired { by: AcquiredBy::Grant, stamp: g.state.timestamp(), part: 0 };
+    item.words = Words::NONE.changed(Word::Subtype(Subtype::Goblin), Word::Subtype(Subtype::Elf));
+    g.state.stack_push(item); let serial = g.state.stack.last().unwrap().serial;
+    let frame = g.state.agenda.len(); g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
+    g.own_text.set(true);
+    let mut run = Cx { frame, ..cx(&mut g) };
+    run.delayed_trigger_about(DelayedWhen::AnyOfObjectsLeaves, source, THEM, ability, &[watched]);
+    let since = run.s().delayed[0].since; drop(run);
+    cx(&mut g).exile_all(&[watched]);
+    let trigger = g.state.triggers[0];
+    assert_eq!(trigger.source, source); assert_eq!(trigger.controller, THEM);
+    assert_eq!(trigger.words, Some(item.words)); assert_eq!(trigger.acquired, item.acquired);
+    assert_eq!(trigger.since, Some(since)); assert_eq!(g.state.members(trigger.members), &[watched]);
+}
+
+#[test]
+fn group_departure_does_not_trigger_or_expire_on_phasing() {
+    let mut g = game(); let source = put(&mut g, &PLAIN, Zone::BATTLEFIELD);
+    let watched = put(&mut g, &BODY, Zone::BATTLEFIELD);
+    group_delay(&mut g, source, YOU, &[watched]);
+    crate::phasing::phase_out(&mut cx(&mut g), &[watched], None, false);
+    assert!(g.state.triggers.is_empty()); crate::turn::cleanup(&mut cx(&mut g)).unwrap();
+    assert_eq!(g.state.delayed.len(), 1); assert_eq!(g.state.members(g.state.delayed[0].members), &[watched]);
+}
+
+/// A group departure whose condition is false neither triggers nor is used up (CR 603.4); once every member has left
+/// without it triggering, it can never trigger again and is gone as the turn changes (CR 400.7, 603.7c).
+#[test]
+fn group_departure_with_a_false_condition_neither_triggers_nor_is_used_up_and_expires_at_the_turn_change() {
+    for def in [&NEVER_IF, &NEVER_COND] {
+        let mut g = game(); let source = put(&mut g, def, Zone::BATTLEFIELD);
+        let a = put(&mut g, &BODY, Zone::BATTLEFIELD); let b = put(&mut g, &BODY, Zone::BATTLEFIELD);
+        group_delay(&mut g, source, YOU, &[a, b]);
+        cx(&mut g).exile_all(&[a]);
+        assert!(g.state.triggers.is_empty(), "{}", def.name); assert_eq!(g.state.delayed.len(), 1, "{}", def.name);
+        cx(&mut g).exile_all(&[b]);
+        assert!(g.state.triggers.is_empty(), "{}", def.name); assert_eq!(g.state.delayed.len(), 1, "{}", def.name);
+        g.state.update_turn(|t| t.set_step(Step::Cleanup)); crate::turn::next_step(&mut g);
+        assert!(g.state.delayed.is_empty(), "{}", def.name);
+    }
 }

@@ -1270,6 +1270,7 @@ pub trait Game: Query {
     fn delayed_trigger(&mut self, when: DelayedWhen, source: ObjectId, controller: PlayerId, ability: AbilityRef, subject: Target);
     /// `delayed_trigger`, carrying the objects the ability is about to the moment it triggers (`event_objects` of its
     /// stack item): every Warrior a mobilize ability created, which it sacrifices together (CR 603.7c).
+    /// `AnyOfObjectsLeaves` watches these exact objects for one battlefield departure (CR 603.7b, 603.10a).
     fn delayed_trigger_about(&mut self, when: DelayedWhen, source: ObjectId, controller: PlayerId, ability: AbilityRef, objects: &[ObjectId]);
     /// Creates a step-delayed triggered ability (CR 603.7c-e), retaining both an independent singular `subject` and
     /// the real objects its instructions refer to (`event_objects`). Infinite Authority carries its first creature

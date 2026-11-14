@@ -3976,3 +3976,12 @@ is a World card's, or one whose static ability can make something a World
 cached: the guard reads those objects as it is asked, after every event, as
 `library_visibility::sync` does, and inspects game objects rather than asking
 whether the global card table contains any World.
+
+### Captured group departures
+
+`DelayedWhen::AnyOfObjectsLeaves` watches the real object identities in a delayed ability's existing members span
+(CR 603.7b-e, 603.10a). A battlefield departure of any member triggers it once with no event-specific payload; the
+trigger uses the normal stack and retains its creating source, controller, text and captured members. Independent
+creations remain independent. Stangg uses this fixed-outcome procedure (Mechtitan Core, not yet implemented, prints the same) for the token group an
+instruction creates, including additional tokens made by replacement effects. Simultaneous matches have the same
+outcome; this mode does not expose an event choice or implement general event-specific delayed-trigger selection.

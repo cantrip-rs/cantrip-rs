@@ -6696,7 +6696,7 @@ fn waiting_mana_triggers(cx: &Cx) -> Vec<WaitingManaTrigger> {
             }
         }
     }
-    for d in cx.s().delayed.iter().filter(|d| d.when.is_event()) {
+    for d in cx.s().delayed.iter().filter(|d| d.when.is_event() && d.when != DelayedWhen::AnyOfObjectsLeaves) {
         if let AbilityDef::Triggered(t) = cards.ability(d.ability)
             && t.mana_ability
         {
@@ -14209,7 +14209,7 @@ fn delayed_mana_abilities(cx: &mut Cx, event: &Event, statics: &mut crate::settl
         .s()
         .delayed
         .iter()
-        .filter(|d| d.when.is_event() && matches!(cx.cards().ability(d.ability), AbilityDef::Triggered(t) if t.mana_ability))
+        .filter(|d| d.when.is_event() && d.when != DelayedWhen::AnyOfObjectsLeaves && matches!(cx.cards().ability(d.ability), AbilityDef::Triggered(t) if t.mana_ability))
         .cloned()
         .collect();
     for d in delayed {
@@ -16762,6 +16762,42 @@ mod delayed_watched_mana_tests {
             .mana_ability(TriggeredMana::One(Mana::G)).condition(snow_creator).only_if(snow_creator)], ..CardDef::BLANK
     };
     static WATCHED: CardDef = CardDef { name: "Ordinary watched mana source", types: TypeSet::of(&[CardType::Artifact]), ..CardDef::BLANK };
+
+    #[test]
+    fn captured_group_departure_never_fires_for_mana_taps_or_advice() {
+        let cards = Box::leak(Box::new(CardTable::new([&SOURCE, &WATCHED])));
+        let mut g = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+        let you = PlayerId(0);
+        let source = g.state.push_obj(Obj::new(cards.id_of(&SOURCE), you, Zone::BATTLEFIELD));
+        g.state.zone_push(Zone::BATTLEFIELD, source);
+        let ability = AbilityRef::delayed(cards.id_of(&SOURCE), 0);
+        let members = g.state.members_push(&[source]);
+        let words = Some(Words::NONE.changed(Word::Subtype(Subtype::Goblin), Word::Subtype(Subtype::Elf)));
+        // This deliberately pairs the fixed departure mode with a mana definition whose matcher accepts the tap.
+        // A wrong route through the ordinary matcher would add mana, so the existing delay is a positive control.
+        let group = cantrip_state::Delayed { when: DelayedWhen::AnyOfObjectsLeaves, source, controller: you,
+            ability, subject: Target::None, members, since: 0, acquired: Acquired::OWN, words, unless: None };
+        let ordinary = cantrip_state::Delayed { when: DelayedWhen::WatchingThisTurn, subject: Target::Object(source), ..group };
+        g.state.delayed_push(group); g.state.delayed_push(ordinary);
+        let mut c = Cx { g: &mut g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: vec![], damage: None, asked_at: None, doer: None, producing: None, reached: None };
+        let waiting = waiting_mana_triggers(&c);
+        assert_eq!(waiting.iter().filter(|(_, _, _, d)| d.is_some()).count(), 1);
+        let (_, _, snow, _) = tap_triggers(&c, &waiting, source, you, 1 << Mana::G as usize);
+        assert_eq!(snow[Mana::G as usize], 1);
+        let event = Event::TappedForMana { permanent: source, player: you, produced: ManaTally([0, 0, 0, 0, 1, 0]) };
+        let mut statics = crate::settle::TriggerStatics::new(None);
+        delayed_mana_abilities(&mut c, &event, &mut statics).unwrap();
+        assert_eq!(c.s().player(you).pool.get(Mana::G), 1);
+        assert_eq!(c.s().delayed.len(), 2);
+        c.st().delayed_remove(1);
+        let waiting = waiting_mana_triggers(&c);
+        let (_, _, snow, _) = tap_triggers(&c, &waiting, source, you, 1 << Mana::G as usize);
+        assert_eq!(snow[Mana::G as usize], 0);
+        let mut statics = crate::settle::TriggerStatics::new(None);
+        delayed_mana_abilities(&mut c, &event, &mut statics).unwrap();
+        assert_eq!(c.s().player(you).pool.get(Mana::G), 1);
+        assert_eq!(c.s().delayed, vec![group]);
+    }
 
     #[test]
     fn delayed_mana_advice_reads_creators_words_and_snow_quality() {

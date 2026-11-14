@@ -323,6 +323,9 @@ fn next_turn_taker(s: &mut GameState, after: PlayerId) -> PlayerId {
         // for the first that isn't skipped (CR 614.10a).
         DelayedWhen::NextTurnStep { player, after, .. } => s.turn.active == player && s.player(player).turn_began > after,
         DelayedWhen::WhenEvent => s.obj(d.watched()).became.is_some(),
+        // These exact identities cannot leave again once all have changed zones. A phased-out object retains its
+        // identity and remains watched (CR 702.26d); the creating source is independent of the watched group.
+        DelayedWhen::AnyOfObjectsLeaves => s.members(d.members).iter().all(|&id| s.obj(id).became.is_some()),
         _ => false,
     };
     // So do the effects about that turn alone ("during that turn"): they last through its cleanup step, and end as the next turn
