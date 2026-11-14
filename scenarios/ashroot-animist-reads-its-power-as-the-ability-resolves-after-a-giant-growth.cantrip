@@ -1,0 +1,49 @@
+# Ashroot Animist: X is the Animist's power as the ability resolves (CR 608.2h), not as it triggered. On turn 3 the Animist attacks and
+# its trigger targets the Memnite (the only other creature); in response Giant Growth makes the Animist a 7/7, so the Memnite gets +7/+7
+# and trample: an 8/8. Giant Growth ends at end of turn, the Memnite is a 1/1 again on turn 4.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Jet
+Ashroot Animist
+Memnite
+Giant Growth
+Forest x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ashroot Animist.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ashroot Animist > Bot2)
+? Stack.Count = 1
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Ashroot Animist)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ashroot Animist.Power = 7
+? Bot1.Battlefield.Memnite.Power = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 8
+? Bot1.Battlefield.Memnite.Toughness = 8
+? Bot1.Battlefield.Memnite.Keywords = Trample
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+
+[Expect]
+Bot2.Life = 13

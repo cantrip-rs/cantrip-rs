@@ -1,0 +1,57 @@
+# Ashroot Animist, a 4/4 with trample: "Whenever this creature attacks, another target creature you control gains trample and gets +X/+X
+# until end of turn, where X is this creature's power." On turn 3 it attacks alone with Bot1's Memnite and Ornithopter and Bot2's own
+# Ornithopter on the table: the Animist itself and Bot2's Ornithopter are refused as targets, the Memnite is chosen and is a 5/5 with trample until the end
+# of the turn (it is not attacking) and a 1/1 again on turn 4.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Jet
+Ashroot Animist
+Memnite
+Ornithopter
+Forest x20
+
+[Bot2 Deck]
+Ornithopter
+Island x23
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ashroot Animist.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ashroot Animist.Keywords = Trample
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ashroot Animist > Bot2)
+! Bot1.Target(Ashroot Animist)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 5
+? Bot1.Battlefield.Memnite.Toughness = 5
+? Bot1.Battlefield.Memnite.Keywords = Trample
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ashroot Animist.Power = 4
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot2.Life = 16

@@ -1,0 +1,58 @@
+# Ashroot Animist: a negative power gives +0/+0, not a penalty (CR 107.1b). On turn 3 the Animist attacks and its trigger targets the
+# Memnite; Bot2 answers with Dismember (-5/-5) on the Animist, which dies as a -1/-1. The ability
+# still resolves with X = 0: the Memnite gains trample and gets +0/+0.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Jet
+Ashroot Animist
+Memnite
+Forest x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Jet
+Mox Ruby
+Dismember
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ashroot Animist.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ashroot Animist > Bot2)
+Bot1.Pass
+Bot2.Battlefield.Mox Jet#1.Activate
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Dismember.Cast(Ashroot Animist)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Ashroot Animist
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Memnite.Keywords = Trample
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Memnite.Power = 1

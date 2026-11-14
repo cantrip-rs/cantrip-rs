@@ -1,0 +1,11 @@
+{
+  "name": "Ashroot Animist",
+  "manaCost": "{2}{R}{G}",
+  "type": "Creature — Lizard Druid",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Trample\nWhenever this creature attacks, another target creature you control gains trample and gets +X/+X until end of turn, where X is this creature's power.",
+  "keywords": [
+    "Trample"
+  ]
+}
