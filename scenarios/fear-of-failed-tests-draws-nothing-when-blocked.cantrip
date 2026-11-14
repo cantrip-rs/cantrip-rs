@@ -1,0 +1,37 @@
+# Same setup, but Bot2 has an Ornithopter (cast for free on turn 2) and blocks: Fear of Failed Tests deals its combat damage to a creature, not to a
+# player (CR 510.1), so the trigger never fires and Bot1 draws nothing beyond the draw step (library 13). The unblocked scenario is the positive control.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Fear of Failed Tests
+Island x3
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fear of Failed Tests.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Fear of Failed Tests)
+Bot2.Block(Ornithopter > Fear of Failed Tests)
+[T3 Bot1.Main2]
+? Stack.Count = 0
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter
+Bot1.Library.Count = 13

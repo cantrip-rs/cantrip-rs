@@ -1,0 +1,33 @@
+# Fear of Failed Tests (2/7) is cast on turn 1 with Black Lotus and two Moxes. On turn 3 it attacks unblocked: Bot2 takes 2 and Bot1 draws that many
+# cards (CR 121.1): the library goes 14 -> 13 (draw step) -> 11. The blocked, prevented, pumped and planeswalker scenarios are the other cases.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Fear of Failed Tests
+Island x3
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fear of Failed Tests.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fear of Failed Tests.Types = Enchantment; Creature
+[T3 Bot1.Main1]
+? Bot1.Library.Count = 13
+Bot1.Attack(Fear of Failed Tests)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 18
+Bot1.Library.Count = 11
+Bot1.Hand.Count = 6
