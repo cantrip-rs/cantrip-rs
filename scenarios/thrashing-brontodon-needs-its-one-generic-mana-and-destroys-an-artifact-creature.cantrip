@@ -1,0 +1,30 @@
+# Thrashing Brontodon: the {1} is a cost (CR 602.2b): with Bot1 having played no land and Black Lotus gone, the ability is refused even with
+# Bot2's Ornithopter on the battlefield. With a Forest to pay for it, "target artifact or enchantment" takes the Ornithopter, an
+# artifact creature, and the Brontodon is sacrificed to pay.
+
+[Bot1 Deck]
+Black Lotus
+Thrashing Brontodon
+Forest
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thrashing Brontodon.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Thrashing Brontodon.Activate(Ornithopter; Mana: short)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Thrashing Brontodon.Activate(Ornithopter)
+
+[Expect]
+Bot1.Graveyard = Thrashing Brontodon; Black Lotus
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield = Forest

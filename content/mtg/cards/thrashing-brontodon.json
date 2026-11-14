@@ -1,0 +1,8 @@
+{
+  "name": "Thrashing Brontodon",
+  "manaCost": "{1}{G}{G}",
+  "type": "Creature — Dinosaur",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "{1}, Sacrifice this creature: Destroy target artifact or enchantment."
+}

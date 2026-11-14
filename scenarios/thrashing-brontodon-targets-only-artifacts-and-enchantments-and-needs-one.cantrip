@@ -1,0 +1,43 @@
+# Thrashing Brontodon: "{1}, Sacrifice this creature: Destroy target artifact or enchantment." (CR 115.1, 602.2b). With none on the
+# battlefield (Black Lotus was sacrificed to cast it) the ability can't be activated (turn 1). Once Bot2 has a Fastbond, an Elvish Mystic and
+# a Forest, only the enchantment is a target: the creature and the land are refused beside it, and the destroyed Fastbond is the positive
+# control. The Brontodon is sacrificed as a cost.
+
+[Bot1 Deck]
+Black Lotus
+Thrashing Brontodon
+Forest
+Island x20
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Fastbond
+Forest x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thrashing Brontodon.Cast
+Bot1.Hand.Forest.Play
+? Bot1.Battlefield.Thrashing Brontodon.Power = 3
+? Bot1.Battlefield.Thrashing Brontodon.Toughness = 4
+! Bot1.Battlefield.Thrashing Brontodon.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Fastbond.Cast
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Thrashing Brontodon.Activate(Bot2.Battlefield.Elvish Mystic)
+! Bot1.Battlefield.Thrashing Brontodon.Activate(Bot1.Battlefield.Forest)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Thrashing Brontodon.Activate(Fastbond)
+
+[Expect]
+Bot1.Graveyard = Thrashing Brontodon; Black Lotus
+Bot2.Graveyard = Fastbond
+Bot2.Battlefield = Forest; Forest; Elvish Mystic
