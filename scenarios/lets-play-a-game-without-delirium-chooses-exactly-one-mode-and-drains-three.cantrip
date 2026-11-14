@@ -1,0 +1,27 @@
+# Let's Play a Game: "Delirium - Choose one. If there are four or more card types among cards in your graveyard, choose one or
+# more instead" (CR 700.2). With an empty graveyard only one mode may be chosen: choosing two is refused, and the drain mode
+# alone makes each opponent lose 3 life and the caster gain 3 (CR 119.3, 119.4): Bot2 on 17, Bot1 on 23.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Let's Play a Game
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Let's Play a Game.Cast
+! Bot1.Modes(1; 3)
+Bot1.Modes(3)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 23

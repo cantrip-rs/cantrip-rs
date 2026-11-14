@@ -1,0 +1,55 @@
+# Let's Play a Game with delirium (CR 207.2c, 700.2): on turn 1 Black Lotus pays for a Wheel of Fortune that puts an Ornithopter
+# (artifact creature), four Islands (land), the Wheel (sorcery) and the Lotus (artifact) into Bot1's graveyard: four types, so all three
+# modes may be chosen. The Wheel also makes Bot2 discard its seven Islands and draw a Memnite and six Islands. On turn 3, with Bot2's
+# Memnite on the battlefield and Bot2 holding its six Islands and its turn-2 draw (seven cards), the spell does everything in
+# printed order: Bot2's Memnite (1/1) gets -1/-1 and dies while Bot1's own Memnite (1/1) does not, Bot2 discards two (7 -> 5), and
+# Bot2 loses 3 life while Bot1 gains 3 (20 -> 17, 20 -> 23).
+
+[Bot1 Deck]
+Black Lotus
+Wheel of Fortune
+Ornithopter
+Island
+Island
+Island
+Island
+Black Lotus
+Mox Jet
+Memnite
+Let's Play a Game
+Swamp
+Swamp
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Island x7
+Memnite
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Let's Play a Game.Cast
+Bot1.Modes(1; 2; 3)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 23
+Bot2.Battlefield.Count = 0
+Bot2.Hand.Count = 5
+Bot1.Battlefield.Memnite.Power = 1

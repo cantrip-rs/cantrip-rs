@@ -1,0 +1,51 @@
+# Let's Play a Game: delirium counts only "cards in your graveyard" (CR 207.2c, 700.2). On turn 1 Black Lotus pays for a Wheel of
+# Fortune: Bot1's graveyard gets the Lotus (artifact), the Wheel (sorcery) and five Islands (land), three types. Bot2's graveyard gets
+# a Memnite (creature), a Lightning Bolt (instant) and five Islands (land), which would make five types between them but do not
+# count. On turn 3 only one mode may be chosen: choosing two is refused, and "each opponent discards two cards" alone takes Bot2
+# from seven cards (seven drawn off the Wheel and one for turn 2, less one discarded to hand size at that cleanup) to five.
+
+[Bot1 Deck]
+Black Lotus
+Wheel of Fortune
+Island
+Island
+Island
+Island
+Island
+Black Lotus
+Mox Jet
+Let's Play a Game
+Swamp
+Swamp
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Memnite
+Lightning Bolt
+Island x5
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Let's Play a Game.Cast
+! Bot1.Modes(1; 2)
+Bot1.Modes(2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Hand.Count = 5
+Bot2.Graveyard.Count = 10
+Bot2.Life = 20
+Bot1.Life = 20

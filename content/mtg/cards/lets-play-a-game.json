@@ -1,0 +1,6 @@
+{
+  "name": "Let's Play a Game",
+  "manaCost": "{3}{B}",
+  "type": "Sorcery",
+  "oracleText": "Delirium — Choose one. If there are four or more card types among cards in your graveyard, choose one or more instead.\n• Creatures your opponents control get -1/-1 until end of turn.\n• Each opponent discards two cards.\n• Each opponent loses 3 life and you gain 3 life."
+}
