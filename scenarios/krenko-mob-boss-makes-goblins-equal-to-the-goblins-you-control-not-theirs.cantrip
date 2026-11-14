@@ -1,0 +1,61 @@
+# Krenko, Mob Boss, a 3/3 Goblin Warrior: "{T}: Create X 1/1 red Goblin creature tokens, where X is the number of Goblins you control." Bot2 controls a Goblin Boarders, which
+# does not count. Turn 3: Krenko is the only Goblin Bot1 controls, so X is 1 and one Goblin token is made (counted before it exists). Turn 5: Krenko and that token are two
+# Goblins, so two more tokens come: four Goblins and three tokens. The mana is paid exactly: the pool is empty after the cost.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Krenko, Mob Boss
+Mountain x17
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Goblin Boarders
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Krenko, Mob Boss.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Hand.Goblin Boarders.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Krenko, Mob Boss.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Goblin Token; Krenko, Mob Boss; Mox Ruby
+[T5 Bot1.Main1]
+Bot1.Battlefield.Krenko, Mob Boss.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Goblin Token; Goblin Token; Goblin Token; Krenko, Mob Boss; Mox Ruby
+Bot1.Battlefield.Goblin Token#1.Power = 1
+Bot1.Battlefield.Goblin Token#1.Toughness = 1
+Bot1.Battlefield.Goblin Token#1.Colors = Red
+Bot2.Battlefield = Goblin Boarders; Mox Ruby; Mox Ruby; Mox Ruby
