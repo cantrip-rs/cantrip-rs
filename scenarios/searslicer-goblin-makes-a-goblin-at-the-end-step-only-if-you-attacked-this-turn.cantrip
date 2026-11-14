@@ -1,0 +1,42 @@
+# Searslicer Goblin, a 2/1: "Raid -- At the beginning of your end step, if you attacked this turn, create a 1/1 red Goblin creature token."
+# Turn 3: the Searslicer Goblin attacks, and at the end step a 1/1 red Goblin token
+# appears. Turn 5: nothing attacks and no token is made (the turn-3 attack does not count).
+
+[Bot1 Deck]
+Searslicer Goblin
+Mox Ruby x2
+Mountain x14
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Searslicer Goblin.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Searslicer Goblin > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Goblin Token = (absent)
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Token.Power = 1
+[T5 Bot1.End]
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield = Goblin Token; Mox Ruby; Mox Ruby; Searslicer Goblin
+Bot1.Battlefield.Goblin Token.Power = 1
+Bot1.Battlefield.Goblin Token.Toughness = 1
+Bot1.Battlefield.Goblin Token.Colors = Red
+Bot1.Battlefield.Goblin Token.Subtypes = Goblin
+Bot2.Life = 18

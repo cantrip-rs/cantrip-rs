@@ -1,0 +1,8 @@
+{
+  "name": "Searslicer Goblin",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin Warrior",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Raid — At the beginning of your end step, if you attacked this turn, create a 1/1 red Goblin creature token."
+}
