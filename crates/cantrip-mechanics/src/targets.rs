@@ -1501,6 +1501,14 @@ pub fn card_in_your_graveyard_with_mana_value_at_most(q: &dyn Query, asker: &Ask
     card_in_your_graveyard(q, asker, t, types) && matches!(t, Target::Object(id) if q.mana_value(id) <= max)
 }
 
+/// "Target creature card with mana value less than or equal to this creature's power from your graveyard" (CR 115.1, 202.3, 113.7a):
+/// the power of the creature whose ability this is, as it is now or as it last was on the battlefield once it has left
+/// (`power_or_last_known`). A power below 0 allows no card: no mana value is less than 0. Alesha, Who Laughs at Fate and
+/// Fiendish Panda print it.
+pub fn creature_card_in_your_graveyard_up_to_source_power(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    u32::try_from(power_or_last_known(q, asker.source)).is_ok_and(|power| card_in_your_graveyard_with_mana_value_at_most(q, asker, t, &[CardType::Creature], power))
+}
+
 /// "Target creature or [subtype] card from your graveyard" (CR 115.1, 205.3g): a card in the asker's own graveyard that is a creature card or has this
 /// subtype. Seedship Broodtender prints it with Spacecraft, Broodheart Engine with Vehicle.
 pub fn creature_card_or_subtype_card_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target, subtype: Subtype) -> bool {
