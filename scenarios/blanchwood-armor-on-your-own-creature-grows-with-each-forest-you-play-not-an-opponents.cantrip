@@ -1,0 +1,42 @@
+# Blanchwood Armor counts only the Forests its controller controls (CR 109.5), live (CR 611.3a): on turn 5 Bot1 enchants its own Grizzly Bears (2/2) with three
+# Forests in play, +3/+3 for 5/5 (Bot2's Forest does not count: it would be 6/6). On turn 7 Bot1's fourth Forest makes it 6/6.
+
+[Bot1 Deck]
+Forest
+Forest
+Forest
+Forest
+Grizzly Bears
+Blanchwood Armor
+Forest x10
+
+[Bot2 Deck]
+Forest
+Forest x13
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Forest#3.Activate
+Bot1.Hand.Blanchwood Armor.Cast(Bot1.Battlefield.Grizzly Bears)
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Grizzly Bears.Power = 5
+? Bot1.Battlefield.Grizzly Bears.Toughness = 5
+[T7 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 6
+Bot1.Battlefield.Grizzly Bears.Toughness = 6
+Bot1.Battlefield.Blanchwood Armor.AttachedTo = Grizzly Bears

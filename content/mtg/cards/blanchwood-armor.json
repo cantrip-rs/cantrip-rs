@@ -1,0 +1,6 @@
+{
+  "name": "Blanchwood Armor",
+  "manaCost": "{2}{G}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +1/+1 for each Forest you control."
+}
