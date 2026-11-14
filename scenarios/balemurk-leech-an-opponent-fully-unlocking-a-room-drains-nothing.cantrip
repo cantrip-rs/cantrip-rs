@@ -1,0 +1,58 @@
+# Balemurk Leech: "whenever you fully unlock a Room" is its controller's unlock only. Bot2 casts Steaming Sauna in turn 2
+# and fully unlocks Roaring Furnace in turn 4 (Bot2 has 3 cards in hand: the Furnace deals 3 damage to the Leech, which dies).
+# Bot1 controls the Leech and loses nothing, and Bot2, the Leech's opponent, loses nothing: neither the Room entering nor
+# its being fully unlocked is Bot1's.
+
+[Bot1 Deck]
+Island
+Mox Jet
+Balemurk Leech
+Island x17
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Roaring Furnace // Steaming Sauna
+Island
+Island
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Balemurk Leech.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Roaring Furnace // Steaming Sauna.Cast(Ability: Steaming Sauna)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+? Stack.Count = 0
+? Bot1.Life = 20
+? Bot2.Life = 20
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Steaming Sauna.Activate(Ability: left door)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Island.Activate
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+? Bot2.Battlefield.Roaring Furnace // Steaming Sauna.Doors = Roaring Furnace; Steaming Sauna
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Graveyard = Balemurk Leech

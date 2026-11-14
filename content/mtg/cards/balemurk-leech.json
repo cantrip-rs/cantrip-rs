@@ -1,0 +1,8 @@
+{
+  "name": "Balemurk Leech",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Leech",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Eerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, each opponent loses 1 life."
+}

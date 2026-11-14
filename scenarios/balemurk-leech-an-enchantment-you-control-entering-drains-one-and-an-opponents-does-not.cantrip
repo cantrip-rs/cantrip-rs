@@ -1,0 +1,54 @@
+# Balemurk Leech: "Eerie - Whenever an enchantment you control enters and whenever you fully unlock a Room, each opponent
+# loses 1 life." Bot1 casts the Leech in turn 1 (a creature, not an enchantment: no trigger). In turn 2 Bot2 casts a Bad Moon,
+# an enchantment under the opponent's control, so the Leech triggers nothing and both players stay at 20. In turn 3 Bot1 casts
+# its own Bad Moon (CR 603.6a): the trigger resolves and Bot2 loses exactly 1 life, Bot1 none.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Balemurk Leech
+Bad Moon
+Swamp
+Swamp
+Swamp x14
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Bad Moon
+Swamp x17
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Balemurk Leech.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot2.Life = 20
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Bad Moon.Cast
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Pass
+[T2 Bot2.Main2]
+? Bot2.Battlefield = Bad Moon; Mox Jet; Swamp
+? Stack.Count = 0
+? Bot1.Life = 20
+? Bot2.Life = 20
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Bad Moon.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+? Stack.Count = 1
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19

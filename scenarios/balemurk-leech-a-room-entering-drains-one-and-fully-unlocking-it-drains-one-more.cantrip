@@ -1,0 +1,51 @@
+# Balemurk Leech with Roaring Furnace // Steaming Sauna: the Room entering is an enchantment entering, so Bot2 loses 1 (20 ->
+# 19, once: entering with one door unlocked is not also fully unlocking, CR 709.5). Unlocking its other door in turn 3 fully
+# unlocks it ("whenever you fully unlock a Room", the 2024-09-20 ruling): 1 more (19 -> 18). The Room is cast after the Leech
+# is on the battlefield, so the entering counts.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Balemurk Leech
+Roaring Furnace // Steaming Sauna
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Balemurk Leech.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Roaring Furnace // Steaming Sauna.Cast(Ability: Steaming Sauna)
+Bot1.Pass
+? Stack.Count = 1
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot2.Life = 19
+[T3 Bot1.Main1]
+? Stack.Count = 0
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Steaming Sauna.Activate(Ability: left door)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Roaring Furnace // Steaming Sauna.Doors = Roaring Furnace; Steaming Sauna
+? Bot2.Life = 18
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 20
