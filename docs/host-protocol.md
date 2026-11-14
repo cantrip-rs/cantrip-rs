@@ -158,6 +158,21 @@ as a yes-or-no `MayPromptMessage` whose question's verb is `Exert`. A creature c
 for another. Then the costs are locked in and paid (CR 508.1h-j); a creature to be enlisted that was tapped for mana
 meanwhile makes the declaration illegal, and the declaration of attackers is asked again (CR 733.1). Version 207.
 
+**Permanents an attack costs.** An attack may cost permanents to sacrifice beside mana (CR 508.1h: Flooded Woodlands'
+"sacrifices a land of their choice for each green creature they control that's attacking"). Its `AttackCostMessage` says
+so in `Nonmana`, in words ("sacrifice a land"), with `Cost` its mana alone - empty where it costs none, never "{0}" - and
+an `AttackVerdictView`'s `Nonmana` is what the declaration judged costs besides mana, added up ("sacrifice 2 lands"). The
+permanents are shared by the attacks and nothing asks before they are paid, so the verdict judges them: a declaration
+whose permanents to sacrifice can't each be a different one the player controls is refused (`Issue` "can't attack: the
+cost to sacrifice a land for it can't be paid", rule `508.1j`), `Addable` offers no attack the declaration can't spare
+them for, and `Free` is false wherever an attack costs permanents. The engine refuses such a declaration with the same
+words; `GameClient.Answer` settles it, so no seat sends it. A permanent another step of the same payment chose
+already (an enlist ability's creature to tap) is never offered to a sacrifice chosen as it is paid, so no order of
+payment strands that step. What a player does while paying can still leave a declaration unpayable (a land sacrificed
+for mana, a creature to enlist tapped for mana): it is taken back (CR 733.1), and the `DeclareAttackersPromptMessage`
+asked again has `TakenBack` true, which the web client says and with which `AttackCosts.Within` declares only attacks
+that cost nothing. Version 237.
+
 **An optional replacement of damage says which damage.** "You may have that damage dealt to you instead" (Blood of the
 Martyr, CR 614.1a) is asked once for each part of the damage it could replace - each creature Pyroclasm would damage - as a
 worded `MayPromptMessage` (`Purpose::AskDamage` in the engine) whose `Event` is that damage in words, as the effects so far

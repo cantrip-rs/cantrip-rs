@@ -248,15 +248,27 @@ pub fn decide(game: &Game, random: &mut Random, request: &Request) -> Answer {
             let attackers = random.some(eligible, n);
             // A player a restriction forbids the creature to attack (CR 508.1c) is not chosen; a creature forbidden every
             // player stays home.
-            Answer::Attack(
-                attackers
-                    .into_iter()
-                    .filter_map(|a| {
-                        let open: Vec<PlayerId> = players.iter().copied().filter(|&p| !requirements.bars(a, Target::Player(p))).collect();
-                        (!open.is_empty()).then(|| (a, Target::Player(open[random.below(open.len())])))
-                    })
-                    .collect(),
-            )
+            let drawn: Vec<(ObjectId, Target)> = attackers
+                .into_iter()
+                .filter_map(|a| {
+                    let open: Vec<PlayerId> = players.iter().copied().filter(|&p| !requirements.bars(a, Target::Player(p))).collect();
+                    (!open.is_empty()).then(|| (a, Target::Player(open[random.below(open.len())])))
+                })
+                .collect();
+            // Permanents to sacrifice the attacks share (CR 508.1j: Flooded Woodlands) may be too few for all of them: then each
+            // attack is kept, in the order drawn, while the ones kept can still be paid for.
+            if requirements.unpaid(&drawn).is_none() {
+                Answer::Attack(drawn)
+            } else {
+                let mut kept = Vec::new();
+                for attack in drawn {
+                    kept.push(attack);
+                    if requirements.unpaid(&kept).is_some() {
+                        kept.pop();
+                    }
+                }
+                Answer::Attack(kept)
+            }
         }
         RequestKind::AssignCombatDamage { divisions } => Answer::Shares(DamageDivision::suggested_shares(divisions)),
         // A declaration an effect makes requirements of (CR 509.1c): the engine's own, which obeys them.
@@ -409,5 +421,63 @@ mod tests {
             },
         };
         assert!(matches!(decide(&game, &mut Random::new(3), &request), Answer::CostPayment(259)));
+    }
+
+    /// Two Llanowar Elves and one land under Flooded Woodlands (CR 508.1j, 118.3): however many the random seat draws to
+    /// attack, it declares only what the land can pay for, which the engine takes - a deliberate fuzz of its draws at one
+    /// forced position.
+    #[test]
+    fn the_random_seat_declares_only_attacks_its_lands_can_pay_for() {
+        let script = cantrip_script::GameScript::parse(
+            "[Bot1 Deck]
+Forest
+Mox Emerald
+Llanowar Elves
+Llanowar Elves
+Forest x10
+
+[Bot2 Deck]
+Island
+Black Lotus
+Mox Jet
+Flooded Woodlands
+Island x10
+
+             [Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+             Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+             Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Flooded Woodlands.Cast
+             [T3 Bot1.Main1]
+[Handover Bot1.Attack]
+
+[Expect]
+Turn = 3
+",
+            "random-seat-flooded-woodlands",
+        )
+        .expect("the script parses");
+        let result = cantrip_script::run(&script).unwrap_or_else(|f| panic!("{}
+{}", f.message, f.report));
+        let game = result.game;
+        let request = game.pending().cloned().expect("a declaration of attackers");
+        assert!(matches!(request.kind, RequestKind::DeclareAttackers { .. }), "{:?}", request.kind);
+        let mut both = 0;
+        for seed in 0..32 {
+            let answer = decide(&game, &mut Random::new(seed), &request);
+            if let Err(why) = cantrip_engine::check_answer(&game, &request, &answer) {
+                panic!("seed {seed}: the engine refuses {answer:?}: {}", why.0);
+            }
+            both += usize::from(matches!(&answer, Answer::Attack(a) if a.len() == 2));
+        }
+        assert_eq!(both, 0, "two Elves can't both attack with one land to sacrifice");
     }
 }

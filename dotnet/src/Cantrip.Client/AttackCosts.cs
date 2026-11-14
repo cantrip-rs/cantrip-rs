@@ -12,6 +12,16 @@ namespace Cantrip.Client;
 /// prompt says it could pay, and once a seat has given up paying for an attack it declares only what costs nothing for the
 /// rest of that turn.
 /// </para>
+/// <para>
+/// Permanents an attack costs (Flooded Woodlands' "sacrifices a land ... for each green creature ... that's attacking",
+/// <see cref="AttackCostMessage.Nonmana"/>) are shared by the attacks, and asked of nobody before they are paid, so they are
+/// not trimmed here: the host's verdict refuses a declaration short of them (CR 508.1j) and offers no attack it can't spare
+/// them for, and <see cref="GameClient.Answer"/> settles every declaration with it, mending one refused from what may be
+/// added - no seat can send one that can't be paid. A payment can still be left unpayable by what a seat does while
+/// paying (a land sacrificed for mana, a creature to enlist tapped for mana); the declaration asked again then says it
+/// was taken back (<see cref="DeclareAttackersPromptMessage.TakenBack"/>), and <see cref="Within"/> declares only what
+/// costs nothing.
+/// </para>
 /// </summary>
 public static class AttackCosts
 {
@@ -65,6 +75,17 @@ public static class AttackCosts
         }
 
         List<AttackMessage> kept = [.. attacks];
+
+        // The declaration before was taken back unpaid (CR 508.1j, 733.1): whatever left it so would leave the same one so
+        // again, so only what costs nothing is declared now - a creature that must attack where that is free, any other
+        // costly attack dropped. Nothing is then left to pay, and the step goes on.
+        if (prompt.TakenBack)
+        {
+            return [.. kept
+                .Select(attack => prompt.CostOf(attack) is not null && prompt.SuggestedFor(attack.Attacker) is { } free && prompt.CostOf(free) is null ? free : attack)
+                .Where(attack => prompt.CostOf(attack) is null)];
+        }
+
         for (int i = 0; i < kept.Count; i++)
         {
             AttackMessage attack = kept[i];

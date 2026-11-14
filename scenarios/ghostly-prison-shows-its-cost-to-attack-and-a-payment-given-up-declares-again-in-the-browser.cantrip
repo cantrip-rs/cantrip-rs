@@ -1,7 +1,8 @@
 # Browser
 # What a player sees of a cost to attack (CR 508.1d, 508.1h-j) under Bot2's Ghostly Prison: the attackers dock says what
 # attacking Bot2 costs a creature and the mana there is for it; the payment that follows the declaration is titled for
-# the attack, not for Ghostly Prison as if it were a spell, and says Cancel declares attackers again. Bot1 declares both
+# the attack, not for Ghostly Prison as if it were a spell, and says Cancel declares attackers again; asked again, the
+# dock says the attack before was taken back. Bot1 declares both
 # Llanowar Elves ({4}), taps Mox Ruby, gives the payment up - the Mox untaps, the declaration is taken back (CR 733) - and
 # declares one Elf, paying {2} with both Moxen. Bot2 takes 1.
 
@@ -52,6 +53,7 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Cancel
 ? Bot1.Battlefield.Mox Ruby.Tapped = false
 ? Client.Bot1.Prompt.Title = Declare attackers
+? Client.Bot1.Prompt.Detail = The attack was taken back: its costs weren't all paid  ·  2 can attack  ·  attacking Bot2 costs {2} a creature (you can make up to 6 mana)
 Bot1.Attack(Llanowar Elves)
 ? Combat.AttackCost = {2}
 ? Client.Bot1.Prompt.Title = Pay {2} to attack with Llanowar Elves

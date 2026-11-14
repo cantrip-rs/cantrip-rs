@@ -940,8 +940,12 @@ pub struct AttackVerdictView {
     /// What declaring it costs (CR 508.1h), in mana symbols; empty when nothing.
     #[serde(default)]
     pub cost: String,
+    /// What declaring it costs besides mana, in words, "sacrifice 2 lands"; empty when nothing.
+    #[serde(default)]
+    pub nonmana: String,
     /// Nothing is required: any declaration of `addable` attacks, each creature attacking once, is legal, and need not be
-    /// asked. False wherever a target caps how many may attack it, as two such attacks need not both be legal.
+    /// asked. False wherever a target caps how many may attack it, as two such attacks need not both be legal, and wherever
+    /// an attack costs permanents, which the attacks share.
     #[serde(default)]
     pub free: bool,
 }
@@ -967,12 +971,15 @@ pub struct AttackCostMessage {
     pub attacker: ViewHandle,
     pub target_player: i32,
     pub target_permanent: ViewHandle,
-    /// The cost in mana symbols, "{2}".
+    /// The mana it costs, in mana symbols, "{2}"; empty when it costs no mana.
     pub cost: String,
     /// Its mana value, for adding costs up.
     pub mana_value: i32,
     /// Its generic part.
     pub generic: i32,
+    /// What it costs besides mana, in words, "sacrifice a land" (Flooded Woodlands, CR 508.1h); empty when nothing.
+    #[serde(default)]
+    pub nonmana: String,
 }
 
 /// One creature's combat damage and where it may go (CR 510.1).
@@ -1073,6 +1080,9 @@ pub struct DeclareAttackersPrompt {
     /// declared first. Every other declaration is asked of the host (`CheckAttacks`).
     #[serde(default)]
     pub verdict: AttackVerdictView,
+    /// The declaration made before this one in the same step was taken back, its costs not all paid (CR 508.1j, 733.1).
+    #[serde(default)]
+    pub taken_back: bool,
 }
 
 impl DeclareAttackersPrompt {

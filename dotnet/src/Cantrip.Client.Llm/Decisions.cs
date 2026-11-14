@@ -803,7 +803,7 @@ public sealed class Decisions
 
     /// <summary>What one attack costs to declare (CR 508.1h), as a choice says it, or nothing when it costs nothing.</summary>
     private static string CostOf(DeclareAttackersPromptMessage prompt, AttackMessage attack) =>
-        prompt.CostOf(attack) is { } cost ? $" It costs {cost.Cost} to attack there." : string.Empty;
+        prompt.CostOf(attack) is { } cost ? $" It costs {cost.Words()} to attack there." : string.Empty;
 
     /// <summary>
     /// Costs to attack (CR 508.1d, 508.1h): that an attack costing something is paid once attackers are declared, all of
@@ -812,13 +812,14 @@ public sealed class Decisions
     private static string AttackCostNote(GameClient client, DeclareAttackersPromptMessage prompt) =>
         prompt.Costs.Count == 0
             ? string.Empty
-            : "\nSome attacks cost mana to declare (\"creatures can't attack you unless their controller pays ...\"): "
+            : "\nSome attacks cost something to declare (\"creatures can't attack you unless their controller pays ...\", \"... sacrifices a land\"): "
                 + string.Join(", ", prompt.Costs
-                    .DistinctBy(cost => (cost.TargetPlayer, cost.TargetPermanent.Value))
-                    .Select(cost => $"attacking {(cost.TargetPermanent.IsNone ? GameText.Player(client, cost.TargetPlayer) : GameText.Named(client, cost.TargetPermanent))} costs {cost.Cost} a creature"))
-                + ". The total is paid once attackers are declared"
+                    .DistinctBy(cost => (cost.TargetPlayer, cost.TargetPermanent.Value, cost.Words()))
+                    .Select(cost => $"attacking {(cost.TargetPermanent.IsNone ? GameText.Player(client, cost.TargetPlayer) : GameText.Named(client, cost.TargetPermanent))} costs {cost.Words()} for {GameText.Creature(client, cost.Attacker)} and creatures like it"))
+                + ". The total is paid once attackers are declared, and a declaration short of permanents to sacrifice is refused"
                 + (prompt.CanPay >= 0 ? $", and you have {prompt.CanPay} mana for it." : ".")
-                + " A creature that must attack never has to pay to.";
+                + " A creature that must attack never has to pay to."
+                + (prompt.TakenBack ? " The attack declared before was taken back, its costs not all paid: only attacks that cost nothing are declared now." : string.Empty);
 
     /// <summary>
     /// Declares blockers (CR 509.1).

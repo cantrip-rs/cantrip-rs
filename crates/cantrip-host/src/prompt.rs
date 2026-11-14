@@ -861,6 +861,7 @@ pub fn attack_verdict_view(verdict: &AttackVerdict, handles: &mut HandleSpace) -
             rule: i.rule.to_string(),
         }),
         cost: if verdict.cost.is_zero() { String::new() } else { verdict.cost.to_string() },
+        nonmana: verdict.nonmana.clone(),
         free: verdict.free,
     }
 }
@@ -1446,9 +1447,11 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                         attacker: handles.handle(c.attacker),
                         target_player: c.target.player().map_or(0, seat),
                         target_permanent: c.target.object().map_or(ViewHandle::NONE, |id| handles.handle(id)),
-                        cost: c.cost.to_string(),
+                        // An attack that costs only permanents (CR 508.1h) costs no mana: no "{0}".
+                        cost: if c.cost.is_zero() { String::new() } else { c.cost.to_string() },
                         mana_value: c.cost.mana_value() as i32,
                         generic: wire(c.cost.generic),
+                        nonmana: requirements.nonmana_words(&[(c.attacker, c.target)]),
                     })
                     .collect(),
                 can_pay: if *can_pay == u32::MAX { -1 } else { *can_pay as i32 },
@@ -1458,6 +1461,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                     &requirements.judge(eligible, &attack_targets(players, planeswalkers, battles), costs, &[], true),
                     handles,
                 ),
+                taken_back: requirements.taken_back,
             })
         }
         RequestKind::AssignCombatDamage { divisions } => PromptPayload::AssignCombatDamagePromptMessage(AssignCombatDamagePrompt {

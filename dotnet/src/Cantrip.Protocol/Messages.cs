@@ -2943,6 +2943,13 @@ public sealed class DeclareAttackersPromptMessage : PromptPayload
     /// What declaring <paramref name="attacks"/> costs in all, in oracle notation ("{4}"), or empty when nothing: the
     /// generic parts added up, any other symbols after them.
     /// </summary>
+    /// <summary>
+    /// What declaring <paramref name="attacks"/> costs besides mana, in words, each attack's own listed ("sacrifice a land,
+    /// sacrifice a land"): the host's verdict adds them up. Empty when nothing.
+    /// </summary>
+    public string TotalNonmanaText(IEnumerable<AttackMessage> attacks) =>
+        string.Join(", ", attacks.Select(CostOf).OfType<AttackCostMessage>().Select(cost => cost.Nonmana).Where(words => words.Length > 0));
+
     public string TotalCostText(IEnumerable<AttackMessage> attacks)
     {
         List<AttackCostMessage> costs = [.. attacks.Select(CostOf).OfType<AttackCostMessage>()];
@@ -2991,6 +2998,14 @@ public sealed class DeclareAttackersPromptMessage : PromptPayload
     [Key(11)]
     public AttackVerdictView Verdict { get; set; } = new() { Complete = true };
 
+    /// <summary>
+    /// The declaration made before this one in the same step was taken back, its costs not all paid (CR 508.1j, 733.1):
+    /// given up, or left unpayable by what was done while paying (a land sacrificed for mana, a creature to enlist tapped
+    /// for mana). A seat that answers alike each time declares only attacks that cost nothing now (<c>AttackCosts</c>).
+    /// </summary>
+    [Key(12)]
+    public bool TakenBack { get; set; }
+
     /// <summary>No attack, or where an effect requires attacks (CR 508.1d) the engine's own declaration, which obeys them.</summary>
     public override AnswerPayload Default() => new AttackersDeclaredAnswer { Attacks = [.. Suggested] };
 
@@ -3028,7 +3043,7 @@ public sealed class AttackCostMessage
     [Key(2)]
     public ViewHandle TargetPermanent { get; set; }
 
-    /// <summary>The cost in oracle notation, "{2}".</summary>
+    /// <summary>The mana it costs in oracle notation, "{2}"; empty when it costs no mana.</summary>
     [Key(3)]
     public string Cost { get; set; } = string.Empty;
 
@@ -3039,6 +3054,27 @@ public sealed class AttackCostMessage
     /// <summary>Its generic part.</summary>
     [Key(5)]
     public int Generic { get; set; }
+
+    /// <summary>
+    /// What it costs besides mana, in words, "sacrifice a land" (Flooded Woodlands, CR 508.1h); empty when nothing. A
+    /// declaration whose permanents to sacrifice aren't there is refused by the host's verdict (CR 508.1j).
+    /// </summary>
+    [Key(6)]
+    public string Nonmana { get; set; } = string.Empty;
+
+    /// <summary>All it costs, as a player reads it: "{2}", "sacrifice a land", "{1} and sacrifice a land".</summary>
+    public string Words() => AttackCostWords.Of(Cost, Nonmana);
+}
+
+/// <summary>What attacking costs in words, from its mana in oracle notation and the rest in words (CR 508.1h).</summary>
+public static class AttackCostWords
+{
+    /// <summary>"{2}", "sacrifice a land", "{1} and sacrifice a land", or empty when it costs nothing.</summary>
+    public static string Of(string mana, string nonmana) =>
+        mana.Length == 0 ? nonmana : nonmana.Length == 0 ? mana : $"{mana} and {nonmana}";
+
+    /// <summary>The same as something to do: "pay {2}", "sacrifice a land", "pay {1} and sacrifice a land".</summary>
+    public static string Pay(string mana, string nonmana) => Of(mana.Length == 0 ? mana : $"pay {mana}", nonmana);
 }
 
 /// <summary>
@@ -3090,12 +3126,16 @@ public sealed class AttackVerdictView
     [Key(3)]
     public string Cost { get; set; } = string.Empty;
 
+    /// <summary>What declaring it costs besides mana, in words ("sacrifice 2 lands"); empty when nothing.</summary>
+    [Key(5)]
+    public string Nonmana { get; set; } = string.Empty;
+
     /// <summary>
     /// Nothing is required of the declaration: any declaration of <see cref="Addable"/> attacks, each creature attacking once,
     /// is legal, so a client need not ask the host about each one (the prompt's own verdict says so for the whole question).
     /// False wherever a target caps how many creatures may attack it (CR 508.1c), as two attacks addable on their own may be
     /// one too many together, and wherever a creature that can't attack alone is eligible, as one addable attack on its own
-    /// may be that creature attacking alone.
+    /// may be that creature attacking alone, and wherever an attack costs permanents to sacrifice, which the attacks share.
     /// </summary>
     [Key(4)]
     public bool Free { get; set; }

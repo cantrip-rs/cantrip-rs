@@ -2483,8 +2483,12 @@ public sealed partial class MainPage
 
         string? unmet = verdict?.Issue is { } why ? AttackIssueCaption(client, why) : null;
 
-        // A cost to attack (CR 508.1h): what the attack chosen so far costs in all, paid once it is locked in.
-        string cost = verdict?.Cost ?? prompt.TotalCostText(declared);
+        // A cost to attack (CR 508.1h): what the attack chosen so far costs in all, paid once it is locked in - its mana and
+        // the permanents it sacrifices (Flooded Woodlands), as the host's verdict adds them up.
+        string mana = verdict?.Cost ?? prompt.TotalCostText(declared);
+        string nonmana = verdict?.Nonmana ?? prompt.TotalNonmanaText(declared);
+        string cost = AttackCostWords.Of(mana, nonmana);
+        string pay = AttackCostWords.Pay(mana, nonmana);
 
         Prompt(
             "Declare attackers",
@@ -2494,16 +2498,18 @@ public sealed partial class MainPage
                     ? $"Choose what to attack ({_pending.Count} selected)"
                     : (_attacking.Count switch
                     {
+                        // The declaration before this one was taken back unpaid (CR 508.1j, 733.1): said, so the player knows why.
+                        0 when prompt.TakenBack => $"The attack was taken back: its costs weren't all paid  ·  {prompt.Eligible.Count} can attack",
                         0 => $"{prompt.Eligible.Count} can attack",
                         1 => "1 attacking",
                         _ => $"{_attacking.Count} attacking",
-                    }) + AttackCostNote(client, prompt, cost));
+                    }) + AttackCostNote(client, prompt, cost, pay, nonmana.Length > 0));
 
         AddButton(
-            _attacking.Count == 0 ? "No attack" : cost.Length > 0 ? $"Attack with {_attacking.Count}, pay {cost}" : $"Attack with {_attacking.Count}",
+            _attacking.Count == 0 ? "No attack" : pay.Length > 0 ? $"Attack with {_attacking.Count}, {pay}" : $"Attack with {_attacking.Count}",
             () => Send(client, new AttackersDeclaredAnswer { Attacks = declared }),
             enabled: verdict?.Complete == true,
-            primary: true).Tooltip = (cost.Length > 0 ? $"Lock in the attack, then pay {cost} to attack" : "Lock in the attack") + Suffix(PassKey);
+            primary: true).Tooltip = (pay.Length > 0 ? $"Lock in the attack, then {pay} to attack" : "Lock in the attack") + Suffix(PassKey);
 
         if (_pending.Count > 0)
         {
@@ -2561,27 +2567,38 @@ public sealed partial class MainPage
     /// the mana the player has for it; with nothing chosen, what attacking each defender costs a creature. Empty where
     /// nothing costs anything to attack.
     /// </summary>
-    private static string AttackCostNote(GameClient client, DeclareAttackersPromptMessage prompt, string cost)
+    private static string AttackCostNote(GameClient client, DeclareAttackersPromptMessage prompt, string cost, string pay, bool nonmana)
     {
         if (prompt.Costs.Count == 0)
         {
             return string.Empty;
         }
 
-        string mana = prompt.CanPay >= 0 ? $" (you can make up to {prompt.CanPay} mana)" : string.Empty;
+        // The mana there is to pay with, where some attack costs mana.
+        string mana = prompt.CanPay >= 0 && prompt.Costs.Exists(c => c.Cost.Length > 0) ? $" (you can make up to {prompt.CanPay} mana)" : string.Empty;
         if (cost.Length > 0)
         {
-            return $"  ·  costs {cost} to attack{mana}";
+            return nonmana ? $"  ·  to attack, {pay}{mana}" : $"  ·  costs {cost} to attack{mana}";
         }
 
-        // Each defender whose attack costs something, by what one creature attacking it costs.
+        // Each defender whose attack costs something, by what one creature attacking it costs: every cost it has, each with
+        // the creatures it is theirs where not every creature that may attack pays it (Flooded Woodlands' green ones).
         List<string> each = [];
-        foreach (AttackCostMessage first in prompt.Costs.DistinctBy(c => (c.TargetPlayer, c.TargetPermanent.Value)))
+        foreach (IGrouping<(int, int), AttackCostMessage> defender in prompt.Costs.GroupBy(c => (c.TargetPlayer, c.TargetPermanent.Value)))
         {
+            AttackCostMessage first = defender.First();
             string whom = first.TargetPermanent.IsNone
                 ? NameOf(client, first.TargetPlayer)
                 : client.Object(first.TargetPermanent)?.Name ?? "a permanent";
-            each.Add($"attacking {whom} costs {first.Cost} a creature");
+            int attackers = prompt.Eligible.Count(creature => prompt.AttacksFor(creature).Exists(attack =>
+                attack.TargetPermanent == first.TargetPermanent && (!first.TargetPermanent.IsNone || attack.TargetPlayer == first.TargetPlayer)));
+            foreach (IGrouping<string, AttackCostMessage> words in defender.GroupBy(c => c.Words()))
+            {
+                string who = words.Count() == attackers
+                    ? "a creature"
+                    : "for " + string.Join(", ", words.Select(c => client.Object(c.Attacker)?.Name ?? "a creature").Distinct());
+                each.Add(words.First().Nonmana.Length == 0 ? $"attacking {whom} costs {words.Key} {who}" : $"attacking {whom}: {words.Key} {(who == "a creature" ? "for each creature" : who)}");
+            }
         }
 
         return $"  ·  {string.Join(", ", each)}{mana}";

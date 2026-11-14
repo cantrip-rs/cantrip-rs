@@ -1,0 +1,48 @@
+# Browser
+# What a player sees of an attack that costs a land (CR 508.1h) under Bot2's Flooded Woodlands: the attackers dock says
+# attacking Bot2 means sacrificing a land for each green creature, no "{0}". Bot1 has two Llanowar Elves and one land, so
+# both Elves attacking can't be paid (CR 508.1j, 118.3) and the declaration is refused rather than asked again forever;
+# one Elf attacks, Bot1 sacrifices the Forest for it, and Bot2 takes 1.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Llanowar Elves
+Llanowar Elves
+Forest x10
+
+[Bot2 Deck]
+Island
+Black Lotus
+Mox Jet
+Flooded Woodlands
+Island x10
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Flooded Woodlands.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+? Client.Bot1.Prompt.Title = Declare attackers
+? Client.Bot1.Prompt.Detail = 2 can attack  ·  attacking Bot2: sacrifice a land for each creature
+! Bot1.Attack(Llanowar Elves#1 > Bot2; Llanowar Elves#2 > Bot2)
+Bot1.Attack(Llanowar Elves)
+Bot1.Choose(Forest)
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot2.Life = 19
+Bot1.Graveyard = Forest
+Bot1.Battlefield.Llanowar Elves#1.Tapped = true
+Bot1.Battlefield.Llanowar Elves#2.Tapped = false
