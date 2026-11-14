@@ -1,0 +1,41 @@
+# Glimmerburst: "Draw two cards. Create a 1/1 white Glimmer enchantment creature token." Bot1 casts it in its main phase with four Moxen: exactly two
+# cards are drawn (CR 121.1) and the token is a 1/1 white Enchantment Creature Glimmer (CR 111.3, 111.4) under Bot1's control.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Glimmerburst
+Island x6
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Library.Count = 13
+? Bot1.Hand.Count = 4
+Bot1.Hand.Glimmerburst.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 11
+? Bot1.Hand.Count = 5
+? Bot1.Battlefield.Glimmer Token.Types = Enchantment; Creature
+? Bot1.Battlefield.Glimmer Token.Subtypes = Glimmer
+? Bot1.Battlefield.Glimmer Token.Colors = White
+? Bot1.Battlefield.Glimmer Token.Power = 1
+? Bot1.Battlefield.Glimmer Token.Toughness = 1
+[Expect]
+Bot1.Graveyard.Count = 1
+Bot2.Battlefield.Count = 0
