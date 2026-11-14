@@ -1,0 +1,35 @@
+# Diamond Mare choosing white: Lightning Helix is a red and white spell, so it is "a spell of the chosen color" and the Mare's
+# trigger gains 1 life (21) when it is cast, once, however many of its colors are chosen ones; the Helix then resolves: 3
+# damage to Bot2 (17) and 3 life for Bot1 (24).
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Diamond Mare
+Lightning Helix
+Swamp x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Diamond Mare.Cast
+Bot1.Colors(White)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+
+[Expect]
+Bot1.Life = 24
+Bot2.Life = 17
