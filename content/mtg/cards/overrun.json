@@ -1,0 +1,6 @@
+{
+  "name": "Overrun",
+  "manaCost": "{2}{G}{G}{G}",
+  "type": "Sorcery",
+  "oracleText": "Creatures you control get +3/+3 and gain trample until end of turn. (Each of those creatures can deal excess combat damage to the player or planeswalker it's attacking.)"
+}

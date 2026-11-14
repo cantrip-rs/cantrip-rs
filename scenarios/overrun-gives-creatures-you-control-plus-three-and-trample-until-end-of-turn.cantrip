@@ -1,0 +1,48 @@
+# Overrun: "Creatures you control get +3/+3 and gain trample until end of turn." Bot1's first Ornithopter (0/2 flying) becomes a 3/5
+# with flying and trample; Bot2's Ornithopter is not Bot1's and stays 0/2; a second Ornithopter Bot1 casts after Overrun resolved is
+# not affected (CR 611.2c). At the next turn the first one is a 0/2 without trample again (CR 514.2).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Black Lotus
+Ornithopter
+Ornithopter
+Overrun
+Plains
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: G)
+Bot1.Hand.Overrun.Cast
+? Bot1.Mana = 
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 3
+? Bot1.Battlefield.Ornithopter.Toughness = 5
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Trample
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Hand.Ornithopter.Cast
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#2.Power = 0
+? Bot1.Battlefield.Ornithopter#2.Keywords = Flying
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter#1.Power = 0
+Bot1.Battlefield.Ornithopter#1.Toughness = 2
+Bot1.Battlefield.Ornithopter#1.Keywords = Flying
