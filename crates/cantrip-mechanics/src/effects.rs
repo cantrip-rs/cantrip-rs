@@ -1437,6 +1437,16 @@ pub fn gain_that_much_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Sus
     gain_life(g, item, item.data[0] as i32)
 }
 
+/// "Target opponent loses that much life" as a triggered ability (CR 119.3): the player targeted in slot 0 loses the amount the
+/// trigger carries in `data[0]`, what the event gained when it triggered (CR 603.10); with its target gone it does nothing
+/// (CR 608.2b). Enduring Tenacity and the Professor Dellian Fel emblem print it after "Whenever you gain life".
+pub fn target_opponent_loses_that_much_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(opponent) = crate::targets::player(g, item, 0) {
+        g.lose_life(opponent, item.data[0] as i32);
+    }
+    Ok(())
+}
+
 /// "{cost}: Target creature gets +`P`/+`T` for as long as this artifact remains tapped" (CR 611.2a, 608.2b): the creature the
 /// resolving ability targeted in slot 0, if it is still a legal target. Ashnod's Battle Gear (+2/-2) and Tawnos's Weaponry
 /// (+1/+1) print it.

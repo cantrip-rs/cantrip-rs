@@ -22,20 +22,10 @@ fn emblem(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 // --- The emblem ---------------------------------------------------------------------------------------------------
 
-/// "Whenever you gain life, target opponent loses that much life": the amount is the life that event gained (the
-/// trigger's data, CR 603.10: it is what was gained when the ability triggered). With its target gone it does nothing
-/// (CR 608.2b).
-fn target_opponent_loses_that_much(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(opponent) = targets::player(g, item, 0) {
-        g.lose_life(opponent,(item.data[0] as i32) as i32);
-    }
-    Ok(())
-}
-
 pub static EMBLEM: CardDef = CardDef {
     name: "Professor Dellian Fel emblem",
     has_cost: false,
-    abilities: &[triggered(YOU_GAIN_LIFE, target_opponent_loses_that_much, "Whenever you gain life, target opponent loses that much life.")
+    abilities: &[triggered(YOU_GAIN_LIFE, effects::target_opponent_loses_that_much_life, "Whenever you gain life, target opponent loses that much life.")
         .targets(&[targets::OPPONENT])],
     text: "Whenever you gain life, target opponent loses that much life.",
     ..CardDef::BLANK
