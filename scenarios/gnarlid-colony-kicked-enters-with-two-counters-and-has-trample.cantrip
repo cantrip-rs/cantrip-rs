@@ -1,0 +1,29 @@
+# Gnarlid Colony cast with its kicker {2}{G} (five mana: Black Lotus's three green and two Moxen; CR 702.33a): "If this creature
+# was kicked, it enters with two +1/+1 counters on it" (CR 702.33d, 614.1c), a 4/4, and with the counters it is one of
+# "each creature you control with a +1/+1 counter on it" and has trample itself (CR 613.1f).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Gnarlid Colony
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gnarlid Colony.Cast(Kicked: 1)
+
+[Expect]
+Bot1.Battlefield.Gnarlid Colony.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Gnarlid Colony.Power = 4
+Bot1.Battlefield.Gnarlid Colony.Toughness = 4
+Bot1.Battlefield.Gnarlid Colony.Keywords = Trample

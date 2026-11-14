@@ -1,0 +1,48 @@
+# Gnarlid Colony (unkicked, a bare 2/2 with no trample of its own) gives trample to another creature you control that has a +1/+1 counter (CR 613.1f, 702.19): Bot1's Cloudbound Moogle puts its enters counter on itself, and so has flying and trample while Colony, with none, has no trample.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Emerald
+Gnarlid Colony
+Cloudbound Moogle
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gnarlid Colony.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cloudbound Moogle.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Cloudbound Moogle)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Gnarlid Colony.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Gnarlid Colony.Power = 2
+Bot1.Battlefield.Gnarlid Colony.Keywords = (absent)
+Bot1.Battlefield.Cloudbound Moogle.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Cloudbound Moogle.Keywords = Flying; Trample

@@ -1,0 +1,51 @@
+# Gnarlid Colony cast without kicker (CR 702.33a) enters as a bare 2/2 with no counter (CR 702.33d), so it has no trample itself;
+# Bot1's Cloudbound Moogle puts a +1/+1 counter on Bot2's Ornithopter, which Colony's "creatures you control" (CR 613.1f)
+# does not reach, so it stays a flyer without trample. (The control with the counter on Bot1's creature is
+# gnarlid-colony-gives-trample-to-another-creature-you-control-with-a-counter.)
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Emerald
+Gnarlid Colony
+Cloudbound Moogle
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gnarlid Colony.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cloudbound Moogle.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Gnarlid Colony.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Gnarlid Colony.Power = 2
+Bot1.Battlefield.Gnarlid Colony.Keywords = (absent)
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Ornithopter.Keywords = Flying
