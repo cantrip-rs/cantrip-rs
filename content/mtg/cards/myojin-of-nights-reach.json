@@ -1,0 +1,8 @@
+{
+  "name": "Myojin of Night's Reach",
+  "manaCost": "{5}{B}{B}{B}",
+  "type": "Legendary Creature — Spirit",
+  "power": 5,
+  "toughness": 2,
+  "oracleText": "Myojin of Night's Reach enters with a divinity counter on it if you cast it from your hand.\nMyojin of Night's Reach has indestructible as long as it has a divinity counter on it.\nRemove a divinity counter from Myojin of Night's Reach: Each opponent discards their hand."
+}

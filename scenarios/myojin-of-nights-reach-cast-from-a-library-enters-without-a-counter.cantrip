@@ -1,0 +1,39 @@
+# Myojin of Night's Reach: "enters with a divinity counter on it if you cast it from your hand" (CR 614.1c, 601.2a) - cast, but not from a hand, is not enough. Bot1 casts it
+# off the top of its library with Bolas's Citadel, paying 8 life: it enters with no counter, so it has no indestructible and its ability can't be activated.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Bolas's Citadel
+Island
+Island
+Myojin of Night's Reach
+Island x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bolas's Citadel.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Library.Myojin of Night's Reach.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 12
+? Bot1.Battlefield.Myojin of Night's Reach.Counters.Divinity = (absent)
+! Bot1.Battlefield.Myojin of Night's Reach.Activate
+
+[Expect]
+Bot1.Battlefield.Myojin of Night's Reach.Keywords = (absent)
+Bot2.Hand.Count = 7
