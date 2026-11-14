@@ -1,0 +1,62 @@
+# Steel Hellkite: it attacks Bot2's Ajani Resolute (loyalty 2) on turn 3 and kills it, while Bot1's Memnite attacks Bot2
+# itself (19). Bot2 was dealt combat damage, but not by the Hellkite (CR 120.3c: damage to a planeswalker is not damage to
+# its controller): X=2 destroys nothing, and Bot2's Grizzly Bears (mana value 2) survives.
+
+[Bot1 Deck]
+Black Lotus
+Memnite
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Steel Hellkite
+Island x20
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Ajani Resolute
+Grizzly Bears
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Steel Hellkite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Ajani Resolute.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Steel Hellkite > Bot2.Battlefield.Ajani Resolute; Memnite > Bot2)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Steel Hellkite.Activate(Ability: Destroy each; X: 2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot2.Graveyard = Ajani Resolute
+Bot2.Battlefield = Plains; Mox Pearl; Mox Emerald; Mox Ruby; Grizzly Bears

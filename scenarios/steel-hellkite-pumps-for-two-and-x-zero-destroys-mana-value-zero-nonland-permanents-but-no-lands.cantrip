@@ -1,0 +1,71 @@
+# Steel Hellkite: "{2}: This creature gets +1/+0 until end of turn." Two pumps on turn 3 make it 7/5 and Bot2 goes to 13.
+# Then X=0 (free) destroys each nonland permanent with mana value 0 whose controller was dealt combat damage: Bot2's Memnite
+# and two Moxen go, its Island (mana value 0, a land) and Grizzly Bears (mana value 2) stay. Bot1's own Moxen (mana value 0)
+# stay too: Bot1 was not dealt damage.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Steel Hellkite
+Island x20
+
+[Bot2 Deck]
+Island
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Steel Hellkite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Steel Hellkite.Activate(Ability: {2}: This creature gets)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Steel Hellkite.Activate(Ability: {2}: This creature gets)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Steel Hellkite.Power = 7
+? Bot1.Battlefield.Steel Hellkite.Toughness = 5
+Bot1.Attack(Steel Hellkite > Bot2)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Steel Hellkite.Activate(Ability: Destroy each; X: 0)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 13
+Bot2.Graveyard = Memnite; Mox Ruby; Mox Emerald
+Bot2.Battlefield = Island; Grizzly Bears
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Steel Hellkite
