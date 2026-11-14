@@ -119,6 +119,13 @@ pub fn life_above_starting_life(q: &dyn LayerQuery, source: ObjectId) -> i32 {
     player.life - player.starting_life
 }
 
+/// "As long as you have at least 7 life more than your starting life total, creatures you control get +N/+N" as a static ability's
+/// `StaticDef::affects` (CR 604.2, 611.3a, 103.4): creatures under the source's controller's control, while their life total is 7 or
+/// more above the one they started with. Leyline of Hope and Righteous Valkyrie print it.
+pub fn your_creatures_while_seven_above_starting_life(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
+    life_above_starting_life(q, source) >= 7 && your_creatures(q, source, affected, so_far)
+}
+
 /// "... as long as you gained life this turn" (CR 611.3a, 119.3) as a static ability's `StaticDef::affects`: only the source itself,
 /// and only while its controller has gained life this turn. The layers ask again whenever characteristics are computed, so it
 /// turns on with the gain and off as the turn ends. Ulna Alley Shopkeep and Tenured Concocter print it.

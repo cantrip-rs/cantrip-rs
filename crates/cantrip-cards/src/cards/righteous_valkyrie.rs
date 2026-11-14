@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::effects::gain_life_equal_to_subject_toughness;
-use cantrip_mechanics::statics::{life_above_starting_life, plus_pt, your_creatures};
+use cantrip_mechanics::statics::{plus_pt, your_creatures_while_seven_above_starting_life};
 use cantrip_mechanics::{lands, triggers};
 use cantrip_oracle as oracle;
 
@@ -12,12 +12,6 @@ fn another_angel_or_cleric_enters(q: &dyn Query, me: &Asker, event: &Event) -> O
         .or_else(|| triggers::another_of_subtype_you_control_enters::<{ lands::sub(Subtype::Cleric) }>(q, me, event))
 }
 
-/// "As long as you have at least 7 life more than your starting life total, creatures you control get +2/+2" (CR 604.2, 611.3a,
-/// 103.4): creatures under this card's controller's control, while their life total is 7 or more above their starting one.
-fn creatures_while_seven_above_starting_life(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
-    life_above_starting_life(q, source) >= 7 && your_creatures(q, source, affected, so_far)
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
         when_asked(EventMask::ZONE_CHANGE, another_angel_or_cleric_enters),
@@ -26,7 +20,7 @@ pub static CARD: CardDef = CardDef {
     )],
     statics: &[static_ability(
         Layer::PtModify,
-        creatures_while_seven_above_starting_life,
+        your_creatures_while_seven_above_starting_life,
         plus_pt::<2, 2>,
         "As long as you have at least 7 life more than your starting life total, creatures you control get +2/+2.",
     )],
