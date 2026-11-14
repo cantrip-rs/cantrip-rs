@@ -1,0 +1,46 @@
+# Pyromancer's Goggles: the rider is on the Goggles' own mana. Bot1 casts Lightning Bolt at Bot2 on turn 3 paid with Mox Ruby's
+# {R} and leaves the Goggles untapped: no copy (one spell on the stack), Bot2 goes to 17 and keeps its Grizzly Bears.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Pyromancer's Goggles
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Pyromancer's Goggles.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Pyromancer's Goggles.Tapped = false

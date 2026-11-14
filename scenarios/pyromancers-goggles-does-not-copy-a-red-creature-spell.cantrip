@@ -1,0 +1,34 @@
+# Pyromancer's Goggles: its {R} and Mox Ruby's {R} pay for Goblin Piker ({1}{R}), a red creature spell, not an instant or sorcery:
+# no copy, one Goblin Piker enters.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Pyromancer's Goggles
+Goblin Piker
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Pyromancer's Goggles.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Pyromancer's Goggles.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Piker.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Pyromancer's Goggles; Goblin Piker
+Stack.Count = 0
