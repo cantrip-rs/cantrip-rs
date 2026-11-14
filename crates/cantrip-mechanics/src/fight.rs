@@ -15,6 +15,18 @@ pub fn targets_fight(g: &mut dyn Game, item: &StackItem, first: usize, second: u
     }
 }
 
+const THIS_MAY_FIGHT: Question = Question::new("Fight", "have {source} fight that creature?", "Chosen as the ability resolves", "Fight", "Don't");
+
+/// "You may have [this creature] fight [that creature]" (CR 701.14a-b, 608.2d): the source's controller chooses as the ability
+/// resolves, and only on a yes do the source and `prey` fight; the fight does nothing unless both are still creatures on the
+/// battlefield (CR 701.14b). Affectionate Indrik and Kraul Harpooner print it.
+pub fn may_have_this_fight(g: &mut dyn Game, item: &StackItem, prey: ObjectId) -> Result<(), Suspend> {
+    if crate::effects::ask_may(g, item.controller, item.object, Purpose::Ask(&THIS_MAY_FIGHT))? {
+        g.fight(item.object, prey);
+    }
+    Ok(())
+}
+
 /// "Put `N` +1/+1 counters on target creature you control. [Then] it fights target creature an opponent controls." (CR 122.1,
 /// 701.14, 608.2b-c): the creature is the spell's first target and the one fought its second, each judged as the spell resolves.
 /// With the first gone nothing is put on and nothing fights; with only the second gone the counters are still put on and no

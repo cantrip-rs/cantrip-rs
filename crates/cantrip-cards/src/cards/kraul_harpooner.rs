@@ -1,6 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::effects::ask_may;
-use cantrip_mechanics::{pump, targets, triggers};
+use cantrip_mechanics::{fight, pump, targets, triggers};
 use cantrip_oracle as oracle;
 
 /// "Target creature you don't control with flying" (CR 115.1, 109.5, 702.9), read from the layers as the ability goes on the
@@ -8,8 +7,6 @@ use cantrip_oracle as oracle;
 fn creature_you_dont_control_with_flying(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     (targets::CREATURE_YOU_DONT_CONTROL.filter)(q, asker, t) && matches!(t, Target::Object(id) if targets::has_flying_creature(q, id))
 }
-
-const FIGHT: Question = Question::new("Fight", "have Kraul Harpooner fight that creature?", "Chosen as the ability resolves", "Fight", "Don't");
 
 /// "Undergrowth \u{2014} When this creature enters, choose up to one target creature you don't control with flying. This creature
 /// gets +X/+0 until end of turn, where X is the number of creature cards in your graveyard, then you may have this creature
@@ -22,10 +19,7 @@ fn undergrowth(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     pump(g, item.object, item.object, x, 0);
     g.end_sentence();
     let Some(prey) = targets::object(g, item, 0) else { return Ok(()) };
-    if ask_may(g, item.controller, item.object, Purpose::Ask(&FIGHT))? {
-        g.fight(item.object, prey);
-    }
-    Ok(())
+    fight::may_have_this_fight(g, item, prey)
 }
 
 pub static CARD: CardDef = CardDef {
