@@ -1,0 +1,70 @@
+# Wildheart Invoker: "{8}: Target creature gets +5/+5 and gains trample until end of turn." With seven mana (five Moxen and two Forests) the
+# ability is refused (turn 5, CR 602.2b); with eight (turn 7) it makes the 4/3 Invoker a 9/8 with trample until end of turn. It attacks into
+# Bot2's Ornithopter (0/2), which blocks: 7 damage tramples over to Bot2 (CR 702.19b) and the Ornithopter dies.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Mox Jet
+Wildheart Invoker
+Mox Sapphire
+Forest
+Forest
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wildheart Invoker.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+? Bot1.Battlefield.Wildheart Invoker.Power = 4
+? Bot1.Battlefield.Wildheart Invoker.Toughness = 3
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Wildheart Invoker.Activate(Wildheart Invoker; Mana: short)
+[T7 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Forest#3.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Wildheart Invoker.Activate(Wildheart Invoker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wildheart Invoker.Power = 9
+? Bot1.Battlefield.Wildheart Invoker.Toughness = 8
+? Bot1.Battlefield.Wildheart Invoker.Keywords = Trample
+Bot1.Attack(Wildheart Invoker > Bot2)
+Bot2.Block(Ornithopter > Wildheart Invoker)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Bot2.Battlefield.Count = 0
