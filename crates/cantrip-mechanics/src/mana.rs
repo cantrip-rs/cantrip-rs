@@ -3,14 +3,22 @@
 
 use cantrip_api::*;
 
-/// "It produces colorless mana instead of any other type" (CR 614.1a, 106.12b), as Ritual of Subdual and Chaos Moon
-/// print it. Replace only the types in a proposed production, retaining its total, recipient, restrictions and duration.
-/// The caller supplies the land/source restriction and whether this is an ordinary or granted replacement.
-pub fn produce_colorless_instead(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
+/// "If a land is tapped for mana, it ..." (CR 614.1a, 106.12b): the `applies` of a replacement that changes what any land
+/// produces, whoever taps it. Ritual of Subdual and Infernal Darkness print it.
+pub fn a_land_is_tapped(q: &dyn Query, _: &Asker, proposal: &Proposal) -> bool {
+    matches!(proposal, Proposal::ManaProduction(production) if q.chars(production.permanent).is(CardType::Land))
+}
+
+/// "It produces {`M`} instead of any other type" (CR 614.1a, 106.12b): the types of a proposed production are replaced by `M`,
+/// retaining its total, recipient, restrictions and duration. Infernal Darkness ({B}) and Deep Water ({U}) print it, and
+/// Ritual of Subdual and Chaos Moon ("colorless mana instead of any other type") with `M` {C}. The caller supplies the
+/// land/source restriction and whether this is an ordinary or granted replacement.
+pub fn produce_instead<const M: u8>(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
+    const { assert!(M <= Mana::C as u8, "M is a kind of mana") };
     if let Proposal::ManaProduction(production) = proposal {
         let total = production.total();
         production.mana = ManaPool::default();
-        production.mana.0[Mana::C as usize] = total;
+        production.mana.0[M as usize] = total;
     }
 }
 

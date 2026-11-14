@@ -2,20 +2,6 @@ use cantrip_api::*;
 use cantrip_mechanics::{cumulative_upkeep, mana};
 use cantrip_oracle as oracle;
 
-/// "If a land is tapped for mana, it produces colorless mana instead of any other type." (CR 604.1).
-fn if_land_tapped_mana_produces_applies(
-    q: &dyn Query,
-    _: &Asker,
-    proposal: &Proposal,
-) -> bool {
-    let Proposal::ManaProduction(m) = proposal else { return false };
-    let id = m.permanent;
-    if q.chars(id).is(CardType::Land) {
-        return true;
-    }
-    false
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         cumulative_upkeep!(
@@ -26,8 +12,8 @@ pub static CARD: CardDef = CardDef {
     replacements: &[
         replacement(
             ReplacementKind::ManaProduction,
-            if_land_tapped_mana_produces_applies,
-            mana::produce_colorless_instead,
+            mana::a_land_is_tapped,
+            mana::produce_instead::<{ Mana::C as u8 }>,
             "If a land is tapped for mana, it produces colorless mana instead of any other type.",
         ),
     ],

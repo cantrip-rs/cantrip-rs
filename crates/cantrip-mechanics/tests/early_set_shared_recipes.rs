@@ -148,7 +148,7 @@ fn mana_probe(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         lasts: ManaLasts::Turn,
     };
     let mut proposal = Proposal::ManaProduction(original);
-    mana::produce_colorless_instead(g, &Asker::new(item.object, YOU), &mut proposal);
+    mana::produce_instead::<{ Mana::C as u8 }>(g, &Asker::new(item.object, YOU), &mut proposal);
     assert_eq!(
         proposal,
         Proposal::ManaProduction(ManaProduction {
@@ -158,7 +158,7 @@ fn mana_probe(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         "only mana types change; the tapper, recipient, restriction and lifetime stay intact"
     );
     let once = proposal;
-    mana::produce_colorless_instead(g, &Asker::new(item.object, YOU), &mut proposal);
+    mana::produce_instead::<{ Mana::C as u8 }>(g, &Asker::new(item.object, YOU), &mut proposal);
     assert_eq!(proposal, once, "already-colorless mana is unchanged");
     Ok(())
 }
