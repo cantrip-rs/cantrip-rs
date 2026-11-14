@@ -1,0 +1,51 @@
+# Morbid triggers only "at the beginning of your end step": Bot1 burns Bot2's Memnite on Bot2's turn 2, so a creature died that turn, but the end step is
+# Bot2's and the Pack's ability does not trigger (CR 603.2, 603.4); the Pack is still a 4/5 with no counters on Bot1's next upkeep.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Needletooth Pack
+Lightning Bolt
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Needletooth Pack.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Memnite
+[T3 Bot1.Upkeep]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Needletooth Pack.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Needletooth Pack.Power = 4
+Bot1.Battlefield.Needletooth Pack.Toughness = 5

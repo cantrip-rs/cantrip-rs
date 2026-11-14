@@ -1,0 +1,8 @@
+{
+  "name": "Needletooth Pack",
+  "manaCost": "{3}{G}{G}",
+  "type": "Creature — Dinosaur",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Morbid — At the beginning of your end step, if a creature died this turn, put two +1/+1 counters on target creature you control."
+}

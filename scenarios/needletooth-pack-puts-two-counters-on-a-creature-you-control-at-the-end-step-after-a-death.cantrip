@@ -1,0 +1,67 @@
+# Needletooth Pack's morbid (CR 603.4): Bot2's Memnite dies to Lightning Bolt on Bot1's turn 3, so at Bot1's end step it puts two +1/+1 counters on target creature
+# you control: Bot1's Memnite becomes 3/3 (the Pack stays 4/5). Bot2's remaining Memnite is refused as the target.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Memnite
+Needletooth Pack
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Memnite
+Memnite
+Island x18
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Needletooth Pack.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Count = 1
+[T3 Bot1.End]
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Toughness = 3
+Bot1.Battlefield.Needletooth Pack.Power = 4
+Bot1.Battlefield.Needletooth Pack.Toughness = 5
+Bot2.Battlefield.Memnite.Power = 1
