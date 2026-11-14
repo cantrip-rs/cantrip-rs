@@ -1,0 +1,50 @@
+# Rapacious Dragon: "Flying" and "When this creature enters, create two Treasure tokens." Turn 1: the Dragon (3/3) is cast for {4}{R} with five
+# Mox Rubies and makes exactly two Treasures, with the pool empty. Turn 3 one Treasure is sacrificed for mana (one is left), and the Dragon
+# attacks: Bot2's Memnite cannot block a flier and the Dragon hits for 3.
+
+[Bot1 Deck]
+Mox Ruby x5
+Rapacious Dragon
+Mountain
+Mountain x12
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Battlefield.Mox Ruby#5.Activate
+Bot1.Hand.Rapacious Dragon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 8
+? Bot1.Mana =
+? Bot1.Battlefield.Rapacious Dragon.Power = 3
+? Bot1.Battlefield.Rapacious Dragon.Toughness = 3
+? Bot1.Battlefield.Rapacious Dragon.Keywords = Flying
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Treasure Token.Activate(Color: Red)
+? Bot1.Battlefield.Count = 7
+Bot1.Attack(Rapacious Dragon > Bot2)
+! Bot2.Block(Memnite > Rapacious Dragon)
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Count = 7
