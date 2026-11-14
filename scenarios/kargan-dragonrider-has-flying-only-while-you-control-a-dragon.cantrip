@@ -1,0 +1,58 @@
+# Kargan Dragonrider: "As long as you control a Dragon, this creature has flying." It is a Human Warrior, so it is no Dragon
+# itself. Bot1 casts it with no flying; the opponent's Dragon Engine does not give it flying; Bot1's own Dragon Engine does; and
+# once Bot1's Dragon dies the flying goes with it.
+
+[Bot1 Deck]
+Mox Ruby x5
+Kargan Dragonrider
+Dragon Engine
+Lightning Bolt
+Mountain x12
+
+[Bot2 Deck]
+Mox Ruby x3
+Dragon Engine
+Mountain x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Kargan Dragonrider.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kargan Dragonrider.Keywords = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Hand.Dragon Engine.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Dragon Engine.Subtypes = Construct; Dragon
+? Bot1.Battlefield.Kargan Dragonrider.Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Dragon Engine.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kargan Dragonrider.Keywords = Flying
+? Bot1.Battlefield.Dragon Engine.Keywords = (absent)
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Dragon Engine)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kargan Dragonrider.Keywords = (absent)
+[Expect]
+Bot1.Battlefield.Kargan Dragonrider.Keywords = (absent)
+Bot1.Graveyard.Count = 2
