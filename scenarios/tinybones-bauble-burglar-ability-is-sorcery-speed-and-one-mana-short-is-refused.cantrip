@@ -1,0 +1,43 @@
+# Tinybones, Bauble Burglar: "{3}{B}, {T}: Each opponent discards a card. Activate only as a sorcery" (CR 602.5d). On turn 3
+# Bot1 has Swamp, Swamp and Mox Jet, one mana short of {3}{B}, so the ability is refused; Mox Ruby makes four. On Bot2's turn 4
+# all four are untapped, but it is not Bot1's turn to act at sorcery speed, so it is refused still; on turn 5 it is paid and works.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Tinybones, Bauble Burglar
+Swamp
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tinybones, Bauble Burglar.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+! Bot1.Battlefield.Tinybones, Bauble Burglar.Activate(Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+[T4 Bot2.Main1]
+! Bot1.Battlefield.Tinybones, Bauble Burglar.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Tinybones, Bauble Burglar.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Tinybones, Bauble Burglar.Tapped = true
+Bot1.Mana = 

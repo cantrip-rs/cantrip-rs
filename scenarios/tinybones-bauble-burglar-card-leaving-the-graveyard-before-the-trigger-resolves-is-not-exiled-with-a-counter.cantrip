@@ -1,0 +1,57 @@
+# Tinybones, Bauble Burglar: "exile it from their graveyard with a stash counter on it" (CR 701.13, 400.7). Bot2 discards its
+# Lightning Bolt to Tinybones's ability, and with the trigger on the stack Bot1 sacrifices Tormod's Crypt to exile Bot2's
+# graveyard: the Bolt is exiled by it with no counter and the trigger finds nothing to exile. Bot1 can't cast the Bolt from
+# exile - it has no stash counter - though it can play the Mountain Bot2 discarded to its hand size on turn 2, which has.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Mox Pearl
+Tinybones, Bauble Burglar
+Tormod's Crypt
+Swamp
+Swamp x14
+
+[Bot2 Deck]
+Lightning Bolt
+Mountain x6
+Mountain x13
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tinybones, Bauble Burglar.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Tinybones, Bauble Burglar.Activate
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Lightning Bolt)
+? Stack = Tinybones, Bauble Burglar
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt; Mountain
+Bot1.Pass
+Bot2.Pass
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Exile.Mountain.Play
+
+[Expect]
+Exile = Lightning Bolt
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield = Mountain; Mox Jet; Mox Pearl; Mox Ruby; Swamp; Swamp; Tinybones, Bauble Burglar

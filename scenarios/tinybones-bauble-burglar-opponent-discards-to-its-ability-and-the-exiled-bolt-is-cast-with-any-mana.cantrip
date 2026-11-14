@@ -1,0 +1,65 @@
+# Tinybones, Bauble Burglar: "{3}{B}, {T}: Each opponent discards a card. Activate only as a sorcery" and "Whenever an opponent
+# discards a card, exile it from their graveyard with a stash counter on it" (CR 701.9a, 701.13, 122.1). Bot1 casts Tinybones on
+# turn 1 and on turn 3 taps Swamp, Swamp, Mox Jet and Mox Ruby, which pay it exactly, the pool empty after. Bot2 discards the Lightning Bolt (its hand a Bolt and Mountains); it sits in the graveyard
+# as the trigger waits, then is exiled, not left in Bot2's graveyard. "During your turn, you may play cards you don't own with stash counters on them from
+# exile, and mana of any type can be spent to cast those spells": Bot1, with only Mox Pearl's {W} open, casts the Bolt at Bot2
+# for its {R}, and the Bolt, leaving exile, goes to its owner's graveyard. The Mountain Bot2 discarded to its hand size at
+# the end of turn 2 was exiled with a stash counter the same way (it stays there, unplayed).
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Mox Pearl
+Tinybones, Bauble Burglar
+Swamp
+Swamp
+Swamp x14
+
+[Bot2 Deck]
+Lightning Bolt
+Mountain x6
+Mountain x13
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tinybones, Bauble Burglar.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Tinybones, Bauble Burglar.Activate
+? Bot1.Mana = 
+? Bot1.Battlefield.Tinybones, Bauble Burglar.Tapped = true
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Lightning Bolt)
+? Bot2.Graveyard = Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt; Mountain
+? Bot2.Exile.Lightning Bolt.Counters.Stash = 1
+? Bot1.Life = 20
+? Bot2.Graveyard.Count = 0
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Exile.Lightning Bolt.Cast(Bot2; Ability: 1 life)
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 20
+Bot2.Graveyard = Lightning Bolt
+Exile = Mountain
+Bot2.Hand.Count = 6
+Bot1.Battlefield.Mox Pearl.Tapped = true

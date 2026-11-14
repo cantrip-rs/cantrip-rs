@@ -1,0 +1,75 @@
+# Tinybones, Bauble Burglar: "During your turn, you may play cards you don't own with stash counters on them from exile" (CR 601.3,
+# 604.1). Both players have a Tinybones. On turn 4 Bot2 activates its own, Bot1 chooses to discard its Lightning Bolt and
+# Bot2's Tinybones exiles it with a stash counter. On Bot1's turn 5 neither can cast it: Bot1's own Tinybones doesn't let it
+# cast a card it owns, and it isn't Bot2's turn for Bot2's, though Bot2 has Mox Sapphire open. On turn 6, Bot2's own turn, Bot2
+# casts it at Bot1 (the "may": it waited a turn in exile), and the Bolt, leaving exile, goes to its owner's graveyard.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Tinybones, Bauble Burglar
+Lightning Bolt
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Tinybones, Bauble Burglar
+Swamp
+Mountain
+Swamp x13
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tinybones, Bauble Burglar.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Tinybones, Bauble Burglar.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Tinybones, Bauble Burglar.Activate
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Lightning Bolt)
+Bot2.Pass
+Bot1.Pass
+? Exile = Lightning Bolt
+? Bot1.Graveyard.Count = 0
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot2.Battlefield.Mox Sapphire.Activate
+! Bot2.Exile.Lightning Bolt.Cast(Bot1)
+[T6 Bot2.Main1]
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Exile.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot1.Graveyard = Lightning Bolt
+Exile.Count = 0
+Bot2.Battlefield.Mox Sapphire.Tapped = true

@@ -1,0 +1,51 @@
+# Tinybones, Bauble Burglar: the permission is for "cards you don't own with stash counters on them", not every card in exile,
+# and the exile is for "an opponent discards" (CR 701.9a, 122.1). Bot1 casts Tinybones on turn 1. On turn 2 Bot2 casts Ornithopter.
+# On turn 3 Bot1's Swords to Plowshares exiles it, with no counter, so Bot1 can't cast it from exile though an Ornithopter
+# costs {0} and it is Bot1's main phase. Faithless Looting then has Bot1 discard two Swamps of its own: they stay in Bot1's graveyard.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Tinybones, Bauble Burglar
+Swords to Plowshares
+Faithless Looting
+Swamp x13
+
+[Bot2 Deck]
+Ornithopter
+Mountain x6
+Mountain x13
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tinybones, Bauble Burglar.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+! Bot1.Exile.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Swamp; Swamp)
+
+[Expect]
+Bot1.Graveyard = Faithless Looting; Swamp; Swamp; Swords to Plowshares
+Exile = Ornithopter
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Swamp; Tinybones, Bauble Burglar
