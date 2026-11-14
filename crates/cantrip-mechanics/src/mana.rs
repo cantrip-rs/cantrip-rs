@@ -123,6 +123,28 @@ pub fn add_chosen_and_hurt(g: &mut dyn Game, asker: &Asker, color: Option<Color>
     Ok(())
 }
 
+/// The Urza's lands (CR 605.1a, 205.3i): "Add {C}. If you control an Urza's [A] and an Urza's [B], add `ALL` {C} instead", the
+/// two other lands named by `lands::sub(..)` and read through the words of the source's text (CR 612.2), held under any
+/// layer (CR 613). A mana ability's `add_by`: Urza's Mine (Power-Plant and Tower, 2), Urza's Power Plant (Mine and Tower, 2) and
+/// Urza's Tower (Mine and Power-Plant, 3).
+pub fn add_colorless_if_you_control_the_other_urzas_lands<const A: u16, const B: u16, const ALL: u32>(
+    g: &mut dyn Game,
+    asker: &Asker,
+    _: Option<Color>,
+) -> Result<(), Suspend> {
+    let q: &dyn Query = g;
+    let urzas = q.words(asker.source).subtype(Subtype::Urzas);
+    let controls = |n: u16| {
+        let land = crate::lands::word(q, asker.source, n);
+        q.state().battlefield().iter().any(|&id| {
+            q.controller(id) == asker.controller && q.chars(id).has_subtype(urzas) && q.chars(id).has_subtype(land)
+        })
+    };
+    let amount = if controls(A) && controls(B) { ALL } else { 1 };
+    g.add_mana(asker.controller, Mana::C, amount);
+    Ok(())
+}
+
 /// How many other lands the entering land's controller controls, read on the battlefield as it is while the land enters,
 /// so the land itself is not counted (CR 614.1d).
 pub fn other_lands_you_control(g: &mut dyn Game, entering: &Entering) -> usize {
