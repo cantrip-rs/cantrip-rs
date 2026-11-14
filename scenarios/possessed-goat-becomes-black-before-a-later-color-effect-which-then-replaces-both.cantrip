@@ -1,0 +1,51 @@
+# Possessed Goat becomes black "in addition" (layer 5, CR 613.1e) with the timestamp of its activation. On turn 1 Bot1 casts the
+# Goat and activates it (white and black); on turn 2 Bot2's Dwarven Song makes it red until end of turn, a later timestamp that
+# sets its colors, so it is only red; at the end of turn the effect is gone and it is black and white again in turn 3.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Possessed Goat
+Plains
+Lightning Bolt
+Mountain
+Plains
+Plains x12
+
+[Bot2 Deck]
+Mountain
+Dwarven Song
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Possessed Goat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Possessed Goat.Activate
+Bot1.Choose(Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Possessed Goat.Colors = Black; White
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Dwarven Song.Cast
+Bot2.Target(Bot1.Battlefield.Possessed Goat)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Possessed Goat.Colors = Red
+? Bot1.Battlefield.Possessed Goat.Subtypes = Demon; Goat
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Possessed Goat.Colors = Black; White
+Bot1.Battlefield.Possessed Goat.Power = 4

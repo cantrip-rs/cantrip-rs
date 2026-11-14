@@ -1,0 +1,49 @@
+# Possessed Goat, {3}, Discard a card: three +1/+1 counters, and it becomes a black Demon in addition to its other colors and
+# types. On turn 1 Bot1 casts it ({W} from Mox Pearl) and pays {3} (Mox Ruby, Mox Jet, Plains), discarding Lightning Bolt
+# (Mountain stays in hand): the white 1/1 Goat is a 4/4 white-and-black Goat Demon creature. "Activate only once" (CR 602.5b):
+# with mana and a card to discard still available, it cannot be activated again.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Possessed Goat
+Plains
+Lightning Bolt
+Mountain
+Plains
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Possessed Goat.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Possessed Goat.Colors = White
+? Bot1.Battlefield.Possessed Goat.Subtypes = Goat
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Possessed Goat.Activate
+Bot1.Choose(Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Possessed Goat.Power = 4
+[T1 Bot1.End]
+! Bot1.Battlefield.Possessed Goat.Activate
+
+[Expect]
+Bot1.Battlefield.Possessed Goat.Power = 4
+Bot1.Battlefield.Possessed Goat.Toughness = 4
+Bot1.Battlefield.Possessed Goat.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Possessed Goat.Colors = Black; White
+Bot1.Battlefield.Possessed Goat.Types = Creature
+Bot1.Battlefield.Possessed Goat.Subtypes = Demon; Goat
+Bot1.Graveyard = Lightning Bolt
