@@ -1,0 +1,8 @@
+{
+  "name": "Frenzied Goblin",
+  "manaCost": "{R}",
+  "type": "Creature — Goblin Berserker",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Whenever this creature attacks, you may pay {R}. If you do, target creature can't block this turn."
+}
