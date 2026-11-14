@@ -1,0 +1,32 @@
+# Fear of Immobility: "If an opponent controls it, put a stun counter on it." Bot1 targets its own Ornithopter: it is tapped (the
+# tap does not depend on who controls it) but no opponent controls it, so no stun counter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Fear of Immobility
+Ornithopter
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fear of Immobility.Cast
+Bot1.Pass
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Ornithopter.Counters.Stun = (absent)
+Stack.Count = 0
