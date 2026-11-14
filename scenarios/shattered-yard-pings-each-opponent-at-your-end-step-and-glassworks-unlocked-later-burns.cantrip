@@ -1,0 +1,60 @@
+# Glassworks // Shattered Yard cast as its right door, Shattered Yard, in turn 1: "at the beginning of your end step, this
+# Room deals 1 damage to each opponent" takes Bot2 from 20 to 19 at Bot1's end step, and it is dealt to the player only (the
+# Llanowar Elves in play are not hurt) and not at Bot2's own end step. In turn 3 Bot1 unlocks Glassworks for {2}{R}, a
+# special action (CR 709.5e), and "when you unlock this door" triggers (CR 709.5h): the Room deals 4 damage to Bot2's
+# Baloth Prime. Fully unlocked, Shattered Yard's trigger fires again at Bot1's end step, 19 to 18.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Glassworks // Shattered Yard
+Mountain
+Island x17
+
+[Bot2 Deck]
+Black Lotus
+Forest
+Baloth Prime
+Mox Emerald
+Llanowar Elves
+Island x15
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Glassworks // Shattered Yard.Cast(Ability: Shattered Yard)
+[T2 Bot2.Upkeep]
+? Bot2.Life = 19
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Baloth Prime.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+? Bot2.Life = 19
+Bot1.Battlefield.Shattered Yard.Activate(Ability: left door)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Target(Baloth Prime)
+? Stack = Glassworks // Shattered Yard
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Baloth Prime.Damage = 4
+[T4 Bot2.Upkeep]
+
+[Expect]
+Turn = 4
+Bot1.Battlefield.Glassworks // Shattered Yard.Doors = Glassworks; Shattered Yard
+Bot2.Battlefield.Baloth Prime.Damage = 0
+Bot2.Battlefield.Llanowar Elves.Damage = 0
+Bot2.Life = 18

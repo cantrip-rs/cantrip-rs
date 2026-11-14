@@ -1,0 +1,18 @@
+{
+  "name": "Glassworks // Shattered Yard",
+  "oracleText": "",
+  "halves": [
+    {
+      "name": "Glassworks",
+      "manaCost": "{2}{R}",
+      "type": "Enchantment — Room",
+      "oracleText": "When you unlock this door, this Room deals 4 damage to target creature an opponent controls.\n(You may cast either half. That door unlocks on the battlefield. As a sorcery, you may pay the mana cost of a locked door to unlock it.)"
+    },
+    {
+      "name": "Shattered Yard",
+      "manaCost": "{4}{R}",
+      "type": "Enchantment — Room",
+      "oracleText": "At the beginning of your end step, this Room deals 1 damage to each opponent.\n(You may cast either half. That door unlocks on the battlefield. As a sorcery, you may pay the mana cost of a locked door to unlock it.)"
+    }
+  ]
+}
