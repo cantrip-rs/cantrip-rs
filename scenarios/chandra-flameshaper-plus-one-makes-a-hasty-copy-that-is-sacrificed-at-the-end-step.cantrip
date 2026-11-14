@@ -1,0 +1,42 @@
+# Chandra, Flameshaper +1 (CR 707.2, 707.9a, 606.4): Bot1 casts Mons's Goblin Raiders and then Chandra, and her +1 targets the
+# Raiders. The token copy has haste, so it attacks at once and Bot2 takes 1; it is sacrificed at the beginning of the end step.
+# Her loyalty is 6 + 1 = 7.
+[Bot1 Deck]
+Black Lotus x3
+Chandra, Flameshaper
+Mons's Goblin Raiders
+Mountain x2
+Mountain x10
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Mons's Goblin Raiders.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Chandra, Flameshaper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Chandra, Flameshaper.Activate(Ability: Create a token; Target: Bot1.Battlefield.Mons's Goblin Raiders)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mons's Goblin Raiders#2.Token = true
+? Bot1.Battlefield.Mons's Goblin Raiders#2.Keywords = Haste
+! Bot1.Attack(Mons's Goblin Raiders#1 > Bot2)
+Bot1.Attack(Mons's Goblin Raiders#2 > Bot2)
+[T1 Bot1.Main2]
+? Bot2.Life = 19
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Count = 2
+Bot1.Battlefield.Chandra, Flameshaper.Counters.Loyalty = 7

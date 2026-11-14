@@ -1,0 +1,54 @@
+# Chandra, Flameshaper -4 (CR 601.2d, 120.3, 704.5i): after a +2 on turn 1 (loyalty 8) Bot2 builds a board of Liliana of the Veil
+# (3 loyalty), Mons's Goblin Raiders (1/1) and Ornithopter (0/2). On turn 3 the -4 divides 8 damage: 3 to Liliana, 3 to the
+# Raiders and 2 to the Ornithopter - all three die, and Chandra is left with 4 loyalty.
+[Bot1 Deck]
+Black Lotus x3
+Chandra, Flameshaper
+Mountain x3
+Mountain x16
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Liliana of the Veil
+Mons's Goblin Raiders
+Ornithopter
+Swamp x2
+Swamp x10
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Chandra, Flameshaper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Chandra, Flameshaper.Activate(Ability: Add)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mountain)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Mons's Goblin Raiders.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Liliana of the Veil.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Chandra, Flameshaper.Activate(Ability: 8 damage)
+Bot1.Divide(Bot2.Battlefield.Liliana of the Veil: 3; Bot2.Battlefield.Mons's Goblin Raiders: 3; Bot2.Battlefield.Ornithopter: 2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield = Mox Ruby
+Bot2.Graveyard.Count = 4
+Bot1.Battlefield.Chandra, Flameshaper.Counters.Loyalty = 4
