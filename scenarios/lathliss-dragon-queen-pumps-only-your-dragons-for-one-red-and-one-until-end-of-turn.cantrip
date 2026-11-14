@@ -1,0 +1,67 @@
+# Lathliss's {1}{R}: Dragons you control get +1/+0 until end of turn. Bot1 pays it twice with a Mountain and another mana each (the pool is
+# empty after each), so Lathliss is 8/6 and with only Mox Jet left it can no longer be activated; Bot2's Dragon Whelp stays 2/3,
+# and the next turn Lathliss is 6/6 again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mountain
+Lathliss, Dragon Queen
+Mountain
+Mox Jet
+Mountain x13
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Dragon Whelp
+Island x17
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lathliss, Dragon Queen.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Dragon Whelp.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Lathliss, Dragon Queen.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Lathliss, Dragon Queen.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Lathliss, Dragon Queen.Activate(Mana: short)
+? Bot1.Battlefield.Lathliss, Dragon Queen.Power = 8
+? Bot1.Battlefield.Lathliss, Dragon Queen.Toughness = 6
+? Bot2.Battlefield.Dragon Whelp.Power = 2
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Lathliss, Dragon Queen.Power = 6
+Bot1.Battlefield.Lathliss, Dragon Queen.Toughness = 6
+Bot2.Battlefield.Dragon Whelp.Power = 2
+Bot2.Battlefield.Dragon Whelp.Toughness = 3
+Stack.Count = 0
