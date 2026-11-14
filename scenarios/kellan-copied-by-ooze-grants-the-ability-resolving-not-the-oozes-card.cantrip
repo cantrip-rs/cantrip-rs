@@ -1,0 +1,59 @@
+# Probe: Necrotic Ooze, a Scout through Arcane Adaptation, activates Kellan's {1}{R} ability from the graveyard: it becomes a
+# Human Faerie Detective and gains the combat-damage trigger.
+[Bot1 Deck]
+Island
+Mox Jet
+Mox Sapphire
+Entomb
+Black Lotus
+Arcane Adaptation
+Necrotic Ooze
+Mox Pearl
+Mountain
+Mox Ruby
+Kellan, Planar Trailblazer
+Island x10
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Arcane Adaptation.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Scout)
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Necrotic Ooze.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Kellan, Planar Trailblazer)
+? Bot1.Graveyard.Count = 3
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Necrotic Ooze.Activate(Ability: Scout)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Necrotic Ooze.Subtypes = Detective; Faerie; Human
+Bot1.Attack(Necrotic Ooze > Bot2)
+[T7 Bot1.Main2]
+? Bot2.Life = 16
+
+[Expect]
+Exile.Count = 1
+Bot2.Life = 16
