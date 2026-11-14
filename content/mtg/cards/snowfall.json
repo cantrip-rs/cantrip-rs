@@ -1,0 +1,6 @@
+{
+  "name": "Snowfall",
+  "manaCost": "{2}{U}",
+  "type": "Enchantment",
+  "oracleText": "Cumulative upkeep {U} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nWhenever an Island is tapped for mana, its controller may add an additional {U}. If that Island is snow, its controller may add an additional {U}{U} instead. Spend this mana only to pay cumulative upkeep costs."
+}

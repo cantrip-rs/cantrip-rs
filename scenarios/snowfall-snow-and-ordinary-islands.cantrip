@@ -1,0 +1,50 @@
+# Each Island's controller chooses Snowfall's extra restricted blue mana, where a snow Island's {U}{U} replaces the {U} (CR 605.1b, 106.6).
+[Bot1 Deck]
+Snowfall
+Black Lotus
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Snow-Covered Island x4
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Snowfall.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Island.Play
+Bot2.Battlefield.Snow-Covered Island.Activate
+Bot2.Modes(Add no mana)
+? Bot2.Mana = {U}
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Island.Activate
+! Bot1.Modes(Add {U}{U})
+Bot1.Modes(Add one {U})
+? Bot1.Mana = {U}{R} {U} (CumulativeUpkeep)
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana = {U}{R}
+[T4 Bot2.Main1]
+Bot2.Hand.Snow-Covered Island.Play
+Bot2.Battlefield.Snow-Covered Island.Activate
+! Bot2.Modes(Add one {U})
+Bot2.Modes(Add {U}{U})
+? Bot2.Mana = {U} {U}{U} (CumulativeUpkeep)
+Bot2.Battlefield.Snow-Covered Island.Activate
+Bot2.Modes(Add {U}{U})
+? Bot2.Mana = {U}{U} {U}{U}{U}{U} (CumulativeUpkeep)
+? Bot2.ManaFrom = {U} snow Snow-Covered Island; {U} snow Snow-Covered Island; {U}{U}{U}{U} Snowfall
+
+[Expect]
+Bot1.Battlefield.Snowfall.Counters.Age = 1

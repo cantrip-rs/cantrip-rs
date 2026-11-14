@@ -1,0 +1,46 @@
+# A text change makes Snowfall watch Mountains instead of Islands; its blue mana symbols stay blue (CR 612.2).
+[Bot1 Deck]
+Snowfall
+Black Lotus
+Trait Doctoring
+Mountain
+Mox Sapphire x2
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Snowfall.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.PayCost
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Trait Doctoring.Cast(Snowfall)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Replace a basic land type)
+Bot1.Modes(Island)
+Bot1.Modes(Mountain)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+? Bot1.Mana = {U}
+Bot1.Battlefield.Mountain.Activate
+Bot1.Modes(Add one {U})
+? Bot1.Mana = {U}{R} {U} (CumulativeUpkeep)
+
+[Expect]
+Bot1.Battlefield.Snowfall.Counters.Age = 1

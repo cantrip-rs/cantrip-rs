@@ -1,0 +1,40 @@
+# An Island tapped for black still adds restricted blue, and its controller receives both (Snowfall ruling 2008-08-01).
+[Bot1 Deck]
+Snowfall
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Underground Sea
+Brainstorm
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Snowfall.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Underground Sea.Play
+Bot2.Battlefield.Underground Sea.Activate(Ability: {B})
+! Bot2.Modes(Add {U}{U})
+Bot2.Modes(Add one {U})
+? Bot2.Mana = {B} {U} (CumulativeUpkeep)
+! Bot2.Hand.Brainstorm.Cast(Mana: short)
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Modes(Add no mana)
+Bot1.PayCost
+[T4 Bot2.Main1]
+Bot2.Battlefield.Underground Sea.Activate(Ability: {U})
+Bot2.Modes(Add no mana)
+Bot2.Hand.Brainstorm.Cast
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard.Brainstorm.Colors = Blue
+Bot2.Battlefield.Underground Sea.Tapped = true
