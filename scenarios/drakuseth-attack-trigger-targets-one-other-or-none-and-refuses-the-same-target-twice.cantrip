@@ -1,0 +1,42 @@
+# Drakuseth's "up to two other targets" may be fewer than two, even none (CR 601.2c, 115.1d): Bot1 targets only Bot2 for 4 (20 to
+# 16, then 7 in combat to 9) and nothing else is dealt 3, so Bot1 stays at 20. The other targets can't repeat the first target or
+# each other, can't be more than two, and must be a creature, player, planeswalker or battle (a Mox Ruby is refused).
+
+[Bot1 Deck]
+Black Lotus x2
+Mox Ruby
+Drakuseth, Maw of Flames
+Mountain x20
+
+[Bot2 Deck]
+Memnite
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Drakuseth, Maw of Flames.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Drakuseth, Maw of Flames > Bot2)
+Bot1.Target(Bot2)
+! Bot1.Target(Bot2)
+! Bot1.Target(Bot2.Battlefield.Memnite; Bot1; Bot1.Battlefield.Drakuseth, Maw of Flames)
+! Bot1.Target(Bot1.Battlefield.Mox Ruby)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 9
+? Bot1.Life = 20
+? Bot2.Battlefield.Memnite.Damage = 0
+
+[Expect]
+Bot2.Battlefield.Memnite.Power = 1
