@@ -1,0 +1,38 @@
+# Fierce Empath, "a creature card" and "or greater" (CR 701.23, 202.3): a mana value above 6 qualifies, and only one card may be found though two qualify (Craw Wurm and Woodfall Primus). Woodfall Primus (8) is found; Serra Angel (5) is not offered.
+
+[Bot1 Deck]
+Fierce Empath
+Mox Emerald
+Mox Jet
+Mox Ruby
+Island
+Island
+Island
+Craw Wurm
+Woodfall Primus
+Serra Angel
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fierce Empath.Cast
+Bot1.Accept
+! Bot1.Search(Serra Angel)
+! Bot1.Search(Craw Wurm; Woodfall Primus)
+Bot1.Search(Woodfall Primus)
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Hand = Island; Island; Island; Woodfall Primus
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby; Fierce Empath
+Bot1.Library.Count = 10
+Bot1.Revealed = Woodfall Primus

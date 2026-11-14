@@ -1,0 +1,8 @@
+{
+  "name": "Fierce Empath",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Elf",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "When this creature enters, you may search your library for a creature card with mana value 6 or greater, reveal it, put it into your hand, then shuffle."
+}

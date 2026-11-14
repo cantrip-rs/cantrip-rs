@@ -1,0 +1,41 @@
+# Fierce Empath, "a creature card with mana value 6 or greater" (CR 701.23, 202.3): the boundary is inclusive, so Craw Wurm (6) is found. Serra Angel (5), Grizzly Bears (2) and the
+# noncreature Portal to Phyrexia (9) are refused; the card found goes to Bot1's hand and the library, shuffled, keeps the rest.
+
+[Bot1 Deck]
+Fierce Empath
+Mox Emerald
+Mox Jet
+Mox Ruby
+Island
+Island
+Island
+Craw Wurm
+Serra Angel
+Grizzly Bears
+Portal to Phyrexia
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fierce Empath.Cast
+Bot1.Accept
+! Bot1.Search(Serra Angel)
+! Bot1.Search(Grizzly Bears)
+! Bot1.Search(Portal to Phyrexia)
+Bot1.Search(Craw Wurm)
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Hand = Island; Island; Island; Craw Wurm
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby; Fierce Empath
+Bot1.Revealed = Craw Wurm
+Bot1.Library.Count = 11

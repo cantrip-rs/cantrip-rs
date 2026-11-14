@@ -1,0 +1,35 @@
+# Fierce Empath finding nothing (CR 701.23b): the library holds only a 5-mana creature and a 9-mana noncreature, so nothing qualifies and the search finds no card.
+
+[Bot1 Deck]
+Fierce Empath
+Mox Emerald
+Mox Jet
+Mox Ruby
+Island
+Island
+Island
+Serra Angel
+Portal to Phyrexia
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fierce Empath.Cast
+Bot1.Accept
+! Bot1.Search(Serra Angel)
+! Bot1.Search(Portal to Phyrexia)
+Bot1.Search()
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Hand = Island; Island; Island
+Bot1.Library.Count = 11
