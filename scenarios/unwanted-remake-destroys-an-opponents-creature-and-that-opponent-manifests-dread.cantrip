@@ -1,0 +1,39 @@
+# Unwanted Remake, "Destroy target creature. Its controller manifests dread." Bot1 destroys Bot2's Memnite; it is Bot2, the
+# creature's controller, not Bot1, who looks at the top two cards of its library (Guerrilla Gorilla, Lightning Bolt) and manifests
+# one: the Gorilla goes face down onto Bot2's battlefield and the Bolt into its graveyard, beside the Memnite.
+
+[Bot1 Deck]
+Mox Pearl
+Unwanted Remake
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Guerrilla Gorilla
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Unwanted Remake.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot2.Arrange(Guerrilla Gorilla | Lightning Bolt)
+[T3 Bot1.End]
+
+[Expect]
+Bot2.Battlefield.Count = 1
+Bot2.Graveyard.Count = 2
+Bot1.Graveyard = Unwanted Remake
+Bot1.Battlefield.Count = 1

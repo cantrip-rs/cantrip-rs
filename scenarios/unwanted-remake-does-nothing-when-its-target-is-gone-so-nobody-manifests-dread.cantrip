@@ -1,0 +1,39 @@
+# Unwanted Remake: its only target is illegal on resolution, so the spell is countered and none of it happens (CR 608.2b): Bot2
+# answers by Bolting its own Memnite, so Bot2 loses the Memnite but is not made to manifest dread (nothing leaves the library:
+# Bot2 drew for turn 2 only, leaving 21 of its 29 cards in the library, 19 had it manifested).
+
+[Bot1 Deck]
+Mox Pearl
+Unwanted Remake
+Island x20
+
+[Bot2 Deck]
+Memnite
+Mox Ruby
+Lightning Bolt
+Island
+Island
+Island
+Island
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Unwanted Remake.Cast(Bot2.Battlefield.Memnite)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+[T3 Bot1.End]
+
+[Expect]
+Bot2.Battlefield.Count = 1
+Bot2.Graveyard.Count = 2
+Bot1.Graveyard = Unwanted Remake
+Bot2.Library.Count = 21
