@@ -1,0 +1,35 @@
+# Duskmourn's Domination on the caster's own Ornithopter: control does not change (CR 613.1b: "you control" it already), but it is -3/-0 (0/2 becomes -3/2)
+# and has lost flying (CR 613.1f).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Sapphire
+Black Lotus
+Ornithopter
+Duskmourn's Domination
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Duskmourn's Domination.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = -3
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Ornithopter.Keywords = (absent)

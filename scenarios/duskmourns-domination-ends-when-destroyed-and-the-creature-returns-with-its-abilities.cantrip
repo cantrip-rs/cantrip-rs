@@ -1,0 +1,55 @@
+# When Duskmourn's Domination is destroyed (Bot2's Disenchant), Bot1 stops controlling Serra Angel, which goes back to Bot2 as a 4/4 with flying
+# and vigilance again (CR 613.1b, 303.4, 400.7 not applying - it never left the battlefield).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Sapphire
+Black Lotus
+Duskmourn's Domination
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Mox Pearl
+Serra Angel
+Disenchant
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Serra Angel.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Duskmourn's Domination.Cast(Bot2.Battlefield.Serra Angel)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Serra Angel.Power = 1
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Duskmourn's Domination)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Serra Angel = (absent)
+Bot2.Battlefield.Serra Angel.Power = 4
+Bot2.Battlefield.Serra Angel.Toughness = 4
+Bot2.Battlefield.Serra Angel.Keywords = Flying; Vigilance
+Bot1.Graveyard = Duskmourn's Domination; Black Lotus
