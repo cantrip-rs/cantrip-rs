@@ -1,0 +1,8 @@
+{
+  "name": "Gorehorn Raider",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Minotaur Pirate",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Raid — When this creature enters, if you attacked this turn, this creature deals 2 damage to any target."
+}
