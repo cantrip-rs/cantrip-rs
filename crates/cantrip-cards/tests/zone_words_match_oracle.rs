@@ -33,10 +33,11 @@ fn zone_words_are_read_from_the_oracle_text() {
             from_anywhere: a.from_anywhere || w.from_anywhere,
             leaves_graveyard: a.leaves_graveyard || w.leaves_graveyard,
         });
-        let abilities = card
-            .abilities
+        // A Room's (or other split card's) Oracle text is both halves' text, and each half's abilities are its own (CR 709.5).
+        let defs: Vec<&CardDef> = std::iter::once(*card).chain(card.split.into_iter().flat_map(|(left, right)| [left, right])).collect();
+        let abilities = defs
             .iter()
-            .chain(card.delayed)
+            .flat_map(|def| def.abilities.iter().chain(def.delayed))
             .filter_map(|a| match a {
                 AbilityDef::Triggered(t) => Some(read_zone_words(t.text)),
                 _ => None,
