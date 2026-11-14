@@ -1,0 +1,63 @@
+# Reality Twist costs {1}{U}{U} per age counter; one blue is insufficient, the cost offers no X choice, two payments scale, and declining sacrifices it (CR 702.24a).
+[Bot1 Deck]
+Black Lotus
+Reality Twist
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Jet
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Reality Twist.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+! Bot1.PayCost(X: 1)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana = {B}
+? Bot1.Battlefield.Reality Twist.Counters.Age = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Island#1.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Island#2.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Reality Twist.Counters.Age = 2
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[Expect]
+Bot1.Graveyard = Reality Twist; Black Lotus

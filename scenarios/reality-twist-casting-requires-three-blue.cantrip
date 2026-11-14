@@ -1,0 +1,25 @@
+# Two blue and one white cannot pay {U}{U}{U}; adding a third blue permits the same cast (CR 601.2h).
+[Bot1 Deck]
+Mox Sapphire x3
+Mox Pearl
+Reality Twist
+Island x20
+[Bot2 Deck]
+Island x24
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana = {W}{U}{U}
+! Bot1.Hand.Reality Twist.Cast(Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Reality Twist.Cast
+? Bot1.Mana = {W}
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Reality Twist.Types = Enchantment

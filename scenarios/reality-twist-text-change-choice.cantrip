@@ -1,0 +1,34 @@
+# The player chooses the output of one replacement effect (CR 614.5, 106.12b).
+[Bot1 Deck]
+Black Lotus
+Reality Twist
+Magical Hack
+Mox Sapphire
+Swamp
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Reality Twist.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Magical Hack.Cast(Bot1.Battlefield.Reality Twist)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Plains)
+Bot1.Modes(Swamp)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Modes(1)
+? Bot1.Mana = {R}
+[Expect]
+Bot1.Battlefield.Reality Twist.Types = Enchantment

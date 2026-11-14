@@ -1,0 +1,22 @@
+# Reality Twist changes an opponent's Plains to produce red instead of white (CR 614.1a).
+[Bot1 Deck]
+Black Lotus
+Reality Twist
+Island x20
+[Bot2 Deck]
+Plains
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Reality Twist.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+? Bot2.Mana = {R}
+[Expect]
+Bot1.Battlefield.Reality Twist.Types = Enchantment

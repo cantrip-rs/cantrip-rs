@@ -1,0 +1,33 @@
+# The player chooses the output of one replacement effect (CR 614.5, 106.12b).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Prismatic Omen
+Reality Twist
+Ancient Tomb
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ancient Tomb.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Prismatic Omen.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Reality Twist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ancient Tomb.Activate(Ability: Add {C}{C})
+Bot1.Modes(2)
+? Bot1.Mana = {G}{G}
+[Expect]
+Bot1.Battlefield.Ancient Tomb.Subtypes = Forest; Island; Mountain; Plains; Swamp

@@ -1,0 +1,21 @@
+# Reality Twist changes mana from Mountain to W, replacing the land's normal output (CR 614.1a).
+[Bot1 Deck]
+Black Lotus
+Reality Twist
+Mountain
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Reality Twist.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+? Bot1.Mana = {W}
+[Expect]
+Bot1.Battlefield.Reality Twist.Types = Enchantment
