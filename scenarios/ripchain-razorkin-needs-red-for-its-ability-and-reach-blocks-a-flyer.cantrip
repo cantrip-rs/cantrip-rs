@@ -1,0 +1,50 @@
+# Ripchain Razorkin: "Reach" and "{2}{R}, Sacrifice a land: Draw a card." In turn 3 Bot1 has only Mox Jet, Mox Pearl and Mox Sapphire
+# tapped for mana: three mana but none of it red, so {2}{R} cannot be paid and the ability is refused, the Mountain staying in play
+# (CR 601.2h, 602.2b). In turn 4 Bot2's Ornithopter (flying) attacks and the Razorkin, with reach (CR 702.17b), blocks and kills it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mountain
+Ripchain Razorkin
+Island x14
+
+[Bot2 Deck]
+Island
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ripchain Razorkin.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Ripchain Razorkin.Activate(Sacrifice: Mountain)
+? Bot1.Graveyard = 
+[T4 Bot2.Main1]
+Bot2.Attack(Ornithopter > Bot1)
+Bot1.Block(Ripchain Razorkin > Ornithopter)
+[Bot2.Main2]
+
+[Expect]
+Bot2.Graveyard = Ornithopter
+Bot1.Life = 20

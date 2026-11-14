@@ -1,0 +1,11 @@
+{
+  "name": "Ripchain Razorkin",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Human Berserker",
+  "power": 5,
+  "toughness": 3,
+  "oracleText": "Reach\n{2}{R}, Sacrifice a land: Draw a card.",
+  "keywords": [
+    "Reach"
+  ]
+}
