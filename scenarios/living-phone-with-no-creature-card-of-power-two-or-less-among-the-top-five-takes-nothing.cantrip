@@ -1,0 +1,46 @@
+# Living Phone: with no creature card of power 2 or less among the top five (Serra Angel, an Island, Hill Giant, Mox Ruby, an
+# Island; the Savannah Lions that would qualify is sixth) the five cards are still looked at and all go to the bottom, and nothing
+# is taken: Bot1's hand is the three Islands it had and the library is still 16 cards, the Lions on top.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Living Phone
+Island
+Island
+Island
+Serra Angel
+Island
+Island
+Hill Giant
+Mox Ruby
+Savannah Lions
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Living Phone.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Living Phone)
+Bot1.Pass
+[T2 Bot2.End]
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Library.Count = 16
+Bot1.Graveyard = Living Phone

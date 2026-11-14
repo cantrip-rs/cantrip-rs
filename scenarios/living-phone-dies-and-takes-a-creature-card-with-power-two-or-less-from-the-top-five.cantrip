@@ -1,0 +1,57 @@
+# Living Phone, "When this creature dies, look at the top five cards of your library. You may reveal a creature card with power 2
+# or less from among them and put it into your hand. Put the rest on the bottom of your library in a random order." Bot2 Bolts
+# the Phone. The top five are Serra Angel (power 4), an Island, Grizzly Bears (power 2, the boundary), Hill Giant (power 3, one
+# over) and Mox Ruby; only the Bears may be revealed and taken (each other card is refused), and the sixth card, a Savannah Lions
+# that would qualify, is not among the five. The other four go to the bottom: the library is 15 - 1 + ... cards, with the Lions now on top.
+# that would qualify, is not among the five. The other four go to the bottom of the library, which is 15 cards, the Lions on top.
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Living Phone
+Island
+Island
+Island
+Serra Angel
+Island
+Grizzly Bears
+Hill Giant
+Mox Ruby
+Savannah Lions
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Living Phone.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Living Phone)
+Bot1.Pass
+! Bot1.Choose(Serra Angel)
+! Bot1.Choose(Island)
+! Bot1.Choose(Hill Giant)
+! Bot1.Choose(Mox Ruby)
+! Bot1.Choose(Savannah Lions)
+Bot1.Choose(Grizzly Bears)
+? Bot1.Revealed = Grizzly Bears
+[T2 Bot2.End]
+
+[Expect]
+Bot1.Hand.Grizzly Bears.Power = 2
+Bot1.Library.Count = 15
+Bot1.Library.Savannah Lions.Power = 2
+Bot1.Library.Hill Giant.Power = 3
+Bot1.Graveyard = Living Phone
