@@ -1230,6 +1230,14 @@ pub static RAT: CardDef = CardDef {
     ..token!(Rat)
 };
 
+/// "Create [COUNT] 1/1 black Rat creature tokens with 'This token can't block.'" (CR 701.7, 111.1, 509.1b) as an ability's or spell's
+/// whole effect: every token is made at once under the controller of the resolving object, the card file listing `RAT_CANT_BLOCK` in
+/// its `EXTRA`. Lord Skitter, Sewer King makes one; Redcap Gutter-Dweller two.
+pub fn create_rats_that_cant_block<const COUNT: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &RAT_CANT_BLOCK, COUNT)?;
+    Ok(())
+}
+
 /// The 1/1 black Rat creature token with "This token can't block." (CR 111.1, 509.1b). Song of Totentanz and Lord Skitter,
 /// Sewer King make it; the card file lists it in its `EXTRA`.
 pub static RAT_CANT_BLOCK: CardDef = CardDef {
