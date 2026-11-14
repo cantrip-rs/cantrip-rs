@@ -1,0 +1,59 @@
+# "You don't lose the game for having 0 or less life." (CR 104.3b, 704.5a) Bot1 starts at 1 life and casts the Grimoire on
+# turn 1. Bot2's Lightning Bolt takes it to -2: it does not lose to its life total, discards three cards for the three
+# life it lost (the Grimoire's own trigger, so it is still asked and still keeps three cards), and the game goes on.
+
+[Life]
+Bot1: 1
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Marina Vendrell's Grimoire
+Island
+Forest
+Swamp
+Plains
+Mountain
+Island
+Island x9
+
+[Bot2 Deck]
+Black Lotus
+Mountain
+Lightning Bolt
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Marina Vendrell's Grimoire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 6
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Forest; Swamp; Island)
+[Expect]
+Result = InProgress
+Bot1.Life = -2
+Bot1.LostTo = (absent)
+Bot1.Hand.Count = 3

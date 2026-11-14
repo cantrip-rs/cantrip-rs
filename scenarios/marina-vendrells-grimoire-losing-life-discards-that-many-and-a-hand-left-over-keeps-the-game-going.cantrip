@@ -1,0 +1,62 @@
+# "Whenever you lose life, discard that many cards. Then if you have no cards in hand, you lose the game." Bot1 casts the
+# Grimoire on turn 1 (drawing Forest, Swamp, Plains, Mountain and Island, so its hand is Island, Forest, Swamp, Plains, Mountain
+# and Island) and Bot2's Lightning Bolt takes 3 life: Bot1 chooses three cards (Forest, Swamp, Island) and discards them
+# together (CR 701.9), keeps three, and is still in the game (an empty hand is the only loss, CR 104.3e). Bot2's own life
+# is untouched, and nothing was drawn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Marina Vendrell's Grimoire
+Island
+Forest
+Swamp
+Plains
+Mountain
+Island
+Island x9
+
+[Bot2 Deck]
+Black Lotus
+Mountain
+Lightning Bolt
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Marina Vendrell's Grimoire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 6
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+? Bot1.Hand.Count = 6
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Forest; Swamp; Island)
+? Bot1.Hand.Count = 3
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 20
+Bot1.Hand = Island; Plains; Mountain
+Bot1.Graveyard = Island; Swamp; Forest; Black Lotus
+Result = InProgress

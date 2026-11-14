@@ -1,0 +1,6 @@
+{
+  "name": "Marina Vendrell's Grimoire",
+  "manaCost": "{5}{U}",
+  "type": "Legendary Artifact — Book",
+  "oracleText": "When Marina Vendrell's Grimoire enters, if you cast it, draw five cards.\nYou have no maximum hand size and don't lose the game for having 0 or less life.\nWhenever you gain life, draw that many cards.\nWhenever you lose life, discard that many cards. Then if you have no cards in hand, you lose the game."
+}

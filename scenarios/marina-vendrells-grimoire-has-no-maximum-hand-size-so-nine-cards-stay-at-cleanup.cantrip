@@ -1,0 +1,57 @@
+# "You have no maximum hand size." (CR 402.2, 514.1): Bot1 ends turn 3 holding nine cards (it cast the Grimoire on turn 1 and
+# the Lightning Helix on turn 3, which drew three) and discards none at the cleanup step: on turn 4 it still has nine. Without
+# the Grimoire, in the sibling scenario, a hand of eight is cut to seven.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Marina Vendrell's Grimoire
+Island
+Forest
+Swamp
+Plains
+Mountain
+Island
+Lightning Helix
+Island x7
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Marina Vendrell's Grimoire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 6
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 7
+? Bot1.Library.Count = 7
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Bot2.Life = 17
+? Bot1.Hand.Count = 6
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+? Bot1.Hand.Count = 9
+[Expect]
+Bot1.Hand.Count = 9
+Bot1.Graveyard.Count = 2

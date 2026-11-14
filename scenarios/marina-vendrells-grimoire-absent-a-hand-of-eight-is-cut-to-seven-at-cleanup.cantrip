@@ -1,0 +1,20 @@
+# The control for the Grimoire's "You have no maximum hand size": the same game without it. Bot1 draws on turn 3 into a hand
+# of eight and, at the cleanup step, discards down to seven (CR 514.1), choosing the Forest; turn 4 shows seven.
+
+[Bot1 Deck]
+Island x7
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T3 Bot1.Cleanup]
+? Bot1.Hand.Count = 8
+Bot1.Discard(Forest)
+[T4 Bot2.Main1]
+[Expect]
+Turn = 4
+Bot1.Hand.Count = 7
+Bot1.Graveyard = Forest

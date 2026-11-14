@@ -1,0 +1,27 @@
+# The control for the Grimoire's "You don't lose the game for having 0 or less life": the same Bolt at the same life total
+# without it. Bot1 at 3 life takes Bot2's Lightning Bolt to 0 and loses to its life total (CR 104.3b, 704.5a).
+
+[Life]
+Bot1: 3
+
+[Bot1 Deck]
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mountain
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Result = Bot2 won
+Bot1.LostTo = Life
+Bot1.Life = 0
