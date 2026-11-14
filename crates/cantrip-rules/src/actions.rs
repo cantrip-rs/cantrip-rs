@@ -1737,6 +1737,17 @@ fn pays_permanents(cx: &Cx, cost: &Cost, p: &PermanentCost, asker: &Asker, id: O
         && permanent_allowed(cx, cost, p, asker.controller, id, paid)
 }
 
+/// The permanents `player` controls that could pay the one permanent component of `cost`, a cost to attack imposed by
+/// `source` (CR 508.1h): those the combat payment's own step would let them choose (`pay_scheduled_costs`), as it
+/// asks them - the payer's permanents, by the rule's filter read from its source and linked text.
+pub(crate) fn sacrifice_candidates(cx: &Cx, player: PlayerId, source: ObjectId, by: Option<Linked>, cost: &Cost) -> Vec<ObjectId> {
+    let Some(p) = cost.permanents else { return Vec::new() };
+    let asker = Asker { instance: None, source, controller: player, by, spell: false };
+    cx.s().battlefield().iter().copied()
+        .filter(|&id| live(cx.s(), id) && cx.s().obj(id).controller == player && pays_permanents(cx, cost, &p, &asker, id, None))
+        .collect()
+}
+
 /// Whether `player` may pay a permanents cost paid for `paid` with `id` as far as the static abilities that forbid some
 /// payments go (CR 101.2, `CardDef::cost_bans`): a sacrifice one forbids can't be made (CR 701.21a), and tapping, returning
 /// or exiling a permanent is no sacrifice.
@@ -2443,9 +2454,17 @@ enum SourceText {
     Combat { source: ObjectId, attacker: ObjectId, by: Option<Linked> },
 }
 
+/// The permanents the steps of `remaining` other than the one at `except` chose before the payment began (an enlist
+/// ability's creature to tap), which no step choosing at payment may take.
+fn reserved_by_others(remaining: &[SpellPayment<'_>], except: usize) -> Vec<ObjectId> {
+    remaining.iter().enumerate().filter(|&(j, _)| j != except)
+        .flat_map(|(_, step)| match step { SpellPayment::Permanent { objects, .. } => objects.iter().copied(), _ => [].iter().copied() })
+        .collect()
+}
+
 /// A currently selected fixed cost operation. Grouped permanents stay one operation.
 enum SpellPayment<'a> {
-    Permanent { origin: CostOrigin, component: usize, cost: &'a Cost, objects: &'a [ObjectId], source_text: SourceText },
+    Permanent { origin: CostOrigin, component: usize, cost: &'a Cost, objects: &'a [ObjectId], source_text: SourceText, combat_attackers: Option<&'a [ObjectId]> },
     Life { amount: u32, source_text: SourceText },
     Energy { amount: u32, source_text: SourceText },
     CountersAmong { origin: CostOrigin, component: usize, cost: &'a Cost, source_text: SourceText },
@@ -2542,7 +2561,7 @@ fn append_fixed_payments<'a>(out: &mut Vec<SpellPayment<'a>>, origin: CostOrigin
         let n = part.permanents.map_or(0, |p| p.count as usize);
         let objects = if chosen.is_empty() { &[] } else { &chosen[at..at + n] };
         at += n;
-        if n > 0 { out.push(SpellPayment::Permanent { origin, component, cost: part, objects, source_text: source_text }); }
+        if n > 0 { out.push(SpellPayment::Permanent { origin, component, cost: part, objects, source_text: source_text, combat_attackers: None }); }
         if part.life > 0 {
             component_life += part.life;
             out.push(SpellPayment::Life { amount: part.life, source_text: source_text });
@@ -2867,8 +2886,14 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
     for payment in combat {
         let text = SourceText::Combat { source: payment.source, attacker: payment.attacker, by: payment.by };
         let combat_scope = PaymentScope::Combat { payment: match scope { PaymentScope::Combat { payment, .. } => payment, _ => unreachable!() }, payer: player, attacker: payment.attacker, by: payment.by };
-        append_fixed_payments(&mut remaining, CostOrigin::PrintedAdditional, payment.cost, payment.chosen.as_slice(), text, 0, 0, combat_scope, payment.source, false, combat_offset);
-        combat_offset += part_count(payment.cost);
+        let start = remaining.len();
+        append_fixed_payments(&mut remaining, CostOrigin::PrintedAdditional, &payment.cost, payment.chosen.as_slice(), text, 0, 0, combat_scope, payment.source, false, combat_offset);
+        if !payment.grouped_attackers.is_empty() {
+            for step in &mut remaining[start..] {
+                if let SpellPayment::Permanent { combat_attackers, .. } = step { *combat_attackers = Some(&payment.grouped_attackers); }
+            }
+        }
+        combat_offset += part_count(&payment.cost);
     }
     for (position, payment) in remaining.iter_mut().enumerate() {
         if let SpellPayment::ChooseObject { declaration, .. } = payment { *declaration = position; }
@@ -3011,7 +3036,11 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                     && (!cost.tap_permanents || !cx.s().obj(id).tapped)
                     && (!p.tapped || cx.s().obj(id).tapped)
                     && pays_permanents(cx, cost, &p, &asker, id, scope.paid_for());
-                let can_pay = if objects.is_empty() { cx.s().battlefield().iter().copied().filter(|&id| eligible(id)).count() >= p.count as usize }
+                // A choice made at payment never takes a permanent another step of the payment already chose (enlist's
+                // creature to tap, CR 702.154a): moved or tapped first, it would leave that step unpayable and the whole
+                // payment taken back with nothing asked (CR 601.2h, 508.1j). That step goes first instead.
+                let reserved = reserved_by_others(remaining, i);
+                let can_pay = if objects.is_empty() { cx.s().battlefield().iter().copied().filter(|&id| !reserved.contains(&id) && eligible(id)).count() >= p.count as usize }
                     else { objects.iter().copied().all(eligible) };
                 (!conflicts && can_pay).then_some(i)
             }
@@ -3126,6 +3155,8 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
         };
         let step = remaining.remove(eligible[position]);
         let (spell, scope) = step.context(spell, scope);
+        // What the other steps still to pay chose already (`reserved_by_others`), which this one may not take.
+        let reserved: Vec<ObjectId> = reserved_by_others(remaining, usize::MAX);
         match step {
             SpellPayment::Life { amount, .. } => { ops::change_life(cx, player, -life_paid(amount)); }
             SpellPayment::Energy { amount, .. } => { ops::change_energy(cx, player, -(amount as i32), player); }
@@ -3342,9 +3373,9 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 if !ops::tap_quietly(cx, object) { return Err(Stop::Cancel); }
                 cx.emit(Event::Tapped { permanent: object });
             }
-            SpellPayment::Permanent { origin, component, cost, objects, .. } => {
+            SpellPayment::Permanent { origin, component, cost, objects, combat_attackers, .. } => {
                 let selected = if objects.is_empty() {
-                    choose_permanents(cx, player, spell, cost, scope.paid_for(), scope.by())?
+                    choose_permanents_apart(cx, player, spell, cost, scope.paid_for(), scope.by(), &reserved)?
                 } else { objects.to_vec() };
                 if let PaymentScope::ManaAbility { colors: Some((which, color, colorless)), .. } = scope && which == component
                     && !cost.tap_permanents && cost.permanents.is_some_and(|p| p.action == PermanentAction::Sacrifice) {
@@ -3359,7 +3390,13 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 let paid = pay_permanents(cx, player, cost, &selected, scope.linked(), &mut Vec::new());
                 if paid.len() != selected.len() { return Err(Stop::Cancel); }
                 let paid: Vec<(usize, ObjectId)> = paid.into_iter().map(|(_, object)| (component, object)).collect();
-                for (component, object) in paid { scope.record(cx, spell, object, origin, component, CostPart::Permanents); }
+                for (index, (component, object)) in paid.into_iter().enumerate() {
+                    let receipt_scope = match (scope, combat_attackers.and_then(|a| a.get(index)).copied()) {
+                        (PaymentScope::Combat { payment, payer, by, .. }, Some(attacker)) => PaymentScope::Combat { payment, payer, attacker, by },
+                        _ => scope,
+                    };
+                    receipt_scope.record(cx, spell, object, origin, component, CostPart::Permanents);
+                }
             }
         }
         Ok(false)

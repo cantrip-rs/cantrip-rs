@@ -78,6 +78,28 @@ static BEAST: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+fn any_attack(_: &dyn Query, _: &Asker, _: ObjectId, _: Target) -> bool {
+    true
+}
+
+fn a_land(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
+    q.chars(id).is(CardType::Land)
+}
+
+/// "Mutate {1}{G} / Creatures can't attack unless their controller sacrifices a land for each creature they control that's
+/// attacking": a 3/3 Toad with a Flooded Woodlands-style grouped cost to attack.
+static TOLL_TOAD: CardDef = CardDef {
+    name: "Mutate Test Toll Toad",
+    cost: mana("{3}{G}"),
+    types: TypeSet::of(&[CardType::Creature]),
+    subtypes: SubtypeSet::of(&[Subtype::Frog]),
+    power: Some(3),
+    toughness: Some(3),
+    ways: &[WayDef { kind: WayKind::Mutate, ..way(Cost::mana(mana("{1}{G}")), ZoneKind::Hand, "Mutate {1}{G}") }],
+    attack_cost_rules: &[AttackPayment { applies: any_attack, cost: Cost::sacrifice(1, a_land), grouped: true, one: "a land", many: "lands" }],
+    ..CardDef::BLANK
+};
+
 fn others_you_control(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
     affected != source && q.controller(affected) == q.controller(source) && so_far.is(CardType::Creature)
 }
@@ -256,7 +278,7 @@ fn cx(game: &mut Game) -> Cx<'_> {
 
 /// Your main phase with priority and an empty stack, every answer round-tripped through the game-log tree (`Game::verify`).
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &BEAR, &SOLDIER, &BEAST, &ELK, &CAT, &WOLF_FRONT, &TUCK, &TUCK_BOTTOM, &VOID, &SQUELCHER, &KEEPER])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &BEAR, &SOLDIER, &BEAST, &ELK, &CAT, &WOLF_FRONT, &TUCK, &TUCK_BOTTOM, &VOID, &SQUELCHER, &KEEPER, &TOLL_TOAD])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -867,4 +889,39 @@ fn a_card_under_a_face_down_permanent_gives_nothing_while_it_is_face_down() {
     let c = g.chars(manifested);
     assert_eq!(c.name, "Mutate Test Bear");
     assert!(c.has(Keyword::Trample), "face up, the Beast's abilities");
+}
+
+/// CR 702.140e, 508.1h-j, 118.3: a Toad mutated onto a Toad has its grouped cost to attack twice, once from each card's
+/// text (CR 607.1): two costs, each a sacrifice of its own, never one sacrifice of two lands (`lock_attack_costs` keys a
+/// group by its text's link as well as its source).
+#[test]
+fn a_cost_to_attack_printed_twice_on_a_merged_permanent_is_two_payments() {
+    let mut g = game();
+    let toad = put(&mut g, &TOLL_TOAD, YOU, Zone::BATTLEFIELD);
+    g.state.update_obj(toad, |o| o.controlled_since = 1);
+    let lands = [put(&mut g, &FILLER, YOU, Zone::BATTLEFIELD), put(&mut g, &FILLER, YOU, Zone::BATTLEFIELD)];
+    let mutating = put(&mut g, &TOLL_TOAD, YOU, Zone::hand(YOU));
+    add(&mut g, Mana::G, 2);
+    cast_mutating(&mut g, mutating, toad);
+    resolve_all(&mut g, true);
+    assert_eq!(g.state.merge_of(toad).map(|m| m.parts.len()), Some(1));
+    // The declaration of attackers of the same turn, asked now.
+    g.verify = false;
+    while !g.state.agenda.is_empty() {
+        g.state.frame_remove(0);
+    }
+    g.state.frame_push(Frame::new(FrameKind::BeginStep));
+    g.state.update_turn(|t| t.set_step(Step::DeclareAttackers));
+    g.state.update_player(YOU, |p| p.turn_began = 2);
+    let r = next(&mut g);
+    assert!(matches!(r.kind, RequestKind::DeclareAttackers { .. }), "{:?}", r.kind);
+    g.answer(r.id, r.player, Answer::Attack(vec![(toad, Target::Player(THEM))])).expect("two lands pay for both");
+    for &land in &lands {
+        let r = next(&mut g);
+        let RequestKind::ChooseCards { rule, purpose: Purpose::SacrificeCost, .. } = &r.kind else { panic!("{:?}", r.kind) };
+        assert_eq!(rule.count, Count::Exactly(1), "each text's cost is its own sacrifice of one land");
+        g.answer(r.id, r.player, Answer::Cards(vec![land])).expect("a land");
+    }
+    g.run();
+    assert_eq!(g.state.attackers.len(), 1);
 }

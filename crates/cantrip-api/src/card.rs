@@ -2855,7 +2855,17 @@ pub type AttackCostRule = fn(&dyn Query, &Asker, ObjectId, Target) -> Option<Man
 #[derive(Clone, Copy)]
 pub struct AttackPayment {
     pub applies: fn(&dyn Query, &Asker, ObjectId, Target) -> bool,
+    /// Mana, if any, and one sacrifice of permanents and nothing else (`CardTable::new` refuses any other): what the
+    /// declaration's validator can judge payable before it is paid (`AttackRules::sacrifices`, CR 508.1j). A card whose
+    /// attacks cost anything else extends that judgment first.
     pub cost: Cost,
+    /// The rule makes one permanent payment for all matching attacks (for example, sacrifice a land for each).
+    /// Different rule sources remain separate payments.
+    pub grouped: bool,
+    /// One permanent of the sacrifice, with its article, and several, as the rule names them ("a land", "lands"): how a
+    /// client says what attacking costs.
+    pub one: &'static str,
+    pub many: &'static str,
 }
 
 /// A static ability that says how many creatures may attack a given player, planeswalker or battle in one declaration of
@@ -4898,6 +4908,19 @@ impl CardTable {
         // A static ability given in layer 6 applies from there on (CR 613.1f): once given, in layer 6 itself, and from 7a on.
         // One of an earlier layer would come into being after its layer was done, and would be quietly absent: refused.
         for card in &cards {
+            // A fixed cost to attack is mana and one sacrifice (`AttackPayment::cost`): the permanent part a declaration's
+            // validator judges payable (CR 508.1j), and the one part a grouped rule adds its attacks' counts to.
+            for rule in card.attack_cost_rules {
+                let c = rule.cost;
+                assert!(
+                    c.components.is_empty()
+                        && c.mana.x == 0
+                        && c.permanents.is_some_and(|p| p.count > 0 && p.action == PermanentAction::Sacrifice && !p.tapped && p.excluded.is_none())
+                        && Cost { mana: ManaCost::ZERO, permanents: None, tap: true, ..c }.is_tap_only(),
+                    "{}: a fixed cost to attack is mana and one sacrifice of permanents (AttackPayment::cost)",
+                    card.name
+                );
+            }
             assert!(card.skip_steps.iter().all(|rule| matches!(rule.step, Step::Untap | Step::Upkeep | Step::Draw)),
                 "{}: skipped steps currently support Untap, Upkeep and Draw", card.name);
             for ability in card.abilities.iter().chain(card.delayed) {

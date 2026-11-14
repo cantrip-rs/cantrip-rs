@@ -13,16 +13,29 @@ static FILLER: CardDef = CardDef { name: "Combat payment filler", types: TypeSet
 static BEAR: CardDef = CardDef { name: "Combat payment attacker", types: TypeSet::of(&[CardType::Creature]), power: Some(2), toughness: Some(2), ..CardDef::BLANK };
 static LAND: CardDef = CardDef { name: "Combat payment Island", subtypes: SubtypeSet::of(&[Subtype::Island]), ..FILLER };
 static FOREST: CardDef = CardDef { name: "Combat payment Forest", subtypes: SubtypeSet::of(&[Subtype::Forest]), ..FILLER };
-static TAX: CardDef = CardDef { name: "Combat payment land tax", types: TypeSet::of(&[CardType::Enchantment]), attack_cost_rules: &[AttackPayment { applies: all, cost: Cost::sacrifice(1, land) }], ..CardDef::BLANK };
-static LEVIATHAN: CardDef = CardDef { name: "Combat payment two Islands", attack_cost_rules: &[AttackPayment { applies: this, cost: Cost::sacrifice(2, island) }], ..BEAR };
-static LINKED: CardDef = CardDef { name: "Combat payment source-sensitive tax", attack_cost_rules: &[AttackPayment { applies: all, cost: Cost::sacrifice(1, linked_land) }], ..TAX };
-static MIXED: CardDef = CardDef { name: "Combat payment mixed tax", attack_cost_rules: &[AttackPayment { applies: all, cost: Cost::sequence(&[Cost::sacrifice(1, land), Cost::sacrifice(1, island)]) }], ..TAX };
-static MANA_TAX: CardDef = CardDef { name: "Combat payment removable mana tax", attack_cost_rules: &[AttackPayment { applies: all, cost: cost("{1}").and(Cost::sacrifice(1, land)) }], abilities: &[mana_ability(SACRIFICE_THIS, add(Mana::C), "Sacrifice this: Add {C}.")], ..TAX };
+static TAX: CardDef = CardDef { name: "Combat payment land tax", types: TypeSet::of(&[CardType::Enchantment]), attack_cost_rules: &[AttackPayment { applies: all, cost: Cost::sacrifice(1, land), grouped: false, one: "a land", many: "lands" }], ..CardDef::BLANK };
+static GROUPED_TAX: CardDef = CardDef { name: "Grouped land tax", attack_cost_rules: &[AttackPayment { applies: all, cost: Cost::sacrifice(1, land), grouped: true, one: "a land", many: "lands" }], ..TAX };
+static LEVIATHAN: CardDef = CardDef { name: "Combat payment two Islands", attack_cost_rules: &[AttackPayment { applies: this, cost: Cost::sacrifice(2, island), grouped: false, one: "an Island", many: "Islands" }], ..BEAR };
+static LINKED: CardDef = CardDef { name: "Combat payment source-sensitive tax", attack_cost_rules: &[AttackPayment { applies: all, cost: Cost::sacrifice(1, linked_land), grouped: false, one: "a land", many: "lands" }], ..TAX };
+static MIXED: CardDef = CardDef { name: "Combat payment mixed tax", attack_cost_rules: &[AttackPayment { applies: all, cost: Cost::sacrifice(1, land), grouped: false, one: "a land", many: "lands" }, AttackPayment { applies: all, cost: Cost::sacrifice(1, island), grouped: false, one: "an Island", many: "Islands" }], ..TAX };
+static MANA_TAX: CardDef = CardDef { name: "Combat payment removable mana tax", attack_cost_rules: &[AttackPayment { applies: all, cost: cost("{1}").and(Cost::sacrifice(1, land)), grouped: false, one: "a land", many: "lands" }], abilities: &[mana_ability(SACRIFICE_THIS, add(Mana::C), "Sacrifice this: Add {C}.")], ..TAX };
+static SAC_LAND: CardDef = CardDef { name: "Combat payment sacrificial land", abilities: &[mana_ability(SACRIFICE_THIS, add(Mana::C), "Sacrifice this: Add {C}.")], ..FILLER };
+static SAC_LAND_CREATURE: CardDef = CardDef { name: "Combat payment sacrificial land creature", types: TypeSet::of(&[CardType::Land, CardType::Creature]), abilities: &[mana_ability(SACRIFICE_THIS, add(Mana::C), "Sacrifice this: Add {C}.")], ..BEAR };
 static LAND_CREATURE: CardDef = CardDef { name: "Combat payment land creature", types: TypeSet::of(&[CardType::Land, CardType::Creature]), ..BEAR };
 fn noop(_: &mut dyn Rules, _: &StackItem) -> Result<(), Suspend> { Ok(()) }
+// The Gitrog Monster's land-card death trigger distinguishes one sacrifice batch from two.
+fn land_dies(q: &dyn Query, _: &Asker, event: &Event) -> Option<Fired> {
+    match *event {
+        Event::ZoneChange { old, from, to, .. } if from.is(ZoneKind::Battlefield) && to.is(ZoneKind::Graveyard) && q.chars(old).is(CardType::Land) => Fired::PLAIN,
+        _ => None,
+    }
+}
+static GITROG_WATCHER: CardDef = CardDef { name: "Gitrog-style land death watcher", types: TypeSet::of(&[CardType::Creature]),
+    abilities: &[triggered(when_asked(EventMask::ZONE_CHANGE, land_dies), noop, "Whenever one or more land cards are put into your graveyard from anywhere, draw a card.").once_per_batch()], ..BEAR };
+
 static RECRUITER: CardDef = CardDef { name: "Combat payment enlist", abilities: &[paid_as_it_attacks(AttackOption::Enlist, noop, "Enlist")], ..BEAR };
 fn game() -> Game {
-    let cards = Box::leak(Box::new(CardTable::new([&FILLER,&BEAR,&LAND,&FOREST,&TAX,&LEVIATHAN,&LINKED,&MIXED,&MANA_TAX,&LAND_CREATURE,&RECRUITER])));
+    let cards = Box::leak(Box::new(CardTable::new([&FILLER,&BEAR,&LAND,&FOREST,&TAX,&GROUPED_TAX,&LEVIATHAN,&LINKED,&MIXED,&MANA_TAX,&LAND_CREATURE,&SAC_LAND,&SAC_LAND_CREATURE,&RECRUITER,&GITROG_WATCHER])));
     let filler = cards.id_of(&FILLER);
     let mut g = Game::new(cards, &Setup { decks: vec![vec![filler;20];2], shuffle: false, ..Default::default() });
     g.verify = true;
@@ -72,12 +85,41 @@ fn leviathan_asks_for_two_islands_in_one_sacrifice() {
     assert_eq!(rule.count,Count::Exactly(2));assert!(!cards.contains(&forest));answer(&mut g,r,Answer::Cards(lands.to_vec()));done(&mut g);assert_eq!(g.state.attackers.len(),1);
 }
 #[test]
-fn a_partially_paid_declaration_rolls_back_sacrifices_taps_and_receipts() {
+fn a_declaration_short_of_lands_is_refused_with_its_reason_and_never_asked_again() {
     let mut g=game();put(&mut g,&TAX,B);let ids=[put(&mut g,&BEAR,A),put(&mut g,&BEAR,A)];let l=put(&mut g,&LAND,A);
-    attack(&mut g,&ids);choose(&mut g,&[l]);let r=next(&mut g);assert!(matches!(r.kind,RequestKind::DeclareAttackers{..}),"{:?}",r.kind);
-    assert!(g.state.obj(l).zone.is(ZoneKind::Battlefield));assert!(!g.state.obj(ids[0]).tapped);assert!(!g.state.obj(ids[1]).tapped);
+    let r=next(&mut g);
+    let RequestKind::DeclareAttackers{ref eligible,ref requirements,ref costs,..}=r.kind else{panic!("{:?}",r.kind)};
+    let at=Target::Player(B);let targets=[at];
+    // CR 508.1j, 118.3: one land pays for one attack, not two; the verdict offers either alone and nothing beside it.
+    let none=requirements.judge(eligible,&targets,costs,&[],true);
+    assert!(!none.free,"permanents to sacrifice are shared: each declaration is the host's to judge");
+    assert_eq!(none.addable,vec![(ids[0],at),(ids[1],at)]);
+    let one=requirements.judge(eligible,&targets,costs,&[(ids[0],at)],true);
+    assert!(one.complete);assert!(one.addable.is_empty());assert_eq!(one.nonmana,"sacrifice a land");
+    let both=requirements.judge(eligible,&targets,costs,&[(ids[0],at),(ids[1],at)],true);
+    assert!(!both.complete);assert_eq!(both.issue.as_ref().map(|i|i.rule),Some("508.1j"));
+    let refused=g.answer(r.id,r.player,Answer::Attack(vec![(ids[0],at),(ids[1],at)])).unwrap_err();
+    assert!(refused.0.contains("can't attack: the cost to sacrifice a land for it can't be paid (CR 508.1j)"),"{}",refused.0);
+    assert!(!g.state.obj(ids[0]).tapped,"nothing of a refused declaration happens");
+    answer(&mut g,r,Answer::Attack(vec![(ids[0],at)]));choose(&mut g,&[l]);done(&mut g);assert_eq!(g.state.attackers.len(),1);
+}
+#[test]
+fn a_land_sacrificed_for_mana_while_paying_rolls_back_the_declaration() {
+    let mut g=game();let tax=put(&mut g,&MANA_TAX,B);let a=put(&mut g,&BEAR,A);let l=put(&mut g,&SAC_LAND,A);
+    attack(&mut g,&[a]);let r=next(&mut g);let RequestKind::PayCosts{ref options,mana_abilities:true,..}=r.kind else{panic!("{:?}",r.kind)};
+    let action=options.iter().find(|o|o.kind==ActionKind::ActivateAbility&&o.source==Some(l)).unwrap().clone();answer(&mut g,r,Answer::Act(Action::of(&action)));
+    let r=next(&mut g);assert!(matches!(r.kind,RequestKind::DeclareAttackers{..}),"{:?}",r.kind);
+    let RequestKind::DeclareAttackers{ref requirements,..}=r.kind else{unreachable!()};assert!(requirements.taken_back);
+    assert!(g.state.obj(l).became.is_none()&&g.state.obj(l).zone.is(ZoneKind::Battlefield),"the land is back");assert!(!g.state.obj(a).tapped);
+    assert!(g.state.obj(tax).zone.is(ZoneKind::Battlefield));
     assert!(!g.events().iter().any(|r|matches!(r.event,Event::CombatPaymentBegan{..}|Event::CombatCostObjectPaid{..}|Event::Attacks{..})));
-    answer(&mut g,r,Answer::Attack(vec![(ids[0],Target::Player(B))]));choose(&mut g,&[l]);done(&mut g);assert_eq!(g.state.attackers.len(),1);
+}
+#[test]
+fn a_combat_receipt_is_about_its_source_its_attacker_and_what_paid() {
+    let mut g=game();let tax=put(&mut g,&TAX,B);let a=put(&mut g,&BEAR,A);let l=put(&mut g,&LAND,A);let other=put(&mut g,&FOREST,A);
+    attack(&mut g,&[a]);choose(&mut g,&[l]);done(&mut g);
+    let paid=g.events().iter().find(|r|matches!(r.event,Event::CombatCostObjectPaid{..})).expect("a receipt").event;
+    assert!(paid.is_about(tax)&&paid.is_about(a)&&paid.is_about(l));assert!(!paid.is_about(other));
 }
 #[test]
 fn overlapping_components_allow_the_player_to_choose_payment_order() {
@@ -111,24 +153,87 @@ fn a_required_attacker_is_not_forced_to_pay_a_nonmana_cost() {
     assert_eq!(requirements.most,0,"the payer can always decline the cost to attack");
 }
 #[test]
-fn enlist_can_tap_a_land_creature_before_that_creature_pays_a_sacrifice_cost() {
+fn an_enlisted_land_creature_is_tapped_before_it_pays_a_sacrifice_and_no_stranding_order_is_offered() {
+    // Coalition Skyknight enlisting Dryad Arbor, the only land, under Flooded Woodlands: the Arbor pays both, tapped first
+    // (CR 702.154a, 508.1j, 601.2h). Sacrificed first it could not be tapped, so that order is not offered at all: no
+    // order is asked, and a seat taking the first choice of every question can't strand the payment.
     let mut g=game();put(&mut g,&TAX,B);let a=put(&mut g,&RECRUITER,A);let l=put(&mut g,&LAND_CREATURE,A);
     attack(&mut g,&[a]);let r=next(&mut g);assert!(matches!(r.kind,RequestKind::ChooseCards{purpose:Purpose::Enlist,..}));answer(&mut g,r,Answer::Cards(vec![l]));
-    let r=next(&mut g);let RequestKind::ChooseCostPayment{ref choices,..}=r.kind else{panic!("{:?}",r.kind)};
-    let tap=choices.iter().position(|c|c.kind==CostPaymentKind::Tap).unwrap();answer(&mut g,r,Answer::CostPayment(tap));
-    choose(&mut g,&[l]);done(&mut g);assert_eq!(g.state.attackers.len(),1);
+    let r=next(&mut g);
+    let RequestKind::ChooseCards{ref cards,purpose:Purpose::SacrificeCost,..}=r.kind else{panic!("the tap goes first, unasked: {:?}",r.kind)};
+    assert_eq!(cards,&vec![l]);assert!(g.state.obj(l).tapped,"tapped for the enlist already");
+    answer(&mut g,r,Answer::Cards(vec![l]));done(&mut g);assert_eq!(g.state.attackers.len(),1);
     let tapped=g.events().iter().position(|r|matches!(r.event,Event::Tapped{permanent} if permanent==l)).unwrap();
     let sacrificed=g.events().iter().position(|r|matches!(r.event,Event::ZoneChange{old,reason:ZoneReason::Sacrifice,..} if old==l)).unwrap();
     assert!(tapped<sacrificed);
 }
 
 #[test]
-fn sacrificing_an_enlist_payment_first_cannot_later_tap_its_old_identity() {
-    let mut g=game();put(&mut g,&TAX,B);let a=put(&mut g,&RECRUITER,A);let l=put(&mut g,&LAND_CREATURE,A);
+fn an_enlisted_creature_sacrificed_for_mana_while_paying_takes_the_declaration_back_saying_so() {
+    // A land creature that sacrifices itself for mana, enlisted, then sacrificed for the {1} of the cost: it is gone (CR
+    // 400.7), so its enlist tap can't be paid; the other land still pays the land, and the declaration, short of the tap,
+    // is taken back (CR 508.1j, 733.1) and asked again saying so.
+    let mut g=game();put(&mut g,&MANA_TAX,B);let a=put(&mut g,&RECRUITER,A);let l=put(&mut g,&SAC_LAND_CREATURE,A);let other=put(&mut g,&LAND,A);
+    attack(&mut g,&[a]);let r=next(&mut g);assert!(matches!(r.kind,RequestKind::ChooseCards{purpose:Purpose::Enlist,..}));answer(&mut g,r,Answer::Cards(vec![l]));
+    let r=next(&mut g);let RequestKind::PayCosts{ref options,mana_abilities:true,..}=r.kind else{panic!("{:?}",r.kind)};
+    let action=options.iter().find(|o|o.kind==ActionKind::ActivateAbility&&o.source==Some(l)).unwrap().clone();answer(&mut g,r,Answer::Act(Action::of(&action)));
+    let r=next(&mut g);
+    let RequestKind::ChooseCards{ref cards,purpose:Purpose::SacrificeCost,..}=r.kind else{panic!("{:?}",r.kind)};
+    assert_eq!(cards,&vec![other]);answer(&mut g,r,Answer::Cards(vec![other]));
+    let r=next(&mut g);let RequestKind::DeclareAttackers{ref requirements,..}=r.kind else{panic!("{:?}",r.kind)};
+    assert!(requirements.taken_back,"asked again saying the declaration before was taken back");
+    assert!(g.state.obj(l).became.is_none()&&g.state.obj(other).became.is_none());assert!(!g.state.obj(a).tapped);
+}
+
+#[test]
+fn flooded_style_two_attacker_cost_is_one_land_sacrifice_event() {
+    let mut g=game();let watcher=put(&mut g,&GITROG_WATCHER,A);put(&mut g,&GROUPED_TAX,B);
+    let attackers=[put(&mut g,&BEAR,A),put(&mut g,&BEAR,A)];let lands=[put(&mut g,&LAND,A),put(&mut g,&FOREST,A)];
+    attack(&mut g,&attackers);choose(&mut g,&lands);g.run();
+    let ordering = match g.pending().map(|r| &r.kind) { Some(RequestKind::OrderTriggers { sources, .. }) => sources.iter().filter(|&&s| s==watcher).count(), _ => 0 };
+    let triggers=ordering + g.state.triggers.iter().filter(|t|t.source==watcher).count()
+        + g.state.stack.iter().filter(|i|i.object==watcher && i.kind==StackKind::Triggered).count();
+    assert_eq!(triggers,1,"the simultaneous sacrifice of both lands triggers Gitrog once");
+}
+
+#[test]
+fn grouped_cost_sources_remain_separate_and_keep_attacker_receipts() {
+    let mut g=game();let watcher=put(&mut g,&GITROG_WATCHER,A);
+    let taxes=[put(&mut g,&GROUPED_TAX,B),put(&mut g,&GROUPED_TAX,B)];
+    let attackers=[put(&mut g,&BEAR,A),put(&mut g,&BEAR,A)];
+    let lands=[put(&mut g,&LAND,A),put(&mut g,&LAND,A),put(&mut g,&FOREST,A),put(&mut g,&FOREST,A)];
+    attack(&mut g,&attackers);
+    let mut r=next(&mut g);
+    if let RequestKind::ChooseCostPayment{ref choices,..}=r.kind {
+        assert_eq!(choices.len(),2,"each source's grouped cost is independently orderable");
+        answer(&mut g,r,Answer::CostPayment(0));r=next(&mut g);
+    }
+    assert!(matches!(r.kind,RequestKind::ChooseCards {purpose:Purpose::SacrificeCost,..}));
+    answer(&mut g,r,Answer::Cards(lands[..2].to_vec()));choose(&mut g,&lands[2..]);g.run();
+    let order=match g.pending().map(|r|&r.kind) {Some(RequestKind::OrderTriggers{sources,..})=>sources.iter().filter(|&&s|s==watcher).count(),_=>0};
+    let triggers=order+g.state.triggers.iter().filter(|t|t.source==watcher).count()+g.state.stack.iter().filter(|i|i.object==watcher&&i.kind==StackKind::Triggered).count();
+    assert_eq!(triggers,2,"each rule source has its own simultaneous sacrifice event");
+    let receipts:Vec<_>=g.events().iter().filter_map(|r|match r.event {Event::CombatCostObjectPaid{source,attacker,object,..}=>Some((source,attacker,object)),_=>None}).collect();
+    assert_eq!(receipts,vec![(taxes[0],attackers[0],lands[0]),(taxes[0],attackers[1],lands[1]),(taxes[1],attackers[0],lands[2]),(taxes[1],attackers[1],lands[3])]);
+}
+
+#[test]
+fn a_permanent_an_enlist_chose_is_kept_for_its_tap_while_other_costs_take_others() {
+    let mut g=game();put(&mut g,&TAX,B);put(&mut g,&TAX,B);let a=put(&mut g,&RECRUITER,A);let l=put(&mut g,&LAND_CREATURE,A);let other=put(&mut g,&LAND,A);
     attack(&mut g,&[a]);let r=next(&mut g);answer(&mut g,r,Answer::Cards(vec![l]));
     let r=next(&mut g);let RequestKind::ChooseCostPayment{ref choices,..}=r.kind else{panic!("{:?}",r.kind)};
     let sacrifice=choices.iter().position(|c|c.kind==CostPaymentKind::Sacrifice).unwrap();answer(&mut g,r,Answer::CostPayment(sacrifice));
-    choose(&mut g,&[l]);let r=next(&mut g);assert!(matches!(r.kind,RequestKind::DeclareAttackers{..}));
-    assert!(g.state.obj(l).became.is_none());assert!(!g.state.obj(l).tapped);assert!(!g.state.obj(a).tapped);
-    assert!(!g.events().iter().any(|r|matches!(r.event,Event::CombatPaymentBegan{..}|Event::CombatCostObjectPaid{..})));
+    // The land creature is the enlist's (CR 702.154a): the first sacrifice takes the other land, then the tap is paid, and
+    // the second sacrifice takes the tapped land creature (CR 601.2h).
+    let r=next(&mut g);let RequestKind::ChooseCards{ref cards,purpose:Purpose::SacrificeCost,..}=r.kind else{panic!("{:?}",r.kind)};
+    assert_eq!(cards,&vec![other]);answer(&mut g,r,Answer::Cards(vec![other]));
+    let r=next(&mut g);let RequestKind::ChooseCards{ref cards,purpose:Purpose::SacrificeCost,..}=r.kind else{panic!("{:?}",r.kind)};
+    assert_eq!(cards,&vec![l]);assert!(g.state.obj(l).tapped);answer(&mut g,r,Answer::Cards(vec![l]));
+    done(&mut g);assert_eq!(g.state.attackers.len(),1);
+}
+#[test]
+#[should_panic(expected = "a fixed cost to attack is mana and one sacrifice of permanents")]
+fn a_cost_to_attack_with_another_kind_of_part_is_refused_by_the_card_table() {
+    static LIFE_TAX: CardDef = CardDef { name: "Combat payment life tax", attack_cost_rules: &[AttackPayment { applies: all, cost: Cost { life: 2, ..Cost::sacrifice(1, land) }, grouped: true, one: "a land", many: "lands" }], ..TAX };
+    CardTable::new([&LIFE_TAX]);
 }

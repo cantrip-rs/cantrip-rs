@@ -444,7 +444,10 @@ pub(crate) struct LockedAttackPayment {
     pub attacker: ObjectId,
     pub chosen: Option<ObjectId>,
     pub by: Option<Linked>,
-    pub cost: &'static Cost,
+    pub cost: Cost,
+    /// Each permanent in a grouped component is attributed to its corresponding attack.
+    pub grouped_attackers: Vec<ObjectId>,
+    pub group_rule: Option<&'static AttackPayment>,
 }
 
 pub(crate) struct LockedAttackCosts {
@@ -470,7 +473,20 @@ pub(crate) fn lock_attack_costs(cx: &Cx, attacks: &[(ObjectId, Target)]) -> Lock
             }
             for rule in def.attack_cost_rules {
                 if (rule.applies)(cx, &asker, attacker, target) {
-                    total.fixed.push(LockedAttackPayment { source, attacker, chosen: None, by, cost: &rule.cost });
+                    if rule.grouped && rule.cost.permanents.is_some() {
+                        let per = rule.cost.permanents.unwrap().count;
+                        if let Some(group) = total.fixed.iter_mut().find(|p| p.source == source && p.by == by
+                            && p.group_rule.is_some_and(|r| std::ptr::eq(r, rule))) {
+                            if let Some(component) = group.cost.permanents.as_mut() { component.count += per; }
+                            group.grouped_attackers.extend(std::iter::repeat_n(attacker, per as usize));
+                        } else {
+                            total.fixed.push(LockedAttackPayment { source, attacker, chosen: None, by, cost: rule.cost,
+                                grouped_attackers: vec![attacker; per as usize], group_rule: Some(rule) });
+                        }
+                    } else {
+                        total.fixed.push(LockedAttackPayment { source, attacker, chosen: None, by, cost: rule.cost,
+                            grouped_attackers: Vec::new(), group_rule: None });
+                    }
                     total.mana = total.mana.plus(&rule.cost.total_mana());
                     taxed = true;
                 }
@@ -482,6 +498,31 @@ pub(crate) fn lock_attack_costs(cx: &Cx, attacks: &[(ObjectId, Target)]) -> Lock
         }
     }
     total
+}
+
+/// The permanents each attack of `eligible` on `targets` would cost the active player (CR 508.1h), one entry for each rule
+/// that asks some (`CardDef::attack_cost_rules`, each a mana cost and one sacrifice), with the permanents that could pay it
+/// now: what `AttackRules::unpaid` judges a declaration payable by (CR 508.1j, 118.3). Each rule's candidates are found
+/// once, by the filter the payment chooses them with (`actions::sacrifice_candidates`), from that rule's source.
+pub(crate) fn attack_sacrifices(cx: &Cx, eligible: &[ObjectId], targets: &[Target]) -> Vec<cantrip_state::AttackSacrifice> {
+    let active = cx.s().turn.active;
+    let mut out = Vec::new();
+    for (source, controller, def, by) in sources(cx, |d| !d.attack_cost_rules.is_empty()) {
+        let asker = Asker { instance: None, source, controller, by, spell: false };
+        for rule in def.attack_cost_rules {
+            let Some(p) = rule.cost.permanents else { continue };
+            let mut candidates = None;
+            for &attacker in eligible {
+                for &target in targets {
+                    if (rule.applies)(cx, &asker, attacker, target) {
+                        let candidates = candidates.get_or_insert_with(|| crate::actions::sacrifice_candidates(cx, active, source, by, &rule.cost)).clone();
+                        out.push(cantrip_state::AttackSacrifice { attacker, target, source, count: p.count, candidates, one: rule.one, many: rule.many });
+                    }
+                }
+            }
+        }
+    }
+    out
 }
 
 /// Whether `player` may spend mana as though it were of any color to pay a cost for `source` (CR 609.4b): to activate an

@@ -53,6 +53,34 @@ pub struct AttackRules {
     pub limits: Vec<(Target, u32)>,
     pub most: u32,
     pub suggested: Vec<(ObjectId, Target)>,
+    /// The permanents attacks cost (CR 508.1h), one entry for each attack, rule and permanent cost that asks them: what a
+    /// declaration must be able to pay, besides mana, for it to be made at all (CR 508.1j). Empty on nearly every board.
+    pub sacrifices: Vec<AttackSacrifice>,
+    /// The declaration made before this one in the same step was taken back, its costs not all paid (CR 508.1j, 733.1):
+    /// given up, or left unpayable by what the player did while paying (a land sacrificed for mana, a creature to enlist
+    /// tapped for mana). Said so the player knows why they are asked again, and so a seat that answers alike each time
+    /// may declare differently - only attacks that cost nothing, say - rather than make the same one forever.
+    pub taken_back: bool,
+}
+
+/// A permanent part of what one attack costs (CR 508.1h): `count` of the attacking player's permanents, each one of
+/// `candidates`, sacrificed as the declaration's costs are paid (CR 508.1j) - Flooded Woodlands' "sacrifices a land of
+/// their choice for each green creature they control that's attacking". No permanent pays for two parts (CR 118.3), so a
+/// declaration whose parts can't each be given permanents of their own can't be paid at all: it is illegal (CR 508.1j),
+/// and the validator refuses it as it is declared, saying why. Unlike a mana payment, which a player may give up in its
+/// own question, nothing asks first.
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+pub struct AttackSacrifice {
+    pub attacker: ObjectId,
+    pub target: Target,
+    /// The permanent whose static ability asks it.
+    pub source: ObjectId,
+    pub count: u32,
+    /// The permanents that may pay it, as the declaration is asked.
+    pub candidates: Vec<ObjectId>,
+    /// One permanent of it, with its article ("a land"), and several ("lands"), as the rule names them.
+    pub one: &'static str,
+    pub many: &'static str,
 }
 
 /// What the rules make of a declaration of attackers.
@@ -66,6 +94,8 @@ pub struct AttackVerdict {
     pub issue: Option<AttackIssue>,
     /// What declaring it costs (CR 508.1h), zero when nothing.
     pub cost: ManaCost,
+    /// What declaring it costs besides mana, in words ("sacrifice 2 lands"), empty when nothing (`AttackRules::sacrifices`).
+    pub nonmana: String,
     /// Nothing is required of the declaration (the most is 0), nothing caps how many may attack a target and nothing forbids
     /// a creature to attack alone: any
     /// declaration of `addable` attacks, each creature attacking once, is legal, so a client need not ask about each one.
@@ -97,6 +127,65 @@ impl AttackRules {
                 AttackAim::At(t) => t == at,
                 AttackAim::PlayerOtherThan(p) => matches!(at, Target::Player(q) if q != p),
             }
+    }
+
+    /// The permanent parts of `attacks`' costs, each `count` times: one slot for each permanent to be sacrificed.
+    fn sacrifice_slots<'a>(&'a self, attacks: &'a [(ObjectId, Target)]) -> impl Iterator<Item = &'a AttackSacrifice> + 'a {
+        self.sacrifices
+            .iter()
+            .filter(|s| attacks.contains(&(s.attacker, s.target)))
+            .flat_map(|s| std::iter::repeat_n(s, s.count as usize))
+    }
+
+    /// Whether every permanent `attacks`' costs ask for can be a different one of its candidates (CR 118.3, 508.1j): a
+    /// matching of every slot (`sacrifice_slots`) to a permanent of its own, found by augmenting paths. `None` when they
+    /// can; else the attacker of a slot left without one.
+    pub fn unpaid(&self, attacks: &[(ObjectId, Target)]) -> Option<ObjectId> {
+        if self.sacrifices.is_empty() {
+            return None;
+        }
+        let slots: Vec<&AttackSacrifice> = self.sacrifice_slots(attacks).collect();
+        // The permanent each slot has, and the slot each permanent pays.
+        let mut paid_by: HashMap<ObjectId, usize> = HashMap::new();
+        fn place(slot: usize, slots: &[&AttackSacrifice], paid_by: &mut HashMap<ObjectId, usize>, seen: &mut Vec<ObjectId>) -> bool {
+            for &id in &slots[slot].candidates {
+                if seen.contains(&id) {
+                    continue;
+                }
+                seen.push(id);
+                match paid_by.get(&id).copied() {
+                    Some(other) if !place(other, slots, paid_by, seen) => continue,
+                    _ => {
+                        paid_by.insert(id, slot);
+                        return true;
+                    }
+                }
+            }
+            false
+        }
+        for slot in 0..slots.len() {
+            if !place(slot, &slots, &mut paid_by, &mut Vec::new()) {
+                return Some(slots[slot].attacker);
+            }
+        }
+        None
+    }
+
+    /// What `attacks` cost besides mana, in words: "sacrifice a land", "sacrifice 3 lands", each kind of permanent once and
+    /// added up, joined by "and"; empty when nothing.
+    pub fn nonmana_words(&self, attacks: &[(ObjectId, Target)]) -> String {
+        let mut kinds: Vec<(&'static str, &'static str, u32)> = Vec::new();
+        for s in self.sacrifices.iter().filter(|s| attacks.contains(&(s.attacker, s.target))) {
+            match kinds.iter_mut().find(|k| k.0 == s.one && k.1 == s.many) {
+                Some(k) => k.2 += s.count,
+                None => kinds.push((s.one, s.many, s.count)),
+            }
+        }
+        kinds
+            .iter()
+            .map(|&(one, many, n)| if n == 1 { format!("sacrifice {one}") } else { format!("sacrifice {n} {many}") })
+            .collect::<Vec<_>>()
+            .join(" and ")
     }
 
     /// How many requirements `attacker` attacking `at` obeys: none where that attack is forbidden (CR 508.1c-d).
@@ -229,6 +318,15 @@ impl AttackRules {
         if found.is_none() && attacks.len() == 1 && self.alone_barred.contains(&attacks[0].0) {
             found = issue(attacks[0].0, "can't attack alone", None, "508.1c");
         }
+        // CR 508.1j, 118.3: permanents to sacrifice that aren't there to give make a declaration that can't be paid, which
+        // is illegal, and no attack added to it pays for the rest.
+        if found.is_none()
+            && let Some(creature) = self.unpaid(attacks)
+        {
+            let one = self.sacrifice_slots(attacks).find(|s| s.attacker == creature).map_or("a permanent", |s| s.one);
+            found = issue(creature, &format!("can't attack: the cost to sacrifice {one} for it can't be paid"), None, "508.1j");
+            mendable = false;
+        }
         let declared = self.obeyed(attacks);
         let short = found.is_none() && declared < self.most;
         // CR 508.1c: an attack added to nothing by a creature a static ability forbids to attack alone is legal only with
@@ -326,8 +424,21 @@ impl AttackRules {
         };
         // Two attacks of `addable` may still be one too many for a capped target (CR 508.1c), and one of them alone may be an
         // attack a static ability forbids alone, so neither declaration is free of asking.
-        let free = self.most == 0 && !self.capped(targets) && self.alone_barred.is_empty();
-        AttackVerdict { complete, addable, issue: found, cost: AttackCost::total(costs, attacks), free }
+        // CR 508.1j: an attack whose permanents to sacrifice the declaration with it can't spare is no step towards a legal
+        // one, as nothing added pays for it.
+        let mut addable = addable;
+        if !self.sacrifices.is_empty() {
+            let mut with = attacks.to_vec();
+            addable.retain(|&attack| {
+                with.push(attack);
+                let payable = self.unpaid(&with).is_none();
+                with.pop();
+                payable
+            });
+        }
+        // Permanents to sacrifice are room the attacks share, as a cap is: two attacks addable alone may not be payable together.
+        let free = self.most == 0 && !self.capped(targets) && self.alone_barred.is_empty() && self.sacrifices.is_empty();
+        AttackVerdict { complete, addable, issue: found, cost: AttackCost::total(costs, attacks), nonmana: self.nonmana_words(attacks), free }
     }
 }
 
@@ -620,6 +731,24 @@ mod tests {
     const P3: PlayerId = PlayerId(2);
     /// A planeswalker of P2 that one creature at most may attack (Tomik, Orzhov Lawmage).
     const W: Target = Target::Object(ObjectId(7));
+
+    /// CR 508.1h, 508.1j, 118.3: what attacks cost in permanents, added up in words, and payable only with a permanent of its
+    /// own for each: two lands for two green attackers, an Island beside them named apart.
+    #[test]
+    fn permanents_attacks_cost_add_up_and_each_needs_its_own() {
+        let at = Target::Player(P2);
+        let (l1, l2, island) = (ObjectId(20), ObjectId(21), ObjectId(22));
+        let land = |attacker| AttackSacrifice { attacker, target: at, source: ObjectId(9), count: 1, candidates: vec![l1, l2, island], one: "a land", many: "lands" };
+        let r = AttackRules {
+            sacrifices: vec![land(U), land(V), AttackSacrifice { attacker: V, target: at, source: ObjectId(10), count: 1, candidates: vec![island], one: "an Island", many: "Islands" }],
+            ..Default::default()
+        };
+        assert_eq!(r.nonmana_words(&[(U, at)]), "sacrifice a land");
+        assert_eq!(r.nonmana_words(&[(U, at), (V, at)]), "sacrifice 2 lands and sacrifice an Island");
+        assert_eq!(r.unpaid(&[(U, at), (V, at)]), None, "the Island pays its own part, the other two lands the lands");
+        let none = AttackRules { sacrifices: vec![AttackSacrifice { candidates: vec![l1], ..land(U) }, AttackSacrifice { candidates: vec![l1], ..land(V) }], ..Default::default() };
+        assert_eq!(none.unpaid(&[(U, at), (V, at)]), Some(V), "one land can't be sacrificed twice");
+    }
 
     fn capped(at: Target) -> AttackRules {
         AttackRules { limits: vec![(at, 1)], ..Default::default() }

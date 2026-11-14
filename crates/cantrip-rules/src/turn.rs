@@ -957,7 +957,9 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
     // declaration can obey without paying a cost to attack - a cost is never a requirement.
     let requirements = attack_rules(cx, &eligible, &targets, barred, &costs);
     let can_pay = if costs.is_empty() { 0 } else { actions::available(cx, active).most_unrestricted() };
-    let kind = RequestKind::DeclareAttackers { eligible, players, planeswalkers, battles, requirements, costs, can_pay };
+    let mut kind = RequestKind::DeclareAttackers { eligible, players, planeswalkers, battles, requirements, costs, can_pay };
+    // A declaration taken back is asked again saying so (`AttackRules::taken_back`).
+    let taken_back = |kind: &mut RequestKind| if let RequestKind::DeclareAttackers { requirements, .. } = kind { requirements.taken_back = true };
     let attacks = loop {
         // A declaration whose costs are not paid is taken back (CR 508.1, 733): the game returns to the moment before it,
         // the mana abilities activated while paying undone but those that may not be (`takeback`), and the attackers are
@@ -986,7 +988,7 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
                     AttackOption::Enlist => (&ENLIST_COST, Some(o.tapped)),
                     AttackOption::Exert => (&EXERT_COST, None),
                 };
-                fixed.push(crate::static_rules::LockedAttackPayment { source: o.attacker, attacker: o.attacker, chosen, by: None, cost });
+                fixed.push(crate::static_rules::LockedAttackPayment { source: o.attacker, attacker: o.attacker, chosen, by: None, cost: *cost, grouped_attackers: Vec::new(), group_rule: None });
             }
         }
         // CR 508.1h: the total cost to attack, locked in now; mana abilities activated while paying it (CR 508.1i) change
@@ -998,6 +1000,7 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
                 Ok(_) => {}
                 Err(Stop::Cancel) => {
                     crate::takeback::take_back(cx, mark, log_mark, since);
+                    taken_back(&mut kind);
                     continue;
                 }
                 Err(stop) => return Err(stop),
@@ -1007,6 +1010,7 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
         // gone, can't be: the declaration is illegal and taken back (CR 508.1, 733.1).
         if !scheduled_options && !options.iter().all(|o| o.tapped == ObjectId::NONE || enlistable_now(cx, active, o.tapped)) {
             crate::takeback::take_back(cx, mark, log_mark, since);
+            taken_back(&mut kind);
             continue;
         }
         for o in options.iter().filter(|_| !scheduled_options) {
@@ -1383,7 +1387,9 @@ fn attack_rules(cx: &Cx, eligible: &[ObjectId], targets: &[Target], barred: Vec<
         }
     }
     let alone = crate::static_rules::attacks_alone_barred(cx, cx.cards(), eligible);
-    let mut rules = AttackRules { required, barred, alone_barred: alone, limits: crate::static_rules::attack_limits(cx, targets), most: 0, suggested: Vec::new() };
+    // CR 508.1h-j: the permanents attacks cost, which a declaration must be able to pay.
+    let sacrifices = if costs.is_empty() { Vec::new() } else { crate::static_rules::attack_sacrifices(cx, eligible, targets) };
+    let mut rules = AttackRules { required, barred, alone_barred: alone, limits: crate::static_rules::attack_limits(cx, targets), most: 0, suggested: Vec::new(), sacrifices, taken_back: false };
     if !rules.required.is_empty() {
         (rules.most, rules.suggested) = rules.solve(eligible, targets, costs);
     }
