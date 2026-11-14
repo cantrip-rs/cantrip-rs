@@ -1,0 +1,41 @@
+# Murder ({1}{B}{B}, "Destroy target creature.") kills Bot1's own Ornithopter and then Bot2's: any creature, whoever controls
+# it and whatever else it is (an artifact creature here), is a legal target (CR 701.8a, 115.1). A land is not a creature, so
+# Murder refuses Bot2's Island. Two Black Lotuses pay the two Murders (BBB each, the {1} paid from the third B).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Ornithopter
+Murder
+Murder
+Swamp
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Island
+Ornithopter
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Hand.Murder.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Murder.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Murder.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Graveyard = Murder; Black Lotus; Murder; Ornithopter; Black Lotus
+Bot1.Battlefield.Count = 0
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield = Island

@@ -1,0 +1,43 @@
+# Murder is an instant: Bot1 casts it on Bot2's turn, at Bot2's Memnite, with Black Lotus's {B}{B}{B}. Bot2 answers with Heroic
+# Intervention, so the Memnite is indestructible as Murder resolves: "destroy" does nothing to it (CR 701.8a, 702.12b), the
+# target is still legal so Murder resolves, and it goes to Bot1's graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Murder
+Swamp x20
+
+[Bot2 Deck]
+Forest
+Memnite
+Mox Emerald
+Heroic Intervention
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Murder.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Heroic Intervention.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Memnite.Keywords = Hexproof; Indestructible
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Memnite.Power = 1
+Bot2.Graveyard = Heroic Intervention
+Bot1.Graveyard = Murder; Black Lotus
