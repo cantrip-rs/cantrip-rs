@@ -1,0 +1,46 @@
+# Fear of Falling's one legal target is Bot2's Ornithopter, and Bot2 answers the attack trigger with Lightning Bolt on it. The target is no longer legal as the
+# ability resolves (CR 608.2b), so nothing happens and Fear of Falling is still 4/4 and unblocked: Bot2 takes 4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Fear of Falling
+Island x3
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Lightning Bolt
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fear of Falling.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Fear of Falling > Bot2)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Stack.Count = 0
+[Expect]
+Bot2.Graveyard = Ornithopter; Lightning Bolt
+Bot2.Life = 16
+Bot1.Battlefield.Fear of Falling.Power = 4

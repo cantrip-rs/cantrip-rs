@@ -1,0 +1,11 @@
+{
+  "name": "Fear of Falling",
+  "manaCost": "{3}{U}{U}",
+  "type": "Enchantment Creature — Nightmare",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying\nWhenever this creature attacks, target creature defending player controls gets -2/-0 and loses flying until your next turn.",
+  "keywords": [
+    "Flying"
+  ]
+}
