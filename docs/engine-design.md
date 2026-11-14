@@ -2941,6 +2941,19 @@ one `Event::Blocks` for each pair, `declared` on its first alone, so "whenever t
 and "whenever this creature blocks a creature" once for each attacker (CR 509.3b); "becomes blocked by a creature" (CR 509.3d)
 reads each pair from the attacker's side.
 
+A replacement of the declaration itself (CR 614.1a, 509.1: Camouflage's "this turn, instead of declaring blockers, each
+defending player ... divides them into piles ... each creature in a pile that can block the creature that pile is assigned to
+does so") is `EffectKind::BlockersInstead { card, index }`, made by `Game::blockers_instead_this_turn`, naming the `index`th
+of the `CardDef::blockers_instead` of the card that made it: a `BlockersInstead { text, blocks }`, whose `blocks` carries out
+the card's own procedure (its questions, its random choices) over a `DefendingCreatures` - the defending player, the
+attackers they defend against, and each creature they control with its capacity (`turn::block_capacity`) - and names the
+blocks it means to happen. `turn::declare_blockers` asks it instead of the defending player, and keeps of what it names the
+blocks the restrictions allow (the same `allowed` pairs a declaration is offered: CR 509.1b), then, with those blocks as the
+requirements and nothing else (there is no declaration for Lure's to apply to), as many of them as the restrictions on the
+whole allow (`solve`: menace, "can't be blocked by more than one creature"); only where no declaration has every one of them is
+the defending player asked which, through the ordinary `DeclareBlockers` question narrowed to those blocks. The blocks are then
+made and announced, and the unblocked attackers named (CR 509.1g-h), exactly as after a declaration.
+
 A resolved rule about a set that can still gain members (CR 611.2c: an effect that changes no characteristics is a rule of
 the game, and reaches objects that weren't there as it began) is `EffectKind::LastingRule { card, index, about }`, naming the
 `index`th of the `CardDef::lasting_rules` of the card that made it, made by `Game::add_lasting_rule`: a `LastingRule { text,

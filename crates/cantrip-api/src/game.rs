@@ -1426,6 +1426,14 @@ pub trait Game: Query {
         let kind = EffectKind::LastingRule { card: item.ability.card, index, about };
         self.add_player_effect(item.controller, item.object, kind, duration);
     }
+    /// "This turn, instead of declaring blockers, ..." (CR 614.1a, 509.1), made by the resolving spell or ability `item`: the
+    /// `index`th of the `blockers_instead` of its card replaces each defending player's declaration of blockers until the turn
+    /// ends (CR 514.2), each declare blockers step of the turn, whether or not the source stays where it is. Controlled by
+    /// `item`'s controller (CR 109.5). Camouflage.
+    fn blockers_instead_this_turn(&mut self, item: &StackItem, index: u8) {
+        let kind = EffectKind::BlockersInstead { card: item.ability.card, index };
+        self.add_player_effect(item.controller, item.object, kind, Duration::EndOfTurn);
+    }
     /// "You may play [`count`] additional land[s] this turn" (CR 305.2, 611.2c), made by the resolving spell or ability
     /// `item`: a permission for its controller (CR 109.5), asked nothing as it resolves, that adds `count` to the lands they
     /// can play until the turn ends (CR 514.2), whatever happens to the source, and adds to every other effect and static

@@ -762,6 +762,15 @@ impl<'a> Projector<'a> {
                 let text = crate::text::changed_text(rule.text, name, e.words);
                 summary.pending_effects.push(if p == self.viewer { format!("{name}: {text}") } else { format!("Their {name}'s effect: {text}") });
             }
+            // A replacement of the declaration of blockers (CR 614.1a, 509.1: Camouflage's "this turn, instead of declaring
+            // blockers, ..."): about no object either, said the same way.
+            if let EffectKind::BlockersInstead { card, index } = e.kind
+                && let Some(instead) = game.cards.get(card).blockers_instead.get(index as usize)
+            {
+                let name = game.cards.get(card).name;
+                let text = instead.text;
+                summary.pending_effects.push(if p == self.viewer { format!("{name}: {text}") } else { format!("Their {name}'s effect: {text}") });
+            }
         }
         // A play rule a resolved ability gave the player for a duration (CR 611.2a, 401.2: "until end of turn, you may play cards
         // from the top of your library"): a permission about the player, on no object (the card may be gone), said in the rule's

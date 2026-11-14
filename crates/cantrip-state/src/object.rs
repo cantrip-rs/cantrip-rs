@@ -1789,6 +1789,12 @@ pub enum EffectKind {
     /// is what its words named as it resolved, which the set is asked with: the player or object ("target opponent"), or
     /// `Target::None`. About no object, so it outlives its `affected` object, which is only the source.
     LastingRule { card: CardId, index: u8, about: Target },
+    /// A replacement of the declaration of blockers (CR 614.1a, 509.1) a resolving spell or ability made, for as long as the
+    /// effect lasts: the `index`th of the `blockers_instead` of `card`, the card whose spell or ability made it, carries out
+    /// what each defending player does instead of declaring blockers, in each declare blockers step while it lasts.
+    /// Camouflage's "this turn, instead of declaring blockers, ...". About no object, so it outlives its `affected` object,
+    /// which is only the source.
+    BlockersInstead { card: CardId, index: u8 },
     /// A regeneration shield (CR 701.19a, 614.8): the next time the permanent would be destroyed this turn, it is
     /// tapped, its damage removed and it is removed from combat instead. One effect for each shield.
     RegenerationShield,
@@ -1923,6 +1929,7 @@ impl EffectKind {
                 | EffectKind::SpellCostChange { .. }
                 | EffectKind::SpellAlternative { .. }
                 | EffectKind::LastingRule { .. }
+                | EffectKind::BlockersInstead { .. }
         ) || matches!(self, EffectKind::Prevention { to, .. } if to.object().is_none())
     }
 }

@@ -1488,57 +1488,70 @@ fn declare_blockers(cx: &mut Cx) -> R<()> {
             }
         }
     }
-    // Menace (CR 702.111b) and "except by three or more creatures" (CR 509.1b): an attacker that can't be blocked by
-    // fewer than so many creatures is offered only if that many could, and not at all if it can't be blocked by that many
-    // either ("can't be blocked by more than one creature" as well, CR 509.1b: the restrictions are cumulative).
-    let menace: Vec<ObjectId> = attackers
-        .iter()
-        .copied()
-        .filter(|&a| {
-            let fewest = cx.chars(a).minimum_blockers();
-            allowed.iter().filter(|p| p.1 == a).count() < fewest || fewest > maximum_blockers(cx, a, &rule_sources)
-        })
-        .collect();
-    allowed.retain(|p| !menace.contains(&p.1));
-    if !allowed.is_empty() {
-        // CR 509.1b-c: each attacker's limits, and the blocks effects require if able, with the most of them a declaration can obey.
-        let requirements = block_rules(cx, &attackers, &allowed, &rule_sources);
-        // A defending player who has left blocks with nothing (CR 800.4a): no one else declares their blocks.
-        let answer = cx.ask_rule(defender, RequestKind::DeclareBlockers { eligible, attackers, allowed, requirements })?;
-        if let Some(Answer::Block(blocks)) = answer {
-            // CR 509.1g: the blockers are declared together, a "blocks" event for each attacker each blocks; only its first
-            // declared block is marked as declared - not the others of a band it blocks through banding, nor the other attackers
-            // a creature that can block several was declared to block - so "whenever this creature blocks" triggers once
-            // (CR 509.3a) and "whenever it blocks a creature" once for each (CR 509.3b).
-            let mut events: Vec<Event> = Vec::with_capacity(blocks.len());
-            let mut list: Vec<Block> = Vec::new();
-            let mut attackers = cx.s().attackers.clone();
-            for (blocker, attacker) in blocks {
-                // CR 702.22h: a creature blocking a member of an attacking band blocks each other member of it too, a block of
-                // each (CR 509.3b, 509.3d), including any it blocks automatically through banding.
-                let band = attackers.iter().find(|a| a.id == attacker).map_or(0, |a| a.band);
-                let mut blocked = vec![attacker];
-                blocked.extend(attackers.iter().filter(|a| band != 0 && a.band == band && a.id != attacker).map(|a| a.id));
-                for attacker in blocked {
-                    // A blocker declared against two members of one band still blocks each member only once. Its
-                    // unqualified "blocks" trigger is once for the whole declaration, not once per attacked creature.
-                    if list.iter().any(|b: &Block| b.blocker == blocker && b.attacker == attacker) { continue; }
-                    let first = !list.iter().any(|b: &Block| b.blocker == blocker);
-                    events.push(Event::Blocks { blocker, attacker, declared: first });
-                    list.push(Block { blocker, attacker, first_strike: false });
-                    if let Some(a) = attackers.iter_mut().find(|a| a.id == attacker) {
-                        if !a.blocked {
-                            events.push(Event::BecameBlocked { attacker });
-                        }
-                        a.blocked = true;
+    // CR 614.1a, 509.1: a replacement effect a resolved spell made ("this turn, instead of declaring blockers, ...",
+    // Camouflage) replaces the declaration. Of several, the defending player would apply one, leaving no declaration for the
+    // others (CR 616.1); Camouflage's alone are printed, all the same procedure, so the first is the one.
+    let instead = cx.s().effects.iter().find(|e| matches!(e.kind, EffectKind::BlockersInstead { .. })).copied();
+    let declared = if let Some(instead) = instead {
+        Some(blocks_instead(cx, &instead, defender, &attackers, &allowed, &rule_sources)?)
+    } else {
+        // Menace (CR 702.111b) and "except by three or more creatures" (CR 509.1b): an attacker that can't be blocked by
+        // fewer than so many creatures is offered only if that many could, and not at all if it can't be blocked by that many
+        // either ("can't be blocked by more than one creature" as well, CR 509.1b: the restrictions are cumulative).
+        let menace: Vec<ObjectId> = attackers
+            .iter()
+            .copied()
+            .filter(|&a| {
+                let fewest = cx.chars(a).minimum_blockers();
+                allowed.iter().filter(|p| p.1 == a).count() < fewest || fewest > maximum_blockers(cx, a, &rule_sources)
+            })
+            .collect();
+        allowed.retain(|p| !menace.contains(&p.1));
+        if allowed.is_empty() {
+            None
+        } else {
+            // CR 509.1b-c: each attacker's limits, and the blocks effects require if able, with the most of them a declaration can obey.
+            let requirements = block_rules(cx, &attackers, &allowed, &rule_sources);
+            // A defending player who has left blocks with nothing (CR 800.4a): no one else declares their blocks.
+            match cx.ask_rule(defender, RequestKind::DeclareBlockers { eligible, attackers, allowed, requirements })? {
+                Some(Answer::Block(blocks)) => Some(blocks),
+                _ => None,
+            }
+        }
+    };
+    if let Some(blocks) = declared {
+        // CR 509.1g: the blockers are declared together, a "blocks" event for each attacker each blocks; only its first
+        // declared block is marked as declared - not the others of a band it blocks through banding, nor the other attackers
+        // a creature that can block several was declared to block - so "whenever this creature blocks" triggers once
+        // (CR 509.3a) and "whenever it blocks a creature" once for each (CR 509.3b).
+        let mut events: Vec<Event> = Vec::with_capacity(blocks.len());
+        let mut list: Vec<Block> = Vec::new();
+        let mut attackers = cx.s().attackers.clone();
+        for (blocker, attacker) in blocks {
+            // CR 702.22h: a creature blocking a member of an attacking band blocks each other member of it too, a block of
+            // each (CR 509.3b, 509.3d), including any it blocks automatically through banding.
+            let band = attackers.iter().find(|a| a.id == attacker).map_or(0, |a| a.band);
+            let mut blocked = vec![attacker];
+            blocked.extend(attackers.iter().filter(|a| band != 0 && a.band == band && a.id != attacker).map(|a| a.id));
+            for attacker in blocked {
+                // A blocker declared against two members of one band still blocks each member only once. Its
+                // unqualified "blocks" trigger is once for the whole declaration, not once per attacked creature.
+                if list.iter().any(|b: &Block| b.blocker == blocker && b.attacker == attacker) { continue; }
+                let first = !list.iter().any(|b: &Block| b.blocker == blocker);
+                events.push(Event::Blocks { blocker, attacker, declared: first });
+                list.push(Block { blocker, attacker, first_strike: false });
+                if let Some(a) = attackers.iter_mut().find(|a| a.id == attacker) {
+                    if !a.blocked {
+                        events.push(Event::BecameBlocked { attacker });
                     }
+                    a.blocked = true;
                 }
             }
-            cx.st().set_attackers(attackers);
-            cx.st().set_blocks(list);
-            if !events.is_empty() {
-                cx.emit_batch(&events, None);
-            }
+        }
+        cx.st().set_attackers(attackers);
+        cx.st().set_blocks(list);
+        if !events.is_empty() {
+            cx.emit_batch(&events, None);
         }
     }
     // CR 509.1h: the attackers nothing blocked are unblocked, announced together.
@@ -1576,10 +1589,6 @@ fn deals_now(cx: &Cx, id: ObjectId, had_first_strike: bool, first_strike_step: b
 /// one that does (`BlockRequirements::solve`). A creature that can't block, or may block nothing, is required nothing (CR
 /// 509.1c: a requirement is obeyed only as far as the restrictions allow).
 fn block_rules(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)], rule_sources: &[ObjectId]) -> BlockRequirements {
-    let limits = attackers
-        .iter()
-        .map(|&a| (a, count_u32(cx.chars(a).minimum_blockers()), u32::try_from(maximum_blockers(cx, a, rule_sources)).unwrap_or(u32::MAX)))
-        .collect();
     let mut required = crate::static_rules::block_requirements(cx, allowed);
     // One requirement for each effect (CR 509.1c counts requirements): two "blocks this turn if able" on a creature are two.
     for e in &cx.s().effects {
@@ -1597,6 +1606,21 @@ fn block_rules(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)]
             required.extend(allowed.iter().filter(|p| p.0 == e.affected).map(|&(b, a)| RequiredBlock { blocker: Some(b), attacker: Some(a) }));
         }
     }
+    let mut rules = block_limits(cx, attackers, allowed, rule_sources);
+    rules.required = required;
+    if !rules.required.is_empty() {
+        most_obeyed(&mut rules, allowed);
+    }
+    rules
+}
+
+/// The restrictions on a declaration of blockers among `allowed` (CR 509.1a-b), with no requirement yet: each attacker's
+/// fewest and most blockers, the creatures that can block more than one attacker, and the attacking bands.
+fn block_limits(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)], rule_sources: &[ObjectId]) -> BlockRequirements {
+    let limits = attackers
+        .iter()
+        .map(|&a| (a, count_u32(cx.chars(a).minimum_blockers()), u32::try_from(maximum_blockers(cx, a, rule_sources)).unwrap_or(u32::MAX)))
+        .collect();
     // The creatures that can block more than one attacker (CR 509.1a): none without a static ability that limits or widens
     // blocking or a resolved effect that widens it.
     let mut capacities: Vec<(ObjectId, u32)> = Vec::new();
@@ -1612,16 +1636,82 @@ fn block_rules(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)]
     // requirement to block another, and one block may obey two.
     let bands = cx.s().attackers.iter().filter(|a| a.band != 0).map(|a| (a.id, a.band)).collect();
     // No block costs anything to declare yet (CR 509.1d): no effect that makes one is built.
-    let mut rules = BlockRequirements { required, most: 0, suggested: Vec::new(), bands, limits, costs: Vec::new(), capacities };
-    if !rules.required.is_empty()
-        && let Some((most, suggested)) = rules.solve(allowed, &[], None, true)
-    {
+    BlockRequirements { required: Vec::new(), most: 0, suggested: Vec::new(), bands, limits, costs: Vec::new(), capacities }
+}
+
+/// The most of `rules`' requirements a declaration among `allowed` that obeys every restriction can obey, with one that does
+/// (`BlockRequirements::solve`, CR 509.1c), set as the rules' `most` and `suggested`.
+fn most_obeyed(rules: &mut BlockRequirements, allowed: &[(ObjectId, ObjectId)]) {
+    if let Some((most, suggested)) = rules.solve(allowed, &[], None, true) {
         rules.most = most;
         if most > 0 {
             rules.suggested = suggested;
         }
     }
-    rules
+}
+
+/// What a defending player does instead of declaring blockers under a replacement effect a resolved spell made (CR 614.1a,
+/// 509.1; `EffectKind::BlockersInstead`): the effect's card carries out its procedure over the attackers that player
+/// defends against and every creature they control, with how many attackers each can block (CR 509.1a), and names which
+/// creature blocks which attacker if it can. Each block named that the restrictions allow is made (CR 509.1b: a tapped
+/// creature, one that can't block or can't block that attacker blocks nothing), as many of them together as the restrictions
+/// on the whole allow (CR 509.1c read for "does so": a lone creature named to block a creature with menace doesn't, two do);
+/// only where they allow no declaration with every one of them is the defending player asked which, among the declarations
+/// that make the most. No other requirement applies, as there is no declaration to obey it (CR 509.1c). A defending player
+/// who has left does nothing (CR 800.4a).
+fn blocks_instead(
+    cx: &mut Cx,
+    effect: &ContinuousEffect,
+    defender: PlayerId,
+    attackers: &[ObjectId],
+    allowed: &[(ObjectId, ObjectId)],
+    rule_sources: &[ObjectId],
+) -> R<Vec<(ObjectId, ObjectId)>> {
+    let EffectKind::BlockersInstead { card, index } = effect.kind else { return Ok(Vec::new()) };
+    let Some(instead) = cx.card(card).blockers_instead.get(index as usize).copied() else { return Ok(Vec::new()) };
+    if cx.s().player(defender).lost {
+        return Ok(Vec::new());
+    }
+    let defended = cx.s().attackers.iter().filter(|a| a.defending == defender).map(|a| a.id).collect();
+    let creatures = cx
+        .s()
+        .battlefield()
+        .iter()
+        .copied()
+        .filter(|&id| cx.s().obj(id).controller == defender && cx.chars(id).is(CardType::Creature))
+        .map(|id| (id, block_capacity(cx, id, rule_sources)))
+        .collect();
+    let over = DefendingCreatures { defender, attackers: defended, creatures };
+    let named = (instead.blocks)(cx, &Asker::new(effect.source, effect.controller), &over)?;
+    let mut able: Vec<(ObjectId, ObjectId)> = Vec::new();
+    for pair in named {
+        if allowed.contains(&pair) && !able.contains(&pair) {
+            able.push(pair);
+        }
+    }
+    if able.is_empty() {
+        return Ok(able);
+    }
+    let mut rules = block_limits(cx, attackers, &able, rule_sources);
+    rules.required = able.iter().map(|&(b, a)| RequiredBlock { blocker: Some(b), attacker: Some(a) }).collect();
+    most_obeyed(&mut rules, &able);
+    if rules.most == count_u32(rules.required.len()) {
+        return Ok(rules.suggested);
+    }
+    if rules.most == 0 {
+        return Ok(Vec::new());
+    }
+    let mut eligible: Vec<ObjectId> = Vec::new();
+    for &(b, _) in &able {
+        if !eligible.contains(&b) {
+            eligible.push(b);
+        }
+    }
+    let ask = RequestKind::DeclareBlockers { eligible, attackers: attackers.to_vec(), allowed: able, requirements: rules };
+    Ok(match cx.ask_rule(defender, ask)? {
+        Some(Answer::Block(blocks)) => blocks,
+        _ => Vec::new(),
+    })
 }
 
 /// Combat damage (CR 510): every attacker and blocker deals its damage at once. A creature with a choice in where its damage

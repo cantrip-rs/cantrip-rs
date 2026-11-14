@@ -2721,6 +2721,34 @@ pub struct LastingBlockRule {
     pub allows: BlockRule,
 }
 
+/// What a defending player's declaration of blockers would have been made over (CR 509.1a), handed to the effect that
+/// replaces it (`BlockersInstead`): the player, the attacking creatures for which that player is the defending player (CR
+/// 506.2, 508.5), in the order they attack, and every creature that player controls with how many attackers it can block
+/// (CR 509.1a: one, more for "can block an additional creature", `u32::MAX` for any number) - tapped ones and ones that can't
+/// block included, which an effect may still name but which then block nothing.
+#[derive(Clone, Debug)]
+pub struct DefendingCreatures {
+    pub defender: PlayerId,
+    pub attackers: Vec<ObjectId>,
+    pub creatures: Vec<(ObjectId, u32)>,
+}
+
+/// A replacement effect a resolving spell or ability makes for a duration that replaces a defending player's declaration of
+/// blockers with another procedure (CR 614.1a, 509.1): "this turn, instead of declaring blockers, ..." (Camouflage). `blocks`
+/// carries the procedure out - asking what it asks, choosing at random what it chooses - and names each creature that blocks
+/// an attacker if it can: the blocks it names that the restrictions allow (CR 509.1b; flying, a tapped creature, "can't
+/// block") are made, as many of them as the restrictions allow together (menace, "can't be blocked by more than one
+/// creature", CR 509.1c read for "does so"), and an attacker none blocks becomes unblocked (CR 509.1h). The effect
+/// (`EffectKind::BlockersInstead`) is about no object, so it outlives its source and applies to each declaration of
+/// blockers while it lasts. A card lists these in its `blockers_instead`.
+#[derive(Clone, Copy)]
+pub struct BlockersInstead {
+    /// What it says, in the card's own words with their duration: shown beside its controller's life total while it lasts.
+    pub text: &'static str,
+    /// The procedure, asked as the effect's source and controller, over the declaration it replaces.
+    pub blocks: fn(&mut dyn Game, &Asker, &DefendingCreatures) -> Result<Vec<(ObjectId, ObjectId)>, Suspend>,
+}
+
 /// Whether a rule a resolving spell or ability made about an open set of objects applies to the permanent `id` now (CR
 /// 611.2c): asked whenever the rule is read, of the permanent as it is then, so the set takes in what arrives or comes to
 /// match it later and lets go of what stops matching. `asker` is the effect's source - which may have left the battlefield,
@@ -3656,6 +3684,9 @@ pub struct CardDef {
     /// The rules its resolving spells and abilities give an open set of objects for a duration (CR 611.2c):
     /// `EffectKind::LastingRule` names the nth. Not standing abilities: they function only while such an effect lasts.
     pub lasting_rules: &'static [LastingRule],
+    /// The replacements of the declaration of blockers its resolving spells and abilities make for a duration (CR 614.1a,
+    /// 509.1): `EffectKind::BlockersInstead` names the nth. Not standing abilities: they function only while such an effect lasts.
+    pub blockers_instead: &'static [BlockersInstead],
     /// Its static abilities that give the spells a player casts convoke, delve or improvise (CR 601.2f-h), while it is on the
     /// battlefield.
     pub grants_pay_with: &'static [PayWithGrant],
@@ -4040,6 +4071,7 @@ impl CardDef {
         lasting_cost_changes: &[],
         lasting_block_rules: &[],
         lasting_rules: &[],
+        blockers_instead: &[],
         grants_pay_with: &[],
         ability_alternatives: &[],
         granted_ways: &[],
