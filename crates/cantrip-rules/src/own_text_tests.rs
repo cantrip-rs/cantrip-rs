@@ -80,6 +80,12 @@ fn mana_apply(q: &dyn Query, asker: &Asker, _: &mut Proposal) {
     note("reshape", q, asker.source);
 }
 
+/// The output types of a replacement choosing among them (`mana_type_replacement`, Reality Twist's land-type words): {B}
+/// while "Goblin" reads Elf, and none - it does not apply - while it reads Goblin.
+fn elf_types(q: &dyn Query, asker: &Asker, _: ObjectId, _: PlayerId) -> Vec<Mana> {
+    if q.words(asker.source).subtype(Subtype::Goblin) == Subtype::Elf { vec![Mana::B] } else { Vec::new() }
+}
+
 fn mana_only(_: &dyn Query, _: &Asker, proposal: &Proposal) -> bool {
     matches!(proposal, Proposal::ManaProduction(_))
 }
@@ -105,6 +111,7 @@ static SOURCE: CardDef = CardDef {
         replacement(ReplacementKind::TokenCreation, always, token_apply, "Goblin tokens"),
         replacement(ReplacementKind::ManaProduction, never, mana_apply, "Goblin mana, never"),
         replacement(ReplacementKind::ManaProduction, mana_only, mana_apply, "Goblin mana"),
+        mana_type_replacement(elf_types, "Elf mana is {B}"),
     ],
     granted_preventions: &[GrantedPreventionDef { hint: "Goblin shield", damage: "damage", of_it: None, applies: shielded, then: None, text: "" }],
     delayed: &[triggered(when(EventMask::SPELL_CAST, delayed_cast), nothing, "This turn, whenever a Goblin spell is cast, do nothing.")],
@@ -233,6 +240,25 @@ fn the_outcomes_of_a_production_are_judged_by_the_text_now() {
     crate::replace::mana_outcomes(&cx, production);
     assert_eq!(seen("applies"), Some(Subtype::Elf), "whether an effect applies");
     assert_eq!(seen("reshape"), Some(Subtype::Elf), "what an effect does to the outcome");
+    reads_its_own_text(&cx, id);
+}
+
+/// The types a replacement offers (`ReplacementDef::mana_types`) are read by its text now, both where the outcomes are
+/// judged - payment planned in the middle of the source's own resolving ability, Reality Twist's cumulative upkeep after a
+/// Magical Hack changed its land-type words - and where the tap produces them, so the two agree.
+#[test]
+fn the_types_a_production_could_be_are_offered_by_the_text_now() {
+    let (mut g, id, frame) = resolving();
+    let mut cx = own(&mut g, frame);
+    let mut green = ManaPool::default();
+    green.0[Mana::G as usize] = 1;
+    let production = ManaProduction { permanent: id, player: YOU, to: YOU, mana: green, restriction: None, lasts: ManaLasts::default() };
+    let mut black = ManaPool::default();
+    black.0[Mana::B as usize] = 1;
+    let outcomes = crate::replace::mana_outcomes(&cx, production);
+    assert!(!outcomes.is_empty() && outcomes.iter().all(|o| o.mana == black), "judged as {{B}}: {outcomes:?}");
+    reads_its_own_text(&cx, id);
+    assert_eq!(crate::replace::mana_production(&mut cx, production).mana, black, "produced as {{B}}");
     reads_its_own_text(&cx, id);
 }
 

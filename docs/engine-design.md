@@ -2651,6 +2651,8 @@ Nested or subsequent opaque callbacks retain normal execution and explicit unsup
 Pentad Prism and storage lands remove counters as costs, so they are not peers for Coalition's removal effect;
 no shared counter-removal recipe or peer-card migration is inferred from similar Oracle words.
 
+A single mana replacement may offer several output types (`ReplacementDef::mana_types`), as Naked Singularity and Reality Twist do for a land with multiple basic land types. The tapper chooses one type, the entire output retains its quantity, and the effect has one identity for CR 614.5 and 616.1. `mana_outcomes` branches over the same options while keeping that identity, so payment planning and producible-type advice agree. The callback sees the source and player, not the quantity; its nonempty result also defines applicability, so no independent amount predicate can introduce an undeclared threshold into capability analysis. Land-type words are read from the replacement source's current text; mana symbols are fixed.
+
 Damping Sphere and the Contamination core fixture declare fixed-output/total-threshold replacements. Actual
 guard/application and the capability's quantity partition execute the same declaration; no independent amount
 callback can contradict it. The thresholds partition positive totals into equivalence classes, including the

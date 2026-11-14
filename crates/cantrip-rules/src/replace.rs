@@ -354,6 +354,7 @@ fn nothing_prevented(_: &dyn Query, _: &Asker, _: &DamageEvent) -> bool {
 /// whose text an earlier part of the event changed: it applies to nothing and does nothing.
 static NO_REPLACEMENT: ReplacementDef = ReplacementDef {
     fixed_mana: None,
+    mana_types: None,
     hint: "",
     kind: ReplacementKind::ZoneChange,
     own_everywhere: false,
@@ -1318,7 +1319,20 @@ fn apply_printed(cx: &mut Cx, proposal: &mut Proposal, source: ObjectId, index: 
     let asker = Asker { instance: None, source, controller, by: printed_link(cx, source, index), spell: false };
     let before = *proposal;
     let mut after = before;
-    def.reshape(&*cx, &asker, &mut after);
+    if let (Some(types), Proposal::ManaProduction(m)) = (def.mana_types, &mut after) {
+        let choices = types(&*cx, &asker, m.permanent, m.player);
+        if !choices.is_empty() {
+            let choice = if choices.len() == 1 { 0 } else {
+                let ask = RequestKind::ChooseModes { source, modes: choices.iter().copied().map(Label::ManaType).collect(), eligible: (0..choices.len() as u8).collect(), count: 1, at_most: 1, affordable: Vec::new(), additional_cost: false, repeat: false };
+                match cx.ask_core(m.player, ask, false) { Ok(Answer::Modes(chosen)) => chosen.first().copied().unwrap_or(0) as usize, _ => 0 }
+            };
+            let total = m.total();
+            m.mana = ManaPool::default();
+            m.mana.0[choices[choice] as usize] = total;
+        }
+    } else {
+        def.reshape(&*cx, &asker, &mut after);
+    }
     normalize_damage(&mut after);
     if !valid_redirection(&*cx, &before, |p| *p = after) { return; }
     let components = if let (Some(damage), Proposal::Damage(before), Proposal::Damage(after)) = (def.damage, before, after) {
@@ -1553,9 +1567,26 @@ pub(crate) fn mana_outcomes(cx: &Cx, production: ManaProduction) -> Vec<ManaProd
             if optional {
                 walk(cx, proposal, applied, seen, out);
             }
-            let mut next = proposal;
-            reshape(cx, &c, &mut next);
-            walk(cx, next, applied, seen, out);
+            let alternatives = if c.origin == Origin::Printed {
+                let def = printed_replacement(cx, c.source, c.index);
+                if let (Some(types), Proposal::ManaProduction(m)) = (def.mana_types, proposal) {
+                    let asker = Asker { instance: None, source: c.source, controller: controller_of(cx, c.source, &proposal), by: printed_link(cx, c.source, c.index), spell: false };
+                    let choices = { let _others = cx.others_text(); types(cx, &asker, m.permanent, m.player) };
+                    choices.into_iter().map(|mana| {
+                        let mut next = m;
+                        next.mana = ManaPool::default();
+                        next.mana.0[mana as usize] = m.total();
+                        Proposal::ManaProduction(next)
+                    }).collect::<Vec<_>>()
+                } else { Vec::new() }
+            } else { Vec::new() };
+            if alternatives.is_empty() {
+                let mut next = proposal;
+                reshape(cx, &c, &mut next);
+                walk(cx, next, applied, seen, out);
+            } else {
+                for next in alternatives { walk(cx, next, applied, seen, out); }
+            }
             applied.pop();
         }
     }

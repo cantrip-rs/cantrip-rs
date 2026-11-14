@@ -1183,6 +1183,13 @@ pub const fn replacement(kind: ReplacementKind, applies: ReplacementApplies, app
     ReplacementDef { hint, kind, applies, apply, ..ReplacementDef::BLANK }
 }
 
+/// One mana replacement choosing among source-dependent output types while retaining the amount.
+/// The callback returns no types if the replacement doesn't apply and cannot inspect the amount, so
+/// mana capability analysis can use the same rule without missing an amount-dependent condition.
+pub const fn mana_type_replacement(types: fn(&dyn crate::Query, &Asker, ObjectId, PlayerId) -> Vec<Mana>, hint: &'static str) -> ReplacementDef {
+    ReplacementDef { hint, kind: ReplacementKind::ManaProduction, mana_types: Some(types), ..ReplacementDef::BLANK }
+}
+
 /// A printed total-quantity condition and fixed replacement output, shared by Damping
 /// Sphere and Contamination. Both play and capability evaluation execute this contract.
 pub const fn fixed_mana_replacement(minimum: u32, source: crate::ManaReplacementSource, mana: Mana, amount: u32, hint: &'static str) -> ReplacementDef {

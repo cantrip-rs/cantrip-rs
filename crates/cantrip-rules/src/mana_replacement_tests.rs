@@ -162,9 +162,18 @@ static RUINS: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+fn two_mana_types(q: &dyn Query, _: &Asker, id: ObjectId, _: PlayerId) -> Vec<Mana> {
+    if q.chars(id).is(CardType::Land) { vec![Mana::R, Mana::G] } else { vec![] }
+}
+static OUTPUT_CHOICE: CardDef = CardDef {
+    name: "Mana Replacement Choice",
+    replacements: &[mana_type_replacement(two_mana_types, "choose red or green")],
+    ..CardDef::BLANK
+};
+
 fn game() -> Game {
     let table: &'static CardTable = Box::leak(Box::new(CardTable::new([
-        &FILLER, &SPHERE, &REFLECTION, &CONTAMINATION, &FLARE, &TOMB, &GROVE, &TOWER, &ROCK, &SEARCHLIGHT, &LOTUS, &RUINS,
+        &FILLER, &SPHERE, &REFLECTION, &CONTAMINATION, &FLARE, &TOMB, &GROVE, &TOWER, &ROCK, &SEARCHLIGHT, &LOTUS, &RUINS, &OUTPUT_CHOICE,
     ])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
@@ -463,4 +472,123 @@ fn producible_types_union_every_order_of_multiple_mana_replacements() {
     assert_eq!(g.producible_types(ruins), (ColorSet::of(Color::Black), true));
     assert!(g.state.player(YOU).pool.is_empty());
     assert!(!g.state.obj(ruins).tapped);
+}
+
+/// One effect has two possible outputs, both visible to planning, even when another effect doubles it.
+#[test]
+fn one_mana_replacement_exposes_each_choice_to_planning() {
+    let mut g = game();
+    let tomb = put(&mut g, &TOMB);
+    put(&mut g, &OUTPUT_CHOICE);
+    put(&mut g, &REFLECTION);
+    let yields = replaced_mana_yields(&g, YOU, tomb, 0).unwrap();
+    let outputs = &yields[0].1;
+    assert!(outputs.contains(&pool(&[(Mana::R, 4)])));
+    assert!(outputs.contains(&pool(&[(Mana::G, 4)])));
+    assert_eq!(g.producible_types(tomb), (ColorSet::of(Color::Red).with(Color::Green), false));
+    let spell = put(&mut g, &FILLER);
+    for mana in [Mana::R, Mana::G] {
+        let mut symbols = [0; 6];
+        symbols[mana as usize] = 1;
+        assert!(can_afford(&cx(&mut g), YOU, spell, &ManaCost { symbols, ..ManaCost::ZERO }));
+    }
+    let mut mixed = [0; 6];
+    mixed[Mana::R as usize] = 1;
+    mixed[Mana::G as usize] = 1;
+    assert!(!can_afford(&cx(&mut g), YOU, spell, &ManaCost { symbols: mixed, ..ManaCost::ZERO }));
+    assert!(g.state.player(YOU).pool.is_empty());
+}
+
+/// The output choice belongs to the tapper and does not create multiple replacement identities.
+#[test]
+fn a_single_replacement_asks_the_tapper_for_the_output_once() {
+    for chosen in 0..2 {
+        let mut g = game();
+        let effect = put(&mut g, &OUTPUT_CHOICE);
+        g.state.update_obj(effect, |o| o.controller = PlayerId(1));
+        let tomb = put(&mut g, &TOMB);
+        g.run();
+        let r = g.pending().cloned().unwrap();
+        let RequestKind::Priority { options } = &r.kind else { panic!("priority") };
+        let option = options.iter().find(|o| o.source == Some(tomb)).unwrap();
+        g.answer(r.id, r.player, Answer::Act(Action::of(option))).unwrap();
+        let mut questions = 0;
+        loop {
+            g.run();
+            let Some(r) = g.pending().cloned() else { break };
+            match &r.kind {
+                RequestKind::ChooseCostPayment { choices, .. } => {
+                    let n = choices.iter().position(|c| c.kind == CostPaymentKind::Tap).unwrap_or(0);
+                    g.answer(r.id, r.player, Answer::CostPayment(n)).unwrap();
+                }
+                RequestKind::ChooseModes { modes, .. } => {
+                    assert_eq!(r.player, YOU);
+                    assert_eq!(modes.len(), 2);
+                    questions += 1;
+                    g.answer(r.id, r.player, Answer::Modes(vec![chosen])).unwrap();
+                }
+                _ => break,
+            }
+        }
+        assert_eq!(questions, 1);
+        assert_eq!(g.state.player(YOU).pool, pool(&[(if chosen == 0 { Mana::R } else { Mana::G }, 2)]));
+    }
+}
+
+/// A second replacement is ordered once with the entire choice effect, then sees its modified production.
+#[test]
+fn choice_effect_and_quantity_replacement_can_be_ordered_either_way() {
+    for choose_first in [false, true] {
+        let mut g = game();
+        let choice = put(&mut g, &OUTPUT_CHOICE);
+        let sphere = put(&mut g, &SPHERE);
+        let tomb = put(&mut g, &TOMB);
+        g.run();
+        let r = g.pending().cloned().unwrap();
+        let RequestKind::Priority { options } = &r.kind else { panic!("priority") };
+        let option = options.iter().find(|o| o.source == Some(tomb)).unwrap();
+        g.answer(r.id, r.player, Answer::Act(Action::of(option))).unwrap();
+        let mut orders = 0;
+        let mut choices = 0;
+        loop {
+            g.run();
+            let Some(r) = g.pending().cloned() else { break };
+            match &r.kind {
+                RequestKind::ChooseCostPayment { choices, .. } => {
+                    let n = choices.iter().position(|c| c.kind == CostPaymentKind::Tap).unwrap_or(0);
+                    g.answer(r.id, r.player, Answer::CostPayment(n)).unwrap();
+                }
+                RequestKind::ChooseReplacement { sources, .. } => {
+                    let first = if choose_first { choice } else { sphere };
+                    let n = sources.iter().position(|&s| s == first).unwrap();
+                    orders += 1;
+                    g.answer(r.id, r.player, Answer::Index(n as u8)).unwrap();
+                }
+                RequestKind::ChooseModes { .. } => {
+                    choices += 1;
+                    g.answer(r.id, r.player, Answer::Modes(vec![0])).unwrap();
+                }
+                _ => break,
+            }
+        }
+        assert_eq!((orders, choices), (1, 1));
+        assert_eq!(g.state.player(YOU).pool, pool(&[(if choose_first { Mana::C } else { Mana::R }, 1)]));
+    }
+}
+
+#[test]
+fn grouped_replacement_applicability_is_source_based_at_every_amount() {
+    let mut g = game();
+    let effect = put(&mut g, &OUTPUT_CHOICE);
+    let land = put(&mut g, &TOMB);
+    let artifact = put(&mut g, &ROCK);
+    let asker = Asker::new(effect, YOU);
+    let def = &OUTPUT_CHOICE.replacements[0];
+    for amount in [1, 2, 7] {
+        let make = |permanent| Proposal::ManaProduction(ManaProduction {
+            permanent, player: YOU, to: YOU, mana: pool(&[(Mana::C, amount)]), restriction: None, lasts: ManaLasts::Step,
+        });
+        assert!(def.applies_to(&cx(&mut g), &asker, &make(land)));
+        assert!(!def.applies_to(&cx(&mut g), &asker, &make(artifact)));
+    }
 }

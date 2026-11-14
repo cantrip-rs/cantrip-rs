@@ -382,6 +382,9 @@ pub struct ReplacementDef {
     pub applies: ReplacementApplies,
     pub apply: ReplacementApply,
     pub fixed_mana: Option<FixedManaReplacement>,
+    /// One effect may offer a choice of output types while retaining the produced amount (CR 614.5, 106.12b).
+    /// Return distinct types when the effect applies, or none when it does not. The callback cannot inspect quantity.
+    pub mana_types: Option<fn(&dyn Query, &Asker, ObjectId, PlayerId) -> Vec<Mana>>,
     /// Game operations the effect performs as it applies (see [`ReplacementThen`]).
     pub then: Option<ReplacementThen>,
     /// Additional components of a damage event; see [`ReplacementDamage`].
@@ -549,6 +552,7 @@ impl ReplacementDef {
         applies: never,
         apply: nothing,
         fixed_mana: None,
+        mana_types: None,
         then: None,
         damage: None,
         optional: None,
@@ -559,6 +563,8 @@ impl ReplacementDef {
         if let Some(rule) = self.fixed_mana {
             matches!(proposal, Proposal::ManaProduction(m) if m.total() >= rule.minimum
                 && (rule.source)(q, asker, m.permanent, m.player))
+        } else if let Some(types) = self.mana_types {
+            matches!(proposal, Proposal::ManaProduction(m) if !types(q, asker, m.permanent, m.player).is_empty())
         } else {
             (self.applies)(q, asker, proposal)
         }

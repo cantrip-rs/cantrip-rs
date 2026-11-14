@@ -590,3 +590,17 @@ pub fn add_a_counter_for_each(q: &dyn Query, asker: &Asker, proposal: &mut Propo
         z.counters[CounterKind::PlusOne as usize] += more;
     }
 }
+
+/// Mana output by the basic land types named in a single replacement effect (CR 106.12b, 614.5).
+/// Naked Singularity and Reality Twist let the tapping player choose among all matching types; every mana has that type.
+pub fn land_type_mana(q: &dyn Query, asker: &Asker, permanent: ObjectId, mapping: &[(Subtype, Mana)]) -> Vec<Mana> {
+    let chars = q.chars(permanent);
+    let words = q.words(asker.source);
+    let mut result = Vec::new();
+    for &(land_type, mana) in mapping {
+        if chars.has_subtype(words.subtype(land_type)) {
+            result.push(mana);
+        }
+    }
+    result
+}
