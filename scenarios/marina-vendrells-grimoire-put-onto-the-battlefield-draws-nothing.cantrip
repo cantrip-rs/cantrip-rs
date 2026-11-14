@@ -1,0 +1,35 @@
+# "When Marina Vendrell's Grimoire enters, if you cast it": Show and Tell puts it onto the battlefield from Bot1's hand without
+# casting it (CR 603.4), so its enters trigger finds no cast and Bot1 draws nothing: its library is as it was and its hand
+# is just the cards it did not play. (Casting it, in the sibling scenario, draws five: the positive control.)
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Show and Tell
+Marina Vendrell's Grimoire
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Lightning Bolt x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Show and Tell.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Marina Vendrell's Grimoire)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Marina Vendrell's Grimoire.Types = Artifact
+Bot1.Library.Count = 13
+Bot1.Hand.Count = 2
+Stack.Count = 0

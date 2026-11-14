@@ -1,0 +1,78 @@
+# "Whenever you lose life, discard that many cards." with fewer cards than that (CR 701.9b: a player with fewer cards
+# discards what they have). Bot1 casts the Grimoire on turn 1 (a hand of six). Bot2's Lightning Bolt makes it discard three and
+# keep three; its Fireball for four then takes four life, more than the three cards left: all three are discarded, the hand is
+# empty, and Bot1 loses the game (CR 104.3e) at 13 life.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Marina Vendrell's Grimoire
+Island
+Forest
+Swamp
+Plains
+Mountain
+Island
+Island x9
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mountain
+Lightning Bolt
+Fireball
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Marina Vendrell's Grimoire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 6
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Forest; Swamp; Island)
+? Bot1.Life = 17
+? Bot1.Hand.Count = 3
+? Result = InProgress
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Fireball.Cast(X: 4)
+Bot2.Target(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 13
+? Bot1.Hand.Count = 3
+? Result = InProgress
+Bot1.Choose(Island; Plains; Mountain)
+[Expect]
+Result = Bot2 won
+Bot1.LostTo = Effect
+Bot1.Life = 13
+Bot1.Hand.Count = 0

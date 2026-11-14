@@ -1,0 +1,69 @@
+# "Whenever you lose life, discard that many cards. Then if you have no cards in hand, you lose the game." Bot1 casts the
+# Grimoire on turn 1 (a hand of Island, Forest, Swamp, Plains, Mountain and Island). Bot2's first Lightning Bolt makes it
+# discard three (Forest, Swamp, Island) and keep three, still in the game (the other way round in the sibling scenario). The
+# second Bolt takes three more, exactly the hand: the last three cards are discarded, the hand is then empty, and Bot1
+# loses the game to the Grimoire's effect, not to its life (14 is above zero).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Marina Vendrell's Grimoire
+Island
+Forest
+Swamp
+Plains
+Mountain
+Island
+Island x9
+
+[Bot2 Deck]
+Black Lotus
+Mountain
+Lightning Bolt
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Marina Vendrell's Grimoire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 6
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+? Bot1.Hand.Count = 6
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Forest; Swamp; Island)
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 14
+? Bot1.Hand.Count = 3
+? Result = InProgress
+Bot1.Choose(Island; Plains; Mountain)
+[Expect]
+Result = Bot2 won
+Bot1.LostTo = Effect
+Bot1.Life = 14
+Bot1.Hand.Count = 0

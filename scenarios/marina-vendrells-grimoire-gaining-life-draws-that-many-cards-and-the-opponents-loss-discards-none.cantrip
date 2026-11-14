@@ -1,0 +1,59 @@
+# "Whenever you gain life, draw that many cards." Bot1 casts the Grimoire on turn 1 (a hand of six), draws a Lightning Helix on
+# turn 3 and casts it at Bot2: gaining 3 life (23) draws exactly three cards, and the 3 damage Bot2 takes is Bot2's life
+# loss, not Bot1's, so Bot1 discards nothing (hand: 6 + the turn's draw - the Helix + 3 = 9; Grimoire's text only watches
+# its controller's life).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Marina Vendrell's Grimoire
+Island
+Forest
+Swamp
+Plains
+Mountain
+Island
+Lightning Helix
+Island x7
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Marina Vendrell's Grimoire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 6
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 7
+? Bot1.Library.Count = 7
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Bot2.Life = 17
+? Bot1.Hand.Count = 6
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 17
+Bot1.Hand.Count = 9
+Bot1.Library.Count = 4
+Bot1.Graveyard.Count = 2
