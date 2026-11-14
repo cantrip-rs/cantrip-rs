@@ -1,0 +1,12 @@
+{
+  "name": "Terror of Mount Velus",
+  "manaCost": "{5}{R}{R}",
+  "type": "Creature — Dragon",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Flying\nDouble strike (This creature deals both first-strike and regular combat damage.)\nWhen this creature enters, creatures you control gain double strike until end of turn.",
+  "keywords": [
+    "Flying",
+    "DoubleStrike"
+  ]
+}
