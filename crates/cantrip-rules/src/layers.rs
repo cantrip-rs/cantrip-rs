@@ -3061,7 +3061,7 @@ pub(crate) fn effect_layer(kind: EffectKind) -> Option<Layer> {
         | EffectKind::SetCreatureType(_)
         | EffectKind::LoseSubtypesOf(_)
         | EffectKind::SetTypes(_) => Layer::Type,
-        EffectKind::SetColors(_) => Layer::Color,
+        EffectKind::SetColors(_) | EffectKind::AddColors(_) => Layer::Color,
         EffectKind::LoseAllAbilities
         | EffectKind::Protection(_)
         | EffectKind::ProtectionFromColorless
@@ -3197,6 +3197,8 @@ fn apply_effect(effect: &ContinuousEffect, layer: Layer, chars: &mut Chars) {
             }
             // CR 105.3: "becomes white and blue" is what it is now, not what it is as well.
             (Layer::Color, EffectKind::SetColors(colors)) => chars.colors = colors,
+            // CR 105.3: "becomes [color] in addition to its other colors": what it was stays.
+            (Layer::Color, EffectKind::AddColors(colors)) => chars.colors = ColorSet(chars.colors.0 | colors.0),
             (Layer::PtSet, EffectKind::SetPt(p, t)) => {
                 chars.power = Some(p);
                 chars.toughness = Some(t);

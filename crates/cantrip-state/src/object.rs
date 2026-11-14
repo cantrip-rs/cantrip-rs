@@ -1632,6 +1632,10 @@ pub enum EffectKind {
     LoseSubtypesOf(CardType),
     /// Is exactly these colors (CR 105.3, 613.1e), layer 5.
     SetColors(ColorSet),
+    /// Is these colors as well as the ones it has (CR 105.3, 613.1e), layer 5: "it becomes black in addition to its other colors"
+    /// (Possessed Goat). It adds to what the effects before it at an earlier timestamp left, and one after it that sets the
+    /// colors replaces both.
+    AddColors(ColorSet),
     /// "Loses all abilities" (CR 613.1f), layer 6: at its timestamp, so what is granted later is kept.
     LoseAllAbilities,
     /// It loses the enchant ability `card` prints (CR 113.10, 613.1f, 702.5a), layer 6, at its timestamp: every instance of
