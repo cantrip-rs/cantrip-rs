@@ -1,0 +1,51 @@
+# Koma, World-Eater: "Ward {4}". Bot2 has a Black Lotus (three white) and a Mox Pearl on turn 4: Swords to Plowshares costs one, so three
+# mana are left, one short of ward {4}; the ward trigger counters Swords and Koma stays on the battlefield; Bot1 gains no life.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Koma, World-Eater
+Forest
+Forest x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Swords to Plowshares
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Koma, World-Eater.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Koma, World-Eater)
+! Bot2.PayCost
+[T4 Bot2.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Bot1.Battlefield.Koma, World-Eater.Power = 8
+Bot2.Graveyard = Swords to Plowshares; Black Lotus

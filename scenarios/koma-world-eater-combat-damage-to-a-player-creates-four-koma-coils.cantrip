@@ -1,0 +1,44 @@
+# Koma, World-Eater: "Whenever Koma deals combat damage to a player, create four 3/3 blue Serpent creature tokens named Koma's Coil."
+# Koma is cast on turn 3 and attacks on turn 5 into an empty board: 8 damage (Bot2 at 12) and four 3/3 blue Serpent tokens named
+# Koma's Coil. Bot1 controls four Moxen, Koma and the four tokens.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Koma, World-Eater
+Forest
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Koma, World-Eater.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Koma, World-Eater > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 12
+Bot1.Battlefield.Count = 9
+Bot1.Battlefield.Koma's Coil#1.Power = 3
+Bot1.Battlefield.Koma's Coil#4.Toughness = 3
+Bot1.Battlefield.Koma's Coil#1.Colors = Blue
+Bot1.Battlefield.Koma's Coil#1.Subtypes = Serpent
+Bot1.Battlefield.Koma's Coil#1.ManaValue = 0
