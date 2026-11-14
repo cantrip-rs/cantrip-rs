@@ -1,0 +1,54 @@
+# Heroism's shield lasts the turn, not the combat: an unpaid red attacker deals no combat damage in an added combat either (CR 611.2a, 615.1).
+[Bot1 Deck]
+Heroism
+Suntail Hawk
+Fanatical Firebrand
+World at War
+Black Lotus
+Mox Pearl
+Mox Ruby
+Black Lotus
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Suntail Hawk.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Heroism.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Fanatical Firebrand > Bot2)
+Bot1.Battlefield.Heroism.Activate(Sacrifice: Suntail Hawk)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.World at War.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Step = BeginCombat
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fanatical Firebrand.Tapped = false
+Bot1.Attack(Fanatical Firebrand > Bot2)
+[T3 Bot1.End]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Fanatical Firebrand.Tapped = true

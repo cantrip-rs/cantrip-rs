@@ -1,0 +1,41 @@
+# Heroism also affects its controller's attacking red creature, but its shield only prevents combat damage (CR 615.1).
+[Bot1 Deck]
+Heroism
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Fanatical Firebrand
+Suntail Hawk
+Twiddle
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Suntail Hawk.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Heroism.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Fanatical Firebrand > Bot2)
+Bot1.Battlefield.Heroism.Activate
+! Bot1.Choose(Fanatical Firebrand)
+Bot1.Choose(Suntail Hawk)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Twiddle.Cast(Bot1.Battlefield.Fanatical Firebrand)
+Bot1.Modes(Untap)
+Bot1.Battlefield.Fanatical Firebrand.Activate(Bot2)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 19
