@@ -1,0 +1,8 @@
+{
+  "name": "Strongbox Raider",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Orc Pirate",
+  "power": 5,
+  "toughness": 2,
+  "oracleText": "Raid — When this creature enters, if you attacked this turn, exile the top two cards of your library. Choose one of them. Until the end of your next turn, you may play that card."
+}

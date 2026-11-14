@@ -1,0 +1,41 @@
+# Strongbox Raider's raid needs an attack this turn (CR 508.1): Bot1 casts it on turn 3 without having attacked, so nothing is exiled and no choice is asked; the top two
+# cards of the library stay where they are.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Memnite
+Strongbox Raider
+Mountain
+Mountain
+Mountain
+Island
+Lightning Bolt
+Mountain
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Strongbox Raider.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Exile.Count = 0
+Bot1.Library.Count = 12
+Bot1.Battlefield = Mox Ruby; Memnite; Strongbox Raider
