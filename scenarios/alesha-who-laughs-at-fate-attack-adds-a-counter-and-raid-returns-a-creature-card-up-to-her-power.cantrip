@@ -1,0 +1,77 @@
+# Alesha, Who Laughs at Fate: first strike; "Whenever Alesha attacks, put a +1/+1 counter on it." and "Raid - At the beginning of
+# your end step, if you attacked this turn, return target creature card with mana value less than or equal to Alesha's power from your
+# graveyard to the battlefield." Bot1's graveyard holds Grizzly Bears (mana value 2), Gray Ogre (3), Hill Giant (4), two Faithless
+# Looting, a Mountain and Black Lotus; Bot2's holds a Memnite (0). On turn 3 Alesha attacks and is a 3/3 with a counter: at the end step
+# the Memnite (an opponent's card), Hill Giant (one over her power), a Mountain, Faithless Looting and Black Lotus (no creature
+# cards) are refused, and Gray Ogre, exactly at her power, returns; the Bears stay.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Alesha, Who Laughs at Fate
+Faithless Looting
+Grizzly Bears
+Gray Ogre
+Hill Giant
+Mountain
+Faithless Looting
+Mountain x20
+
+[Bot2 Deck]
+Mountain
+Faithless Looting
+Memnite
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Alesha, Who Laughs at Fate.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Memnite; Mountain)
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears; Gray Ogre)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Hill Giant; Mountain)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Alesha, Who Laughs at Fate > Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Alesha, Who Laughs at Fate.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Alesha, Who Laughs at Fate.Keywords = FirstStrike
+? Bot1.Battlefield.Alesha, Who Laughs at Fate.Power = 3
+[T3 Bot1.End]
+! Bot1.Target(Bot2.Graveyard.Memnite)
+! Bot1.Target(Bot1.Graveyard.Hill Giant)
+! Bot1.Target(Bot1.Graveyard.Faithless Looting)
+! Bot1.Target(Bot1.Graveyard.Black Lotus)
+! Bot1.Target(Bot1.Graveyard.Mountain)
+Bot1.Target(Bot1.Graveyard.Gray Ogre)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gray Ogre.Tapped = false
+
+[Expect]
+Bot1.Battlefield = Alesha, Who Laughs at Fate; Gray Ogre; Mountain; Mox Ruby
+Bot1.Graveyard = Faithless Looting; Mountain; Hill Giant; Faithless Looting; Grizzly Bears; Black Lotus
+Bot2.Graveyard = Faithless Looting; Mountain; Memnite
+Bot2.Life = 17

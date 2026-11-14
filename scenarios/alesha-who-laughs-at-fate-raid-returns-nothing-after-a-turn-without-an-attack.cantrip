@@ -1,0 +1,48 @@
+# Alesha, Who Laughs at Fate: the raid trigger needs an attack this turn. Bot1's graveyard holds Grizzly Bears (mana value 2, within
+# Alesha's power of 2) after Faithless Looting. On turn 3 Alesha does not attack, so at the end step nothing is put onto the stack
+# and the Bears stay in the graveyard. On turn 5 she attacks (3/3 after the counter) and at the end step the Bears return.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Alesha, Who Laughs at Fate
+Faithless Looting
+Grizzly Bears
+Mountain
+Mountain
+Mountain x20
+
+[Bot2 Deck]
+Island x23
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Alesha, Who Laughs at Fate.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears; Mountain)
+[T3 Bot1.End]
+? Stack.Count = 0
+? Bot1.Graveyard = Faithless Looting; Mountain; Grizzly Bears; Black Lotus
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Alesha, Who Laughs at Fate > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Alesha, Who Laughs at Fate; Grizzly Bears; Mountain; Mox Ruby
+Bot1.Battlefield.Alesha, Who Laughs at Fate.Power = 3
+Bot1.Graveyard = Faithless Looting; Mountain; Black Lotus

@@ -1,0 +1,11 @@
+{
+  "name": "Alesha, Who Laughs at Fate",
+  "manaCost": "{1}{B}{R}",
+  "type": "Legendary Creature — Human Warrior",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "First strike\nWhenever Alesha attacks, put a +1/+1 counter on it.\nRaid — At the beginning of your end step, if you attacked this turn, return target creature card with mana value less than or equal to Alesha's power from your graveyard to the battlefield.",
+  "keywords": [
+    "FirstStrike"
+  ]
+}
