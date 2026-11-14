@@ -134,6 +134,15 @@ pub fn next_this_turn(g: &mut dyn Game, item: &StackItem, ability: u8, source: O
     g.delayed_trigger(DelayedWhen::NextThisTurn, source, item.controller, AbilityRef::delayed(card, ability), Target::None);
 }
 
+/// The whole effect of "When you next [event] this turn, ..." (CR 603.7b) for a spell or ability that does nothing else: it sets up
+/// the card's delayed ability number 0 (`next_this_turn`), for an effect function of a `spell`, `ability`, loyalty or chapter. Flamehold
+/// Grappler, Pit Automaton, Rimefire Torque, Pigment Wrangler's Striking Palette, Loki Laufeyson, Summon: Brynhildr, Summon: G.F.
+/// Cerberus's chapter II and Teach by Example print it.
+pub fn watch_for_the_next(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    next_this_turn(g, item, 0, item.object);
+    Ok(())
+}
+
 /// `at_next_end_step_about` for "at the beginning of your next end step" (CR 603.7): the first end step of the ability's
 /// controller's turn that has not begun yet, which is this turn's when the ability resolves before it. Dragonhawk, Fate's
 /// Tempest uses it for the cards it exiled.

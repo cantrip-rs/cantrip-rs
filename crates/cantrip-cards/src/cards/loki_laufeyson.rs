@@ -12,19 +12,11 @@ fn next_instant_or_sorcery_within_lokis_power(q: &dyn Query, me: &Asker, event: 
     (i64::from(q.mana_value(spell)) <= i64::from(targets::power_or_last_known(q, me.source))).then_some(fired)
 }
 
-/// "{1}, {T}: When you next cast ... this turn, copy that spell": the ability sets up a delayed triggered ability that
-/// triggers once, on the next such spell this turn, and ends with the turn if none is cast (CR 603.7b). Each activation
-/// sets up its own, so two would both copy the same next spell.
-fn watch(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    delayed::next_this_turn(g, item, 0, item.object);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         ability(
             cost("{1}").and(TAP),
-            watch,
+            delayed::watch_for_the_next,
             "{1}, {T}: When you next cast an instant or sorcery spell with mana value less than or equal to Loki's power this turn, copy that spell. You may choose new targets for the copy.",
         ),
         power_up::ability(
