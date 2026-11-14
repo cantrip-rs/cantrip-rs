@@ -1,0 +1,11 @@
+{
+  "name": "Drakuseth, Maw of Flames",
+  "manaCost": "{4}{R}{R}{R}",
+  "type": "Legendary Creature — Dragon",
+  "power": 7,
+  "toughness": 7,
+  "oracleText": "Flying\nWhenever Drakuseth attacks, Drakuseth deals 4 damage to any target and 3 damage to each of up to two other targets.",
+  "keywords": [
+    "Flying"
+  ]
+}

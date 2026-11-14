@@ -1,0 +1,43 @@
+# Drakuseth's first target need not be a player and the "other" targets are chosen after it (CR 115.3): the 4 goes to Bot2's
+# Grizzly Bears (2/2, dies), the 3 to each player; Bot1 takes 3 (20 to 17) and Bot2 takes 3 and then 7 in combat (20 to 10).
+
+[Bot1 Deck]
+Black Lotus x2
+Mox Ruby
+Drakuseth, Maw of Flames
+Mountain x20
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Grizzly Bears
+Forest x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Drakuseth, Maw of Flames.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Drakuseth, Maw of Flames > Bot2)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2; Bot1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 10
+? Bot1.Life = 17
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears
