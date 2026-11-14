@@ -1,0 +1,11 @@
+{
+  "name": "Unwilling Vessel",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Human Wizard",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Vigilance\nEerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, put a possession counter on this creature.\nWhen this creature dies, create an X/X blue Spirit creature token with flying, where X is the number of counters on this creature.",
+  "keywords": [
+    "Vigilance"
+  ]
+}

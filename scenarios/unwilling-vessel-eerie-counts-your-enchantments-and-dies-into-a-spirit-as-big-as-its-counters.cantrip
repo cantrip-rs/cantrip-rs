@@ -1,0 +1,84 @@
+# Unwilling Vessel (3/2 vigilance), "Eerie - Whenever an enchantment you control enters ..., put a possession counter on this creature.
+# When this creature dies, create an X/X blue Spirit creature token with flying, where X is the number of counters on this creature":
+# Bot2's Flood on turn 2 is not an enchantment Bot1 controls, so no counter; each of Bot1's two Floods on turn 3 puts one (two in all);
+# Bot2's Lightning Bolt kills it on turn 4 and a 2/2 blue Spirit with flying is made, X being the two counters it had as it died.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Unwilling Vessel
+Flood
+Flood
+Island
+Island x20
+
+[Bot2 Deck]
+Island
+Flood
+Mox Ruby
+Lightning Bolt
+Island
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unwilling Vessel.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Unwilling Vessel.Keywords = Vigilance
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Flood.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Unwilling Vessel.Counters.Possession = (absent)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flood.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Unwilling Vessel.Counters.Possession = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flood.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Unwilling Vessel.Counters.Possession = 2
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Unwilling Vessel)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Spirit Token.Power = 2
+Bot1.Battlefield.Spirit Token.Toughness = 2
+Bot1.Battlefield.Spirit Token.Colors = Blue
+Bot1.Battlefield.Spirit Token.Keywords = Flying
+Bot1.Graveyard.Unwilling Vessel.Counters.Possession = (absent)

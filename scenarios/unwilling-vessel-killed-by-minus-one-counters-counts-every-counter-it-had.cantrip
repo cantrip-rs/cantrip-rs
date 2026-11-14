@@ -1,0 +1,50 @@
+# Unwilling Vessel: "When this creature dies, create an X/X blue Spirit creature token with flying, where X is the number of counters
+# on this creature" counts counters of every kind as it last existed (CR 608.2h; its ruling: the -1/-1 counters that killed it count
+# too). Bot1's Flood on turn 3 gives it a possession counter, then Bot1's own Darkness Descends puts two -1/-1 counters on it: a 3/2
+# with them is a 1/0 and dies with three counters, so the Spirit is 3/3 (one counting only possession counters would make a 1/1).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Black Lotus
+Unwilling Vessel
+Flood
+Darkness Descends
+
+[Bot2 Deck]
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unwilling Vessel.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flood.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Unwilling Vessel.Counters.Possession = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Darkness Descends.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Unwilling Vessel; Darkness Descends; Black Lotus
+Bot1.Battlefield.Spirit Token.Power = 3
+Bot1.Battlefield.Spirit Token.Toughness = 3
