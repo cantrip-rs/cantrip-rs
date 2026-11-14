@@ -3289,6 +3289,14 @@ pub fn put_counters_of_on(g: &mut dyn Game, from: ObjectId, target: ObjectId) {
     g.add_counters_together(&puts);
 }
 
+/// "Put its counters on [up to one] target creature" for a trigger about another creature (`Fired::about`, as
+/// `triggers::creature_you_control_with_counters_dies` fires): the counters the subject had as it last was, on the first target.
+/// Host of the Hereafter and Reluctant Role Model print it.
+pub fn put_the_subjects_counters_on_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Target::Object(subject) = item.subject else { return Ok(()) };
+    put_counters_of_on_target(g, item, subject)
+}
+
 /// "When this creature dies [or leaves the battlefield], put its counters on [up to one] target creature" (see `put_counters_of_on_target`). Essence
 /// Channeler, Graft Surgeon, Scolding Administrator and Broodguard Elite print it.
 pub fn put_its_counters_on_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
