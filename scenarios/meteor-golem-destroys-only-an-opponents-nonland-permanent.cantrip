@@ -1,0 +1,56 @@
+# Meteor Golem {7} (3/3): "When this creature enters, destroy target nonland permanent an opponent controls." Seven mana on turn 3
+# (five Moxen and two Plains). The trigger refuses Bot1's own Mox Ruby and Bot2's Plains (beside the positive control: Bot2's
+# Ornithopter, which is chosen and destroyed; Bot2's Mox Pearl survives). The Golem stays.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Meteor Golem
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Ornithopter
+Plains x11
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Meteor Golem.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Mox Ruby)
+! Bot1.Target(Bot2.Battlefield.Plains)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Ornithopter
+? Bot2.Battlefield = Plains; Mox Pearl
+
+[Expect]
+Bot1.Battlefield = Plains; Plains; Mox Ruby; Mox Jet; Mox Emerald; Mox Pearl; Mox Sapphire; Meteor Golem

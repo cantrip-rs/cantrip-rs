@@ -1,0 +1,46 @@
+# Meteor Golem's enters trigger needs a target (CR 603.3d): Bot2 controls only a Plains (a land) and Bot1 has only its own
+# permanents, neither a legal target, so the trigger is removed from the stack and no target is asked (`! Bot1.Target`). The
+# Golem stays and nothing is destroyed.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Meteor Golem
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Plains x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Meteor Golem.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target
+
+[Expect]
+Bot1.Battlefield = Plains; Plains; Mox Ruby; Mox Jet; Mox Emerald; Mox Pearl; Mox Sapphire; Meteor Golem
+Bot2.Battlefield = Plains
+Bot2.Graveyard.Count = 0
