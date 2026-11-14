@@ -1,0 +1,8 @@
+{
+  "name": "Lionheart Glimmer",
+  "manaCost": "{3}{W}{W}",
+  "type": "Enchantment Creature — Cat Glimmer",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "Ward {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\nWhenever you attack, creatures you control get +1/+1 until end of turn."
+}

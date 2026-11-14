@@ -1,0 +1,38 @@
+# Lionheart Glimmer, "Ward {2}": Bot2 has a Mox Ruby and one more Mox, so after Lightning Bolt it has one mana left, which is not
+# enough for the ward cost; the ward trigger counters the Bolt and the Glimmer takes no damage.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Lionheart Glimmer
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lionheart Glimmer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Lightning Bolt.Cast(Lionheart Glimmer)
+! Bot2.PayCost
+[T2 Bot2.Main2]
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.Lionheart Glimmer.Damage = 0
+Bot2.Graveyard = Lightning Bolt

@@ -1,0 +1,36 @@
+# Lionheart Glimmer, "Ward {2}": Bot2 has a Black Lotus (three red) so it pays the Bolt's {R} and the ward's {2}; the Bolt
+# resolves and deals 3 damage to the 2/5 Glimmer, which survives.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Lionheart Glimmer
+Island x16
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lionheart Glimmer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Lionheart Glimmer)
+Bot2.PayCost
+? Bot2.Mana =
+[T2 Bot2.Main2]
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.Lionheart Glimmer.Damage = 3
+Bot2.Graveyard = Lightning Bolt; Black Lotus
