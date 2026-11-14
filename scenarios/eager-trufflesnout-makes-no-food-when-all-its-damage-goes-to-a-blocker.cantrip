@@ -1,0 +1,43 @@
+# The trigger needs combat damage dealt to a player: blocked by a Kraken Hatchling (0/4), all 4 of the Trufflesnout's damage is lethal damage to the blocker
+# (CR 702.19b, nothing left to trample over), so Bot2 stays at 20 and no Food token is created.
+
+[Bot1 Deck]
+Black Lotus
+Eager Trufflesnout
+Island x18
+
+[Bot2 Deck]
+Mox Sapphire
+Kraken Hatchling
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Eager Trufflesnout.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Kraken Hatchling.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Eager Trufflesnout > Bot2)
+Bot2.Block(Kraken Hatchling > Eager Trufflesnout)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 20
+Bot1.Battlefield.Food Token = (absent)
+Bot1.Battlefield.Count = 1
+Bot2.Graveyard = Kraken Hatchling

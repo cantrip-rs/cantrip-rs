@@ -1,0 +1,32 @@
+# Eager Trufflesnout (CR 510.2, 603.2, 111.10b): unblocked, it deals 4 combat damage to Bot2 and its controller creates a Food token, an artifact. Trample is shown.
+
+[Bot1 Deck]
+Black Lotus
+Eager Trufflesnout
+Island x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Eager Trufflesnout.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Eager Trufflesnout > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 16
+Bot1.Battlefield.Food Token.Types = Artifact
+Bot1.Battlefield.Eager Trufflesnout.Keywords = Trample
+Bot1.Battlefield.Count = 2
+Bot2.Battlefield.Count = 0

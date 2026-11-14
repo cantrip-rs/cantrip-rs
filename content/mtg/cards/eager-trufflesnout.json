@@ -1,0 +1,11 @@
+{
+  "name": "Eager Trufflesnout",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Boar",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\nWhenever this creature deals combat damage to a player, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")",
+  "keywords": [
+    "Trample"
+  ]
+}
