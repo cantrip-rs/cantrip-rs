@@ -1,0 +1,32 @@
+# Campus Guide: the search is optional ("you may search"). Bot1 declines, so the library is neither searched nor shuffled: the top
+# card is still Lightning Bolt, which Bot1 draws on turn 3 (a shuffle would almost surely have changed that), and nothing is
+# revealed. Control: the scenario where the search puts the Island on top.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Campus Guide
+Plains x4
+Lightning Bolt
+Island
+Plains x7
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Campus Guide.Cast
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains; Lightning Bolt
+Bot1.Revealed = (absent)
+Bot1.Library.Count = 8

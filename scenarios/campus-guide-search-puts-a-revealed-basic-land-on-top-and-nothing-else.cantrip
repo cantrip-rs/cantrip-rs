@@ -1,0 +1,40 @@
+# Campus Guide {2} (2/1): "When this creature enters, you may search your library for a basic land card, reveal it, then shuffle and
+# put that card on top." Bot1 accepts and finds the Island: only a basic land card may be found (the Tropical Island, a nonbasic
+# land, and Lightning Bolt are refused). The Island is revealed and ends on top of the library, so Bot1 draws it on turn 3.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Campus Guide
+Plains x4
+Lightning Bolt
+Island
+Tropical Island
+Plains x6
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Campus Guide.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Search(Tropical Island)
+! Bot1.Search(Lightning Bolt)
+Bot1.Search(Island)
+? Bot1.Revealed = Island
+? Bot1.Library.Count = 9
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains; Island
+Bot1.Library.Count = 8
+Bot1.Battlefield = Mox Jet; Mox Ruby; Campus Guide
+Bot1.Revealed = Island

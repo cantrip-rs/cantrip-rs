@@ -1,0 +1,8 @@
+{
+  "name": "Campus Guide",
+  "manaCost": "{2}",
+  "type": "Artifact Creature — Golem",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "When this creature enters, you may search your library for a basic land card, reveal it, then shuffle and put that card on top."
+}
