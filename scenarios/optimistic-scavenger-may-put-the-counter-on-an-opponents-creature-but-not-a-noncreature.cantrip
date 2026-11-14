@@ -1,0 +1,37 @@
+# Optimistic Scavenger: the counter goes on "target creature", any creature on the battlefield (CR 115.1). Bot1 casts Glorious
+# Anthem (an enchantment it controls enters) with Scavenger and Bot2's Memnite both on the battlefield: Mox Pearl, a noncreature
+# permanent, is refused as the target (the refusal), and Memnite is chosen, so Memnite gets the +1/+1 counter and the Scavenger
+# none.
+
+[Bot1 Deck]
+Mox Pearl
+Black Lotus
+Optimistic Scavenger
+Glorious Anthem
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Optimistic Scavenger.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Glorious Anthem.Cast
+Bot1.Pass
+! Bot1.Target(Mox Pearl)
+Bot1.Target(Memnite)
+[T3 Bot1.End]
+
+[Expect]
+Bot2.Battlefield.Memnite.Power = 2
+Bot2.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Optimistic Scavenger.Power = 2
+Bot1.Battlefield.Optimistic Scavenger.Toughness = 2

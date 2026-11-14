@@ -1,0 +1,45 @@
+# Optimistic Scavenger's Eerie is about enchantments Bot1 controls and Rooms Bot1 unlocks. Bot2 casts Unholy Annex on turn 2 (an
+# enchantment entering under Bot2's control) and unlocks Ritual Chamber on turn 4 (Bot2 fully unlocking a Room), the Demon token
+# arriving for Bot2; neither puts a counter on Bot1's Scavenger, which is still a 1/1 afterwards (the refusals; the positive
+# controls are the other scenarios of this card).
+
+[Bot1 Deck]
+Mox Pearl
+Optimistic Scavenger
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Mox Emerald
+Unholy Annex // Ritual Chamber
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Optimistic Scavenger.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Unholy Annex.Doors = Unholy Annex
+? Bot1.Battlefield.Optimistic Scavenger.Power = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Unholy Annex.Activate(Ability: right door)
+[T4 Bot2.End]
+? Bot2.Battlefield.Unholy Annex // Ritual Chamber.Doors = Unholy Annex; Ritual Chamber
+
+[Expect]
+Bot2.Battlefield.Demon Token.Power = 6
+Bot1.Battlefield.Optimistic Scavenger.Power = 1
+Bot1.Battlefield.Optimistic Scavenger.Toughness = 1

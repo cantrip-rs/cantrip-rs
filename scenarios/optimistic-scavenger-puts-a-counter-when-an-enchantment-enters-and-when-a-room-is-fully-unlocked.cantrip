@@ -1,0 +1,44 @@
+# Optimistic Scavenger, "Eerie - Whenever an enchantment you control enters and whenever you fully unlock a Room, put a +1/+1
+# counter on target creature." On turn 1 Scavenger is cast, then Roaring Furnace // Steaming Sauna as its left door,
+# Roaring Furnace: the Room enters, an enchantment Bot1 controls enters, and the Scavenger gets a counter (2/2). Only one door is
+# unlocked, so it is not fully unlocked then. On turn 3 Bot1 unlocks Steaming Sauna as a special action (CR 709.5e): the Room is
+# fully unlocked now, a second trigger, and the Scavenger is a 3/3. Casting Mox Ruby (an artifact, not an enchantment) gives
+# nothing in between (checked at 2/2 after it is cast on turn 3).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Black Lotus
+Optimistic Scavenger
+Roaring Furnace // Steaming Sauna
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Optimistic Scavenger.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Roaring Furnace // Steaming Sauna.Cast(Ability: Roaring Furnace)
+[T1 Bot1.End]
+? Bot1.Battlefield.Optimistic Scavenger.Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+? Bot1.Battlefield.Optimistic Scavenger.Power = 2
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Roaring Furnace.Activate(Ability: right door)
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Battlefield.Optimistic Scavenger.Power = 3
+Bot1.Battlefield.Optimistic Scavenger.Toughness = 3
