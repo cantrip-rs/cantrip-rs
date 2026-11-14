@@ -1,0 +1,60 @@
+# Unflinching Courage ({1}{G}{W}): "Enchanted creature gets +2/+2 and has trample and lifelink." Bot1's Grizzly Bears (2/2) is
+# enchanted: a 4/4 with trample and lifelink. It attacks and Bot2's Grizzly Bears blocks: 2 to the blocker, the other 2 trample
+# over to Bot2 (20 to 18), and all 4 damage is lifelinked: Bot1 20 to 24.
+# A refusal first: the Aura cannot enchant Mox Pearl (not a creature).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Grizzly Bears
+Unflinching Courage
+Forest x10
+
+[Bot2 Deck]
+Mox Pearl
+Grizzly Bears
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Unflinching Courage.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Unflinching Courage.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 4
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Grizzly Bears > Grizzly Bears)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 24
+Bot2.Life = 18
+Bot2.Graveyard = Grizzly Bears
+Bot1.Battlefield.Grizzly Bears.Power = 4
+Bot1.Battlefield.Grizzly Bears.Toughness = 4
+Bot1.Battlefield.Grizzly Bears.Damage = 2
+Bot1.Battlefield.Grizzly Bears.Keywords = Lifelink; Trample

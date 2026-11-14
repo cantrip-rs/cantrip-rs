@@ -1,0 +1,6 @@
+{
+  "name": "Unflinching Courage",
+  "manaCost": "{1}{G}{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +2/+2 and has trample and lifelink. (Damage dealt by the creature also causes its controller to gain that much life.)"
+}

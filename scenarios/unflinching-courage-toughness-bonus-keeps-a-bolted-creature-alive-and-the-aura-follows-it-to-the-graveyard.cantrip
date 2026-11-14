@@ -1,0 +1,55 @@
+# Unflinching Courage: "Enchanted creature gets +2/+2" raises toughness too (CR 613.4c), so Bot1's enchanted Grizzly Bears (a
+# 4/4) survives Bot2's Lightning Bolt with 3 damage marked. Bot2's Shock then makes 5, the Bears die (CR 704.5g), and the Aura,
+# attached to nothing, is put into its owner's graveyard as a state-based action (CR 704.5m, 303.4c).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Grizzly Bears
+Unflinching Courage
+Forest x10
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Shock
+Mountain x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Unflinching Courage.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Toughness = 4
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Grizzly Bears.Damage = 3
+? Bot1.Battlefield.Grizzly Bears.Toughness = 4
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Unflinching Courage; Grizzly Bears
+Bot1.Battlefield = Mox Emerald; Mox Pearl; Mox Jet
+Bot2.Graveyard = Shock; Lightning Bolt
