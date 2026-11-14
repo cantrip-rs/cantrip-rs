@@ -1,0 +1,56 @@
+# Carnelian Orb of Dragonkind's "Dragon" is a word of its text (CR 612.2), read as its mana is added. Artificial Evolution
+# replaces it with Goblin: the Orb's {R} then gives haste to Mons's Goblin Raiders, a Goblin creature spell it pays for, which
+# attacks the turn it was cast (20 to 19); on turn 3 the Orb's mana pays a Firespitter Whelp, a Dragon, which gains no haste.
+
+[Bot1 Deck]
+Mountain
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Carnelian Orb of Dragonkind
+Artificial Evolution
+Mons's Goblin Raiders
+Firespitter Whelp
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Carnelian Orb of Dragonkind.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Artificial Evolution.Cast(Bot1.Battlefield.Carnelian Orb of Dragonkind)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Dragon)
+Bot1.Modes(Goblin)
+Bot1.Battlefield.Carnelian Orb of Dragonkind.Activate
+? Bot1.Mana = {R} (GoblinCreatureSpellsGainHaste)
+Bot1.Hand.Mons's Goblin Raiders.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mons's Goblin Raiders.Keywords = Haste
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Mons's Goblin Raiders > Bot2)
+[T1 Bot1.Main2]
+? Bot2.Life = 19
+[T3 Bot1.Main1]
+Bot1.Battlefield.Carnelian Orb of Dragonkind.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Firespitter Whelp.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firespitter Whelp.Keywords = Flying
+? Bot1.Battlefield.Mons's Goblin Raiders.Keywords = (absent)
+
+[Expect]
+Bot2.Life = 19

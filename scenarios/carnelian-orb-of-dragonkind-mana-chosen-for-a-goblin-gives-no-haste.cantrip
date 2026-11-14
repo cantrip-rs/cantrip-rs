@@ -1,0 +1,46 @@
+# Carnelian Orb of Dragonkind's mana, chosen by name from a pool that also holds plain red (`Spend:`), gives haste only to a
+# Dragon creature spell it pays for (CR 106.6, 601.2h). Bot1 floats the Orb's {R} beside a Mox Ruby's and spends the Orb's on
+# Mons's Goblin Raiders (a Goblin): no haste, so it can't attack (Bot2 stays at 20). On turn 3 the Orb's {R}, chosen beside two
+# plain red, pays a Firespitter Whelp (a Dragon), which gains haste and attacks (20 to 18).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Carnelian Orb of Dragonkind
+Mons's Goblin Raiders
+Firespitter Whelp
+Mountain x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Carnelian Orb of Dragonkind.Cast
+Bot1.Battlefield.Carnelian Orb of Dragonkind.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana = {R} {R} (DragonCreatureSpellsGainHaste)
+Bot1.Hand.Mons's Goblin Raiders.Cast(Spend: R DragonCreatureSpellsGainHaste)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}
+? Bot1.Battlefield.Mons's Goblin Raiders.Keywords = (absent)
+[T1 Bot1.Main2]
+? Bot2.Life = 20
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Carnelian Orb of Dragonkind.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Firespitter Whelp.Cast(Spend: R DragonCreatureSpellsGainHaste)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firespitter Whelp.Keywords = Flying; Haste
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Firespitter Whelp > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18

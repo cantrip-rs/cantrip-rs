@@ -1,0 +1,44 @@
+# Carnelian Orb of Dragonkind's mana gives haste only to a Dragon creature spell it pays for (CR 106.6), also when the pool
+# holds snow mana, which is paid by its qualities (CR 107.4h). On turn 1 the Orb's {R} beside a Snow-Covered Island's {U} pays
+# Mons's Goblin Raiders, the only mana that can; on turn 3 it is chosen by name (`Spend:`) beside a Snow-Covered Mountain's {R}
+# for a second Raiders. Neither Goblin gains haste, so neither can attack the turn it is cast and Bot2 stays at 20.
+
+[Bot1 Deck]
+Snow-Covered Island
+Black Lotus
+Carnelian Orb of Dragonkind
+Mons's Goblin Raiders x2
+Snow-Covered Mountain
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Snow-Covered Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Carnelian Orb of Dragonkind.Cast
+Bot1.Battlefield.Carnelian Orb of Dragonkind.Activate
+Bot1.Battlefield.Snow-Covered Island.Activate
+Bot1.Hand.Mons's Goblin Raiders.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mons's Goblin Raiders.Keywords = (absent)
+? Bot1.Mana = {U}
+[T1 Bot1.Main2]
+? Bot2.Life = 20
+[T3 Bot1.Main1]
+Bot1.Hand.Snow-Covered Mountain.Play
+Bot1.Battlefield.Carnelian Orb of Dragonkind.Activate
+Bot1.Battlefield.Snow-Covered Mountain.Activate
+Bot1.Hand.Mons's Goblin Raiders.Cast(Spend: R DragonCreatureSpellsGainHaste)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mons's Goblin Raiders#2.Keywords = (absent)
+? Bot1.Mana = {R}
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Count = 5

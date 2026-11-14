@@ -1,0 +1,45 @@
+# Carnelian Orb of Dragonkind's "If that mana is spent on a Dragon creature spell, it gains haste until end of turn" is an
+# effect of the mana (CR 106.6), not a triggered ability: it has no "when", "whenever" or "at" (CR 603.1). Nothing goes on the
+# stack beside the Firespitter Whelp, so Bot2's Stifle ("counter target activated or triggered ability") has nothing to
+# target and is never offered, and the Whelp has haste and attacks the turn it was cast (20 to 18).
+
+[Bot1 Deck]
+Mox Ruby x2
+Black Lotus
+Carnelian Orb of Dragonkind
+Firespitter Whelp
+Mountain x15
+
+[Bot2 Deck]
+Island
+Stifle
+Island x18
+
+[Actions]
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Carnelian Orb of Dragonkind.Cast
+Bot1.Battlefield.Carnelian Orb of Dragonkind.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Firespitter Whelp.Cast
+? Stack.Count = 1
+Bot1.Pass
+! Bot2.Hand.Stifle.Cast
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Firespitter Whelp.Keywords = Flying; Haste
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Firespitter Whelp > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Hand.Count = 7

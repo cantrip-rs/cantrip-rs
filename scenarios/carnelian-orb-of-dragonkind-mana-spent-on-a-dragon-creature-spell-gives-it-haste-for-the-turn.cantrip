@@ -1,0 +1,39 @@
+# Carnelian Orb of Dragonkind: "{T}: Add {R}. If that mana is spent on a Dragon creature spell, it gains haste until end of turn"
+# (CR 106.6): an effect of the mana itself, no triggered ability (CR 603.1), so only the Whelp goes on the stack. Bot1 casts the Orb with a Black Lotus, then pays a Firespitter Whelp ({2}{R}) with the Orb's mana and two Mox
+# Rubies, which is enough though only one of the three is the Orb's (the ruling: any part of the cost). The Whelp attacks on the
+# turn it was cast (20 to 18, its haste) and has no haste on turn 3.
+
+[Bot1 Deck]
+Black Lotus
+Carnelian Orb of Dragonkind
+Mox Ruby x2
+Firespitter Whelp
+Mountain x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Carnelian Orb of Dragonkind.Cast
+Bot1.Battlefield.Carnelian Orb of Dragonkind.Activate
+? Bot1.Mana = {R} (DragonCreatureSpellsGainHaste)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Firespitter Whelp.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firespitter Whelp.Keywords = Flying; Haste
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Firespitter Whelp > Bot2)
+[T1 Bot1.Main2]
+? Bot2.Life = 18
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Firespitter Whelp.Keywords = Flying
+
+[Expect]
+Bot2.Life = 18
