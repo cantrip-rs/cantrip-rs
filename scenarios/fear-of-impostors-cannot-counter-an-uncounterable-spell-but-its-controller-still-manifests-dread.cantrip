@@ -1,0 +1,49 @@
+# Ruling 2024-09-20: "A spell that can't be countered is a legal target for Fear of Impostors's last ability. The spell won't be countered
+# when the ability resolves, but its controller will still manifest dread." Bot2 casts Abrupt Decay ("This spell can't be countered") at
+# Bot1's Memnite on turn 2, and Bot1 flashes the Impostors in (CR 702.8a) with Black Lotus. The enters trigger targets the Decay: it stays on
+# the stack (CR 701.6), Bot2 still manifests dread (Lightning Bolt face down, Mountain to the graveyard, CR 701.62a), and then the Decay
+# resolves and destroys the Memnite.
+
+[Bot1 Deck]
+Black Lotus
+Memnite
+Fear of Impostors
+Island x17
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Abrupt Decay
+Island x4
+Island
+Lightning Bolt
+Mountain
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Abrupt Decay.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Fear of Impostors.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Arrange(Lightning Bolt | Mountain)
+? Stack.Count = 1
+? Bot2.Battlefield..FaceDown = true
+? Bot2.Battlefield..FaceDownName = Lightning Bolt
+? Bot2.Graveyard = Mountain
+[Expect]
+Bot1.Graveyard = Memnite; Black Lotus
+Bot2.Graveyard = Abrupt Decay; Mountain
+Bot2.Battlefield.Count = 3
+Bot2.Library.Count = 10

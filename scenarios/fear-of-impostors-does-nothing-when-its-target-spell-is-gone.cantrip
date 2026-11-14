@@ -1,0 +1,45 @@
+# The target must still be a legal target as the ability resolves (CR 608.2b): Bot2 casts Lightning Bolt, Bot1 flashes the Impostors in, and in response to the
+# enters trigger Bot2 counters its own Bolt with Counterspell. The ability's one target is gone, so it does nothing: no counter and no manifest dread for
+# anyone (the Bot2 library keeps every card beyond its draws), only the two spells in Bot2's graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Fear of Impostors
+Island x18
+
+[Bot2 Deck]
+Mox Ruby
+Mox Sapphire
+Lightning Bolt
+Counterspell
+Island x3
+Island
+Mountain
+Island x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Fear of Impostors.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Counterspell.Cast(Lightning Bolt)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Graveyard = Counterspell; Lightning Bolt
+Bot2.Library.Count = 13
+Bot1.Life = 20
+Bot2.Battlefield.Count = 3
