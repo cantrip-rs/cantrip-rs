@@ -1,0 +1,60 @@
+# Goblin Firebomb: "Flash" and "{7}, {T}, Sacrifice this artifact: Destroy target permanent." Bot1 casts it on Bot2's turn 2
+# (upkeep, an artifact without flash could not be). On turn 3 Mox Jet, Ruby and Pearl and Black Lotus are only six mana, so the
+# ability is refused (`Mana: short`); Mox Sapphire makes the seventh and the ability is paid with all seven mana
+# (Lotus sacrificed for its three). It targets Bot2's Island rather than Bot2's Mox Ruby (both are legal targets), destroying
+# the Island only; the Firebomb is sacrificed.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Goblin Firebomb
+Black Lotus
+Mox Sapphire
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Island
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Goblin Firebomb.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Goblin Firebomb.Activate(Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Goblin Firebomb.Activate(Bot2.Battlefield.Island)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Mox Ruby
+Bot2.Graveyard = Island
+Bot1.Graveyard = Goblin Firebomb; Black Lotus
