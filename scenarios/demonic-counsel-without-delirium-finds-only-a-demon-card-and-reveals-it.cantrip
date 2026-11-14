@@ -1,0 +1,45 @@
+# Demonic Counsel with three card types in the graveyard (artifact Black Lotus and Memnite, instant Entomb, creature Grizzly
+# Bears: delirium is off): search for a Demon card, reveal it, put it into the hand, then shuffle. Hill Giant isn't a Demon,
+# and Bot2's Demonic Hordes in their own library can't be found.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Entomb
+Entomb
+Demonic Counsel
+Swamp
+Swamp
+Grizzly Bears
+Memnite
+Demonic Hordes
+Hill Giant
+Swamp x10
+
+[Bot2 Deck]
+Island x7
+Demonic Hordes
+Island x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb#1.Cast
+Bot1.Search(Grizzly Bears)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Demonic Counsel.Cast
+? Bot1.Graveyard = Entomb; Memnite; Entomb; Grizzly Bears; Black Lotus
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Hill Giant)
+Bot1.Search(Demonic Hordes)
+
+[Expect]
+Bot1.Hand.Demonic Hordes.Power = 5
+Bot1.Revealed = Demonic Hordes
+Bot1.Shuffles = 3
+Bot2.Library.Demonic Hordes.Power = 5
+Bot2.Shuffles = 0

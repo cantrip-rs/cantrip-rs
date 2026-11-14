@@ -1,0 +1,43 @@
+# Demonic Counsel with exactly four card types among cards in the graveyard (artifact Black Lotus, instant Entomb, creature
+# Grizzly Bears, land Swamp): "instead" search for any card - Memnite, not a Demon, can be taken, it isn't revealed, and the
+# Demon-card search does not also happen.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Entomb
+Entomb
+Demonic Counsel
+Swamp
+Swamp
+Grizzly Bears
+Memnite
+Demonic Hordes
+Swamp x11
+
+[Bot2 Deck]
+Island x7
+Demonic Hordes
+Island x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb#1.Cast
+Bot1.Search(Grizzly Bears)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Swamp)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Demonic Counsel.Cast
+? Bot1.Graveyard = Entomb; Swamp; Entomb; Grizzly Bears; Black Lotus
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Memnite)
+
+[Expect]
+Bot1.Hand.Memnite.Power = 1
+Bot1.Revealed = (absent)
+Bot1.Shuffles = 3
+Bot2.Library.Demonic Hordes.Power = 5
+Bot2.Shuffles = 0

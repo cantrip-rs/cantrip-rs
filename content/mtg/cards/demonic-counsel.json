@@ -1,0 +1,6 @@
+{
+  "name": "Demonic Counsel",
+  "manaCost": "{1}{B}",
+  "type": "Sorcery",
+  "oracleText": "Search your library for a Demon card, reveal it, put it into your hand, then shuffle.\nDelirium — If there are four or more card types among cards in your graveyard, instead search your library for any card, put it into your hand, then shuffle."
+}
