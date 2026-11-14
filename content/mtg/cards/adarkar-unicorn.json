@@ -1,0 +1,8 @@
+{
+  "name": "Adarkar Unicorn",
+  "manaCost": "{1}{W}{W}",
+  "type": "Creature — Unicorn",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{T}: Add {U} or {C}{U}. Spend this mana only to pay cumulative upkeep costs."
+}

@@ -1,0 +1,50 @@
+# Browser
+# The Unicorn makes either restricted bundle; Volunteer Reserves spends it on cumulative upkeep (CR 106.6, 702.24a).
+[Bot1 Deck]
+Adarkar Unicorn
+Volunteer Reserves
+Black Lotus x2
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Adarkar Unicorn.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Volunteer Reserves.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Client.Bot1.Battlefield.Adarkar Unicorn.Actions = {T}: Add {U} or {U}{C} (only for cumulative upkeep costs)...
+Bot1.Battlefield.Adarkar Unicorn.Activate
+? Client.Bot1.Prompt.Modes = Add {U}; Add {C}{U}
+Bot1.Modes(Add {U})
+? Bot1.Battlefield.Adarkar Unicorn.Tapped = true
+? Bot1.Mana = {U} (CumulativeUpkeep)
+? Client.Bot1.Mana = 1 Blue (cumulative upkeep)
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Adarkar Unicorn.Activate
+? Client.Bot1.Prompt.Modes = Add {U}; Add {C}{U}
+Bot1.Modes(Add {C}{U})
+? Bot1.Battlefield.Adarkar Unicorn.Tapped = true
+? Bot1.Mana = {U} (CumulativeUpkeep) {C} (CumulativeUpkeep)
+? Client.Bot1.Mana = 1 Blue (cumulative upkeep); 1 Colorless (cumulative upkeep)
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Volunteer Reserves.Counters.Age = 2

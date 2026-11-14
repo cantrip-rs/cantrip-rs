@@ -1,0 +1,22 @@
+# Cancelling Adarkar Unicorn's mana choice takes the activation back (CR 602.2, 723.1).
+[Bot1 Deck]
+Adarkar Unicorn
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Adarkar Unicorn.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Adarkar Unicorn.Activate
+Bot1.Cancel
+
+[Expect]
+Bot1.Battlefield.Adarkar Unicorn.Tapped = false
+Bot1.Mana =
