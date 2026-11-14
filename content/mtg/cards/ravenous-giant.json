@@ -1,0 +1,8 @@
+{
+  "name": "Ravenous Giant",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Giant",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "At the beginning of your upkeep, this creature deals 1 damage to you."
+}

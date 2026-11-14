@@ -1,0 +1,31 @@
+# Ravenous Giant deals exactly 1 damage to its controller at the beginning of their upkeep, and nothing at the opponent's upkeep (CR 503.1a, 120.3).
+
+[Bot1 Deck]
+Ravenous Giant
+Black Lotus
+Mountain x21
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Ravenous Giant.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Life = 20
+? Bot2.Life = 20
+[T3 Bot1.Main1]
+? Bot1.Life = 19
+? Bot2.Life = 20
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 20
