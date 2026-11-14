@@ -1,0 +1,41 @@
+# "You may sacrifice" (CR 701.21a): Bot1 declines, nothing is sacrificed, and no reflexive trigger is created (CR 603.12), so no
+# target is asked for and nothing is damaged.
+
+[Bot1 Deck]
+Boilerbilges Ripper
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Fastbond
+Mox Emerald
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Fastbond.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Boilerbilges Ripper.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Choose()
+? Stack.Count = 0
+
+[Expect]
+Bot2.Life = 20
+Bot1.Life = 20
+Bot1.Battlefield.Fastbond.Tapped = false
+Bot1.Battlefield.Boilerbilges Ripper.Damage = 0
