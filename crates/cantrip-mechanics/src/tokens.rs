@@ -1591,3 +1591,13 @@ pub fn create_a_zombie(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
     create(g, item.controller, &ZOMBIE, 1)?;
     Ok(())
 }
+
+/// The 1/1 white Glimmer enchantment creature token (CR 111). Glimmer Seeker and Grand Entryway create this exact token; the
+/// card file lists it in its `EXTRA`.
+pub static GLIMMER: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::White)),
+    types: TypeSet::of(&[CardType::Enchantment, CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Glimmer)
+};
