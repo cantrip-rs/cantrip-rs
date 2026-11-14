@@ -1526,6 +1526,16 @@ pub fn damage_first_target<const N: u32>(g: &mut dyn Game, item: &StackItem) -> 
     Ok(())
 }
 
+/// "It deals damage equal to its power to target [creature]" (CR 120.3, 608.2h): the ability's source dealing damage equal to its power
+/// as the layers make it as the ability resolves, or as it last was on the battlefield when it was sacrificed as a cost (CR 113.7a);
+/// nothing for a power of zero or less (CR 120.8) or a target that is no longer legal (CR 608.2b). Which targets are allowed is the
+/// card's own. Voldaren Thrillseeker and Heartfire Immolator print it.
+pub fn this_deals_damage_equal_to_its_power_to_first_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let power = g.chars(item.object).power.unwrap_or(0).max(0) as u32;
+    crate::damage_target(g, item, 0, power);
+    Ok(())
+}
+
 /// "It deals damage equal to the number of creatures you control to target [creature]" (CR 120.3, 608.2h): the creatures counted as
 /// the ability resolves, so a creature sacrificed for its cost is not in the count (ruling 2025-04-04). Which targets
 /// are allowed is the card's own. Stadium Headliner and Team Avatar print it.
