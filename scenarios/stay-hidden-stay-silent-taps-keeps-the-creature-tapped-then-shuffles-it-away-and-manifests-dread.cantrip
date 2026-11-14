@@ -1,0 +1,67 @@
+# Stay Hidden, Stay Silent on Bot2's Ornithopter: "When this Aura enters, tap enchanted creature" taps it on turn 3, and "Enchanted
+# creature doesn't untap during its controller's untap step" (CR 502.3) keeps it tapped through Bot2's turn-4 untap step. On turn 5,
+# with a spell on the stack the {4}{U}{U} ability is refused ("Activate only as a sorcery", CR 602.5d), and with the stack empty it
+# resolves: the Ornithopter is shuffled into Bot2's library (Bot2's library is shuffled once, one card bigger) and Bot1 manifests
+# dread - of Llanowar Elves and Lightning Bolt the Elves goes face down as a 2/2 and the Bolt to the graveyard. The Aura, its
+# creature gone, goes to the graveyard (CR 704.5m).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Black Lotus
+Stay Hidden, Stay Silent
+Island
+Island
+Mox Pearl
+Island
+Island
+Llanowar Elves
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Ornithopter x4
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stay Hidden, Stay Silent.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mox Pearl.Cast
+! Bot1.Battlefield.Stay Hidden, Stay Silent.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Stay Hidden, Stay Silent.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Llanowar Elves | Lightning Bolt)
+
+[Expect]
+Bot2.Battlefield.Count = 0
+Bot2.Shuffles = 1
+Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield..FaceDownName = Llanowar Elves
+Bot1.Battlefield..Power = 2
+Bot1.Graveyard.Count = 3
