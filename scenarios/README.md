@@ -297,6 +297,7 @@ default declines, so a scenario that does not care about such a card need say no
 | `Bot1.Colors(Red; Green)` | colors chosen as a spell or ability resolves (CR 202.2b), by name and in the order asked for; a color repeats where the ability allows it, as Coalition Relic's one mana per charge counter does (default: the first on offer) |
 | `Bot1.Number(7)` | a number chosen between the least and the most offered, both included (CR 107.1, 614.12a: Nyota Uhura's "choose a number between 0 and 10"); `! Bot1.Number(7)` checks that 7 is refused by the current number question, which still needs an answer; `! Bot1.Number`, bare, says the player is not asked a number (default: the least) |
 | `Bot1.Replace(Archon of Emeria)` | which of two applicable replacement effects applies first (CR 616.1), by its source card's name or part of its hint (default: the first offered) |
+| `Bot1.Replace(2)` | when ordering simultaneous events with replacement choices, select the second offered event (one-based) |
 | `Bot1.ChoosePlayer(Bot2)` | a player chosen without targeting (CR 608.2d, 614.12a), as True-Name Nemesis asks as it enters (default: the first in turn order) |
 
 A preparation card's spell (CR 722.3c) is named in a line by its own name, `Bot1.Exile.All Aboard.Cast(...)`, though no deck can hold it; it exists only as the copy in exile.
