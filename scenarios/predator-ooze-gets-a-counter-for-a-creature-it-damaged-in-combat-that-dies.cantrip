@@ -1,0 +1,42 @@
+# Predator Ooze: "Whenever a creature dealt damage by this creature this turn dies, put a +1/+1 counter on this creature" (CR 603.2,
+# 120.3). Attacking on turn 3 it gets its counter and is a 2/2; Bot2's Grizzly Bears block it, take 2 damage and die, so it gets a
+# second counter (3/3). The Bears' 2 damage is lethal to a 2/2 but not to an indestructible creature (CR 702.12b), which survives.
+
+[Bot1 Deck]
+Black Lotus
+Predator Ooze
+Forest x20
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Predator Ooze.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Predator Ooze > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Block(Grizzly Bears > Predator Ooze)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears
+Bot1.Battlefield.Predator Ooze.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Predator Ooze.Power = 3
+Bot1.Battlefield.Predator Ooze.Damage = 2
+Bot2.Life = 20

@@ -1,0 +1,47 @@
+# Predator Ooze: any damage the Ooze dealt counts, one point included (CR 603.2, 120.3). The Ooze blocks Bot2's attacking Grizzly Bears on
+# turn 4 as a 1/1 (the counter is for attacking, not blocking), dealing 1 and taking 2 (indestructible); Bot1 then Shocks the damaged
+# Bears (Mox Ruby) and they die, so the Ooze gets its counter (2/2).
+
+[Bot1 Deck]
+Black Lotus
+Predator Ooze
+Mox Ruby
+Shock
+Forest x20
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Predator Ooze.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.BeginCombat]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Block(Predator Ooze > Grizzly Bears)
+[T4 Bot2.Main2]
+? Bot2.Battlefield.Grizzly Bears.Damage = 1
+? Bot1.Battlefield.Predator Ooze.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears
+Bot1.Battlefield.Predator Ooze.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Predator Ooze.Power = 2

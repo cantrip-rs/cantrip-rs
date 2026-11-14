@@ -1,0 +1,11 @@
+{
+  "name": "Predator Ooze",
+  "manaCost": "{G}{G}{G}",
+  "type": "Creature — Ooze",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Indestructible (Damage and effects that say \"destroy\" don't destroy this creature.)\nWhenever this creature attacks, put a +1/+1 counter on it.\nWhenever a creature dealt damage by this creature this turn dies, put a +1/+1 counter on this creature.",
+  "keywords": [
+    "Indestructible"
+  ]
+}

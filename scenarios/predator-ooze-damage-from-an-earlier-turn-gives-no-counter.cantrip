@@ -1,0 +1,49 @@
+# Predator Ooze: "dealt damage by this creature this turn" (CR 603.2). On turn 3 Hill Giant blocks the Ooze and takes 2, which wears off at
+# end of turn (CR 514.2). On turn 4 Bot1 Lightning Bolts the Giant (Mox Ruby): it dies, but it was not dealt damage by the Ooze this turn,
+# so the Ooze stays at the one counter from attacking.
+
+[Bot1 Deck]
+Black Lotus
+Predator Ooze
+Mox Ruby
+Lightning Bolt
+Forest x20
+
+[Bot2 Deck]
+Black Lotus
+Mountain
+Hill Giant
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Predator Ooze.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Predator Ooze > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Block(Hill Giant > Predator Ooze)
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Hill Giant.Damage = 2
+[T4 Bot2.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Hill Giant; Black Lotus
+Bot1.Battlefield.Predator Ooze.Counters.PlusOnePlusOne = 1

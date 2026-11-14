@@ -1,0 +1,42 @@
+# Predator Ooze: the second trigger needs the damaged creature to die (CR 603.2). On turn 3 Bot1's Ooze (a 2/2 with its attack counter)
+# attacks and Hill Giant (3/3, paid with Black Lotus and Mountain) blocks it: the Giant takes 2 damage and lives, the indestructible Ooze
+# survives 3, and it has only the one counter from attacking.
+
+[Bot1 Deck]
+Black Lotus
+Predator Ooze
+Forest x20
+
+[Bot2 Deck]
+Black Lotus
+Mountain
+Hill Giant
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Predator Ooze.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Predator Ooze > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Block(Hill Giant > Predator Ooze)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Black Lotus
+Bot2.Battlefield.Hill Giant.Damage = 2
+Bot1.Battlefield.Predator Ooze.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Predator Ooze.Damage = 3

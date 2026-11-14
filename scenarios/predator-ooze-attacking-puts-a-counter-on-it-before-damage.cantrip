@@ -1,0 +1,32 @@
+# Predator Ooze, {G}{G}{G} 1/1 indestructible: "Whenever this creature attacks, put a +1/+1 counter on it" (CR 508.2a, 603.2, 122.1).
+# Cast on turn 1 off Black Lotus it is a 1/1 with no counters; attacking on turn 3 into an empty board, the trigger resolves before
+# damage, so it is a 2/2 and Bot2 goes from 20 to 18.
+
+[Bot1 Deck]
+Black Lotus
+Predator Ooze
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Predator Ooze.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Predator Ooze.Power = 1
+? Bot1.Battlefield.Predator Ooze.Counters.PlusOnePlusOne = (absent)
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Predator Ooze > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Predator Ooze.Counters.PlusOnePlusOne = 1
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Predator Ooze.Power = 2
+Bot1.Battlefield.Predator Ooze.Toughness = 2
+Bot2.Life = 18
+Bot1.Battlefield.Predator Ooze.Keywords = Indestructible

@@ -1,0 +1,46 @@
+# Predator Ooze: "Whenever a creature dealt damage by this creature this turn dies, put a +1/+1 counter on this creature" (CR 603.2,
+# 603.3, 510.1). Attacking on turn 3 it gets its counter and is a 2/2; Bot2's two Llanowar Elves block it together, and it deals 1 to
+# each (the engine's division, lethal to each in turn). Both die at once, so the ability triggers once for each - two more counters, a
+# 4/4. The Elves' 2 damage does not destroy the indestructible Ooze (CR 702.12b).
+
+[Bot1 Deck]
+Black Lotus
+Predator Ooze
+Forest x20
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Llanowar Elves
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Predator Ooze.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves#1.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Predator Ooze > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Block(Llanowar Elves#1 > Predator Ooze; Llanowar Elves#2 > Predator Ooze)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Llanowar Elves; Llanowar Elves
+Bot1.Battlefield.Predator Ooze.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Predator Ooze.Power = 4
+Bot2.Life = 20

@@ -1,0 +1,50 @@
+# Predator Ooze: "dealt damage by this creature this turn dies" is not only combat deaths (CR 603.2). Hill Giant blocks the attacking Ooze
+# and takes 2; after combat Bot1 Shocks the Giant (Mox Ruby), 2 more damage kills it, and the Ooze gets a second counter (3/3).
+
+[Bot1 Deck]
+Black Lotus
+Predator Ooze
+Mox Ruby
+Shock
+Forest x20
+
+[Bot2 Deck]
+Black Lotus
+Mountain
+Hill Giant
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Predator Ooze.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Predator Ooze > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Block(Hill Giant > Predator Ooze)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Predator Ooze.Counters.PlusOnePlusOne = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Hill Giant; Black Lotus
+Bot1.Battlefield.Predator Ooze.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Predator Ooze.Power = 3
