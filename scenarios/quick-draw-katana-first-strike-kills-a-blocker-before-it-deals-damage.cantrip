@@ -1,0 +1,44 @@
+# The equipped Memnite (3/1 first strike during its controller's turn) is blocked by Bot2's own Memnite (1/1). It deals its 3
+# damage in the first-strike step, so the blocker dies before dealing regular damage and Bot1's Memnite survives, no damage to Bot2.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Memnite
+Quick-Draw Katana
+Mountain x14
+
+[Bot2 Deck]
+Island
+Memnite
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Quick-Draw Katana.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Quick-Draw Katana.Activate(Ability: Equip; Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Memnite > Bot1.Battlefield.Memnite)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Memnite
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Memnite.Power = 3

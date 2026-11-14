@@ -1,0 +1,53 @@
+# Quick-Draw Katana {2}, Equip {2}: "During your turn, equipped creature gets +2/+0 and has first strike." With only the
+# Mountain untapped after casting it, equip is refused (one mana short). On turn 3 two Moxen pay it: the equipped Memnite is
+# 3/1 with first strike in its controller's turn (and hits Bot2 for 3), the unequipped Ornithopter stays 0/2, and in Bot2's
+# turn 4 the Memnite is 1/1 with no keyword again.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Memnite
+Ornithopter
+Quick-Draw Katana
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Quick-Draw Katana.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Quick-Draw Katana.Activate(Ability: Equip; Memnite; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Quick-Draw Katana.Activate(Ability: Equip; Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Memnite.Keywords = FirstStrike
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Quick-Draw Katana.AttachedTo = Memnite
+Bot1.Battlefield.Memnite.Power = 1
