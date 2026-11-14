@@ -1,0 +1,52 @@
+# Grand Entryway // Elegant Rotunda: Bot1 casts Elegant Rotunda (right door) on turn 3 and chooses only one target, Bot2's
+# Phyrexian Walker ("up to two"): it gets one counter and nothing else does. On turn 5 Bot1 unlocks Grand Entryway (left door),
+# which makes the Glimmer.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Memnite
+Grand Entryway // Elegant Rotunda
+Island x16
+
+[Bot2 Deck]
+Phyrexian Walker
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grand Entryway // Elegant Rotunda.Cast(Ability: Elegant Rotunda)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Elegant Rotunda.Doors = Elegant Rotunda
+? Bot2.Battlefield.Phyrexian Walker.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Elegant Rotunda.Activate(Ability: left door)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Grand Entryway // Elegant Rotunda.Doors = Grand Entryway; Elegant Rotunda
+Bot1.Battlefield.Glimmer Token.Power = 1
+Bot2.Battlefield.Phyrexian Walker.Counters.PlusOnePlusOne = 1
