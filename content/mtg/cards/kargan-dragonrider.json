@@ -1,0 +1,8 @@
+{
+  "name": "Kargan Dragonrider",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Human Warrior",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "As long as you control a Dragon, this creature has flying."
+}
