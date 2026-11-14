@@ -124,3 +124,72 @@ fn a_repeated_cost_may_be_paid_as_many_times_as_the_caster_can_pay() {
     assert_eq!(g.state.player(YOU).life, life + 40);
     assert_eq!(g.state.player(YOU).pool.get(Mana::C), 0);
 }
+
+/// CR 702.56a: past 255 - three hundred {C} pay the {1} three hundred times, each counted.
+#[test]
+fn repeated_cost_can_be_paid_300_times() {
+    let (mut g, spell) = game(300);
+    let life = g.state.player(YOU).life;
+    let mosts = cast(&mut g, spell, &[300, 0]);
+    assert!(mosts.iter().all(|&most| most >= 300));
+    assert_eq!(g.state.player(YOU).life, life + 300);
+    assert_eq!(g.state.player(YOU).pool.get(Mana::C), 0);
+}
+
+/// A sorcery for {0} with multikicker {1} (CR 702.33c).
+static MULTIKICKED: CardDef = CardDef {
+    name: "Multikicked Test Spell",
+    types: TypeSet::of(&[CardType::Sorcery]),
+    has_cost: true,
+    kicker: multikicker(mana("{1}")),
+    ..CardDef::BLANK
+};
+
+/// A multikicker's count is the spell's `kicked`, which holds 255 (RX-5): it is announced up to 255 times however much
+/// mana there is, never a 256th time that `kicked` would wrap to none, and 255 kicks are all counted.
+#[test]
+fn a_multikicker_is_announced_no_more_times_than_its_count_holds() {
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &MULTIKICKED])));
+    let deck = || vec![table.id_of(&FILLER); 20];
+    let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
+    while !g.state.agenda.is_empty() {
+        g.state.frame_remove(0);
+    }
+    g.state.update_turn(|t| {
+        t.active = YOU;
+        t.priority = YOU;
+        t.set_step(Step::PrecombatMain);
+    });
+    g.state.frame_push(Frame::new(FrameKind::Priority));
+    let spell = g.state.push_obj(Obj::new(table.id_of(&MULTIKICKED), YOU, Zone::hand(YOU)));
+    g.state.zone_push(Zone::hand(YOU), spell);
+    g.state.add_mana(YOU, Mana::C, 300, ObjectId::NONE, None, ManaLasts::Step, false);
+    let r = next(&mut g);
+    let RequestKind::Priority { options } = &r.kind else { panic!("priority first, got {:?}", r.kind) };
+    let o = options.iter().find(|o| o.kind == ActionKind::CastSpell && o.source == Some(spell)).expect("the cast is offered");
+    g.answer(r.id, r.player, Answer::Act(Action::of(o))).expect("the cast");
+    let r = next(&mut g);
+    let RequestKind::PayCosts { announcing: true, most, .. } = r.kind else { panic!("the kicks are announced, got {:?}", r.kind) };
+    assert_eq!(most, 255, "300 mana could pay more, but the count holds 255");
+    assert!(g.answer(r.id, r.player, Answer::Announce(256)).is_err(), "a 256th kick is not offered");
+    g.answer(r.id, r.player, Answer::Announce(255)).expect("255 kicks");
+    loop {
+        let r = next(&mut g);
+        match &r.kind {
+            RequestKind::ChooseCostPayment { choices, .. } => {
+                let chosen = choices.iter().position(|c| c.kind == CostPaymentKind::Mana).unwrap_or(0);
+                g.answer(r.id, r.player, Answer::CostPayment(chosen)).expect("a legal cost order");
+            }
+            RequestKind::PayCosts { options, .. } => {
+                let o = options.iter().find(|o| o.kind == ActionKind::AssignMana)
+                    .or_else(|| options.iter().find(|o| o.kind == ActionKind::ConfirmCasting))
+                    .expect("the payment goes on");
+                g.answer(r.id, r.player, Answer::Act(Action::of(o))).expect("a legal payment");
+            }
+            RequestKind::Priority { .. } => break,
+            other => panic!("unexpected {other:?}"),
+        }
+    }
+    assert_eq!(g.state.stack.last().expect("the spell is cast").kicked, 255);
+    assert_eq!(g.state.player(YOU).pool.get(Mana::C), 45);
+}

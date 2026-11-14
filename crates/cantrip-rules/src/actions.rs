@@ -10476,6 +10476,9 @@ fn cast(
             };
             most_x(def.kicker.map_or(base, |k| add_cost(base, ManaCost { x: 0, ..k.cost })), per)
         };
+        // A multikicker's count is the spell's `kicked`, which holds 255 (RX-5): it is announced no more times than that. A
+        // cost paid any number of times otherwise keeps its own count (`announce_repeated`).
+        let cap = if def.kicker.is_some_and(|k| k.multi && k.cost.x == 0) { cap.min(u32::from(u8::MAX)) } else { cap };
         // An X that can't be 0 starts at 1 (CR 107.3a). A kicker with {X} announces 0 as not kicking it, so a kicked one
         // has X 1 or more as it is.
         let least = if def.kicker.is_none() && less_each == 0 { u32::from(least_x(def.x_cant_be_zero)) } else { 0 };
