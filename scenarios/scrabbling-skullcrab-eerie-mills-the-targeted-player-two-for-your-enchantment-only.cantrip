@@ -1,0 +1,76 @@
+# Scrabbling Skullcrab, "Eerie - Whenever an enchantment you control enters ..., target player mills two cards": a Mox Sapphire
+# entering after it (an artifact) triggers nothing; Bot1's Flood (an enchantment) targets Bot2, who mills exactly two; a second Flood
+# targets Bot1 itself, who mills exactly two (any player is a legal target); Bot2's own Flood on its turn is not an enchantment
+# Bot1 controls, so nothing more is milled. Library counts are checked after each step.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Scrabbling Skullcrab
+Flood
+Flood
+Island
+Island x16
+
+[Bot2 Deck]
+Mox Sapphire
+Flood
+Island
+Island
+Island
+Island
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Scrabbling Skullcrab.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Library.Count = 14
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot2.Library.Count = 14
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flood.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Library.Count = 12
+? Bot1.Library.Count = 16
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flood.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 14
+? Bot2.Library.Count = 12
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Flood.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Library.Count = 14
+Bot2.Library.Count = 11
+Bot1.Graveyard.Count = 2
+Bot2.Graveyard.Count = 2
