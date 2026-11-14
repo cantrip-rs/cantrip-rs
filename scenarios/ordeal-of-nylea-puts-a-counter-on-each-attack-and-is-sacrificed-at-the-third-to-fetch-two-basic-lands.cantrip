@@ -1,0 +1,54 @@
+# Ordeal of Nylea: "Whenever enchanted creature attacks, put a +1/+1 counter on it. Then if it has three or more +1/+1 counters on it, sacrifice this Aura. When you sacrifice this Aura,
+# search ..." (CR 508.1m, 122.1, 701.21a, 603.10a). Bot1's Elvish Mystic attacks three times: the first two attacks leave the Aura on it with one and two counters; at the third it has three
+# counters, the Aura is sacrificed, and Bot1 searches for two basic lands, which arrive tapped (a creature card and a third land are not allowed).
+
+[Bot1 Deck]
+Black Lotus
+Elvish Mystic
+Ordeal of Nylea
+Elvish Mystic x4
+Elvish Mystic x3
+Forest
+Mountain
+Plains
+Elvish Mystic x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ordeal of Nylea.Cast(Bot1.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Elvish Mystic > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Mystic.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Count = 2
+[T5 Bot1.Main1]
+Bot1.Attack(Elvish Mystic > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Mystic.Counters.PlusOnePlusOne = 2
+? Bot1.Graveyard.Count = 1
+[T7 Bot1.Main1]
+Bot1.Attack(Elvish Mystic > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Elvish Mystic)
+! Bot1.Search(Forest; Mountain; Plains)
+Bot1.Search(Forest; Mountain)
+? Bot1.Battlefield.Forest.Tapped = true
+? Bot1.Battlefield.Mountain.Tapped = true
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Elvish Mystic; Forest; Mountain
+Bot1.Battlefield.Elvish Mystic.Counters.PlusOnePlusOne = 3
+Bot1.Graveyard = Ordeal of Nylea; Black Lotus

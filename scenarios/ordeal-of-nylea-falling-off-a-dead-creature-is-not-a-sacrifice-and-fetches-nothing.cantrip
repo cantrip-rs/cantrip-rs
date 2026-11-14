@@ -1,0 +1,38 @@
+# Ordeal of Nylea, "when you sacrifice this Aura" (CR 701.21a): an Aura put into its owner's graveyard because the enchanted creature died was not sacrificed, so nothing is
+# searched for. Bot2 kills Bot1's enchanted Elvish Mystic with Lightning Bolt; the Aura goes to the graveyard and the library keeps its basic lands.
+
+[Bot1 Deck]
+Black Lotus
+Elvish Mystic
+Ordeal of Nylea
+Elvish Mystic x4
+Forest
+Mountain
+Elvish Mystic x9
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ordeal of Nylea.Cast(Bot1.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Elvish Mystic)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 0
+Bot1.Graveyard = Ordeal of Nylea; Elvish Mystic; Black Lotus
+Bot1.Library.Count = 11

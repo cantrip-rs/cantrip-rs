@@ -1,0 +1,42 @@
+# Ordeal of Nylea enchants "creature", not "creature you control" (CR 303.4), and only the enchanted creature counts: Bot1 puts it on one of Bot2's two Ornithopters. When both attack,
+# the Aura's controller, Bot1, has the trigger for the enchanted one only and puts a +1/+1 counter on it; with one counter the Aura is not sacrificed, and Bot1 searches for nothing.
+
+[Bot1 Deck]
+Black Lotus
+Ordeal of Nylea
+Elvish Mystic x5
+Forest
+Mountain
+Elvish Mystic x8
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x20
+
+[Actions]
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Ordeal of Nylea.Cast(Bot2.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Ornithopter#1 > Bot1; Ornithopter#2 > Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter#1.Counters.PlusOnePlusOne = 1
+? Bot2.Battlefield.Ornithopter#2.Counters.PlusOnePlusOne = (absent)
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Ordeal of Nylea
+Bot1.Library.Count = 9
