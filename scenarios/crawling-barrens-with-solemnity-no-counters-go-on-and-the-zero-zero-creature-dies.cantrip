@@ -1,0 +1,43 @@
+# Crawling Barrens with Bot2's Solemnity out ("Counters can't be put on artifacts, creatures, enchantments, or lands"): the
+# ability still resolves, no counters are put on it and Bot1 accepts the second sentence, so it becomes a 0/0 Elemental creature and
+# is put into the graveyard as a state-based action (CR 704.5f) - the land is lost for nothing.
+
+[Bot1 Deck]
+Crawling Barrens
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Island x15
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Solemnity
+Island x17
+
+[Actions]
+Bot1.Hand.Crawling Barrens.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Solemnity.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Crawling Barrens.Activate(Ability: Put two)
+Bot1.Pass
+Bot1.Accept
+
+[Expect]
+Bot1.Graveyard = Crawling Barrens

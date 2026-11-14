@@ -1,0 +1,19 @@
+# Crawling Barrens: "{T}: Add {C}." A land that is not a creature has no summoning sickness (CR 302.6), so it taps the turn it is
+# played, for colorless mana and never for a color.
+
+[Bot1 Deck]
+Crawling Barrens
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Crawling Barrens.Play
+! Bot1.Battlefield.Crawling Barrens.Activate(Color: Red)
+Bot1.Battlefield.Crawling Barrens.Activate
+? Bot1.Mana = {C}
+
+[Expect]
+Bot1.Battlefield.Crawling Barrens.Tapped = true
+Bot1.Battlefield.Crawling Barrens.Types = Land
