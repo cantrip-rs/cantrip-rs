@@ -1,0 +1,8 @@
+{
+  "name": "Splitskin Doll",
+  "manaCost": "{1}{W}",
+  "type": "Artifact Creature — Toy",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "When this creature enters, draw a card. Then discard a card unless you control another creature with power 2 or less."
+}

@@ -1,0 +1,40 @@
+# Splitskin Doll: the creature must have power 2 or less. Bot1's other creature is Hill Giant, a 3/3 (power 3 is one over), so
+# the discard is not waived: Bot1 draws Mox Emerald and discards it, leaving the lone Island in hand.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Black Lotus
+Mox Ruby
+Hill Giant
+Splitskin Doll
+Island
+Mox Emerald
+Island x20
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Splitskin Doll.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+Bot1.Choose(Mox Emerald)
+[T1 Bot1.End]
+
+[Expect]
+Bot1.Hand.Count = 1
+Bot1.Graveyard.Count = 2
+Bot1.Graveyard.Mox Emerald.Colors.Count = 0
