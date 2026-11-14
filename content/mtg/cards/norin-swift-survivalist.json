@@ -1,0 +1,8 @@
+{
+  "name": "Norin, Swift Survivalist",
+  "manaCost": "{R}",
+  "type": "Legendary Creature — Human Coward",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Norin can't block.\nWhenever a creature you control becomes blocked, you may exile it. You may play that card from exile this turn."
+}
