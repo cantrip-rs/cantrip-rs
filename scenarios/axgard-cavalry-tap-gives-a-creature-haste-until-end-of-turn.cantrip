@@ -1,0 +1,51 @@
+# Axgard Cavalry, a 2/2: "{T}: Target creature gains haste until end of turn." Turn 1: summoning sick, it can't pay its own {T}. Turn 3: the
+# freshly cast Memnite (no haste of its own) is given haste and attacks for 1 (20 -> 19). Turn 5: a Memnite cast now is
+# sick again, as the haste ended with turn 3.
+
+[Bot1 Deck]
+Mox Ruby x2
+Axgard Cavalry
+Memnite
+Memnite
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Axgard Cavalry.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Axgard Cavalry.Activate(Bot1.Battlefield.Axgard Cavalry)
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Battlefield.Axgard Cavalry.Activate(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Haste
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+[T5 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite#2.Keywords = (absent)
+? Bot1.Battlefield.Memnite#1.Keywords = (absent)
+! Bot1.Attack(Memnite#2 > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Memnite#1.Tapped = false

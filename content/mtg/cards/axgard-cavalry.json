@@ -1,0 +1,8 @@
+{
+  "name": "Axgard Cavalry",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Dwarf Berserker",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{T}: Target creature gains haste until end of turn. (It can attack and {T} this turn.)"
+}
