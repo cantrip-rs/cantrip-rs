@@ -57,6 +57,13 @@ pub fn creatures_you_control_of_chosen_type(q: &dyn LayerQuery, source: ObjectId
         && s.obj(affected).controller == s.obj(source).controller
 }
 
+/// "Each other creature you control of the chosen type" (CR 205.3m): `creatures_you_control_of_chosen_type` without the permanent
+/// itself, which is left out though it is the chosen type whenever it is a creature. Lifecraft Engine and Adaptive Automaton use it
+/// as `StaticDef::affects`.
+pub fn other_creatures_you_control_of_chosen_type(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
+    affected != source && creatures_you_control_of_chosen_type(q, source, affected, so_far)
+}
+
 /// "... [is/are] the chosen type in addition to [its/their] other types" (CR 205.1b, 613.1d): the `modify` of a type-changing
 /// static ability that adds the creature type chosen as the permanent entered and keeps the others. No type chosen (it
 /// entered with its abilities lost, CR 614.12): nothing is added. Arcane Adaptation, Roaming Throne and Lifecraft Engine
