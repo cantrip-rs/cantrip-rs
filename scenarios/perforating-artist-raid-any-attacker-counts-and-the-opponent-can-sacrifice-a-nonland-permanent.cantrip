@@ -1,0 +1,49 @@
+# Perforating Artist: "Raid" asks whether you attacked, not whether the Artist did. Bot1 attacks with only an Ornithopter on turn 3
+# (0 damage), the Artist stays home, and at the end step Bot2, who controls an Island and an Ornithopter, chooses to sacrifice
+# a nonland permanent: it sacrifices the Ornithopter, the only one it has, and loses no life.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Perforating Artist
+Ornithopter
+Swamp x15
+
+[Bot2 Deck]
+Island
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Perforating Artist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot2.Modes(Sacrifice a nonland permanent)
+[T4 Bot2.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield = Island

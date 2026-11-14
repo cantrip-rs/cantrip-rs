@@ -1,0 +1,43 @@
+# Perforating Artist: Bot2 controls an Island and nothing else, so a nonland permanent can't be sacrificed - the Island is not
+# among them - and the sacrifice choice is refused. It chooses to discard a card instead and loses no life: the Artist's 3 combat
+# damage is all it took (17).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Perforating Artist
+Ornithopter
+Swamp x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Perforating Artist.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Perforating Artist > Bot2)
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot2.Modes(Sacrifice a nonland permanent)
+Bot2.Modes(Discard a card)
+Bot2.Choose(Island)
+[T4 Bot2.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 17
+Bot2.Hand.Count = 7
+Bot2.Battlefield = Island

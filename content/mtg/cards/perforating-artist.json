@@ -1,0 +1,11 @@
+{
+  "name": "Perforating Artist",
+  "manaCost": "{1}{B}{R}",
+  "type": "Creature — Devil",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Deathtouch (Any amount of damage this deals to a creature is enough to destroy it.)\nRaid — At the beginning of your end step, if you attacked this turn, each opponent loses 3 life unless that player sacrifices a nonland permanent of their choice or discards a card.",
+  "keywords": [
+    "Deathtouch"
+  ]
+}
