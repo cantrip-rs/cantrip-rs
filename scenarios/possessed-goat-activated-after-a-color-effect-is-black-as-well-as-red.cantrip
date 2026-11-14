@@ -1,0 +1,50 @@
+# Layer 5 follows timestamps: Bot2's Dwarven Song makes Possessed Goat red until end of turn in turn 2, and only afterwards Bot1
+# activates it (its Moxen and Plains untouched since turn 1): "in addition to its other colors" the later effect adds black to
+# red, so it is red and black. The next turn it is white and black.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Possessed Goat
+Plains
+Lightning Bolt
+Mountain
+Plains
+Plains x12
+
+[Bot2 Deck]
+Mountain
+Dwarven Song
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Possessed Goat.Cast
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Dwarven Song.Cast
+Bot2.Target(Bot1.Battlefield.Possessed Goat)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Possessed Goat.Colors = Red
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Possessed Goat.Activate
+Bot1.Choose(Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Possessed Goat.Colors = Black; Red
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Possessed Goat.Colors = Black; White
+Bot1.Battlefield.Possessed Goat.Power = 4

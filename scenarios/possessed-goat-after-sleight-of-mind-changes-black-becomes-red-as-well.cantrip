@@ -1,0 +1,46 @@
+# Possessed Goat's "black" is a color word of its text (CR 612.1, 612.2): Bot1 changes it with Sleight of Mind to "red", then
+# activates it. The Goat "becomes a red Demon in addition to its other colors and types", so it is white and red, not black.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Possessed Goat
+Plains
+Lightning Bolt
+Sleight of Mind
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Possessed Goat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Sleight of Mind.Cast(Bot1.Battlefield.Possessed Goat)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Black)
+Bot1.Colors(Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Possessed Goat.Activate
+Bot1.Choose(Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Possessed Goat.Colors = Red; White
+Bot1.Battlefield.Possessed Goat.Subtypes = Demon; Goat
+Bot1.Battlefield.Possessed Goat.Power = 4

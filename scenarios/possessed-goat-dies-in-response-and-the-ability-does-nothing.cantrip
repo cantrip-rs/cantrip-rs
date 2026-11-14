@@ -1,0 +1,49 @@
+# The ability resolves only as far as it can: if Possessed Goat is destroyed in response, there is nothing to put counters on and
+# nothing to become a black Demon (CR 400.7). The cost (three mana and the discard) is already paid and the Goat is
+# dead. Bot2 bolts it in response to the activation in turn 3.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Possessed Goat
+Plains
+Lightning Bolt
+Mountain
+Plains
+Plains
+Plains x11
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Possessed Goat.Cast
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Possessed Goat.Activate
+Bot1.Choose(Lightning Bolt)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Possessed Goat)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Possessed Goat = (absent)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Battlefield.Possessed Goat = (absent)
+Bot1.Graveyard = Possessed Goat; Lightning Bolt
+Bot1.Battlefield.Count = 4

@@ -1,0 +1,8 @@
+{
+  "name": "Possessed Goat",
+  "manaCost": "{W}",
+  "type": "Creature — Goat",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{3}, Discard a card: Put three +1/+1 counters on this creature and it becomes a black Demon in addition to its other colors and types. Activate only once."
+}
