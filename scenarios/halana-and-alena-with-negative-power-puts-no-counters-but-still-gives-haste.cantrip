@@ -1,0 +1,53 @@
+# Halana and Alena, Partners: with two Weaknesses on her she is -2/1, and the ability puts no counters (a negative X is not
+# a removal of counters, CR 107.1b) but the creature still gains haste (CR 611.2a). Bot1 casts her and both Weaknesses on turn 1
+# and Grizzly Bears on turn 3: at the beginning of combat the Bears get no counters, and attack for 2 (20 to 18).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Black Lotus
+Halana and Alena, Partners
+Weakness
+Weakness
+Grizzly Bears
+Plains x10
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Halana and Alena, Partners.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Weakness.Cast(Bot1.Battlefield.Halana and Alena, Partners)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {B}
+Bot1.Hand.Weakness.Cast(Bot1.Battlefield.Halana and Alena, Partners)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Halana and Alena, Partners.Power = -2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = (absent)

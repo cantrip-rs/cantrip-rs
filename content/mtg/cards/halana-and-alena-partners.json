@@ -1,0 +1,12 @@
+{
+  "name": "Halana and Alena, Partners",
+  "manaCost": "{2}{R}{G}",
+  "type": "Legendary Creature — Human Ranger",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Reach (This creature can block creatures with flying.)\nFirst strike (This creature deals combat damage before creatures without first strike.)\nAt the beginning of combat on your turn, put X +1/+1 counters on another target creature you control, where X is Halana and Alena's power. That creature gains haste until end of turn.",
+  "keywords": [
+    "Reach",
+    "FirstStrike"
+  ]
+}

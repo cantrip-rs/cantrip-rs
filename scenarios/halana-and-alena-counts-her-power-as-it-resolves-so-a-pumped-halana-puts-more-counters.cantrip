@@ -1,0 +1,51 @@
+# Halana and Alena, Partners: X is Halana and Alena's power as the ability resolves. Bot1 casts her on turn 1, then on turn 3
+# casts Grizzly Bears and Giant Growth on her (5/6 until end of turn) before combat: at the beginning of combat the Bears get
+# five counters, not two, a 7/7 with haste that attacks for 7 (20 to 13). Halana herself has no counters.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Halana and Alena, Partners
+Grizzly Bears
+Giant Growth
+Forest
+Plains x10
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Halana and Alena, Partners.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Halana and Alena, Partners)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Halana and Alena, Partners.Power = 5
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 13
+
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Grizzly Bears.Power = 7
+Bot1.Battlefield.Grizzly Bears.Toughness = 7
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 5
+Bot1.Battlefield.Halana and Alena, Partners.Counters.PlusOnePlusOne = (absent)

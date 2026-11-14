@@ -1,0 +1,70 @@
+# Halana and Alena, Partners ({2}{R}{G}, 2/3 reach first strike): "At the beginning of combat on your turn, put X +1/+1 counters
+# on another target creature you control, where X is Halana and Alena's power. That creature gains haste until end of turn."
+# Bot1 casts Halana on turn 1 from four Moxen: with no other creature she has no target and nothing happens. On turn 3 it
+# casts Grizzly Bears and Memnite; at the beginning of combat the Bears are the target (Halana herself and Bot2's Ornithopter
+# are refused) and get two counters, 4/4, and haste: the just-cast Bears attack for 4 (20 to 16). Memnite got nothing. On
+# Bot2's turn 4 there is no trigger, and on turn 5 the haste is gone but the counters stay.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Halana and Alena, Partners
+Grizzly Bears
+Memnite
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Halana and Alena, Partners.Cast
+[T1 Bot1.Main2]
+? Stack.Count = 0
+? Bot1.Battlefield.Halana and Alena, Partners.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+! Bot1.Target(Bot1.Battlefield.Halana and Alena, Partners)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+[T3 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Grizzly Bears.Keywords = Haste
+Bot1.Attack(Grizzly Bears > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Grizzly Bears.Power = 4
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 4
+Bot1.Battlefield.Grizzly Bears.Toughness = 4
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Halana and Alena, Partners.Power = 2
+Bot1.Battlefield.Halana and Alena, Partners.Keywords = FirstStrike; Reach
+Bot2.Life = 16
