@@ -2062,6 +2062,13 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                     break;
                 }
                 cx.record(Event::Triggered { source: trigger.source, ability: trigger.ability });
+            } else if def.triggers_only_once {
+                // "This ability triggers only once": any earlier triggering of this object's ability ends it, however it
+                // resolved, and each of the static abilities that make it trigger again counts against the same one.
+                if crate::loops::settled_read(cx, |h| h.has_triggered(trigger.source, trigger.ability), |&triggered| triggered) {
+                    break;
+                }
+                cx.record(Event::Triggered { source: trigger.source, ability: trigger.ability });
             }
             if n == 0 && !members.is_empty() {
                 trigger.members = cx.st().members_push(&members);

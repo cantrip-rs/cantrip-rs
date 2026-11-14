@@ -606,6 +606,12 @@ impl<'a> History<'a> {
             .count()
     }
 
+    /// Whether this ability of this object has triggered at any time since the object came to exist: a new object has a
+    /// history of its own (CR 400.7), so its id has no earlier triggerings. "This ability triggers only once."
+    pub fn has_triggered(&self, source: ObjectId, ability: AbilityRef) -> bool {
+        self.records.iter().any(|r| matches!(r.event, Event::Triggered { source: s, ability: a } if s == source && a == ability))
+    }
+
     /// Whether `player` has done this turn what this ability of this object says may be done only once each turn (CR
     /// 603.2h: it "triggers only if its source's controller has not yet taken the indicated action that turn"). Asked of
     /// the source's controller now, so a player who gains control of it after another did it may still do it once.

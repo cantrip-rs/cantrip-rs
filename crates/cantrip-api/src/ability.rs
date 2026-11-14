@@ -853,6 +853,11 @@ impl AbilityDef {
         AbilityDef::Triggered(TriggeredDef { triggers_each_turn: n, ..triggered_def(self, "only a triggered ability triggers") })
     }
 
+    /// "This ability triggers only once" (`TriggeredDef::triggers_only_once`): never again for the same source object.
+    pub const fn triggers_only_once(self) -> AbilityDef {
+        AbilityDef::Triggered(TriggeredDef { triggers_only_once: true, ..triggered_def(self, "only a triggered ability triggers") })
+    }
+
     /// The objects the ability is about, fixed as it triggers from the event's subject and read back as it resolves with
     /// `Query::event_objects` (`TriggeredDef::members_of`).
     pub const fn members_of(self, f: TriggerMembers) -> AbilityDef {

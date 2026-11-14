@@ -1817,6 +1817,7 @@ impl TriggeredDef {
         sums_at_least: 0,
 
         triggers_each_turn: 0,
+        triggers_only_once: false,
         members_of: None,
         counted_by_amount: false,
         counted_by: None,
@@ -1951,6 +1952,10 @@ pub struct TriggeredDef {
     /// "This ability triggers only N times each turn" (no numbered rule; CR 603.2h is "do this only once each turn"): 0 for no limit. A triggering that would exceed it
     /// does not happen, and one that happens uses one up.
     pub triggers_each_turn: u8,
+    /// "This ability triggers only once" (no numbered rule; the rulings of Acrobatic Cheerleader): once it has triggered, it
+    /// never triggers again for as long as its source remains the same object, even if the triggered ability was countered
+    /// or what it did is gone. A new object (CR 400.7) has not triggered yet.
+    pub triggers_only_once: bool,
     /// The objects the ability is about, found as it triggers (`TriggerMembers`) and read back by the resolving ability with
     /// `Query::event_objects`, whichever way it triggered: as `once_per_batch` carries a batch's subjects, for an ability whose
     /// objects are not events' subjects. A state trigger (CR 603.8) is about no event, so its subject is `Target::None`.
