@@ -1,0 +1,30 @@
+# Returning Sindbad in response does not remove its ability from the stack (CR 113.7a).
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Sindbad
+Unsummon
+Island x4
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sindbad.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sindbad.Activate
+Bot1.Hand.Unsummon.Cast(Sindbad)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Hand = Sindbad; Island; Island; Island; Island
+Bot1.Graveyard = Lightning Bolt; Unsummon

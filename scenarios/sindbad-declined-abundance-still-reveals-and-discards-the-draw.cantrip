@@ -1,0 +1,45 @@
+# Bot1 declines Abundance for Sindbad's draw (answered mid-resolution, so the resolution is redone with the answer): the
+# draw is not replaced, so the drawn Lightning Bolt is revealed and discarded (CR 121.6c, 614.6). Bot1 also declines
+# Abundance for its turn 3 draw for the turn.
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Black Lotus
+Abundance
+Sindbad
+Island
+Island
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Abundance.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sindbad.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sindbad.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[Expect]
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Revealed = Lightning Bolt
