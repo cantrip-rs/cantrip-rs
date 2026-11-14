@@ -1,0 +1,39 @@
+# Acrobatic Cheerleader, Survival: "At the beginning of your second main phase, if this creature is tapped, put a flying counter on
+# it. This ability triggers only once." It is cast on turn 1 and attacks on turn 3, so it is tapped at the second main phase and
+# gets a flying counter. On turn 5 it attacks again and is tapped again at the second main phase: it has triggered once, so it
+# gets no second counter (the flying counter is not a +1/+1 counter, so it grows no bigger either).
+
+[Bot1 Deck]
+Plains
+Mox Jet
+Acrobatic Cheerleader
+Island x17
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Acrobatic Cheerleader.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Acrobatic Cheerleader.Counters.Flying = (absent)
+Bot1.Attack(Acrobatic Cheerleader > Bot2)
+[T3 Bot1.Main2]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Acrobatic Cheerleader.Counters.Flying = 1
+? Bot1.Battlefield.Acrobatic Cheerleader.Keywords = Flying
+[T5 Bot1.Main1]
+Bot1.Attack(Acrobatic Cheerleader > Bot2)
+[T5 Bot1.Main2]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Acrobatic Cheerleader.Counters.Flying = 1
+Bot1.Battlefield.Acrobatic Cheerleader.Tapped = true
+Stack.Count = 0
+Bot2.Life = 16

@@ -1,0 +1,45 @@
+# Acrobatic Cheerleader: "This ability triggers only once" holds for the object that triggered it. It attacks on turn 3 and gets
+# its flying counter at the second main phase; Ephemerate (exile it, return it) then makes it a new object (CR 400.7) with no
+# counter, untapped. On turn 5 the new object attacks, is tapped at the second main phase and triggers for the first time: one
+# flying counter again.
+
+[Bot1 Deck]
+Plains
+Plains
+Mox Jet
+Acrobatic Cheerleader
+Ephemerate
+Island x16
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Plains#1.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Hand.Acrobatic Cheerleader.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Acrobatic Cheerleader > Bot2)
+[T3 Bot1.Main2]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Acrobatic Cheerleader.Counters.Flying = 1
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Ephemerate.Cast(Acrobatic Cheerleader)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Acrobatic Cheerleader.Counters.Flying = (absent)
+? Bot1.Battlefield.Acrobatic Cheerleader.Tapped = false
+[T5 Bot1.Main1]
+Bot1.Attack(Acrobatic Cheerleader > Bot2)
+[T5 Bot1.Main2]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Acrobatic Cheerleader.Counters.Flying = 1
+Stack.Count = 0
+Bot2.Life = 16
