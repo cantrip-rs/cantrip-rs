@@ -14,11 +14,9 @@ fn triple(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Copy it twice. You may choose new targets for the copies" (CR 707.10, 707.10c) for a trigger about the spell that was cast:
-/// two copies, neither cast, each with its own choice of new targets.
+/// "Copy it twice. You may choose new targets for the copies" (CR 707.10, 707.10c) for a trigger about the spell that was cast.
 fn copy_the_cast_spell_twice(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    copy::copy_the_cast_spell(g, item)?;
-    copy::copy_the_cast_spell(g, item)
+    copy::copy_the_cast_spell_times(g, item, 2)
 }
 
 /// Chapter III's delayed ability (CR 603.7b, 707.10): it triggers once on the next instant or sorcery spell its controller casts

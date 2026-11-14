@@ -323,6 +323,16 @@ pub fn copy_the_cast_spell(g: &mut dyn Game, item: &StackItem) -> Result<(), Sus
     Ok(())
 }
 
+/// `copy_the_cast_spell` made `times` times, "copy it twice" or "copy it for each [...]" (CR 707.10, 707.10c): every copy is its own
+/// copy of the spell, not cast, with its own choice of new targets, and none is made when `times` is zero. Summon: G.F. Cerberus's
+/// chapter III (twice) and Thousand-Year Storm (once for each other instant and sorcery cast before it) print it.
+pub fn copy_the_cast_spell_times(g: &mut dyn Game, item: &StackItem, times: u32) -> Result<(), Suspend> {
+    for _ in 0..times {
+        copy_the_cast_spell(g, item)?;
+    }
+    Ok(())
+}
+
 /// "Copy target [...] spell [you control]. You may choose new targets for the copy" (CR 707.10, 707.10c) for a spell or ability whose
 /// target 0 is the spell: the copy is created on the stack above it and is not cast; a permanent spell's copy becomes a token as
 /// it resolves (CR 707.10a, 111.1). With the target gone it does nothing (CR 608.2b). Choreographed Sparks, Lutri, the
