@@ -1,0 +1,34 @@
+# Veteran Survivor: "exile up to one target card from a graveyard" - the target may be left unchosen (CR 601.2c), the ability then
+# exiles nothing. Survivor attacks on turn 3 and is tapped; Bot1 is asked for a target with two cards in the graveyards
+# (Faithless Looting and Island) and chooses none, so both stay and nothing is exiled with Survivor.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Veteran Survivor
+Faithless Looting
+Island x20
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Veteran Survivor.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Island; Island)
+Bot1.Attack(Veteran Survivor > Bot2)
+[T3 Bot1.Main2]
+Bot1.Target()
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Graveyard = Faithless Looting; Island; Island
+Exile.Count = 0
+Bot2.Life = 18
