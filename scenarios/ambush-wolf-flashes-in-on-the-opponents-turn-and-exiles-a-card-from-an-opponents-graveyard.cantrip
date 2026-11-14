@@ -1,0 +1,44 @@
+# Ambush Wolf has flash (CR 702.8a), so Bot1 casts it at Bot2's end step; its enters trigger exiles the Black Lotus Bot2 sacrificed from Bot2's
+# graveyard (CR 115.1, 701.13a) and the Wolf itself stays on the battlefield as a 4/2.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Ambush Wolf
+Island x16
+
+[Bot2 Deck]
+Black Lotus
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+[T2 Bot2.End]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ambush Wolf.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Graveyard.Black Lotus)
+
+[Expect]
+Stack.Count = 0
+Exile = Black Lotus
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield.Ambush Wolf.Power = 4
+Bot1.Battlefield.Ambush Wolf.Toughness = 2

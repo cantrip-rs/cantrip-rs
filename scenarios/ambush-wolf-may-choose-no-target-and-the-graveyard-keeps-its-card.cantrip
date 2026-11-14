@@ -1,0 +1,43 @@
+# The target is "up to one" (CR 601.2c): with Bot2's sacrificed Black Lotus a legal target, Bot1 chooses none, the Wolf still enters
+# and the Lotus stays in Bot2's graveyard.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Ambush Wolf
+Island x16
+
+[Bot2 Deck]
+Black Lotus
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+[T2 Bot2.End]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ambush Wolf.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot2.Graveyard = Black Lotus
+Bot1.Battlefield.Ambush Wolf.Power = 4

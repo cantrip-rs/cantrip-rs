@@ -1,0 +1,11 @@
+{
+  "name": "Ambush Wolf",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Wolf",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Flash (You may cast this spell any time you could cast an instant.)\nWhen this creature enters, exile up to one target card from a graveyard.",
+  "keywords": [
+    "Flash"
+  ]
+}

@@ -1,0 +1,26 @@
+# "a graveyard" is any graveyard: Bot1's Ambush Wolf, paid for with a Black Lotus that is sacrificed into Bot1's own graveyard, exiles that Lotus
+# (CR 115.1, 701.13a) while Bot2's graveyard holds nothing.
+
+[Bot1 Deck]
+Black Lotus
+Ambush Wolf
+Island x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Ambush Wolf.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Graveyard.Black Lotus)
+
+[Expect]
+Stack.Count = 0
+Exile = Black Lotus
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Ambush Wolf.Power = 4
