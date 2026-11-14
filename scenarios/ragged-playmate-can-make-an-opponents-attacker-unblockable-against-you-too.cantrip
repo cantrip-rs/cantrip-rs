@@ -1,0 +1,57 @@
+# Ragged Playmate: "target creature" is any creature with power 2 or less, an opponent's included (CR 115.1). In turn 4 Bot2 attacks
+# Bot1 with its 2/2 Runeclaw Bear and Bot1, with Runeclaw Bear of their own untapped, gives Bot2's attacker "can't be blocked": the block
+# is refused (CR 509.1b) and Bot1 takes 2. The Playmate was cast in turn 1 and so may tap in Bot2's turn.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Ragged Playmate
+Runeclaw Bear
+Island x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Sapphire
+Runeclaw Bear
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Runeclaw Bear.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ragged Playmate.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Runeclaw Bear.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Runeclaw Bear > Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Ragged Playmate.Activate(Bot2.Battlefield.Runeclaw Bear)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Block(Runeclaw Bear > Runeclaw Bear)
+[Bot2.Main2]
+? Bot1.Life = 18
+
+[Expect]
+Bot1.Life = 18

@@ -1,0 +1,8 @@
+{
+  "name": "Ragged Playmate",
+  "manaCost": "{1}{R}",
+  "type": "Artifact Creature — Toy",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{1}, {T}: Target creature with power 2 or less can't be blocked this turn."
+}
