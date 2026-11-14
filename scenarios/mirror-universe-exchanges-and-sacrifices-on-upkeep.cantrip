@@ -1,0 +1,27 @@
+# Mirror Universe exchanges the two life totals on its controller's upkeep; sacrificing it is part of the cost (CR 701.12c).
+[Life]
+Bot1: 12
+Bot2: 5
+[Bot1 Deck]
+Black Lotus x2
+Mirror Universe
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Mirror Universe.Cast
+! Bot1.Battlefield.Mirror Universe.Activate(Bot2)
+[T3 Bot1.Upkeep]
+! Bot1.Battlefield.Mirror Universe.Activate(Bot1)
+Bot1.Battlefield.Mirror Universe.Activate(Bot2)
+? Bot1.Graveyard.Count = 3
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 5
+Bot2.Life = 12
+Bot1.Graveyard.Count = 3

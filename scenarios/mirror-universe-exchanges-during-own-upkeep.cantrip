@@ -1,0 +1,49 @@
+# Mirror Universe can be activated only in its controller's upkeep, targets an opponent, and exchanges unequal life totals after tapping and sacrificing it (CR 602.5, 701.12c).
+[Bot1 Deck]
+Mirror Universe
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Island x20
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mirror Universe.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Battlefield.Mirror Universe.Activate(Bot2)
+[T2 Bot2.Upkeep]
+Bot2.Pass
+! Bot1.Battlefield.Mirror Universe.Activate(Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+[T3 Bot1.Upkeep]
+! Bot1.Battlefield.Mirror Universe.Activate(Bot1)
+Bot1.Battlefield.Mirror Universe.Activate(Bot2)
+? Bot1.Graveyard = Mirror Universe; Black Lotus
+? LeftBattlefield = Black Lotus (tapped); Mirror Universe (tapped)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 17
