@@ -1,0 +1,35 @@
+# Hardened Escort: "another target creature you control" - with no other creature the trigger has no target and does nothing:
+# the Escort itself is neither pumped nor indestructible. Bot2's creature is no legal target either (it is not Bot1's).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Hardened Escort
+Island x16
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hardened Escort.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Hardened Escort > Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Hardened Escort.Power = 2
+Bot1.Battlefield.Hardened Escort.Keywords = (absent)
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Keywords = Flying
+Stack.Count = 0
