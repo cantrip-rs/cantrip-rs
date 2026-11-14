@@ -109,6 +109,32 @@ mod worded_label_tests {
     use super::*;
 
     #[test]
+    fn replacement_occurrences_preserve_information_and_full_width_answers() {
+        static DEF: CardDef = CardDef { name: "Occurrence observation", ..CardDef::BLANK };
+        let cards = Box::leak(Box::new(CardTable::new([&DEF])));
+        let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+        while !game.state.agenda.is_empty() { game.state.frame_remove(0); }
+        let object = game.state.push_obj(Obj::new(cards.id_of(&DEF), PlayerId(0), Zone::BATTLEFIELD));
+        game.state.zone_push(Zone::BATTLEFIELD, object);
+        let mut occurrences = vec![ReplacementOccurrence::Life { player: PlayerId(1), amount: -2, occurrence: 0 }; 300];
+        occurrences[299] = ReplacementOccurrence::Object { object, reason: ZoneReason::Destroy, component: true, occurrence: 299 };
+        let request = Request { id: 1, player: PlayerId(0), may_cancel: false, kind: RequestKind::OrderReplacementOccurrences { occurrences } };
+        let knowledge = crate::knowledge::Knowledge::of(&game, request.player);
+        let (observation, index) = crate::observe::observe_indexed(&game, &knowledge, request.player, InfoMode::Full).unwrap();
+        let answering = crate::answer::Answering::new(&game, &request, &observation, &index);
+        let AskKind::ChooseCostPayment { choices } = &answering.ask.kind else { panic!("occurrence observation") };
+        assert_eq!(choices[0].label, "Event 1: life change -2");
+        assert_eq!(choices[299].label, "Event 300: Destroy (component)");
+        assert_ne!(choices[299].objects[0], Ref::None);
+        let native = Answer::CostPayment(299);
+        let factored = answering.factored(&request, &native, None).unwrap();
+        let mut machine = factor::Machine::new(&answering.ask, &[]);
+        for token in factor::decompose(&answering.ask, &[], &factored).unwrap() { assert!(machine.choose_token(token)); }
+        assert_eq!(answering.engine(&game, &request, machine.answer().unwrap()).unwrap(), native);
+        assert!(answering.factored(&request, &Answer::CostPayment(300), None).is_none());
+    }
+
+    #[test]
     fn cost_payment_observation_and_answers_keep_large_operation_keys() {
         static DEF: CardDef = CardDef { name: "Cost payment observation", ..CardDef::BLANK };
         let cards = Box::leak(Box::new(CardTable::new([&DEF])));
@@ -359,6 +385,18 @@ pub(crate) fn ask_of(
     let mut perms = Perms::default();
     let mut source = Ref::None;
     let kind = match &request.kind {
+        RequestKind::OrderReplacementOccurrences { occurrences } => {
+            AskKind::ChooseCostPayment { choices: occurrences.iter().map(|occurrence| match *occurrence {
+                ReplacementOccurrence::Life { player, amount, occurrence } => CostPaymentObs {
+                    label: format!("Event {}: life change {amount}", occurrence + 1),
+                    objects: vec![t(Target::Player(player))], kind: CostPaymentKindObs::Choose,
+                },
+                ReplacementOccurrence::Object { object, reason, component, occurrence } => CostPaymentObs {
+                    label: format!("Event {}: {reason:?}{}", occurrence + 1, if component { " (component)" } else { "" }),
+                    objects: vec![r(object)], kind: CostPaymentKindObs::Choose,
+                },
+            }).collect() }
+        }
         RequestKind::ChooseCostPayment { source: s, choices } => {
             source = r(*s);
             AskKind::ChooseCostPayment { choices: choices.iter().map(|choice| CostPaymentObs {

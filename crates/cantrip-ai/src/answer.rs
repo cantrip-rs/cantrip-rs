@@ -183,6 +183,7 @@ impl Answering {
         Ok(match (&request.kind, answer) {
             (_, F::Cancel) => cancel(),
             (RequestKind::ChooseCostPayment { choices, .. }, F::CostPayment(index)) if *index < choices.len() => Answer::CostPayment(*index),
+            (RequestKind::OrderReplacementOccurrences { occurrences }, F::CostPayment(index)) if *index < occurrences.len() => Answer::CostPayment(*index),
             (RequestKind::Priority { .. }, F::Pass) => Answer::Pass,
             (
                 RequestKind::Priority { options }
@@ -388,6 +389,7 @@ impl Answering {
         }
         Some(match (&request.kind, answer, &self.ask.kind) {
             (RequestKind::ChooseCostPayment { choices, .. }, Answer::CostPayment(index), AskKind::ChooseCostPayment { .. }) if *index < choices.len() => F::CostPayment(*index),
+            (RequestKind::OrderReplacementOccurrences { occurrences }, Answer::CostPayment(index), AskKind::ChooseCostPayment { .. }) if *index < occurrences.len() => F::CostPayment(*index),
             (RequestKind::Priority { .. }, Answer::Pass, _) => F::Pass,
             (
                 RequestKind::Priority { options }
