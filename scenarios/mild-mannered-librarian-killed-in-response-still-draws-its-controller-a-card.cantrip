@@ -1,0 +1,48 @@
+# Mild-Mannered Librarian's ability resolving with the Librarian gone (Bot2's Lightning Bolt in response, CR 608.2b, 400.7):
+# the counters and the type change have nothing to apply to, but "you draw a card" is still done (CR 608.2c), and the
+# Librarian stays in the graveyard.
+
+[Bot1 Deck]
+Plains
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mild-Mannered Librarian
+Plains x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mild-Mannered Librarian.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mild-Mannered Librarian.Activate
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Mild-Mannered Librarian)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Mild-Mannered Librarian
+Bot1.Hand = Plains; Plains; Plains

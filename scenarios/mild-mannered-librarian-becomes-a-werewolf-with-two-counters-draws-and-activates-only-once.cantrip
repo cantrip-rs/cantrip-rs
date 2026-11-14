@@ -1,0 +1,49 @@
+# Mild-Mannered Librarian: "{3}{G}: This creature becomes a Werewolf. Put two +1/+1 counters on it and you draw a card.
+# Activate only once." (CR 602.5b). It stops being a Human (CR 205.1a), is a 3/3 with two counters, and its controller draws
+# one card; with Black Lotus's {G}{G}{G} and a Plains still untapped there is {3}{G} for a second activation, which is
+# not offered.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mild-Mannered Librarian
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mild-Mannered Librarian.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mild-Mannered Librarian.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mild-Mannered Librarian.Subtypes = Werewolf
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Plains.Activate
+! Bot1.Battlefield.Mild-Mannered Librarian.Activate
+
+[Expect]
+Bot1.Battlefield.Mild-Mannered Librarian.Power = 3
+Bot1.Battlefield.Mild-Mannered Librarian.Toughness = 3
+Bot1.Battlefield.Mild-Mannered Librarian.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Mild-Mannered Librarian.Subtypes = Werewolf
+Bot1.Hand = Plains; Plains
