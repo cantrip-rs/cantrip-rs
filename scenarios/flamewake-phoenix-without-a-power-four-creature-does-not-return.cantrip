@@ -1,0 +1,51 @@
+# Flamewake Phoenix dies to Bot2's Lightning Bolt in turn 2. In turn 3 Bot1 casts no creature with power 4 or greater (Alpine Grizzly stays in hand), so the Ferocious intervening "if" (CR 603.4) is false at the beginning of combat: nothing triggers, nothing is asked, and the Phoenix stays in the graveyard.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Emerald
+Flamewake Phoenix
+Alpine Grizzly
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Flamewake Phoenix.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Attackers]
+! Bot1.Attack()
+Bot1.Attack(Flamewake Phoenix > Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Flamewake Phoenix)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Flamewake Phoenix
+[T3 Bot1.Main1]
+[T3 Bot1.BeginCombat]
+? Stack.Count = 0
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Flamewake Phoenix
+Bot1.Battlefield.Flamewake Phoenix = (absent)
