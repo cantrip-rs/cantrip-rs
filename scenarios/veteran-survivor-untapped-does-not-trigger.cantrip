@@ -1,0 +1,34 @@
+# Veteran Survivor: the "if this creature is tapped" of Survival (CR 603.4). Survivor does not attack on turn 3, so it is untapped
+# when the second main phase begins: no target is asked (the refusal) and nothing is exiled, though a card (Faithless Looting)
+# is in Bot1's graveyard to be exiled.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Veteran Survivor
+Faithless Looting
+Island x20
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Veteran Survivor.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Island; Island)
+[T3 Bot1.Main2]
+Bot1.Pass
+! Bot1.Target
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Graveyard = Faithless Looting; Island; Island
+Exile.Count = 0
+Bot1.Battlefield.Veteran Survivor.Power = 2

@@ -1,0 +1,81 @@
+# Veteran Survivor: "Survival - At the beginning of your second main phase, if this creature is tapped, exile up to one target card
+# from a graveyard." and "As long as there are three or more cards exiled with this creature, it gets +3/+3 and has hexproof."
+# Survivor attacks on turns 3, 5 and 7 and exiles one Faithless Looting from Bot1's graveyard each time. After the first and the
+# second exile it is still a 2/1 with no hexproof (the condition false, with two); after the third it is a 5/4 with hexproof
+# (true, at three), and Bot2 can no longer target it with Lightning Bolt (the refusal). The first exiled card is taken from
+# Bot2's graveyard, to show the target may be in any graveyard. The +3/+3 is the Survivor's alone ("it gets"): Bot2's
+# Ornithopter stays a 0/2.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Veteran Survivor
+Faithless Looting
+Faithless Looting
+Faithless Looting
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Faithless Looting
+Lightning Bolt
+Ornithopter
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Veteran Survivor.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot2.Choose(Swamp; Swamp)
+[T3 Bot1.Main1]
+Bot1.Attack(Veteran Survivor > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Veteran Survivor.Tapped = true
+Bot1.Target(Bot2.Graveyard.Faithless Looting)
+[T3 Bot1.End]
+? Exile = Faithless Looting
+? Bot1.Battlefield.Veteran Survivor.Power = 2
+? Bot1.Battlefield.Veteran Survivor.Keywords = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Island; Island)
+Bot1.Attack(Veteran Survivor > Bot2)
+[T5 Bot1.Main2]
+Bot1.Target(Bot1.Graveyard.Faithless Looting)
+[T5 Bot1.End]
+? Exile.Count = 2
+? Bot1.Battlefield.Veteran Survivor.Power = 2
+? Bot1.Battlefield.Veteran Survivor.Keywords = (absent)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Island; Island)
+Bot1.Attack(Veteran Survivor > Bot2)
+[T7 Bot1.Main2]
+Bot1.Target(Bot1.Graveyard.Faithless Looting)
+[T7 Bot1.End]
+? Exile.Count = 3
+[T8 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Veteran Survivor)
+
+[Expect]
+Bot1.Battlefield.Veteran Survivor.Power = 5
+Bot1.Battlefield.Veteran Survivor.Toughness = 4
+Bot1.Battlefield.Veteran Survivor.Keywords = Hexproof
+Bot1.Graveyard = Island; Island; Island; Island
+Bot2.Life = 14
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
