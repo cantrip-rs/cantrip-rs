@@ -11,6 +11,8 @@ mod computed_x_tests;
 #[cfg(test)]
 mod ability_acquisition_identity_tests;
 #[cfg(test)]
+mod linked_created_tokens_tests;
+#[cfg(test)]
 mod delayed_capture_tests;
 #[cfg(test)]
 mod rebound_hand_tests;
@@ -409,10 +411,12 @@ pub(crate) struct StateCheck {
     /// callback scope, even if another change became pending afterward. Call
     /// bookkeeping only, not remembered game history (CR 603.8, 608.2c).
     judged: bool,
+    /// Replacement or prevention follow-up instructions have their own causal source.
+    replacement_callback: bool,
 }
 
 impl StateCheck {
-    pub(crate) const NONE: StateCheck = StateCheck { depth: 0, resolving: None, due: false, open: false, done: false, judged: false };
+    pub(crate) const NONE: StateCheck = StateCheck { depth: 0, resolving: None, due: false, open: false, done: false, judged: false, replacement_callback: false };
 }
 
 /// The most events a game records before it is a draw (`docs/rules-exceptions.md`, RX-1): a run of play that never repeats
@@ -724,7 +728,7 @@ impl Game {
                             cx.st().update_frame(at, |f| f.unjudged = false);
                         }
                         let resolving = cx.resolving().map(|item| item.object);
-                        cx.g.check = StateCheck { depth: 1, resolving, due: carried, open: false, done: carried, judged: false };
+                        cx.g.check = StateCheck { depth: 1, resolving, due: carried, open: false, done: carried, judged: false, replacement_callback: false };
                         let flow = resolve::resolve(&mut cx);
                         let check = std::mem::replace(&mut cx.g.check, StateCheck::NONE);
                         if check.due {
@@ -1164,6 +1168,10 @@ impl Game {
                 patch(*source, ability);
             }
             match &mut record.event {
+                Event::TokenCreatedByAbility { by, ability, .. } => {
+                    patch(by.object, ability);
+                    if chain.contains(&by.object) { by.text = self.cards.linked_card(ability.card); }
+                }
                 Event::AbilityActivated { source, ability, .. }
                 | Event::Resolved { source, ability }
                 | Event::Triggered { source, ability }
@@ -1649,8 +1657,8 @@ impl<'a> Cx<'a> {
 
     /// The state triggers have judged the game as it is now (`StateCheck`): every change so far is seen.
     pub(crate) fn state_judged(&mut self) {
-        let StateCheck { depth, resolving, .. } = self.g.check;
-        self.g.check = StateCheck { depth, resolving, judged: true, ..StateCheck::NONE };
+        let StateCheck { depth, resolving, replacement_callback, .. } = self.g.check;
+        self.g.check = StateCheck { depth, resolving, replacement_callback, judged: true, ..StateCheck::NONE };
     }
 
     /// Carries out `f` as one instruction (`StateCheck`): what it changes with no event is judged once it is done, and, within

@@ -2951,6 +2951,16 @@ fn create_tokens_onto(
         None if !attacking.is_empty() => enter_attacking_by_choice(cx, &attacking),
         None => {}
     }
+    // Record the resolving ability's linked identity only for actual token creations. Unlike the general event cause,
+    // this retains acquisition and the specific creating ability (CR 607.2c, 607.5).
+    if spell.is_none() && !cx.g.check.replacement_callback && cx.mana_source.is_none() && cx.g.mana_interval.is_none() {
+        if let Some(item) = cx.resolving().copied().filter(|item| item.kind != StackKind::Spell) {
+            let by = Query::linked(cx, &item);
+            for &token in &created {
+                events.push(Event::TokenCreatedByAbility { token, by, ability: item.ability });
+            }
+        }
+    }
     // What each token was as it entered (CR 603.6a, 614.12): judged once they are all there, as the permanents that enter by
     // a move are, so the history says it of tokens too.
     for &permanent in &created {

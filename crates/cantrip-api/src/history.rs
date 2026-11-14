@@ -339,6 +339,15 @@ impl<'a> History<'a> {
         self.records
     }
 
+    /// Tokens actually created by this particular ability and acquisition (CR 607.2c, 607.5), oldest first.
+    /// These are their original object identities: callers asking about permanents must also check the current battlefield.
+    pub fn tokens_created_by(&self, by: Linked, ability: AbilityRef) -> impl Iterator<Item = ObjectId> + 'a {
+        self.records.iter().filter_map(move |record| match record.event {
+            Event::TokenCreatedByAbility { token, by: made_by, ability: creator } if made_by == by && creator == ability => Some(token),
+            _ => None,
+        })
+    }
+
     /// This turn's records, oldest first: the tail of the history, found from the end.
     pub fn this_turn(&self) -> &'a [Record] {
         let start = self.records.iter().rposition(|r| r.turn != self.turn).map_or(0, |i| i + 1);

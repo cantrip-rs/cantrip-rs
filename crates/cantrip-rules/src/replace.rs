@@ -874,7 +874,7 @@ fn run_then(cx: &mut Cx, applied: &[Applied], source: ObjectId, controller: Play
 /// game, then restore the enclosing core instruction's bookkeeping.
 fn callback_instructions(cx: &mut Cx, source: ObjectId, callback: impl FnOnce(&mut Cx)) {
     let outer = cx.g.check;
-    cx.g.check = crate::StateCheck { depth: 1, resolving: Some(source), due: outer.due, open: false, done: outer.done, judged: false };
+    cx.g.check = crate::StateCheck { depth: 1, resolving: Some(source), due: outer.due, open: false, done: outer.done, judged: false, replacement_callback: true };
     let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| callback(cx)));
     let checked = std::mem::replace(&mut cx.g.check, outer);
     if let Err(panic) = result { std::panic::resume_unwind(panic); }

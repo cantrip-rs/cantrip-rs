@@ -1046,6 +1046,8 @@ pub enum VariableCost {
     /// Loamcrafter Faun's "you may discard one or more land cards" (`Game::may_pay_counted`, which says how many). The
     /// filter names a characteristic of the cards (CR 701.9c), so none of them is put into a hidden zone unrevealed.
     DiscardOneOrMore(ObjectFilter),
+    /// An optional resolving cost exiling any selected set from supplied candidates (CR 118.11, 118.12).
+    ExileAnyNumber(&'static ExileSelection),
     /// An activated ability's "Remove any number of [kind] counters from this permanent" (CR 118.3, 602.2b): how many is
     /// announced as the ability is activated, up to the counters there are, and is the ability's X (`StackItem::x`), which
     /// its effect reads as "that many" (CR 107.3). The Astonishing Ant-Man.
@@ -1060,6 +1062,16 @@ pub enum VariableCost {
     /// tapped as a tap cost of X of them (`Cost::tap_untapped`). The filter names the untapped permanents. Secluded
     /// Starforge, Glacian, Merchant's Dockhand. Not a mana ability's (Hazel of the Rootbloom's): `mana_ability` refuses it.
     TapX(ObjectFilter),
+}
+
+/// Candidate and complete-set rules for a resolving exile cost (CR 118.11, 118.12). Tetravus supplies its linked
+/// battlefield tokens; Winter, Cynical Opportunist supplies its graveyard cards and four-type set requirement. The
+/// payment procedure is the same for either; the candidate and set rules differ. `valid` must be upward-closed: if any
+/// subset can pay, the full candidate set can pay, so offerability can be checked before the choice.
+#[derive(Clone, Copy)]
+pub struct ExileSelection {
+    pub candidates: fn(&dyn Query, &Asker) -> Vec<ObjectId>,
+    pub valid: fn(&dyn Query, &Asker, &[ObjectId]) -> bool,
 }
 
 impl VariableCost {

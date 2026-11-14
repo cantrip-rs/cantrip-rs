@@ -138,6 +138,8 @@ pub enum Event {
     CombatPaymentBegan { payment: u32, payer: PlayerId },
     /// An object paid a component imposed by `source` for `attacker`'s attack.
     CombatCostObjectPaid { payment: u32, source: ObjectId, attacker: ObjectId, payer: PlayerId, object: ObjectId, receipt: u32 },
+    /// A token made by an ability, with the exact linked text and acquisition (CR 607.2c, 607.5).
+    TokenCreatedByAbility { token: ObjectId, by: Linked, ability: AbilityRef },
     /// An ability copy's serial and the serial it copied, including copies of copies.
     AbilityCopied { copy: u32, original: u32 },
     /// A spell became cast (CR 601.2i), with how many spells its caster has cast this turn, this one included. `options` has a
@@ -595,7 +597,7 @@ impl Event {
             Event::CombatPaymentBegan { .. } => false,
             Event::CombatFirstStrike { creature } => creature == object,
             Event::CombatCostObjectPaid { source, attacker, object: paid, .. } => source == object || attacker == object || paid == object,
-            Event::AbilityCopied { .. } | Event::ActivatedAs { .. } | Event::ActivationManaPaid { .. } | Event::ValueNoted { .. } => false,
+            Event::TokenCreatedByAbility { .. } | Event::AbilityCopied { .. } | Event::ActivatedAs { .. } | Event::ActivationManaPaid { .. } | Event::ValueNoted { .. } => false,
             Event::PaidAlternative { spell, .. } | Event::PaidRepeatedly { spell, .. } => spell == object,
             Event::LandPlayed { land, .. } => land == object,
             Event::Copied { copy, original, .. } => copy == object || original == object,
@@ -763,7 +765,7 @@ impl EventMask {
             Event::Looked { .. } => EventMask::LOOKED,
             Event::Countered { .. } => EventMask::COUNTERED,
             Event::AbilityActivated { .. } => EventMask::ABILITY_ACTIVATED,
-            Event::ActivatedAs { .. } | Event::ActivationManaPaid { .. } | Event::ValueNoted { .. } => EventMask(0),
+            Event::TokenCreatedByAbility { .. } | Event::ActivatedAs { .. } | Event::ActivationManaPaid { .. } | Event::ValueNoted { .. } => EventMask(0),
             // The alternative cost a cast was paid with is part of the cast's record.
             Event::Cast(_) | Event::PaidAlternative { .. } | Event::PaidRepeatedly { .. } => EventMask::CAST,
             Event::LandPlayed { .. } => EventMask::LAND_PLAYED,
