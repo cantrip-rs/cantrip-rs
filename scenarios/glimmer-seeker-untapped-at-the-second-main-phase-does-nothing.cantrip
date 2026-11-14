@@ -1,0 +1,29 @@
+# Glimmer Seeker, Survival: "if this creature is tapped": the Seeker does not attack on turn 3, so it is untapped at the second
+# main phase and the ability does not trigger - no Glimmer token and no card drawn.
+
+[Bot1 Deck]
+Plains
+Mox Jet
+Mox Ruby
+Glimmer Seeker
+Island x16
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Glimmer Seeker.Cast
+[T3 Bot1.Main2]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Glimmer Token = (absent)
+Bot1.Battlefield.Glimmer Seeker.Tapped = false
+Stack.Count = 0

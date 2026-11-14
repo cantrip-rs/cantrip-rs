@@ -1,0 +1,50 @@
+# Glimmer Seeker, Survival: "At the beginning of your second main phase, if this creature is tapped, draw a card if you control a
+# Glimmer creature. If you don't control a Glimmer creature, create a 1/1 white Glimmer enchantment creature token." The Seeker
+# (a Human Survivor, no Glimmer) is cast on turn 1 and attacks on turn 3: tapped at the second main phase, Bot1 controls no Glimmer, so
+# it makes the 1/1 Glimmer token and draws nothing. On turn 5 it attacks again: now it controls a Glimmer creature (the token), so
+# it draws a card (Lightning Bolt) and makes no second token.
+
+[Bot1 Deck]
+Plains
+Mox Jet
+Mox Ruby
+Glimmer Seeker
+Island x3
+Island
+Island
+Lightning Bolt
+Island x9
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Glimmer Seeker.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Glimmer Token = (absent)
+Bot1.Attack(Glimmer Seeker > Bot2)
+[T3 Bot1.Main2]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Glimmer Token.Power = 1
+? Bot1.Battlefield.Glimmer Token.Toughness = 1
+? Bot1.Battlefield.Glimmer Token.Colors = White
+? Bot1.Battlefield.Glimmer Token.Types = Enchantment; Creature
+? Bot1.Hand.Count = 4
+[T5 Bot1.Main1]
+Bot1.Attack(Glimmer Seeker > Bot2)
+[T5 Bot1.Main2]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Lightning Bolt.Colors = Red
+Bot1.Hand.Count = 6
+Bot1.Battlefield = Glimmer Seeker; Glimmer Token; Mox Jet; Mox Ruby; Plains
+Stack.Count = 0
