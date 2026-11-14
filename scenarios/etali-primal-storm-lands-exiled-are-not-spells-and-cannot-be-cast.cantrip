@@ -1,0 +1,32 @@
+# Etali, Primal Storm (CR 305.1, 608.2g): a land is not a spell. The top cards are a Mountain (Bot1's) and an Island (Bot2's):
+# both are exiled, nothing can be cast, and both stay in exile - Bot1 plays neither as a land either. Bot2 takes 6 (20 -> 14).
+[Bot1 Deck]
+Black Lotus x2
+Etali, Primal Storm
+Island x5
+Mountain
+Island x10
+[Bot2 Deck]
+Plains x8
+Island
+Plains x10
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Etali, Primal Storm.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Etali, Primal Storm > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 14
+
+[Expect]
+Bot2.Life = 14
+Exile = Island; Mountain

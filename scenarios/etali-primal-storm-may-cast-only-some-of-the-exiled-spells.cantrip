@@ -1,0 +1,37 @@
+# Etali, Primal Storm (CR 608.2g): "any number" includes fewer than all. Bot1 casts the Bolt from its own library for free and
+# declines the Raiders from Bot2's, which stay in exile. Bot2 takes 6 and 3 (20 -> 11).
+[Bot1 Deck]
+Black Lotus x2
+Etali, Primal Storm
+Island x5
+Lightning Bolt
+Island x10
+[Bot2 Deck]
+Plains x8
+Mons's Goblin Raiders
+Plains x10
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Etali, Primal Storm.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Etali, Primal Storm > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+Bot1.Target(Bot2)
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 11
+
+[Expect]
+Bot2.Life = 11
+Exile = Mons's Goblin Raiders
