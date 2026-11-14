@@ -1345,6 +1345,15 @@ pub fn controlled_by_that_player(q: &dyn Query, id: ObjectId) -> bool {
     matches!(q.event_subject(), Target::Player(p) if on_battlefield(q, id) && q.controller(id) == p)
 }
 
+/// "Target creature that player controls" of "Whenever ... deals damage to a player, ... target creature that player controls"
+/// (CR 115.1): a creature under the control of the trigger's subject (`controlled_by_that_player`). Fear of Burning Alive prints it.
+pub fn creature_that_player_controls(q: &dyn Query, _: &Asker, t: Target) -> bool {
+    let Target::Object(id) = t else { return false };
+    controlled_by_that_player(q, id) && q.chars(id).is(CardType::Creature)
+}
+
+pub const CREATURE_THAT_PLAYER_CONTROLS: TargetSpec = target(creature_that_player_controls);
+
 /// "Target artifact or enchantment that player controls" of "Whenever ... deal combat damage to a player, ..." (CR 603.12): an
 /// artifact or enchantment under the control of the trigger's subject (`controlled_by_that_player`). Leatherhead, Swamp
 /// Stalker and Feline Sovereign print it; a slot of up to one is `up_to_one(artifact_or_enchantment_that_player_controls)`.

@@ -2372,6 +2372,25 @@ pub fn creature_you_control_deals_combat_damage_to_player(q: &dyn Query, me: &As
     }
 }
 
+/// "Whenever a source you control deals noncombat damage to an opponent" (CR 120.2, 603.2): damage of more than zero that is not
+/// combat damage, dealt by a source whose controller is this ability's controller (CR 120.2b: an object deals it) - a spell
+/// or a permanent - to one of that player's opponents. One trigger for each source and each opponent it hurt, with the opponent
+/// the trigger's subject ("that player"); the ability is `.damage_amount()`, which carries "that amount" for the resolving
+/// ability (`StackItem::matched_damage_amount`). Fear of Burning Alive prints it. The `listens` mask is `EventMask::DAMAGE`.
+pub fn source_you_control_deals_noncombat_damage_to_an_opponent(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::Damage { target: Target::Player(p), amount, kind, controller, .. }
+            if !kind.is_combat() && *amount > 0 && *controller == me.controller && q.state().opponents(me.controller).any(|o| o == *p) =>
+        {
+            Fired::about(Target::Player(*p))
+        }
+        _ => None,
+    }
+}
+
+pub const SOURCE_YOU_CONTROL_DEALS_NONCOMBAT_DAMAGE_TO_AN_OPPONENT: Trigger =
+    when_asked(EventMask::DAMAGE, source_you_control_deals_noncombat_damage_to_an_opponent);
+
 /// `creature_you_control_deals_combat_damage_to_player` for an ability that refers to the damage ("that many", "that
 /// much"): the player is the trigger's subject and the amount of that creature's damage its `data[0]`. Starwinder and Old Gnawbone
 /// ("create that many Treasure tokens") print it.
