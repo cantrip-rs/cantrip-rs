@@ -1,0 +1,33 @@
+# "This creature becomes a copy of another target creature you control": Silent Hallcreeper (1/1) takes the counters on turn 3 (3/3), then on turn 5
+# becomes a copy of Bot1's Ornithopter, a 0/2 flying artifact creature (CR 707.2): it keeps its two +1/+1 counters (so it is 2/4), loses its Horror
+# subtype and its own abilities, and the Ornithopter is untouched. Ornithopter is its only legal target (it is "another" creature), so it is chosen without asking.
+
+[Bot1 Deck]
+Black Lotus
+Silent Hallcreeper
+Ornithopter
+Island x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Silent Hallcreeper.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Silent Hallcreeper > Bot2)
+Bot1.Modes(Put two)
+[T5 Bot1.Main1]
+Bot1.Attack(Silent Hallcreeper > Bot2)
+Bot1.Modes(This creature becomes a copy)
+
+[Expect]
+Turn = 5
+Bot2.Life = 16
+Bot1.Battlefield = Ornithopter; Ornithopter
+Bot1.Battlefield.Ornithopter#1.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Ornithopter#1.Power = 2
+Bot1.Battlefield.Ornithopter#1.Keywords = Flying
+Bot1.Battlefield.Ornithopter#1.ChosenModes = 1, 3

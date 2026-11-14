@@ -1,0 +1,31 @@
+# Silent Hallcreeper, "This creature can't be blocked. Whenever this creature deals combat damage to a player, choose one that hasn't been chosen -
+# put two +1/+1 counters on this creature": cast with Black Lotus mana, it attacks on turn 3 into Bot2's untapped Ornithopter (a 0/2 flier that
+# could otherwise block it) and is not blocked (CR 509.1b), so Bot2 takes 1 and the trigger puts two +1/+1 counters on it (CR 122.1a).
+
+[Bot1 Deck]
+Black Lotus
+Silent Hallcreeper
+Island x22
+
+[Bot2 Deck]
+Ornithopter
+Island x23
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Silent Hallcreeper.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Silent Hallcreeper > Bot2)
+! Bot2.Block(Ornithopter > Silent Hallcreeper)
+Bot1.Modes(Put two)
+
+[Expect]
+Turn = 3
+Bot2.Life = 19
+Bot2.Battlefield = Ornithopter
+Bot1.Battlefield.Silent Hallcreeper.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Silent Hallcreeper.Power = 3
+Bot1.Battlefield.Silent Hallcreeper.ChosenModes = 1

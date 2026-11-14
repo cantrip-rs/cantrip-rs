@@ -1,0 +1,33 @@
+# "Choose one that hasn't been chosen" (CR 700.2): Silent Hallcreeper alone on Bot1's side. On turn 3 its hit cannot offer "becomes a copy of
+# another target creature you control" (no other creature to target), so Bot1 draws a card. On turn 5 the draw is spent and refused; Bot1 takes
+# the counters, and the permanent has chosen modes 1 and 2 (the counters and the draw).
+
+[Bot1 Deck]
+Black Lotus
+Silent Hallcreeper
+Island x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Silent Hallcreeper.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Silent Hallcreeper > Bot2)
+! Bot1.Modes(This creature becomes a copy)
+Bot1.Modes(Draw a card)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Silent Hallcreeper.ChosenModes = 2
+? Bot1.Hand.Count = 7
+[T5 Bot1.Main1]
+Bot1.Attack(Silent Hallcreeper > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot2.Life = 18
+Bot1.Battlefield.Silent Hallcreeper.ChosenModes = 1, 2
+Bot1.Battlefield.Silent Hallcreeper.Counters.PlusOnePlusOne = 2
+Bot1.Hand.Count = 8
