@@ -1,0 +1,71 @@
+# Goblin Smuggler: "Haste" and "{T}: Another target creature with power 2 or less can't be blocked this turn." Turn 1: a Goblin Assailant
+# (power 2) and then the Smuggler are cast, and the Smuggler taps at once (haste) to target the Assailant; it can't target itself.
+# Turn 3: Hill Giant (power 3) and the Smuggler itself are refused, and the Smuggler targets the Assailant: Bot2's Memnite isn't
+# asked to block and the Assailant hits for 2. Turn 5, the target being the opponent's Memnite (accepted), the Memnite blocks the
+# Assailant again as the earlier effect lasted only for turn 3.
+
+[Bot1 Deck]
+Mox Ruby x5
+Goblin Assailant
+Goblin Smuggler
+Hill Giant
+Mountain x10
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Goblin Assailant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Battlefield.Mox Ruby#5.Activate
+Bot1.Hand.Goblin Smuggler.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Goblin Smuggler.Activate(Bot1.Battlefield.Goblin Smuggler)
+Bot1.Battlefield.Goblin Smuggler.Activate(Bot1.Battlefield.Goblin Assailant)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Smuggler.Tapped = true
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Goblin Smuggler.Activate(Bot1.Battlefield.Hill Giant)
+! Bot1.Battlefield.Goblin Smuggler.Activate(Bot1.Battlefield.Goblin Smuggler)
+Bot1.Battlefield.Goblin Smuggler.Activate(Bot1.Battlefield.Goblin Assailant)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Goblin Assailant > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+Bot1.Battlefield.Goblin Smuggler.Activate(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Goblin Assailant > Bot2)
+Bot2.Block(Memnite > Goblin Assailant)
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Goblin Assailant.Damage = 1
+
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield = 

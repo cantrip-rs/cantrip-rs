@@ -1,0 +1,11 @@
+{
+  "name": "Goblin Smuggler",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Goblin Rogue",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Haste (This creature can attack and {T} as soon as it comes under your control.)\n{T}: Another target creature with power 2 or less can't be blocked this turn.",
+  "keywords": [
+    "Haste"
+  ]
+}
