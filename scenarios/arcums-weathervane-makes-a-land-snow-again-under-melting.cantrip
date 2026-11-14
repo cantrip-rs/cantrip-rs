@@ -1,0 +1,45 @@
+# Under Melting a Snow-Covered Island is a nonsnow basic land, so Arcum's Weathervane can't take snow from it but can make it
+# snow; the Weathervane's effect, later than Melting's static ability, applies after it in layer 4 and the land is snow
+# (CR 613.1d, 613.7a).
+[Bot1 Deck]
+Snow-Covered Island
+Black Lotus
+Mox Ruby
+Melting
+Mox Pearl
+Mox Jet
+Arcum's Weathervane
+Mountain x20
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Snow-Covered Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Melting.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+? Bot1.Battlefield.Snow-Covered Island.Supertypes = Basic
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Arcum's Weathervane.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Arcum's Weathervane.Activate(Bot1.Battlefield.Snow-Covered Island; Ability: no longer snow)
+Bot1.Battlefield.Arcum's Weathervane.Activate(Bot1.Battlefield.Snow-Covered Island; Ability: becomes snow)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Snow-Covered Island.Supertypes = Basic; Snow

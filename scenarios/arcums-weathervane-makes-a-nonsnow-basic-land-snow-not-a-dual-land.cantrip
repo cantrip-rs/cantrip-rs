@@ -1,0 +1,86 @@
+# Arcum's Weathervane's second ability, paid with exactly {2} and a tap, makes a nonsnow basic land of either player snow,
+# keeping it basic (CR 205.4b, the ruling); it can't target a dual land, which has basic land types but is not basic, nor a
+# land already snow (the ruling). A land the first ability made nonsnow is a nonsnow basic land again, and the later
+# effect makes it snow: same layer, timestamp order (CR 613.1d, 613.7). The first ability takes snow from any snow land, a
+# nonbasic legendary one too, which stays legendary (CR 205.4b, the rulings).
+[Bot1 Deck]
+Island
+Mox Pearl
+Mox Ruby
+Arcum's Weathervane
+Snow-Covered Island
+Dark Depths
+Mountain
+Mountain x20
+
+[Bot2 Deck]
+Tundra
+Island
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Arcum's Weathervane.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Tundra.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Snow-Covered Island.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Arcum's Weathervane.Activate(Bot2.Battlefield.Tundra; Ability: becomes snow)
+! Bot1.Battlefield.Arcum's Weathervane.Activate(Bot1.Battlefield.Snow-Covered Island; Ability: becomes snow)
+Bot1.Battlefield.Arcum's Weathervane.Activate(Bot1.Battlefield.Island; Ability: becomes snow)
+? Bot1.Mana =
+? Bot1.Battlefield.Arcum's Weathervane.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Island.Supertypes = Basic; Snow
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Dark Depths.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Arcum's Weathervane.Activate(Bot2.Battlefield.Island; Ability: becomes snow)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Island.Supertypes = Basic; Snow
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Arcum's Weathervane.Activate(Bot1.Battlefield.Island; Ability: no longer snow)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Island.Supertypes = Basic
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Arcum's Weathervane.Activate(Bot1.Battlefield.Island; Ability: becomes snow)
+Bot1.Pass
+Bot2.Pass
+[T11 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Arcum's Weathervane.Activate(Bot1.Battlefield.Dark Depths; Ability: no longer snow)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Island.Supertypes = Basic; Snow
+Bot2.Battlefield.Island.Supertypes = Basic; Snow
+Bot2.Battlefield.Tundra.Supertypes = (absent)
+Bot1.Battlefield.Snow-Covered Island.Supertypes = Basic; Snow
+Bot1.Battlefield.Dark Depths.Supertypes = Legendary

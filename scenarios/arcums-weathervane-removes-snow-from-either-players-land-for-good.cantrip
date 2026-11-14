@@ -1,0 +1,67 @@
+# Arcum's Weathervane's first ability, paid with exactly {2} and a tap, takes snow from a snow land of either player and
+# not from a nonsnow one; the lands stay basic (CR 205.4b) and stay nonsnow after the Weathervane is destroyed, since a
+# resolved ability's effect with no stated duration lasts (CR 611.2a, 613.1d).
+[Bot1 Deck]
+Snow-Covered Island
+Mox Pearl
+Mox Ruby
+Arcum's Weathervane
+Mountain
+Mountain
+Mountain
+Mountain x20
+
+[Bot2 Deck]
+Island
+Snow-Covered Plains
+Disenchant
+Plains
+Plains
+Plains
+Plains
+Plains x20
+
+[Actions]
+Bot1.Hand.Snow-Covered Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Arcum's Weathervane.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Arcum's Weathervane.Activate(Bot2.Battlefield.Island; Ability: no longer snow)
+Bot1.Battlefield.Arcum's Weathervane.Activate(Bot1.Battlefield.Snow-Covered Island; Ability: no longer snow)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Snow-Covered Island.Supertypes = Basic
+? Bot1.Battlefield.Arcum's Weathervane.Tapped = true
+[T4 Bot2.Main1]
+Bot2.Hand.Snow-Covered Plains.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Arcum's Weathervane.Activate(Bot2.Battlefield.Snow-Covered Plains; Ability: no longer snow)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Snow-Covered Plains.Supertypes = Basic
+[T6 Bot2.Main1]
+Bot2.Battlefield.Snow-Covered Plains.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Arcum's Weathervane)
+[T6 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Arcum's Weathervane
+Bot1.Battlefield.Snow-Covered Island.Supertypes = Basic
+Bot2.Battlefield.Snow-Covered Plains.Supertypes = Basic
+Bot2.Battlefield.Island.Supertypes = Basic
