@@ -1642,6 +1642,15 @@ fn creature_card_in_your_graveyard_filter(q: &dyn Query, asker: &Asker, t: Targe
 /// "Target creature card in your graveyard". Recurring Nightmare and Metamorphosis Fanatic print it.
 pub const CREATURE_CARD_IN_YOUR_GRAVEYARD: TargetSpec = target(creature_card_in_your_graveyard_filter);
 
+fn zombie_creature_card_in_your_graveyard_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_card_in_your_graveyard_filter(q, asker, t)
+        && matches!(t, Target::Object(id) if q.chars(id).has_subtype(q.words(asker.source).subtype(Subtype::Zombie)))
+}
+
+/// "Target Zombie creature card from your graveyard" (CR 115.1, 205.3m): a creature card in your graveyard that is a Zombie, the
+/// type read through the words of the source's own text (CR 612.2). Deadly Plot and Zul Ashur, Lich Lord print it.
+pub const ZOMBIE_CREATURE_CARD_IN_YOUR_GRAVEYARD: TargetSpec = target(zombie_creature_card_in_your_graveyard_filter);
+
 /// "Target creature card from that player's graveyard": a creature card in the graveyard of the player the trigger is about (its
 /// subject: the player combat damage was dealt to). Fire Lord Sozin's targets and Shark Shredder's one.
 pub fn creature_card_in_that_players_graveyard(q: &dyn Query, _: &Asker, t: Target) -> bool {

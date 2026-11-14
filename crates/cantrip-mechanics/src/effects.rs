@@ -3131,6 +3131,16 @@ pub fn may_cast_first_target(g: &mut dyn Game, item: &StackItem, instead: Option
     Ok(())
 }
 
+/// "You may cast [the target card] this turn" (CR 601.3): the first target, a card in a graveyard, may be cast by this ability's
+/// controller until end of turn. It stays where it is, and its costs and the timing of its types are as usual. Emry, Lurker of
+/// the Loch and Zul Ashur, Lich Lord print it.
+pub fn may_cast_first_target_this_turn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(card) = crate::targets::object(g, item, 0) {
+        g.allow_play(card, item.controller, PlayGrant { expiry: Expiry::EndOfTurn, ..PlayGrant::CAST });
+    }
+    Ok(())
+}
+
 /// "[This creature] connives" (CR 701.50): the source of the ability connives, even if it has already left the battlefield. Ledger
 /// Shredder, M.O.D.O.K., Madame Masque, Norman Osborn and Red Room Recruit print it.
 pub fn this_connives(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
