@@ -1,0 +1,75 @@
+# Ragged Playmate: "{1}, {T}: Target creature with power 2 or less can't be blocked this turn." In turn 3 the targets are checked: Bot2's
+# 3/3 Hill Giant (power 3, one over the limit) is refused while Bot1's 2/2 Runeclaw Bear (exactly 2) is accepted. The {1} and the tap are
+# the whole cost (Mox Jet pays, the Playmate is tapped). Bot2's Ornithopter may not block the Bear in turn 3 (Bot2 takes 2) but may in
+# turn 5 ("this turn" has ended) and dies to the Bear.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Ragged Playmate
+Runeclaw Bear
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Hill Giant
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Runeclaw Bear.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ragged Playmate.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Ragged Playmate.Activate(Bot2.Battlefield.Hill Giant)
+Bot1.Battlefield.Ragged Playmate.Activate(Bot1.Battlefield.Runeclaw Bear)
+? Bot1.Battlefield.Ragged Playmate.Tapped = true
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Runeclaw Bear > Bot2)
+! Bot2.Block(Ornithopter > Runeclaw Bear)
+[Bot1.Main2]
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+Bot1.Attack(Runeclaw Bear > Bot2)
+Bot2.Block(Ornithopter > Runeclaw Bear)
+[Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Graveyard = Ornithopter
