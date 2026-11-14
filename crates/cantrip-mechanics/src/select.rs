@@ -297,6 +297,16 @@ pub const fn power_at_most(most: u32) -> Part {
     part(&(power_is_at_most as SelectFn), most, "with power {n} or less")
 }
 
+fn mana_value_at_least_rule(q: &dyn Query, choice: &Choice, least: u32) -> Verdict {
+    Verdict::each(choice, |card| q.mana_value(card) >= least)
+}
+
+/// "With mana value `least` or greater" (CR 202.3), each card's read where it is (an {X} in a library or graveyard is 0, CR
+/// 202.3e). Fierce Empath searches for a creature card with it.
+pub const fn mana_value_at_least(least: u32) -> Part {
+    part(&(mana_value_at_least_rule as SelectFn), least, "with mana value {n} or greater")
+}
+
 /// "With the same mana value as" a card or permanent, `exactly` (CR 202.3), each card's read where it is (an {X} in a library is
 /// 0, CR 202.3e). Drift of Phantasms's transmute and Fleshwrither's transfigure search for it.
 pub const fn mana_value_exactly(exactly: u32) -> Part {

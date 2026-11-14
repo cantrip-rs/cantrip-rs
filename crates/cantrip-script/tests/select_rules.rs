@@ -145,6 +145,13 @@ fn the_qualities_allow_only_the_cards_that_have_them() {
     let cheap = select::cards(select::up_to(1)).with(select::mana_value_at_most(2));
     let names = verdict(&game, &cheap, &[]).1;
     assert!(!names.contains(&"Probe Bear") && names.contains(&"Probe Wastes"), "{names:?}");
+    // "Mana value 3 or greater": the Bear (3) is allowed at 3 and not at 4, the land (0) at neither.
+    let three_up = select::cards(select::up_to(1)).with(select::mana_value_at_least(3));
+    let names = verdict(&game, &three_up, &[]).1;
+    assert!(names.contains(&"Probe Bear") && !names.contains(&"Probe Wastes"), "{names:?}");
+    let four_up = select::cards(select::up_to(1)).with(select::mana_value_at_least(4));
+    assert!(!verdict(&game, &four_up, &[]).1.contains(&"Probe Bear"));
+    assert_eq!(three_up.words(&|n| n.to_string()), vec!["with mana value 3 or greater".to_string()]);
     // A split card has the name of each half (CR 201.2a).
     let named = select::cards(select::up_to(1)).with(select::named(card("Probe Ice")));
     assert_eq!(verdict(&game, &named, &[]).1, vec!["Probe Fire // Probe Ice"]);

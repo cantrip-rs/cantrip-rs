@@ -1,14 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::select::Part;
 use cantrip_mechanics::{airbend_targets, choose, effects, exile_and_return_transformed, flurry, select, targets};
 use cantrip_oracle as oracle;
-
-fn mana_value_three_or_greater(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
-    Verdict::each(choice, |id| q.mana_value(id) >= 3)
-}
-
-/// "With mana value 3 or greater" (CR 202.3): each permanent's, a token's or a copy's as it is (`Query::mana_value`).
-const MANA_VALUE_THREE_OR_GREATER: Part = select::part(&(mana_value_three_or_greater as SelectFn), 0, "with mana value 3 or greater");
 
 /// "Starting with you, each player chooses up to one permanent with mana value 3 or greater from among permanents your
 /// opponents control. Exile those permanents." (CR 608.2d, 101.4, 406.1.) The players choose in turn order from the Saga's
@@ -16,11 +8,11 @@ const MANA_VALUE_THREE_OR_GREATER: Part = select::part(&(mana_value_three_or_gre
 /// the permanents chosen leave together.
 fn chapter_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let you = item.controller;
-    // "From among permanents your opponents control": what may be chosen of them is the selection's (`MANA_VALUE_THREE_OR_GREATER`).
+    // "From among permanents your opponents control": what may be chosen of them is the selection's (`select::mana_value_at_least`).
     let candidates: Vec<ObjectId> = g.state().battlefield().iter().copied().filter(|&id| g.controller(id) != you).collect();
     let choosers: Vec<PlayerId> = g.state().turn_order_from(you).collect();
     let mut chosen: Vec<ObjectId> = Vec::new();
-    let rule = select::cards(select::up_to(1)).with(MANA_VALUE_THREE_OR_GREATER);
+    let rule = select::cards(select::up_to(1)).with(select::mana_value_at_least(3));
     for player in choosers {
         // A player who could choose none of them is asked nothing.
         let choice = cantrip_api::select::Choice { chooser: player, source: item.object, candidates: &candidates, selected: &[] };
