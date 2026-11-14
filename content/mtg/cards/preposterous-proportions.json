@@ -1,0 +1,6 @@
+{
+  "name": "Preposterous Proportions",
+  "manaCost": "{5}{G}{G}",
+  "type": "Sorcery",
+  "oracleText": "Creatures you control get +10/+10 and gain vigilance until end of turn."
+}

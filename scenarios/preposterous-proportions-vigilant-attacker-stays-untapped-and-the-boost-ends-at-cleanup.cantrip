@@ -1,0 +1,56 @@
+# Preposterous Proportions (CR 702.20b, 514.2): Bot1 casts it in turn 3's first main phase, so its Memnite is 11/11 with vigilance; it attacks, does not
+# tap, and deals 11 to Bot2. At turn 3's cleanup the "until end of turn" effect ends, so on turn 4 the Memnite is 1/1 again without vigilance.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Preposterous Proportions
+Memnite
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Preposterous Proportions.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Vigilance
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Memnite.Tapped = false
+? Bot2.Life = 9
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 9
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Memnite.Keywords = (absent)

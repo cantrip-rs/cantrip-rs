@@ -1,0 +1,66 @@
+# Preposterous Proportions (7 mana, CR 611.2, 611.2c): "Creatures you control get +10/+10 and gain vigilance until end of turn" affects only the
+# creatures Bot1 controls as it resolves. Bot1's Memnite is 11/11 with vigilance, Bot2's Memnite stays 1/1 with no keyword, and a second Memnite Bot1
+# casts afterwards (turn 3, after the sorcery) stays 1/1 without vigilance.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Preposterous Proportions
+Memnite
+Memnite
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Preposterous Proportions.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 11
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Memnite#1.Power = 11
+Bot1.Battlefield.Memnite#1.Toughness = 11
+Bot1.Battlefield.Memnite#1.Keywords = Vigilance
+Bot1.Battlefield.Memnite#2.Power = 1
+Bot1.Battlefield.Memnite#2.Toughness = 1
+Bot2.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Memnite.Toughness = 1
