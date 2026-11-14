@@ -1,0 +1,45 @@
+# Killer's Mask: "When this Equipment enters, manifest dread, then attach this Equipment to that creature." Bot2 Shatters the Mask
+# with its enters trigger on the stack. The trigger still manifests dread (ruling 2024-09-20: "You'll still manifest dread even if
+# this Equipment isn't on the battlefield"; CR 113.7a): the Lightning Bolt goes face down as a 2/2 and the Guerrilla Gorilla to the
+# graveyard, and only the attach does nothing, with no Equipment to attach (CR 701.3b): the 2/2 has no menace.
+
+[Bot1 Deck]
+Black Lotus
+Killer's Mask
+Swamp x6
+Guerrilla Gorilla
+Lightning Bolt
+Swamp x10
+
+[Bot2 Deck]
+Mox Ruby
+Shatter
+Mountain x18
+
+[Actions]
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Killer's Mask.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Killer's Mask)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Killer's Mask; Black Lotus
+Bot1.Arrange(Lightning Bolt | Guerrilla Gorilla)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield..FaceDownName = Lightning Bolt
+Bot1.Battlefield..Power = 2
+Bot1.Battlefield..Keywords = (absent)
+Bot1.Graveyard = Guerrilla Gorilla; Killer's Mask; Black Lotus

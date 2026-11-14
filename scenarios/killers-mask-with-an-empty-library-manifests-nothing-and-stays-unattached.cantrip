@@ -1,0 +1,39 @@
+# Killer's Mask enters with Bot1's library empty: manifest dread looks at no cards and makes no creature (CR 701.62a), so there
+# is no "that creature" and the Equipment stays unattached (CR 701.3a). Equip {2} then attaches it to the Ornithopter, which
+# gains menace.
+
+[Bot1 Deck]
+Black Lotus
+Killer's Mask
+Ornithopter
+Mox Jet
+Mox Ruby
+Swamp
+Swamp
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Killer's Mask.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 0
+? Bot1.Battlefield = Killer's Mask; Ornithopter
+? Bot1.Battlefield.Killer's Mask.AttachedTo = (absent)
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Killer's Mask.Activate(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Killer's Mask.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Menace
+Bot1.Graveyard = Black Lotus

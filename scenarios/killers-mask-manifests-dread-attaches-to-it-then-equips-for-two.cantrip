@@ -1,0 +1,48 @@
+# Killer's Mask (3): its enters trigger manifests dread (CR 701.62a) - of Guerrilla Gorilla and Lightning Bolt the Gorilla goes face
+# down as a 2/2 and the Bolt to the graveyard - then attaches the Equipment to that creature (CR 701.3a), so the face-down
+# permanent has menace (CR 702.111). Equip {2} (CR 702.6) at sorcery speed moves it to the Ornithopter (flying and menace); the
+# pool is empty after paying exactly {2}, and with the Mask gone the face-down 2/2 has no keywords again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Killer's Mask
+Ornithopter
+Swamp x2
+Guerrilla Gorilla
+Lightning Bolt
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Killer's Mask.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Guerrilla Gorilla | Lightning Bolt)
+? Bot1.Graveyard = Lightning Bolt; Black Lotus
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Guerrilla Gorilla
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Keywords = Menace
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Killer's Mask.Activate(Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Killer's Mask.AttachedTo = Ornithopter
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Menace
+? Bot1.Battlefield..Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield.Killer's Mask.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Menace
+Bot1.Battlefield..Power = 2
