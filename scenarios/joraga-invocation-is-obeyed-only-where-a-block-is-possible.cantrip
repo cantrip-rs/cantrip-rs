@@ -1,0 +1,51 @@
+# Joraga Invocation: "must be blocked this turn if able" (CR 509.1c) asks nothing where no block is possible. Bot1 attacks with Savannah Lions
+# (5/4) and Ornithopter (3/5, flying); Bot2's only creature, Grizzly Bears, can't block a flier, so it is required to block only the Lions:
+# declaring no block is refused, blocking is accepted, and the Ornithopter is unblocked and deals 3.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Black Lotus
+Savannah Lions
+Ornithopter
+Joraga Invocation
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Joraga Invocation.Cast
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 3
+? Bot1.Battlefield.Ornithopter.Toughness = 5
+Bot1.Attack(Savannah Lions > Bot2; Ornithopter > Bot2)
+! Bot2.Block(Count: 0)
+Bot2.Block(Grizzly Bears > Savannah Lions)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot2.Graveyard = Grizzly Bears

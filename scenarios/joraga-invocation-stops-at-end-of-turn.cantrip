@@ -1,0 +1,48 @@
+# Joraga Invocation: "until end of turn" and "this turn" (CR 514.2, 611.2c). Bot1 casts it and does not attack; a turn later Savannah Lions
+# is a 2/1 again, and attacking into Bot2's Grizzly Bears, Bot2 may declare no blocks and takes 2.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Black Lotus
+Savannah Lions
+Joraga Invocation
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Joraga Invocation.Cast
+Bot2.Pass
+? Bot1.Battlefield.Savannah Lions.Power = 5
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Savannah Lions.Power = 2
+? Bot1.Battlefield.Savannah Lions.Toughness = 1
+Bot1.Attack(Savannah Lions > Bot2)
+Bot2.Block(Count: 0)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18

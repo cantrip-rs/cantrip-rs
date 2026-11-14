@@ -1,0 +1,65 @@
+# Joraga Invocation: only the creatures Bot1 controls as it resolves get +3/+3 (CR 611.2c), but "must be blocked this turn if able" is a rule
+# of the game that reaches a creature that arrives later in the turn (CR 509.1c, 611.2c). Raging Goblin (1/1, haste) is cast after Joraga
+# resolves and stays 1/1, and Savannah Lions is 5/4. Both attack; Bot2's two creatures must block one each, so declaring no blocks or two
+# blockers on the Lions is refused. The Goblin and Elite Vanguard (2/1) kill each other.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Black Lotus
+Savannah Lions
+Joraga Invocation
+Raging Goblin
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Emerald
+Mox Jet
+Elite Vanguard
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Elite Vanguard.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Joraga Invocation.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Raging Goblin.Cast
+Bot2.Pass
+? Bot1.Battlefield.Savannah Lions.Power = 5
+? Bot1.Battlefield.Raging Goblin.Power = 1
+? Bot1.Battlefield.Raging Goblin.Toughness = 1
+Bot1.Attack(Savannah Lions > Bot2; Raging Goblin > Bot2)
+! Bot2.Block(Count: 0)
+! Bot2.Block(Elite Vanguard > Savannah Lions; Grizzly Bears > Savannah Lions)
+Bot2.Block(Elite Vanguard > Raging Goblin; Grizzly Bears > Savannah Lions)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Grizzly Bears; Elite Vanguard
+Bot1.Battlefield.Savannah Lions.Damage = 2
+Bot1.Graveyard = Raging Goblin; Joraga Invocation; Black Lotus
