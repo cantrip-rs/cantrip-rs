@@ -1,0 +1,62 @@
+# "Search your library for up to two basic land cards": with a single basic land in the library only it is found (the Hart is
+# sacrificed either way, as a cost; a search for a stated quality need not find all, CR 701.23b), and with no basic land left the search finds nothing. Bot1 fetches a lone Forest on
+# turn 3, leaving the Tropical Island and Mox Pearl behind, then pays for a second Hart on turn 5 and sacrifices it on turn 7
+# into a library with no basic land, so nothing more arrives.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Burnished Hart
+Burnished Hart
+Plains
+Plains
+Tropical Island
+Forest
+Mox Pearl
+Tropical Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Burnished Hart.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Burnished Hart.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Tropical Island)
+! Bot1.Search(Mox Pearl)
+Bot1.Search(Forest)
+? Bot1.Battlefield.Forest.Tapped = true
+? Bot1.Battlefield.Count = 4
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Burnished Hart.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Burnished Hart.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Search()
+
+[Expect]
+Bot1.Graveyard = Burnished Hart; Burnished Hart
+Bot1.Battlefield = Forest; Mox Emerald; Mox Jet; Mox Ruby
