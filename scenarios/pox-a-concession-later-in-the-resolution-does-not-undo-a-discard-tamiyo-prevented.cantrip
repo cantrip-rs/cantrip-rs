@@ -1,0 +1,59 @@
+# Pox in a game of three. Bot3 controls Bot2's Tamiyo, Collector of Tales (Harmless Offering), so Bot1's Pox can't make
+# Bot3 discard (CR 101.2). Bot2 concedes later, while Bot1 chooses the land it sacrifices: Tamiyo leaves with Bot2 then
+# (CR 800.4a), after Bot3's discard was already decided, so Bot3 keeps its whole hand.
+[Bot1 Deck]
+Swamp
+Black Lotus
+Pox
+Swamp
+Island
+Island
+Island
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Tamiyo, Collector of Tales
+Harmless Offering
+Island x20
+[Bot3 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Tamiyo, Collector of Tales.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Harmless Offering.Cast
+Bot2.Target(Bot3)
+Bot2.Target(Tamiyo, Collector of Tales)
+[T3 Bot3.Main1]
+? Bot3.Battlefield.Tamiyo, Collector of Tales.Counters.Loyalty = 5
+Bot3.Hand.Island.Play
+[T4 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Pox.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Choose(Island; Island)
+Bot2.Choose(Island)
+Bot2.Concede
+Bot1.Choose(Swamp)
+[Expect]
+Bot2.Status = Lost
+Bot3.Hand.Count = 7
+Bot1.Hand.Count = 3

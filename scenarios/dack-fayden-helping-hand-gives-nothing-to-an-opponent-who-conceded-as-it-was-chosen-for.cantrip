@@ -1,0 +1,53 @@
+# Dack Fayden, Helping Hand in a game of three: two Llanowar Elves are put onto the battlefield and goaded, and Bot3
+# concedes while Bot1 chooses the opponent for the first. Bot3 has left the game (CR 800.4a), so Bot2 is the only opponent
+# to choose for it; the second Elves has no different opponent left to go to and stays with Bot1, goaded.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Dack Fayden, Helping Hand
+Island
+Island
+Forest
+Forest
+Llanowar Elves
+Island
+Llanowar Elves
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dack Fayden, Helping Hand.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot3.Concede
+Bot1.ChoosePlayer(Bot2)
+[T2 Bot2.Main1]
+
+[Expect]
+Turn = 2
+Bot1.Library.Count = 11
+Bot1.Hand = Forest; Island; Island
+Bot1.Battlefield = Dack Fayden, Helping Hand; Llanowar Elves; Mox Jet; Mox Pearl; Mox Sapphire
+Bot1.Battlefield.Llanowar Elves.GoadedBy = Bot1
+Bot3.Status = Lost
+Bot2.Battlefield = Llanowar Elves
+Bot2.Battlefield.Llanowar Elves.GoadedBy = Bot1

@@ -1,0 +1,35 @@
+# Cleansing in a three-player game: Bot1 pays for nothing, Bot2 chooses to pay for Bot3's Swamp and concedes while Bot3 is
+# asked. Bot2's Forest left the game with Bot2 (CR 800.4a) and is not among the lands Bot3 is offered (CR 400.7); Bot3
+# pays 1 life for Bot1's Plains, which stays, and the Swamp is destroyed.
+[Bot1 Deck]
+Black Lotus
+Cleansing
+Plains
+Island x20
+[Bot2 Deck]
+Forest
+Island x24
+[Bot3 Deck]
+Swamp
+Island x24
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot3.Main1]
+Bot3.Hand.Swamp.Play
+[T4 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Cleansing.Cast
+Bot1.Choose()
+Bot2.Choose(Swamp)
+Bot2.Concede
+! Bot3.Choose(Gone.Forest)
+Bot3.Choose(Plains)
+[Expect]
+Bot1.Life = 20
+Bot3.Life = 19
+Bot1.Graveyard = Cleansing; Black Lotus
+Bot1.Battlefield = Plains
+Bot3.Graveyard = Swamp

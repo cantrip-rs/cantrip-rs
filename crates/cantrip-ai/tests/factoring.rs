@@ -353,6 +353,8 @@ fn scenarios_that_once_failed_factor() {
             "we-say-thee-nay-teamwork-taps-a-summoning-sick-creature-and-another-for-total-power-two",
             // Creatures that can't attack alone (CR 508.1c): a walk declaring one alone is the validator's refusal.
             "pet-sehlat-two-attack-together",
+            // A choice asked again after a player conceded mid-resolution (CR 800.4a): their objects left the game.
+            "cleansing-a-payer-who-concedes-pays-nothing-and-the-land-they-chose-is-destroyed",
         ]
         .iter()
         .map(|n| {

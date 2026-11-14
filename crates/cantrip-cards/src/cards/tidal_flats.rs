@@ -12,12 +12,21 @@ fn attacking_creature_without_flying_controller(
     let mut unpaid = Vec::new();
     for payer in g.state().apnap().collect::<Vec<_>>() {
         let mut remaining: Vec<_> = attackers.iter().copied().filter(|&a| g.controller(a) == payer).collect();
-        while !remaining.is_empty() {
-            let attacker = if remaining.len() == 1 {
-                remaining[0]
-            } else {
-                cantrip_mechanics::choose::select(g, payer, item.object, Purpose::Choose, remaining.clone(),
-                    cantrip_mechanics::select::Selection::new(cantrip_mechanics::select::exactly(1)).called("attacking creature to pay for next"))?[0]
+        loop {
+            // A creature that left the game with a player who conceded as another was asked is no longer one to pay for
+            // (CR 800.4a, 400.7).
+            remaining.retain(|&a| is_live(g, a));
+            let attacker = match remaining.as_slice() {
+                [] => break,
+                [only] => *only,
+                _ => {
+                    let rule = cantrip_mechanics::select::Selection::new(cantrip_mechanics::select::exactly(1)).called("attacking creature to pay for next");
+                    match cantrip_mechanics::choose::select(g, payer, item.object, Purpose::Choose, remaining.clone(), rule)?.first() {
+                        Some(&attacker) => attacker,
+                        // Nothing was left to choose from: the rest left the game as the question was asked.
+                        None => break,
+                    }
+                }
             };
             remaining.retain(|&a| a != attacker);
             if !g.may_pay(payer, item.object, attacker, cost("{1}"), &PAY_QUESTION)? {

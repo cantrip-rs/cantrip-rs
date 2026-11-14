@@ -883,6 +883,126 @@ pub fn stand_in(state: &crate::GameState, kind: &RequestKind, player: PlayerId) 
     }
 }
 
+/// Whether `id` left with a player who has left the game (CR 800.4a): it is no longer the object it was - it ceased to
+/// exist, or was exiled as what they controlled (CR 400.7) - and its owner or controller has left.
+pub fn departed(state: &crate::GameState, id: ObjectId) -> bool {
+    if id == ObjectId::NONE || id.index() >= state.objects.len() {
+        return false;
+    }
+    let o = state.obj(id);
+    (o.became.is_some() || o.zone.is(ZoneKind::Gone)) && (state.player(o.owner).lost || state.player(o.controller).lost)
+}
+
+/// A question asked after a player left the game earlier in the same run (`Frame::conceded`), worked out by code that
+/// listed what it offers before they left: what it offers without the objects that left with them and the players who
+/// have left (CR 800.4a, 400.7), for none of them can be chosen, targeted or paid with. A choice of exactly N with fewer
+/// left takes as many as it can; a target slot left with fewer candidates than it needs is given up (`Answer::Cancel`)
+/// where the question may be (CR 601.2c), and otherwise takes as many as there are. A question left with nothing to
+/// choose is answered with nothing, unasked (`Err`), as is a payment for an object that left.
+pub fn without_departed(state: &crate::GameState, mut kind: RequestKind, may_cancel: bool) -> Result<RequestKind, Answer> {
+    let gone = |id: ObjectId| departed(state, id);
+    let lost = |p: PlayerId| state.player(p).lost;
+    let out = |t: &Target| match *t {
+        Target::Object(id) => gone(id),
+        Target::Player(p) => lost(p),
+        _ => false,
+    };
+    // Keeps the entries of `ids` still in the game, and the same entries of `beside`, a list kept in step with it.
+    fn keep<T>(ids: &mut Vec<ObjectId>, beside: &mut Vec<T>, gone: impl Fn(ObjectId) -> bool) {
+        let mut at = 0;
+        beside.retain(|_| {
+            at += 1;
+            ids.get(at - 1).is_none_or(|&id| !gone(id))
+        });
+        ids.retain(|&id| !gone(id));
+    }
+    let options = |o: &mut Vec<ActionOption>| o.retain(|o| !o.source.is_some_and(gone));
+    match &mut kind {
+        RequestKind::ChooseCostPayment { choices, .. } => {
+            choices.retain(|c| !c.objects.iter().any(|&id| gone(id)));
+            if choices.is_empty() {
+                return Err(if may_cancel { Answer::Cancel } else { Answer::Pass });
+            }
+        }
+        // A payment for an object that has left (Tidal Flats' "for each attacking creature") is for nothing: not made.
+        RequestKind::UnlessPays { source, subject, .. } if subject != source && gone(*subject) => return Err(Answer::Pass),
+        RequestKind::Priority { options: o } | RequestKind::PayCosts { options: o, .. } | RequestKind::UnlessPays { options: o, .. } => options(o),
+        RequestKind::ChooseCards { cards, rule, .. } | RequestKind::SearchLibrary { library: cards, rule, .. } => {
+            cards.retain(|&c| !gone(c));
+            if let Some(among) = &mut rule.among {
+                among.retain(|&c| !gone(c));
+            }
+            let eligible = rule.among.as_ref().map_or(cards.len(), Vec::len);
+            if let Count::Exactly(n) = rule.count
+                && eligible < n as usize
+            {
+                rule.count = Count::AsManyAsCan(n);
+            }
+            if cards.is_empty() {
+                return Err(Answer::Cards(Vec::new()));
+            }
+        }
+        RequestKind::ChooseTarget { candidates, least, count, .. } => {
+            candidates.retain(|t| !out(t));
+            let n = crate::count_u32(candidates.len());
+            if n < *least {
+                if may_cancel {
+                    return Err(Answer::Cancel);
+                }
+                *least = n;
+            }
+            *count = (*count).min(n);
+            if n == 0 {
+                return Err(Answer::Targets(Vec::new()));
+            }
+        }
+        RequestKind::ChooseDividedTargets { candidates, max_targets, optional, .. } => {
+            candidates.retain(|t| !out(t));
+            *max_targets = (*max_targets).min(crate::count_u32(candidates.len()));
+            if candidates.is_empty() {
+                return Err(if may_cancel && !*optional { Answer::Cancel } else { Answer::Divided(Vec::new()) });
+            }
+        }
+        RequestKind::ChoosePlayer { candidates, .. } | RequestKind::ChooseStartingPlayer { candidates } => {
+            candidates.retain(|&p| !lost(p));
+            if candidates.is_empty() {
+                return Err(Answer::Pass);
+            }
+        }
+        RequestKind::TapForPower { cards, powers, .. } => keep(cards, powers, gone),
+        RequestKind::CollectEvidence { cards, values, .. } => keep(cards, values, gone),
+        RequestKind::Craft { cards, .. } | RequestKind::DistributeCards { cards, .. } => cards.retain(|&c| !gone(c)),
+        RequestKind::RemoveCounters { pools, .. } => pools.retain(|p| !gone(p.object)),
+        RequestKind::DeclareAttackers { eligible, players, planeswalkers, battles, costs, .. } => {
+            eligible.retain(|&c| !gone(c));
+            players.retain(|&p| !lost(p));
+            planeswalkers.retain(|&c| !gone(c));
+            battles.retain(|&c| !gone(c));
+            costs.retain(|c| !gone(c.attacker) && !out(&c.target));
+        }
+        RequestKind::DeclareBlockers { eligible, attackers, allowed, .. } => {
+            eligible.retain(|&c| !gone(c));
+            attackers.retain(|&c| !gone(c));
+            allowed.retain(|&(b, a)| !gone(b) && !gone(a));
+        }
+        RequestKind::AssignCombatDamage { divisions } => {
+            for d in divisions.iter_mut() {
+                keep(&mut d.creatures, &mut d.lethal, gone);
+                if out(&d.defender) {
+                    d.may_assign_to_defender = false;
+                }
+            }
+            divisions.retain(|d| !gone(d.source) && (!d.creatures.is_empty() || d.may_assign_to_defender));
+        }
+        RequestKind::DiscardToHandSize { count, hand } => {
+            hand.retain(|&c| !gone(c));
+            *count = (*count).min(crate::count_u32(hand.len()));
+        }
+        _ => {}
+    }
+    Ok(kind)
+}
+
 /// The counters of one kind on one permanent that a `RequestKind::RemoveCounters` may take from, and how many it has.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct CounterPool {

@@ -1440,7 +1440,11 @@ impl<'a> Cx<'a> {
         // A real choice, asked or answered on a re-run, ends a run of passes (`loops`; RX-4).
         // A player who conceded at this point of the run leaves the game here, on every replay (`Game::concede`).
         let any_conceded = !self.g.state.agenda[self.frame].conceded.is_empty();
-        self.concessions_here();
+        // Only at a question that is put to a player still in the game: one to a player who had already left is answered for
+        // them or asked of another (below), and a concession comes no earlier than the question it was made at.
+        if !self.g.state.player(player).lost {
+            self.concessions_here();
+        }
         // A player who has left the game makes no choice: a cost is not paid, and anything else is chosen by another player
         // (CR 800.4f-h). Any question this asks is one of the run's, replayed as the others are.
         if self.g.state.player(player).lost {
@@ -1458,11 +1462,23 @@ impl<'a> Cx<'a> {
                 }
             };
         }
+        // After a concession here or earlier in the run, the question offers nothing that left with the player who conceded
+        // (CR 800.4a): the code asking it listed what it offers before they left. A question left with nothing to ask is answered
+        // unasked. What `as_allowed` let be asked stays allowed: a player leaving only takes away what kept a card from being
+        // discarded or sacrificed, and ends no effect that gave the player asked control (CR 800.4a).
+        let changed = any_conceded && self.g.state.agenda[self.frame].conceded.iter().any(|&(at, _)| at as usize <= self.cursor);
+        let kind = if changed {
+            match cantrip_state::without_departed(&self.g.state, kind, may_cancel) {
+                Ok(kind) => kind,
+                Err(answer) => return Ok(answer),
+            }
+        } else {
+            kind
+        };
         // The answer given here before, replayed: only ever the answer of the player asked, and after a concession earlier in the
         // run only one that still answers the question (the game may have changed under it).
         let replay = {
             let frame = &self.g.state.agenda[self.frame];
-            let changed = any_conceded && frame.conceded.iter().any(|&(at, _)| at as usize <= self.cursor);
             frame
                 .answers
                 .get(self.cursor)

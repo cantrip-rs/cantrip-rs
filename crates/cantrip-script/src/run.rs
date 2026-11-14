@@ -1821,6 +1821,12 @@ impl<'s> Run<'s> {
             holder = Some(player_of(b));
             parts.remove(0);
         }
+        // `Gone.Forest`: an object that is no longer the object it was (CR 400.7) - one that left the game with a player
+        // who left it (CR 800.4a) - for a refusal that shows it is not offered.
+        let gone = parts.len() > 1 && parts[0].eq_ignore_ascii_case("Gone");
+        if gone {
+            parts.remove(0);
+        }
         if parts.len() > 1
             && let Some(z) = parse::ZoneKind::parse(parts[0])
         {
@@ -1842,7 +1848,7 @@ impl<'s> Run<'s> {
             .iter()
             .copied()
             .filter(|&id| {
-                if !live(s, id) || !self.game.known_name(id).eq_ignore_ascii_case(&name) {
+                if live(s, id) == gone || !self.game.known_name(id).eq_ignore_ascii_case(&name) {
                     return false;
                 }
                 let kind = s.obj(id).zone.kind();

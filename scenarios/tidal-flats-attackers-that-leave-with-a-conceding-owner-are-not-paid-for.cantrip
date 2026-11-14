@@ -1,0 +1,56 @@
+# Tidal Flats in a game of three. Bot3 attacks Bot1 with two Memnites Bot2 gave it (Harmless Offering). Bot1's Tidal
+# Flats asks Bot3 which attacker it pays for first; Bot2 concedes then, and both Memnites leave the game with their owner
+# (CR 800.4a). Nothing is left to pay for: the resolution ends without a payment.
+[Bot1 Deck]
+Island
+Black Lotus
+Tidal Flats
+Island x20
+[Bot2 Deck]
+Memnite
+Memnite
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Harmless Offering
+Harmless Offering
+Island x20
+[Bot3 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Tidal Flats.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite#1.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Harmless Offering.Cast
+Bot2.Target(Bot3)
+Bot2.Target(Memnite)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Harmless Offering.Cast
+Bot2.Target(Bot3)
+Bot2.Target(Memnite)
+[T3 Bot3.DeclareAttackers]
+? Bot3.Battlefield.Count = 2
+Bot3.Attack(Memnite#1 > Bot1; Memnite#2 > Bot1)
+Bot3.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Tidal Flats.Activate
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot2.Concede
+[T3 Bot3.Main2]
+[Expect]
+Bot2.Status = Lost
+Bot3.Battlefield.Count = 0
