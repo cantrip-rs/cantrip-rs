@@ -1,0 +1,69 @@
+# Drogskol Reaver ({5}{W}{U}, 3/5 flying double strike lifelink): "Whenever you gain life, draw a card." Cast on turn nine from
+# five lands and two Moxen. On turn eleven Bot1's Healing Salve gives Bot2 3 life and draws nothing, a second gives Bot1 3
+# and draws one; then the Reaver attacks an empty board: first-strike and regular damage are two lifelink gains of 3, so two
+# more cards, and Bot2 takes 6.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Plains x3
+Island x2
+Drogskol Reaver
+Healing Salve x2
+Island x30
+
+[Bot2 Deck]
+Island x40
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Drogskol Reaver.Cast
+[T11 Bot1.Main1]
+? Bot1.Library.Count = 28
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 23
+? Bot1.Library.Count = 28
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Bot1.Library.Count = 27
+[T11 Bot1.DeclareAttackers]
+Bot1.Attack(Drogskol Reaver > Bot2)
+[T11 Bot1.Main2]
+? Bot1.Life = 29
+? Bot2.Life = 17
+
+[Expect]
+Bot1.Life = 29
+Bot2.Life = 17
+Bot1.Library.Count = 25
+Bot1.Battlefield.Drogskol Reaver.Keywords = DoubleStrike; Flying; Lifelink

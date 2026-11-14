@@ -1,0 +1,13 @@
+{
+  "name": "Drogskol Reaver",
+  "manaCost": "{5}{W}{U}",
+  "type": "Creature — Spirit",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Flying\nDouble strike (This creature deals both first-strike and regular combat damage.)\nLifelink (Damage dealt by this creature also causes you to gain that much life.)\nWhenever you gain life, draw a card.",
+  "keywords": [
+    "Flying",
+    "DoubleStrike",
+    "Lifelink"
+  ]
+}
