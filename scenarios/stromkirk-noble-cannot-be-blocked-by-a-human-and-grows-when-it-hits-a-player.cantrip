@@ -1,0 +1,39 @@
+# Stromkirk Noble can't be blocked by Humans (CR 509.1b): Bot2's Elite Vanguard, a Human Soldier, may not block it, so it deals its 1
+# combat damage to Bot2, and that damage to a player puts exactly one +1/+1 counter on it (CR 603.2, 510.1).
+
+[Bot1 Deck]
+Stromkirk Noble
+Mox Ruby
+Mountain x20
+
+[Bot2 Deck]
+Elite Vanguard
+Mox Pearl
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stromkirk Noble.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Elite Vanguard.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Stromkirk Noble > Bot2)
+! Bot2.Block(Elite Vanguard > Stromkirk Noble)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Stromkirk Noble.Power = 2
+Bot1.Battlefield.Stromkirk Noble.Toughness = 2
+Bot1.Battlefield.Stromkirk Noble.Counters.PlusOnePlusOne = 1
