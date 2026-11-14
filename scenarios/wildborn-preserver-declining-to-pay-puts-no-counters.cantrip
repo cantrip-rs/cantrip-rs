@@ -1,0 +1,35 @@
+# "You may pay {X}": Bot1 declines when Llanowar Elves enter, so nothing triggers (CR 603.12 is not met) and the Preserver stays 2/2.
+
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Forest
+Wildborn Preserver
+Llanowar Elves
+Venom Connoisseur
+Forest x10
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Wildborn Preserver.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wildborn Preserver.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T1 Bot1.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Wildborn Preserver.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Wildborn Preserver.Power = 2

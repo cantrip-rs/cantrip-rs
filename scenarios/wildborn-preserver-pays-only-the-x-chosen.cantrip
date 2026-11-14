@@ -1,0 +1,37 @@
+# The X is the amount Bot1 chooses as they pay it (CR 107.3f): paying X = 1 puts exactly one counter on the Preserver, a 3/3, though
+# two more mana are in the pool. The Preserver entering was no "another creature": it asked nothing of Bot1 as it resolved.
+
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Forest
+Wildborn Preserver
+Llanowar Elves
+Venom Connoisseur
+Forest x10
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Wildborn Preserver.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wildborn Preserver.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost(X: 1)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Wildborn Preserver.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Wildborn Preserver.Power = 3

@@ -1,0 +1,40 @@
+# Wildborn Preserver (2/2): when another non-Human creature enters under Bot1's control, Bot1 may pay {X} (CR 107.3f), and
+# when they do, X +1/+1 counters go on the Preserver (CR 603.12, 122.1). Llanowar Elves enter (an Elf Druid) and Bot1 pays
+# X = 2 from the Black Lotus mana left over: the Preserver is a 4/4 and the Elves carry no counters. It has its Flash and Reach (CR 702.8, 702.17).
+
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Forest
+Wildborn Preserver
+Llanowar Elves
+Venom Connoisseur
+Forest x10
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Wildborn Preserver.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost(X: 2)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Wildborn Preserver.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Wildborn Preserver.Power = 4
+Bot1.Battlefield.Wildborn Preserver.Toughness = 4
+Bot1.Battlefield.Wildborn Preserver.Keywords = Flash; Reach
+Bot1.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = (absent)

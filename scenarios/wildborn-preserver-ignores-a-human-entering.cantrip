@@ -1,0 +1,37 @@
+# "Another non-Human creature": Venom Connoisseur is a Human Druid, so its entering asks nothing of Bot1 and leaves the Preserver
+# alone with the Black Lotus mana unspent in the pool: no trigger goes on the stack (CR 603.2), and the {G} left over is still there.
+
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Forest
+Wildborn Preserver
+Llanowar Elves
+Venom Connoisseur
+Forest x10
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Wildborn Preserver.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wildborn Preserver.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Venom Connoisseur.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Mana = {G}
+[T1 Bot1.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Wildborn Preserver.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Venom Connoisseur.Power = 2

@@ -1,0 +1,50 @@
+# Bot1 flashes in a Wildborn Preserver and then an Ambush Viper (a Snake) on Bot2's turn 2, paying X = 1 for the Preserver's
+# trigger. With the reflexive "when you do" ability on the stack, Bot2 Lightning Bolts the Preserver. The counter would go on
+# the Preserver, but it is a new object in the graveyard now (CR 400.7), so nothing is put on it.
+
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Forest
+Wildborn Preserver
+Ambush Viper
+Forest x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Wildborn Preserver.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Ambush Viper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost(X: 1)
+? Stack = Wildborn Preserver
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Wildborn Preserver)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Wildborn Preserver; Black Lotus
+? Stack = Wildborn Preserver
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Wildborn Preserver; Black Lotus
+Bot1.Battlefield.Ambush Viper.Power = 2

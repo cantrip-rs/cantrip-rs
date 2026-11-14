@@ -1,0 +1,37 @@
+# "Another non-Human creature you control": Bot1's Wildborn Preserver is on the battlefield when Bot2 casts an Ambush Viper (a
+# Snake, not a Human) on turn 2. The Viper is Bot2's, so nothing triggers for Bot1.
+
+[Bot1 Deck]
+Mox Emerald
+Forest
+Wildborn Preserver
+Forest x10
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Ambush Viper
+Forest x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Wildborn Preserver.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Ambush Viper.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Ambush Viper.Power = 2
+Bot1.Battlefield.Wildborn Preserver.Counters.PlusOnePlusOne = (absent)

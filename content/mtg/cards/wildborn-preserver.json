@@ -1,0 +1,12 @@
+{
+  "name": "Wildborn Preserver",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Elf Archer",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flash (You may cast this spell any time you could cast an instant.)\nReach (This creature can block creatures with flying.)\nWhenever another non-Human creature you control enters, you may pay {X}. When you do, put X +1/+1 counters on this creature.",
+  "keywords": [
+    "Flash",
+    "Reach"
+  ]
+}
