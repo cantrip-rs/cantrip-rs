@@ -1,0 +1,44 @@
+# Vanish from Sight on Bot2's Mox Ruby: its owner Bot2 declines the top (CR 701.1 - "their choice of the top or bottom"), so the Mox
+# goes to the bottom of Bot2's library and is not drawn again in turn 4 (the library is 20 cards of Mountain above it). Bot1 then
+# surveils 1 and keeps the Forest on top (Arrange with the Forest on top and nothing for the graveyard).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Vanish from Sight
+Island
+Island
+Island
+Forest
+Island x11
+
+[Bot2 Deck]
+Mox Ruby
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Vanish from Sight.Cast(Bot2.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+Bot2.Decline
+Bot1.Arrange(Forest | )
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Count = 0
+Bot2.Library.Mox Ruby.Colors.Count = 0
+Bot1.Graveyard = Vanish from Sight
+Bot1.Library.Top = Forest
