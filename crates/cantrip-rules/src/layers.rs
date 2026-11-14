@@ -2600,7 +2600,7 @@ fn contract_pairs(base: Chars, ability: AbilityRef) -> Vec<(Chars, Chars)> {
 
 /// The raw state a static ability's effect may check before it does anything, varied: the source attached to the object or
 /// not, a counter of every kind on both, the source at its highest class level and with choices made (a creature type, a
-/// color, a player), the object under the other player's control, and life totals high; a crowded game (another of the
+/// color, a player, and two ordered basic land types), the object under the other player's control, and life totals high; a crowded game (another of the
 /// source's card, an artifact, a black and a white permanent, two Forests, a snow land, a Mountain/Forest, an Equipment
 /// attached to the source, creature cards and an instant card in the graveyards and cards in hand); and the source in a hand.
 const SCENES: usize = 7;
@@ -2614,7 +2614,7 @@ fn contract_scene(cards: &CardTable, card: CardId, target: CardId, scene: usize)
     if scene == 4 {
         source.class_level = 3;
         // Made by the source's own text, as an entering permanent's own `enters` makes them.
-        let made = cantrip_state::Entered { subtype: Some(Subtype::Goblin), color: Some(Color::Black), player: Some(PlayerId(1)), ..Default::default() };
+        let made = cantrip_state::Entered { subtype: Some(Subtype::Goblin), subtype_pair: Some([Subtype::Forest, Subtype::Island]), color: Some(Color::Black), player: Some(PlayerId(1)), ..Default::default() };
         source.marks.choices = <cantrip_state::Choices as cantrip_state::ChoiceRecord>::entered(cards.linked_card(card), made);
     }
     let source = state.push_obj(source);
