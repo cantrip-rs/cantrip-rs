@@ -1,0 +1,6 @@
+{
+  "name": "Stay Hidden, Stay Silent",
+  "manaCost": "{1}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nWhen this Aura enters, tap enchanted creature.\nEnchanted creature doesn't untap during its controller's untap step.\n{4}{U}{U}: Shuffle enchanted creature into its owner's library, then manifest dread. Activate only as a sorcery."
+}

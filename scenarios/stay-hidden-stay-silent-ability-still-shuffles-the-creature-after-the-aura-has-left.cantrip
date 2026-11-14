@@ -1,0 +1,74 @@
+# Stay Hidden, Stay Silent's {4}{U}{U} ability uses the creature the Aura was enchanting when it left (CR 608.2h): Bot2 responds to the
+# activation by putting the Aura on the bottom of Bot1's library with Vanish from Sight (the Aura is gone), and the ability still shuffles
+# the Ornithopter into Bot2's library (Bot2's library is shuffled once) and Bot1 manifests dread.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Black Lotus
+Stay Hidden, Stay Silent
+Island
+Island
+Mox Pearl
+Island
+Island
+Llanowar Elves
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Vanish from Sight
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stay Hidden, Stay Silent.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Stay Hidden, Stay Silent.Activate
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Vanish from Sight.Cast(Bot1.Battlefield.Stay Hidden, Stay Silent)
+Bot2.Pass
+Bot1.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Llanowar Elves | Lightning Bolt)
+
+[Expect]
+Bot2.Battlefield.Count = 4
+Bot2.Shuffles = 1
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield..FaceDownName = Llanowar Elves
