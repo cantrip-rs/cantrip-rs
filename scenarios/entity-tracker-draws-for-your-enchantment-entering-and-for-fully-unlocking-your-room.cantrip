@@ -1,0 +1,56 @@
+# Entity Tracker, Eerie: "Whenever an enchantment you control enters and whenever you fully unlock a Room, draw a card." Bot1 casts the Tracker, then
+# Unholy Annex // Ritual Chamber as Unholy Annex (an enchantment entering: draws the Swamp), and on turn 3 unlocks Ritual Chamber, the Room's other door
+# (CR 709.5i, fully unlocked): one more card. Unholy Annex itself draws at the end of turn 1 and the draw step another on turn 3. Library counts pin each draw.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Entity Tracker
+Unholy Annex // Ritual Chamber
+Swamp
+Island x3
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Entity Tracker.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 14
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 13
+? Bot1.Hand = Swamp
+Bot1.Hand.Swamp.Play
+[T3 Bot1.Main1]
+? Bot1.Library.Count = 11
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Unholy Annex.Activate(Ability: right door)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Unholy Annex // Ritual Chamber.Doors = Unholy Annex; Ritual Chamber
+[Expect]
+Bot1.Library.Count = 10

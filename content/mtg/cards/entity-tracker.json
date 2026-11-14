@@ -1,0 +1,11 @@
+{
+  "name": "Entity Tracker",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Human Scout",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flash\nEerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, draw a card.",
+  "keywords": [
+    "Flash"
+  ]
+}
