@@ -1,15 +1,13 @@
 use cantrip_api::*;
 use cantrip_mechanics::select::{cards, exactly};
-use cantrip_mechanics::{choose, targets};
+use cantrip_mechanics::{choose, copy, targets};
 use cantrip_oracle as oracle;
 
 /// "Create a token that's a copy of [the card], except it isn't legendary and is a Mutant in addition to its other
 /// types" (CR 707.2, 707.9b, 111.1): the copiable values of the exiled card, with both exceptions applied, so a copy of the
 /// token has them too.
 fn mutant_copy_of(g: &mut dyn Game, saga: ObjectId, controller: PlayerId, card: ObjectId) -> Result<(), Suspend> {
-    let mutant = g.words(saga).subtype(Subtype::Mutant);
-    let values = g.copiable_values(card).nonlegendary().with_subtype(mutant);
-    g.create_token_copies_of(values, controller, 1)?;
+    copy::create_token_copy_with_subtype(g, saga, controller, card, Subtype::Mutant, true)?;
     Ok(())
 }
 

@@ -177,6 +177,26 @@ pub fn create_token_copy_of_it(
     Ok(())
 }
 
+/// "Create a token that's a copy of [a card], except it's a [subtype] in addition to its other types" (CR 707.2, 707.9b, 111.1) for
+/// `controller`: the copiable values of `card` (an exiled card is copied as it was printed), with the creature type `subtype` as a
+/// word of `source`'s text (CR 612) added, and with "it isn't legendary" too when `nonlegendary`. A copy of the token has the
+/// exceptions too. The new tokens. The Cloning of Shredder (Mutant, not legendary) and Abyssal Harvester (Nightmare) print it.
+pub fn create_token_copy_with_subtype(
+    g: &mut dyn Game,
+    source: ObjectId,
+    controller: PlayerId,
+    card: ObjectId,
+    subtype: Subtype,
+    nonlegendary: bool,
+) -> Result<Vec<ObjectId>, Suspend> {
+    let word = g.words(source).subtype(subtype);
+    let mut values = g.copiable_values(card);
+    if nonlegendary {
+        values = values.nonlegendary();
+    }
+    g.create_token_copies_of(values.with_subtype(word), controller, 1)
+}
+
 /// "Create a copy of [an object] in exile. You may cast the copy without paying its mana cost" (CR 707.12, 118.9, 608.2g): the
 /// copy is of `of` as it last existed, wherever it is now, owned by `player`. It is cast while the effect resolves, whatever its
 /// timing (CR 608.2g), if it has a legal target and `player` says yes; one that is not cast, because it could not be or was not
