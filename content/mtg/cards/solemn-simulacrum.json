@@ -1,0 +1,8 @@
+{
+  "name": "Solemn Simulacrum",
+  "manaCost": "{4}",
+  "type": "Artifact Creature — Golem",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, you may search your library for a basic land card, put that card onto the battlefield tapped, then shuffle.\nWhen this creature dies, you may draw a card."
+}

@@ -1,0 +1,57 @@
+# Solemn Simulacrum {4} (2/2): "When this creature enters, you may search your library for a basic land card, put that card onto the
+# battlefield tapped, then shuffle." Bot1 accepts and finds the Forest: only a basic land card may be found (the Tropical Island
+# is refused), and it enters tapped. "When this creature dies, you may draw a card": Bot2's Lightning Bolt kills it on turn 2 and
+# Bot1 accepts, so the hand grows from two Plains to three cards.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Solemn Simulacrum
+Plains
+Plains
+Tropical Island
+Forest
+Plains x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Solemn Simulacrum.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Search(Tropical Island)
+Bot1.Search(Forest)
+? Bot1.Battlefield.Forest.Tapped = true
+? Bot1.Hand.Count = 2
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Solemn Simulacrum)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Solemn Simulacrum
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+? Bot1.Hand.Count = 3
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Mox Jet; Mox Emerald; Mox Pearl; Forest
+Bot1.Graveyard = Solemn Simulacrum
