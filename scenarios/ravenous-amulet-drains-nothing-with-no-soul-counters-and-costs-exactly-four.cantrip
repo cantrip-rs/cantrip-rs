@@ -1,0 +1,48 @@
+# Ravenous Amulet {4}, {T}, Sacrifice this artifact: "Each opponent loses life equal to the number of soul counters on this
+# artifact." With no soul counter the number is zero, so Bot2 keeps all 20 life (a sacrifice that still happens: the cost was
+# paid). The ability costs exactly {4}: with only three Moxen on the battlefield (Sapphire and Emerald are still in hand) it is refused (`Mana: short`); a fourth is then
+# cast and tapped and the activation takes all four and nothing else, leaving Mox Emerald untapped. Bot1's life is unchanged too.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Ravenous Amulet
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ravenous Amulet.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Ravenous Amulet.Activate(Ability: Each opponent loses; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Ravenous Amulet.Activate(Ability: Each opponent loses)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot1.Life = 20
+Bot1.Graveyard = Ravenous Amulet
+Bot1.Battlefield.Mox Emerald.Tapped = false

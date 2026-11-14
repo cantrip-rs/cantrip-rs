@@ -1,0 +1,53 @@
+# Ravenous Amulet {1}, {T}, Sacrifice a creature: "Draw a card and put a soul counter on this artifact. Activate only as a
+# sorcery." Bot1 casts four Moxen, Memnite and the Amulet (Jet and Ruby), then casts Mox Pearl: with Pearl on the stack the
+# ability is refused (CR 602.5d). Once Pearl has resolved the ability costs exactly {1} (Sapphire's mana, nothing floats) and
+# the sacrifice of the Memnite: Bot1 draws the top card, Lightning Bolt, the Memnite is in the graveyard, the Amulet is tapped
+# with one soul counter. With no creature left to sacrifice (and the Amulet tapped) it is refused again.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Ravenous Amulet
+Memnite
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ravenous Amulet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+! Bot1.Battlefield.Ravenous Amulet.Activate(Ability: Draw a card)
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Ravenous Amulet.Activate(Ability: Draw a card)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ravenous Amulet.Counters.Soul = 1
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Ravenous Amulet.Activate(Ability: Draw a card)
+
+[Expect]
+Bot1.Hand = Lightning Bolt
+Bot1.Graveyard = Memnite
+Bot1.Library.Count = 13
+Bot1.Battlefield.Ravenous Amulet.Counters.Soul = 1
+Bot1.Battlefield.Ravenous Amulet.Tapped = true
