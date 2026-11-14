@@ -1,0 +1,37 @@
+# Paranormal Analyst triggers even when all of the manifest dread was impossible (CR 701.62b, the ruling): with no cards in the library Bot1 manifests and puts nothing
+# anywhere (CR 701.62a), yet the Analyst's ability goes on the stack and does nothing when it resolves - Bot1's hand stays the two Islands left from its opening seven.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Paranormal Analyst
+Twist Reality
+Island x2
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Paranormal Analyst.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Twist Reality.Cast
+Bot1.Modes(Manifest dread)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Island; Island
+Bot1.Graveyard = Twist Reality; Black Lotus
+Bot1.Library.Count = 0
+Stack.Count = 0
