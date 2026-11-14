@@ -1,0 +1,49 @@
+# Empyrean Eagle: "Flying. Other creatures you control with flying get +1/+1." Bot1's Ornithopter (a 0/2 flier) is a 1/3, its
+# Memnite (1/1 without flying) is not pumped, the Eagle itself stays 2/3 (it is not "other"), and Bot2's Ornithopter, a flier
+# the Eagle's controller does not control, is not pumped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Island
+Empyrean Eagle
+Ornithopter
+Memnite
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x23
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Empyrean Eagle.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Ornithopter.Power = 0
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Empyrean Eagle.Power = 2
+Bot1.Battlefield.Empyrean Eagle.Toughness = 3
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2

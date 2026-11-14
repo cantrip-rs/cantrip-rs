@@ -1,0 +1,44 @@
+# Empyrean Eagle: "Other creatures you control with flying get +1/+1" asks about flying as layer 6 leaves it (CR 613.1f, 613.4c).
+# Bot1's Memnite (1/1, no flying) is not pumped until Jump gives it flying until end of turn on turn 3; then it is a 2/2 flier.
+# On turn 5 Jump's effect has ended, and the Memnite is a 1/1 without flying again.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Island
+Empyrean Eagle
+Memnite
+Jump
+Island
+Island x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Empyrean Eagle.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Jump.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Flying
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1

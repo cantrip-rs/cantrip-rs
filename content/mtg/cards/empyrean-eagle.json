@@ -1,0 +1,11 @@
+{
+  "name": "Empyrean Eagle",
+  "manaCost": "{1}{W}{U}",
+  "type": "Creature — Bird Spirit",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying\nOther creatures you control with flying get +1/+1.",
+  "keywords": [
+    "Flying"
+  ]
+}
