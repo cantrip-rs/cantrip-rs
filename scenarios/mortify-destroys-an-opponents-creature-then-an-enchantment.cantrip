@@ -1,0 +1,56 @@
+# Mortify ({1}{W}{B} instant): "Destroy target creature or enchantment." Bot1 pays with Plains and the two Moxen, and Mortifies
+# Bot2's Elvish Mystic on turn three and Bot2's Fastbond on turn five, so both halves of the type line are shown as targets
+# of an opponent's permanent (CR 115.1, 701.8).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mortify
+Mortify
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Forest
+Forest
+Elvish Mystic
+Fastbond
+Forest x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mortify.Cast(Bot2.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Elvish Mystic
+? Bot2.Battlefield.Count = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Fastbond.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mortify.Cast(Bot2.Battlefield.Fastbond)
+
+[Expect]
+Bot1.Graveyard = Mortify; Mortify
+Bot2.Graveyard = Fastbond; Elvish Mystic
+Bot2.Battlefield = Forest; Forest
+Bot1.Battlefield = Mox Jet; Mox Pearl; Plains; Plains; Plains

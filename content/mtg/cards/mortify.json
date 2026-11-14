@@ -1,0 +1,6 @@
+{
+  "name": "Mortify",
+  "manaCost": "{1}{W}{B}",
+  "type": "Instant",
+  "oracleText": "Destroy target creature or enchantment."
+}

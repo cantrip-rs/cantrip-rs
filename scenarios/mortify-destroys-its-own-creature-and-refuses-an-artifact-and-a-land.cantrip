@@ -1,0 +1,43 @@
+# Mortify's target is "creature or enchantment" (CR 115.1): Bot1's own Savannah Lions is a legal target, while Bot1's Mox Pearl
+# (an artifact) and Plains (a land) are refused, and Bot2's Mox Ruby is refused too; nothing but a creature or an enchantment is
+# offered. Mortify is cast in Bot1's third turn, paid with a Plains and the two Moxen.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Savannah Lions
+Mortify
+Plains x3
+Plains x10
+
+[Bot2 Deck]
+Mox Ruby
+Forest x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+! Bot1.Hand.Mortify.Cast(Bot1.Battlefield.Mox Pearl)
+! Bot1.Hand.Mortify.Cast(Bot1.Battlefield.Plains)
+! Bot1.Hand.Mortify.Cast(Bot2.Battlefield.Mox Ruby)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mortify.Cast(Bot1.Battlefield.Savannah Lions)
+
+[Expect]
+Step = Main1
+Bot1.Graveyard = Mortify; Savannah Lions
+Bot1.Battlefield = Mox Jet; Mox Pearl; Plains; Plains
+Bot2.Battlefield = Mox Ruby
