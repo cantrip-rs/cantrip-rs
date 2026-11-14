@@ -1,0 +1,25 @@
+# Temple of Epiphany enters tapped (its first sentence) and, when it enters, scry 1 (CR 701.22): Bot1 sends the Lightning
+# Bolt it looks at to the bottom, so the Black Lotus under it is on top, and Counterspell next, Lightning Bolt last. The library
+# keeps all its cards (scry puts none into the graveyard, unlike surveil).
+
+[Bot1 Deck]
+Temple of Epiphany
+Mountain x6
+Lightning Bolt
+Black Lotus
+Counterspell
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Temple of Epiphany.Play
+Bot1.Arrange( | Lightning Bolt)
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Battlefield = Temple of Epiphany
+Bot1.Battlefield.Temple of Epiphany.Tapped = true
+Bot1.Library = Black Lotus; Counterspell; Lightning Bolt
+Bot1.Graveyard.Count = 0
