@@ -1,0 +1,8 @@
+{
+  "name": "Fanatic of the Harrowing",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Human Cleric",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, each player discards a card. If you discarded a card this way, draw a card."
+}

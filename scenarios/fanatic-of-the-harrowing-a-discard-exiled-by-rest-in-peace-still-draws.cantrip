@@ -1,0 +1,44 @@
+# Fanatic of the Harrowing: "If you discarded a card this way, draw a card" asks whether Bot1 discarded, not where the card ended up
+# (CR 701.9a, 614.6). Bot1's Rest in Peace exiles every card that would go to a graveyard, so the Mountain Bot1 discards goes to
+# exile instead (and Bot2's Plains too): it was still discarded, so Bot1 draws the Ornithopter on top of its library.
+
+[Bot1 Deck]
+Fanatic of the Harrowing
+Black Lotus
+Mox Jet
+Mox Pearl
+Rest in Peace
+Swamp
+Mountain
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rest in Peace.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Fanatic of the Harrowing.Cast
+Bot1.Pass
+? Stack.Count = 1
+Bot1.Pass
+[T1 Bot1.Main2]
+? Stack.Count = 0
+? Bot2.Hand.Count = 6
+
+[Expect]
+Bot1.Hand = Ornithopter
+Bot1.Graveyard.Count = 0
+Exile.Count = 3
+Bot2.Graveyard.Count = 0
+Bot2.Hand.Count = 6

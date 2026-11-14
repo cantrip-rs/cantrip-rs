@@ -1,0 +1,41 @@
+# Fanatic of the Harrowing: "If you discarded a card this way, draw a card." Bot1 casts the Fanatic with its last card in hand
+# (the five Moxen and Black Lotus are on the battlefield or gone): it has nothing to discard, so it draws nothing (Hand 0, the
+# Swamp on top of its library stays there), while Bot2 still discards one of its seven Plains (Hand 6).
+
+[Bot1 Deck]
+Fanatic of the Harrowing
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Swamp x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fanatic of the Harrowing.Cast
+Bot1.Pass
+? Stack.Count = 1
+Bot1.Pass
+[T1 Bot1.Main2]
+? Stack.Count = 0
+? Bot1.Hand.Count = 0
+? Bot1.Library.Count = 13
+? Bot1.Graveyard = Black Lotus
+? Bot2.Graveyard = Plains
+? Bot2.Hand.Count = 6
+
+[Expect]
+Bot1.Hand.Count = 0
+Bot2.Hand.Count = 6

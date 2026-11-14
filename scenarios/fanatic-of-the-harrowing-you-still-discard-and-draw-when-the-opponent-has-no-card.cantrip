@@ -1,0 +1,57 @@
+# Fanatic of the Harrowing: "If you discarded a card this way, draw a card" depends on Bot1's own discard alone. Bot2 plays its
+# Moxen, Black Lotus and Ornithopter in turn 2 and plays the Island it drew, leaving it no card in hand. In turn 3 Bot1 casts the Fanatic:
+# Bot2 has no card to discard (Graveyard empty), Bot1 discards its Mountain and draws an Island (Hand 4 -> 5, Library 13 -> 12).
+
+[Bot1 Deck]
+Fanatic of the Harrowing
+Black Lotus
+Mox Jet
+Mountain
+Island
+Island
+Island
+Forest
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Mox Jet
+Black Lotus
+Ornithopter
+Island x13
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+? Bot2.Hand.Count = 0
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fanatic of the Harrowing.Cast
+Bot1.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot1.Choose(Mountain)
+[T3 Bot1.Main2]
+? Stack.Count = 0
+? Bot2.Graveyard.Count = 0
+? Bot2.Hand.Count = 0
+? Bot1.Graveyard = Mountain; Black Lotus
+? Bot1.Hand.Count = 5
+? Bot1.Library.Count = 12
+
+[Expect]
+Bot2.Hand.Count = 0

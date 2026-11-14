@@ -1,0 +1,40 @@
+# Fanatic of the Harrowing: "When this creature enters, each player discards a card. If you discarded a card this way, draw a card." Bot1
+# casts it (Black Lotus and Mox Jet pay {3}{B}) holding Mountain, Forest and two Islands: it chooses the Mountain, Bot2 discards a
+# Plains of its seven, and Bot1 draws the Ornithopter on top of its library, so its hand is Forest, Island, Island, Ornithopter and
+# Bot2's six Plains.
+
+[Bot1 Deck]
+Fanatic of the Harrowing
+Black Lotus
+Mox Jet
+Mountain
+Forest
+Island
+Island
+Ornithopter
+Island x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fanatic of the Harrowing.Cast
+Bot1.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot1.Choose(Mountain)
+[T1 Bot1.Main2]
+? Stack.Count = 0
+? Bot1.Graveyard = Mountain; Black Lotus
+? Bot1.Hand.Count = 4
+? Bot1.Hand.Ornithopter.Power = 0
+? Bot2.Graveyard = Plains
+? Bot2.Hand.Count = 6
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot2.Hand.Count = 6
