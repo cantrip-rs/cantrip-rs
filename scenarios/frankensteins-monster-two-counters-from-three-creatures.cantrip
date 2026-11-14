@@ -1,0 +1,44 @@
+# X=2 exiles two of three creature cards and gives one independently chosen counter per card (CR 614.1c).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Jet
+Entomb
+Entomb
+Entomb
+Frankenstein's Monster
+Swamp
+Swamp
+Grizzly Bears
+Llanowar Elves
+Ornithopter
+Swamp x12
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Llanowar Elves)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Ornithopter)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Frankenstein's Monster.Cast(X: 2)
+Bot1.Choose(Confirm X)
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Choose()
+! Bot1.Choose(Grizzly Bears; Llanowar Elves; Ornithopter)
+Bot1.Choose(Grizzly Bears; Llanowar Elves)
+Bot1.Modes(1)
+Bot1.Modes(3)
+[Expect]
+Exile = Grizzly Bears; Llanowar Elves
+Bot1.Graveyard.Ornithopter.Power = 0
+Bot1.Battlefield.Frankenstein's Monster.Power = 2
+Bot1.Battlefield.Frankenstein's Monster.Toughness = 3

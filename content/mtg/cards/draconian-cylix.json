@@ -1,0 +1,6 @@
+{
+  "name": "Draconian Cylix",
+  "manaCost": "{3}",
+  "type": "Artifact",
+  "oracleText": "{2}, {T}, Discard a card at random: Regenerate target creature."
+}

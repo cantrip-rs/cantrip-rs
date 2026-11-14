@@ -1,4 +1,4 @@
-# adeline-and-jacked-rabbit-hand-over-their-attack-triggers-to-order, answer 95
+# adeline-and-jacked-rabbit-hand-over-their-attack-triggers-to-order, answer 93
 
 ## Full
 bucket 64 len 39 first_option 37 options 2 cap_hit false compact 1471 bytes dense 13568 bytes

@@ -5,8 +5,8 @@ use cantrip_mechanics::{effects, targets};
 use cantrip_oracle as oracle;
 
 /// "Gain control of target creature an opponent controls for as long as you control this Vehicle. That creature can't attack
-/// or block for as long as you control this Vehicle." Both last while `YOU_CONTROL_SOURCE` holds (CR 611.2b): if the Vehicle
-/// has already left, neither does anything.
+/// or block for as long as you control this Vehicle." Both use the uninterrupted source-control duration (CR 611.2b):
+/// a control interval which ended before resolution does not restart either effect.
 fn possess(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     // The target is read first: once it is under the ability's controller it is no longer a creature an opponent controls.
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
@@ -26,6 +26,5 @@ pub static CARD: CardDef = CardDef {
         .targets(&[targets::CREATURE_AN_OPPONENT_CONTROLS]),
         crew(3, "Crew 3 (Tap any number of creatures you control with total power 3 or more: This Vehicle becomes an artifact creature until end of turn.)"),
     ],
-    lasting: &[effects::YOU_CONTROL_SOURCE],
     ..oracle::POSSESSION_ENGINE
 };

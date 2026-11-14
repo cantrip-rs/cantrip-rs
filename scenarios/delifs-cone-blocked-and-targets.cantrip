@@ -1,0 +1,34 @@
+# A blocked attacker does not trigger the delayed ability; the opponent's creature and a noncreature cannot be targets (CR 509.1h).
+[Bot1 Deck]
+Delif's Cone
+Memnite
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Delif's Cone.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Delif's Cone.Activate(Bot2.Battlefield.Ornithopter)
+! Bot1.Battlefield.Delif's Cone.Activate(Bot1.Battlefield.Delif's Cone)
+Bot1.Battlefield.Delif's Cone.Activate(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Ornithopter > Memnite)
+Bot1.Pass
+! Bot1.Accept
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot2.Battlefield.Ornithopter.Damage = 1
+Bot1.Graveyard = Delif's Cone

@@ -1,0 +1,38 @@
+# The unblocked trigger targets only a defending player's artifact; accepting destroys it and prevents combat damage (CR 115.1d, 118.12).
+[Bot1 Deck]
+Floral Spuzzem
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Forest x20
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Floral Spuzzem.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Island.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Floral Spuzzem > Bot2)
+! Bot1.Target(Bot1.Battlefield.Mox Emerald)
+! Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Target(Bot2.Battlefield.Mox Ruby)
+Bot1.Accept
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Graveyard = Mox Ruby
+Bot2.Battlefield.Ornithopter.Types = Artifact; Creature
+Bot2.Life = 20

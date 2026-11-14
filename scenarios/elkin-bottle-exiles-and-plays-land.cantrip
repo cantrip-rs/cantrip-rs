@@ -1,0 +1,30 @@
+# The Bottle costs three mana to cast and three to activate; its controller exiles and may play their top land.
+[Bot1 Deck]
+Elkin Bottle
+Black Lotus
+Black Lotus
+Island x4
+Forest
+Island x15
+[Bot2 Deck]
+Island x7
+Forest
+Island x15
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Elkin Bottle.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Elkin Bottle.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Exile = Forest
+Bot1.Exile.Forest.Play
+[Expect]
+Bot1.Battlefield.Forest.Tapped = false
+Bot2.Library.Top = Forest

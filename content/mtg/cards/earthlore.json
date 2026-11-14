@@ -1,0 +1,6 @@
+{
+  "name": "Earthlore",
+  "manaCost": "{G}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant land you control\nTap enchanted land: Target blocking creature gets +1/+2 until end of turn. Activate only if enchanted land is untapped."
+}

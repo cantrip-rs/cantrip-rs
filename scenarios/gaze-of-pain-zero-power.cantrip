@@ -1,0 +1,29 @@
+# A zero-power attacker deals no damage when its controller accepts the optional effect (CR 107.1b, 120.8).
+[Bot1 Deck]
+Gaze of Pain
+Mox Jet
+Mox Pearl
+Ornithopter
+Swamp x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gaze of Pain.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Accept
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Memnite.Toughness = 1
+Bot2.Battlefield.Memnite.Damage = 0
+Bot2.Life = 20

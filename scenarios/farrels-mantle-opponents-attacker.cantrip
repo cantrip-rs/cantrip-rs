@@ -1,0 +1,25 @@
+# The enchanted creature's controller chooses whether it deals damage, even when an opponent controls the Aura (CR 608.2d).
+[Bot1 Deck]
+Black Lotus
+Farrel's Mantle
+Ornithopter
+Plains x20
+[Bot2 Deck]
+Memnite
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Farrel's Mantle.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+Bot2.Accept
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Ornithopter = (absent)
+Bot1.Life = 20

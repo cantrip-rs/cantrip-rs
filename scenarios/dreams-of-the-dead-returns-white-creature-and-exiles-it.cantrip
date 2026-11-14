@@ -1,0 +1,42 @@
+# Dreams returns a white creature; declining its gained cumulative upkeep sacrifices it to exile instead of the graveyard.
+[Bot1 Deck]
+Savannah Lions
+Mox Pearl
+Mox Ruby
+Lightning Bolt
+Black Lotus
+Mox Sapphire
+Dreams of the Dead
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Savannah Lions)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dreams of the Dead.Cast
+? Bot1.Mana =
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Dreams of the Dead.Activate(Bot1.Graveyard.Savannah Lions)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Savannah Lions.Colors = White
+[T7 Bot1.Upkeep]
+Bot1.Decline
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Exile.Savannah Lions.Colors = White
+Bot1.Graveyard = Black Lotus; Lightning Bolt

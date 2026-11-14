@@ -26,8 +26,6 @@ public sealed record CardChoicePresentation(string Title, string Detail, string 
             or CardChoicePurposeView.Blight or CardChoicePurposeView.TapToReduce or CardChoicePurposeView.PutCounters
             or CardChoicePurposeView.PreventDamageFrom or CardChoicePurposeView.Band or CardChoicePurposeView.Enlist
             or CardChoicePurposeView.ChooseAsEnters or CardChoicePurposeView.Choose;
-        // Banding (CR 702.22c): at most one creature without banding in a band.
-        int withoutBanding = picked.Count(h => prompt.WithoutBanding.Exists(w => w.Value == h));
         // A mulligan's bottoming is asked by the rules and has no source; an effect's (Valakut Awakening) names its own.
         string source = legend ? "The legend rule"
             : client.Object(context?.Source ?? prompt.Source)?.Name
@@ -133,13 +131,16 @@ public sealed record CardChoicePresentation(string Title, string Detail, string 
                 ? $"{source}: choose the source whose damage the shield prevents first"
             // Banding (CR 702.22c, 508.1e): the attackers that attack in a band with the source.
             : prompt.Purpose == CardChoicePurposeView.Band
-                ? $"{source} has banding: choose attacking creatures to band with it, or none"
+                ? $"{source}: choose attacking creatures to band with it, or none"
             // Enlist (CR 702.154a, 508.1g): an optional cost of the attacker's, paid by tapping a creature that isn't attacking.
             : prompt.Purpose == CardChoicePurposeView.Enlist
                 ? $"{source} has enlist: you may tap a creature you control that isn't attacking, and {source} gets +X/+0 until end of turn, X its power"
             // Sylvan Library: the cards each later paid for or put back, not the ones that go back.
             : prompt.Purpose == CardChoicePurposeView.PayLifeOrPutOnTop
                 ? $"{source}: choose {prompt.Count} cards in your hand drawn this turn - for each, pay {prompt.Life} life or put it on top of your library"
+            // AsManyAsCan is constrained by the selection verdict, not an exact Count (CR 502.3).
+            : prompt.Purpose == CardChoicePurposeView.Untap && prompt.CountKind == CountKindView.AsManyAsCan
+                ? $"{source}: choose as many permanents to untap as the untap restrictions allow"
             : prompt.Count == 1 && !prompt.UpTo ? $"{source}: choose {article} {kind}{from} to {verb}{budget}"
             : anyNumber ? $"{source}: choose any number of {many}{from} to {verb}{budget}"
             : $"{source}: choose {(prompt.UpTo ? "up to " : "")}{prompt.Count} {many}{from} to {verb}{budget}";
@@ -152,9 +153,7 @@ public sealed record CardChoicePresentation(string Title, string Detail, string 
             : prompt.Purpose == CardChoicePurposeView.PreventDamageFrom
             ? $"It has {prompt.PreventLeft} damage left to prevent; what it can't prevent of the others' damage is dealt{where}"
             : prompt.Purpose == CardChoicePurposeView.Band
-            ? withoutBanding > 1
-                ? $"A band may have only one creature without banding  ·  {withoutBanding} chosen{where}"
-                : $"{picked.Count} chosen  ·  any with banding, at most one without; the band is blocked as one, and you divide the damage of what blocks it{where}"
+                ? $"{picked.Count} chosen  ·  only legal additions to this band are offered; the band is blocked as one{where}"
             // Enlist: what the creature chosen gives, by its power now (the bonus reads it as it resolves, CR 608.2h).
             : prompt.Purpose == CardChoicePurposeView.Enlist
             ? picked.Count == 0
@@ -176,6 +175,8 @@ public sealed record CardChoicePresentation(string Title, string Detail, string 
                 ? $"{picked.Count} chosen  ·  total {total} {manaValue} of {prompt.MinimumManaValue}{where}"
             : prompt.MaximumTotalManaValue is { } most
                 ? $"{picked.Count} of {prompt.Count} chosen  ·  total mana value {manaValue} of {most} or less{where}"
+            : prompt.CountKind == CountKindView.AsManyAsCan
+                ? $"{picked.Count} chosen  ·  choose as many as the rules allow{where}"
             : ordered && prompt.Count > 1
                 ? prompt.Purpose == CardChoicePurposeView.Splice
                     ? $"{picked.Count} of {prompt.Count} chosen  ·  their text follows the spell in the order chosen{where}"

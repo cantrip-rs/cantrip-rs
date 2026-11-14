@@ -1,0 +1,6 @@
+{
+  "name": "Errantry",
+  "manaCost": "{1}{R}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +3/+0 and can only attack alone."
+}

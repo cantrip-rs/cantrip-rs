@@ -5,7 +5,7 @@
 use cantrip_api::*;
 use cantrip_state::ManaPart;
 
-use crate::Cx;
+use crate::{Cx, actions::WithWords};
 
 /// The permanents with a static ability of this kind, with the player who controls each, once for each definition it has
 /// one in: a merged permanent has its other components' (CR 702.140e, `CardTable::texts`).
@@ -366,13 +366,21 @@ pub fn may_attack_despite_defender(q: &dyn Query, cards: &'static CardTable, cre
     })
 }
 
+/// Live sources of attack-only summoning-sickness exceptions (CR 302.6, 609.4).
+/// Asked lazily only when an otherwise eligible creature is summoning sick.
+/// Empty sources allocate nothing and read no extra characteristics.
+pub(crate) fn attack_haste_sources(cx: &Cx) -> Vec<(Asker, &'static CardDef)> {
+    sources(cx, |d| !d.attacks_as_though_haste.is_empty())
+        .map(|(source, controller, def, by)| (Asker { source, controller, by, spell: false, instance: None }, def)).collect()
+}
+
 /// What each attack open to the active player's creatures costs to declare (CR 508.1d, 508.1h): for each of `eligible`
 /// and each of `targets`, every static ability of a permanent on the battlefield that makes that attack cost something
 /// (`CardDef::attack_costs`: Propaganda's "creatures can't attack you unless their controller pays {2} for each creature
 /// they control that's attacking you"), added up, with the first such permanent named as the cost's source. Attacks that
 /// cost nothing have no entry. A board with no such permanent, nearly every board, makes no list.
 pub fn attack_costs(cx: &Cx, eligible: &[ObjectId], targets: &[Target]) -> Vec<AttackCost> {
-    let taxes: Vec<(ObjectId, PlayerId, &'static CardDef, Option<Linked>)> = sources(cx, |d| !d.attack_costs.is_empty()).collect();
+    let taxes: Vec<(ObjectId, PlayerId, &'static CardDef, Option<Linked>)> = sources(cx, |d| !d.attack_costs.is_empty() || !d.attack_cost_rules.is_empty()).collect();
     if taxes.is_empty() {
         return Vec::new();
     }
@@ -391,6 +399,13 @@ pub fn attack_costs(cx: &Cx, eligible: &[ObjectId], targets: &[Target]) -> Vec<A
                         first.get_or_insert(id);
                     }
                 }
+                for rule in def.attack_cost_rules {
+                    if (rule.applies)(cx, &asker, attacker, target) {
+                        total = total.plus(&rule.cost.total_mana());
+                        // A zero mana total can still owe a nonmana cost.
+                        first.get_or_insert(id);
+                    }
+                }
             }
             if let Some(source) = first {
                 out.push(AttackCost { attacker, target, cost: total, source });
@@ -398,6 +413,53 @@ pub fn attack_costs(cx: &Cx, eligible: &[ObjectId], targets: &[Target]) -> Vec<A
         }
     }
     out
+}
+
+/// Each fixed rule contributes separately for each chosen attack. Keep the
+/// provider and its linked text after locking, even if payment removes it.
+pub(crate) struct LockedAttackPayment {
+    pub source: ObjectId,
+    pub attacker: ObjectId,
+    pub chosen: Option<ObjectId>,
+    pub by: Option<Linked>,
+    pub cost: &'static Cost,
+}
+
+pub(crate) struct LockedAttackCosts {
+    pub mana: ManaCost,
+    pub source: Option<ObjectId>,
+    pub fixed: Vec<LockedAttackPayment>,
+    pub attackers: Vec<ObjectId>,
+}
+
+pub(crate) fn lock_attack_costs(cx: &Cx, attacks: &[(ObjectId, Target)]) -> LockedAttackCosts {
+    let mut total = LockedAttackCosts { mana: ManaCost::ZERO, source: None, fixed: Vec::new(), attackers: Vec::new() };
+    // No live source means no allocation, even when the card table contains
+    // thousands of unused taxing cards. Read only chosen attack/defender pairs.
+    for (source, controller, def, by) in sources(cx, |d| !d.attack_cost_rules.is_empty() || !d.attack_costs.is_empty()) {
+        let asker = Asker { instance: None, source, controller, by, spell: false };
+        for &(attacker, target) in attacks {
+            let mut taxed = false;
+            for rule in def.attack_costs {
+                if let Some(cost) = rule(cx, &asker, attacker, target) && !cost.is_zero() {
+                    total.mana = total.mana.plus(&cost);
+                    taxed = true;
+                }
+            }
+            for rule in def.attack_cost_rules {
+                if (rule.applies)(cx, &asker, attacker, target) {
+                    total.fixed.push(LockedAttackPayment { source, attacker, chosen: None, by, cost: &rule.cost });
+                    total.mana = total.mana.plus(&rule.cost.total_mana());
+                    taxed = true;
+                }
+            }
+            if taxed {
+                total.source.get_or_insert(source);
+                if !total.attackers.contains(&attacker) { total.attackers.push(attacker); }
+            }
+        }
+    }
+    total
 }
 
 /// Whether `player` may spend mana as though it were of any color to pay a cost for `source` (CR 609.4b): to activate an
@@ -744,8 +806,10 @@ pub fn lasting_rules_barring_attacks(q: &dyn Query, cards: &CardTable, creatures
         for &creature in creatures {
             let applies = match e.kind {
                 EffectKind::CantAttackPlayer { .. } => e.affected == creature,
-                EffectKind::LastingRule { card, index, about } =>
-                    (cards.get(card).lasting_rules[index as usize].applies)(q, &Asker::new(e.source, e.controller), about, creature),
+                EffectKind::LastingRule { card, index, about } => {
+                    let reads = WithWords { q, source: e.source, words: e.words };
+                    (cards.get(card).lasting_rules[index as usize].applies)(&reads, &Asker::new(e.source, e.controller), about, creature)
+                },
                 _ => unreachable!(),
             };
             if !applies { continue; }
@@ -934,7 +998,10 @@ pub fn lasting_rules_on<'a>(
             .get(card)
             .lasting_rules
             .get(index as usize)
-            .is_some_and(|r| r.rule == rule && (r.applies)(q, &Asker::new(e.source, e.controller), about, id)),
+            .is_some_and(|r| {
+                let reads = WithWords { q, source: e.source, words: e.words };
+                r.rule == rule && (r.applies)(&reads, &Asker::new(e.source, e.controller), about, id)
+            }),
         _ => false,
     })
 }
@@ -996,4 +1063,61 @@ pub fn cant_be_regenerated(q: &dyn Query, cards: &'static CardTable, id: ObjectI
                 }
             })
         })
+}
+
+
+/// Whether a live static ability skips this step (CR 500.11, 614.10).
+/// Reads only sources actually on the battlefield; copies and component links count,
+/// and a source that lost all its abilities does not. No candidate list is allocated.
+pub(crate) fn skips_step(cx: &Cx, player: PlayerId, step: Step) -> bool {
+    sources(cx, |d| !d.skip_steps.is_empty()).any(|(source, controller, def, by)| {
+        let asker = Asker { source, controller, by, instance: None, spell: false };
+        def.skip_steps.iter().any(|rule| rule.step == step && (rule.applies)(cx, &asker, player))
+    })
+}
+
+
+/// Static hand-size rules applying to `player`, with their source timestamps
+/// (CR 613.7a, 613.11). No allocation in a game without an applicable source.
+pub(crate) fn hand_size_rules(cx: &Cx, player: PlayerId) -> Vec<(u32, HandSize)> {
+    let mut rules = Vec::new();
+    for (source, controller, def, by) in sources(cx, |d| !d.hand_size_rules.is_empty()) {
+        let asker = Asker { source, controller, by, instance: None, spell: false };
+        for rule in def.hand_size_rules {
+            if (rule.applies)(cx, &asker, player) {
+                rules.push((cx.s().obj(source).timestamp, rule.size));
+            }
+        }
+    }
+    rules
+}
+
+/// Materialize complete-declaration restrictions from live static sources.
+pub fn combat_groups(cx: &Cx, role: CombatRole, eligible: &[ObjectId]) -> Vec<CombatGroup> {
+    let mut groups: Vec<CombatGroup> = Vec::new();
+    for (source, controller, def, by) in sources(cx, |d| !d.combat_groups.is_empty()) {
+        let asker = Asker { instance: None, source, controller, by, spell: false };
+        for rule in def.combat_groups.iter().filter(|r| r.role == role) {
+            for &subject in eligible {
+                if !(rule.applies)(cx, &asker, subject) {
+                    continue;
+                }
+                let members = eligible
+                    .iter()
+                    .copied()
+                    .filter(|&other| (!rule.others_only || other != subject) && (rule.counted)(cx, &asker, subject, other))
+                    .collect();
+                // Global caps share their membership instead of storing one
+                // copy of the whole declaration for every affected creature.
+                if let Some(g) = groups.iter_mut().find(|g| g.members == members && g.at_least == rule.at_least && g.at_most == rule.at_most) {
+                    if !g.subjects.contains(&subject) {
+                        g.subjects.push(subject);
+                    }
+                } else {
+                    groups.push(CombatGroup { subjects: vec![subject], members, at_least: rule.at_least, at_most: rule.at_most });
+                }
+            }
+        }
+    }
+    groups
 }

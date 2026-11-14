@@ -1,0 +1,34 @@
+# With only a friendly creature and an opposing Wall, the upkeep trigger cannot be put on the stack (CR 603.3d).
+[Bot1 Deck]
+Erhnam Djinn
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Ornithopter
+Forest x20
+[Bot2 Deck]
+Wall of Wood
+Mox Emerald
+Forest x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Erhnam Djinn.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Wall of Wood.Cast
+[T3 Bot1.Main1]
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot2.Battlefield.Wall of Wood.Keywords = Defender

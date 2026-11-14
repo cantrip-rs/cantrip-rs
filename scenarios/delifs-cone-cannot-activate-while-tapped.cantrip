@@ -1,0 +1,48 @@
+# Icy Manipulator taps the Cone, making its tap cost unavailable; after untapping it can be sacrificed (CR 602.2b).
+[Bot1 Deck]
+Delif's Cone
+Memnite
+Island x20
+[Bot2 Deck]
+Icy Manipulator
+Black Lotus
+Mox Ruby
+Mox Jet
+Island x20
+[Actions]
+Bot1.Hand.Delif's Cone.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Icy Manipulator.Cast
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Icy Manipulator.Activate(Bot1.Battlefield.Delif's Cone)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Delif's Cone.Tapped = true
+! Bot1.Battlefield.Delif's Cone.Activate(Bot1.Battlefield.Memnite)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Delif's Cone.Activate(Bot1.Battlefield.Memnite)
+? Bot1.Graveyard = Delif's Cone
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Accept
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 20

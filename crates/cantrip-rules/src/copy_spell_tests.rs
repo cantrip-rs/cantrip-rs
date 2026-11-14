@@ -47,7 +47,7 @@ fn a_copy_of_a_spell_made_uncounterable_and_hasty_by_its_mana_is_neither() {
 static WALKER: CardDef = CardDef {
     name: "Copy Test Walker",
     types: TypeSet::of(&[CardType::Planeswalker]),
-    supertypes: Supertypes { basic: false, legendary: true, snow: false },
+    supertypes: Supertypes { basic: false, legendary: true, snow: false, world: false },
     loyalty: Some(3),
     ..CardDef::BLANK
 };
