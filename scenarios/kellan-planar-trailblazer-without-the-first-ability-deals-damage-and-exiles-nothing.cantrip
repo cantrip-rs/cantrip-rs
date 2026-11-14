@@ -1,0 +1,27 @@
+# Kellan, Planar Trailblazer (CR 603.2): as a Scout it has no combat-damage trigger. Attacked on turn 3 without the {1}{R}
+# ability, it deals 2 (20 -> 18) and nothing is exiled from the library.
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Kellan, Planar Trailblazer
+Island x4
+Mountain
+Island x10
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Kellan, Planar Trailblazer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Kellan, Planar Trailblazer > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+
+[Expect]
+Exile.Count = 0
+Bot2.Life = 18

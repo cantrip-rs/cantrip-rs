@@ -1,0 +1,50 @@
+# Kellan, Planar Trailblazer (CR 205.1a, 613.4b, 702.4, 510.2): on turn 3 Bot1 pays {1}{R} and then {2}{R} (a Black Lotus, a
+# Mox Ruby and a Mountain: 5 mana). Kellan is a 3/2 Human Faerie Rogue with double strike and still has the gained trigger: it
+# deals 3 first-strike damage and 3 regular damage (20 -> 14), exiling the top card each time. Bot1 plays the Mountain as its
+# land drop and casts the Black Lotus from exile.
+[Bot1 Deck]
+Black Lotus
+Mountain
+Mox Ruby
+Kellan, Planar Trailblazer
+Island x3
+Island
+Mountain
+Black Lotus
+Island x10
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Kellan, Planar Trailblazer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Kellan, Planar Trailblazer.Activate(Ability: Scout)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Kellan, Planar Trailblazer.Activate(Ability: is a Detective)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kellan, Planar Trailblazer.Subtypes = Faerie; Human; Rogue
+? Bot1.Battlefield.Kellan, Planar Trailblazer.Power = 3
+? Bot1.Battlefield.Kellan, Planar Trailblazer.Toughness = 2
+? Bot1.Battlefield.Kellan, Planar Trailblazer.Keywords = DoubleStrike
+Bot1.Attack(Kellan, Planar Trailblazer > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 14
+? Exile.Count = 2
+Bot1.Exile.Mountain.Play
+Bot1.Exile.Black Lotus.Cast
+
+[Expect]
+Bot2.Life = 14
+Exile.Count = 0

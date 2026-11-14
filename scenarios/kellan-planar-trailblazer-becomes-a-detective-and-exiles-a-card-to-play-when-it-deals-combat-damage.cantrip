@@ -1,0 +1,37 @@
+# Kellan, Planar Trailblazer (CR 205.1a, 613.1d, 510.2, 305.1): on turn 1 Bot1 casts Kellan (2/1 Human Faerie Scout). On turn 3 the
+# {1}{R} ability makes it a Human Faerie Detective that has the gained trigger. It attacks, deals 2 (20 -> 18), and the trigger
+# exiles the top card of Bot1's library - a Mountain - which Bot1 plays from exile as its land drop this turn.
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Kellan, Planar Trailblazer
+Island x5
+Mountain
+Island x10
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Kellan, Planar Trailblazer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Kellan, Planar Trailblazer.Activate(Ability: Scout)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kellan, Planar Trailblazer.Subtypes = Detective; Faerie; Human
+Bot1.Attack(Kellan, Planar Trailblazer > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+? Exile = Mountain
+Bot1.Exile.Mountain.Play
+? Bot1.Battlefield.Count = 4
+
+[Expect]
+Exile.Count = 0
+Bot2.Life = 18

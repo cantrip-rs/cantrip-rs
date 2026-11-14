@@ -1,0 +1,42 @@
+# Kellan, Planar Trailblazer (CR 608.2c): "If Kellan is a Detective" is checked as the ability resolves. As a Scout, the {2}{R}
+# ability does nothing (still 2/1, no double strike); after the {1}{R} ability a second activation of it does nothing either
+# (it is no longer a Scout: its types are still Human Faerie Detective).
+[Bot1 Deck]
+Black Lotus
+Mountain
+Mox Ruby
+Kellan, Planar Trailblazer
+Island x3
+Island
+Mountain
+Island x10
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Kellan, Planar Trailblazer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Kellan, Planar Trailblazer.Activate(Ability: is a Detective)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kellan, Planar Trailblazer.Power = 2
+? Bot1.Battlefield.Kellan, Planar Trailblazer.Toughness = 1
+? Bot1.Battlefield.Kellan, Planar Trailblazer.Keywords = (absent)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Kellan, Planar Trailblazer.Activate(Ability: Scout)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kellan, Planar Trailblazer.Subtypes = Detective; Faerie; Human
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Kellan, Planar Trailblazer.Power = 2

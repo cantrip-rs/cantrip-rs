@@ -1,0 +1,53 @@
+# Kellan, Planar Trailblazer (CR 608.2c, 205.1a): "If Kellan is a Scout" is checked as the {1}{R} ability resolves. Once Kellan
+# is a Rogue (after {1}{R} then {2}{R}), paying {1}{R} again changes nothing: it is not a Scout, so it stays a 3/2 Human Faerie
+# Rogue and does not gain the trigger a second time - one hit with double strike exiles two cards, not four.
+[Bot1 Deck]
+Black Lotus
+Mountain
+Mox Ruby x3
+Kellan, Planar Trailblazer
+Island
+Island
+Island x3
+Island x10
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Kellan, Planar Trailblazer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Kellan, Planar Trailblazer.Activate(Ability: Scout)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Kellan, Planar Trailblazer.Activate(Ability: is a Detective)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Kellan, Planar Trailblazer.Activate(Ability: Scout)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kellan, Planar Trailblazer.Subtypes = Faerie; Human; Rogue
+? Bot1.Battlefield.Kellan, Planar Trailblazer.Power = 3
+Bot1.Attack(Kellan, Planar Trailblazer > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 14
+? Exile.Count = 2
+
+[Expect]
+Bot2.Life = 14
+Exile.Count = 2
