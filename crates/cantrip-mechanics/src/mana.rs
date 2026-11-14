@@ -3,6 +3,21 @@
 
 use cantrip_api::*;
 
+/// "any color that a land an opponent controls could produce" (CR 106.7, 800.4a): capabilities through the current
+/// layers and replacement effects, irrespective of costs or tapped state; only lands of opponents still in the game. Exotic Orchard and Fellwar Stone print it.
+/// Colorless is deliberately absent from the colors returned by the rules query (CR 106.1b).
+pub fn opponents_land_colors(q: &dyn Query, me: &Asker) -> ColorSet {
+    let mut colors = ColorSet::NONE;
+    for opponent in q.state().opponents(me.controller) {
+        for land in q.permanents_of(opponent) {
+            if q.chars(land).is(CardType::Land) {
+                colors.0 |= q.producible_types(land).0.0;
+            }
+        }
+    }
+    colors
+}
+
 /// "If a land is tapped for mana, it ..." (CR 614.1a, 106.12b): the `applies` of a replacement that changes what any land
 /// produces, whoever taps it. Ritual of Subdual and Infernal Darkness print it.
 pub fn a_land_is_tapped(q: &dyn Query, _: &Asker, proposal: &Proposal) -> bool {
