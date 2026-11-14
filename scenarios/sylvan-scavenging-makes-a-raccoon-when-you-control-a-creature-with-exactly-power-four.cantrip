@@ -1,0 +1,58 @@
+# Sylvan Scavenging's second mode (CR 700.2, 603.4): the Raccoon is created if Bot1 controls a creature with power 4 or greater as the mode resolves.
+# Bot1's Cackling Prowler is exactly 4/3, so at Bot1's end step the mode creates a 3/3 green Raccoon token (and the Prowler's own morbid ability is not
+# triggered: no creature died).
+
+[Bot1 Deck]
+Black Lotus
+Cackling Prowler
+Sylvan Scavenging
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Island x13
+
+[Bot2 Deck]
+Island x21
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cackling Prowler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Sylvan Scavenging.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+Bot1.Modes(Create a 3/3 green Raccoon)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Cackling Prowler.Power = 4
+Bot1.Battlefield.Count = 7
+Bot1.Battlefield.Raccoon Token.Power = 3
+Bot1.Battlefield.Raccoon Token.Toughness = 3
+Bot1.Battlefield.Raccoon Token.Colors = Green
+Bot1.Battlefield.Raccoon Token.Subtypes = Raccoon
