@@ -1,0 +1,51 @@
+# Solemn Simulacrum: both abilities say "you may". Bot1 declines the search, so the library is neither searched nor shuffled (the
+# Forest is still on top) and no land arrives; when Bot2's Lightning Bolt kills the Simulacrum on turn 2, Bot1 declines the draw and
+# the hand is still the two Plains. Control: the scenario where both are accepted.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Solemn Simulacrum
+Plains
+Plains
+Forest
+Plains x11
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Solemn Simulacrum.Cast
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Library.Top = Forest
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Solemn Simulacrum)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Solemn Simulacrum
+Bot2.Pass
+Bot1.Pass
+Bot1.Decline
+? Bot1.Hand.Count = 2
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Mox Jet; Mox Emerald; Mox Pearl
+Bot1.Library.Top = Forest
