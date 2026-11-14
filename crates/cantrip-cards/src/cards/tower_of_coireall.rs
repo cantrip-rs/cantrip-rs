@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{combat, targets};
+use cantrip_mechanics::{combat, lands, targets};
 use cantrip_oracle as oracle;
 
 /// "{T}: Target creature can't be blocked by Walls this turn." (CR 608.2, 611.2a).
@@ -41,7 +41,7 @@ pub static CARD: CardDef = CardDef {
     lasting_block_rules: &[
         LastingBlockRule {
             text: "Can't be blocked by Walls",
-            allows: combat::cant_be_blocked_by_walls,
+            allows: combat::cant_be_blocked_by_subtype::<{ lands::sub(Subtype::Wall) }>,
         },
     ],
     ..oracle::TOWER_OF_COIREALL
