@@ -1,0 +1,62 @@
+# Garruk's Uprising's intervening "if" (CR 603.4): Bot1's only creature is Trained Armodon (3/3, one under the limit) and Bot2's Questing Beast (power 4)
+# is not one Bot1 controls, so no card is drawn when the Uprising enters (hand: 7 - four Moxen, Armodon = 2, +1 draw step, - Uprising = 2).
+# The trample is Bot1's alone: the Armodon has it and Bot2's Beast does not.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Mox Ruby
+Mox Jet
+Trained Armodon
+Garruk's Uprising
+Forest
+Forest x14
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Questing Beast
+Island x22
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Trained Armodon.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Questing Beast.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Garruk's Uprising.Cast
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 2
+Bot1.Battlefield.Trained Armodon.Keywords = Trample
+Bot2.Battlefield.Questing Beast.Keywords = CantBeBlockedByPowerTwoOrLess; Deathtouch; Haste; Vigilance

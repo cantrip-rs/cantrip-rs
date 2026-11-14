@@ -1,0 +1,47 @@
+# Garruk's Uprising: "When this enchantment enters, if you control a creature with power 4 or greater, draw a card" (CR 603.4) and "Creatures you control have
+# trample" (CR 702.19). Bot1 controls Questing Beast (4/4, exactly the limit) as the Uprising enters, so it draws (hand 7 - Lotus, four Moxen, Beast and
+# Uprising = 0, +1). The Beast has trample, Bot2's Memnite does not.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Questing Beast
+Garruk's Uprising
+Forest x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Questing Beast.Cast
+Bot1.Pass
+? Bot1.Hand.Count = 1
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Battlefield.Mox Emerald#4.Activate
+Bot1.Hand.Garruk's Uprising.Cast
+Bot1.Pass
+? Stack.Count = 1
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+
+[Expect]
+Bot1.Hand.Count = 1
+Bot1.Battlefield.Questing Beast.Keywords = CantBeBlockedByPowerTwoOrLess; Deathtouch; Haste; Trample; Vigilance
+Bot2.Battlefield.Memnite.Keywords = (absent)

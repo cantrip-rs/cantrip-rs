@@ -1,0 +1,74 @@
+# Garruk's Uprising: "Whenever a creature you control with power 4 or greater enters, draw a card" (CR 603.6a). With the Uprising on the battlefield,
+# Bot2's Questing Beast (power 4, not Bot1's) entering draws nothing, Bot1's Trained Armodon (3/3, one under the limit) draws nothing, and Bot1's own Questing
+# Beast (exactly 4) draws a card. Hand: 7 - four Moxen and the Uprising = 2; turn 3 draw 3, Armodon 2 (unchanged); turn 5 draw 3, Beast 2, +1 = 3.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Mox Ruby
+Mox Jet
+Garruk's Uprising
+Trained Armodon
+Questing Beast
+Forest x15
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Questing Beast
+Island x22
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Garruk's Uprising.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Questing Beast.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+? Bot1.Hand.Count = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Trained Armodon.Cast
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+? Bot1.Hand.Count = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Questing Beast.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 3
