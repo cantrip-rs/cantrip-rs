@@ -1957,6 +1957,25 @@ pub fn this_or_another_of_subtype_you_control_enters<const SUBTYPE: u16>(q: &dyn
     }
 }
 
+/// "Whenever another nontoken [subtype] you control enters" (CR 603.6a), `SUBTYPE` a `Subtype` as `u16` (`lands::sub`): a permanent
+/// other than this one, a card and not a token, under your control as it entered, that has that subtype, the type read through the
+/// words of the source's text (CR 612); the trigger is about that permanent (`StackItem::subject`). Black Panther, Vanguard (Heroes)
+/// and Lathliss, Dragon Queen (Dragons) print it.
+pub fn another_nontoken_of_subtype_you_control_enters<const SUBTYPE: u16>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::ZoneChange { new, to, .. }
+            if *new != me.source
+                && to.is(ZoneKind::Battlefield)
+                && !q.obj(*new).token
+                && q.controller(*new) == me.controller
+                && q.chars(*new).has_subtype(crate::lands::word(q, me.source, SUBTYPE)) =>
+        {
+            Fired::about(Target::Object(*new))
+        }
+        _ => None,
+    }
+}
+
 /// "Whenever another [subtype] you control enters" (CR 603.6a), `SUBTYPE` a `Subtype` as `u16` (`lands::sub`): a permanent
 /// other than this one, under your control as it entered, that is that creature type (a token too), the type read through
 /// the words of the source's text (CR 612); the trigger is about that permanent (`StackItem::subject`). Thalia's Lieutenant (Humans),
