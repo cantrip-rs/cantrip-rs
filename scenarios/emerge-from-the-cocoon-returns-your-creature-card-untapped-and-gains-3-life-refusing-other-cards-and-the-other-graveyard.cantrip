@@ -1,0 +1,85 @@
+# Emerge from the Cocoon: "Return target creature card from your graveyard to the battlefield. You gain 3 life." Bot1's
+# graveyard holds Black Lotus (a non-creature card) and its Ornithopter (Bolted on turn 2); Bot2's holds its own Ornithopter
+# and two Lightning Bolts. Refused as targets: Bot1's Black Lotus and Bot2's Ornithopter (a creature card, but not in Bot1's
+# graveyard). Bot1's Ornithopter is accepted: it returns untapped under Bot1's control and Bot1 gains exactly 3 life (20 -> 23),
+# with Bot2's graveyard untouched. Five Moxen pay the {4}{W}.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Ornithopter
+Black Lotus
+Emerge from the Cocoon
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Mountain
+Ornithopter
+Lightning Bolt
+Lightning Bolt
+Island x2
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Ornithopter; Black Lotus
+? Bot2.Graveyard = Lightning Bolt; Ornithopter; Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Emerge from the Cocoon.Cast(Bot1.Graveyard.Black Lotus)
+! Bot1.Hand.Emerge from the Cocoon.Cast(Bot2.Graveyard.Ornithopter)
+Bot1.Hand.Emerge from the Cocoon.Cast(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter
+Bot1.Graveyard = Emerge from the Cocoon; Black Lotus
+Bot2.Graveyard = Lightning Bolt; Ornithopter; Lightning Bolt
+Bot1.Life = 23

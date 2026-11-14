@@ -1,0 +1,55 @@
+# Emerge from the Cocoon: "Return target creature card from your graveyard to the battlefield. You gain 3 life." Bot2's
+# Grafdigger's Cage says creature cards in graveyards can't enter the battlefield. The Ornithopter is still a legal target (the Cage
+# stops it entering, not being targeted), so the spell resolves: the return does nothing, and Bot1 still gains the 3 life (CR
+# 608.2c), 20 -> 23, with the Ornithopter left in the graveyard.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Ornithopter
+Emerge from the Cocoon
+Island x13
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Grafdigger's Cage
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grafdigger's Cage.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Emerge from the Cocoon.Cast(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Graveyard = Emerge from the Cocoon; Ornithopter
+Bot1.Life = 23
