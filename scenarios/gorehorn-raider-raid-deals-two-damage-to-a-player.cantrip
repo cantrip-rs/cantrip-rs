@@ -1,0 +1,58 @@
+# Gorehorn Raider: "Raid -- When this creature enters, if you attacked this turn, it deals 2 damage to any target." Any target includes a player:
+# after the first Raider attacks for 4 on turn 3, the second one's trigger hits Bot2 for 2 more.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby x4
+Gorehorn Raider
+Gorehorn Raider
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Gorehorn Raider.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot2.Life = 20
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Attack(Gorehorn Raider > Bot2)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Gorehorn Raider.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14
