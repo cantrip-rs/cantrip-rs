@@ -29,6 +29,19 @@ pub fn plus_one_counters_on_first_target_then_it_fights_second<const N: i32>(g: 
     Ok(())
 }
 
+/// "Put `N` +1/+1 counters on target creature you control. [Then] it deals damage equal to its power to target creature an opponent
+/// controls." (CR 122.1, 120.3, 608.2b-c): the creature is the spell's first target and the one hit its second, each judged as the
+/// spell resolves. With the first gone nothing is put on and nothing is dealt; with only the second gone the counters are still put
+/// on. The counters come first, so the damage is the power they give (CR 608.2c). Knockout Maneuver and Felling Blow print it.
+pub fn plus_one_counters_on_first_target_then_it_bites_second<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = targets::object(g, item, 0) {
+        g.add_counters(creature, CounterKind::PlusOne, N);
+    }
+    g.end_sentence();
+    targets_bite(g, item, 0, 1);
+    Ok(())
+}
+
 /// "Enchanted creature fights up to one target creature an opponent controls" / "equipped creature fights ..." (CR 701.14), the
 /// ability's first target being the one fought. The enchanted or equipped creature is the one the source is attached to as the
 /// ability resolves, or, if the source has left the battlefield by then, the one it was attached to as it left (CR 608.2h). The
