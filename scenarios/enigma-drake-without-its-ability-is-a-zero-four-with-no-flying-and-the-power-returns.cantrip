@@ -1,0 +1,60 @@
+# Enigma Drake's power is set by a characteristic-defining ability (CR 604.3). Dress Down ("Creatures lose all abilities") removes
+# it along with flying (CR 613.1f): with an instant in the graveyard the Drake would be 1/4, but without the ability its power is 0
+# (CR 208.5) and its toughness stays the printed 4, and it is no longer flying. When Dress Down is sacrificed at the end step the
+# Drake counts again: 1/4 flying (the Lotus and Dress Down in the graveyard are an artifact and an enchantment, not instants).
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Enigma Drake
+Lightning Bolt
+Dress Down
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Enigma Drake.Cast
+Bot1.Pass
+Bot2.Pass
+
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Enigma Drake.Power = 1
+? Bot1.Battlefield.Enigma Drake.Toughness = 4
+? Bot1.Battlefield.Enigma Drake.Keywords = Flying
+
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Dress Down.Cast
+Bot1.Pass
+Bot2.Pass
+
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Dress Down.Colors = Blue
+? Bot1.Battlefield.Enigma Drake.Power = 0
+? Bot1.Battlefield.Enigma Drake.Toughness = 4
+? Bot1.Battlefield.Enigma Drake.Keywords = (absent)
+
+[T7 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Dress Down = (absent)
+Bot1.Battlefield.Enigma Drake.Power = 1
+Bot1.Battlefield.Enigma Drake.Toughness = 4
+Bot1.Battlefield.Enigma Drake.Keywords = Flying

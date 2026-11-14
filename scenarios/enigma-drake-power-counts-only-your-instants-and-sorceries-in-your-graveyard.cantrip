@@ -1,0 +1,83 @@
+# Enigma Drake (*/4 flying): "Enigma Drake's power is equal to the number of instant and sorcery cards in your graveyard" - a
+# characteristic-defining ability (CR 604.3, layer 7a). Bot1 casts it on turn 1 off Black Lotus and a Mountain: the Lotus lands in the
+# graveyard, but an artifact is not an instant or sorcery, so the Drake is 0/4. Bot2's Lightning Bolt in turn 2 hits the Drake for 3
+# (it survives, toughness 4) and goes to Bot2's graveyard, which is not Bot1's, so the power stays 0. On turn 3 Bot1 bolts its own
+# Memnite: the graveyard holds an artifact, a creature and one instant, so the power is 1. On turn 5 Chain Lightning (a sorcery)
+# makes it 2, and the Drake attacks for exactly that.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Enigma Drake
+Memnite
+Lightning Bolt
+Chain Lightning
+Island
+Mountain
+Mountain
+Island x11
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Enigma Drake.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Black Lotus
+? Bot1.Battlefield.Enigma Drake.Power = 0
+? Bot1.Battlefield.Enigma Drake.Toughness = 4
+? Bot1.Battlefield.Enigma Drake.Keywords = Flying
+
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Enigma Drake)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Lightning Bolt
+? Bot1.Battlefield.Enigma Drake.Power = 0
+? Bot1.Battlefield.Enigma Drake.Toughness = 4
+? Bot1.Battlefield.Enigma Drake.Damage = 3
+
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[T3 Bot1.Main2]
+? Bot1.Graveyard = Memnite; Lightning Bolt; Black Lotus
+? Bot1.Battlefield.Enigma Drake.Power = 1
+? Bot1.Battlefield.Enigma Drake.Toughness = 4
+
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Chain Lightning.Cast(Bot2)
+
+[T5 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Enigma Drake.Power = 2
+? Bot2.Life = 17
+Bot1.Attack(Enigma Drake > Bot2)
+
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Enigma Drake.Power = 2
+Bot1.Battlefield.Enigma Drake.Toughness = 4
+Bot1.Graveyard = Chain Lightning; Memnite; Lightning Bolt; Black Lotus
+Bot2.Graveyard = Lightning Bolt

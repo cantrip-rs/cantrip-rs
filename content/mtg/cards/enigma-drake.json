@@ -1,0 +1,11 @@
+{
+  "name": "Enigma Drake",
+  "manaCost": "{1}{U}{R}",
+  "type": "Creature — Drake",
+  "power": "*",
+  "toughness": 4,
+  "oracleText": "Flying\nEnigma Drake's power is equal to the number of instant and sorcery cards in your graveyard.",
+  "keywords": [
+    "Flying"
+  ]
+}
