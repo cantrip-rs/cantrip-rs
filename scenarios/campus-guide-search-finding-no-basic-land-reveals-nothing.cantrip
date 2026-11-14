@@ -1,0 +1,33 @@
+# Campus Guide: a library without a basic land card has nothing to find (CR 701.23b): Bot1 accepts, finds nothing (the Tropical Island is a
+# nonbasic land, refused) and reveals nothing; the library is shuffled all the same and the Guide stays.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Campus Guide
+Plains x4
+Tropical Island
+Lightning Bolt
+Lightning Bolt
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Campus Guide.Cast
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Search(Tropical Island)
+Bot1.Search()
+
+[Expect]
+Bot1.Revealed = (absent)
+Bot1.Library.Count = 3
+Bot1.Battlefield = Mox Jet; Mox Ruby; Campus Guide
+Stack.Count = 0
