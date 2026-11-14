@@ -1,0 +1,38 @@
+# Goblin Oriflamme gives only its controller's attacking creatures +1/+0 while they attack (CR 613.1g).
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Goblin Oriflamme
+Ornithopter
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Oriflamme.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot2.Battlefield.Ornithopter.Power = 0
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Power = 0
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+[T4 Bot2.DeclareBlockers]
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19
