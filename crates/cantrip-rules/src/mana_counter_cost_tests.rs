@@ -230,7 +230,7 @@ fn a_mana_symbol_x_is_not_written_into_the_permanent() {
 fn mana_activated_during_payment_does_not_replace_the_parent_spells_x() {
     let mut game = game(); let source = put(&mut game, &BATTERY, Zone::BATTLEFIELD);
     let spell = put(&mut game, &SPELL, Zone::hand(YOU));
-    act(&mut game, spell); announce(&mut game, 3, 1000);
+    act(&mut game, spell); announce(&mut game, 3, i32::MAX as u32);
     act(&mut game, source); announce(&mut game, 2, 5); finish_payment(&mut game);
     assert_eq!(game.state.player(YOU).pool.total(), 0);
     assert_eq!(game.state.stack.last().unwrap().x, 3);

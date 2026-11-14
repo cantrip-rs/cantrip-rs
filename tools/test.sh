@@ -104,7 +104,7 @@ else
   # the workspace's directory so its rust-toolchain.toml chooses the toolchain. A --filter names dotnet tests, so it
   # leaves these out.
   if [ "$RESULT" = 0 ] && [ -z "$FILTERED" ]; then
-    (cd "$ROOT" && CANTRIP_VERIFY=1 cargo test --profile checked --workspace --quiet) || RESULT=1
+    (cd "$ROOT" && CANTRIP_VERIFY=1 cargo test --profile checked --workspace --quiet --no-fail-fast) || RESULT=1
   fi
 fi
 

@@ -144,9 +144,9 @@ if "%RESULT%"=="0" if not defined FILTERED (
   pushd "%ROOT%"
   set "CANTRIP_VERIFY=1"
   if defined DETAILED (
-    cargo test --profile checked --workspace --quiet
+    cargo test --profile checked --workspace --quiet --no-fail-fast
   ) else (
-    cargo test --profile checked --workspace --quiet > "%LOG%-engine.txt" 2>&1
+    cargo test --profile checked --workspace --quiet --no-fail-fast > "%LOG%-engine.txt" 2>&1
   )
   if errorlevel 1 set "RESULT=1"
   popd

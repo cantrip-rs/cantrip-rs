@@ -2,6 +2,17 @@
 use cantrip_engine::*;
 use cantrip_state::{Frame, FrameKind};
 const YOU: PlayerId = PlayerId(0);
+fn flood_lands(g: &mut dyn cantrip_api::Game, item: &StackItem) -> Result<(), Suspend> {
+    for land in g.permanents_of(item.controller) {
+        if g.chars(land).is(CardType::Land) { g.add_counters(land, CounterKind::Flood, 1); }
+    }
+    Ok(())
+}
+static FLOODER: CardDef = CardDef {
+    name: "Flood counter setup", oracle: true, types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[ability(Cost::NONE, flood_lands, "Put a flood counter on each land you control.")],
+    ..CardDef::BLANK
+};
 fn put_eluge_and_flooded_island(g: &mut Game) {
     let all = cantrip_cards::all();
     let eluge = g.cards.id_of(all.iter().copied().find(|c| c.name == "Eluge, the Shoreless Sea").unwrap());
@@ -11,12 +22,24 @@ fn put_eluge_and_flooded_island(g: &mut Game) {
     g.state.zone_push(zone, reducer);
     let land = g.state.push_obj(Obj::new(island, YOU, zone));
     g.state.zone_push(zone, land);
-    let mut counts = [0; CounterKind::COUNT];
-    counts[CounterKind::Flood as usize] = 1;
-    g.state.update_obj(land, |o| { o.put_path_add(&counts); o.tapped = true; });
+    g.state.update_obj(land, |o| o.tapped = true);
+    let flooder = g.state.push_obj(Obj::new(g.cards.id_of(&FLOODER), YOU, zone));
+    g.state.zone_push(zone, flooder);
+    g.run();
+    let request = g.pending().cloned().unwrap();
+    let RequestKind::Priority { options } = &request.kind else { panic!("priority") };
+    let option = options.iter().find(|o| o.source == Some(flooder)).unwrap();
+    g.answer(request.id, YOU, Answer::Act(Action::of(option))).unwrap();
+    for _ in 0..2 {
+        g.run();
+        let request = g.pending().cloned().unwrap();
+        g.answer(request.id, request.player, Answer::Pass).unwrap();
+    }
+    g.run();
+    assert_eq!(g.state.obj(land).counters(CounterKind::Flood), 1);
 }
 fn setup(name: &str) -> (Game, ObjectId) {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new(cantrip_cards::all())));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new(cantrip_cards::all().into_iter().chain([&FLOODER]))));
     let all = cantrip_cards::all();
     let island = table.id_of(all.iter().copied().find(|c| c.name == "Island").unwrap());
     let card = table.id_of(all.iter().copied().find(|c| c.name == name).unwrap());
@@ -45,9 +68,9 @@ fn begin(g: &mut Game, source: ObjectId, n: u32) {
 #[test]
 fn biomass_mutation_hybrid_reduction_keeps_announced_x() {
     let (mut g, source) = setup("Biomass Mutation");
-    put_eluge_and_flooded_island(&mut g);
     g.state.add_mana(YOU, Mana::C, 1001, ObjectId::NONE, None, ManaLasts::Step, false);
     g.state.add_mana(YOU, Mana::G, 1, ObjectId::NONE, None, ManaLasts::Step, false);
+    put_eluge_and_flooded_island(&mut g);
     begin(&mut g, source, 1001);
     let request = g.pending().cloned().unwrap();
     let RequestKind::ChooseModes { additional_cost: true, affordable, .. } = &request.kind else { panic!("{:?}", request.kind) };
@@ -73,9 +96,9 @@ fn thieving_skydiver_kicker_keeps_x_above_old_cap() {
 #[test]
 fn biomass_hybrid_advice_counts_the_announced_generic_mana() {
     let (mut g, source) = setup("Biomass Mutation");
-    put_eluge_and_flooded_island(&mut g);
     g.state.add_mana(YOU, Mana::C, 1000, ObjectId::NONE, None, ManaLasts::Step, false);
     g.state.add_mana(YOU, Mana::G, 1, ObjectId::NONE, None, ManaLasts::Step, false);
+    put_eluge_and_flooded_island(&mut g);
     begin(&mut g, source, 1001);
     let request = g.pending().cloned().unwrap();
     let RequestKind::ChooseModes { additional_cost: true, affordable, .. } = &request.kind else { panic!("{:?}", request.kind) };
