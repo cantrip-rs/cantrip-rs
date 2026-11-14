@@ -1,0 +1,36 @@
+# Grow from the Ashes cast with its kicker {2} (five mana: Black Lotus's {G}{G}{G} and two Moxen; CR 702.33a): "If this spell
+# was kicked, instead search your library for two basic land cards, put them onto the battlefield, then shuffle." Two
+# Forests may be found, not three and not a Tropical Island, and both enter untapped, after a single shuffle.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Grow from the Ashes
+Tropical Island
+Llanowar Elves
+Plains
+Tropical Island
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grow from the Ashes.Cast(Kicked: 1)
+Bot1.Pass
+! Bot1.Search(Tropical Island)
+! Bot1.Search(Forest#1; Forest#2; Forest#3)
+Bot1.Search(Forest#1; Forest#2)
+
+[Expect]
+Bot1.Battlefield.Forest#1.Tapped = false
+Bot1.Battlefield.Forest#2.Tapped = false
+Bot1.Battlefield.Count = 4
+Bot1.Shuffles = 1

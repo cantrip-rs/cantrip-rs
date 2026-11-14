@@ -1,0 +1,39 @@
+# Grow from the Ashes ({2}{G}): "Search your library for a basic land card, put it onto the battlefield, then shuffle"
+# (CR 701.23). Only a basic land card may be found (not Tropical Island, not Llanowar Elves, and no second Forest), and the
+# Forest enters untapped, the library shuffled; Bot2's library is not searched.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Grow from the Ashes
+Tropical Island
+Llanowar Elves
+Plains
+Tropical Island
+Llanowar Elves
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grow from the Ashes.Cast
+Bot1.Pass
+! Bot1.Search(Tropical Island)
+! Bot1.Search(Llanowar Elves)
+! Bot1.Search(Forest#1; Forest#2)
+Bot1.Search(Forest#1)
+
+[Expect]
+Bot1.Battlefield.Forest.Tapped = false
+Bot1.Battlefield.Count = 4
+Bot1.Shuffles = 1
+Bot2.Library.Count = 13
+Bot2.Battlefield.Count = 0
