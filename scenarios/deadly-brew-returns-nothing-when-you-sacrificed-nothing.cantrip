@@ -1,0 +1,36 @@
+# Deadly Brew: "If you sacrificed a permanent this way, you may return another permanent card from your graveyard to your hand."
+# Bot1 controls no creature or planeswalker, only Moxen, so it sacrifices nothing (Bot2 sacrifices its Memnite): Bot1 is not
+# offered the Black Lotus in its graveyard, which stays there.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+Deadly Brew
+Island x16
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Deadly Brew.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Memnite
+Bot1.Battlefield = Mox Jet; Mox Emerald
+Bot1.Hand.Count = 4
+Bot1.Graveyard.Count = 2

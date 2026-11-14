@@ -1,0 +1,6 @@
+{
+  "name": "Deadly Brew",
+  "manaCost": "{B}{G}",
+  "type": "Sorcery",
+  "oracleText": "Each player sacrifices a creature or planeswalker of their choice. If you sacrificed a permanent this way, you may return another permanent card from your graveyard to your hand."
+}

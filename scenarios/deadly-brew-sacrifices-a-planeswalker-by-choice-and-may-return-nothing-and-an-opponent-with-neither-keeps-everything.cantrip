@@ -1,0 +1,59 @@
+# Deadly Brew: "creature or planeswalker of their choice": Bot1 controls a Memnite and Liliana of the Veil and chooses to sacrifice
+# Liliana (the Memnite stays); Bot2 controls only a Mox Sapphire, neither a creature nor a planeswalker, so sacrifices nothing and keeps it.
+# "If you sacrificed a permanent this way, you may return another permanent card from your graveyard to your hand": Bot1's graveyard holds a
+# Black Lotus and Lightning Bolt (an instant, not a permanent card, so it is not offered) beside the Liliana it sacrificed (not "another");
+# Bot1 may return none and chooses not to, so all of them stay.
+
+[Bot1 Deck]
+Black Lotus
+Liliana of the Veil
+Mox Jet
+Mox Emerald
+Mox Ruby
+Lightning Bolt
+Deadly Brew
+Memnite
+Island x12
+
+[Bot2 Deck]
+Mox Sapphire
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Liliana of the Veil.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Deadly Brew.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Liliana of the Veil)
+! Bot1.Choose(Lightning Bolt)
+! Bot1.Choose(Liliana of the Veil)
+Bot1.Choose()
+
+[Expect]
+Bot1.Battlefield = Memnite; Mox Emerald; Mox Jet; Mox Ruby
+Bot2.Battlefield = Mox Sapphire
+Bot1.Hand.Count = 0
+Bot1.Graveyard = Deadly Brew; Liliana of the Veil; Lightning Bolt; Black Lotus

@@ -1,0 +1,37 @@
+# Deadly Brew: "If you sacrificed a permanent this way, you may return another permanent card from your graveyard to your hand."
+# A token is a permanent (CR 111.1): Bot1's only creatures are the two Goblin tokens Dragon Fodder made, it sacrifices one, and it
+# may still return the Black Lotus from its graveyard. Bot2 controls nothing to sacrifice.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Black Lotus
+Dragon Fodder
+Deadly Brew
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Dragon Fodder.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Deadly Brew.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Goblin Token#1)
+Bot1.Choose(Black Lotus)
+
+[Expect]
+Bot1.Battlefield = Goblin Token; Mox Emerald; Mox Jet; Mox Ruby
+Bot1.Hand = Black Lotus; Island
