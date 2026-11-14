@@ -1,0 +1,18 @@
+{
+  "name": "Underwater Tunnel // Slimy Aquarium",
+  "oracleText": "",
+  "halves": [
+    {
+      "name": "Underwater Tunnel",
+      "manaCost": "{U}",
+      "type": "Enchantment — Room",
+      "oracleText": "When you unlock this door, surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)\n(You may cast either half. That door unlocks on the battlefield. As a sorcery, you may pay the mana cost of a locked door to unlock it.)"
+    },
+    {
+      "name": "Slimy Aquarium",
+      "manaCost": "{3}{U}",
+      "type": "Enchantment — Room",
+      "oracleText": "When you unlock this door, manifest dread, then put a +1/+1 counter on that creature.\n(You may cast either half. That door unlocks on the battlefield. As a sorcery, you may pay the mana cost of a locked door to unlock it.)"
+    }
+  ]
+}

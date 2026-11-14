@@ -1,0 +1,51 @@
+# Unwilling Vessel, "Eerie - Whenever an enchantment you control enters and whenever you fully unlock a Room, put a possession
+# counter on this creature": Underwater Tunnel cast as its left door on turn 3 enters as an enchantment (1 counter); unlocking
+# the other door, Slimy Aquarium, on the same turn fully unlocks the Room (CR 709.5h) for a second counter (2 in all). The Room
+# entering with only one door unlocked is not a full unlock, so it adds exactly one.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Black Lotus
+Unwilling Vessel
+Underwater Tunnel // Slimy Aquarium
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unwilling Vessel.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Unwilling Vessel.Counters.Possession = (absent)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Underwater Tunnel // Slimy Aquarium.Cast(Ability: Underwater Tunnel)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Unwilling Vessel.Counters.Possession = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Underwater Tunnel.Activate(Ability: right door)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Unwilling Vessel.Counters.Possession = 2
