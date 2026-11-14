@@ -212,7 +212,10 @@ public sealed class CardActions
         // distinguishes one from another.
         if (option.Kind == ActionKindView.ActivateAbility)
         {
-            string adds = string.Concat(option.Produces.Select(type => $"{{{Symbol(type)}}}"));
+            string adds = option.ProducesAlternatives.Count > 0
+                ? string.Join(" or ", option.ProducesAlternatives.Select(bundle => bundle.Count > 0
+                    ? string.Concat(bundle.Select(type => $"{{{Symbol(type)}}}")) : "no mana"))
+                : string.Concat(option.Produces.Select(type => $"{{{Symbol(type)}}}"));
 
             if (color is { } chosen)
             {
@@ -603,6 +606,7 @@ public sealed class CardActions
             && option.Produces.Count == 0
             && option.ProducesOfAnyOneColor == 0
             && option.ProducesOfAnyColorEach == 0
+            && option.ProducesAlternatives.Count == 0
             && option.ColorChoices.Count == 0;
     }
 

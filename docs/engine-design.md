@@ -2744,6 +2744,8 @@ Actual pending/on-stack triggers supply their subject, data, members, acquisitio
 is invented for an ability with no current triggering: missing numerical values use zero (CR 107.2), and missing
 objects/players remain absent. Subject-chosen targets without a current chooser report an explicit gap.
 
+A mana ability that chooses between finite, complete bundles uses `add_one_bundle_of`: the static bundles and their card labels define both the choice made as the ability resolves and every mutually exclusive outcome considered by payment advice, replacement previews and producible-type queries. Restrictions and tap-for-mana replacements apply to the selected whole bundle. The host exposes the full alternatives and only their common mana separately, so a client does not treat alternatives as simultaneous production (Adarkar Unicorn, CR 605.3a, 106.12b).
+
 Wizard's Rockets and Vivi Ornitier use shared executable color-combination recipes with capability contracts.
 An announced-X recipe denotes the entire positive-total family, independently of what can pay its activation;
 the current-power recipe reads layers and treats nonpositive/undetermined power as zero. Actual production asks

@@ -2527,6 +2527,10 @@ public sealed class ActionOptionMessage
     [Key(38)]
     public ViewHandle SpendCard { get; set; }
 
+    /// <summary>Mutually exclusive full bundles produced by one mana activation, chosen as it resolves.</summary>
+    [Key(39)]
+    public List<List<ManaTypeView>> ProducesAlternatives { get; set; } = [];
+
 }
 
 /// <summary>

@@ -359,11 +359,37 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
                     // What it adds as the replacement effects on a tap for mana leave it (CR 106.12b), where any would change
                     // it and the row can say it; else what it lists.
                     let player = game.state.obj(src).controller;
-                    let replaced = replaced_mana_yields(game, player, src, o.index).and_then(|yields| row_yield(&yields));
-                    let (fixed, any) = replaced.unwrap_or((d.adds, u32::from(d.adds_any.max(1))));
+                    let yields = replaced_mana_yields(game, player, src, o.index);
+                    let replaced = yields.as_deref().and_then(row_yield);
+                    let bundles = match d.mana_capability {
+                        Some(ManaCapability::FiniteBundles(bundles, _)) => Some(yields.as_ref().map_or_else(
+                            || bundles.to_vec(), |y| y.iter().flat_map(|(_, pools)| pools.iter().copied()).collect())),
+                        _ => None,
+                    };
+                    let (fixed, any) = if let Some(bundles) = &bundles {
+                        (ManaPool(std::array::from_fn(|m| bundles.iter().map(|p| p.0[m]).min().unwrap_or(0))), 0)
+                    } else { replaced.unwrap_or((d.adds, u32::from(d.adds_any.max(1)))) };
+                    if let Some(bundles) = &bundles {
+                        m.produces_alternatives = bundles.iter().map(|pool| {
+                            let mut mana = Vec::new();
+                            for kind in Mana::ALL {
+                                for _ in 0..pool.get(kind) { mana.push(mana_view(kind)); }
+                            }
+                            mana
+                        }).collect();
+                        let text: Vec<String> = bundles.iter().map(|pool| {
+                            let mut text = String::new();
+                            for mana in Mana::ALL {
+                                for _ in 0..pool.get(mana) { text.push_str(&format!("{{{}}}", mana.symbol())); }
+                            }
+                            if text.is_empty() { text.push_str("no mana"); }
+                            text
+                        }).collect();
+                        m.description = format!("{} (can add {} now)", m.description, text.join(" or "));
+                    }
                     // The printed ability remains the description; say separately when the current yield differs from
                     // it, so a replacement effect or variable mana ability does not leave that text misleading.
-                    if replaced.is_some() && (fixed != d.adds || (!o.color_choices.is_empty() && any != u32::from(d.adds_any.max(1)))) {
+                    if bundles.is_none() && replaced.is_some() && (fixed != d.adds || (!o.color_choices.is_empty() && any != u32::from(d.adds_any.max(1)))) {
                         let mut now = String::new();
                         for mana in Mana::ALL {
                             for _ in 0..fixed.get(mana) {
@@ -1781,6 +1807,41 @@ fn count_shown(count: Count, verdict: &SelectionVerdictView) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn finite_bundle_row_is_one_action_and_reports_all_outcomes() {
+        fn applies(_: &dyn Query, asker: &Asker, proposal: &Proposal) -> bool {
+            matches!(proposal, Proposal::ManaProduction(m) if m.player == asker.controller)
+        }
+        fn double(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
+            if let Proposal::ManaProduction(m) = proposal { m.mana = ManaPool(m.mana.0.map(|n| n * 2)); }
+        }
+        static BUNDLES: [ManaPool; 2] = [ManaPool([0, 1, 0, 0, 0, 0]), ManaPool([0, 1, 0, 0, 0, 1])];
+        static SOURCE: CardDef = CardDef { name: "Bundle source", types: TypeSet::of(&[CardType::Land]),
+            abilities: &[mana_ability(TAP, add_one_bundle_of(&BUNDLES, 0).only_for(ManaRestriction::CumulativeUpkeep), "{T}: Add {U} or {C}{U}.")],
+            labels: &["Add {U}", "Add {C}{U}"], ..CardDef::BLANK };
+        static REPLACEMENT: CardDef = CardDef { name: "Bundle doubler", types: TypeSet::of(&[CardType::Enchantment]),
+            replacements: &[replacement(ReplacementKind::ManaProduction, applies, double, "double")], ..CardDef::BLANK };
+        let cards = Box::leak(Box::new(CardTable::new([&SOURCE, &REPLACEMENT])));
+        let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Setup::default() });
+        let player = PlayerId(0);
+        let source = game.state.push_obj(Obj::new(cards.id_of(&SOURCE), player, Zone::BATTLEFIELD));
+        game.state.zone_push(Zone::BATTLEFIELD, source);
+        let option = ActionOption::on(ActionKind::ActivateAbility, source, 0);
+        let message = option_message(&game, &mut HandleSpace::new(), &option);
+        assert_eq!(message.produces_alternatives.len(), 2);
+        assert_eq!(message.produces_alternatives[0].len(), 1);
+        assert_eq!(message.produces_alternatives[1].len(), 2);
+        let modifier = game.state.push_obj(Obj::new(cards.id_of(&REPLACEMENT), player, Zone::BATTLEFIELD));
+        game.state.zone_push(Zone::BATTLEFIELD, modifier);
+        game.state.see_statics();
+        let message = option_message(&game, &mut HandleSpace::new(), &option);
+        assert_eq!(message.produces_alternatives[0].len(), 2);
+        assert_eq!(message.produces_alternatives[1].len(), 4);
+        assert_eq!(message.produces.len(), 2);
+        let wire = serde_json::to_value(&message).unwrap();
+        assert_eq!(wire["ProducesAlternatives"].as_array().unwrap().len(), 2);
+    }
 
     #[test]
     fn a_mana_ability_row_shows_the_total_cost_including_added_life() {

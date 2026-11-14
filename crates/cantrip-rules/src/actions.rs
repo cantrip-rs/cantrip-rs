@@ -5014,13 +5014,26 @@ pub fn replaced_mana_yields(game: &crate::Game, player: PlayerId, source: Object
     }
     let ability = game.chars(source).abilities().nth(index as usize)?;
     let AbilityDef::Activated(def) = game.cards.ability(ability) else { return None };
-    if !def.is_mana_ability() || !def.cost.tap || def.colors_from_sacrifice || def.adds.0.iter().all(|&n| n == 0) && def.adds_any == 0 {
+    if !def.is_mana_ability() || !def.cost.tap || def.colors_from_sacrifice || def.adds.0.iter().all(|&n| n == 0) && def.adds_any == 0 && !matches!(def.mana_capability, Some(ManaCapability::FiniteBundles(..))) {
         return None;
     }
     let mut copy = advice_game(game);
     let cx = Cx { g: &mut copy, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     // Asked as the ability it is (CR 607.5): one an effect gave the source reads only its own links.
     let by = cx.link_of_nth(source, index as usize);
+    if let Some(ManaCapability::FiniteBundles(bundles, _)) = def.mana_capability {
+        let restriction = def.restricted.map(|r| restriction_from(&cx, source, r, by));
+        let mut changed = false;
+        let mut pools = Vec::new();
+        for bundle in bundles {
+            let outcomes = replaced_yields(&cx, source, player, bundle.0, 0, 0, restriction);
+            changed |= outcomes.is_some();
+            for pool in outcomes.map_or_else(|| vec![*bundle], |v| v.into_iter().map(|p| p.mana).collect()) {
+                if !pools.contains(&pool) { pools.push(pool); }
+            }
+        }
+        return changed.then_some(vec![(None, pools)]);
+    }
     let types = if def.adds_any > 0 { any_types(&cx, source, player, def, by) } else { 0 };
     let restriction = def.restricted.map(|r| restriction_from(&cx, source, r, by));
     let choices: Vec<Option<Mana>> =
@@ -6302,7 +6315,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
             }
             // A yield not stated, a cost in mana paid in a way announced (Phyrexian, {2/W}), or a cost of tapped permanents
             // (chosen once its mana is paid, and paid again for each, CR 601.2g-h), is not judged.
-            if def.adds.0.iter().all(|&n| n == 0) && def.adds_any == 0
+            if def.adds.0.iter().all(|&n| n == 0) && def.adds_any == 0 && !matches!(def.mana_capability, Some(ManaCapability::FiniteBundles(..)))
                 || cost.mana.phyrexian != [0; 5]
                 || cost.mana.twobrid != [0; 5]
                 || def.cost.permanents.is_some_and(|p| p.tapped)
@@ -6342,6 +6355,35 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
                 tapped: false,
                 taps: None,
             };
+            if let Some(ManaCapability::FiniteBundles(bundles, _)) = def.mana_capability {
+                for bundle in bundles {
+                    let outcomes = if replaceable && def.cost.tap {
+                        replaced_yields(cx, id, player, bundle.0, 0, 0,
+                            def.restricted.map(|r| restriction_from(cx, id, r, by)))
+                    } else { None };
+                    let outcomes = outcomes.unwrap_or_else(|| vec![ManaProduction { permanent: id, player, to: player,
+                        mana: *bundle, restriction: def.restricted.map(|r| restriction_from(cx, id, r, by)), lasts: ManaLasts::Step }]);
+                    for outcome in outcomes {
+                        let mut each = Alternative { fixed: outcome.mana.0, k: 0, types: 0,
+                            restriction: outcome.restriction.filter(|&r| r != ManaRestriction::GainsHaste),
+                            tapped: def.cost.tap, ..alternative };
+                        let types = each.produces(None);
+                        if !waiting.is_empty() && def.cost.tap && types != 0 {
+                            (each.extra, each.produced, each.extra_snow, each.produced_snow) = tap_triggers(cx, &waiting, id, player, types);
+                        }
+                        if let Some(repeat) = Repeat::of(&cost, def.colors_from_sacrifice) {
+                            if !defer && matches!(repeat, Repeat::Tap(..)) {
+                                return available_as(cx, player, skip, window, true, tap);
+                            }
+                            repeatable.push((each, id, repeat, by));
+                        } else if !alternatives.contains(&each) {
+                            alternatives.push(each);
+                        }
+                    }
+                }
+                keeps |= !def.cost.tap && !def.cost.sacrifice_self;
+                continue;
+            }
             // Mana of a type chosen from none is no mana (Thespian's Stage copying Sunken Citadel has no chosen color).
             if alternative.types == 0 {
                 alternative.k = 0;
@@ -13377,7 +13419,15 @@ fn activate_mana_as(
             // What the mana ability does, its activator does (CR 605.3b, 122.6a): the counters it puts are theirs.
             Some(effect) => cx.acting_as(player, |cx| effect(cx, &asker, color)),
             None => {
-                let def = ActivatedDef { restricted, ..*def };
+                let mut def = ActivatedDef { restricted, ..*def };
+                if let Some(ManaCapability::FiniteBundles(bundles, first_label)) = def.mana_capability {
+                    let modes = (0..bundles.len() as u8).map(|i| Label::Card(ability.card, first_label + i)).collect();
+                    let eligible = (0..bundles.len() as u8).collect();
+                    let request = RequestKind::ChooseModes { source, modes, eligible, count: 1, at_most: 0,
+                        affordable: Vec::new(), additional_cost: false, repeat: false };
+                    let Answer::Modes(chosen) = cx.ask_core(player, request, true)? else { return Err(Stop::Cancel) };
+                    def.adds = bundles[chosen[0] as usize];
+                }
                 add_listed(cx, player, &def, if colorless { Some(Mana::C) } else { color.map(Color::mana) });
                 Ok(())
             }
@@ -13689,7 +13739,21 @@ pub(crate) fn producible_types(cx: &Cx, land: ObjectId) -> (ColorSet, bool) {
         // without selecting guessed X values or using affordability (CR 106.7). Opaque quantity-dependent
         // replacement callbacks still require a symbolic contract, rather than sampling their guards.
         if let Some(capability) = def.mana_capability {
+            if let ManaCapability::FiniteBundles(bundles, _) = capability {
+                let restriction = def.restricted.map(|r| restriction_from(cx, land, r, by));
+                for bundle in bundles {
+                    let outcomes = if replaceable && def.cost.tap {
+                        replaced_yields(cx, land, controller, bundle.0, 0, 0, restriction)
+                    } else { None };
+                    let pools: Vec<ManaPool> = outcomes.map_or_else(|| vec![*bundle], |v| v.into_iter().map(|p| p.mana).collect());
+                    for pool in pools {
+                        types |= (0..6).filter(|&m| pool.0[m] > 0).fold(0u8, |t, m| t | 1 << m);
+                    }
+                }
+                continue;
+            }
             let (colors, total) = match capability {
+                ManaCapability::FiniteBundles(..) => unreachable!(),
                 ManaCapability::AnnouncedXCombination(colors) => (colors, None),
                 ManaCapability::CurrentPowerCombination(colors) =>
                     (colors, Some(chars.power.unwrap_or(0).max(0) as u32)),

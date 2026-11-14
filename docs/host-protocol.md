@@ -386,3 +386,5 @@ zone; a life event's source is `ViewHandle.None`, named for whose life total it 
 whose index is a byte); the first event is the default. The replacement for that event is then asked as usual.
 
 Protocol 241 adds the cumulative-upkeep-only mana spend filter (CR 106.6, 702.24a); prior filter values are unchanged.
+
+Protocol 242 adds `producesAlternatives` to action options: complete, mutually exclusive mana bundles for one activation. The player chooses the bundle as the ability resolves; existing `produces` contains only mana common to all bundles.

@@ -1788,7 +1788,7 @@ impl ActivatedDef {
 
     /// A mana ability (CR 605.1a): one with an effect of its own that adds mana, or one that lists the mana it adds.
     pub const fn is_mana_ability(&self) -> bool {
-        if self.mana.is_some() || self.adds_any > 0 {
+        if self.mana.is_some() || self.adds_any > 0 || matches!(self.mana_capability, Some(crate::ability::ManaCapability::FiniteBundles(..))) {
             return true;
         }
         let mut i = 0;

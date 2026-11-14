@@ -599,6 +599,28 @@ public sealed class PromptPresentationTests
     /// mana type — or a player could never take the {C} the card allows.
     /// </summary>
     [Fact]
+    public void Finite_mana_bundles_are_one_action_with_all_outcomes_visible()
+    {
+        GameClient client = Client("priority-sacrifice-for-mana");
+        var option = new ActionOptionMessage
+        {
+            Kind = ActionKindView.ActivateAbility,
+            CostText = "{T}",
+            ProducesAlternatives = [[ManaTypeView.Blue, ManaTypeView.Blue], [ManaTypeView.Blue, ManaTypeView.Blue, ManaTypeView.Colorless, ManaTypeView.Colorless]],
+            Description = "{T}: Add {U} or {C}{U}.",
+        };
+        Assert.Single(CardActions.ManaRows([option]));
+        Assert.Contains("Add {U}{U} or {U}{U}{C}{C}", CardActions.Describe(client, option));
+        Assert.True(AutoMana.IsManaAbility(option));
+        var decoded = MessagePackSerializer.Deserialize<ActionOptionMessage>(MessagePackSerializer.Serialize(option));
+        Assert.Equal(option.ProducesAlternatives[1], decoded.ProducesAlternatives[1]);
+        option.ProducesAlternatives = [[ManaTypeView.Blue], [ManaTypeView.Colorless]];
+        Assert.True(AutoMana.IsManaAbility(option));
+        Assert.False(CardActions.IsIrreversibleActivation(option));
+        Assert.Contains("Add {U} or {C}", CardActions.Describe(client, option));
+    }
+
+    [Fact]
     public void A_color_choice_remains_selectable_when_every_choice_adds_the_same_mana()
     {
         GameClient client = Client("priority-sacrifice-for-mana");

@@ -327,7 +327,7 @@ public static class AutoPlay
                     continue;
                 }
 
-                bool addsMana = option.Produces.Count > 0 || ChoosesColors(option);
+                bool addsMana = option.Produces.Count > 0 || option.ProducesAlternatives.Count > 0 || ChoosesColors(option);
                 if (kind == ActionKindView.ActivateAbility && addsMana != mana)
                 {
                     continue;
@@ -615,7 +615,7 @@ public static class AutoPlay
         !options.Any(other =>
             other.Kind == ActionKindView.ActivateAbility
             && other.Source == option.Source
-            && (other.Produces.Count > 0 || ChoosesColors(other)));
+            && (other.Produces.Count > 0 || other.ProducesAlternatives.Count > 0 || ChoosesColors(other)));
 
     /// <summary>A graveyard card offered to pay {1} of a delve cost by being exiled, or null (CR 702.66a).</summary>
     private static ActionOptionMessage? ExileToPay(IReadOnlyList<ActionOptionMessage> options) =>

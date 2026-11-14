@@ -162,6 +162,36 @@ static RUINS: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+static BUNDLES: [ManaPool; 2] = [ManaPool([0, 1, 0, 0, 0, 0]), ManaPool([0, 1, 0, 0, 0, 1])];
+static CHOICE: CardDef = CardDef {
+    name: "Mana Replacement Bundle Choice",
+    types: TypeSet::of(&[CardType::Land]),
+    abilities: &[mana_ability(TAP, add_one_bundle_of(&BUNDLES, 0), "{T}: Add {U} or {C}{U}.")],
+    labels: &["Add {U}", "Add {C}{U}"],
+    ..CardDef::BLANK
+};
+static CREATURE_CHOICE: CardDef = CardDef {
+    name: "Mana Replacement Creature Bundle Choice",
+    types: TypeSet::of(&[CardType::Creature, CardType::Land]),
+    abilities: &[mana_ability(TAP, add_one_bundle_of(&BUNDLES, 0), "{T}: Add {U} or {C}{U}.")],
+    labels: &["Add {U}", "Add {C}{U}"],
+    ..CardDef::BLANK
+};
+static OUTLET: CardDef = CardDef {
+    name: "Mana Replacement Tapping Outlet",
+    types: TypeSet::of(&[CardType::Artifact]),
+    abilities: &[mana_ability(
+        tap_untapped(1, |q, _, id| q.chars(id).is(CardType::Creature)), add(Mana::G), "Tap an untapped creature you control: Add {G}.")],
+    ..CardDef::BLANK
+};
+static RESTRICTED_CHOICE: CardDef = CardDef {
+    name: "Mana Replacement Restricted Bundle Choice",
+    types: TypeSet::of(&[CardType::Land]),
+    abilities: &[mana_ability(TAP, add_one_bundle_of(&BUNDLES, 0).only_for(ManaRestriction::CumulativeUpkeep), "{T}: Add {U} or {C}{U}." )],
+    labels: &["Add {U}", "Add {C}{U}"],
+    ..CardDef::BLANK
+};
+
 fn two_mana_types(q: &dyn Query, _: &Asker, id: ObjectId, _: PlayerId) -> Vec<Mana> {
     if q.chars(id).is(CardType::Land) { vec![Mana::R, Mana::G] } else { vec![] }
 }
@@ -173,7 +203,7 @@ static OUTPUT_CHOICE: CardDef = CardDef {
 
 fn game() -> Game {
     let table: &'static CardTable = Box::leak(Box::new(CardTable::new([
-        &FILLER, &SPHERE, &REFLECTION, &CONTAMINATION, &FLARE, &TOMB, &GROVE, &TOWER, &ROCK, &SEARCHLIGHT, &LOTUS, &RUINS, &OUTPUT_CHOICE,
+        &FILLER, &SPHERE, &REFLECTION, &CONTAMINATION, &FLARE, &TOMB, &GROVE, &TOWER, &ROCK, &SEARCHLIGHT, &LOTUS, &RUINS, &OUTPUT_CHOICE, &CHOICE, &RESTRICTED_CHOICE, &CREATURE_CHOICE, &OUTLET,
     ])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
@@ -591,4 +621,94 @@ fn grouped_replacement_applicability_is_source_based_at_every_amount() {
         assert!(def.applies_to(&cx(&mut g), &asker, &make(land)));
         assert!(!def.applies_to(&cx(&mut g), &asker, &make(artifact)));
     }
+}
+
+#[test]
+fn bundle_choice_is_one_ability_and_replacement_preview_lists_every_bundle() {
+    for selected in 0..2u8 {
+        let mut g = game();
+        let source = put(&mut g, &CHOICE);
+        put(&mut g, &REFLECTION);
+        let outcomes = &replaced_mana_yields(&g, YOU, source, 0).unwrap()[0].1;
+        assert!(outcomes.contains(&pool(&[(Mana::U, 2)])));
+        assert!(outcomes.contains(&pool(&[(Mana::C, 2), (Mana::U, 2)])));
+        assert_eq!(g.producible_types(source), (ColorSet::of(Color::Blue), true));
+        g.run();
+        let request = g.pending().unwrap().clone();
+        let RequestKind::Priority { options } = &request.kind else { panic!("priority") };
+        let option = options.iter().find(|o| o.source == Some(source)).unwrap();
+        g.answer(request.id, request.player, Answer::Act(Action::of(option))).unwrap();
+        g.run();
+        let request = g.pending().unwrap().clone();
+        assert!(matches!(request.kind, RequestKind::ChooseModes { .. }));
+        g.answer(request.id, request.player, Answer::Modes(vec![selected])).unwrap();
+        g.run();
+        let expected = if selected == 0 { pool(&[(Mana::U, 2)]) } else { pool(&[(Mana::C, 2), (Mana::U, 2)]) };
+        assert_eq!(g.state.player(YOU).pool, expected);
+    }
+}
+
+#[test]
+fn restricted_bundle_choice_does_not_pay_an_ordinary_cast() {
+    let mut g = game();
+    let spell = put(&mut g, &FILLER);
+    put(&mut g, &RESTRICTED_CHOICE);
+    let mut symbols = [0; 6];
+    symbols[Mana::U as usize] = 1;
+    assert!(!can_afford(&cx(&mut g), YOU, spell, &ManaCost { symbols, ..ManaCost::ZERO }));
+    symbols[Mana::C as usize] = 1;
+    let both = ManaCost { symbols, ..ManaCost::ZERO };
+    assert!(crate::actions::available(&cx(&mut g), YOU).covers_for(&both, &ManaPayment::CumulativeUpkeep));
+    assert!(!crate::actions::available(&cx(&mut g), YOU).covers_for(&both, &ManaPayment::Other));
+}
+
+#[test]
+fn chosen_bundle_keeps_its_upkeep_restriction_through_replacement() {
+    let mut g = game();
+    let source = put(&mut g, &RESTRICTED_CHOICE);
+    put(&mut g, &REFLECTION);
+    g.run();
+    let request = g.pending().unwrap().clone();
+    let RequestKind::Priority { options } = &request.kind else { panic!("priority") };
+    let option = options.iter().find(|o| o.source == Some(source)).unwrap();
+    g.answer(request.id, request.player, Answer::Act(Action::of(option))).unwrap();
+    g.run();
+    let request = g.pending().unwrap().clone();
+    g.answer(request.id, request.player, Answer::Modes(vec![1])).unwrap();
+    g.run();
+    assert!(g.state.player(YOU).pool.is_empty());
+    let (_, made) = g.state.restricted_of(YOU).find(|(r, _)| *r == ManaRestriction::CumulativeUpkeep).unwrap();
+    assert_eq!(made, pool(&[(Mana::U, 2), (Mana::C, 2)]));
+}
+
+#[test]
+fn bundle_alternatives_cannot_be_spent_together() {
+    static DISJOINT: [ManaPool; 2] = [ManaPool([0, 1, 0, 0, 0, 0]), ManaPool([0, 0, 0, 0, 0, 1])];
+    static SOURCE: CardDef = CardDef {
+        name: "Disjoint bundle source", types: TypeSet::of(&[CardType::Land]),
+        abilities: &[mana_ability(TAP, add_one_bundle_of(&DISJOINT, 0), "{T}: Add {U} or {C}.")],
+        labels: &["Add {U}", "Add {C}"], ..CardDef::BLANK
+    };
+    let cards = Box::leak(Box::new(CardTable::new([&SOURCE])));
+    let mut g = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Setup::default() });
+    put(&mut g, &SOURCE);
+    let mut symbols = [0; 6];
+    symbols[Mana::U as usize] = 1;
+    symbols[Mana::C as usize] = 1;
+    let cost = ManaCost { symbols, ..ManaCost::ZERO };
+    assert!(!crate::actions::available(&cx(&mut g), YOU).covers_for(&cost, &ManaPayment::Other));
+}
+
+/// A bundle ability with {T} in its cost taps its source (CR 107.5): the same creature cannot also be tapped for an ability
+/// that taps an untapped creature, so one creature never pays both {U} and {G}.
+#[test]
+fn a_tapping_bundle_ability_leaves_its_source_tapped_for_other_costs() {
+    let mut g = game();
+    let spell = put(&mut g, &FILLER);
+    put(&mut g, &CREATURE_CHOICE);
+    put(&mut g, &OUTLET);
+    let both = ManaCost { symbols: [0, 1, 0, 0, 1, 0], ..ManaCost::ZERO };
+    assert!(!can_afford(&cx(&mut g), YOU, spell, &both));
+    put(&mut g, &CREATURE_CHOICE);
+    assert!(can_afford(&cx(&mut g), YOU, spell, &both));
 }

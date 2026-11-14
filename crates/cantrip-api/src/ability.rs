@@ -283,6 +283,9 @@ pub const fn ability(cost: Cost, effect: Effect, text: &'static str) -> AbilityD
 /// A mana ability (CR 605.1a): pay `cost`, and what `adds` says is added at once, never on the stack (CR 605.3).
 pub const fn mana_ability(cost: Cost, adds: Adds, text: &'static str) -> AbilityDef {
     assert!(!matches!(cost.variable, Some(VariableCost::TapX(_))), "a mana ability's tap X cost is not supported yet");
+    if matches!(adds.capability, Some(ManaCapability::FiniteBundles(..))) {
+        assert!(adds.effect.is_none() && adds.any == 0 && !adds.any_color, "bundle choices cannot combine with a separate mana effect or color choice");
+    }
     AbilityDef::Activated(ActivatedDef {
         text,
         cost,
@@ -454,6 +457,8 @@ pub enum ManaCapability {
     /// Exactly the source's current nonnegative power mana, independently in these colors.
     /// Power is read through layers at resolution (Vivi Ornitier, CR 208.2, 608.2h).
     CurrentPowerCombination(ColorSet),
+    /// A finite choice of complete mana bundles, chosen during resolution.
+    FiniteBundles(&'static [ManaPool], u8),
 }
 
 #[derive(Clone, Copy)]
@@ -560,6 +565,22 @@ pub const fn add_one_of(colors: &[Color]) -> Adds {
 /// before it is activated.
 pub const fn add_by(effect: ManaEffect) -> Adds {
     Adds { effect: Some(effect), ..Adds::NOTHING }
+}
+
+/// Add exactly one of these complete bundles. Label indices on the ability's card name
+/// the choices in the same order; the choice happens as the mana ability resolves.
+pub const fn add_one_bundle_of(bundles: &'static [ManaPool], first_label: u8) -> Adds {
+    assert!(bundles.len() >= 2 && bundles.len() <= u8::MAX as usize, "a bundle choice needs 2..=255 alternatives");
+    assert!((first_label as usize) + bundles.len() <= 256, "bundle labels exceed card label indices");
+    let mut i = 0;
+    let mut produces = false;
+    while i < bundles.len() {
+        let mut m = 0;
+        while m < 6 { produces |= bundles[i].0[m] > 0; m += 1; }
+        i += 1;
+    }
+    assert!(produces, "a mana ability must have a producing choice");
+    Adds { pool: bundles[0], capability: Some(ManaCapability::FiniteBundles(bundles, first_label)), ..Adds::NOTHING }
 }
 
 /// Adds what a mana ability with no effect of its own lists (CR 106.4): its fixed mana, and its mana of one color as
@@ -1454,6 +1475,14 @@ mod tests {
         assert!(d.any_color && d.adds_any == 1 && d.colors.has(Color::Red) && d.colors.has(Color::White) && !d.colors.has(Color::Blue));
         let AbilityDef::Activated(d) = ability(loyalty(-2), |_, _| Ok(()), "-2: Nothing.") else { panic!() };
         assert!(d.timing == Timing::Sorcery && !d.is_mana_ability());
+    }
+
+    #[test]
+    fn finite_bundle_labels_can_end_at_index_255() {
+        static TWO: [ManaPool; 2] = [ManaPool([0, 1, 0, 0, 0, 0]), ManaPool([0, 0, 1, 0, 0, 0])];
+        let AbilityDef::Activated(def) = mana_ability(TAP, add_one_bundle_of(&TWO, 254), "choice") else { panic!() };
+        assert!(matches!(def.mana_capability, Some(ManaCapability::FiniteBundles(_, 254))));
+        assert!(std::panic::catch_unwind(|| add_one_bundle_of(&TWO, 255)).is_err());
     }
 
     #[test]

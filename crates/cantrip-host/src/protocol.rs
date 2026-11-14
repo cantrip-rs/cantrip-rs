@@ -850,6 +850,9 @@ pub struct ActionOptionMessage {
     /// (`RestrictedManaView::rider`); 0 for none. Two riders of one source are two kinds of mana its payer chooses between.
     #[serde(default)]
     pub rider: u32,
+    /// Mutually exclusive full bundles from one mana activation, chosen as it resolves.
+    #[serde(default)]
+    pub produces_alternatives: Vec<Vec<ManaTypeView>>,
 }
 
 impl ActionOptionMessage {
@@ -893,6 +896,7 @@ impl ActionOptionMessage {
             snow: false,
             pay_snow: false,
             rider: 0,
+            produces_alternatives: Vec::new(),
         }
     }
 }

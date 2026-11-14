@@ -222,7 +222,7 @@ public static class AutoMana
     {
         ArgumentNullException.ThrowIfNull(option);
         return option.Kind == ActionKindView.ActivateAbility
-            && (option.Produces.Count > 0 || option.ProducesOfAnyOneColor > 0 || option.ProducesOfAnyColorEach > 0);
+            && (option.Produces.Count > 0 || option.ProducesOfAnyOneColor > 0 || option.ProducesOfAnyColorEach > 0 || option.ProducesAlternatives.Count > 0);
     }
 
     /// <summary>

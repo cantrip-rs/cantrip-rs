@@ -294,7 +294,7 @@ public sealed class RandomPlay : IAutoPlayer
 
     /// <summary>Whether an ability adds mana, either of stated types or of colors its answer would name (CR 106.1b).</summary>
     private static bool MakesMana(ActionOptionMessage option) =>
-        option.Produces.Count > 0 || option.ProducesOfAnyOneColor > 0 || option.ProducesOfAnyColorEach > 0 || option.ColorChoices.Count > 0;
+        option.Produces.Count > 0 || option.ProducesOfAnyOneColor > 0 || option.ProducesOfAnyColorEach > 0 || option.ProducesAlternatives.Count > 0 || option.ColorChoices.Count > 0;
 
     /// <summary>
     /// What to aim an action at: a draw from the targets the server offered, and for "up to one target" the choice
