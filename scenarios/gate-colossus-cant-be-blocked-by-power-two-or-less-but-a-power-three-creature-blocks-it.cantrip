@@ -1,0 +1,63 @@
+# Gate Colossus: "This creature can't be blocked by creatures with power 2 or less" (CR 509.1b). Bot1 casts it on turn 1
+# (Black Lotus and five Moxen: eight mana). Bot2 on turn 2 casts Grizzly Bears (2/2) and Memnite (1/1) off two Moxen and a
+# Centaur Courser (3/3) off Black Lotus. Attacking on turn 3, neither the Bears nor the Memnite may block it, but the
+# Courser may: it takes 8 and dies (joining the spent Lotus), the Colossus takes 3 and lives, and Bot2 stays at 20.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Gate Colossus
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Memnite
+Centaur Courser
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Gate Colossus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Centaur Courser.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Gate Colossus > Bot2)
+! Bot2.Block(Grizzly Bears > Gate Colossus)
+! Bot2.Block(Memnite > Gate Colossus)
+Bot2.Block(Centaur Courser > Gate Colossus)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Centaur Courser; Black Lotus
+Bot2.Battlefield = Mox Emerald; Mox Ruby; Grizzly Bears; Memnite
+Bot1.Battlefield.Gate Colossus.Damage = 3

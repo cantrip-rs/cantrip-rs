@@ -1,0 +1,38 @@
+# Gate Colossus: with no Gate Bot1 controls, affinity for Gates takes off nothing. Black Lotus and four Moxen make only
+# seven mana, so the cast is refused (and Gate Colossus stays in hand); an Island played and tapped makes the eighth and
+# it is cast for exactly {8}.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Gate Colossus
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Gate Colossus.Cast(Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Gate Colossus.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Mox Jet; Mox Ruby; Mox Sapphire; Island; Gate Colossus

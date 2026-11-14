@@ -1,0 +1,51 @@
+# Gate Colossus's graveyard trigger is a "may": the same game as the accepting scenario, but Bot1 declines when Talon Gates of
+# Madara enters on turn 3, so the Colossus stays in the graveyard (beside the spent Black Lotus), the library is not
+# touched (20 cards) and the Gate has entered.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Gate Colossus
+Talon Gates of Madara
+Plains x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Wrath of God
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Gate Colossus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Wrath of God.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Gate Colossus; Black Lotus
+Bot1.Hand.Talon Gates of Madara.Play
+Bot1.Decline
+
+[Expect]
+Bot1.Graveyard = Gate Colossus; Black Lotus
+Bot1.Library.Count = 20
+Bot1.Battlefield = Talon Gates of Madara; Mox Pearl; Mox Jet; Mox Ruby; Mox Sapphire; Mox Emerald
