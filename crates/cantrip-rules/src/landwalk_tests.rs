@@ -51,6 +51,21 @@ fn snow_basic_landwalk_requires_both_current_snow_and_the_correct_land_type() {
     }
 }
 
+/// CR 702.14c: snow landwalk of a land type that is no basic land type - Barbarian Guides' "snow landwalk of the chosen
+/// type" - needs a snow land of that type, and neither a non-snow one nor a snow land of another type.
+#[test]
+fn snow_landwalk_of_a_nonbasic_land_type_requires_a_snow_land_of_that_type() {
+    for (walk, land_type) in [(Keyword::SnowGatewalk, Subtype::Gate), (Keyword::SnowDesertwalk, Subtype::Desert),
+        (Keyword::SnowUrzaswalk, Subtype::Urzas), (Keyword::SnowCavewalk, Subtype::Cave)] {
+        for (actual, snow, blocks) in [(land_type, true, false), (land_type, false, true), (Subtype::Lair, true, true)] {
+            let (mut g, a, b, _) = position(walk, Some(actual), supertype(false, false, snow), THEM);
+            assert_eq!(blockable(&mut g, a, b), blocks, "{walk:?}, {actual:?}, snow {snow}");
+        }
+        let (mut g, a, b, _) = position(walk, Some(land_type), supertype(false, false, true), YOU);
+        assert!(blockable(&mut g, a, b), "only the defender's lands count");
+    }
+}
+
 #[test]
 fn all_landwalk_qualifiers_require_a_land_and_the_current_qualifier() {
     for (walk, subtype, yes, no) in [
