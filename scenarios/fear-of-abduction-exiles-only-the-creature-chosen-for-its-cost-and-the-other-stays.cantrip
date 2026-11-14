@@ -1,0 +1,46 @@
+# Fear of Abduction: Bot1 controls Memnite and Ornithopter and chooses Memnite as the creature to exile for the additional cost.
+# Ornithopter stays on the battlefield; Bot2's Phyrexian Walker is exiled by the enters trigger.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Black Lotus
+Memnite
+Fear of Abduction
+Ornithopter
+Island x15
+
+[Bot2 Deck]
+Phyrexian Walker
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Fear of Abduction.Cast
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile = Memnite; Phyrexian Walker
+Bot2.Battlefield.Count = 0
+Bot1.Battlefield.Count = 5
