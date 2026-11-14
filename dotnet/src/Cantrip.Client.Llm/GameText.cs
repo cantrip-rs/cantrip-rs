@@ -433,10 +433,10 @@ public static class GameText
         }
 
         // Mana a rule tells apart by the permanent that produced it (CR 106.3): "1 white from Barracks of the Thousand".
-        foreach (RestrictedManaView apart in player.RestrictedMana.Where(mana => !mana.Source.IsNone || mana.Snow))
+        foreach (RestrictedManaView apart in player.RestrictedMana.Where(mana => !mana.Source.IsNone || mana.Snow || mana.Filter == ManaSpendFilterView.CumulativeUpkeep))
         {
             text.Append(CultureInfo.InvariantCulture,
-                $", unspent {(apart.Snow ? "snow-source " : "")}mana {apart.Amount} {apart.Type.ToString().ToLowerInvariant()}{(apart.Source.IsNone ? "" : $" from {GameText.Named(client, apart.Source)}")}");
+                $", unspent {(apart.Snow ? "snow-source " : "")}mana {apart.Amount} {apart.Type.ToString().ToLowerInvariant()}{(apart.Source.IsNone ? "" : $" from {GameText.Named(client, apart.Source)}")}{(apart.Filter == ManaSpendFilterView.CumulativeUpkeep ? " (only for cumulative upkeep costs)" : "")}");
         }
 
         if (player.PoisonCounters > 0)

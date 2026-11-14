@@ -142,6 +142,7 @@ pub fn restriction_view(restriction: ManaRestriction) -> (ManaSpendFilterView, M
                 (true, Some(AbilitiesOf::Permanents)) => panic!("a mana restriction the wire has no word for: {}", restriction.name()),
             }
         }
+        ManaRestriction::CumulativeUpkeep => ManaSpendFilterView::CumulativeUpkeep,
         ManaRestriction::NotNonartifactSpells => ManaSpendFilterView::NotNonartifactSpells,
         ManaRestriction::GainsHaste => ManaSpendFilterView::None,
         // No limit; the subtypes beside its haste say which creature spells it gives haste to (Carnelian Orb of Dragonkind's

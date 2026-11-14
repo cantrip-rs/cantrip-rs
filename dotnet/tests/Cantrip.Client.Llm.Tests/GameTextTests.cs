@@ -33,6 +33,15 @@ public sealed class GameTextTests
     }
 
     [Fact]
+    public void Names_cumulative_upkeep_mana_and_its_limit()
+    {
+        GameClient client = Seated();
+        client.Me!.RestrictedMana = [new RestrictedManaView { Type = ManaTypeView.Blue, Amount = 1, Filter = ManaSpendFilterView.CumulativeUpkeep }];
+        string text = GameText.Position(client);
+        Assert.Contains("unspent mana 1 blue (only for cumulative upkeep costs)", text, StringComparison.Ordinal);
+    }
+
+    [Fact]
     public void Never_names_a_card_the_server_did_not_send()
     {
         // The opponent's hand is a count in the view and has to be a count here. Anything else would be this seat

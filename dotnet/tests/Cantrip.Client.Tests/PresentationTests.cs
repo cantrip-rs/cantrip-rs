@@ -645,6 +645,14 @@ public sealed class PromptPresentationTests
     }
 
     [Fact]
+    public void Cumulative_upkeep_mana_action_names_its_restriction()
+    {
+        GameClient client = Client("priority-sacrifice-for-mana");
+        var option = new ActionOptionMessage { Kind = ActionKindView.ActivateAbility, Produces = [ManaTypeView.Blue], CostText = "{T}", Filter = ManaSpendFilterView.CumulativeUpkeep };
+        Assert.Contains("only for cumulative upkeep costs", CardActions.Describe(client, option));
+    }
+
+    [Fact]
     public void A_mana_ability_the_player_has_of_their_own_is_theirs_and_not_a_cards()
     {
         GameClient client = Client("priority-sacrifice-for-mana");

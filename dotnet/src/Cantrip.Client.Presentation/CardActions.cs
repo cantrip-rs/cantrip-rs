@@ -681,6 +681,7 @@ public sealed class CardActions
     /// </summary>
     public static string Restricted(ManaSpendFilterView filter, IReadOnlyList<string>? subtypes = null, int manaValue = 0) => filter switch
     {
+        ManaSpendFilterView.CumulativeUpkeep => "cumulative upkeep costs",
         ManaSpendFilterView.NoncreatureSpells => "noncreature spells",
         ManaSpendFilterView.ManaValueSpells => $"spells with mana value {manaValue} or greater",
         ManaSpendFilterView.ManaValueOrXSpells => $"spells with mana value {manaValue} or greater or with {{X}} in their mana costs",

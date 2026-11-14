@@ -34,7 +34,7 @@ fn cx(g: &mut RulesGame) -> Cx<'_> {
 fn action(kind: ActionKind) -> Answer { Answer::Act(Action::of(&ActionOption::simple(kind))) }
 fn offered(amount: i32, chosen: u32, cost: &Cost) -> Vec<ActionOption> {
     let (mut g,source)=position(amount,vec![]);
-    assert_eq!(pay_during_resolution(&mut cx(&mut g),YOU,source,source,cost,&ASK,Some(chosen),None),Err(crate::Stop::Suspend));
+    assert_eq!(pay_during_resolution(&mut cx(&mut g),YOU,source,source,cost,&ASK,Some(chosen),None,Paying::Other),Err(crate::Stop::Suspend));
     let RequestKind::UnlessPays { options, .. }=&g.pending().unwrap().kind else { panic!("payment question") };
     options.clone()
 }
@@ -97,7 +97,7 @@ fn departed_and_phased_out_sources_cannot_supply_their_old_counters() {
         let (mut g,source)=position(3,vec![]);
         if phased { crate::phasing::phase_out(&mut cx(&mut g),&[source],None,false); }
         else { crate::ops::move_to(&mut cx(&mut g),source,Zone::graveyard(YOU)); }
-        assert_eq!(pay_during_resolution(&mut cx(&mut g),YOU,source,source,&COUNTERS,&ASK,Some(0),None),Err(crate::Stop::Suspend));
+        assert_eq!(pay_during_resolution(&mut cx(&mut g),YOU,source,source,&COUNTERS,&ASK,Some(0),None,Paying::Other),Err(crate::Stop::Suspend));
         let RequestKind::UnlessPays { options, .. }=&g.pending().unwrap().kind else { panic!("payment question") };
         assert!(!options.iter().any(|o|o.kind==ActionKind::IncreaseX),"last-known counters cannot be paid");
     }

@@ -10,8 +10,9 @@
 //! which graveyard) is made separately for each age counter. Each instance triggers separately, and counts the permanent's
 //! age counters as it resolves, not only the ones it put (CR 702.24b).
 //!
-//! The payments the engine pays as costs (mana, life, sacrifices, counters put on this permanent) are paid by `may_pay`,
-//! the cost multiplied by the age counters; the others are asked and made here, in the order the cost says.
+//! The payments the engine pays as costs are multiplied by the age counters; mana-bearing costs use
+//! `may_pay_cumulative_upkeep` so the mana restriction can recognize the keyword cost (CR 106.6). The others are
+//! asked and made here in the order the cost says.
 
 use crate::{choose, library};
 use cantrip_api::*;
@@ -136,10 +137,10 @@ fn pay(g: &mut dyn Game, item: &StackItem, payment: Payment, age: u32) -> Result
     let may = |g: &mut dyn Game, question: &'static Question| Ok(matches!(g.ask(payer, RequestKind::May { source: this, purpose: Purpose::Ask(question) })?, Answer::Yes));
     match payment {
         // A total with more hybrid symbols than a cost holds is not offered (`ManaCost::times`).
-        Payment::Mana(mana) => paid_if(g, mana.times(age), |g, total| g.may_pay(payer, this, this, Cost::mana(total), &PAY)),
+        Payment::Mana(mana) => paid_if(g, mana.times(age), |g, total| g.may_pay_cumulative_upkeep(payer, this, this, Cost::mana(total), &PAY)),
         Payment::ManaAndLife(mana, life) => {
             let total = mana.times(age).map(|mana| (mana, u32::from(life) * age));
-            paid_if(g, total, |g, (mana, life)| g.may_pay(payer, this, this, Cost { mana, life, ..Cost::NONE }, &PAY))
+            paid_if(g, total, |g, (mana, life)| g.may_pay_cumulative_upkeep(payer, this, this, Cost { mana, life, ..Cost::NONE }, &PAY))
         }
         Payment::Life(life) => g.may_pay(payer, this, this, Cost { life: u32::from(life) * age, ..Cost::NONE }, &PAY),
         Payment::Sacrifice(filter) => g.may_pay(payer, this, this, Cost::sacrifice(age, filter), &SACRIFICE),

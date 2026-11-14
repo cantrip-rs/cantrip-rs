@@ -313,6 +313,8 @@ mod entry_actor_tests;
 #[cfg(test)]
 mod resolving_counter_cost_tests;
 #[cfg(test)]
+mod cumulative_mana_tests;
+#[cfg(test)]
 mod counter_ceiling_tests;
 #[cfg(test)]
 mod counter_maximum_tests;
@@ -3352,6 +3354,10 @@ impl cantrip_api::Game for Cx<'_> {
 
     fn may_pay(&mut self, payer: PlayerId, source: ObjectId, subject: ObjectId, cost: Cost, question: &'static Question) -> Result<bool, Suspend> {
         actions::may_pay(self, payer, source, subject, &cost, question).map_err(|_| Suspend)
+    }
+
+    fn may_pay_cumulative_upkeep(&mut self, payer: PlayerId, source: ObjectId, subject: ObjectId, cost: Cost, question: &'static Question) -> Result<bool, Suspend> {
+        actions::may_pay_cumulative_upkeep(self, payer, source, subject, &cost, question).map_err(|_| Suspend)
     }
 
     fn may_pay_x(&mut self, payer: PlayerId, source: ObjectId, subject: ObjectId, cost: Cost, question: &'static Question) -> Result<Option<u32>, Suspend> {

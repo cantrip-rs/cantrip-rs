@@ -474,6 +474,8 @@ public enum ManaSpendFilterView
     /// last card exiled with this artifact" (CR 106.6): the card where it is, or the spell it became as it is cast. With no
     /// card beside it - one gone anywhere else, or none ever exiled - it pays for nothing.</summary>
     Card = 29,
+    /// <summary>Only to pay cumulative upkeep costs (CR 702.24a).</summary>
+    CumulativeUpkeep = 30,
 }
 
 /// <summary>What spending some mana does to whatever it pays for (CR 106.6): the effect half of a restriction.</summary>

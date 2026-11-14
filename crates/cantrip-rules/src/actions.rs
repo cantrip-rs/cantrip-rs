@@ -12016,6 +12016,23 @@ fn choose_modes(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool, ab
 /// announced as {2} (CR 601.2f, 118.7a). They become that generic mana or their color's symbols in `cost`. The advice is
 /// the fewest paid with {2} that leave a cost the player could pay; `any`: what mana may pay it (CR 609.4b).
 fn announce_twobrids(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &mut ManaCost, any: AnyMana) -> R<()> {
+    announce_twobrids_for(cx, player, source, cost, any, None)
+}
+
+// A resolving cost's purpose is explicit: neither the source's zone nor its type makes it an activation.
+fn announcement_affordable(cx: &Cx, player: PlayerId, source: ObjectId, cost: &ManaCost, purpose: Option<Paying>) -> bool {
+    match purpose {
+        Some(purpose) => {
+            let cost = if static_rules::spend_any_color_for(cx, player, source, spending_for(cx, source, purpose)) {
+                cost.paid_with_any_color()
+            } else { *cost };
+            available(cx, player).covers_for(&cost, &payment_for(cx, player, source, purpose))
+        }
+        None => can_afford(cx, player, source, cost),
+    }
+}
+
+fn announce_twobrids_for(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &mut ManaCost, any: AnyMana, purpose: Option<Paying>) -> R<()> {
     let mut symbols: Vec<Color> = Vec::new();
     for (i, &n) in cost.twobrid.iter().enumerate() {
         for _ in 0..n {
@@ -12038,7 +12055,7 @@ fn announce_twobrids(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &mut
                 for (i, k) in std::mem::take(&mut rest.phyrexian).into_iter().enumerate() {
                     rest.symbols[Color::ALL[i].mana() as usize] += k;
                 }
-                can_afford(cx, player, source, &any.view(&rest))
+                announcement_affordable(cx, player, source, &any.view(&rest), purpose)
             })
             .map(|mask| (0..n as u8).filter(|&i| mask & (1 << i) != 0).collect())
             .unwrap_or_default()
@@ -12209,6 +12226,10 @@ fn announce_hybrids(cx: &mut Cx, player: PlayerId, source: ObjectId, costed: Cos
 /// asked about a page at a time, in order, each page up to as many as the life left over from the pages before covers:
 /// every symbol is still the player's choice, and the life asked never passes what they can pay.
 fn announce_life(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &mut ManaCost, any: AnyMana, paid: Option<CostFor>) -> R<u32> {
+    announce_life_for(cx, player, source, cost, any, paid, None)
+}
+
+fn announce_life_for(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &mut ManaCost, any: AnyMana, paid: Option<CostFor>, purpose: Option<Paying>) -> R<u32> {
     const PAGE: usize = u8::MAX as usize;
     let mut symbols: Vec<Color> = Vec::new();
     for (i, &n) in cost.phyrexian.iter().enumerate() {
@@ -12241,7 +12262,7 @@ fn announce_life(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &mut Man
                 let mut trial = with_life.clone();
                 trial[page.start..page.start + k as usize].fill(true);
                 let rest = with_colors(&trial);
-                can_afford(cx, player, source, &any.view(&rest))
+                announcement_affordable(cx, player, source, &any.view(&rest), purpose)
             })
             .map(|k| (0..k).collect())
             .unwrap_or_default();
@@ -14709,6 +14730,7 @@ fn payment_for(cx: &Cx, player: PlayerId, source: ObjectId, purpose: Paying) -> 
             spell_payment(cx, player, source, cx.s().restricted_of(player).any(|(r, _)| r.names_subtypes()))
         }
         Paying::Activating(payment) => payment,
+        Paying::CumulativeUpkeep => ManaPayment::CumulativeUpkeep,
         _ => ManaPayment::Other,
     }
 }
@@ -14898,6 +14920,7 @@ pub(crate) enum Paying {
     Casting,
     /// Activating an ability, its source as it was when the activation began (CR 602.2a, 113.7a).
     Activating(ManaPayment),
+    CumulativeUpkeep,
     Other,
 }
 
@@ -15165,11 +15188,11 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
     // ability's symbols are announced as it is proposed (CR 118.13a, 601.2b), and a cost paid as one resolves announces its
     // own (`pay_announced`, CR 118.13b). A payment that is neither for a cast nor for an activation is what reaches here
     // with one, so no ban on paying life to cast or activate (`payable_life_for`) applies to it.
-    let life = if total.phyrexian != [0; 5] { announce_life(cx, player, source, &mut total, helpers.any, None)? } else { 0 };
+    let life = if total.phyrexian != [0; 5] { announce_life_for(cx, player, source, &mut total, helpers.any, None, Some(helpers.purpose))? } else { 0 };
     // A monocolored hybrid symbol not yet announced (a cost changed after the announcement) is announced now, as the cost
     // is paid (CR 118.13b).
     if total.twobrid != [0; 5] {
-        announce_twobrids(cx, player, source, &mut total, helpers.any)?;
+        announce_twobrids_for(cx, player, source, &mut total, helpers.any, Some(helpers.purpose))?;
     }
     // CR 609.4b: a player who may spend mana as though it were mana of any color for this cost pays each colored symbol with
     // any mana, and one who may spend mana of any type on it every symbol; the cost is not changed, nor is what was spent.
@@ -15562,13 +15585,19 @@ pub fn payable_life(cx: &Cx, player: PlayerId) -> i32 {
 /// Whether it was paid.
 pub fn may_pay(cx: &mut Cx, payer: PlayerId, source: ObjectId, subject: ObjectId, cost: &Cost, question: &'static Question) -> R<bool> {
     let x = (cost.mana.x > 0).then_some(0);
-    Ok(pay_during_resolution(cx, payer, source, subject, cost, question, x, None)?.is_some())
+    Ok(pay_during_resolution(cx, payer, source, subject, cost, question, x, None, Paying::Other)?.is_some())
+}
+
+/// The cumulative upkeep keyword's payment (CR 702.24a), distinguishable for restricted mana (CR 106.6).
+pub fn may_pay_cumulative_upkeep(cx: &mut Cx, payer: PlayerId, source: ObjectId, subject: ObjectId, cost: &Cost, question: &'static Question) -> R<bool> {
+    let x = (cost.mana.x > 0).then_some(0);
+    Ok(pay_during_resolution(cx, payer, source, subject, cost, question, x, None, Paying::CumulativeUpkeep)?.is_some())
 }
 
 /// `may_pay` for a cost whose variable part's size the payer sets as they pay it (`VariableCost::DiscardOneOrMore`): how many
 /// it took, or `None` declined.
 pub fn may_pay_counted(cx: &mut Cx, payer: PlayerId, source: ObjectId, subject: ObjectId, cost: &Cost, question: &'static Question) -> R<Option<u32>> {
-    pay_during_resolution(cx, payer, source, subject, cost, question, None, None)
+    pay_during_resolution(cx, payer, source, subject, cost, question, None, None, Paying::Other)
 }
 
 /// The most X a payer may raise "you may pay {X}" to while choosing it: past what any game could produce, a bound for a
@@ -15581,7 +15610,7 @@ const MOST_X_PAID: u32 = 1000;
 /// paying, CR 118.5). The X paid, or `None` when the payer declined: "when you do" (CR 603.12) asks whether it was paid, and
 /// "X" afterwards is the X paid. `cost` is the cost with its {X} (and any other mana or life beside it).
 pub fn may_pay_x(cx: &mut Cx, payer: PlayerId, source: ObjectId, subject: ObjectId, cost: &Cost, question: &'static Question) -> R<Option<u32>> {
-    pay_during_resolution(cx, payer, source, subject, cost, question, Some(0), None)
+    pay_during_resolution(cx, payer, source, subject, cost, question, Some(0), None, Paying::Other)
 }
 
 /// "You may pay [mana] up to `most` times" (`ANY_NUMBER_OF_TIMES`: "any number of times") as a spell or ability resolves
@@ -15596,7 +15625,7 @@ pub fn may_pay_times(cx: &mut Cx, payer: PlayerId, source: ObjectId, subject: Ob
         return Ok(0);
     }
     let cost = Cost { mana, ..Cost::NONE };
-    Ok(pay_during_resolution(cx, payer, source, subject, &cost, question, Some(1), Some(most))?.unwrap_or(0))
+    Ok(pay_during_resolution(cx, payer, source, subject, &cost, question, Some(1), Some(most), Paying::Other)?.unwrap_or(0))
 }
 
 /// The payment `may_pay`, `may_pay_x` and `may_pay_times` ask: with `x` the X chosen so far for a cost with an {X}, else
@@ -15618,8 +15647,9 @@ fn pay_during_resolution(
     question: &'static Question,
     x: Option<u32>,
     times: Option<u32>,
+    purpose: Paying,
 ) -> R<Option<u32>> {
-    let result = pay_during_resolution_inner(cx, payer, source, subject, cost, question, x, times);
+    let result = pay_during_resolution_inner(cx, payer, source, subject, cost, question, x, times, purpose);
     // A completed payment procedure, including declining it, is a rules instruction boundary. Any non-event state
     // changes made while paying must be judged before the resolving effect continues (CR 603.8, 601.2g-h, 118.12).
     if result.is_ok() { cx.judge_if_due(); }
@@ -15635,6 +15665,7 @@ fn pay_during_resolution_inner(
     question: &'static Question,
     mut x: Option<u32>,
     times: Option<u32>,
+    purpose: Paying,
 ) -> R<Option<u32>> {
     // A part no payment during a resolution can have - a spell's or an activated ability's own - can't be paid, and
     // nothing is asked.
@@ -15661,7 +15692,7 @@ fn pay_during_resolution_inner(
     let announced;
     let cost = if cost.mana.twobrid != [0; 5] && times.is_none() {
         let mut mana = cost.mana;
-        announce_twobrids(cx, payer, source, &mut mana, AnyMana::No)?;
+        announce_twobrids_for(cx, payer, source, &mut mana, AnyMana::No, Some(purpose))?;
         announced = Cost { mana, ..*cost };
         &announced
     } else {
@@ -15687,7 +15718,7 @@ fn pay_during_resolution_inner(
         // Once a mana ability has cost the payer the life the payment needs, or what another part takes, there is nothing
         // left to do but decline - or, where X sets the life, lower X.
         let mut options = Vec::new();
-        let pool = spendable(cx, payer, source, Paying::Other);
+        let pool = spendable(cx, payer, source, purpose);
         // Mana spent as though it were mana of any color where a rule lets the payer for this payment (CR 609.4b), as the
         // payment itself asks (`pay_mana_used`, `spending_for`): no spell is cast and no ability activated by it.
         let any_color = static_rules::spend_any_color_for(cx, payer, source, SpendingFor::Other);
@@ -15696,11 +15727,11 @@ fn pay_during_resolution_inner(
         let judged = ManaCost { generic: total.generic - bent.min(total.generic), ..total };
         let life_room = payable_life(cx, payer) - life_paid(life);
         let pool_covers = if judged.snow > 0 {
-            let groups = quality_groups(cx, payer, source, Paying::Other, &[]);
+            let groups = quality_groups(cx, payer, source, purpose, &[]);
             pool_announcements_pay(&judged, life_room, any_color, &|cost| quality_plan(&groups, cost).is_some())
         } else { pool_pays(&pool, &judged, life_room, any_color) };
         let remaining = if judged.snow > 0 {
-            let groups = quality_groups(cx, payer, source, Paying::Other, &[]);
+            let groups = quality_groups(cx, payer, source, purpose, &[]);
             let best = std::cell::Cell::new(judged);
             pool_announcements_pay(&judged, life_room, any_color, &|cost| {
                 let left = quality_uncovered(&groups, cost);
@@ -15726,7 +15757,7 @@ fn pay_during_resolution_inner(
         }
         first = false;
         if may_become && mana_asked {
-            options = mana_options_while_paying(cx, payer, source, Paying::Other);
+            options = mana_options_while_paying(cx, payer, source, purpose);
         }
         if payable && !refused && (judged == ManaCost::ZERO || pool_covers) {
             options.push(ActionOption::simple(ActionKind::PayCost));
@@ -15792,7 +15823,7 @@ fn pay_during_resolution_inner(
             }
             ActionKind::PayCost => {
                 let (mark, log_mark, asked, since) = (cx.s().mark(), cx.g.log.len(), cx.cursor, crate::takeback::since(cx.g));
-                match pay_announced(cx, payer, source, cost, total, life, x.unwrap_or(0)) {
+                match pay_announced(cx, payer, source, cost, total, life, x.unwrap_or(0), purpose) {
                     // Without an X, what was paid is how many the variable part took (`may_pay_counted`), if it has one.
                     Ok(taken) => return Ok(Some(x.unwrap_or(taken))),
                     // A choice given up: nothing was paid, and the payer is asked again. A payment the engine refused
@@ -15850,23 +15881,23 @@ fn pool_announcements_pay(owed: &ManaCost, life_room: i32, any_color: bool, pays
 /// Pays a resolution's cost with `total` its mana and `life` its life: its Phyrexian symbols are announced first, each
 /// paid with its color or 2 life, immediately before the cost is paid (CR 118.13b, 107.4f), and the life they take is paid
 /// with the rest. A choice of more life than the payer can pay gives the payment up, to be asked again.
-fn pay_announced(cx: &mut Cx, payer: PlayerId, source: ObjectId, cost: &Cost, mut total: ManaCost, mut life: u32, x: u32) -> R<u32> {
+fn pay_announced(cx: &mut Cx, payer: PlayerId, source: ObjectId, cost: &Cost, mut total: ManaCost, mut life: u32, x: u32, purpose: Paying) -> R<u32> {
     if total.phyrexian != [0; 5] {
-        life += announce_life(cx, payer, source, &mut total, AnyMana::No, None)?;
+        life += announce_life_for(cx, payer, source, &mut total, AnyMana::No, None, Some(purpose))?;
         if !rest_payable(cx, payer, 0, life, None) {
             return Err(Stop::Cancel);
         }
     }
-    pay_resolution_cost(cx, payer, source, cost, total, life, x)
+    pay_resolution_cost(cx, payer, source, cost, total, life, x, purpose)
 }
 
 /// Chooses what the parts of a resolution's cost other than mana and life take, then pays the whole (CR 118.3, 601.2h):
 /// the mana from the pool, the life, and each other part as an activated ability's cost pays it (`activate`). `x` is the
 /// X paid, for a "sacrifice X" part. How many the variable part took ("discard one or more"), 0 for none.
-fn pay_resolution_cost(cx: &mut Cx, payer: PlayerId, source: ObjectId, cost: &Cost, total: ManaCost, life: u32, x: u32) -> R<u32> {
+fn pay_resolution_cost(cx: &mut Cx, payer: PlayerId, source: ObjectId, cost: &Cost, total: ManaCost, life: u32, x: u32, purpose: Paying) -> R<u32> {
     // The payer has already had the 605.3a mana-ability window in UnlessPays. All remaining operations, including
     // individual mana units, may be paid in any order; a failed payment is reversed by the enclosing payment journal.
-    let helpers = Helpers { waterbend: cost.waterbend.generic, abilities_closed: true, ..Helpers::NONE };
+    let helpers = Helpers { waterbend: cost.waterbend.generic, abilities_closed: true, purpose, ..Helpers::NONE };
     let extra_life = life - cost.life.min(life);
     let payment = cx.g.log.len() as u32;
     let resolving = if cx.g.mana_interval.is_none() {

@@ -197,7 +197,7 @@ public static class PromptFixtures
         "targeting-optional",
         "discard-one",
         "discard-many",
-        "paying", "paying-snow",
+        "paying", "paying-snow", "paying-cumulative-upkeep",
         "paying-dual",
         "paying-waterbend",
         "paying-improvise",
@@ -697,6 +697,20 @@ public static class PromptFixtures
                     Count = 3,
                     MaximumHandSize = 7,
                     Hand = Hand(),
+                };
+
+            case "paying-cumulative-upkeep":
+                view.Players.Single(p => p.Seat == Viewer).RestrictedMana =
+                [new RestrictedManaView { Type = ManaTypeView.Blue, Amount = 1, Filter = ManaSpendFilterView.CumulativeUpkeep }];
+                return new PayCostsPromptMessage
+                {
+                    Player = Viewer, Spell = new ViewHandle(HandHerald), Total = "{U}", Remaining = "{U}",
+                    RemainingColored = [ColorView.Blue],
+                    Options =
+                    [
+                        new ActionOptionMessage { Kind = ActionKindView.AssignMana, Produces = [ManaTypeView.Blue], Filter = ManaSpendFilterView.CumulativeUpkeep, OptionId = 1, Description = "Pay {U} with cumulative upkeep mana" },
+                        new ActionOptionMessage { Kind = ActionKindView.CancelCasting, Source = new ViewHandle(HandHerald) },
+                    ],
                 };
 
             case "paying-snow":

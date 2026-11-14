@@ -729,6 +729,7 @@ public sealed partial class MainPage
     internal static string RestrictionCaption(ManaSpendFilterView filter, ManaSpendEffectView effect, List<string> subtypes, int manaValue, string? card = null) => (filter, effect) switch
     {
         (ManaSpendFilterView.Card, _) => card is null ? "a card that is gone" : $"only {card}",
+        (ManaSpendFilterView.CumulativeUpkeep, _) => "cumulative upkeep",
         (ManaSpendFilterView.NoncreatureSpells, _) => "noncreature spells",
         (ManaSpendFilterView.ManaValueSpells, _) => $"mana value {manaValue}+",
         (ManaSpendFilterView.ManaValueOrXSpells, _) => $"mana value {manaValue}+ or X",
@@ -786,6 +787,7 @@ public sealed partial class MainPage
             ManaSpendFilterView.Card when card is null =>
                 "Spend this mana only to cast one card, which is gone from where it could be cast, so it can't be spent on anything.",
             ManaSpendFilterView.Card => $"Spend this mana only to cast {card}.",
+            ManaSpendFilterView.CumulativeUpkeep => "Spend this mana only to pay cumulative upkeep costs.",
             ManaSpendFilterView.NoncreatureSpells => "Spend this mana only to cast a noncreature spell.",
             ManaSpendFilterView.ManaValueSpells => $"Spend this mana only to cast spells with mana value {manaValue} or greater.",
             ManaSpendFilterView.ManaValueOrXSpells =>

@@ -113,6 +113,20 @@ public sealed class PromptGalleryTests(WebClient web)
     }
 
     [Fact]
+    public async Task Cumulative_upkeep_mana_is_labeled_and_clickable()
+    {
+        await using TablePage table = await TablePage.OpenAsync(web, "prompt=paying-cumulative-upkeep", WebClient.Pictures(nameof(PromptGalleryTests)));
+        TableState opened = await table.SettledAsync(state => state.Fixture == "paying-cumulative-upkeep");
+        ManaChipState chip = Assert.Single(opened.Players!.SelectMany(p => p.Mana), mana => mana.Caption == "cumulative upkeep");
+        Assert.True(chip.Clickable);
+        Assert.Equal("CumulativeUpkeep", chip.Filter);
+        await table.Page.Mouse.ClickAsync(chip.X, chip.Y);
+        TableState paid = await table.SettledAsync(state => state.Answered.Length > 0);
+        Assert.Contains("AssignMana", paid.Answered, StringComparison.Ordinal);
+        Assert.Empty(table.Errors);
+    }
+
+    [Fact]
     public async Task Snow_pool_chip_offers_both_symbol_allocations_and_sends_the_choice()
     {
         await using TablePage table = await TablePage.OpenAsync(web, "prompt=paying-snow", WebClient.Pictures(nameof(PromptGalleryTests)));

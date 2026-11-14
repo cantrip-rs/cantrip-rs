@@ -384,3 +384,5 @@ object event's source is the object, or `ViewHandle.None` and "Hidden object N" 
 zone; a life event's source is `ViewHandle.None`, named for whose life total it is. The answer is a
 `CostPaymentChosenAnswer` whose `Key` is the event's zero-based index in decimal (not a `ReplacementChosenAnswer`,
 whose index is a byte); the first event is the default. The replacement for that event is then asked as usual.
+
+Protocol 241 adds the cumulative-upkeep-only mana spend filter (CR 106.6, 702.24a); prior filter values are unchanged.
