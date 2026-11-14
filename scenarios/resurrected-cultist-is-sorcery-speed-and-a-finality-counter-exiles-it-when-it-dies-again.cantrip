@@ -1,0 +1,75 @@
+# Resurrected Cultist with delirium already met (CR 207.2c): turn 1 Black Lotus pays for a Wheel of Fortune that discards the Cultist, a
+# Memnite and an Island into Bot1's graveyard with the Lotus and the Wheel: creature, artifact, land and sorcery. On turn 4, with {2}{B}{B}
+# available and four types, the ability is still refused while Bot2's Lightning Bolt is on the stack: "only as a sorcery" (CR 307.1).
+# On turn 5 the Cultist returns with a finality counter (CR 614.1c); Bot2's second Bolt on turn 6 kills it, and it is exiled instead
+# of going to the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Resurrected Cultist
+Wheel of Fortune
+Memnite
+Island
+Swamp x20
+
+[Bot2 Deck]
+Mountain x7
+Mountain
+Mountain
+Mountain
+Mountain
+Lightning Bolt
+Lightning Bolt
+Mountain
+Mountain x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 5
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+? Stack.Count = 1
+! Bot1.Graveyard.Resurrected Cultist.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Graveyard.Resurrected Cultist.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Resurrected Cultist.Counters.Finality = 1
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Resurrected Cultist)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 4
+Bot1.Graveyard.Count = 4
+Exile = Resurrected Cultist
+Bot1.Life = 17

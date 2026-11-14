@@ -1,0 +1,63 @@
+# Resurrected Cultist's delirium ability (CR 207.2c, 602.5b, 400.7, 122.6). On turn 1 Bot1 plays an Island, then Black Lotus, Mox Jet
+# and Mox Ruby pay for a Wheel of Fortune ({2}{R}); the Wheel discards the Cultist and a Memnite: the graveyard holds a creature, an
+# artifact and a sorcery (Memnite is both creature and artifact, the Lotus is an artifact): three types. On turn 3, with {2}{B}{B}
+# available (Mox Jet, Mox Ruby, Island, Swamp), the ability is refused. On turn 5 a Lightning Bolt to Bot2's face (Mox Ruby) adds an
+# instant, the fourth type, and now, with three sources left, it is still refused (it costs four mana); after the land drop Mox Jet, Island and two Swamps pay {2}{B}{B} and the Cultist returns untapped (a 4/1) with a finality
+# counter, no longer in the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Resurrected Cultist
+Wheel of Fortune
+Memnite
+Island
+Swamp
+Swamp
+Lightning Bolt
+Swamp x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 4
+? Bot1.Hand.Count = 7
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+! Bot1.Graveyard.Resurrected Cultist.Activate
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+! Bot1.Graveyard.Resurrected Cultist.Activate(Mana: short)
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Graveyard.Resurrected Cultist.Activate
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Resurrected Cultist.Counters.Finality = 1
+? Bot1.Battlefield.Resurrected Cultist.Tapped = false
+? Bot1.Battlefield.Resurrected Cultist.Power = 4
+
+[Expect]
+Bot1.Battlefield.Resurrected Cultist.Counters.Finality = 1
+Bot1.Graveyard.Count = 4
+Bot2.Life = 17
