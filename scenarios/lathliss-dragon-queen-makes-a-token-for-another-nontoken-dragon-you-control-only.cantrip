@@ -1,0 +1,64 @@
+# Lathliss, Dragon Queen: she makes no token as she enters herself, and none for Bot2's Dragon Whelp. When Bot1 casts their own
+# nontoken Dragon Whelp, one 5/5 Dragon token is made; the token, a Dragon entering, makes no further token (it is not nontoken).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mountain
+Lathliss, Dragon Queen
+Dragon Whelp
+Mox Jet
+Mountain x13
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Dragon Whelp
+Island x17
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lathliss, Dragon Queen.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield = Lathliss, Dragon Queen; Mountain; Mox Emerald; Mox Jet; Mox Ruby
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Dragon Whelp.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield = Lathliss, Dragon Queen; Mountain; Mox Emerald; Mox Jet; Mox Ruby
+[T2 Bot2.Main2]
+? Stack.Count = 0
+? Bot1.Battlefield = Lathliss, Dragon Queen; Mountain; Mox Emerald; Mox Jet; Mox Ruby
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Dragon Whelp.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Dragon Token; Dragon Whelp; Lathliss, Dragon Queen; Mountain; Mountain; Mox Emerald; Mox Jet; Mox Ruby
+Bot1.Battlefield.Dragon Token.Power = 5
+Bot1.Battlefield.Dragon Token.Keywords = Flying
+Bot2.Battlefield.Dragon Whelp.Power = 2
+Stack.Count = 0
