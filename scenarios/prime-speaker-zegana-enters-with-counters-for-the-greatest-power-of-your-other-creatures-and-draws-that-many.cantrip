@@ -1,0 +1,72 @@
+# Prime Speaker Zegana: "enters with X +1/+1 counters on it, where X is the greatest power among other creatures you control. When
+# it enters, draw cards equal to its power." Bot1 has a 2/1 Savannah Lions and a 1/1 Memnite (the greatest power is 2, not the sum 3);
+# Bot2's Hill Giant (power 3) is not counted. Zegana enters as a 3/3 with two counters and Bot1 draws three cards.
+
+[Bot1 Deck]
+Mox Pearl
+Savannah Lions
+Memnite
+Black Lotus
+Mox Emerald
+Mox Ruby
+Prime Speaker Zegana
+Forest
+Plains x12
+
+[Bot2 Deck]
+Black Lotus
+Hill Giant
+Mox Ruby
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Prime Speaker Zegana.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Prime Speaker Zegana.Counters.PlusOnePlusOne = 2
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Prime Speaker Zegana.Power = 3
+Bot1.Battlefield.Prime Speaker Zegana.Toughness = 3
+Bot1.Battlefield.Prime Speaker Zegana.Counters.PlusOnePlusOne = 2
+Bot1.Library.Count = 9

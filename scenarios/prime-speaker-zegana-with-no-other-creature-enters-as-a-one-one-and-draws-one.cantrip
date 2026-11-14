@@ -1,0 +1,41 @@
+# Prime Speaker Zegana: with no other creature she is not counted among "other creatures you control", so X is 0: she enters as a
+# 1/1 with no counters and draws one card. Bot2's Savannah Lions (power 2) does not count either.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Prime Speaker Zegana
+Forest
+Plains x15
+
+[Bot2 Deck]
+Savannah Lions
+Plains x15
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Prime Speaker Zegana.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Prime Speaker Zegana.Power = 1
+Bot1.Battlefield.Prime Speaker Zegana.Toughness = 1
+Bot1.Battlefield.Prime Speaker Zegana.Counters.PlusOnePlusOne = (absent)
+Bot1.Library.Count = 12

@@ -1,0 +1,51 @@
+# Prime Speaker Zegana: "draw cards equal to its power" with a power of zero or less draws nothing (CR 107.1b). With her enters
+# trigger on the stack Bot1 casts Dismember on her (-5/-5 makes the 1/1 a -4/-4): she dies, and as the trigger resolves her last-known
+# power -4 draws no cards (Dismember paid with Mox Pearl and 4 life; the Library stays at 13: 20 cards less the 7 in hand, none drawn).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Prime Speaker Zegana
+Dismember
+Forest
+Plains x13
+
+[Bot2 Deck]
+Plains x16
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Prime Speaker Zegana.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dismember.Cast(Bot1.Battlefield.Prime Speaker Zegana)
+Bot1.Modes(1; 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Prime Speaker Zegana = (absent)
+Bot1.Library.Count = 13
+Bot1.Life = 16
