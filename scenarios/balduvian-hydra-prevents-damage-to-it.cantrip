@@ -1,0 +1,29 @@
+# Removing a +1/+0 counter shields Hydra from the next 1 damage dealt to it this turn (CR 615.7).
+[Bot1 Deck]
+Balduvian Hydra
+Black Lotus
+Mountain x18
+[Bot2 Deck]
+Lava Dart
+Mountain x19
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Balduvian Hydra.Cast(X: 1)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+? Bot1.Battlefield.Balduvian Hydra.Power = 1
+? Bot1.Battlefield.Balduvian Hydra.Toughness = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lava Dart.Cast(Bot1.Battlefield.Balduvian Hydra)
+Bot1.Battlefield.Balduvian Hydra.Activate(Ability: Remove)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Balduvian Hydra.Activate(Ability: Remove)
+[Expect]
+Bot1.Battlefield.Balduvian Hydra.Power = 0
+Bot1.Battlefield.Balduvian Hydra.Toughness = 1
+Bot1.Battlefield.Balduvian Hydra.Damage = 0

@@ -1,0 +1,45 @@
+# Hydra enters with X +1/+0 counters and grows only in its controller's upkeep (CR 122.1, 602.5).
+[Bot1 Deck]
+Balduvian Hydra
+Black Lotus
+Mox Ruby
+Gleemox
+Mox Jet
+Mountain x15
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Balduvian Hydra.Cast(X: 2)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+? Bot1.Battlefield.Balduvian Hydra.Power = 2
+? Bot1.Battlefield.Balduvian Hydra.Toughness = 1
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+! Bot1.Battlefield.Balduvian Hydra.Activate(Ability: {R}{R}{R})
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Balduvian Hydra.Activate(Ability: {R}{R}{R})
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+! Bot1.Battlefield.Balduvian Hydra.Activate(Ability: {R}{R}{R})
+[Expect]
+Bot1.Battlefield.Balduvian Hydra.Power = 3
+Bot1.Battlefield.Balduvian Hydra.Toughness = 1
