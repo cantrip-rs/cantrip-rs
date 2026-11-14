@@ -4441,7 +4441,7 @@ fn some_cast(
     let x_life = def.additional_cost.is_some_and(|c| c.pay_x_life);
     let x_sacrifices = matches!(variable, Some(VariableCost::SacrificeX(_) | VariableCost::SacrificeWithPowerX(_) | VariableCost::BlightX));
     let cap = if x_life {
-        payable_life_for(cx, player, Some(CostFor::Spell)).clamp(0, 1000) as u32
+        payable_life_for(cx, player, Some(CostFor::Spell)).max(0) as u32
     } else if matches!(variable, Some(VariableCost::BlightX)) {
         blight_x_most(cx, player)
     } else if let Some(v @ VariableCost::SacrificeX(_)) = variable {
@@ -10446,7 +10446,7 @@ fn cast(
         // X paid in life is announced up to the life there is (CR 119.4), and X creatures sacrificed up to the creatures
         // there are (CR 601.2b).
         let cap: u32 = if extra.pay_x_life {
-            payable_life_for(cx, player, Some(CostFor::Spell)).clamp(0, 1000) as u32
+            payable_life_for(cx, player, Some(CostFor::Spell)).max(0) as u32
         } else if matches!(extra.variable, Some(VariableCost::SacrificeWithPowerX(_))) {
             // A power read as the cost is paid (CR 601.2h), after the mana abilities that may change it (CR 601.2g): X up
             // to the most a power can be, the payment refusing one nothing has.
@@ -10466,7 +10466,15 @@ fn cast(
             let paid_with = extra;
             (1..=more.most_times()).take_while(|&n| can_pay_other(cx, spell, player, &paid_with.and(more.times(n as u8)))).count() as u32
         } else {
-            1000
+            // X paid in mana, a kicker paid any number of times, or permanents sacrificed for {1} less each: no bound play
+            // can reach (CR 107.3, 601.2b), only what the total's 32-bit count holds (`most_x`).
+            let per = match def.kicker {
+                Some(k) if k.cost.x > 0 => u32::from(k.cost.x),
+                Some(k) => k.cost.mana_value(),
+                None if less_each > 0 => u32::from(less_each),
+                None => u32::from(x_symbols),
+            };
+            most_x(def.kicker.map_or(base, |k| add_cost(base, ManaCost { x: 0, ..k.cost })), per)
         };
         // An X that can't be 0 starts at 1 (CR 107.3a). A kicker with {X} announces 0 as not kicking it, so a kicked one
         // has X 1 or more as it is.
@@ -12266,6 +12274,15 @@ fn untargeted_x(base: ManaCost, costed: XCosted) -> XCost {
     XCost { base, per: u32::from(base.x), kicker: None, less: 0, reduced: 0, reducer: None, costed, modes: Some(0), targets: Vec::new(), targets_later: false }
 }
 
+/// The most an X paid in mana may be announced as where nothing else bounds it (CR 107.3, 601.2b): no bound play can reach,
+/// only so much that the total - `base`, and `per` mana for each X - stays within the announcement's signed controls and
+/// leaves the total cost's 32 bits as much room again for whatever raises it later (CR 601.2f). An X past it is more than
+/// two billion mana, which no game played by hand makes (`docs/known-issues.md`, KI-164); any X that can't be paid is
+/// taken back (CR 601.2h).
+fn most_x(base: ManaCost, per: u32) -> u32 {
+    (i32::MAX as u32 - base.mana_value()) / per.max(1)
+}
+
 /// The least value X may be announced as (CR 107.3a, 601.2b): 1 for an X that can't be 0 ("X can't be 0"), else 0.
 pub(crate) const fn least_x(x_cant_be_zero: bool) -> u32 {
     x_cant_be_zero as u32
@@ -12428,7 +12445,7 @@ fn activate(
     if mana.x > 0 {
         // "X target lands" cannot be announced past the legal targets there are (CR 601.2c, 602.2b).
         let cap = x_target_cap(cx, &Asker { instance: None, source, controller: player, by, spell: false }, def);
-        let cap = tap_x.map_or(cap, |(_, most)| cap.min(most));
+        let cap = tap_x.map_or(cap, |(_, most)| cap.min(most)).min(most_x(mana, u32::from(mana.x)));
         // "Spend only black mana on X" (CR 107.3, 601.2h by way of 602.2b): X's generic mana only that mana may pay.
         mana = mana.with_x_mana(def.x_mana);
         // What the total comes to at each X (`x_total`), with the targets still to be chosen and the cost changes they may
@@ -12671,7 +12688,7 @@ fn special_action(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: Abil
     let mut x = None;
     if printed.x > 0 {
         let paid = untargeted_x(printed, XCosted::SpecialAction(ability));
-        let n = announce(cx, player, source, &paid, 0, 1000)?;
+        let n = announce(cx, player, source, &paid, 0, most_x(paid.base, paid.per))?;
         printed = ManaCost { x: 0, ..x_total(&paid, n) };
         x = Some(n);
     }

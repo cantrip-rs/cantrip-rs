@@ -20,6 +20,13 @@ namespace Cantrip.Client.Tests;
 public sealed class AutoPlayPaymentTests
 {
     [Fact]
+    public void An_x_the_advice_puts_at_the_signed_limit_is_announced_no_higher_than_a_seat_steps()
+    {
+        var prompt = new PayCostsPromptMessage { AnnouncesXOrKicks = true, HasX = true, MostAffordable = int.MaxValue, MostAnnounced = int.MaxValue };
+        Assert.Equal(AutoPlay.MostStepped, AutoPlay.AnnouncedValue(prompt));
+    }
+
+    [Fact]
     public void Closes_mana_window_when_the_pool_covers_the_cost()
     {
         var prompt = new PayCostsPromptMessage

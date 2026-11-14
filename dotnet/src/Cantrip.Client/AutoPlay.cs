@@ -524,10 +524,17 @@ public static class AutoPlay
         return XCosts.Most(client) is { } ceiling ? Math.Max(prompt.LeastAnnounced, Math.Min(wanted, ceiling)) : wanted;
     }
 
+    /// <summary>
+    /// The most a seat that steps to its X (<see cref="Announce"/>) announces: the advice reaches the most the server
+    /// offers - two billion and more - where some mana's yield is not stated, and that many steps would never end. No
+    /// game played by hand makes more mana than this.
+    /// </summary>
+    public const int MostStepped = 1000;
+
     /// <summary>The value <see cref="AnnouncedValue"/> wants before anything given up this turn lowers it.</summary>
     private static int Wanted(PayCostsPromptMessage prompt)
     {
-        int most = Math.Max(0, prompt.MostAffordable);
+        int most = Math.Clamp(prompt.MostAffordable, 0, MostStepped);
 
         // Permanents sacrificed for a reduction each (CR 601.2b): none, a seat with no plan for its board keeping it.
         if (prompt.SacrificeReduces > 0)

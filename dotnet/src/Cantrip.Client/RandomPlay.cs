@@ -348,7 +348,7 @@ public sealed class RandomPlay : IAutoPlayer
             {
                 // Drawn here, and drawn once, within what the server says could be paid: for an X paid in life, what
                 // could be paid and survived (CR 704.5a), so a random seat never pays itself out of the game.
-                int most = Math.Max(0, prompt.MostAffordable);
+                int most = Math.Clamp(prompt.MostAffordable, 0, AutoPlay.MostStepped);
                 if (_xMost is { } ceiling)
                 {
                     most = Math.Max(prompt.LeastAnnounced, Math.Min(most, ceiling));

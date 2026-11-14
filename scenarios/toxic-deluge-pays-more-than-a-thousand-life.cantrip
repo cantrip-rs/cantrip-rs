@@ -1,0 +1,32 @@
+# Toxic Deluge's X life is announced up to the life there is (CR 119.4, 601.2b), with no other bound: at 2000 life, X = 1001
+# costs 1001 life and gives every creature -1001/-1001, so Bot2's Dark Confidant dies. Black Lotus pays for the {2}{B}.
+
+[Life]
+Bot1: 2000
+
+[Bot1 Deck]
+Black Lotus
+Toxic Deluge
+Island x13
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Dark Confidant
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Dark Confidant.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Toxic Deluge.Cast(X: 1001)
+
+[Expect]
+Bot1.Life = 999
+Bot2.Graveyard = Dark Confidant
+Bot1.Graveyard = Toxic Deluge; Black Lotus

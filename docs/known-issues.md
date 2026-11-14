@@ -92,8 +92,23 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-161](#ki-161-a-scenarios--modes-refusal-does-not-check-what-a-subtype-question-offers) | A scenario's `! Modes(...)` refusal does not check what a subtype question offers | Pri-3 | Open |
 | [KI-162](#ki-162-the-client-shows-no-duration-for-an-effect-that-changes-a-lands-types) | The client shows no duration for an effect that changes a land's types | Pri-2 | Open |
 | [KI-163](#ki-163-a-choose-question-offering-one-card-drops-its-rules-words-from-the-caption) | A choose question offering one card drops its rule's words from the caption | Pri-2 | Open |
+| [KI-164](#ki-164-an-x-paid-in-mana-is-announced-at-most-about-two-billion) | An X paid in mana is announced at most about two billion | Pri-3 | Won't fix: beyond practical scale |
 
 ## Issues
+
+### KI-164: An X paid in mana is announced at most about two billion
+
+| Priority | Status | Area | Found |
+| --- | --- | --- | --- |
+| Pri-3 | Won't fix: beyond practical scale | engine (`crates/cantrip-rules/src/actions.rs`, `most_x`) | 2026-11-14, review of PR #3021 (Balduvian Hydra) |
+
+**Notes.** Where nothing else bounds it, an X paid in mana (a spell's, an activation's, a morph or disguise cost's), a
+multikicker's count and a "{1} less for each" sacrifice count are announced up to `i32::MAX` less the rest of the cost's
+mana value, divided by the mana each X adds: 2,147,483,646 for Fireball, half that for an {X}{X}. A larger X is not
+offered. The bound keeps the total within the announcement's signed controls on the wire and leaves a `ManaCost`'s 32 bits
+as much room again for whatever raises the cost later, so the arithmetic on it stays plain. Play cannot reach it: an X
+past it needs more than two billion mana in a pool, made by hand on a clock. The bots step to no more than 1000
+(`AutoPlay.MostStepped`), where the advice cannot bound what some mana makes.
 
 ### KI-163: A choose question offering one card drops its rule's words from the caption
 

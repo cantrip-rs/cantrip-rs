@@ -25,6 +25,18 @@ public sealed class RandomPlayTests
     /// <summary>Enough draws that a choice taken one time in three would have to show up.</summary>
     private const int Draws = 400;
 
+    [Fact]
+    public void An_x_affordable_up_to_the_signed_limit_is_stepped_to_no_further_than_a_seat_steps()
+    {
+        var prompt = new PayCostsPromptMessage { AnnouncesXOrKicks = true, HasX = true, X = AutoPlay.MostStepped,
+            MostAffordable = int.MaxValue, MostAnnounced = int.MaxValue };
+        prompt.Options.Add(new ActionOptionMessage { Kind = ActionKindView.IncreaseX });
+        prompt.Options.Add(new ActionOptionMessage { Kind = ActionKindView.DecreaseX });
+        prompt.Options.Add(new ActionOptionMessage { Kind = ActionKindView.ConfirmCasting });
+        var answer = Assert.IsType<TakeActionAnswer>(new RandomPlay(seed: 7).Decide(prompt));
+        Assert.NotEqual(ActionKindView.IncreaseX, answer.Kind);
+    }
+
     // --- Priority ---------------------------------------------------------------------------------------------------
 
     [Fact]
