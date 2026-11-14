@@ -1,0 +1,86 @@
+# Dwynen, Gilt-Leaf Daen: "Whenever Dwynen attacks, you gain 1 life for each attacking Elf you control" (CR 508.1, 608.2h) and "Other Elf creatures you
+# control get +1/+1" (CR 613.4c). Turn 3: Dwynen attacks alone and gains 1 (herself counted). Turn 5: Dwynen, Elvish Mystic and Memnite attack, Dwynen's
+# Elite and its Elf Warrior token stay home, so only Dwynen and the Mystic count (2 life). The Mystic is 2/2, the Elite 3/3 and the token 2/2, while
+# Dwynen is still 3/4, Memnite is not an Elf and Bot2's own Elvish Mystic is not helped.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Mox Jet
+Dwynen, Gilt-Leaf Daen
+Elvish Mystic
+Dwynen's Elite
+Memnite
+Forest x15
+
+[Bot2 Deck]
+Mox Emerald
+Elvish Mystic
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dwynen, Gilt-Leaf Daen.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Dwynen, Gilt-Leaf Daen > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Life = 21
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dwynen's Elite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Elvish Mystic.Power = 2
+Bot1.Attack(Dwynen, Gilt-Leaf Daen > Bot2; Elvish Mystic > Bot2; Memnite > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 23
+Bot1.Battlefield.Dwynen, Gilt-Leaf Daen.Power = 3
+Bot1.Battlefield.Dwynen, Gilt-Leaf Daen.Toughness = 4
+Bot1.Battlefield.Elvish Mystic.Power = 2
+Bot1.Battlefield.Elvish Mystic.Toughness = 2
+Bot1.Battlefield.Dwynen's Elite.Power = 3
+Bot1.Battlefield.Dwynen's Elite.Toughness = 3
+Bot1.Battlefield.Elf Warrior Token.Power = 2
+Bot1.Battlefield.Elf Warrior Token.Toughness = 2
+Bot1.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Elvish Mystic.Power = 1
+Bot2.Battlefield.Elvish Mystic.Toughness = 1

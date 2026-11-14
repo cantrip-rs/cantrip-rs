@@ -1,0 +1,54 @@
+# Dwynen, Gilt-Leaf Daen with a changeling (CR 702.73a, 205.3m): Avian Changeling has every creature type, Elf among them, so "Other Elf creatures you
+# control get +1/+1" makes it 3/3, and when both attack, "you gain 1 life for each attacking Elf you control" counts it with Dwynen: 2 life.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Ruby
+Dwynen, Gilt-Leaf Daen
+Avian Changeling
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Dwynen, Gilt-Leaf Daen.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Avian Changeling.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Avian Changeling.Power = 3
+[T3 Bot1.Main1]
+Bot1.Attack(Dwynen, Gilt-Leaf Daen > Bot2; Avian Changeling > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 14
+Bot1.Battlefield.Avian Changeling.Power = 3
+Bot1.Battlefield.Avian Changeling.Toughness = 3
+Bot1.Battlefield.Dwynen, Gilt-Leaf Daen.Power = 3
