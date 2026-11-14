@@ -1,0 +1,48 @@
+# Locker Room, cast as the right door: "Whenever one or more creatures you control deal combat damage to a player, draw a card." (CR 603.2c) The
+# trigger is one for the whole batch. Bot1 casts it on turn 1 (Black Lotus and two Moxen) beside two Memnites. On turn 3 both Memnites hit Bot2 together
+# (2 damage) and one card is drawn, not two (library 13 -> 12 for the draw step -> 11); on turn 5 a single Memnite attacks and, being the one
+# creature "one or more" counts, draws one more (-> 9 with the draw step).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Memnite
+Memnite
+Bottomless Pool // Locker Room
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bottomless Pool // Locker Room.Cast(Ability: Locker Room)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Locker Room.Doors = Locker Room
+[T3 Bot1.Main1]
+? Bot1.Library.Count = 12
+Bot1.Attack(Memnite#1 > Bot2; Memnite#2 > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+? Bot1.Library.Count = 11
+[T5 Bot1.Main1]
+Bot1.Attack(Memnite#1 > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+? Bot2.Life = 17
+
+[Expect]
+Bot1.Library.Count = 9

@@ -1,0 +1,59 @@
+# "Combat damage to a player": a Memnite that hits a planeswalker instead does not draw (CR 510.2: it is damage to the planeswalker, not to a player).
+# Bot2 casts Liliana of the Veil on turn 2 (Swamp, Mox Jet, Mox Ruby); on turn 3 Bot1's Memnite attacks it (loyalty 3 -> 2) and the library stays at 12
+# (13 less the turn-3 draw step); on turn 5 it attacks Bot2 and the Locker Room draws, the control that the Room does draw (-> 10 with the draw step).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Memnite
+Bottomless Pool // Locker Room
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Liliana of the Veil
+Swamp x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bottomless Pool // Locker Room.Cast(Ability: Locker Room)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Liliana of the Veil.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2.Battlefield.Liliana of the Veil)
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Liliana of the Veil.Counters.Loyalty = 2
+? Bot2.Life = 20
+? Bot1.Library.Count = 12
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T5 Bot1.Main2]
+? Bot2.Life = 19
+
+[Expect]
+Bot1.Library.Count = 10

@@ -1,0 +1,55 @@
+# Locker Room's trigger is combat damage dealt "to a player" by creatures "you control" (CR 510.2, 603.2). Bot1 casts it on turn 1 with a Memnite and an
+# Ornithopter (Black Lotus and two Moxen). On turn 3 the Memnite is blocked by Bot2's Ornithopter (its damage goes to a creature) while Bot1's own Ornithopter is
+# unblocked but has 0 power, so it deals no damage at all; on turn 4 Bot2's Memnite hits Bot1 (a creature Bot1 does not control). No card is drawn
+# for any of it: the library stays at 12 (13 less the turn-3 draw step) to the end of turn 4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Memnite
+Ornithopter
+Bottomless Pool // Locker Room
+Island
+Island x13
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bottomless Pool // Locker Room.Cast(Ability: Locker Room)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+? Bot1.Library.Count = 12
+Bot1.Attack(Memnite > Bot2; Ornithopter > Bot2)
+Bot2.Block(Ornithopter > Memnite)
+[T3 Bot1.Damage]
+? Bot2.Life = 20
+[T3 Bot1.Main2]
+? Bot1.Library.Count = 12
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+[T4 Bot2.Main2]
+? Bot1.Life = 19
+
+[Expect]
+Bot1.Library.Count = 12
+Bot2.Life = 20
