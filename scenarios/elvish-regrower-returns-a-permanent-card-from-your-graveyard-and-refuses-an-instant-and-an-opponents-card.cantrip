@@ -1,0 +1,52 @@
+# Elvish Regrower (CR 603.6a, 115.1, 110.4): its enters trigger returns target permanent card from its controller's graveyard to hand. Bot1's graveyard holds two spent Black
+# Lotuses (permanent cards: accepted) and a Lightning Bolt (an instant: refused); Bot2's sacrificed Black Lotus is a permanent card in the wrong graveyard (refused) and stays there.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Elvish Regrower
+Lightning Bolt
+Island x15
+
+[Bot2 Deck]
+Black Lotus
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Regrower.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Graveyard.Lightning Bolt)
+! Bot1.Target(Bot2.Graveyard.Black Lotus)
+Bot1.Target(Bot1.Graveyard.Black Lotus)
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Black Lotus.Colors.Count = 0
+Bot1.Hand.Count = 4
+Bot1.Graveyard.Count = 2
+Bot2.Graveyard = Black Lotus
+Bot2.Life = 17
+Bot1.Battlefield.Elvish Regrower.Power = 4

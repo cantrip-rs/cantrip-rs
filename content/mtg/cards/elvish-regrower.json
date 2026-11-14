@@ -1,0 +1,8 @@
+{
+  "name": "Elvish Regrower",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Elf Druid",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "When this creature enters, return target permanent card from your graveyard to your hand."
+}
