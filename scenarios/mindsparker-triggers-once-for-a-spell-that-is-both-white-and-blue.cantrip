@@ -1,0 +1,52 @@
+# Mindsparker: Dovin's Veto is both white and blue, so Bot2 casting it makes Mindsparker's ability trigger once (CR 603.2c),
+# not twice: it deals 2 damage to Bot2, and Bot2 ends at 16 (2 for the Ancestral Recall it counters, 2 for the Veto).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mindsparker
+Mountain x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Ancestral Recall
+Dovin's Veto
+Island x16
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mindsparker.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Ancestral Recall.Cast(Bot2)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 18
+Bot2.Hand.Dovin's Veto.Cast(Stack.Ancestral Recall)
+? Stack.Count = 3
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 16
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 16
+Bot2.Graveyard = Dovin's Veto; Ancestral Recall; Black Lotus
+Stack.Count = 0

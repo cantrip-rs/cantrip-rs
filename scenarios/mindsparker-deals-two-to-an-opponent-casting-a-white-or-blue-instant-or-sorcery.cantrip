@@ -1,0 +1,75 @@
+# Mindsparker: Bot2's blue instant (Ancestral Recall), blue sorcery (Time Walk) and white instant (Swords to Plowshares) each make it
+# deal 2 damage to Bot2 as they are cast, before they resolve. Bot1's own blue instant (Ancestral Recall) deals nothing to anyone.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mindsparker
+Mox Sapphire
+Ancestral Recall
+Mountain
+Mountain x13
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Plains
+Ancestral Recall
+Swords to Plowshares
+Time Walk
+Island x14
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mindsparker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+? Bot2.Life = 20
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Ancestral Recall.Cast(Bot2)
+? Stack.Count = 2
+? Bot2.Life = 20
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 18
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Time Walk.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 16
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Mindsparker)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 14
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 14
+Bot1.Life = 23
+Exile = Mindsparker
+Stack.Count = 0

@@ -1,0 +1,55 @@
+# Mindsparker deals nothing to an opponent casting a red instant (Lightning Bolt, at Bot1), a black instant (Dark Ritual) or a
+# white creature spell (Savannah Lions): Bot2 stays at 20, and only the Bolt hurts Bot1 (17).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mindsparker
+Mountain x16
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Lightning Bolt
+Dark Ritual
+Savannah Lions
+Island x14
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mindsparker.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Dark Ritual.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot1.Life = 17
+Bot2.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Savannah Lions
+Stack.Count = 0
