@@ -1,0 +1,36 @@
+# Aggressive Mammoth: trample itself, and "other creatures you control have trample" - Bot1's Ornithopter has it, Bot2's
+# does not, and the Mammoth's own Trample is its printed keyword (it is not "other").
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Aggressive Mammoth
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Aggressive Mammoth.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Aggressive Mammoth.Keywords = Trample
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Trample
+Bot2.Battlefield.Ornithopter.Keywords = Flying

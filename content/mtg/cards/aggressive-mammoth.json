@@ -1,0 +1,11 @@
+{
+  "name": "Aggressive Mammoth",
+  "manaCost": "{3}{G}{G}{G}",
+  "type": "Creature — Elephant",
+  "power": 8,
+  "toughness": 8,
+  "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\nOther creatures you control have trample.",
+  "keywords": [
+    "Trample"
+  ]
+}
