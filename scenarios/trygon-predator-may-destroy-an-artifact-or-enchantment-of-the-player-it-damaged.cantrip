@@ -1,0 +1,74 @@
+# Trygon Predator ({1}{G}{U}, 2/3 flyer): "Whenever this creature deals combat damage to a player, you may destroy target
+# artifact or enchantment that player controls." Bot2 controls a Forest, a Llanowar Elves, a Mox Pearl and a Sol Ring; Bot1
+# controls its own Moxen. Turn 3 it connects: the Forest, the Elves and Bot1's own Mox Jet are not candidates (refused), Sol
+# Ring is, and is destroyed. Bot2 then casts Fastbond (an enchantment). Turn 5 it connects again and targets Fastbond but
+# Bot1 declines: it stays. Turn 7 Bot1 targets it again and accepts: it is destroyed. Bot2 takes 2 each time (20 to 14) and
+# the Mox Pearl, never targeted, survives.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Trygon Predator
+Island x16
+
+[Bot2 Deck]
+Forest
+Mox Pearl
+Llanowar Elves
+Sol Ring
+Fastbond
+Forest x15
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Trygon Predator.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Trygon Predator > Bot2)
+! Bot1.Target(Bot2.Battlefield.Forest)
+! Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+! Bot1.Target(Bot1.Battlefield.Mox Jet)
+Bot1.Target(Bot2.Battlefield.Sol Ring)
+Bot1.Accept
+? Bot2.Battlefield = Forest; Llanowar Elves; Mox Pearl
+[T4 Bot2.Main1]
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Fastbond.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Trygon Predator > Bot2)
+Bot1.Target(Bot2.Battlefield.Fastbond)
+Bot1.Decline
+? Bot2.Battlefield = Fastbond; Forest; Llanowar Elves; Mox Pearl
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Trygon Predator > Bot2)
+Bot1.Target(Bot2.Battlefield.Fastbond)
+Bot1.Accept
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot2.Graveyard = Fastbond; Sol Ring
+Bot2.Battlefield = Forest; Llanowar Elves; Mox Pearl
+Bot1.Battlefield.Trygon Predator.Keywords = Flying

@@ -1,0 +1,41 @@
+# Trygon Predator's ability triggers only on combat damage dealt to a player (CR 510.1, 603.2). On turn 3 Bot2's Ornithopter (a
+# 0/2 flier) blocks it: the Predator's damage goes to the Ornithopter, nothing triggers, there is no target to choose, and Bot2's
+# Mox Pearl survives with Bot2 still at 20.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Trygon Predator
+Island x16
+
+[Bot2 Deck]
+Mox Pearl
+Ornithopter
+Forest x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Trygon Predator.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Trygon Predator > Bot2)
+Bot2.Block(Ornithopter > Trygon Predator)
+[T3 Bot1.Main2]
+? Stack.Count = 0
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield = Mox Pearl

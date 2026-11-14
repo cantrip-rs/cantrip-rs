@@ -1,0 +1,11 @@
+{
+  "name": "Trygon Predator",
+  "manaCost": "{1}{G}{U}",
+  "type": "Creature — Beast",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying\nWhenever this creature deals combat damage to a player, you may destroy target artifact or enchantment that player controls.",
+  "keywords": [
+    "Flying"
+  ]
+}
