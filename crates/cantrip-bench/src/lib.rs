@@ -330,6 +330,7 @@ pub fn decide(game: &Game, random: &mut Random, request: &Request) -> Answer {
             Answer::Order(random.some(&all, all.len()))
         }
         RequestKind::ChooseReplacement { sources, .. } => Answer::Index(random.below(sources.len()) as u8),
+        RequestKind::OrderReplacementOccurrences { occurrences } => Answer::CostPayment(random.below(occurrences.len())),
         RequestKind::ChooseName { suggestion, kind, .. } => Answer::Name(default_name(game.cards, *kind, *suggestion)),
         RequestKind::ChooseSubtype { choices, .. } => Answer::Subtype(choices[random.below(choices.len())]),
         RequestKind::ChooseNumber { least, most, .. } => {
@@ -391,4 +392,22 @@ fn fitting(game: &Game, request: &Request, drawn: Vec<ObjectId>) -> Vec<ObjectId
         }
     }
     kept
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn replacement_occurrence_choice_preserves_full_width_index() {
+        let island = cantrip_engine::card("Island").unwrap();
+        let game = Game::new(cantrip_engine::cards(), &Setup { decks: vec![vec![island; 20]; 2], ..Setup::default() });
+        let request = Request {
+            id: 1, player: PlayerId(0), may_cancel: false,
+            kind: RequestKind::OrderReplacementOccurrences {
+                occurrences: (0..300).map(|i| ReplacementOccurrence::Life { player: PlayerId(0), amount: -1, occurrence: i }).collect(),
+            },
+        };
+        assert!(matches!(decide(&game, &mut Random::new(3), &request), Answer::CostPayment(259)));
+    }
 }
