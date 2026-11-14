@@ -1,0 +1,32 @@
+# Dance of the Dead's ruling: "If the creature card put onto the battlefield has protection from black (or anything that
+# prevents this from legally being attached), this won't be able to attach to it. Then this will go to the graveyard as a
+# state-based action, causing the creature to be sacrificed." Bot1 discards White Knight to hand size on turn 3 and casts
+# Dance of the Dead on it on turn 5: the Knight enters, the Aura can't enchant it (CR 702.16c, 303.4c), the state-based
+# actions put the Aura into the graveyard (CR 704.5m), and its leaves-the-battlefield ability sacrifices the Knight.
+
+[Bot1 Deck]
+White Knight
+Black Lotus
+Dance of the Dead
+Island
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T3 Bot1.Cleanup]
+Bot1.Discard(White Knight)
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Dance of the Dead.Cast(Bot1.Graveyard.White Knight)
+[T5 Bot1.Main2]
+
+[Expect]
+LeftBattlefield = Black Lotus (tapped); Dance of the Dead; White Knight (tapped)
+Bot1.Battlefield.Count = 0
+Bot1.Graveyard = White Knight; Dance of the Dead; Black Lotus

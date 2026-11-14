@@ -1,0 +1,47 @@
+# Dance of the Dead's enters ability has an intervening "if it's on the battlefield" (CR 603.4): with the trigger on the
+# stack Bot2 Disenchants the Aura, so on resolution the condition is false and the creature card is not put onto the
+# battlefield. Bot1's Ornithopter (killed by its own Cut Down on turn 1) stays in the graveyard.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Ornithopter
+Cut Down
+Dance of the Dead
+Swamp
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Disenchant
+Plains x10
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cut Down.Cast(Ornithopter)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Dance of the Dead.Cast(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Dance of the Dead)
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Swamp; Swamp; Mox Jet
+Bot1.Graveyard = Dance of the Dead; Cut Down; Ornithopter
+Bot2.Graveyard = Disenchant

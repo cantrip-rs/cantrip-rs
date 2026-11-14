@@ -1,0 +1,43 @@
+# Dance of the Dead puts a creature card from an opponent's graveyard onto the battlefield under its controller's control,
+# and when the Aura leaves the battlefield, that creature's controller sacrifices it. Bot1 Cuts Down Bot2's Ornithopter and
+# casts Dance of the Dead on the card in Bot2's graveyard: the Ornithopter enters under Bot1's control. Bot2 Disenchants the
+# Aura on its turn, and its leaves-the-battlefield ability has Bot1, the creature's controller, sacrifice the Ornithopter,
+# which goes to its owner's graveyard (CR 701.21a, 404.1).
+
+[Bot1 Deck]
+Black Lotus
+Cut Down
+Dance of the Dead
+Swamp x12
+
+[Bot2 Deck]
+Ornithopter
+Plains
+Plains
+Disenchant
+Plains x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Cut Down.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot1.Hand.Dance of the Dead.Cast(Bot2.Graveyard.Ornithopter)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Tapped = true
+? Bot2.Graveyard.Count = 0
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains#1.Activate
+Bot2.Battlefield.Plains#2.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Dance of the Dead)
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 0
+Bot1.Graveyard = Dance of the Dead; Cut Down; Black Lotus
+Bot2.Graveyard = Ornithopter; Disenchant

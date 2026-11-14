@@ -1,0 +1,49 @@
+# Dance of the Dead's enters ability is Stifled, so the Aura stays attached to the Ornithopter card in Bot1's graveyard.
+# "Enchanted creature" means a creature permanent on the battlefield (CR 109.2, 303.4m): the card gets no +1/+1, and with
+# no enchanted creature there is no enchanted creature's controller, so the upkeep ability doesn't trigger in Bot1's
+# upkeep - not even though the card's owner, Bot1, is treated as its controller off the battlefield (CR 108.4a).
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Ornithopter
+Cut Down
+Dance of the Dead
+Swamp
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Stifle
+Island x10
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cut Down.Cast(Ornithopter)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Dance of the Dead.Cast(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Stifle.Cast(Stack.Dance of the Dead)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Dance of the Dead.AttachedTo = Ornithopter
+? Bot1.Graveyard.Ornithopter.Power = 0
+[T5 Bot1.Upkeep]
+? Stack.Count = 0
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Dance of the Dead.AttachedTo = Ornithopter

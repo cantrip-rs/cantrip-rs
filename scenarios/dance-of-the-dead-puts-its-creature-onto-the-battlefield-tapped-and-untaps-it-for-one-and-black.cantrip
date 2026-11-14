@@ -1,0 +1,63 @@
+# Dance of the Dead: Bot1 kills its own Ornithopter with Cut Down and casts Dance of the Dead ({1}{B}) on the card in its
+# graveyard (the enchant ability allows only a creature card in a graveyard, CR 303.4a: not the Ornithopter on the
+# battlefield, not the Cut Down card). The Aura's enters ability puts the Ornithopter onto the battlefield tapped (CR
+# 110.5b) and attaches the Aura to it, a 1/3 under "+1/+1". It doesn't untap in Bot1's untap steps (CR 502.3). In Bot1's
+# upkeep on turn 3 Bot1 holds only two white mana, which can't pay {1}{B}; on turn 5 Bot1 may pay and declines, and the
+# Ornithopter stays tapped; on turn 7 Bot1 pays exactly {1}{B} with a Swamp and a Mox Pearl, leaving the other Mox Pearl
+# untapped, and the Ornithopter untaps (CR 118.12).
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Cut Down
+Dance of the Dead
+Mox Pearl
+Mox Pearl
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Hand.Dance of the Dead.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Hand.Cut Down.Cast(Ornithopter)
+Bot1.Pass
+! Bot1.Hand.Dance of the Dead.Cast(Bot1.Graveyard.Cut Down)
+Bot1.Hand.Dance of the Dead.Cast(Bot1.Graveyard.Ornithopter)
+? Bot1.Mana =
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Tapped = true
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot1.Battlefield.Dance of the Dead.AttachedTo = Ornithopter
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+! Bot1.PayCost
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Hand.Swamp.Play
+[T5 Bot1.Upkeep]
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Tapped = true
+[T7 Bot1.Upkeep]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.PayCost
+? Bot1.Mana =
+? Bot1.Battlefield.Mox Pearl#2.Tapped = false
+[T7 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Dance of the Dead.AttachedTo = Ornithopter
