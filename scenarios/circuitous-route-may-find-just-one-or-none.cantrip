@@ -1,0 +1,42 @@
+# Circuitous Route, "up to two" (CR 701.23b): the player may find fewer than two. Bot1 takes only the Mountain and leaves a Forest and the Gate in the library.
+
+[Bot1 Deck]
+Circuitous Route
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Elvish Mystic
+Elvish Mystic
+Forest
+Talon Gates of Madara
+Mountain
+Elvish Mystic x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Circuitous Route.Cast
+Bot1.Search(Mountain)
+? Bot1.Battlefield.Mountain.Tapped = true
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire; Mountain
+Bot1.Graveyard = Circuitous Route
+Bot1.Library.Count = 11
+Bot1.Hand.Count = 2

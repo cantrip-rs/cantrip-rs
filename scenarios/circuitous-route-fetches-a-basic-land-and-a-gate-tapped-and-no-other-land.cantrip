@@ -1,0 +1,48 @@
+# Circuitous Route, "up to two basic land cards and/or Gate cards" (CR 701.23, 205.3i): Bot1 may take any mix of the two kinds. A basic Forest and the Gate Talon Gates of Madara
+# are both found and arrive tapped. A nonbasic land that is not a Gate (Maze of Ith) and a plain creature are not allowed, and neither is a third card.
+
+[Bot1 Deck]
+Circuitous Route
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Elvish Mystic
+Elvish Mystic
+Forest
+Talon Gates of Madara
+Maze of Ith
+Mountain
+Elvish Mystic x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Circuitous Route.Cast
+! Bot1.Search(Maze of Ith)
+! Bot1.Search(Elvish Mystic)
+! Bot1.Search(Forest; Mountain; Talon Gates of Madara)
+Bot1.Search(Forest; Talon Gates of Madara)
+? Bot1.Battlefield.Forest.Tapped = true
+? Bot1.Battlefield.Talon Gates of Madara.Tapped = true
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire; Forest; Talon Gates of Madara
+Bot1.Graveyard = Circuitous Route
+Bot1.Library.Count = 11
+Bot2.Library.Count = 13
