@@ -1,0 +1,58 @@
+# Ancient Cornucopia: "you may gain 1 life for each of that spell's colors" counts the colors the spell has as the ability
+# resolves (CR 608.2h), not as it was cast. On turn 3 Bot1 casts Lightning Helix (red and white); with Cornucopia's trigger on
+# top of it, Bot2 casts Thoughtlace on the Helix, which is then blue alone (Thoughtlace is Bot2's spell, so it triggers nothing).
+# Bot1 accepts and gains 1 life, not 2, then the Helix resolves: Bot1 gains 3 and Bot2 takes 3. The Cornucopia then taps
+# for one green.
+
+[Bot1 Deck]
+Forest
+Mox Jet
+Mox Pearl
+Mox Ruby
+Ancient Cornucopia
+Lightning Helix
+Forest x13
+
+[Bot2 Deck]
+Mox Sapphire
+Thoughtlace
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ancient Cornucopia.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Thoughtlace.Cast(Stack.Lightning Helix)
+! Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Life = 21
+[T3 Bot1.Main2]
+Bot1.Battlefield.Ancient Cornucopia.Activate(Color: Green)
+? Bot1.Mana = {G}
+
+[Expect]
+Bot1.Life = 24
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Helix
+Bot2.Graveyard = Thoughtlace

@@ -1337,6 +1337,17 @@ pub fn an_opponent_casts_a_spell(q: &dyn Query, me: &Asker, event: &Event) -> Op
     }
 }
 
+/// "For each of that spell's colors", for an ability `you_cast_a_spell_about_it` put on the stack: the colors the
+/// spell has as the ability resolves, or as it last was on the stack if it has left (CR 608.2h), so a spell made another color
+/// in the meantime is counted as it now is, and one countered first as it was. Ramos, Dragon Engine and Ancient Cornucopia
+/// print it.
+pub fn colors_of_that_spell(q: &dyn Query, item: &StackItem) -> u32 {
+    match item.subject {
+        Target::Object(spell) => q.chars(spell).colors.iter().count() as u32,
+        _ => 0,
+    }
+}
+
 /// "Whenever you cast a spell" (CR 601.2i, 603.2) for an ability that does something with the spell cast: it is the trigger's
 /// subject (`Fired::about`), so the copy of "copy it" is of that spell. Flamehold Grappler's delayed ability and Jace Reawakened's
 /// print it.
