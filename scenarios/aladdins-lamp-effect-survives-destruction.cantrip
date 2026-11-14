@@ -1,0 +1,33 @@
+# Shatter removes the source after its ability resolves; its original controller still chooses and draws (CR 611.2a).
+[Bot1 Deck]
+Black Lotus x2
+Show and Tell
+Aladdin's Lamp
+Gitaxian Probe
+Island x2
+Plains
+Mountain
+Forest x15
+[Bot2 Deck]
+Black Lotus
+Shatter
+Island x18
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Aladdin's Lamp)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Aladdin's Lamp.Activate(X: 2)
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Shatter.Cast(Bot1.Battlefield.Aladdin's Lamp)
+Bot2.Pass
+Bot1.Hand.Gitaxian Probe.Cast(Bot2)
+Bot1.Modes(1)
+Bot1.Choose(Mountain)
+[Expect]
+Bot1.Hand = Island; Island; Mountain
+Bot1.Graveyard = Gitaxian Probe; Aladdin's Lamp; Black Lotus; Show and Tell; Black Lotus
+Bot1.Library.Top = Forest

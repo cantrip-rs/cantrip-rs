@@ -1,0 +1,27 @@
+# Lamp applies to an empty library; its actual replacement draw is then replaced by Laboratory Maniac (CR 121.6a, 616.1g).
+[Bot1 Deck]
+Black Lotus x3
+Show and Tell
+Aladdin's Lamp
+Laboratory Maniac
+Gitaxian Probe
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Aladdin's Lamp)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Laboratory Maniac.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Aladdin's Lamp.Activate(X: 1)
+Bot1.Pass
+Bot1.Hand.Gitaxian Probe.Cast(Bot2)
+Bot1.Modes(1)
+Bot1.Replace(Aladdin's Lamp)
+[Expect]
+Result = Bot1 won

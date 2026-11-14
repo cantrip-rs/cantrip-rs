@@ -1,0 +1,24 @@
+# An unused effect ends in cleanup and does not replace the next turn's draw (CR 611.2a).
+[Bot1 Deck]
+Black Lotus x2
+Show and Tell
+Aladdin's Lamp
+Island x3
+Plains
+Mountain
+Forest x15
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Aladdin's Lamp)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Aladdin's Lamp.Activate(X: 2)
+Bot1.Pass
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Hand = Island; Island; Island; Plains
+Bot1.Library.Top = Mountain

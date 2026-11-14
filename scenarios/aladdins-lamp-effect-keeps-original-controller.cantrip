@@ -1,0 +1,45 @@
+# March animates the Lamp; Act of Treason takes it after its effect resolves, which still applies to the original controller's draw (CR 611.2a).
+[Bot1 Deck]
+Black Lotus x2
+Show and Tell
+Aladdin's Lamp
+Ancestral Recall
+Island
+Island
+Plains
+Mountain
+Forest
+Swamp
+Island x15
+[Bot2 Deck]
+Black Lotus x3
+March of the Machines
+Act of Treason
+Island x18
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Aladdin's Lamp)
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Aladdin's Lamp.Activate(X: 2)
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.March of the Machines.Cast(Spend: U, U, U, U)
+Bot2.Pass
+Bot2.Hand.Act of Treason.Cast(Bot1.Battlefield.Aladdin's Lamp)
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Choose(Mountain)
+[Expect]
+Bot1.Hand = Island; Mountain; Forest; Swamp
+Bot1.Library.Top = Island
+Bot2.Battlefield = Aladdin's Lamp; March of the Machines

@@ -1,0 +1,28 @@
+# X cannot be zero, while X=3 works on a one-card library: leave that card and draw it (CR 107.3a, 121.6a).
+[Bot1 Deck]
+Black Lotus x2
+Show and Tell
+Aladdin's Lamp
+Gitaxian Probe
+Island x2
+Plains
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Aladdin's Lamp)
+Bot1.Pass
+! Bot1.Battlefield.Aladdin's Lamp.Activate(X: 0; Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Aladdin's Lamp.Activate(X: 3)
+Bot1.Pass
+Bot1.Hand.Gitaxian Probe.Cast(Bot2)
+Bot1.Modes(1)
+Bot1.Choose(Plains)
+[Expect]
+Bot1.Hand = Island; Island; Plains
+Bot1.Library.Count = 0
+Bot1.Life = 18

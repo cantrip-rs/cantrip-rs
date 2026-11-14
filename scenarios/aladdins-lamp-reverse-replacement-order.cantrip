@@ -1,0 +1,40 @@
+# Choose the X=3 effect before X=1 from one Lamp; the latter replaces the former's draw (CR 611.2d, 614.5, 616.1g).
+[Bot1 Deck]
+Black Lotus x3
+Show and Tell
+Aladdin's Lamp
+Voltaic Key
+Gitaxian Probe
+Plains
+Mountain
+Forest
+Swamp
+Island x15
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Aladdin's Lamp)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Voltaic Key.Cast
+Bot1.Pass
+Bot1.Battlefield.Aladdin's Lamp.Activate(X: 1)
+Bot1.Pass
+Bot1.Battlefield.Voltaic Key.Activate(Bot1.Battlefield.Aladdin's Lamp)
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Aladdin's Lamp.Activate(X: 3)
+Bot1.Pass
+Bot1.Hand.Gitaxian Probe.Cast(Bot2)
+Bot1.Modes(1)
+Bot1.Replace(2)
+Bot1.Choose(Forest)
+Bot1.Choose(Forest)
+[Expect]
+Bot1.Hand = Forest
+Bot1.Life = 18
+Bot1.Library.Top = Swamp

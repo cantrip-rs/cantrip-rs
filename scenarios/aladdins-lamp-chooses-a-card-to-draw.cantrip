@@ -1,0 +1,37 @@
+# Lamp replaces Brainstorm's first draw, privately looking at two and drawing the one chosen (CR 121.6, 614.5).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Show and Tell
+Aladdin's Lamp
+Island
+Brainstorm
+Mox Sapphire
+Plains
+Mountain
+Forest
+Swamp
+Island x15
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Aladdin's Lamp)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Aladdin's Lamp.Activate(X: 2)
+Bot1.Pass
+? Bot1.Mana = {U}
+? Bot1.Battlefield.Aladdin's Lamp.Tapped = true
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Brainstorm.Cast
+Bot1.Choose(Mountain)
+? Bot1.Looked = Plains; Mountain
+? Bot2.Sees.Bot1.LibraryTop = (hidden)
+Bot1.Choose(Forest; Swamp)
+[Expect]
+Bot1.Hand = Mountain
