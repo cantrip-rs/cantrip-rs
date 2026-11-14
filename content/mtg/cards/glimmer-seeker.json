@@ -1,0 +1,8 @@
+{
+  "name": "Glimmer Seeker",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Survivor",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Survival — At the beginning of your second main phase, if this creature is tapped, draw a card if you control a Glimmer creature. If you don't control a Glimmer creature, create a 1/1 white Glimmer enchantment creature token."
+}
