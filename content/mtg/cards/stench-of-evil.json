@@ -1,0 +1,6 @@
+{
+  "name": "Stench of Evil",
+  "manaCost": "{2}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "Destroy all Plains. For each land destroyed this way, Stench of Evil deals 1 damage to that land's controller unless they pay {2}."
+}

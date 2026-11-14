@@ -1,0 +1,31 @@
+# Heroic Intervention makes the Plains indestructible before Stench resolves; they cause no damage (CR 701.8a).
+[Bot1 Deck]
+Black Lotus x2
+Stench of Evil
+Island x20
+[Bot2 Deck]
+Black Lotus
+Heroic Intervention
+Plains x2
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Plains.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Stench of Evil.Cast
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Heroic Intervention.Cast
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot2.Battlefield = Plains; Plains

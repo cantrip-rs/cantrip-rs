@@ -1,0 +1,24 @@
+# Paying twice prevents both damage assignments, while the Plains are still destroyed (CR 118.12a, 608.2f).
+[Bot1 Deck]
+Black Lotus x3
+Plains x2
+Stench of Evil
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus#2.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Stench of Evil.Cast
+Bot1.PayCost(Times: 2)
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Graveyard = Stench of Evil; Plains; Plains; Black Lotus; Black Lotus; Black Lotus
