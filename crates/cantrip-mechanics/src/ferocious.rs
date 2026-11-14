@@ -20,6 +20,16 @@ pub fn you_control(q: &dyn Query, player: PlayerId) -> bool {
     count(q, player) > 0
 }
 
+/// Whether `player` controls a creature other than `this` with power 4 or greater, as the game is now (CR 208.1, layers applied;
+/// a creature with no power does not count): "if you control another creature with power 4 or greater". Nessian Hornbeetle's
+/// intervening "if" and Tiger Dillo's attack and block restriction print it.
+pub fn you_control_another(q: &dyn Query, player: PlayerId, this: ObjectId) -> bool {
+    q.permanents_of(player).into_iter().any(|id| {
+        let c = q.chars(id);
+        id != this && c.is(CardType::Creature) && c.power.is_some_and(|p| p >= 4)
+    })
+}
+
 /// `you_control` as a condition of the ability's controller, asked of an `Asker`: a triggered ability's "while you control a
 /// creature with power 4 or greater", asked as the trigger event happens and not again on resolution (`AbilityDef::only_if`); its
 /// intervening "if you control a creature with power 4 or greater" (`AbilityDef::condition`, CR 603.4), asked as it triggers and

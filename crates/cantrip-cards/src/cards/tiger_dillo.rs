@@ -1,11 +1,10 @@
 use cantrip_api::*;
+use cantrip_mechanics::ferocious;
 use cantrip_oracle as oracle;
 
-/// "You control another creature with power 4 or greater": a creature its controller controls now other than this one, whose
-/// power as it is now (CR 208.1, layers applied) is at least 4. A creature with no power does not count.
+/// "You control another creature with power 4 or greater": asked of the creature's controller as it is now.
 fn controls_another_big_creature(q: &dyn Query, this: ObjectId) -> bool {
-    let me = q.controller(this);
-    q.state().battlefield().iter().any(|&id| id != this && q.controller(id) == me && q.chars(id).is(CardType::Creature) && q.chars(id).power.is_some_and(|p| p >= 4))
+    ferocious::you_control_another(q, q.controller(this), this)
 }
 
 /// "This creature can't attack ... unless you control another creature with power 4 or greater" (CR 508.1c): asked of this
