@@ -1,0 +1,39 @@
+# "If it would be put into a graveyard from anywhere": from the battlefield too. Show and Tell puts the Colossus onto the
+# battlefield; Bot1 sacrifices it to Phyrexian Altar (indestructible does not stop a sacrifice) and it is revealed and
+# shuffled into the library instead - the graveyard holds only the spent Black Lotus and Show and Tell.
+
+[Bot1 Deck]
+Darksteel Colossus
+Show and Tell
+Phyrexian Altar
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Island x10
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Darksteel Colossus)
+Bot2.Choose(Island)
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Battlefield.Darksteel Colossus.Power = 11
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Phyrexian Altar.Cast
+Bot1.Battlefield.Phyrexian Altar.Activate(Sacrifice: Darksteel Colossus; Color: Red)
+
+[Expect]
+Stack.Count = 0
+Bot1.Library.Count = 11
+Bot1.Graveyard = Show and Tell; Black Lotus
+Bot1.Battlefield.Count = 4
+Bot1.Hand.Count = 0

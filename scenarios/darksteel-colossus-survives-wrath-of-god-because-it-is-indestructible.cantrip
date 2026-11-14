@@ -1,0 +1,42 @@
+# "Indestructible": effects that say "destroy" do not destroy it. Show and Tell puts the Colossus onto the battlefield on
+# turn 1 (Black Lotus and Mox Sapphire); Bot2 casts a Memnite and then Wrath of God on turn 2 (Black Lotus and Mox
+# Pearl). Wrath destroys the Memnite (so it did resolve) but not the Colossus, which is still on the battlefield, undamaged,
+# and not in the library or a graveyard.
+
+[Bot1 Deck]
+Darksteel Colossus
+Show and Tell
+Black Lotus
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Island
+Black Lotus
+Mox Pearl
+Memnite
+Wrath of God
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Darksteel Colossus)
+Bot2.Choose(Island)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Wrath of God.Cast
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Sapphire; Darksteel Colossus
+Bot1.Battlefield.Darksteel Colossus.Damage = 0
+Bot2.Graveyard = Wrath of God; Memnite; Black Lotus
