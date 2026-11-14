@@ -1,0 +1,34 @@
+# Dryad Militant's replacement covers an instant or sorcery card put into a graveyard "from anywhere" (CR 614.1a), a library
+# included, and only those. Bot1's Thought Scour mills its own Lightning Bolt and Grizzly Bears: the Bolt is exiled, the Bears (a
+# creature card) goes to the graveyard, and the Thought Scour itself is exiled as it resolves.
+
+[Bot1 Deck]
+Forest
+Mox Sapphire
+Dryad Militant
+Thought Scour
+Island
+Island
+Island
+Lightning Bolt
+Grizzly Bears
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Dryad Militant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Grizzly Bears
+Exile = Lightning Bolt; Thought Scour

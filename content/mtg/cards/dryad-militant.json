@@ -1,0 +1,8 @@
+{
+  "name": "Dryad Militant",
+  "manaCost": "{G/W}",
+  "type": "Creature — Dryad Soldier",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "({G/W} can be paid with either {G} or {W}.)\nIf an instant or sorcery card would be put into a graveyard from anywhere, exile it instead."
+}
