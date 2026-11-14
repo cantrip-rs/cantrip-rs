@@ -1,0 +1,38 @@
+# Unsettling Twins: which of the two cards is manifested is Bot1's choice (CR 701.62a). Of Guerrilla Gorilla and Lightning Bolt it
+# manifests the Bolt, which stays a face-down 2/2 (a noncreature card cannot be turned face up), and the Gorilla goes into the
+# graveyard.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Mox Ruby
+Unsettling Twins
+Island
+Island
+Guerrilla Gorilla
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Unsettling Twins.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Lightning Bolt | Guerrilla Gorilla)
+[T1 Bot1.End]
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot1.Graveyard = Guerrilla Gorilla
