@@ -3497,8 +3497,8 @@ pub fn charge_counters_on_self<const N: i32>(g: &mut dyn Game, item: &StackItem)
     counters_on_self::<{ CounterKind::Charge as usize }, N>(g, item)
 }
 
-/// "Draw that many cards" (CR 121.1, 608.2c): as many cards as the combat damage the trigger's event dealt to the player
-/// (`StackItem::matched_damage_amount`). April, Reporter of the Weird prints it before a discard, Starship Enterprise alone.
+/// "Draw that many cards" (CR 121.1, 608.2c): as many cards as the damage the trigger's event dealt to the player
+/// (`StackItem::matched_damage_amount`). April, Reporter of the Weird prints it before a discard, Starship Enterprise alone, and Niv-Mizzet, Visionary for noncombat damage.
 pub fn draw_that_many(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.draw(item.controller, item.matched_damage_amount());
     Ok(())

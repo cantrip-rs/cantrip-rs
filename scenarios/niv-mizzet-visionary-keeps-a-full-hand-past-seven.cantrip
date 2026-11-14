@@ -1,0 +1,44 @@
+# Niv-Mizzet, Visionary: "You have no maximum hand size" (CR 402.2). Bot1 casts it on turn 1 off Black Lotus and three Moxen and then
+# draws without playing anything: its hand grows past seven and the turn-13 cleanup discards nothing, while Bot2, without it,
+# discards down to seven every turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Niv-Mizzet, Visionary
+Forest
+Forest
+Forest x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Niv-Mizzet, Visionary.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot2.Hand.Count = 7
+[T5 Bot1.Main1]
+[T7 Bot1.Main1]
+[T9 Bot1.Main1]
+[T11 Bot1.Main1]
+? Bot1.Hand.Count = 7
+[T13 Bot1.Main1]
+? Bot1.Hand.Count = 8
+? Bot2.Hand.Count = 7
+[T14 Bot2.Main1]
+
+[Expect]
+Bot1.Hand.Count = 8
+Bot2.Hand.Count = 8

@@ -1,0 +1,94 @@
+# Niv-Mizzet, Visionary: "Whenever a source you control deals noncombat damage to an opponent, you draw that many cards." Turn 1:
+# Bot1 casts Niv-Mizzet off Black Lotus and three Moxen, then Lightning Bolt (a spell it controls) at Bot2: 3 damage, so it draws three
+# Shocks. Turn 2: Bot2's own Lightning Bolt at Bot1 is a source the opponent controls and draws Bot1 nothing. Turn 3: Bot1 draws a
+# Mox Ruby, plays it, and Shocks Bot2's Ornithopter (not a player), its own face (not an opponent), then Bot2's face (2 damage, two
+# draws); Niv-Mizzet's 5 combat damage to Bot2 draws nothing (combat damage). Bot1 ends with two cards in hand.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Ruby
+Mox Jet
+Niv-Mizzet, Visionary
+Lightning Bolt
+Shock
+Shock
+Shock
+Mox Ruby
+Forest
+Forest
+Forest x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Niv-Mizzet, Visionary.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 1
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+? Stack.Count = 0
+? Bot1.Hand.Count = 3
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Shock.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 15
+? Bot1.Hand.Count = 1
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 15
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Niv-Mizzet, Visionary > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 10
+
+[Expect]
+Bot2.Life = 10
+Bot1.Life = 15
+Bot1.Hand.Count = 2

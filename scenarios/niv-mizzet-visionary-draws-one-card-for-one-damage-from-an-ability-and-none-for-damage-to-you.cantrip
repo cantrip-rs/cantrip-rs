@@ -1,0 +1,59 @@
+# Niv-Mizzet, Visionary: "that many" is the damage the source dealt, whatever it is, and the source may be an ability's. Bot1 casts
+# Niv-Mizzet on turn 1 and Prodigal Sorcerer on turn 3. On turn 5 the Sorcerer pings Bot2 for 1 damage (19) and Bot1 draws one card;
+# on turn 7 it pings Bot1 itself, which is no opponent: no card.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Niv-Mizzet, Visionary
+Prodigal Sorcerer
+Forest
+Forest x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Niv-Mizzet, Visionary.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Prodigal Sorcerer.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+[T5 Bot1.Main1]
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Prodigal Sorcerer.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+[T7 Bot1.Main1]
+? Bot1.Hand.Count = 5
+Bot1.Battlefield.Prodigal Sorcerer.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+? Stack.Count = 0
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 19
+Bot1.Hand.Count = 5

@@ -1,0 +1,11 @@
+{
+  "name": "Niv-Mizzet, Visionary",
+  "manaCost": "{4}{U}{R}",
+  "type": "Legendary Creature — Dragon Wizard",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Flying\nYou have no maximum hand size.\nWhenever a source you control deals noncombat damage to an opponent, you draw that many cards.",
+  "keywords": [
+    "Flying"
+  ]
+}
