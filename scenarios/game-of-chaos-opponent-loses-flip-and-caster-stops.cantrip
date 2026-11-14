@@ -1,0 +1,29 @@
+# When Bot2 loses the flip, its target Bot1 gains life and chooses to stop (CR 705.1, 119.3).
+[Bot1 Deck]
+Island x20
+
+[Bot2 Deck]
+Game of Chaos
+Black Lotus
+Mountain x20
+
+[Dice]
+2
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+! Bot2.Hand.Game of Chaos.Cast(Bot2)
+Bot2.Hand.Game of Chaos.Cast(Bot1)
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 19
+? Bot1.Life = 21
+Bot1.Decline
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 21
+Bot2.Graveyard = Game of Chaos; Black Lotus

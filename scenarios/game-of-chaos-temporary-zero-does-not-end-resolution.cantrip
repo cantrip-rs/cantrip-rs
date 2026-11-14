@@ -1,0 +1,24 @@
+# Bot2 briefly reaches zero life while the resolving spell asks whether to flip again, then gains life (CR 704.3, 704.4).
+[Life]
+Bot1: 20
+Bot2: 1
+[Bot1 Deck]
+Game of Chaos
+Black Lotus
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Dice]
+1; 2
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Game of Chaos.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot2.Decline
+[Expect]
+Result = InProgress
+Bot1.Life = 19
+Bot2.Life = 2
