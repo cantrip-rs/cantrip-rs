@@ -736,6 +736,14 @@ pub fn plus_one_counter_on_this(g: &mut dyn Game, item: &StackItem) -> Result<()
     Ok(())
 }
 
+/// "Put X +1/+1 counters on [this creature]" (CR 122.1, 107.3): the X announced for or paid into the ability, on its source as it is
+/// now; a source that has left the battlefield is a new object (CR 400.7) and gets none. Stature, Size Shifter's power-up and
+/// Wildborn Preserver's reflexive ability print it.
+pub fn x_plus_one_counters_on_this(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.add_counters(item.object, CounterKind::PlusOne, item.x as i32);
+    Ok(())
+}
+
 /// "This Vehicle becomes an artifact creature. Put `N` +1/+1 counters on it" (CR 301.7, 611.2a, 122.1): with no duration said it
 /// stays an artifact creature for as long as it is on the battlefield, still a Vehicle, its printed power and toughness and the
 /// counters making it. Done to the permanent whose ability this is, so a Vehicle that has left the battlefield by the time the
