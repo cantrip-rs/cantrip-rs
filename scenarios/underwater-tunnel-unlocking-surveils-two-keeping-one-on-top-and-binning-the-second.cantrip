@@ -1,0 +1,28 @@
+# Underwater Tunnel, "When you unlock this door, surveil 2" (CR 701.25a): cast as its left door for {U} (Black Lotus), the top
+# TWO cards are looked at - Lightning Bolt stays on top and Counterspell, the second, goes to the graveyard. The Slimy Aquarium
+# door stays locked, so no manifest dread happens (no face-down creature, Bot1's library is only one card shorter than the Bolt).
+
+[Bot1 Deck]
+Black Lotus
+Underwater Tunnel // Slimy Aquarium
+Island x5
+Lightning Bolt
+Counterspell
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Underwater Tunnel // Slimy Aquarium.Cast(Ability: Underwater Tunnel)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Lightning Bolt | Counterspell)
+
+[Expect]
+Bot1.Graveyard = Counterspell; Black Lotus
+Bot1.Library = Lightning Bolt; Island
+Bot1.Battlefield.Underwater Tunnel.Doors = Underwater Tunnel
+Bot1.Battlefield.Count = 1
