@@ -528,13 +528,20 @@ pub fn delirium(view: &dyn LayerQuery, source: ObjectId) -> bool {
     seen.iter().count() >= 4
 }
 
+/// The number of instant and sorcery cards in the graveyard of `source`'s controller (never tokens, CR 111.7), each judged as the
+/// layers make it and counted once whether it is one or both, for the statics that count them. Spell mastery (`spell_mastery`) and
+/// Enigma Drake's power use it.
+pub fn instant_and_sorcery_cards_in_your_graveyard(view: &dyn LayerQuery, source: ObjectId) -> usize {
+    let state = view.state();
+    let you = state.obj(source).controller;
+    state.zone(Zone::graveyard(you)).iter().filter(|&&c| view.chars(c).is(CardType::Instant) || view.chars(c).is(CardType::Sorcery)).count()
+}
+
 /// Spell mastery (an ability word, CR 207.2c) for a static ability's condition: two or more instant and/or sorcery cards in the
 /// graveyard of `source`'s controller, judged on the cards' characteristics as the layers made them. `mechanics::spell_mastery`
 /// is the same question outside the layers. Ghitu Lavarunner uses it; Fiery Impulse asks the other.
 pub fn spell_mastery(view: &dyn LayerQuery, source: ObjectId) -> bool {
-    let state = view.state();
-    let you = state.obj(source).controller;
-    state.zone(Zone::graveyard(you)).iter().filter(|&&c| view.chars(c).is(CardType::Instant) || view.chars(c).is(CardType::Sorcery)).count() >= 2
+    instant_and_sorcery_cards_in_your_graveyard(view, source) >= 2
 }
 
 /// "... has defender" (CR 702.3, layer 6) as a static ability's `StaticDef::apply`. Spider-Man No More prints it.
