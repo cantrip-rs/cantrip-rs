@@ -500,6 +500,12 @@ pub fn have_lifelink(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
     chars.keywords = chars.keywords.with(Keyword::Lifelink);
 }
 
+/// "... has trample and lifelink" (CR 702.19, 702.15, layer 6) as a static ability's `StaticDef::apply`. Loxodon Warhammer's and
+/// Shadowspear's equipped creature and Unflinching Courage's enchanted creature have it.
+pub fn have_trample_and_lifelink(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
+    chars.keywords = chars.keywords.with(Keyword::Trample).with(Keyword::Lifelink);
+}
+
 /// "... has deathtouch and lifelink" (CR 702.2, 702.15, layer 6) as a static ability's `StaticDef::apply`. Basilisk Collar's and
 /// Dissection Tools' equipped creature.
 pub fn have_deathtouch_and_lifelink(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
