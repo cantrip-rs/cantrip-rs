@@ -1446,6 +1446,22 @@ pub static ELF: CardDef = CardDef {
     ..token!(Elf)
 };
 
+/// The 1/1 green Elf Warrior creature token (CR 111.1, 111.4). Elfsworn Giant and Dwynen's Elite make it.
+pub static ELF_WARRIOR: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Green)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Elf Warrior)
+};
+
+/// "Create a 1/1 green Elf Warrior creature token" as an ability's whole effect (CR 111.1, 701.7a): one, under its controller.
+/// Elfsworn Giant and Dwynen's Elite print it.
+pub fn create_an_elf_warrior(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &ELF_WARRIOR, 1)?;
+    Ok(())
+}
+
 /// The 2/2 black and green Elf creature token (CR 111.1, 111.4). Morcant's Eyes and Unforgiving Aim make it.
 pub static ELF_BLACK_GREEN: CardDef = CardDef {
     colors: Some(ColorSet(0b10100)),
