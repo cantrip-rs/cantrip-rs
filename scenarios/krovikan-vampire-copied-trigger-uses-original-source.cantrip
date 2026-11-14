@@ -1,0 +1,52 @@
+# A copied end-step ability keeps its source and returns the card under its new controller; the original finds no card (CR 707.10).
+[Bot1 Deck]
+Krovikan Vampire
+Black Lotus
+Mox Jet
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Grizzly Bears
+Forest
+Black Lotus x2
+Return the Favor
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Krovikan Vampire.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Krovikan Vampire > Bot2)
+Bot2.Block(Grizzly Bears > Krovikan Vampire)
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Return the Favor.Cast
+Bot2.Modes(Copy target)
+Bot2.Target(Stack.Krovikan Vampire)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Grizzly Bears = (absent)
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Krovikan Vampire.Power = 3
