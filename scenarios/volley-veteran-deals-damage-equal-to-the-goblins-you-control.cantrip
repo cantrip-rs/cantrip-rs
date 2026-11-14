@@ -1,0 +1,84 @@
+# Volley Veteran: "When this creature enters, it deals damage to target creature an opponent controls equal to the number of Goblins you
+# control." Turn 3: Bot1 has a Goblin Assailant and casts the first Veteran, which counts itself: 2 Goblins, so 2 damage to Bot2's Fortress
+# Crab (3/6); Bot2's own Goblin Assailant does not count (that would be 3) and Bot1's Assailant and a Mox Jet are refused as targets. Turn 5
+# the second Veteran makes 3 Goblins and 3 damage to the Crab (its earlier damage having worn off).
+
+[Bot1 Deck]
+Mox Ruby x5
+Goblin Assailant
+Volley Veteran
+Volley Veteran
+Mountain x12
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Ruby
+Fortress Crab
+Goblin Assailant
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Goblin Assailant.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Fortress Crab.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Goblin Assailant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Volley Veteran.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Goblin Assailant)
+! Bot1.Target(Bot2.Battlefield.Mox Jet)
+Bot1.Target(Bot2.Battlefield.Fortress Crab)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Fortress Crab.Damage = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Volley Veteran.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Fortress Crab)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Fortress Crab.Damage = 3
+
+[Expect]
+Bot2.Battlefield.Fortress Crab.Damage = 3
