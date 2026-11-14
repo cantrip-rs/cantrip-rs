@@ -20,13 +20,6 @@ fn copy_it(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "When you next activate an exhaust ability that isn't a mana ability this turn" (CR 603.7b): sets up delayed triggered
-/// ability number 0, which triggers once on the next such activation this turn and ends with the turn.
-fn watch(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    delayed::next_this_turn(g, item, 0, item.object);
-    Ok(())
-}
-
 const COPY_IT: AbilityDef = triggered(
     when_asked(EventMask::ABILITY_ACTIVATED, you_activate_an_exhaust_ability_that_isnt_a_mana_ability),
     copy_it,
@@ -38,7 +31,7 @@ pub static CARD: CardDef = CardDef {
         mana_ability(TAP, add_n(Mana::C, 2).only_for(ManaRestriction::ABILITIES), "{T}: Add {C}{C}. Spend this mana only to activate abilities."),
         ability(
             cost("{2}, {T}"),
-            watch,
+            delayed::watch_for_the_next,
             "{2}, {T}: When you next activate an exhaust ability that isn't a mana ability this turn, copy it. You may choose new targets for the copy.",
         ),
     ],

@@ -20,14 +20,6 @@ fn charge(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "{T}, Remove three charge counters: When you next cast an instant or sorcery spell this turn, copy it": the ability
-/// sets up a delayed triggered ability, number 0 of the card's `delayed` list, that triggers once on the next such spell
-/// its controller casts this turn and ends with the turn if none is cast (CR 603.7b).
-fn watch(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    delayed::next_this_turn(g, item, 0, item.object);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     enters: Some(chosen_type::enters_choosing_a_creature_type),
     abilities: &[
@@ -38,7 +30,7 @@ pub static CARD: CardDef = CardDef {
         ),
         ability(
             TAP.and(remove_counters(CounterKind::Charge, 3)),
-            watch,
+            delayed::watch_for_the_next,
             "{T}, Remove three charge counters from this artifact: When you next cast an instant or sorcery spell this turn, copy it. You may choose new targets for the copy.",
         ),
     ],
