@@ -1,0 +1,11 @@
+{
+  "name": "Ghostly Keybearer",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Spirit",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\nWhenever this creature deals combat damage to a player, unlock a locked door of up to one target Room you control.",
+  "keywords": [
+    "Flying"
+  ]
+}

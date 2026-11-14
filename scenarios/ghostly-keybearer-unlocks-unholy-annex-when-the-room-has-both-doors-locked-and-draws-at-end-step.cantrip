@@ -1,0 +1,69 @@
+# Ghostly Keybearer unlocking a door of a Room whose doors are both locked (CR 709.5f: the controller chooses a locked half). Bot1's Unholy Annex (cast
+# on turn 1) is exiled by Flickerwisp on turn 3 and returns at the end step not cast, so it has neither door unlocked (CR 709.5d). On turn 5 the Keybearer
+# hits Bot2 and Bot1 targets the Room and is asked which door (both halves are offered; Bot1 names Unholy Annex): the left door is unlocked and Ritual Chamber stays
+# locked, so no Demon is made (CR 709.5c), and Unholy Annex's end step ability is back: with no Demon Bot1 draws and loses 2 life at its end step (16 after the 2 it lost at its turn 1 end step, none on turn 3 with the Room exiled).
+# Mox Sapphire, Pearl and Pearl pay Flickerwisp's {1}{W}{W}; the Keybearer's {3}{U} and Unholy Annex's {2}{B} are paid on turn 1.
+
+[Bot1 Deck]
+Black Lotus
+Unholy Annex // Ritual Chamber
+Mox Sapphire
+Mox Pearl
+Mox Pearl
+Mox Jet
+Ghostly Keybearer
+Flickerwisp
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ghostly Keybearer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Upkeep]
+? Bot1.Life = 18
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Flickerwisp.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Upkeep]
+? Bot1.Battlefield..Doors.Count = 0
+[T5 Bot1.Main1]
+Bot1.Attack(Ghostly Keybearer)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Name(Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Battlefield.Unholy Annex.Doors = Unholy Annex
+? Bot1.Battlefield.Demon Token = (absent)
+[T6 Bot2.Upkeep]
+? Bot1.Life = 16
+[Expect]
+Bot1.Battlefield.Unholy Annex.Doors = Unholy Annex

@@ -1,0 +1,48 @@
+# Ghostly Keybearer's ability needs combat damage dealt to a player (CR 510.2): Bot2's Ornithopter (0/2 flier) blocks it on turn 3, takes the 3 damage and dies,
+# Bot2 loses no life, nothing triggers and Bot1's Unholy Annex keeps its one door unlocked with no target question asked (the unblocked hit that does unlock is
+# the other scenarios').
+
+[Bot1 Deck]
+Black Lotus
+Unholy Annex // Ritual Chamber
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Ghostly Keybearer
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ghostly Keybearer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ghostly Keybearer)
+Bot2.Block(Ornithopter > Ghostly Keybearer)
+[T3 Bot1.Main2]
+? Stack.Count = 0
+? Bot2.Graveyard = Ornithopter
+? Bot2.Life = 20
+[Expect]
+Bot1.Battlefield.Unholy Annex.Doors = Unholy Annex
+Bot1.Battlefield.Demon Token = (absent)

@@ -1,0 +1,80 @@
+# Ghostly Keybearer's target is a Room "you control": Bot2's Unholy Annex (cast on turn 2 with three Moxen) is refused on turn 3, when the Keybearer first hits
+# Bot2 (positive control: Bot1's own Annex is taken and its right door is unlocked, making the Demon). On turn 5 the hit targets that Room again, now fully unlocked:
+# it is still a legal target (CR 115.1) with no locked door, so nothing is unlocked and no second Demon is made. The Keybearer's own flight keeps Bot2
+# without a blocker both turns. Bot2 loses life to the Annexes it draws with: 2 at its own end step (no Demon of its own), and 2 at Bot1's end step once the Demon is out (18 -> 15 after the first hit; 13 -> 11 -> 8 after the second).
+
+[Bot1 Deck]
+Black Lotus
+Unholy Annex // Ritual Chamber
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Ghostly Keybearer
+Island x13
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Unholy Annex // Ritual Chamber
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ghostly Keybearer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ghostly Keybearer)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Unholy Annex)
+Bot1.Target(Bot1.Battlefield.Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 15
+? Bot1.Battlefield.Unholy Annex // Ritual Chamber.Doors = Unholy Annex; Ritual Chamber
+? Bot1.Battlefield.Count = 7
+? Bot2.Battlefield.Unholy Annex.Doors = Unholy Annex
+[T5 Bot1.Main1]
+Bot1.Attack(Ghostly Keybearer)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Unholy Annex // Ritual Chamber)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+? Bot2.Life = 8
+[Expect]
+Bot1.Battlefield.Count = 7
+Bot1.Battlefield.Unholy Annex // Ritual Chamber.Doors = Unholy Annex; Ritual Chamber
