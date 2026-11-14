@@ -1,12 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::{creatures_have_total_power_at_least, effects, pump, targets, triggers};
+use cantrip_mechanics::{your_creatures_have_total_power_at_least, effects, pump, targets, triggers};
 use cantrip_oracle as oracle;
-
-/// "Whenever you attack while creatures you control have total power 8 or greater" (CR 508.3d): a condition of the trigger
-/// event, judged as attackers are declared and not again as the ability resolves (CR 603.4, `only_if`).
-fn eight_power(q: &dyn Query, asker: &Asker) -> bool {
-    creatures_have_total_power_at_least(q, asker.controller, 8)
-}
 
 /// "Target attacking creature gets +2/+0 and gains first strike until end of turn." A creature that has stopped attacking
 /// is no longer legal and gets neither (CR 608.2b). The two are one instruction (CR 608.2c).
@@ -25,7 +19,7 @@ pub static CARD: CardDef = CardDef {
         pump_and_first_strike,
         "Whenever you attack while creatures you control have total power 8 or greater, target attacking creature gets +2/+0 and gains first strike until end of turn.",
     )
-    .only_if(eight_power)
+    .only_if(your_creatures_have_total_power_at_least::<8>)
     .targets(&[targets::ATTACKING_CREATURE])],
     ..oracle::UNA_CHIN_RILEY_NUMBER_ONE
 };

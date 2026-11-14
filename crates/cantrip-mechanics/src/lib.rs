@@ -223,6 +223,16 @@ pub fn creatures_have_total_power_at_least(q: &dyn Query, player: PlayerId, mini
     total_power_of_creatures_you_control(q, player) >= i64::from(minimum)
 }
 
+/// "While creatures you control have total power `N` or greater" as a condition of an ability (CR 208.1, 613.4):
+/// `creatures_have_total_power_at_least` for the ability's controller. As `AbilityDef::only_if` it is read only as the
+/// trigger event happens and not again as the ability resolves (CR 508.3d, 603.2, not an intervening "if"); as
+/// `AbilityDef::condition` it is the intervening "if" (CR 603.4). Kirk, Commanding Officer, Hologram Janeway, Laan
+/// Noonien Singh, Una Chin-Riley, Tactical Officer and Worf, Honor-Bound Warrior print it on "you attack"; Surrak, the
+/// Hunt Caller prints it as an intervening "if" at the beginning of combat.
+pub fn your_creatures_have_total_power_at_least<const N: i32>(q: &dyn Query, asker: &Asker) -> bool {
+    creatures_have_total_power_at_least(q, asker.controller, N)
+}
+
 /// "Activate only during your turn" (CR 602.5b), and "if it's your turn" on an alternative cost (CR 118.9): the
 /// ability's or spell's controller is the active player. Wishclaw Talisman, Vivi Ornitier, Sundial of the Infinite and
 /// Mine Collapse print it.

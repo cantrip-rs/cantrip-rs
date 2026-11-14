@@ -1,12 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::{creatures_have_total_power_at_least, double, triggers};
+use cantrip_mechanics::{your_creatures_have_total_power_at_least, double, triggers};
 use cantrip_oracle as oracle;
-
-/// "While creatures you control have total power 8 or greater" is read only as attackers are declared and the trigger put on
-/// the stack (CR 508.3d, 603.4): a creature that grows or dies afterwards leaves the ability where it is.
-fn eight_power(q: &dyn Query, asker: &Asker) -> bool {
-    creatures_have_total_power_at_least(q, asker.controller, 8)
-}
 
 /// "Double Worf's power until end of turn" (CR 701.10a-b): +X/+0, where X is his power as the ability resolves. A Worf who
 /// has left the battlefield is gone (CR 400.7), so nothing happens.
@@ -37,7 +31,7 @@ pub static CARD: CardDef = CardDef {
             double_power,
             "Whenever you attack while creatures you control have total power 8 or greater, double Worf's power until end of turn.",
         )
-        .only_if(eight_power),
+        .only_if(your_creatures_have_total_power_at_least::<8>),
         ability(
             Cost::tap_untapped(2, untapped_artifact_or_creature_you_control),
             add_counter,
