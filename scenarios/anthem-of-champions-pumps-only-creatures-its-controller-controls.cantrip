@@ -1,0 +1,47 @@
+# Anthem of Champions: "Creatures you control get +1/+1." Bot1's Ornithopter (0/2) is a 1/3 once the Anthem resolves and a
+# Ornithopter cast afterwards is too (the bonus is a static ability, not a one-shot); Bot2's Ornithopter is not pumped, and
+# the Anthem itself, an enchantment, is no creature and has no power.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Anthem of Champions
+Ornithopter
+Ornithopter
+Forest x20
+
+[Bot2 Deck]
+Ornithopter
+Island x23
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Anthem of Champions.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#2.Power = 1
+
+[Expect]
+Bot1.Battlefield.Ornithopter#1.Power = 1
+Bot1.Battlefield.Ornithopter#1.Toughness = 3
+Bot1.Battlefield.Ornithopter#2.Power = 1
+Bot1.Battlefield.Ornithopter#2.Toughness = 3
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Anthem of Champions.Power = (absent)

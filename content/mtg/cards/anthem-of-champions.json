@@ -1,0 +1,6 @@
+{
+  "name": "Anthem of Champions",
+  "manaCost": "{G}{W}",
+  "type": "Enchantment",
+  "oracleText": "Creatures you control get +1/+1."
+}
