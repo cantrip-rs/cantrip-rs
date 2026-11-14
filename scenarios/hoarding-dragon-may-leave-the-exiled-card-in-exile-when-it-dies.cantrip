@@ -1,0 +1,47 @@
+# Hoarding Dragon's dies ability is a "may": Bot1 finds Sol Ring with the enters ability, then declines to put the exiled card
+# into their hand when Terror kills the Dragon. Sol Ring stays in exile.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Hoarding Dragon
+Terror
+Sol Ring
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hoarding Dragon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Search(Sol Ring)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Terror.Cast(Bot1.Battlefield.Hoarding Dragon)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Exile = Sol Ring
+Bot1.Hand =
+Bot1.Graveyard = Terror; Hoarding Dragon; Black Lotus
+Stack.Count = 0
