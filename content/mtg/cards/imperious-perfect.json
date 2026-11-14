@@ -1,0 +1,8 @@
+{
+  "name": "Imperious Perfect",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Elf Warrior",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Other Elves you control get +1/+1.\n{G}, {T}: Create a 1/1 green Elf Warrior creature token."
+}

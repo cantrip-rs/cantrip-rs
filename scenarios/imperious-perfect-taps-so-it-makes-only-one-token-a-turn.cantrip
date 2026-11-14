@@ -1,0 +1,35 @@
+# Imperious Perfect's token ability has {T} in its cost (CR 602.2, 302.6): after it makes one Elf Warrior it is tapped, and a second activation in the same turn is refused even with more mana
+# available, so Bot1 ends with exactly one token.
+
+[Bot1 Deck]
+Imperious Perfect
+Black Lotus
+Mox Emerald
+Mox Emerald
+Forest
+Forest
+Forest
+Forest x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Imperious Perfect.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Imperious Perfect.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {G}
+! Bot1.Battlefield.Imperious Perfect.Activate
+
+[Expect]
+Bot1.Battlefield = Elf Warrior Token; Imperious Perfect; Mox Emerald; Mox Emerald
