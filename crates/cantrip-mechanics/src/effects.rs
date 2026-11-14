@@ -3121,3 +3121,11 @@ pub fn draw_then_may_put_up_to_lands_tapped(g: &mut dyn Game, player: PlayerId, 
     crate::hand::may_put_up_to_onto_battlefield_tapped(g, player, source, crate::select::land_cards(crate::select::up_to(most)))?;
     Ok(())
 }
+
+/// "Gain control of target creature for as long as this permanent remains on the battlefield" (CR 611.2b):
+/// Infernal Denizen and The Akroan War. An effect whose duration never starts does nothing.
+pub fn gain_control_of_target_while_source_on_battlefield(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    g.gain_control(item.object, creature, item.controller, Duration::WhileSourceOnBattlefield);
+    Ok(())
+}

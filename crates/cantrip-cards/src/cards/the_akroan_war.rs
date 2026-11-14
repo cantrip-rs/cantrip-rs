@@ -1,15 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::targets;
+use cantrip_mechanics::{effects, targets};
 use cantrip_oracle as oracle;
-
-/// I - "Gain control of target creature for as long as this Saga remains on the battlefield." (CR 611.2b): a Saga that has
-/// left the battlefield already gives control for no time at all; the creature is judged a legal target as it resolves
-/// (CR 608.2b).
-fn steal(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
-    g.gain_control(item.object, creature, item.controller, Duration::WhileSourceOnBattlefield);
-    Ok(())
-}
 
 /// II - "creatures your opponents control": the creatures the Saga's controller does not control, read as attackers are
 /// declared (CR 611.2c), so a creature that changes hands or arrives later is judged as it then is.
@@ -44,7 +35,7 @@ fn tapped_creatures_hit_themselves(g: &mut dyn Game, _: &StackItem) -> Result<()
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        chapter(1, steal, "I \u{2014} Gain control of target creature for as long as this Saga remains on the battlefield.")
+        chapter(1, effects::gain_control_of_target_while_source_on_battlefield, "I \u{2014} Gain control of target creature for as long as this Saga remains on the battlefield.")
             .targets(&[targets::CREATURE]),
         chapter(2, must_attack, "II \u{2014} Until your next turn, creatures your opponents control attack each combat if able."),
         chapter(3, tapped_creatures_hit_themselves, "III \u{2014} Each tapped creature deals damage to itself equal to its power."),
