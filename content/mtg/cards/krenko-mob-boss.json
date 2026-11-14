@@ -1,0 +1,8 @@
+{
+  "name": "Krenko, Mob Boss",
+  "manaCost": "{2}{R}{R}",
+  "type": "Legendary Creature — Goblin Warrior",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "{T}: Create X 1/1 red Goblin creature tokens, where X is the number of Goblins you control."
+}
