@@ -1,0 +1,44 @@
+# Commune with Evil: "Look at the top four cards of your library. Put one of them into your hand and the rest into your graveyard.
+# You gain 3 life." Bot1 sees a Memnite, an Ornithopter, a Darksteel Myr and a Mox Pearl, takes the Ornithopter, and the other
+# three go to its graveyard; the fifth card, an Island, stays on top. Bot1 gains 3 (20 -> 23), Bot2 is untouched. Paid with exactly
+# {2}{B} from three Moxen: the pool is empty.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Commune with Evil
+Swamp x3
+Memnite
+Ornithopter
+Darksteel Myr
+Mox Pearl
+Island
+Swamp x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Commune with Evil.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Ornithopter | Memnite; Darksteel Myr; Mox Pearl)
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 23
+Bot1.Hand.Count = 4
+Bot1.Library.Count = 9
+Bot1.Graveyard = Commune with Evil; Mox Pearl; Darksteel Myr; Memnite
+Bot2.Life = 20
+Bot2.Hand.Count = 7
+Bot2.Graveyard.Count = 0
+Bot2.Library.Count = 13

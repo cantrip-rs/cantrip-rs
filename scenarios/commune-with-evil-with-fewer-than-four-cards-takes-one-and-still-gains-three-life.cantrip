@@ -1,0 +1,33 @@
+# Commune with Evil with only two cards in the library: Bot1 looks at both (CR 701.20e: all there are), takes the Memnite
+# and the Ornithopter goes to its graveyard; the 3 life is still gained (20 -> 23).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Commune with Evil
+Swamp x3
+Memnite
+Ornithopter
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Commune with Evil.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Memnite | Ornithopter)
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 23
+Bot1.Hand.Count = 4
+Bot1.Library.Count = 0
+Bot1.Graveyard = Commune with Evil; Ornithopter
