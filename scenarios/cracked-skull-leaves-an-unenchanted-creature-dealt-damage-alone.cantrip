@@ -1,0 +1,48 @@
+# Cracked Skull only watches the creature it enchants. Bot1's Aura is on one Phyrexian Walker; Bot2 Shocks the other (0/3): it
+# takes 2 damage, survives, and the Aura and the enchanted Walker are untouched.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Phyrexian Walker
+Phyrexian Walker
+Cracked Skull
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Shock
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Cracked Skull.Cast(Bot1.Battlefield.Phyrexian Walker#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Phyrexian Walker#2)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Phyrexian Walker#2.Damage = 2
+Bot1.Battlefield.Cracked Skull.AttachedTo = Phyrexian Walker
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard = Shock

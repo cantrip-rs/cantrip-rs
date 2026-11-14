@@ -1,0 +1,38 @@
+# Cracked Skull: only a nonland card may be chosen. Bot2's hand is seven Islands: Bot1 still looks at it (the choice is shown,
+# CR 701.20e), but no Island may be chosen, so Bot1 chooses nothing and nothing is discarded.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Phyrexian Walker
+Cracked Skull
+Island x3
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Cracked Skull.Cast(Bot1.Battlefield.Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Island)
+Bot1.Choose()
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot2.Graveyard.Count = 0
+Bot2.Hand.Count = 7
+Bot2.Library.Count = 13

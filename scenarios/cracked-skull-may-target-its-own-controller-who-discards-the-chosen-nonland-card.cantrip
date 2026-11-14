@@ -1,0 +1,37 @@
+# Cracked Skull: "target player" may be the Aura's own controller. Bot1 looks at its own hand (a Lightning Bolt and an Island
+# after the Aura is cast), chooses the Bolt and discards it itself.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Phyrexian Walker
+Cracked Skull
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Cracked Skull.Cast(Bot1.Battlefield.Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Graveyard = Lightning Bolt
+Bot1.Hand = Island
+Bot2.Hand.Count = 7

@@ -1,0 +1,49 @@
+# Cracked Skull: "When enchanted creature is dealt damage, destroy it." Bot1 puts the Aura on one of its two Phyrexian Walkers
+# (0/3) on turn 1 (the Aura's own trigger targets Bot1, whose hand is one Island: nothing to choose). On turn 2 Bot2 Shocks the
+# enchanted Walker: 2 damage is not lethal (toughness 3), but the damage trigger destroys it, so the Walker and the Aura (state-based
+# action, CR 704.5m) go to Bot1's graveyard. The other Walker is untouched.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Phyrexian Walker
+Phyrexian Walker
+Cracked Skull
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Shock
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Cracked Skull.Cast(Bot1.Battlefield.Phyrexian Walker#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Phyrexian Walker#1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Phyrexian Walker.Damage = 0
+Bot1.Graveyard = Cracked Skull; Phyrexian Walker
+Bot2.Graveyard = Shock

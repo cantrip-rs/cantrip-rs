@@ -1,0 +1,44 @@
+# Cracked Skull: "Enchant creature. When this Aura enters, look at target player's hand. You may choose a nonland card from it.
+# That player discards that card." Bot1 puts the Aura on its own Phyrexian Walker, targets Bot2 and looks at its hand: a Lightning
+# Bolt, a Counterspell and five Islands. A land can't be chosen; the Bolt is, and Bot2 discards it (it goes to Bot2's graveyard, the
+# rest of the hand stays, nobody draws). The Aura stays on the Walker.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Phyrexian Walker
+Cracked Skull
+Island x3
+Island x10
+
+[Bot2 Deck]
+Lightning Bolt
+Counterspell
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Cracked Skull.Cast(Bot1.Battlefield.Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Island)
+Bot1.Choose(Lightning Bolt)
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot2.Graveyard = Lightning Bolt
+Bot2.Hand = Counterspell; Island; Island; Island; Island; Island
+Bot2.Library.Count = 13
+Bot1.Battlefield.Cracked Skull.AttachedTo = Phyrexian Walker

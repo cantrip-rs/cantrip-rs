@@ -1,0 +1,40 @@
+# Cracked Skull: the choice is a "may" (CR 608.2d). Bot1 looks at Bot2's Lightning Bolt and Counterspell, chooses none: Bot2
+# discards nothing and its hand is unchanged.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Phyrexian Walker
+Cracked Skull
+Island x3
+Island x10
+
+[Bot2 Deck]
+Lightning Bolt
+Counterspell
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Cracked Skull.Cast(Bot1.Battlefield.Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot2.Graveyard.Count = 0
+Bot2.Hand = Lightning Bolt; Counterspell; Island; Island; Island; Island; Island
+Bot2.Library.Count = 13
