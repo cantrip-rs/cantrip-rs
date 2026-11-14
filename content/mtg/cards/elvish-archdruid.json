@@ -1,0 +1,8 @@
+{
+  "name": "Elvish Archdruid",
+  "manaCost": "{1}{G}{G}",
+  "type": "Creature — Elf Druid",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Other Elf creatures you control get +1/+1.\n{T}: Add {G} for each Elf you control."
+}

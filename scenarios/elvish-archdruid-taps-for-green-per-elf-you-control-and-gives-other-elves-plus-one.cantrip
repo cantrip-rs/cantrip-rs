@@ -1,0 +1,61 @@
+# Elvish Archdruid: "{T}: Add {G} for each Elf you control" (CR 106.5): Bot1's Archdruid and Elvish Mystic are two Elves; Memnite is not an Elf and
+# Bot2's Elvish Mystic is not Bot1's, so the Archdruid adds exactly {G}{G}. "Other Elf creatures you control get +1/+1" (CR 613.4c): Bot1's Mystic is
+# 2/2, the Archdruid itself still 2/2, Memnite 1/1 and Bot2's Mystic 1/1.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Elvish Archdruid
+Elvish Mystic
+Memnite
+Forest x15
+
+[Bot2 Deck]
+Mox Emerald
+Elvish Mystic
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.Elvish Archdruid.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Elvish Archdruid.Activate
+? Bot1.Mana = {G}{G}
+
+[Expect]
+Bot1.Battlefield.Elvish Archdruid.Tapped = true
+Bot1.Battlefield.Elvish Archdruid.Power = 2
+Bot1.Battlefield.Elvish Mystic.Power = 2
+Bot1.Battlefield.Elvish Mystic.Toughness = 2
+Bot1.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Elvish Mystic.Power = 1
+Bot2.Battlefield.Elvish Mystic.Toughness = 1
