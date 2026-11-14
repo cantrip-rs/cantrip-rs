@@ -1,0 +1,43 @@
+# Ward {2} (CR 702.21a): Bot2 has a Mox Ruby for the Lightning Bolt and a Mox Jet, one mana short of the {2} the ward trigger asks, so the Bolt is countered and the
+# Prowler (toughness 3, the Bolt's exact damage) survives undamaged.
+
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Cackling Prowler
+Island x17
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Cackling Prowler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Cackling Prowler)
+[T2 Bot2.Main2]
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot2.Graveyard = Lightning Bolt
+Bot1.Battlefield.Cackling Prowler.Damage = 0

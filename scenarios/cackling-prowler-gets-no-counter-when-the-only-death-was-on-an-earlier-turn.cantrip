@@ -1,0 +1,49 @@
+# Morbid reads only this turn: Bot2's Memnite died on Bot2's turn 2 (Lightning Bolt at its end step), and at Bot1's turn-3 end step, with nothing dying that
+# turn, the trigger never goes on the stack (CR 603.4): the Prowler stays 4/3.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Black Lotus
+Cackling Prowler
+Lightning Bolt
+Island x15
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.End]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Memnite
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Cackling Prowler.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+? Stack.Count = 0
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Cackling Prowler.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Cackling Prowler.Power = 4
+Bot1.Battlefield.Cackling Prowler.Toughness = 3

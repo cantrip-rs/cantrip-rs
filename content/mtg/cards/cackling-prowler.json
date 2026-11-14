@@ -1,0 +1,8 @@
+{
+  "name": "Cackling Prowler",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Hyena Rogue",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Ward {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\nMorbid — At the beginning of your end step, if a creature died this turn, put a +1/+1 counter on this creature."
+}

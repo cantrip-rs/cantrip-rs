@@ -1,0 +1,46 @@
+# Morbid triggers only "at the beginning of your end step": Bot1 burns Bot2's Memnite on Bot2's turn 2, so a creature died that turn, but the end step is
+# Bot2's and the Prowler's ability does not trigger (CR 603.2, 603.4); the Prowler is still a 4/3 with no counter on Bot1's next upkeep.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Black Lotus
+Cackling Prowler
+Lightning Bolt
+Island x15
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Cackling Prowler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Memnite
+[T3 Bot1.Upkeep]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Cackling Prowler.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Cackling Prowler.Power = 4
+Bot1.Battlefield.Cackling Prowler.Toughness = 3

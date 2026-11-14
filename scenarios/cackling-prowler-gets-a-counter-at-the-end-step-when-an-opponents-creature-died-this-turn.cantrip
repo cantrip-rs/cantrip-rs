@@ -1,0 +1,50 @@
+# Cackling Prowler's morbid (CR 603.4): at Bot1's end step a creature died this turn (Bot2's Memnite, burnt by Lightning Bolt after the Prowler entered),
+# so Bot1 puts one +1/+1 counter on the Prowler, 4/3 to 5/4. Ward {2} is on the Prowler.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Black Lotus
+Cackling Prowler
+Lightning Bolt
+Island x15
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Cackling Prowler.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cackling Prowler.Power = 4
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Memnite
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Cackling Prowler.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Cackling Prowler.Power = 5
+Bot1.Battlefield.Cackling Prowler.Toughness = 4

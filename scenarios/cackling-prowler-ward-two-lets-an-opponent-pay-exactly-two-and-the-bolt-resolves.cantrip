@@ -1,0 +1,41 @@
+# Ward {2}, the positive control: Bot2's Black Lotus makes three red, one for the Lightning Bolt and exactly {2} for the ward trigger (the pool is empty after),
+# so the Bolt resolves and its 3 damage kills the 4/3 Prowler.
+
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Cackling Prowler
+Island x17
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Cackling Prowler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Cackling Prowler)
+Bot2.PayCost
+? Bot2.Mana =
+[T2 Bot2.Main2]
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.Cackling Prowler = (absent)
+Bot2.Graveyard = Lightning Bolt; Black Lotus
