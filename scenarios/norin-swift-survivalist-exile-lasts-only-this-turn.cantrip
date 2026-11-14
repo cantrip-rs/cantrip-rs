@@ -1,0 +1,48 @@
+# Norin, Swift Survivalist: "You may play that card from exile this turn." Bot1 exiles its blocked Runeclaw Bear in turn 3 and, in
+# its second main phase, plays nothing; in turn 5 the permission is gone (CR 611.2a): the Bear stays in exile and can't be cast.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Norin, Swift Survivalist
+Runeclaw Bear
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Norin, Swift Survivalist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Runeclaw Bear.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Runeclaw Bear > Bot2)
+Bot2.Block(Ornithopter > Runeclaw Bear)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[Bot1.Main2]
+? Exile = Runeclaw Bear
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Exile.Runeclaw Bear.Cast
+
+[Expect]
+Exile = Runeclaw Bear

@@ -1,0 +1,70 @@
+# Norin, Swift Survivalist: the exile is a "may". In turn 3 Bot1 declines it for its blocked Runeclaw Bear, which then kills the
+# 0/2 Ornithopter that blocked it. In turn 4 Bot2's Runeclaw Bear attacks: Norin "can't block" (CR 509.1b), so a block by him is refused,
+# while Bot1's untapped Ornithopter may block it, and no question is asked (Bot2's attacker is not "a creature you control", and
+# Bot1's blocker blocks rather than becomes blocked): the Ornithopter dies.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Norin, Swift Survivalist
+Runeclaw Bear
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Mox Sapphire
+Ornithopter
+Runeclaw Bear
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Norin, Swift Survivalist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Runeclaw Bear.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Runeclaw Bear.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Runeclaw Bear > Bot2)
+Bot2.Block(Ornithopter > Runeclaw Bear)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[Bot1.Main2]
+? Bot2.Graveyard = Ornithopter
+? Exile = 
+[T4 Bot2.Main1]
+Bot2.Attack(Runeclaw Bear > Bot1)
+! Bot1.Block(Norin, Swift Survivalist > Runeclaw Bear)
+Bot1.Block(Ornithopter > Runeclaw Bear)
+Bot2.Pass
+Bot1.Pass
+! Bot1.Accept
+[Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Ornithopter
+Bot2.Graveyard = Ornithopter
+Exile = 

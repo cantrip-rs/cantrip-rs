@@ -1,0 +1,40 @@
+# Norin, Swift Survivalist: "You may play that card from exile this turn", play, not only cast (CR 305.1). In turn 3 Bot1's Dryad Arbor
+# (a land creature, played as turn 1's land drop) attacks, is blocked by Bot2's Ornithopter and exiled; in the second main phase
+# Bot1 plays it from exile as its land drop for the turn, and it is back on the battlefield.
+
+[Bot1 Deck]
+Dryad Arbor
+Mox Ruby
+Norin, Swift Survivalist
+Island x17
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Dryad Arbor.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Norin, Swift Survivalist.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Dryad Arbor > Bot2)
+Bot2.Block(Ornithopter > Dryad Arbor)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Exile = Dryad Arbor
+[Bot1.Main2]
+Bot1.Exile.Dryad Arbor.Play
+? Bot1.Battlefield.Dryad Arbor.Types = Land; Creature
+
+[Expect]
+Exile = 
+Bot2.Battlefield.Ornithopter.Damage = 0

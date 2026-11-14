@@ -1,0 +1,57 @@
+# Norin, Swift Survivalist: "Whenever a creature you control becomes blocked, you may exile it. You may play that card from exile
+# this turn." In turn 3 Bot1 attacks with its Runeclaw Bear and Bot2's Ornithopter blocks. Bot1 accepts the exile: the Bear leaves
+# combat, so the Ornithopter takes no damage (CR 506.4) and survives, and in its second main phase Bot1 casts the Bear again from exile with the Moxen it has
+# untapped (CR 601.2a). Bot2 loses no life: a blocked creature stays blocked.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Norin, Swift Survivalist
+Runeclaw Bear
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Norin, Swift Survivalist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Runeclaw Bear.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Runeclaw Bear > Bot2)
+Bot2.Block(Ornithopter > Runeclaw Bear)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Exile = Runeclaw Bear
+[Bot1.Main2]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Exile.Runeclaw Bear.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Damage = 0
+? Bot1.Battlefield.Runeclaw Bear.Tapped = false
+
+[Expect]
+Bot2.Life = 20
+Exile = 
+Bot2.Graveyard = 

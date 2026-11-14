@@ -1,0 +1,62 @@
+# Norin, Swift Survivalist: "you may exile it. You may play that card from exile this turn." A token exiled this way ceases to exist
+# (CR 111.7) and is no card to play. In turn 3 Bot1's Gremlin token (made by Razorkin Hordecaller's attack in turn 1) is blocked by
+# Bot2's Ornithopter and exiled: nothing stays in exile, and the Hordecaller's new Gremlin from this attack is the only one left.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Razorkin Hordecaller
+Norin, Swift Survivalist
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Razorkin Hordecaller.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Razorkin Hordecaller > Bot2)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+? Bot1.Battlefield.Count = 8
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Norin, Swift Survivalist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Gremlin Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Block(Ornithopter > Gremlin Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[Bot1.Main2]
+? Bot1.Battlefield.Count = 9
+
+[Expect]
+Exile = 
+Bot2.Battlefield.Ornithopter.Damage = 0
