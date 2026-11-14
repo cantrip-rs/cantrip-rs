@@ -1,0 +1,27 @@
+# Three Tree Mascot ({2}, 2/1 artifact creature): Changeling (CR 702.73a) makes it every creature type, in every zone.
+# Mox Jet and Mox Pearl cast it.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Three Tree Mascot
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Hand.Three Tree Mascot.Subtypes = (every creature type)
+Bot1.Hand.Three Tree Mascot.Cast
+
+[Expect]
+Bot1.Battlefield.Three Tree Mascot.Power = 2
+Bot1.Battlefield.Three Tree Mascot.Toughness = 1
+Bot1.Battlefield.Three Tree Mascot.Types = Artifact; Creature
+Bot1.Battlefield.Three Tree Mascot.Subtypes = (every creature type)
+Bot1.Battlefield.Three Tree Mascot.Keywords = Changeling
+Bot1.Battlefield.Three Tree Mascot.Colors = (absent)

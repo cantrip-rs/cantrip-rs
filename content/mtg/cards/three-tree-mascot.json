@@ -1,0 +1,11 @@
+{
+  "name": "Three Tree Mascot",
+  "manaCost": "{2}",
+  "type": "Artifact Creature — Shapeshifter",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Changeling (This card is every creature type.)\n{1}: Add one mana of any color. Activate only once each turn.",
+  "keywords": [
+    "Changeling"
+  ]
+}

@@ -1,0 +1,37 @@
+# Three Tree Mascot: "{1}: Add one mana of any color. Activate only once each turn." Turn 1: Mox Jet and Mox Pearl cast it; Mox Ruby's
+# {R} pays the first {1} and the Mascot adds {G} (a color other than the one spent). With Mox Sapphire's mana available a
+# second activation the same turn is refused (CR 602.5b). On turn three it can be activated again, now for {W}, and it
+# cannot be activated for colorless.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Three Tree Mascot
+Swamp x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Three Tree Mascot.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Three Tree Mascot.Activate(Color: Colorless)
+Bot1.Battlefield.Three Tree Mascot.Activate(Color: Green)
+? Bot1.Mana = {G}
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Three Tree Mascot.Activate(Color: Blue)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Three Tree Mascot.Activate(Color: White)
+? Bot1.Mana = {W}
+
+[Expect]
+Bot1.Mana = {W}
