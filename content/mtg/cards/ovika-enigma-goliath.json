@@ -1,0 +1,11 @@
+{
+  "name": "Ovika, Enigma Goliath",
+  "manaCost": "{5}{U}{R}",
+  "type": "Legendary Creature — Phyrexian Nightmare",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Flying\nWard—{3}, Pay 3 life.\nWhenever you cast a noncreature spell, create X 1/1 red Phyrexian Goblin creature tokens, where X is the mana value of that spell. They gain haste until end of turn.",
+  "keywords": [
+    "Flying"
+  ]
+}

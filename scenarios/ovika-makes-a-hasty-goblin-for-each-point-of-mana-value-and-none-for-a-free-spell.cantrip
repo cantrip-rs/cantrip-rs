@@ -1,0 +1,64 @@
+# Ovika, Enigma Goliath: "Whenever you cast a noncreature spell, create X 1/1 red Phyrexian Goblin creature tokens, where X is the
+# mana value of that spell. They gain haste until end of turn." Bot1 casts Ovika on turn 1 off two Black Lotuses and a Mountain, then a
+# third Black Lotus - a noncreature spell with mana value 0 - which makes no Goblins. On turn 3 Bot1 casts Fireball with X = 2 (mana
+# value 3, the announced X counting, CR 202.3e): three Goblins appear with haste, so they attack at once beside Ovika (CR 611.2c): 2 from
+# Fireball + 3 + 6 takes Bot2 from 20 to 9. The next turn the Goblins have lost the haste.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Black Lotus
+Ovika, Enigma Goliath
+Black Lotus
+Fireball
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Ovika, Enigma Goliath.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ovika, Enigma Goliath.Power = 6
+Bot1.Hand.Black Lotus.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Battlefield.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Count = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Fireball.Cast(X: 2)
+Bot1.Target(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Battlefield.Count = 5
+? Bot1.Battlefield.Phyrexian Goblin Token#1.Keywords = Haste
+? Bot1.Battlefield.Phyrexian Goblin Token#3.Keywords = Haste
+? Bot1.Battlefield.Phyrexian Goblin Token#3.Colors = Red
+? Bot1.Battlefield.Phyrexian Goblin Token#3.Power = 1
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ovika, Enigma Goliath > Bot2; Phyrexian Goblin Token#1 > Bot2; Phyrexian Goblin Token#2 > Bot2; Phyrexian Goblin Token#3 > Bot2)
+[T5 Bot1.Main1]
+
+[Expect]
+Bot2.Life = 9
+Bot1.Battlefield.Phyrexian Goblin Token#1.Keywords = (absent)
+Bot1.Battlefield.Count = 5
