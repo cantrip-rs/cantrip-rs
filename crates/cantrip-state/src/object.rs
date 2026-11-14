@@ -2390,6 +2390,10 @@ pub struct LastKnown {
     /// Source queries use these only after leaving its expected battlefield zone; current relationships stay separate.
     pub blocked_creatures: Span,
     pub blocking_creatures: Span,
+    /// Exact incarnations of the other creatures in the attacking band it was in at this snapshot (CR 702.22c, 608.2h): "all
+    /// creatures banded with it" asked of a source that has left (Icatian Skirmishers). A run of the same arena; empty when
+    /// it was in no band.
+    pub banded_creatures: Span,
     /// Its mana value as it last had it (CR 202.3; on the stack, X counted, CR 202.3e): a cast's is its mana value as it
     /// became cast (`history::Cast::value`).
     pub mana_value: u32,

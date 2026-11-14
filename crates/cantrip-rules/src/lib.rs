@@ -1137,6 +1137,7 @@ impl Game {
                     enchanted: false,
                     blocked_creatures: Default::default(),
                     blocking_creatures: Default::default(),
+                    banded_creatures: Default::default(),
                     mana_value,
                     abilities: c.abilities,
                     words: Words::NONE,

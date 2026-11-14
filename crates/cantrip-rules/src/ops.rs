@@ -2601,17 +2601,27 @@ pub fn last_known_from(cx: &mut Cx, id: ObjectId, c: &Chars) -> LastKnown {
     // Every leaving object's row is prepared before the simultaneous move erases any pairs (CR 603.10a).
     // The member arena is journalled and cloned with the position, unlike a pointer into the undo journal.
     let known = cx.s().last_known(id).or_else(|| cx.s().phased_last_known(id))
-        .map(|last| (last.blocked_creatures, last.blocking_creatures));
-    let (blocked_creatures, blocking_creatures) = if let Some(known) = known {
+        .map(|last| (last.blocked_creatures, last.blocking_creatures, last.banded_creatures));
+    let (blocked_creatures, blocking_creatures, banded_creatures) = if let Some(known) = known {
         // A departed source can deal damage later (CR 113.7a). Its event snapshot must retain the same source LKI.
         known
-    } else if cx.s().blocks.is_empty() {
-        // Normal casting and noncombat events pay no arena writes or allocations.
-        (Default::default(), Default::default())
     } else {
-        let blocked: Vec<_> = cx.s().blocks.iter().filter(|b| b.blocker == id).map(|b| b.attacker).collect();
-        let blocking: Vec<_> = cx.s().blocks.iter().filter(|b| b.attacker == id).map(|b| b.blocker).collect();
-        (cx.st().members_push(&blocked), cx.st().members_push(&blocking))
+        // Normal casting and noncombat events pay no arena writes or allocations.
+        let (blocked, blocking) = if cx.s().blocks.is_empty() {
+            (Default::default(), Default::default())
+        } else {
+            let blocked: Vec<_> = cx.s().blocks.iter().filter(|b| b.blocker == id).map(|b| b.attacker).collect();
+            let blocking: Vec<_> = cx.s().blocks.iter().filter(|b| b.attacker == id).map(|b| b.blocker).collect();
+            (cx.st().members_push(&blocked), cx.st().members_push(&blocking))
+        };
+        let band = cx.s().attackers.iter().find(|a| a.id == id).map_or(0, |a| a.band);
+        let banded = if band == 0 {
+            Default::default()
+        } else {
+            let mates: Vec<_> = cx.s().attackers.iter().filter(|a| a.band == band && a.id != id).map(|a| a.id).collect();
+            cx.st().members_push(&mates)
+        };
+        (blocked, blocking, banded)
     };
     LastKnown {
         id,
@@ -2646,6 +2656,7 @@ pub fn last_known_from(cx: &mut Cx, id: ObjectId, c: &Chars) -> LastKnown {
         enchanted: cx.s().last_known(id).or_else(|| cx.s().phased_last_known(id)).is_some_and(|last| last.enchanted),
         blocked_creatures,
         blocking_creatures,
+        banded_creatures,
         mana_value: cantrip_api::mana_value_of(&|card| cx.cards().get(card), cx.s(), id, c),
         abilities: c.abilities,
         words: cantrip_api::words(cx.s(), id),

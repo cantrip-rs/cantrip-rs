@@ -350,7 +350,7 @@ impl Hash for Name<'_> {
             // Combat relationships in an LKI row are immutable historical records. Their query notes a read of
             // the past, clearing the loop run just as an event-history query does. Arena offsets are not position
             // identity (and recursively hashing paired departed sources would create cycles).
-            let known = s.last_known(id).map(|k| LastKnown { id: ObjectId::NONE, blocked_creatures: Default::default(), blocking_creatures: Default::default(), ..*k });
+            let known = s.last_known(id).map(|k| LastKnown { id: ObjectId::NONE, blocked_creatures: Default::default(), blocking_creatures: Default::default(), banded_creatures: Default::default(), ..*k });
             (o, known).hash(h);
         };
         match s.obj(id).became {
@@ -490,7 +490,7 @@ fn write_position<H: Hasher>(s: &GameState, canon: &Canon, h: &mut H, hashed: bo
                 o.exiled.map(|e| (canon.id(e.by), e.text, e.from, e.until_leaves, e.encoded)),
                 o.marks.choices.objects_raw().map(|c| c.map(|c| canon.id(c))),
                 stamp,
-                s.phased_last_known(id).map(|last| LastKnown { id: ObjectId::NONE, blocked_creatures: Default::default(), blocking_creatures: Default::default(), ..*last }),
+                s.phased_last_known(id).map(|last| LastKnown { id: ObjectId::NONE, blocked_creatures: Default::default(), blocking_creatures: Default::default(), banded_creatures: Default::default(), ..*last }),
             )
                 .hash(h);
             o.timestamp = 0;

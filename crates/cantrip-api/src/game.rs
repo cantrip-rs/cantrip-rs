@@ -767,6 +767,23 @@ pub trait Query {
         out
     }
 
+    /// The other creatures in the attacking band `source` is in (CR 702.22c): "all creatures banded with it" (Icatian
+    /// Skirmishers, Camel). One that has left the battlefield or phased out is asked of its last-known information - the band
+    /// it was in as it last existed there (CR 608.2h, 113.7a) - with the same contract as `creatures_blocked_by`: exact
+    /// incarnations, which rules actions decide whether can still be affected. A live source in no band, or removed from
+    /// combat (CR 702.22f), has none.
+    fn creatures_banded_with(&self, source: ObjectId) -> Vec<ObjectId> {
+        let s = self.state();
+        if source.index() >= s.objects.len() { return Vec::new(); }
+        if let Some(known) = s.last_known(source).or_else(|| s.phased_last_known(source)) {
+            crate::history::note_read();
+            return s.members(known.banded_creatures).to_vec();
+        }
+        let band = s.attackers.iter().find(|a| a.id == source).map_or(0, |a| a.band);
+        if band == 0 { return Vec::new(); }
+        s.attackers.iter().filter(|a| a.band == band && a.id != source).map(|a| a.id).collect()
+    }
+
     /// Whether a creature that has left the battlefield was attacking as it last was there (CR 506.3, 603.10a), from its
     /// last-known information: combat forgets it the moment it leaves (CR 506.4), so `is_attacking` no longer says.
     fn was_attacking(&self, id: ObjectId) -> bool {

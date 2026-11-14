@@ -552,3 +552,46 @@ fn target_characteristics_are_current_even_though_the_source_has_lki() {
         "CR 608.2b checks the target's current type"
     );
 }
+
+fn band(g: &mut Game, members: &[ObjectId], number: u32) {
+    let mut attackers = g.state.attackers.clone();
+    for &id in members {
+        let mut a = Attacker::new(id, Target::Player(YOU), YOU, TypeSet::NONE);
+        a.band = number;
+        attackers.push(a);
+    }
+    g.state.set_attackers(attackers);
+}
+
+#[test]
+fn a_departed_attacker_keeps_its_last_known_band() {
+    let mut g = position();
+    let [skirmishers, hero, memnite, other, alone] = [(); 5].map(|_| put(&mut g, THEM));
+    band(&mut g, &[skirmishers, hero, memnite], 1);
+    band(&mut g, &[other], 2);
+    band(&mut g, &[alone], 0);
+    assert_eq!(g.creatures_banded_with(skirmishers), [hero, memnite]);
+    assert!(g.creatures_banded_with(alone).is_empty(), "an attacker in no band is banded with nothing");
+    let mark = g.state.mark();
+    crate::ops::sacrifice(&mut cx(&mut g), THEM, &[skirmishers]);
+    assert_eq!(
+        g.creatures_banded_with(skirmishers),
+        [hero, memnite],
+        "Icatian Skirmishers' trigger asks the band it was in as it last existed (CR 608.2h)"
+    );
+    assert_eq!(g.creatures_banded_with(hero), [memnite], "a member removed from combat leaves the band (CR 702.22f)");
+    g.state.rollback(mark);
+    assert!(g.state.last_known(skirmishers).is_none());
+    assert_eq!(g.creatures_banded_with(skirmishers), [hero, memnite]);
+}
+
+#[test]
+fn a_creature_removed_from_combat_before_it_left_was_in_no_band() {
+    let mut g = position();
+    let [a, b] = [(); 2].map(|_| put(&mut g, THEM));
+    band(&mut g, &[a, b], 1);
+    crate::ops::remove_from_combat(&mut cx(&mut g), &[a]);
+    assert!(g.creatures_banded_with(a).is_empty());
+    crate::ops::sacrifice(&mut cx(&mut g), THEM, &[a]);
+    assert!(g.creatures_banded_with(a).is_empty());
+}

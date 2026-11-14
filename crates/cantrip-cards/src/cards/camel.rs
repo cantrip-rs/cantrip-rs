@@ -15,10 +15,7 @@ fn as_long_as_creature_attacking_applies(
                 .has_subtype(q.words(asker.source).subtype(Subtype::Desert))
             && matches!(
                 * target, Target::Object(o) if asker.source == o || (q.chars(o)
-                .is(CardType::Creature) && Some(asker.source).is_some_and(| other :
-                ObjectId | { let band = | o : ObjectId | q.state().attackers.iter()
-                .find(| a | a.id == o).map_or(0, | a | a.band); o != other && band(o) !=
-                0 && band(o) == band(other) }))
+                .is(CardType::Creature) && q.creatures_banded_with(asker.source).contains(&o))
             )
             && q.is_attacking(asker.source)
         {

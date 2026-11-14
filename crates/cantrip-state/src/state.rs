@@ -1981,7 +1981,7 @@ impl GameState {
                 match rows.iter().find(|(id, _)| *id == row.id) {
                     // A search world changes hidden card characteristics, not the public combat relationship
                     // an earlier incarnation had. Preserve the same immutable history spans in journal copies too.
-                    Some((_, l)) => *row = LastKnown { blocked_creatures: row.blocked_creatures, blocking_creatures: row.blocking_creatures, ..*l },
+                    Some((_, l)) => *row = LastKnown { blocked_creatures: row.blocked_creatures, blocking_creatures: row.blocking_creatures, banded_creatures: row.banded_creatures, ..*l },
                     None => debug_assert!(false, "a row that shows a hidden card has a row of the card it is dealt"),
                 }
             }
