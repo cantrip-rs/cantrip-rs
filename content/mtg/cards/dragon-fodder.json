@@ -1,0 +1,6 @@
+{
+  "name": "Dragon Fodder",
+  "manaCost": "{1}{R}",
+  "type": "Sorcery",
+  "oracleText": "Create two 1/1 red Goblin creature tokens."
+}
