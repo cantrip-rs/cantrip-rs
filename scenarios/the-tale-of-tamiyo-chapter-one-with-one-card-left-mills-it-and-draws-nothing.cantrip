@@ -1,0 +1,24 @@
+# "If two cards that share a card type were milled": with a single card left in the library only one is milled, so there is no pair to share a type and nothing
+# is drawn (an empty library would lose Bot1 the game at its next draw, CR 704.5b, not before). The Island goes to the graveyard beside the sacrificed Black Lotus.
+
+[Bot1 Deck]
+Black Lotus
+The Tale of Tamiyo
+Island x5
+Island
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.The Tale of Tamiyo.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Island; Black Lotus
+Bot1.Hand.Count = 5
+Bot1.Library.Count = 0
+Result = InProgress
