@@ -1,0 +1,68 @@
+# Ayli, Eternal Pilgrim: "{1}, Sacrifice another creature: You gain life equal to the sacrificed creature's toughness." With only Ayli
+# on Bot1's side (and Bot2's Memnite across the table) the ability cannot be activated even with {W} in the pool: "another", and
+# "sacrifice" takes only a creature you control. Bot1 then casts two Memnites; Giant Growth makes one of them 4/4 and sacrificing it
+# gains 4 (toughness as it last existed, CR 608.2h), sacrificing the other, a 1/1, gains 1; each activation costs exactly {1}
+# (the pool is empty afterwards). Life goes 20, 24, 25.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Ayli, Eternal Pilgrim
+Memnite
+Memnite
+Giant Growth
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ayli, Eternal Pilgrim.Cast
+Bot1.Pass
+Bot2.Pass
+
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Ayli, Eternal Pilgrim.Activate(Ability: You gain life)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite#1.Toughness = 4
+Bot1.Battlefield.Ayli, Eternal Pilgrim.Activate(Ability: You gain life)
+Bot1.Choose(Memnite#1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 24
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Ayli, Eternal Pilgrim.Activate(Ability: You gain life)
+Bot1.Choose(Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 25
+Bot1.Battlefield.Memnite = (absent)
+Bot2.Battlefield.Memnite.Power = 1
+Bot1.Graveyard.Count = 3
+Bot1.Battlefield.Ayli, Eternal Pilgrim.Keywords = Deathtouch

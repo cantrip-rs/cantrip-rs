@@ -1,0 +1,98 @@
+# Ayli, Eternal Pilgrim: "{1}{W}{B}, Sacrifice another creature: Exile target nonland permanent. Activate only if you have at least 10
+# life more than your starting life total" (CR 602.5). Bot1 starts at 28 life with Ayli, three Memnites, Mox Pearl, Mox Jet and a
+# Black Lotus; on turn 3 it adds a Mox Ruby and taps the Lotus for WWW, Jet for B and Ruby for R (generic costs are paid from W first).
+# The exile ability is refused at 28 and at 29 with the mana, a Memnite and a target all there; the first ability ("{1}, Sacrifice
+# another creature: You gain life equal to the sacrificed creature's toughness") takes it from 28 to 29 and then 30, and at exactly 10
+# above the starting 20 the exile ability exiles Bot2's Memnite (its Island is refused). It does not matter what the life total
+# does afterwards (it is 30 still). On turn 5 it exiles Bot1's own Mox Pearl, paying {1}{W}{B} and sacrificing a Memnite.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Black Lotus
+Ayli, Eternal Pilgrim
+Memnite
+Memnite
+Memnite
+Mox Ruby
+Memnite
+Island x11
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Life]
+Bot1: 28
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ayli, Eternal Pilgrim.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Ayli, Eternal Pilgrim.Activate(Bot2.Battlefield.Memnite; Ability: Exile target)
+? Bot1.Life = 28
+Bot1.Battlefield.Ayli, Eternal Pilgrim.Activate(Ability: You gain life)
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 29
+! Bot1.Battlefield.Ayli, Eternal Pilgrim.Activate(Bot2.Battlefield.Memnite; Ability: Exile target)
+Bot1.Battlefield.Ayli, Eternal Pilgrim.Activate(Ability: You gain life)
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 30
+! Bot1.Battlefield.Ayli, Eternal Pilgrim.Activate(Bot2.Battlefield.Island; Ability: Exile target)
+Bot1.Battlefield.Ayli, Eternal Pilgrim.Activate(Bot2.Battlefield.Memnite; Ability: Exile target)
+Bot1.Choose(Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Count = 1
+? Bot1.Battlefield.Count = 4
+? Bot1.Life = 30
+[T5 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Ayli, Eternal Pilgrim.Activate(Bot1.Battlefield.Mox Pearl; Ability: Exile target)
+Bot1.Choose(Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 30
+Bot1.Battlefield.Mox Pearl = (absent)
+Bot1.Battlefield.Count = 3
+Bot1.Graveyard.Count = 5
+Exile = Memnite; Mox Pearl
