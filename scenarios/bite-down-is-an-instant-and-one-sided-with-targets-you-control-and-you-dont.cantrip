@@ -1,0 +1,88 @@
+# Bite Down (CR 120.3, 609.7): "Target creature you control deals damage equal to its power to target creature or planeswalker you don't control." It is an instant:
+# Bot1 casts it on Bot2's turn 4. The first target must be Bot1's (Bot2's Hill Giant is refused, Alpine Grizzly is chosen), the second Bot2's (Bot1's
+# Ornithopter is refused, Bot2's Hill Giant is chosen). Alpine Grizzly deals 4 to the Hill Giant (3/3), which dies; it takes nothing back.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Alpine Grizzly
+Ornithopter
+Bite Down
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Hill Giant
+Ornithopter
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bite Down.Cast
+! Bot1.Target(Bot2.Battlefield.Hill Giant)
+Bot1.Target(Bot1.Battlefield.Alpine Grizzly)
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 4
+Stack.Count = 0
+Bot2.Battlefield.Hill Giant = (absent)
+Bot2.Graveyard = Hill Giant
+Bot1.Battlefield.Alpine Grizzly.Damage = 0
+Bot1.Graveyard = Bite Down

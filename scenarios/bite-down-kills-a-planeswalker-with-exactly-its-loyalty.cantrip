@@ -1,0 +1,68 @@
+# Bite Down's second target may be a planeswalker you don't control (CR 120.3c, 306.9): Bot1's Alpine Grizzly (power 4) deals 4 damage to Bot2's Oko,
+# Thief of Crowns, which has exactly 4 loyalty, so Oko is put into the graveyard as a state-based action (CR 704.5i); the Grizzly takes nothing.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Alpine Grizzly
+Bite Down
+Island x15
+
+[Bot2 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Oko, Thief of Crowns
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Oko, Thief of Crowns.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Oko, Thief of Crowns.Counters.Loyalty = 4
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bite Down.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Oko, Thief of Crowns = (absent)
+Bot2.Graveyard = Oko, Thief of Crowns
+Bot1.Battlefield.Alpine Grizzly.Damage = 0
