@@ -1,0 +1,47 @@
+# Final Vengeance's additional cost is "a creature or enchantment" (CR 118.8): with Ornithopter and a Hardened Scales both out, Bot1
+# chooses to sacrifice the Hardened Scales, a noncreature enchantment, and keeps the Ornithopter; the Mox Emerald, which is neither, is
+# not offered. Bot2's Hired Blade is exiled.
+
+[Bot1 Deck]
+Swamp
+Mox Emerald
+Hardened Scales
+Ornithopter
+Final Vengeance
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Hired Blade
+Island x15
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hardened Scales.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Hired Blade.Cast
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Final Vengeance.Cast(Bot2.Battlefield.Hired Blade)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Choose(Hardened Scales)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Hired Blade
+Bot1.Graveyard = Final Vengeance; Hardened Scales
+Bot1.Battlefield = Mox Emerald; Ornithopter; Swamp

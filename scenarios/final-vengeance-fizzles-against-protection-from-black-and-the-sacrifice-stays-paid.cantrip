@@ -1,0 +1,41 @@
+# A cost once paid stays paid (CR 601.2h): Bot1 casts Final Vengeance at Bot2's Mother of Runes, sacrificing Ornithopter. In response
+# Bot2 gives Mother protection from black, so the only target is illegal and the spell does nothing (CR 608.2b, 702.16b): Mother is not
+# exiled and is tapped for her ability, and Ornithopter is not given back.
+
+[Bot1 Deck]
+Swamp
+Ornithopter
+Final Vengeance
+Island
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Plains
+Mother of Runes
+Island x15
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Mother of Runes.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Final Vengeance.Cast(Bot2.Battlefield.Mother of Runes)
+Bot1.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mother of Runes.Activate(Mother of Runes)
+Bot2.Colors(Black)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Mother of Runes.Tapped = true
+Exile.Count = 0
+Bot2.Graveyard.Count = 0
+Bot1.Graveyard = Final Vengeance; Ornithopter
+Bot1.Battlefield = Swamp
