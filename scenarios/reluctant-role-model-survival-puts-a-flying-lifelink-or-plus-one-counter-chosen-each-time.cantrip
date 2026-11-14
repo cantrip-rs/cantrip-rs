@@ -1,0 +1,51 @@
+# Reluctant Role Model (2/2): "Survival - At the beginning of your second main phase, if this creature is tapped, put a flying,
+# lifelink, or +1/+1 counter on it." It attacks on turns 3, 5 and 7 and Bot1 chooses a different kind each time: flying, then
+# lifelink, then +1/+1 (a 3/3 with flying and lifelink; it deals 2 each time, Bot2 20 -> 14, and its lifelink gains Bot1 2 on turn 7). On turn 9 it stays home, is untapped at the second
+# main phase, and nothing is chosen or put on it.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Reluctant Role Model
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Reluctant Role Model.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Reluctant Role Model > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Reluctant Role Model.Tapped = true
+Bot1.Modes(Flying counter)
+[T3 Bot1.End]
+? Bot1.Battlefield.Reluctant Role Model.Counters.Flying = 1
+? Bot1.Battlefield.Reluctant Role Model.Keywords = Flying
+[T5 Bot1.Main1]
+Bot1.Attack(Reluctant Role Model > Bot2)
+[T5 Bot1.Main2]
+Bot1.Modes(Lifelink counter)
+[T5 Bot1.End]
+? Bot1.Battlefield.Reluctant Role Model.Counters.Lifelink = 1
+[T7 Bot1.Main1]
+Bot1.Attack(Reluctant Role Model > Bot2)
+[T7 Bot1.Main2]
+Bot1.Modes(+1/+1 counter)
+[T9 Bot1.Main2]
+[T9 Bot1.End]
+
+[Expect]
+Bot1.Battlefield.Reluctant Role Model.Counters.Flying = 1
+Bot1.Battlefield.Reluctant Role Model.Counters.Lifelink = 1
+Bot1.Battlefield.Reluctant Role Model.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Reluctant Role Model.Power = 3
+Bot1.Battlefield.Reluctant Role Model.Toughness = 3
+Bot1.Battlefield.Reluctant Role Model.Tapped = false
+Bot2.Life = 14
+Bot1.Life = 22
