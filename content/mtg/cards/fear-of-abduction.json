@@ -1,0 +1,11 @@
+{
+  "name": "Fear of Abduction",
+  "manaCost": "{4}{W}{W}",
+  "type": "Enchantment Creature — Nightmare",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "As an additional cost to cast this spell, exile a creature you control.\nFlying\nWhen this creature enters, exile target creature an opponent controls.\nWhen this creature leaves the battlefield, put each card exiled with it into its owner's hand.",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,52 @@
+# Fear of Abduction: the opponent has no creature, so the enters trigger has no target and exiles nothing. When it leaves
+# the battlefield, only the Memnite exiled to pay its cost returns to Bot1's hand (Bot2's Terror, turn 2).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Black Lotus
+Memnite
+Fear of Abduction
+Island x16
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Terror
+Island x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Fear of Abduction.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Exile = Memnite
+? Bot1.Battlefield.Count = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Terror.Cast(Fear of Abduction)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot1.Hand = Island; Memnite
+Bot1.Battlefield.Count = 3
