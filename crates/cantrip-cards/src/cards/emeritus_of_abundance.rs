@@ -12,14 +12,9 @@ pub static REGROWTH: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
-/// "If you control eight or more lands" (CR 603.4): checked as it triggers and again as it resolves.
-fn eight_lands(q: &dyn Query, asker: &Asker) -> bool {
-    cantrip_mechanics::lands_you_control(q, asker.controller) >= 8
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(triggers::THIS_ATTACKS, cantrip_mechanics::prepare::become_prepared, "Whenever this creature attacks, if you control eight or more lands, this creature becomes prepared.")
-        .condition(eight_lands)],
+        .condition(cantrip_mechanics::you_control_at_least_n_lands::<8>)],
     enters: Some(cantrip_mechanics::prepare::enters_prepared),
     prepare: Some(&REGROWTH),
     ..oracle::EMERITUS_OF_ABUNDANCE

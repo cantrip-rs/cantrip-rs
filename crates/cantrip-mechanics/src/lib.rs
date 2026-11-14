@@ -915,6 +915,13 @@ pub fn an_opponent_controls_more_lands(q: &dyn Query, asker: &Asker) -> bool {
     q.state().opponents(asker.controller).any(|opponent| lands_you_control(q, opponent) > ours)
 }
 
+/// "If you control N or more lands" / "Activate only if you control N or more lands": the asker's controller controls at
+/// least `N` lands (CR 109.5). Vraska, the Cutting Glare (6), Emeritus of Abundance (8), Temple of the False God and Cryptic
+/// Caves (5) and Dragonmaster Outcast (6) ask it.
+pub fn you_control_at_least_n_lands<const N: usize>(q: &dyn Query, asker: &Asker) -> bool {
+    lands_you_control(q, asker.controller) >= N
+}
+
 /// Deals damage to the target in `slot`, if it is still legal.
 pub fn damage_target(g: &mut dyn Game, item: &StackItem, slot: usize, amount: u32) {
     if g.target_legal(item, slot) {
