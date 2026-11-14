@@ -1,0 +1,11 @@
+{
+  "name": "Rapacious Dragon",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Dragon",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\nWhen this creature enters, create two Treasure tokens. (They're artifacts with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "keywords": [
+    "Flying"
+  ]
+}
