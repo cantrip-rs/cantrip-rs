@@ -2122,7 +2122,7 @@ pub struct ObjectMovedEvent {
 #[serde(rename_all = "PascalCase")]
 pub struct LifeChangedEvent {
     pub player: i32,
-    pub delta: i32,
+    pub delta: i64,
     pub new_total: i32,
 }
 
@@ -2385,6 +2385,8 @@ mod tests {
             r#"{"$type":"LifeChangedEvent","Player":2,"Delta":-3,"NewTotal":17}"#,
             r#"{"$type":"DamageMarkedEvent","Object":5,"Amount":2}"#,
             r#"{"$type":"LifeChangedEvent","Player":2,"Delta":-2147483648,"NewTotal":-2147483648}"#,
+            r#"{"$type":"LifeChangedEvent","Player":2,"Delta":2147483648,"NewTotal":2147483647}"#,
+            r#"{"$type":"LifeChangedEvent","Player":2,"Delta":-4294967295,"NewTotal":-2147483648}"#,
             r#"{"$type":"DamageMarkedEvent","Object":5,"Amount":65535}"#,
         ] {
             let event: GameEventView = serde_json::from_str(json).unwrap();

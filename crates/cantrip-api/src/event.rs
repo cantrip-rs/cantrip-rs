@@ -67,7 +67,7 @@ pub use cantrip_state::{CostOrigin, CostPart};
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct MillResult {
     pub cards: Vec<ObjectId>,
-    pub count: u32,
+    pub count: u64,
 }
 
 /// The parts of one instruction several players carry out at once (CR 101.4), for `Game::together`: who sacrifices what (CR
@@ -188,7 +188,7 @@ pub enum Event {
     /// a prevention effect is applied to a damage event and prevents some or all of it, before what is left is dealt;
     /// what "if damage is prevented this way" (CR 615.5) would ask. `combat` says whether it would have been combat damage.
     DamagePrevented { source: ObjectId, target: Target, amount: u32, combat: bool, by: ObjectId },
-    LifeChange { player: PlayerId, delta: i32 },
+    LifeChange { player: PlayerId, magnitude: u32, negative: bool },
     Drew { player: PlayerId, card: ObjectId },
     /// A card was discarded (CR 701.9a): `card` is the object it became where it went. `undefined` when a replacement put it
     /// into a hidden zone instead of its owner's graveyard without its being revealed (Library of Leng): every value of its

@@ -289,7 +289,7 @@ fn move_together_entering_event(
     reason: ZoneReason,
     attacking: Option<Target>,
     life: &[(PlayerId, i64)],
-) -> (Vec<ObjectId>, Vec<ObjectId>, i32) {
+) -> (Vec<ObjectId>, Vec<ObjectId>, u64) {
     // An object moves once however many times the batch names it: a permanent a spell targets twice ("destroy target
     // artifact and target creature" at an artifact creature, CR 115.3) is destroyed once (CR 400.7). The first move kept.
     // And an object that has changed zones or ceased to exist since it was named is not moved at all: it became a new
@@ -3708,7 +3708,7 @@ pub fn mill(cx: &mut Cx, player: PlayerId, count: u32) -> Vec<ObjectId> {
 
 /// Mills as `mill` does, with the number the instruction became once the effects that change it applied (CR 614.1a).
 pub fn mill_result(cx: &mut Cx, player: PlayerId, count: u32) -> MillResult {
-    let count = replace::mill_count(cx, player, count);
+    let count = replace::mill_count(cx, player, u64::from(count));
     MillResult { cards: mill_counted(cx, &[(player, count)]), count }
 }
 
@@ -3719,15 +3719,21 @@ pub fn mill_result(cx: &mut Cx, player: PlayerId, count: u32) -> MillResult {
 /// each player's number first (CR 614.1a, `replace::mill_count`), every number before any card moves; a player mills as
 /// many as their library holds (CR 701.17b).
 pub fn mill_together(cx: &mut Cx, mills: &[(PlayerId, u32)]) -> Vec<ObjectId> {
-    let counts: Vec<(PlayerId, u32)> = mills.iter().map(|&(player, count)| (player, replace::mill_count(cx, player, count))).collect();
+    let counts: Vec<_> = mills.iter().map(|&(player, count)| (player, replace::mill_count(cx, player, u64::from(count)))).collect();
+    mill_counted(cx, &counts)
+}
+
+/// Applies replacements to full-width mill instructions before moving any cards.
+pub fn mill_together_wide(cx: &mut Cx, mills: &[(PlayerId, u64)]) -> Vec<ObjectId> {
+    let counts: Vec<_> = mills.iter().map(|&(player, count)| (player, replace::mill_count(cx, player, count))).collect();
     mill_counted(cx, &counts)
 }
 
 /// The mill itself, each number already replaced: the cards that went to a graveyard, or to exile instead (CR 701.17c).
-fn mill_counted(cx: &mut Cx, counts: &[(PlayerId, u32)]) -> Vec<ObjectId> {
+fn mill_counted(cx: &mut Cx, counts: &[(PlayerId, u64)]) -> Vec<ObjectId> {
     let mut moves: Vec<Moving> = Vec::new();
     for &(player, count) in counts {
-        let top = cx.s().zone(Zone::library(player)).iter().take(count as usize).copied();
+        let top = cx.s().zone(Zone::library(player)).iter().take(usize::try_from(count).unwrap_or(usize::MAX)).copied();
         moves.extend(top.map(|c| Moving::to(c, Zone::graveyard(player))));
     }
     move_together(cx, &moves, ZoneReason::Mill)
@@ -4339,7 +4345,7 @@ fn lifelink(source: ObjectId, controller: PlayerId, chars: &Chars, amount: u32, 
 }
 
 /// Each opponent of `player` still in the game loses `amount` life simultaneously (CR 101.4, 119.3): the total lost.
-pub fn each_opponent_loses_life(cx: &mut Cx, player: PlayerId, amount: i32) -> i32 {
+pub fn each_opponent_loses_life(cx: &mut Cx, player: PlayerId, amount: i32) -> u64 {
     let losses: Vec<_> = cx.s().opponents(player).map(|p| (p, amount)).collect();
     lose_life_together(cx, &losses)
 }
@@ -4347,7 +4353,7 @@ pub fn each_opponent_loses_life(cx: &mut Cx, player: PlayerId, amount: i32) -> i
 /// The losses of one instruction (CR 101.4, 119.3, 608.2h): coalesced per player, replaced in APNAP order (CR 616.1)
 /// before any of its life totals change, then announced as one event (CR 603.2c). Only the final losses count towards
 /// "life lost this way", not gains or the separate actions a replacement's continuation performs.
-pub fn lose_life_together(cx: &mut Cx, losses: &[(PlayerId, i32)]) -> i32 {
+pub fn lose_life_together(cx: &mut Cx, losses: &[(PlayerId, i32)]) -> u64 {
     let mut merged: Vec<(PlayerId, i64)> = Vec::with_capacity(losses.len());
     for &(player, n) in losses.iter().filter(|&&(_, n)| n > 0) {
         match merged.iter_mut().find(|(p, _)| *p == player) {
@@ -4361,7 +4367,7 @@ pub fn lose_life_together(cx: &mut Cx, losses: &[(PlayerId, i32)]) -> i32 {
 /// The changes of life of one simultaneous event, each its own occurrence (CR 101.4, 119.3): replaced and judged allowed
 /// (`prepare_life_changes`, `retain_life_changes`) before any of them applies, then announced together (CR 603.2c). The life
 /// lost.
-fn life_together(cx: &mut Cx, life: &[(PlayerId, i64)]) -> i32 {
+fn life_together(cx: &mut Cx, life: &[(PlayerId, i64)]) -> u64 {
     let mut changes = prepare_life_changes(cx, life);
     retain_life_changes(cx, &mut changes);
     let mut events = Vec::with_capacity(changes.len());
@@ -4372,12 +4378,30 @@ fn life_together(cx: &mut Cx, life: &[(PlayerId, i64)]) -> i32 {
     total
 }
 
+/// Simultaneous signed-magnitude life changes (CR 101.4, 119.3).
+pub fn life_changes_together(cx: &mut Cx, changes: &[LifeChange]) -> u64 {
+    // Keep each magnitude unsigned through prohibitions and replacements: a replacement may reduce a value that
+    // exceeds i64 even though the final stored life and event are in their normal domains.
+    let mut prepared = Vec::with_capacity(changes.len());
+    for player in cx.s().apnap() {
+        for &change in changes.iter().filter(|c| c.player == player) {
+            let delta = prepare_life_proposal(cx, change);
+            if delta != 0 { prepared.push((player, delta)); }
+        }
+    }
+    retain_life_changes(cx, &mut prepared);
+    let mut events = Vec::with_capacity(prepared.len());
+    let total = apply_life_changes(cx, prepared, &mut events);
+    if !events.is_empty() { cx.emit_batch(&events, None); }
+    total
+}
+
 /// One instruction whose parts several players carry out at once (CR 101.4, `Game::together`): the sacrifices (CR 701.21a),
 /// the discards (CR 701.9) and the changes of life (CR 119.3) of `parts`, each change of life its own occurrence. Every
 /// replacement of every part is worked out against the game as it is before any of them happens, then they all happen and are
 /// announced together (CR 603.2c) - the discards' own events after them, as every discard's are (`discard_events`). The life
 /// lost.
-pub fn together(cx: &mut Cx, parts: cantrip_api::Together) -> i32 {
+pub fn together(cx: &mut Cx, parts: cantrip_api::Together) -> u64 {
     let life: Vec<(PlayerId, i64)> = parts.life.iter().filter(|&&(_, n)| n != 0).map(|&(player, n)| (player, i64::from(n))).collect();
     let mut moves = discard_moves(cx, parts.discards, &[], false);
     let discarding = moves.len();
@@ -4399,7 +4423,7 @@ pub fn together(cx: &mut Cx, parts: cantrip_api::Together) -> i32 {
 /// results are one loss for each player merges them first (`lose_life_together`); damage's are one loss for each player and
 /// one lifelink gain for each source (CR 119.9-10, 702.15e). Replacements run in APNAP order, each player's results in the
 /// order given, before any original life update, including when a replacement changes a result's sign.
-fn prepare_life_changes(cx: &mut Cx, changes: &[(PlayerId, i64)]) -> Vec<(PlayerId, i32)> {
+fn prepare_life_changes(cx: &mut Cx, changes: &[(PlayerId, i64)]) -> Vec<(PlayerId, i64)> {
     let mut prepared = Vec::with_capacity(changes.len());
     if changes.is_empty() {
         return prepared;
@@ -4420,23 +4444,27 @@ fn prepare_life_changes(cx: &mut Cx, changes: &[(PlayerId, i64)]) -> Vec<(Player
 
 /// A later replacement's continuation may remove a player or change a prohibition. Judge every final prohibition
 /// before applying any original result, including the counter results of damage (CR 101.2, 120.4c-d).
-fn retain_life_changes(cx: &Cx, changes: &mut Vec<(PlayerId, i32)>) {
+fn retain_life_changes(cx: &Cx, changes: &mut Vec<(PlayerId, i64)>) {
     changes.retain(|&(player, delta)| cx.s().in_game(player) && !life_total_cant_change(cx.s(), player) && !blocked(cx, player, delta));
 }
 
 /// Apply prepared, allowed life results through the journal, returning the life actually lost and leaving their
 /// announcements with the caller. Damage announces them with its other results, an explicit loss instruction on its own
 /// (CR 603.2c). No replacement or prohibition is judged against a partially applied simultaneous event.
-fn apply_life_changes(cx: &mut Cx, changes: Vec<(PlayerId, i32)>, events: &mut Vec<Event>) -> i32 {
+fn apply_life_changes(cx: &mut Cx, changes: Vec<(PlayerId, i64)>, events: &mut Vec<Event>) -> u64 {
     let mut total = 0i64;
     for (player, delta) in changes {
-        cx.st().update_player(player, |p| p.life += delta);
+        cx.st().update_player(player, |p| {
+            let sum = i64::from(p.life) + delta;
+            debug_assert!(i32::try_from(sum).is_ok(), "life total exceeds its i32 domain");
+            p.life = i32::try_from(sum).unwrap_or(sum as i32);
+        });
         if delta < 0 {
-            total -= i64::from(delta);
+            total -= delta;
         }
-        events.push(Event::LifeChange { player, delta });
+        events.push(Event::LifeChange { player, magnitude: delta.unsigned_abs() as u32, negative: delta < 0 });
     }
-    total as i32
+    total as u64
 }
 
 /// Whether `player`'s life total can't change (CR 119.7, 119.8): a resolved effect says so (`EffectKind::LifeTotalCantChange`).
@@ -4452,47 +4480,46 @@ pub fn change_life(cx: &mut Cx, player: PlayerId, delta: impl Into<i64>) {
     if delta == 0 {
         return;
     }
-    cx.st().update_player(player, |p| p.life += delta);
+    cx.st().update_player(player, |p| {
+            let sum = i64::from(p.life) + delta;
+            debug_assert!(i32::try_from(sum).is_ok(), "life total exceeds its i32 domain");
+            p.life = i32::try_from(sum).unwrap_or(sum as i32);
+        });
     // CR 702.179d: an opponent losing life during the turn of a player with speed triggers its inherent ability
     // (`designations::inherent_triggers`).
-    cx.emit(Event::LifeChange { player, delta });
+    cx.emit(Event::LifeChange { player, magnitude: delta.unsigned_abs() as u32, negative: delta < 0 });
 }
 
 /// The shared life-change pipeline before its update: single-player changes apply it at once; simultaneous losses and
 /// damage results prepare every player's changes first (CR 101.4, 120.4c, 614.1a, 616.1).
-fn prepare_life_change(cx: &mut Cx, player: PlayerId, delta: impl Into<i64>) -> i32 {
-    let delta = delta.into() as i32;
-    if delta == 0 || !cx.s().in_game(player) {
+fn prepare_life_change(cx: &mut Cx, player: PlayerId, delta: impl Into<i64>) -> i64 {
+    prepare_life_proposal(cx, LifeChange::from_signed(player, delta.into()))
+}
+
+/// Prohibitions and replacement effects inspect the full unsigned proposal before the final bounded event.
+fn prepare_life_proposal(cx: &mut Cx, change: LifeChange) -> i64 {
+    let player = change.player;
+    if change.magnitude == 0 || !cx.s().in_game(player) || blocked_sign(cx, player, change.negative)
+        || life_total_cant_change(cx.s(), player) {
         return 0;
     }
-    // CR 119.7: a player who can't gain life gains none, and nothing happens: no life gain event, so nothing that
-    // triggers on one (CR 119.9) triggers, and no replacement effect of a life gain event does anything.
-    if blocked(cx, player, delta) {
+    let changed = crate::replace::life_change_proposal(cx, change);
+    if changed.magnitude == 0 || !cx.s().in_game(player) || blocked_sign(cx, player, changed.negative) {
         return 0;
     }
-    // CR 119.7, 119.8: a player whose life total can't change gains and loses none, and nothing replaces what can't happen
-    // (Teferi's Protection's rulings: "Words of Worship's effect ... ends up replacing the event with nothing").
-    if life_total_cant_change(cx.s(), player) {
-        return 0;
-    }
-    // CR 614.1a, 616.1: "you gain that much life plus 1 instead", "they lose twice that much life instead". The event
-    // history records the life that actually changed. A gain an effect turned into a loss, or a loss into a gain, the player
-    // can't have is nothing (the Platinum Emperion rulings).
-    let delta = crate::replace::life_change(cx, player, delta);
-    if delta == 0 || !cx.s().in_game(player) || blocked(cx, player, delta) {
-        return 0;
-    }
-    delta
+    debug_assert!(changed.magnitude <= u64::from(u32::MAX), "final life event exceeds its u32 magnitude domain");
+    changed.signed()
 }
 
 /// Whether `player` can't have this change of life: a gain while they can't gain life (CR 119.7), a loss while they can't lose
 /// life (CR 119.8).
-fn blocked(cx: &Cx, player: PlayerId, delta: i32) -> bool {
-    if delta > 0 {
-        crate::static_rules::cant_gain_life(cx, cx.cards(), player)
-    } else {
-        crate::static_rules::cant_lose_life(cx, cx.cards(), player)
-    }
+fn blocked(cx: &Cx, player: PlayerId, delta: i64) -> bool {
+    blocked_sign(cx, player, delta < 0)
+}
+
+fn blocked_sign(cx: &Cx, player: PlayerId, negative: bool) -> bool {
+    if negative { crate::static_rules::cant_lose_life(cx, cx.cards(), player) }
+    else { crate::static_rules::cant_gain_life(cx, cx.cards(), player) }
 }
 
 /// Regeneration (CR 701.19a-b): tap, heal and remove from combat. Only those

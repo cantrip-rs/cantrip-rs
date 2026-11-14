@@ -414,7 +414,10 @@ impl View<'_> {
                         obs.objects = vec![o(source), target_ref(target, refs)];
                         obs.amount = amount as i32;
                     }
-                    Event::LifeChange { delta, .. } => obs.amount = delta,
+                    Event::LifeChange { magnitude, negative, .. } => {
+                        // The model feature is i32; only this derived projection is bounded. The rules event remains exact.
+                        obs.amount = life_observation_amount(u64::from(magnitude), negative);
+                    },
                     Event::Drew { card, .. } | Event::Discarded { card, .. } | Event::Revealed { card, .. } | Event::Cycled { card, .. } => obs.objects = vec![o(card)],
                     Event::SpellCast { spell, .. } | Event::Countered { spell } => obs.objects = vec![o(spell)],
                     Event::Attacks { attacker, defender, .. } => obs.objects = vec![o(attacker), target_ref(defender, refs)],
@@ -487,4 +490,25 @@ fn counts(names: impl Iterator<Item = String>) -> Vec<Count> {
 
 fn cantrip_obs_bytes(obs: &ObjectObs) -> Vec<u8> {
     postcard::to_allocvec(obs).expect("an object always serializes")
+}
+
+/// Project an exact life event onto the fixed-width model feature.
+pub(crate) fn life_observation_amount(magnitude: u64, negative: bool) -> i32 {
+    let limit = if negative { i64::from(i32::MAX) + 1 } else { i64::from(i32::MAX) };
+    let value = i64::try_from(magnitude).unwrap_or(limit).min(limit);
+    if negative { (-value) as i32 } else { value as i32 }
+}
+
+#[cfg(test)]
+mod life_projection_tests {
+    use super::life_observation_amount;
+    #[test]
+    fn life_amount_feature_preserves_ordinary_sign_and_bounds_extremes() {
+        assert_eq!(life_observation_amount(7, false), 7);
+        assert_eq!(life_observation_amount(7, true), -7);
+        assert_eq!(life_observation_amount(u64::from(u32::MAX), false), i32::MAX);
+        assert_eq!(life_observation_amount(u64::from(u32::MAX), true), i32::MIN);
+        assert_eq!(life_observation_amount(u64::MAX, false), i32::MAX);
+        assert_eq!(life_observation_amount(u64::MAX, true), i32::MIN);
+    }
 }

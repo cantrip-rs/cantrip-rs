@@ -7,7 +7,7 @@ use cantrip_oracle as oracle;
 fn drain(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let lost = g.each_opponent_loses_life(item.controller, 5);
     if lost > 0 {
-        g.gain_life(item.controller, lost);
+        g.life_changes_together(&[LifeChange { player: item.controller, magnitude: lost, negative: false }]);
     }
     Ok(())
 }

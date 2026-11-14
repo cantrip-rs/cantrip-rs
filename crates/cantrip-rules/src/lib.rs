@@ -2343,6 +2343,10 @@ impl cantrip_api::Game for Cx<'_> {
         ops::mill_together(self, mills)
     }
 
+    fn mill_together_wide(&mut self, mills: &[(PlayerId, u64)]) -> Vec<ObjectId> {
+        ops::mill_together_wide(self, mills)
+    }
+
     fn damage(&mut self, source: ObjectId, target: Target, amount: u32) -> u32 {
         ops::damage(self, source, target, amount, false)
     }
@@ -2359,7 +2363,7 @@ impl cantrip_api::Game for Cx<'_> {
         ops::heal(self, permanent)
     }
 
-    fn each_opponent_loses_life(&mut self, player: PlayerId, amount: i32) -> i32 {
+    fn each_opponent_loses_life(&mut self, player: PlayerId, amount: i32) -> u64 {
         ops::each_opponent_loses_life(self, player, amount)
     }
 
@@ -2988,12 +2992,16 @@ impl cantrip_api::Game for Cx<'_> {
         ops::change_life(self, player, -i64::from(amount));
     }
 
-    fn lose_life_together(&mut self, losses: &[(PlayerId, i32)]) -> i32 {
+    fn lose_life_together(&mut self, losses: &[(PlayerId, i32)]) -> u64 {
         ops::lose_life_together(self, losses)
     }
 
-    fn together(&mut self, parts: cantrip_api::Together) -> i32 {
+    fn together(&mut self, parts: cantrip_api::Together) -> u64 {
         ops::together(self, parts)
+    }
+
+    fn life_changes_together(&mut self, changes: &[LifeChange]) -> u64 {
+        ops::life_changes_together(self, changes)
     }
 
     fn set_life_total(&mut self, player: PlayerId, total: i32) {

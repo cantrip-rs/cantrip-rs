@@ -50,7 +50,7 @@ pub enum Proto {
     Step { turn: i32, step: Step, active: PlayerId },
     Moved { old: ObjectId, new: ObjectId, from: Zone, to: Zone, reason: ZoneReason },
     Created { object: ObjectId, controller: PlayerId, name: String },
-    Life { player: PlayerId, delta: i32, total: i32 },
+    Life { player: PlayerId, delta: i64, total: i32 },
     Damage { object: ObjectId, amount: i32 },
     Tap { object: ObjectId, tapped: bool },
     Cast { spell: ObjectId, controller: PlayerId, targets: Vec<Target>, x: Option<i32>, modes: Vec<String>, kicked: i32, gift: Option<PlayerId> },
@@ -174,9 +174,11 @@ impl Tracker {
                     out.push(Proto::Moved { old, new, from, to, reason });
                 }
             }
-            Event::LifeChange { player, delta } => {
+            Event::LifeChange { player, magnitude, negative } => {
+                let delta = if negative { -i64::from(magnitude) } else { i64::from(magnitude) };
                 let total = self.life.get_mut(player.index()).map(|l| {
-                    *l += delta;
+                    let sum = i64::from(*l) + delta;
+                    *l = i32::try_from(sum).unwrap_or(sum as i32);
                     *l
                 });
                 out.push(Proto::Life { player, delta, total: total.unwrap_or(game.state.player(player).life) });
@@ -564,6 +566,20 @@ mod tests {
 
     fn began(serial: u32, turn: u32, active: PlayerId, step: Step) -> Record {
         Record { serial, turn, step, active, cause: Cause::Turn, event: Event::StepBegan { step } }
+    }
+
+    #[test]
+    fn life_event_keeps_full_magnitude_and_exact_new_total() {
+        let deck = vec!["Forest".to_string(); 20];
+        let mut game = deal(&[deck.clone(), deck], 1, false, None).expect("a game");
+        let player = PlayerId(0);
+        game.state.update_player(player, |p| p.life = -1);
+        let mut tracker = Tracker::new(&game);
+        let record = Record { serial: 0, turn: 1, step: Step::Upkeep, active: player, cause: Cause::Turn,
+            event: Event::LifeChange { player, magnitude: 2_147_483_648, negative: false } };
+        let mut events = Vec::new();
+        tracker.proto_of(&game, &record, &mut events);
+        assert!(matches!(events.as_slice(), [Proto::Life { delta: 2_147_483_648, total: i32::MAX, .. }]));
     }
 
     /// A step begun again within one turn is no new turn: another cleanup step (CR 514.3a, 724.1d), a second combat

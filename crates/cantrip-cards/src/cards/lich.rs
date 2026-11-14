@@ -19,7 +19,7 @@ fn if_would_gain_life_draw_applies(
     proposal: &Proposal,
 ) -> bool {
     let Proposal::LifeChange(l) = proposal else { return false };
-    if l.amount > 0 && asker.controller == l.player {
+    if !l.negative && l.magnitude > 0 && asker.controller == l.player {
         return true;
     }
     false
@@ -28,7 +28,7 @@ fn if_would_gain_life_draw_applies(
 /// "If you would gain life, draw that many cards instead." (CR 614.1a).
 fn if_would_gain_life_draw_apply(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
     let Proposal::LifeChange(l) = proposal else { return };
-    l.amount = 0;
+    l.magnitude = 0;
 }
 
 /// "If you would gain life, draw that many cards instead." (CR 608.2).
@@ -39,7 +39,9 @@ fn if_would_gain_life_draw_then(
     _: &Proposal,
 ) {
     let Proposal::LifeChange(l) = before else { return };
-    g.draw(asker.controller, l.amount.unsigned_abs());
+    // Drawing beyond the u32 request domain is outside the engine's bounded count domain.
+    debug_assert!(l.magnitude <= u64::from(u32::MAX));
+    g.draw(asker.controller, l.magnitude as u32);
 }
 
 /// The permanents chosen for Lich's sacrifice must be nontokens (CR 111.6).

@@ -1582,8 +1582,8 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                 // A change of life is asked of the player whose life it is (CR 616.1); damage, of the player it would be
                 // dealt to or whose permanent it would be dealt to, as the effects so far have left it.
                 event: match (life, damage) {
-                    (Some(n), _) if *n > 0 => format!("You would gain {n} life"),
-                    (Some(n), _) => format!("You would lose {} life", n.unsigned_abs()),
+                    (Some((n, false)), _) => format!("You would gain {n} life"),
+                    (Some((n, true)), _) => format!("You would lose {n} life"),
                     (None, Some(d)) => damage_words(game, request.player, *d),
                     // The turn effects would skip (CR 614.10) is the asked player's.
                     (None, None) if *turn => "Your turn would begin".to_string(),
@@ -1693,7 +1693,7 @@ mod tests {
     }
 
     /// A game dealt these two decks, top of the library first, and the objects of the first seat's opening hand.
-    fn game_with(first: &[&str]) -> (Game, Vec<ObjectId>) {
+    pub(super) fn game_with(first: &[&str]) -> (Game, Vec<ObjectId>) {
         let deck = |top: &[&str]| top.iter().map(|c| c.to_string()).chain(std::iter::repeat_n("Forest".to_string(), 20)).collect::<Vec<_>>();
         let game = deal(&[deck(first), deck(&[])], 1, false, None).expect("a game");
         let seat = game.state.seats().next().expect("a seat");
@@ -2435,4 +2435,18 @@ mod row_yield_tests {
         let missing = [(Some(Mana::W), vec![pool(&[(Mana::W, 1)])]), (Some(Mana::U), vec![])];
         assert_eq!(row_yield(&missing), None);
     }
+    #[test]
+    fn life_replacement_prompt_describes_the_full_unsigned_magnitude() {
+        let (game, hand) = crate::prompt::tests::game_with(&["Llanowar Elves"]);
+        let player = game.state.seats().next().unwrap();
+        for (negative, expected) in [(false, "You would gain 6442450944 life"), (true, "You would lose 6442450944 life")] {
+            let request = Request { id: 1, player, may_cancel: false,
+                kind: RequestKind::ChooseReplacement { subject: None, life: Some((6_442_450_944, negative)),
+                    sources: vec![hand[0]], hints: vec!["replace it"], damage: None, turn: false,
+                    counters: Vec::new(), draw: false } };
+            let PromptPayload::ChooseReplacementPromptMessage(p) = prompt(&game, &request, &mut HandleSpace::new()).unwrap().0 else { panic!("replacement prompt") };
+            assert_eq!(p.event, expected);
+        }
+    }
+
 }

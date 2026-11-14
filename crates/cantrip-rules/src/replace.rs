@@ -826,7 +826,7 @@ fn choose(cx: &mut Cx, proposal: &Proposal, found: &[Candidate]) -> Option<usize
     let ask = RequestKind::ChooseReplacement {
         subject: subject_of(proposal),
         life: match proposal {
-            Proposal::LifeChange(l) => Some(l.amount),
+            Proposal::LifeChange(l) => Some((l.magnitude, l.negative)),
             _ => None,
         },
         sources: found.iter().map(|c| c.source).collect(),
@@ -1754,7 +1754,7 @@ pub fn draw_count(cx: &mut Cx, player: PlayerId, count: u32) -> u32 {
 
 /// An instruction to mill cards (CR 701.17a): how many are milled once every effect that changes the number has applied
 /// (CR 614.1a), before any card moves.
-pub fn mill_count(cx: &mut Cx, player: PlayerId, count: u32) -> u32 {
+pub fn mill_count(cx: &mut Cx, player: PlayerId, count: u64) -> u64 {
     if !possible(cx, None) {
         return count;
     }
@@ -2491,14 +2491,20 @@ pub(crate) fn damage_event(
 /// every effect has applied, in the order the player chooses (CR 616.1), each judged again on the event as the one
 /// before it left it (CR 616.1f), so a gain turned into a loss meets the effects on losing life. Zero is no event
 /// (CR 119.10).
-pub fn life_change(cx: &mut Cx, player: PlayerId, amount: i32) -> i32 {
+#[cfg(test)]
+pub fn life_change(cx: &mut Cx, player: PlayerId, amount: i64) -> i64 {
+    life_change_proposal(cx, LifeChange::from_signed(player, amount)).signed()
+}
+
+/// Apply replacements before narrowing a transient unsigned magnitude (CR 614.1a, 616.1).
+pub(crate) fn life_change_proposal(cx: &mut Cx, change: LifeChange) -> LifeChange {
     if !possible(cx, None) {
-        return amount;
+        return change;
     }
-    let mut proposal = Proposal::LifeChange(LifeChange { player, amount });
+    let mut proposal = Proposal::LifeChange(change);
     apply(cx, &mut proposal);
     match proposal {
-        Proposal::LifeChange(l) => l.amount,
+        Proposal::LifeChange(l) => l,
         _ => unreachable!("an effect cannot change the kind of the event"),
     }
 }

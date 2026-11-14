@@ -12,7 +12,7 @@ use cantrip_engine::*;
 /// "Whenever one or more opponents lose life": a life loss of anyone but the ability's controller.
 fn opponents_lose_life(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
     match event {
-        Event::LifeChange { player, delta } if *delta < 0 && *player != PlayerId(0) => Fired::PLAIN,
+        Event::LifeChange { player, negative: true, .. } if *player != PlayerId(0) => Fired::PLAIN,
         _ => None,
     }
 }

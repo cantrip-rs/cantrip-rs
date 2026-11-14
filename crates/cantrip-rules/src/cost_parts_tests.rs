@@ -1888,7 +1888,7 @@ fn random_library_cost_is_paid_after_nonrandom_costs() {
     answer(&mut g, &r, Answer::Act(Action::of(&ability)));
     next(&mut g);
     let events = g.events();
-    let life = events.iter().position(|r| matches!(r.event, Event::LifeChange { player, delta: -3, .. } if player == YOU)).expect("life was paid");
+    let life = events.iter().position(|r| matches!(r.event, Event::LifeChange { player, magnitude: 3, negative: true, .. } if player == YOU)).expect("life was paid");
     let shuffle = events.iter().position(|r| matches!(r.event, Event::Shuffled { player } if player == YOU)).expect("the library was shuffled");
     assert!(life < shuffle, "the nonrandom cost precedes the random library cost");
     let serial = g.state.stack.last().expect("the activation is on the stack").serial;

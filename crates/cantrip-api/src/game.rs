@@ -8,7 +8,7 @@ use crate::card::{CounterTo, CountersIf, Entering, EntersAs, FaceDown, LibraryPl
 use crate::card::{AbilityDef, ActivatedDef, Asker, CardDef, CauseKind, PlayerCounter, TriggeredDef};
 use crate::chars::Chars;
 use crate::history::{History, Record};
-use crate::{DamageResult, LeftBattlefield, MillResult, Together};
+use crate::{DamageResult, LeftBattlefield, LifeChange, MillResult, Together};
 use crate::Event;
 
 /// A die roll (CR 706.2): the face the die showed, and the result once the roll was modified (CR 706.4).
@@ -888,6 +888,8 @@ pub trait Game: Query {
     /// simultaneous zone change, one event, so "whenever one or more cards are milled" triggers once (CR 603.2c). The new
     /// objects, as `mill` returns them, player by player.
     fn mill_together(&mut self, mills: &[(PlayerId, u32)]) -> Vec<ObjectId>;
+    /// Mills simultaneous instructions with full-width transient counts, before replacement effects (CR 614.1a).
+    fn mill_together_wide(&mut self, mills: &[(PlayerId, u64)]) -> Vec<ObjectId>;
     /// Deals damage (CR 120.3) from `source` to `target`: marked on a creature, removed as loyalty from a planeswalker,
     /// lost as life by a player, each after prevention and replacement. How much was dealt, which is none when the damage
     /// was prevented or the target is gone. Original damage split among recipients
@@ -1590,7 +1592,7 @@ pub trait Game: Query {
     /// nothing. Prohibitions and replacements apply in APNAP order before any of the instruction's life totals change,
     /// then the changes are announced together (CR 603.2c). Returns the actual life lost: only final negative changes,
     /// not blocked losses or losses replaced with gains. Gul Dukat, Colonial Prefect; Archfiend of Despair.
-    fn lose_life_together(&mut self, losses: &[(PlayerId, i32)]) -> i32;
+    fn lose_life_together(&mut self, losses: &[(PlayerId, i32)]) -> u64;
     /// One instruction whose sacrifices, discards and changes of life happen at once (CR 101.4): each sacrifice judged as
     /// `sacrifice_each` judges it, each discard as `discard_together`, and each change of life its own occurrence, never added
     /// to another (unlike `lose_life_together`'s) - replaced on its own, in APNAP order, and announced as its own `LifeChange`
@@ -1598,13 +1600,15 @@ pub trait Game: Query {
     /// replacement and prohibition of every part is judged against the game as it is before any part happens (CR 616.1), then
     /// they all happen and are announced together. Returns the life lost. Rottenmouth Viper; an exchange of life totals
     /// (`exchange::life_totals`, CR 701.12c).
-    fn together(&mut self, parts: Together) -> i32;
+    fn together(&mut self, parts: Together) -> u64;
+    /// Simultaneous life proposals with transient magnitudes and explicit sign (CR 101.4, 119.3).
+    fn life_changes_together(&mut self, changes: &[LifeChange]) -> u64;
     /// "`player`'s life total becomes `total`" (CR 119.5): they gain or lose the difference, so a player who can't gain life
     /// keeps a total lower than `total` (CR 119.7).
     fn set_life_total(&mut self, player: PlayerId, total: i32);
     /// Each opponent of `player` still in the game loses `amount` life simultaneously (CR 101.4, 119.3), through
     /// `lose_life_together`. Returns the actual life lost, excluding blocked losses and losses replaced with gains.
-    fn each_opponent_loses_life(&mut self, player: PlayerId, amount: i32) -> i32;
+    fn each_opponent_loses_life(&mut self, player: PlayerId, amount: i32) -> u64;
     fn add_mana(&mut self, player: PlayerId, mana: Mana, amount: u32);
     /// Adds a full-width count in any combination of the listed colors (CR 106.4, 608.2d):
     /// independently choose each unit, in successive wire-sized requests. Wizard's Rockets and

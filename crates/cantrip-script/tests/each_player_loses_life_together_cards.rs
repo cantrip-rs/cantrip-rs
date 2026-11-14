@@ -15,7 +15,7 @@ use cantrip_engine::*;
 /// Any life loss, whoever suffers it.
 fn a_player_loses_life(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
     match event {
-        Event::LifeChange { delta, .. } if *delta < 0 => Fired::PLAIN,
+        Event::LifeChange { negative: true, .. } => Fired::PLAIN,
         _ => None,
     }
 }
@@ -244,7 +244,7 @@ fn bot2_loses_5_then_exchange_with_bot2(g: &mut dyn Rules, item: &StackItem) -> 
 /// Any loss of life, or a gain by anyone but Bot1 (whose own gains, the witness's, it does not watch).
 fn a_loss_or_anothers_gain(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
     match event {
-        Event::LifeChange { player, delta } if *delta < 0 || *player != PlayerId(0) => Fired::PLAIN,
+        Event::LifeChange { player, negative, .. } if *negative || *player != PlayerId(0) => Fired::PLAIN,
         _ => None,
     }
 }

@@ -25,7 +25,7 @@ const QUESTION: Question = Question::new(
 fn drain(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if g.may_pay(item.controller, item.object, item.object, PAY, &QUESTION)? {
         let lost = g.each_opponent_loses_life(item.controller, 1);
-        g.gain_life(item.controller, lost);
+        g.life_changes_together(&[LifeChange { player: item.controller, magnitude: lost, negative: false }]);
     }
     Ok(())
 }

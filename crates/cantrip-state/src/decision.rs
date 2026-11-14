@@ -636,7 +636,7 @@ pub enum RequestKind {
     /// the event is a card the asked player would draw (CR 121.6).
     ChooseReplacement {
         subject: Option<ObjectId>,
-        life: Option<i32>,
+        life: Option<(u64, bool)>,
         sources: Vec<ObjectId>,
         hints: Vec<&'static str>,
         damage: Option<DamageAbout>,

@@ -972,7 +972,7 @@ pub fn mill_then_put_onto_battlefield(
 /// Kraven's Last Hunt (I) print it.
 pub fn mill_then_reflexive(g: &mut dyn Game, item: &StackItem, count: u32, reflexive: AbilityRef) {
     let milled = g.mill_result(item.controller, count);
-    if milled.cards.len() as u32 == milled.count {
+    if u64::try_from(milled.cards.len()).ok() == Some(milled.count) {
         g.reflexive_trigger(item.object, item.controller, reflexive, Target::None);
     }
 }

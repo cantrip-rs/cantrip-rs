@@ -347,8 +347,8 @@ pub fn an_opponent_draws_a_card(q: &dyn Query, me: &Asker, event: &Event) -> Opt
 /// much"): the trigger's `data[0]` is the life gained.
 pub fn you_gain_life(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
-        Event::LifeChange { player, delta } if *delta > 0 && *player == me.controller => {
-            Some(Fired { subject: Target::None, data: [*delta as u32, 0] })
+        Event::LifeChange { player, magnitude, negative: false } if *player == me.controller => {
+            Some(Fired { subject: Target::None, data: [*magnitude, 0] })
         }
         _ => None,
     }
@@ -2079,8 +2079,8 @@ pub fn you_attack_with_a_creature_of_subtype<const SUBTYPE: u16>(q: &dyn Query, 
 /// trigger carries how much was lost. Bloodthirsty Conqueror and Kefka, Ruler of Ruin (on its controller's turn) print it.
 pub fn opponent_loses_life(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
-        Event::LifeChange { player, delta } if *delta < 0 && q.state().opponents(me.controller).any(|p| p == *player) => {
-            Some(Fired { subject: Target::Player(*player), data: [delta.unsigned_abs(), 0] })
+        Event::LifeChange { player, magnitude, negative: true } if q.state().opponents(me.controller).any(|p| p == *player) => {
+            Some(Fired { subject: Target::Player(*player), data: [*magnitude, 0] })
         }
         _ => None,
     }

@@ -31,7 +31,7 @@ static POKE: CardDef = CardDef { name: "Probe Poke", types: TypeSet::of(&[CardTy
 
 fn a_player_loses_life(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
     match event {
-        Event::LifeChange { player, delta } if *delta < 0 => Some(Fired { subject: Target::Player(*player), data: [0, 0] }),
+        Event::LifeChange { player, negative: true, .. } => Some(Fired { subject: Target::Player(*player), data: [0, 0] }),
         _ => None,
     }
 }

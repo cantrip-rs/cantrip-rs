@@ -6,8 +6,8 @@ use cantrip_oracle as oracle;
 /// the event history, as the ability resolves, and every opponent mills together.
 fn opponents_mill_life_gained(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let x = g.history().life_gained(item.controller);
-    let mills: Vec<(PlayerId, u32)> = g.state().opponents(item.controller).map(|p| (p, x)).collect();
-    g.mill_together(&mills);
+    let mills: Vec<(PlayerId, u64)> = g.state().opponents(item.controller).map(|p| (p, x)).collect();
+    g.mill_together_wide(&mills);
     Ok(())
 }
 

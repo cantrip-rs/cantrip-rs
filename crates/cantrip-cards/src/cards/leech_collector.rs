@@ -18,7 +18,7 @@ pub static BLOODLETTING: CardDef = CardDef {
 /// (CR 603.2: the trigger event is the first gain itself, not a limit on how often it triggers).
 fn you_gain_life_for_the_first_time_each_turn(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
-        Event::LifeChange { player, delta } if *delta > 0 && *player == me.controller && q.history().life_gained(me.controller) == 0 => Fired::PLAIN,
+        Event::LifeChange { player, negative: false, .. } if *player == me.controller && q.history().life_gained(me.controller) == 0 => Fired::PLAIN,
         _ => None,
     }
 }

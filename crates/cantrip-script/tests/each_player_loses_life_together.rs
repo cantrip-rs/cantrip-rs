@@ -11,7 +11,7 @@ use cantrip_engine::*;
 /// "Whenever one or more players lose life": any life loss, whoever suffers it.
 fn players_lose_life(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
     match event {
-        Event::LifeChange { delta, .. } if *delta < 0 => Fired::PLAIN,
+        Event::LifeChange { negative: true, .. } => Fired::PLAIN,
         _ => None,
     }
 }

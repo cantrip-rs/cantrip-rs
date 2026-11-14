@@ -7,7 +7,7 @@ use cantrip_oracle as oracle;
 /// carries how much was lost.
 fn a_player_loses_life(_: &dyn Query, _: &Asker, event: &Event) -> Option<Fired> {
     match event {
-        Event::LifeChange { player, delta } if *delta < 0 => Some(Fired { subject: Target::Player(*player), data: [delta.unsigned_abs(), 0] }),
+        Event::LifeChange { player, magnitude, negative: true } => Some(Fired { subject: Target::Player(*player), data: [*magnitude, 0] }),
         _ => None,
     }
 }

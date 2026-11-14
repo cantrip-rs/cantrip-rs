@@ -325,18 +325,18 @@ pub const fn permanents_enter_tapped<const WHICH: u8>(hint: &'static str) -> Rep
 
 /// "If you would gain life" (CR 119.10, 614.1a): a gain of life by the effect's controller. Zero is no gain.
 fn you_would_gain_life(_: &dyn Query, asker: &Asker, proposal: &Proposal) -> bool {
-    matches!(proposal, Proposal::LifeChange(l) if l.player == asker.controller && l.amount > 0)
+    matches!(proposal, Proposal::LifeChange(l) if l.player == asker.controller && !l.negative && l.magnitude > 0)
 }
 
 fn twice_that_much_life(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
     if let Proposal::LifeChange(l) = proposal {
-        l.amount = l.amount.saturating_mul(2);
+        l.magnitude = l.magnitude.saturating_mul(2);
     }
 }
 
 fn that_much_life_plus_one(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
     if let Proposal::LifeChange(l) = proposal {
-        l.amount = l.amount.saturating_add(1);
+        l.magnitude = l.magnitude.saturating_add(1);
     }
 }
 
@@ -427,12 +427,12 @@ pub const GAIN_THAT_MUCH_LIFE_PLUS_ONE: ReplacementDef =
 /// "If an opponent would gain life": a gain by a player other than the effect's controller who is their opponent.
 fn opponent_would_gain_life(q: &dyn Query, asker: &Asker, proposal: &Proposal) -> bool {
     matches!(proposal, Proposal::LifeChange(l)
-        if l.amount > 0 && q.state().opponents(asker.controller).any(|p| p == l.player))
+        if !l.negative && l.magnitude > 0 && q.state().opponents(asker.controller).any(|p| p == l.player))
 }
 
 fn loses_that_much_life(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
     if let Proposal::LifeChange(l) = proposal {
-        l.amount = -l.amount;
+        l.negative = !l.negative;
     }
 }
 

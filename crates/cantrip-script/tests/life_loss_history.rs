@@ -6,8 +6,8 @@ use cantrip_script::{GameScript, run_on};
 
 fn opponent_lost_life(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match *event {
-        Event::LifeChange { player, delta } if delta < 0 && q.state().opponents(me.controller).any(|opponent| opponent == player) => {
-            Some(Fired { subject: Target::Player(player), data: [delta.unsigned_abs(), 0] })
+        Event::LifeChange { player, magnitude, negative: true } if q.state().opponents(me.controller).any(|opponent| opponent == player) => {
+            Some(Fired { subject: Target::Player(player), data: [magnitude, 0] })
         }
         _ => None,
     }
@@ -15,7 +15,7 @@ fn opponent_lost_life(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired>
 
 fn opponent_lost_one(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match *event {
-        Event::LifeChange { delta: -1, .. } => opponent_lost_life(q, me, event),
+        Event::LifeChange { magnitude: 1, negative: true, .. } => opponent_lost_life(q, me, event),
         _ => None,
     }
 }

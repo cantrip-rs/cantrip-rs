@@ -25,7 +25,7 @@ fn lose_five(g: &mut dyn cantrip_api::Game, item: &StackItem) -> Result<(), Susp
 }
 
 fn life_lost(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
-    if matches!(event, Event::LifeChange { delta, .. } if *delta < 0) { Fired::PLAIN } else { None }
+    if matches!(event, Event::LifeChange { negative: true, .. }) { Fired::PLAIN } else { None }
 }
 
 fn end_of_combat(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {

@@ -5,7 +5,7 @@ use cantrip_oracle as oracle;
 /// "If you gaining life causes a triggered ability of a permanent you control to trigger, that ability triggers an
 /// additional time" (CR 603.2d). It counts each life-gain event, not each life point, and excludes delayed abilities.
 fn gaining_life_triggers_again(_: &dyn Query, asker: &Asker, event: &Event, triggering: &Triggering) -> bool {
-    matches!(event, Event::LifeChange { player, delta } if *player == asker.controller && *delta > 0)
+    matches!(event, Event::LifeChange { player, negative: false, .. } if *player == asker.controller)
         && triggering.of_a_permanent_controlled_by(asker.controller)
 }
 

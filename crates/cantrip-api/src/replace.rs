@@ -166,7 +166,7 @@ pub struct DrawInstruction {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct MillInstruction {
     pub player: PlayerId,
-    pub count: u32,
+    pub count: u64,
 }
 
 /// A permanent about to connive (CR 701.50): "if a creature you control would connive, instead you draw a card, then that
@@ -221,13 +221,26 @@ pub struct TokenCreation {
 
 /// Life a player is about to gain or lose (CR 119.3, 614.1a): by an effect, as a cost (CR 119.4: paying life is losing
 /// it), as the result of damage (CR 120.3a; the damage itself is a `DamageEvent`, already dealt), by lifelink
-/// (CR 120.3f) or as a life total is set to a number (CR 119.5). `amount` is signed: more than zero is a gain, less a loss,
-/// so "that player loses that much life instead" turns one into the other. An effect that leaves it at zero leaves no
+/// (CR 120.3f) or as a life total is set to a number (CR 119.5). A transient u64 magnitude and a sign preserve an
+/// aggregate through replacements; the final event's magnitude is u32. "That player loses that much life instead" changes the sign. An effect that leaves it at zero leaves no
 /// event (CR 119.10). A player who can't gain life meets no replacement of a gain (CR 119.7).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct LifeChange {
     pub player: PlayerId,
-    pub amount: i32,
+    pub magnitude: u64,
+    pub negative: bool,
+}
+
+impl LifeChange {
+    /// The signed amount for intermediate arithmetic; recorded events use a u32 magnitude and a sign.
+    pub fn signed(self) -> i64 {
+        debug_assert!(self.magnitude <= i64::MAX as u64, "life proposal exceeds its transient domain");
+        if self.negative { -(self.magnitude as i64) } else { self.magnitude as i64 }
+    }
+
+    pub fn from_signed(player: PlayerId, amount: i64) -> Self {
+        Self { player, magnitude: amount.unsigned_abs(), negative: amount < 0 }
+    }
 }
 
 /// A permanent tapped for mana producing it (CR 106.12, 106.12b): all the mana the mana ability produces as it resolves,

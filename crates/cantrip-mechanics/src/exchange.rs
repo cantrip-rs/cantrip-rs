@@ -13,11 +13,16 @@ pub fn life_totals(g: &mut dyn Game, a: PlayerId, b: PlayerId) -> u32 {
     if !g.can_gain_life(gainer) || !g.can_lose_life(loser) {
         return 0;
     }
-    let difference = (before_a - before_b).abs();
+    // abs_diff is a u32 and covers the full span between any two i32 totals.
+    let difference = before_a.abs_diff(before_b);
     // One simultaneous change of both life totals (CR 701.12c, 101.4): replaced in APNAP order before either changes, and
     // announced together.
-    g.together(Together { life: &[(loser, -difference), (gainer, difference)], ..Together::default() });
-    (before_a - g.state().player(a).life).max(0).unsigned_abs()
+    g.life_changes_together(&[
+        LifeChange { player: loser, magnitude: u64::from(difference), negative: true },
+        LifeChange { player: gainer, magnitude: u64::from(difference), negative: false },
+    ]);
+    let after_a = g.state().player(a).life;
+    if before_a > after_a { before_a.abs_diff(after_a) } else { 0 }
 }
 
 /// "Exchange control of [target A] and [target B]" (CR 701.12a-b) for a spell or ability whose targets 0 and 1 are the two

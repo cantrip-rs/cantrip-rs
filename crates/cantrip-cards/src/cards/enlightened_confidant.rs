@@ -11,7 +11,7 @@ fn surveil_and_take(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let you = item.controller;
     let binned = surveil_into_graveyard(g, you, item.object, 1)?;
     let gained = g.history().life_gained(you);
-    let taken: Vec<ObjectId> = binned.into_iter().filter(|&card| g.mana_value(card) <= gained).collect();
+    let taken: Vec<ObjectId> = binned.into_iter().filter(|&card| u64::from(g.mana_value(card)) <= gained).collect();
     g.return_to_hand(&taken);
     Ok(())
 }

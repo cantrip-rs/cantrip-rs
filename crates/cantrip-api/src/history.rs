@@ -279,7 +279,7 @@ impl EventQuery {
                 _ => self.reason.is_none() && self.from.is_none() && self.to.is_none(),
             }
             && match *e {
-                Event::LifeChange { delta, .. } => self.gained.is_none_or(|g| g == (delta > 0)),
+                Event::LifeChange { negative, .. } => self.gained.is_none_or(|g| g != negative),
                 _ => self.gained.is_none(),
             }
     }
@@ -591,19 +591,19 @@ impl<'a> History<'a> {
     }
 
     /// Life `player` has gained this turn (CR 119.3).
-    pub fn life_gained(&self, player: PlayerId) -> u32 {
+    pub fn life_gained(&self, player: PlayerId) -> u64 {
         self.life(player, true)
     }
 
     /// Life `player` has lost this turn (CR 119.3).
-    pub fn life_lost(&self, player: PlayerId) -> u32 {
+    pub fn life_lost(&self, player: PlayerId) -> u64 {
         self.life(player, false)
     }
 
-    fn life(&self, player: PlayerId, gained: bool) -> u32 {
+    fn life(&self, player: PlayerId, gained: bool) -> u64 {
         self.select(EventQuery::kind(EventMask::LIFE_CHANGE).player(player).gained(gained).this_turn())
             .map(|r| match r.event {
-                Event::LifeChange { delta, .. } => delta.unsigned_abs(),
+                Event::LifeChange { magnitude, .. } => u64::from(magnitude),
                 _ => 0,
             })
             .sum()

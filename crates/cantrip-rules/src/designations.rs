@@ -94,7 +94,7 @@ pub(crate) fn inherent_triggers(cx: &Cx, event: &Event) -> Vec<(u8, PlayerId, Ta
         Event::Damage { source, target: Target::Player(victim), amount, kind, .. } if kind.is_combat() => {
             combat_damage(cx, source, victim, amount, &mut found);
         }
-        Event::LifeChange { player, delta } if delta < 0 => {
+        Event::LifeChange { player, negative: true, .. } => {
             if let Some(found_speed) = crate::speed::life_lost(cx, player) {
                 found.push(found_speed);
             }

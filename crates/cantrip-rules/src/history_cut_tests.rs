@@ -30,7 +30,7 @@ fn the_history_is_whole_again_after_a_trigger_panics() {
     let mut game = Game::new(table, &Setup { decks: vec![Vec::new(), Vec::new()], ..Default::default() });
     let id = game.state.push_obj(Obj::new(table.id_of(&PANICKER), YOU, Zone::BATTLEFIELD));
     game.state.zone_push(Zone::BATTLEFIELD, id);
-    let caught = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| cx(&mut game).emit(Event::LifeChange { player: YOU, delta: -1 })));
+    let caught = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| cx(&mut game).emit(Event::LifeChange { player: YOU, magnitude: 1, negative: true })));
     assert!(caught.is_err(), "the trigger did not panic");
     assert_eq!(game.history_end, None, "the history is still cut");
 }

@@ -1269,11 +1269,15 @@ discards after it. The creature is read as it was if it has left the battlefield
 
 Replacement effects of a gain or loss of life (CR 614.1a: "you gain that much life plus 1 instead", "they lose twice that much
 life instead", "that player loses that much life instead") are `ReplacementKind::LifeChange` effects over a
-`Proposal::LifeChange { player, amount }`, `amount` signed (a gain above zero, a loss below), applied by `change_life` through
+`Proposal::LifeChange { player, magnitude, negative }`, with a transient u64 magnitude and explicit sign, applied by `change_life` through
 `replace::life_change` after the can't-gain check (a replacement of a gain of a player who can't gain life does nothing, CR
 119.7) and ordered by the player whose life it is (CR 616.1, `RequestKind::ChooseReplacement`'s `life`, which the host words as
 "You would gain 3 life"). Each is judged again on the event as the one before left it (CR 616.1f), so a gain turned into a loss
-meets the effects on losing life; an amount left at zero is no event (CR 119.10). The `LifeChange` event records the life that
+meets the effects on losing life; an amount left at zero is no event (CR 119.10). The sign and magnitude cover every difference
+between two i32 life totals without widening those totals (Mirror Universe and Mister Negative, CR 701.12c); the changes are
+prepared and announced together. Intermediate proposals and aggregate receipts are u64, while final event magnitudes remain u32. The AI's i32
+observation feature alone projects larger magnitudes to its nearest bound; the rules event and host life-change event retain the
+full value. The `LifeChange` event records the life that
 actually changed, so the history's `life_gained`/`life_lost` count it. Damage is replaced as damage before its life
 results are prepared; the life lost to it is a distinct result of the same simultaneous event (Bloodletter of Aclazotz
 doubles the loss, not the damage nor its lifelink). Lifelink is one gain

@@ -674,7 +674,7 @@ public sealed class LifeChangedEvent : GameEventView
     public int Player { get; set; }
 
     [Key(1)]
-    public int Delta { get; set; }
+    public long Delta { get; set; }
 
     [Key(2)]
     public int NewTotal { get; set; }

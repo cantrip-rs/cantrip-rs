@@ -48,5 +48,5 @@ fn reverse_polarity_counts_two_large_artifact_damage_events() {
     assert_eq!(blasts, 2);
     assert!(cast);
     assert_eq!(game.state.player(PlayerId(0)).life, 262164);
-    assert!(game.log.iter().any(|r| matches!(r.event, Event::LifeChange { player: PlayerId(0), delta: 524288 })));
+    assert!(game.log.iter().any(|r| matches!(r.event, Event::LifeChange { player: PlayerId(0), magnitude: 524288, negative: false })));
 }

@@ -85,7 +85,7 @@ fn a_rule_that_stops_triggered_abilities_stops_the_inherent_ones() {
             ("taking the initiative", |_| vec![Event::TookInitiative { player: A }], (INITIATIVE_VENTURE, A)),
             ("an opponent losing life", |g| {
                 g.state.update_player(A, |p| p.speed = Some(1));
-                vec![Event::LifeChange { player: B, delta: -1 }]
+                vec![Event::LifeChange { player: B, magnitude: 1, negative: true }]
             }, (SPEED_UP, A)),
         ];
         for (name, setup, expected) in cases {
@@ -121,7 +121,7 @@ fn two_creatures_of_one_player_take_the_initiative_once() {
 /// Hush stopped did not trigger, so once the Hush is gone the next loss of life triggers it.
 #[test]
 fn speed_triggers_once_each_turn_and_a_stopped_one_does_not_count() {
-    let loss = Event::LifeChange { player: B, delta: -1 };
+    let loss = Event::LifeChange { player: B, magnitude: 1, negative: true };
     let mut g = game(2);
     g.state.update_player(A, |p| p.speed = Some(1));
     cx(&mut g).emit(loss);

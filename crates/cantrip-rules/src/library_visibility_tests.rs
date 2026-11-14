@@ -292,13 +292,13 @@ fn life_mana(g: &mut dyn cantrip_api::Game, a: &Asker, _: Option<Color>) -> Resu
 }
 
 fn replace_gain(_: &dyn Query, a: &Asker, p: &Proposal) -> bool {
-    matches!(p, Proposal::LifeChange(l) if l.player == a.controller && l.amount > 0)
+    matches!(p, Proposal::LifeChange(l) if l.player == a.controller && !l.negative && l.magnitude > 0)
 }
 fn no_gain(_: &dyn Query, _: &Asker, p: &mut Proposal) {
-    if let Proposal::LifeChange(l) = p { l.amount = 0; }
+    if let Proposal::LifeChange(l) = p { l.magnitude = 0; }
 }
 fn draw_instead(g: &mut dyn cantrip_api::Game, _: &Asker, before: &Proposal, _: &Proposal) {
-    if let Proposal::LifeChange(l) = before { g.draw(l.player, l.amount as u32); }
+    if let Proposal::LifeChange(l) = before { g.draw(l.player, u32::try_from(l.magnitude).unwrap()); }
 }
 fn nothing(_: &mut dyn cantrip_api::Game, _: &StackItem) -> Result<(), Suspend> { Ok(()) }
 fn creature(q: &dyn Query, _: &Asker, id: ObjectId) -> bool { q.chars(id).is(CardType::Creature) }

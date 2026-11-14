@@ -83,7 +83,7 @@ fn a_rules_choice_of_a_player_who_left_is_made_by_the_next_player_in_turn_order(
     let (mut g, trinket, at) = game(3);
     let which = RequestKind::ChooseReplacement {
         subject: None,
-        life: Some(-1),
+        life: Some((1, true)),
         sources: vec![trinket, trinket],
         hints: vec!["", ""],
         damage: None,

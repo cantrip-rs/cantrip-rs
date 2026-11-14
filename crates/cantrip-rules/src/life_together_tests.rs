@@ -17,14 +17,14 @@ fn nothing(_: &mut dyn cantrip_api::Game, _: &StackItem) -> Result<(), Suspend> 
 
 fn opponent_lost_life(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match *event {
-        Event::LifeChange { player, delta } if player != me.controller && delta < 0 => Fired::about(Target::Player(player)),
+        Event::LifeChange { player, negative: true, .. } if player != me.controller => Fired::about(Target::Player(player)),
         _ => None,
     }
 }
 
 fn opponent_lost_one(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match *event {
-        Event::LifeChange { delta: -1, .. } => opponent_lost_life(q, me, event),
+        Event::LifeChange { magnitude: 1, negative: true, .. } => opponent_lost_life(q, me, event),
         _ => None,
     }
 }
@@ -44,14 +44,14 @@ static WATCHER: CardDef = CardDef {
 /// Bloodletter of Aclazotz's replacement, with assertions that all replacements see the original instruction's
 /// pre-loss state and history, even for a player later in APNAP order.
 fn opponent_loses_on_your_turn(q: &dyn Query, me: &Asker, proposal: &Proposal) -> bool {
-    matches!(proposal, Proposal::LifeChange(l) if l.amount < 0 && l.player != me.controller && q.state().turn.active == me.controller)
+    matches!(proposal, Proposal::LifeChange(l) if l.negative && l.magnitude > 0 && l.player != me.controller && q.state().turn.active == me.controller)
 }
 
 fn twice(q: &dyn Query, _: &Asker, proposal: &mut Proposal) {
     assert!(q.state().players.iter().all(|p| p.life == 20), "no original life update before all replacements");
     assert!(!q.history().records.iter().any(|r| matches!(r.event, Event::LifeChange { .. })), "no original event before all replacements");
     if let Proposal::LifeChange(l) = proposal {
-        l.amount *= 2;
+        l.magnitude *= 2;
     }
 }
 
@@ -77,12 +77,12 @@ static EMPERION: CardDef = CardDef {
 };
 
 fn opponent_gains(_: &dyn Query, me: &Asker, proposal: &Proposal) -> bool {
-    matches!(proposal, Proposal::LifeChange(l) if l.amount > 0 && l.player != me.controller)
+    matches!(proposal, Proposal::LifeChange(l) if !l.negative && l.magnitude > 0 && l.player != me.controller)
 }
 
 fn gain_to_loss(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
     if let Proposal::LifeChange(l) = proposal {
-        l.amount = -l.amount;
+        l.negative = !l.negative;
     }
 }
 
@@ -98,7 +98,7 @@ static REMEDY: CardDef = CardDef {
 /// Exsanguinate at X=1: the return value is used by the next instruction, after every opponent's loss.
 fn drain(g: &mut dyn cantrip_api::Game, item: &StackItem) -> Result<(), Suspend> {
     let lost = g.each_opponent_loses_life(item.controller, 1);
-    g.gain_life(item.controller, lost);
+    g.life_changes_together(&[LifeChange { player: item.controller, magnitude: lost, negative: false }]);
     Ok(())
 }
 
@@ -173,7 +173,7 @@ static ARMOR: CardDef = CardDef {
 
 fn gained(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match *event {
-        Event::LifeChange { player, delta } if player == me.controller && delta > 0 => Fired::PLAIN,
+        Event::LifeChange { player, negative: false, .. } if player == me.controller => Fired::PLAIN,
         _ => None,
     }
 }
@@ -188,14 +188,14 @@ static PRIDEMATE: CardDef = CardDef {
 };
 
 fn own_gain(_: &dyn Query, me: &Asker, proposal: &Proposal) -> bool {
-    matches!(proposal, Proposal::LifeChange(l) if l.player == me.controller && l.amount > 0)
+    matches!(proposal, Proposal::LifeChange(l) if l.player == me.controller && !l.negative && l.magnitude > 0)
 }
 
 fn plus_one(q: &dyn Query, _: &Asker, proposal: &mut Proposal) {
     assert!(q.state().players.iter().all(|p| p.life == 20), "lifelink replacements precede every original life update");
     assert!(!q.history().records.iter().any(|r| matches!(r.event, Event::LifeChange { .. })), "no original life announcement yet");
     if let Proposal::LifeChange(l) = proposal {
-        l.amount += 1;
+        l.magnitude += 1;
     }
 }
 
@@ -519,7 +519,7 @@ fn cx(g: &mut Game) -> Cx<'_> {
 
 fn changes(g: &Game) -> Vec<(PlayerId, i32)> {
     g.log.iter().filter_map(|r| match r.event {
-        Event::LifeChange { player, delta } => Some((player, delta)),
+        Event::LifeChange { player, magnitude, negative } => Some((player, if negative { -(i64::from(magnitude)) as i32 } else { magnitude as i32 })),
         _ => None,
     }).collect()
 }
@@ -728,7 +728,7 @@ fn damage_life_choices_precede_all_updates_and_survive_undo_redo() {
         let request = g.pending().cloned().expect("damage-result replacement question");
         assert_eq!(request.player, player, "life results are prepared in APNAP order");
         let RequestKind::ChooseReplacement { life: amount, sources, .. } = &request.kind else { panic!("{:?}", request.kind) };
-        assert_eq!(*amount, Some(-1));
+        assert_eq!(*amount, Some((1, true)));
         assert_eq!(*sources, vec![one, two]);
         assert_eq!(life(&g), vec![20; 4]);
         assert!(changes(&g).is_empty());
@@ -797,7 +797,7 @@ fn darien_trigger_survives_owner_conceding_during_damage_life_replacements() {
         g.run();
         let request = g.pending().unwrap();
         assert_eq!(request.player, LAST);
-        assert!(matches!(request.kind, RequestKind::ChooseReplacement { life: Some(-1), .. }));
+        assert!(matches!(request.kind, RequestKind::ChooseReplacement { life: Some((1, true)), .. }));
         assert_eq!(g.state.obj(darien).owner, ACTIVE);
         assert_eq!(g.state.obj(darien).controller, YOU);
         assert_eq!(trigger_count(&g, darien, 0), 1, "already triggered before the first result choice");
@@ -906,7 +906,7 @@ fn damage_results_share_apnap_across_permanent_counters_poison_and_life_with_rep
     for (player, sources, loss, permanent) in [
         (ACTIVE, seasons, None, Some(nighthawk)),
         (LAST, talents, None, None),
-        (FIRST, bloodletters, Some(-1), None),
+        (FIRST, bloodletters, Some((1, true)), None),
     ] {
         let request = g.pending().cloned().unwrap();
         assert_eq!(request.player, player);
@@ -957,7 +957,7 @@ fn life_choices_precede_later_players_infect_and_toxic_counter_choices() {
         g.state.update_turn(|t| t.set_step(Step::CombatDamage));
         g.state.frame_push(Frame::new(FrameKind::BeginStep));
         g.run();
-        for (player, sources, gain) in [(ACTIVE, angels, Some(2)), (FIRST, talents, None)] {
+        for (player, sources, gain) in [(ACTIVE, angels, Some((2, false))), (FIRST, talents, None)] {
             let request = g.pending().cloned().unwrap();
             assert_eq!(request.player, player);
             assert!(matches!(&request.kind, RequestKind::ChooseReplacement { life, sources: offered, .. }
@@ -1553,7 +1553,7 @@ fn replacement_choices_are_apnap_before_all_updates_and_survive_undo_redo() {
         let request = g.pending().cloned().expect("replacement question");
         assert_eq!(request.player, player, "APNAP, not seat order or the loss input order");
         let RequestKind::ChooseReplacement { life: amount, sources, .. } = &request.kind else { panic!("{:?}", request.kind) };
-        assert_eq!(*amount, Some(-1));
+        assert_eq!(*amount, Some((1, true)));
         assert_eq!(*sources, vec![one, two]);
         assert_eq!(life(&g), vec![20; 4], "every choice precedes the original updates");
         assert!(changes(&g).is_empty());

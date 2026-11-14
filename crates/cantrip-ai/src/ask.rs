@@ -908,7 +908,7 @@ pub(crate) fn ask_of(
             perms.order = all.iter().map(|a| a.1).collect();
             AskKind::ChooseReplacement {
                 subject: subject.map_or(Ref::None, r),
-                life: *life,
+                life: life.map(|(magnitude, negative)| crate::observe::life_observation_amount(magnitude, negative)),
                 sources: all.iter().map(|a| a.0.0).collect(),
                 hints: all.iter().map(|a| a.0.1.clone()).collect(),
                 damage: damage.map(|d| (r(d.source), t(d.to), d.amount)),

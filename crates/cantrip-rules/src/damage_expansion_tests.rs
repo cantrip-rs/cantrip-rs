@@ -1361,7 +1361,7 @@ fn recombined_original_fragments_form_one_precise_damage_result() {
 
 fn opponent_loss(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
     match *event {
-        Event::LifeChange { player: THEM, delta } if delta < 0 => Some(Fired { subject: Target::Player(THEM), data: [u32::try_from(delta.unsigned_abs()).unwrap(), 0] }),
+        Event::LifeChange { player: THEM, magnitude, negative: true } => Some(Fired { subject: Target::Player(THEM), data: [magnitude, 0] }),
         _ => None,
     }
 }
@@ -2002,7 +2002,7 @@ fn printed_bloodthirsty_conqueror_gains_life_from_opponents_loss() {
         let mut g = Game::new(cards, &Setup { decks: vec![vec![cards.id_of(conqueror); 20]; 2], ..Default::default() });
         let creature = put(&mut g, conqueror, YOU);
         let source = creature;
-        let event = Event::LifeChange { player: THEM, delta: if amount == i32::MAX as u32 + 1 { i32::MIN } else { -(amount as i32) } };
+        let event = Event::LifeChange { player: THEM, magnitude: amount, negative: true };
         cx(&mut g, source).emit_batch(&[event], None);
         let trigger = *g.state.triggers.iter().find(|t| t.source == creature).unwrap();
         assert_eq!(trigger.data[0], amount);

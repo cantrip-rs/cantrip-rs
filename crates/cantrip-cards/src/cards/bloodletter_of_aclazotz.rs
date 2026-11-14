@@ -8,13 +8,13 @@ use cantrip_oracle as oracle;
 fn opponent_loses_life_during_your_turn(q: &dyn Query, asker: &Asker, proposal: &Proposal) -> bool {
     let Proposal::LifeChange(l) = proposal else { return false };
     let state = q.state();
-    l.amount < 0 && state.turn.active == asker.controller && state.opponents(asker.controller).any(|p| p == l.player)
+    l.negative && l.magnitude > 0 && state.turn.active == asker.controller && state.opponents(asker.controller).any(|p| p == l.player)
 }
 
 /// "... they lose twice that much life instead."
 fn twice_that_much(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
     if let Proposal::LifeChange(l) = proposal {
-        l.amount = l.amount.saturating_mul(2);
+        l.magnitude = l.magnitude.saturating_mul(2);
     }
 }
 
