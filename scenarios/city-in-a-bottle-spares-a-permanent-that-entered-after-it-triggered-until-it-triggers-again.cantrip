@@ -1,0 +1,71 @@
+# "Their controllers sacrifice them": the permanents that were there as the state trigger triggered (CR 603.8; the
+# 2014-02-01 ruling: "those permanents will be sacrificed"). City in a Bottle enters with Bot1's Kird Ape on the battlefield
+# and triggers; in response Bot2 puts Camel onto the battlefield with Sneak Attack (not cast, so the casting ban is no
+# matter). The ability sacrifices Kird Ape alone, and Camel is still there as the ability triggers again once it has left the
+# stack - exactly one Arabian Nights permanent - and that second triggering sacrifices it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Kird Ape
+Island
+Island
+Island
+City in a Bottle
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mountain
+Sneak Attack
+Camel
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kird Ape.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Sneak Attack.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.City in a Bottle.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Sneak Attack.Activate
+Bot2.Pass
+Bot2.Choose(Camel)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Kird Ape
+? Bot2.Battlefield.Camel.Tapped = false
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Kird Ape
+Bot1.Battlefield.City in a Bottle.Tapped = false
+Bot2.Graveyard = Camel; Black Lotus

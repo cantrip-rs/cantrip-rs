@@ -1,0 +1,84 @@
+# "Whenever one or more other nontoken permanents with a name originally printed in the Arabian Nights expansion are on the
+# battlefield, their controllers sacrifice them" (CR 603.8, 701.21a). Bot1 has Kird Ape and a token copy of it (Relm's
+# Sketching), Bot2 Camel, the land Oasis and an Ornithopter. As City in a Bottle enters its state trigger triggers, and its
+# controllers sacrifice Kird Ape, Camel and Oasis together; the token stays (the 2004-10-04 ruling), as do Ornithopter, the
+# Moxen and City in a Bottle itself, whose own name is an Arabian Nights one ("other"). Two turns later Mirrorweave makes
+# Bot2's Ornithopter a copy of the Kird Ape token: a nontoken permanent named Kird Ape now (CR 707.2), with no event, in the
+# middle of a resolution - the ability triggers again and Bot2 sacrifices it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Kird Ape
+Relm's Sketching
+City in a Bottle
+Mirrorweave
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Camel
+Oasis
+Ornithopter
+Island
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kird Ape.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Relm's Sketching.Cast(Bot1.Battlefield.Kird Ape)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Oasis.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Camel.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.City in a Bottle.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Kird Ape; Relm's Sketching; Black Lotus
+? Bot2.Graveyard = Camel; Oasis
+? Bot2.Battlefield = Mox Pearl; Ornithopter
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mirrorweave.Cast(Bot1.Battlefield.Kird Ape)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Mox Sapphire; Mox Pearl; Mox Jet; Kird Ape; City in a Bottle
+Bot2.Battlefield = Mox Pearl
+Bot1.Battlefield.Kird Ape.Token = true
+Bot2.Graveyard = Ornithopter; Camel; Oasis

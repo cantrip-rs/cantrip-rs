@@ -1,0 +1,57 @@
+# City in a Bottle's second ability: "Players can't cast spells or play lands with a name originally printed in the Arabian
+# Nights expansion" (CR 101.2, 601.3, 305.1). With it on the battlefield, its controller can't cast Kird Ape with an untapped
+# Mox Ruby to pay for it, nor play Desert as the turn's land, though a Mox (not an Arabian Nights name) is cast and an Island
+# played; on the next turn its opponent can't cast Camel off an untapped Mox Pearl nor play Oasis, and plays a Plains -
+# and can't cast a second City in a Bottle off the Mox and the Plains either, its own name being an Arabian Nights one.
+# No Arabian Nights permanent is on the battlefield, so its triggered ability does nothing.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+City in a Bottle
+Kird Ape
+Desert
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Camel
+Oasis
+Plains
+City in a Bottle
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.City in a Bottle.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+! Bot1.Hand.Kird Ape.Cast
+! Bot1.Hand.Desert.Play
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+! Bot2.Hand.Camel.Cast
+! Bot2.Hand.Oasis.Play
+Bot2.Hand.Plains.Play
+! Bot2.Hand.City in a Bottle.Cast
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Mox Jet; City in a Bottle; Mox Ruby; Island
+Bot1.Hand = Kird Ape; Desert
+Bot2.Battlefield = Mox Pearl; Plains
+Bot2.Battlefield.Mox Pearl.Tapped = false
+Bot2.Battlefield.Plains.Tapped = false
+Bot2.Hand = Camel; City in a Bottle; Island; Island; Island; Oasis

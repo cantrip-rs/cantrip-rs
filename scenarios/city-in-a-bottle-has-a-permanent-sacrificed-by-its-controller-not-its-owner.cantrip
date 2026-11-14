@@ -1,0 +1,56 @@
+# "Their controllers sacrifice them" (CR 701.21a: a permanent is sacrificed by its controller). Bot1 takes Bot2's Kird Ape
+# with Control Magic, then casts City in a Bottle: its state trigger triggers (CR 603.8) and Bot1, Kird Ape's controller,
+# sacrifices it - to its owner Bot2's graveyard. Its owner, who doesn't control it, couldn't sacrifice it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Control Magic
+City in a Bottle
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Kird Ape
+Island
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Kird Ape.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Control Magic.Cast(Bot2.Battlefield.Kird Ape)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kird Ape.Tapped = false
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.City in a Bottle.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Graveyard = Kird Ape
+Bot1.Graveyard = Control Magic; Black Lotus

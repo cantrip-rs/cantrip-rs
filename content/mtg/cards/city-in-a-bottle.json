@@ -1,0 +1,6 @@
+{
+  "name": "City in a Bottle",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "Whenever one or more other nontoken permanents with a name originally printed in the Arabian Nights expansion are on the battlefield, their controllers sacrifice them.\nPlayers can't cast spells or play lands with a name originally printed in the Arabian Nights expansion."
+}
