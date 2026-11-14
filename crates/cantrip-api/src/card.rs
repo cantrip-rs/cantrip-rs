@@ -408,6 +408,9 @@ pub struct StaticDef {
     /// part applied to as the object's characteristics were worked out, whatever its own `affects` would say by then, and
     /// it goes on applying though its source loses its abilities in a layer between them (`layers.rs`).
     pub continues: bool,
+    /// The effect, including its later `continues` parts, lasts through cleanup after this source leaves.
+    /// Its affected set remains dynamic (CR 611.3a); this does not retain unrelated abilities of the source.
+    pub lingers_until_end_of_turn: bool,
     /// It sets the land subtypes of what it affects (CR 305.7, layer 4): `sets_land_subtypes`. The layers read it to know
     /// which lands have lost the abilities of their rules text, from layer 4 on, so that their static abilities from layer
     /// 4 on (CR 613.8a: they depend on it), replacement effects, cost changes and other printed rules agree with it.
@@ -434,6 +437,7 @@ impl StaticDef {
             lost_pt: None,
             loses_all: false,
             continues: false,
+            lingers_until_end_of_turn: false,
             sets_land_subtypes: false,
         };
 }

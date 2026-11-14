@@ -1496,8 +1496,25 @@ impl StackItem {
     }
 }
 
-/// A continuous effect from a resolved spell or ability (CR 611), applied in its layer (CR 613).
+/// Stable identity of a printed part of a continuous characteristic effect (CR 613.6).
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub struct StaticDefinition {
+    pub card: CardId,
+    pub index: u32,
+}
+
+/// A static effect's definition and linked/grant identity, retained separately from its departed source's other abilities.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub struct RetainedStatic {
+    pub definition: StaticDefinition,
+    pub first: StaticDefinition,
+    pub by: Option<(Linked, CardId)>,
+    pub acquired: Acquired,
+    pub activation: Acquired,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+/// A continuous effect, applied in its layer (CR 613).
 pub struct ContinuousEffect {
     pub source: ObjectId,
     pub controller: PlayerId,
@@ -1512,6 +1529,9 @@ pub struct ContinuousEffect {
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum EffectKind {
+    /// A static effect whose printed lifetime continues after its source leaves (CR 611.3a).
+    /// It retains its timestamp and definitions, not a fixed set of affected objects.
+    RetainedStatic(RetainedStatic),
     /// Protection from these colors (CR 702.16), layer 6.
     Protection(ColorSet),
     /// Protection from colorless (CR 702.16a, 105.2c), layer 6.
@@ -1876,7 +1896,8 @@ impl EffectKind {
     pub fn outlives_affected(self) -> bool {
         matches!(
             self,
-            EffectKind::PlayerHexproof
+            EffectKind::RetainedStatic(_)
+                | EffectKind::PlayerHexproof
                 | EffectKind::CantActivatePowerUp
                 | EffectKind::PlayerProtectionFromEverything
                 | EffectKind::CastAsThoughFlash(_)

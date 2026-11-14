@@ -12,7 +12,7 @@
 //! history: which permanents have static abilities is a question of the state alone.
 
 use cantrip_api::*;
-use cantrip_state::{CdaExclusions, ContinuousEffect};
+use cantrip_state::{CdaExclusions, ContinuousEffect, RetainedStatic, StaticDefinition};
 
 pub fn chars(cards: &CardTable, state: &GameState, log: &[Record], id: ObjectId) -> Chars {
     chars_before(cards, state, log, id, Layer::End)
@@ -730,7 +730,7 @@ fn object<'a>(cards: &CardTable, state: &'a GameState, id: ObjectId) -> Object<'
     let (any_sources, has_hone) = if state.statics_seen {
         let found = static_sources(cards, state);
         let has_hone = on_battlefield && found.honed.iter().any(|&e| state.obj(e).attached_to == Some(id));
-        (!found.list.is_empty() || !found.granted.is_empty(), has_hone)
+        (!found.list.is_empty() || !found.granted.is_empty() || found.retained_layers != 0, has_hone)
     } else {
         (false, false)
     };
@@ -1335,6 +1335,21 @@ fn static_sources<'a>(cards: &CardTable, state: &'a GameState) -> std::cell::Ref
                 made.granted.push(e.affected);
             }
         }
+        made.lingering = made.list.iter().any(|&(source, _, _)| statics_of(cards, state, source).any(|st| st.lingers_until_end_of_turn));
+        made.retained_layers = 0;
+        made.retained_rules = 0;
+        for e in &state.effects {
+            if let Some((st, _, _)) = retained_static(cards, e) {
+                if let Some(li) = LAYERS.iter().position(|&layer| layer == st.layer) {
+                    made.retained_layers |= 1 << li;
+                }
+                made.retained_rules |= u8::from(st.loses_all)
+                    | (u8::from(st.everywhere) << 1)
+                    | (u8::from(st.sets_land_subtypes) << 2)
+                    | (u8::from(st.layer == Layer::Control) << 3);
+                made.continuing |= st.continues;
+            }
+        }
         made.epoch = state.epoch;
     }
     state.static_sources.borrow()
@@ -1556,6 +1571,70 @@ fn first_part(statics: &[StaticDef], mut i: usize) -> usize {
     i
 }
 
+fn retained_definition(cards: &CardTable, definition: StaticDefinition) -> &'static StaticDef {
+    &cards.get(definition.card).statics[definition.index as usize]
+}
+
+fn retained_static(cards: &CardTable, effect: &ContinuousEffect) -> Option<(&'static StaticDef, &'static StaticDef, RetainedStatic)> {
+    let EffectKind::RetainedStatic(binding) = effect.kind else { return None };
+    Some((retained_definition(cards, binding.definition), retained_definition(cards, binding.first), binding))
+}
+
+/// Effects whose stated lifetime survives their source's departure (CR 611.3a). Keep the definition,
+/// original timestamp and linked text, rather than freezing the objects it currently affects.
+/// A first part that exists before its layer applies continues through the later layers even if
+/// layer 6 takes the source's abilities (CR 613.6).
+pub(crate) fn departing_statics(cards: &CardTable, state: &GameState, log: &[Record], leaving: &[ObjectId]) -> Vec<ContinuousEffect> {
+    if leaving.is_empty() || !has_lingering_statics(cards, state) {
+        return Vec::new();
+    }
+    let pass = pass(cards, state, log);
+    let cx = Ctx { cards, state, log, pass: &pass };
+    let mut kept = Vec::new();
+    for li in 0..LAYERS.len() {
+        let plan = plan(&cx, li);
+        for (at, &index) in plan.order.iter().enumerate() {
+            let entry = plan.entries[index as usize];
+            let GKind::Static { source, st, by, .. } = entry.kind else { continue };
+            if !st.lingers_until_end_of_turn || st.continues || !leaving.contains(&source)
+                || !state.obj(source).zone.is(ZoneKind::Battlefield) {
+                continue;
+            }
+            let stage = Stage { li, entries: &plan.entries, order: &plan.order, len: at, extra: None, keep: true };
+            let snap = chars_at(&cx, source, &stage, false);
+            let view = View { stage: Some(stage), pass: Some(&pass), ..View::new(cards, state, log, LAYERS[li]) };
+            if !exists(&view, source, source, &snap) {
+                continue;
+            }
+            let giver = entry.giver(cards, state);
+            for (card, _) in cards.texts_linked(state, source) {
+                let definitions = cards.get(card).statics;
+                let Some(first) = definitions.iter().position(|s| std::ptr::eq(s, st)) else { continue };
+                let first_definition = StaticDefinition { card, index: first as u32 };
+                for (part, _) in definitions.iter().enumerate().skip(first)
+                    .take_while(|&(part, s)| part == first || s.continues) {
+                    kept.push(ContinuousEffect {
+                        source, controller: state.obj(source).controller, timestamp: entry.timestamp,
+                        affected: source,
+                        kind: EffectKind::RetainedStatic(RetainedStatic {
+                            definition: StaticDefinition { card, index: part as u32 },
+                            first: first_definition, by, acquired: giver.acquired, activation: giver.activation,
+                        }),
+                        duration: Duration::EndOfTurn, words: cantrip_api::words(state, source),
+                    });
+                }
+                break;
+            }
+        }
+    }
+    kept
+}
+
+/// Guard departure bookkeeping before allocating a list of departing objects.
+pub(crate) fn has_lingering_statics(cards: &CardTable, state: &GameState) -> bool {
+    state.statics_seen && static_sources(cards, state).lingering
+}
+
 /// One continuous effect of a layer, over the whole game.
 #[derive(Clone, Copy)]
 struct GEntry {
@@ -1569,6 +1648,8 @@ struct GEntry {
 
 #[derive(Clone, Copy)]
 enum GKind {
+    /// An effect kept by its stated lifetime, with its original source's linked text and timestamp.
+    Retained { effect: ContinuousEffect, st: &'static StaticDef, first: *const StaticDef, binding: RetainedStatic },
     /// A static ability of `source` (its own, or one an effect granted it) that applies to the objects it says; `first` is
     /// the first part of its effect (CR 613.6), itself unless it `continues` one, and then it applies to the objects that
     /// part applied to (`Snap::parts`), whatever its words say of them by now.
@@ -1587,7 +1668,7 @@ impl GEntry {
     /// What it says, for a message.
     fn text(&self) -> &'static str {
         match self.kind {
-            GKind::Static { st, .. } | GKind::Given { st, .. } | GKind::Granted { st, .. } => st.text,
+            GKind::Static { st, .. } | GKind::Given { st, .. } | GKind::Granted { st, .. } | GKind::Retained { st, .. } => st.text,
             GKind::Effect(_) => "a resolved effect",
         }
     }
@@ -1600,6 +1681,10 @@ impl GEntry {
             statics_of(cards, state, source).position(|s| std::ptr::eq(s, st)).unwrap_or(0)
         };
         match self.kind {
+            GKind::Retained { effect, binding, .. } => Giver {
+                activation: binding.activation, static_grant: true,
+                ..Giver::entry(effect.source, binding.acquired)
+            },
             GKind::Static { source, st, .. } => {
                 let by = grant(part_of(source, st));
                 let text = state.copy_acquired(source);
@@ -1623,7 +1708,7 @@ impl GEntry {
     fn dependent(&self) -> bool {
         match self.kind {
             // A later part applies to the set its first part did (CR 613.6), but what it does may still depend on others.
-            GKind::Static { .. } | GKind::Given { .. } | GKind::Granted { .. } => true,
+            GKind::Static { .. } | GKind::Given { .. } | GKind::Granted { .. } | GKind::Retained { .. } => true,
             GKind::Effect(e) => matches!(e.kind, EffectKind::ChangeText { .. } | EffectKind::AddAllCreatureTypes | EffectKind::SetCreatureType(_)),
         }
     }
@@ -1669,6 +1754,7 @@ fn layers_with_entries(cx: &Ctx) -> u16 {
     let mut granting = false;
     if state.statics_seen {
         let found = static_sources(cards, state);
+        mask |= found.retained_layers;
         for &(source, _, _) in &found.list {
             for st in statics_of(cards, state, source) {
                 mask |= bit(st.layer);
@@ -1736,6 +1822,13 @@ fn collect_entries(cx: &Ctx, li: usize) -> Vec<GEntry> {
     }
     for e in state.effects.iter().filter(|e| effect_layer(e.kind) == Some(layer)) {
         entries.push(GEntry { kind: GKind::Effect(*e), timestamp: e.timestamp, seq: 2 });
+    }
+    for e in &state.effects {
+        if let Some((st, first, binding)) = retained_static(cards, e)
+            && st.layer == layer
+        {
+            entries.push(GEntry { kind: GKind::Retained { effect: *e, st, first, binding }, timestamp: e.timestamp, seq: 0 });
+        }
     }
     // CR 122.1b, 613.1f, 613.7c: the ability a keyword counter gives applies in layer 6 at the timestamp of its counters, in
     // timestamp order with the effects there, so "loses all abilities" takes it from counters put on before it and not from
@@ -1826,6 +1919,14 @@ fn collect_entries(cx: &Ctx, li: usize) -> Vec<GEntry> {
 fn applies(view: &View, o: &ObjCtx, entry: &GEntry, snap: &Snap) -> bool {
     let id = o.id;
     match entry.kind {
+        GKind::Retained { effect, st, first, binding } => {
+            (o.on_battlefield || st.everywhere)
+                && if st.continues {
+                    snap.parts.iter().any(|&(source, part)| source == effect.source && std::ptr::eq(part, first))
+                } else {
+                    (st.affects)(&view.as_text(binding.by), effect.source, id, &snap.chars)
+                }
+        }
         GKind::Static { source, st, first, continues, by } => {
             (o.on_battlefield || st.everywhere)
                 && if continues {
@@ -1899,6 +2000,7 @@ fn strippers_present(cards: &CardTable, state: &GameState) -> bool {
 /// What `entry` does to the object, which it applies to.
 fn apply_raw(view: &View, layer: Layer, id: ObjectId, entry: &GEntry, chars: &mut Chars) {
     match entry.kind {
+        GKind::Retained { effect, st, binding, .. } => apply_static(st, &view.as_text(binding.by), effect.source, id, chars),
         GKind::Static { source, st, by, .. } => apply_static(st, &view.as_text(by), source, id, chars),
         GKind::Given { holder, st, by, .. } => apply_static(st, &View { asking: Some(by), ..*view }, holder, id, chars),
         GKind::Effect(e) => apply_effect(view.cards, &e, layer, chars),
@@ -1931,6 +2033,11 @@ fn apply_entry(cx: &Ctx, o: &ObjCtx, entry: &GEntry, stage: &Stage, snap: &mut S
     if noting && let GKind::Static { source, st, continues: false, .. } = entry.kind {
         snap.parts.push((source, st));
     }
+    if noting && let GKind::Retained { effect, st, .. } = entry.kind
+        && !st.continues
+    {
+        snap.parts.push((effect.source, st));
+    }
 }
 
 /// The objects an entry could apply to: a static ability's, every permanent (a phased-out one is treated as though it
@@ -1939,7 +2046,7 @@ fn apply_entry(cx: &Ctx, o: &ObjCtx, entry: &GEntry, stage: &Stage, snap: &mut S
 fn candidates(cx: &Ctx, entry: &GEntry) -> Vec<ObjectId> {
     let state = cx.state;
     match entry.kind {
-        GKind::Static { st, .. } if st.everywhere => state
+        GKind::Static { st, .. } | GKind::Retained { st, .. } if st.everywhere => state
             .zones
             .iter()
             .flatten()
@@ -1949,7 +2056,7 @@ fn candidates(cx: &Ctx, entry: &GEntry) -> Vec<ObjectId> {
                 !obj.zone.is(ZoneKind::Sideboard) && !obj.zone.is(ZoneKind::PhasedOut) && obj.became.is_none()
             })
             .collect(),
-        GKind::Static { .. } | GKind::Given { .. } => state.battlefield().to_vec(),
+        GKind::Static { .. } | GKind::Given { .. } | GKind::Retained { .. } => state.battlefield().to_vec(),
         GKind::Effect(e) => vec![e.affected],
         GKind::Granted { holder, .. } => vec![holder],
     }
@@ -2820,6 +2927,11 @@ pub fn control_order(cards: &CardTable, state: &GameState, log: &[Record]) -> Ve
         }
     }
     for e in &state.effects {
+        if let Some((st, _, binding)) = retained_static(cards, e)
+            && st.layer == Layer::Control
+        {
+            entries.push((e.timestamp, 0, Control::Static { source: e.source, st, by: binding.by }));
+        }
         if let EffectKind::Control(to) = e.kind
             && objects.contains(&e.affected)
         {
@@ -3445,8 +3557,11 @@ pub fn lost_all_abilities(cards: &CardTable, state: &GameState, log: &[Record], 
 /// (`applies`). Where none does, a card judged as the face it would be cast as where it is (`chars_as_face`) has what that
 /// spell would have on the stack.
 pub fn statics_everywhere(cards: &CardTable, state: &GameState) -> bool {
-    state.statics_seen
-        && static_sources(cards, state).list.iter().any(|&(source, _, _)| statics_of(cards, state, source).any(|st| st.everywhere))
+    state.statics_seen && {
+        let found = static_sources(cards, state);
+        found.retained_rules & 2 != 0
+            || found.list.iter().any(|&(source, _, _)| statics_of(cards, state, source).any(|st| st.everywhere))
+    }
 }
 
 /// Whether any static ability could apply to an object on the battlefield: a permanent, emblem or card whose card has static
@@ -3455,7 +3570,7 @@ pub fn statics_everywhere(cards: &CardTable, state: &GameState) -> bool {
 pub fn static_sources_present(cards: &CardTable, state: &GameState) -> bool {
     state.statics_seen && {
         let found = static_sources(cards, state);
-        !found.list.is_empty() || !found.honed.is_empty() || !found.granted.is_empty()
+        !found.list.is_empty() || !found.honed.is_empty() || !found.granted.is_empty() || found.retained_layers != 0
     }
 }
 
@@ -3466,7 +3581,7 @@ pub fn static_sources_present(cards: &CardTable, state: &GameState) -> bool {
 pub fn abilities_may_be_lost(cards: &CardTable, state: &GameState) -> bool {
     state.statics_seen && {
         let found = static_sources(cards, state);
-        !found.strippers.is_empty() || !found.setters.is_empty()
+        !found.strippers.is_empty() || !found.setters.is_empty() || found.retained_rules & 5 != 0
     }
 }
 
@@ -3863,6 +3978,106 @@ mod tests {
         let relic = chars(&cards, &state, &[], ids[1]);
         assert!(relic.is(CardType::Creature) && relic.is(CardType::Artifact));
         assert_eq!((relic.power, relic.toughness), (Some(2), Some(2)));
+    }
+
+    static LINGERING: CardDef = CardDef {
+        name: "Lingering Animator",
+        types: TypeSet::of(&[CardType::Enchantment]),
+        statics: &[
+            static_ability(Layer::Type, noncreature_artifact, creature_too, "").lingers_until_end_of_turn(),
+            loses_all_abilities(noncreature_artifact, "").continues(),
+            static_ability(Layer::PtSet, noncreature_artifact, base::<2, 2>, "").continues(),
+        ],
+        ..CardDef::BLANK
+    };
+
+    // CR 611.3a: Song's explicitly extended effect keeps its dynamic subject set, including
+    // objects arriving after departure and when no artifact existed as it departed.
+    #[test]
+    fn retained_statics_reach_later_objects_and_undo_with_the_departure() {
+        let cards = CardTable::new([&LINGERING, &RELIC]);
+        let (mut state, ids) = battlefield(&cards, &["Lingering Animator"]);
+        let source = ids[0];
+        let retained = departing_statics(&cards, &state, &[], &[source]);
+        assert_eq!(retained.len(), 3);
+        assert!(retained.iter().all(|e| e.timestamp == 1 && e.kind.outlives_affected()));
+        let mark = state.mark();
+        state.zone_remove(Zone::BATTLEFIELD, source);
+        state.update_obj(source, |o| o.zone = Zone::GONE);
+        for effect in retained { state.effect_push(effect); }
+        let id = state.push_obj(Obj::new(cards.find("Relic").unwrap(), PlayerId(0), Zone::BATTLEFIELD));
+        state.zone_push(Zone::BATTLEFIELD, id);
+        assert_eq!(pt(&cards, &state, id), (Some(2), Some(2)));
+        assert!(lost_all_abilities(&cards, &state, &[], id));
+        state.effects_retain(|e| e.duration != Duration::EndOfTurn);
+        assert_eq!(pt(&cards, &state, id), (None, None));
+        state.revert(mark);
+        assert_eq!(state.battlefield(), [source]);
+        assert!(state.effects.is_empty());
+        assert_eq!(departing_statics(&cards, &state, &[], &[source]).len(), 3);
+    }
+
+    // CR 613.6: losing the ability in layer 6 does not undo the effect that started in layer 4.
+    #[test]
+    fn retained_statics_begin_before_ability_loss_and_preserve_the_old_timestamp() {
+        let cards = CardTable::new([&LINGERING, &RELIC]);
+        let (mut state, ids) = battlefield(&cards, &["Lingering Animator", "Relic"]);
+        let (source, relic) = (ids[0], ids[1]);
+        state.effect_push(ContinuousEffect { source, affected: source, ..effect(10, EffectKind::LoseAllAbilities) });
+        let retained = departing_statics(&cards, &state, &[], &[source]);
+        assert_eq!(retained.len(), 3);
+        state.zone_remove(Zone::BATTLEFIELD, source);
+        state.update_obj(source, |o| o.zone = Zone::GONE);
+        for effect in retained { state.effect_push(effect); }
+        state.effect_push(ContinuousEffect { source, affected: relic, ..effect(5, EffectKind::SetPt(3, 4)) });
+        assert_eq!(pt(&cards, &state, relic), (Some(3), Some(4)));
+    }
+
+    // CR 305.7, 613.8: text removed before the first part can start produces no surviving effect.
+    #[test]
+    fn retained_statics_do_not_resurrect_text_removed_in_the_first_layer() {
+        let cards = CardTable::new([&LINGERING, &RELIC]);
+        let (mut state, ids) = battlefield(&cards, &["Lingering Animator", "Relic"]);
+        let source = ids[0];
+        state.effect_push(ContinuousEffect { source, affected: source, ..effect(0, EffectKind::AddTypes(types(&[CardType::Land]))) });
+        state.effect_push(ContinuousEffect { source, affected: source, ..effect(0, EffectKind::SetLandType(Subtype::Swamp)) });
+        assert!(chars(&cards, &state, &[], source).text_lost);
+        assert!(departing_statics(&cards, &state, &[], &[source]).is_empty());
+    }
+
+    // CR 707.2, 613.7: a copied static ability keeps the actual definition and the copy's timestamp.
+    #[test]
+    fn retained_statics_capture_copied_definitions_and_distinct_sources() {
+        let cards = CardTable::new([&LINGERING, &RELIC]);
+        let (mut state, ids) = battlefield(&cards, &["Lingering Animator", "Relic"]);
+        let copied = ids[1];
+        state.update_obj(copied, |o| o.copy = Some(Copiable::of(cards.find("Lingering Animator").unwrap())));
+        let retained = departing_statics(&cards, &state, &[], &ids);
+        assert_eq!(retained.len(), 6);
+        assert_eq!(retained.iter().filter(|e| e.source == copied && e.timestamp == 2).count(), 3);
+        assert!(retained.iter().all(|e| matches!(e.kind, EffectKind::RetainedStatic(binding)
+            if binding.definition.card == cards.find("Lingering Animator").unwrap())));
+    }
+
+    // Phasing is not leaving the battlefield (CR 702.26d). No new lifetime starts for it.
+    #[test]
+    fn retained_statics_do_not_capture_a_phased_out_source() {
+        let cards = CardTable::new([&LINGERING, &RELIC]);
+        let (mut state, ids) = battlefield(&cards, &["Lingering Animator"]);
+        state.zone_remove(Zone::BATTLEFIELD, ids[0]);
+        state.update_obj(ids[0], |o| o.zone = Zone::PHASED_OUT);
+        state.zone_push(Zone::PHASED_OUT, ids[0]);
+        assert!(departing_statics(&cards, &state, &[], &ids).is_empty());
+    }
+
+    #[test]
+    fn retained_statics_do_not_grow_hot_state_layouts() {
+        assert_eq!(std::mem::size_of::<GameState>(), 1240);
+        assert_eq!(std::mem::size_of::<Obj>(), 896);
+        assert_eq!(std::mem::size_of::<Event>(), 28);
+        assert_eq!(std::mem::size_of::<Record>(), 52);
+        eprintln!("EffectKind={} ContinuousEffect={} StaticDef={}", std::mem::size_of::<EffectKind>(),
+            std::mem::size_of::<ContinuousEffect>(), std::mem::size_of::<StaticDef>());
     }
 
     /// CR 613.6, 613.1f, 613.7 (the rulings of Opalescence and Humility): an Opalescence that loses its abilities to

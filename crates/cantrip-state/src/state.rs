@@ -250,12 +250,17 @@ pub struct StaticSources {
     /// Whether a source of `list` has a static ability that continues an effect begun in an earlier layer
     /// (`StaticDef::continues`, CR 613.6): only then do the layers note which effects began to apply to an object.
     pub continuing: bool,
+    /// A live static source has an effect that may continue after departure.
+    pub lingering: bool,
+    /// Layer and rule interests of retained static effects, derived with the live source lists.
+    pub retained_layers: u16,
+    pub retained_rules: u8,
 }
 
 impl StaticSources {
     /// None found yet: found again at the next question.
     pub fn none() -> StaticSources {
-        StaticSources { epoch: u64::MAX, list: Vec::new(), strippers: Vec::new(), setters: Vec::new(), controllers: Vec::new(), honed: Vec::new(), granted: Vec::new(), targeting: Vec::new(), continuing: false }
+        StaticSources { epoch: u64::MAX, list: Vec::new(), strippers: Vec::new(), setters: Vec::new(), controllers: Vec::new(), honed: Vec::new(), granted: Vec::new(), targeting: Vec::new(), continuing: false, lingering: false, retained_layers: 0, retained_rules: 0 }
     }
 }
 
