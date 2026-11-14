@@ -1,0 +1,76 @@
+# Fear of Burning Alive's delirium ability answers noncombat damage of exactly 1 (CR 120.2b, 603.2): "that amount" is the
+# smallest damage there is. Turns 1-3 are as in the other delirium scenario: the Wheel of Fortune leaves four card types in
+# Bot1's graveyard (CR 207.2c), Bot2 casts an Aegis Turtle (0/5) and Bot1 casts Fear, whose 4 damage to Bot2 triggers it and
+# hits the Turtle for 4. Turn 5, the Turtle healed, Bot1's Fanatical Firebrand (haste) pings Bot2 for 1: the ability
+# triggers and the Turtle is dealt exactly 1.
+
+[Bot1 Deck]
+Black Lotus
+Wheel of Fortune
+Island
+Ornithopter
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mountain
+Mox Sapphire
+Mox Emerald
+Fear of Burning Alive
+Fanatical Firebrand
+Island x8
+
+[Bot2 Deck]
+Island x7
+Island
+Mox Ruby
+Aegis Turtle
+Island x9
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aegis Turtle.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Fear of Burning Alive.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+? Bot2.Battlefield.Aegis Turtle.Damage = 4
+[T5 Bot1.Main1]
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Fanatical Firebrand.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 15
+? Stack = Fear of Burning Alive
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 15
+Bot2.Battlefield.Aegis Turtle.Damage = 1

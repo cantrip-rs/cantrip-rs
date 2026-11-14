@@ -1,0 +1,95 @@
+# Fear of Burning Alive's delirium ability needs four card types among cards in its controller's graveyard and noncombat damage to
+# an opponent (CR 120.2, 603.4). Turn 1: Bot1 casts an Ornithopter and three Moxen and pays Wheel of Fortune with Black Lotus,
+# so the graveyard holds Black Lotus (artifact), the Wheel (sorcery) and a discarded Island (land): three types, one short.
+# Turn 3 Fear's enters trigger deals 4 to Bot2 and the delirium ability does not trigger (the stack is empty). Turn 5 a Lightning
+# Bolt to Bot2's face does not trigger it either (the Bolt is still on the stack, not in the graveyard); with the Bolt in the graveyard
+# there are four types, and a second Bolt dealing 3 to Bot2's Steel Wall does not trigger it (a creature is not an opponent), nor does
+# Fear's own combat damage to Bot2 (combat damage is not noncombat damage).
+
+[Bot1 Deck]
+Black Lotus
+Wheel of Fortune
+Island
+Ornithopter
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mountain
+Mox Sapphire
+Mox Emerald
+Fear of Burning Alive
+Lightning Bolt
+Lightning Bolt
+Island x7
+
+[Bot2 Deck]
+Island x7
+Island
+Mox Sapphire
+Aegis Turtle
+Steel Wall
+Island x9
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Steel Wall.Cast
+[T3 Bot1.Main1]
+? Bot1.Graveyard.Count = 3
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Fear of Burning Alive.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack = Fear of Burning Alive
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+? Stack.Count = 0
+[T5 Bot1.Main1]
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 13
+? Stack.Count = 0
+? Bot2.Battlefield.Steel Wall.Damage = 0
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Steel Wall)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Steel Wall.Damage = 3
+? Stack.Count = 0
+? Bot1.Graveyard.Count = 5
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Fear of Burning Alive > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T5 Bot1.Main2]
+? Bot2.Life = 9
+
+[Expect]
+Bot2.Life = 9
+Bot2.Battlefield.Steel Wall.Damage = 3
+Bot2.Battlefield.Aegis Turtle.Damage = 0
+Bot1.Graveyard.Count = 5

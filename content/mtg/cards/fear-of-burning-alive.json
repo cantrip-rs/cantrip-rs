@@ -1,0 +1,8 @@
+{
+  "name": "Fear of Burning Alive",
+  "manaCost": "{4}{R}{R}",
+  "type": "Enchantment Creature — Nightmare",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "When this creature enters, it deals 4 damage to each opponent.\nDelirium — Whenever a source you control deals noncombat damage to an opponent, if there are four or more card types among cards in your graveyard, this creature deals that amount of damage to target creature that player controls."
+}

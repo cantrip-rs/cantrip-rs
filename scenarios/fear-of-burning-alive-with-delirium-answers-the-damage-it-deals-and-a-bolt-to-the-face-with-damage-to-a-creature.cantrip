@@ -1,0 +1,107 @@
+# Fear of Burning Alive: "When this creature enters, it deals 4 damage to each opponent." and "Delirium - Whenever a source you
+# control deals noncombat damage to an opponent, if there are four or more card types among cards in your graveyard, this creature
+# deals that amount of damage to target creature that player controls." Turn 1: Bot1 casts three Moxen, then Black Lotus pays for
+# Wheel of Fortune, which puts Black Lotus (artifact), the Wheel (sorcery), an Ornithopter (artifact creature) and an Island (land)
+# into Bot1's graveyard: exactly four types (CR 207.2c). The Wheel makes Bot2 discard and draw seven too. Turn 2 Bot2 casts an
+# Aegis Turtle (0/5). Turn 3 Bot1 casts Fear with six mana: its own enters trigger deals 4 to Bot2 (a source Bot1 controls), the
+# delirium ability triggers (Bot2's Turtle is the one creature it can target) and the Turtle is dealt exactly 4. Turn 4 Bot2's own
+# Lightning Bolt to its own face (a source Bot2 controls, not Bot1) does not trigger it. Bot2 then casts a Steel Wall (0/4). Turn 5
+# Bot1's Bolt to its own face (not an opponent) does not trigger it; a Bolt to Bot2's face (3 noncombat damage by a spell Bot1
+# controls, CR 120.2b) does: Bot1's own Fear is refused as a target and the Steel Wall is dealt exactly 3, the Turtle healed.
+
+[Bot1 Deck]
+Black Lotus
+Wheel of Fortune
+Island
+Ornithopter
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mountain
+Mox Sapphire
+Mox Emerald
+Fear of Burning Alive
+Lightning Bolt
+Lightning Bolt
+Island x7
+
+[Bot2 Deck]
+Island x7
+Island
+Mox Ruby
+Aegis Turtle
+Steel Wall
+Lightning Bolt
+Island x8
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aegis Turtle.Cast
+[T3 Bot1.Main1]
+? Bot1.Graveyard.Count = 4
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Fear of Burning Alive.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack = Fear of Burning Alive
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+? Stack = Fear of Burning Alive
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Aegis Turtle.Damage = 4
+? Bot1.Battlefield.Fear of Burning Alive.Damage = 0
+[T4 Bot2.Main1]
+Bot2.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 13
+? Stack.Count = 0
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Steel Wall.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+? Stack.Count = 0
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 10
+! Bot1.Target(Fear of Burning Alive)
+Bot1.Target(Steel Wall)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 10
+Bot1.Life = 17
+Bot2.Battlefield.Steel Wall.Damage = 3
+Bot2.Battlefield.Aegis Turtle.Damage = 0
+Bot1.Battlefield.Fear of Burning Alive.Damage = 0
