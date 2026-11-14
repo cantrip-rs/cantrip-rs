@@ -1,0 +1,11 @@
+{
+  "name": "Elfsworn Giant",
+  "manaCost": "{3}{G}{G}",
+  "type": "Creature — Giant",
+  "power": 5,
+  "toughness": 3,
+  "oracleText": "Reach (This creature can block creatures with flying.)\nLandfall — Whenever a land you control enters, create a 1/1 green Elf Warrior creature token.",
+  "keywords": [
+    "Reach"
+  ]
+}

@@ -1,0 +1,55 @@
+# Elfsworn Giant's landfall (CR 603.6a, 111.1): Bot1's Forest entering after the Giant makes a 1/1 green Elf Warrior token, Bot2's Island entering on turn 2 makes
+# none, and Bot1's next Forest makes a second token. The Giant entering is not a land entering. Reach is shown.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Elfsworn Giant
+Forest
+Forest
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Elfsworn Giant.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 3
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elf Warrior Token.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Elf Warrior Token#1.Power = 1
+Bot1.Battlefield.Elf Warrior Token#1.Toughness = 1
+Bot1.Battlefield.Elf Warrior Token#1.Colors = Green
+Bot1.Battlefield.Elf Warrior Token#2.Power = 1
+Bot1.Battlefield.Elf Warrior Token#3 = (absent)
+Bot1.Battlefield.Elfsworn Giant.Keywords = Reach
+Bot2.Battlefield.Count = 1

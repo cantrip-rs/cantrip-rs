@@ -1,0 +1,54 @@
+# Elfsworn Giant's landfall (CR 603.2, 603.6a): kicked Grow from the Ashes puts two Forests onto the battlefield at once, and each land entering triggers
+# the Giant, so two 1/1 green Elf Warrior tokens are made (not one). The lands are put onto the battlefield, not played; landfall still sees them enter.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Mox Jet
+Elfsworn Giant
+Island
+Island
+Grow from the Ashes
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Elfsworn Giant.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grow from the Ashes.Cast(Kicked: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Forest#1; Forest#2)
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Forest#1.Tapped = false
+Bot1.Battlefield.Forest#2.Tapped = false
+Bot1.Battlefield.Elf Warrior Token#1.Power = 1
+Bot1.Battlefield.Elf Warrior Token#1.Toughness = 1
+Bot1.Battlefield.Elf Warrior Token#2.Power = 1
+Bot1.Battlefield.Elf Warrior Token#2.Colors = Green
+Bot1.Battlefield.Elf Warrior Token#3 = (absent)
