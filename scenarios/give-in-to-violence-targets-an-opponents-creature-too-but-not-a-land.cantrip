@@ -1,0 +1,32 @@
+# Give In to Violence says "target creature", with no controller restriction: Bot1 gives Bot2's Memnite +2/+2 and lifelink (a 3/3
+# with lifelink). A Mox Jet is not a creature and cannot be targeted (CR 115.4).
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Give In to Violence
+Swamp x17
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+! Bot1.Hand.Give In to Violence.Cast(Bot1.Battlefield.Mox Jet#1)
+Bot1.Hand.Give In to Violence.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Power = 3
+? Bot2.Battlefield.Memnite.Toughness = 3
+
+[Expect]
+Bot2.Battlefield.Memnite.Keywords = Lifelink

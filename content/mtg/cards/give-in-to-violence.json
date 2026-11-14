@@ -1,0 +1,6 @@
+{
+  "name": "Give In to Violence",
+  "manaCost": "{1}{B}",
+  "type": "Instant",
+  "oracleText": "Target creature gets +2/+2 and gains lifelink until end of turn."
+}
