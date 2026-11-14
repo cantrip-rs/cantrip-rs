@@ -91,6 +91,21 @@ pub fn search_for_two_basic_lands_onto_the_battlefield_tapped(g: &mut dyn Game, 
     Ok(())
 }
 
+/// "You may sacrifice [`what`]. If you do, search your library for [`rule`], put them onto the battlefield tapped, then
+/// shuffle." (CR 701.21a, 701.23, 701.24): declining is the empty answer to an up-to-one choice, and only a sacrifice that
+/// happened lets the search happen. Fewer cards than `rule` allows may be found, or none, and the library is shuffled whenever
+/// it is searched. `what` is up to one of the controller's permanents, `select::land_cards(select::up_to(1))` for a land.
+/// Larval Scoutlander (a land or Lander) and Springbloom Druid (a land) print it.
+pub fn may_sacrifice_to_find_to_battlefield_tapped(g: &mut dyn Game, item: &StackItem, what: Selection, rule: Selection) -> Result<(), Suspend> {
+    let you = item.controller;
+    // "If you do" is what was actually sacrificed (CR 608.2c), not what was chosen.
+    if crate::effects::may_sacrifice(g, you, item.object, what)?.is_empty() {
+        return Ok(());
+    }
+    find_to_battlefield(g, you, item.object, rule, true)?;
+    Ok(())
+}
+
 /// "Search your library for [`rule`], put it into your graveyard, then shuffle" (CR 701.23). Entomb (`select::CARD`) and
 /// Goblin Engineer (`select::ARTIFACT_CARD`) print it.
 pub fn find_to_graveyard(g: &mut dyn Game, player: PlayerId, source: ObjectId, rule: Selection) -> Result<Vec<ObjectId>, Suspend> {

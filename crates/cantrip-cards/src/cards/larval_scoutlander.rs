@@ -1,7 +1,7 @@
 use cantrip_api::select::{Choice, SelectFn, Verdict};
 use cantrip_api::*;
 use cantrip_mechanics::triggers::THIS_ENTERS;
-use cantrip_mechanics::{choose, library, select, statics, station};
+use cantrip_mechanics::{library, select, statics, station};
 use cantrip_oracle as oracle;
 
 const SEVEN_PLUS: &str = "7+ | Flying";
@@ -21,15 +21,8 @@ fn land_or_lander(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
 /// only a sacrifice that happened lets the search happen; fewer than two lands may be found, or none, and the library is
 /// shuffled whenever it is searched.
 fn sacrifice_to_search(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let you = item.controller;
-    let permanents = g.permanents_of(you);
     let rule = select::cards(select::up_to(1)).with(select::part(&(land_or_lander as SelectFn), 0, "")).called("land or Lander");
-    let chosen = choose::select(g, you, item.object, Purpose::Sacrifice, permanents, rule)?;
-    let Some(&permanent) = chosen.first() else { return Ok(()) };
-    // A permanent of your own is always yours to sacrifice to your own ability (CR 701.21a): chosen, it is sacrificed.
-    g.sacrifice(you, &[permanent]);
-    library::find_to_battlefield(g, you, item.object, select::basic_land_cards(select::up_to(2)), true)?;
-    Ok(())
+    library::may_sacrifice_to_find_to_battlefield_tapped(g, item, rule, select::basic_land_cards(select::up_to(2)))
 }
 
 pub static CARD: CardDef = CardDef {
