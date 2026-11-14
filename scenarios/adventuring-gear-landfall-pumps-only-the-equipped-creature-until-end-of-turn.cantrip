@@ -1,0 +1,57 @@
+# Adventuring Gear {1}, Equip {1}: "Landfall -- Whenever a land you control enters, equipped creature gets +2/+2 until end of
+# turn." On turn 1 a land enters while nothing is equipped: the trigger does nothing. Equip is refused with no mana (one short).
+# On turn 3 one Mox pays the equip {1}; playing a Forest then makes the equipped Memnite 3/3 (the unequipped Ornithopter stays
+# 0/2), it hits Bot2 for 3, and the bonus is gone after the turn. Bot2's own land entering on turn 4 pumps nothing.
+
+[Bot1 Deck]
+Forest
+Forest
+Mox Ruby
+Memnite
+Ornithopter
+Adventuring Gear
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Adventuring Gear.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Adventuring Gear.Activate(Ability: Equip; Memnite; Mana: short)
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Adventuring Gear.Activate(Ability: Equip; Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 3
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Adventuring Gear.AttachedTo = Memnite
+Bot1.Battlefield.Memnite.Power = 1
