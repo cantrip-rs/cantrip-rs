@@ -331,6 +331,19 @@ pub fn cards_at_random_from_hand(g: &mut dyn Game, player: PlayerId, count: usiz
     hand
 }
 
+/// "Target player sacrifices a creature of their choice" (CR 701.21a, 608.2b): the first target player, who chooses when they control more than one creature and has it taken without
+/// asking when there is only one; the creatures that left (none if they control none, or the target is no longer legal). Only the player is targeted, so a creature's hexproof does not
+/// matter. Tribute to Hunger and Cornered by Black Mages use what left.
+pub fn first_target_player_sacrifices_a_creature(g: &mut dyn Game, item: &StackItem) -> Result<LeftBattlefield, Suspend> {
+    let Some(player) = targets::player(g, item, 0) else { return Ok(LeftBattlefield::new(Vec::new(), Vec::new())) };
+    sacrifice_chosen(g, player, item.object, 1, |chars| chars.is(CardType::Creature))
+}
+
+/// "Target player sacrifices a creature of their choice" (CR 701.21a) as an effect callback. Diabolic Edict, Crude Bent Blade and Gatekeeper of Malakir print it.
+pub fn target_player_sacrifices_a_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    first_target_player_sacrifices_a_creature(g, item).map(drop)
+}
+
 /// "[Player] sacrifices a [kind]" (CR 701.21): chosen by that player when there is a choice, taken when there is not.
 pub fn sacrifice_chosen(
     g: &mut dyn Game,
