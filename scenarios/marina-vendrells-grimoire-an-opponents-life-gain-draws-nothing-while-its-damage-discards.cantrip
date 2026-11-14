@@ -1,0 +1,62 @@
+# "Whenever you gain life" and "Whenever you lose life" are about the Grimoire's controller alone. Bot1 casts it on turn 1 (a
+# hand of six). Bot2's Lightning Helix gains Bot2 3 life (23) and deals Bot1 3 damage: Bot1 draws nothing for Bot2's gain,
+# and discards three (Forest, Swamp, Island) for its own loss, keeping three cards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Marina Vendrell's Grimoire
+Island
+Forest
+Swamp
+Plains
+Mountain
+Island
+Island x9
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Lightning Helix
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Marina Vendrell's Grimoire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 6
+? Bot1.Library.Count = 9
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Lightning Helix.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 23
+? Bot1.Life = 17
+? Bot1.Hand.Count = 6
+Bot1.Choose(Forest; Swamp; Island)
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Library.Count = 9
+Bot2.Life = 23
+Bot1.Life = 17
+Result = InProgress

@@ -1,0 +1,40 @@
+# Marina Vendrell's Grimoire: "When Marina Vendrell's Grimoire enters, if you cast it, draw five cards." Bot1 casts it on turn 1
+# with Black Lotus and four Moxen (Lotus's three plus three Moxen make {5}{U}): after the trigger resolves it has drawn exactly five cards
+# (CR 121.1, 603.4). The Island it kept in hand is the sixth card.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Marina Vendrell's Grimoire
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Library.Count = 13
+? Bot1.Hand.Count = 2
+Bot1.Hand.Marina Vendrell's Grimoire.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 13
+? Bot1.Battlefield.Marina Vendrell's Grimoire.Types = Artifact
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Library.Count = 8
+Bot1.Hand.Count = 6
+Bot1.Life = 20
