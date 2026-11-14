@@ -1,0 +1,24 @@
+# A Forest tapped for mana produces only the substituted mana (CR 614.1a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Naked Singularity
+Forest
+Island x20
+[Bot2 Deck]
+Island x24
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Naked Singularity.Cast
+? Bot1.Mana =
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+? Bot1.Mana = {B}
+[Expect]
+Bot1.Battlefield.Naked Singularity.Types = Artifact

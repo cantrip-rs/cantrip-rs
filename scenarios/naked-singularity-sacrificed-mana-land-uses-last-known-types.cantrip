@@ -1,0 +1,32 @@
+# An all-basic-types land sacrificed as a mana cost keeps its last-known types for the replacement (CR 106.12, 608.2h).
+[Bot1 Deck]
+Black Lotus x2
+Mox Pearl
+Mox Jet
+Naked Singularity
+Prismatic Omen
+Dwarven Ruins
+Forest x20
+[Bot2 Deck]
+Island x24
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Prismatic Omen.Cast
+Bot1.Hand.Dwarven Ruins.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Naked Singularity.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Dwarven Ruins.Activate(Ability: Sacrifice)
+Bot1.Modes(5)
+? Bot1.Mana = {B}{B}
+[Expect]
+Bot1.Graveyard = Dwarven Ruins; Black Lotus; Black Lotus

@@ -1,0 +1,6 @@
+{
+  "name": "Naked Singularity",
+  "manaCost": "{5}",
+  "type": "Artifact",
+  "oracleText": "Cumulative upkeep {3} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nIf tapped for mana, Plains produce {R}, Islands produce {G}, Swamps produce {W}, Mountains produce {U}, and Forests produce {B} instead of any other type."
+}

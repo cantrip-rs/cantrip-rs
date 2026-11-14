@@ -1,0 +1,26 @@
+# The player chooses the output of one replacement effect (CR 614.5, 106.12b).
+[Bot1 Deck]
+Black Lotus x2
+Mox Pearl
+Naked Singularity
+Prismatic Omen
+Tolarian Academy
+Forest x20
+[Bot2 Deck]
+Island x24
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Prismatic Omen.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Naked Singularity.Cast
+? Bot1.Mana =
+Bot1.Hand.Tolarian Academy.Play
+Bot1.Battlefield.Tolarian Academy.Activate(Ability: for each artifact)
+Bot1.Modes(5)
+? Bot1.Mana = {B}{B}
+[Expect]
+Bot1.Battlefield.Naked Singularity.Types = Artifact

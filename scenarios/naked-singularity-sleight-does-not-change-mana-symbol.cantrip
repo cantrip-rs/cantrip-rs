@@ -1,0 +1,31 @@
+# Sleight of Mind changes color words, not the printed mana symbol {G} (CR 612.2, 107.4).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Naked Singularity
+Sleight of Mind
+Island
+Island x20
+[Bot2 Deck]
+Island x24
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Naked Singularity.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleight of Mind.Cast(Naked Singularity)
+Bot1.Colors(Green)
+Bot1.Colors(Red)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+? Bot1.Mana = {G}
+[Expect]
+Bot1.Battlefield.Naked Singularity.Types = Artifact

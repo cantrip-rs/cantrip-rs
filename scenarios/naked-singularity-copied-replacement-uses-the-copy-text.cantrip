@@ -1,0 +1,37 @@
+# Copy Artifact copies the replacement; returning the original leaves the copy changing an opponent's Plains (CR 707.2, 614.1).
+[Bot1 Deck]
+Black Lotus x3
+Mox Pearl
+Naked Singularity
+Copy Artifact
+Boomerang
+Island x20
+[Bot2 Deck]
+Plains
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Naked Singularity.Cast
+? Bot1.Mana = {W}
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Copy Artifact.Cast
+Bot1.Accept
+Bot1.Target(Bot1.Battlefield.Naked Singularity)
+? Bot1.Mana = {U}{U}
+Bot1.Hand.Boomerang.Cast(Bot1.Battlefield.Naked Singularity#1)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+? Bot2.Mana = {R}
+[Expect]
+Bot1.Hand = Naked Singularity
+Bot1.Battlefield.Naked Singularity.Types = Artifact; Enchantment

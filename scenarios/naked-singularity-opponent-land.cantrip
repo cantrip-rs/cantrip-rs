@@ -1,0 +1,29 @@
+# The replacement also applies to an opponent's land; a nonland mana source remains unchanged (CR 614.1a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Naked Singularity
+Forest x20
+[Bot2 Deck]
+Island
+Mox Ruby
+Island x22
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Naked Singularity.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Ruby.Activate
+? Bot2.Mana = {R}
+Bot2.Battlefield.Island.Activate
+? Bot2.Mana = {R}{G}
+[Expect]
+Bot1.Battlefield.Naked Singularity.Types = Artifact

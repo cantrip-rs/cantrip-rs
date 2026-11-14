@@ -1,0 +1,25 @@
+# The player chooses the output of one replacement effect (CR 614.5, 106.12b).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Naked Singularity
+Tundra
+Island x20
+[Bot2 Deck]
+Island x24
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Naked Singularity.Cast
+? Bot1.Mana =
+Bot1.Hand.Tundra.Play
+Bot1.Battlefield.Tundra.Activate(Ability: {W})
+Bot1.Modes(1)
+? Bot1.Mana = {R}
+[Expect]
+Bot1.Battlefield.Naked Singularity.Types = Artifact
