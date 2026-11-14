@@ -1,0 +1,48 @@
+# "When this creature enters, you may sacrifice another creature or enchantment. When you do, this creature deals 2 damage to any
+# target" (CR 701.21a, 603.12, 120.2b). Bot1 sacrifices its Fastbond (an enchantment) as the enter trigger resolves, and the reflexive
+# trigger that follows deals exactly 2 to Bot2. Neither the Ripper itself ("another") nor a Mox (an artifact, not a creature or an
+# enchantment) may be sacrificed, and a Mox is not a legal target (it is not a creature, player, planeswalker or battle).
+
+[Bot1 Deck]
+Boilerbilges Ripper
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Fastbond
+Mox Emerald
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Fastbond.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Boilerbilges Ripper.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+! Bot1.Choose(Boilerbilges Ripper)
+! Bot1.Choose(Mox Ruby)
+Bot1.Choose(Fastbond)
+! Bot1.Target(Mox Ruby)
+Bot1.Target(Bot2)
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 20
+Bot1.Graveyard = Fastbond
+Bot1.Battlefield.Boilerbilges Ripper.Power = 4
