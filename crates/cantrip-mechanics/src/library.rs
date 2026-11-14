@@ -883,6 +883,35 @@ pub fn look_at_top_take_some_rest_to_graveyard(g: &mut dyn Game, player: PlayerI
     top_take_one_rest_to_graveyard(g, player, source, count, false, (take, take), |_| true)
 }
 
+/// "Look at the top `N` cards of your library. You may put one of those cards back on top of your library. Put the rest into your
+/// graveyard." (CR 701.20, 401.4, 404.3) as an ability's whole effect: a library of fewer than `N` shows what it has (CR 609.3)
+/// and one of none does nothing. The card kept is left where it is, the top of what remains once the rest have gone; the rest go
+/// to the graveyard together, in the order their owner arranges them. Gurmag Nightwatch and Gutless Plunderer (3) print it.
+pub fn look_at_top_may_put_one_back_rest_to_graveyard<const N: usize>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let player = item.controller;
+    let looked = top_of_library(g, player, N);
+    if looked.is_empty() {
+        return Ok(());
+    }
+    g.look_at(player, &looked);
+    let ask = RequestKind::DistributeCards {
+        source: item.object,
+        cards: looked.clone(),
+        destinations: vec![
+            Destination { kind: DestinationKind::LibraryTop, min: 0, max: 1, eligible: looked.clone() },
+            Destination { kind: DestinationKind::Graveyard, min: 0, max: u8::MAX, eligible: looked.clone() },
+        ],
+        may_shuffle: false,
+    };
+    let mut kept = Vec::new();
+    if let Answer::Placements { placements, .. } = g.ask(player, ask)? {
+        kept = placements[0].clone();
+    }
+    let rest: Vec<ObjectId> = looked.into_iter().filter(|c| !kept.contains(c)).collect();
+    g.put_into_graveyard(&rest);
+    Ok(())
+}
+
 fn top_take_one_rest_to_graveyard(
     g: &mut dyn Game,
     player: PlayerId,
