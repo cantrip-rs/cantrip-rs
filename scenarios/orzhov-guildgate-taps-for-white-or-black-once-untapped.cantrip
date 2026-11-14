@@ -1,0 +1,23 @@
+# Orzhov Guildgate: once it has untapped it taps for {W} on one turn and {B} on the next (the color is chosen as the ability is
+# activated, CR 605.1a), never for another color or for colorless.
+
+[Bot1 Deck]
+Orzhov Guildgate
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Orzhov Guildgate.Play
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Orzhov Guildgate.Activate(Color: Red)
+! Bot1.Battlefield.Orzhov Guildgate.Activate(Color: Colorless)
+Bot1.Battlefield.Orzhov Guildgate.Activate(Color: White)
+? Bot1.Mana = {W}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Orzhov Guildgate.Activate(Color: Black)
+? Bot1.Mana = {B}
+
+[Expect]
+Bot1.Battlefield.Orzhov Guildgate.Tapped = true
