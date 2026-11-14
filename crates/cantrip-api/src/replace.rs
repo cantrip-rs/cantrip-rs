@@ -423,6 +423,8 @@ pub struct GrantedReplacementDef {
     pub then: Option<GrantedThen>,
     /// Additional components of a damage event; see [`ReplacementDamage`].
     pub damage: Option<GrantedDamage>,
+    /// The effect controller may decline this replacement (CR 614.1a).
+    pub optional: Option<&'static Question>,
     /// "The next time [an event] would happen this turn, ... instead" (CR 614.1a): the effect is used up by the one event it
     /// replaces, and ends as it applies; a second such effect waits for the next event.
     pub once: bool,

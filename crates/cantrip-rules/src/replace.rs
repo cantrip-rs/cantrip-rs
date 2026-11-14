@@ -625,6 +625,17 @@ fn candidates_for(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Opti
         if (def.applies)(&reads, &asker, e.affected, &selected)
             && valid_redirection(cx, &selected, |after| (def.apply)(&reads, &asker, e.affected, after))
         {
+            // An optional partial redirect cannot be offered when its destination has left (CR 614.9).
+            // Preview only this combination; `apply_granted` checks the same components when applying it.
+            if let (Some(_), Some(damage), Proposal::Damage(before)) = (def.optional, def.damage, selected) {
+                let mut after = selected;
+                (def.apply)(&reads, &asker, e.affected, &mut after);
+                normalize_damage(&mut after);
+                if let Proposal::Damage(after) = after {
+                    let components = damage(&reads, &asker, e.affected, &before, &after);
+                    if !valid_damage_components(cx, &selected, &components) { continue; }
+                }
+            }
             found.push(Candidate { source: e.source, index, origin: Origin::Granted(e.timestamp) });
         }
     }
@@ -1015,8 +1026,7 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
             pick
         } else { 0 };
         let chosen = found[pick];
-        if chosen.origin == Origin::Printed
-            && printed_replacement(cx, chosen.source, chosen.index).optional.is_some()
+        if candidate_optional(cx, chosen)
             && cx.concessions_here()
         {
             // Re-enter the loop to refresh both the proposal and its candidates, even if the old candidate would
@@ -1038,6 +1048,10 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
             }
             Origin::Granted(timestamp) => {
                 let Some((&e, def)) = granted(cx, timestamp) else { continue };
+                if def.optional.is_some_and(|q| !takes(cx, e.controller, source, q)) {
+                    if group_once { return Some(DamageProgress::Expanded { added, applied }); }
+                    continue;
+                }
                 apply_granted(cx, proposal, source, e, def, &applied, true, &mut added);
             }
             // "That player discards it, but exiles it instead of putting it into their graveyard" (CR 702.35a): the
@@ -1274,6 +1288,15 @@ fn printed_taken(cx: &mut Cx, source: ObjectId, index: u8, proposal: &Proposal) 
     takes(cx, controller, source, question)
 }
 
+/// Both standing and lasting effects use the same optional-choice procedure (CR 614.1a).
+fn candidate_optional(cx: &Cx, c: Candidate) -> bool {
+    match c.origin {
+        Origin::Printed => printed_replacement(cx, c.source, c.index).optional.is_some(),
+        Origin::Granted(timestamp) => granted(cx, timestamp).is_some_and(|(_, d)| d.optional.is_some()),
+        _ => false,
+    }
+}
+
 /// Damage quantities are nonnegative even though their expression domain is
 /// signed (CR 107.1b). Normalize before expansion/continuation reads the result.
 fn normalize_damage(proposal: &mut Proposal) {
@@ -1388,8 +1411,7 @@ fn apply_to_each_part(cx: &mut Cx, parts: &mut Vec<Proposal>) {
             let Some(pick) = choose(cx, &parts[0], &all) else { continue };
             all[pick]
         } else { first };
-        if chosen.origin == Origin::Printed
-            && printed_replacement(cx, chosen.source, chosen.index).optional.is_some()
+        if candidate_optional(cx, chosen)
             && cx.concessions_here()
         {
             found = parts.iter().map(|p| candidates(cx, p, &applied, None, [None; 8])).collect();
@@ -1415,6 +1437,7 @@ fn apply_to_each_part(cx: &mut Cx, parts: &mut Vec<Proposal>) {
             }
             Origin::Granted(timestamp) => {
                 let Some((&e, def)) = granted(cx, timestamp) else { continue };
+                if def.optional.is_some_and(|q| !takes(cx, e.controller, source, q)) { continue; }
                 let mut took = false;
                 for j in (0..parts.len()).filter(|&j| meets(j)) {
                     let mut added = Vec::new();
@@ -1519,10 +1542,7 @@ pub(crate) fn mana_outcomes(cx: &Cx, production: ManaProduction) -> Vec<ManaProd
         for c in found {
             applied.push((c.source, c.index, c.origin));
             // Declined, it has had its opportunity, and the event goes on as it was (CR 614.5, 616.1).
-            let optional = match c.origin {
-                Origin::Printed => printed_replacement(cx, c.source, c.index).optional.is_some(),
-                _ => false,
-            };
+            let optional = candidate_optional(cx, c);
             if optional {
                 walk(cx, proposal, applied, seen, out);
             }
@@ -2354,6 +2374,10 @@ fn damage_event_inner(
             break;
         };
         let key = (candidate.source, candidate.index, candidate.origin);
+        if candidate_optional(cx, candidate) && cx.concessions_here() {
+            plan = None;
+            continue;
+        }
         if let Origin::Granted(timestamp) = candidate.origin
             && granted(cx, timestamp).is_some_and(|(_, d)| d.once)
         {
@@ -2364,6 +2388,12 @@ fn damage_event_inner(
                 .filter(|g| formed_candidates(cx, &parts, g).contains(&candidate))
                 .map(|g| eligibility(cx, &parts, g, key))
                 .collect();
+            if def.optional.is_some_and(|q| !takes(cx, effect.controller, candidate.source, q)) {
+                for selected in snapshots {
+                    for i in selected { if !parts[i].applied.contains(&key) { parts[i].applied.push(key); } }
+                }
+                continue;
+            }
             let mut took = false;
             for selected in snapshots {
                 let before = aggregate(&parts, &selected).event;
@@ -2571,6 +2601,88 @@ mod tests {
         replacements: &[replacement(ReplacementKind::Draw, an_opponent_would_draw, instead, "draws nothing instead").optional(&SKIP)],
         ..CardDef::BLANK
     };
+    fn any_draw(_: &dyn Query, _: &Asker, _: ObjectId, p: &Proposal) -> bool {
+        matches!(p, Proposal::Draw(_))
+    }
+    fn skip_draw(q: &dyn Query, asker: &Asker, _: ObjectId, p: &mut Proposal) {
+        instead(q, asker, p);
+    }
+    static LASTING_DENIER: CardDef = CardDef {
+        name: "Lasting optional replacement probe",
+        types: TypeSet::of(&[CardType::Enchantment]),
+        granted_replacements: &[granted_replacement(ReplacementKind::Draw, any_draw, skip_draw, "skip the draw").optional(&SKIP)],
+        ..CardDef::BLANK
+    };
+    static LASTING_ONCE: CardDef = CardDef {
+        name: "Lasting once optional probe",
+        types: TypeSet::of(&[CardType::Enchantment]),
+        granted_replacements: &[granted_replacement(ReplacementKind::Draw, any_draw, skip_draw, "skip the next draw").optional(&SKIP).once()],
+        ..CardDef::BLANK
+    };
+    fn any_mana(_: &dyn Query, _: &Asker, _: ObjectId, p: &Proposal) -> bool {
+        matches!(p, Proposal::ManaProduction(_))
+    }
+    fn red_mana(_: &dyn Query, _: &Asker, _: ObjectId, p: &mut Proposal) {
+        if let Proposal::ManaProduction(m) = p {
+            m.mana = ManaPool::default();
+            m.mana.0[Mana::R as usize] = 1;
+        }
+    }
+    static LASTING_MANA: CardDef = CardDef {
+        name: "Lasting optional mana probe",
+        types: TypeSet::of(&[CardType::Enchantment]),
+        granted_replacements: &[granted_replacement(ReplacementKind::ManaProduction, any_mana, red_mana, "produce red instead").optional(&SKIP)],
+        ..CardDef::BLANK
+    };
+    fn damage_to_me(_: &dyn Query, _: &Asker, p: &Proposal) -> bool {
+        matches!(p, Proposal::Damage(d) if d.target == Target::Player(ME) && d.amount > 0)
+    }
+    fn no_damage(_: &dyn Query, _: &Asker, p: &mut Proposal) {
+        if let Proposal::Damage(d) = p { d.amount = 0; }
+    }
+    fn lasting_damage_to_me(q: &dyn Query, a: &Asker, _: ObjectId, p: &Proposal) -> bool { damage_to_me(q, a, p) }
+    fn lasting_redirect(_: &dyn Query, a: &Asker, _: ObjectId, p: &mut Proposal) {
+        if let Proposal::Damage(d) = p { d.target = Target::Player(a.controller); }
+    }
+    static PRINTED_DAMAGE: CardDef = CardDef {
+        name: "Competing damage probe",
+        replacements: &[replacement(ReplacementKind::Damage, damage_to_me, no_damage, "deal no damage")],
+        ..CardDef::BLANK
+    };
+    static LASTING_DAMAGE: CardDef = CardDef {
+        name: "Lasting optional damage probe",
+        granted_replacements: &[granted_replacement(ReplacementKind::Damage, lasting_damage_to_me, lasting_redirect, "redirect damage").optional(&SKIP)],
+        ..CardDef::BLANK
+    };
+    static ONCE_DAMAGE: CardDef = CardDef {
+        name: "Once optional damage probe",
+        granted_replacements: &[granted_replacement(ReplacementKind::Damage, lasting_damage_to_me, lasting_redirect, "redirect next damage").optional(&SKIP).once()],
+        ..CardDef::BLANK
+    };
+    fn partial_rewrite(_: &dyn Query, _: &Asker, _: ObjectId, p: &mut Proposal) {
+        if let Proposal::Damage(d) = p { d.amount = d.amount.saturating_sub(1); }
+    }
+    fn partial_to_departed(_: &dyn Query, _: &Asker, _: ObjectId, _: &DamageEvent, _: &DamageEvent) -> Vec<DamageComponent> {
+        vec![DamageComponent::Redirected { target: Target::Player(PlayerId(1)), amount: 1 }]
+    }
+    static PARTIAL_OPTIONAL: CardDef = CardDef {
+        name: "Optional partial redirection probe",
+        granted_replacements: &[granted_replacement(ReplacementKind::Damage, lasting_damage_to_me, partial_rewrite, "redirect one")
+            .with_damage(partial_to_departed).optional(&SKIP)],
+        ..CardDef::BLANK
+    };
+    fn any_tokens(_: &dyn Query, _: &Asker, _: ObjectId, p: &Proposal) -> bool {
+        matches!(p, Proposal::TokenCreation(_))
+    }
+    fn twice_as_many(_: &dyn Query, _: &Asker, _: ObjectId, p: &mut Proposal) {
+        if let Proposal::TokenCreation(t) = p { t.count *= 2; }
+    }
+    static LASTING_TOKENS: CardDef = CardDef {
+        name: "Lasting optional token probe",
+        types: TypeSet::of(&[CardType::Enchantment]),
+        granted_replacements: &[granted_replacement(ReplacementKind::TokenCreation, any_tokens, twice_as_many, "twice that many").optional(&SKIP)],
+        ..CardDef::BLANK
+    };
     fn goes_to_the_graveyard(_: &dyn Query, _: &Asker, proposal: &Proposal) -> bool {
         matches!(proposal, Proposal::ZoneChange(z) if z.to.is(ZoneKind::Graveyard))
     }
@@ -2589,7 +2701,7 @@ mod tests {
     /// library, and a frame whose run is given `answers`.
     fn game(cards: &[(&'static CardDef, Zone)], answers: Vec<Answer>) -> Game {
         let table: &'static CardTable =
-            Box::leak(Box::new(CardTable::new([&FILLER, &DOUBLER, &GAINER, &GRAVE_GAINER, &LIMITER, &DENIER, &PEACE])));
+            Box::leak(Box::new(CardTable::new([&FILLER, &DOUBLER, &GAINER, &GRAVE_GAINER, &LIMITER, &DENIER, &PEACE, &LASTING_DENIER, &LASTING_ONCE, &LASTING_MANA, &PRINTED_DAMAGE, &LASTING_DAMAGE, &ONCE_DAMAGE, &LASTING_TOKENS])));
         let deck: Vec<CardId> = std::iter::repeat_n(table.id_of(&FILLER), 17).collect();
         let mut game = Game::new(table, &crate::Setup { decks: vec![deck, Vec::new()], ..Default::default() });
         for &(def, to) in cards {
@@ -2719,6 +2831,282 @@ mod tests {
         crate::ops::draw_cards(&mut cx, them, 1);
         assert!(cx.s().agenda[frame].pending.is_none(), "the controller's answer was the one asked for");
         assert!(cx.s().zone(Zone::hand(them)).is_empty(), "the draw was replaced");
+    }
+
+    /// A lasting optional replacement asks its effect controller, even when another player is affected; declining
+    /// leaves the original draw intact (CR 614.1a, 616.1).
+    #[test]
+    fn a_lasting_optional_replacement_asks_its_controller_and_can_be_declined() {
+        for (answer, hand, library) in [(Answer::Yes, 7, 10), (Answer::No, 8, 9)] {
+            let mut g = game(&[(&LASTING_DENIER, Zone::BATTLEFIELD)], vec![]);
+            let source = g.state.battlefield()[0];
+            let card = g.cards.id_of(&LASTING_DENIER);
+            let controller = PlayerId(1);
+            let frame = g.state.agenda.len() - 1;
+            g.state.update_frame(frame, |f| f.answers = vec![(Some(controller), answer)]);
+            let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+            cantrip_api::Game::add_player_effect(&mut cx, controller, source, EffectKind::ReplacementRule { card, index: 0 }, Duration::EndOfTurn);
+            assert_eq!(draw(&mut g, 1), (hand, library, 20));
+        }
+    }
+
+    #[test]
+    fn competing_lasting_optional_is_ordered_by_affected_player_then_asked_of_controller() {
+        for (choice, expected) in [(Answer::Yes, (7, 10, 20)), (Answer::No, (7, 10, 21))] {
+            let mut g = game(&[(&GAINER, Zone::BATTLEFIELD), (&LASTING_DENIER, Zone::BATTLEFIELD)], vec![]);
+            let source = g.state.battlefield()[1];
+            let card = g.cards.id_of(&LASTING_DENIER);
+            let them = PlayerId(1);
+            let frame = g.state.agenda.len() - 1;
+            g.state.update_frame(frame, |f| f.answers = vec![(Some(ME), Answer::Index(1)), (Some(them), choice)]);
+            let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+            cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0 }, Duration::EndOfTurn);
+            assert_eq!(draw(&mut g, 1), expected);
+        }
+    }
+
+    #[test]
+    fn declined_lasting_once_remains_for_the_next_event_then_is_consumed() {
+        let mut g = game(&[(&LASTING_ONCE, Zone::BATTLEFIELD)], vec![Answer::No, Answer::Yes]);
+        let source = g.state.battlefield()[0];
+        let card = g.cards.id_of(&LASTING_ONCE);
+        let frame = g.state.agenda.len() - 1;
+        let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0 }, Duration::EndOfTurn);
+        assert_eq!(draw(&mut g, 2), (8, 9, 20));
+        assert!(!g.state.effects.iter().any(|e| matches!(e.kind, EffectKind::ReplacementRule { card: c, .. } if c == card)));
+    }
+
+    #[test]
+    fn competing_lasting_damage_is_ordered_by_recipient_and_offered_to_effect_controller() {
+        for choice in [Answer::Yes, Answer::No] {
+            let mut g = game(&[(&PRINTED_DAMAGE, Zone::BATTLEFIELD), (&LASTING_DAMAGE, Zone::BATTLEFIELD)], vec![]);
+            let source = g.state.battlefield()[1];
+            let card = g.cards.id_of(&LASTING_DAMAGE);
+            let them = PlayerId(1);
+            let frame = g.state.agenda.len() - 1;
+            g.state.update_frame(frame, |f| f.answers = vec![(Some(ME), Answer::Index(1)), (Some(them), choice.clone())]);
+            let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+            cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0 }, Duration::EndOfTurn);
+            let event = DamageEvent { source, target: Target::Player(ME), amount: 2, combat: false, heal_marked: false, shielded: None };
+            let parts = damage_event(&mut cx, &[event], &mut Vec::new(), &mut Vec::new());
+            assert!(cx.s().agenda[frame].pending.is_none());
+            assert_eq!(parts[0].event.target, if choice == Answer::Yes { Target::Player(them) } else { Target::Player(ME) });
+            assert_eq!(parts[0].event.amount, if choice == Answer::Yes { 2 } else { 0 });
+        }
+    }
+
+    #[test]
+    fn lasting_once_damage_replacement_waits_after_decline() {
+        let mut g = game(&[(&ONCE_DAMAGE, Zone::BATTLEFIELD)], vec![]);
+        let source = g.state.battlefield()[0];
+        let card = g.cards.id_of(&ONCE_DAMAGE);
+        let them = PlayerId(1);
+        let frame = g.state.agenda.len() - 1;
+        g.state.update_frame(frame, |f| f.answers = vec![(Some(them), Answer::No), (Some(them), Answer::Yes)]);
+        let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0 }, Duration::EndOfTurn);
+        let event = DamageEvent { source, target: Target::Player(ME), amount: 2, combat: false, heal_marked: false, shielded: None };
+        let first = damage_event(&mut cx, &[event], &mut Vec::new(), &mut Vec::new());
+        let second = damage_event(&mut cx, &[event], &mut Vec::new(), &mut Vec::new());
+        let third = damage_event(&mut cx, &[event], &mut Vec::new(), &mut Vec::new());
+        assert_eq!([first[0].event.target, second[0].event.target, third[0].event.target], [Target::Player(ME), Target::Player(them), Target::Player(ME)]);
+        assert!(cx.s().agenda[frame].pending.is_none());
+    }
+
+    #[test]
+    fn lasting_optional_draw_uses_stand_in_after_its_controller_leaves() {
+        let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &LASTING_DENIER])));
+        let deck = std::iter::repeat_n(table.id_of(&FILLER), 17).collect();
+        let mut g = Game::new(table, &crate::Setup { decks: vec![deck, Vec::new(), Vec::new()], ..Default::default() });
+        let source = g.state.push_obj(Obj::new(table.id_of(&LASTING_DENIER), ME, Zone::BATTLEFIELD));
+        g.state.zone_push(Zone::BATTLEFIELD, source);
+        g.state.frame_push(Frame::new(FrameKind::Settle));
+        let card = g.cards.id_of(&LASTING_DENIER);
+        let them = PlayerId(1);
+        let frame = g.state.agenda.len() - 1;
+        let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0 }, Duration::EndOfTurn);
+        cx.g.state.update_frame(frame, |f| { f.conceded.push((0, them)); f.answers = vec![(Some(PlayerId(2)), Answer::Yes)]; });
+        assert_eq!(draw(&mut g, 1), (7, 10, 20));
+        assert!(g.state.player(them).lost);
+    }
+
+    #[test]
+    fn optional_partial_redirection_to_live_player_is_offered_and_applies() {
+        let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &PARTIAL_OPTIONAL])));
+        let deck = std::iter::repeat_n(table.id_of(&FILLER), 17).collect();
+        let mut g = Game::new(table, &crate::Setup { decks: vec![deck, Vec::new(), Vec::new()], ..Default::default() });
+        let source = g.state.push_obj(Obj::new(table.id_of(&PARTIAL_OPTIONAL), ME, Zone::BATTLEFIELD));
+        g.state.zone_push(Zone::BATTLEFIELD, source);
+        g.state.frame_push(Frame::new(FrameKind::Settle));
+        let card = g.cards.id_of(&PARTIAL_OPTIONAL);
+        let frame = g.state.agenda.len() - 1;
+        g.state.update_frame(frame, |f| f.answers = vec![(Some(ME), Answer::Yes)]);
+        let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0 }, Duration::EndOfTurn);
+        let event = DamageEvent { source, target: Target::Player(ME), amount: 2, combat: false, heal_marked: false, shielded: None };
+        let parts = damage_event(&mut cx, &[event], &mut Vec::new(), &mut Vec::new());
+        assert!(cx.s().agenda[frame].pending.is_none());
+        assert!(parts.iter().any(|p| p.event.target == Target::Player(ME) && p.event.amount == 1));
+        assert!(parts.iter().any(|p| p.event.target == Target::Player(PlayerId(1)) && p.event.amount == 1));
+    }
+
+    #[test]
+    fn optional_partial_redirection_to_departed_player_is_not_offered() {
+        let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &PARTIAL_OPTIONAL])));
+        let deck = std::iter::repeat_n(table.id_of(&FILLER), 17).collect();
+        let mut g = Game::new(table, &crate::Setup { decks: vec![deck, Vec::new(), Vec::new()], ..Default::default() });
+        let source = g.state.push_obj(Obj::new(table.id_of(&PARTIAL_OPTIONAL), ME, Zone::BATTLEFIELD));
+        g.state.zone_push(Zone::BATTLEFIELD, source);
+        g.state.frame_push(Frame::new(FrameKind::Settle));
+        let card = g.cards.id_of(&PARTIAL_OPTIONAL);
+        let frame = g.state.agenda.len() - 1;
+        let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0 }, Duration::EndOfTurn);
+        crate::ops::concede(&mut cx, PlayerId(1));
+        let event = DamageEvent { source, target: Target::Player(ME), amount: 2, combat: false, heal_marked: false, shielded: None };
+        let parts = damage_event(&mut cx, &[event], &mut Vec::new(), &mut Vec::new());
+        assert!(cx.s().agenda[frame].pending.is_none(), "an impossible partial redirect is not a choice");
+        assert_eq!((parts[0].event.target, parts[0].event.amount), (Target::Player(ME), 2));
+    }
+
+    #[test]
+    fn concession_makes_lasting_redirection_to_the_departed_player_inapplicable() {
+        let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &LASTING_DAMAGE])));
+        let deck = std::iter::repeat_n(table.id_of(&FILLER), 17).collect();
+        let mut g = Game::new(table, &crate::Setup { decks: vec![deck, Vec::new(), Vec::new()], ..Default::default() });
+        let source = g.state.push_obj(Obj::new(table.id_of(&LASTING_DAMAGE), ME, Zone::BATTLEFIELD));
+        g.state.zone_push(Zone::BATTLEFIELD, source);
+        g.state.frame_push(Frame::new(FrameKind::Settle));
+        let card = g.cards.id_of(&LASTING_DAMAGE);
+        let them = PlayerId(1);
+        let frame = g.state.agenda.len() - 1;
+        let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0 }, Duration::EndOfTurn);
+        cx.g.state.update_frame(frame, |f| f.conceded.push((0, them)));
+        let event = DamageEvent { source, target: Target::Player(ME), amount: 2, combat: false, heal_marked: false, shielded: None };
+        let parts = damage_event(&mut cx, &[event], &mut Vec::new(), &mut Vec::new());
+        assert!(cx.s().player(them).lost);
+        assert!(cx.s().agenda[frame].pending.is_none(), "no choice is offered for impossible redirection");
+        assert_eq!((parts[0].event.target, parts[0].event.amount), (Target::Player(ME), 2));
+    }
+
+    /// A lasting optional replacement of a token creation is its controller's to take, once for the event: declined,
+    /// the tokens are created as they would be (CR 614.1a, 616.1).
+    #[test]
+    fn a_lasting_optional_token_replacement_can_be_declined() {
+        for (answer, made) in [(Answer::Yes, 2), (Answer::No, 1)] {
+            let mut g = game(&[(&LASTING_TOKENS, Zone::BATTLEFIELD)], vec![answer]);
+            let source = g.state.battlefield()[0];
+            let card = g.cards.id_of(&LASTING_TOKENS);
+            let token = g.cards.id_of(&FILLER);
+            let frame = g.state.agenda.len() - 1;
+            let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+            cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0 }, Duration::EndOfTurn);
+            let out = token_batch(&mut cx, &[(token, None, ME)]);
+            assert_eq!(out.map_or(1, |(tokens, _)| tokens.len()), made);
+        }
+    }
+
+    fn draw_while_on_battlefield(q: &dyn Query, _: &Asker, affected: ObjectId, p: &Proposal) -> bool {
+        matches!(p, Proposal::Draw(_)) && q.is_on_battlefield(affected)
+    }
+    fn tokens_while_on_battlefield(q: &dyn Query, _: &Asker, affected: ObjectId, p: &Proposal) -> bool {
+        matches!(p, Proposal::TokenCreation(_)) && q.is_on_battlefield(affected)
+    }
+    /// A lasting optional draw replacement and token replacement that apply only while their source is on the battlefield.
+    static FIELD_DENIER: CardDef = CardDef {
+        name: "Lasting optional replacement while on the battlefield probe",
+        types: TypeSet::of(&[CardType::Enchantment]),
+        granted_replacements: &[
+            granted_replacement(ReplacementKind::Draw, draw_while_on_battlefield, skip_draw, "skip the draw").optional(&SKIP),
+            granted_replacement(ReplacementKind::TokenCreation, tokens_while_on_battlefield, twice_as_many, "twice that many").optional(&SKIP),
+        ],
+        ..CardDef::BLANK
+    };
+
+    /// A game of four, with `FIELD_DENIER` on the battlefield owned by the third player and its lasting effect `index`
+    /// controlled by the first, and the third conceding at the run's first question.
+    fn field_denier_with_its_owner_conceding(index: u8) -> (Game, PlayerId) {
+        let owner = PlayerId(2);
+        let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &FIELD_DENIER])));
+        let deck = std::iter::repeat_n(table.id_of(&FILLER), 17).collect();
+        let mut g = Game::new(table, &crate::Setup { decks: vec![deck, Vec::new(), Vec::new(), Vec::new()], ..Default::default() });
+        let source = g.state.push_obj(Obj::new(table.id_of(&FIELD_DENIER), owner, Zone::BATTLEFIELD));
+        g.state.zone_push(Zone::BATTLEFIELD, source);
+        g.state.frame_push(Frame::new(FrameKind::Settle));
+        let card = g.cards.id_of(&FIELD_DENIER);
+        let frame = g.state.agenda.len() - 1;
+        let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index }, Duration::EndOfTurn);
+        g.state.update_frame(frame, |f| f.conceded.push((0, owner)));
+        (g, owner)
+    }
+
+    /// A concession at a lasting optional replacement's question that ends its applying (its source leaves the game with its
+    /// owner, CR 800.4a) rebuilds the candidates before anyone is asked: the draw goes on as it was (CR 614.1a).
+    #[test]
+    fn a_concession_before_a_lasting_optional_replacement_refreshes_its_candidates() {
+        let (mut g, owner) = field_denier_with_its_owner_conceding(0);
+        assert_eq!(draw(&mut g, 1), (8, 9, 20));
+        assert!(g.state.player(owner).lost);
+    }
+
+    /// The same for a token creation, which meets its replacements part by part (`apply_to_each_part`).
+    #[test]
+    fn a_concession_before_a_lasting_optional_token_replacement_refreshes_its_candidates() {
+        let (mut g, owner) = field_denier_with_its_owner_conceding(1);
+        let token = g.cards.id_of(&FILLER);
+        let frame = g.state.agenda.len() - 1;
+        let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        let out = token_batch(&mut cx, &[(token, None, ME)]);
+        assert!(cx.s().agenda[frame].pending.is_none(), "no one is asked about an effect that no longer applies");
+        assert_eq!(out.map_or(1, |(tokens, _)| tokens.len()), 1);
+        assert!(g.state.player(owner).lost);
+    }
+
+    /// A concession at a once-only lasting optional damage replacement's question that makes its redirection impossible (to
+    /// the player who leaves, CR 614.9, 800.4a) rebuilds the event's plan before anyone is asked: the damage is dealt as it
+    /// would be, and the effect is still waiting.
+    #[test]
+    fn a_concession_before_a_once_optional_damage_replacement_rebuilds_the_plan() {
+        let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &PRINTED_DAMAGE, &ONCE_DAMAGE])));
+        let deck = std::iter::repeat_n(table.id_of(&FILLER), 17).collect();
+        let mut g = Game::new(table, &crate::Setup { decks: vec![deck, Vec::new(), Vec::new()], ..Default::default() });
+        let printed = g.state.push_obj(Obj::new(table.id_of(&PRINTED_DAMAGE), ME, Zone::BATTLEFIELD));
+        g.state.zone_push(Zone::BATTLEFIELD, printed);
+        let source = g.state.push_obj(Obj::new(table.id_of(&ONCE_DAMAGE), ME, Zone::BATTLEFIELD));
+        g.state.zone_push(Zone::BATTLEFIELD, source);
+        g.state.frame_push(Frame::new(FrameKind::Settle));
+        let card = g.cards.id_of(&ONCE_DAMAGE);
+        let them = PlayerId(1);
+        let frame = g.state.agenda.len() - 1;
+        // The damaged player puts the once-only redirection first; its controller concedes as they would be asked about it.
+        g.state.update_frame(frame, |f| { f.answers = vec![(Some(ME), Answer::Index(1))]; f.conceded.push((1, them)); });
+        let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        cantrip_api::Game::add_player_effect(&mut cx, them, source, EffectKind::ReplacementRule { card, index: 0 }, Duration::EndOfTurn);
+        let event = DamageEvent { source, target: Target::Player(ME), amount: 2, combat: false, heal_marked: false, shielded: None };
+        let parts = damage_event(&mut cx, &[event], &mut Vec::new(), &mut Vec::new());
+        assert!(cx.s().player(them).lost);
+        assert!(cx.s().agenda[frame].pending.is_none(), "no one is asked about an impossible redirection");
+        assert_eq!((parts[0].event.target, parts[0].event.amount), (Target::Player(ME), 0), "the printed effect applies");
+    }
+
+    #[test]
+    fn optional_lasting_mana_outcomes_include_decline_and_accept() {
+        let mut g = game(&[(&LASTING_MANA, Zone::BATTLEFIELD)], vec![]);
+        let source = g.state.battlefield()[0];
+        let card = g.cards.id_of(&LASTING_MANA);
+        let frame = g.state.agenda.len() - 1;
+        let mut cx = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        cantrip_api::Game::add_player_effect(&mut cx, ME, source, EffectKind::ReplacementRule { card, index: 0 }, Duration::EndOfTurn);
+        let mut mana = ManaPool::default();
+        mana.0[Mana::G as usize] = 1;
+        let outcomes = mana_outcomes(&cx, ManaProduction { permanent: source, player: ME, to: ME, mana, restriction: None, lasts: ManaLasts::Step });
+        assert_eq!(outcomes.len(), 2);
+        assert!(outcomes.iter().any(|m| m.mana.get(Mana::G) == 1));
+        assert!(outcomes.iter().any(|m| m.mana.get(Mana::R) == 1));
     }
 
     /// A card is exiled with a replacement effect's source only as that effect's direct result (CR 607.2b): an effect that

@@ -79,6 +79,7 @@ static ONCE_REDIRECT: CardDef = CardDef {
         apply: to_affected,
         then: None,
         damage: None,
+        optional: None,
         once: true,
         text: "",
     }],
