@@ -1,0 +1,11 @@
+{
+  "name": "Patched Plaything",
+  "manaCost": "{2}{W}",
+  "type": "Artifact Creature — Toy",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Double strike\nThis creature enters with two -1/-1 counters on it if you cast it from your hand.",
+  "keywords": [
+    "DoubleStrike"
+  ]
+}

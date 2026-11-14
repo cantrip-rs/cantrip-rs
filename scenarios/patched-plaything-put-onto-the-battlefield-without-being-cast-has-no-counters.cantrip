@@ -1,0 +1,41 @@
+# Patched Plaything: the counters are only "if you cast it from your hand". Bot2's Thoughtseize makes Bot1 discard the Plaything,
+# and Bot1 Reanimates it on turn 3 (losing 3 life, its mana value): it was never cast, so it enters as a full 4/3 with no
+# counters, and its double strike hits Bot2 for 4 + 4 on turn 5 (Bot2, down to 18 by its own Thoughtseize, to 10).
+
+[Bot1 Deck]
+Mox Jet
+Reanimate
+Patched Plaything
+Island
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Swamp
+Thoughtseize
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Thoughtseize.Cast(Bot1)
+Bot2.Choose(Patched Plaything)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Reanimate.Cast(Patched Plaything)
+[T3 Bot1.End]
+? Bot1.Battlefield.Patched Plaything.Power = 4
+? Bot1.Battlefield.Patched Plaything.Toughness = 3
+? Bot1.Battlefield.Patched Plaything.Counters.MinusOneMinusOne = (absent)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Patched Plaything > Bot2)
+[T5 Bot1.End]
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 10
