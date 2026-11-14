@@ -1,0 +1,84 @@
+# Popular Egotist ({2}{B}) T1, with a Memnite, a Lotus Petal and three Moxen in play. T3: Bad Moon (an enchantment) is cast and then
+# sacrificed to {1}{B} (Mox Jet, Mox Pearl: the pool is spent exactly): the Egotist gains indestructible and taps (CR 702.12b), and the
+# sacrifice drains Bot2 for 1 (CR 603.10a), resolving before the ability does (CR 608.1, the trigger is put on the stack above it).
+# Sacrificing a Lotus Petal for mana (an artifact, not a creature or enchantment) drains again. T5: with only the Egotist and a
+# Memnite as creatures, the Memnite is the one that can be sacrificed to the ability (a creature: third drain); then, with {1}{B} untapped
+# and no other creature or enchantment but the Egotist itself, it cannot be activated.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Popular Egotist
+Memnite
+Bad Moon
+Lotus Petal
+Swamp
+Swamp
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Popular Egotist.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bad Moon.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bad Moon.ManaValue = 2
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Popular Egotist.Activate
+Bot1.Choose(Bad Moon)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+? Bot2.Life = 19
+? Bot1.Battlefield.Popular Egotist.Keywords = (absent)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Popular Egotist.Keywords = Indestructible
+? Bot1.Battlefield.Popular Egotist.Tapped = true
+Bot1.Battlefield.Lotus Petal.Activate(Color: Black)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+? Bot2.Life = 18
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Popular Egotist.Activate
+Bot1.Choose(Memnite)
+? Bot1.Graveyard.Count = 3
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swamp.Activate
+! Bot1.Battlefield.Popular Egotist.Activate
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 17
+Bot1.Graveyard = Memnite; Lotus Petal; Bad Moon
+Bot1.Battlefield.Popular Egotist.Tapped = true

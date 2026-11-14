@@ -1,0 +1,49 @@
+# "Whenever YOU sacrifice a permanent": Innocent Blood makes each player sacrifice a creature. Bot1 sacrifices its Memnite (keeping the
+# Egotist) and Bot2 its Ornithopter: only Bot1's sacrifice drains, once (Bot2 19, Bot1 21), and Bot2's own sacrifice gives nothing
+# (it does not lose-and-gain a second time).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Popular Egotist
+Memnite
+Innocent Blood
+Swamp
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Popular Egotist.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Innocent Blood.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite)
+? Stack.Count = 1
+? Bot1.Life = 20
+? Bot2.Life = 20
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 19
+Bot1.Battlefield.Popular Egotist.Tapped = false
+Bot1.Graveyard = Innocent Blood; Memnite
+Bot2.Graveyard = Ornithopter
+Stack.Count = 0
