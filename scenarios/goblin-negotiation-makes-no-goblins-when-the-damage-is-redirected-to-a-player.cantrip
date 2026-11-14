@@ -1,0 +1,77 @@
+# Goblin Negotiation counts only the excess damage "dealt to that creature this way" (CR 120.10): in response Bot2 casts Blood
+# of the Martyr, and as the 4 damage would be dealt to its Hill Giant Bot2 has it dealt to itself instead (CR 614.1a, 614.9).
+# The Giant takes nothing and lives, Bot2 goes to 16, and Bot1 makes no Goblin - damage to a player is no excess for a creature.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Goblin Negotiation
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Hill Giant
+Black Lotus
+Blood of the Martyr
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Negotiation.Cast(Bot2.Battlefield.Hill Giant; X: 4; Spend: R, R, R, R, B, W)
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Blood of the Martyr.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Accept
+
+[Expect]
+Bot2.Life = 16
+Bot2.Battlefield.Hill Giant.Damage = 0
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby
