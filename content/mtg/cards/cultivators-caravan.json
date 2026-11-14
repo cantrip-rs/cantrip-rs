@@ -1,0 +1,8 @@
+{
+  "name": "Cultivator's Caravan",
+  "manaCost": "{3}",
+  "type": "Artifact — Vehicle",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "{T}: Add one mana of any color.\nCrew 3 (Tap any number of creatures you control with total power 3 or more: This Vehicle becomes an artifact creature until end of turn.)"
+}

@@ -1,0 +1,54 @@
+# Cultivator's Caravan: "{T}: Add one mana of any color." and "Crew 3" (a 5/5 Vehicle). Bot1 casts it (Jet, Ruby, Pearl) with two
+# Memnites (power 1 each) on turn 1. On turn 3 two Memnites, total power 2, cannot crew it (refused); a third Memnite
+# makes exactly 3 and all three tap to crew it: it is a 5/5 artifact creature, attacks (it has been under Bot1's control since
+# turn 1) and deals 5 to Bot2 (20 - 5 = 15). On turn 5 the (untapped) Caravan taps for blue.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Cultivator's Caravan
+Memnite
+Memnite
+Memnite
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cultivator's Caravan.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Cultivator's Caravan.Activate(Ability: Crew)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Cultivator's Caravan.Activate(Ability: Crew)
+Bot1.Choose(Memnite#1; Memnite#2; Memnite#3)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cultivator's Caravan.Power = 5
+? Bot1.Battlefield.Cultivator's Caravan.Toughness = 5
+Bot1.Attack(Cultivator's Caravan > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 15
+[T5 Bot1.Main1]
+Bot1.Battlefield.Cultivator's Caravan.Activate(Ability: Add one mana; Color: Blue)
+? Bot1.Mana = {U}
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Cultivator's Caravan.Tapped = true
