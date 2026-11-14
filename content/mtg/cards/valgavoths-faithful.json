@@ -1,0 +1,8 @@
+{
+  "name": "Valgavoth's Faithful",
+  "manaCost": "{B}",
+  "type": "Creature — Human Cleric",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{3}{B}, Sacrifice this creature: Return target creature card from your graveyard to the battlefield. Activate only as a sorcery."
+}

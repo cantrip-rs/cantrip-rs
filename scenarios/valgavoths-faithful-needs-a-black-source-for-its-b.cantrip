@@ -1,0 +1,58 @@
+# The {B} of {3}{B} (CR 107.4, 202.1): Valgavoth's Faithful is cast with Bot1's only Swamp, and a Lightning Bolt (Mox Ruby) kills Bot1's
+# own Ornithopter. Bot2's Strip Mine destroys that Swamp on turn 2. On turn 3 Bot1 has four Moxen, Ruby, Pearl, Emerald and Sapphire,
+# four mana and no black among them: the ability is refused. On turn 5 a new Swamp joins Ruby, Pearl and Emerald: exactly {3}{B}, and it works.
+
+[Bot1 Deck]
+Swamp
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Valgavoth's Faithful
+Ornithopter
+Lightning Bolt
+Mox Sapphire
+Swamp
+Island x15
+
+[Bot2 Deck]
+Strip Mine
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Valgavoth's Faithful.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Strip Mine.Play
+Bot2.Battlefield.Strip Mine.Activate(Ability: Destroy; Bot1.Battlefield.Swamp)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Valgavoth's Faithful.Activate(Bot1.Graveyard.Ornithopter; Mana: short)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Valgavoth's Faithful.Activate(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Graveyard = Valgavoth's Faithful; Swamp; Lightning Bolt
+Stack.Count = 0

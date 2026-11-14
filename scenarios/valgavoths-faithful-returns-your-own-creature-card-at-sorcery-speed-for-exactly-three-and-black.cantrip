@@ -1,0 +1,68 @@
+# Valgavoth's Faithful ({B}) T1, then Lightning Bolt (Mox Ruby) kills Bot1's own Ornithopter; on turn 2 Bot2's Bolt kills its own Memnite.
+# Turn 3, with Mox Jet, Mox Ruby and Mox Pearl only (three mana): {3}{B} is short. After a Swamp (four mana) the ability is refused for the
+# instant in the graveyard and for Bot2's Memnite there (not "your graveyard"). On turn 4, Bot2's turn, with four mana, it is refused: only as
+# a sorcery. On turn 5 it works: the Faithful is sacrificed as a cost (it cannot be its own target, it was on the battlefield), the Ornithopter
+# comes back untapped, and Bot2's Memnite stays in Bot2's graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Valgavoth's Faithful
+Ornithopter
+Lightning Bolt
+Swamp
+Swamp
+Island x15
+
+[Bot2 Deck]
+Memnite
+Lightning Bolt
+Mountain
+Mountain
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Valgavoth's Faithful.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Valgavoth's Faithful.Activate(Bot1.Graveyard.Ornithopter; Mana: short)
+Bot1.Hand.Swamp.Play
+! Bot1.Battlefield.Valgavoth's Faithful.Activate(Bot1.Graveyard.Lightning Bolt)
+! Bot1.Battlefield.Valgavoth's Faithful.Activate(Bot2.Graveyard.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Pass
+! Bot1.Battlefield.Valgavoth's Faithful.Activate(Bot1.Graveyard.Ornithopter)
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Valgavoth's Faithful.Activate(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Ornithopter; Swamp; Swamp
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Graveyard = Valgavoth's Faithful; Lightning Bolt
+Bot2.Graveyard = Memnite; Lightning Bolt
+Stack.Count = 0
