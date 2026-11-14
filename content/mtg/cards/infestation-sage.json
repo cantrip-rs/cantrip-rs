@@ -1,0 +1,8 @@
+{
+  "name": "Infestation Sage",
+  "manaCost": "{B}",
+  "type": "Creature — Elf Warlock",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "When this creature dies, create a 1/1 black and green Insect creature token with flying."
+}

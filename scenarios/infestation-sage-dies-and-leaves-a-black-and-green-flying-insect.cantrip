@@ -1,0 +1,35 @@
+# "When this creature dies, create a 1/1 black and green Insect creature token with flying": Bot2's Lightning Bolt kills Bot1's
+# Infestation Sage on turn 2; the trigger resolves and Bot1 controls a 1/1 black and green Insect token with flying (CR 700.4,
+# 603.10a, 111.1, 205.3m). The Sage itself is in the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Infestation Sage
+Island x18
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Plains x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Infestation Sage.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Infestation Sage)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Infestation Sage
+Bot1.Battlefield = Insect Token; Mox Jet
+Bot1.Battlefield.Insect Token.Power = 1
+Bot1.Battlefield.Insect Token.Toughness = 1
+Bot1.Battlefield.Insect Token.Colors = Black; Green
+Bot1.Battlefield.Insect Token.Keywords = Flying
+Bot1.Battlefield.Insect Token.Subtypes = Insect

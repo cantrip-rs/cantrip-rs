@@ -1,0 +1,30 @@
+# "When this creature dies": exile is not dying. Bot2's Swords to Plowshares exiles Bot1's Infestation Sage on turn 2, so no
+# trigger fires and Bot1 gets no Insect (CR 700.4, 603.10a); Bot1 gains the Sage's 1 life.
+
+[Bot1 Deck]
+Mox Jet
+Infestation Sage
+Island x18
+
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Plains x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Infestation Sage.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Infestation Sage)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Infestation Sage
+Bot1.Battlefield = Mox Jet
+Bot1.Life = 21
