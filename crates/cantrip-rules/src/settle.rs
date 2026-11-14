@@ -1467,6 +1467,10 @@ impl Query for BoardThen<'_> {
         self.q.instructing()
     }
 
+    fn effect_controller(&self) -> Option<PlayerId> {
+        self.q.effect_controller()
+    }
+
     fn linked_card(&self, card: CardId) -> CardId {
         self.q.linked_card(card)
     }

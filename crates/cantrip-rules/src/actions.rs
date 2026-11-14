@@ -277,6 +277,10 @@ impl Query for AsSpell<'_> {
         self.q.instructing()
     }
 
+    fn effect_controller(&self) -> Option<PlayerId> {
+        self.q.effect_controller()
+    }
+
     fn card(&self, id: CardId) -> &'static CardDef {
         self.q.card(id)
     }
@@ -389,6 +393,10 @@ impl Query for WithWords<'_> {
 
     fn instructing(&self) -> Option<&StackItem> {
         self.q.instructing()
+    }
+
+    fn effect_controller(&self) -> Option<PlayerId> {
+        self.q.effect_controller()
     }
 
     fn card(&self, id: CardId) -> &'static CardDef {
@@ -4047,6 +4055,10 @@ impl Query for Announcing<'_> {
         self.q.instructing()
     }
 
+    fn effect_controller(&self) -> Option<PlayerId> {
+        self.q.effect_controller()
+    }
+
     fn mana_value(&self, id: ObjectId) -> u32 {
         self.q.mana_value(id)
     }
@@ -4167,6 +4179,11 @@ impl Query for Watch<'_> {
     fn instructing(&self) -> Option<&StackItem> {
         self.w.told.set(true);
         self.q.instructing()
+    }
+
+    /// A player, which names none of the candidates.
+    fn effect_controller(&self) -> Option<PlayerId> {
+        self.q.effect_controller()
     }
 
     fn mana_value(&self, id: ObjectId) -> u32 {
@@ -4928,6 +4945,10 @@ impl Query for AsFace<'_> {
 
     fn instructing(&self) -> Option<&StackItem> {
         self.cx.instructing()
+    }
+
+    fn effect_controller(&self) -> Option<PlayerId> {
+        self.cx.effect_controller()
     }
 
     /// A nonmodal double-faced card judged as its back face, as it would be cast transformed, has its front face's mana value
@@ -8847,6 +8868,10 @@ impl Query for QueryAsFace<'_> {
 
     fn instructing(&self) -> Option<&StackItem> {
         self.q.instructing()
+    }
+
+    fn effect_controller(&self) -> Option<PlayerId> {
+        self.q.effect_controller()
     }
 
     fn card(&self, id: CardId) -> &'static CardDef {

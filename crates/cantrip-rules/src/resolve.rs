@@ -317,6 +317,10 @@ impl Query for Given<'_> {
         self.q.instructing()
     }
 
+    fn effect_controller(&self) -> Option<PlayerId> {
+        self.q.effect_controller()
+    }
+
     fn events(&self) -> &[Record] {
         self.q.events()
     }

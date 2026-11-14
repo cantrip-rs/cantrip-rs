@@ -547,6 +547,16 @@ pub trait Query {
         None
     }
 
+    /// The controller of the spell or ability whose effect is being carried out now (CR 609.1), the player whose spell or
+    /// ability causes what it has a player do: the controller of the spell or ability resolving, or of the replacement effect
+    /// or mana ability whose effect is carried out in the middle of it or of anything else, which is that effect's own (CR
+    /// 609.1, 614.1a, 605.3b). `None` for a player's own action (a cost, a special action), the turn's and the rules' (the
+    /// cleanup discard). The same answer `may_cause` is asked with (CR 101.2). Wilt-Leaf Liege's "if a spell or ability an
+    /// opponent controls causes you to discard this card".
+    fn effect_controller(&self) -> Option<PlayerId> {
+        None
+    }
+
     /// The cards in exile that were exiled with `by` (CR 607.2a): what an ability linked to the one that exiled them refers
     /// to - an ability of the same object printed in the same text (`Linked`), so cards exiled by an ability of another text
     /// the object has (a copy effect's, a granted one's) are not among them (CR 607.5). A permanent that left and came back

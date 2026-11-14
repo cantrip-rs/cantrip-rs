@@ -2129,6 +2129,10 @@ impl Query for Cx<'_> {
         Cx::instructing(self)
     }
 
+    fn effect_controller(&self) -> Option<PlayerId> {
+        Cx::effect_controller(self)
+    }
+
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
         actions::producible_types(self, permanent)
     }
