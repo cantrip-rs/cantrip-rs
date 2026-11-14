@@ -1,0 +1,45 @@
+# Fear of Surveillance: "Whenever this creature attacks, surveil 1." It attacks on turn 3; with the trigger on the stack Bot2 Bolts
+# it. The ability exists independently of its source (CR 113.7a) and surveil 1 is done by its controller, not by the creature, so it
+# still resolves: Bot1 looks at the top card, Lightning Bolt, and puts it into its graveyard (CR 701.25a). No combat damage is dealt.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Fear of Surveillance
+Island x4
+Island
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Swamp x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fear of Surveillance.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Attack(Fear of Surveillance > Bot2)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Fear of Surveillance)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Fear of Surveillance
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt)
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Pearl; Plains
+Bot1.Graveyard = Lightning Bolt; Fear of Surveillance
+Bot2.Graveyard = Lightning Bolt
+Bot2.Life = 20

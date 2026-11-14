@@ -1,0 +1,44 @@
+# Fear of Surveillance: "Vigilance. Whenever this creature attacks, surveil 1." It is cast on turn 1 and attacks on turns 3 and 5.
+# Vigilance: it is still untapped after attacking. Each attack surveils 1 (CR 701.25a): on turn 3 Lightning Bolt is put into the
+# graveyard, on turn 5 Giant Growth is kept on top of the library.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Fear of Surveillance
+Island x4
+Island
+Lightning Bolt
+Counterspell
+Giant Growth
+Island x9
+
+[Bot2 Deck]
+Ornithopter
+Swamp x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fear of Surveillance.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Fear of Surveillance > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt)
+? Bot1.Battlefield.Fear of Surveillance.Tapped = false
+? Bot1.Graveyard = Lightning Bolt
+[T5 Bot1.Main1]
+Bot1.Attack(Fear of Surveillance > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Giant Growth | )
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Fear of Surveillance.Tapped = false
+Bot1.Graveyard = Lightning Bolt
+Bot2.Life = 16
+Stack.Count = 0
