@@ -288,6 +288,32 @@ pub fn create_token_copy_with_haste(g: &mut dyn Game, item: &StackItem, of: Obje
 pub const SACRIFICE_IT_AT_END_STEP: AbilityDef =
     delayed_trigger(crate::delayed::sacrifice_created, "Sacrifice it at the beginning of the next end step.");
 
+/// The ability a token copy has by the copy's exception (CR 707.9a): "At the beginning of the end step, sacrifice this token." Not
+/// a card anyone plays: a definition for the exception's ability to be referred to by. It is part of the copy's copiable values
+/// (CR 707.9a), so a copy of the token has it too. The card file listing it in its `EXTRA` is the one that uses
+/// `create_token_copy_with_haste_and_sacrifice`.
+pub static SACRIFICE_THIS_TOKEN_EXCEPTION: CardDef = CardDef {
+    name: "Token copy exception (sacrifice this token)",
+    abilities: &[triggered(
+        crate::triggers::EACH_END_STEP,
+        crate::effects::sacrifice_self,
+        "At the beginning of the end step, sacrifice this token.",
+    )],
+    ..CardDef::BLANK
+};
+
+/// "Create a token that's a copy of [the first target], except it has haste and 'At the beginning of the end step, sacrifice this
+/// token'" (CR 707.2, 707.9a, 111.1): the target as it is as the spell or ability resolves, under the resolving object's
+/// controller, with both exceptions part of its copiable values. Nothing if the target is no longer legal (CR 608.2b). Kindle the
+/// Inner Flame, Electroduplicate and Chandra, Flameshaper print it.
+pub fn create_token_copy_with_haste_and_sacrifice(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    let exception = AbilityRef { card: g.card_id(&SACRIFICE_THIS_TOKEN_EXCEPTION), index: 0 };
+    let copy = g.copiable_values(creature).with_keyword(Keyword::Haste).with_ability(exception);
+    g.create_token_copies_together(&[(copy, item.controller)])?;
+    Ok(())
+}
+
 /// "Copy that spell. You may choose new targets for the copy" (CR 707.10, 707.10c) for a trigger about the spell that was cast
 /// (`Fired::about` the spell): the copy is not cast, and is made from its last-known information if the spell has left the stack
 /// (CR 608.2h). Leyline of Resonance, Loki Laufeyson and Jace Reawakened print it.
