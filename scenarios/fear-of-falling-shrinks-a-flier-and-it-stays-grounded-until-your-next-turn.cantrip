@@ -1,0 +1,59 @@
+# Fear of Falling (4/4 flying): "Whenever this creature attacks, target creature defending player controls gets -2/-0 and loses flying until your next turn."
+# Bot2 has a Wind Drake and an Ornithopter, so the ability asks which: Bot1's own Fear of Falling is refused (it is not a creature defending player controls),
+# Bot2's Wind Drake is accepted and becomes 0/2 without flying, and the Ornithopter is untouched. The effect outlasts the turn (CR 611.2b): on turn 4 the Drake
+# is still 0/2 and grounded, and on turn 5, when Bot1's next turn begins, it is a 2/2 flier again. Fear of Falling, unblocked by the grounded Drake, deals 4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Fear of Falling
+Island x3
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Wind Drake
+Ornithopter
+Island x4
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fear of Falling.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wind Drake.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Wind Drake.Keywords = Flying
+[T3 Bot1.Main1]
+Bot1.Attack(Fear of Falling > Bot2)
+! Bot1.Target(Bot1.Battlefield.Fear of Falling)
+Bot1.Target(Bot2.Battlefield.Wind Drake)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Wind Drake.Power = 0
+? Bot2.Battlefield.Wind Drake.Toughness = 2
+? Bot2.Battlefield.Wind Drake.Keywords = (absent)
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Wind Drake.Power = 0
+? Bot2.Battlefield.Wind Drake.Keywords = (absent)
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Wind Drake.Power = 2
+[Expect]
+Bot2.Battlefield.Wind Drake.Keywords = Flying
+Bot2.Battlefield.Wind Drake.Toughness = 2
+Bot2.Battlefield.Ornithopter.Power = 0
