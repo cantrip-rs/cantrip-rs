@@ -1,0 +1,51 @@
+# Fiery Annihilation on Bot2's Alpine Grizzly (4/2) wearing a Coral Sword, targeting both: the Sword is exiled first, and the 5 damage
+# is lethal, but the Grizzly "would die this turn" so it is exiled instead of going to the graveyard.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Fiery Annihilation
+Island x16
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Alpine Grizzly
+Coral Sword
+Island x16
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Alpine Grizzly.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Coral Sword.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Alpine Grizzly.Power = 5
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fiery Annihilation.Cast
+Bot1.Target(Alpine Grizzly)
+Bot1.Target(Coral Sword)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Mountain
+Exile = Alpine Grizzly; Coral Sword
+Bot2.Graveyard = Black Lotus

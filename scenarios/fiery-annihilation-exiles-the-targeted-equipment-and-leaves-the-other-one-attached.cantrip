@@ -1,0 +1,75 @@
+# Fiery Annihilation {2}{R}: "deals 5 damage to target creature. Exile up to one target Equipment attached to that creature. If that
+# creature would die this turn, exile it instead." Bot2's Wall of Stone (0/8) wears a Coral Sword and a Barbed Bloodletter. Bot1
+# targets the wall and the Coral Sword: the wall takes exactly 5 and lives, the Sword is exiled (not put into the graveyard), the
+# Bloodletter stays attached. Bot1's own unattached Skullclamp and Bot2's Mox Jet are not "Equipment attached to that creature": refused.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Fiery Annihilation
+Skullclamp
+Island x14
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Wall of Stone
+Coral Sword
+Mox Jet
+Barbed Bloodletter
+Island x14
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Skullclamp.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Wall of Stone.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Coral Sword.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Barbed Bloodletter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Wall of Stone.Toughness = 10
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fiery Annihilation.Cast
+Bot1.Target(Wall of Stone)
+! Bot1.Target(Skullclamp)
+! Bot1.Target(Bot2.Battlefield.Mox Jet)
+Bot1.Target(Coral Sword)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Wall of Stone.Damage = 5
+
+[Expect]
+Bot2.Battlefield.Wall of Stone.Power = 1
+Bot2.Battlefield.Wall of Stone.Toughness = 10
+Exile = Coral Sword
+Bot2.Graveyard = Black Lotus
+Bot1.Graveyard = Fiery Annihilation
