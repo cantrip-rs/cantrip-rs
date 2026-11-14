@@ -1,0 +1,6 @@
+{
+  "name": "The Tale of Tamiyo",
+  "manaCost": "{2}{U}",
+  "type": "Legendary Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after IV.)\nI, II, III — Mill two cards. If two cards that share a card type were milled this way, draw a card and repeat this process.\nIV — Exile any number of target instant, sorcery, and/or Tamiyo planeswalker cards from your graveyard. Copy them. You may cast any number of the copies."
+}

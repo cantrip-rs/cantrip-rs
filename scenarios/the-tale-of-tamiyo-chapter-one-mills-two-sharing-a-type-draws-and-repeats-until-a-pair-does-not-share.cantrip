@@ -1,0 +1,31 @@
+# The Tale of Tamiyo, cast with Black Lotus mana: chapter I (CR 714.2b) mills two cards. Mox Jet and Ornithopter share the artifact type (CR 205.2a: Ornithopter
+# is an artifact creature, the Mox only an artifact), so Bot1 draws a card (the Lightning Bolt below them) and repeats: the next two, an Island and a second
+# Lightning Bolt, share no type, so it ends. Four cards are milled in all and one drawn (Black Lotus is in the graveyard too, sacrificed for its mana).
+
+[Bot1 Deck]
+Black Lotus
+The Tale of Tamiyo
+Island x5
+Mox Jet
+Ornithopter
+Lightning Bolt
+Island
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.The Tale of Tamiyo.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.The Tale of Tamiyo.Counters.Lore = 1
+Bot1.Graveyard.Count = 5
+Bot1.Graveyard = Lightning Bolt; Island; Ornithopter; Mox Jet; Black Lotus
+Bot1.Hand.Count = 6
+Bot1.Library.Count = 12
