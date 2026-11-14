@@ -1,0 +1,35 @@
+# Twist Reality's second mode, "Manifest dread" (CR 701.62a): of Llanowar Elves and Lightning Bolt the Elves goes face down as a
+# 2/2 and the Bolt to the graveyard. Nothing is countered (the mode has no target, so it can be chosen with no spell on the stack).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Twist Reality
+Island x3
+Llanowar Elves
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Twist Reality.Cast
+Bot1.Modes(Manifest dread)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Llanowar Elves | Lightning Bolt)
+
+[Expect]
+Bot1.Graveyard = Twist Reality; Lightning Bolt
+Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield..FaceDownName = Llanowar Elves
+Bot1.Battlefield..Power = 2
+Bot1.Battlefield..Toughness = 2
