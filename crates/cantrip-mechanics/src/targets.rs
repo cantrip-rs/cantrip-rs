@@ -999,6 +999,14 @@ pub fn artifact_creature_or_enchantment_filter(q: &dyn Query, _: &Asker, t: Targ
         c.is(CardType::Artifact) || c.is(CardType::Creature) || c.is(CardType::Enchantment)
     })
 }
+/// "Target artifact, creature, or enchantment an opponent controls" as a filter (CR 115.1, 109.5): a permanent that is any of them
+/// and is controlled by a player other than the ability's controller, for a slot that is "up to one" or carries a further limit.
+/// Earth Kingdom Jailer (with a mana value of at least 3) and Trapped in the Screen print it.
+pub fn artifact_creature_or_enchantment_an_opponent_controls_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    artifact_creature_or_enchantment_filter(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) != asker.controller)
+}
+/// "Target artifact, creature, or enchantment an opponent controls" (CR 115.1).
+pub const ARTIFACT_CREATURE_OR_ENCHANTMENT_AN_OPPONENT_CONTROLS: TargetSpec = target(artifact_creature_or_enchantment_an_opponent_controls_filter);
 /// "Target permanent". Alpha Deathclaw and Argentum Armor print it.
 pub const PERMANENT: TargetSpec = target(permanent_filter);
 fn other_permanent_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
