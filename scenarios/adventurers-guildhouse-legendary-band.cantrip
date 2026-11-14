@@ -1,0 +1,43 @@
+# Guildhouse lets a green legendary creature band with another legendary creature; blocking one blocks both, and their controller assigns damage (CR 702.22c, 702.22h, 702.22k).
+[Bot1 Deck]
+Adventurers' Guildhouse
+Mox Emerald
+Mox Pearl
+Reptil, Dinomorpher
+Isamaru, Hound of Konda
+Island x15
+
+[Bot2 Deck]
+Forest
+Black Lotus
+Ulvenwald Oddity
+Island x17
+
+[Actions]
+Bot1.Hand.Adventurers' Guildhouse.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Reptil, Dinomorpher.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Ulvenwald Oddity.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Reptil, Dinomorpher > Bot2; Isamaru, Hound of Konda > Bot2)
+Bot1.Choose(Isamaru, Hound of Konda)
+? Combat.Attackers = Reptil, Dinomorpher > Bot2 (band 1); Isamaru, Hound of Konda > Bot2 (band 1)
+Bot2.Block(Ulvenwald Oddity > Reptil, Dinomorpher)
+[T3 Bot1.Blockers]
+? Combat.Blocks = Ulvenwald Oddity > Reptil, Dinomorpher; Ulvenwald Oddity > Isamaru, Hound of Konda
+Bot1.AssignDamage(Ulvenwald Oddity > Reptil, Dinomorpher: 4)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard.Reptil, Dinomorpher.Power = 1
+Bot1.Battlefield.Isamaru, Hound of Konda.Damage = 0
+Bot2.Life = 20

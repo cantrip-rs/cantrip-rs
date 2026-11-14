@@ -1,0 +1,11 @@
+{
+  "name": "Deep Spawn",
+  "manaCost": "{5}{U}{U}{U}",
+  "type": "Creature — Homarid",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Trample\nAt the beginning of your upkeep, sacrifice this creature unless you mill two cards.\n{U}: This creature gains shroud until end of turn and doesn't untap during your next untap step. Tap this creature. (A creature with shroud can't be the target of spells or abilities.)",
+  "keywords": [
+    "Trample"
+  ]
+}

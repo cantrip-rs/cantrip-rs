@@ -1,0 +1,28 @@
+# An uncharged Battery pays one black but cannot pay a two-black cost (CR 601.2g).
+[Bot1 Deck]
+Black Mana Battery
+Black Lotus
+Mox Pearl
+Dark Ritual
+Black Knight
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Black Mana Battery.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Black Knight.Cast(Mana: short)
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Battlefield.Black Mana Battery.Activate(Ability: Remove any number; X: 0)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {B}{B}{B}
+[Expect]
+Bot1.Graveyard = Dark Ritual; Black Lotus

@@ -1,0 +1,48 @@
+# Charging costs two and taps the Battery; two charges can be spent together for {B}{B}{B} (CR 602.2, 605.1a).
+[Bot1 Deck]
+Black Mana Battery
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Island x25
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Black Mana Battery.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Black Mana Battery.Activate(Ability: Put a charge; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Mana Battery.Activate(Ability: Put a charge)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Black Mana Battery.Counters.Charge = 1
+! Bot1.Battlefield.Black Mana Battery.Activate(Ability: Put a charge)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Mana Battery.Activate(Ability: Put a charge)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Black Mana Battery.Counters.Charge = 2
+[T7 Bot1.Main1]
+Bot1.Battlefield.Black Mana Battery.Activate(Ability: Remove any number; X: 2)
+! Bot1.Battlefield.Black Mana Battery.Activate(Ability: Remove any number; X: 3)
+Bot1.Pass
+? Bot1.Mana = {B}{B}{B}
+? Bot1.Battlefield.Black Mana Battery.Counters.Charge = (absent)
+[Expect]
+Bot1.Battlefield.Black Mana Battery.Tapped = true
+Bot1.Battlefield.Black Mana Battery.Counters.Charge = (absent)

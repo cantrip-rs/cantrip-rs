@@ -1,0 +1,61 @@
+# The triggered ability remembers the tapped creature even if the Aura is destroyed in response (CR 113.7a).
+[Bot1 Deck]
+Spirit Shackle
+Mox Jet
+Gleemox
+Swamp x20
+[Bot2 Deck]
+Craw Wurm
+Memnite
+Disenchant
+Mox Pearl
+Black Lotus
+Black Lotus
+Forest x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Craw Wurm.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Craw Wurm > Bot1)
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Craw Wurm.Tapped = true
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+! Bot1.Hand.Spirit Shackle.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Spirit Shackle.Cast(Bot2.Battlefield.Craw Wurm)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spirit Shackle.AttachedTo = Craw Wurm
+? Bot2.Battlefield.Craw Wurm.Power = 6
+? Bot2.Battlefield.Craw Wurm.Toughness = 4
+[T6 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Attack(Craw Wurm > Bot1; Memnite > Bot1)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Spirit Shackle)
+Bot2.Battlefield.Forest.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Craw Wurm.Power = 6
+? Bot2.Battlefield.Craw Wurm.Toughness = 2
+? Bot2.Battlefield.Craw Wurm.Counters.Plus0Minus2 = 1
+? Bot2.Battlefield.Memnite.Toughness = 1
+[Expect]
+Bot1.Graveyard = Spirit Shackle
+Bot2.Battlefield.Craw Wurm.Counters.Plus0Minus2 = 1

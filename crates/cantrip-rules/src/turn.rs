@@ -6,6 +6,10 @@ use cantrip_state::{Frame, FrameKind};
 use crate::layers::{self, live, summoning_sick};
 use crate::{Cx, Flow, Game, R, Stop, actions, ops};
 
+#[cfg(test)]
+#[path = "lasting_block_text_tests.rs"]
+mod lasting_block_text_tests;
+
 /// What a card that may begin the game on the battlefield asks (CR 103.6a): the Leylines, Gemstone Caverns.
 const BEGIN_ON_BATTLEFIELD: Question = Question::new(
     "BeginOnBattlefield",
@@ -93,14 +97,25 @@ pub fn next_step(game: &mut Game) {
         s.drop_spent_mana_riders();
     }
     let main_seen = turn.scheduled && game.log.iter().rev().take_while(|r| r.turn == turn.number).any(|r| matches!(r.event, Event::StepBegan { step } if step.is_main()));
-    let s = &mut game.state;
-    // CR 724.1d, 724.2d: a turn or combat phase ended during combat removes every creature and planeswalker from combat as
-    // the step ends, as the end of the combat phase does, and "until end of combat" effects expire.
+    // A duration through this step ends at its boundary, even when the step is ended early. Settle control before
+    // the new step's beginning triggers inspect its permanents (CR 500.4, 611.2a).
+    if game.state.effects.iter().any(|e| e.duration == Duration::EndOfStep) {
+        game.state.effects_retain(|e| e.duration != Duration::EndOfStep);
+        let mut cx = Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        ops::settle_lasting_and_control(&mut cx);
+    }
+    // CR 511.3, 724.1d, 724.2d: combat durations end before another combat begins.
+    // Settle the effects ending at this boundary while event watchers still exist, just as at cleanup.
     if turn.number > 0 && combat_ends {
-        // "This combat" effects end with the combat phase (CR 511.3), before an additional one begins.
-        if s.effects.iter().any(|e| e.duration == Duration::EndOfCombat) {
-            s.effects_retain(|e| e.duration != Duration::EndOfCombat);
+        if game.state.effects.iter().any(|e| e.duration == Duration::EndOfCombat) {
+            game.state.effects_retain(|e| e.duration != Duration::EndOfCombat);
         }
+        let mut cx = Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        expire_combat_watchers(&mut cx);
+    }
+    let s = &mut game.state;
+    // Removing every creature from combat also happens when the phase or turn ended early.
+    if turn.number > 0 && combat_ends {
         s.set_attackers(Vec::new());
         s.set_blocks(Vec::new());
         s.set_blockers(Vec::new());
@@ -250,6 +265,16 @@ fn first_step(spec: PhaseSpec, main_seen: bool) -> Step {
     }
 }
 
+/// A combat-limited delayed event ability expires after continuous effects ending at this boundary have settled.
+/// The normal path has no such delayed entries and needs neither layer work nor allocation.
+fn expire_combat_watchers(cx: &mut Cx) {
+    if !cx.s().delayed.iter().any(|d| d.when == DelayedWhen::ThisCombat) { return; }
+    ops::settle_lasting_and_control(cx);
+    for at in (0..cx.s().delayed.len()).rev() {
+        if cx.s().delayed[at].when == DelayedWhen::ThisCombat { cx.st().delayed_remove(at); }
+    }
+}
+
 /// Who takes the next turn: the most recently created extra turn first (CR 500.7), skipping a player who has left the
 /// game (CR 800.4k), else the next player in turn order.
 fn next_turn_taker(s: &mut GameState, after: PlayerId) -> PlayerId {
@@ -338,7 +363,8 @@ fn next_turn_taker(s: &mut GameState, after: PlayerId) -> PlayerId {
 /// next turn".
 fn turn_would_have_begun(s: &mut GameState, p: PlayerId) {
     // "During that player's next untap step" too: the untap step would have been that turn's first step.
-    let waits = |e: &ContinuousEffect| matches!(e.duration, Duration::UntilNextTurnOf(q) | Duration::EndOfNextTurnOf(q) | Duration::DuringNextUntapStepOf(q) if q == p);
+    let waits = |e: &ContinuousEffect| matches!(e.duration, Duration::UntilNextTurnOf(q) | Duration::EndOfNextTurnOf(q) | Duration::DuringNextUntapStepOf(q) if q == p)
+        || matches!(e.duration, Duration::UntilNextStepOf { player: Some(q), .. } | Duration::UntilEndOfNextStepOf { player: Some(q), .. } if q == p);
     if s.effects.iter().any(waits) {
         s.effects_retain(|e| !waits(e));
     }
@@ -512,12 +538,19 @@ pub fn begin_step(cx: &mut Cx) -> R<Flow> {
     let turn = cx.s().turn;
     let active = turn.active;
     if turn.step() != Step::Untap {
+        // CR 103.8a skips the first draw STEP, including its triggers and priority, not just its draw action.
+        let first_draw = turn.step() == Step::Draw && turn.number == 1 && active == turn.starting && cx.s().players.len() == 2 && !turn.phase_additional;
+        if first_draw || crate::static_rules::skips_step(cx, active, turn.step()) {
+            return Ok(Flow::Done);
+        }
         crate::settle::step_began(cx, turn.step());
     }
     match turn.step() {
         Step::Untap => {
             if turn.phase_additional {
-                // CR 500.8, 501.1: another beginning phase in this same turn runs untap/upkeep/draw again.
+                // Another beginning phase has the same skip rules and step deadlines, without beginning another turn.
+                if crate::static_rules::skips_step(cx, active, Step::Untap) { return Ok(Flow::Done); }
+                crate::settle::expire_step_deadlines(cx, Step::Untap);
                 crate::phasing::untap_step(cx, active);
                 crate::day_night::check_untap_step(cx)?;
                 untap_step(cx, active)?;
@@ -550,14 +583,10 @@ pub fn begin_step(cx: &mut Cx) -> R<Flow> {
             // How many turns a player has taken is asked of the history (`cantrip_mechanics::history::in_your_first_turns`).
             // Whether it is an extra turn is part of its beginning (CR 500.7: "haven't begun an extra turn this game").
             cx.record(Event::TurnBegan { player: active, extra: turn.extra != 0 });
-            // CR 502.1: first, the active player's phased-out permanents phase in.
-            crate::phasing::untap_step(cx, active);
-            // CR 502.2: the untap step's second turn-based action reads what the previous turn's active player cast,
-            // before the counts are cleared for this turn.
-            crate::day_night::check_untap_step(cx)?;
             // "Until your next turn" ends as that turn begins (CR 611.2b).
             if cx.s().effects.iter().any(|e| e.duration == Duration::UntilNextTurnOf(active)) {
                 cx.st().effects_retain(|e| e.duration != Duration::UntilNextTurnOf(active));
+                ops::settle_lasting_and_control(cx);
             }
             // The same for a delayed ability that lasts until then (CR 603.7b).
             for at in (0..cx.s().delayed.len()).rev() {
@@ -572,16 +601,19 @@ pub fn begin_step(cx: &mut Cx) -> R<Flow> {
                     cx.st().effect_set(at, effect);
                 }
             }
+            // The turn begins even when its first step is skipped (CR 500.11, 614.10a).
+            // Turn-bound durations ended above; skipped untap-step deadlines, phasing, day/night, exert and untaps wait.
+            if crate::static_rules::skips_step(cx, active, Step::Untap) {
+                return Ok(Flow::Done);
+            }
+            crate::settle::expire_step_deadlines(cx, Step::Untap);
+            // CR 502.1-2: phasing, then day/night, before the simultaneous untap.
+            crate::phasing::untap_step(cx, active);
+            crate::day_night::check_untap_step(cx)?;
             untap_step(cx, active)?;
             return Ok(Flow::Done);
         }
-        Step::Draw => {
-            // CR 103.8a: the player who goes first skips the draw of their first turn (in a two-player game).
-            let skip = turn.number == 1 && active == turn.starting && cx.s().players.len() == 2 && !turn.phase_additional;
-            if !skip {
-                ops::draw_cards(cx, active, 1);
-            }
-        }
+        Step::Draw => ops::draw_cards(cx, active, 1),
         Step::PrecombatMain => ops::add_lore_counters(cx),
         Step::DeclareAttackers => declare_attackers(cx)?,
         Step::DeclareBlockers => declare_blockers(cx)?,
@@ -745,6 +777,7 @@ pub(crate) fn untap_step(cx: &mut Cx, active: PlayerId) -> R<()> {
         }
         untapping.push(id);
     }
+    crate::untap_limits::restrict(cx, active, &mut untapping)?;
     // "Untap [these] during each other player's untap step" (CR 611.3a): what each rule is true of now, before anything
     // untaps, untaps with the active player's permanents and is no one's choice (Bender's Waterskin ruling, 2025-10-02).
     // A permanent of a player who isn't active is outside "doesn't untap during its controller's untap step" (CR 502.3,
@@ -773,11 +806,21 @@ pub(crate) fn untap_step(cx: &mut Cx, active: PlayerId) -> R<()> {
     let ends = |e: &ContinuousEffect| match e.duration {
         Duration::DuringNextUntapStepOf(p) => p == active,
         Duration::DuringItsControllersNextUntapStep => s.obj(e.affected).controller == active,
+        Duration::DuringControllersNextUntapSteps(n) => n <= 1 && s.obj(e.affected).controller == active,
         _ => false,
     };
     if s.effects.iter().any(ends) {
         let keep: Vec<bool> = s.effects.iter().map(|e| !ends(e)).collect();
         cx.st().effects_keep(&keep);
+    }
+    // These are remaining future steps, not a tally of past actions. Every independent effect advances together;
+    // skipped steps never enter this procedure. Read the controllers before settling control after the untap.
+    for at in 0..cx.s().effects.len() {
+        let e = cx.s().effects[at];
+        if let Duration::DuringControllersNextUntapSteps(n) = e.duration
+            && cx.s().obj(e.affected).controller == active {
+            cx.st().effect_set(at, ContinuousEffect { duration: Duration::DuringControllersNextUntapSteps(n - 1), ..e });
+        }
     }
     // No player gets priority in the untap step (CR 502.4), so no state-based actions are checked before the upkeep begins:
     // an effect "for as long as [it] remains tapped" ends the moment its source untaps (CR 611.2b), and the controller it
@@ -861,6 +904,7 @@ fn defending_player(cx: &Cx, attack: Target) -> Option<PlayerId> {
 fn declare_attackers(cx: &mut Cx) -> R<()> {
     spend_next_turn_effects(cx);
     let active = cx.s().turn.active;
+    let attack_haste = std::cell::OnceCell::new();
     let eligible: Vec<ObjectId> = cx
         .s()
         .battlefield()
@@ -878,7 +922,8 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
                 // CR 508.1c: a resolved rule about an open set that says it, or those who control it, can't attack this turn
                 // (`LastingRuleKind::CantAttack`: Peace in Our Time).
                 && crate::static_rules::lasting_rules_on(cx, cx.cards(), id, LastingRuleKind::CantAttack).next().is_none()
-                && !summoning_sick(cx.cards(), cx.s(), &cx.g.log, id)
+                && (!summoning_sick(cx.cards(), cx.s(), &cx.g.log, id)
+                    || !attack_haste.get_or_init(|| crate::static_rules::attack_haste_sources(cx)).is_empty())
                 // CR 702.3b: defender, unless an effect or a static ability lets it attack as though it didn't have it
                 // (CR 609.4), which lifts no other restriction: asked last, of a creature that could otherwise attack.
                 && (!chars.has(Keyword::Defender) || crate::static_rules::may_attack_despite_defender(&*cx, cx.cards(), id))
@@ -891,6 +936,20 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
     // CR 508.1c: the attacks a static ability forbids ("this creature can't attack unless ...", "creatures with flying
     // can't attack you"). A creature forbidden every attack open to it can't attack at all.
     let mut barred = crate::static_rules::attacks_barred(&*cx, cx.cards(), &eligible, &targets);
+    // The permission may name particular defenders; include a sick creature
+    // only for the attacks it permits. Every independent restriction still holds.
+    if let Some(sources) = attack_haste.get().filter(|s| !s.is_empty()) {
+        for &creature in &eligible {
+            if summoning_sick(cx.cards(), cx.s(), &cx.g.log, creature) {
+                for &defender in &targets {
+                    if !sources.iter().any(|(asker, def)| def.attacks_as_though_haste.iter().any(|rule| rule(cx, asker, creature, defender)))
+                        && !barred.contains(&(creature, defender)) {
+                        barred.push((creature, defender));
+                    }
+                }
+            }
+        }
+    }
     // CR 508.1c, 611.2c: the attacks a resolved rule about an open set forbids - "until your next turn, creatures can't
     // attack you" (Chronomantic Escape), barring the attack on that player alone.
     for attack in crate::static_rules::lasting_rules_barring_attacks(&*cx, cx.cards(), &eligible, &targets) {
@@ -930,19 +989,26 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
         ops::tap_together(cx, &tapping);
         // CR 508.1g: the optional costs to attack the active player chooses to pay.
         let options = choose_attack_options(cx, active, &attacks)?;
-        let RequestKind::DeclareAttackers { costs, .. } = &kind else { unreachable!() };
+        let locked = crate::static_rules::lock_attack_costs(cx, &attacks);
+        let mut fixed = locked.fixed;
+        let scheduled_options = !fixed.is_empty();
+        if scheduled_options {
+            // Enlist may tap a land creature before a mandatory sacrifice
+            // takes it. It belongs to the same payment ordering.
+            for o in &options {
+                let (cost, chosen) = match o.option {
+                    AttackOption::Enlist => (&ENLIST_COST, Some(o.tapped)),
+                    AttackOption::Exert => (&EXERT_COST, None),
+                };
+                fixed.push(crate::static_rules::LockedAttackPayment { source: o.attacker, attacker: o.attacker, chosen, by: None, cost });
+            }
+        }
         // CR 508.1h: the total cost to attack, locked in now; mana abilities activated while paying it (CR 508.1i) change
         // nothing of it. CR 508.1j: it is paid all at once.
-        let total = AttackCost::total(costs, &attacks);
-        if !total.is_zero() {
-            let paying: Vec<ObjectId> = attacks.iter().filter(|&&(a, t)| !AttackCost::free(costs, a, t)).map(|a| a.0).collect();
-            let source = costs
-                .iter()
-                .find(|c| attacks.contains(&(c.attacker, c.target)))
-                .map(|c| c.source)
-                .expect("a cost to attack has a source");
-            let helpers = actions::Helpers { attackers: &paying, ..actions::Helpers::NONE };
-            match actions::pay_mana_with(cx, active, source, total, &helpers) {
+        let total = locked.mana;
+        if !total.is_zero() || !fixed.is_empty() {
+            let source = locked.source.expect("a cost to attack has a source");
+            match actions::pay_attack_costs(cx, active, source, total, &fixed, &locked.attackers) {
                 Ok(_) => {}
                 Err(Stop::Cancel) => {
                     crate::takeback::take_back(cx, mark, log_mark, since);
@@ -953,11 +1019,11 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
         }
         // CR 508.1j: the optional costs are paid with the rest. A creature to be tapped that a mana ability tapped, or that is
         // gone, can't be: the declaration is illegal and taken back (CR 508.1, 733.1).
-        if !options.iter().all(|o| o.tapped == ObjectId::NONE || enlistable_now(cx, active, o.tapped)) {
+        if !scheduled_options && !options.iter().all(|o| o.tapped == ObjectId::NONE || enlistable_now(cx, active, o.tapped)) {
             crate::takeback::take_back(cx, mark, log_mark, since);
             continue;
         }
-        for o in &options {
+        for o in options.iter().filter(|_| !scheduled_options) {
             match o.option {
                 AttackOption::Enlist => ops::tap(cx, o.tapped),
                 AttackOption::Exert => ops::exert(cx, o.attacker, active),
@@ -968,6 +1034,9 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
     let (attacks, bands, options) = attacks;
     let mut attackers = Vec::new();
     for ((id, target), band) in attacks.into_iter().zip(bands) {
+        // Paying may sacrifice an attacking land creature or move/control a
+        // chosen creature. Only the still-present creatures become attacking.
+        if !live(cx.s(), id) || !cx.s().obj(id).zone.is(ZoneKind::Battlefield) || cx.s().obj(id).controller != active || !cx.chars(id).is(CardType::Creature) { continue; }
         // Each names a player or a planeswalker or battle of a defending player (CR 508.1b), which the declaration was checked
         // against: its defending player is the one that names (CR 508.5).
         let Some(defending) = defending_player(cx, target) else { continue };
@@ -1074,9 +1143,17 @@ fn choose_attack_options(cx: &mut Cx, active: PlayerId, attacks: &[(ObjectId, Ta
     Ok(paid)
 }
 
-/// Whether `id` may be tapped for an enlist ability of a creature `player` attacks with (CR 702.154a), past not attacking and
-/// not being tapped for another: an untapped creature `player` controls that has haste or has been under their control
-/// continuously since the turn began.
+const ENLIST_COST: Cost = Cost::tap_untapped(1, enlist_cost_creature);
+const EXERT_COST: Cost = Cost { exert: true, ..Cost::NONE };
+
+/// The creature/haste part of a locked enlist payment's filter.
+fn enlist_cost_creature(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
+    let obj = q.obj(id);
+    let chars = q.chars(id);
+    chars.is(CardType::Creature) && (chars.has(Keyword::Haste) || obj.controlled_since < q.state().player(obj.controller).turn_began)
+}
+
+/// Whether the optional enlist declaration can choose this untapped creature.
 fn enlistable_now(cx: &Cx, player: PlayerId, id: ObjectId) -> bool {
     let obj = cx.s().obj(id);
     obj.zone == Zone::BATTLEFIELD
@@ -1087,16 +1164,14 @@ fn enlistable_now(cx: &Cx, player: PlayerId, id: ObjectId) -> bool {
 }
 
 /// The attacking bands the active player announces (CR 508.1e, 702.22c), one band number for each of `attacks` (0 for none).
-/// Each attacker with banding not yet in a band is asked in turn for the other attackers that band with it: any of those
-/// attacking what it attacks (CR 702.22d) and in no band yet (each creature is in one band at most), any number with banding
-/// and at most one without (the core refuses more, `validate`). Choosing none forms no band with it. Nothing is asked where no
-/// attacker has banding, or one has no other attacker beside it.
+/// A qualifying provider not already in a band may choose the other unbanded attackers attacking the same defender.
+/// The selection enforces ordinary banding or the provider's named "bands with other" quality. Declining forms no band.
 fn declare_bands(cx: &mut Cx, active: PlayerId, attacks: &[(ObjectId, Target)]) -> R<Vec<u32>> {
     let mut band = vec![0u32; attacks.len()];
     let mut next = 1;
     for i in 0..attacks.len() {
         let (source, target) = attacks[i];
-        if band[i] != 0 || !cx.chars(source).has(Keyword::Banding) {
+        if band[i] != 0 || !crate::banding::can_lead(cx, source) {
             continue;
         }
         let eligible: Vec<ObjectId> =
@@ -1121,15 +1196,8 @@ fn declare_bands(cx: &mut Cx, active: PlayerId, attacks: &[(ObjectId, Target)]) 
     Ok(band)
 }
 
-/// "Any number of creatures with banding and up to one without" (CR 702.22c): the creatures that join a band.
-fn up_to_one_without_banding(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
-    let banding = |c: ObjectId| q.chars(c).has(Keyword::Banding);
-    let without = choice.selected.iter().filter(|&&c| !banding(c)).count();
-    Verdict { complete: without <= 1, addable: Bits::of(choice.candidates.len(), |i| without == 0 || banding(choice.candidates[i])) }
-}
-
-/// The rule of a band's other members (CR 702.22c), a part of the question that asks for them.
-const BAND: Part = cantrip_api::select::part(&(up_to_one_without_banding as SelectFn), 0, "");
+/// The rule of a band's other members (CR 702.22c), including parameterized qualities.
+const BAND: Part = cantrip_api::select::part(&(crate::banding::selection as SelectFn), 0, "");
 
 /// Whether `blocker` may block `attacker` (CR 509.1b): a creature that can't block (decayed's too, CR 702.147a), one that
 /// can't be blocked (an ability, or a resolved effect: `EffectKind::CantBeBlocked`), a resolved restriction on the pair
@@ -1152,7 +1220,13 @@ fn can_block(cx: &Cx, blocker: ObjectId, attacker: ObjectId, rule_sources: &[Obj
     // effect too, so it holds whatever abilities its source or the creature have lost since (CR 113.1a, 611.2c, 613.1f).
     for e in &cx.s().effects {
         if let EffectKind::BlockRestriction { card, index } = e.kind
-            && cx.card(card).lasting_block_rules.get(index as usize).is_some_and(|r| !(r.allows)(cx, e.affected, blocker, attacker))
+            && cx.card(card).lasting_block_rules.get(index as usize).is_some_and(|r| {
+                // This callback's source argument names the affected attacker,
+                // not the object which created the rule. Read its rule words
+                // through that argument, while characteristics remain live.
+                let reads = actions::WithWords { q: cx, source: e.affected, words: e.words };
+                !(r.allows)(&reads, e.affected, blocker, attacker)
+            })
         {
             return false;
         }
@@ -1183,17 +1257,28 @@ fn can_block(cx: &Cx, blocker: ObjectId, attacker: ObjectId, rule_sources: &[Obj
     // CR 702.14c: only a defending player's current lands qualify. Raw membership is exact: snow islandwalk
     // does not confer ordinary islandwalk and cannot evade blockers through a non-snow Island.
     if a.keywords.has_landwalk() {
+        // CR 609.4: "as though it didn't have [landwalk]" changes only blocking. The attacker retains the ability,
+        // including for other abilities that ask about it; flying, protection and other landwalks still restrict it.
+        let mut walks = a.keywords;
+        for &source in rule_sources {
+            for (card, by) in cx.cards().texts_linked(cx.s(), source) {
+                let asker = Asker { instance: None, source, controller: cx.s().obj(source).controller, by, spell: false };
+                for exception in cx.card(card).landwalk_exceptions {
+                    walks.0 &= !(exception(cx, &asker, blocker, attacker)).for_effect().0;
+                }
+            }
+        }
         let defending = cx.s().obj(blocker).controller;
         let walked = cx.s().battlefield().iter().any(|&id| {
             if cx.s().obj(id).controller != defending { return false; }
             let land = cx.chars(id);
             land.is(CardType::Land) && (
-                Keyword::LANDWALKS.iter().any(|&(walk, ty)| a.has(walk) && land.has_subtype(ty))
-                || (land.supertypes.snow && Keyword::SNOW_LANDWALKS.iter().any(|&(walk, ty)| a.has(walk) && land.has_subtype(ty)))
-                || (a.has(Keyword::SnowLandwalk) && land.supertypes.snow)
-                || (a.has(Keyword::Desertwalk) && land.has_subtype(Subtype::Desert))
-                || (a.has(Keyword::NonbasicLandwalk) && !land.supertypes.basic)
-                || (a.has(Keyword::LegendaryLandwalk) && land.supertypes.legendary)
+                Keyword::LANDWALKS.iter().any(|&(walk, ty)| walks.has(walk) && land.has_subtype(ty))
+                || (land.supertypes.snow && Keyword::SNOW_LANDWALKS.iter().any(|&(walk, ty)| walks.has(walk) && land.has_subtype(ty)))
+                || (walks.has(Keyword::SnowLandwalk) && land.supertypes.snow)
+                || (walks.has(Keyword::Desertwalk) && land.has_subtype(Subtype::Desert))
+                || (walks.has(Keyword::NonbasicLandwalk) && !land.supertypes.basic)
+                || (walks.has(Keyword::LegendaryLandwalk) && land.supertypes.legendary)
             )
         });
         if walked { return false; }
@@ -1303,7 +1388,7 @@ fn attack_rules(cx: &Cx, eligible: &[ObjectId], targets: &[Target], barred: Vec<
         }
     }
     let alone = crate::static_rules::attacks_alone_barred(cx, cx.cards(), eligible);
-    let mut rules = AttackRules { required, barred, alone_barred: alone, limits: crate::static_rules::attack_limits(cx, targets), most: 0, suggested: Vec::new() };
+    let mut rules = AttackRules { required, barred, alone_barred: alone, groups: crate::static_rules::combat_groups(cx, CombatRole::Attacker, eligible), limits: crate::static_rules::attack_limits(cx, targets), most: 0, suggested: Vec::new() };
     if !rules.required.is_empty() {
         (rules.most, rules.suggested) = rules.solve(eligible, targets, costs);
     }
@@ -1361,6 +1446,65 @@ fn cant_block(cx: &Cx, id: ObjectId) -> bool {
         || crate::static_rules::lasting_rules_on(cx, cx.cards(), id, LastingRuleKind::CantBlock).next().is_some()
 }
 
+/// Live sources of static blocking rules, shared by declaration legality and its rule-specific tests.
+fn blocking_rule_sources(cx: &Cx) -> Vec<ObjectId> {
+    cx
+        .s()
+        .battlefield()
+        .iter()
+        .copied()
+        .filter(|&id| {
+            let obj = cx.s().obj(id);
+            cx.cards().texts(cx.s(), obj).any(|card| cx.cards().block_rules[card.0 as usize]) && !cx.lost_all_abilities(id)
+        })
+        .collect()
+}
+
+/// A "could block" condition at resolution, rather than a new declaration. Find a restriction-valid representation of
+/// exactly the proposed graph, including automatic band associations. Every desired relationship is required by this
+/// hypothetical question, not by a Lure or other gameplay requirement. Unrelated existing pairs may persist even after
+/// gaining evasion; only the proposed pairs are checked for pair restrictions. A proposed blocker must be untapped
+/// (Sorrow's Path and General Jarkeld); declaration payments are not imposed again.
+pub(crate) fn block_reassignment_allowed(cx: &Cx, ending: &[(ObjectId, ObjectId)], starting: &[(ObjectId, ObjectId)]) -> bool {
+    let sources = blocking_rule_sources(cx);
+    let mut graph: Vec<_> = cx.s().blocks.iter().map(|b| (b.blocker,b.attacker)).filter(|p| !ending.contains(p)).collect();
+    let mut proposed = Vec::new();
+    let mut changed_blockers = Vec::new();
+    let mut changed_attackers = Vec::new();
+    for &(b,a) in ending.iter().chain(starting) {
+        if !changed_blockers.contains(&b) { changed_blockers.push(b); }
+        if !changed_attackers.contains(&a) { changed_attackers.push(a); }
+    }
+    for &(b,a) in starting {
+        if !live(cx.s(),b) || cx.s().obj(b).tapped { return false; }
+        let chars = cx.chars(b);
+        if !chars.is(CardType::Creature) || chars.is(CardType::Battle) || cx.is_attacking(b) { return false; }
+        let Some(attack) = cx.s().attackers.iter().find(|x| x.id == a && x.defending == cx.controller(b)) else { return false; };
+        for member in cx.s().attackers.iter().filter(|x| x.id == a || (attack.band != 0 && x.band == attack.band)) {
+            let pair = (b,member.id);
+            if !graph.contains(&pair) { graph.push(pair); }
+            if !proposed.contains(&pair) { proposed.push(pair); }
+            if !changed_attackers.contains(&member.id) { changed_attackers.push(member.id); }
+        }
+    }
+    // A band can be blocked through any member which this blocker can legally be declared to block. The solver chooses
+    // those representatives and checks their minimum/maximum counts; automatic associations consume no extra capacity.
+    let allowed: Vec<_> = graph.iter().copied().filter(|&(b,a)| {
+        !proposed.contains(&(b,a)) || (!cant_block(cx,b) && can_block(cx,b,a,&sources))
+    }).collect();
+    let mut blockers = Vec::new();
+    for &(b,_) in &graph { if !blockers.contains(&b) { blockers.push(b); } }
+    let rules = BlockRequirements {
+        groups: crate::static_rules::combat_groups(cx,CombatRole::Blocker,&blockers),
+        required: graph.iter().map(|&(b,a)| RequiredBlock {blocker:Some(b),attacker:Some(a)}).collect(),
+        bands: cx.s().attackers.iter().filter(|a| a.band != 0).map(|a| (a.id,a.band)).collect(),
+        limits: changed_attackers.iter().copied().map(|a| (a,count_u32(cx.chars(a).minimum_blockers()),u32::try_from(maximum_blockers(cx,a,&sources)).unwrap_or(u32::MAX))).collect(),
+        capacities: blockers.iter().copied().map(|b| (b,if changed_blockers.contains(&b) {block_capacity(cx,b,&sources)} else {u32::MAX})).collect(),
+        ..Default::default()
+    };
+    rules.solve(&allowed,&[],Some(count_u32(graph.len())),false).is_some()
+}
+
 fn declare_blockers(cx: &mut Cx) -> R<()> {
     let attackers: Vec<ObjectId> = cx.s().attackers.iter().map(|a| a.id).collect();
     if attackers.is_empty() {
@@ -1379,16 +1523,7 @@ fn declare_blockers(cx: &mut Cx) -> R<()> {
         .collect();
     // The permanents whose static abilities limit who may block whom, or by how many (CR 509.1b), and which have not lost
     // them (CR 613.1f).
-    let rule_sources: Vec<ObjectId> = cx
-        .s()
-        .battlefield()
-        .iter()
-        .copied()
-        .filter(|&id| {
-            let obj = cx.s().obj(id);
-            cx.cards().texts(cx.s(), obj).any(|card| cx.cards().block_rules[card.0 as usize]) && !cx.lost_all_abilities(id)
-        })
-        .collect();
+    let rule_sources = blocking_rule_sources(cx);
     let mut allowed = Vec::new();
     for &b in &eligible {
         for &a in &attackers {
@@ -1411,7 +1546,7 @@ fn declare_blockers(cx: &mut Cx) -> R<()> {
     allowed.retain(|p| !menace.contains(&p.1));
     if !allowed.is_empty() {
         // CR 509.1b-c: each attacker's limits, and the blocks effects require if able, with the most of them a declaration can obey.
-        let requirements = block_rules(cx, &attackers, &allowed, &rule_sources);
+        let requirements = block_rules(cx, &attackers, &allowed, &rule_sources, &eligible);
         // A defending player who has left blocks with nothing (CR 800.4a): no one else declares their blocks.
         let answer = cx.ask_rule(defender, RequestKind::DeclareBlockers { eligible, attackers, allowed, requirements })?;
         if let Some(Answer::Block(blocks)) = answer {
@@ -1484,7 +1619,7 @@ fn deals_now(cx: &Cx, id: ObjectId, had_first_strike: bool, first_strike_step: b
 /// says blocks if able (`EffectKind::MustBlock`) that may block something, or blocks one attacker if able (`EffectKind::MustBlockAttacker`) that may block it; and the most of them a declaration can obey, with
 /// one that does (`BlockRequirements::solve`). A creature that can't block, or may block nothing, is required nothing (CR
 /// 509.1c: a requirement is obeyed only as far as the restrictions allow).
-fn block_rules(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)], rule_sources: &[ObjectId]) -> BlockRequirements {
+fn block_rules(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)], rule_sources: &[ObjectId], eligible: &[ObjectId]) -> BlockRequirements {
     let limits = attackers
         .iter()
         .map(|&a| (a, count_u32(cx.chars(a).minimum_blockers()), u32::try_from(maximum_blockers(cx, a, rule_sources)).unwrap_or(u32::MAX)))
@@ -1521,7 +1656,8 @@ fn block_rules(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)]
     // requirement to block another, and one block may obey two.
     let bands = cx.s().attackers.iter().filter(|a| a.band != 0).map(|a| (a.id, a.band)).collect();
     // No block costs anything to declare yet (CR 509.1d): no effect that makes one is built.
-    let mut rules = BlockRequirements { required, most: 0, suggested: Vec::new(), bands, limits, costs: Vec::new(), capacities };
+    let groups = crate::static_rules::combat_groups(cx, CombatRole::Blocker, eligible);
+    let mut rules = BlockRequirements { groups, required, most: 0, suggested: Vec::new(), bands, limits, costs: Vec::new(), capacities };
     if !rules.required.is_empty()
         && let Some((most, suggested)) = rules.solve(allowed, &[], None, true)
     {
@@ -1531,6 +1667,12 @@ fn block_rules(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)]
         }
     }
     rules
+}
+
+/// CR 510.1a, 609.4: an earlier resolving effect can say the creature assigns no combat damage. It stays in combat,
+/// remains a receiver of assigned damage, and still makes a first-strike step occur when appropriate (CR 510.4).
+fn assigns_combat_damage(cx: &Cx, creature: ObjectId) -> bool {
+    !cx.s().effects.iter().any(|e| e.affected == creature && e.kind == EffectKind::NoCombatDamageAssignment)
 }
 
 /// Combat damage (CR 510): every attacker and blocker deals its damage at once. A creature with a choice in where its damage
@@ -1548,6 +1690,16 @@ fn combat_damage(cx: &mut Cx) -> R<()> {
     // CR 510.4: which attackers and blockers had first strike or double strike as the first-strike step began, which the
     // regular step after it asks.
     if first_strike_step {
+        // A creature not blocking now can become a blocker by an effect later. The fact belongs to the actual
+        // incarnation, even if its last blocking relationship disappears before it is assigned a new one.
+        let first: Vec<_> = cx.s().battlefield().iter().copied()
+            .filter(|&id| {
+                if !live(cx.s(), id) { return false; }
+                let chars = cx.chars(id);
+                chars.is(CardType::Creature) && (chars.has(Keyword::FirstStrike) || chars.has(Keyword::DoubleStrike))
+            })
+            .map(|creature| Event::CombatFirstStrike { creature }).collect();
+        cx.record_batch(&first);
         let mut attackers = cx.s().attackers.clone();
         for a in &mut attackers {
             a.first_strike = live(cx.s(), a.id) && strikes_first(cx, a.id);
@@ -1566,11 +1718,12 @@ fn combat_damage(cx: &mut Cx) -> R<()> {
         .attackers
         .iter()
         .copied()
-        .filter(|a| live(cx.s(), a.id) && deals_now(cx, a.id, a.first_strike, first_strike_step))
+        .filter(|a| live(cx.s(), a.id) && deals_now(cx, a.id, a.first_strike, first_strike_step) && assigns_combat_damage(cx, a.id))
         .collect();
     let mut blockers: Vec<ObjectId> = Vec::new();
     for b in &cx.s().blocks {
-        if !blockers.contains(&b.blocker) && live(cx.s(), b.blocker) && deals_now(cx, b.blocker, b.first_strike, first_strike_step) {
+        if !blockers.contains(&b.blocker) && live(cx.s(), b.blocker) && deals_now(cx, b.blocker, b.first_strike, first_strike_step)
+            && assigns_combat_damage(cx, b.blocker) {
             blockers.push(b.blocker);
         }
     }
@@ -1736,7 +1889,7 @@ fn attacker_division(cx: &Cx, attacker: &Attacker) -> Option<DamageDivision> {
     if power == 0 || blockers.is_empty() {
         return None;
     }
-    let banding = blockers.iter().any(|&b| cx.chars(b).has(Keyword::Banding));
+    let banding = crate::banding::controls_assignment(cx, &blockers);
     let trample = cx.chars(attacker.id).has(Keyword::Trample) && !banding && combat_defender_present(cx, attacker.target);
     let lethal = lethal_for(cx, attacker.id, &blockers);
     if blockers.len() == 1 && (!trample || power <= lethal[0]) {
@@ -1765,7 +1918,7 @@ fn blocker_division(cx: &Cx, blocker: ObjectId) -> Option<DamageDivision> {
     if power == 0 || blocked.len() < 2 {
         return None;
     }
-    let banding = blocked.iter().any(|&a| cx.chars(a).has(Keyword::Banding));
+    let banding = crate::banding::controls_assignment(cx, &blocked);
     let lethal = lethal_for(cx, blocker, &blocked);
     let suggested = if banding { spared(cx, power, &blocked, &lethal) } else { lethal_in_turn(power, &lethal, false).0 };
     Some(DamageDivision {
@@ -1843,6 +1996,8 @@ pub(crate) fn cleanup(cx: &mut Cx) -> R<()> {
         // permanents you control").
         ops::settle_lasting_and_control(cx);
     }
+    // A combat-duration watcher made outside combat ends with the turn at the latest, like an EndOfCombat effect.
+    expire_combat_watchers(cx);
     // "This turn" delayed abilities end with it (CR 603.7b), and so does a "when you next ... this turn" that never triggered:
     // as the "until end of turn" effects end, at the same moment (CR 514.2), so one still triggers on what their ending does
     // (Stolen Uniform's "when you lose control of that Equipment this turn" as its "until end of turn" control ends; its
@@ -1871,7 +2026,7 @@ pub(crate) fn cleanup(cx: &mut Cx) -> R<()> {
                     Expiry::Never => true,
                     Expiry::EndOfTurn => false,
                     Expiry::EndOfYourNextTurn => !(p.player == active && number > p.turn),
-                    Expiry::UntilYourNextEndStep | Expiry::WhileControls(_) | Expiry::UntilAnotherExiledWith(_) => true,
+                    Expiry::UntilYourNextEndStep | Expiry::UntilYourNextStep(_) | Expiry::WhileControls(_) | Expiry::UntilAnotherExiledWith(_) => true,
                 }
         });
     }
@@ -2034,3 +2189,7 @@ fn _unused(cx: &Cx) -> bool {
 #[cfg(test)]
 #[path = "landwalk_tests.rs"]
 mod landwalk_tests;
+
+#[cfg(test)]
+#[path = "step_deadline_tests.rs"]
+mod step_deadline_tests;

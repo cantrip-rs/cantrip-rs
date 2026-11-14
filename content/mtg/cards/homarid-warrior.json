@@ -1,0 +1,8 @@
+{
+  "name": "Homarid Warrior",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Homarid Warrior",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "{U}: This creature gains shroud until end of turn and doesn't untap during your next untap step. Tap it. (A creature with shroud can't be the target of spells or abilities.)"
+}

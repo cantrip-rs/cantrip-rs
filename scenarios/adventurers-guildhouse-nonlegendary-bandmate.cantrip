@@ -1,0 +1,35 @@
+# A green legendary blocker and a nonlegendary blocker do not let their controller assign the attacker's damage (CR 702.22j).
+[Bot1 Deck]
+Adventurers' Guildhouse
+Black Lotus
+Reptil, Dinomorpher
+Llanowar Elves
+Island x16
+
+[Bot2 Deck]
+Black Lotus
+Hill Giant
+Mountain
+Island x17
+
+[Actions]
+Bot1.Hand.Adventurers' Guildhouse.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Reptil, Dinomorpher.Cast
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Hill Giant.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Hill Giant > Bot1)
+Bot1.Block(Reptil, Dinomorpher > Hill Giant; Llanowar Elves > Hill Giant)
+Bot2.AssignDamage(Hill Giant > Reptil, Dinomorpher: 2; Hill Giant > Llanowar Elves: 1)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard.Reptil, Dinomorpher.Power = 1
+Bot1.Graveyard.Llanowar Elves.Power = 1

@@ -1,0 +1,28 @@
+# An uncharged Battery can pay for Merfolk of the Pearl Trident but cannot pay for the two-mana Balduvian Conjurer (CR 601.2g).
+[Bot1 Deck]
+Blue Mana Battery
+Black Lotus
+Mox Pearl
+Merfolk of the Pearl Trident
+Balduvian Conjurer
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Blue Mana Battery.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Balduvian Conjurer.Cast(Mana: short)
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Battlefield.Blue Mana Battery.Activate(Ability: Remove any number; X: 0)
+Bot1.Pass
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Merfolk of the Pearl Trident.Power = 1

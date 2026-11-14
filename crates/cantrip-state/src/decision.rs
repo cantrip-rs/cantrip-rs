@@ -944,6 +944,8 @@ pub enum AttackOption {
 /// of any declaration.
 #[derive(Clone, Debug, Default, PartialEq, Eq, Hash)]
 pub struct BlockRequirements {
+    /// Whole-declaration counts of distinct blocking creatures (CR 509.1b).
+    pub groups: Vec<crate::CombatGroup>,
     /// The requirements (CR 509.1c), one for each effect or static ability and each creature it is about: two Lures on a
     /// creature make two of each creature able to block it; "target creature blocks this turn if able" one of that creature,
     /// for any attacker.

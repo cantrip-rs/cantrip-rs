@@ -5,7 +5,7 @@ use cantrip_obs::{InfoMode, Ref};
 use cantrip_obs::encode::{self, Origin};
 use cantrip_obs::factor::{FactoredAnswer, Machine, Tok};
 const YOU: PlayerId = PlayerId(0);
-static SOURCE: CardDef = CardDef { name: "AI snow source", supertypes: Supertypes { snow: true, basic: false, legendary: false }, types: TypeSet::of(&[CardType::Land]), subtypes: SubtypeSet::of(&[Subtype::Island]), ..CardDef::BLANK };
+static SOURCE: CardDef = CardDef { name: "AI snow source", supertypes: Supertypes { snow: true, basic: false, legendary: false, world: false }, types: TypeSet::of(&[CardType::Land]), subtypes: SubtypeSet::of(&[Subtype::Island]), ..CardDef::BLANK };
 static SPELL: CardDef = CardDef { name: "AI snow spell", cost: mana("{U}{S}"), has_cost: true, types: TypeSet::of(&[CardType::Creature]), power: Some(1), toughness: Some(1), ..CardDef::BLANK };
 fn position(pool: bool) -> Game {
     let table = Box::leak(Box::new(CardTable::new([&SOURCE, &SPELL])));

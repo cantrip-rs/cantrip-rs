@@ -1,0 +1,38 @@
+# Two attackers attack different opponents; only the enchanted attacker's defending player discards.
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Pearl
+Grizzly Bears
+Cloak of Confusion
+Ornithopter
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Bot3 Deck]
+Plains x20
+[Dice]
+1
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Cloak of Confusion.Cast(Bot1.Battlefield.Grizzly Bears)
+[T4 Bot1.BeginCombat]
+Bot1.Attack(Grizzly Bears > Bot2; Ornithopter > Bot3)
+Bot1.Accept
+[T4 Bot1.Main2]
+[Expect]
+Bot2.Graveyard.Count = 2
+Bot3.Graveyard.Count = 1
+Bot2.Life = 20

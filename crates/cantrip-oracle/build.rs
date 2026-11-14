@@ -446,9 +446,9 @@ fn face_fields(card: &Card, is_back: bool, source: &str, known: &HashSet<String>
         fields.push(format!("    colors: Some(ColorSet({})),", indicator.iter().fold(0u32, |a, i| a | 1 << i)));
     }
     fields.push(format!("    types: TypeSet::of(&[{}]),", types.join(", ")));
-    let (basic, legendary, snow) = (has("Basic"), has("Legendary"), has("Snow"));
-    if basic || legendary || snow {
-        fields.push(format!("    supertypes: Supertypes {{ basic: {basic}, legendary: {legendary}, snow: {snow} }},"));
+    let (basic, legendary, snow, world) = (has("Basic"), has("Legendary"), has("Snow"), has("World"));
+    if basic || legendary || snow || world {
+        fields.push(format!("    supertypes: Supertypes {{ basic: {basic}, legendary: {legendary}, snow: {snow}, world: {world} }},"));
     }
     if !subs.is_empty() {
         let list: Vec<String> = subs.iter().map(|s| format!("Subtype::{}", subtype_ident(s))).collect();

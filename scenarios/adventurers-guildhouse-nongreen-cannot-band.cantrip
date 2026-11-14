@@ -1,0 +1,35 @@
+# White legendary blockers do not let their controller assign the attacker's damage (CR 702.22j).
+[Bot1 Deck]
+Adventurers' Guildhouse
+Black Lotus
+Isamaru, Hound of Konda
+Kytheon, Hero of Akros
+Island x16
+
+[Bot2 Deck]
+Black Lotus
+Hill Giant
+Mountain
+Island x17
+
+[Actions]
+Bot1.Hand.Adventurers' Guildhouse.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Hand.Kytheon, Hero of Akros.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Hill Giant.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Hill Giant > Bot1)
+Bot1.Block(Isamaru, Hound of Konda > Hill Giant; Kytheon, Hero of Akros > Hill Giant)
+Bot2.AssignDamage(Hill Giant > Isamaru, Hound of Konda: 2; Hill Giant > Kytheon, Hero of Akros: 1)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard.Isamaru, Hound of Konda.Power = 2
+Bot1.Graveyard.Kytheon, Hero of Akros.Power = 2

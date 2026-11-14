@@ -1,0 +1,45 @@
+# Balduvian Shaman changes Crusade's white to blue, then gives it cumulative upkeep {1} (CR 612.2, 702.24a).
+[Bot1 Deck]
+Balduvian Shaman
+Crusade
+Mox Sapphire
+Mox Pearl
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Balduvian Shaman.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Crusade.Cast
+[T3 Bot1.Upkeep]
+? Bot1.Battlefield.Balduvian Shaman.Power = 1
+Bot1.Battlefield.Balduvian Shaman.Activate(Crusade)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(White)
+Bot1.Colors(Blue)
+? Bot1.Battlefield.Balduvian Shaman.Power = 2
+? Bot1.Battlefield.Balduvian Shaman.Toughness = 2
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.PayCost(Spend: U)
+Bot1.Pass
+? Bot1.Mana = {W}
+? Bot1.Battlefield.Crusade.Counters.Age = 1
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Graveyard = Crusade

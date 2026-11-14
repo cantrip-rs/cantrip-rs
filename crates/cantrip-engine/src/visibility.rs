@@ -90,12 +90,16 @@ pub fn stack_entries(state: &GameState) -> Vec<StackEntry> {
 pub fn observable(game: &Game, viewer: PlayerId, extra: &HashSet<ObjectId>) -> HashSet<ObjectId> {
     let s = &game.state;
     let mut visible = HashSet::new();
+    let hands = game.revealed_hands();
     for p in s.seats() {
         if p == viewer {
             visible.extend(s.zone(Zone::sideboard(p)).iter().copied());
         }
         // A companion revealed before the game is shown to everyone while it stays outside the game (CR 103.2b).
         visible.extend(revealed_companion(s, p));
+        if hands & (1 << p.0) != 0 {
+            visible.extend(s.zone(Zone::hand(p)).iter().copied());
+        }
         if s.sees_as(viewer, p) {
             visible.extend(s.zone(Zone::hand(p)).iter().copied());
             // "You may look at the top card of your library any time" (CR 401.2): its player sees it while a permanent says

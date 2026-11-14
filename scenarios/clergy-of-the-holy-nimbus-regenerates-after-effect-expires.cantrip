@@ -1,0 +1,41 @@
+# The opponent's restriction expires at cleanup; lethal damage on the next turn regenerates the Clergy, tapping it and removing damage (CR 611.2a, 701.19b).
+[Bot1 Deck]
+Mox Pearl
+Clergy of the Holy Nimbus
+Plains x20
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Shock
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Clergy of the Holy Nimbus.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Clergy of the Holy Nimbus.Activate
+? Bot2.Mana =
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Clergy of the Holy Nimbus)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Clergy of the Holy Nimbus.Tapped = true
+? Bot1.Battlefield.Clergy of the Holy Nimbus.Damage = 0
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Clergy of the Holy Nimbus)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Clergy of the Holy Nimbus.Tapped = true
+Bot1.Battlefield.Clergy of the Holy Nimbus.Damage = 0

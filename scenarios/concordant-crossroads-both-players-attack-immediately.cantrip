@@ -1,0 +1,33 @@
+# Crossroads gives both players' freshly cast creatures haste, allowing each to attack immediately (CR 702.10b).
+[Bot1 Deck]
+Concordant Crossroads
+Llanowar Elves
+Mox Emerald
+Forest
+Forest x20
+[Bot2 Deck]
+Savannah Lions
+Plains
+Plains x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Concordant Crossroads.Cast
+? Bot1.Mana =
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Llanowar Elves > Bot2)
+[T2 Bot2.Main1]
+? Bot2.Life = 19
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T2 Bot2.DeclareAttackers]
+Bot2.Attack(Savannah Lions > Bot1)
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Mox Emerald.Keywords = (absent)
+Bot1.Life = 18
+Bot2.Life = 19

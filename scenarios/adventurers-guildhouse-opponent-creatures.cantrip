@@ -1,0 +1,38 @@
+# An opponent's green legendary blocker does not gain the ability (CR 702.22j).
+[Bot1 Deck]
+Adventurers' Guildhouse
+Black Lotus
+Mox Ruby
+Hill Giant
+Island x16
+
+[Bot2 Deck]
+Mox Pearl
+Black Lotus
+Reptil, Dinomorpher
+Isamaru, Hound of Konda
+Island x17
+
+[Actions]
+Bot1.Hand.Adventurers' Guildhouse.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hill Giant.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Reptil, Dinomorpher.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Isamaru, Hound of Konda.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Hill Giant > Bot2)
+Bot2.Block(Reptil, Dinomorpher > Hill Giant; Isamaru, Hound of Konda > Hill Giant)
+Bot1.AssignDamage(Hill Giant > Reptil, Dinomorpher: 2; Hill Giant > Isamaru, Hound of Konda: 1)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard.Reptil, Dinomorpher.Power = 1
+Bot2.Battlefield.Isamaru, Hound of Konda.Damage = 1
