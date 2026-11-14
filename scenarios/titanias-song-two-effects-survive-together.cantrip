@@ -1,0 +1,30 @@
+# Two separately timestamped Songs leave together; both effects persist and reach a later artifact (CR 611.3a, 613.6, 613.8).
+[Bot1 Deck]
+Black Lotus x4
+Titania's Song x2
+Tranquility
+Sol Ring
+Forest x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Titania's Song#1.Cast
+Bot1.Hand.Titania's Song.Cast
+Bot1.Hand.Tranquility.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sol Ring.Toughness = 1
+! Bot1.Battlefield.Sol Ring.Activate
+[Expect]
+Bot1.Battlefield.Sol Ring.Types = Artifact; Creature
+Bot1.Battlefield.Sol Ring.Power = 1

@@ -1,0 +1,6 @@
+{
+  "name": "Titania's Song",
+  "manaCost": "{3}{G}",
+  "type": "Enchantment",
+  "oracleText": "Each noncreature artifact loses all abilities and becomes an artifact creature with power and toughness each equal to its mana value. If this enchantment leaves the battlefield, this effect continues until end of turn."
+}

@@ -1,0 +1,42 @@
+# A conceding owner removes Song from the game, but its effect lasts through this turn (CR 800.4a, 611.3a, 514.2).
+[Bot1 Deck]
+Black Lotus
+Titania's Song
+Forest
+Forest x20
+[Bot2 Deck]
+Black Lotus
+Sol Ring
+Island x20
+[Bot3 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+[T4 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Titania's Song.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Bot2.Battlefield.Sol Ring.Power = 1
+Bot1.Concede
+? Bot2.Battlefield.Sol Ring.Power = 1
+? Bot2.Battlefield.Sol Ring.Types = Artifact; Creature
+! Bot2.Battlefield.Sol Ring.Activate
+[T5 Bot2.Main1]
+? Bot2.Battlefield.Sol Ring.Types = Artifact
+Bot2.Battlefield.Sol Ring.Activate
+? Bot2.Mana = {C}{C}
+[Expect]
+Bot1.Status = Lost
+Result = InProgress
+Bot2.Battlefield.Sol Ring.Tapped = true

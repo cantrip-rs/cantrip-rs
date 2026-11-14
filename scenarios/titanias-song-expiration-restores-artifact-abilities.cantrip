@@ -1,0 +1,54 @@
+# The effect survives departure for the current turn and expires at cleanup (CR 611.3a, 514.2).
+# Sol Ring remains a 1/1 without its mana ability after Disenchant destroys the Song (CR 611.3a, 613.6, 514.2).
+[Bot1 Deck]
+Black Lotus
+Forest
+Titania's Song
+Sol Ring
+Forest
+Forest
+Forest
+Forest x20
+[Bot2 Deck]
+Plains
+Disenchant
+Plains
+Island
+Island
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Titania's Song.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Titania's Song)
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Pass
+Bot1.Pass
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sol Ring.Power = 1
+! Bot1.Battlefield.Sol Ring.Activate
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Sol Ring.Types = Artifact
+Bot1.Battlefield.Sol Ring.Activate
+? Bot1.Mana = {C}{C}
+[Expect]
+Bot1.Graveyard = Titania's Song; Black Lotus
+Bot1.Battlefield.Sol Ring.Types = Artifact
+Bot1.Battlefield.Sol Ring.Tapped = true
