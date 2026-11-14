@@ -1,0 +1,43 @@
+# Surgical Suite // Hospital Room cast as Hospital Room in turn 1 has only the right door unlocked. In turn 3 Bot1 discards Hired
+# Blade to Faithless Looting and then pays the left door's cost {1}{W} as a special action (CR 709.5e): that unlocks Surgical
+# Suite, "when you unlock this door" triggers and returns Hired Blade, and the Room now has both names (both doors unlocked).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Surgical Suite // Hospital Room
+Faithless Looting
+Mox Ruby
+Mox Jet
+Plains
+Hired Blade
+Plains
+Plains
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Surgical Suite // Hospital Room.Cast(Ability: Hospital Room)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Hired Blade; Plains)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Hospital Room.Activate(Ability: left door)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Hired Blade.Tapped = false
+Bot1.Battlefield.Surgical Suite // Hospital Room.Doors = Surgical Suite; Hospital Room
+Bot1.Graveyard = Faithless Looting; Plains; Black Lotus
