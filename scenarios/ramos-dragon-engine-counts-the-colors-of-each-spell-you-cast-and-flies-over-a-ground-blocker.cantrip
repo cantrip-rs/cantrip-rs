@@ -1,0 +1,73 @@
+# Ramos, Dragon Engine: "Whenever you cast a spell, put a +1/+1 counter on Ramos for each of that spell's colors", and
+# Flying. Bot1 casts it turn 1 ({6}: Black Lotus and three Moxen). A colorless spell (Mox Ruby) adds nothing (4/4); Lightning
+# Bolt (one color) adds one (5/5). On turn 3 Terminate ({B}{R}) kills Bot2's Grizzly Bears and adds two (7/7). Attacking,
+# Bot2's Memnite may not block a flyer, so Ramos hits for 7: Bot2 is at 20 - 3 (the Bolt) - 7 = 10.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Ramos, Dragon Engine
+Lightning Bolt
+Terminate
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Memnite
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ramos, Dragon Engine.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ramos, Dragon Engine.Power = 4
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ramos, Dragon Engine.Power = 4
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ramos, Dragon Engine.Power = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Terminate.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ramos, Dragon Engine.Power = 7
+Bot1.Attack(Ramos, Dragon Engine > Bot2)
+! Bot2.Block(Memnite > Ramos, Dragon Engine)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 10
+Bot2.Graveyard = Grizzly Bears
+Bot1.Battlefield.Ramos, Dragon Engine.Toughness = 7
