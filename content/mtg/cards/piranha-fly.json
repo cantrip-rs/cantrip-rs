@@ -1,0 +1,11 @@
+{
+  "name": "Piranha Fly",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Fish Insect",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying\nThis creature enters tapped.",
+  "keywords": [
+    "Flying"
+  ]
+}
