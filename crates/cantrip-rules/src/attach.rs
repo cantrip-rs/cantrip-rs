@@ -29,8 +29,12 @@ pub(crate) fn host_allows_as(q: &dyn Query, attachment: ObjectId, ac: &Chars, co
     }
     let hc = q.chars(host);
     // An Aura already attached is put into the graveyard only by protection that doesn't spare it (CR 702.16n); one being
-    // attached can't be by any (CR 702.16c: "can't be enchanted"; Spectra Ward's ruling).
-    let protected = if !attaching && ac.has_subtype(Subtype::Aura) {
+    // attached can't be by any (CR 702.16c: "can't be enchanted"; Spectra Ward's ruling). Protection is a permanent's
+    // static ability, functioning only on the battlefield (CR 113.6, 702.16c: "a permanent ... with protection"): a
+    // creature card in a graveyard that an Aura enchants (Animate Dead's "enchant creature card in a graveyard") has none.
+    let protected = if !q.is_on_battlefield(host) {
+        false
+    } else if !attaching && ac.has_subtype(Subtype::Aura) {
         hc.protection_removes_aura(attachment, ac, mana_value, controller)
     } else {
         hc.protected_from_by(ac, mana_value, controller)

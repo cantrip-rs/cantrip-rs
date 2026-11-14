@@ -1,0 +1,32 @@
+# Animate Dead may enchant a creature card in a graveyard that has protection from black: protection is a permanent's
+# static ability and functions only on the battlefield (CR 113.6, 702.16c), so the Aura enters attached to the White
+# Knight card and returns it. On the battlefield the Knight's protection from black means the Aura can't be attached to it
+# (CR 702.16c); the state-based actions put the Aura into the graveyard (CR 303.4c, 704.5m), and its leaves-the-battlefield
+# ability sacrifices the Knight. Bot1 discards the Knight to hand size on turn 3 and casts Animate Dead on it on turn 5.
+
+[Bot1 Deck]
+White Knight
+Black Lotus
+Animate Dead
+Island
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T3 Bot1.Cleanup]
+Bot1.Discard(White Knight)
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Animate Dead.Cast(Bot1.Graveyard.White Knight)
+[T5 Bot1.Main2]
+
+[Expect]
+LeftBattlefield = Black Lotus (tapped); Animate Dead; White Knight
+Bot1.Battlefield.Count = 0
+Bot1.Graveyard = White Knight; Animate Dead; Black Lotus
