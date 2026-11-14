@@ -2074,3 +2074,51 @@ fn an_effect_chosen_for_a_part_prevented_to_zero_does_nothing_and_the_event_goes
         }
     }
 }
+
+// Zero assignments cannot create a second damage event or force early recipient snapshots (CR 120.8).
+#[test]
+fn zero_damage_assignments_do_not_change_replacements_prevention_or_snapshots() {
+    fn run(with_zero: bool) -> (Vec<u32>, Vec<Event>, i32, i32, usize, bool, Vec<ContinuousEffect>) {
+        let mut g = game();
+        let source = put(&mut g, &SOURCE, YOU);
+        put(&mut g, &DOUBLER, YOU);
+        let shield_source = put(&mut g, &SHIELD, YOU);
+        let bear = put(&mut g, &BEAR, THEM);
+        let mut cx = cx(&mut g, source);
+        shield(&mut cx, shield_source, Target::Player(THEM), 1);
+        let hits = if with_zero {
+            vec![(source, Target::Player(THEM), 0), (source, Target::Player(YOU), 2), (source, Target::Object(bear), 0)]
+        } else { vec![(source, Target::Player(YOU), 2)] };
+        let (outcomes, events, mut batch) = crate::ops::damage_batch(&mut cx, &hits, false);
+        let snapshots = batch.snapshot_count();
+        batch.rest_of_preventions(&mut cx);
+        (outcomes.into_iter().map(|o| o.amount).collect(), events, cx.g.state.player(YOU).life,
+         cx.g.state.player(THEM).life, snapshots, cx.g.pending().is_some(), cx.g.state.effects.to_vec())
+    }
+    let (single, events, your_life, their_life, snapshots, pending, effects) = run(false);
+    let (mixed, mixed_events, mixed_your_life, mixed_their_life, mixed_snapshots, mixed_pending, mixed_effects) = run(true);
+    assert_eq!(single, [4]);
+    assert_eq!(mixed, [0, 4, 0], "zero result slots preserve original indices");
+    assert_eq!(events, mixed_events, "zero creates no damage or prevention event");
+    assert_eq!((your_life, their_life), (mixed_your_life, mixed_their_life));
+    assert_eq!((snapshots, mixed_snapshots), (0, 0), "zero does not trigger a battlefield snapshot");
+    assert_eq!((pending, mixed_pending), (false, false), "zero does not create a replacement question");
+    assert_eq!(effects, mixed_effects, "the zero recipient's prevention shield remains unused");
+}
+
+#[test]
+fn all_zero_damage_has_no_result_event_or_replacement_question() {
+    let mut g = game();
+    let source = put(&mut g, &SOURCE, YOU);
+    put(&mut g, &DOUBLER, YOU);
+    let bear = put(&mut g, &BEAR, THEM);
+    let mut cx = cx(&mut g, source);
+    let (outcomes, events, mut batch) = crate::ops::damage_batch(&mut cx,
+        &[(source, Target::Player(THEM), 0), (source, Target::Object(bear), 0)], false);
+    assert_eq!(outcomes.iter().map(|o| o.amount).collect::<Vec<_>>(), [0, 0]);
+    assert!(outcomes.iter().all(|o| o.result.is_none()));
+    assert!(events.is_empty());
+    assert_eq!(batch.snapshot_count(), 0);
+    batch.rest_of_preventions(&mut cx);
+    assert!(cx.g.pending().is_none());
+}
