@@ -1,0 +1,48 @@
+# Heroic Reinforcements: "creatures you control get +1/+1 and gain haste" until end of turn affects the set of creatures fixed as it
+# resolves (CR 611.2c), not whatever Bot1 controls later. On turn 3 Bot1 casts it (its two Soldiers and nothing else are 2/2s with
+# haste), then takes Bot2's Memnite with Act of Treason: the Memnite, Bot1's now, stays a 1/1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+Heroic Reinforcements
+Act of Treason
+Forest x20
+
+[Bot2 Deck]
+Memnite
+Island x23
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Heroic Reinforcements.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Soldier Token#1.Power = 2
+? Bot1.Battlefield.Soldier Token#2.Keywords = Haste
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Ability: Sacrifice; Color: Red)
+Bot1.Hand.Act of Treason.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Soldier Token#1.Power = 2
+Bot1.Battlefield.Soldier Token#2.Toughness = 2

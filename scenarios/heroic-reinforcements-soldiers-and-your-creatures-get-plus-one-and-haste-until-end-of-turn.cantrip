@@ -1,0 +1,62 @@
+# Heroic Reinforcements: "Create two 1/1 white Soldier creature tokens. Until end of turn, creatures you control get +1/+1 and
+# gain haste." On turn 3, with Bot2's Memnite on the other side, it makes two Soldiers that are 2/2 with haste, Bot1's Memnite
+# (already there) is a 2/2, Bot2's Memnite stays a 1/1, and an Ornithopter cast afterwards is no 1/3 and, summoning sick, cannot
+# attack. The three attack at once (6 damage). On turn 4 the Soldiers are 1/1 again.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+Memnite
+Heroic Reinforcements
+Ornithopter
+Forest x20
+
+[Bot2 Deck]
+Memnite
+Island x23
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Heroic Reinforcements.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Soldier Token#1.Power = 2
+? Bot1.Battlefield.Soldier Token#1.Toughness = 2
+? Bot1.Battlefield.Soldier Token#1.Keywords = Haste
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot2.Battlefield.Memnite.Power = 1
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Ornithopter > Bot2)
+Bot1.Attack(Memnite; Soldier Token#1; Soldier Token#2 > Bot2)
+[T4 Bot2.Main1]
+? Bot2.Life = 14
+? Bot1.Battlefield.Soldier Token#1.Power = 1
+? Bot1.Battlefield.Soldier Token#1.Keywords = (absent)
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Count = 8
+Bot1.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Memnite.Power = 1
