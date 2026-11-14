@@ -826,6 +826,18 @@ pub fn rest_to_bottom_in_random_order(g: &mut dyn Game, player: PlayerId, looked
     g.bottom_in_random_order(player, &rest);
 }
 
+/// "Reveal cards from the top of your library until you reveal a card that `qualifies`. Put that card into your hand and the
+/// rest on the bottom of your library in a random order" (CR 701.20, 401.4). A library holding no such card is revealed
+/// whole and put back in a random order. Spinner of Souls (a creature card), Page, Loose Leaf (an instant or sorcery card)
+/// and Heirloom Blade (a creature card sharing a type with the creature) print it.
+pub fn reveal_until_to_hand_rest_to_bottom(g: &mut dyn Game, player: PlayerId, qualifies: &dyn Fn(&dyn Query, ObjectId) -> bool) {
+    let (found, rest) = reveal_until(g, player, qualifies);
+    if let Some(card) = found {
+        g.return_to_hand_revealed(&[card]);
+    }
+    rest_to_bottom_in_random_order(g, player, &rest);
+}
+
 /// "Reveal the top `count` cards of your library. Put a land card from among them onto the battlefield [tapped] and the
 /// rest into your graveyard" (CR 701.20, 404.3). A land must be chosen whenever one is revealed; revealing moves nothing,
 /// and the rest go to the graveyard together in their owner's chosen order. An empty library does nothing. Cavalier of

@@ -18,12 +18,7 @@ fn is_instant_or_sorcery(q: &dyn Query, card: ObjectId) -> bool {
 /// the rest on the bottom of your library in a random order." A library holding no such card is revealed whole and put back
 /// in a random order (CR 701.20, 401.4).
 fn reveal_until_instant_or_sorcery(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let you = item.controller;
-    let (found, rest) = library::reveal_until(g, you, &is_instant_or_sorcery);
-    if let Some(card) = found {
-        g.return_to_hand_revealed(&[card]);
-    }
-    library::rest_to_bottom_in_random_order(g, you, &rest);
+    library::reveal_until_to_hand_rest_to_bottom(g, item.controller, &is_instant_or_sorcery);
     Ok(())
 }
 
