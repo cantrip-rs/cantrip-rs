@@ -2244,6 +2244,17 @@ pub fn deals_combat_damage_to_an_opponent(q: &dyn Query, source: ObjectId, event
     }
 }
 
+/// "Whenever this creature deals combat damage" (CR 510.2, 603.2c): damage dealt by `source` (damage of 0 is never dealt, CR 120.8)
+/// as combat damage, to anything. The creature's damage is one batch, so the ability is written `.once_per_batch()`: a creature that
+/// damages several creatures at once triggers it once, and a double striker once in each combat damage step. Dropkick Bomber's
+/// granted ability and Quintessential Katana's print it.
+pub fn this_deals_combat_damage(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    match event {
+        Event::Damage { source: dealer, kind, amount, .. } if kind.is_combat() && *dealer == source && *amount > 0 => Fired::PLAIN,
+        _ => None,
+    }
+}
+
 /// "Whenever this creature deals combat damage to a creature" (CR 510.2, 603.2): once for each creature it damages, judged
 /// as the damage is dealt, with "that creature" the trigger's subject. Stinkweed Imp prints it, and Kaldra Compleat grants it.
 pub fn deals_combat_damage_to_a_creature(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
@@ -2597,6 +2608,7 @@ pub const A_SOURCE_DEALS_DAMAGE_TO_THIS: Trigger = when(EventMask::DAMAGE, a_sou
 pub const THIS_TAKES_DAMAGE: Trigger = when(EventMask::DAMAGE, this_takes_damage);
 pub const THIS_DEALT_DAMAGE: Trigger = THIS_TAKES_DAMAGE;
 pub const DEALS_COMBAT_DAMAGE_TO_A_CREATURE: Trigger = when(EventMask::DAMAGE, deals_combat_damage_to_a_creature);
+pub const THIS_DEALS_COMBAT_DAMAGE: Trigger = when(EventMask::DAMAGE, this_deals_combat_damage);
 pub const THIS_ATTACKS: Trigger = when(EventMask::ATTACKS, this_attacks);
 /// "Whenever this creature attacks" with the attacking creature as the subject: see `this_attacks_subject`.
 pub const THIS_ATTACKS_SUBJECT: Trigger = when(EventMask::ATTACKS, this_attacks_subject);
