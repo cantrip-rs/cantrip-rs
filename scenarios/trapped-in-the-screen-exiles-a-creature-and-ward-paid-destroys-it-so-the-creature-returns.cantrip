@@ -1,0 +1,58 @@
+# Trapped in the Screen: "Ward {2}" (CR 702.21a) and the exile "until this enchantment leaves the battlefield" (CR 610.3). On turn
+# three Bot1 exiles Bot2's Ornithopter (a creature; its Mox Pearl is the other legal target). On turn four Bot2 targets Trapped
+# with Disenchant ({1}{W}) and pays the ward {2} with its other two Moxen: Trapped is destroyed and Ornithopter returns to the
+# battlefield under Bot2's control as a new object (summoning sick, CR 400.7).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Trapped in the Screen
+Island x20
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Emerald
+Disenchant
+Ornithopter
+Plains x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Trapped in the Screen.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Exile = Ornithopter
+[T4 Bot2.Main1]
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Disenchant.Cast(Trapped in the Screen)
+Bot2.PayCost
+[T4 Bot2.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot1.Graveyard = Trapped in the Screen
+Bot2.Battlefield.Ornithopter.SummoningSick = true
+Bot2.Mana = 

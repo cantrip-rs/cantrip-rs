@@ -1,0 +1,6 @@
+{
+  "name": "Trapped in the Screen",
+  "manaCost": "{2}{W}",
+  "type": "Enchantment",
+  "oracleText": "Ward {2} (Whenever this enchantment becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\nWhen this enchantment enters, exile target artifact, creature, or enchantment an opponent controls until this enchantment leaves the battlefield."
+}

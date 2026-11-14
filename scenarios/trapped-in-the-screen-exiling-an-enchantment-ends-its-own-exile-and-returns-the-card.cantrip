@@ -1,0 +1,56 @@
+# Trapped in the Screen can target an enchantment an opponent controls. On turn two Bot2's Web Up exiles Bot1's Ornithopter. On
+# turn three Bot1 targets Web Up (beside Bot2's Moxen, which are also legal) and exiles it: Web Up has left the battlefield, so
+# its own exile ends (CR 610.3) and Ornithopter returns to Bot1, while Web Up stays exiled.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Ornithopter
+Trapped in the Screen
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Web Up
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Web Up.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Target(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+? Exile = Ornithopter
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Trapped in the Screen.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Web Up)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Web Up
+Bot1.Battlefield.Ornithopter.SummoningSick = true
+Bot2.Battlefield.Count = 3
