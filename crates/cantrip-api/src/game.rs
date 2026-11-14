@@ -1537,6 +1537,10 @@ pub trait Game: Query {
     /// Records that `player` surveilled `count`, having looked at `looked` cards (CR 701.25a, 701.25d):
     /// `cantrip_mechanics::surveil` calls it once the surveil is complete, and never for surveil 0 (CR 701.25c).
     fn surveilled(&mut self, player: PlayerId, count: u32, looked: u32);
+    /// Records that `player` manifested dread (CR 701.62a, 701.62b), the cards the process put into their graveyard being
+    /// `graveyard` (as the objects they became there): `cantrip_mechanics::manifest_dread` calls it once the process is
+    /// complete, even if some or all of it was impossible.
+    fn manifested_dread(&mut self, player: PlayerId, graveyard: &[ObjectId]);
     /// `player` gave a gift to `to` (CR 702.174c): the gift triggered ability of a permanent they control resolved. (A
     /// spell's gift is announced by the core as the spell resolves.)
     fn gave_gift(&mut self, player: PlayerId, to: PlayerId, gift: Gift);

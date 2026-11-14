@@ -486,6 +486,11 @@ pub enum Event {
     /// `player` surveilled `count` (CR 701.25a), recorded once the process is complete, even if some or all of it was
     /// impossible (CR 701.25d); `looked` as for `Scried`. Never for "surveil 0" (CR 701.25c).
     Surveilled { player: PlayerId, count: u32, looked: u32 },
+    /// `player` manifested dread (CR 701.62a, 701.62b), recorded once the process is complete, even if some or all of it was
+    /// impossible (an empty library, or a library of one card, which is manifested with none put into the graveyard):
+    /// `graveyard` is the cards the process put into their graveyard, as the objects they became there - none, one, or both
+    /// when the manifested one could not enter (CR 701.40f).
+    ManifestedDread { player: PlayerId, graveyard: [Option<ObjectId>; 2] },
     /// `player`'s speed became `speed` (CR 702.179): set to 1 by the state-based action (CR 704.5aa), or increased
     /// (CR 702.179c-d). Never for an increase that changed nothing.
     SpeedChanged { player: PlayerId, speed: u8 },
@@ -605,6 +610,7 @@ impl Event {
             | Event::DungeonCompleted { player }
             | Event::Scried { player, .. }
             | Event::Surveilled { player, .. }
+            | Event::ManifestedDread { player, .. }
             | Event::SpeedChanged { player, .. }
             | Event::CrimeCommitted { player, .. }
             | Event::GameLost { player, .. }
@@ -654,6 +660,7 @@ impl Event {
             | Event::ModesChosen { source, .. }
             | Event::Done { source, .. } => source == object,
             Event::CrimeCommitted { by, .. } => by == object,
+            Event::ManifestedDread { graveyard, .. } => graveyard.contains(&Some(object)),
             Event::Attacks { attacker, .. } | Event::AttackAssigned { attacker, .. }
             | Event::Unblocked { attacker, .. } | Event::BecameBlocked { attacker } => attacker == object,
             Event::PaidToAttack { attacker, tapped, .. } => attacker == object || tapped == object,
@@ -794,6 +801,8 @@ impl EventMask {
     pub const SADDLED: EventMask = EventMask(1 << 66);
     /// A spell merged with a permanent (CR 702.140d), a distinct event from transforming.
     pub const MUTATED: EventMask = EventMask(1 << 65);
+    /// A player manifested dread (CR 701.62b).
+    pub const MANIFESTED_DREAD: EventMask = EventMask(1 << 67);
     /// A meld card's counterpart melded with it (CR 701.42a): recorded only, sharing transforming's bit.
     pub const MELDED: EventMask = EventMask::TRANSFORMED;
 
@@ -899,6 +908,7 @@ impl EventMask {
             Event::CrimeCommitted { .. } => EventMask::CRIME,
             Event::Scried { .. } => EventMask::SCRIED,
             Event::Surveilled { .. } => EventMask::SURVEILLED,
+            Event::ManifestedDread { .. } => EventMask::MANIFESTED_DREAD,
             Event::DamagePrevented { .. } => EventMask::DAMAGE_PREVENTED,
             Event::SpeedChanged { .. } => EventMask::SPEED_CHANGED,
             // "When [a player] loses the game" (CR 603.10f): Shinryu, Transcendent Rival's Burning Chains. A drawn game

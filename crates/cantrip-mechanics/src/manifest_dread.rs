@@ -22,6 +22,9 @@ pub fn controller_manifests_dread(g: &mut dyn Game, item: &StackItem) -> Result<
 pub fn manifest_dread_object(g: &mut dyn Game, player: PlayerId, source: ObjectId) -> Result<Option<ObjectId>, Suspend> {
     let looked = top_of_library(g, player, 2);
     if looked.is_empty() {
+        // CR 701.62b: "whenever a player manifests dread" triggers even where all of it was impossible (the ruling: a
+        // library with no cards).
+        g.manifested_dread(player, &[]);
         return Ok(None);
     }
     let ask = RequestKind::DistributeCards {
@@ -44,7 +47,10 @@ pub fn manifest_dread_object(g: &mut dyn Game, player: PlayerId, source: ObjectI
     // too when it wasn't, a rule or effect keeping it from entering (CR 701.40f) - every looked-at card still where it was.
     let rest: Vec<(ObjectId, Zone)> =
         looked.into_iter().filter(|&c| g.obj(c).became.is_none()).map(|c| (c, Zone::graveyard(player))).collect();
-    g.move_together(&rest, MoveReason::Other);
+    let moved = g.move_together(&rest, MoveReason::Other);
+    // Only what really reached the graveyard was put there "this way" (a card a replacement effect exiled instead was not).
+    let in_graveyard: Vec<ObjectId> = moved.into_iter().filter(|&c| g.obj(c).zone == Zone::graveyard(player)).collect();
+    g.manifested_dread(player, &in_graveyard);
     Ok(made)
 }
 
