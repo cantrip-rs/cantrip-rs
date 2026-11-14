@@ -1,0 +1,49 @@
+# Dragon Mage: "Flying" and "Whenever this creature deals combat damage to a player, each player discards their hand, then draws seven cards."
+# Turn 1: Bot1 pays {5}{R}{R} with Black Lotus and four Mox Rubies. Turn 3: the 5/5 flier attacks (Bot2 has no flier to block it) and hits
+# for 5. Each player's hand then goes to the graveyard (Bot2's seven, on top of the one it discarded to hand size on turn 2, and Bot1's two) and each draws seven.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby x4
+Dragon Mage
+Memnite
+Mountain x13
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Dragon Mage.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dragon Mage.Keywords = Flying
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 2
+? Bot2.Hand.Count = 7
+? Bot2.Graveyard.Count = 1
+Bot1.Attack(Dragon Mage > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 15
+? Bot1.Hand.Count = 7
+? Bot2.Hand.Count = 7
+? Bot2.Graveyard.Count = 8
+? Bot1.Graveyard.Count = 3
+
+[Expect]
+Bot2.Life = 15
+Bot1.Hand.Count = 7
+Bot2.Hand.Count = 7
