@@ -1,0 +1,23 @@
+# Gruul Guildgate: once it has untapped it taps for {R} on one turn and {G} on the next (the color is chosen as the ability is
+# activated, CR 605.1a), never for another color or for colorless.
+
+[Bot1 Deck]
+Gruul Guildgate
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gruul Guildgate.Play
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Gruul Guildgate.Activate(Color: Blue)
+! Bot1.Battlefield.Gruul Guildgate.Activate(Color: Colorless)
+Bot1.Battlefield.Gruul Guildgate.Activate(Color: Red)
+? Bot1.Mana = {R}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Gruul Guildgate.Activate(Color: Green)
+? Bot1.Mana = {G}
+
+[Expect]
+Bot1.Battlefield.Gruul Guildgate.Tapped = true
