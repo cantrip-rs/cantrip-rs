@@ -272,17 +272,23 @@ pub fn choose_from_hand(g: &mut dyn Game, player: PlayerId, source: ObjectId, co
     choose::cards(g, player, source, Purpose::Discard, hand, count, false)
 }
 
-/// "Each [of these players] discards a card" (CR 701.9, 101.4): in the order given (turn order from the active player,
-/// `apnap()`) each player with a card in hand chooses one (nothing is asked of an empty hand), then every chosen card is
-/// discarded together. The cards discarded. Liliana of the Veil (each player) and Aclazotz, Deepest Betrayal (each
-/// opponent) print it.
+/// "Each [of these players] discards a card" (CR 701.9, 101.4): `each_discards_cards` of one. The cards discarded. Liliana of the
+/// Veil (each player) and Aclazotz, Deepest Betrayal (each opponent) print it.
 pub fn each_discards_a_card(g: &mut dyn Game, players: &[PlayerId], source: ObjectId) -> Result<Vec<ObjectId>, Suspend> {
+    each_discards_cards(g, players, source, 1)
+}
+
+/// "Each [of these players] discards `count` cards" (CR 701.9, 101.4): in the order given (turn order from the active player,
+/// `apnap()`) each player still in the game chooses `count` cards from their hand, or all they have if fewer (nothing is asked of
+/// an empty hand), then every chosen card is discarded together. The cards discarded. Garruk, Veiled Butcher and Let's Play a Game
+/// (two each) print it, and Liliana of the Veil and Aclazotz, Deepest Betrayal through `each_discards_a_card`.
+pub fn each_discards_cards(g: &mut dyn Game, players: &[PlayerId], source: ObjectId, count: u32) -> Result<Vec<ObjectId>, Suspend> {
     let mut chosen = Vec::new();
     for &player in players {
         if !crate::players::reached(g, player) {
             continue;
         }
-        chosen.extend(choose_from_hand(g, player, source, 1)?);
+        chosen.extend(choose_from_hand(g, player, source, count)?);
     }
     Ok(g.discard_together(&chosen))
 }

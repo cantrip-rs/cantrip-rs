@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::replacements::OPPONENTS_CREATURES_EXILED_INSTEAD_OF_DYING;
-use cantrip_mechanics::{choose_from_hand, each_player_sacrifices, hand, targets, tokens};
+use cantrip_mechanics::{each_player_sacrifices, hand, targets, tokens};
 use cantrip_oracle as oracle;
 
 /// +2: Up to one target creature gets -4/-1 until your next turn (CR 611.2a).
@@ -35,14 +35,7 @@ fn minus_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 fn minus_three(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let you = item.controller;
     let opponents: Vec<PlayerId> = g.state().apnap().filter(|&p| p != you).collect();
-    let mut chosen: Vec<ObjectId> = Vec::new();
-    for &who in &opponents {
-        if !cantrip_mechanics::players::reached(g, who) {
-            continue;
-        }
-        chosen.extend(choose_from_hand(g, who, item.object, 2)?);
-    }
-    let discarded = g.discard_together(&chosen);
+    let discarded = cantrip_mechanics::each_discards_cards(g, &opponents, item.object, 2)?;
     let short = opponents
         .iter()
         .filter(|&&who| {
