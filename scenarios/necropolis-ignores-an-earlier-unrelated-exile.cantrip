@@ -1,0 +1,42 @@
+# An earlier exiled zero-mana creature is not the four-mana card paid for Necropolis's ability (CR 602.2b, 608.2h).
+[Bot1 Deck]
+Necropolis
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Entomb
+Swords to Plowshares
+Hill Giant
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Hill Giant)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Necropolis.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+Bot1.Battlefield.Necropolis.Activate
+Bot1.Choose(Hill Giant)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Necropolis.Toughness = 5
+Bot1.Battlefield.Necropolis.Counters.Plus0Plus1 = 4
+Exile = Hill Giant; Ornithopter

@@ -1,0 +1,52 @@
+# The source is destroyed in response after paying its cost; its ability resolves without placing counters on the new object (CR 113.7a, 400.7).
+[Bot1 Deck]
+Necropolis
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Entomb
+Memnite
+Hill Giant
+Island x20
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Hill Giant)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Necropolis.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Necropolis.Activate
+Bot1.Choose(Hill Giant)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Necropolis)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Necropolis = (absent)
+Bot1.Graveyard = Necropolis; Black Lotus; Entomb
+Exile = Hill Giant
