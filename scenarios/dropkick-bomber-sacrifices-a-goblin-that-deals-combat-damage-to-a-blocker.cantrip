@@ -1,0 +1,50 @@
+# Dropkick Bomber: the granted "When this creature deals combat damage, sacrifice it." is not limited to damage to a player. Bot1's
+# Goblin Assailant (3/3 with the lord) is given flying and the trigger on turn 3; Bot2's Ornithopter (0/2 flying) blocks it, the
+# Assailant deals 3 combat damage to it and is sacrificed (the Ornithopter dies too).
+
+[Bot1 Deck]
+Mox Ruby x5
+Dropkick Bomber
+Goblin Assailant
+Mountain x13
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Dropkick Bomber.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Battlefield.Mox Ruby#5.Activate
+Bot1.Hand.Goblin Assailant.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Dropkick Bomber.Activate(Bot1.Battlefield.Goblin Assailant)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Goblin Assailant > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Ornithopter > Goblin Assailant)
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+? Bot2.Graveyard.Count = 1
+? Bot1.Graveyard.Count = 1
+
+[Expect]
+Bot1.Battlefield.Dropkick Bomber.Power = 2
+Bot1.Graveyard.Count = 1
