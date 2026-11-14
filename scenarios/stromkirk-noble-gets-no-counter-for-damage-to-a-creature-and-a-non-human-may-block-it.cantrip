@@ -1,0 +1,47 @@
+# Stromkirk Noble's counter is for combat damage to a player only. Bot2's Wall of Wood (not a Human) may block it, the Noble deals its 1
+# damage to the Wall, and gets no counter; the Human Elite Vanguard still may not block it.
+
+[Bot1 Deck]
+Stromkirk Noble
+Mox Ruby
+Mountain x20
+
+[Bot2 Deck]
+Elite Vanguard
+Wall of Wood
+Mox Pearl
+Forest
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stromkirk Noble.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Elite Vanguard.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Wall of Wood.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Stromkirk Noble > Bot2)
+! Bot2.Block(Elite Vanguard > Stromkirk Noble)
+Bot2.Block(Wall of Wood > Stromkirk Noble)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Battlefield.Wall of Wood.Damage = 1
+Bot1.Battlefield.Stromkirk Noble.Power = 1
+Bot1.Battlefield.Stromkirk Noble.Toughness = 1

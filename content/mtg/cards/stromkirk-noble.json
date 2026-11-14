@@ -1,0 +1,8 @@
+{
+  "name": "Stromkirk Noble",
+  "manaCost": "{R}",
+  "type": "Creature — Vampire Noble",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "This creature can't be blocked by Humans.\nWhenever this creature deals combat damage to a player, put a +1/+1 counter on it."
+}
