@@ -1,0 +1,26 @@
+# Uncharted Haven: "This land enters tapped. As it enters, choose a color. {T}: Add one mana of the chosen color" (CR 614.1c,
+# 605.1a, 607.2d). Bot1 plays it on turn 1 and chooses red (not the color Crossroads Village's scenario uses): it enters tapped
+# and cannot be tapped (refused). On turn 3 it adds red (the positive control) and no other color: green is refused.
+
+[Bot1 Deck]
+Uncharted Haven
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Uncharted Haven.Play
+Bot1.Colors(Red)
+? Bot1.Battlefield.Uncharted Haven.Tapped = true
+? Bot1.Battlefield.Uncharted Haven.ChosenColor = Red
+! Bot1.Battlefield.Uncharted Haven.Activate(Color: Red)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Uncharted Haven.Activate(Color: Green)
+! Bot1.Battlefield.Uncharted Haven.Activate(Color: Blue)
+Bot1.Battlefield.Uncharted Haven.Activate(Color: Red)
+? Bot1.Mana = {R}
+
+[Expect]
+Bot1.Battlefield.Uncharted Haven.ChosenColor = Red
+Bot1.Battlefield.Uncharted Haven.Tapped = true
