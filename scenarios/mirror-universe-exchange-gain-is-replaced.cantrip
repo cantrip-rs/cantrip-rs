@@ -1,0 +1,30 @@
+# Boon Reflection doubles the gain from the simultaneous life exchange (CR 701.12c, 614.1a).
+[Life]
+Bot1: 5
+Bot2: 12
+[Bot1 Deck]
+Black Lotus x4
+Mirror Universe
+Boon Reflection
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Mirror Universe.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Boon Reflection.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mirror Universe.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 5
+Bot1.Graveyard.Count = 5
