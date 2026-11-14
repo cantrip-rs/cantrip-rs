@@ -1,0 +1,8 @@
+{
+  "name": "Heroes' Bane",
+  "manaCost": "{3}{G}{G}",
+  "type": "Creature — Hydra",
+  "power": 0,
+  "toughness": 0,
+  "oracleText": "This creature enters with four +1/+1 counters on it.\n{2}{G}{G}: Put X +1/+1 counters on this creature, where X is its power."
+}

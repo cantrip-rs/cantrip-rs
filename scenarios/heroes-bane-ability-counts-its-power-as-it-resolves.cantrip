@@ -1,0 +1,53 @@
+# Heroes' Bane: X is its power "as the ability resolves" (CR 608.2h, 107.3a), not as it is activated. On turn 3 Bot1 activates it
+# ({2}{G}{G}: Mox Emerald, Mox Pearl, Mox Ruby, Forest) while it is a 4/4, and Bot2 answers with Giant Growth (+3/+3): the pump resolves
+# first, so X is 7 and it ends with 4 + 7 = 11 counters, a 14/14 until end of turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Heroes' Bane
+Forest x3
+Forest x20
+
+[Bot2 Deck]
+Forest
+Giant Growth
+Island x5
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Heroes' Bane.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Heroes' Bane.Activate
+Bot1.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Giant Growth.Cast(Bot1.Battlefield.Heroes' Bane)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Heroes' Bane.Power = 7
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Heroes' Bane.Counters.PlusOnePlusOne = 11
+Bot1.Battlefield.Heroes' Bane.Power = 14
+Bot1.Battlefield.Heroes' Bane.Toughness = 14

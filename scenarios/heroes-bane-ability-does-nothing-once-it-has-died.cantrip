@@ -1,0 +1,66 @@
+# Heroes' Bane: once it has left the battlefield the ability has nothing to put counters on (CR 400.7, 608.2b). Bot1 activates it on
+# turn 3 and Bot2 answers with two Depressurizes (-3/-0 each): after the second the 4/4's power is -2, so it is destroyed
+# ("then if that creature's power is 0 or less, destroy it"), and the ability then resolves for nothing.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Heroes' Bane
+Forest x3
+Forest x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Swamp
+Depressurize
+Depressurize
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Heroes' Bane.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Swamp.Play
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Heroes' Bane.Activate
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Depressurize.Cast(Bot1.Battlefield.Heroes' Bane)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Heroes' Bane.Power = 1
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Depressurize.Cast(Bot1.Battlefield.Heroes' Bane)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Heroes' Bane; Black Lotus
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Heroes' Bane; Black Lotus
+Bot1.Battlefield.Count = 4

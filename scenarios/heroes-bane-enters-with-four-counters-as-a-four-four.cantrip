@@ -1,0 +1,30 @@
+# Heroes' Bane, {3}{G}{G} 0/0 Hydra: "This creature enters with four +1/+1 counters on it" (CR 614.1c, 122.1). It is cast off Black
+# Lotus (GGG), Mox Emerald and Mox Pearl and is a 4/4 on the battlefield with four counters (it never sees 0/0, so no state-based
+# action kills it).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Heroes' Bane
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Heroes' Bane.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Heroes' Bane.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Heroes' Bane.Power = 4
+Bot1.Battlefield.Heroes' Bane.Toughness = 4
+Bot1.Graveyard = Black Lotus

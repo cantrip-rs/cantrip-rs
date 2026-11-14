@@ -1,0 +1,51 @@
+# Heroes' Bane: "{2}{G}{G}: Put X +1/+1 counters on this creature, where X is its power" (CR 107.3a, 122.1). On turn 1 two Black Lotuses
+# and three Moxen pay {3}{G}{G} and one activation (GGG + Mox Ruby): X is 4, so it is an 8/8 with eight counters. On turn 3 Mox
+# Emerald, Mox Pearl, Mox Ruby and a Forest pay a second activation: X is 8 (the counters count), 16/16 with sixteen counters.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Heroes' Bane
+Forest
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Heroes' Bane.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Heroes' Bane.Power = 4
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Heroes' Bane.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Heroes' Bane.Counters.PlusOnePlusOne = 8
+? Bot1.Battlefield.Heroes' Bane.Power = 8
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Heroes' Bane.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Heroes' Bane.Counters.PlusOnePlusOne = 16
+Bot1.Battlefield.Heroes' Bane.Power = 16
+Bot1.Battlefield.Heroes' Bane.Toughness = 16
