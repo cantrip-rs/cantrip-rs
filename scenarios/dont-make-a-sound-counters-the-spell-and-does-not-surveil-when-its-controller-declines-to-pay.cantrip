@@ -1,0 +1,45 @@
+# Don't Make a Sound when the spell's controller could pay {2} but declines: Bot2 casts Lightning Bolt at Bot1 keeping Mox Jet and Mox Ruby
+# untapped and pays nothing. The Bolt is countered (Bot1 keeps 20 life) and "if they do" is false, so Bot1 surveils nothing: the library is still 12 cards.
+
+[Bot1 Deck]
+Island
+Island
+Don't Make a Sound
+Island x5
+Mountain
+Plains
+Island x10
+
+[Bot2 Deck]
+Mountain
+Mountain
+Mox Jet
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Don't Make a Sound.Cast(Lightning Bolt)
+Bot1.Pass
+Bot2.Decline
+
+[Expect]
+Bot1.Life = 20
+Bot2.Graveyard = Lightning Bolt
+Bot1.Graveyard = Don't Make a Sound
+Bot1.Library.Count = 12

@@ -1,0 +1,48 @@
+# Don't Make a Sound: "Counter target spell unless its controller pays {2}. If they do, surveil 2." Bot2 casts Lightning Bolt at Bot1 with a
+# Mountain, keeping Mox Jet and Mox Ruby untapped, and pays exactly {2}. The Bolt resolves (Bot1 at 17) and Bot1 - the spell's controller is
+# the payer, not Bot1 - surveils 2: the top card (Mountain) goes to the graveyard and the Plains stays on top (CR 118.12, 701.25a).
+
+[Bot1 Deck]
+Island
+Island
+Don't Make a Sound
+Island x5
+Mountain
+Plains
+Island x10
+
+[Bot2 Deck]
+Mountain
+Mountain
+Mox Jet
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Don't Make a Sound.Cast(Lightning Bolt)
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.PayCost
+Bot1.Arrange(Plains | Mountain)
+
+[Expect]
+Bot1.Life = 17
+Bot2.Graveyard = Lightning Bolt
+Bot1.Graveyard = Don't Make a Sound; Mountain
