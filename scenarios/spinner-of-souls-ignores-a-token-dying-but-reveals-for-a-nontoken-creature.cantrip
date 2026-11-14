@@ -1,0 +1,55 @@
+# Spinner of Souls: "Whenever another nontoken creature you control dies" (CR 700.4, 111.7). A Warrior token of Bot1's dying to
+# Lightning Bolt reveals nothing (Bot1's library and hand are as they were), but on Bot1's turn 5 its Memnite, a nontoken creature,
+# dying to the second Bolt does: the Islands revealed above the Grizzly Bears go to the bottom and the Bears goes to hand.
+
+[Bot1 Deck]
+Spinner of Souls
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Ruby
+Secure the Wastes
+Lightning Bolt
+Lightning Bolt
+Memnite
+Island
+Island
+Grizzly Bears
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Spinner of Souls.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Secure the Wastes.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Warrior Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Pearl; Mox Ruby; Mox Ruby; Spinner of Souls
+? Bot1.Hand.Count = 0
+? Bot1.Library.Count = 13
+[T5 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Memnite)
+Bot1.Accept
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Grizzly Bears
+Bot1.Library.Count = 10

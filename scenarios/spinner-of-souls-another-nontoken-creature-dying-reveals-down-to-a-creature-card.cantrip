@@ -1,0 +1,41 @@
+# Spinner of Souls: "Whenever another nontoken creature you control dies, you may reveal cards from the top of your library until you
+# reveal a creature card. Put that card into your hand and the rest on the bottom of your library in a random order." Bot1's own
+# Lightning Bolt kills its Memnite; the trigger reveals two Islands and a Grizzly Bears, the Bears goes to hand, the Islands go
+# back under the library, so it still holds everything but the Bears and the Savannah Lions on top is not revealed.
+
+[Bot1 Deck]
+Spinner of Souls
+Memnite
+Black Lotus
+Mox Ruby
+Lightning Bolt
+Island
+Island
+Island
+Island
+Grizzly Bears
+Savannah Lions
+Island x8
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Spinner of Souls.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Memnite)
+Bot1.Accept
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Island; Island; Grizzly Bears
+Bot1.Graveyard = Memnite; Lightning Bolt; Black Lotus
+Bot1.Battlefield = Mox Ruby; Spinner of Souls
+Bot1.Library.Count = 11
+Bot1.Battlefield.Spinner of Souls.Keywords = Reach

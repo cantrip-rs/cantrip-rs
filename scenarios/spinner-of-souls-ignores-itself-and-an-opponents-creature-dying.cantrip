@@ -1,0 +1,47 @@
+# Spinner of Souls: "Whenever another nontoken creature you control dies" (CR 700.4). Bot2's Memnite dying to Bot1's Lightning Bolt
+# is not a creature Bot1 controls, and Spinner dying to a second Bolt is not "another" creature: neither reveals anything, so the
+# Grizzly Bears stays at the top of the library and the hand holds only the Islands.
+
+[Bot1 Deck]
+Spinner of Souls
+Black Lotus
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island
+Island
+Grizzly Bears
+Island x8
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Spinner of Souls.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Spinner of Souls)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 2
+Bot2.Graveyard = Memnite
+Bot1.Graveyard = Spinner of Souls; Lightning Bolt; Lightning Bolt; Black Lotus
+Bot1.Hand = Island; Island
+Bot1.Library.Count = 9

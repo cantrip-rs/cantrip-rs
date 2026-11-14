@@ -1,0 +1,11 @@
+{
+  "name": "Spinner of Souls",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Spider Spirit",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Reach\nWhenever another nontoken creature you control dies, you may reveal cards from the top of your library until you reveal a creature card. Put that card into your hand and the rest on the bottom of your library in a random order.",
+  "keywords": [
+    "Reach"
+  ]
+}
