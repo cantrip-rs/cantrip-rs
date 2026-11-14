@@ -1,0 +1,47 @@
+# Ghostly Keybearer (3/3 flying): "Whenever this creature deals combat damage to a player, unlock a locked door of up to one target Room you control."
+# Turn 1 Bot1 casts Unholy Annex as its left door (Black Lotus) and the Keybearer (four Moxen). On turn 3 the Keybearer hits Bot2 for 3, and the Room's
+# one locked door is unlocked with no choice to make (CR 709.5f): Ritual Chamber's "when you unlock this door" makes the 6/6 Demon (CR 709.5h).
+
+[Bot1 Deck]
+Black Lotus
+Unholy Annex // Ritual Chamber
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Ghostly Keybearer
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ghostly Keybearer.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Unholy Annex.Doors = Unholy Annex
+[T3 Bot1.Main1]
+Bot1.Attack(Ghostly Keybearer)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Battlefield.Unholy Annex // Ritual Chamber.Doors = Unholy Annex; Ritual Chamber
+[Expect]
+Bot1.Battlefield.Demon Token.Power = 6
