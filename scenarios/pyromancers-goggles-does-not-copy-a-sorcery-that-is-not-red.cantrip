@@ -1,0 +1,34 @@
+# Pyromancer's Goggles: its {R} pays the {1} of Night's Whisper ({1}{B}, a black sorcery) with Mox Jet's {B}: the spell is not red,
+# so there is no copy. One spell on the stack; it draws two cards and loses 2 life once (18).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Pyromancer's Goggles
+Night's Whisper
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Pyromancer's Goggles.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Pyromancer's Goggles.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Night's Whisper.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot1.Hand.Count = 5

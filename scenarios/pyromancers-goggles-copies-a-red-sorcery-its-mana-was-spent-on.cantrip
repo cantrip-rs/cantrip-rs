@@ -1,0 +1,53 @@
+# Pyromancer's Goggles: a red sorcery is copied too. The Goggles' {R} pays for Flame Slash aimed at Bot2's Grizzly Bears; the
+# copy is aimed at its Memnite. Both die.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Pyromancer's Goggles
+Flame Slash
+Island x20
+
+[Bot2 Deck]
+Island
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Pyromancer's Goggles.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Pyromancer's Goggles.Activate
+Bot1.Hand.Flame Slash.Cast(Bot2.Battlefield.Grizzly Bears)
+? Stack.Count = 2
+Bot1.Pass
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears; Memnite
+Bot2.Life = 20
