@@ -1,0 +1,56 @@
+# Each player sacrifices a chosen land for a green attacker; a white attacker costs no land (CR 508.1h–j).
+[Bot1 Deck]
+Flooded Woodlands
+Black Lotus
+Mox Jet
+Forest
+Llanowar Elves
+Plains
+Savannah Lions
+Island x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Plains
+Savannah Lions
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Flooded Woodlands.Cast
+? Bot1.Mana =
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Attack(Llanowar Elves)
+Bot1.Choose(Forest)
+[T3 Bot1.Main2]
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Attack(Llanowar Elves)
+Bot2.Choose(Forest)
+[T4 Bot2.Main2]
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Savannah Lions)
+? Combat.Attackers = Savannah Lions > Bot2
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Forest; Black Lotus
+Bot2.Life = 17
+Bot1.Life = 19
+Bot2.Graveyard = Forest
+Bot1.Battlefield.Plains.Tapped = false

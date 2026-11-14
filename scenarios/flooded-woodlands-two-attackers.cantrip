@@ -1,0 +1,41 @@
+# Two green attackers each cost a land (CR 508.1h–j).
+[Bot1 Deck]
+Flooded Woodlands
+Black Lotus
+Mox Jet
+Forest
+Llanowar Elves
+Llanowar Elves
+Mox Emerald
+Plains
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Flooded Woodlands.Cast
+? Bot1.Mana =
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Attack(Llanowar Elves; Llanowar Elves)
+! Bot1.Choose()
+Bot1.Choose(Forest; Plains)
+? Combat.Attackers = Llanowar Elves > Bot2; Llanowar Elves > Bot2
+[T3 Bot1.Main2]
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Llanowar Elves)
+Bot1.Attack()
+[Expect]
+Bot1.Graveyard = Plains; Forest; Black Lotus
+Bot2.Life = 18
