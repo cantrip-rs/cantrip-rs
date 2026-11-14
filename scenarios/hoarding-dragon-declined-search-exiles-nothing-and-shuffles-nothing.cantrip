@@ -1,0 +1,47 @@
+# Hoarding Dragon's enters ability is a "may": Bot1 declines the search, so nothing is exiled and the library is not shuffled
+# (Sol Ring stays in it). When Terror kills the Dragon its dies ability has no card to put into hand and asks nothing.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Hoarding Dragon
+Terror
+Sol Ring
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hoarding Dragon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Terror.Cast(Bot1.Battlefield.Hoarding Dragon)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Hand =
+Bot1.Shuffles = 0
+Bot1.Library.Count = 13
+Bot1.Graveyard = Terror; Hoarding Dragon; Black Lotus
+Stack.Count = 0

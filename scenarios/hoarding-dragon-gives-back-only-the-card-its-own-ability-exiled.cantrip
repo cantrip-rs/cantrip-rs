@@ -1,0 +1,66 @@
+# Two Hoarding Dragons: each one's dies ability finds only the card exiled by that same Dragon's enters ability (CR 607.2a).
+# Bot1's first Dragon exiles Sol Ring (turn 1) and the second Mana Vault (turn 3). When Bot2's Terror kills the first Dragon
+# on turn 4, its ability puts Sol Ring into Bot1's hand and Mana Vault stays in exile with the second Dragon.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Mox Emerald
+Hoarding Dragon
+Hoarding Dragon
+Mountain
+Sol Ring
+Mana Vault
+Mountain x12
+
+[Bot2 Deck]
+Black Lotus
+Terror
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hoarding Dragon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Search(Sol Ring)
+? Exile = Sol Ring
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hoarding Dragon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Search(Mana Vault)
+? Exile = Sol Ring; Mana Vault
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Terror.Cast(Bot1.Battlefield.Hoarding Dragon#1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+
+[Expect]
+Exile = Mana Vault
+Bot1.Hand = Mountain; Mountain; Sol Ring
+Bot1.Battlefield = Hoarding Dragon; Mox Emerald; Mox Ruby
+Bot1.Graveyard = Hoarding Dragon; Black Lotus; Black Lotus

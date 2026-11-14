@@ -1,0 +1,55 @@
+# Hoarding Dragon: on entering, Bot1 accepts and searches their own library for an artifact card (Sol Ring; Bot2's Sol Ring
+# stays in Bot2's library, which is not shuffled); it is exiled, not put in hand, and Bot1's library is shuffled. When Terror
+# kills the Dragon, its dies ability puts the exiled card into its owner's hand.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Hoarding Dragon
+Terror
+Sol Ring
+Mountain x12
+
+[Bot2 Deck]
+Sol Ring
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hoarding Dragon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Search(Sol Ring)
+? Exile = Sol Ring
+? Bot1.Hand = Terror
+? Bot1.Shuffles = 1
+? Bot2.Shuffles = 0
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Terror.Cast(Bot1.Battlefield.Hoarding Dragon)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+
+[Expect]
+Exile.Count = 0
+Bot1.Hand = Sol Ring
+Bot1.Graveyard = Terror; Hoarding Dragon; Black Lotus
+Bot1.Library.Count = 12
+Bot2.Library.Count = 13
+Stack.Count = 0
