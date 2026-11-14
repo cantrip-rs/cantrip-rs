@@ -1,0 +1,8 @@
+{
+  "name": "Slumbering Cerberus",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Dog",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "This creature doesn't untap during your untap step.\nMorbid — At the beginning of each end step, if a creature died this turn, untap this creature."
+}

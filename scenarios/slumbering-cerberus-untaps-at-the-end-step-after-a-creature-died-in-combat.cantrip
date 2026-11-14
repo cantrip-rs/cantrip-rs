@@ -1,0 +1,48 @@
+# Slumbering Cerberus attacks on turn 3 and Bot2's Memnite blocks it and dies (CR 700.4), so at the beginning of Bot1's own end step the morbid ability untaps
+# Cerberus (it survives the 1 damage, 4/2).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Slumbering Cerberus
+Lightning Bolt
+Mountain
+Mountain
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Slumbering Cerberus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Slumbering Cerberus > Bot2)
+[T3 Bot1.Blockers]
+Bot2.Block(Memnite > Slumbering Cerberus)
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Memnite = (absent)
+? Bot1.Battlefield.Slumbering Cerberus.Tapped = true
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Slumbering Cerberus.Tapped = false
+
+[Expect]
+Bot2.Graveyard = Memnite
+Bot2.Life = 20
