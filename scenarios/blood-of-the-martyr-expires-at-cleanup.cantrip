@@ -1,0 +1,31 @@
+# Cleanup ends the spell's effect, so damage on the next turn is not offered for redirection (CR 514.2, 611.2a).
+[Bot1 Deck]
+Blood of the Martyr
+Black Lotus
+Ornithopter
+Mox Ruby
+Shock
+Plains x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Blood of the Martyr.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+[Expect]
+Bot1.Life = 20
+Bot1.Graveyard = Ornithopter; Shock; Blood of the Martyr; Black Lotus

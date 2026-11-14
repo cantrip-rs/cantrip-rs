@@ -1,0 +1,53 @@
+# Blood of the Martyr replaces only damage to creatures: while it lasts, Shock to the opponent's Jace, the Mind Sculptor
+# (loyalty 3) and Shock to the opponent are dealt as they would be, with no question asked - Jace is left at loyalty 1
+# (CR 120.3c), the opponent at 18 life, and its caster at 20 (CR 614.1a).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Blood of the Martyr
+Shock
+Shock
+Plains x20
+[Bot2 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Jace, the Mind Sculptor
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Jace, the Mind Sculptor.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Blood of the Martyr.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Shock#1.Cast(Bot2.Battlefield.Jace, the Mind Sculptor)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18
+Bot2.Battlefield.Jace, the Mind Sculptor.Counters.Loyalty = 1
+Bot1.Graveyard = Shock; Shock; Blood of the Martyr; Black Lotus

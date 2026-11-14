@@ -1,0 +1,32 @@
+# Pyroclasm damages creatures controlled by different players simultaneously. The spell controller independently redirects
+# the opponent's creature's damage but declines for their own, which entered after Blood was cast (CR 611.2c, 616.1).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Blood of the Martyr
+Pyroclasm
+Ornithopter
+Plains x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Blood of the Martyr.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Pyroclasm.Cast
+Bot1.Accept
+Bot1.Decline
+[Expect]
+Bot1.Life = 18
+Bot1.Graveyard = Ornithopter; Pyroclasm; Blood of the Martyr; Black Lotus
+Bot2.Battlefield.Ornithopter.Damage = 0
