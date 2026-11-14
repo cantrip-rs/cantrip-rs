@@ -1,0 +1,28 @@
+# Removing islandwalk after attackers are declared allows an otherwise prohibited block (CR 509.1b).
+[Bot1 Deck]
+Hammerheim
+Ornithopter
+Island x20
+[Bot2 Deck]
+Mox Sapphire
+Grayscaled Gharial
+Island x20
+[Actions]
+Bot1.Hand.Hammerheim.Play
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Grayscaled Gharial.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grayscaled Gharial > Bot1)
+Bot1.Battlefield.Hammerheim.Activate(Bot2.Battlefield.Grayscaled Gharial; Ability: loses all landwalk)
+Bot1.Pass
+Bot2.Pass
+Bot1.Block(Ornithopter > Grayscaled Gharial)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Ornithopter.Damage = 1

@@ -312,6 +312,7 @@ public static class PromptFixtures
         "choose-put-on-bottom-effect",
         "waiting-to-start",
         "choose-player",
+        "choose-player-defined-x",
         "choose-player-bottom",
         "choose-player-protection",
         "choose-player-gift",
@@ -2227,6 +2228,17 @@ public static class PromptFixtures
                     Candidates = [Rival, 3],
                     Verb = "Draw",
                     Amount = 1,
+                };
+
+            case "choose-player-defined-x":
+                Announce(view, "Spoils of War", "{X}{B}", "X is the number of artifact and/or creature cards in an opponent's graveyard as you cast this spell. Distribute X +1/+1 counters among any number of target creatures.", Viewer);
+                view.Players.Add(new PlayerSummaryView { Seat = 3, Name = "Bot 3", Team = 3, Life = 20, HandCount = 5, LibraryCount = 30 });
+                return new ChoosePlayerPromptMessage
+                {
+                    Player = Viewer,
+                    Source = new ViewHandle(OnStack),
+                    Candidates = [Rival, 3],
+                    Verb = "Define X",
                 };
 
             case "choose-player-gift":

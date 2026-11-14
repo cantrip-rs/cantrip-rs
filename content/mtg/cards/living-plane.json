@@ -1,0 +1,6 @@
+{
+  "name": "Living Plane",
+  "manaCost": "{2}{G}{G}",
+  "type": "World Enchantment",
+  "oracleText": "All lands are 1/1 creatures that are still lands."
+}

@@ -501,6 +501,7 @@ mod tests {
             inline_targets: [Target::None; 16],
             target_count: 0,
             inline_spec_of: [0; 16],
+            target_choosers: Default::default(),
             x: 0,
             kicked: 0,
             counted: 0,

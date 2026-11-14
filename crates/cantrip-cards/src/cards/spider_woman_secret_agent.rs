@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{effects, targets, triggers};
+use cantrip_mechanics::{targets, triggers};
 use cantrip_oracle as oracle;
 
 /// "Tap target creature an opponent controls. That creature can't become untapped for as long as you control Spider-Woman"
@@ -8,7 +8,7 @@ use cantrip_oracle as oracle;
 fn tap_and_hold(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
     g.tap(creature);
-    g.add_effect(item.object, creature, EffectKind::CantBecomeUntapped, Duration::AsLongAs(g.card_id(&CARD), 0));
+    g.add_effect(item.object, creature, EffectKind::CantBecomeUntapped, Duration::WhileSourceControlled);
     Ok(())
 }
 
@@ -19,6 +19,5 @@ pub static CARD: CardDef = CardDef {
         "When Spider-Woman enters, tap target creature an opponent controls. That creature can't become untapped for as long as you control Spider-Woman.",
     )
     .targets(&[targets::CREATURE_AN_OPPONENT_CONTROLS])],
-    lasting: &[effects::YOU_CONTROL_SOURCE],
     ..oracle::SPIDER_WOMAN_SECRET_AGENT
 };

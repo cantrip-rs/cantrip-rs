@@ -1,0 +1,6 @@
+{
+  "name": "Infinite Hourglass",
+  "manaCost": "{4}",
+  "type": "Artifact",
+  "oracleText": "At the beginning of your upkeep, put a time counter on this artifact.\nAll creatures get +1/+0 for each time counter on this artifact.\n{3}: Remove a time counter from this artifact. Any player may activate this ability but only during any upkeep step."
+}

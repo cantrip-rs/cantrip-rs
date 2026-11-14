@@ -1,0 +1,44 @@
+# After the Guard protects a creature, an opponent gains control of the Guard and destroys that creature; the delayed trigger's controller cannot sacrifice the opponent's permanent (CR 701.21a).
+[Bot1 Deck]
+Kjeldoran Guard
+Mox Pearl
+Mox Ruby
+Ornithopter
+Plains x20
+[Bot2 Deck]
+Mountain
+Black Lotus
+Act of Treason
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kjeldoran Guard.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+[T4 Bot2.BeginCombat]
+Bot1.Battlefield.Kjeldoran Guard.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+[T4 Bot2.Main2]
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Act of Treason.Cast(Bot1.Battlefield.Kjeldoran Guard)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Kjeldoran Guard.Power = 1
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.End]
+[Expect]
+Bot1.Graveyard = Ornithopter
+Bot2.Battlefield.Kjeldoran Guard.Power = 1
+Bot2.Graveyard = Lightning Bolt; Act of Treason; Black Lotus

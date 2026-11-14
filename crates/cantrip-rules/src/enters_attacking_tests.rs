@@ -69,8 +69,12 @@ fn cx(game: &mut Game) -> Cx<'_> {
 /// Player 0's turn in the declare attackers step, a Footman attacking player 1, the Firebrand beside it on the battlefield.
 /// The card `entering` is put onto the battlefield from player 0's hand by the tests.
 fn game(entering: &'static CardDef) -> (Game, &'static CardTable, ObjectId) {
+    game_with_seats(entering, 2)
+}
+
+fn game_with_seats(entering: &'static CardDef, seats: usize) -> (Game, &'static CardTable, ObjectId) {
     let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FIREBRAND, &FOOTMAN, &WALKER, entering])));
-    let mut game = Game::new(table, &Setup { decks: vec![Vec::new(), Vec::new()], ..Default::default() });
+    let mut game = Game::new(table, &Setup { decks: vec![Vec::new(); seats], ..Default::default() });
     game.state.update_turn(|t| {
         t.active = YOU;
         t.priority = YOU;
@@ -115,4 +119,51 @@ fn an_instruction_that_names_a_defender_moves_an_arriving_attacker_to_it() {
     assert_eq!(attacking.len(), 1, "an attacker already in the combat is not added again");
     assert_eq!(attacking[0].target, Target::Object(walker));
     assert_eq!(attacking[0].defending, THEM);
+}
+
+
+#[test]
+fn an_arriving_attackers_defender_is_remembered_after_removal_from_combat() {
+    let (mut game, _, hand) = game(&FOOTMAN);
+    let made = ops::put_onto_battlefield_with(&mut cx(&mut game), &[(hand, YOU, false)], ZoneReason::Other, &[]).unwrap()[0];
+    assert_eq!(game.defending_player(made), Some(THEM));
+    ops::remove_from_combat(&mut cx(&mut game), &[made]);
+    assert_eq!(game.defending_player(made), Some(THEM), "a resolving unblocked ability still knows its defender");
+    assert!(!game.history().all().iter().any(|r| matches!(r.event, Event::Attacks { attacker, .. } if attacker == made)),
+        "entering attacking must not generate an attack declaration or its triggers");
+}
+
+#[test]
+fn a_removed_planeswalker_does_not_erase_an_arriving_attackers_defending_player() {
+    let (mut game, table, hand) = game(&FOOTMAN);
+    let walker = put(&mut game, table, &WALKER, Zone::BATTLEFIELD, THEM);
+    let made = ops::put_onto_battlefield_attacking(&mut cx(&mut game), hand, YOU, Target::Object(walker), &[]).unwrap();
+    ops::remove_from_combat(&mut cx(&mut game), &[walker]);
+    assert_eq!(game.state.attackers.iter().find(|a| a.id == made).unwrap().target, Target::None);
+    assert_eq!(game.defending_player(made), Some(THEM));
+    ops::remove_from_combat(&mut cx(&mut game), &[made]);
+    assert_eq!(game.defending_player(made), Some(THEM));
+}
+
+#[test]
+fn a_reselected_defender_is_remembered_after_the_attacker_leaves_combat() {
+    let other = PlayerId(2);
+    let (mut game, _, hand) = game_with_seats(&FOOTMAN, 3);
+    let made = ops::put_onto_battlefield_attacking(&mut cx(&mut game), hand, YOU, Target::Player(THEM), &[]).unwrap();
+    ops::set_attack_target(&mut cx(&mut game), made, Target::Player(other));
+    assert_eq!(game.defending_player(made), Some(other));
+    ops::remove_from_combat(&mut cx(&mut game), &[made]);
+    assert_eq!(game.defending_player(made), Some(other), "use its latest actual defender in multiplayer");
+    assert!(!game.history().all().iter().any(|r| matches!(r.event, Event::Attacks { attacker, .. } if attacker == made)));
+}
+
+
+#[test]
+fn a_departed_arriving_attacker_retains_its_defender_but_the_new_object_does_not() {
+    let (mut game, _, hand) = game(&FOOTMAN);
+    let made = ops::put_onto_battlefield_attacking(&mut cx(&mut game), hand, YOU, Target::Player(THEM), &[]).unwrap();
+    let exiled = cantrip_api::Game::exile(&mut cx(&mut game), made);
+    assert_ne!(made, exiled);
+    assert_eq!(game.defending_player(made), Some(THEM), "the original incarnation retains the combat relationship");
+    assert_eq!(game.defending_player(exiled), None, "a new zone incarnation has never attacked");
 }

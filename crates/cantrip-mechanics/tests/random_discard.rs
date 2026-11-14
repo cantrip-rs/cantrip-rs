@@ -33,7 +33,7 @@ fn resolve(size: usize, count: usize, faces: &[u8]) -> (RulesGame, Vec<ObjectId>
     }
     let other = game.state.push_obj(Obj::new(cards.id_of(&CARD), THEM, Zone::hand(THEM)));
     game.state.zone_push(Zone::hand(THEM), other);
-    let item = StackItem { instance: AbilityAcquisition::OWN, event_amount: None,
+    let item = StackItem { target_choosers: Span::default(), instance: AbilityAcquisition::OWN, event_amount: None,
         kind: StackKind::Triggered, object: source, ability: AbilityRef::delayed(cards.id_of(&SOURCE), 0), controller: YOU,
         inline_targets: [Target::None; INLINE_TARGETS], target_count: 0, inline_spec_of: [0; INLINE_TARGETS],
         x: 0, kicked: 0, counted: 0, paid: 0, modes: 0, way: 0, choice: 0,

@@ -1,0 +1,27 @@
+# Hammerheim removes both mountainwalk and the islandwalk granted by Fishliver Oil (CR 611.2a).
+[Bot1 Deck]
+Hammerheim
+Island x20
+[Bot2 Deck]
+Goblin Mountaineer
+Fishliver Oil
+Black Lotus x2
+Island x20
+[Actions]
+Bot1.Hand.Hammerheim.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Goblin Mountaineer.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Fishliver Oil.Cast(Bot2.Battlefield.Goblin Mountaineer)
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Goblin Mountaineer.Keywords = Islandwalk; Mountainwalk
+Bot1.Battlefield.Hammerheim.Activate(Bot2.Battlefield.Goblin Mountaineer; Ability: loses all landwalk)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Goblin Mountaineer.Keywords = (absent)
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Goblin Mountaineer.Keywords = Islandwalk; Mountainwalk

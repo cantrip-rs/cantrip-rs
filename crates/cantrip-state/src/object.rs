@@ -39,6 +39,10 @@ pub struct Obj {
     any_counters: bool,
     /// When it entered its zone (CR 613.7d), for ordering and for layer timestamps.
     pub timestamp: u32,
+    /// The start of its current uninterrupted interval as a World permanent (CR 704.5k), zero while it is not one.
+    /// Unlike its layer timestamp this is not reset by attaching, turning face up, or changing copies while still a World.
+    /// Simultaneous acquisitions share a clock value, independently of their APNAP layer timestamp order.
+    pub world_since: u32,
     /// The copy effects on it (CR 707.2, 613.2, layer 1a): the values it copied, which are its copiable values unless it
     /// is face down (`copiable`, layer 1b). An object about to be put onto the battlefield face down holds the face-down
     /// values here until it enters (`put_onto_battlefield_face_down`).
@@ -237,6 +241,8 @@ pub const CHOSEN_KEPT: usize = 2;
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum Kept {
     Name(CardId),
+    Color(Color),
+    Number(u32),
     Object(ObjectId),
     Player(PlayerId),
     /// On an emblem, no choice but what its text names: the object whose ability made it, as the object it was then (CR
@@ -331,6 +337,14 @@ impl ChoiceRecord for Choices {
     }
 
     fn keep(&mut self, by: Linked, value: Kept) -> bool {
+        // A reselected entry choice uses its existing carrier, without taking another kept slot.
+        if by.acquired == Acquired::OWN && self.by == Some(by.text) {
+            match value {
+                Kept::Color(color) if self.color.is_some() => { self.color = Some(color); return true; }
+                Kept::Number(number) if self.number.is_some() => { self.number = Some(number); return true; }
+                _ => {}
+            }
+        }
         let chosen = Chosen { value, text: by.text, acquired: by.acquired };
         let mine = |c: &Option<Chosen<Kept>>| {
             c.is_some_and(|c| c.text == by.text && c.acquired == by.acquired && c.value.same_kind(value))
@@ -384,7 +398,8 @@ impl Choices {
 
     /// The color chosen, to `by` (`GameState::chosen_color`).
     pub fn color(&self, by: Linked) -> Option<Color> {
-        self.entered_to(by)?.color
+        self.entered_to(by).and_then(|c| c.color)
+            .or_else(|| self.kept_to(by, |k| match k { Kept::Color(c) => Some(c), _ => None }))
     }
 
     /// The creature or land type chosen, to `by`.
@@ -407,9 +422,10 @@ impl Choices {
         self.entered_to(by)?.option
     }
 
-    /// The number chosen as this permanent entered, to the linked ability.
+    /// The number chosen as this permanent entered or reselected by its linked ability.
     pub fn number(&self, by: Linked) -> Option<u32> {
-        self.entered_to(by)?.number
+        self.entered_to(by).and_then(|c| c.number)
+            .or_else(|| self.kept_to(by, |k| match k { Kept::Number(n) => Some(n), _ => None }))
     }
 
     /// The object chosen, to `by`, wherever it is now: as the permanent entered, or by `by` as it resolved.
@@ -624,6 +640,7 @@ impl Obj {
             counters: _,
             any_counters: _,
             timestamp: _,
+            world_since: _,
             copy: _,
             loyalty_turn: _,
             became,
@@ -698,6 +715,7 @@ impl Obj {
             counters: [0; CounterKind::COUNT],
             any_counters: false,
             timestamp: 0,
+            world_since: 0,
             copy: None,
             loyalty_turn: 0,
             became: None,
@@ -1348,6 +1366,9 @@ pub struct StackItem {
     /// 700.2c). So a slot that takes a variable number of targets ("attach any number of target Equipment you control to
     /// target creature you control") can stand anywhere in the list, and each target is judged by its own slot.
     pub inline_spec_of: [u8; INLINE_TARGETS],
+    /// Per-target chosen players, in the optional target-chooser arena. Empty for
+    /// ordinary targeting; copied with the other announcement choices.
+    pub target_choosers: Span,
     /// The X announced for it (CR 107.3); for a reflexive triggered ability, the number its "that many" counts
     /// (CR 603.12, `PendingTrigger::count`).
     pub x: u32,
@@ -1435,6 +1456,13 @@ pub struct StackItem {
 }
 
 impl StackItem {
+    /// A resolving mode/half uses local spec numbers for its existing choices.
+    pub fn narrow_target_choosers(&mut self, first: usize, count: usize) {
+        let skip = first.min(self.target_choosers.len as usize) as u32;
+        self.target_choosers.start += skip;
+        self.target_choosers.len = (self.target_choosers.len - skip).min(count as u32);
+    }
+
     /// The damage a "that much damage" triggered ability (`TriggeredDef::damage_amount`) matched, added up over its batch
     /// (CR 603.2c); 0 where it matched none.
     pub fn matched_damage_amount(&self) -> u32 {
@@ -1511,6 +1539,8 @@ pub enum EffectKind {
     /// and indestructible" (Shadowspear). Named landwalk references include the matching snow variant
     /// (`Keywords::for_effect`); grants stay exact. What is granted after it is kept.
     LoseKeywords(Keywords),
+    /// All kinds of "bands with other", independently of ordinary banding (CR 702.22).
+    LoseBandsWithOthers,
     /// Gains this ability (activated, triggered or a supported static rule), layer 6.
     AddAbility(AbilityRef),
     /// Protection from a player (CR 702.16a): their spells and abilities can't target it, their creatures can't block
@@ -1560,6 +1590,15 @@ pub enum EffectKind {
     SwitchPt,
     /// Its power and toughness become these (CR 613.4b), layer 7b: "it becomes a 0/0 creature".
     SetPt(i32, i32),
+    /// Set only base power in layer 7b (CR 613.4b); toughness continues to be determined independently.
+    /// Island of Wak-Wak and Singing Tree set base power without setting toughness.
+    SetPower(i32),
+    /// Set only base toughness in layer 7b (CR 613.4b); power continues to be determined independently.
+    /// Sentinel and Wall of Tombstones set base toughness without setting power.
+    SetToughness(i32),
+    /// Assigns no combat damage (CR 510.1a, 609.4), a resolved rule rather than removal or prevention of damage.
+    /// Gaze of Pain and Cloak of Confusion apply it after their controller chooses their triggered effect.
+    NoCombatDamageAssignment,
     /// Is exactly these card types (CR 205.1a, 613.1d), layer 4: an instant or sorcery stays one, and the subtypes it had stay
     /// only where they belong to a card type it still has (`Subtype::card_types`). An effect that also names its subtypes
     /// ("becomes an Equipment artifact") sets them with `LoseSubtypesOf` and `AddSubtype` after it.
@@ -1888,6 +1927,13 @@ pub enum Duration {
     /// (CR 500.8, Aurelia, the Warleader) begins without it; one made outside combat ends with the turn's cleanup at the
     /// latest. Ursine Monstrosity's "attacks that player this combat if able".
     EndOfCombat,
+    /// Until the current step ends (CR 500.4, 611.2a), including when an effect ends the turn/combat early.
+    EndOfStep,
+    /// Until the next matching step begins (CR 500.4). A skipped step never begins. `None` means any player's.
+    /// Erhnam Djinn, Gabriel Angelfire and Xenic Poltergeist name their controller's next upkeep.
+    UntilNextStepOf { step: Step, player: Option<PlayerId> },
+    /// Through the next matching step (CR 611.2a). Becomes `EndOfStep` when it begins; Halfdane's next upkeep.
+    UntilEndOfNextStepOf { step: Step, player: Option<PlayerId> },
     /// As long as the affected object stays where it is.
     Indefinite,
     /// "For as long as [the source] remains on the battlefield" (CR 611.2b): it ends the moment the effect's source is no
@@ -1954,11 +2000,19 @@ pub enum Duration {
     /// ends with that untap step, whatever it did: a permanent untapped as that step began is under it no more (the Frost
     /// Titan ruling). About an object, so only an effect on one lasts so (`EffectKind::DoesntUntap`).
     DuringItsControllersNextUntapStep,
+    /// During the affected permanent's controller's next N untap steps (CR 502.3, 611.2a): Telekinesis (2),
+    /// Frost Breath (1). Each actual matching untap step consumes one, even if the permanent was already untapped.
+    /// Follows its current controller, works through ability loss, and is independent of other such durations.
+    DuringControllersNextUntapSteps(u32),
     /// "During [that player's] next untap step" (CR 502.3, 611.2a): until the end of this player's next untap step, and a
     /// rule it makes about untapping applies in that untap step alone (Exhaustion's "their next untap step"; Sleep's "that
     /// player's next untap step") - another player's untap step a permanent untaps in is not it (the Exhaustion ruling). A
     /// player who has left the game would have begun their turn, and it ends then (CR 800.4m).
     DuringNextUntapStepOf(PlayerId),
+    /// "For as long as you control [the source]" (CR 611.2b). The effect's controller must control the same source
+    /// continuously from the ability's creation on the stack. A lapse before resolution prevents the duration from
+    /// starting, unless control returns during resolution itself. Aladdin, Merieke Ri Berit and Orcish Squatters print it.
+    WhileSourceControlled,
 }
 
 impl Duration {
@@ -1987,6 +2041,8 @@ pub enum Expiry {
     EndOfYourNextTurn,
     /// "Until your next end step" (CR 500.4): ends as the holder's next end step begins, before its triggers.
     UntilYourNextEndStep,
+    /// Until the holder's next step of this kind begins (CR 500.4): Elkin Bottle's next upkeep. Skipped steps don't expire it.
+    UntilYourNextStep(Step),
     /// "For as long as you control [this permanent]" (CR 611.2b): it lasts while the holder controls this object on the
     /// battlefield, and ends for good the first time they don't - the permanent leaves (a returned one is a new object,
     /// CR 400.7), phases out (CR 702.26f) or changes controller, though it come back - and it does nothing if that is
@@ -2212,6 +2268,10 @@ pub enum DelayedWhen {
     /// "Whenever [event] this turn" (CR 603.7b): triggers each time the ability's own `listens`/`matches` accept an
     /// event, until the cleanup step ends the turn. The ability's `matches` is asked of `source`.
     ThisTurn,
+    /// "Whenever [event] this combat" (CR 603.7b): every matching event until this combat phase ends,
+    /// including an effect ending the combat phase or turn early. It lasts through the end-of-combat step.
+    /// Goblin Flotilla and Melee create these; the ability exists independently of its creating source.
+    ThisCombat,
     /// "Whenever [that object] [event] this turn" (CR 603.7b): as `ThisTurn`, except that its `matches` is asked of the
     /// object it was made for, its `subject` (`Delayed::watched`) — no ability of that object's, so nothing it loses or gains
     /// changes it (CR 603.7c), and it goes on watching after that object has left the battlefield. Its conditions are its
@@ -2269,6 +2329,7 @@ impl DelayedWhen {
         matches!(
             self,
             DelayedWhen::ThisTurn
+                | DelayedWhen::ThisCombat
                 | DelayedWhen::WatchingThisTurn
                 | DelayedWhen::UntilEvent
                 | DelayedWhen::UntilNextTurnOf(_)
@@ -3297,6 +3358,28 @@ mod tests {
         let by_copy = Chosen { value: CardId(6), text: CardId(4), acquired: copy };
         assert_eq!(by_copy.to(by(CardId(4), copy)), Some(CardId(6)));
         assert_eq!(by_copy.to(by(CardId(4), Acquired::OWN)), None);
+    }
+
+    #[test]
+    fn reselected_entry_colors_and_numbers_reuse_their_carriers() {
+        let text=CardId(4);let own=Linked {object:ObjectId(2),text,acquired:Acquired::OWN};
+        let mut choices=Choices::entered(text,Entered {color:Some(Color::Blue),number:Some(2),card:Some(CardId(9)),..Default::default()});
+        assert!(choices.keep(own,Kept::Player(PlayerId(1))),"fill the second kept slot");
+        assert!(choices.keep(own,Kept::Color(Color::Red)));assert!(choices.keep(own,Kept::Number(u32::MAX)));
+        assert_eq!(choices.color(own),Some(Color::Red));assert_eq!(choices.number(own),Some(u32::MAX));
+        assert_eq!(choices.card(own),Some(CardId(9)));assert_eq!(choices.player(own),Some(PlayerId(1)));
+    }
+
+    #[test]
+    fn reselected_values_stay_linked_to_the_ability_that_chose_them() {
+        let own=Linked {object:ObjectId(2),text:CardId(4),acquired:Acquired::OWN};
+        let grant=Linked {acquired:Acquired {by:AcquiredBy::Grant,stamp:7,part:0},..own};
+        let mut choices=Choices::entered(own.text,Entered {color:Some(Color::Blue),number:Some(2),..Default::default()});
+        assert!(choices.keep(grant,Kept::Color(Color::Red)));assert!(choices.keep(grant,Kept::Number(5)));
+        assert_eq!((choices.color(own),choices.number(own)),(Some(Color::Blue),Some(2)));
+        assert_eq!((choices.color(grant),choices.number(grant)),(Some(Color::Red),Some(5)));
+        assert!(choices.keep(grant,Kept::Number(6)));assert_eq!(choices.number(grant),Some(6));
+        assert_eq!(choices.number(Linked {text:CardId(8),..grant}),None);
     }
 
     /// Each ability that chose a name keeps its own (CR 607.2d): a second ability's name doesn't take the first's place, the

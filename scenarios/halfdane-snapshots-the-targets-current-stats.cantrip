@@ -1,0 +1,41 @@
+# A boost applied in response changes the values read on resolution; Halfdane keeps those values after the boost expires.
+[Bot1 Deck]
+Halfdane
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Ornithopter
+Giant Growth
+Forest x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Halfdane.Cast
+? Bot1.Mana = {B}
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Upkeep]
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Halfdane.Power = 3
+? Bot1.Battlefield.Halfdane.Toughness = 5
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Halfdane.Power = 3
+Bot1.Battlefield.Halfdane.Toughness = 5

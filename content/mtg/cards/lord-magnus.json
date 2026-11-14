@@ -1,0 +1,11 @@
+{
+  "name": "Lord Magnus",
+  "manaCost": "{3}{G}{W}{W}",
+  "type": "Legendary Creature — Human Druid",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "First strike\nCreatures with plainswalk can be blocked as though they didn't have plainswalk.\nCreatures with forestwalk can be blocked as though they didn't have forestwalk.",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

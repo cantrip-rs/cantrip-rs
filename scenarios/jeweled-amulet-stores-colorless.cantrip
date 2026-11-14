@@ -1,0 +1,21 @@
+# A colorless payment is remembered as colorless and produces exactly one colorless mana (CR 106.1b).
+[Bot1 Deck]
+Jeweled Amulet
+Wastes
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Jeweled Amulet.Cast
+Bot1.Hand.Wastes.Play
+Bot1.Battlefield.Wastes.Activate
+Bot1.Battlefield.Jeweled Amulet.Activate(Ability: Put a charge)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Jeweled Amulet.Counters.Charge = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Jeweled Amulet.Activate(Ability: Remove a charge)
+? Bot1.Mana = {C}
+[Expect]
+Bot1.Battlefield.Jeweled Amulet.Counters.Charge = (absent)

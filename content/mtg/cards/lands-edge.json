@@ -1,0 +1,6 @@
+{
+  "name": "Land's Edge",
+  "manaCost": "{1}{R}{R}",
+  "type": "World Enchantment",
+  "oracleText": "Discard a card: If the discarded card was a land card, this enchantment deals 2 damage to target player or planeswalker. Any player may activate this ability."
+}

@@ -1,0 +1,39 @@
+# Hexproof makes the blocked creature an illegal target; the still-legal Wall lets Glyph resolve without affecting it (CR 608.2b).
+[Bot1 Deck]
+Glyph of Delusion
+Mox Sapphire
+Steel Wall
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Grizzly Bears
+Black Lotus
+Blossoming Defense
+Forest x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Steel Wall.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Forest.Play
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Block(Steel Wall > Grizzly Bears)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Glyph of Delusion.Cast
+Bot1.Target(Steel Wall)
+Bot1.Target(Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Hand.Blossoming Defense.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot2.Battlefield.Forest.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Battlefield.Grizzly Bears.Counters.Glyph = (absent)

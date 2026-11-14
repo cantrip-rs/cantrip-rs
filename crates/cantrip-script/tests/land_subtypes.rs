@@ -22,7 +22,7 @@ static FILLER: CardDef = CardDef {
     name: "Filler",
     has_cost: false,
     types: TypeSet::of(&[CardType::Land]),
-    supertypes: Supertypes { basic: true, legendary: false, snow: false },
+    supertypes: Supertypes { basic: true, legendary: false, snow: false, world: false },
     ..CardDef::BLANK
 };
 
@@ -31,7 +31,7 @@ static BASIC: CardDef = CardDef {
     name: "Probe Basic",
     has_cost: false,
     types: TypeSet::of(&[CardType::Land]),
-    supertypes: Supertypes { basic: true, legendary: false, snow: false },
+    supertypes: Supertypes { basic: true, legendary: false, snow: false, world: false },
     ..CardDef::BLANK
 };
 

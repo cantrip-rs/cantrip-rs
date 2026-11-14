@@ -187,6 +187,7 @@ fn seen_by_all_in(g: &crate::Game, id: ObjectId, revealed_by_move: bool) -> bool
                 || (o.zone.is(ZoneKind::Library)
                     && crate::library_visibility::reveals(g, o.owner)
                     && crate::library_visibility::top(g, o.owner) == Some(id))
+                || (o.zone.is(ZoneKind::Hand) && g.revealed_hands() & (1 << o.zone.player.0) != 0)
                 || s.stack.iter().any(|i| match i.kind {
                     // The cards its cost or announcement revealed are among the objects its cost chose (`StackItem::members`):
                     // a spell's spliced cards and those it beheld (CR 702.47a, 701.4a), revealed from its announcement
@@ -336,6 +337,8 @@ fn move_together_entering_event(
     // is before any of them moves - so objects entering together do not see one another on the battlefield (a creature
     // entering with Gev gets none of his counters) and those leaving together still see one another - and only then do
     // they all move. The last-known information of each permanent leaving is taken before any of them leaves (CR 603.10a).
+    crate::hand_visibility::sync(cx);
+    let hands_before = crate::hand_visibility::mask(cx, cx.cards());
     let mut plans: Vec<Plan> = Vec::with_capacity(moves.len());
     let mut regenerating: Vec<(ObjectId, bool)> = Vec::new();
     let mut shielded: Vec<ObjectId> = Vec::new();
@@ -687,7 +690,7 @@ fn move_together_entering_event(
                 if to_c.is(ZoneKind::Graveyard) && !c.token {
                     binned.push((to_c.player, part_id));
                 }
-                part_events.push(Event::ZoneChange { old: m.id, new: part_id, from: Zone::GONE, to: to_c, reason, part: true, put_by: None, enchanted_left: None });
+                part_events.push(Event::ZoneChange { old: m.id, new: part_id, from: Zone::GONE, to: to_c, reason, part: true, put_by: None, enchanted_left: None, from_revealed_hand: false, to_revealed_hand: false });
                 if c.face_down {
                     part_events.push(Event::Revealed { player: old.owner, card: part_id });
                 }
@@ -738,7 +741,7 @@ fn move_together_entering_event(
         if from.is(ZoneKind::Battlefield) {
             remove_from_combat(cx, &[m.id]);
         }
-        events.push(Event::ZoneChange { old: m.id, new: new_id, from, to, reason, part: false, put_by: change.put_by.filter(|_| to.is(ZoneKind::Battlefield)), enchanted_left: aura_hosts.iter().find_map(|&(a, h)| (a == m.id).then_some(h)) });
+        events.push(Event::ZoneChange { old: m.id, new: new_id, from, to, reason, part: false, put_by: change.put_by.filter(|_| to.is(ZoneKind::Battlefield)), enchanted_left: aura_hosts.iter().find_map(|&(a, h)| (a == m.id).then_some(h)), from_revealed_hand: from.is(ZoneKind::Hand) && hands_before & (1 << from.player.0) != 0, to_revealed_hand: false });
         events.extend(melded);
         events.append(&mut part_events);
         // CR 708.9: a face-down permanent or spell that moves to any other zone is revealed to all players by its owner as
@@ -796,6 +799,12 @@ fn move_together_entering_event(
         events.push(entered_event(cx, permanent));
     }
     let lost = apply_life_changes(cx, life, &mut events);
+    let hands_after = crate::hand_visibility::mask(cx, cx.cards());
+    for event in &mut events {
+        if let Event::ZoneChange { to, to_revealed_hand, .. } = event {
+            *to_revealed_hand = to.is(ZoneKind::Hand) && hands_after & (1 << to.player.0) != 0;
+        }
+    }
     cx.emit_batch(&events, Some(crate::settle::Before { battlefield: &before, then: &then, seen_by_all: &seen }));
     for player in shuffled {
         cx.record(Event::Shuffled { player });
@@ -2922,8 +2931,8 @@ fn create_tokens_onto(
         cx.st().zone_push(Zone::BATTLEFIELD, id);
         emblem_as_it_arrives(cx, &entering, id);
         events.push(match spell {
-            Some(spell) => Event::ZoneChange { old: spell.object, new: id, from: Zone::STACK, to: Zone::BATTLEFIELD, part: false, reason: ZoneReason::Resolve, put_by, enchanted_left: None },
-            None => Event::ZoneChange { old: id, new: id, from: Zone::GONE, to: Zone::BATTLEFIELD, part: false, reason: ZoneReason::Created, put_by, enchanted_left: None },
+            Some(spell) => Event::ZoneChange { old: spell.object, new: id, from: Zone::STACK, to: Zone::BATTLEFIELD, part: false, reason: ZoneReason::Resolve, put_by, enchanted_left: None, from_revealed_hand: false, to_revealed_hand: false },
+            None => Event::ZoneChange { old: id, new: id, from: Zone::GONE, to: Zone::BATTLEFIELD, part: false, reason: ZoneReason::Created, put_by, enchanted_left: None, from_revealed_hand: false, to_revealed_hand: false },
         });
         // CR 303.4f, 301.5e: created attached to something, it became attached to it.
         events.extend(entered_attached(cx, id));
@@ -4530,8 +4539,7 @@ pub fn destroy_together(cx: &mut Cx, ids: &[ObjectId], reason: ZoneReason) -> Ve
     let moves: Vec<Moving> = ids
         .iter()
         .copied()
-        .filter(|&id| live(cx.s(), id) && cx.s().obj(id).zone.is(ZoneKind::Battlefield))
-        .filter(|&id| !layers::chars(cx.cards(), cx.s(), &cx.g.log, id).has(Keyword::Indestructible))
+        .filter(|&id| cx.can_destroy(id))
         .map(|id| Moving::to(id, Zone::graveyard(cx.s().obj(id).owner)))
         .collect();
     move_together(cx, &moves, reason)
@@ -5083,14 +5091,17 @@ pub fn set_attack_target(cx: &mut Cx, attacker: ObjectId, defender: Target) {
     // member reselects the band.
     let band = current.band;
     let mut attackers = cx.s().attackers.clone();
+    let mut assignments = Vec::new();
     for a in attackers.iter_mut() {
         if a.id == attacker || (band != 0 && a.band == band) {
             a.target = defender;
             a.defending = defending;
             a.attacked_as = attacked_as;
+            assignments.push(Event::AttackAssigned { attacker: a.id, defender, defending });
         }
     }
     cx.st().set_attackers(attackers);
+    for assignment in assignments { cx.record(assignment); }
 }
 
 /// Permanents just put onto the battlefield attacking `defender` become attacking creatures (CR 506.3, 508.4), not declared
@@ -5112,7 +5123,7 @@ pub fn enter_attacking(cx: &mut Cx, entered: &[ObjectId], defender: Target) {
     // What it is attacked as (CR 506.4e): what the permanent is now; nothing, for a player.
     let attacked_as = defender.object().map_or(TypeSet::NONE, |d| attackable_types(&cx.chars(d)));
     let mut attackers = cx.s().attackers.clone();
-    let mut changed = false;
+    let mut assignments = Vec::new();
     for &id in entered {
         if !eligible_to_enter_attacking(cx, id) {
             continue;
@@ -5124,17 +5135,18 @@ pub fn enter_attacking(cx: &mut Cx, entered: &[ObjectId], defender: Target) {
             Some(at) => {
                 if attackers[at].target != defender {
                     attackers[at] = Attacker::new(id, defender, defending, attacked_as);
-                    changed = true;
+                    assignments.push(Event::AttackAssigned { attacker: id, defender, defending });
                 }
             }
             None => {
                 attackers.push(Attacker::new(id, defender, defending, attacked_as));
-                changed = true;
+                assignments.push(Event::AttackAssigned { attacker: id, defender, defending });
             }
         }
     }
-    if changed {
+    if !assignments.is_empty() {
         cx.st().set_attackers(attackers);
+        for assignment in assignments { cx.record(assignment); }
     }
 }
 
@@ -5285,11 +5297,11 @@ pub fn lasting_holds(cx: &Cx, e: &cantrip_state::ContinuousEffect) -> bool {
     }
     match e.duration {
         Duration::AsLongAs(card, index) => cx.card(card).lasting.get(index as usize).is_none_or(|l| (l.holds)(cx, e)),
-        Duration::WhileSourceTapped | Duration::WhileSourceTappedAndControlled => {
+        Duration::WhileSourceTapped | Duration::WhileSourceTappedAndControlled | Duration::WhileSourceControlled => {
             live(cx.s(), e.source)
                 && cx.s().obj(e.source).zone.is(ZoneKind::Battlefield)
-                && cx.s().obj(e.source).tapped
-                && (e.duration != Duration::WhileSourceTappedAndControlled || cx.s().obj(e.source).controller == e.controller)
+                && (e.duration == Duration::WhileSourceControlled || cx.s().obj(e.source).tapped)
+                && (e.duration == Duration::WhileSourceTapped || cx.s().obj(e.source).controller == e.controller)
         }
         _ => true,
     }
@@ -5297,16 +5309,16 @@ pub fn lasting_holds(cx: &Cx, e: &cantrip_state::ContinuousEffect) -> bool {
 
 /// Whether this duration has a condition that can end without a zone change (CR 611.2b).
 fn conditional(duration: Duration) -> bool {
-    matches!(duration, Duration::AsLongAs(..) | Duration::WhileSourceTapped | Duration::WhileSourceTappedAndControlled | Duration::WhileTapped | Duration::WhileCounter(_))
+    matches!(duration, Duration::AsLongAs(..) | Duration::WhileSourceTapped | Duration::WhileSourceTappedAndControlled | Duration::WhileSourceControlled | Duration::WhileTapped | Duration::WhileCounter(_))
 }
 
-/// The common source-tapped durations' uninterrupted interval (CR 611.2b). The event history is the authority for a
-/// break before resolution; current tapped/control state alone cannot distinguish an untap followed by a retap. A
+/// The common source-dependent durations' uninterrupted interval (CR 611.2b). The event history is the authority for a
+/// break before resolution; current tapped/control state alone cannot distinguish an untap/retap or loss/regain of control. A
 /// complete condition may start again DURING this resolution: since it currently holds, its last affirmative
 /// transition after its last lapse is exactly the beginning of the current full interval, including a conjunction.
 /// Custom AsLongAs predicates are not reconstructed here: they still own their current-state condition only.
 fn source_interval_begins(cx: &Cx, e: &cantrip_state::ContinuousEffect) -> bool {
-    if !matches!(e.duration, Duration::WhileSourceTapped | Duration::WhileSourceTappedAndControlled) {
+    if !matches!(e.duration, Duration::WhileSourceTapped | Duration::WhileSourceTappedAndControlled | Duration::WhileSourceControlled) {
         return true;
     }
     // An immediate mana ability has its own declaration/cost/resolution boundaries. A nested activation must
@@ -5320,13 +5332,14 @@ fn source_interval_begins(cx: &Cx, e: &cantrip_state::ContinuousEffect) -> bool 
     };
     // Core readers of the raw log must notify loop detection/layer caches just as Query::history does.
     cantrip_api::history::note_read();
-    let controlled = e.duration == Duration::WhileSourceTappedAndControlled;
+    let tapped = e.duration != Duration::WhileSourceControlled;
+    let controlled = e.duration != Duration::WhileSourceTapped;
     let mut lapsed = None;
     let mut began = None;
     for record in cx.g.log.iter().skip(since as usize) {
         let transition = match record.event {
-            Event::Untapped { permanent } if permanent == e.source && record.serial >= tapped_since => Some(false),
-            Event::Tapped { permanent } if permanent == e.source && record.serial >= tapped_since => Some(true),
+            Event::Untapped { permanent } if permanent == e.source && tapped && record.serial >= tapped_since => Some(false),
+            Event::Tapped { permanent } if permanent == e.source && tapped && record.serial >= tapped_since => Some(true),
             Event::ControlChanged { permanent, controller, .. } if permanent == e.source && controlled => Some(controller == e.controller),
             Event::PhasedOut { permanent, .. } if permanent == e.source && (controlled || record.serial >= tapped_since) => Some(false),
             Event::PhasedIn { permanent } if permanent == e.source && (controlled || record.serial >= tapped_since) => Some(true),
@@ -5342,10 +5355,11 @@ fn source_interval_begins(cx: &Cx, e: &cantrip_state::ContinuousEffect) -> bool 
     lapsed.is_none_or(|end| began.is_some_and(|start| start > end && start >= resolution))
 }
 
-/// Whether an effect's duration begins as it would first apply (CR 611.2b). Source-tapped durations additionally ask
-/// the history: an interval ended before resolution does not revive merely because the source has been retapped.
+/// Whether an effect's duration begins as it would first apply (CR 611.2b). Source-dependent durations additionally ask
+/// the history: an interval ended before resolution does not revive merely because its condition currently holds.
 pub fn duration_begins(cx: &Cx, e: &cantrip_state::ContinuousEffect) -> bool {
-    !source_departed(cx.s(), e) && lasting_holds(cx, e) && source_interval_begins(cx, e)
+    !matches!(e.duration, Duration::DuringControllersNextUntapSteps(0))
+        && !source_departed(cx.s(), e) && lasting_holds(cx, e) && source_interval_begins(cx, e)
 }
 
 /// Whether any control-changing effect could apply, or have applied: the guard of `settle_control`, free in nearly every
@@ -5520,6 +5534,8 @@ pub fn settle_lasting_and_control(cx: &mut Cx) -> bool {
         }
     }
     settle_combat(cx);
+    crate::world::sync(cx);
+    crate::hand_visibility::sync(cx);
     changed
 }
 
@@ -5675,10 +5691,7 @@ fn leaves_having_lost(cx: &mut Cx, player: PlayerId, reason: LossReason) {
     // The board just before the loss, which an ability that triggers on it looks back on (CR 603.10f).
     let (battlefield, then) = (cx.s().battlefield().to_vec(), crate::settle::Then::now(cx));
     cx.st().update_player(player, |pl| pl.lost = true);
-    crate::designations::monarch_left(cx);
-    crate::designations::initiative_left(cx);
     crate::settle::lost_the_game(cx, &[(player, reason)], &battlefield, &then);
-    leave_game(cx, player);
     let left: Vec<PlayerId> = cx.s().apnap().collect();
     match left.len() {
         0 => {

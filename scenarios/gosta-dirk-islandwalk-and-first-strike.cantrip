@@ -1,0 +1,56 @@
+# Islandwalk prevents blocking before Gosta arrives; afterward Gosta blocks the same attacker and first strike kills it before it deals damage (CR 702.14, 702.7).
+[Bot1 Deck]
+Gosta Dirk
+Black Lotus
+Mox Sapphire
+Gleemox
+Mox Pearl
+Mox Jet
+Island
+Ornithopter
+Swamp
+Plains x17
+[Bot2 Deck]
+Island
+Grayscaled Gharial
+Black Lotus
+Marsh Boa
+Island x18
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Grayscaled Gharial.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Marsh Boa.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+[T4 Bot2.BeginCombat]
+Bot2.Attack(Grayscaled Gharial > Bot1)
+! Bot1.Block(Ornithopter > Grayscaled Gharial)
+[T5 Bot1.Main1]
+? Bot1.Life = 19
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gosta Dirk.Cast
+? Bot1.Mana =
+[T6 Bot2.BeginCombat]
+Bot2.Attack(Grayscaled Gharial; Marsh Boa > Bot1)
+! Bot1.Block(Ornithopter > Marsh Boa)
+Bot1.Block(Gosta Dirk > Grayscaled Gharial)
+[T6 Bot2.Main2]
+[Expect]
+Bot1.Life = 18
+Bot1.Battlefield.Gosta Dirk.Damage = 0
+Bot2.Graveyard = Grayscaled Gharial; Black Lotus

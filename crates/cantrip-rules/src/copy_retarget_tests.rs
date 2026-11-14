@@ -254,3 +254,49 @@ fn a_later_target_is_offered_using_the_new_earlier_target() {
     let copied = g.state.stack.iter().find(|i| i.object == copy).unwrap();
     assert_eq!(g.state.targets(copied), &[Target::Object(their_first), Target::Object(their_second)]);
 }
+
+
+// Glyph of Delusion and Goblin Welder need the same ordered target-availability check as retargeting.
+fn has_targets(g: &mut Game, specs: &[TargetSpec]) -> bool {
+    let source = put(g, &DEPENDENT_TARGETS, YOU, Zone::hand(YOU));
+    crate::actions::slots_satisfiable(&cx(g), &Asker { source, controller: YOU, by: None, spell: true, instance: None }, specs)
+}
+
+#[test]
+fn dependent_target_slots_are_available_only_with_a_complete_legal_announcement() {
+    let mut g = game();
+    assert!(!has_targets(&mut g, &[target(creature), target(creature_controlled_by_first_targets_controller)]));
+    put(&mut g, &CREATURE, YOU, Zone::BATTLEFIELD);
+    assert!(has_targets(&mut g, &[target(creature), target(creature_controlled_by_first_targets_controller)]));
+    // A separate target instruction may target the first creature again; "another" cannot.
+    assert!(!has_targets(&mut g, &[target(creature), target(another_creature)]));
+    put(&mut g, &CREATURE, THEM, Zone::BATTLEFIELD);
+    assert!(has_targets(&mut g, &[target(creature), target(another_creature)]));
+}
+
+fn other_creature_with_same_controller(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_controlled_by_first_targets_controller(q, asker, t) && !q.chosen_targets().contains(&t)
+}
+
+#[test]
+fn target_availability_tries_another_first_choice_when_the_first_one_has_no_partner() {
+    let mut g = game();
+    put(&mut g, &CREATURE, YOU, Zone::BATTLEFIELD);
+    put(&mut g, &CREATURE, THEM, Zone::BATTLEFIELD);
+    assert!(!has_targets(&mut g, &[target(creature), target(other_creature_with_same_controller)]));
+    put(&mut g, &CREATURE, THEM, Zone::BATTLEFIELD);
+    assert!(has_targets(&mut g, &[target(creature), target(other_creature_with_same_controller)]));
+}
+
+fn after_empty_slot(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    q.chosen_targets() == [Target::None] && creature(q, asker, t)
+}
+
+#[test]
+fn target_availability_preserves_empty_optional_slots_and_unannounced_x() {
+    let mut g = game();
+    put(&mut g, &CREATURE, YOU, Zone::BATTLEFIELD);
+    assert!(has_targets(&mut g, &[up_to(1, creature), target(after_empty_slot)]));
+    // X can be zero; its slot is not a required minimum before X is announced.
+    assert!(has_targets(&mut g, &[target(creature).counted(), target(creature)]));
+}

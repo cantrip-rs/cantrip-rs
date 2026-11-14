@@ -29,6 +29,5 @@ pub static CARD: CardDef = CardDef {
             "Thrull creatures get +1/+1.",
         ),
     ],
-    lasting: &[effects::YOU_CONTROL_SOURCE],
     ..oracle::THRULL_CHAMPION
 };

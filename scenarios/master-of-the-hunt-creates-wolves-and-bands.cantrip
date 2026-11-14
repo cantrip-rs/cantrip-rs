@@ -1,0 +1,67 @@
+# Two activations create named Wolves; they band together so their controller assigns a blocker's damage (CR 702.22b, 702.22k).
+[Bot1 Deck]
+Master of the Hunt
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Black Lotus
+Island
+Hill Giant
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Master of the Hunt.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Hill Giant.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Master of the Hunt.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wolves of the Hunt.Power = 1
+? Bot1.Battlefield.Wolves of the Hunt.Toughness = 1
+? Bot1.Battlefield.Wolves of the Hunt.Colors = Green
+? Bot1.Battlefield.Wolves of the Hunt.Subtypes = Wolf
+? Bot1.Battlefield.Wolves of the Hunt.Types = Creature
+? Bot1.Battlefield.Wolves of the Hunt.Token = true
+? Bot1.Battlefield.Wolves of the Hunt.Tapped = false
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Master of the Hunt.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Master of the Hunt.Tapped = false
+[T5 Bot1.BeginCombat]
+Bot1.Attack(Wolves of the Hunt; Wolves of the Hunt; Master of the Hunt)
+! Bot1.Choose(Master of the Hunt)
+Bot1.Choose(Wolves of the Hunt)
+? Combat.Attackers = Wolves of the Hunt > Bot2 (band 1); Wolves of the Hunt > Bot2 (band 1); Master of the Hunt > Bot2
+Bot2.Block(Hill Giant > Wolves of the Hunt)
+[T5 Bot1.Blockers]
+Bot1.AssignDamage(Hill Giant > Wolves of the Hunt#1: 3)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Wolves of the Hunt.Power = 1
+Bot1.Graveyard = Black Lotus; Black Lotus; Black Lotus
+Bot2.Battlefield.Hill Giant.Damage = 2
+Bot2.Life = 18

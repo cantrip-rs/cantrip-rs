@@ -1,0 +1,8 @@
+{
+  "name": "Halfdane",
+  "manaCost": "{1}{W}{U}{B}",
+  "type": "Legendary Creature — Shapeshifter",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "At the beginning of your upkeep, Halfdane's base power and toughness become equal to the power and toughness of target creature other than Halfdane until the end of your next upkeep."
+}

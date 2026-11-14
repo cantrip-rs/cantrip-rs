@@ -700,7 +700,7 @@ fn modes_detail(game: &Game, modes: &[Label], faces: bool) -> (String, bool) {
                 (String::new(), false)
             }
         }
-        None if modes.iter().all(|l| matches!(l, Label::Card(..) | Label::Option(..) | Label::WordedCard(..) | Label::WordedOption(..) | Label::Name(_) | Label::Pile { .. } | Label::FaceUpPile { .. } | Label::FaceDownPile { .. })) => ("Chosen, not targeted".into(), false),
+        None if modes.iter().all(|l| matches!(l, Label::Counter(_) | Label::Card(..) | Label::Option(..) | Label::WordedCard(..) | Label::WordedOption(..) | Label::Name(_) | Label::Pile { .. } | Label::FaceUpPile { .. } | Label::FaceDownPile { .. })) => ("Chosen, not targeted".into(), false),
         None => (String::new(), false),
     }
 }
@@ -2005,6 +2005,37 @@ mod tests {
     }
 
     #[test]
+    fn choice_captions_do_not_promise_targets_for_counter_kinds() {
+        let (game, hand) = game_with(&["Llanowar Elves"]);
+        let request = Request {
+            id: 1, player: PlayerId(0), may_cancel: false,
+            kind: RequestKind::ChooseModes { source: hand[0],
+                modes: vec![Label::Counter(CounterKind::PlusOne), Label::Counter(CounterKind::MinusOne)],
+                eligible: vec![0, 1], count: 1, at_most: 1, affordable: Vec::new(),
+                additional_cost: false, repeat: false },
+        };
+        let PromptPayload::ChooseModesPromptMessage(p) = prompt(&game, &request, &mut HandleSpace::new()).unwrap().0
+            else { panic!("a counter kind choice") };
+        assert_eq!(p.detail, "Chosen, not targeted", "the browser's empty-detail fallback promises targets next");
+        assert_eq!(p.eligible, [0, 1]);
+    }
+
+    #[test]
+    fn choice_captions_name_the_actual_chosen_subtype_family() {
+        let (game, hand) = game_with(&["Llanowar Elves"]);
+        for (choices, heading) in [(vec![Subtype::Plains, Subtype::Island], "Choose a basic land type"),
+                                   (vec![Subtype::Elf, Subtype::Goblin], "Choose a creature type")] {
+            let request = Request {
+                id: 1, player: PlayerId(0), may_cancel: false,
+                kind: RequestKind::ChooseSubtype { source: hand[0], choices, purpose: WordUse::Chosen },
+            };
+            let PromptPayload::ChooseModesPromptMessage(p) = prompt(&game, &request, &mut HandleSpace::new()).unwrap().0
+                else { panic!("a subtype choice") };
+            assert_eq!(p.heading, heading);
+        }
+    }
+
+    #[test]
     fn captured_choice_words_reach_both_rows_and_heading_on_the_games_table() {
         static DEF: CardDef = CardDef {
             name: "Worded Wall", labels: &["1/6 Wall artifact creature with defender", "swampwalk"],
@@ -2352,7 +2383,7 @@ fn options_heading(game: &Game, modes: &[Label]) -> Option<String> {
 fn subtype_heading(source: &str, choices: &[Subtype], purpose: WordUse) -> String {
     let kind = if choices.first().is_some_and(|s| s.is_creature_type()) { "creature type" } else { "basic land type" };
     match purpose {
-        WordUse::Chosen => "Choose a creature type".into(),
+        WordUse::Chosen => format!("Choose a {kind}"),
         WordUse::Replaced => format!("{source}: choose the {kind} to replace"),
         WordUse::Replacing => format!("{source}: choose the {kind} that replaces it"),
     }
