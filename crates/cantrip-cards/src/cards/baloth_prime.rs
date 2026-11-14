@@ -1,15 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::{effects, mana, targets};
+use cantrip_mechanics::{effects, mana, targets, tokens};
 use cantrip_oracle as oracle;
-
-/// The tapped 4/4 green Beast creature token it makes.
-pub static BEAST: CardDef = CardDef {
-    colors: Some(ColorSet::of(Color::Green)),
-    types: TypeSet::of(&[CardType::Creature]),
-    power: Some(4),
-    toughness: Some(4),
-    ..token!(Beast)
-};
 
 /// "Whenever you sacrifice a land": a land of yours moved from the battlefield to a graveyard as a sacrifice.
 fn sacrificed_a_land(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
@@ -24,7 +15,7 @@ fn sacrificed_a_land(q: &dyn Query, source: ObjectId, event: &Event) -> Option<F
 }
 
 fn wake(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let beast = g.card_id(&BEAST);
+    let beast = g.card_id(&tokens::BEAST_4_4);
     g.create_tokens(beast, item.controller, 1, true)?;
     g.untap(item.object);
     Ok(())
@@ -40,4 +31,4 @@ pub static CARD: CardDef = CardDef {
     ..oracle::BALOTH_PRIME
 };
 
-pub static EXTRA: &[&CardDef] = &[&BEAST];
+pub static EXTRA: &[&CardDef] = &[&tokens::BEAST_4_4];

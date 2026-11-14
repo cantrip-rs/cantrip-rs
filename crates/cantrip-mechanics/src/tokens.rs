@@ -1144,6 +1144,22 @@ pub static BEAST_3_3: CardDef = CardDef {
     ..token!(Beast)
 };
 
+/// "Create a 3/3 green Beast creature token" as an effect (CR 111.1): one `BEAST_3_3` under the controller of the resolving
+/// ability. Elder Gargaroth and Primeval Bounty print it.
+pub fn create_a_3_3_beast(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &BEAST_3_3, 1)?;
+    Ok(())
+}
+
+/// A 4/4 green Beast creature token. Baloth Prime and Rampaging Baloths make it.
+pub static BEAST_4_4: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Green)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(4),
+    toughness: Some(4),
+    ..token!(Beast)
+};
+
 /// A 4/4 green Beast creature token with trample. Garruk, Curse Breaker and Garruk, Veiled Butcher make it.
 pub static BEAST_4_4_TRAMPLE: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::Green)),

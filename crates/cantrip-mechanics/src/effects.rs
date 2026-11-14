@@ -706,8 +706,14 @@ pub fn plus_one_counter_on_each_other_creature_you_control(g: &mut dyn Game, ite
 /// effect of the sacrifice ability of Elvenking's Halls, Goblin-town, Iron Hills, Lake-town and Mirkwood (`lands::sacrifice_for_two_counters`),
 /// and of Room of Refuge, Trash the Town and Silverquill Charm: with none chosen (an "up to one" slot) or none legal nothing is put on.
 pub fn two_plus_one_counters_on_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    plus_one_counters_on_target::<2>(g, item)
+}
+
+/// "Put N +1/+1 counters on target [permanent]" (CR 122.1a, 608.2b), the first target still legal on resolution; with none
+/// chosen or none legal nothing is put on. Primeval Bounty prints it with three; `two_plus_one_counters_on_target` is the two case.
+pub fn plus_one_counters_on_target<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(object) = crate::targets::object(g, item, 0) else { return Ok(()) };
-    g.add_counters(object, CounterKind::PlusOne, 2);
+    g.add_counters(object, CounterKind::PlusOne, N);
     Ok(())
 }
 
