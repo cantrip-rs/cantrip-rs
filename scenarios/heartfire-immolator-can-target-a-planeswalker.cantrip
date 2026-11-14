@@ -1,0 +1,47 @@
+# Heartfire Immolator, "target creature or planeswalker": sacrificed for {R}, the 2/2 deals 2 damage to Bot2's Liliana of the
+# Veil, which goes from 3 loyalty to 1 (CR 120.3c, 306.8).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Heartfire Immolator
+Mountain x16
+
+[Bot2 Deck]
+Black Lotus
+Liliana of the Veil
+Swamp x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Heartfire Immolator.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Liliana of the Veil.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Heartfire Immolator.Activate(Bot2.Battlefield.Liliana of the Veil)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Liliana of the Veil.Counters.Loyalty = 1
+Bot1.Graveyard = Heartfire Immolator
