@@ -1,0 +1,50 @@
+# Biogenic Upgrade: three +1/+1 counters divided one each among three target creatures (CR 601.2d) - Bot1's Walking Ballista
+# (already holding one), Bot1's Ornithopter and Bot2's Llanowar Elves - then each one's counters are doubled (CR 701.10e):
+# Ballista 1+1=2 becomes 4, Ornithopter 1 becomes 2, the opponent's Elves 1 becomes 2.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Black Lotus
+Black Lotus
+Biogenic Upgrade
+Ornithopter
+Walking Ballista
+Island x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x12
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Walking Ballista.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Biogenic Upgrade.Cast
+Bot1.Divide(Walking Ballista: 1; Ornithopter: 1; Llanowar Elves: 1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 2
+Bot2.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = 2
+Bot1.Graveyard = Biogenic Upgrade; Black Lotus; Black Lotus

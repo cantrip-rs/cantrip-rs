@@ -1,0 +1,46 @@
+# Biogenic Upgrade: two shares fixed as the spell is cast, two counters for Bot1's Ornithopter and one for Bot2's Llanowar Elves
+# (CR 601.2d). Bot2 kills its own Elves in response with Lightning Bolt, so that share is lost and not given to the Ornithopter
+# (CR 608.2b, ruling 2019-01-25); the Ornithopter's two counters double to four.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Biogenic Upgrade
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Forest
+Mox Ruby
+Llanowar Elves
+Lightning Bolt
+Forest x16
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Biogenic Upgrade.Cast
+Bot1.Divide(Ornithopter: 2; Llanowar Elves: 1)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Llanowar Elves; Lightning Bolt
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 4
