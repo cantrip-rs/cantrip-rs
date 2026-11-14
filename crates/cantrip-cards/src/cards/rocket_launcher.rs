@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{delayed, targets};
+use cantrip_mechanics::{delayed, effects, targets};
 use cantrip_oracle as oracle;
 
 /// "{2}: This artifact deals 1 damage to any target. Destroy this artifact at the beginning of the next end step. Activate only if you've controlled this artifact continuously since the beginning of your most recent turn." (CR 608.2, 120.3).
@@ -31,7 +31,7 @@ pub static CARD: CardDef = CardDef {
     ],
     delayed: &[
         delayed_trigger(
-            delayed::destroy_subject,
+            effects::destroy_subject,
             "Destroy this artifact at the beginning of the next end step.",
         ),
     ],

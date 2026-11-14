@@ -47,23 +47,14 @@ pub fn destroy_that_creature_at_end_of_combat(g: &mut dyn Game, item: &StackItem
     Ok(())
 }
 
-/// "Destroy it": the delayed ability's subject, if it is still the object it was (CR 603.7c, 400.7), even if it is no longer a
-/// creature (CR 701.8a). Cockatrice and Abomination print "destroy that creature at end of combat".
-pub fn destroy_subject(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Target::Object(it) = item.subject {
-        g.destroy(it);
-    }
-    Ok(())
-}
-
-/// The delayed ability of "destroy that creature at end of combat" (CR 603.7c), the body of `destroy_subject`; a card lists it
+/// The delayed ability of "destroy that creature at end of combat" (CR 603.7c), the body of `effects::destroy_subject`; a card lists it
 /// among its `delayed` abilities and names its index in `at_end_of_combat`.
 pub const DESTROY_THAT_CREATURE_AT_END_OF_COMBAT: AbilityDef = destroy_that_at_end_of_combat("Destroy that creature at end of combat.");
 
 /// The same delayed ability with a card's own wording of it, for a card whose text names the object another way ("destroy that Wall
 /// at end of combat": Battering Ram), so the ability's text is the card's Oracle text.
 pub const fn destroy_that_at_end_of_combat(text: &'static str) -> AbilityDef {
-    delayed_trigger(destroy_subject, text)
+    delayed_trigger(crate::effects::destroy_subject, text)
 }
 
 /// "Exile [the target in slot `slot`]. Return that card to the battlefield under its owner's control at the beginning of the next

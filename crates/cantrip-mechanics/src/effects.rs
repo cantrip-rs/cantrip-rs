@@ -1906,6 +1906,16 @@ pub fn destroy_each_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Sus
     Ok(())
 }
 
+/// "Destroy it" (CR 701.8a) for a trigger about an object: the trigger's subject, if it is an object, destroyed even if the source has
+/// left the battlefield by now (CR 603.7c, 400.7). Cryoshatter and Cracked Skull ("When enchanted creature is dealt damage, destroy it")
+/// print it, and so does a delayed trigger (Rocket Launcher, Cockatrice's "destroy that creature at end of combat").
+pub fn destroy_subject(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Target::Object(it) = item.subject {
+        g.destroy(it);
+    }
+    Ok(())
+}
+
 /// "Destroy target [thing]" (CR 701.8): the ability's first target.
 pub fn destroy_first_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     crate::destroy_target(g, item, 0);

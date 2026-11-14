@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{attach::attached_object, statics::plus_pt, targets};
+use cantrip_mechanics::{attach::attached_object, effects, statics::plus_pt, targets};
 use cantrip_oracle as oracle;
 
 /// "When enchanted creature becomes tapped or is dealt damage" (CR 603.2, 701.26a, 120.2): the creature this Aura enchants
@@ -13,17 +13,11 @@ fn enchanted_creature_becomes_tapped_or_is_dealt_damage(q: &dyn Query, source: O
     }
 }
 
-fn destroy_it(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Target::Object(creature) = item.subject else { return Ok(()) };
-    g.destroy(creature);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     enchant: Some(targets::CREATURE),
     abilities: &[triggered(
         when(EventMask(EventMask::TAPPED.0 | EventMask::DAMAGE.0), enchanted_creature_becomes_tapped_or_is_dealt_damage),
-        destroy_it,
+        effects::destroy_subject,
         "When enchanted creature becomes tapped or is dealt damage, destroy it.",
     )
     // Damage dealt to it by several sources at once is one batch (CR 603.2c): the one trigger.
