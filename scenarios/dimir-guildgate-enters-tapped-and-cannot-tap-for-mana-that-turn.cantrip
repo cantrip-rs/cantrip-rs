@@ -1,0 +1,19 @@
+# Dimir Guildgate enters tapped (its first sentence, CR 614.1d): it is a Gate and, tapped, can't pay its own {T} cost, so Bot1 has no mana
+# from it on the turn it enters.
+
+[Bot1 Deck]
+Dimir Guildgate
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Dimir Guildgate.Play
+! Bot1.Battlefield.Dimir Guildgate.Activate(Color: Blue)
+! Bot1.Battlefield.Dimir Guildgate.Activate(Color: Black)
+
+[Expect]
+Bot1.Battlefield.Dimir Guildgate.Tapped = true
+Bot1.Battlefield.Dimir Guildgate.Subtypes = Gate
+Bot1.Mana = 
