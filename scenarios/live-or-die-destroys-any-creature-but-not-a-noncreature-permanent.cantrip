@@ -1,0 +1,54 @@
+# Live or Die, second mode: "Destroy target creature" (CR 701.8). Its target may be either player's creature, an artifact creature or a
+# land that is a creature, but not a noncreature permanent. Bot1 casts the spell twice on turn 3 (three Black Lotus and a Mox Jet give
+# the ten mana for two {3}{B}{B}): the Mox Jet is refused and Bot2's Dryad Arbor (a land creature) is destroyed, then Bot1's own Memnite
+# is destroyed. Bot2's Ornithopter, not targeted, stays.
+
+[Bot1 Deck]
+Memnite
+Mox Jet
+Black Lotus
+Black Lotus
+Black Lotus
+Live or Die
+Live or Die
+Swamp x20
+
+[Bot2 Deck]
+Dryad Arbor
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Dryad Arbor.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Live or Die.Cast
+Bot1.Modes(2)
+! Bot1.Target(Bot1.Battlefield.Mox Jet)
+Bot1.Target(Bot2.Battlefield.Dryad Arbor)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Dryad Arbor.Power = 1
+? Bot1.Mana = {B}{B}{B}{B}{B}
+Bot1.Hand.Live or Die.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield = Mox Jet
+Bot1.Graveyard.Memnite.Power = 1
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Count = 1

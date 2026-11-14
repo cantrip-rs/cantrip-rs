@@ -1,0 +1,61 @@
+# Live or Die, first mode: "Return target creature card from your graveyard to the battlefield" (CR 110.2a, 400.3). Bot1's graveyard holds
+# an Ornithopter (a Lightning Bolt killed it) and the spent Black Lotus; Bot2's holds a Memnite (a Thought Scour milled it). Only
+# Bot1's own Ornithopter is a legal target: the Lotus (not a creature), Bot2's Memnite (not your graveyard) and the Moxen on the
+# battlefield (not in a graveyard) are refused. Free mana pays {3}{B}{B} exactly (3 from the second Lotus, then a Mox Jet and a
+# Mox Ruby); the pool is empty afterwards, and the Ornithopter comes back untapped.
+
+[Bot1 Deck]
+Ornithopter
+Black Lotus
+Lightning Bolt
+Mox Jet
+Mox Ruby
+Black Lotus
+Live or Die
+Swamp x20
+
+[Bot2 Deck]
+Mox Sapphire
+Thought Scour
+Island x5
+Island
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Thought Scour.Cast(Bot2)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard.Memnite.Power = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Live or Die.Cast
+Bot1.Modes(1)
+! Bot1.Target(Count: 0)
+! Bot1.Target(Bot1.Graveyard.Black Lotus)
+! Bot1.Target(Bot2.Graveyard.Memnite)
+! Bot1.Target(Bot1.Battlefield.Mox Jet)
+Bot1.Target(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Tapped = false
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Graveyard = Live or Die; Black Lotus; Lightning Bolt; Black Lotus
+Bot2.Graveyard.Memnite.Power = 1
