@@ -1,0 +1,43 @@
+# Twist Reality, "Choose one - Counter target spell. / Manifest dread.": the first mode counters Bot2's Lightning Bolt (CR 701.6a),
+# so Bot1 keeps its 20 life, the Bolt is in Bot2's graveyard, and the other mode does not happen: Bot1's library is untouched and
+# no face-down creature is made.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Twist Reality
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Twist Reality.Cast
+Bot1.Modes(Counter target spell)
+Bot1.Target(Stack.Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot2.Graveyard = Lightning Bolt
+Bot1.Graveyard = Twist Reality
+Bot1.Library.Count = 17
+Bot1.Battlefield.Count = 3
