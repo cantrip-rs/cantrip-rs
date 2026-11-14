@@ -1,0 +1,11 @@
+{
+  "name": "Firespitter Whelp",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Dragon",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying\nWhenever you cast a noncreature or Dragon spell, this creature deals 1 damage to each opponent.",
+  "keywords": [
+    "Flying"
+  ]
+}
