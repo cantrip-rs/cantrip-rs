@@ -1,0 +1,37 @@
+# Dwynen's Elite's intervening "if" (CR 603.4): the Elite itself is not "another Elf", and Bot2's Elvish Mystic is not one Bot1 controls, so with
+# neither the ability never goes on the stack and no token is made (the positive control is the scenario where Bot1 has its own Elf).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Dwynen's Elite
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Elvish Mystic
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dwynen's Elite.Cast
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 3
+Bot1.Battlefield.Dwynen's Elite.Power = 2
+Bot2.Battlefield.Count = 2

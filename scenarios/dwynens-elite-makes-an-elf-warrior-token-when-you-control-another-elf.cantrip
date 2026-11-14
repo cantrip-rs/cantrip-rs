@@ -1,0 +1,41 @@
+# Dwynen's Elite's intervening "if" (CR 603.4): Bot1 controls Elvish Mystic, another Elf, as the Elite enters, so the trigger is put on the stack
+# and resolves into a 1/1 green Elf Warrior token (CR 111.1); only the one token is made.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Forest
+Elvish Mystic
+Dwynen's Elite
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dwynen's Elite.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Elf Warrior Token.Power = 1
+Bot1.Battlefield.Elf Warrior Token.Toughness = 1
+Bot1.Battlefield.Elf Warrior Token.Colors = Green
+Bot1.Battlefield.Count = 6

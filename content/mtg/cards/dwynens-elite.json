@@ -1,0 +1,8 @@
+{
+  "name": "Dwynen's Elite",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Elf Warrior",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, if you control another Elf, create a 1/1 green Elf Warrior creature token."
+}
