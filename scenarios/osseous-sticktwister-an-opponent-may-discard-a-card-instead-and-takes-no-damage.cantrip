@@ -1,0 +1,41 @@
+# Osseous Sticktwister with delirium (as in its first scenario: a Wheel of Fortune fills Bot1's graveyard with four card types
+# on turn 1): at Bot1's end step Bot2, holding a Lightning Bolt and six Islands, discards the Bolt. It "didn't discard a card"
+# is false, so the Sticktwister deals Bot2 no damage and there is no lifelink gain: both stay at 20. Bot2 has six cards left
+# and seven after its turn-2 draw, and its graveyard holds the seven Islands the Wheel discarded and the Bolt.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Osseous Sticktwister
+Wheel of Fortune
+Memnite
+Island
+Swamp x20
+
+[Bot2 Deck]
+Island x7
+Lightning Bolt
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Osseous Sticktwister.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+Bot2.Modes(Discard a card)
+Bot2.Choose(Lightning Bolt)
+? Bot2.Life = 20
+? Bot1.Life = 20
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Life = 20
+Bot2.Hand.Count = 7
+Bot2.Graveyard.Count = 8

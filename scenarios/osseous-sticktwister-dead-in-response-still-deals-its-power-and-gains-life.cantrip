@@ -1,0 +1,50 @@
+# Osseous Sticktwister's ability once triggered is independent of it (CR 113.7a). Turn 1 as before: four types from the
+# Wheel of Fortune, Bot2 does neither (20 -> 18, Bot1 22). Turn 3: at Bot1's end step Bot2 kills the Sticktwister with a
+# Lightning Bolt (Mountain played on turn 2) in response. The trigger still resolves (its intervening "if" still holds, the
+# Sticktwister in the graveyard making no difference to the four types), Bot2, with a hand of Islands, does neither, and the
+# creature deals damage equal to its power as it last existed (CR 608.2h): 2 (18 -> 16), and its lifelink gains Bot1 2 (22 -> 24).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Osseous Sticktwister
+Wheel of Fortune
+Memnite
+Island
+Swamp x20
+
+[Bot2 Deck]
+Island x7
+Mountain
+Lightning Bolt
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Osseous Sticktwister.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+Bot2.Modes(Do neither)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.End]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Osseous Sticktwister)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard.Count = 5
+Bot1.Pass
+Bot2.Pass
+Bot2.Modes(Do neither)
+? Bot2.Life = 16
+? Bot1.Life = 24
+
+[Expect]
+Bot2.Life = 16
+Bot1.Life = 24

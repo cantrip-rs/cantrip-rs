@@ -1,0 +1,53 @@
+# Osseous Sticktwister when an opponent has nothing left to give up. Turn 1 as in its first scenario: the Wheel of Fortune
+# gives Bot1 four card types, and Bot2 draws seven Simian Spirit Guides. With the end-step trigger on the stack Bot2 exiles
+# all seven from its hand for mana, so as the trigger resolves Bot2 has no card in hand and no nonland permanent: "do
+# neither" is the only answer it has, it is asked nothing, and it takes damage equal to the Sticktwister's power (20 -> 18;
+# Bot1 20 -> 22 by lifelink).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Osseous Sticktwister
+Wheel of Fortune
+Memnite
+Island
+Swamp x20
+
+[Bot2 Deck]
+Island x7
+Simian Spirit Guide x7
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Osseous Sticktwister.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+? Bot2.Hand.Count = 7
+[T1 Bot1.End]
+Bot2.Hand.Simian Spirit Guide.Activate
+Bot2.Hand.Simian Spirit Guide.Activate
+Bot2.Hand.Simian Spirit Guide.Activate
+Bot2.Hand.Simian Spirit Guide.Activate
+Bot2.Hand.Simian Spirit Guide.Activate
+Bot2.Hand.Simian Spirit Guide.Activate
+Bot2.Hand.Simian Spirit Guide.Activate
+? Bot2.Hand.Count = 0
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot2.Life = 18
+? Bot1.Life = 22
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22
+Bot2.Hand.Count = 0
+Exile.Count = 7

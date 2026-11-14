@@ -1,0 +1,43 @@
+# Osseous Sticktwister in a three-player game: turn 1 as in its first scenario (the Wheel of Fortune gives Bot1 four card
+# types). At Bot1's end step the opponents choose in turn order (CR 101.4), Bot2 first; Bot3 concedes while Bot2 is still
+# choosing which card to discard (CR 104.3a), so when the choosing comes round to Bot3 it has left the game and is asked
+# nothing (CR 800.4a). Bot2 discarded, so no one takes damage and there is no lifelink gain: both stay at 20.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Osseous Sticktwister
+Wheel of Fortune
+Memnite
+Island
+Swamp x20
+
+[Bot2 Deck]
+Island x40
+
+[Bot3 Deck]
+Island x40
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Osseous Sticktwister.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+Bot2.Modes(Discard a card)
+Bot3.Concede
+Bot2.Choose(Island)
+? Bot2.Hand.Count = 6
+? Bot2.Life = 20
+? Bot1.Life = 20
+
+[Expect]
+Bot2.Life = 20
+Bot1.Life = 20
+Bot2.Hand.Count = 6
+Bot3.Status = Lost

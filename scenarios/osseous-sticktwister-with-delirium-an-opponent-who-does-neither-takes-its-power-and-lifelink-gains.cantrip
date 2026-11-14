@@ -1,0 +1,41 @@
+# Osseous Sticktwister's delirium trigger (CR 207.2c, 603.4, 700.2): on turn 1 Black Lotus, Mox Jet and Mox Ruby pay for the
+# Sticktwister ({1}{B}) and a Wheel of Fortune ({2}{R}). The Wheel puts a Memnite (artifact creature), an Island (land), the
+# Wheel (sorcery) and the Lotus (artifact) into Bot1's graveyard: four card types. At Bot1's end step Bot2, holding seven new
+# cards but no permanent, may discard a card or do neither, and does neither: the Sticktwister deals 2 (its power) to Bot2
+# (20 -> 18) and, having lifelink, Bot1 gains 2 (20 -> 22).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Osseous Sticktwister
+Wheel of Fortune
+Memnite
+Island
+Swamp x20
+
+[Bot2 Deck]
+Island x7
+Lightning Bolt
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Osseous Sticktwister.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+Bot2.Modes(Do neither)
+? Bot2.Life = 18
+? Bot1.Life = 22
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22
+Bot2.Hand.Count = 8
+Bot2.Graveyard.Count = 7

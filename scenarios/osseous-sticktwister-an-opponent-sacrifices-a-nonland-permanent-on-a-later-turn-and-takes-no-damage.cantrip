@@ -1,0 +1,47 @@
+# Osseous Sticktwister's trigger on each of Bot1's end steps while it has delirium (CR 207.2c, 603.4). Turn 1: the Wheel of
+# Fortune gives four types; Bot2 has no permanents and does neither (20 -> 18, Bot1 20 -> 22 by lifelink). Turn 3: Bot2,
+# having cast a Memnite and an Ornithopter on turn 2, may sacrifice a nonland permanent (it has two) and does,
+# choosing the Memnite: no damage, so the life totals stay 18 and 22 and the Ornithopter stays.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Osseous Sticktwister
+Wheel of Fortune
+Memnite
+Island
+Swamp x20
+
+[Bot2 Deck]
+Island x7
+Memnite
+Ornithopter
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Osseous Sticktwister.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+Bot2.Modes(Do neither)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Modes(Sacrifice a nonland permanent)
+Bot2.Choose(Memnite)
+? Bot2.Life = 18
+? Bot1.Life = 22
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22
+Bot2.Battlefield = Ornithopter
+Bot2.Graveyard.Count = 8

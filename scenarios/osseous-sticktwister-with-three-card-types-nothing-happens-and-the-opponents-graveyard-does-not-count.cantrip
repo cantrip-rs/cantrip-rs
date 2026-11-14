@@ -1,0 +1,43 @@
+# Osseous Sticktwister needs four card types among cards in its controller's graveyard (CR 207.2c, 603.4). After the Wheel of
+# Fortune on turn 1 Bot1's graveyard holds an Island and a Swamp (land), the Wheel (sorcery) and the Lotus (artifact): three
+# types. Bot2's graveyard, from the hand the Wheel made it discard (a Memnite, a Lightning Bolt, three lands and a
+# Counterspell: artifact creature, instant, land), has more, but the card asks of its controller's only: at the end step the
+# trigger never happens, nothing is asked of Bot2 and both stay at 20.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Osseous Sticktwister
+Wheel of Fortune
+Swamp
+Island
+Swamp x20
+
+[Bot2 Deck]
+Memnite
+Lightning Bolt
+Island
+Plains
+Dryad Arbor
+Counterspell
+Swamp
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Osseous Sticktwister.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Life = 20
+Bot2.Hand.Count = 8
+Bot2.Graveyard.Count = 7

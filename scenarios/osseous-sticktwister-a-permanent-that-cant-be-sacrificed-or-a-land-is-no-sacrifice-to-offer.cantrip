@@ -1,0 +1,59 @@
+# "May sacrifice a nonland permanent": a land is none, and a permanent that can't be sacrificed is nothing to sacrifice (CR
+# 101.2, 118.3). Turn 1 as before (the Wheel of Fortune fills Bot1's graveyard with four types, Bot2 does neither: 20 -> 18, Bot1
+# 22). On turn 2 Bot2 plays an Island. At Bot1's turn-3 end step it has no nonland permanent, only a land: sacrificing is not
+# offered, and Bot2 does neither again (16, Bot1 24). On turn 4 it plays another Island and casts Hithlain Rope. At the
+# turn-5 end step its only nonland permanent can't be sacrificed: sacrificing is still not offered, and Bot2 discards an
+# Island instead and takes no damage.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Osseous Sticktwister
+Wheel of Fortune
+Memnite
+Island
+Swamp x20
+
+[Bot2 Deck]
+Island x7
+Hithlain Rope
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Osseous Sticktwister.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+Bot2.Modes(Do neither)
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Pass
+! Bot2.Modes(Sacrifice a nonland permanent)
+Bot2.Modes(Do neither)
+? Bot2.Life = 16
+? Bot1.Life = 24
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Hithlain Rope.Cast
+[T5 Bot1.Main1]
+Bot1.Pass
+! Bot2.Modes(Sacrifice a nonland permanent)
+Bot2.Modes(Discard a card)
+Bot2.Choose(Island)
+? Bot2.Life = 16
+? Bot1.Life = 24
+
+[Expect]
+Bot2.Life = 16
+Bot1.Life = 24
+Bot2.Battlefield.Count = 3
+Bot2.Graveyard.Count = 8
