@@ -1,0 +1,8 @@
+{
+  "name": "Fear of Failed Tests",
+  "manaCost": "{4}{U}",
+  "type": "Enchantment Creature — Nightmare",
+  "power": 2,
+  "toughness": 7,
+  "oracleText": "Whenever this creature deals combat damage to a player, draw that many cards."
+}

@@ -1,0 +1,43 @@
+# Combat damage to a planeswalker is not damage to a player (CR 510.1b, 120.3c): Fear of Failed Tests attacks Bot2's Ajani Resolute on turn 3 and kills
+# it, and Bot1 draws nothing (library 13), Bot2's life untouched.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Fear of Failed Tests
+Island x3
+Island x14
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Ajani Resolute
+Plains x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fear of Failed Tests.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Ajani Resolute.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Fear of Failed Tests > Bot2.Battlefield.Ajani Resolute)
+[T3 Bot1.Main2]
+? Stack.Count = 0
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ajani Resolute
+Bot1.Library.Count = 13
