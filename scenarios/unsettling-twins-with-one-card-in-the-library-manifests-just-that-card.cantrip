@@ -1,0 +1,35 @@
+# Unsettling Twins: with a single card in the library, manifest dread looks at that one and manifests it (CR 701.62a, 701.40a):
+# Bot1's library is only Guerrilla Gorilla, which goes onto the battlefield face down, and nothing goes to the graveyard.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Mox Ruby
+Unsettling Twins
+Island
+Island
+Guerrilla Gorilla
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Unsettling Twins.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot1.Graveyard.Count = 0
+Bot1.Library.Count = 0
