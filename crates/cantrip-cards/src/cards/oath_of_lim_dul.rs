@@ -1,15 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::{choose, effects, select};
+use cantrip_mechanics::{choose, effects, select, triggers};
 use cantrip_oracle as oracle;
-
-/// Capture each life loss and its amount (CR 119.3, 603.2).
-fn you_lose_life(_: &dyn Query, asker: &Asker, event: &Event) -> Option<Fired> {
-    match event {
-        Event::LifeChange { player, delta } if *player == asker.controller && *delta < 0 =>
-            Some(Fired { subject: Target::Player(*player), data: [delta.unsigned_abs(), 0] }),
-        _ => None,
-    }
-}
 
 fn other_permanent(_: &dyn Query, choice: &Choice, _: u32) -> Verdict {
     Verdict::each(choice, |id| id != choice.source)
@@ -48,7 +39,7 @@ fn life_lost(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(when_asked(EventMask::LIFE_CHANGE, you_lose_life), life_lost,
+        triggered(triggers::YOU_LOSE_LIFE, life_lost,
             "Whenever you lose life, for each 1 life you lost, sacrifice a permanent other than this enchantment unless you discard a card."),
         ability(cost("{B}{B}"), |g, item| effects::draw(g, item, 1), "{B}{B}: Draw a card."),
     ],

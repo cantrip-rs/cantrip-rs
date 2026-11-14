@@ -394,6 +394,18 @@ pub fn you_gain_life(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> 
     }
 }
 
+/// "Whenever you lose life" (CR 119.3, 603.2): one trigger for each time the source's controller loses life, and none when
+/// none is lost (a loss of 0, or life that can't be lost, CR 119.8). Oath of Lim-Dul and Marina Vendrell's Grimoire print it
+/// and read the amount ("that many", "for each 1 life you lost"): the trigger's `data[0]` is the life lost.
+pub fn you_lose_life(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::LifeChange { player, delta } if *delta < 0 && *player == me.controller => {
+            Some(Fired { subject: Target::None, data: [delta.unsigned_abs(), 0] })
+        }
+        _ => None,
+    }
+}
+
 /// "When the Nth [kind] counter is put on this permanent" (CR 122.6, 603.2): counters of kind `KIND` (`CounterKind::Plan
 /// as u8`) were put on it and the Nth was among them - it had fewer than N before and has N or more now, as the event
 /// records (`total`). So it triggers once however many are put at once (CR 603.2c), not for a counter after the Nth,
@@ -2694,6 +2706,7 @@ pub const YOU_SCRY_OR_SURVEIL: Trigger = when_asked(EventMask(EventMask::SCRIED.
 pub const YOU_DRAW_A_CARD: Trigger = when_asked(EventMask::DREW, you_draw_a_card);
 pub const AN_OPPONENT_DRAWS_A_CARD: Trigger = when_asked(EventMask::DREW, an_opponent_draws_a_card);
 pub const YOU_GAIN_LIFE: Trigger = when_asked(EventMask::LIFE_CHANGE, you_gain_life);
+pub const YOU_LOSE_LIFE: Trigger = when_asked(EventMask::LIFE_CHANGE, you_lose_life);
 /// "Whenever you put one or more +1/+1 counters on this creature" (`you_put_plus_one_counters_on_this`).
 pub const YOU_PUT_PLUS_ONE_COUNTERS_ON_THIS: Trigger = when_asked(EventMask::COUNTERS, you_put_plus_one_counters_on_this);
 /// "When you cast this spell": functions from the stack (CR 113.6k, `when_this_spell_is_cast`).
