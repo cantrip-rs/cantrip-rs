@@ -1,0 +1,52 @@
+# Meat Locker, "When you unlock this door, tap up to one target creature and put two stun counters on it" (CR 701.26a, 122.1d):
+# cast as its left door on turn 3, it taps the chosen Ornithopter and puts two stun counters on it; the other Ornithopter is
+# untouched. A stun counter replaces an untap by removing itself (CR 122.1d): after Bot2's turn-4 untap step the Ornithopter is
+# still tapped with one counter, and after the turn-6 untap step it is still tapped with none; the turn-8 untap frees it.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Meat Locker // Drowned Diner
+Island x16
+
+[Bot2 Deck]
+Ornithopter x4
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter#1.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Meat Locker // Drowned Diner.Cast(Ability: Meat Locker)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter#1.Tapped = true
+? Bot2.Battlefield.Ornithopter#1.Counters.Stun = 2
+? Bot2.Battlefield.Ornithopter#2.Tapped = false
+? Bot2.Battlefield.Ornithopter#2.Counters.Stun = (absent)
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter#1.Tapped = true
+? Bot2.Battlefield.Ornithopter#1.Counters.Stun = 1
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter#1.Tapped = true
+? Bot2.Battlefield.Ornithopter#1.Counters.Stun = (absent)
+[T8 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Ornithopter#1.Tapped = false
+Bot2.Battlefield.Ornithopter#2.Tapped = false
