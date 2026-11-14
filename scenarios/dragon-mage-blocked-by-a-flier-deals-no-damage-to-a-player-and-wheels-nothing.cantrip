@@ -1,0 +1,44 @@
+# Dragon Mage's trigger needs combat damage dealt to a player. Bot2's Ornithopter (a flier) blocks the Dragon on turn 3: all of the damage goes to the
+# Ornithopter, none to Bot2, so no hand is discarded and the graveyards hold only the Ornithopter, and Black Lotus (sacrificed for mana).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby x4
+Dragon Mage
+Memnite
+Mountain x13
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Dragon Mage.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Dragon Mage > Bot2)
+Bot2.Block(Ornithopter > Dragon Mage)
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+? Bot2.Graveyard = Ornithopter
+? Bot1.Hand.Count = 2
+
+[Expect]
+Bot2.Graveyard = Ornithopter
+Bot1.Graveyard = Black Lotus
+Bot2.Life = 20

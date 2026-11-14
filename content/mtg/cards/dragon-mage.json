@@ -1,0 +1,11 @@
+{
+  "name": "Dragon Mage",
+  "manaCost": "{5}{R}{R}",
+  "type": "Creature — Dragon Wizard",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Flying\nWhenever this creature deals combat damage to a player, each player discards their hand, then draws seven cards.",
+  "keywords": [
+    "Flying"
+  ]
+}
