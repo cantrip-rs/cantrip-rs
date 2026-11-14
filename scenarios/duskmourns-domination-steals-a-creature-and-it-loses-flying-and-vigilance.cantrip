@@ -1,0 +1,59 @@
+# Duskmourn's Domination on an opponent's Serra Angel (4/4 flying, vigilance): Bot1 controls it, it is a 1/4 with no abilities (CR 613.1b, 613.1f),
+# it is summoning sick under its new controller (CR 302.6, so Bot1 is first asked to declare attackers next turn) and then it attacks as a ground creature - Bot2's Memnite may block it, which a
+# flier would forbid (CR 702.9b) - and it taps to attack, which vigilance would prevent (CR 702.20b).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Sapphire
+Black Lotus
+Duskmourn's Domination
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Mox Pearl
+Serra Angel
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Serra Angel.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Hand.Duskmourn's Domination.Cast(Bot1.Battlefield.Island)
+Bot1.Hand.Duskmourn's Domination.Cast(Bot2.Battlefield.Serra Angel)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Serra Angel.Power = 1
+? Bot1.Battlefield.Serra Angel.Toughness = 4
+? Bot1.Battlefield.Serra Angel.Keywords = (absent)
+? Bot2.Battlefield.Serra Angel = (absent)
+? Bot1.Battlefield.Serra Angel.SummoningSick = true
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Serra Angel > Bot2)
+Bot2.Block(Memnite > Serra Angel)
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Serra Angel.Tapped = true
+[Expect]
+Bot2.Battlefield.Memnite = (absent)
+Bot2.Life = 20

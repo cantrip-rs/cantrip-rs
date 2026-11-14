@@ -1,0 +1,42 @@
+# Ruling 2024-09-20: "If the enchanted creature gains an ability after Duskmourn's Domination becomes attached to it, it will keep that ability."
+# Bot1 takes Bot2's Ornithopter (flying lost), then enchants it with Flight on a later turn: the later timestamp gives it flying again (CR 613.7a).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Sapphire
+Black Lotus
+Duskmourn's Domination
+Flight
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Duskmourn's Domination.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Keywords = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Flight.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.Ornithopter.Power = -3

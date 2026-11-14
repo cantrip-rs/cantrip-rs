@@ -1,0 +1,6 @@
+{
+  "name": "Duskmourn's Domination",
+  "manaCost": "{4}{U}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nYou control enchanted creature.\nEnchanted creature gets -3/-0 and loses all abilities."
+}
