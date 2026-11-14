@@ -1769,6 +1769,11 @@ pub trait Game: Query {
     /// countered stays (CR 101.2); returns how many were countered.
     fn counter_items(&mut self, items: &[(ObjectId, usize)]) -> u32;
     fn reveal(&mut self, player: PlayerId, cards: &[ObjectId]);
+    /// Reveal objects until the current instruction is finished with them (CR 701.20a), including while it asks questions.
+    /// Each successful call must be paired with `end_effect_reveal` once the revealed objects are no longer relevant.
+    fn begin_effect_reveal(&mut self, player: PlayerId, cards: &[ObjectId]);
+    /// End the most recent matching effect reveal; a zone change also ends visibility of its old object.
+    fn end_effect_reveal(&mut self, cards: &[ObjectId]);
     /// Whether target `slot` of the resolving item is still legal (CR 608.2b).
     fn target_legal(&self, item: &StackItem, slot: usize) -> bool;
     /// A cost paid as the spell or ability resolves (CR 118.12, 608.2d): "[payer] may pay [cost]. If they do, ...", and

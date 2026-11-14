@@ -198,6 +198,9 @@ pub enum Event {
     Discarded { player: PlayerId, card: ObjectId, undefined: bool },
     /// Cards were revealed to every player (CR 701.20a).
     Revealed { player: PlayerId, card: ObjectId },
+    /// An effect keeps a revealed object visible while its instruction is in progress (CR 701.20a).
+    /// Bookkeeping only: the actual reveal is the separate `Revealed` event.
+    EffectRevealScope { card: ObjectId, open: bool },
     Countered { spell: ObjectId },
     /// An ability was activated (CR 602.2, 605.3): `ability` of `source`, by `player`; `by` names the other object whose effect
     /// gave the source that ability (CR 113.2c, 613.1f: Chromatic Lantern's mana ability on a land, an Equipment's ability on
@@ -595,7 +598,7 @@ impl Event {
             Event::CombatPaymentBegan { .. } => false,
             Event::CombatFirstStrike { creature } => creature == object,
             Event::CombatCostObjectPaid { source, attacker, object: paid, .. } => source == object || attacker == object || paid == object,
-            Event::AbilityCopied { .. } | Event::ActivatedAs { .. } | Event::ActivationManaPaid { .. } | Event::ValueNoted { .. } => false,
+            Event::EffectRevealScope { .. } | Event::AbilityCopied { .. } | Event::ActivatedAs { .. } | Event::ActivationManaPaid { .. } | Event::ValueNoted { .. } => false,
             Event::PaidAlternative { spell, .. } | Event::PaidRepeatedly { spell, .. } => spell == object,
             Event::LandPlayed { land, .. } => land == object,
             Event::Copied { copy, original, .. } => copy == object || original == object,
@@ -763,7 +766,7 @@ impl EventMask {
             Event::Looked { .. } => EventMask::LOOKED,
             Event::Countered { .. } => EventMask::COUNTERED,
             Event::AbilityActivated { .. } => EventMask::ABILITY_ACTIVATED,
-            Event::ActivatedAs { .. } | Event::ActivationManaPaid { .. } | Event::ValueNoted { .. } => EventMask(0),
+            Event::EffectRevealScope { .. } | Event::ActivatedAs { .. } | Event::ActivationManaPaid { .. } | Event::ValueNoted { .. } => EventMask(0),
             // The alternative cost a cast was paid with is part of the cast's record.
             Event::Cast(_) | Event::PaidAlternative { .. } | Event::PaidRepeatedly { .. } => EventMask::CAST,
             Event::LandPlayed { .. } => EventMask::LAND_PLAYED,

@@ -3181,6 +3181,18 @@ impl cantrip_api::Game for Cx<'_> {
         }
     }
 
+    fn begin_effect_reveal(&mut self, player: PlayerId, cards: &[ObjectId]) {
+        let frame = self.frame;
+        let start = count_u32(self.g.log.len());
+        if frame < self.s().agenda.len() { self.st().update_frame(frame, |f| { f.effect_reveal_start.get_or_insert(start); }); }
+        for &card in cards { self.record(Event::EffectRevealScope { card, open: true }); }
+        self.reveal(player, cards);
+    }
+
+    fn end_effect_reveal(&mut self, cards: &[ObjectId]) {
+        for &card in cards { self.record(Event::EffectRevealScope { card, open: false }); }
+    }
+
     fn target_legal(&self, item: &StackItem, slot: usize) -> bool {
         resolve::target_legal(self.g.cards, &self.g.state, &self.g.log, item, slot)
     }

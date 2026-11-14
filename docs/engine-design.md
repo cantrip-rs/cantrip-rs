@@ -980,8 +980,14 @@ shuffling interrupts the reveal even if the same card finishes on top. Static re
 `Game::revealed_in_hidden_zones`, `visible_library_top` and `ops::seen_by_all` share that derived rule for host/AI
 visibility and rules look-back. Play permissions remain independent. Frame snapshots and the currently revealed top
 are journaled state, so `goto` undoes/redoes them with the rest of the game.
-The history's `Event::Revealed` is what was shown, never whether a card is revealed
-now. The card an ability is activated from in a hand or a library is revealed by the activation itself, one
+An effect that keeps a revealed card visible across its own choices uses `begin_effect_reveal` and `end_effect_reveal`
+(Zur's Weirding, CR 701.20a). Replayed history holds balanced scope markers; moving the old object or shuffling its library
+ends its visibility. A journaled optional frame offset guards the ordinary path: without an active frame carrying a reveal start no history is
+scanned; otherwise the scan starts at the earliest such offset and ends at the current history. The offset survives staged
+continuations and stays until its frame ends, even if its scopes have closed; rollback and replay restore it with the frame.
+The existing library-top snapshot uses a boxed slice, leaving Frame at 416 bytes on the measured target without an additional
+allocation for that snapshot. The history's `Event::Revealed` is what was shown,
+never whether a card is revealed now. The card an ability is activated from in a hand or a library is revealed by the activation itself, one
 `Event::Revealed` by the activator as it is announced and before any cost (CR 602.2a; a mana ability's too, CR 605.3; a
 special action none, CR 116.2), and is not kept revealed while the ability is on the stack (RX-7 in
 `docs/rules-exceptions.md`). No card declares anything. An ability that matches events of both kinds ("enters or dies") is

@@ -152,6 +152,26 @@ pub(crate) fn seen_by_all(cx: &Cx, id: ObjectId, revealed_by_move: bool) -> bool
     seen_by_all_in(cx.g, id, revealed_by_move)
 }
 
+/// Open effect reveals in the active frames. Scope markers live in the same replayed history as their reveal; an
+/// abandoned or rolled-back frame cannot leave one open. A shuffled library or a randomized card loses its identity.
+pub(crate) fn effect_reveals(g: &crate::Game) -> Vec<ObjectId> {
+    let Some(start) = g.state.agenda.iter().filter_map(|frame| frame.effect_reveal_start.map(|start| start as usize)).min() else { return Vec::new() };
+    let mut open = Vec::new();
+    for record in g.log.iter().skip(start) {
+        match record.event {
+            Event::EffectRevealScope { card, open: true } => open.push(card),
+            Event::EffectRevealScope { card, open: false } => {
+                if let Some(at) = open.iter().rposition(|&id| id == card) { open.remove(at); }
+            }
+            Event::Shuffled { player } => open.retain(|&id| g.state.obj(id).zone != Zone::library(player)),
+            Event::Randomized { card, .. } => open.retain(|&id| id != card),
+            Event::ZoneChange { old, .. } => open.retain(|&id| id != old),
+            _ => {}
+        }
+    }
+    open
+}
+
 /// The cards in a hand or a library that a reveal in effect shows every player now (`seen_by_all`): those the cost or
 /// announcement of a spell or an activated ability still on the stack revealed (behold, splice), and those whose revealing
 /// triggered an ability not yet off the stack (CR 701.20a). Not the card an ability was activated from there: its reveal is
@@ -165,6 +185,7 @@ pub(crate) fn revealed_in_hidden_zones(g: &crate::Game) -> Vec<ObjectId> {
         candidates.extend_from_slice(s.members(item.members));
     }
     candidates.extend(s.triggers.iter().map(|t| t.source));
+    candidates.extend(effect_reveals(g));
     let mut out: Vec<ObjectId> = Vec::new();
     for id in candidates {
         let zone = s.obj(id).zone;
@@ -184,6 +205,7 @@ fn seen_by_all_in(g: &crate::Game, id: ObjectId, revealed_by_move: bool) -> bool
         ZoneKind::Exile => !o.face_down || s.apnap().all(|p| o.seen_by & (1 << p.0) != 0),
         ZoneKind::Hand | ZoneKind::Library => {
             revealed_by_move
+                || effect_reveals(g).contains(&id)
                 || (o.zone.is(ZoneKind::Library)
                     && crate::library_visibility::reveals(g, o.owner)
                     && crate::library_visibility::top(g, o.owner) == Some(id))
@@ -4612,6 +4634,8 @@ pub fn random_below(cx: &mut Cx, bound: u32) -> u32 {
 /// cards are already in the library; nothing changes zones.
 pub fn arrange_library(cx: &mut Cx, player: PlayerId, top: &[ObjectId], bottom: &[ObjectId]) {
     let library = Zone::library(player);
+    let scoped: Vec<_> = effect_reveals(cx.g).into_iter()
+        .filter(|id| top.contains(id) || bottom.contains(id)).collect();
     let reordered_revealed = cx.s().player(player).revealed_library_top
         .is_some_and(|id| top.contains(&id) || bottom.contains(&id));
     for &id in top.iter().chain(bottom) {
@@ -4628,6 +4652,7 @@ pub fn arrange_library(cx: &mut Cx, player: PlayerId, top: &[ObjectId], bottom: 
     if reordered_revealed {
         crate::library_visibility::conceal(cx, player);
     }
+    for id in scoped { crate::library_visibility::renew(cx, player, id); }
     crate::library_visibility::sync(cx);
 }
 

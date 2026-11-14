@@ -42,6 +42,11 @@ pub fn shuffle_library(cx: &mut Cx, player: PlayerId) {
 /// A resolving instruction shuffles through its effect context. CR 106.7 advice tries all orders;
 /// actual play uses the unchanged generator procedure.
 pub(crate) fn shuffle_in(cx: &mut Cx, zone: Zone) {
+    // CR 701.20d: scoped effect reveals, like continuous top reveals, lose their old identity when shuffled.
+    if zone.is(ZoneKind::Library) {
+        let revealed = ops::effect_reveals(cx.g);
+        for id in revealed { crate::library_visibility::renew(cx, zone.player, id); }
+    }
     if cx.g.hypothetical_chance.is_none() {
         shuffle(cx.st(), zone);
         return;

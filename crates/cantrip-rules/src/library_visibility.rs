@@ -29,7 +29,7 @@ pub(crate) fn top(game: &Game, player: PlayerId) -> Option<ObjectId> {
 pub(crate) fn hold(cx: &mut Cx) -> bool {
     // Outside a frame there is no announcement that can suspend.
     if cx.s().agenda.get(cx.frame).is_some_and(|f| f.library_tops.is_none()) {
-        let tops = cx.s().seats().map(|p| cx.s().zone(Zone::library(p)).first().copied()).collect();
+        let tops: Box<[_]> = cx.s().seats().map(|p| cx.s().zone(Zone::library(p)).first().copied()).collect();
         let frame = cx.frame;
         cx.st().update_frame(frame, |f| f.library_tops = Some(tops));
         return true;
@@ -85,20 +85,7 @@ pub(crate) fn conceal(cx: &mut Cx, player: PlayerId) {
 
 fn set_top(cx: &mut Cx, player: PlayerId, mut new: Option<ObjectId>) {
     if let Some(old) = cx.s().player(player).revealed_library_top {
-        let zone = Zone::library(player);
-        if live(cx.s(), old) && cx.s().obj(old).zone == zone {
-            let last = ops::last_known_of(cx, old);
-            let row = cx.st().last_known_push(last);
-            let at = cx.s().zone(zone).iter().position(|&id| id == old).expect("a live library card");
-            let obj = *cx.s().obj(old);
-            let mut renewed = Obj::new(obj.card, obj.owner, zone);
-            renewed.token = obj.token;
-            renewed.card_copy = obj.card_copy;
-            renewed.timestamp = cx.st().timestamp();
-            let id = cx.st().push_obj(renewed);
-            cx.st().zone_remove(zone, old);
-            cx.st().zone_insert(zone, at, id);
-            cx.st().update_obj(old, |o| { o.zone = Zone::GONE; o.last_known = Some(row); });
+        if let Some(id) = renew(cx, player, old) {
             if new == Some(old) { new = Some(id); }
         }
     }
@@ -114,4 +101,23 @@ fn set_top(cx: &mut Cx, player: PlayerId, mut new: Option<ObjectId>) {
             cause: cantrip_api::history::Cause::Rules, event: Event::Revealed { player, card },
         });
     }
+}
+
+/// A revealed library card reordered or concealed becomes a new object without changing zones (CR 701.20d, 401.6).
+pub(crate) fn renew(cx: &mut Cx, player: PlayerId, old: ObjectId) -> Option<ObjectId> {
+    let zone = Zone::library(player);
+    if !live(cx.s(), old) || cx.s().obj(old).zone != zone { return None; }
+    let last = ops::last_known_of(cx, old);
+    let row = cx.st().last_known_push(last);
+    let at = cx.s().zone(zone).iter().position(|&id| id == old).expect("a live library card");
+    let obj = *cx.s().obj(old);
+    let mut renewed = Obj::new(obj.card, obj.owner, zone);
+    renewed.token = obj.token;
+    renewed.card_copy = obj.card_copy;
+    renewed.timestamp = cx.st().timestamp();
+    let id = cx.st().push_obj(renewed);
+    cx.st().zone_remove(zone, old);
+    cx.st().zone_insert(zone, at, id);
+    cx.st().update_obj(old, |o| { o.zone = Zone::GONE; o.last_known = Some(row); });
+    Some(id)
 }

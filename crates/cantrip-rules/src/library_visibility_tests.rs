@@ -440,3 +440,59 @@ fn a_land_play_during_resolution_hides_its_changed_top_until_the_special_action_
     let revealed = cx.g.log[from..].iter().find(|r| matches!(r.event, Event::Revealed { card, .. } if card == top)).unwrap();
     assert!(played.serial < revealed.serial, "the special action completes before revealing its new top");
 }
+
+#[test]
+fn effect_reveal_scopes_nest_and_a_shuffle_hides_the_old_identity() {
+    use cantrip_api::Game as _;
+    let (mut g, ids) = game();
+    while !g.state.agenda.is_empty() { g.state.frame_remove(0); }
+    g.state.frame_push(Frame::new(FrameKind::BeginStep));
+    let card = ids[0];
+    fn scope(game: &mut Game) -> Cx<'_> { Cx { g: game, frame: 0, cursor: 0, mana_source: None, entering: None,
+        lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None } }
+    scope(&mut g).begin_effect_reveal(YOU, &[card]);
+    scope(&mut g).begin_effect_reveal(YOU, &[card]);
+    assert!(g.revealed_in_hidden_zones().contains(&card));
+    let resumed_at = g.log.len() as u32;
+    g.state.update_frame(0, |frame| { frame.staged = true; frame.log_mark = resumed_at; });
+    assert!(g.revealed_in_hidden_zones().contains(&card), "a staged continuation retains its reveal start");
+    let mut child = Frame::new(FrameKind::Priority);
+    child.log_mark = g.log.len() as u32;
+    g.state.frame_push(child);
+    assert!(g.revealed_in_hidden_zones().contains(&card), "a nested frame retains the outer reveal");
+    g.state.frame_remove(g.state.agenda.len() - 1);
+    scope(&mut g).end_effect_reveal(&[card]);
+    assert!(g.revealed_in_hidden_zones().contains(&card), "an outer reveal remains open");
+    let original_card = g.state.obj(card).card;
+    cx(&mut g).shuffle(YOU);
+    assert!(!g.revealed_in_hidden_zones().contains(&card), "the shuffled identity is no longer publicly trackable");
+    assert_eq!(g.state.obj(card).zone, Zone::GONE, "a shuffled revealed card becomes a new object");
+    assert!(g.state.zone(Zone::library(YOU)).iter().any(|&id| id != card && g.state.obj(id).card == original_card));
+    scope(&mut g).end_effect_reveal(&[card]);
+    assert!(!g.revealed_in_hidden_zones().contains(&card));
+}
+
+#[test]
+fn reordered_effect_revealed_card_is_renewed_and_undo_restores_scope() {
+    use cantrip_api::Game as _;
+    let (mut g, [a, b, _]) = game();
+    while !g.state.agenda.is_empty() { g.state.frame_remove(0); }
+    g.state.frame_push(Frame::new(FrameKind::BeginStep));
+    let mut scope = Cx { g: &mut g, frame: 0, cursor: 0, mana_source: None, entering: None,
+        lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+    scope.begin_effect_reveal(YOU, &[a]);
+    let before = scope.g.state.clone();
+    let mark = scope.g.state.mark();
+    let log = scope.g.log.len();
+    ops::arrange_library(&mut scope, YOU, &[], &[a]);
+    let renewed = *scope.g.state.zone(Zone::library(YOU)).last().unwrap();
+    assert_ne!(a, renewed);
+    assert_eq!(scope.g.state.obj(a).zone, Zone::GONE);
+    assert_eq!(scope.g.state.obj(a).became, None);
+    assert!(!scope.g.revealed_in_hidden_zones().contains(&renewed));
+    assert!(scope.g.state.zone(Zone::library(YOU)).contains(&b));
+    scope.g.state.rollback(mark);
+    scope.g.log.truncate(log);
+    assert!(scope.g.state == before);
+    assert!(scope.g.revealed_in_hidden_zones().contains(&a));
+}
