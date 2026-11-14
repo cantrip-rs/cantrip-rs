@@ -1657,3 +1657,20 @@ pub fn create_a_soldier(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspen
     create(g, item.controller, &SOLDIER, 1)?;
     Ok(())
 }
+
+/// The 1/1 red Gremlin creature token (CR 111.4). Razorkin Hordecaller, Gremlin Tamer, Midnight Mayhem and Scurry of Gremlins
+/// make it.
+pub static GREMLIN: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Red)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Gremlin)
+};
+
+/// "Create a 1/1 red Gremlin creature token" as an ability's whole effect (CR 111.1, 701.7a): one, under its controller.
+/// Razorkin Hordecaller and Gremlin Tamer print it.
+pub fn create_a_gremlin(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &GREMLIN, 1)?;
+    Ok(())
+}
