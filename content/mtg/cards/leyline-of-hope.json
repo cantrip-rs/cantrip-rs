@@ -1,0 +1,6 @@
+{
+  "name": "Leyline of Hope",
+  "manaCost": "{2}{W}{W}",
+  "type": "Enchantment",
+  "oracleText": "If this card is in your opening hand, you may begin the game with it on the battlefield.\nIf you would gain life, you gain that much life plus 1 instead.\nAs long as you have at least 7 life more than your starting life total, creatures you control get +2/+2."
+}
