@@ -3772,6 +3772,25 @@ fn damage_together_event(cx: &mut Cx, hits: &[(ObjectId, Target, u32)]) -> Vec<u
 pub(crate) struct DamageOutcome { pub amount: u32, pub result: Option<DamageResult> }
 
 pub(crate) fn damage_batch(cx: &mut Cx, hits: &[(ObjectId, Target, u32)], combat: bool) -> (Vec<DamageOutcome>, Vec<Event>, DamageBatch) {
+    // CR 120.8: zero damage is not an event. Remove it before snapshots, replacement ordering or prevention,
+    // but retain one return slot per original assignment. The usual all-positive path allocates no filter.
+    if hits.iter().any(|&(_, _, amount)| amount == 0) {
+        let nonzero: Vec<_> = hits.iter().copied().filter(|&(_, _, amount)| amount != 0).collect();
+        if nonzero.is_empty() {
+            return (hits.iter().map(|_| DamageOutcome { amount: 0, result: None }).collect(), Vec::new(), DamageBatch::default());
+        }
+        let (results, events, batch) = damage_batch_nonzero(cx, &nonzero, combat);
+        let mut results = results.into_iter();
+        let restored = hits.iter().map(|&(_, _, amount)| {
+            if amount == 0 { DamageOutcome { amount: 0, result: None } }
+            else { results.next().expect("each nonzero damage assignment has a result") }
+        }).collect();
+        return (restored, events, batch);
+    }
+    damage_batch_nonzero(cx, hits, combat)
+}
+
+fn damage_batch_nonzero(cx: &mut Cx, hits: &[(ObjectId, Target, u32)], combat: bool) -> (Vec<DamageOutcome>, Vec<Event>, DamageBatch) {
     let mut batch = DamageBatch::new(cx, hits);
     let proposed: Vec<_> = hits.iter().map(|&(source, target, amount)| DamageEvent { source, target, amount, combat, heal_marked: false, shielded: None }).collect();
     let parts = replace::damage_event(cx, &proposed, &mut batch.prevented, &mut batch.shielded);
@@ -4035,6 +4054,9 @@ impl DamageRecipient {
 }
 
 impl DamageBatch {
+    #[cfg(test)]
+    pub(crate) fn snapshot_count(&self) -> usize { self.dealt.len() }
+
     /// Read every possible recipient before any assignment changes the state (CR 120.10). For example, damage to a
     /// player can change Serra Ascendant's toughness before the next assignment reaches that creature. Redirection
     /// can choose a recipient absent from `hits`, so active replacement effects require the whole battlefield.
