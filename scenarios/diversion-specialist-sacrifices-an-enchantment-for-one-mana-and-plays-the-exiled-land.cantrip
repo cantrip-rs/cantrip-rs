@@ -1,0 +1,56 @@
+# Diversion Specialist: "{1}, Sacrifice another creature or enchantment: Exile the top card of your library. You may play it this
+# turn" (CR 602.2, 701.21a, 701.13a). Bot1 sacrifices its Exploration, paying the {1} with the Mox Ruby, and plays the exiled
+# Mountain as the turn's land. The Specialist itself (CR 700.1 "another") and a Mox (an artifact, not a creature or an
+# enchantment) are not offered, and Bot2's library is untouched. The Specialist has menace.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Diversion Specialist
+Ornithopter
+Exploration
+Island
+Mountain
+Island x10
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Diversion Specialist.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Exploration.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Diversion Specialist.Activate
+? Bot1.Mana =
+! Bot1.Choose(Diversion Specialist)
+! Bot1.Choose(Mox Pearl)
+Bot1.Choose(Exploration)
+Bot1.Pass
+Bot2.Pass
+Bot1.Exile.Mountain.Play
+
+[Expect]
+Bot1.Graveyard = Exploration
+Exile.Count = 0
+Bot1.Battlefield.Mountain.Tapped = false
+Bot1.Battlefield.Diversion Specialist.Keywords = Menace
+Bot2.Library.Count = 12
+Bot1.Library.Count = 10
+Stack.Count = 0

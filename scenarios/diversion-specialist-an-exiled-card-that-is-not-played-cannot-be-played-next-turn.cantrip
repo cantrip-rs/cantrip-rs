@@ -1,0 +1,45 @@
+# "You may play it this turn" (CR 611.2a, 701.13a): Bot1 sacrifices its Ornithopter on turn 3 and exiles a Lightning Bolt, but
+# does not cast it; on turn 5, with the Mox Ruby's mana in the pool, the Bolt can no longer be cast and stays in exile.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Diversion Specialist
+Ornithopter
+Island
+Island
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Diversion Specialist.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Diversion Specialist.Activate
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+
+[Expect]
+Bot2.Life = 20
+Exile = Lightning Bolt

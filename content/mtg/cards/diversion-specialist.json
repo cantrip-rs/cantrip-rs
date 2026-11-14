@@ -1,0 +1,11 @@
+{
+  "name": "Diversion Specialist",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Human Warrior",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\n{1}, Sacrifice another creature or enchantment: Exile the top card of your library. You may play it this turn.",
+  "keywords": [
+    "Menace"
+  ]
+}
