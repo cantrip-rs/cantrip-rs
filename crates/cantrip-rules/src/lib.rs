@@ -2995,6 +2995,15 @@ impl cantrip_api::Game for Cx<'_> {
         self.emit(Event::Surveilled { player, count, looked });
     }
 
+    fn manifested_dread(&mut self, player: PlayerId, graveyard: &[ObjectId]) {
+        // At most two cards are looked at, so at most two go to the graveyard (CR 701.62a).
+        let mut cards = [None; 2];
+        for (slot, &card) in cards.iter_mut().zip(graveyard) {
+            *slot = Some(card);
+        }
+        self.emit(Event::ManifestedDread { player, graveyard: cards });
+    }
+
     fn attach(&mut self, attachment: ObjectId, host: ObjectId) -> bool {
         ops::attach(self, attachment, host)
     }
