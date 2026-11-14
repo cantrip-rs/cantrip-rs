@@ -1,0 +1,8 @@
+{
+  "name": "Clammy Prowler",
+  "manaCost": "{3}{U}",
+  "type": "Enchantment Creature — Horror",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "Whenever this creature attacks, another target attacking creature can't be blocked this turn."
+}
