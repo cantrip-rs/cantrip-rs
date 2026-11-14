@@ -1,0 +1,49 @@
+# Gratuitous Violence: damage to a permanent is doubled too. Bot1's Memnite (power 1) is blocked by Bot2's Wall of Wood and deals 2 to it, not 1;
+# Bot2's Wall (power 0) deals nothing to the Memnite.
+
+[Bot1 Deck]
+Memnite
+Black Lotus
+Mox Ruby
+Mountain
+Gratuitous Violence
+Mountain x2
+Mountain x14
+
+[Bot2 Deck]
+Wall of Wood
+Forest
+Island x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Gratuitous Violence.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Wall of Wood.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Wall of Wood > Memnite)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Wall of Wood.Damage = 2
+Bot2.Life = 20
+Bot1.Battlefield.Memnite.Damage = 0
