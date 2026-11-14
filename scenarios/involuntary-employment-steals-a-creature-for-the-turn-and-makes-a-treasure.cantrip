@@ -1,0 +1,49 @@
+# Involuntary Employment, {3}{R}: "Gain control of target creature until end of turn. Untap that creature. It gains haste until end of turn. Create a Treasure
+# token." Bot2's Memnite is stolen on turn 3 (a Mox is no creature and is refused): it has haste, so it attacks Bot2 for 1, and Bot1 gets an untapped Treasure.
+# On turn 4 the Memnite is Bot2's again, without haste, and the Treasure stays Bot1's.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Involuntary Employment
+Mountain x17
+
+[Bot2 Deck]
+Memnite
+Mox Pearl
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Involuntary Employment.Cast(Bot2.Battlefield.Mox Pearl)
+Bot1.Hand.Involuntary Employment.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Haste
+? Bot1.Battlefield.Memnite.Tapped = false
+? Bot1.Battlefield.Treasure Token.Tapped = false
+Bot1.Attack(Memnite > Bot2)
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Memnite.Keywords = (absent)
+? Bot1.Battlefield.Memnite = (absent)
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield = Memnite; Mox Pearl
+Bot1.Battlefield = Mox Ruby; Treasure Token
+Bot1.Graveyard = Involuntary Employment; Black Lotus
