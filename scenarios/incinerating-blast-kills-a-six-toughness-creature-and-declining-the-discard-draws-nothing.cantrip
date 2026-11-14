@@ -1,0 +1,70 @@
+# Incinerating Blast deals 6 damage: Bot2's Imposing Vantasaur (3/6) dies. A Mox Pearl is not a creature and is refused as a target. Bot1 declines the discard, so
+# nothing is discarded and no card is drawn: the hand is the one it had.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Incinerating Blast
+Lightning Bolt
+Island
+Island
+Mountain
+Forest
+Island x12
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Imposing Vantasaur
+Plains
+Plains
+Plains x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Battlefield.Mox Pearl#3.Activate
+Bot2.Hand.Imposing Vantasaur.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+! Bot1.Hand.Incinerating Blast.Cast(Bot2.Battlefield.Mox Pearl#1)
+Bot1.Hand.Incinerating Blast.Cast(Bot2.Battlefield.Imposing Vantasaur)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+
+[Expect]
+Bot2.Battlefield.Imposing Vantasaur = (absent)
+Bot2.Graveyard = Imposing Vantasaur; Black Lotus
+Bot1.Graveyard = Incinerating Blast; Black Lotus
+Bot1.Hand = Island; Island; Lightning Bolt; Mountain

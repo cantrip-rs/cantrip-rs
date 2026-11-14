@@ -1,0 +1,72 @@
+# Incinerating Blast: "~ deals 6 damage to target creature. You may discard a card. If you do, draw a card." Bot2's Hundroog is a 4/7, so six damage does not
+# kill it and is marked as exactly 6 (not 7). Bot1 chooses to discard Lightning Bolt and draws the next card; the card is not countered by the creature surviving.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Incinerating Blast
+Lightning Bolt
+Island
+Island
+Mountain
+Forest
+Island x12
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Hundroog
+Forest
+Forest x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Battlefield.Mox Emerald#3.Activate
+Bot2.Battlefield.Mox Emerald#4.Activate
+Bot2.Hand.Hundroog.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Incinerating Blast.Cast(Bot2.Battlefield.Hundroog)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+
+[Expect]
+Bot2.Battlefield.Hundroog.Damage = 6
+Bot1.Graveyard = Incinerating Blast; Lightning Bolt; Black Lotus
+Bot1.Hand = Forest; Island; Island; Mountain
