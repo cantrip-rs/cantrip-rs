@@ -1,0 +1,38 @@
+# Two Adaptive Automatons, each choosing Construct: each is "other" to the other, so each gets +1/+1 from the other and none from
+# itself (CR 613.4c). The first is a 2/2 until the second enters, then a 3/3; the second enters as a 3/3, not a 4/4.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Black Lotus
+Adaptive Automaton
+Adaptive Automaton
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Adaptive Automaton.Cast
+Bot1.Pass
+Bot1.Modes(Construct)
+? Bot1.Battlefield.Adaptive Automaton.Power = 2
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Adaptive Automaton.Cast
+Bot1.Pass
+Bot1.Modes(Construct)
+
+[Expect]
+Bot1.Battlefield.Adaptive Automaton#1.Power = 3
+Bot1.Battlefield.Adaptive Automaton#1.Toughness = 3
+Bot1.Battlefield.Adaptive Automaton#2.Power = 3
+Bot1.Battlefield.Adaptive Automaton#2.Toughness = 3

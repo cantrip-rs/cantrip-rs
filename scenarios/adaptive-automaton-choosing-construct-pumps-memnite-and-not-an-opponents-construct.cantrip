@@ -1,0 +1,44 @@
+# Adaptive Automaton choosing Construct, the type it already is: the type chosen is one it has anyway, so it adds nothing new
+# (Subtypes stays Construct) and it stays a 2/2, "other creatures" excluding itself. Bot1's Memnite (a Construct) is a 2/2
+# and Bot1's Ornithopter (a Thopter) stays 0/2; Bot2's Memnite, cast on turn two, is a Construct under Bot2's control and stays 1/1.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Adaptive Automaton
+Ornithopter
+Memnite
+Island
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Adaptive Automaton.Cast
+Bot1.Pass
+Bot1.Modes(Construct)
+? Bot1.Battlefield.Adaptive Automaton.Subtypes = Construct
+? Bot1.Battlefield.Adaptive Automaton.Power = 2
+? Bot1.Battlefield.Adaptive Automaton.Toughness = 2
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+
+[Expect]
+Bot2.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Memnite.Power = 2
