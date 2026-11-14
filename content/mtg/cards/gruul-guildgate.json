@@ -1,0 +1,5 @@
+{
+  "name": "Gruul Guildgate",
+  "type": "Land — Gate",
+  "oracleText": "This land enters tapped.\n{T}: Add {R} or {G}."
+}
