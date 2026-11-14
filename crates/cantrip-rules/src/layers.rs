@@ -3052,6 +3052,8 @@ pub(crate) fn effect_layer(kind: EffectKind) -> Option<Layer> {
     Some(match kind {
         EffectKind::ChangeText { .. } | EffectKind::SetName(_) => Layer::Text,
         EffectKind::AddTypes(_)
+        | EffectKind::AddSupertypes(_)
+        | EffectKind::LoseSupertypes(_)
         | EffectKind::AddSubtype(_)
         | EffectKind::SetLandType(_)
         | EffectKind::LoseAllCreatureTypes
@@ -3152,6 +3154,15 @@ fn apply_effect(effect: &ContinuousEffect, layer: Layer, chars: &mut Chars) {
             }
             // CR 205.1b: added types are added; a land that becomes a creature is still a land.
             (Layer::Type, EffectKind::AddTypes(types)) => chars.types = TypeSet(chars.types.0 | types.0),
+            // CR 205.4b: a supertype gained or lost leaves the other supertypes, the card types and the subtypes as they were.
+            (Layer::Type, EffectKind::AddSupertypes(s)) => {
+                let had = chars.supertypes;
+                chars.supertypes = Supertypes { basic: had.basic || s.basic, legendary: had.legendary || s.legendary, snow: had.snow || s.snow };
+            }
+            (Layer::Type, EffectKind::LoseSupertypes(s)) => {
+                let had = chars.supertypes;
+                chars.supertypes = Supertypes { basic: had.basic && !s.basic, legendary: had.legendary && !s.legendary, snow: had.snow && !s.snow };
+            }
             (Layer::Type, EffectKind::AddSubtype(s)) => chars.subtypes = chars.subtypes.with(s),
             // CR 305.7: the land's land types are set, and the abilities its rules text gives it are gone with them.
             (Layer::Type, EffectKind::SetLandType(s)) => chars.set_land_subtypes(SubtypeSet::NONE.with(s)),

@@ -1572,6 +1572,12 @@ pub enum EffectKind {
     /// Gains these card types (CR 205.1b, 613.1d), layer 4: a crewed Vehicle is an artifact creature, and Tezzeret's
     /// emblem makes an artifact a Robot creature.
     AddTypes(TypeSet),
+    /// Gains these supertypes (CR 205.4b, 613.1d), layer 4, keeping the supertypes it has: "target nonsnow basic land
+    /// becomes snow" (Arcum's Weathervane, Thermal Flux). Its card types and subtypes are unchanged.
+    AddSupertypes(Supertypes),
+    /// Loses these supertypes (CR 205.4b, 613.1d), layer 4, at its timestamp, keeping its other supertypes: "target snow
+    /// land is no longer snow" (Arcum's Weathervane, Thermal Flux). One given by an effect after it is had.
+    LoseSupertypes(Supertypes),
     /// Its controller is this player (CR 613.1b, layer 2). The latest of an object's control effects applies.
     Control(PlayerId),
     /// Gains "this creature attacks each combat if able" (CR 508.1d), layer 6: an ability, which "loses all abilities" later
