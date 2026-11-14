@@ -1,0 +1,50 @@
+# Living Phone looks at exactly five cards: the fifth, Memnite (power 1), may be taken, and the sixth, Savannah Lions (power 2),
+# is out of reach (the refusal), so Bot1 takes the Memnite and the library is 15 cards.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Living Phone
+Island
+Island
+Island
+Serra Angel
+Island
+Island
+Hill Giant
+Memnite
+Savannah Lions
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Living Phone.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Living Phone)
+Bot1.Pass
+! Bot1.Choose(Savannah Lions)
+! Bot1.Choose(Hill Giant)
+Bot1.Choose(Memnite)
+? Bot1.Revealed = Memnite
+[T2 Bot2.End]
+
+[Expect]
+Bot1.Hand.Memnite.Power = 1
+Bot1.Library.Count = 15
+Bot1.Library.Savannah Lions.Power = 2
+Bot1.Graveyard = Living Phone
