@@ -1,0 +1,11 @@
+{
+  "name": "Taurean Mauler",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Shapeshifter",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Changeling (This card is every creature type.)\nWhenever an opponent casts a spell, you may put a +1/+1 counter on this creature.",
+  "keywords": [
+    "Changeling"
+  ]
+}

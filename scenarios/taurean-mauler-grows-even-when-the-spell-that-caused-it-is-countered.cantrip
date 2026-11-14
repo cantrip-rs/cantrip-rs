@@ -1,0 +1,51 @@
+# Taurean Mauler's ability resolves even if the spell that caused it is countered (the ruling; CR 603.2, 113.7a): Bot2 casts a
+# Mox Sapphire and the Mauler's trigger goes on the stack above it. In response Bot1 counters the Mox with Counterspell, which
+# resolves first; the trigger then still resolves, Bot1 accepts, and the Mauler gets its +1/+1 counter (3/3). Bot1's own
+# Counterspell triggers nothing.
+
+[Bot1 Deck]
+Taurean Mauler
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Mox Sapphire
+Counterspell
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Mox Sapphire
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Taurean Mauler.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Taurean Mauler.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Counterspell.Cast(Stack.Mox Sapphire)
+? Stack.Count = 3
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Mox Sapphire
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+
+[Expect]
+Bot1.Battlefield.Taurean Mauler.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Taurean Mauler.Power = 3
+Bot2.Battlefield =
+Bot1.Graveyard = Counterspell; Black Lotus

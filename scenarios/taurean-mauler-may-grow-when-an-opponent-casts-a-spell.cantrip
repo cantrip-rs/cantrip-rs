@@ -1,0 +1,51 @@
+# Taurean Mauler: whenever an opponent casts a spell, its controller may put a +1/+1 counter on it. Bot2's Mox Sapphire is cast and Bot1
+# accepts (3/3); Bot2's Ancestral Recall is cast and Bot1 declines (still 3/3). Bot1's own Mox Jet, cast on its turn, triggers nothing.
+# It is a Changeling.
+
+[Bot1 Deck]
+Taurean Mauler
+Black Lotus
+Mox Jet
+Mountain x4
+Mountain x14
+
+[Bot2 Deck]
+Mox Sapphire
+Ancestral Recall
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Taurean Mauler.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Taurean Mauler.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+? Bot1.Battlefield.Taurean Mauler.Power = 3
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Ancestral Recall.Cast(Bot2)
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Pass
+Bot1.Decline
+? Bot1.Battlefield.Taurean Mauler.Power = 3
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+? Stack.Count = 1
+
+[Expect]
+Bot1.Battlefield.Taurean Mauler.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Taurean Mauler.Toughness = 3
+Bot1.Battlefield.Taurean Mauler.Keywords = Changeling
