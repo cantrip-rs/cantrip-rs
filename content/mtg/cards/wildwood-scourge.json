@@ -1,0 +1,8 @@
+{
+  "name": "Wildwood Scourge",
+  "manaCost": "{X}{G}",
+  "type": "Creature — Hydra",
+  "power": 0,
+  "toughness": 0,
+  "oracleText": "This creature enters with X +1/+1 counters on it.\nWhenever one or more +1/+1 counters are put on another non-Hydra creature you control, put a +1/+1 counter on this creature."
+}

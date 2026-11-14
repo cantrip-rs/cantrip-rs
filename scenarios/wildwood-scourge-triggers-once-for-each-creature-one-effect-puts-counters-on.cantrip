@@ -1,0 +1,45 @@
+# Wildwood Scourge: "Whenever one or more +1/+1 counters are put on another non-Hydra creature you control" triggers once for each
+# such creature (CR 603.2c). Test of Conviction's Battle Stations puts a counter on each creature Bot1 controls at once: the two
+# Ornithopters make two triggers, two counters on the Scourge, beside the one the spell put on it (which triggers nothing).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Wildwood Scourge
+Ornithopter
+Ornithopter
+Test of Conviction
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Wildwood Scourge.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wildwood Scourge.Counters.PlusOnePlusOne = 1
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Test of Conviction.Cast
+Bot1.Modes(Battle Stations)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Ornithopter#1.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter#2.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Wildwood Scourge.Counters.PlusOnePlusOne = 4

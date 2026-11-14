@@ -1,0 +1,39 @@
+# Wildwood Scourge: enters with X +1/+1 counters (X = 2 here), and a +1/+1 counter put on another non-Hydra creature
+# you control (Snakeskin Veil on Ornithopter) puts one on it. Entering with its own counters does not trigger it.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Wildwood Scourge
+Ornithopter
+Snakeskin Veil
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Wildwood Scourge.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wildwood Scourge.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Wildwood Scourge.Power = 2
+? Stack.Count = 0
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wildwood Scourge.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Snakeskin Veil.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Wildwood Scourge.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Wildwood Scourge.Power = 3

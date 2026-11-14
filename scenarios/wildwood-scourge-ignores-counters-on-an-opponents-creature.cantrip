@@ -1,0 +1,30 @@
+# Wildwood Scourge: only creatures its controller controls. An opponent's Walking Ballista entering with a counter does nothing.
+
+[Bot1 Deck]
+Black Lotus
+Wildwood Scourge
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Walking Ballista
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Wildwood Scourge.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wildwood Scourge.Counters.PlusOnePlusOne = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Walking Ballista.Cast(X: 1)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 1
+
+[Expect]
+Bot1.Battlefield.Wildwood Scourge.Counters.PlusOnePlusOne = 2
+Stack.Count = 0

@@ -1,0 +1,37 @@
+# Wildwood Scourge: "another non-Hydra creature". A second Wildwood Scourge (a Hydra) entering with a counter does not grow the
+# first one, nor does the first one's own counter from Snakeskin Veil grow it again, and the second does not grow from the first's.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Wildwood Scourge
+Wildwood Scourge
+Snakeskin Veil
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Wildwood Scourge.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Wildwood Scourge.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wildwood Scourge#1.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Wildwood Scourge#2.Counters.PlusOnePlusOne = 1
+Bot1.Hand.Snakeskin Veil.Cast(Bot1.Battlefield.Wildwood Scourge#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Wildwood Scourge#1.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Wildwood Scourge#2.Counters.PlusOnePlusOne = 1
+Stack.Count = 0
