@@ -1,0 +1,55 @@
+# Tribute to Hunger: "Target opponent sacrifices a creature of their choice. You gain life equal to that creature's toughness." (CR 701.21a, 608.2h) Bot2 controls a Memnite (1/1) and an Ornithopter (0/2) and
+# answers Tribute with Giant Growth on the Ornithopter (3/5). They choose it: only their own creatures can be chosen (not Bot1's Ornithopter), and Bot1 gains its toughness as it last existed, 5
+# (not its power 3, nor its printed toughness 2): 20 -> 25. The Memnite stays.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Ornithopter
+Tribute to Hunger
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Memnite
+Ornithopter
+Giant Growth
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tribute to Hunger.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Giant Growth.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Ornithopter.Toughness = 5
+Bot1.Pass
+! Bot2.Choose(Bot1.Battlefield.Ornithopter)
+Bot2.Choose(Bot2.Battlefield.Ornithopter)
+? Bot1.Life = 25
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 25
+Bot2.Life = 20
+Bot2.Battlefield = Memnite; Mox Emerald
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Sapphire; Ornithopter

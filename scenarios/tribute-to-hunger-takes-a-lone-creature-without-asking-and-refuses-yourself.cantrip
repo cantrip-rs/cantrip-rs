@@ -1,0 +1,41 @@
+# Tribute to Hunger: "Target opponent sacrifices a creature of their choice. You gain life equal to that creature's toughness." (CR 115.1, 701.21a) Only an opponent can be targeted: Bot1 cannot name themself.
+# Bot2's lone creature, a Memnite (1/1) beside a Mox Emerald that is not a creature, is sacrificed without a question, and Bot1 gains its toughness, 1 (20 -> 21).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Tribute to Hunger
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Tribute to Hunger.Cast(Bot1)
+Bot1.Hand.Tribute to Hunger.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 21
+Bot2.Life = 20
+Bot2.Battlefield = Mox Emerald
+Bot2.Graveyard = Memnite

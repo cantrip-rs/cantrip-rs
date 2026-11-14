@@ -1,0 +1,6 @@
+{
+  "name": "Tribute to Hunger",
+  "manaCost": "{2}{B}",
+  "type": "Instant",
+  "oracleText": "Target opponent sacrifices a creature of their choice. You gain life equal to that creature's toughness."
+}

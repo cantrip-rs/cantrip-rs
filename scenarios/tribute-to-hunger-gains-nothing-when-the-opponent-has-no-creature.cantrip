@@ -1,0 +1,41 @@
+# Tribute to Hunger: "Target opponent sacrifices a creature of their choice. You gain life equal to that creature's toughness." (CR 701.21a, 608.2h) Bot2 has no creature, so nothing is sacrificed and
+# there is no creature whose toughness could be read: Bot1 gains no life (20), and their own Ornithopter is not sacrificed in its place.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Ornithopter
+Tribute to Hunger
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tribute to Hunger.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Sapphire; Ornithopter
+Bot2.Battlefield = Mox Emerald
+Bot2.Graveyard.Count = 0
