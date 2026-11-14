@@ -1,0 +1,56 @@
+# Glassworks // Shattered Yard cast as its left door, Glassworks, in turn 3: the Room enters with that door unlocked (CR
+# 709.5d) and "when you unlock this door, this Room deals 4 damage to target creature an opponent controls" triggers. Bot1's
+# own Ornithopter is refused as a target; Bot2's Baloth Prime (10/10) is chosen and is dealt exactly 4, while Bot2's
+# Llanowar Elves is not touched. Shattered Yard stays locked, so Bot2 loses no life at Bot1's end step.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Sapphire
+Ornithopter
+Glassworks // Shattered Yard
+Island x16
+
+[Bot2 Deck]
+Black Lotus
+Forest
+Baloth Prime
+Mox Emerald
+Llanowar Elves
+Island x15
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Baloth Prime.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Glassworks // Shattered Yard.Cast(Ability: Glassworks)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Ornithopter)
+Bot1.Target(Baloth Prime)
+? Stack = Glassworks
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Baloth Prime.Damage = 4
+[T4 Bot2.Upkeep]
+? Bot2.Life = 20
+
+[Expect]
+Turn = 4
+Bot1.Battlefield.Glassworks.Doors = Glassworks
+Bot2.Battlefield.Baloth Prime.Damage = 0
+Bot2.Battlefield.Llanowar Elves.Damage = 0
+Bot2.Life = 20
