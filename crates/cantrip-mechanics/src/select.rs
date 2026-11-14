@@ -90,6 +90,10 @@ fn another_creature_or_artifact(q: &dyn Query, choice: &Choice, _: u32) -> Verdi
     Verdict::each(choice, |id| id != choice.source && (q.chars(id).is(CardType::Creature) || q.chars(id).is(CardType::Artifact)))
 }
 
+fn another_creature_or_enchantment(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
+    Verdict::each(choice, |id| id != choice.source && (q.chars(id).is(CardType::Creature) || q.chars(id).is(CardType::Enchantment)))
+}
+
 fn another_creature(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
     Verdict::each(choice, |id| id != choice.source && q.chars(id).is(CardType::Creature))
 }
@@ -273,6 +277,10 @@ pub const ARTIFACT_OR_CREATURE: Part = part(&(artifact_or_creature as SelectFn),
 /// "Another creature or artifact": a creature or artifact permanent other than the object whose text asks (`Choice::source`).
 /// The Sackville-Bagginses and Automated Warfare System sacrifice one.
 pub const ANOTHER_CREATURE_OR_ARTIFACT: Part = part(&(another_creature_or_artifact as SelectFn), 0, "");
+
+/// "Another creature or enchantment": a creature or enchantment permanent (an enchantment creature is both) other than the object
+/// whose text asks (`Choice::source`). Boilerbilges Ripper sacrifices one.
+pub const ANOTHER_CREATURE_OR_ENCHANTMENT: Part = part(&(another_creature_or_enchantment as SelectFn), 0, "");
 
 /// "Another creature": a creature permanent other than the object whose text asks (`Choice::source`). Bolg of the North and
 /// Sephiroth, Fabled SOLDIER sacrifice one.
@@ -568,6 +576,12 @@ pub const fn creature_cards(count: Count) -> Selection {
 /// Automated Warfare System's "you may sacrifice" is `up_to(1)`.
 pub const fn another_creature_or_artifact_permanents(count: Count) -> Selection {
     Selection::of(count, &[ANOTHER_CREATURE_OR_ARTIFACT]).called("other creature or artifact")
+}
+
+/// `count` of "another creature or enchantment" (CR 701.21a), chosen as an effect resolves: Boilerbilges Ripper's "you may
+/// sacrifice" is `up_to(1)`.
+pub const fn another_creature_or_enchantment_permanents(count: Count) -> Selection {
+    Selection::of(count, &[ANOTHER_CREATURE_OR_ENCHANTMENT]).called("other creature or enchantment")
 }
 
 /// `count` of "an artifact or creature" (CR 701.21a), chosen as an effect resolves: In the Pale Moonlight's chapter III and
