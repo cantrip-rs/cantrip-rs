@@ -1,0 +1,43 @@
+# Patched Plaything: "if you cast it from your hand" - a cast from the graveyard (Yawgmoth's Will, which Bot1 casts with Black
+# Lotus on turn 3 after Bot2's Thoughtseize made it discard the Plaything) does not count (CR 614.1c), though Bot1 cast it. The
+# Plaything enters as a full 4/3 with no counters.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Black Lotus
+Yawgmoth's Will
+Patched Plaything
+Island
+Island x20
+
+[Bot2 Deck]
+Swamp
+Thoughtseize
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Thoughtseize.Cast(Bot1)
+Bot2.Choose(Patched Plaything)
+[T3 Bot1.Main1]
+Bot1.Hand.Yawgmoth's Will.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Patched Plaything.Cast
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Battlefield.Patched Plaything.Power = 4
+Bot1.Battlefield.Patched Plaything.Toughness = 3
+Bot1.Battlefield.Patched Plaything.Counters.MinusOneMinusOne = (absent)

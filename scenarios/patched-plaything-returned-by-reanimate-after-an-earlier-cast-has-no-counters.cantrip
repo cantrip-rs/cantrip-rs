@@ -1,0 +1,37 @@
+# Patched Plaything: only a cast from the hand counts, and the cast belongs to the object that was cast. Bot1 casts the Plaything
+# (a 2/1 with its two -1/-1 counters), Bolts it the same turn, and Reanimates it: the card that returns is a new object (CR 400.7)
+# that was not cast, so it enters as a full 4/3 with no counters. Bot1 loses 3 life to Reanimate.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Patched Plaything
+Lightning Bolt
+Reanimate
+Island x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Patched Plaything.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Patched Plaything.Power = 2
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Patched Plaything)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Reanimate.Cast(Patched Plaything)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Patched Plaything.Power = 4
+Bot1.Battlefield.Patched Plaything.Toughness = 3
+Bot1.Battlefield.Patched Plaything.Counters.MinusOneMinusOne = (absent)
