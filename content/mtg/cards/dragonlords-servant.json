@@ -1,0 +1,8 @@
+{
+  "name": "Dragonlord's Servant",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin Shaman",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Dragon spells you cast cost {1} less to cast."
+}

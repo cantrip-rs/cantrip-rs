@@ -1,0 +1,57 @@
+# Dragonlord's Servant: "Dragon spells you cast cost {1} less to cast." Turn 1: Bot1 pays {1}{R} for the Servant, then a Dragon
+# Engine ({3}, a Dragon Construct) with exactly {2}. Turn 2: Bot2's Dragon Engine still costs {3} (the Servant is Bot1's), so
+# three Moxes leave nothing over. Turn 3: Bot1's Sure Strike is not a Dragon and costs its full {1}{R}.
+
+[Bot1 Deck]
+Mox Ruby x4
+Dragonlord's Servant
+Dragon Engine
+Sure Strike
+Mountain x14
+
+[Bot2 Deck]
+Mox Ruby x3
+Dragon Engine
+Mountain x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Dragonlord's Servant.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Dragon Engine.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dragon Engine.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Hand.Dragon Engine.Cast
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Dragon Engine.Power = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Sure Strike.Cast(Bot1.Battlefield.Dragonlord's Servant)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dragonlord's Servant.Power = 4
+[Expect]
+Bot1.Battlefield.Dragon Engine.Toughness = 3
+Bot2.Battlefield.Dragon Engine.Toughness = 3
