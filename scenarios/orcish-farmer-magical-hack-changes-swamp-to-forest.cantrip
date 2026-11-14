@@ -1,0 +1,41 @@
+# Magical Hack changes Farmer's land-type word (CR 612.2). Before the hack the same ability produces a Swamp; afterward it produces a Forest.
+[Bot1 Deck]
+Orcish Farmer
+Black Lotus
+Mox Sapphire
+Magical Hack
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Orcish Farmer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Orcish Farmer.Activate(Bot2.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Island.Subtypes = Swamp
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Island.Subtypes = Island
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Magical Hack.Cast(Bot1.Battlefield.Orcish Farmer)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Swamp)
+Bot1.Modes(Forest)
+Bot1.Battlefield.Orcish Farmer.Activate(Bot2.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Island.Subtypes = Forest
+Bot2.Battlefield.Island.Activate
+? Bot2.Mana = {G}
+[T6 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Island.Subtypes = Island

@@ -1,0 +1,29 @@
+# An activated ability resolves independently of its source after it leaves (CR 113.7a).
+[Bot1 Deck]
+Orcish Farmer
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island
+Lightning Bolt
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Orcish Farmer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Orcish Farmer.Activate(Bot2.Battlefield.Island)
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Orcish Farmer)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Orcish Farmer; Black Lotus
+Bot2.Battlefield.Island.Subtypes = Swamp

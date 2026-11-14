@@ -1,0 +1,26 @@
+# Sacrificing the targeted land in response leaves Farmer's ability without a legal target (CR 608.2b).
+[Bot1 Deck]
+Orcish Farmer
+Black Lotus
+Island x20
+[Bot2 Deck]
+Strip Mine
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Orcish Farmer.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Strip Mine.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Orcish Farmer.Activate(Bot2.Battlefield.Strip Mine)
+Bot1.Pass
+Bot2.Battlefield.Strip Mine.Activate(Ability: Destroy target land; Bot1.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard = Strip Mine
+Bot1.Graveyard = Island; Black Lotus

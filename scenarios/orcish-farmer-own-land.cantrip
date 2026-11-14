@@ -1,0 +1,22 @@
+# Farmer can target its controller's own land; another player's untap step does not end it (CR 611.2a).
+[Bot1 Deck]
+Orcish Farmer
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Orcish Farmer.Cast
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Orcish Farmer.Activate(Bot1.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Island.Subtypes = Swamp
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Island.Subtypes = Swamp
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Island.Subtypes = Island

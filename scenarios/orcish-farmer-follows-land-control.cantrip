@@ -1,0 +1,31 @@
+# Changing control after resolution makes the deadline the land's new controller's untap step (CR 611.2a).
+[Bot1 Deck]
+Orcish Farmer
+Conquer
+Black Lotus x3
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Orcish Farmer.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Orcish Farmer.Activate(Bot2.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Conquer.Cast(Bot2.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Island.Subtypes = Swamp
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Island.Subtypes = Swamp
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Island.Subtypes = Island
