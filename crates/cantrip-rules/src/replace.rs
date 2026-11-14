@@ -955,16 +955,15 @@ fn apply(cx: &mut Cx, proposal: &mut Proposal) {
 /// Each effect is its own text, its source's now, though a resolving ability's instructions made the event (`Cx::own_text`).
 fn apply_to(cx: &mut Cx, proposal: &mut Proposal, entry: Option<&mut Entering>, uses: Option<&mut Vec<PreventionUse>>) {
     // Damage is formed with its whole event (`damage_event_inner`); what an effect adds to damage reaches here never.
-    let _ = cx.instruction(|cx| cx.own_text(false, |cx| apply_each(cx, proposal, entry, uses, false, None)), |_| true);
+    let _ = cx.instruction(|cx| cx.own_text(false, |cx| apply_each(cx, proposal, entry, uses, false, None, &mut [None; 8])), |_| true);
 }
 
 enum DamageProgress {
     Expanded { added: Vec<DamageComponent>, applied: Vec<Applied> },
 }
 
-fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Entering>, mut uses: Option<&mut Vec<PreventionUse>>, group_once: bool, mut selected: Option<Candidate>) -> Option<DamageProgress> {
+fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Entering>, mut uses: Option<&mut Vec<PreventionUse>>, group_once: bool, mut selected: Option<Candidate>, commander_declined_to: &mut [Option<Zone>; 8]) -> Option<DamageProgress> {
     let mut applied: Vec<Applied> = cx.lineage.clone();
-    let mut commander_declined_to: [Option<Zone>; 8] = [None; 8];
     loop {
         if let Proposal::ZoneChange(z) = proposal && !z.to.is(ZoneKind::Battlefield) {
             z.put_by = None;
@@ -1003,9 +1002,9 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
         let found = match selected.take() {
             // The effect chosen for the part it is still eligible for applies only if it still applies to it as that part
             // is now; otherwise it does nothing to it.
-            Some(candidate) if candidates(cx, proposal, &applied, entry.as_deref(), commander_declined_to).contains(&candidate) => vec![candidate],
+            Some(candidate) if candidates(cx, proposal, &applied, entry.as_deref(), *commander_declined_to).contains(&candidate) => vec![candidate],
             Some(_) => return None,
-            None => candidates(cx, proposal, &applied, entry.as_deref(), commander_declined_to),
+            None => candidates(cx, proposal, &applied, entry.as_deref(), *commander_declined_to),
         };
         if found.is_empty() {
             return None;
@@ -1249,7 +1248,7 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
         }
         unlink_if_sent_elsewhere(&start, proposal);
         if let Proposal::ZoneChange(z) = &mut *proposal {
-            for declined in &mut commander_declined_to {
+            for declined in commander_declined_to.iter_mut() {
                 if *declined != Some(z.to) {
                     *declined = None;
                 }
@@ -1257,6 +1256,149 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
         }
         if group_once || !added.is_empty() { return Some(DamageProgress::Expanded { added, applied }); }
     }
+}
+
+/// A single pending mixed life or zone-change occurrence. Each keeps its own replacement history and declined
+/// commander destinations across choices (CR 614.5, 616.1f).
+struct MixedOccurrence {
+    proposal: Proposal,
+    applied: Vec<Applied>,
+    declined: [Option<Zone>; 8],
+    selected: Option<Candidate>,
+    dependency: Option<usize>,
+    done: bool,
+}
+
+fn mixed_has_choice(cx: &Cx, proposal: &Proposal, found: &[Candidate]) -> bool {
+    found.len() > 1 || found.iter().any(|c| match c.origin {
+        Origin::Printed => printed_replacement(cx, c.source, c.index).optional.is_some(),
+        Origin::Commander => true,
+        _ => false,
+    }) || matches!(proposal, Proposal::Damage(_))
+}
+
+fn mixed_occurrence(cx: &Cx, proposal: Proposal, occurrence: usize) -> ReplacementOccurrence {
+    match proposal {
+        Proposal::LifeChange(l) => ReplacementOccurrence::Life { player: l.player, amount: l.amount, occurrence },
+        Proposal::ZoneChange(z) => ReplacementOccurrence::Object { object: z.object, reason: z.reason, component: cx.s().obj(z.object).token && z.is_card, occurrence },
+        _ => unreachable!("mixed resolution supports life and zone changes"),
+    }
+}
+
+/// Prepare the replacements of simultaneous life and zone events together. Choose one replacement at a time and then
+/// re-evaluate APNAP, so a continuation or concession can introduce an earlier player's next choice (CR 101.4d).
+pub(crate) fn mixed_life_and_zone(cx: &mut Cx, proposals: &mut [Proposal], dependencies: &[(usize, usize)]) -> bool {
+    // In the common case with no applicable replacement machinery, avoid building or scanning pending lineages.
+    if !proposals.iter().any(|p| match p {
+        Proposal::ZoneChange(z) => zone_change_possible(cx, z),
+        Proposal::LifeChange(_) => possible(cx, None),
+        _ => false,
+    }) { return false; }
+    let mut pending: Vec<_> = proposals.iter().copied().enumerate().map(|(at, proposal)| MixedOccurrence {
+        proposal, applied: cx.lineage.clone(), declined: [None; 8], selected: None,
+        dependency: dependencies.iter().find_map(|&(child, parent)| (child == at).then_some(parent)), done: false,
+    }).collect();
+    loop {
+        // A continuation or concession may remove a recipient or change who controls a pending permanent.
+        for part in &mut pending {
+            if part.done { continue; }
+            match &mut part.proposal {
+                Proposal::ZoneChange(z) => {
+                    if !live(cx.s(), z.object) || cx.s().obj(z.object).zone != z.from {
+                        z.replaced = true;
+                    } else if z.from.is(ZoneKind::Battlefield) {
+                        if z.regenerated && (!z.destroy || crate::static_rules::cant_be_regenerated(cx, cx.cards(), z.object)) {
+                            z.regenerated = false;
+                            z.regeneration_shield = false;
+                        }
+                        z.controller = cx.s().obj(z.object).controller;
+                    }
+                }
+                Proposal::LifeChange(l) if !cx.s().in_game(l.player) => l.amount = 0,
+                _ => {}
+            }
+        }
+        let mut options = Vec::new();
+        for at in 0..pending.len() {
+            if pending[at].done { continue; }
+            if let Some(parent) = pending[at].dependency {
+                if !pending[parent].done { continue; }
+                if matches!(pending[parent].proposal, Proposal::ZoneChange(z) if z.regenerated || z.shielded || z.replaced) {
+                    pending[at].done = true;
+                    continue;
+                }
+            }
+            let part = &pending[at];
+            if matches!(part.proposal, Proposal::LifeChange(l) if l.amount == 0) { pending[at].done = true; continue; }
+            let found = candidates(cx, &part.proposal, &part.applied, None, part.declined);
+            if found.is_empty() { pending[at].done = true; continue; }
+            let chosen = part.selected.filter(|c| found.contains(c)).or_else(|| {
+                (found.len() == 1 && (matches!(found[0].origin, Origin::Printed if printed_replacement(cx, found[0].source, found[0].index).optional.is_some())
+                    || matches!(found[0].origin, Origin::Commander))).then_some(found[0])
+            });
+            pending[at].selected = chosen;
+            let part = &pending[at];
+            let actor = if let Some(c) = chosen {
+                match c.origin {
+                    Origin::Printed if printed_replacement(cx, c.source, c.index).optional.is_some() =>
+                        printed_controller(cx, c.source, c.index, &part.proposal),
+                    Origin::Commander => cx.s().obj(c.source).owner,
+                    _ => affected(cx, &part.proposal),
+                }
+            } else { affected(cx, &part.proposal) };
+            options.push((at, actor, mixed_has_choice(cx, &part.proposal, &found)));
+        }
+        if options.is_empty() { break; }
+        // One mandatory replacement requires no outer choice. Apply it in full, including its contained
+        // instructions, before returning to outer choices (CR 616.1f–g).
+        let chosen_at = if let Some(&(at, _, _)) = options.iter().find(|(_, _, choice)| !choice) { at } else {
+            let Some(player) = cx.s().apnap().find(|p| options.iter().any(|(_, actor, _)| actor == p)) else { break };
+            let theirs: Vec<_> = options.iter().filter(|(_, actor, _)| *actor == player).map(|(at, _, _)| *at).collect();
+            if theirs.len() == 1 { theirs[0] } else {
+                let occurrences = theirs.iter().map(|&at| mixed_occurrence(cx, pending[at].proposal, at)).collect();
+                let ask = RequestKind::OrderReplacementOccurrences { occurrences };
+                match cx.ask_core(player, ask, false) {
+                    Ok(Answer::CostPayment(index)) if index < theirs.len() => theirs[index],
+                    _ => theirs[0],
+                }
+            }
+        };
+        let part = &mut pending[chosen_at];
+        let found = candidates(cx, &part.proposal, &part.applied, None, part.declined);
+        if found.is_empty() { part.selected = None; continue; }
+        let previously_selected = part.selected.take().filter(|c| found.contains(c));
+        let selected = if let Some(c) = previously_selected { c } else if found.len() > 1 {
+            let Some(pick) = cx.instruction(|cx| cx.own_text(false, |cx| choose(cx, &part.proposal, &found)), |_| true) else { continue };
+            found[pick]
+        } else { found[0] };
+        // Ordering the effects and an optional controller's decision are separate choices.
+        if previously_selected.is_none()
+            && (matches!(selected.origin, Origin::Printed if printed_replacement(cx, selected.source, selected.index).optional.is_some())
+                || matches!(selected.origin, Origin::Commander))
+        {
+            part.selected = Some(selected);
+            continue;
+        }
+        let outer = std::mem::replace(&mut cx.lineage, part.applied.clone());
+        let progress = cx.instruction(|cx| cx.own_text(false, |cx| apply_each(cx, &mut part.proposal, None, None, true, Some(selected), &mut part.declined)), |_| true);
+        cx.lineage = outer;
+        let applied_one = match progress {
+            Some(DamageProgress::Expanded { added, applied }) => {
+                debug_assert!(added.is_empty());
+                part.applied = applied;
+                true
+            }
+            // A concession or continuation removed it before application; it has not had its opportunity yet.
+            None => false,
+        };
+        if applied_one {
+            // Another replacement's continuation can introduce an effect that now applies to an occurrence whose
+            // previous scan found none. Its own lineage still prevents already-applied effects from applying again.
+            for part in &mut pending { part.done = false; }
+        }
+    }
+    for (out, part) in proposals.iter_mut().zip(pending) { *out = part.proposal; }
+    true
 }
 
 /// The player whose "you" a source's printed effect has: its controller - for the permanent entering, the player it enters
@@ -2409,7 +2551,7 @@ fn damage_event_inner(
             let progress = cx.instruction(
                 |cx| {
                     cx.own_text(false, |cx| {
-                        apply_each(cx, &mut proposal, None, Some(uses), true, Some(candidate))
+                        apply_each(cx, &mut proposal, None, Some(uses), true, Some(candidate), &mut [None; 8])
                     })
                 },
                 |_| true,

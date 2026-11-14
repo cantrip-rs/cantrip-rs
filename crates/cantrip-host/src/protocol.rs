@@ -1498,6 +1498,8 @@ pub struct ChooseReplacementPrompt {
     /// Each source's name, in step with `sources`: a source that has left (Ral Zarek's skip, CR 704.5i) may have no handle
     /// in a seat's view, and is named by this. Empty for one in a zone the seat may not look into.
     pub source_names: Vec<String>,
+    #[serde(default)]
+    pub occurrence_order: bool,
 }
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
@@ -2014,7 +2016,9 @@ impl PromptPayload {
                 AnswerPayload::ModesChosenAnswer(ModesChosenAnswer { modes })
             }
             PromptPayload::ChooseCostPaymentPromptMessage(p) => AnswerPayload::CostPaymentChosenAnswer(CostPaymentChosenAnswer { key: p.choices.first().map_or_else(String::new, |c| c.key.clone()) }),
-            PromptPayload::ChooseReplacementPromptMessage(_) => AnswerPayload::ReplacementChosenAnswer(ReplacementChosenAnswer { index: 0 }),
+            PromptPayload::ChooseReplacementPromptMessage(p) => if p.occurrence_order {
+                AnswerPayload::CostPaymentChosenAnswer(CostPaymentChosenAnswer { key: "0".into() })
+            } else { AnswerPayload::ReplacementChosenAnswer(ReplacementChosenAnswer { index: 0 }) },
             PromptPayload::OrderTriggersPromptMessage(p) => AnswerPayload::TriggersOrderedAnswer(TriggersOrderedAnswer {
                 order: (0..p.sources.len() as i32).collect(),
             }),

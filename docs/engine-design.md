@@ -1215,6 +1215,16 @@ or more" once. The sacrifices and discards are one `move_together` (each move wi
 changes: they are prepared and judged against the game before any move is made, applied with the moves and announced in
 their batch; the discards' own `Discarded` events follow, as every discard's do.
 
+For staged life costs paid as an instruction resolves, `Game::pay_life_with_permanents` commits the chosen payments with
+unpaid destructions and sacrifices. Cleansing chooses the lands any player pays for; Killing Wave uses the same life-cost
+staging with sacrifices instead. Each chosen payment has its own resolution-payment receipt (CR 118.11–12). Mixed life and
+zone replacements keep one pending proposal and applied lineage per occurrence; each replacement step is followed by an
+APNAP recheck (CR 101.4c–d, 616.1). When a player has choices on multiple occurrences, the full-width occurrence-order
+question names the relevant life amount or object without revealing a hidden card. A merged token's physical card component
+is considered after the parent move survives replacement (CR 730.3e). If a replacement continuation changes the game,
+the original action's look-back battlefield is captured after those continuations and before any original move. Ordinary
+moves without life keep their direct path.
+
 Damage uses that same life preparation and application within the existing `ops::DamageBatch`, with the four phases
 of CR 120.4 kept distinct. Once every damage replacement and prevention has applied, the batch finalizes actual damage
 and each recipient's total excess, records all of that dealt damage in the existing history through `Cx::record_batch`,

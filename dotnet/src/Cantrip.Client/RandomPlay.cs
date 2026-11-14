@@ -205,7 +205,9 @@ public sealed class RandomPlay : IAutoPlayer
             MulliganPromptMessage mulligan => mulligan.Default(),
             ChooseColorsPromptMessage colors => Colors(colors),
             NameCardPromptMessage name => new CardNamedAnswer { Name = name.Names.Count > 0 ? Any(name.Names) : name.Suggestion },
-            ChooseReplacementPromptMessage replacement => new ReplacementChosenAnswer { Index = _random.Next(Math.Max(replacement.Sources.Count, 1)) },
+            ChooseReplacementPromptMessage replacement => replacement.OccurrenceOrder
+                ? new CostPaymentChosenAnswer { Key = _random.Next(Math.Max(replacement.Sources.Count, 1)).ToString() }
+                : new ReplacementChosenAnswer { Index = _random.Next(Math.Max(replacement.Sources.Count, 1)) },
             OrderTriggersPromptMessage order => Order(order),
             DistributeCardsPromptMessage distribute => Distribute(distribute),
 

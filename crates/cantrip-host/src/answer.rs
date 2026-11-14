@@ -88,11 +88,13 @@ pub fn translate(
 ) -> Result<Answer, Untranslatable> {
     Ok(match payload {
         AnswerPayload::CostPaymentChosenAnswer(a) => {
-            let RequestKind::ChooseCostPayment { choices, .. } = &request.kind else {
-                return Err(Untranslatable::Illegal("this request is not a cost-payment choice".into()));
+            let count = match &request.kind {
+                RequestKind::ChooseCostPayment { choices, .. } => choices.len(),
+                RequestKind::OrderReplacementOccurrences { occurrences } => occurrences.len(),
+                _ => return Err(Untranslatable::Illegal("this request is not an indexed choice".into())),
             };
-            let index = a.key.parse::<usize>().map_err(|_| Untranslatable::Illegal("invalid cost-payment key".into()))?;
-            if index >= choices.len() || a.key != index.to_string() { return Err(Untranslatable::Illegal("not a cost payment offered".into())); }
+            let index = a.key.parse::<usize>().map_err(|_| Untranslatable::Illegal("invalid choice key".into()))?;
+            if index >= count || a.key != index.to_string() { return Err(Untranslatable::Illegal("not an option offered".into())); }
             Answer::CostPayment(index)
         }
         AnswerPayload::PassAnswer(_) => Answer::Pass,
@@ -435,6 +437,23 @@ mod option_id_tests {
         let AnswerPayload::CostPaymentChosenAnswer(back) = payload_of(&answer, &request, &mut handles, &game) else { panic!("a cost payment") };
         assert_eq!(back.key, "299");
         for key in ["300", "-1", "01", "not-a-number", "999999999999999999999999999999999999"] {
+            let answer = AnswerPayload::CostPaymentChosenAnswer(CostPaymentChosenAnswer { key: key.into() });
+            assert!(matches!(translate(&answer, &request, &handles, &game), Err(Untranslatable::Illegal(_))));
+        }
+    }
+
+    #[test]
+    fn replacement_occurrence_order_keys_do_not_wrap_at_255() {
+        let (game, mut request, mut handles, _) = fixture();
+        request.kind = RequestKind::OrderReplacementOccurrences {
+            occurrences: (0..300).map(|i| cantrip_engine::ReplacementOccurrence::Life { player: PlayerId(0), amount: -i, occurrence: i as usize }).collect(),
+        };
+        let given = AnswerPayload::CostPaymentChosenAnswer(CostPaymentChosenAnswer { key: "299".into() });
+        let Ok(answer) = translate(&given, &request, &handles, &game) else { panic!("offered occurrence") };
+        assert!(matches!(answer, Answer::CostPayment(299)));
+        let AnswerPayload::CostPaymentChosenAnswer(back) = payload_of(&answer, &request, &mut handles, &game) else { panic!("indexed answer") };
+        assert_eq!(back.key, "299");
+        for key in ["300", "-1", "01"] {
             let answer = AnswerPayload::CostPaymentChosenAnswer(CostPaymentChosenAnswer { key: key.into() });
             assert!(matches!(translate(&answer, &request, &handles, &game), Err(Untranslatable::Illegal(_))));
         }

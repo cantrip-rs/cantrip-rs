@@ -13497,6 +13497,8 @@ fn answers_to_try(kind: &RequestKind, budget: usize) -> Result<(Vec<Answer>, boo
             let all = choices(cards.len(), 0, most, false, budget, &mut sets);
             Ok((sets.into_iter().map(|set| Answer::Cards(set.into_iter().map(|i| cards[i]).collect())).collect(), all))
         }
+        RequestKind::OrderReplacementOccurrences { occurrences } =>
+            Ok(((0..occurrences.len()).take(budget).map(Answer::CostPayment).collect(), occurrences.len() <= budget)),
         RequestKind::ChooseReplacement { sources, .. } =>
             Ok(((0..sources.len()).map(|i| Answer::Index(i as u8)).collect(), true)),
         RequestKind::ChooseColors { choices: allowed, count, .. } => {

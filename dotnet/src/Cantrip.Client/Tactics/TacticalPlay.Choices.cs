@@ -1224,6 +1224,7 @@ public sealed partial class TacticalPlay
     /// </summary>
     private static AnswerPayload Replacement(ChooseReplacementPromptMessage prompt)
     {
+        if (prompt.OccurrenceOrder) return prompt.Default();
         if (prompt.Event == "You would draw a card" && prompt.Hints.Count > 0)
         {
             bool keeps = prompt.Hints.Any(hint => hint.Contains("hand instead", StringComparison.Ordinal));

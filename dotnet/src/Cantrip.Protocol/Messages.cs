@@ -2092,8 +2092,12 @@ public sealed class ChooseReplacementPromptMessage : PromptPayload
     [Key(5)]
     public List<string> SourceNames { get; set; } = [];
 
+    /// <summary>Whether the options are simultaneous events whose replacement choices can be ordered.</summary>
+    [Key(6)]
+    public bool OccurrenceOrder { get; set; }
+
     /// <summary>The first offered effect. Any choice is legal, so the first is as good an automatic answer as any.</summary>
-    public override AnswerPayload Default() => new ReplacementChosenAnswer { Index = 0 };
+    public override AnswerPayload Default() => OccurrenceOrder ? new CostPaymentChosenAnswer { Key = "0" } : new ReplacementChosenAnswer { Index = 0 };
 }
 
 /// <summary>

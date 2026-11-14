@@ -394,7 +394,7 @@ fn answers(verb: ScriptVerb, kind: &RequestKind) -> bool {
         V::Triggers => matches!(kind, RequestKind::OrderTriggers { .. }),
         V::Arrange => matches!(kind, RequestKind::DistributeCards { .. }),
         V::Search => matches!(kind, RequestKind::SearchLibrary { .. }),
-        V::Replace => matches!(kind, RequestKind::ChooseReplacement { .. }),
+        V::Replace => matches!(kind, RequestKind::ChooseReplacement { .. } | RequestKind::OrderReplacementOccurrences { .. }),
         V::Name => matches!(kind, RequestKind::ChooseName { .. } | RequestKind::ChooseModes { .. }),
         _ => false,
     }
@@ -426,6 +426,7 @@ fn kind_name(kind: &RequestKind) -> &'static str {
         RequestKind::DistributeCards { .. } => "DistributeCards",
         RequestKind::SearchLibrary { .. } => "SearchLibrary",
         RequestKind::ChooseReplacement { .. } => "ChooseReplacement",
+        RequestKind::OrderReplacementOccurrences { .. } => "OrderReplacementOccurrences",
         RequestKind::ChooseName { .. } => "ChooseName",
         RequestKind::ChooseSubtype { .. } => "ChooseSubtype",
         RequestKind::ChooseNumber { .. } => "ChooseNumber",
@@ -1512,6 +1513,7 @@ impl<'s> Run<'s> {
             RequestKind::Mulligan { .. } => Answer::No,
             RequestKind::OrderTriggers { sources, .. } => Answer::Order((0..count_u32(sources.len())).collect()),
             RequestKind::ChooseReplacement { .. } => Answer::Index(0),
+            RequestKind::OrderReplacementOccurrences { .. } => Answer::CostPayment(0),
             // A name must be chosen (CR 201.3): the suggestion, or the first name the question allows.
             RequestKind::ChooseName { suggestion, kind, .. } => Answer::Name(default_name(self.game.cards, *kind, *suggestion)),
             RequestKind::ChooseSubtype { choices, .. } => Answer::Subtype(choices[0]),
@@ -1666,6 +1668,13 @@ impl<'s> Run<'s> {
             }
             (V::Triggers, RequestKind::OrderTriggers { sources, abilities }) => Some(self.order_triggers(step, sources, abilities)?),
             (V::Replace, RequestKind::ChooseReplacement { sources, hints, .. }) => Some(self.replacement(step, sources, hints)?),
+            (V::Replace, RequestKind::OrderReplacementOccurrences { occurrences }) => {
+                let spec = step.positional().next().unwrap_or("");
+                let index = spec.parse::<usize>().ok().and_then(|n| n.checked_sub(1))
+                    .filter(|&i| i < occurrences.len())
+                    .ok_or_else(|| Fail(format!("line {}: choose an occurrence number from 1 to {}", step.line, occurrences.len())))?;
+                Some(Answer::CostPayment(index))
+            },
             (V::Arrange, RequestKind::DistributeCards { cards, destinations, may_shuffle, .. }) => {
                 Some(self.arrange(step, cards, destinations, *may_shuffle)?)
             }

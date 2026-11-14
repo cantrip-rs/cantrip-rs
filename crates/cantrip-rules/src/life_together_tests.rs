@@ -487,6 +487,7 @@ fn game() -> Game {
         &HAWK, &INFECT, &TOXIC, &ARMOR, &REVIEW_DARIEN, &REVIEW_SEASON, &REVIEW_STINGER,
         &RESULT_HISTORY_WATCHER, &TALENT, &MELIRA, &RED_TERROR, &HAPATRA, &REVIEW_WORDSMITH, &REVIEW_SONIC,
         &REVIEW_TALENT, &REVIEW_CLASP, &REVIEW_ENGINE, &REVIEW_THRUMMINGBIRD,
+        &LAND_PAYMENT_LAND, &LAND_EXILER, &MIXED_PAYMENT, &SAME_PAYMENT, &OPTIONAL_LAND_EXILER, &CARD_COMPONENT_EXILER, &CONTROL_ON_LOSS, &CREATE_EXILERS_ON_LOSS, &LAND_EXILER_WATCHER, &TWO_PAYMENTS, &ASK_CONTROLLER_ON_LOSS, &MANDATORY_LAND_WITH_THEN,
     ])));
     let mut g = Game::new(table, &Setup { decks: vec![Vec::new(); 4], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -1571,4 +1572,544 @@ fn replacement_choices_are_apnap_before_all_updates_and_survive_undo_redo() {
     g.goto(after);
     assert_eq!(changes(&g), expected);
     assert_eq!(life(&g), vec![16, 16, 32, 16]);
+}
+
+fn life_after_land_destroyed(q: &dyn Query, _: &Asker, event: &Event) -> Option<Fired> {
+    if matches!(event, Event::LifeChange { player: YOU, delta: -1 }) {
+        assert!(!q.state().battlefield().iter().any(|&id| q.chars(id).is(CardType::Land)), "the life payment and destruction must already both have happened");
+        Fired::PLAIN
+    } else { None }
+}
+
+static LAND_PAYMENT_OBSERVER: CardDef = CardDef {
+    name: "Simultaneous life and land observer",
+    types: TypeSet::of(&[CardType::Enchantment]),
+    abilities: &[triggered(when_asked(EventMask::LIFE_CHANGE, life_after_land_destroyed), nothing, "Whenever you lose life, observe the battlefield.")],
+    ..CardDef::BLANK
+};
+static LAND_PAYMENT_LAND: CardDef = CardDef { name: "Simultaneous life and land", types: TypeSet::of(&[CardType::Land]), ..CardDef::BLANK };
+
+#[test]
+fn life_cost_and_destroy_are_one_instruction() {
+    use cantrip_api::Game as _;
+    let table = Box::leak(Box::new(CardTable::new([&LAND_PAYMENT_OBSERVER, &LAND_PAYMENT_LAND])));
+    let mut g = Game::new(table, &Setup { decks: vec![Vec::new(); 2], ..Default::default() });
+    let watcher = g.state.push_obj(Obj::new(table.id_of(&LAND_PAYMENT_OBSERVER), YOU, Zone::BATTLEFIELD));
+    g.state.zone_push(Zone::BATTLEFIELD, watcher);
+    let land = g.state.push_obj(Obj::new(table.id_of(&LAND_PAYMENT_LAND), YOU, Zone::BATTLEFIELD));
+    g.state.zone_push(Zone::BATTLEFIELD, land);
+    g.state.see_statics();
+    let mut c = cx(&mut g);
+    assert!(c.pay_life_with_permanents(land, &[(YOU, 1)], &[land], &[]));
+    assert_eq!(c.state().player(YOU).life, 19);
+}
+
+#[test]
+fn simultaneous_life_costs_check_total_affordability_before_any_action() {
+    use cantrip_api::Game as _;
+    let table = Box::leak(Box::new(CardTable::new([&LAND_PAYMENT_LAND])));
+    let mut g = Game::new(table, &Setup { decks: vec![Vec::new(); 2], ..Default::default() });
+    let land = g.state.push_obj(Obj::new(table.id_of(&LAND_PAYMENT_LAND), YOU, Zone::BATTLEFIELD));
+    g.state.zone_push(Zone::BATTLEFIELD, land);
+    g.state.update_player(YOU, |p| p.life = 1);
+    let mut c = cx(&mut g);
+    assert!(!c.pay_life_with_permanents(land, &[(YOU, 1), (YOU, 1)], &[land], &[]));
+    assert_eq!(c.state().player(YOU).life, 1);
+    assert_eq!(c.obj(land).zone, Zone::BATTLEFIELD);
+    assert!(!c.g.log.iter().any(|r| matches!(r.event, Event::ResolutionPaymentBegan { .. })));
+    assert!(c.pay_life_with_permanents(land, &[(YOU, 1)], &[land], &[]));
+    assert_eq!(c.state().player(YOU).life, 0);
+    assert!(c.obj(land).became.is_some());
+    assert_eq!(c.g.log.iter().filter(|r| matches!(r.event, Event::ResolutionPaymentBegan { payer, source, .. } if payer == YOU && source == land)).count(), 1);
+}
+
+fn land_to_graveyard(_: &dyn Query, _: &Asker, proposal: &Proposal) -> bool {
+    matches!(proposal, Proposal::ZoneChange(z) if z.destruction())
+}
+fn exile_land_instead(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
+    if let Proposal::ZoneChange(z) = proposal { z.to = Zone::exile(z.to.player); }
+}
+static LAND_EXILER: CardDef = CardDef {
+    name: "Simultaneous replacement Rest in Peace",
+    types: TypeSet::of(&[CardType::Enchantment]),
+    replacements: &[replacement(ReplacementKind::ZoneChange, land_to_graveyard, exile_land_instead, "Exile the land instead.")],
+    ..CardDef::BLANK
+};
+fn mixed_payment(g: &mut dyn cantrip_api::Game, item: &StackItem) -> Result<(), Suspend> {
+    let lands: Vec<_> = g.state().battlefield().iter().copied().filter(|&id| g.chars(id).is(CardType::Land)).collect();
+    g.pay_life_with_permanents(item.object, &[(LAST, 1)], &lands, &[]);
+    Ok(())
+}
+static MIXED_PAYMENT: CardDef = CardDef {
+    name: "Simultaneous payment and destruction",
+    types: TypeSet::of(&[CardType::Sorcery]), spell: spell(&[], mixed_payment), ..CardDef::BLANK
+};
+/// The payer is earlier in APNAP than the land's controller; both choose between printed replacement effects.
+#[test]
+fn mixed_life_and_destruction_replacement_choices_follow_apnap() {
+    let mut g = game();
+    put(&mut g, &DOUBLER, ACTIVE); put(&mut g, &DOUBLER, ACTIVE);
+    put(&mut g, &LAND_EXILER, ACTIVE); put(&mut g, &LAND_EXILER, ACTIVE);
+    put(&mut g, &LAND_PAYMENT_LAND, FIRST);
+    let card = g.cards.id_of(&MIXED_PAYMENT);
+    let source = g.state.push_obj(Obj::new(card, ACTIVE, Zone::STACK));
+    g.state.zone_push(Zone::STACK, source);
+    g.state.stack_push(crate::actions::stack_item(StackKind::Spell, source, AbilityRef::spell(card), ACTIVE, &[]));
+    let serial = g.state.stack.last().unwrap().serial;
+    g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
+    g.run();
+    let before = g.at;
+    let request = g.pending().cloned().expect("replacement choice");
+    assert_eq!(request.player, LAST, "the earlier affected player chooses life replacements first");
+    g.answer(request.id, LAST, Answer::Index(0)).unwrap();
+    g.run();
+    let request = g.pending().cloned().expect("land replacement choice");
+    assert_eq!(request.player, FIRST);
+    g.answer(request.id, FIRST, Answer::Index(0)).unwrap();
+    g.run();
+    let after = g.at;
+    assert_eq!(g.state.player(LAST).life, 16);
+    assert_eq!(g.state.zone(Zone::exile(FIRST)).len(), 1);
+    assert_eq!(g.log.iter().filter(|r| matches!(r.event, Event::ResolutionPaymentBegan {
+        source: recorded, payer: LAST, resolving: Some(which), .. } if recorded == source && which == serial)).count(), 1);
+    g.goto(before);
+    assert_eq!(g.pending().unwrap().player, LAST);
+    assert_eq!(g.state.player(LAST).life, 20);
+    g.goto(after);
+    assert_eq!(g.state.player(LAST).life, 16);
+    assert_eq!(g.state.zone(Zone::exile(FIRST)).len(), 1);
+}
+
+fn same_payment(g: &mut dyn cantrip_api::Game, item: &StackItem) -> Result<(), Suspend> {
+    let lands: Vec<_> = g.state().battlefield().iter().copied().filter(|&id| g.chars(id).is(CardType::Land)).collect();
+    g.pay_life_with_permanents(item.object, &[(FIRST, 1)], &lands, &[]);
+    Ok(())
+}
+static SAME_PAYMENT: CardDef = CardDef {
+    name: "Same player payment and destruction",
+    types: TypeSet::of(&[CardType::Sorcery]), spell: spell(&[], same_payment), ..CardDef::BLANK
+};
+/// CR 101.4c: the affected player can choose either simultaneous replacement question first.
+#[test]
+fn mixed_replacement_questions_for_one_player_can_be_ordered() {
+    let mut g = game();
+    put(&mut g, &DOUBLER, ACTIVE); put(&mut g, &DOUBLER, ACTIVE);
+    put(&mut g, &LAND_EXILER, ACTIVE); put(&mut g, &LAND_EXILER, ACTIVE);
+    let land = put(&mut g, &LAND_PAYMENT_LAND, FIRST);
+    let card = g.cards.id_of(&SAME_PAYMENT);
+    let source = g.state.push_obj(Obj::new(card, ACTIVE, Zone::STACK));
+    g.state.zone_push(Zone::STACK, source);
+    g.state.stack_push(crate::actions::stack_item(StackKind::Spell, source, AbilityRef::spell(card), ACTIVE, &[]));
+    let serial = g.state.stack.last().unwrap().serial;
+    g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
+    g.run();
+    let request = g.pending().cloned().expect("order choice");
+    assert_eq!(request.player, FIRST);
+    let RequestKind::OrderReplacementOccurrences { occurrences } = &request.kind else { panic!("expected an occurrence-order choice: {:?}", request.kind) };
+    let life = occurrences.iter().position(|o| matches!(o, ReplacementOccurrence::Life { player, amount: -1, .. } if *player == FIRST)).unwrap();
+    let object = occurrences.iter().position(|o| matches!(o, ReplacementOccurrence::Object { object, .. } if *object == land)).unwrap();
+    assert_ne!(life, object);
+    g.answer(request.id, FIRST, Answer::CostPayment(object)).unwrap();
+    g.run();
+    let request = g.pending().cloned().expect("land replacements");
+    assert!(matches!(&request.kind, RequestKind::ChooseReplacement { subject: Some(id), .. } if *id == land));
+    g.answer(request.id, FIRST, Answer::Index(0)).unwrap();
+    g.run();
+    let request = g.pending().cloned().expect("life replacements");
+    assert!(matches!(&request.kind, RequestKind::ChooseReplacement { life: Some(-1), .. }));
+}
+
+const OPTIONAL_EXILE: Question = Question::new("OptionalExile", "exile it instead?", "", "Exile", "Do not exile");
+static OPTIONAL_LAND_EXILER: CardDef = CardDef {
+    name: "Optional exile the destroyed land", types: TypeSet::of(&[CardType::Enchantment]),
+    replacements: &[replacement(ReplacementKind::ZoneChange, land_to_graveyard, exile_land_instead, "You may exile it instead.").optional(&OPTIONAL_EXILE)],
+    ..CardDef::BLANK
+};
+
+#[test]
+fn mixed_event_optional_replacement_asks_its_controller_in_apnap_order_and_replays() {
+    let mut g = game();
+    put(&mut g, &DOUBLER, ACTIVE); put(&mut g, &DOUBLER, ACTIVE);
+    put(&mut g, &OPTIONAL_LAND_EXILER, YOU);
+    put(&mut g, &LAND_PAYMENT_LAND, FIRST);
+    let card = g.cards.id_of(&MIXED_PAYMENT);
+    let source = g.state.push_obj(Obj::new(card, ACTIVE, Zone::STACK));
+    g.state.zone_push(Zone::STACK, source);
+    g.state.stack_push(crate::actions::stack_item(StackKind::Spell, source, AbilityRef::spell(card), ACTIVE, &[]));
+    let serial = g.state.stack.last().unwrap().serial;
+    g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
+    g.run();
+    let before = g.at;
+    let request = g.pending().cloned().expect("life replacements");
+    assert_eq!(request.player, LAST);
+    g.answer(request.id, LAST, Answer::Index(0)).unwrap();
+    g.run();
+    let request = g.pending().cloned().expect("optional replacement");
+    assert_eq!(request.player, YOU, "the optional effect's controller, not the land's controller");
+    assert!(matches!(request.kind, RequestKind::May { .. }));
+    g.answer(request.id, YOU, Answer::No).unwrap();
+    g.run();
+    let after = g.at;
+    assert_eq!(g.state.player(LAST).life, 16);
+    assert_eq!(g.state.zone(Zone::graveyard(FIRST)).len(), 1);
+    g.goto(before);
+    assert_eq!(g.pending().unwrap().player, LAST);
+    g.goto(after);
+    assert_eq!(g.state.player(LAST).life, 16);
+    assert_eq!(g.state.zone(Zone::graveyard(FIRST)).len(), 1);
+}
+
+#[test]
+fn mixed_replacement_order_restarts_when_a_concession_changes_land_controller() {
+    let mut g = game();
+    put(&mut g, &DOUBLER, ACTIVE); put(&mut g, &DOUBLER, ACTIVE);
+    put(&mut g, &LAND_EXILER, ACTIVE); put(&mut g, &LAND_EXILER, ACTIVE);
+    let land = put(&mut g, &LAND_PAYMENT_LAND, ACTIVE);
+    let control_source = put(&mut g, &DRAIN, FIRST);
+    cantrip_api::Game::add_effect(&mut cx(&mut g), control_source, land, EffectKind::Control(FIRST), Duration::EndOfTurn);
+    let card = g.cards.id_of(&MIXED_PAYMENT);
+    let source = g.state.push_obj(Obj::new(card, ACTIVE, Zone::STACK));
+    g.state.zone_push(Zone::STACK, source);
+    g.state.stack_push(crate::actions::stack_item(StackKind::Spell, source, AbilityRef::spell(card), ACTIVE, &[]));
+    let serial = g.state.stack.last().unwrap().serial;
+    g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
+    g.run();
+    assert_eq!(g.pending().unwrap().player, LAST);
+    g.concede(FIRST);
+    let request = g.pending().cloned().expect("returned land replacement choice");
+    assert_eq!(request.player, ACTIVE, "the returned land creates an earlier APNAP choice");
+    assert!(matches!(&request.kind, RequestKind::ChooseReplacement { subject: Some(id), .. } if *id == land));
+}
+
+fn destroyed_card_component(_: &dyn Query, _: &Asker, proposal: &Proposal) -> bool {
+    matches!(proposal, Proposal::ZoneChange(z) if z.destruction() && z.is_card)
+}
+static CARD_COMPONENT_EXILER: CardDef = CardDef {
+    name: "Card component exile replacement", types: TypeSet::of(&[CardType::Enchantment]),
+    replacements: &[replacement(ReplacementKind::ZoneChange, destroyed_card_component, exile_land_instead, "Exile the card instead.")],
+    ..CardDef::BLANK
+};
+
+fn merged_token_land(g: &mut Game, controller: PlayerId) -> ObjectId {
+    let land = put(g, &LAND_PAYMENT_LAND, controller);
+    g.state.update_obj(land, |o| o.token = true);
+    let card = g.cards.id_of(&LAND_PAYMENT_LAND);
+    g.state.set_merge(land, cantrip_state::Merge {
+        own_face: card, own_token: true, own_commander_id: None, own_face_down: None,
+        parts: vec![cantrip_state::MergedPart { card, face: card, token: false, commander_id: None, copy: None,
+            on_top: false, timestamp: 0, prior: None, melded: false }],
+    });
+    land
+}
+
+/// CR 730.3e: a token's card-only component replacements join the same APNAP scheduling, after its parent move survives.
+#[test]
+fn mixed_merged_token_card_component_replacements_follow_apnap() {
+    let mut g = game();
+    put(&mut g, &DOUBLER, ACTIVE); put(&mut g, &DOUBLER, ACTIVE);
+    put(&mut g, &CARD_COMPONENT_EXILER, ACTIVE); put(&mut g, &CARD_COMPONENT_EXILER, ACTIVE);
+    let land = merged_token_land(&mut g, ACTIVE);
+    let card = g.cards.id_of(&MIXED_PAYMENT);
+    let source = g.state.push_obj(Obj::new(card, ACTIVE, Zone::STACK));
+    g.state.zone_push(Zone::STACK, source);
+    g.state.stack_push(crate::actions::stack_item(StackKind::Spell, source, AbilityRef::spell(card), ACTIVE, &[]));
+    let serial = g.state.stack.last().unwrap().serial;
+    g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
+    g.run();
+    let request = g.pending().cloned().expect("card component replacement choice");
+    assert_eq!(request.player, ACTIVE, "the card component's controller chooses before the life payer");
+    assert!(matches!(&request.kind, RequestKind::ChooseReplacement { subject: Some(id), .. } if *id == land));
+    g.answer(request.id, ACTIVE, Answer::Index(0)).unwrap();
+    g.run();
+    assert_eq!(g.pending().unwrap().player, LAST);
+}
+
+#[test]
+fn mixed_merged_token_regeneration_never_asks_card_component_replacements() {
+    let mut g = game();
+    put(&mut g, &DOUBLER, ACTIVE); put(&mut g, &DOUBLER, ACTIVE);
+    put(&mut g, &CARD_COMPONENT_EXILER, ACTIVE); put(&mut g, &CARD_COMPONENT_EXILER, ACTIVE);
+    let land = merged_token_land(&mut g, ACTIVE);
+    cantrip_api::Game::add_effect(&mut cx(&mut g), land, land, EffectKind::RegenerationShield, Duration::EndOfTurn);
+    let card = g.cards.id_of(&MIXED_PAYMENT);
+    let source = g.state.push_obj(Obj::new(card, ACTIVE, Zone::STACK));
+    g.state.zone_push(Zone::STACK, source);
+    g.state.stack_push(crate::actions::stack_item(StackKind::Spell, source, AbilityRef::spell(card), ACTIVE, &[]));
+    let serial = g.state.stack.last().unwrap().serial;
+    g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
+    g.run();
+    let request = g.pending().cloned().expect("life replacement choice");
+    assert_eq!(request.player, LAST, "no choice for a component whose parent regenerates");
+    g.answer(request.id, LAST, Answer::Index(0)).unwrap();
+    g.run();
+    assert_eq!(g.state.obj(land).zone, Zone::BATTLEFIELD);
+    assert!(g.state.zone(Zone::exile(ACTIVE)).is_empty());
+}
+
+#[test]
+fn mixed_replacement_choices_can_alternate_between_one_players_events() {
+    let mut g = game();
+    for _ in 0..3 { put(&mut g, &DOUBLER, ACTIVE); put(&mut g, &LAND_EXILER, ACTIVE); }
+    let land = put(&mut g, &LAND_PAYMENT_LAND, FIRST);
+    let card = g.cards.id_of(&SAME_PAYMENT);
+    let source = g.state.push_obj(Obj::new(card, ACTIVE, Zone::STACK));
+    g.state.zone_push(Zone::STACK, source);
+    g.state.stack_push(crate::actions::stack_item(StackKind::Spell, source, AbilityRef::spell(card), ACTIVE, &[]));
+    let serial = g.state.stack.last().unwrap().serial;
+    g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
+    g.run();
+    let first = g.pending().cloned().unwrap();
+    let RequestKind::OrderReplacementOccurrences { occurrences } = &first.kind else { panic!("first occurrence order") };
+    let life = occurrences.iter().position(|o| matches!(o, ReplacementOccurrence::Life { player, amount: -1, .. } if *player == FIRST)).unwrap();
+    g.answer(first.id, FIRST, Answer::CostPayment(life)).unwrap(); g.run();
+    let choice = g.pending().cloned().unwrap();
+    assert!(matches!(choice.kind, RequestKind::ChooseReplacement { life: Some(-1), .. }));
+    g.answer(choice.id, FIRST, Answer::Index(0)).unwrap(); g.run();
+    let second = g.pending().cloned().unwrap();
+    let RequestKind::OrderReplacementOccurrences { occurrences } = &second.kind else { panic!("order after first life replacement") };
+    assert!(occurrences.iter().any(|o| matches!(o, ReplacementOccurrence::Life { amount: -2, .. })));
+    let object = occurrences.iter().position(|o| matches!(o, ReplacementOccurrence::Object { object, .. } if *object == land)).unwrap();
+    g.answer(second.id, FIRST, Answer::CostPayment(object)).unwrap(); g.run();
+    let choice = g.pending().cloned().unwrap();
+    assert!(matches!(choice.kind, RequestKind::ChooseReplacement { subject: Some(id), .. } if id == land));
+    g.answer(choice.id, FIRST, Answer::Index(0)).unwrap(); g.run();
+    let third = g.pending().cloned().unwrap();
+    assert!(matches!(third.kind, RequestKind::OrderReplacementOccurrences { .. }), "the player may switch between events again");
+}
+
+fn take_land_after_replacement(g: &mut dyn cantrip_api::Game, asker: &Asker, _: &Proposal, _: &Proposal) {
+    if let Some(land) = g.state().battlefield().iter().copied().find(|&id| g.chars(id).is(CardType::Land)) {
+        g.add_effect(asker.source, land, EffectKind::Control(asker.controller), Duration::EndOfTurn);
+    }
+}
+static CONTROL_ON_LOSS: CardDef = CardDef {
+    name: "Replacement continuation changes control", types: TypeSet::of(&[CardType::Enchantment]),
+    replacements: &[replacement(ReplacementKind::LifeChange, opponent_loses_on_your_turn, twice,
+        "An opponent loses twice that life; then gain control of the land.").then(take_land_after_replacement)],
+    ..CardDef::BLANK
+};
+
+#[test]
+fn mixed_replacement_continuation_restarts_apnap_for_a_new_controller() {
+    let mut g = game();
+    let changing = put(&mut g, &CONTROL_ON_LOSS, ACTIVE);
+    put(&mut g, &DOUBLER, ACTIVE);
+    put(&mut g, &LAND_EXILER, ACTIVE); put(&mut g, &LAND_EXILER, ACTIVE);
+    let land = put(&mut g, &LAND_PAYMENT_LAND, FIRST);
+    let card = g.cards.id_of(&MIXED_PAYMENT);
+    let source = g.state.push_obj(Obj::new(card, ACTIVE, Zone::STACK));
+    g.state.zone_push(Zone::STACK, source);
+    g.state.stack_push(crate::actions::stack_item(StackKind::Spell, source, AbilityRef::spell(card), ACTIVE, &[]));
+    let serial = g.state.stack.last().unwrap().serial;
+    g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
+    g.run();
+    let request = g.pending().cloned().expect("life replacements");
+    assert_eq!(request.player, LAST);
+    let RequestKind::ChooseReplacement { sources, .. } = &request.kind else { panic!("life replacements") };
+    let index = sources.iter().position(|&id| id == changing).unwrap();
+    g.answer(request.id, LAST, Answer::Index(index as u8)).unwrap(); g.run();
+    let request = g.pending().cloned().expect("new earlier controller's replacement choice");
+    assert_eq!(request.player, ACTIVE);
+    assert!(matches!(&request.kind, RequestKind::ChooseReplacement { subject: Some(id), .. } if *id == land));
+}
+
+fn create_exilers_after_replacement(g: &mut dyn cantrip_api::Game, asker: &Asker, _: &Proposal, _: &Proposal) {
+    let card = g.card_id(&LAND_EXILER_WATCHER);
+    let _ = g.create_tokens(card, asker.controller, 2, false);
+}
+static CREATE_EXILERS_ON_LOSS: CardDef = CardDef {
+    name: "Replacement continuation creates replacement effects", types: TypeSet::of(&[CardType::Enchantment]),
+    replacements: &[replacement(ReplacementKind::LifeChange, opponent_loses_on_your_turn, twice,
+        "An opponent loses twice that life; then create two replacement sources.").then(create_exilers_after_replacement)],
+    ..CardDef::BLANK
+};
+
+#[test]
+fn mixed_replacement_continuation_rechecks_previously_unaffected_event() {
+    let mut g = game();
+    let creating = put(&mut g, &CREATE_EXILERS_ON_LOSS, ACTIVE);
+    put(&mut g, &DOUBLER, ACTIVE);
+    let land = put(&mut g, &LAND_PAYMENT_LAND, FIRST);
+    let card = g.cards.id_of(&MIXED_PAYMENT);
+    let source = g.state.push_obj(Obj::new(card, ACTIVE, Zone::STACK));
+    g.state.zone_push(Zone::STACK, source);
+    g.state.stack_push(crate::actions::stack_item(StackKind::Spell, source, AbilityRef::spell(card), ACTIVE, &[]));
+    let serial = g.state.stack.last().unwrap().serial;
+    g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
+    g.run();
+    let request = g.pending().cloned().expect("life replacements");
+    assert_eq!(request.player, LAST);
+    let RequestKind::ChooseReplacement { sources, .. } = &request.kind else { panic!("life replacements") };
+    let index = sources.iter().position(|&id| id == creating).unwrap();
+    g.answer(request.id, LAST, Answer::Index(index as u8)).unwrap(); g.run();
+    let request = g.pending().cloned().expect("newly applicable land replacement choice");
+    assert_eq!(request.player, FIRST);
+    assert!(matches!(&request.kind, RequestKind::ChooseReplacement { subject: Some(id), .. } if *id == land));
+    g.answer(request.id, FIRST, Answer::Index(0)).unwrap(); g.run();
+    let watcher_card = g.cards.id_of(&LAND_EXILER_WATCHER);
+    let watchers: Vec<_> = g.state.battlefield().iter().copied().filter(|&id| g.state.obj(id).card == watcher_card).collect();
+    assert_eq!(watchers.len(), 2);
+    let order = g.pending().cloned().expect("the two departure triggers must be ordered");
+    assert!(matches!(&order.kind, RequestKind::OrderTriggers { sources, .. }
+        if sources.len() == 2 && watchers.iter().all(|id| sources.contains(id))),
+        "replacement-created permanents see the later simultaneous land departure");
+    g.answer(order.id, ACTIVE, Answer::Order(vec![0, 1])).unwrap(); g.run();
+    assert_eq!(watchers.iter().map(|&id| waiting_or_stacked(&g, id, ACTIVE)).sum::<usize>(), 2);
+}
+
+fn another_permanent_leaves(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    match *event {
+        Event::ZoneChange { old, from, .. } if old != source && from.is(ZoneKind::Battlefield) => Fired::PLAIN,
+        _ => None,
+    }
+}
+static LAND_EXILER_WATCHER: CardDef = CardDef {
+    name: "New replacement source watches departures", types: TypeSet::of(&[CardType::Enchantment]),
+    replacements: &[replacement(ReplacementKind::ZoneChange, land_to_graveyard, exile_land_instead, "Exile it instead.")],
+    abilities: &[triggered(when(EventMask::ZONE_CHANGE, another_permanent_leaves), nothing, "Whenever another permanent leaves, observe it.")],
+    ..CardDef::BLANK
+};
+
+#[test]
+fn staged_life_payment_respects_a_fixed_life_total() {
+    use cantrip_api::Game as _;
+    let mut g = game();
+    put(&mut g, &EMPERION, YOU);
+    let land = put(&mut g, &LAND_PAYMENT_LAND, FIRST);
+    let mut c = cx(&mut g);
+    assert_eq!(c.payable_resolution_life(YOU), 0);
+    assert!(!c.pay_life_with_permanents(land, &[(YOU, 1)], &[land], &[]));
+    assert_eq!(c.obj(land).zone, Zone::BATTLEFIELD);
+    assert!(!c.g.log.iter().any(|r| matches!(r.event, Event::ResolutionPaymentBegan { .. })));
+}
+
+fn two_payments(g: &mut dyn cantrip_api::Game, item: &StackItem) -> Result<(), Suspend> {
+    let lands: Vec<_> = g.state().battlefield().iter().copied().filter(|&id| g.chars(id).is(CardType::Land)).collect();
+    g.pay_life_with_permanents(item.object, &[(FIRST, 1), (FIRST, 1)], &lands, &[]);
+    Ok(())
+}
+static TWO_PAYMENTS: CardDef = CardDef {
+    name: "Two simultaneous life-cost occurrences", types: TypeSet::of(&[CardType::Sorcery]),
+    spell: spell(&[], two_payments), ..CardDef::BLANK
+};
+#[test]
+fn mixed_identical_life_occurrences_have_distinct_stable_ordering_identities() {
+    let mut g = game();
+    for _ in 0..3 { put(&mut g, &DOUBLER, ACTIVE); }
+    put(&mut g, &LAND_PAYMENT_LAND, ACTIVE);
+    let card = g.cards.id_of(&TWO_PAYMENTS);
+    let source = g.state.push_obj(Obj::new(card, ACTIVE, Zone::STACK));
+    g.state.zone_push(Zone::STACK, source);
+    g.state.stack_push(crate::actions::stack_item(StackKind::Spell, source, AbilityRef::spell(card), ACTIVE, &[]));
+    let serial = g.state.stack.last().unwrap().serial;
+    g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
+    g.run();
+    let request = g.pending().cloned().expect("choose an occurrence");
+    let RequestKind::OrderReplacementOccurrences { occurrences } = &request.kind else { panic!("occurrence order") };
+    let ids: Vec<_> = occurrences.iter().filter_map(|o| match o {
+        ReplacementOccurrence::Life { player, amount: -1, occurrence } if *player == FIRST => Some(*occurrence),
+        _ => None,
+    }).collect();
+    assert_eq!(ids.len(), 2);
+    assert_ne!(ids[0], ids[1], "two equal amounts remain distinguishable");
+    g.answer(request.id, FIRST, Answer::CostPayment(1)).unwrap(); g.run();
+    let choice = g.pending().cloned().expect("replacement order for the selected occurrence");
+    assert!(matches!(choice.kind, RequestKind::ChooseReplacement { life: Some(-1), .. }));
+    g.answer(choice.id, FIRST, Answer::Index(0)).unwrap(); g.run();
+    let request = g.pending().expect("choose between the modified and the other occurrence");
+    let RequestKind::OrderReplacementOccurrences { occurrences } = &request.kind else { panic!("occurrence order: {:?}", request.kind) };
+    assert!(occurrences.iter().any(|o| matches!(o, ReplacementOccurrence::Life { amount: -2, occurrence, .. } if *occurrence == ids[1])));
+    assert!(occurrences.iter().any(|o| matches!(o, ReplacementOccurrence::Life { amount: -1, occurrence, .. } if *occurrence == ids[0])));
+}
+
+fn ask_controller_after_loss(g: &mut dyn cantrip_api::Game, asker: &Asker, _: &Proposal, _: &Proposal) {
+    let _ = g.ask(asker.controller, RequestKind::May { source: asker.source, purpose: Purpose::Ask(&OPTIONAL_EXILE) });
+}
+static ASK_CONTROLLER_ON_LOSS: CardDef = CardDef {
+    name: "Life replacement asks its controller", types: TypeSet::of(&[CardType::Enchantment]),
+    replacements: &[replacement(ReplacementKind::LifeChange, opponent_loses_on_your_turn, twice,
+        "An opponent loses twice that life; the controller chooses.").then(ask_controller_after_loss)],
+    ..CardDef::BLANK
+};
+
+#[test]
+fn mixed_forced_replacement_completes_contained_choice_before_outer_choice() {
+    let mut g = game();
+    put(&mut g, &ASK_CONTROLLER_ON_LOSS, ACTIVE);
+    put(&mut g, &LAND_EXILER, ACTIVE); put(&mut g, &LAND_EXILER, ACTIVE);
+    put(&mut g, &LAND_PAYMENT_LAND, FIRST);
+    let card = g.cards.id_of(&SAME_PAYMENT);
+    let source = g.state.push_obj(Obj::new(card, ACTIVE, Zone::STACK));
+    g.state.zone_push(Zone::STACK, source);
+    g.state.stack_push(crate::actions::stack_item(StackKind::Spell, source, AbilityRef::spell(card), ACTIVE, &[]));
+    let serial = g.state.stack.last().unwrap().serial;
+    g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
+    g.run();
+    let request = g.pending().cloned().expect("contained continuation choice");
+    assert_eq!(request.player, ACTIVE, "the forced outer replacement runs its contained instruction");
+    assert!(matches!(request.kind, RequestKind::May { .. }));
+    g.answer(request.id, ACTIVE, Answer::Yes).unwrap(); g.run();
+    let request = g.pending().expect("outer land replacement choice");
+    assert_eq!(request.player, FIRST);
+    assert!(matches!(request.kind, RequestKind::ChooseReplacement { subject: Some(_), .. }));
+}
+
+fn no_choice_after_land_replacement(_: &mut dyn cantrip_api::Game, _: &Asker, _: &Proposal, _: &Proposal) {}
+static MANDATORY_LAND_WITH_THEN: CardDef = CardDef {
+    name: "Mandatory land replacement with a forced continuation", types: TypeSet::of(&[CardType::Enchantment]),
+    replacements: &[replacement(ReplacementKind::ZoneChange, land_to_graveyard, exile_land_instead,
+        "Exile it instead and do a mandatory action.").then(no_choice_after_land_replacement)],
+    ..CardDef::BLANK
+};
+
+#[test]
+fn mixed_forced_continuations_do_not_ask_a_fake_order_question() {
+    let mut g = game();
+    put(&mut g, &MANDATORY_LAND_WITH_THEN, ACTIVE);
+    put(&mut g, &LAND_PAYMENT_LAND, FIRST); put(&mut g, &LAND_PAYMENT_LAND, FIRST);
+    let card = g.cards.id_of(&MIXED_PAYMENT);
+    let source = g.state.push_obj(Obj::new(card, ACTIVE, Zone::STACK));
+    g.state.zone_push(Zone::STACK, source);
+    g.state.stack_push(crate::actions::stack_item(StackKind::Spell, source, AbilityRef::spell(card), ACTIVE, &[]));
+    let serial = g.state.stack.last().unwrap().serial;
+    g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
+    g.run();
+    assert!(!g.pending().is_some_and(|request| matches!(request.kind, RequestKind::OrderReplacementOccurrences { .. })),
+        "mandatory continuations make no choice to order");
+    assert_eq!(g.state.zone(Zone::exile(FIRST)).len(), 2);
+}
+
+#[test]
+fn mixed_single_optional_replacements_are_ordered_by_their_controller() {
+    let mut g = game();
+    put(&mut g, &OPTIONAL_LAND_EXILER, ACTIVE);
+    put(&mut g, &LAND_PAYMENT_LAND, FIRST); put(&mut g, &LAND_PAYMENT_LAND, FIRST);
+    let card = g.cards.id_of(&SAME_PAYMENT);
+    let source = g.state.push_obj(Obj::new(card, ACTIVE, Zone::STACK));
+    g.state.zone_push(Zone::STACK, source);
+    g.state.stack_push(crate::actions::stack_item(StackKind::Spell, source, AbilityRef::spell(card), ACTIVE, &[]));
+    let serial = g.state.stack.last().unwrap().serial;
+    g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
+    g.run();
+    let before = g.at;
+    let request = g.pending().cloned().expect("order optional replacement decisions");
+    assert_eq!(request.player, ACTIVE, "the controller makes the optional decisions, not the affected land controller");
+    assert!(matches!(request.kind, RequestKind::OrderReplacementOccurrences { .. }));
+    g.answer(request.id, ACTIVE, Answer::CostPayment(0)).unwrap(); g.run();
+    let request = g.pending().cloned().expect("first optional decision");
+    assert_eq!(request.player, ACTIVE);
+    assert!(matches!(request.kind, RequestKind::May { .. }));
+    g.answer(request.id, ACTIVE, Answer::No).unwrap(); g.run();
+    let request = g.pending().cloned().expect("second optional decision");
+    assert_eq!(request.player, ACTIVE);
+    assert!(matches!(request.kind, RequestKind::May { .. }));
+    g.answer(request.id, ACTIVE, Answer::Yes).unwrap(); g.run();
+    let after = g.at;
+    assert_eq!(g.state.zone(Zone::graveyard(FIRST)).len(), 1);
+    assert_eq!(g.state.zone(Zone::exile(FIRST)).len(), 1);
+    g.goto(before);
+    assert!(matches!(g.pending().map(|r| &r.kind), Some(RequestKind::OrderReplacementOccurrences { .. })));
+    g.goto(after);
+    assert_eq!(g.state.zone(Zone::graveyard(FIRST)).len(), 1);
+    assert_eq!(g.state.zone(Zone::exile(FIRST)).len(), 1);
 }

@@ -430,6 +430,13 @@ pub struct CostPaymentChoice {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum CostPaymentKind { Life, Tap, Sacrifice, Return, Exile, Mana, Energy, Counters, Discard, Behold, Exert, Unattach, Library, CommitHelpers, Choose }
 
+/// One still-pending event whose replacement choices a player may order with their other choices (CR 101.4c).
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub enum ReplacementOccurrence {
+    Life { player: PlayerId, amount: i32, occurrence: usize },
+    Object { object: ObjectId, reason: ZoneReason, component: bool, occurrence: usize },
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub enum RequestKind {
     /// Choose which currently payable operation of a cost to pay next (CR 601.2h).
@@ -634,6 +641,8 @@ pub enum RequestKind {
     /// event is the beginning of the asked player's turn, which effects would skip (CR 614.10); `counters`, for counters
     /// about to be put on `subject` (CR 122.6), how many of each kind as the effects so far have left them; `draw`, whether
     /// the event is a card the asked player would draw (CR 121.6).
+    /// Which simultaneous event's replacement choice to make next; `CostPayment` is the full-width occurrence index.
+    OrderReplacementOccurrences { occurrences: Vec<ReplacementOccurrence> },
     ChooseReplacement {
         subject: Option<ObjectId>,
         life: Option<i32>,
@@ -688,7 +697,8 @@ impl RequestKind {
             | K::Mulligan { .. }
             | K::ChooseStartingPlayer { .. }
             | K::OrderTriggers { .. }
-            | K::ChooseReplacement { .. } => None,
+            | K::ChooseReplacement { .. }
+            | K::OrderReplacementOccurrences { .. } => None,
         }
     }
 
@@ -805,6 +815,8 @@ impl RequestKind {
                 add(library);
                 add(rule.among.as_deref().unwrap_or(&[]));
             }
+            // Ordering replacements does not reveal a hidden event object to another player's optional effect controller.
+            RequestKind::OrderReplacementOccurrences { .. } => {}
             RequestKind::ChooseReplacement { subject, sources, damage, .. } => {
                 if let Some(s) = subject {
                     add(&[*s]);
@@ -831,7 +843,7 @@ pub fn stand_in(state: &crate::GameState, kind: &RequestKind, player: PlayerId) 
         return StandIn::Unpaid;
     }
     let next = || state.turn_order_from(player).next().unwrap_or(player);
-    if matches!(kind, RequestKind::ChooseStartingPlayer { .. } | RequestKind::ChooseReplacement { .. }) {
+    if matches!(kind, RequestKind::ChooseStartingPlayer { .. } | RequestKind::ChooseReplacement { .. } | RequestKind::OrderReplacementOccurrences { .. }) {
         return StandIn::By(next());
     }
     let Some(source) = kind.source().filter(|&s| s != ObjectId::NONE && s.index() < state.objects.len()) else {

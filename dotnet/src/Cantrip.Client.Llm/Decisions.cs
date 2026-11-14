@@ -1741,14 +1741,15 @@ public sealed class Decisions
 
         int pick = One(new Question
         {
-            Heading = $"More than one effect wants to change the same event: {prompt.Event}"
+            Heading = prompt.OccurrenceOrder ? "Which event's replacement choices do you make next?" :
+                $"More than one effect wants to change the same event: {prompt.Event}"
                 + (prompt.Subject == ViewHandle.None ? "." : $" ({GameText.Named(client, prompt.Subject)}).")
                 + " Which applies first?",
             Choices = [.. prompt.Sources.Select((source, i) =>
-                $"{GameText.Named(client, source)}: {(i < prompt.Hints.Count ? prompt.Hints[i] : "applies")}")],
+                $"{(source == ViewHandle.None && i < prompt.SourceNames.Count ? prompt.SourceNames[i] : GameText.Named(client, source))}: {(i < prompt.Hints.Count ? prompt.Hints[i] : "applies")}")],
         });
 
-        return new ReplacementChosenAnswer { Index = pick };
+        return prompt.OccurrenceOrder ? new CostPaymentChosenAnswer { Key = pick.ToString() } : new ReplacementChosenAnswer { Index = pick };
     }
 
     /// <summary>

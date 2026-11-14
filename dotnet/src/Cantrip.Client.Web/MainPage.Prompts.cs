@@ -1694,8 +1694,8 @@ public sealed partial class MainPage
         string subject = prompt.Event.Length > 0 ? prompt.Event : client.Object(prompt.Subject)?.Name ?? "it";
 
         Prompt(
-            $"{subject}: which applies first?",
-            $"{prompt.Sources.Count} effects want to change this  ·  then each other one that still applies does, once");
+            prompt.OccurrenceOrder ? "Which event's replacements do you choose next?" : $"{subject}: which applies first?",
+            prompt.OccurrenceOrder ? "Choose an event" : $"{prompt.Sources.Count} effects want to change this  ·  then each other one that still applies does, once");
 
         // A source this seat holds no handle to - one that has left, seen by a page reloaded since - is named by the prompt.
         List<string> names = [.. prompt.Sources.Select((source, i) => client.Object(source)?.Name
@@ -1724,7 +1724,7 @@ public sealed partial class MainPage
 
             AddButton(
                 hint.Length > 0 ? $"{source}: {hint}" : source,
-                () => Send(client, new ReplacementChosenAnswer { Index = index }),
+                () => Send(client, prompt.OccurrenceOrder ? new CostPaymentChosenAnswer { Key = index.ToString() } : new ReplacementChosenAnswer { Index = index }),
                 primary: index == 0);
         }
     }

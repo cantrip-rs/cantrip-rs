@@ -1575,6 +1575,37 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                 owner: seat(owner),
             })
         }
+        RequestKind::OrderReplacementOccurrences { occurrences } => {
+            use cantrip_engine::ReplacementOccurrence as O;
+            PromptPayload::ChooseReplacementPromptMessage(ChooseReplacementPrompt {
+                player,
+                subject: ViewHandle::NONE,
+                event: "Simultaneous events".into(),
+                sources: occurrences.iter().map(|o| match o {
+                    O::Object { object, .. } if object.index() < game.state.objects.len()
+                        && crate::view::looks_into(&game.state, request.player, game.state.obj(*object).zone) => source_handle(game, handles, *object),
+                    O::Object { .. } | O::Life { .. } => ViewHandle::NONE,
+                }).collect(),
+                source_names: occurrences.iter().enumerate().map(|(i, o)| match o {
+                    O::Object { object, .. } => {
+                        let name = source_name(game, request.player, *object);
+                        if name.is_empty() { format!("Hidden object {}", i + 1) } else { name }
+                    }
+                    O::Life { player, .. } if *player == request.player => "Your life total".into(),
+                    O::Life { player, .. } => format!("Player {} life total", player.0 + 1),
+                }).collect(),
+                hints: occurrences.iter().map(|o| match o {
+                    O::Life { amount, occurrence, .. } if *amount > 0 => format!("event {}: would gain {amount} life", occurrence + 1),
+                    O::Life { amount, occurrence, .. } => format!("event {}: would lose {} life", occurrence + 1, amount.unsigned_abs()),
+                    O::Object { reason: cantrip_engine::ZoneReason::Destroy | cantrip_engine::ZoneReason::DestroyNoRegen, component: true, occurrence, .. } => format!("event {}: its card component would be destroyed", occurrence + 1),
+                    O::Object { reason: cantrip_engine::ZoneReason::Destroy | cantrip_engine::ZoneReason::DestroyNoRegen, occurrence, .. } => format!("event {}: would be destroyed", occurrence + 1),
+                    O::Object { reason: cantrip_engine::ZoneReason::Sacrifice, occurrence, .. } => format!("event {}: would be sacrificed", occurrence + 1),
+                    O::Object { reason: cantrip_engine::ZoneReason::Discard, occurrence, .. } => format!("event {}: would be discarded", occurrence + 1),
+                    O::Object { occurrence, .. } => format!("event {}: would change zones", occurrence + 1),
+                }).collect(),
+                occurrence_order: true,
+            })
+        }
         RequestKind::ChooseReplacement { subject, life, sources, hints, damage, turn, counters, draw } => {
             PromptPayload::ChooseReplacementPromptMessage(ChooseReplacementPrompt {
                 player,
@@ -1596,6 +1627,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                 sources: sources.iter().map(|&s| source_handle(game, handles, s)).collect(),
                 hints: hints.iter().map(|h| (*h).to_string()).collect(),
                 source_names: sources.iter().map(|&s| source_name(game, request.player, s)).collect(),
+                occurrence_order: false,
             })
         }
     };
@@ -2296,6 +2328,42 @@ mod tests {
 
     /// A replacement's source is named with the prompt (KI-34): one that has left - Ral Zarek's skip, Ral in the graveyard -
     /// is named to a seat that holds no handle to it, by its last-known name; one in a hand only to the hand's player.
+    #[test]
+    fn replacement_occurrence_prompt_identifies_life_and_object_events() {
+        let (game, hand) = game_with(&["Llanowar Elves"]);
+        let player = PlayerId(0);
+        let request = Request { id: 1, player, may_cancel: false, kind: RequestKind::OrderReplacementOccurrences {
+            occurrences: vec![
+                cantrip_engine::ReplacementOccurrence::Life { player, amount: -2, occurrence: 0 },
+                cantrip_engine::ReplacementOccurrence::Object { object: hand[0], reason: cantrip_engine::ZoneReason::Destroy, component: false, occurrence: 1 },
+            ],
+        } };
+        let (payload, _) = prompt(&game, &request, &mut HandleSpace::new()).unwrap();
+        let PromptPayload::ChooseReplacementPromptMessage(p) = payload else { panic!("occurrence ordering prompt") };
+        assert!(p.occurrence_order);
+        assert_eq!(p.source_names[0], "Your life total");
+        assert_eq!(p.hints, ["event 1: would lose 2 life", "event 2: would be destroyed"]);
+        assert!(matches!(PromptPayload::ChooseReplacementPromptMessage(p).default_answer(), AnswerPayload::CostPaymentChosenAnswer(_)));
+    }
+
+    #[test]
+    fn replacement_occurrence_order_does_not_reveal_another_players_hidden_card() {
+        let (game, hand) = game_with(&["Llanowar Elves"]);
+        let owner = game.state.obj(hand[0]).owner;
+        let viewer = game.state.seats().find(|&p| p != owner).unwrap();
+        let kind = RequestKind::OrderReplacementOccurrences { occurrences: vec![
+            cantrip_engine::ReplacementOccurrence::Object { object: hand[0], reason: cantrip_engine::ZoneReason::Discard, component: false, occurrence: 0 },
+        ] };
+        let mut shown = Vec::new();
+        kind.objects(&mut |id| shown.push(id));
+        assert!(!shown.contains(&hand[0]), "ordering a replacement does not reveal the hidden card");
+        let request = Request { id: 1, player: viewer, may_cancel: false, kind };
+        let (payload, _) = prompt(&game, &request, &mut HandleSpace::new()).unwrap();
+        let PromptPayload::ChooseReplacementPromptMessage(p) = payload else { panic!("occurrence ordering prompt") };
+        assert_eq!(p.source_names, ["Hidden object 1"]);
+        assert_eq!(p.sources, [ViewHandle::NONE]);
+    }
+
     #[test]
     fn a_replacements_source_is_named_with_the_prompt_even_without_a_handle() {
         let (mut game, hand) = game_with(&["Llanowar Elves"]);

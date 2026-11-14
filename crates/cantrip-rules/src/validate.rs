@@ -400,6 +400,9 @@ pub fn check(game: &Game, request: &Request, answer: &Answer) -> Result<(), Reje
             seen.sort();
             if seen == (0..count_u32(sources.len())).collect::<Vec<_>>() { Ok(()) } else { no("not an order of every trigger") }
         }
+        (RequestKind::OrderReplacementOccurrences { occurrences }, Answer::CostPayment(i)) => {
+            if *i < occurrences.len() { Ok(()) } else { no("not one of the occurrences offered") }
+        }
         (RequestKind::ChooseReplacement { sources, .. }, Answer::Index(i)) => {
             if (*i as usize) < sources.len() { Ok(()) } else { no("not one of the replacement effects offered") }
         }

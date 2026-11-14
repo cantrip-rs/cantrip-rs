@@ -279,10 +279,64 @@ fn move_together_entering(cx: &mut Cx, moves: &[Moving], reason: ZoneReason, att
     (created, seen)
 }
 
+/// Construct the unmodified move proposal without applying replacement effects.
+fn moving_proposal(cx: &Cx, mut m: Moving, reason: ZoneReason) -> (Moving, ZoneChange) {
+    let old = *cx.s().obj(m.id);
+    let from = old.zone;
+    let to = m.to;
+    // A spell moved off the stack by any instruction carries its own replacements of that move (`resolve::its_own_exile`):
+    // flashback's "instead of putting it anywhere else" (CR 702.34a) and a cast's "exile it instead" (CR 614.1a).
+    if from.is(ZoneKind::Stack)
+        && let Some(item) = cx.s().stack.iter().find(|i| i.kind == StackKind::Spell && i.object == m.id).copied()
+    {
+        m = crate::resolve::its_own_exile(cx, &item, m, reason);
+    }
+    // A card goes to its owner's own hand, library or graveyard, whoever puts it there (CR 400.3).
+    let to = match to.kind() {
+        ZoneKind::Library | ZoneKind::Hand | ZoneKind::Graveyard | ZoneKind::Exile => Zone::new(to.kind(), old.owner),
+        _ => to,
+    };
+    // Replacement effects of the permanents in play, and of the card itself (CR 614, 616): they change where it goes,
+    // how it arrives, or what it arrives with.
+    let entry = m.entering.filter(|_| to.is(ZoneKind::Battlefield));
+    let proposed = ZoneChange {
+        object: m.id,
+        from,
+        to,
+        reason,
+        controller: entry.map_or(old.controller, |e| e.controller),
+        put_by: to.is(ZoneKind::Battlefield).then(|| m.put_by.player(cx)).flatten(),
+        tapped: entry.is_some_and(|e| e.tapped),
+        attacking: false,
+        counters: [0; CounterKind::COUNT],
+        counters_by: entry.map_or(old.controller, |e| e.controller),
+        reveal: false,
+        shuffle: false,
+        is_card: !old.token && !old.card_copy,
+        madness: false,
+        pays_characteristic: m.pays_characteristic,
+        exiled_with: None,
+        flashback: m.flashback,
+        exile_instead: m.exile_instead,
+        adventure: m.adventure,
+        commander_components: [ObjectId::NONE; 8],
+        omen: m.omen,
+        rebound: m.rebound,
+        on_adventure: false,
+        rebounding: false,
+        destroy: m.destroy || reason == ZoneReason::Destroy,
+        regenerated: false,
+        regeneration_shield: false,
+        shielded: false,
+        replaced: false,
+    };
+    (m, proposed)
+}
+
 /// The moves of `move_together_entering`, and with them the changes of life `life` of the same simultaneous action
 /// (`together`, CR 101.4), each its own occurrence: replaced and judged allowed against the game as it is before any of the
-/// moves or changes is made (CR 616.1, `prepare_life_changes`), applied with the moves and announced in their batch (CR
-/// 603.2c). The new objects, those seen by all as they moved, and the life lost.
+/// moves or changes is made (CR 616.1), applied with the moves and announced in their batch (CR 603.2c). The new objects,
+/// those seen by all as they moved, and the life lost.
 fn move_together_entering_event(
     cx: &mut Cx,
     moves: &[Moving],
@@ -348,68 +402,83 @@ fn move_together_entering_event(
         if together { moves.iter().map(|m| m.id).filter(|&id| cx.s().obj(id).zone.is(ZoneKind::Battlefield)).collect() } else { Vec::new() };
     // Saved and put back as this move is done, so a move made while it is worked out (a replacement's) leaves it as it was.
     let outer_leaving = std::mem::replace(&mut *cx.s().leaving_together.borrow_mut(), leaving);
-    for m in moves {
+    // Only life-plus-move instructions need a mixed replacement scheduler; ordinary moves keep their direct path.
+    let mut mixed = if life.is_empty() { None } else {
+        let mut proposals: Vec<Proposal> = moves.iter().map(|m| {
+            Proposal::ZoneChange(moving_proposal(cx, *m, m.reason.unwrap_or(reason)).1)
+        }).collect();
+        // A merged token's physical cards have their own card-only replacement pass (CR 730.3e), but only if the
+        // parent permanent's move survives regeneration and other prevention.
+        let mut component_indices = vec![None; moves.len()];
+        let mut dependencies = Vec::new();
+        for (parent, m) in moves.iter().enumerate() {
+            if cx.s().obj(m.id).token && crate::merge::components(cx, m.id).is_some_and(|all| all.iter().any(|c| !c.token)) {
+                let Proposal::ZoneChange(base) = proposals[parent] else { unreachable!("move proposal") };
+                let child = proposals.len();
+                proposals.push(Proposal::ZoneChange(ZoneChange { is_card: true, ..base }));
+                component_indices[parent] = Some(child);
+                dependencies.push((child, parent));
+            }
+        }
+        proposals.extend(life.iter().filter_map(|&(player, amount)| {
+            let delta = amount as i32;
+            (delta != 0 && cx.s().in_game(player) && !blocked(cx, player, delta) && !life_total_cant_change(cx.s(), player))
+                .then_some(Proposal::LifeChange(LifeChange { player, amount: delta }))
+        }));
+        let replacements_possible = replace::mixed_life_and_zone(cx, &mut proposals, &dependencies);
+        Some((proposals, component_indices, replacements_possible))
+    };
+    // Replacement continuations may themselves create or move permanents. The look-back view of the original mixed
+    // action is the state after those continuations, immediately before the simultaneous moves (CR 603.10a).
+    let recapture = mixed.as_ref().is_some_and(|(_, _, possible)| *possible);
+    let before = if recapture { cx.s().battlefield().to_vec() } else { before };
+    let then = if recapture && looks_back { crate::settle::Then::now(cx) } else { then };
+    let hands_before = if recapture {
+        crate::hand_visibility::sync(cx);
+        events.clear();
+        for &a in &before {
+            let Some(host) = cx.s().obj(a).attached_to else { continue };
+            let leaving = |id: ObjectId| moves.iter().any(|m| m.id == id && live(cx.s(), id));
+            if live(cx.s(), host) && cx.s().obj(host).zone.is(ZoneKind::Battlefield) && (leaving(a) || leaving(host))
+                && !events.iter().any(|e| matches!(e, Event::Unattached { attachment, .. } if *attachment == a))
+            {
+                events.push(Event::Unattached { attachment: a, from: host });
+            }
+        }
+        crate::hand_visibility::mask(cx, cx.cards())
+    } else { hands_before };
+    let mut prepared_life = Vec::new();
+    if let Some((proposals, _, _)) = &mixed {
+        prepared_life.extend(proposals.iter().filter_map(|p| match *p {
+            Proposal::LifeChange(l) if l.amount != 0 => Some((l.player, l.amount)),
+            _ => None,
+        }));
+    }
+    for (move_index, selected) in moves.iter().copied().enumerate() {
+        if mixed.is_some() && !live(cx.s(), selected.id) { continue; }
+        let m = &selected;
         let reason = m.reason.unwrap_or(reason);
         let old = *cx.s().obj(m.id);
         let from = old.zone;
-        let to = m.to;
-        let mut m = *m;
-        // A spell moved off the stack by any instruction carries its own replacements of that move (`resolve::its_own_exile`):
-        // flashback's "instead of putting it anywhere else" (CR 702.34a) and a cast's "exile it instead" (CR 614.1a).
-        if from.is(ZoneKind::Stack)
-            && let Some(item) = cx.s().stack.iter().find(|i| i.kind == StackKind::Spell && i.object == m.id).copied()
-        {
-            m = crate::resolve::its_own_exile(cx, &item, m, reason);
-        }
-        // A card goes to its owner's own hand, library or graveyard, whoever puts it there (CR 400.3).
-        let to = match to.kind() {
-            ZoneKind::Library | ZoneKind::Hand | ZoneKind::Graveyard | ZoneKind::Exile => Zone::new(to.kind(), old.owner),
-            _ => to,
-        };
-        // Replacement effects of the permanents in play, and of the card itself (CR 614, 616): they change where it goes,
-        // how it arrives, or what it arrives with.
-        let entry = m.entering.filter(|_| to.is(ZoneKind::Battlefield));
-        let proposed = ZoneChange {
-            object: m.id,
-            from,
-            to,
-            reason,
-            controller: entry.map_or(old.controller, |e| e.controller),
-            put_by: to.is(ZoneKind::Battlefield).then(|| m.put_by.player(cx)).flatten(),
-            tapped: entry.is_some_and(|e| e.tapped),
-            attacking: false,
-            counters: [0; CounterKind::COUNT],
-            counters_by: entry.map_or(old.controller, |e| e.controller),
-            reveal: false,
-            shuffle: false,
-            is_card: !old.token && !old.card_copy,
-            madness: false,
-            pays_characteristic: m.pays_characteristic,
-            exiled_with: None,
-            flashback: m.flashback,
-            exile_instead: m.exile_instead,
-            adventure: m.adventure,
-            commander_components: [ObjectId::NONE; 8],
-            omen: m.omen,
-            rebound: m.rebound,
-            on_adventure: false,
-            rebounding: false,
-            destroy: m.destroy || reason == ZoneReason::Destroy,
-            regenerated: false,
-            regeneration_shield: false,
-            shielded: false,
-            replaced: false,
-        };
+        let (mut m, proposed) = moving_proposal(cx, *m, reason);
+        let entry = m.entering.filter(|_| proposed.to.is(ZoneKind::Battlefield));
         let requested_to = proposed.to;
         // A permanent entering is judged as it would exist on the battlefield (CR 614.12), and its own replacements are
         // ordered with the others (CR 616.1). One its own replacement sent elsewhere instead does not enter at all.
-        let change = match entry {
-            Some(mut e) => {
-                let change = entry_replacements(cx, &mut e, proposed);
-                m.entering = Some(e).filter(|_| change.to.is(ZoneKind::Battlefield) && e.instead.is_none());
-                change
+        let change = if let Some((proposals, _, _)) = mixed.as_mut() {
+            match proposals[move_index] {
+                Proposal::ZoneChange(z) => z,
+                _ => unreachable!("mixed move proposal remains a zone change"),
             }
-            None => replace::zone_change(cx, proposed),
+        } else {
+            match entry {
+                Some(mut e) => {
+                    let change = entry_replacements(cx, &mut e, proposed);
+                    m.entering = Some(e).filter(|_| change.to.is(ZoneKind::Battlefield) && e.instead.is_none());
+                    change
+                }
+                None => replace::zone_change(cx, proposed),
+            }
         };
         // A regeneration shield replaced the destruction (CR 701.19a, 614.8): it never happens (CR 614.6), and the permanent
         // is regenerated instead, once every move is worked out.
@@ -439,7 +508,12 @@ fn move_together_entering_event(
         let components = if from.is(ZoneKind::Battlefield) || from.is(ZoneKind::PhasedOut) { crate::merge::components(cx, m.id) } else { None };
         let components = components.map(|all| {
             let card_to = (old.token && all.iter().any(|c| !c.token)).then(|| {
-                let as_card = replace::zone_change(cx, ZoneChange { is_card: true, ..proposed });
+                let as_card = if let Some((proposals, indices, _)) = &mixed {
+                    indices[move_index].and_then(|at| match proposals[at] { Proposal::ZoneChange(z) => Some(z), _ => None })
+                        .unwrap_or_else(|| replace::zone_change(cx, ZoneChange { is_card: true, ..proposed }))
+                } else {
+                    replace::zone_change(cx, ZoneChange { is_card: true, ..proposed })
+                };
                 if as_card.regenerated || as_card.shielded || as_card.replaced { (to, change.exiled_with) } else { (as_card.to, as_card.exiled_with) }
             });
             (all, card_to.filter(|&(z, _)| z != to))
@@ -562,8 +636,7 @@ fn move_together_entering_event(
     *cx.s().leaving_together.borrow_mut() = outer_leaving;
     // The changes of life of the same action are replaced, and judged allowed, against the same game the moves were, before
     // any of them is made (CR 101.4, 616.1): a permanent leaving in this action still stops or replaces them.
-    let mut life = prepare_life_changes(cx, life);
-    retain_life_changes(cx, &mut life);
+    retain_life_changes(cx, &mut prepared_life);
     // The permanents regenerated, shielded or otherwise replaced instead of moving stay (CR 701.19a, 614.6): no attachment
     // of theirs ends for their sake.
     if !regenerating.is_empty() || !shielded.is_empty() || !replaced.is_empty() {
@@ -798,7 +871,7 @@ fn move_together_entering_event(
     for permanent in entered {
         events.push(entered_event(cx, permanent));
     }
-    let lost = apply_life_changes(cx, life, &mut events);
+    let lost = apply_life_changes(cx, prepared_life, &mut events);
     let hands_after = crate::hand_visibility::mask(cx, cx.cards());
     for event in &mut events {
         if let Event::ZoneChange { to, to_revealed_hand, .. } = event {
@@ -4370,6 +4443,38 @@ fn life_together(cx: &mut Cx, life: &[(PlayerId, i64)]) -> i32 {
         cx.emit_batch(&events, None);
     }
     total
+}
+
+/// Costs chosen for one resolving instruction, with the unpaid destruction and sacrifice actions (CR 101.4, 118.12,
+/// 608.2e). Cleansing and Killing Wave both choose life costs before applying their respective unpaid actions.
+pub fn pay_life_with_permanents(cx: &mut Cx, source: ObjectId, payments: &[(PlayerId, u32)], destroy: &[ObjectId], sacrifice: &[(PlayerId, ObjectId)]) -> bool {
+    for player in cx.s().apnap() {
+        let available = crate::actions::payable_life(cx, player).max(0) as u32;
+        if payments.iter().filter(|&&(p, _)| p == player).try_fold(available, |left, &(_, amount)| left.checked_sub(amount)).is_none() { return false; }
+    }
+    if payments.iter().any(|&(player, _)| !cx.s().in_game(player)) { return false; }
+    // Each chosen payment is a resolution cost, with its own receipt identity even when several are simultaneous.
+    let resolving = if cx.g.mana_interval.is_none() {
+        cx.s().agenda.get(cx.frame).and_then(|frame| match frame.kind {
+            cantrip_state::FrameKind::Resolve { serial } => Some(serial),
+            _ => None,
+        })
+    } else { None };
+    for &(payer, _) in payments {
+        let payment = cx.g.log.len() as u32;
+        cx.record(Event::ResolutionPaymentBegan { payment, source, payer, resolving });
+    }
+    let life: Vec<_> = payments.iter().filter(|&&(_, n)| n != 0).map(|&(player, n)| (player, -i64::from(n))).collect();
+    let mut moves: Vec<_> = destroy.iter().copied().filter(|&id| cx.can_destroy(id)).map(|id| Moving {
+        reason: Some(ZoneReason::Destroy), ..Moving::to(id, Zone::graveyard(cx.s().obj(id).owner))
+    }).collect();
+    moves.extend(sacrifice_moves(cx, sacrifice));
+    if moves.is_empty() {
+        life_together(cx, &life);
+    } else {
+        cx.instruction(|cx| move_together_entering_event(cx, &moves, ZoneReason::Other, None, &life), |_| true);
+    }
+    true
 }
 
 /// One instruction whose parts several players carry out at once (CR 101.4, `Game::together`): the sacrifices (CR 701.21a),
