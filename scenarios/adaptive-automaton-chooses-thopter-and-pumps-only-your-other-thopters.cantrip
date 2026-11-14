@@ -1,0 +1,46 @@
+# Adaptive Automaton (3, a 2/2 Construct): Bot1 casts it with three Moxen and chooses Thopter as it enters (CR 614.12a). It is a
+# Thopter as well as a Construct (CR 205.1b) yet stays a 2/2 - "other creatures" - while Bot1's Ornithopter (a 0/2 Thopter) is
+# a 1/3. Bot1's Memnite (an Artifact Creature - Construct) is not the chosen type and stays 1/1, and Bot2's Ornithopter, cast on
+# turn two, is not under Bot1's control and stays 0/2.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Adaptive Automaton
+Ornithopter
+Memnite
+Island
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Adaptive Automaton.Cast
+Bot1.Pass
+Bot1.Modes(Thopter)
+? Bot1.Battlefield.Adaptive Automaton.Subtypes = Construct; Thopter
+? Bot1.Battlefield.Adaptive Automaton.Power = 2
+? Bot1.Battlefield.Adaptive Automaton.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2

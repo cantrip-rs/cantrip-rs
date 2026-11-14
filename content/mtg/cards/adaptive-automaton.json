@@ -1,0 +1,8 @@
+{
+  "name": "Adaptive Automaton",
+  "manaCost": "{3}",
+  "type": "Artifact Creature — Construct",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "As this creature enters, choose a creature type.\nThis creature is the chosen type in addition to its other types.\nOther creatures you control of the chosen type get +1/+1."
+}
