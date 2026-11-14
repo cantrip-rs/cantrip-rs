@@ -1,0 +1,44 @@
+# Scrawling Crawler: its triggers need it on the battlefield. Bot2's draw on turn 2 costs it 1 life (19) while the Crawler is there;
+# Bot2's Lightning Bolt then kills it (3 damage to a 3/2). In Bot1's turn-3 upkeep nobody draws (Bot2 still holds the 6 cards it
+# had left) and Bot2's own draw on turn 4 costs it no life (19).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Scrawling Crawler
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Scrawling Crawler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot2.Life = 19
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Scrawling Crawler)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Scrawling Crawler
+[T3 Bot1.Main1]
+? Bot2.Life = 19
+? Bot2.Hand.Count = 6
+? Bot1.Hand.Count = 4
+[T4 Bot2.Main1]
+? Bot2.Life = 19
+? Bot2.Hand.Count = 7
+
+[Expect]
+Bot1.Life = 20
