@@ -1,0 +1,8 @@
+{
+  "name": "Affectionate Indrik",
+  "manaCost": "{5}{G}",
+  "type": "Creature — Beast",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "When this creature enters, you may have it fight target creature you don't control. (Each deals damage equal to its power to the other.)"
+}
