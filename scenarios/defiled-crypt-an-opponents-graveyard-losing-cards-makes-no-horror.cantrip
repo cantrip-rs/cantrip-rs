@@ -1,0 +1,43 @@
+# Defiled Crypt: "Whenever one or more cards leave your graveyard": cards leaving an opponent's graveyard don't count. Bot1's
+# Tormod's Crypt exiles Bot2's graveyard (Entomb and its Grizzly Bears): no token.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Black Lotus
+Defiled Crypt // Cadaver Lab
+Tormod's Crypt
+Swamp x2
+Swamp x13
+
+[Bot2 Deck]
+Entomb
+Swamp x7
+Grizzly Bears
+Swamp x11
+
+[Actions]
+Bot1.Hand.Mox Jet#1.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Defiled Crypt // Cadaver Lab.Cast(Ability: Defiled Crypt)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Grizzly Bears)
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 0
+? Bot1.Battlefield.Count = 3
+
+[Expect]
+Bot2.Graveyard.Count = 0

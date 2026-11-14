@@ -1,0 +1,18 @@
+{
+  "name": "Defiled Crypt // Cadaver Lab",
+  "oracleText": "",
+  "halves": [
+    {
+      "name": "Defiled Crypt",
+      "manaCost": "{3}{B}",
+      "type": "Enchantment — Room",
+      "oracleText": "Whenever one or more cards leave your graveyard, create a 2/2 black Horror enchantment creature token. This ability triggers only once each turn.\n(You may cast either half. That door unlocks on the battlefield. As a sorcery, you may pay the mana cost of a locked door to unlock it.)"
+    },
+    {
+      "name": "Cadaver Lab",
+      "manaCost": "{B}",
+      "type": "Enchantment — Room",
+      "oracleText": "When you unlock this door, return target creature card from your graveyard to your hand.\n(You may cast either half. That door unlocks on the battlefield. As a sorcery, you may pay the mana cost of a locked door to unlock it.)"
+    }
+  ]
+}

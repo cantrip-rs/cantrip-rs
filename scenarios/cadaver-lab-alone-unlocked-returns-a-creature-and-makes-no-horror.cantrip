@@ -1,0 +1,32 @@
+# Defiled Crypt's token trigger is a Defiled Crypt door ability: with only Cadaver Lab unlocked, Cadaver Lab returning a creature
+# card from the graveyard (cards leaving it) makes no Horror token.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Defiled Crypt // Cadaver Lab
+Entomb
+Swamp x3
+Grizzly Bears
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet#1.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Defiled Crypt // Cadaver Lab.Cast(Ability: Cadaver Lab)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Grizzly Bears.Power = 2
+? Bot1.Battlefield.Count = 3
+
+[Expect]
+Bot1.Graveyard.Count = 1

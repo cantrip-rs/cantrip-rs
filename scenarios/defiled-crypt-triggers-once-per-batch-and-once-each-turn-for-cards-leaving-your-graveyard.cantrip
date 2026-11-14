@@ -1,0 +1,74 @@
+# Defiled Crypt: "Whenever one or more cards leave your graveyard, create a 2/2 black Horror enchantment creature token. This
+# ability triggers only once each turn." Bot1 casts Defiled Crypt in turn 1; the Black Lotus sacrificed for it goes to the graveyard,
+# which is not leaving it: no token. In turn 2 Tormod's Crypt exiles two cards from that graveyard together (the Lotus
+# and itself, both gone as it resolves): one token (the cards left together, CR 603.2c). In turn 3 Bot1 unlocks Cadaver Lab, returning a
+# creature card Entomb put there: the cards leave again in a new turn, a second token. A second Tormod's Crypt then exiles the
+# Entomb in the same turn: the ability has triggered once this turn, so still 2 tokens.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Black Lotus
+Defiled Crypt // Cadaver Lab
+Entomb
+Tormod's Crypt
+Tormod's Crypt
+Swamp
+Grizzly Bears
+Swamp x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet#1.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Tormod's Crypt#1.Cast
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Defiled Crypt // Cadaver Lab.Cast(Ability: Defiled Crypt)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+? Stack.Count = 0
+? Bot1.Graveyard = Black Lotus
+? Bot1.Battlefield.Horror Token = (absent)
+[T2 Bot2.Main1]
+Bot1.Battlefield.Tormod's Crypt#1.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Graveyard.Count = 0
+? Bot1.Battlefield.Horror Token.Power = 2
+? Bot1.Battlefield.Horror Token.Toughness = 2
+? Bot1.Battlefield.Horror Token.Types = Enchantment; Creature
+? Bot1.Battlefield.Horror Token.Colors = Black
+? Bot1.Battlefield.Count = 5
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+? Bot1.Graveyard = Entomb; Grizzly Bears
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Defiled Crypt.Activate(Ability: right door)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Grizzly Bears.Power = 2
+? Bot1.Graveyard = Entomb
+? Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Graveyard.Count = 0
+? Bot1.Battlefield.Count = 5
+
+[Expect]
+Bot1.Graveyard.Count = 0
