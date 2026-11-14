@@ -1,0 +1,6 @@
+{
+  "name": "Thousand-Year Storm",
+  "manaCost": "{4}{U}{R}",
+  "type": "Enchantment",
+  "oracleText": "Whenever you cast an instant or sorcery spell, copy it for each other instant and sorcery spell you've cast before it this turn. You may choose new targets for the copies."
+}

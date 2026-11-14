@@ -1,0 +1,75 @@
+# Thousand-Year Storm: "copy it for each other instant and sorcery spell you've cast before it this turn." Only YOUR instants and
+# sorceries are counted: on turn 5 Bot1 casts Ornithopter (a creature spell) and Bot2 answers with its own Lightning Bolt - neither
+# counts. Bot1 then casts Chain Lightning, a sorcery: copied for none. A Lightning Bolt cast next is copied for exactly one - the
+# sorcery counts as much as an instant. The copy is not cast (CR 707.10), so it triggers nothing: one Storm trigger for each of the
+# two spells cast. Bot2 takes 3 + 3 + 3 = 9 (11 left); Bot2's Bolt took Bot1 to 17.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Black Lotus
+Black Lotus
+Thousand-Year Storm
+Ornithopter
+Chain Lightning
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Thousand-Year Storm.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Chain Lightning.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 3
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+? Stack.Count = 3
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot2.Life = 11
+Bot1.Life = 17
+Bot1.Battlefield.Ornithopter.Tapped = false

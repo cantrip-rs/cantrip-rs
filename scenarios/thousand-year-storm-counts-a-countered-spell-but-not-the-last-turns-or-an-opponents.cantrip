@@ -1,0 +1,82 @@
+# Thousand-Year Storm: "copy it for each other instant and sorcery spell you've cast before it this turn." A countered spell was
+# still cast (CR 601.2i), a spell cast on another turn is not "this turn", and an opponent's spell is not one "you've cast".
+# Bot1 pays for Storm on turn 1 and casts a Lightning Bolt on turn 3 (not copied: the first this turn). On turn 5 Bot1 casts
+# Bolt B, which Bot2 counters with Counterspell (Bot2's own spell counts for nothing), and then Bolt C: it is copied exactly once
+# - for Bolt B, countered as it was, and not for the turn 3 Bolt: Bot2 takes 3 (turn 3) + 3 + 3 (turn 5) = 9.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Black Lotus
+Black Lotus
+Thousand-Year Storm
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Counterspell
+Island
+Island
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Thousand-Year Storm.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Counterspell.Cast(Lightning Bolt)
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot2.Life = 17
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot2.Life = 11
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Lightning Bolt; Black Lotus; Black Lotus
+Bot2.Graveyard = Counterspell

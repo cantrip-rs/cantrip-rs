@@ -1,0 +1,77 @@
+# Thousand-Year Storm {4}{U}{R}: "Whenever you cast an instant or sorcery spell, copy it for each other instant and sorcery spell
+# you've cast before it this turn. You may choose new targets for the copies." Bot1 pays for it on turn 1 with two Black Lotuses
+# (UUU and RRR), keeps three Mox Rubies and draws a Lightning Bolt each turn. On turn 5 the first Bolt is copied for no spell
+# (none was cast before it), the second for one, the third for two - and the copies, not being cast (CR 707.10), trigger nothing:
+# 3 + 2 x 3 + 3 x 3 = 18 damage, Bot2 from 20 to 2. Bot1 keeps the targets of every copy but the last, which it aims at Bot1
+# itself for the 3 that would otherwise land on Bot2 (CR 707.10c): Bot2 ends at 5 and Bot1 at 17.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Black Lotus
+Black Lotus
+Thousand-Year Storm
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Thousand-Year Storm.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 11
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Target(Bot1)
+? Stack.Count = 3
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot2.Life = 5
+Bot1.Life = 17
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Lightning Bolt; Black Lotus; Black Lotus
