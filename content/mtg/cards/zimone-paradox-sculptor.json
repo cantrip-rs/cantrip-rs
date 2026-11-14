@@ -1,0 +1,8 @@
+{
+  "name": "Zimone, Paradox Sculptor",
+  "manaCost": "{2}{G}{U}",
+  "type": "Legendary Creature — Human Wizard",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "At the beginning of combat on your turn, put a +1/+1 counter on each of up to two target creatures you control.\n{G}{U}, {T}: Double the number of each kind of counter on up to two target creatures and/or artifacts you control."
+}

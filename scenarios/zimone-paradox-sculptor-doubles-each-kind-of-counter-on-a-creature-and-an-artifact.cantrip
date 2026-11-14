@@ -1,0 +1,65 @@
+# Zimone, Paradox Sculptor: "{G}{U}, {T}: Double the number of each kind of counter on up to two target creatures and/or artifacts you
+# control." On turn 1 her combat trigger puts one +1/+1 counter on herself, and Bot1 casts an Everflowing Chalice kicked once on turn 3 for one
+# charge counter. Activating her (Mox Emerald and Mox Sapphire for {G}{U}) with her and the Chalice as the two targets doubles both
+# counts to two: a creature and an artifact, two different kinds. Then combat begins and the trigger adds a third counter to Zimone only.
+# Bot2's Ornithopter is no legal target for either ability.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Mox Ruby
+Zimone, Paradox Sculptor
+Everflowing Chalice
+Black Lotus
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Zimone, Paradox Sculptor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Zimone, Paradox Sculptor)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Everflowing Chalice.Cast(Kicked: 1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Everflowing Chalice.Counters.Charge = 1
+? Bot1.Battlefield.Zimone, Paradox Sculptor.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Zimone, Paradox Sculptor.Activate
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Zimone, Paradox Sculptor; Everflowing Chalice)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Zimone, Paradox Sculptor.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Everflowing Chalice.Counters.Charge = 2
+? Bot1.Battlefield.Zimone, Paradox Sculptor.Tapped = true
+Bot1.Target(Zimone, Paradox Sculptor)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Zimone, Paradox Sculptor.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Zimone, Paradox Sculptor.Power = 4
+Bot1.Battlefield.Zimone, Paradox Sculptor.Toughness = 7
+Bot1.Battlefield.Everflowing Chalice.Counters.Charge = 2
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)

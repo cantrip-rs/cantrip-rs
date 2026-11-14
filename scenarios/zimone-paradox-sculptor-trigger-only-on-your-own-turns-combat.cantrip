@@ -1,0 +1,45 @@
+# Zimone, Paradox Sculptor: "At the beginning of combat on your turn". Zimone puts a counter on herself as Bot1's combat begins on turn 1
+# and chooses no target on turn 3. Bot2's Ornithopter attacks on turn 4: Bot1 is asked nothing at the beginning of Bot2's combat and ends
+# with the one counter.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Mox Ruby
+Zimone, Paradox Sculptor
+Plains x15
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Zimone, Paradox Sculptor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Zimone, Paradox Sculptor)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Target()
+[T4 Bot2.BeginCombat]
+! Bot1.Target
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+! Bot1.Target
+? Stack.Count = 0
+? Bot1.Battlefield.Zimone, Paradox Sculptor.Counters.PlusOnePlusOne = 1
+
+[Expect]
+Bot1.Battlefield.Zimone, Paradox Sculptor.Counters.PlusOnePlusOne = 1

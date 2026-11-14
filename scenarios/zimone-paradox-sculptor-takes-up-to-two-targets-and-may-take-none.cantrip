@@ -1,0 +1,59 @@
+# Zimone, Paradox Sculptor: both abilities say "up to two target", so three targets are refused and none at all is allowed. Bot1 has
+# Zimone and two Ornithopters. As combat begins on turn 1 the trigger will not take all three, and with no target at all no counter
+# is put on anything. On turn 3 the same goes for the {G}{U}, {T} doubling ability: three are refused, none is accepted (it is paid
+# for, and taps Zimone, and does nothing), and the turn 3 combat trigger then counters Zimone and one Ornithopter only.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Mox Ruby
+Zimone, Paradox Sculptor
+Ornithopter
+Ornithopter
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter#1.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Zimone, Paradox Sculptor.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Zimone, Paradox Sculptor; Ornithopter#1; Ornithopter#2)
+Bot1.Target()
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Zimone, Paradox Sculptor.Counters.PlusOnePlusOne = (absent)
+? Bot1.Battlefield.Ornithopter#1.Counters.PlusOnePlusOne = (absent)
+? Bot1.Battlefield.Ornithopter#2.Counters.PlusOnePlusOne = (absent)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Zimone, Paradox Sculptor.Activate
+! Bot1.Target(Zimone, Paradox Sculptor; Ornithopter#1; Ornithopter#2)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Zimone, Paradox Sculptor.Tapped = true
+? Bot1.Battlefield.Zimone, Paradox Sculptor.Counters.PlusOnePlusOne = (absent)
+Bot1.Target(Zimone, Paradox Sculptor; Ornithopter#1)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Zimone, Paradox Sculptor.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter#1.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter#2.Counters.PlusOnePlusOne = (absent)
