@@ -1,0 +1,11 @@
+{
+  "name": "Pelakka Wurm",
+  "manaCost": "{4}{G}{G}{G}",
+  "type": "Creature — Wurm",
+  "power": 7,
+  "toughness": 7,
+  "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\nWhen this creature enters, you gain 7 life.\nWhen this creature dies, draw a card.",
+  "keywords": [
+    "Trample"
+  ]
+}

@@ -1,0 +1,46 @@
+# Pelakka Wurm: "When this creature dies, draw a card" (CR 700.4, 603.6c). Bot1 casts it on turn 1 (two Black Lotuses and Mox Emerald,
+# so three cards are left in hand); on turn 2 Bot2 destroys it with Terror ({1}{B} from Swamp and Mox Jet) and Bot1 draws exactly one card.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Pelakka Wurm
+Forest x3
+Forest x20
+
+[Bot2 Deck]
+Mox Jet
+Swamp
+Terror
+Island x4
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Pelakka Wurm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Terror.Cast(Bot1.Battlefield.Pelakka Wurm)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Pelakka Wurm; Black Lotus; Black Lotus
+Bot1.Hand.Count = 4

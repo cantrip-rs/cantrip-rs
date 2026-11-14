@@ -1,0 +1,56 @@
+# Pelakka Wurm: its draw is only for "this creature" dying (CR 603.6c). With the Wurm on the battlefield Bot1 casts Grizzly Bears
+# (Mox Emerald and Mox Pearl) on turn 3, drawing one card for the turn; on turn 4 Bot2 destroys the Bears with Terror and Bot1 draws
+# nothing for it.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Pelakka Wurm
+Grizzly Bears
+Mox Pearl
+Forest
+Forest x20
+
+[Bot2 Deck]
+Mox Jet
+Swamp
+Terror
+Island x4
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Pelakka Wurm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Terror.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Grizzly Bears; Black Lotus; Black Lotus
+Bot1.Hand.Count = 2
+Bot1.Battlefield.Pelakka Wurm.Power = 7
