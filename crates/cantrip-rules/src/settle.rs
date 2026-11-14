@@ -1096,7 +1096,23 @@ fn state_triggers(cx: &mut Cx) {
             }
         }
     }
-    for (trigger, _, _) in found {
+    push_state_triggers(cx, found);
+}
+
+/// Puts the state triggers found by `state_triggers` or `state_triggers_now` among the pending triggers, each with the
+/// objects it is about found as it triggers (`TriggeredDef::members_of`, by its own text now), as a state trigger found
+/// on an event has them (`collect_batch`): "whenever one or more other nontoken permanents with a name originally printed
+/// in the Arabian Nights expansion are on the battlefield, their controllers sacrifice them" (City in a Bottle) is about
+/// the permanents that were there as it triggered (CR 603.8).
+fn push_state_triggers(cx: &mut Cx, found: Found) {
+    for (mut trigger, def, _) in found {
+        if let Some(members_of) = def.members_of {
+            let objects = {
+                let _others = cx.others_text();
+                members_of(&*cx, trigger.subject)
+            };
+            trigger.members = cx.st().members_push(&objects);
+        }
         cx.st().trigger_push(trigger);
     }
 }
@@ -1136,9 +1152,7 @@ pub(crate) fn state_triggers_now(cx: &mut Cx) {
         }
     }
     drop(others);
-    for (trigger, _, _) in found {
-        cx.st().trigger_push(trigger);
-    }
+    push_state_triggers(cx, found);
     cx.state_judged();
 }
 

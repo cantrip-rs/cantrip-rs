@@ -1953,7 +1953,7 @@ pub struct TriggeredDef {
     pub triggers_each_turn: u8,
     /// The objects the ability is about, found as it triggers (`TriggerMembers`) and read back by the resolving ability with
     /// `Query::event_objects`, whichever way it triggered: as `once_per_batch` carries a batch's subjects, for an ability whose
-    /// objects are not events' subjects.
+    /// objects are not events' subjects. A state trigger (CR 603.8) is about no event, so its subject is `Target::None`.
     pub members_of: Option<TriggerMembers>,
     /// "Choose up to that many target ...", that many being the amount the trigger event carried (`Fired::data[0]`: the life gained):
     /// a `TargetSpec::COUNTED` bound reads it as the ability is put on the stack (CR 603.3d, 601.2c).
