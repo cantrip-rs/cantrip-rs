@@ -1,0 +1,40 @@
+# Surgical Suite: the target is a creature card with mana value 3 or less. Bot1's graveyard holds only Hill Giant (mana value 4,
+# discarded to Faithless Looting) as a creature card, so the unlock trigger has no legal target and returns nothing (CR 603.3d);
+# Hill Giant stays in the graveyard.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Faithless Looting
+Surgical Suite // Hospital Room
+Hired Blade
+Plains
+Mox Jet
+Plains
+Hill Giant
+Plains
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Hill Giant; Plains)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Surgical Suite // Hospital Room.Cast(Ability: Surgical Suite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Faithless Looting; Plains; Hill Giant
+Bot1.Battlefield.Count = 4
+Bot1.Battlefield.Surgical Suite.Doors = Surgical Suite

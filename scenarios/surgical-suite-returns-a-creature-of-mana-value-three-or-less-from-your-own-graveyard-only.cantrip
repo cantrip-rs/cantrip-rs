@@ -1,0 +1,54 @@
+# Surgical Suite: "When you unlock this door, return target creature card with mana value 3 or less from your graveyard to the
+# battlefield." Cast as its left door in turn 3 with Bot1's graveyard holding Cut Down (not a creature), Hired Blade and
+# Goblin Piker (both creatures of mana value 3 or less, discarded to Faithless Looting) and Bot2's Ornithopter (a creature card
+# in an opponent's graveyard, killed by Cut Down): Cut Down and Bot2's Ornithopter are refused, Hired Blade is chosen and enters
+# untapped under Bot1's control; Goblin Piker stays in the graveyard.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Cut Down
+Faithless Looting
+Surgical Suite // Hospital Room
+Hired Blade
+Plains
+Goblin Piker
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cut Down.Cast(Ornithopter)
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Goblin Piker; Hired Blade)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Surgical Suite // Hospital Room.Cast(Ability: Surgical Suite)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Graveyard.Cut Down)
+! Bot1.Target(Bot2.Graveyard.Ornithopter)
+Bot1.Target(Bot1.Graveyard.Hired Blade)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Hired Blade.Tapped = false
+Bot1.Battlefield.Hired Blade.SummoningSick = true
+Bot1.Graveyard = Faithless Looting; Goblin Piker; Cut Down
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Surgical Suite.Doors = Surgical Suite
