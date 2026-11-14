@@ -1,0 +1,32 @@
+# Nessian Hornbeetle: "if you control ANOTHER creature with power 4 or greater". Pumped to 5/5 by a Giant Growth in main phase 1, it is
+# a creature with power 4 or greater, but it is the only creature Bot1 controls, so at the beginning of combat nothing triggers
+# and it gets no counter (the ruling's "another").
+
+[Bot1 Deck]
+Black Lotus
+Nessian Hornbeetle
+Giant Growth
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: G)
+Bot1.Hand.Nessian Hornbeetle.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Nessian Hornbeetle)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Nessian Hornbeetle.Power = 5
+[T1 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Nessian Hornbeetle.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Nessian Hornbeetle.Power = 5

@@ -1,0 +1,88 @@
+# Nessian Hornbeetle, a 2/2: "At the beginning of combat on your turn, if you control another creature with power 4 or greater, put a
+# +1/+1 counter on this creature." An intervening "if" (CR 603.4): asked as combat begins and again on resolution.
+# Turn 1: Bot1 controls a Hill Giant (power 3, just short): no counter. Turn 2: Bot2 casts an Alpine Grizzly (power 4, but an opponent's):
+# turn 3 still no counter. Turn 3 main 2: Bot1 casts its own Alpine Grizzly. Turn 5: power 4 exactly, so one counter (a 3/3), however
+# many qualify. Turn 7: Bot2 answers the trigger with a Lightning Bolt on that Grizzly, so the condition fails on resolution: no
+# second counter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Nessian Hornbeetle
+Hill Giant
+Alpine Grizzly
+Plains
+Plains x12
+
+[Bot2 Deck]
+Black Lotus
+Alpine Grizzly
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Nessian Hornbeetle.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+? Stack.Count = 0
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Nessian Hornbeetle.Counters.PlusOnePlusOne = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: G)
+Bot2.Hand.Alpine Grizzly.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.BeginCombat]
+? Stack.Count = 0
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Nessian Hornbeetle.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Nessian Hornbeetle.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Nessian Hornbeetle.Power = 3
+? Bot1.Battlefield.Nessian Hornbeetle.Toughness = 3
+[T7 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Alpine Grizzly)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Alpine Grizzly = (absent)
+Bot2.Battlefield.Alpine Grizzly.Power = 4
+Bot1.Battlefield.Nessian Hornbeetle.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Nessian Hornbeetle.Power = 3
