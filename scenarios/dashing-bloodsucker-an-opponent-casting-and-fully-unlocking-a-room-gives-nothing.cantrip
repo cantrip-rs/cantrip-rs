@@ -1,0 +1,61 @@
+# Dashing Bloodsucker: "whenever you fully unlock a Room" and "an enchantment you control enters" are its controller's alone.
+# Bot2 casts Steaming Sauna in turn 2 (an enchantment entering under the opponent) and fully unlocks Roaring Furnace in turn 4
+# (the Furnace's trigger deals 4 damage, the 4 cards then in Bot2's hand, to the Bloodsucker, which survives as a 2/5): in
+# neither case does Bot1's Bloodsucker get +2/+0 or lifelink.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Dashing Bloodsucker
+Island x17
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Roaring Furnace // Steaming Sauna
+Island
+Island
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dashing Bloodsucker.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Roaring Furnace // Steaming Sauna.Cast(Ability: Steaming Sauna)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+? Stack.Count = 0
+? Bot1.Battlefield.Dashing Bloodsucker.Power = 2
+? Bot1.Battlefield.Dashing Bloodsucker.Keywords = (absent)
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Steaming Sauna.Activate(Ability: left door)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Island.Activate
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Roaring Furnace // Steaming Sauna.Doors = Roaring Furnace; Steaming Sauna
+? Stack.Count = 0
+? Bot1.Battlefield.Dashing Bloodsucker.Damage = 4
+? Bot1.Battlefield.Dashing Bloodsucker.Power = 2
+? Bot1.Battlefield.Dashing Bloodsucker.Toughness = 5
+? Bot1.Battlefield.Dashing Bloodsucker.Keywords = (absent)
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20

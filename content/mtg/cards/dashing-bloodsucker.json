@@ -1,0 +1,8 @@
+{
+  "name": "Dashing Bloodsucker",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Vampire Warrior",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "Eerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, this creature gets +2/+0 and gains lifelink until end of turn."
+}

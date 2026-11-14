@@ -1,0 +1,77 @@
+# Dashing Bloodsucker: "Eerie - Whenever an enchantment you control enters and whenever you fully unlock a Room, this creature
+# gets +2/+0 and gains lifelink until end of turn." Bot1 casts the 2/5 Bloodsucker in turn 1 (a creature, not an enchantment:
+# no trigger; Power 2, no keyword). In turn 3 it casts Roaring Furnace, the Room entering (CR 603.6a) with one door unlocked, which is
+# one enchantment entering and not a full unlock: Power 4, Toughness still 5, Lifelink, and it attacks for 4 (Bot2 20 -> 16)
+# while Bot1 gains 4 (20 -> 24, CR 702.15b). In turn 5 it unlocks Steaming Sauna, fully unlocking the Room (the 2024-09-20
+# ruling): +2 once more (Power 4 again, not 6, which would show the cast had triggered twice), another 4 damage and 4 life.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Dashing Bloodsucker
+Roaring Furnace // Steaming Sauna
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dashing Bloodsucker.Cast
+Bot1.Pass
+[T1 Bot1.Main2]
+? Stack.Count = 0
+? Bot1.Battlefield.Dashing Bloodsucker.Power = 2
+? Bot1.Battlefield.Dashing Bloodsucker.Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Roaring Furnace // Steaming Sauna.Cast(Ability: Roaring Furnace)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Dashing Bloodsucker.Power = 4
+? Bot1.Battlefield.Dashing Bloodsucker.Toughness = 5
+? Bot1.Battlefield.Dashing Bloodsucker.Keywords = Lifelink
+Bot1.Attack(Dashing Bloodsucker > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+? Bot1.Life = 24
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Dashing Bloodsucker.Power = 2
+? Bot1.Battlefield.Dashing Bloodsucker.Keywords = (absent)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Roaring Furnace.Activate(Ability: right door)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Roaring Furnace // Steaming Sauna.Doors = Roaring Furnace; Steaming Sauna
+? Bot1.Battlefield.Dashing Bloodsucker.Power = 4
+? Bot1.Battlefield.Dashing Bloodsucker.Keywords = Lifelink
+Bot1.Attack(Dashing Bloodsucker > Bot2)
+[T5 Bot1.Main2]
+? Bot2.Life = 12
+? Bot1.Life = 28
+
+[Expect]
+Bot2.Life = 12
+Bot1.Life = 28
