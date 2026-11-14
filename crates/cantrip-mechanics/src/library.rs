@@ -1128,6 +1128,16 @@ pub fn exile_top_card_play_until_end_of_next_turn(g: &mut dyn Game, item: &Stack
     Ok(())
 }
 
+/// "Exile the top two cards of your library. Choose one of them. Until the end of your next turn, you may play that card" as a
+/// resolving spell's or ability's whole effect (CR 406, 514.2): both cards are exiled together and only the chosen one may be played,
+/// a land under the ordinary land-play rules (CR 305.1), until the cleanup step of the controller's next turn. Heroes' Hangout,
+/// Riverwheel Sweep and Strongbox Raider print it.
+pub fn exile_top_two_choose_one_play_until_end_of_next_turn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let grant = PlayGrant { instead: None, lands: true, expiry: Expiry::EndOfYourNextTurn, ..PlayGrant::CAST };
+    exile_top_choose_one_may_play(g, item.controller, item.object, 2, grant)?;
+    Ok(())
+}
+
 /// "Exile the top `count` cards of your library. You may play [it / those cards] this turn" (`exile_top_may_play`): the grant
 /// is to play, not only cast, a land among them under the ordinary land-play rules, until the cleanup step (CR 514.2). The
 /// cards still in exile. Laelia, the Blade Reforged, Emberheart Challenger and Experimental Synthesizer (one card each) print it.
