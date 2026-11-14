@@ -1,0 +1,69 @@
+# Battlesong Berserker, a 3/4: "Whenever you attack, target creature you control gets +1/+0 and gains menace until end of turn." Turn 1:
+# Fanatical Firebrand attacks alone and is the target: 2/1 with menace, Bot2 goes to 18. Turn 3: Firebrand and Berserker attack together,
+# but the trigger is one (whenever you attack, not per attacker); Bot2's Ornithopter and a creature that is not Bot1's are no targets, and
+# the Berserker is chosen: 4/4 with menace (the turn-1 bonus on Firebrand is gone). Bot2 attacking on turn 4 triggers nothing.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby x2
+Battlesong Berserker
+Fanatical Firebrand
+Mountain x12
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Battlesong Berserker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Fanatical Firebrand > Bot2)
+Bot1.Target(Bot1.Battlefield.Fanatical Firebrand)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fanatical Firebrand.Power = 2
+? Bot1.Battlefield.Fanatical Firebrand.Toughness = 1
+? Bot1.Battlefield.Fanatical Firebrand.Keywords = Haste; Menace
+[T1 Bot1.Main2]
+? Bot2.Life = 18
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Fanatical Firebrand.Power = 1
+Bot1.Attack(Fanatical Firebrand > Bot2; Battlesong Berserker > Bot2)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Battlesong Berserker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Battlesong Berserker.Power = 4
+? Bot1.Battlefield.Battlesong Berserker.Toughness = 4
+? Bot1.Battlefield.Battlesong Berserker.Keywords = Menace
+? Bot1.Battlefield.Fanatical Firebrand.Power = 1
+[T3 Bot1.Main2]
+? Bot2.Life = 13
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+? Stack.Count = 0
+[T4 Bot2.End]
+
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Battlesong Berserker.Power = 3
