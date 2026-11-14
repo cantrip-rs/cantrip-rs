@@ -1,0 +1,40 @@
+# A creature that is both green and white gets both of Wilt-Leaf Liege's bonuses, +2/+2 (CR 613.4c): Dryad Militant, {G/W}, is
+# a green and white 2/1, so beside Liege it is 4/3. Bot1 casts Liege off Black Lotus and Mox Pearl, and the Dryad off Mox Emerald.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Black Lotus
+Wilt-Leaf Liege
+Dryad Militant
+Island x15
+
+[Bot2 Deck]
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Dryad Militant.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dryad Militant.Power = 2
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wilt-Leaf Liege.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Dryad Militant.Power = 4
+Bot1.Battlefield.Dryad Militant.Toughness = 3
+Bot1.Battlefield.Wilt-Leaf Liege.Power = 4
+Bot1.Battlefield.Wilt-Leaf Liege.Toughness = 4

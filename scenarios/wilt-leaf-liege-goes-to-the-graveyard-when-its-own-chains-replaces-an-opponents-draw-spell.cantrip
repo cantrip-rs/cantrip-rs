@@ -1,0 +1,32 @@
+# Bot2's Ancestral Recall targets Bot1, whose own Chains of Mephistopheles replaces each draw with a discard. The discard is the
+# replacement effect's, so an ability Bot1 controls causes it (CR 614.1a, 609.1), not Bot2's spell: the Wilt-Leaf Liege
+# Bot1 discards this way goes to its graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Swamp
+Chains of Mephistopheles
+Wilt-Leaf Liege
+Swamp x20
+
+[Bot2 Deck]
+Mox Sapphire
+Ancestral Recall
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Chains of Mephistopheles.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Choose(Wilt-Leaf Liege)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Chains of Mephistopheles; Mox Jet; Swamp
+Bot1.Graveyard = Swamp; Swamp; Wilt-Leaf Liege

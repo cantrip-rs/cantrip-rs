@@ -1,0 +1,58 @@
+# "If you discard Wilt-Leaf Liege and put it onto the battlefield, you've still discarded it. Abilities that trigger when you
+# discard a card will still trigger" (ruling 2024-11-08). Bot1 holds Cryptcaller Chariot ("Whenever you discard one or more cards,
+# create that many tapped 2/2 black Zombie creature tokens") with Wilt-Leaf Liege still in hand; Bot2's Liliana of the Veil +1 on
+# turn 6 has Bot1 discard the Liege, which enters the battlefield and still makes a Zombie.
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Cryptcaller Chariot
+Wilt-Leaf Liege
+Island x17
+
+[Bot2 Deck]
+Swamp x3
+Liliana of the Veil
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cryptcaller Chariot.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp#1.Activate
+Bot2.Battlefield.Swamp#2.Activate
+Bot2.Battlefield.Swamp#3.Activate
+Bot2.Hand.Liliana of the Veil.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Liliana of the Veil.Activate(Ability: Each player)
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Wilt-Leaf Liege)
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Turn = 6
+Bot1.Graveyard.Count = 1
+Bot1.Battlefield.Wilt-Leaf Liege.Power = 4
+Bot1.Battlefield.Zombie Token.Power = 2
+Bot1.Battlefield.Zombie Token.Tapped = true

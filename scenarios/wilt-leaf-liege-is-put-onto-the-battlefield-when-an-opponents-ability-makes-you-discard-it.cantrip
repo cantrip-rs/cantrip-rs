@@ -1,0 +1,41 @@
+# "If a spell or ability an opponent controls causes you to discard this card, put it onto the battlefield instead of putting it
+# into your graveyard." Bot2's Liliana of the Veil +1 ("Each player discards a card") on turn 6: Bot1 chooses the Wilt-Leaf Liege
+# in its hand, and it lands on the battlefield under Bot1 - not in the graveyard. Bot2's own discard, a Swamp, goes to its graveyard.
+
+[Bot1 Deck]
+Wilt-Leaf Liege
+Island x20
+
+[Bot2 Deck]
+Swamp x3
+Liliana of the Veil
+Swamp x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot2.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp#1.Activate
+Bot2.Battlefield.Swamp#2.Activate
+Bot2.Battlefield.Swamp#3.Activate
+Bot2.Hand.Liliana of the Veil.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Liliana of the Veil.Activate(Ability: Each player)
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Wilt-Leaf Liege)
+
+[Expect]
+Turn = 6
+Bot1.Battlefield = Island; Island; Island; Wilt-Leaf Liege
+Bot1.Graveyard.Count = 0
+Bot1.Hand.Count = 5
+Bot2.Graveyard = Swamp

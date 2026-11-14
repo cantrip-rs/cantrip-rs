@@ -1,0 +1,73 @@
+# Wilt-Leaf Liege: "Other green creatures you control get +1/+1. Other white creatures you control get +1/+1." Bot1 casts Liege
+# off Black Lotus and Mox Pearl, with a Llanowar Elves (green only), an Ornithopter (colorless) and, on turn 3, a Savannah Lions
+# (white only). The Elves are 2/2 and the Lions 3/2 - each color's bonus alone - while the Ornithopter stays 0/2 and Liege, green
+# and white itself, stays 4/4 (the word "other"). Bot2's own Savannah Lions, cast between, stays 2/1 ("you control").
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Black Lotus
+Wilt-Leaf Liege
+Llanowar Elves
+Savannah Lions
+Ornithopter
+Plains
+Island x13
+
+[Bot2 Deck]
+Mox Pearl
+Savannah Lions
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wilt-Leaf Liege.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wilt-Leaf Liege.Power = 4
+? Bot1.Battlefield.Wilt-Leaf Liege.Toughness = 4
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 2
+? Bot1.Battlefield.Llanowar Elves.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Savannah Lions.Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Savannah Lions.Power = 3
+Bot1.Battlefield.Savannah Lions.Toughness = 2
+Bot1.Battlefield.Llanowar Elves.Power = 2
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Wilt-Leaf Liege.Power = 4
+Bot1.Battlefield.Wilt-Leaf Liege.Toughness = 4
+Bot2.Battlefield.Savannah Lions.Power = 2
+Bot2.Battlefield.Savannah Lions.Toughness = 1

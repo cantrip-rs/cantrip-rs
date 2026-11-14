@@ -1,0 +1,20 @@
+# Discarding down to the maximum hand size is the rules' own action, not one a spell or ability causes (CR 514.1): Bot1, with
+# eight cards at the cleanup step of turn 3 (it plays nothing), discards its Wilt-Leaf Liege and it goes to the graveyard.
+
+[Bot1 Deck]
+Wilt-Leaf Liege
+Island x20
+
+[Bot2 Deck]
+Island x18
+
+[Actions]
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+Bot1.Discard(Wilt-Leaf Liege)
+
+[Expect]
+Bot1.Graveyard = Wilt-Leaf Liege
+Bot1.Hand.Count = 7
+Bot1.Battlefield.Count = 0

@@ -1,0 +1,59 @@
+# "If a spell or ability an opponent controls causes you to discard this card, put it onto the battlefield instead of putting it
+# into your graveyard." Bot2 begins with Leyline of the Void ("If a card would be put into an opponent's graveyard from anywhere,
+# exile it instead"), so when Bot2's Liliana of the Veil makes Bot1 discard a Wilt-Leaf Liege both replacements would change the
+# discard, and Bot1, the affected card's owner, chooses which applies (CR 616.1, 616.1e; the Liege's 2024-11-08 ruling). On turn 6
+# Bot1 takes the Liege's: it is put onto the battlefield, and the Leyline then no longer applies (CR 616.1f). On turn 8 Bot1 takes
+# the Leyline's for its second Liege: it is exiled, so the Liege's own replacement, which only replaces going to the graveyard, no
+# longer applies.
+
+[Bot1 Deck]
+Wilt-Leaf Liege x2
+Island x20
+
+[Bot2 Deck]
+Leyline of the Void
+Swamp x3
+Liliana of the Veil
+Swamp x20
+
+[Actions]
+Bot2.Accept
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp#1.Activate
+Bot2.Battlefield.Swamp#2.Activate
+Bot2.Battlefield.Swamp#3.Activate
+Bot2.Hand.Liliana of the Veil.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Liliana of the Veil.Activate(Ability: Each player)
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Wilt-Leaf Liege)
+Bot1.Replace(Wilt-Leaf Liege)
+? Bot1.Battlefield.Count = 4
+? Exile.Count = 0
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T8 Bot2.Main1]
+Bot2.Battlefield.Liliana of the Veil.Activate(Ability: Each player)
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Wilt-Leaf Liege)
+Bot1.Replace(Leyline of the Void)
+
+[Expect]
+Turn = 8
+Bot1.Battlefield = Island; Island; Island; Wilt-Leaf Liege; Island
+Exile = Wilt-Leaf Liege
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard = Swamp; Swamp
