@@ -1,0 +1,71 @@
+# Pirate's Cutlass {3}: "When this Equipment enters, attach it to target Pirate you control. Equipped creature gets +2/+1.
+# Equip {2}". Bot1 controls two Fanatical Firebrands (1/1 Goblin Pirates) and a Memnite; Bot2 controls a Fanatical Firebrand
+# too. When the Cutlass enters, the Memnite (not a Pirate) and Bot2's Firebrand (not Bot1's) are refused and Bot1's second
+# Firebrand is chosen: it becomes 3/2 and the first stays 1/1. With every source tapped for the Cutlass, equip is refused (short
+# of {2}). On turn 5 two Moxen pay the equip onto the Memnite: it becomes 3/2 and the Firebrand is 1/1 again.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Fanatical Firebrand
+Fanatical Firebrand
+Memnite
+Pirate's Cutlass
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Fanatical Firebrand
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Fanatical Firebrand.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pirate's Cutlass.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Memnite)
+! Bot1.Target(Bot2.Battlefield.Fanatical Firebrand)
+Bot1.Target(Fanatical Firebrand#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pirate's Cutlass.AttachedTo = Fanatical Firebrand
+? Bot1.Battlefield.Fanatical Firebrand#2.Power = 3
+? Bot1.Battlefield.Fanatical Firebrand#2.Toughness = 2
+? Bot1.Battlefield.Fanatical Firebrand#1.Power = 1
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot2.Battlefield.Fanatical Firebrand.Power = 1
+! Bot1.Battlefield.Pirate's Cutlass.Activate(Ability: Equip; Memnite; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Pirate's Cutlass.Activate(Ability: Equip; Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Pirate's Cutlass.AttachedTo = Memnite
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Fanatical Firebrand#1.Power = 1
+Bot1.Battlefield.Fanatical Firebrand#2.Power = 1
+Bot1.Battlefield.Fanatical Firebrand#2.Toughness = 1
