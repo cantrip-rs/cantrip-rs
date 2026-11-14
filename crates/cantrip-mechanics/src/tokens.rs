@@ -947,6 +947,14 @@ pub static INSECT_BLACK_GREEN_FLYING: CardDef = CardDef {
     ..token!(Insect)
 };
 
+/// "Create [COUNT] 1/1 black and green Insect creature tokens with flying" (CR 111.1): every token is made at once, under the
+/// ability's controller, the card file listing `INSECT_BLACK_GREEN_FLYING` in its `EXTRA`. Infestation Sage makes one; The Swarmweaver
+/// makes two.
+pub fn create_black_green_insects<const COUNT: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &INSECT_BLACK_GREEN_FLYING, COUNT)?;
+    Ok(())
+}
+
 /// The 4/4 white Angel creature token with flying and vigilance. Resplendent Angel and Parhelion II make it.
 pub static ANGEL: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::White)),

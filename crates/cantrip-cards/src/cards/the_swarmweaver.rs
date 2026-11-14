@@ -2,12 +2,6 @@ use cantrip_api::*;
 use cantrip_mechanics::{statics, tokens, triggers};
 use cantrip_oracle as oracle;
 
-/// "Create two 1/1 black and green Insect creature tokens with flying." (CR 111.1.)
-fn two_insects(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &tokens::INSECT_BLACK_GREEN_FLYING, 2)?;
-    Ok(())
-}
-
 /// "Insects and Spiders you control" while delirium holds (CR 207.2c, 613.1f): creatures under the source's controller's control
 /// with the Insect or Spider type as the earlier layers made them, the types read through the source's text (CR 612). The
 /// source itself is a Scarecrow and is not among them.
@@ -20,7 +14,7 @@ fn insects_and_spiders_you_control_with_delirium(view: &dyn LayerQuery, source: 
 }
 
 pub static CARD: CardDef = CardDef {
-    abilities: &[triggered(triggers::THIS_ENTERS, two_insects, "When The Swarmweaver enters, create two 1/1 black and green Insect creature tokens with flying.")],
+    abilities: &[triggered(triggers::THIS_ENTERS, tokens::create_black_green_insects::<2>, "When The Swarmweaver enters, create two 1/1 black and green Insect creature tokens with flying.")],
     statics: &[
         static_ability(
             Layer::PtModify,
