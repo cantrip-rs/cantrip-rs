@@ -1,0 +1,6 @@
+{
+  "name": "Rite of the Dragoncaller",
+  "manaCost": "{4}{R}{R}",
+  "type": "Enchantment",
+  "oracleText": "Whenever you cast an instant or sorcery spell, create a 5/5 red Dragon creature token with flying."
+}
