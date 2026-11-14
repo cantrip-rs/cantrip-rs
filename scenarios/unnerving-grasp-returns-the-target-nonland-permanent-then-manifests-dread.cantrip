@@ -1,0 +1,45 @@
+# Unnerving Grasp, "Return up to one target nonland permanent to its owner's hand. Manifest dread": Bot2's Ornithopter returns to Bot2's
+# hand, then of Llanowar Elves and Lightning Bolt the Elves goes face down as a 2/2 under Bot1's control and the Bolt to Bot1's graveyard.
+# A land is not a legal target (CR 115.1), so Bot2's Island is refused.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Unnerving Grasp
+Island x4
+Llanowar Elves
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Ornithopter x4
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Unnerving Grasp.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Unnerving Grasp.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Llanowar Elves | Lightning Bolt)
+
+[Expect]
+Bot2.Battlefield = Island
+# 7 cards, less the Island and Ornithopter played, plus the turn-2 draw, plus the Ornithopter returned.
+Bot2.Hand.Count = 7
+Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield..FaceDownName = Llanowar Elves
+Bot1.Battlefield..Power = 2
+Bot1.Graveyard = Unnerving Grasp; Lightning Bolt

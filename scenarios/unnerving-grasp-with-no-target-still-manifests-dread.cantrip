@@ -1,0 +1,41 @@
+# Unnerving Grasp's "up to one target": cast with no target (CR 601.2c) it returns nothing but still manifests dread (CR 608.2c, the
+# sentences are separate): the Elves goes face down as a 2/2, the Bolt to the graveyard, and Bot2's Ornithopter stays on the battlefield.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Unnerving Grasp
+Island x4
+Llanowar Elves
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Ornithopter x4
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unnerving Grasp.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Llanowar Elves | Lightning Bolt)
+
+[Expect]
+Bot2.Battlefield = Island; Ornithopter
+Bot2.Hand.Count = 6
+Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield..FaceDownName = Llanowar Elves
+Bot1.Graveyard = Unnerving Grasp; Lightning Bolt
