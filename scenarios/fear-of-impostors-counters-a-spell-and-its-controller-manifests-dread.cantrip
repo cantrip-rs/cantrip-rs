@@ -1,0 +1,46 @@
+# Fear of Impostors (flash, 3/2): "When this creature enters, counter target spell. Its controller manifests dread." Bot1 holds a Black Lotus and flashes the
+# Impostors in (CR 702.8a) on Bot2's turn 2 while Bot2's Grizzly Bears is on the stack. The trigger counters the Bears (CR 701.6) and then Bot2, the spell's
+# controller and not the Impostors' (CR 701.62a), manifests dread: it looks at Lightning Bolt and Mountain, puts the Bolt face down as a 2/2 and the Mountain
+# into its graveyard. Bot1 manifests nothing.
+
+[Bot1 Deck]
+Black Lotus
+Fear of Impostors
+Island x18
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island x4
+Island
+Lightning Bolt
+Mountain
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Fear of Impostors.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fear of Impostors.Power = 3
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Arrange(Lightning Bolt | Mountain)
+? Bot2.Graveyard = Mountain; Grizzly Bears
+? Bot2.Battlefield..FaceDown = true
+? Bot2.Battlefield..FaceDownName = Lightning Bolt
+? Bot2.Battlefield..Power = 2
+[Expect]
+Bot1.Battlefield.Count = 1
+Bot2.Battlefield.Count = 3
+Bot2.Library.Count = 10

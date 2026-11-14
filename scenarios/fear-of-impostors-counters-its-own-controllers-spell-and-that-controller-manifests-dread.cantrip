@@ -1,0 +1,32 @@
+# "Counter target spell" takes any spell, including the Impostors' controller's own, and "its controller" is then that same player (CR 701.62a): Bot1 casts
+# Memnite on turn 1 and, holding the stack with Black Lotus's mana, flashes the Impostors in with Memnite on the stack to counter it. Bot1 manifests dread:
+# of Plains and Forest the Plains goes face down and the Forest to the graveyard, next to the countered Memnite. Bot2 manifests nothing.
+
+[Bot1 Deck]
+Black Lotus
+Fear of Impostors
+Memnite
+Island x4
+Plains
+Forest
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Fear of Impostors.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains | Forest)
+? Bot1.Graveyard = Forest; Memnite; Black Lotus
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Plains
+[Expect]
+Bot1.Battlefield.Count = 2
+Bot2.Battlefield.Count = 0
