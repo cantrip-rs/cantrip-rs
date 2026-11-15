@@ -1,0 +1,42 @@
+# Darkstar Augur {2}{B} (2/3 flier): "Offspring {B}" and "At the beginning of your upkeep, reveal the top card of your library and
+# put that card into your hand. You lose life equal to its mana value." Bot1 pays the offspring cost: a Black Lotus and a Mox Jet
+# pay {2}{B}+{B}. The 1/1 token copy has the ability too, so on turn 3 two cards are revealed and put into the hand (a move, not a
+# draw): Lightning Bolt (1) then Coiling Rebirth (5), costing 6 life.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Darkstar Augur
+Swamp x4
+Lightning Bolt
+Coiling Rebirth
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Darkstar Augur.Cast(Kicked: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 3
+? Bot1.Battlefield.Darkstar Augur#2.Power = 1
+? Bot1.Battlefield.Darkstar Augur#2.Toughness = 1
+? Bot1.Battlefield.Darkstar Augur#2.Keywords = Flying
+? Bot1.Battlefield.Darkstar Augur#1.Power = 2
+? Bot1.Battlefield.Darkstar Augur#1.Toughness = 3
+? Bot1.Battlefield.Darkstar Augur#1.Keywords = Flying
+? Bot1.Life = 20
+[T3 Bot1.Upkeep]
+
+[Expect]
+Bot1.Life = 14
+Bot1.Hand.Count = 6
+Bot1.Hand.Lightning Bolt.Colors = Red
+Bot1.Hand.Coiling Rebirth.Colors = Black
