@@ -1,0 +1,77 @@
+# Earthbend's "When that land dies or is put into exile, return it to the battlefield tapped under your control" is the
+# delayed ability of the card whose earthbend it is (CR 701.66a, 603.7), whatever the object its ability resolves for has
+# become. High Fae Trickster lets Bot1 cast spells as though they had flash (CR 702.8a): with Badgermole Cub's earthbend
+# 1 on the stack targeting a Forest, Bot1 casts Cubwarden for its mutate cost over the Cub, on top (CR 702.140c), so the
+# merged creature is a Cubwarden with the Cub's abilities too (CR 702.140e). The Forest becomes a 1/1 creature; Bot2's
+# Lightning Bolt kills it on turn 8, and it comes back tapped.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+High Fae Trickster
+Forest
+Black Lotus
+Plains
+Badgermole Cub
+Cubwarden
+Island x14
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.High Fae Trickster.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Badgermole Cub.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Forest)
+? Stack.Count = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cubwarden.Cast(Badgermole Cub; Ability: Mutate)
+Bot1.Pass
+Bot1.Modes(1)
+Bot1.Pass
+[T7 Bot1.Main2]
+? Bot1.Battlefield.Forest.Power = 1
+? Bot1.Battlefield.Cubwarden.Power = 3
+[T8 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Forest)
+Bot2.Pass
+Bot1.Pass
+[T8 Bot2.Main2]
+
+[Expect]
+Turn = 8
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.Forest.Power = (absent)
+Bot1.Graveyard = Black Lotus

@@ -15,15 +15,14 @@ use cantrip_api::*;
 pub const TARGET: TargetSpec = crate::targets::LAND_YOU_CONTROL;
 
 /// The land becomes a 0/0 creature with haste that's still a land, with no duration (CR 611.2a); it gets `N` +1/+1
-/// counters; and `RETURN`, the delayed ability 0 of the card whose ability this is, is created, watching it: its source
-/// is this spell or this ability's source, its controller this spell or ability's (CR 603.7d-e).
+/// counters; and `RETURN`, the delayed ability 0 of the card whose ability this is (`StackItem::ability`: the face that
+/// prints it, whatever card the object has now - a merged creature's top, CR 702.140e), is created, watching it: its
+/// source is this spell or this ability's source, its controller this spell or ability's (CR 603.7d-e).
 pub fn effect<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if !g.target_legal(item, 0) {
         return Ok(());
     }
     let Target::Object(land) = item.target(0) else { return Ok(()) };
-    let o = *g.obj(item.object);
-    let card = o.copied_card().unwrap_or(o.card);
     // "It becomes a 0/0 land creature with haste": one instruction (`Game::one_instruction`).
     g.one_instruction(&mut |g| {
         g.add_effect(item.object, land, EffectKind::AddTypes(TypeSet::of(&[CardType::Creature])), Duration::Indefinite);
@@ -32,7 +31,7 @@ pub fn effect<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Su
         Ok(())
     })?;
     g.add_counters(land, CounterKind::PlusOne, N);
-    g.delayed_trigger(DelayedWhen::WhenEvent, item.object, item.controller, AbilityRef::delayed(card, 0), Target::Object(land));
+    g.delayed_trigger(DelayedWhen::WhenEvent, item.object, item.controller, AbilityRef::delayed(item.ability.card, 0), Target::Object(land));
     Ok(())
 }
 

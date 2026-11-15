@@ -1,0 +1,58 @@
+# With Aang, at the Crossroads's leave trigger on the stack, Bot1's Mirrorweave makes Aang a copy of Memnite until end of
+# turn; the delayed "Transform Aang" the trigger creates is still Aang's (CR 603.7, 707.2), so at Bot1's next upkeep, with
+# Mirrorweave over, Aang transforms.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Aang, at the Crossroads
+Ornithopter
+Mirrorweave
+Memnite
+Island x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aang, at the Crossroads.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+? Bot1.Battlefield.Memnite.Power = 1
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Mirrorweave.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite#2.Power = 1
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.End]
+? Bot1.Battlefield.Memnite#2.Power = 1
+[T5 Bot1.Main1]
+
+[Expect]
+Turn = 5
+Bot1.Battlefield.Aang, Destined Savior.Power = 4

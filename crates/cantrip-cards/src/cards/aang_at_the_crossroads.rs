@@ -33,9 +33,7 @@ fn another_creature_you_control_leaves(q: &dyn Query, me: &Asker, event: &Event)
 /// whichever player, made by Aang and about Aang. It transforms him only if he hasn't transformed since it was created
 /// (CR 701.27f, the 2025-10-02 ruling), which the transform instruction itself asks.
 fn transform_at_the_next_upkeep(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let o = *g.obj(item.object);
-    let card = o.copied_card().unwrap_or(o.card);
-    g.delayed_trigger(DelayedWhen::Step { step: Step::Upkeep, on_turn_of: None }, item.object, item.controller, AbilityRef::delayed(card, 1), Target::None);
+    g.delayed_trigger(DelayedWhen::Step { step: Step::Upkeep, on_turn_of: None }, item.object, item.controller, AbilityRef::delayed(item.ability.card, 0), Target::None);
     Ok(())
 }
 
@@ -49,6 +47,8 @@ pub static BACK: CardDef = CardDef {
     statics: &[static_ability(Layer::Ability, land_creatures_you_control, statics::have_vigilance, "Land creatures you control have vigilance.")],
     abilities: &[triggered(BEGINNING_OF_YOUR_COMBAT, earthbend::effect::<2>, "At the beginning of combat on your turn, earthbend 2.")
         .targets(&[earthbend::TARGET])],
+    // The back face's earthbend creates the back face's delayed ability 0 (`earthbend::RETURN`).
+    delayed: &[earthbend::RETURN],
     ..oracle::AANG_DESTINED_SAVIOR
 };
 
@@ -57,9 +57,7 @@ pub static CARD: CardDef = CardDef {
         triggered(THIS_ENTERS, look_for_a_creature, "When Aang enters, look at the top five cards of your library. You may put a creature card with mana value 4 or less from among them onto the battlefield. Put the rest on the bottom of your library in a random order."),
         triggered(when_asked(EventMask::ZONE_CHANGE, another_creature_you_control_leaves), transform_at_the_next_upkeep, "When another creature you control leaves the battlefield, transform Aang at the beginning of the next upkeep."),
     ],
-    // Earthbend's returning ability is the card's delayed ability 0 (`earthbend::RETURN`), the back face's earthbend
-    // reading it off the card.
-    delayed: &[earthbend::RETURN, delayed_trigger(effects::transform_self, "Transform Aang.")],
+    delayed: &[delayed_trigger(effects::transform_self, "Transform Aang.")],
     back: Some(&BACK),
     ..oracle::AANG_AT_THE_CROSSROADS
 };
