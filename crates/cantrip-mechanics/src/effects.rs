@@ -3260,6 +3260,15 @@ pub fn plus_one_counter_on_target(g: &mut dyn Game, item: &StackItem) -> Result<
     Ok(())
 }
 
+/// "Put a +1/+1 counter on target [creature]. You gain 1 life." (CR 122.1a, 119.3, 608.2b) as one ability: with its one target
+/// illegal as it resolves, neither instruction happens (the core removes the ability as a whole, CR 608.2b). Emergency Medical
+/// Hologram and Sunshower Druid print it.
+pub fn plus_one_counter_on_target_and_you_gain_1_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    plus_one_counter_on_target(g, item)?;
+    g.gain_life(item.controller, 1);
+    Ok(())
+}
+
 /// "Put a +1/+1 counter on target creature, then double the number of +1/+1 counters on that creature" (CR 122.1, 701.10e):
 /// nothing if the target is no longer legal (CR 608.2b). The count to double is read after the counter is on it, so a creature
 /// with none ends with two. Growth Curve and Sazh Katzroy print it.
