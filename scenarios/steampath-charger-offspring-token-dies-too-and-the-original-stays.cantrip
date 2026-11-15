@@ -1,0 +1,50 @@
+# Steampath Charger cast with offspring {2} (four Moxen): a 1/1 token copy enters (CR 702.175a) and, being a copy, has the dies ability too. Bot1 Bolts the token on turn 3:
+# its death trigger hits Bot2 (20 to 19) while the original, 2/1, stays.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Steampath Charger
+Lightning Bolt
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Steampath Charger.Cast(Kicked: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Steampath Charger#2.Token = true
+? Bot1.Battlefield.Steampath Charger#2.Power = 1
+? Bot1.Battlefield.Steampath Charger#2.Toughness = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Steampath Charger#2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 19
+Bot1.Battlefield.Steampath Charger.Power = 2
+Bot1.Battlefield.Steampath Charger.Toughness = 1
+Bot1.Battlefield.Steampath Charger#2 = (absent)
+Bot1.Battlefield.Count = 6

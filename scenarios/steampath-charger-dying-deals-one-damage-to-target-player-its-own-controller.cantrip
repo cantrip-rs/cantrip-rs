@@ -1,0 +1,39 @@
+# Steampath Charger: "target player" may be its own controller (CR 115.1d): the death trigger from Bot1's own Bolt is aimed at Bot1, who goes from 20 to 19 while Bot2 stays at 20.
+# (Bolting a creature of your own is legal; nothing else changes.)
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Steampath Charger
+Lightning Bolt
+Mountain
+Mountain x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Steampath Charger.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Steampath Charger#2 = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Steampath Charger)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 20
+Bot1.Life = 19
+Bot1.Graveyard = Steampath Charger; Lightning Bolt
+Bot1.Battlefield.Count = 3

@@ -1,0 +1,8 @@
+{
+  "name": "Steampath Charger",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Lizard Warlock",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Offspring {2} (You may pay an additional {2} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\nWhen this creature dies, it deals 1 damage to target player."
+}

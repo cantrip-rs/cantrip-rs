@@ -1,0 +1,39 @@
+# Steampath Charger: "When this creature dies, it deals 1 damage to target player" (CR 700.4, 603.10a). Bot1 Bolts its own Charger on turn 3, and the death trigger
+# is aimed at Bot2, who goes from 20 to 19. Cast without offspring, no token copy appears.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Steampath Charger
+Lightning Bolt
+Mountain
+Mountain x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Steampath Charger.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Steampath Charger#2 = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Steampath Charger)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 19
+Bot1.Life = 20
+Bot1.Graveyard = Steampath Charger; Lightning Bolt
+Bot1.Battlefield.Count = 3
