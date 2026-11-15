@@ -1,0 +1,6 @@
+{
+  "name": "Horrid Vigor",
+  "manaCost": "{1}{G}",
+  "type": "Instant",
+  "oracleText": "Target creature gains deathtouch and indestructible until end of turn."
+}
