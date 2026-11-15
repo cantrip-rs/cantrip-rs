@@ -761,6 +761,14 @@ fn creature_without_flying_filter(q: &dyn Query, asker: &Asker, t: Target) -> bo
 /// Stormbrood (Charring Bite) and Flood print it.
 pub const CREATURE_WITHOUT_FLYING: TargetSpec = target(creature_without_flying_filter);
 
+fn creature_you_control_without_flying_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_you_control_filter(q, asker, t) && creature_without_flying_filter(q, asker, t)
+}
+
+/// "Target creature you control without flying" (CR 115.1, 702.9): flying as the layers give it when it is chosen and again as
+/// the ability resolves (CR 608.2b). Pileated Provisioner and Salvation Swan print it.
+pub const CREATURE_YOU_CONTROL_WITHOUT_FLYING: TargetSpec = target(creature_you_control_without_flying_filter);
+
 fn attacking_creature_without_flying_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     attacking_creature_filter(q, asker, t) && creature_without_flying_filter(q, asker, t)
 }
