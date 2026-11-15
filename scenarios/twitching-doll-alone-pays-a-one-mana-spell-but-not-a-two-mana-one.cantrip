@@ -1,0 +1,44 @@
+# Twitching Doll's "{T}: Add one mana of any color" is one mana (CR 106.3, 601.2h): on turn 3, with the Forest and Mox spent on the
+# first Grizzly Bears, the Doll is Bot1's only untapped mana source; the second Grizzly Bears ({1}{G}) is refused as short of
+# mana, while Llanowar Elves ({G}) is cast with the Doll tapped for green, which puts a nest counter on it.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Twitching Doll
+Grizzly Bears
+Grizzly Bears
+Llanowar Elves
+Island
+Island x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Twitching Doll.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears#1.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Grizzly Bears.Cast(Mana: short)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Twitching Doll.Activate(Color: Green)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Hand.Grizzly Bears.Power = 2
+Bot1.Battlefield.Twitching Doll.Tapped = true
+Bot1.Battlefield.Twitching Doll.Counters.Nest = 1
+Stack.Count = 0

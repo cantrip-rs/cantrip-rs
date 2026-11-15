@@ -1,0 +1,32 @@
+# Twitching Doll's mana pays a cost as it is paid (CR 601.2h, 605.3a): on turn 3 Bot1 casts Lightning Bolt with the Doll the only untapped mana source, naming
+# no mana first, and taps the Doll for the {R} owed, choosing red as it does. A nest counter goes on it (the mana ability does not use the stack) and Bot2 takes 3.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Twitching Doll
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Twitching Doll.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Twitching Doll.Activate(Color: Red)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Twitching Doll.Tapped = true
+Bot1.Battlefield.Twitching Doll.Counters.Nest = 1

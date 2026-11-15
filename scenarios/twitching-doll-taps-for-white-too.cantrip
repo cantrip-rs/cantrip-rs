@@ -1,0 +1,26 @@
+# Twitching Doll's "any color" includes white (CR 106.1b): chosen on activation, one {W} is in Bot1's pool, with the nest counter put on the Doll.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Twitching Doll
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Twitching Doll.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Twitching Doll.Activate(Ability: Add; Color: White)
+? Bot1.Mana = {W}
+
+[Expect]
+Bot1.Battlefield.Twitching Doll.Counters.Nest = 1

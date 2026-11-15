@@ -1,0 +1,44 @@
+# Twitching Doll: "{T}, Sacrifice this creature: Create a 2/2 green Spider creature token with reach for each counter on this creature. Activate only as a
+# sorcery." Bot1 taps the Doll for mana on turns 3 and 5 (two nest counters), then on turn 7 pays {T} and sacrifices it: the count is of the counters it had
+# (CR 608.2h), so two Spiders (2/2 green, reach) arrive, and the Doll is in the graveyard. The Spiders are untapped; only the Doll was tapped.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Twitching Doll
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Twitching Doll.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Twitching Doll.Activate(Ability: Add; Color: Blue)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Twitching Doll.Activate(Ability: Add; Color: Blue)
+? Bot1.Battlefield.Twitching Doll.Counters.Nest = 2
+Bot1.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Twitching Doll.Activate(Ability: Create a 2/2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Twitching Doll
+Bot1.Battlefield.Spider Token#1.Power = 2
+Bot1.Battlefield.Spider Token#1.Toughness = 2
+Bot1.Battlefield.Spider Token#1.Keywords = Reach
+Bot1.Battlefield.Spider Token#1.Types = Creature
+Bot1.Battlefield.Spider Token#2.Power = 2
+Bot1.Battlefield.Spider Token#2.Toughness = 2
+Bot1.Battlefield.Spider Token#2.Keywords = Reach
+Bot1.Battlefield.Spider Token#1.Tapped = false
+Bot1.Battlefield.Count = 4
