@@ -1,0 +1,56 @@
+# Fasting: "If you would begin your draw step, you may skip that step instead" is an ability: a Fasting that has lost all
+# its abilities offers no skip (CR 613.1f). Bot1 casts Fasting and Opalescence on turn 1, so Fasting is a 1/1 creature
+# (Opalescence: its mana value); Bot2's Humility on turn 2 takes every creature's abilities. Turn 3: no hunger counter, no
+# offer to skip the draw step, Bot1 draws, and the draw destroys nothing.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Black Lotus
+Fasting
+Opalescence
+Island x2
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Black Lotus
+Humility
+Island x4
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Fasting.Cast
+Bot1.Pass
+Bot1.Hand.Opalescence.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Fasting.Types = Enchantment; Creature
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Humility.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Pass
+! Bot1.Accept
+[T3 Bot1.Main1]
+
+[Expect]
+Turn = 3
+Bot1.Life = 20
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Fasting.Counters.Hunger = (absent)
+Bot1.Battlefield.Fasting.Power = 1
+Bot1.Graveyard.Count = 1

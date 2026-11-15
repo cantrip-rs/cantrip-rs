@@ -1,0 +1,35 @@
+# Fasting: "If you would begin your draw step, you may skip that step instead. If you do, you gain 2 life." Declined, the
+# draw step happens: Bot1 draws, gains no life, and "when you draw a card, destroy this enchantment" destroys it (CR
+# 701.8a). Bot2's draw step on turn 2 is not Fasting's to skip ("your draw step": Bot2 is never asked), and Bot2's draw,
+# with Fasting on the battlefield, destroys nothing: only its controller's draw does. The skip is chosen as the draw step
+# would begin (the ruling), after the upkeep's hunger counter.
+
+[Bot1 Deck]
+Fasting
+Mox Pearl
+Plains x5
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fasting.Cast
+Bot1.Pass
+[T2 Bot2.Upkeep]
+Bot2.Pass
+! Bot2.Accept
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Fasting.Counters.Hunger = (absent)
+Bot1.Decline
+[T3 Bot1.Main1]
+
+[Expect]
+Turn = 3
+Bot1.Life = 20
+Bot1.Hand.Count = 6
+Bot1.Battlefield.Fasting = (absent)
+Bot1.Graveyard = Fasting

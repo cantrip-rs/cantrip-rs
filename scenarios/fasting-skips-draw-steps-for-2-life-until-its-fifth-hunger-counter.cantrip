@@ -1,0 +1,52 @@
+# Fasting: "If you would begin your draw step, you may skip that step instead. If you do, you gain 2 life" (CR 614.10,
+# 500.11), and "at the beginning of your upkeep, put a hunger counter on this enchantment. Then destroy this enchantment
+# if it has five or more hunger counters on it." Bot1 casts it on turn 1 and skips each of its draw steps after: each skip
+# gains exactly 2 life and draws nothing, so Fasting's own "when you draw a card" never destroys it, and Bot2's draws
+# (each of its turns) don't either - only "you" drawing does. The counter goes on before the count is read (the ruling):
+# at four counters (turn 9) Fasting stays; the fifth, on turn 11, destroys it in the upkeep, so Bot1 draws that turn.
+# Fasting {W}: Enchantment
+#   At the beginning of your upkeep, put a hunger counter on this enchantment. Then destroy this enchantment if it has five or more hunger counters on it.
+#   If you would begin your draw step, you may skip that step instead. If you do, you gain 2 life.
+#   When you draw a card, destroy this enchantment.
+
+[Bot1 Deck]
+Fasting
+Mox Pearl
+Plains x5
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fasting.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Accept
+[T3 Bot1.Main1]
+? Bot1.Life = 22
+? Bot1.Hand.Count = 5
+? Bot1.Battlefield.Fasting.Counters.Hunger = 1
+Bot1.Accept
+Bot1.Accept
+Bot1.Accept
+[T9 Bot1.Main1]
+? Bot1.Life = 28
+? Bot1.Hand.Count = 5
+? Bot1.Battlefield.Fasting.Counters.Hunger = 4
+[T11 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fasting = (absent)
+? Bot1.Graveyard = Fasting
+[T11 Bot1.Main1]
+
+[Expect]
+Turn = 11
+Bot1.Life = 28
+Bot1.Hand.Count = 6
+Bot1.Battlefield.Fasting = (absent)
+Bot1.Graveyard = Fasting
