@@ -1,0 +1,73 @@
+# Skullsnap Nuisance, Eerie: "Whenever an enchantment you control enters and whenever you fully unlock a Room, surveil 1."
+# Turn 1: Skullsnap Nuisance is cast, then Ornithopter (an artifact creature entering: no surveil), then Unholy Annex //
+# Ritual Chamber as its left door, Unholy Annex (an enchantment entering, only one door unlocked so not a full unlock): one
+# surveil, and Bot1 puts the Island it sees into the graveyard (CR 701.25a). Unholy Annex then draws Mox Ruby at the end
+# step. On turn 5 Ritual Chamber is unlocked, the Room's other door (CR 709.5i, fully unlocked, no enchantment entering):
+# one more surveil, and Bot1 leaves the card it sees on top.
+
+[Bot1 Deck]
+Swamp
+Mox Sapphire
+Mox Jet
+Skullsnap Nuisance
+Ornithopter
+Black Lotus
+Unholy Annex // Ritual Chamber
+Island
+Mox Ruby
+Swamp
+Mountain
+Island
+Plains
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Skullsnap Nuisance.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+? Bot1.Surveilled = (absent)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot1.Arrange(| Island)
+? Bot1.Surveilled = 1 requested, 1 looked
+? Bot1.Graveyard = Island; Black Lotus
+[T3 Bot1.Main1]
+? Bot1.Hand = Mox Ruby; Swamp
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Unholy Annex.Activate(Ability: right door)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains |)
+? Bot1.Surveilled = 1 requested, 1 looked; 1 requested, 1 looked
+? Bot1.Graveyard = Island; Black Lotus
+
+[Expect]
+Bot1.Battlefield.Unholy Annex // Ritual Chamber.Doors = Unholy Annex; Ritual Chamber
+Bot1.Battlefield.Demon Token.Power = 6
+Bot1.Library.Top = Plains
+Bot1.Surveilled = 1 requested, 1 looked; 1 requested, 1 looked
+Bot1.Battlefield.Skullsnap Nuisance.Keywords = Flying

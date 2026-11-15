@@ -1,0 +1,11 @@
+{
+  "name": "Skullsnap Nuisance",
+  "manaCost": "{U}{B}",
+  "type": "Creature — Insect Skeleton",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Flying\nEerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "keywords": [
+    "Flying"
+  ]
+}
