@@ -1,0 +1,5 @@
+{
+  "name": "Lakeside Shack",
+  "type": "Land",
+  "oracleText": "This land enters tapped unless a player has 13 or less life.\n{T}: Add {G} or {U}."
+}
