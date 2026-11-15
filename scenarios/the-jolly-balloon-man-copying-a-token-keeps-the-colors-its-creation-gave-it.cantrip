@@ -1,0 +1,37 @@
+# The Jolly Balloon Man copying a white Spirit token from Lingering Souls (CR 111.4, 707.2, 707.9d): a token has no mana
+# cost, and its white is no color indicator but the copiable value the text that made it gave it, so "red in addition to
+# its other colors" makes the copy white and red. Lingering Souls and Jolly are cast on turn 1 off Black Lotus and the Moxen,
+# so Jolly can tap on turn 3.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Ruby
+Mox Pearl
+Lingering Souls
+The Jolly Balloon Man
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Jolly Balloon Man.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.The Jolly Balloon Man.Activate(Spirit Token)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Spirit Token#1.Colors = White
+Bot1.Battlefield.Spirit Token#3.Colors = Red; White

@@ -1,0 +1,42 @@
+# The Jolly Balloon Man copying a transformed Delver of Secrets (CR 707.8, 707.9d): the copy's values are Insectile
+# Aberration's, whose blue is its color indicator. "Red in addition to its other colors" provides a value for color, so the
+# indicator is not copied, and the face has no mana cost: the token is red alone, while the original stays blue. Delver
+# reveals Lightning Bolt at Bot1's turn-3 upkeep to transform; Jolly was cast on turn 1 so it can tap on turn 3.
+
+[Bot1 Deck]
+Plains
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Delver of Secrets
+The Jolly Balloon Man
+Island
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Delver of Secrets.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Jolly Balloon Man.Cast
+[T3 Bot1.Upkeep]
+Bot1.Accept
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.The Jolly Balloon Man.Activate(Insectile Aberration)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Insectile Aberration#1.Colors = Blue
+Bot1.Battlefield.Insectile Aberration#2.Token = true
+Bot1.Battlefield.Insectile Aberration#2.Colors = Red
+Bot1.Battlefield.Insectile Aberration#2.Power = 1

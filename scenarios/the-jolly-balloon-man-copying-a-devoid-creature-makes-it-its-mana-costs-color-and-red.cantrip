@@ -1,0 +1,38 @@
+# Probe: The Jolly Balloon Man copying a devoid creature (CR 707.9d): the color-defining ability is not copied, so the
+# token's other colors are its mana cost's (blue), plus red.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains
+Mist Intruder
+The Jolly Balloon Man
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mist Intruder.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Jolly Balloon Man.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.The Jolly Balloon Man.Activate(Mist Intruder)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Mist Intruder#1.Colors = (absent)
+Bot1.Battlefield.Mist Intruder#2.Token = true
+Bot1.Battlefield.Mist Intruder#2.Colors = Blue; Red

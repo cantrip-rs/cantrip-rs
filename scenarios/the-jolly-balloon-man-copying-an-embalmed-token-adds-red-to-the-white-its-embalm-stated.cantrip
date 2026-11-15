@@ -1,0 +1,52 @@
+# The Jolly Balloon Man copying a Sacred Cat token made by embalm (CR 707.9b, 702.128a): embalm's exception already states the
+# token's color, white (and that it has no mana cost), and that stated value is part of its copiable values, so "red in
+# addition to its other colors" makes the copy white and red, not red alone (`Copiable::with_color` over colors an earlier
+# exception states). Turn 1: Sacred Cat and Jolly off Black Lotus and the Moxen; Bot1's own Lightning Bolt kills the Cat,
+# which is embalmed with the Lotus's last white. Turn 3: Jolly copies the token.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mox Jet
+Sacred Cat
+The Jolly Balloon Man
+Lightning Bolt
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Sacred Cat.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Jolly Balloon Man.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Sacred Cat)
+Bot1.Pass
+Bot1.Graveyard.Sacred Cat.Activate(Ability: Embalm)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sacred Cat.Colors = White
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.The Jolly Balloon Man.Activate(Sacred Cat)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Sacred Cat#1.Colors = White
+Bot1.Battlefield.Sacred Cat#2.Colors = Red; White
+Bot1.Battlefield.Sacred Cat#2.Subtypes = Balloon; Cat; Zombie
+Bot1.Battlefield.Sacred Cat#2.ManaValue = 0
