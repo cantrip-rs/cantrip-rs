@@ -2683,6 +2683,12 @@ pub enum ManaRestriction {
     /// ability: Purple Dragon Punks. This is for restrictions of different kinds; "any of these subtypes" (Dragon spells or
     /// Omen spells) is the set of subtypes `SubtypeSpells` holds, not a union.
     AnyOf(&'static [ManaRestriction]),
+    /// "Spend this mana only to cast [that card]" (CR 106.6, 601.2a, 400.7): only on casting this card - the object it is
+    /// where it is cast from, which becomes the spell (`ManaPayment::Spell::card`) - never on an ability, nor on any other
+    /// spell, nor on a cost paid for it that is not casting it ("unless its controller pays", CR 118.12). Once the card has
+    /// moved it is a new object (CR 400.7) the mana may not be spent on; `ObjectId::NONE`, a card that never was, takes none.
+    /// Ice Cauldron's "the last card exiled with this artifact" (CR 607.2a).
+    Card(ObjectId),
 }
 
 /// Where the source of an ability that restricted mana may pay for must be (CR 106.6, 109.2).
@@ -2819,7 +2825,10 @@ pub enum ManaPayment {
     /// the stack (`Obj::cast_from`).
     /// `commander`: whether the spell is the payer's own commander (CR 903.3, 903.3d) - its card was designated a commander and
     /// the payer owns it.
-    Spell { types: TypeSet, subtypes: SubtypeSet, legendary: bool, mana_value: u32, x: bool, from: ZoneKind, commander: bool },
+    /// `card`: the card cast, as the object it was before it was put on the stack (CR 601.2a, 400.7) - the card where it is,
+    /// for the advice - which mana limited to one card (`ManaRestriction::Card`) asks; on the stack it is worked out only
+    /// where some such mana is at hand, and is `ObjectId::NONE` otherwise.
+    Spell { types: TypeSet, subtypes: SubtypeSet, legendary: bool, mana_value: u32, x: bool, from: ZoneKind, commander: bool, card: ObjectId },
     /// Activating an ability whose source has these card types and these subtypes as it is activated (CR 602.2b, 605.3a):
     /// both always filled, from the source's characteristics. `on_battlefield`: whether the source is a permanent (CR
     /// 109.2), not a card in a hand, a graveyard or exile.
@@ -2926,6 +2935,7 @@ impl ManaRestriction {
             | (ManaRestriction::SpellsOrAbilities(a, x), ManaRestriction::SpellsOrAbilities(b, y)) => a.0 == b.0 && x as u8 == y as u8,
             (ManaRestriction::SpellsFrom(a), ManaRestriction::SpellsFrom(b))
             | (ManaRestriction::NotSpellsFrom(a), ManaRestriction::NotSpellsFrom(b)) => a as u8 == b as u8,
+            (ManaRestriction::Card(a), ManaRestriction::Card(b)) => a.0 == b.0,
             (ManaRestriction::AnyOf(a), ManaRestriction::AnyOf(b)) => {
                 if a.len() != b.len() {
                     return false;
@@ -2949,7 +2959,7 @@ impl ManaRestriction {
         if let ManaRestriction::Subtypes(SubtypeSpells { creature: true, abilities: Some(AbilitiesOf::Permanents), .. }) = self {
             return false;
         }
-        if let ManaRestriction::Subtypes(_) | ManaRestriction::ManaValue(_) = self {
+        if let ManaRestriction::Subtypes(_) | ManaRestriction::ManaValue(_) | ManaRestriction::Card(_) = self {
             return true;
         }
         if let ManaRestriction::AnyOf(_) = self {
@@ -2975,6 +2985,14 @@ impl ManaRestriction {
     /// Whether it limits mana by the subtypes of the spell it pays for, which only then need working out.
     pub fn names_subtypes(self) -> bool {
         matches!(self, ManaRestriction::Subtypes(_))
+    }
+
+    /// The card it limits mana to (`Card`), whose spell is the only one it pays for.
+    pub fn names_card(self) -> Option<ObjectId> {
+        match self {
+            ManaRestriction::Card(card) => Some(card),
+            _ => None,
+        }
     }
 
     /// The restrictions a union is of; none for one that is not a union.
@@ -3010,6 +3028,7 @@ impl ManaRestriction {
             (ManaRestriction::GainsHaste, _) => true,
             (ManaRestriction::LegendaryUncounterable | ManaRestriction::LegendarySpells, ManaPayment::Spell { legendary, .. }) => legendary,
             (ManaRestriction::YourCommander, ManaPayment::Spell { commander, .. }) => commander,
+            (ManaRestriction::Card(only), ManaPayment::Spell { card, .. }) => only != ObjectId::NONE && card == only,
             (ManaRestriction::Spells(allowed) | ManaRestriction::SpellsOrAbilities(allowed, _), ManaPayment::Spell { types, .. }) => {
                 allowed.0 & types.0 != 0
             }
@@ -3051,6 +3070,10 @@ impl ManaRestriction {
         }
         if let ManaRestriction::ManaValue(m) = self {
             return format!("ManaValue{}OrGreater{}Spells", m.at_least, if m.or_x { "OrX" } else { "" });
+        }
+        // The card is named by whoever can see it (the state dump: "Card Lightning Bolt").
+        if let ManaRestriction::Card(_) = self {
+            return "Card".to_string();
         }
         if let ManaRestriction::Subtypes(s) = self {
             let types: Vec<String> = s.subtypes.iter().map(|t| t.name().replace(' ', "")).collect();
@@ -3536,6 +3559,7 @@ mod tests {
             x: false,
             from: ZoneKind::Hand,
             commander: false,
+            card: ObjectId::NONE,
         };
         let creature = TypeSet::of(&[CardType::Creature]);
         let plaza = ManaRestriction::LegendarySpells;
@@ -3570,6 +3594,7 @@ mod tests {
             x: false,
             from: ZoneKind::Hand,
             commander,
+            card: ObjectId::NONE,
         };
         let restriction = ManaRestriction::YourCommander;
         assert!(restriction.may_pay(&spell(true)));
@@ -3586,6 +3611,38 @@ mod tests {
         assert_eq!(ManaRestriction::parse("YourCommander".split_whitespace()), Some(restriction));
     }
 
+    /// "Spend this mana only to cast [that card]" (CR 106.6, 400.7; Ice Cauldron): the spell that card became and nothing
+    /// else - not another card's spell, not an ability, not anything that is not casting it; and mana limited to no card
+    /// pays for nothing.
+    #[test]
+    fn mana_for_one_card_pays_for_only_its_spell() {
+        let spell = |card| ManaPayment::Spell {
+            types: TypeSet::of(&[CardType::Instant]),
+            subtypes: SubtypeSet::NONE,
+            legendary: false,
+            mana_value: 1,
+            x: false,
+            from: ZoneKind::Exile,
+            commander: false,
+            card,
+        };
+        let restriction = ManaRestriction::Card(ObjectId(7));
+        assert!(restriction.may_pay(&spell(ObjectId(7))));
+        assert!(!restriction.may_pay(&spell(ObjectId(8))));
+        assert!(!restriction.may_pay(&spell(ObjectId::NONE)));
+        assert!(!ManaRestriction::Card(ObjectId::NONE).may_pay(&spell(ObjectId::NONE)));
+        assert!(!restriction.may_pay(&ManaPayment::Ability {
+            source: TypeSet::of(&[CardType::Artifact]),
+            subtypes: SubtypeSet::NONE,
+            on_battlefield: true,
+            equip: false,
+        }));
+        assert!(!restriction.may_pay(&ManaPayment::Other));
+        assert_eq!(restriction.effects(), 0);
+        assert!(restriction.is_known() && restriction != ManaRestriction::Card(ObjectId(8)));
+        assert_eq!(restriction.names_card(), Some(ObjectId(7)));
+    }
+
     /// A restriction by subtype names any number of them, each exactly: the third of three pays for a spell with it, which a
     /// list cut down to two would have left out (CR 106.6, 205.3).
     #[test]
@@ -3599,6 +3656,7 @@ mod tests {
             x: false,
             from: ZoneKind::Hand,
             commander: false,
+            card: ObjectId::NONE,
         };
         for subtype in [Subtype::Dragon, Subtype::Omen, Subtype::Elf] {
             assert!(restriction.may_pay(&spell(subtype)), "{subtype:?}");
@@ -3614,7 +3672,7 @@ mod tests {
     fn equipment_spells_or_equip_abilities() {
         let restriction = ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Equipment).or_equip_abilities());
         let artifact = TypeSet::of(&[CardType::Artifact]);
-        let spell = |subtypes| ManaPayment::Spell { types: artifact, subtypes, legendary: false, mana_value: 2, x: false, from: ZoneKind::Hand, commander: false };
+        let spell = |subtypes| ManaPayment::Spell { types: artifact, subtypes, legendary: false, mana_value: 2, x: false, from: ZoneKind::Hand, commander: false, card: ObjectId::NONE };
         let ability = |subtypes, equip| ManaPayment::Ability { source: artifact, subtypes, on_battlefield: true, equip };
         let equipment = SubtypeSet::of(&[Subtype::Equipment]);
         assert!(restriction.may_pay(&spell(equipment)));
@@ -3638,7 +3696,7 @@ mod tests {
         let artifact = TypeSet::of(&[CardType::Artifact]);
         let elemental = || SubtypeSet::of(&[Subtype::Elemental]);
         let ability = |source, subtypes, on_battlefield| ManaPayment::Ability { source, subtypes, on_battlefield, equip: false };
-        let spell = |types| ManaPayment::Spell { types, subtypes: SubtypeSet::NONE, legendary: false, mana_value: 2, x: false, from: ZoneKind::Hand, commander: false };
+        let spell = |types| ManaPayment::Spell { types, subtypes: SubtypeSet::NONE, legendary: false, mana_value: 2, x: false, from: ZoneKind::Hand, commander: false, card: ObjectId::NONE };
         let castle = ManaRestriction::CREATURE_SPELLS_OR_ABILITIES_OF_CREATURES;
         assert!(castle.may_pay(&spell(creature)));
         assert!(!castle.may_pay(&spell(artifact)));

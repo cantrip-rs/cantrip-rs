@@ -496,7 +496,13 @@ impl StateDump {
                     if n > 0 {
                         let mut one = ManaPool::default();
                         one.0[m as usize] = n;
-                        mana = format!("{mana} {} ({})", mana_text(&one), restriction.name()).trim().to_string();
+                        // Mana for one card names it: "{R}{R} (Card Lightning Bolt)", "(Card none)" for a card that never was.
+                        let name = match restriction.names_card() {
+                            Some(card) if card == ObjectId::NONE => format!("{} none", restriction.name()),
+                            Some(card) => format!("{} {}", restriction.name(), game.known_name(card)),
+                            None => restriction.name(),
+                        };
+                        mana = format!("{mana} {} ({name})", mana_text(&one)).trim().to_string();
                     }
                 }
             }

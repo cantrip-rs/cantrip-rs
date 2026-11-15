@@ -6625,7 +6625,7 @@ fn spell_kind(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &Ca
     let from = cx.s().obj(card).zone.kind();
     let commander = cx.s().obj(card).commander && cx.s().obj(card).owner == player;
     if !a.names_subtypes() {
-        return ManaPayment::Spell { types, subtypes: SubtypeSet::NONE, legendary, mana_value, x, from, commander };
+        return ManaPayment::Spell { types, subtypes: SubtypeSet::NONE, legendary, mana_value, x, from, commander, card };
     }
     let mut subtypes = def.subtypes;
     if std::ptr::eq(def, cx.card(cx.s().obj(card).card)) {
@@ -6634,7 +6634,7 @@ fn spell_kind(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &Ca
     if def.keywords.has(Keyword::Changeling) && (def.types.has(CardType::Creature) || def.types.has(CardType::Kindred)) {
         subtypes = Subtype::CREATURE_TYPES.into_iter().fold(subtypes, SubtypeSet::with);
     }
-    ManaPayment::Spell { types, subtypes, legendary, mana_value, x, from, commander }
+    ManaPayment::Spell { types, subtypes, legendary, mana_value, x, from, commander, card }
 }
 
 /// Whether a static ability lets `player` spend mana as though it were mana of any color to cast `card` as `def` (CR
@@ -6701,7 +6701,7 @@ impl Available {
         // A spell whose X is still to be announced (CR 601.2b) has the larger mana value the larger X is (CR 202.3e):
         // mana for spells of a mana value or greater may pay for it at an X that brings it there (Ashling, Rimebound's
         // mana and a {X}{R} spell), each X costing its {X} symbols more.
-        let ManaPayment::Spell { types, subtypes, legendary, mana_value, x, from, commander } = *payment else { return false };
+        let ManaPayment::Spell { types, subtypes, legendary, mana_value, x, from, commander, card } = *payment else { return false };
         let complex = self.complex.iter().flat_map(|(alternatives, _)| alternatives).filter_map(|a| a.restriction);
         let Some(most) = self.restricted.iter().map(|&(r, ..)| r).chain(complex).filter_map(|r| r.least_mana_value()).max() else { return false };
         if cost.x == 0 || mana_value >= most as u32 {
@@ -6713,7 +6713,7 @@ impl Available {
             let more = cost.plus_x(n * per, cost.x_mana);
             self.covers_as(
                 &more,
-                &ManaPayment::Spell { types, subtypes, legendary, mana_value: mana_value + n * per, x, from, commander },
+                &ManaPayment::Spell { types, subtypes, legendary, mana_value: mana_value + n * per, x, from, commander, card },
             )
         })
     }
@@ -14417,7 +14417,22 @@ fn spell_payment(cx: &Cx, payer: PlayerId, spell: ObjectId, with_subtypes: bool)
         x: cx.mana_cost(spell).x > 0,
         from: cx.s().obj(spell).cast_from.unwrap_or(ZoneKind::Stack),
         commander: cx.s().obj(spell).commander && cx.s().obj(spell).owner == payer,
+        card: cast_card(cx, payer, spell),
     }
+}
+
+/// The card `spell` was cast from, as the object it was before it was put on the stack (CR 601.2a, 400.7), where the payer
+/// has mana limited to that one card (`ManaRestriction::Card`): the card such mana names that became this spell. An object
+/// becomes one other at most, so no two such cards are this spell's. `ObjectId::NONE` where no mana at hand names it.
+fn cast_card(cx: &Cx, payer: PlayerId, spell: ObjectId) -> ObjectId {
+    if !cx.s().has_restricted_mana(payer) {
+        return ObjectId::NONE;
+    }
+    cx.s()
+        .restricted_of(payer)
+        .filter_map(|(r, _)| r.names_card())
+        .find(|&card| card != ObjectId::NONE && cx.s().obj(card).became == Some(spell))
+        .unwrap_or(ObjectId::NONE)
 }
 
 /// The restriction a mana ability of `source` puts on the mana it adds (CR 106.6): a subtype its text names is read
@@ -16158,6 +16173,7 @@ mod tests {
         x: false,
         from: ZoneKind::Hand,
         commander: false,
+        card: ObjectId::NONE,
     };
 
     #[test]

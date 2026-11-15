@@ -595,7 +595,7 @@ kind, place it where the action could otherwise be taken, with a wait or `BotN.P
   already attached to does nothing and is not one (CR 701.3b). Absent until something has become attached
 - `Exile` lists a card exiled face down as `(face down)` (CR 406.3), and `Exile.FaceDown` says what those cards are (the dump sees
   everything; a player's view does not)
-- `BotN.Life`, `.Poison`, `.Energy`, `.Status` (`Lost`, once the player has lost the game and absent until then), `.CantWin` (`true` while an effect keeps the player from winning the game, CR 104.2b - Platinum Angel's "your opponents can't win" - absent otherwise), `.Mana` (`{U}{U}`), `.LandsPlayed`
+- `BotN.Life`, `.Poison`, `.Energy`, `.Status` (`Lost`, once the player has lost the game and absent until then), `.CantWin` (`true` while an effect keeps the player from winning the game, CR 104.2b - Platinum Angel's "your opponents can't win" - absent otherwise), `.Mana` (`{U}{U}`; restricted mana after it with its restriction, `{R} (GainsHaste)`, and mana limited to one card with that card's name, `{R} (Card Lightning Bolt)`, or `(Card none)` for a card that never was - Ice Cauldron's), `.LandsPlayed`
 - `BotN.Shuffles`, the number of times that player's library has been shuffled (CR 701.24), from the game history
 - `BotN.LostTo` (`Life`, `EmptyLibrary`, `Poison`, `Effect`), how the player lost the game (CR 104.3), from the history; absent
   until they have
