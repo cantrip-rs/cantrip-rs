@@ -122,12 +122,15 @@ pub fn first_target_bites_second(g: &mut dyn Game, item: &StackItem) -> Result<(
 pub fn targets_each_bite_last(g: &mut dyn Game, item: &StackItem) {
     let recipient_slot = item.target_count as usize - 1;
     let Some(recipient) = targets::object(g, item, recipient_slot) else { return };
-    let hits: Vec<(ObjectId, Target, u32)> = (0..recipient_slot)
-        .filter_map(|slot| {
-            let source = targets::object(g, item, slot)?;
-            let power = g.chars(source).power.unwrap_or(0).max(0) as u32;
-            Some((source, Target::Object(recipient), power))
-        })
-        .collect();
+    let sources: Vec<ObjectId> = (0..recipient_slot).filter_map(|slot| targets::object(g, item, slot)).collect();
+    each_bite(g, &sources, recipient);
+}
+
+/// "They each deal damage equal to their power to [recipient]" (CR 120.2, 120.3, 120.4b): every one of `sources` deals the power it has
+/// now to `recipient`, all of it dealt together as one event (`Game::damage_together`), a source with no power dealing none. A card whose
+/// earlier instruction changes a target's legality (Coordinated Clobbering taps its untapped targets first) judges the sources itself, as
+/// the spell begins to resolve, and calls this. `targets_each_bite_last` is this for the legal targets before the last.
+pub fn each_bite(g: &mut dyn Game, sources: &[ObjectId], recipient: ObjectId) {
+    let hits: Vec<(ObjectId, Target, u32)> = sources.iter().map(|&source| (source, Target::Object(recipient), damage_equal_to_power(g, source))).collect();
     g.damage_together(&hits);
 }
