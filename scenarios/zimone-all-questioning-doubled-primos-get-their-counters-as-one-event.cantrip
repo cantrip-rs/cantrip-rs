@@ -1,0 +1,86 @@
+# Zimone, All-Questioning with Doubling Season: its end-step trigger creates two Primos, and "then put that many +1/+1
+# counters on it" puts them on both as one event (CR 608.2c, 101.4) - two lands, doubled to four each. Both Primos are Heroes
+# by Arcane Adaptation, so Invisible Woman, Sue Storm ("whenever you put one or more +1/+1 counters on one or more other
+# Heroes you control") triggers once, not once a Primo. The legend rule keeps one Primo before the trigger is put on the
+# stack; the stack then holds that one trigger, and accepting it makes two Walls (doubled).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Ancestral Recall
+Doubling Season
+Arcane Adaptation
+Forest
+Invisible Woman, Sue Storm
+Zimone, All-Questioning
+Forest
+Forest x10
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Arcane Adaptation.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Hero)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Doubling Season.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Invisible Woman, Sue Storm.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Zimone, All-Questioning.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T7 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Primo, the Indivisible#1.Counters.PlusOnePlusOne = 4
+? Bot1.Battlefield.Primo, the Indivisible#2.Counters.PlusOnePlusOne = 4
+Bot1.Choose(Primo, the Indivisible)
+? Stack = Invisible Woman, Sue Storm
+Bot1.Accept
+
+[Expect]
+Bot1.Battlefield.Primo, the Indivisible.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield = Arcane Adaptation; Doubling Season; Forest; Forest; Invisible Woman, Sue Storm; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Primo, the Indivisible; Wall Token; Wall Token; Zimone, All-Questioning

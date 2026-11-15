@@ -1,0 +1,40 @@
+# Zimone's "if a land entered the battlefield under your control this turn" (CR 603.4, 603.6a): only a land counts. Bot1 plays an
+# Island on turns 1 and 3 and none on turn 5, when it casts Zimone and an Ornithopter: two permanents entered under its control
+# that turn and it controls two lands (prime), but neither was a land, so no Primo is made at the end step.
+
+[Bot1 Deck]
+Zimone, All-Questioning
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Ornithopter
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Zimone, All-Questioning.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.End]
+? Stack.Count = 0
+[T6 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield = Island; Island; Mox Emerald; Mox Ruby; Mox Sapphire; Ornithopter; Zimone, All-Questioning

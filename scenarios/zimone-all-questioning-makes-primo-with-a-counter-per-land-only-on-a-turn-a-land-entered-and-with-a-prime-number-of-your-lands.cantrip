@@ -1,0 +1,97 @@
+# Zimone: "At the beginning of your end step, if a land entered the battlefield under your control this turn and you control a prime number of
+# lands, create Primo, the Indivisible ..., then put that many +1/+1 counters on it." Bot1 plays a land on turns 1, 3, 7 and 9 and none on turn 5.
+# T1: one land (not prime), no Primo. T3: two lands (prime): Primo with two counters (2/2); Bot2's Lightning Bolt kills it on turn 4. T5: two lands
+# are still prime but none entered this turn, so no Primo. T7: three lands: Primo with three counters (3/3), legendary Fractal, blue and green; Bot2's second Bolt kills it on turn 8. T9: four lands, not prime, though Bot2 controls
+# three lands (prime) - the other side's lands do not count (CR 109.5) - so no Primo (CR 603.4).
+
+[Bot1 Deck]
+Zimone, All-Questioning
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain
+Mountain
+Mountain
+Island
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Zimone, All-Questioning.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Primo, the Indivisible.Power = 2
+? Bot1.Battlefield.Primo, the Indivisible.Toughness = 2
+? Bot1.Battlefield.Primo, the Indivisible.Counters.PlusOnePlusOne = 2
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Primo, the Indivisible)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 6
+[T5 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 6
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T7 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Primo, the Indivisible.Power = 3
+? Bot1.Battlefield.Primo, the Indivisible.Supertypes = Legendary
+? Bot1.Battlefield.Primo, the Indivisible.Subtypes = Fractal
+? Bot1.Battlefield.Primo, the Indivisible.Colors = Blue; Green
+? Bot1.Battlefield.Primo, the Indivisible.ManaValue = 0
+? Bot1.Battlefield.Primo, the Indivisible.Counters.PlusOnePlusOne = 3
+[T8 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Primo, the Indivisible)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 7
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T9 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 8
+Bot2.Battlefield.Count = 4
