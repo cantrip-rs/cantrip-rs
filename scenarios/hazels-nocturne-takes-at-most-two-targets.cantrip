@@ -1,0 +1,66 @@
+# Hazel's Nocturne: "up to two" targets is no more than two (CR 601.2c). With three Banemakers in the graveyard naming all three is refused, and two return, leaving the third (positive control: the refusal line sits beside the legal choice of two).
+
+[Bot1 Deck]
+Burrog Banemaker
+Burrog Banemaker
+Burrog Banemaker
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Hazel's Nocturne
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Burrog Banemaker#1)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Burrog Banemaker)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Hand.Lightning Bolt.Cast(Burrog Banemaker)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Burrog Banemaker; Burrog Banemaker; Burrog Banemaker
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Hand.Hazel's Nocturne.Cast
+! Bot1.Target(Bot1.Graveyard.Burrog Banemaker#1; Bot1.Graveyard.Burrog Banemaker#2; Bot1.Graveyard.Burrog Banemaker#3)
+Bot1.Target(Bot1.Graveyard.Burrog Banemaker#1; Bot1.Graveyard.Burrog Banemaker#2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18
+Bot1.Graveyard.Count = 2
+Bot1.Hand.Count = 2
