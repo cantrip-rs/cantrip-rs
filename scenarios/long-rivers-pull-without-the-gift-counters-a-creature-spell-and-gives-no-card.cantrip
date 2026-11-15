@@ -1,0 +1,39 @@
+# Long River's Pull {U}{U}: "Gift a card. Counter target creature spell. If the gift was promised, instead counter target spell." The
+# gift is declined. Bot1 holds an Island and a Mox Sapphire. Bot2's Llanowar Elves is a creature spell: Bot1 counters it (it goes to
+# Bot2's graveyard, never onto the battlefield) and Bot2 draws nothing (6 cards left in hand: 8 after the draw, less Forest and Elves).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Long River's Pull
+Island x3
+Island x12
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Mountain
+Lightning Bolt
+Forest x14
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+? Stack = Llanowar Elves
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Long River's Pull.Cast
+Bot1.Decline
+Bot1.Target(Llanowar Elves)
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Long River's Pull
+Bot2.Graveyard = Llanowar Elves
+Bot2.Battlefield = Forest
+Bot2.Hand.Count = 6

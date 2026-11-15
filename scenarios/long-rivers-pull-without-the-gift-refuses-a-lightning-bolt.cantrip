@@ -1,0 +1,36 @@
+# Long River's Pull {U}{U}: with the gift declined it counters only a creature spell. Bot2's Lightning Bolt aimed at Bot1 is not
+# one: with the gift declined the Pull has no legal target, so the cast is called off (the Pull stays in Bot1's hand, unspent)
+# and the Bolt resolves, leaving Bot1 at 17.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Long River's Pull
+Island x3
+Island x12
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x14
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+? Stack = Lightning Bolt
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Long River's Pull.Cast
+Bot1.Decline
+? Stack = Lightning Bolt
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 17
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard = Lightning Bolt

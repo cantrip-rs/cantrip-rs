@@ -1,0 +1,37 @@
+# Long River's Pull {U}{U}: "Gift a card. Counter target creature spell. If the gift was promised, instead counter target spell."
+# With the gift promised the Pull counters any spell: Bot2's Lightning Bolt aimed at Bot1 is countered (Bot1 stays at 20) and Bot2,
+# the opponent promised the gift, draws a card (8 after the turn's draw, less Mountain and Bolt, plus one: 7).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Long River's Pull
+Island x3
+Island x12
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x14
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+? Stack = Lightning Bolt
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Long River's Pull.Cast
+Bot1.Accept
+Bot1.Target(Lightning Bolt)
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Bot1.Graveyard = Long River's Pull
+Bot2.Graveyard = Lightning Bolt
+Bot2.Hand.Count = 7
