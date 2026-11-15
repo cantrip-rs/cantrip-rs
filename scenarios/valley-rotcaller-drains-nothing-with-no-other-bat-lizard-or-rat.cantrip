@@ -1,0 +1,26 @@
+# Valley Rotcaller alone with a Memnite (an Artifact Creature with none of the four types): X is 0 ("other" leaves out the Rotcaller,
+# a Squirrel itself, and the Memnite is no Squirrel, Bat, Lizard or Rat), so nobody's life changes by the trigger; only the
+# Rotcaller's own 1 combat damage lands. Menace is on the Rotcaller.
+
+[Bot1 Deck]
+Black Lotus
+Valley Rotcaller
+Memnite
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Valley Rotcaller.Cast
+Bot1.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Valley Rotcaller > Bot2)
+? Bot1.Battlefield.Valley Rotcaller.Keywords = Menace
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 20
