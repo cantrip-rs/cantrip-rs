@@ -126,6 +126,14 @@ pub fn this_turn(g: &mut dyn Game, item: &StackItem, to: Target, index: u8, shie
     g.add_effect(item.object, affected, EffectKind::Prevention { card, index, to, shield }, Duration::EndOfTurn);
 }
 
+/// "Prevent the next 1 damage that would be dealt to this creature this turn" (CR 615.7): a shield of 1 on the permanent whose
+/// ability this is, until end of turn. Balduvian Hydra (for a +1/+0 counter) and Rock Hydra (for {R}) print it; the card lists
+/// `ANY_DAMAGE` first in its `granted_preventions`.
+pub fn next_1_damage_to_this_this_turn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    this_turn(g, item, Target::Object(item.object), 0, Shield::Next(1));
+    Ok(())
+}
+
 /// "Prevent all combat damage that would be dealt this turn" (CR 615.1): Fog, Holy Day, Moment's Peace. The card lists
 /// `COMBAT_DAMAGE` `index`th in its `granted_preventions`.
 pub fn all_combat_damage_this_turn(g: &mut dyn Game, item: &StackItem, index: u8) {
