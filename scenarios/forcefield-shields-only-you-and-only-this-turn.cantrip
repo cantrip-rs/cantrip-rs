@@ -1,0 +1,72 @@
+# "An unblocked creature of your choice" may be one's own attacker, and "to you" is the shield's only recipient: Forcefield's
+# controller choosing their own unblocked Elite Vanguard leaves its 2 combat damage to the opponent whole. "This turn": the
+# Grizzly Bears, still unblocked in the end of combat step after dealing their damage (CR 509.1h, 511.3), are chosen then,
+# and the shield, never used, ends with the turn (CR 514.2) - the Bears' 2 the next time they attack is dealt in full.
+[Bot1 Deck]
+Forcefield
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Island
+Elite Vanguard
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Forcefield.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Elite Vanguard.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Elite Vanguard > Bot2)
+[T3 Bot1.Blockers]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Forcefield.Activate
+Bot1.Pass
+Bot1.Choose(Elite Vanguard)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T4 Bot2.BeginCombat]
+Bot2.Attack(Grizzly Bears > Bot1)
+[T4 Bot2.EndCombat]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forcefield.Activate
+Bot1.Pass
+Bot1.Choose(Grizzly Bears)
+[T4 Bot2.Main2]
+? Bot1.Life = 18
+[T6 Bot2.BeginCombat]
+Bot2.Attack(Grizzly Bears > Bot1)
+[T6 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 16
+Bot2.Life = 18

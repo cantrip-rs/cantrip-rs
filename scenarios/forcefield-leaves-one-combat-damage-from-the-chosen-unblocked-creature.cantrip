@@ -1,0 +1,69 @@
+# Forcefield, activated for exactly {1} as the attackers are declared, has no unblocked creature to choose - before blockers
+# are declared an attacking creature is neither blocked nor unblocked (CR 509.1h) - so it asks nothing and does nothing.
+# Activated again once blockers are declared, it offers only the unblocked creatures (not the blocked trampler: the ruling),
+# and leaves 1 of the chosen Elite Vanguard's 2 combat damage, while Garruk's Companion's 3 is dealt in full (CR 609.7a,
+# 615.8, 615.1). The two attackers' powers differ, so a shield on the wrong one, or on both, or leaving another amount, shows.
+[Bot1 Deck]
+Forcefield
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Island
+Phyrexian Walker
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Garruk's Companion
+Elite Vanguard
+Charging Badger
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Forcefield.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Garruk's Companion.Cast
+Bot2.Pass
+Bot2.Hand.Charging Badger.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Elite Vanguard.Cast
+Bot2.Pass
+[T4 Bot2.BeginCombat]
+Bot2.Attack(Garruk's Companion > Bot1; Elite Vanguard > Bot1; Charging Badger > Bot1)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Forcefield.Activate
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Choose
+Bot1.Block(Phyrexian Walker > Charging Badger)
+[T4 Bot2.Blockers]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forcefield.Activate
+Bot1.Pass
+! Bot1.Choose(Charging Badger)
+Bot1.Choose(Elite Vanguard)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 16
+Prevented = 1 Elite Vanguard > Bot1 by Forcefield

@@ -1,0 +1,71 @@
+# "The next time" (CR 615.8): Forcefield's shield is used up by the first-strike damage of the double striker it watches, so
+# Iroas's Champion's regular damage is dealt in full (1 + 2). Two shields on Hearthfire Hobgoblin: the first leaves 1 of its
+# first-strike damage, and the second, which then prevents none of that 1, is not used up (CR 609.7b) and leaves 1 of its
+# regular damage (1 + 1). A shield used up by preventing nothing, or never used up, changes the total.
+[Bot1 Deck]
+Forcefield
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Island
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Jet
+Hearthfire Hobgoblin
+Iroas's Champion
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Forcefield.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Hearthfire Hobgoblin.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Iroas's Champion.Cast
+Bot2.Pass
+[T4 Bot2.BeginCombat]
+Bot2.Attack(Hearthfire Hobgoblin > Bot1; Iroas's Champion > Bot1)
+[T4 Bot2.Blockers]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Forcefield.Activate
+Bot1.Pass
+Bot1.Choose(Hearthfire Hobgoblin)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forcefield.Activate
+Bot1.Pass
+Bot1.Choose(Hearthfire Hobgoblin)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Forcefield.Activate
+Bot1.Pass
+Bot1.Choose(Iroas's Champion)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 15
+Prevented = 1 Hearthfire Hobgoblin > Bot1 by Forcefield; 1 Iroas's Champion > Bot1 by Forcefield; 1 Hearthfire Hobgoblin > Bot1 by Forcefield

@@ -1,0 +1,89 @@
+# Only combat damage, and only while its creature is still unblocked as it would deal it (CR 609.7b; the ruling: a blocked
+# creature's trample damage is not Forcefield's). Combat Celebrant's exert untaps the other attackers. Orcish Artillery, chosen
+# once blockers are declared, deals 2 noncombat damage to Forcefield's controller - dealt in full - and then 1 combat damage,
+# of which the shield prevents none. Goliath Beetle, unblocked in the first combat, is chosen in its end of combat step; it
+# attacks again in the additional combat phase (CR 500.8), is blocked by Crimson Kobolds and tramples 2 over them to
+# Forcefield's controller - dealt in full, though that shield still waits.
+[Bot1 Deck]
+Forcefield
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Island
+Crimson Kobolds
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Combat Celebrant
+Goliath Beetle
+Orcish Artillery
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Crimson Kobolds.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Forcefield.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Combat Celebrant.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Orcish Artillery.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Goliath Beetle.Cast
+Bot2.Pass
+[T4 Bot2.BeginCombat]
+Bot2.Attack(Combat Celebrant > Bot1; Goliath Beetle > Bot1; Orcish Artillery > Bot1)
+Bot2.Accept
+[T4 Bot2.Blockers]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Forcefield.Activate
+Bot1.Pass
+Bot1.Choose(Orcish Artillery)
+Bot2.Battlefield.Orcish Artillery.Activate(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 18
+[T4 Bot2.EndCombat]
+? Bot1.Life = 10
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forcefield.Activate
+Bot1.Pass
+Bot1.Choose(Goliath Beetle)
+Bot2.Attack(Goliath Beetle > Bot1)
+Bot1.Block(Crimson Kobolds > Goliath Beetle)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 8
+Bot2.Life = 17
+Bot1.Graveyard = Crimson Kobolds
