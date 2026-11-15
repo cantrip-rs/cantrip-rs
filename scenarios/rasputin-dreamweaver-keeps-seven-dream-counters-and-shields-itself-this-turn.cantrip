@@ -1,0 +1,60 @@
+# Rasputin Dreamweaver can't have more than seven dream counters (CR 122.4): turn 3 began with it untapped and holding
+# seven, so its upkeep ability puts an eighth on it, and the state-based action removes all but seven (CR 704.5r).
+# Then its prevention ability: Giant Growth makes it 7/4 so damage can be seen marked; one dream counter prevents the next
+# 1 damage, so Shock marks 1 (CR 615.7). Another shield made on turn 3 is gone on turn 4 (CR 615.7, "this turn"), and Bot2's
+# Lava Dart kills the 4/1.
+
+[Bot1 Deck]
+Rasputin Dreamweaver
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Forest
+Mountain
+Giant Growth
+Shock
+Plains x20
+
+[Bot2 Deck]
+Mountain
+Lava Dart
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Rasputin Dreamweaver.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Rasputin Dreamweaver.Counters.Dream = 7
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Rasputin Dreamweaver)
+Bot1.Pass
+Bot1.Battlefield.Rasputin Dreamweaver.Activate(Ability: Prevent)
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Rasputin Dreamweaver)
+Bot1.Pass
+Bot1.Battlefield.Rasputin Dreamweaver.Activate(Ability: Prevent)
+? Bot1.Battlefield.Rasputin Dreamweaver.Damage = 1
+Bot1.Pass
+? Bot1.Battlefield.Rasputin Dreamweaver.Counters.Dream = 5
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lava Dart.Cast(Bot1.Battlefield.Rasputin Dreamweaver)
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Rasputin Dreamweaver = (absent)
+Bot1.Graveyard.Count = 4

@@ -1,0 +1,62 @@
+# Rasputin Dreamweaver's upkeep ability checks its intervening "if" again as it resolves (CR 603.4): Rapier Wit taps
+# Rasputin in response, but it still started the turn untapped, so it gets its dream counter - six after the {C} it gave
+# on turn 1, seven again. (Rapier Wit is cast on Bot1's turn, so it puts no stun counter on it.)
+
+[Bot1 Deck]
+Rasputin Dreamweaver
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Gleemox
+Plains x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Rapier Wit
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Rasputin Dreamweaver.Cast
+Bot1.Pass
+Bot1.Battlefield.Rasputin Dreamweaver.Activate(Ability: Add)
+? Bot1.Battlefield.Rasputin Dreamweaver.Counters.Dream = 6
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Rapier Wit.Cast(Bot1.Battlefield.Rasputin Dreamweaver)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Rasputin Dreamweaver.Tapped = true
+? Bot1.Battlefield.Rasputin Dreamweaver.Counters.Dream = 6
+? Stack.Count = 1
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Rasputin Dreamweaver.Tapped = true
+Bot1.Battlefield.Rasputin Dreamweaver.Counters.Dream = 7
+Bot1.Battlefield.Rasputin Dreamweaver.Counters.Stun = (absent)

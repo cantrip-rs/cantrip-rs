@@ -1,0 +1,62 @@
+# Rasputin Dreamweaver enters with seven dream counters (CR 614.1c, 122.6) and two dream counters come off it for {C}{C}
+# (CR 605.1a, 118.3): five. Turn 3 began with it untapped, so its upkeep ability puts one on it: six (CR 603.4). It
+# attacks, which taps it, and gives another counter for mana: five. On turn 5 it began the turn tapped - it untaps only in
+# that untap step - so the ability doesn't trigger, and it still has five.
+# Rasputin Dreamweaver {4}{W}{U}: Legendary Creature — Human Wizard
+#   Rasputin enters with seven dream counters on it.
+#   Remove a dream counter from Rasputin: Add {C}.
+#   Remove a dream counter from Rasputin: Prevent the next 1 damage that would be dealt to Rasputin this turn.
+#   At the beginning of your upkeep, if Rasputin started the turn untapped, put a dream counter on it.
+#   Rasputin can't have more than seven dream counters on it.
+
+[Bot1 Deck]
+Rasputin Dreamweaver
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Gleemox
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Rasputin Dreamweaver.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Rasputin Dreamweaver.Activate(Ability: Add)
+Bot1.Battlefield.Rasputin Dreamweaver.Activate(Ability: Add)
+? Bot1.Mana = {C}{C}
+? Bot1.Battlefield.Rasputin Dreamweaver.Counters.Dream = 5
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Rasputin Dreamweaver.Counters.Dream = 6
+Bot1.Attack(Rasputin Dreamweaver > Bot2)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Rasputin Dreamweaver.Activate(Ability: Add)
+? Bot1.Battlefield.Rasputin Dreamweaver.Counters.Dream = 5
+[T5 Bot1.Main1]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Rasputin Dreamweaver.Tapped = false
+Bot1.Battlefield.Rasputin Dreamweaver.Counters.Dream = 5
