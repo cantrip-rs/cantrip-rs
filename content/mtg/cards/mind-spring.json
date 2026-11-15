@@ -1,0 +1,6 @@
+{
+  "name": "Mind Spring",
+  "manaCost": "{X}{U}{U}",
+  "type": "Sorcery",
+  "oracleText": "Draw X cards."
+}

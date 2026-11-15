@@ -1,0 +1,42 @@
+# Mind Spring {X}{U}{U}: "Draw X cards." With X = 3 it costs {3}{U}{U}: two Mox Sapphires pay the {U}{U} and the Ruby, Jet and
+# Pearl pay the 3, so the pool is empty afterwards. Exactly the top three cards (Forest, Plains, Mountain) come to the hand;
+# the Swamp under them stays in the library.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mind Spring
+Island
+Forest
+Plains
+Mountain
+Swamp
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mind Spring.Cast(X: 3)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Hand = Island; Forest; Plains; Mountain
+Bot1.Library.Count = 10
+Bot1.Graveyard = Mind Spring
+Bot2.Hand.Count = 7

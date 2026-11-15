@@ -1,0 +1,30 @@
+# Mind Spring with X = 0 costs just {U}{U} and draws no cards (CR 107.3b): the hand is the one card left after the casts, and
+# nothing was taken from the library.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mind Spring
+Island
+Forest
+Plains
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mind Spring.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Hand = Island; Forest; Plains; Mountain
+Bot1.Library.Count = 12
+Bot1.Graveyard = Mind Spring
