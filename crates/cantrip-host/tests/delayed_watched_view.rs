@@ -34,6 +34,7 @@ fn delayed_watcher_marks_only_the_captured_battlefield_object_for_both_seats() {
         ability: AbilityRef::delayed(cards.id_of(&SOURCE), 0), subject: Target::Object(watched),
         members: Span::default(), since: 0, acquired: Acquired::OWN,
         words: Some(Words::NONE.changed(Word::Subtype(Subtype::Goblin), Word::Subtype(Subtype::Elf))),
+        unless: None,
     });
     let empty = HashSet::new();
     let names = ["You".to_string(), "Opponent".to_string()];

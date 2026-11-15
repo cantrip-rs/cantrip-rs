@@ -1876,7 +1876,11 @@ time you could cast an instant. If you do, ...") belongs to the player, not to a
 permanent or player"), and while the effect lasts the player is offered it any time they have priority, a spell with split
 second on the stack included (CR 702.61b), as an `ActivateAbility` option numbered from `PLAYER_SPECIAL_ACTION` and offered
 from the card, wherever it has gone - as Channel's mana ability is (`EffectKind::PlayerManaAbility`). Taking it is the same
-`special_action` any other is, its effect handed the effect's subject as its first target.
+`special_action` any other is, its effect handed the effect's subject as its first target. An action that stops a delayed
+triggered ability from triggering (CR 116.2c: Nafs Asp's "that player loses 1 life at the beginning of their next draw step
+unless they pay {1} before that draw step") is made with it by `Game::delayed_trigger_unless`: the `Delayed` names the
+effect by its timestamp (`Delayed::unless`), and taking the action takes away that ability and ends the effect, which allowed
+the action once.
 
 "As an additional cost to cast this spell, you may sacrifice any number of nonland permanents. This spell costs {1} less
 to cast for each permanent sacrificed this way" (Rottenmouth Viper) is `VariableCost::SacrificeAnyNumber`: how many is

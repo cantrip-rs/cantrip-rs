@@ -1247,6 +1247,12 @@ pub trait Game: Query {
     /// separately from the opposing creature; Gift of Immortality and Next of Kin carry a host and an Aura card.
     /// `when` must be a step variant, not an event variant. Event-delayed capture follows its existing separate rules.
     fn delayed_trigger_with(&mut self, when: DelayedWhen, source: ObjectId, controller: PlayerId, ability: AbilityRef, subject: Target, objects: &[ObjectId]);
+    /// `delayed_trigger`, with an effect that lets `payer` stop it from triggering by taking an action at a later time (CR
+    /// 116.2c, 603.7): "[effect] at the beginning of their next draw step unless they pay {1} before that draw step". The
+    /// action is `action`, a `special_action` ability of the source card's `delayed` list (its cost what they pay), offered to
+    /// `payer` any time they have priority for as long as `until` lasts, as `EffectKind::PlayerSpecialAction` is. Taking it
+    /// does its effect, then the delayed ability is gone and the effect with it: it allowed the action once, before then.
+    fn delayed_trigger_unless(&mut self, when: DelayedWhen, source: ObjectId, controller: PlayerId, ability: AbilityRef, subject: Target, payer: PlayerId, action: AbilityRef, until: Duration);
     /// Copies a spell on the stack (CR 707.10) for `copier`, not cast; with `new_targets` the copier may choose new
     /// targets (CR 707.10c). The copy, or nothing if the spell is not on the stack.
     fn copy_spell(&mut self, spell: ObjectId, copier: PlayerId, new_targets: bool) -> Result<Option<ObjectId>, Suspend>;

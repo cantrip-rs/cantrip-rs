@@ -2307,6 +2307,12 @@ pub struct Delayed {
     /// does read these, whatever becomes of its source's text (`PendingTrigger::words`). None for one the rules make as a
     /// spell is cast or a card moves (warp's, rebound's), which reads its source's words.
     pub words: Option<Words>,
+    /// The timestamp of the effect that lets a player stop it from triggering by taking an action before then (CR 116.2c:
+    /// "some effects allow a player to take an action at a later time, usually ... to stop a delayed triggered ability
+    /// from triggering"), an `EffectKind::PlayerSpecialAction` made with it: taking that action takes it away, and the
+    /// effect with it. None for one nothing stops. Nafs Asp's "that player loses 1 life at the beginning of their next
+    /// draw step unless they pay {1} before that draw step".
+    pub unless: Option<u32>,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]

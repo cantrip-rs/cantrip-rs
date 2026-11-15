@@ -956,6 +956,7 @@ fn move_together_entering_moves(
             since,
             acquired: Acquired::OWN,
             words: None,
+            unless: None,
         });
     }
     // A permanent left the battlefield: what was exiled or phased out until it left comes back now (CR 610.3, 610.4).

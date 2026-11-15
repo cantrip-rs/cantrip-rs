@@ -732,6 +732,7 @@ fn resolve_inner(cx: &mut Cx, summarize_terminal_mana: bool) -> R<Flow> {
                             since,
                             acquired: Acquired::OWN,
                             words: None,
+                            unless: None,
                         });
                     }
                 }

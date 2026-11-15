@@ -10917,6 +10917,7 @@ fn cast(
             since,
             acquired: Acquired::OWN,
             words: None,
+            unless: None,
         });
     }
 
@@ -12869,12 +12870,19 @@ fn player_special_action_options(cx: &Cx, player: PlayerId, options: &mut Vec<Ac
 }
 
 /// Taking the action the `n`th effect that allows one lets `player` take (CR 116.2c): a special action, its cost paid and its
-/// effect done at once, about what the effect names (`EffectKind::PlayerSpecialAction`).
+/// effect done at once, about what the effect names (`EffectKind::PlayerSpecialAction`). An action that stops a delayed
+/// triggered ability from triggering (CR 116.2c, `Delayed::unless`) then does: that ability is gone, and the effect that
+/// allowed the action, having done what it allowed, ends with it.
 fn player_special_action(cx: &mut Cx, player: PlayerId, n: u8) -> R<()> {
     let Some(&effect) = player_special_actions(cx.s(), player).nth(usize::from(n)) else { return Err(Stop::Cancel) };
     let EffectKind::PlayerSpecialAction { ability, about } = effect.kind else { return Err(Stop::Cancel) };
     let named = [about];
-    special_action(cx, player, effect.source, ability, None, if about == Target::None { &[] } else { &named })
+    special_action(cx, player, effect.source, ability, None, if about == Target::None { &[] } else { &named })?;
+    if let Some(at) = cx.s().delayed.iter().position(|d| d.unless == Some(effect.timestamp)) {
+        cx.st().delayed_remove(at);
+        cx.st().effects_retain(|e| *e != effect);
+    }
+    Ok(())
 }
 
 fn mana_activation_record(cx: &Cx, player: PlayerId, source: ObjectId, index: u8, color: Option<Color>, colorless: bool, targets: Vec<Target>) -> crate::takeback::Activation {
@@ -13176,6 +13184,7 @@ fn activate_mana_as(
             since,
             acquired,
             words: rider_words,
+            unless: None,
         });
     }
     if def.cost.tap {
@@ -16457,7 +16466,7 @@ mod delayed_watched_mana_tests {
             when: DelayedWhen::WatchingThisTurn, source, controller: you,
             ability: AbilityRef::delayed(cards.id_of(&SOURCE), 0), subject: Target::Object(watched),
             members: Span::default(), since: 0, acquired: Acquired::OWN,
-            words: Some(Words::NONE.changed(Word::Subtype(Subtype::Goblin), Word::Subtype(Subtype::Elf))),
+            words: Some(Words::NONE.changed(Word::Subtype(Subtype::Goblin), Word::Subtype(Subtype::Elf))), unless: None,
         });
         let mut c = Cx { g: &mut g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: vec![], damage: None, asked_at: None, doer: None, producing: None, reached: None };
         let waiting = waiting_mana_triggers(&c);
