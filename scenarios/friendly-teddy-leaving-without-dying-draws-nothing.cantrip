@@ -1,0 +1,40 @@
+# Friendly Teddy only triggers on dying (CR 700.4): Swords to Plowshares exiles it instead, so neither player draws -
+# Bot1 keeps the four Plains and the Ornithopter stays on its library, Bot2 holds only its turn-two draw.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Friendly Teddy
+Plains x4
+Ornithopter
+Plains x12
+
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Swamp x5
+Swamp
+Memnite
+Swamp x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Friendly Teddy.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Friendly Teddy)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+? Exile = Friendly Teddy
+? Bot1.Hand = Plains; Plains; Plains; Plains
+? Bot2.Hand = Swamp; Swamp; Swamp; Swamp; Swamp; Swamp
+
+[Expect]
+Exile = Friendly Teddy
+Bot1.Hand = Plains; Plains; Plains; Plains
+Bot2.Hand = Swamp; Swamp; Swamp; Swamp; Swamp; Swamp
