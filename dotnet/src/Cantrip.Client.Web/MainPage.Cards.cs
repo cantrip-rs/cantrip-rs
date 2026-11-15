@@ -765,6 +765,7 @@ public sealed partial class MainPage
         Effect = option.Effect,
         SpendSubtypes = option.SpendSubtypes,
         SpendManaValue = option.SpendManaValue,
+        SpendCard = option.SpendCard,
         Snow = option.Snow,
         PaySnow = option.PaySnow,
     };

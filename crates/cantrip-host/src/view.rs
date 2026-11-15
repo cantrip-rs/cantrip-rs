@@ -163,6 +163,8 @@ pub fn restriction_view(restriction: ManaRestriction) -> (ManaSpendFilterView, M
         r if r == ManaRestriction::ARTIFACT_SPELLS_OR_ABILITIES_OF_ARTIFACTS => ManaSpendFilterView::ArtifactSpellsOrAbilitiesOfArtifacts,
         r if r == ManaRestriction::ARTIFACT_SPELLS_OR_ABILITIES => ManaSpendFilterView::ArtifactSpellsOrAbilities,
         r if r == ManaRestriction::ARTIFACT_SPELLS_OR_ANY_ABILITY => ManaSpendFilterView::ArtifactSpellsOrAnyAbility,
+        // The card goes beside it as the viewer's handle for it (`spend_card`).
+        ManaRestriction::Card(_) => ManaSpendFilterView::Card,
         r => panic!("a mana restriction the wire has no word for: {}", r.name()),
     };
     let effect = match restriction.effects() {
@@ -173,10 +175,36 @@ pub fn restriction_view(restriction: ManaRestriction) -> (ManaSpendFilterView, M
     (filter, effect, subtypes, mana_value)
 }
 
-/// The restriction a filter, an effect and subtypes from the wire name; none for unrestricted mana.
-pub fn restriction_of(filter: ManaSpendFilterView, effect: ManaSpendEffectView, subtypes: &[String], mana_value: i32) -> Option<ManaRestriction> {
+/// What the viewer is shown as the card a restriction limits mana to (`ManaRestriction::Card`): the card where it is, or the
+/// spell it became as it is cast (CR 601.2a, 400.7), the one place the mana may still go; none for every other restriction,
+/// for a card never named, and for one gone anywhere else, which the mana can no longer be spent on.
+fn restriction_card_shown(game: &Game, restriction: ManaRestriction) -> Option<ObjectId> {
+    let card = restriction.names_card().filter(|&card| card != ObjectId::NONE)?;
+    match game.state.obj(card).became {
+        None => Some(card),
+        Some(spell) => game.state.obj(spell).zone.is(ZoneKind::Stack).then_some(spell),
+    }
+}
+
+/// The viewer's handle for the card a restriction limits mana to (`restriction_card_shown`), beside `restriction_view`, given
+/// them now if they had none; none where nothing is shown.
+pub fn restriction_card(handles: &mut HandleSpace, game: &Game, restriction: ManaRestriction) -> ViewHandle {
+    restriction_card_shown(game, restriction).map_or(ViewHandle::NONE, |shown| handles.handle(shown))
+}
+
+/// `restriction_card` as the viewer already holds it, for reading an answer back: none where they hold no handle for it.
+pub fn restriction_card_held(handles: &HandleSpace, game: &Game, restriction: ManaRestriction) -> ViewHandle {
+    restriction_card_shown(game, restriction).map_or(ViewHandle::NONE, |shown| handles.existing(shown))
+}
+
+/// The restriction a filter, an effect and subtypes from the wire name; none for unrestricted mana. `card` is the card
+/// `ManaSpendFilterView::Card` names (`restriction_card`), as the object it was when the mana was made.
+pub fn restriction_of(filter: ManaSpendFilterView, effect: ManaSpendEffectView, subtypes: &[String], mana_value: i32, card: ObjectId) -> Option<ManaRestriction> {
     if (filter, effect) == (ManaSpendFilterView::None, ManaSpendEffectView::None) {
         return None;
+    }
+    if filter == ManaSpendFilterView::Card {
+        return Some(ManaRestriction::Card(card));
     }
     if matches!(filter, ManaSpendFilterView::ManaValueSpells | ManaSpendFilterView::ManaValueOrXSpells) {
         let at_least = u8::try_from(mana_value).ok()?;
@@ -645,16 +673,17 @@ impl<'a> Projector<'a> {
         }
         for entry in s.mana_from_of(p).filter(|e| e.snow) {
             let (filter, effect, spend_subtypes, spend_mana_value) = entry.restriction.map_or((ManaSpendFilterView::None, ManaSpendEffectView::None, Vec::new(), 0), restriction_view);
+            let spend_card = entry.restriction.map_or(ViewHandle::NONE, |r| restriction_card(handles, game, r));
             let (source, rider) = if entry.restriction.is_none() && told.contains(&(entry.source, entry.rider)) { (handles.handle(entry.source), entry.rider) } else { (ViewHandle::NONE, 0) };
             for mana in Mana::ALL {
                 let n = entry.pool.get(mana);
                 if n == 0 { continue; }
                 if entry.restriction.is_none() { summary.mana[mana as usize] -= count(n); }
                 match summary.restricted_mana.iter_mut().find(|r| r.snow && r.source == source && r.rider == rider && r.r#type == Some(mana_view(mana))
-                    && r.filter == filter && r.effect == effect && r.spend_subtypes == spend_subtypes && r.spend_mana_value == spend_mana_value) {
+                    && r.filter == filter && r.effect == effect && r.spend_subtypes == spend_subtypes && r.spend_mana_value == spend_mana_value && r.spend_card == spend_card) {
                     Some(r) => r.amount += count(n),
                     None => summary.restricted_mana.push(RestrictedManaView { r#type: Some(mana_view(mana)), amount: count(n),
-                        filter, effect, spend_subtypes: spend_subtypes.clone(), spend_mana_value, source, snow: true, rider }),
+                        filter, effect, spend_subtypes: spend_subtypes.clone(), spend_mana_value, spend_card, source, snow: true, rider }),
                 }
             }
         }
@@ -671,6 +700,7 @@ impl<'a> Projector<'a> {
                         effect,
                         spend_subtypes,
                         spend_mana_value,
+                        spend_card: restriction_card(handles, game, restriction),
                         source: ViewHandle::NONE,
                         snow: false,
                         rider: 0,
@@ -2327,7 +2357,7 @@ mod tests {
     fn a_mana_restriction_reads_back_from_the_wire_as_it_was_sent() {
         for restriction in ManaRestriction::NAMED.into_iter().map(|(r, _)| r).chain(ManaRestriction::ANY_OF.into_iter().map(ManaRestriction::AnyOf)) {
             let (filter, effect, subtypes, mana_value) = restriction_view(restriction);
-            assert_eq!(restriction_of(filter, effect, &subtypes, mana_value), Some(restriction), "{}", restriction.name());
+            assert_eq!(restriction_of(filter, effect, &subtypes, mana_value, ObjectId::NONE), Some(restriction), "{}", restriction.name());
         }
         // The same filter, and only the effect says whether the mana also makes the spell uncounterable.
         let (filter, effect, ..) = restriction_view(ManaRestriction::LegendarySpells);
@@ -2340,7 +2370,13 @@ mod tests {
         let ronin = ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Equipment).or_equip_abilities());
         let (filter, effect, subtypes, mana_value) = restriction_view(ronin);
         assert_eq!((filter, subtypes.as_slice()), (ManaSpendFilterView::SubtypeSpellsOrEquipAbilities, ["Equipment".to_string()].as_slice()));
-        assert_eq!(restriction_of(filter, effect, &subtypes, mana_value), Some(ronin));
+        assert_eq!(restriction_of(filter, effect, &subtypes, mana_value, ObjectId::NONE), Some(ronin));
+        // Ice Cauldron's: one card, which goes beside the filter (`restriction_card`) and comes back as the card
+        // (`tests/scenarios_at_a_table.rs` plays it at a table).
+        let cauldron = ManaRestriction::Card(ObjectId(7));
+        let (filter, effect, subtypes, mana_value) = restriction_view(cauldron);
+        assert_eq!(filter, ManaSpendFilterView::Card);
+        assert_eq!(restriction_of(filter, effect, &subtypes, mana_value, ObjectId(7)), Some(cauldron));
     }
 
     /// A power and toughness printed as stars are not a number on the printed card: the goyfs' sizes are their abilities'

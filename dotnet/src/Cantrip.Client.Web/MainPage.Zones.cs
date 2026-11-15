@@ -654,6 +654,8 @@ public sealed partial class MainPage
                 continue;
             }
 
+            // Mana for one card names it (CR 106.6): the card's name where the viewer can see it.
+            string? card = restricted.Filter == ManaSpendFilterView.Card ? client.Object(restricted.SpendCard)?.Name : null;
             chips.Add(Chip(
                 restricted.Type,
                 restricted.Filter,
@@ -661,11 +663,12 @@ public sealed partial class MainPage
                 restricted.SpendSubtypes,
                 restricted.SpendManaValue,
                 restricted.Amount,
-                restricted.Snow ? (restricted.Filter == ManaSpendFilterView.None && restricted.Effect == ManaSpendEffectView.None ? "snow" : $"snow · {RestrictionCaption(restricted.Filter, restricted.Effect, restricted.SpendSubtypes, restricted.SpendManaValue)}") : RestrictionCaption(restricted.Filter, restricted.Effect, restricted.SpendSubtypes, restricted.SpendManaValue),
+                restricted.Snow ? (restricted.Filter == ManaSpendFilterView.None && restricted.Effect == ManaSpendEffectView.None ? "snow" : $"snow · {RestrictionCaption(restricted.Filter, restricted.Effect, restricted.SpendSubtypes, restricted.SpendManaValue, card)}") : RestrictionCaption(restricted.Filter, restricted.Effect, restricted.SpendSubtypes, restricted.SpendManaValue, card),
                 SnowTooltip(restricted.Snow, restricted.Filter == ManaSpendFilterView.None && restricted.Effect == ManaSpendEffectView.None
                     ? string.Empty
-                    : RestrictionTooltip(restricted.Filter, restricted.Effect, restricted.SpendSubtypes, restricted.SpendManaValue)),
-                snow: restricted.Snow));
+                    : RestrictionTooltip(restricted.Filter, restricted.Effect, restricted.SpendSubtypes, restricted.SpendManaValue, card)),
+                snow: restricted.Snow,
+                spendCard: restricted.SpendCard));
         }
 
         // The player's own mana abilities (CR 611.2a), which no card on the table offers: beside the pool they add to,
@@ -694,7 +697,7 @@ public sealed partial class MainPage
 
         return chips;
 
-        PlayerRail.ManaChipSpec Chip(ManaTypeView type, ManaSpendFilterView filter, ManaSpendEffectView effect, List<string> subtypes, int manaValue, int count, string? caption, string? tooltip, ViewHandle source = default, bool snow = false, uint rider = 0)
+        PlayerRail.ManaChipSpec Chip(ManaTypeView type, ManaSpendFilterView filter, ManaSpendEffectView effect, List<string> subtypes, int manaValue, int count, string? caption, string? tooltip, ViewHandle source = default, bool snow = false, uint rider = 0, ViewHandle spendCard = default)
         {
             if (paying is null)
             {
@@ -702,13 +705,13 @@ public sealed partial class MainPage
             }
 
             int committed = paying.Committed
-                .Where(c => c.Type == type && c.Filter == filter && c.Effect == effect && c.SpendSubtypes.SequenceEqual(subtypes) && c.SpendManaValue == manaValue && c.Source == source && c.Snow == snow && c.Rider == rider)
+                .Where(c => c.Type == type && c.Filter == filter && c.Effect == effect && c.SpendSubtypes.SequenceEqual(subtypes) && c.SpendManaValue == manaValue && c.Source == source && c.Snow == snow && c.Rider == rider && c.SpendCard == spendCard)
                 .Sum(c => c.Amount);
 
             string spokenFor = committed == 0 ? string.Empty : $"{committed} to spell";
             string full = caption is null ? spokenFor : spokenFor.Length == 0 ? caption : $"{caption} · {spokenFor}";
 
-            IReadOnlyList<ActionOptionMessage> assignments = _actions.AssignmentsFor(type, filter, effect, subtypes, manaValue, source, snow, rider);
+            IReadOnlyList<ActionOptionMessage> assignments = _actions.AssignmentsFor(type, filter, effect, subtypes, manaValue, source, snow, rider, spendCard);
             if (assignments.Count == 0)
             {
                 return new PlayerRail.ManaChipSpec(type, count, full.Length == 0 ? null : full, tooltip, null);
@@ -723,8 +726,9 @@ public sealed partial class MainPage
         }
     }
 
-    internal static string RestrictionCaption(ManaSpendFilterView filter, ManaSpendEffectView effect, List<string> subtypes, int manaValue) => (filter, effect) switch
+    internal static string RestrictionCaption(ManaSpendFilterView filter, ManaSpendEffectView effect, List<string> subtypes, int manaValue, string? card = null) => (filter, effect) switch
     {
+        (ManaSpendFilterView.Card, _) => card is null ? "a card that is gone" : $"only {card}",
         (ManaSpendFilterView.NoncreatureSpells, _) => "noncreature spells",
         (ManaSpendFilterView.ManaValueSpells, _) => $"mana value {manaValue}+",
         (ManaSpendFilterView.ManaValueOrXSpells, _) => $"mana value {manaValue}+ or X",
@@ -775,10 +779,13 @@ public sealed partial class MainPage
         (true, true) => $"{restriction}. Produced by a snow source; may also pay {{S}}",
     };
 
-    private static string RestrictionTooltip(ManaSpendFilterView filter, ManaSpendEffectView effect, List<string> subtypes, int manaValue)
+    private static string RestrictionTooltip(ManaSpendFilterView filter, ManaSpendEffectView effect, List<string> subtypes, int manaValue, string? card = null)
     {
         string text = filter switch
         {
+            ManaSpendFilterView.Card when card is null =>
+                "Spend this mana only to cast one card, which is gone from where it could be cast, so it can't be spent on anything.",
+            ManaSpendFilterView.Card => $"Spend this mana only to cast {card}.",
             ManaSpendFilterView.NoncreatureSpells => "Spend this mana only to cast a noncreature spell.",
             ManaSpendFilterView.ManaValueSpells => $"Spend this mana only to cast spells with mana value {manaValue} or greater.",
             ManaSpendFilterView.ManaValueOrXSpells =>

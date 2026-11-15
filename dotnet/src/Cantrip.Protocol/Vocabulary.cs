@@ -470,6 +470,10 @@ public enum ManaSpendFilterView
     SubtypeSpellsOrEquipAbilities = 27,
     /// <summary>Only to cast the payer's own commander (CR 903.3d): "spend this mana only to cast your commander".</summary>
     YourCommander = 28,
+    /// <summary>Only to cast one card, named beside it (<c>SpendCard</c>): Ice Cauldron's "spend this mana only to cast the
+    /// last card exiled with this artifact" (CR 106.6): the card where it is, or the spell it became as it is cast. With no
+    /// card beside it - one gone anywhere else, or none ever exiled - it pays for nothing.</summary>
+    Card = 29,
 }
 
 /// <summary>What spending some mana does to whatever it pays for (CR 106.6): the effect half of a restriction.</summary>

@@ -22,7 +22,7 @@ namespace Cantrip.Protocol;
 public sealed class PlayerView
 {
     /// <summary>Protocol version, checked at the handshake so mismatched builds fail loudly.</summary>
-    public const int ProtocolVersion = 239;
+    public const int ProtocolVersion = 240;
 
     [Key(0)]
     public int Version { get; set; } = ProtocolVersion;
@@ -256,6 +256,13 @@ public sealed class RestrictedManaView
     /// </summary>
     [Key(9)]
     public uint Rider { get; set; }
+
+    /// <summary>
+    /// For <see cref="ManaSpendFilterView.Card"/>: the card it may be spent to cast, as this viewer's handle for it - or for
+    /// the spell it became as it is cast; none otherwise, or for a card gone anywhere else, which it can't be spent on.
+    /// </summary>
+    [Key(10)]
+    public ViewHandle SpendCard { get; set; }
 
 }
 

@@ -539,7 +539,8 @@ public sealed record ManaChipState(
     string SpendSubtypes = "",
     int SpendManaValue = 0,
     int Source = 0,
-    int? Ability = null);
+    int? Ability = null,
+    int SpendCard = 0);
 
 /// <summary>An ability shown resolving: the way it cut, and each arrow's target and way.</summary>
 public sealed record EffectState(string Feeling, bool Lit, IReadOnlyList<ArrowState> Arrows);

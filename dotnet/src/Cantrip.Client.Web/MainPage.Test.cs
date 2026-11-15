@@ -491,6 +491,7 @@ public sealed partial class MainPage
                             json.WriteString("effect", assign.Effect.ToString());
                             json.WriteString("spendSubtypes", string.Join(",", assign.SpendSubtypes));
                             json.WriteNumber("spendManaValue", assign.SpendManaValue);
+                            json.WriteNumber("spendCard", assign.SpendCard.Value);
                             json.WriteNumber("source", assign.Source.Value);
                         }
 

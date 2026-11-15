@@ -618,7 +618,8 @@ public sealed partial class TabletPage : UserControl
         foreach (RestrictedManaView restricted in player.RestrictedMana)
         {
             string caption = restricted.Source.IsNone
-                ? MainPage.RestrictionCaption(restricted.Filter, restricted.Effect, restricted.SpendSubtypes, restricted.SpendManaValue)
+                ? MainPage.RestrictionCaption(restricted.Filter, restricted.Effect, restricted.SpendSubtypes, restricted.SpendManaValue,
+                    restricted.Filter == ManaSpendFilterView.Card ? _client.Object(restricted.SpendCard)?.Name : null)
                 : $"from {_client.Object(restricted.Source)?.Name ?? "a permanent"}";
             mana.Add(new PlayerRail.ManaChipSpec(restricted.Type, restricted.Amount, restricted.Snow ? $"snow · {caption}" : caption, null, null));
         }

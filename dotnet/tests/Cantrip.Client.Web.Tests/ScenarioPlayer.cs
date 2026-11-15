@@ -825,7 +825,8 @@ public sealed class ScenarioPlayer
                         && c.Effect == action.Effect.ToString()
                         && c.SpendSubtypes == string.Join(",", action.SpendSubtypes)
                         && c.SpendManaValue == action.SpendManaValue
-                        && c.Source == action.Source.Value)
+                        && c.Source == action.Source.Value
+                        && c.SpendCard == action.SpendCard.Value)
                     ?? throw new Xunit.Sdk.XunitException(
                         $"No {action.Mana} of {action.Filter}/{action.Effect} from {action.Source} in the pool to click: "
                         + string.Join(", ", me.Mana.Select(c => $"{c.Count} {c.Type}{(c.Caption.Length > 0 ? $" ({c.Caption})" : string.Empty)}")));

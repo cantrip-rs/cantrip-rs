@@ -52,6 +52,22 @@ fn target(handles: &HandleSpace, game: &Game, t: &TargetMessage) -> Result<Targe
     }
 }
 
+/// The card an answer's mana limited to one card names (`ManaSpendFilterView::Card`, `spend_card`), as the object it was
+/// when the mana was made: the card of the offered option whose restriction the viewer's handle names. The viewer is shown
+/// the spell a card became as it is cast (CR 400.7, 601.2a: an exiled card cast to the stack), so the card is the one the
+/// question offered, never the object the handle names now; `ObjectId::NONE` for none offered.
+fn restriction_card_of(handles: &HandleSpace, game: &Game, request: &Request, card: ViewHandle) -> ObjectId {
+    let (RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. } | RequestKind::Priority { options }) = &request.kind else {
+        return ObjectId::NONE;
+    };
+    options
+        .iter()
+        .filter_map(|o| o.restriction)
+        .find(|&r| r.names_card().is_some() && crate::view::restriction_card_held(handles, game, r) == card)
+        .and_then(ManaRestriction::names_card)
+        .unwrap_or(ObjectId::NONE)
+}
+
 fn cards(handles: &HandleSpace, game: &Game, list: &[ViewHandle]) -> Result<Vec<ObjectId>, Untranslatable> {
     list.iter().map(|&h| object(handles, game, h)).collect()
 }
@@ -121,7 +137,7 @@ pub fn translate(
                 targets: a.targets.iter().map(|t| target(handles, game, t)).collect::<Result<_, _>>()?,
                 color: a.color.map(color_of),
                 mana: a.mana.map(mana_of),
-                restriction: restriction_of(a.filter, a.effect, &a.spend_subtypes, a.spend_mana_value),
+                restriction: restriction_of(a.filter, a.effect, &a.spend_subtypes, a.spend_mana_value, restriction_card_of(handles, game, request, a.spend_card)),
                 snow: a.snow,
                 pay_snow: a.pay_snow,
                 rider: 0,
@@ -343,6 +359,7 @@ pub fn payload_of(answer: &Answer, request: &Request, handles: &mut HandleSpace,
             a.pay_snow = action.pay_snow;
             if let Some(restriction) = action.restriction {
                 (a.filter, a.effect, a.spend_subtypes, a.spend_mana_value) = restriction_view(restriction);
+                a.spend_card = crate::view::restriction_card(handles, game, restriction);
             }
             // A mana ability's sacrifice goes to the wire as `Sacrifice`, not a target (`prompt::option_message`).
             let sacrifices = action.kind == ActionKind::ActivateAbility

@@ -220,6 +220,12 @@ Giving it up (`CancelCasting`) takes the declaration back (CR 733.1), and the `D
 `TakenBack` true, which the web client says and with which the automatic seats declare `Suggested`, which costs nothing. The
 web client titles the payment "Pay {1} to block with Hipparion". Version 239.
 
+**Mana for one card.** Mana that may be spent only to cast one card (CR 106.6: Ice Cauldron's "the last card exiled with this
+artifact", `ManaRestriction::Card`) is the `ManaSpendFilterView` `Card`, with the card beside it as `SpendCard` on the pool's
+`RestrictedManaView`, on `AssignMana` options and on the `TakeActionAnswer` that spends it: the seat's handle for the card
+where it is, or for the spell it became as it is cast, and none for a card gone anywhere else. The host reads the card back
+from the option offered, never from what the handle names now. Version 240.
+
 An unrestricted `SeparatePiles` selection (`AnyNumber`, no parts or candidate restriction) uses the existing non-targeted
 `ChooseTargetPromptMessage` presentation; its `TargetsChosenAnswer` is translated to the engine's card selection and
 checked by the same validator. A pile-choice mode names its members, with an empty pile named "nothing" (CR 700.3d). The same

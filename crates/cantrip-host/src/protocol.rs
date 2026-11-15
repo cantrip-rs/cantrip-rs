@@ -380,6 +380,10 @@ pub enum ManaSpendFilterView {
     SubtypeSpellsOrEquipAbilities,
     /// Only to cast the payer's own commander (CR 903.3d): "spend this mana only to cast your commander".
     YourCommander,
+    /// Only to cast one card, named beside it (`spend_card`): Ice Cauldron's "spend this mana only to cast the last card
+    /// exiled with this artifact" (CR 106.6) - the card where it is, or the spell it became as it is cast. With no card
+    /// beside it, one gone anywhere else or none ever exiled, it pays for nothing.
+    Card,
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -494,6 +498,10 @@ pub struct RestrictedManaView {
     pub spend_subtypes: Vec<String>,
     /// For `ManaValueSpells` and `ManaValueOrXSpells`: the least mana value the spell may have; 0 otherwise.
     pub spend_mana_value: i32,
+    /// For `Card`: the card it may be spent to cast, as the viewer's handle for it or for the spell it became as it is cast
+    /// (`view::restriction_card`); none otherwise.
+    #[serde(default)]
+    pub spend_card: ViewHandle,
     /// The permanent that produced it, for ordinary mana a rule tells apart by its source (CR 106.3: "mana produced by
     /// Barracks of the Thousand"), which `AssignMana` options name as their `Source`, and for the mana a "when that mana is
     /// spent" ability rides (Path of Ancestry's, CR 603.7a), which is told apart from the rest of its source's; none otherwise.
@@ -798,6 +806,9 @@ pub struct ActionOptionMessage {
     pub spend_subtypes: Vec<String>,
     /// The mana value `filter` names, as `RestrictedManaView::spend_mana_value`.
     pub spend_mana_value: i32,
+    /// The card `filter` names, as `RestrictedManaView::spend_card`.
+    #[serde(default)]
+    pub spend_card: ViewHandle,
     pub spell_name: String,
     pub produces_of_any_color_each: i32,
     pub sacrifice_candidates: Vec<ViewHandle>,
@@ -860,6 +871,7 @@ impl ActionOptionMessage {
             effect: ManaSpendEffectView::None,
             spend_subtypes: Vec::new(),
             spend_mana_value: 0,
+            spend_card: ViewHandle::NONE,
             spell_name: String::new(),
             produces_of_any_color_each: 0,
             sacrifice_candidates: Vec::new(),
@@ -1730,6 +1742,9 @@ pub struct TakeActionAnswer {
     pub spend_subtypes: Vec<String>,
     /// The mana value `filter` names, as `RestrictedManaView::spend_mana_value`.
     pub spend_mana_value: i32,
+    /// The card `filter` names, as `RestrictedManaView::spend_card`.
+    #[serde(default)]
+    pub spend_card: ViewHandle,
     #[serde(default)]
     pub snow: bool,
     #[serde(default)]
@@ -1753,6 +1768,7 @@ impl TakeActionAnswer {
             effect: ManaSpendEffectView::None,
             spend_subtypes: Vec::new(),
             spend_mana_value: 0,
+            spend_card: ViewHandle::NONE,
             snow: false,
             pay_snow: false,
         }
@@ -1768,6 +1784,7 @@ impl TakeActionAnswer {
         answer.effect = option.effect;
         answer.spend_subtypes = option.spend_subtypes.clone();
         answer.spend_mana_value = option.spend_mana_value;
+        answer.spend_card = option.spend_card;
         answer.snow = option.snow;
         answer.pay_snow = option.pay_snow;
         if option.kind == ActionKindView::AssignMana { answer.mana = option.produces.first().copied(); }

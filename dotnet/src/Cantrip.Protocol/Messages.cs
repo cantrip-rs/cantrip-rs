@@ -2523,6 +2523,10 @@ public sealed class ActionOptionMessage
     [Key(37)]
     public uint Rider { get; set; }
 
+    /// <summary>The card <see cref="Filter"/> names, as <see cref="RestrictedManaView.SpendCard"/>.</summary>
+    [Key(38)]
+    public ViewHandle SpendCard { get; set; }
+
 }
 
 /// <summary>
@@ -3733,6 +3737,7 @@ public sealed class TakeActionAnswer : AnswerPayload
             Effect = option.Effect,
             SpendSubtypes = [.. option.SpendSubtypes],
             SpendManaValue = option.SpendManaValue,
+            SpendCard = option.SpendCard,
             Snow = option.Snow,
             PaySnow = option.PaySnow,
             Mana = option.Kind == ActionKindView.AssignMana && option.Produces.Count > 0 ? option.Produces[0] : null,
@@ -3745,6 +3750,10 @@ public sealed class TakeActionAnswer : AnswerPayload
     /// <summary>Snow-source mana quality or the {S} symbol it pays (CR 107.4h).</summary>
     [Key(17)]
     public bool PaySnow { get; set; }
+
+    /// <summary>The card <see cref="Filter"/> names, as <see cref="RestrictedManaView.SpendCard"/>.</summary>
+    [Key(18)]
+    public ViewHandle SpendCard { get; set; }
 
 }
 

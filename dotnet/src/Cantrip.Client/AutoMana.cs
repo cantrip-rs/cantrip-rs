@@ -183,7 +183,7 @@ public static class AutoMana
 
         // Rows whose mana is different mana — Arena of Glory's plain {R} beside its {R}{R} that gives a creature haste —
         // are a choice about more than colour, and the player makes it.
-        if (rows.Where(row => IsManaAbility(row.Option)).Select(row => (row.Option.Filter, row.Option.Effect, string.Join(",", row.Option.SpendSubtypes), row.Option.SpendManaValue)).Distinct().Count() > 1)
+        if (rows.Where(row => IsManaAbility(row.Option)).Select(row => (row.Option.Filter, row.Option.Effect, string.Join(",", row.Option.SpendSubtypes), row.Option.SpendManaValue, row.Option.SpendCard)).Distinct().Count() > 1)
         {
             return null;
         }
