@@ -1,0 +1,65 @@
+# Two Raging Rivers: Memnite's attack triggers both, and each makes its own piles and label. Bot2 puts Phyrexian Walker and
+# Crookshank Kobolds "left" for the first River to resolve, Kobolds of Kher Keep and Crookshank Kobolds "left" for the
+# second; Memnite is labelled "left" by both. Only Crookshank Kobolds, "left" in both Rivers' piles, may block it: one River's
+# "left" pile is not the other's. Skrelv, Defector Mite's "can't be blocked by black creatures" on Memnite (CR 509.1b) is no
+# River's label - the Kobolds are red - and doesn't keep them from blocking.
+[Bot1 Deck]
+Raging River
+Raging River
+Black Lotus
+Mox Ruby
+Mox Pearl
+Skrelv, Defector Mite
+Memnite
+Mountain x10
+
+[Bot2 Deck]
+Phyrexian Walker
+Kobolds of Kher Keep
+Crookshank Kobolds
+Island
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Raging River.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Raging River.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Skrelv, Defector Mite.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Hand.Kobolds of Kher Keep.Cast
+Bot2.Hand.Crookshank Kobolds.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Skrelv, Defector Mite.Activate(Bot1.Battlefield.Memnite)
+Bot1.Modes(1)
+Bot1.Colors(Black)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Memnite > Bot2)
+Bot2.Choose(Phyrexian Walker; Crookshank Kobolds)
+Bot1.Choose(Memnite)
+Bot2.Choose(Kobolds of Kher Keep; Crookshank Kobolds)
+Bot1.Choose(Memnite)
+Bot2.Pass
+! Bot2.Block(Phyrexian Walker > Memnite)
+! Bot2.Block(Kobolds of Kher Keep > Memnite)
+Bot2.Block(Crookshank Kobolds > Memnite)
+? Combat.Blocks = Crookshank Kobolds > Memnite
+
+[Expect]
+Bot1.Battlefield.Memnite.BlockRestriction = Can't be blocked by black creatures; Can't be blocked except by creatures with flying and creatures in a "left" pile; Can't be blocked except by creatures with flying and creatures in a "left" pile; Labelled by Raging River; Labelled by Raging River
+Bot2.Battlefield.Phyrexian Walker.BlockRestriction = In the "left" pile; In the "right" pile
+Bot2.Battlefield.Kobolds of Kher Keep.BlockRestriction = In the "left" pile; In the "right" pile
+Bot2.Battlefield.Crookshank Kobolds.BlockRestriction = In the "left" pile; In the "left" pile

@@ -1,0 +1,67 @@
+# Raging River: as Bot1 attacks with Memnite and Crimson Kobolds, Bot2 divides its creatures without flying - Phyrexian Walker
+# "left", Kobolds of Kher Keep "right"; Ornithopter has flying and is in no pile, and Bot1's own Crookshank Kobolds, which stays
+# home, is not Bot2's to divide - and only then does Bot1 label Memnite "left" and Crimson Kobolds "right". Each pile blocks
+# only the attacker of its label, Ornithopter either one for its flying, and Zealous Guardian, cast with flash after the
+# ability resolved, in no pile at all, neither (the rulings; CR 509.1b). The restriction lasts only this combat: it is
+# gone by the second main phase.
+[Bot1 Deck]
+Raging River
+Black Lotus
+Memnite
+Crimson Kobolds
+Crookshank Kobolds
+Mountain
+Mountain
+Mountain x10
+
+[Bot2 Deck]
+Phyrexian Walker
+Kobolds of Kher Keep
+Ornithopter
+Mox Pearl
+Zealous Guardian
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Raging River.Cast
+? Bot1.Mana = {R}
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Crimson Kobolds.Cast
+Bot1.Hand.Crookshank Kobolds.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Hand.Kobolds of Kher Keep.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2; Crimson Kobolds > Bot2)
+Bot2.Choose(Phyrexian Walker)
+Bot1.Choose(Memnite)
+? Bot2.Battlefield.Phyrexian Walker.BlockRestriction = In the "left" pile
+? Bot2.Battlefield.Kobolds of Kher Keep.BlockRestriction = In the "right" pile
+? Bot2.Battlefield.Ornithopter.BlockRestriction = (absent)
+? Bot1.Battlefield.Crookshank Kobolds.BlockRestriction = (absent)
+? Bot1.Battlefield.Memnite.BlockRestriction = Can't be blocked except by creatures with flying and creatures in a "left" pile; Labelled by Raging River
+? Bot1.Battlefield.Crimson Kobolds.BlockRestriction = Can't be blocked except by creatures with flying and creatures in a "right" pile; Labelled by Raging River
+Bot2.Hand.Zealous Guardian.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Pass
+! Bot2.Block(Phyrexian Walker > Crimson Kobolds)
+! Bot2.Block(Kobolds of Kher Keep > Memnite)
+! Bot2.Block(Zealous Guardian > Memnite)
+! Bot2.Block(Zealous Guardian > Crimson Kobolds)
+Bot2.Block(Phyrexian Walker > Memnite; Ornithopter > Memnite; Kobolds of Kher Keep > Crimson Kobolds)
+? Combat.Blocks.Count = 3
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Zealous Guardian.Tapped = false
+Bot1.Battlefield.Memnite.BlockRestriction = (absent)
+Bot2.Battlefield.Phyrexian Walker.BlockRestriction = (absent)
+Bot2.Life = 20
