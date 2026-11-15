@@ -1,0 +1,27 @@
+# Darkstar Augur {2}{B}: cast without paying offspring (a Black Lotus alone pays {2}{B}) it makes no token copy, and on turn 3 reveals
+# one card, Coiling Rebirth (mana value 5), putting it into the hand and costing 5 life.
+
+[Bot1 Deck]
+Black Lotus
+Darkstar Augur
+Swamp x5
+Coiling Rebirth
+Lightning Bolt
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Darkstar Augur.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 1
+[T3 Bot1.Main1]
+? Bot1.Life = 15
+? Bot1.Hand.Coiling Rebirth.Colors = Black
+
+[Expect]
+Bot1.Life = 15
