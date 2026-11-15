@@ -1,0 +1,23 @@
+# Abandoned Campground: the player with 13 or less life may be an opponent, not only the land's controller (Bot1 stays at 20, Bot2 starts
+# at 13): "a player", CR 614.1d. It enters untapped and taps for {W}.
+
+[Life]
+Bot2: 13
+
+[Bot1 Deck]
+Abandoned Campground
+Plains x19
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Abandoned Campground.Play
+? Bot1.Battlefield.Abandoned Campground.Tapped = false
+Bot1.Battlefield.Abandoned Campground.Activate(Color: White)
+? Bot1.Mana = {W}
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 13
+Bot1.Battlefield.Abandoned Campground.Tapped = true
