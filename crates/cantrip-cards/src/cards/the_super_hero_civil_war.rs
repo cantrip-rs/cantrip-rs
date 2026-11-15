@@ -17,12 +17,6 @@ fn steal(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Up to one other target creature" (CR 115.1): a creature other than the one chosen for the first target, as "other"
-/// says.
-fn creature_other_than_the_first_target(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    (targets::CREATURE.filter)(q, asker, t) && !q.chosen_targets().contains(&t)
-}
-
 /// III: "Target creature you control fights up to one other target creature" (CR 701.14a). If either is an illegal target as
 /// it resolves, neither fights (CR 701.14b, 608.2b).
 fn fight(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -38,7 +32,7 @@ pub static CARD: CardDef = CardDef {
                 .labelled("Creatures to gain control of")]),
         chapter(2, effects::creatures_you_control_get_and_gain::<1, 1, { Keywords::of(&[Keyword::Vigilance]).0 }>, "II \u{2014} Creatures you control get +1/+1 and gain vigilance until end of turn."),
         chapter(3, fight, "III \u{2014} Target creature you control fights up to one other target creature.")
-            .targets(&[targets::CREATURE_YOU_CONTROL, target(creature_other_than_the_first_target).optional()]),
+            .targets(&[targets::CREATURE_YOU_CONTROL, targets::CREATURE_OTHER_THAN_THOSE_CHOSEN.optional()]),
     ],
     ..oracle::THE_SUPER_HERO_CIVIL_WAR
 };
