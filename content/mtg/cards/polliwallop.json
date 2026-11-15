@@ -1,0 +1,6 @@
+{
+  "name": "Polliwallop",
+  "manaCost": "{3}{G}",
+  "type": "Instant",
+  "oracleText": "Affinity for Frogs (This spell costs {1} less to cast for each Frog you control.)\nTarget creature you control deals damage equal to twice its power to target creature you don't control."
+}

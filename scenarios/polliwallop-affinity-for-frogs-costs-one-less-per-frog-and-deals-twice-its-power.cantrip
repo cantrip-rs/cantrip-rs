@@ -1,0 +1,52 @@
+# Polliwallop (CR 702.41a, 120.3, 609.7): "Affinity for Frogs. Target creature you control deals damage equal to twice its power to target
+# creature you don't control." Bot1 controls two Frogs (Poison Dart Frog, Burrog Befuddler), so the {3}{G} spell costs {1}{G}: two Moxen pay it
+# exactly (the pool is empty after the cast). The first target must be Bot1's (Bot2's Ornithopter is refused, the 1/1 Poison Dart Frog
+# is chosen), the second Bot2's (Bot1's Befuddler is refused, Bot2's Ornithopter chosen). The Frog has power 1, so it deals twice that:
+# 2, which kills the 0/2 Ornithopter (1 would not); the Frog takes nothing back.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Poison Dart Frog
+Burrog Befuddler
+Polliwallop
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Poison Dart Frog.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Burrog Befuddler.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Polliwallop.Cast
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Poison Dart Frog)
+! Bot1.Target(Bot1.Battlefield.Burrog Befuddler)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot2.Battlefield.Ornithopter = (absent)
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Poison Dart Frog.Damage = 0
+Bot1.Graveyard = Polliwallop

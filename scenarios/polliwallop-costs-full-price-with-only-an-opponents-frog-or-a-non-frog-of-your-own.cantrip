@@ -1,0 +1,52 @@
+# Polliwallop's affinity for Frogs counts only Frogs its caster controls (CR 702.41a). Bot1 controls a non-Frog (Alpine Grizzly) and Bot2 a Frog
+# (Poison Dart Frog), so the spell costs its full {3}{G}: all four Moxen are tapped for it, and
+# the pool is empty after the cast (a reduction would leave mana in it). Alpine Grizzly (power 4) deals twice that, 8, to Bot2's Frog, which dies.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Alpine Grizzly
+Polliwallop
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Poison Dart Frog
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Poison Dart Frog.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Polliwallop.Cast
+Bot1.Target(Bot1.Battlefield.Alpine Grizzly)
+Bot1.Target(Bot2.Battlefield.Poison Dart Frog)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot2.Battlefield.Poison Dart Frog = (absent)
+Bot1.Battlefield.Alpine Grizzly.Damage = 0
+Bot1.Graveyard = Polliwallop

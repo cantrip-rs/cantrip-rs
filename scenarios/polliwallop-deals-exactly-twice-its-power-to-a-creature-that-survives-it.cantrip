@@ -1,0 +1,58 @@
+# Polliwallop (CR 120.3, 609.7): "Target creature you control deals damage equal to twice its power to target creature you don't
+# control." With two Frogs it costs {1}{G}. Bot1's 1/1 Poison Dart Frog bites Bot2's Craw Wurm (6/4): twice its power is exactly 2,
+# marked on the Wurm, which lives; the Frog takes nothing back (it is not a fight).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Poison Dart Frog
+Burrog Befuddler
+Polliwallop
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Pearl
+Craw Wurm
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Poison Dart Frog.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Burrog Befuddler.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Craw Wurm.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Polliwallop.Cast
+Bot1.Target(Bot1.Battlefield.Poison Dart Frog)
+Bot1.Target(Bot2.Battlefield.Craw Wurm)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot2.Battlefield.Craw Wurm.Damage = 2
+Bot1.Battlefield.Poison Dart Frog.Damage = 0
+Bot1.Graveyard = Polliwallop
