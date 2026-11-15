@@ -615,15 +615,28 @@ pub fn counters_on_each_of_subtype_you_control(g: &mut dyn Game, item: &StackIte
 /// enters later. `SUBTYPE` is a `Subtype` as `u16` (`lands::sub`), `KEYWORDS` a `Keywords` as `u128` (`Keywords::of(&[Keyword::Flying]).0`).
 /// Cosmic Spider-Man (Spiders, five keywords) and Vulture, Scheming Scavenger (Villains, flying) print it.
 pub fn other_of_subtype_you_control_gain_until_end_of_turn<const SUBTYPE: u16, const KEYWORDS: u128>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let word = g.words(item.object).subtype(crate::lands::printed(SUBTYPE));
-    let others: Vec<ObjectId> =
-        g.permanents_of(item.controller).into_iter().filter(|&id| id != item.object && g.chars(id).has_subtype(word)).collect();
+    of_subtype_you_control_gain_until_end_of_turn_but(g, item, SUBTYPE, KEYWORDS, true);
+    Ok(())
+}
+
+/// "[Subtype]s you control gain [keywords] until end of turn" (CR 611.2, 611.2c, 702): `other_of_subtype_you_control_gain_until_end_of_turn`
+/// with the source among them if it has the subtype: every permanent with the subtype that `item`'s controller controls as it resolves, and
+/// none that enters later (a spell that made them first, as Midnight Mayhem's tokens, has resolved its first sentence). Midnight Mayhem
+/// (Gremlins, menace, lifelink and haste) prints it.
+pub fn of_subtype_you_control_gain_until_end_of_turn<const SUBTYPE: u16, const KEYWORDS: u128>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    of_subtype_you_control_gain_until_end_of_turn_but(g, item, SUBTYPE, KEYWORDS, false);
+    Ok(())
+}
+
+fn of_subtype_you_control_gain_until_end_of_turn_but(g: &mut dyn Game, item: &StackItem, subtype: u16, keywords: u128, other: bool) {
+    let word = g.words(item.object).subtype(crate::lands::printed(subtype));
+    let objects: Vec<ObjectId> =
+        g.permanents_of(item.controller).into_iter().filter(|&id| !(other && id == item.object) && g.chars(id).has_subtype(word)).collect();
     instruction(g, |g| {
-        for id in others {
-            g.add_effect(item.object, id, EffectKind::AddKeywords(Keywords(KEYWORDS)), Duration::EndOfTurn);
+        for id in objects {
+            g.add_effect(item.object, id, EffectKind::AddKeywords(Keywords(keywords)), Duration::EndOfTurn);
         }
     });
-    Ok(())
 }
 
 /// "Put `n` `kind` counters on each [subtype] creature you control" (CR 122.1, 205.3, 608.2): `counters_on_each_of_subtype_you_control`
