@@ -1,0 +1,43 @@
+# Valgavoth's Onslaught with X = 1 ({X}{X}{G}: three mana) manifests dread once and puts one +1/+1 counter on that creature (a 3/3): the second pair of
+# cards stays on top of the library.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Valgavoth's Onslaught
+Island
+Snapcaster Mage
+Forest
+Lightning Bolt
+Swamp
+Island x9
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Valgavoth's Onslaught.Cast(X: 1)
+Bot1.Arrange(Snapcaster Mage | Forest)
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield..FaceDownName = Snapcaster Mage
+Bot1.Battlefield..Power = 3
+Bot1.Battlefield..Toughness = 3
+Bot1.Battlefield..Counters.PlusOnePlusOne = 1
+Bot1.Graveyard = Valgavoth's Onslaught; Forest
+Bot1.Library.Top = Lightning Bolt
+Bot1.Library.Count = 11
