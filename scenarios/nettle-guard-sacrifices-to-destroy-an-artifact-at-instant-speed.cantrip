@@ -1,0 +1,50 @@
+# Nettle Guard's {1}, Sacrifice this creature: Destroy target artifact or enchantment, at instant speed (CR 602.2, 701.8): on Bot2's turn 2, with Bot2's Sol Ring on
+# the battlefield beside its Mox Ruby, Bot1 sacrifices the Guard to destroy the Sol Ring. Bot2's Island is not a legal target (refused).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Black Lotus
+Nettle Guard
+Giant Growth
+Giant Growth
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Sol Ring
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Nettle Guard.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Nettle Guard.Activate(Bot2.Battlefield.Island)
+Bot1.Battlefield.Nettle Guard.Activate(Bot2.Battlefield.Sol Ring)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Nettle Guard
+Bot2.Graveyard = Sol Ring
+Bot2.Battlefield = Mox Ruby; Island

@@ -1,0 +1,50 @@
+# Nettle Guard's valiant: the first time each turn it becomes the target of a spell or ability you control, it gets +0/+2 until end of turn (CR 603.2, 611.2a).
+# Turn 3: the first Giant Growth makes the 3/1 a 6/6 (+3/+3 from the spell and +0/+2 from the trigger); the second the same turn is not the first time, so it is
+# only +3/+3: 9/9. Everything ends with the turn (CR 514.2).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Black Lotus
+Nettle Guard
+Giant Growth
+Giant Growth
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Nettle Guard.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Giant Growth.Cast(Nettle Guard)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Nettle Guard.Power = 6
+? Bot1.Battlefield.Nettle Guard.Toughness = 6
+Bot1.Hand.Giant Growth.Cast(Nettle Guard)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Nettle Guard.Power = 9
+? Bot1.Battlefield.Nettle Guard.Toughness = 9
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Nettle Guard.Power = 3
+Bot1.Battlefield.Nettle Guard.Toughness = 1
