@@ -1,0 +1,97 @@
+# Rite of the Moth: "Return target creature card from your graveyard to the battlefield with a finality counter on it." Flashback {3}{W}{W}{B}.
+# Bot1 plays Plains and the last two Moxen at T7 (its library holds only those three cards and the two Ornithopters, so the draw order after Entomb's shuffle does not matter). Two Entombs put two Ornithopters in Bot1's graveyard and Bot2's Entomb puts a Memnite in Bot2's: Memnite (not your graveyard) and Entomb (not a
+# creature card) are refused (CR 115.1). The cast returns an Ornithopter with a finality counter (CR 122.6), so Bot2's Lightning Bolt exiles it
+# instead of letting it die (CR 122.1h). Flashback at six mana with a single white is refused (CR 702.34a, 601.2f), allowed once the second
+# white is in the pool, returns the other Ornithopter with a finality counter, and exiles the card.
+
+[Bot1 Deck]
+Mox Jet
+Swamp
+Entomb
+Entomb
+Mox Pearl
+Rite of the Moth
+Mox Ruby
+Plains
+Mox Emerald
+Mox Sapphire
+Ornithopter
+Ornithopter
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Entomb
+Lightning Bolt
+Island x3
+Island
+Memnite
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Memnite)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Rite of the Moth.Cast(Bot2.Graveyard.Memnite)
+! Bot1.Hand.Rite of the Moth.Cast(Bot1.Graveyard.Entomb)
+Bot1.Hand.Rite of the Moth.Cast(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Counters.Finality = 1
+? Bot1.Battlefield.Ornithopter.Tapped = false
+? Bot1.Graveyard.Count = 4
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Exile = Ornithopter
+? Bot1.Battlefield.Count = 4
+[T7 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Graveyard.Rite of the Moth.Cast(Bot1.Graveyard.Ornithopter; Ability: Flashback; Mana: short)
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+! Bot1.Graveyard.Rite of the Moth.Cast(Bot1.Graveyard.Entomb; Ability: Flashback)
+Bot1.Graveyard.Rite of the Moth.Cast(Bot1.Graveyard.Ornithopter; Ability: Flashback)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Ornithopter.Counters.Finality = 1
+Bot1.Battlefield.Ornithopter.Tapped = false
+Exile = Ornithopter; Rite of the Moth
+Bot1.Graveyard = Entomb; Entomb
+Bot2.Graveyard.Count = 3

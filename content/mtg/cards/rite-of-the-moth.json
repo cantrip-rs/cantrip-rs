@@ -1,0 +1,6 @@
+{
+  "name": "Rite of the Moth",
+  "manaCost": "{1}{W}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "Return target creature card from your graveyard to the battlefield with a finality counter on it. (If a creature with a finality counter on it would die, exile it instead.)\nFlashback {3}{W}{W}{B} (You may cast this card from your graveyard for its flashback cost. Then exile it.)"
+}
