@@ -1,0 +1,53 @@
+# Marvin, Murderous Mimic: "Marvin has all activated abilities of creatures you control that don't have the same name as this
+# creature." (CR 613.1f). Bot1 controls Llanowar Elves ({T}: Add {G}) wearing a Paradise Mantle ("{T}: Add one mana of any
+# color") and Prodigal Sorcerer ({T}: 1 damage to any target); Bot2 controls Mother of Runes (a {T} ability of its own). On turn 3
+# Marvin has the Elves' abilities - the one it gave, too - and the Sorcerer's, no fourth: Mother of Runes' is not his. The any-color
+# mana adds {R}; on turn 5 his ping takes a life from Bot2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Marvin, Murderous Mimic
+Llanowar Elves
+Prodigal Sorcerer
+Paradise Mantle
+Island x12
+
+[Bot2 Deck]
+Mox Pearl
+Mother of Runes
+Plains x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Hand.Marvin, Murderous Mimic.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Prodigal Sorcerer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Mother of Runes.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Paradise Mantle.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Paradise Mantle.Activate(Llanowar Elves)
+Bot1.Battlefield.Marvin, Murderous Mimic.Activate(Ability: Add one mana of any color; Color: Red)
+? Bot1.Mana = {R}
+Bot1.Pass
+! Bot1.Battlefield.Marvin, Murderous Mimic.Activate(Ability: #4)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Marvin, Murderous Mimic.Activate(Ability: damage; Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19

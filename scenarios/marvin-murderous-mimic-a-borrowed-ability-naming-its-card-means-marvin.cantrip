@@ -1,0 +1,48 @@
+# Marvin, Murderous Mimic: "If an activated ability ... references the card it's printed on by name, treat Marvin's version of
+# that ability as though it referenced Marvin instead" (the ruling; CR 113.7, 201.5). Bot1 controls Blazing Rootwalla ("{R}:
+# Blazing Rootwalla gets +2/+0 until end of turn. Activate only once each turn."). Marvin's copy, paid with Mox Ruby, pumps
+# Marvin (4/2), not the Rootwalla (still 1/1); the Rootwalla's own, paid from Black Lotus, pumps it (3/1). The "once each turn"
+# is each object's own (CR 602.5b): Marvin's second activation is refused with {R}{R} still in the pool.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Black Lotus
+Blazing Rootwalla
+Marvin, Murderous Mimic
+Mountain x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Blazing Rootwalla.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Marvin, Murderous Mimic.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Marvin, Murderous Mimic.Activate(Ability: +2/+0)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Marvin, Murderous Mimic.Power = 4
+? Bot1.Battlefield.Blazing Rootwalla.Power = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Blazing Rootwalla.Activate(Ability: +2/+0)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}{R}
+! Bot1.Battlefield.Marvin, Murderous Mimic.Activate(Ability: +2/+0)
+
+[Expect]
+Bot1.Battlefield.Marvin, Murderous Mimic.Power = 4
+Bot1.Battlefield.Marvin, Murderous Mimic.Toughness = 2
+Bot1.Battlefield.Blazing Rootwalla.Power = 3
+Bot1.Battlefield.Blazing Rootwalla.Toughness = 1
