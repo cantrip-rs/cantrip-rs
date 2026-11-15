@@ -25,11 +25,7 @@ fn renew(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         .copied()
         .filter(|&id| id != original && g.controller(id) == item.controller && g.chars(id).is(CardType::Creature))
         .collect();
-    instruction(g, |g| {
-        for creature in others {
-            g.become_copy(item.object, creature, values, Duration::EndOfTurn);
-        }
-    });
+    cantrip_mechanics::copy::become_copies(g, item.object, &others, values, Duration::EndOfTurn);
     Ok(())
 }
 

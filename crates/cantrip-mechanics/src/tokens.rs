@@ -148,6 +148,14 @@ pub static CLUE: CardDef = CardDef {
     ..token!(Clue)
 };
 
+/// A colorless Shard enchantment token with "{2}, Sacrifice this token: Scry 1, then draw a card." (CR 111.10). Niko, Light of Hope creates two.
+pub static SHARD: CardDef = CardDef {
+    types: TypeSet::of(&[CardType::Enchantment]),
+    abilities: &[ability(cost("{2}").and(SACRIFICE_THIS), crate::effects::scry_then_draw::<1>, "{2}, Sacrifice this token: Scry 1, then draw a card.")],
+    text: "{2}, Sacrifice this token: Scry 1, then draw a card.",
+    ..token!(Shard)
+};
+
 /// A colorless Treasure artifact token with "{T}, Sacrifice this artifact: Add one mana of any color." (CR 111.10a).
 pub static TREASURE: CardDef = CardDef {
     types: TypeSet::of(&[CardType::Artifact]),

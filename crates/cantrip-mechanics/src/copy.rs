@@ -323,3 +323,15 @@ pub const COPY_IT_THE_NEXT_INSTANT_OR_SORCERY_YOU_CAST: AbilityDef = triggered(
     copy_the_cast_spell,
     "When you next cast an instant or sorcery spell this turn, copy it. You may choose new targets for the copy.",
 );
+
+/// "[These permanents] become copies of it [for `duration`]" (CR 707.2, 611.2c): every one of `permanents` becomes a copy of
+/// `values`, the copiable values of the object they copy, as one instruction. `source` is the spell or ability doing it. The set is
+/// fixed as the effect begins (CR 611.2c), each keeps its own counters and effects that are no copiable value (CR 613.1). Naga
+/// Fleshcrafter's other creatures and Niko, Light of Hope's Shards print it.
+pub fn become_copies(g: &mut dyn Game, source: ObjectId, permanents: &[ObjectId], values: Copiable, duration: Duration) {
+    instruction(g, |g| {
+        for &permanent in permanents {
+            g.become_copy(source, permanent, values, duration);
+        }
+    });
+}
