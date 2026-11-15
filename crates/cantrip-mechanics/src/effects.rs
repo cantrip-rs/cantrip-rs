@@ -756,6 +756,16 @@ pub fn plus_one_counter_on_this(g: &mut dyn Game, item: &StackItem) -> Result<()
     Ok(())
 }
 
+/// "You may put a +1/+1 counter on [this creature]" (CR 122.1, 608.2d): asked of the ability's controller as it resolves, and only
+/// while the source is still the permanent that triggered; once it has left the battlefield it is a new object (CR 400.7), so
+/// nothing is asked and nothing is put. Mold Adder and Taurean Mauler print it.
+pub fn may_put_a_plus_one_counter_on_this(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if ask_may_this_card(g, item, Purpose::PutCounters(CounterKind::PlusOne, 1))? {
+        plus_one_counter_on_this(g, item)?;
+    }
+    Ok(())
+}
+
 /// "Put X +1/+1 counters on [this creature]" (CR 122.1, 107.3): the X announced for or paid into the ability, on its source as it is
 /// now; a source that has left the battlefield is a new object (CR 400.7) and gets none. Stature, Size Shifter's power-up and
 /// Wildborn Preserver's reflexive ability print it.

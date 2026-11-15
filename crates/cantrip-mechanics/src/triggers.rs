@@ -1293,6 +1293,16 @@ pub fn you_cast_a_spell(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fire
     }
 }
 
+/// "Whenever an opponent casts a spell" (CR 603.2, 601.2i): a spell cast, not one copied (CR 707.10), by an opponent of the
+/// ability's controller (CR 102.2, so a teammate is not one). The trigger is about the player who cast it ("that player",
+/// `StackItem::subject`). Painful Quandary and Taurean Mauler print it.
+pub fn an_opponent_casts_a_spell(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::SpellCast { player, .. } if q.state().opponents(me.controller).any(|o| o == *player) => Fired::about(Target::Player(*player)),
+        _ => None,
+    }
+}
+
 /// "Whenever you cast a spell" (CR 601.2i, 603.2) for an ability that does something with the spell cast: it is the trigger's
 /// subject (`Fired::about`), so the copy of "copy it" is of that spell. Flamehold Grappler's delayed ability and Jace Reawakened's
 /// print it.

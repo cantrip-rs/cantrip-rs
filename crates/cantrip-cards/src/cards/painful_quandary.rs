@@ -1,13 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::effects;
+use cantrip_mechanics::{effects, triggers};
 use cantrip_oracle as oracle;
-
-/// "Whenever an opponent casts a spell" (CR 603.2, 601.2i): a spell cast, not one copied (CR 707.10), by an opponent of the
-/// ability's controller. The trigger is about the player who cast it ("that player", `StackItem::subject`).
-fn opponent_casts_a_spell(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
-    let Event::SpellCast { player, .. } = event else { return None };
-    if q.state().opponents(me.controller).any(|o| o == *player) { Fired::about(Target::Player(*player)) } else { None }
-}
 
 const DISCARD: Question = Question::new("DiscardInsteadOfLosingLife", "discard a card instead of losing 5 life?", "Otherwise you lose 5 life", "Discard a card", "Lose 5 life");
 
@@ -23,7 +16,7 @@ fn lose_5_life_unless_discard(g: &mut dyn Game, item: &StackItem) -> Result<(), 
 
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
-        when_asked(EventMask::SPELL_CAST, opponent_casts_a_spell),
+        when_asked(EventMask::SPELL_CAST, triggers::an_opponent_casts_a_spell),
         lose_5_life_unless_discard,
         "Whenever an opponent casts a spell, that player loses 5 life unless they discard a card.",
     )],
