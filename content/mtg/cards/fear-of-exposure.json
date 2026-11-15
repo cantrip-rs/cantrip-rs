@@ -1,0 +1,11 @@
+{
+  "name": "Fear of Exposure",
+  "manaCost": "{2}{G}",
+  "type": "Enchantment Creature — Nightmare",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "As an additional cost to cast this spell, tap two untapped creatures and/or lands you control.\nTrample",
+  "keywords": [
+    "Trample"
+  ]
+}

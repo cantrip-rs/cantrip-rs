@@ -1,0 +1,35 @@
+# Two permanents are tapped, no more and no fewer: with Forest, Ornithopter and Memnite untapped, only the two named are tapped. With only {G}{W} from Mox
+# Emerald and Mox Pearl it can't be cast though three permanents could be tapped (the {2}{G} is still owed); with Mox Sapphire's mana too it can.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Forest
+Ornithopter
+Memnite
+Fear of Exposure
+Island x12
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Forest.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+! Bot1.Hand.Fear of Exposure.Cast(Tap: Forest; Tap: Ornithopter)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fear of Exposure.Cast(Tap: Forest; Tap: Ornithopter)
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Battlefield.Fear of Exposure.Power = 5

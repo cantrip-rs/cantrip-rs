@@ -1,0 +1,31 @@
+# "As an additional cost to cast this spell, tap two untapped creatures and/or lands you control" (CR 601.2b, 118.3): a land and a creature that came
+# under Bot1's control this turn (tapping it is a cost, not its {T}, CR 302.6) are tapped as it is cast. The spell's {2}{G} is paid from Black Lotus.
+
+[Bot1 Deck]
+Black Lotus
+Forest
+Island
+Ornithopter
+Fear of Exposure
+Plains
+Island x12
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Fear of Exposure.Cast(Tap: Forest; Tap: Ornithopter)
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Fear of Exposure.Power = 5
+Bot1.Battlefield.Fear of Exposure.Toughness = 4
+Bot1.Battlefield.Fear of Exposure.Keywords = Trample
+Bot1.Battlefield.Fear of Exposure.Tapped = false
+Bot1.Mana = 
