@@ -1,0 +1,37 @@
+# The Jolly Balloon Man: "another target creature you control" (CR 115.1, 109.1) leaves out The Jolly Balloon Man itself, and "Activate only
+# as a sorcery" (CR 602.5d) keeps it from being activated on the opponent's turn: with the Jet untapped to pay {1} both times, the
+# only reasons for the refusals are the target and the timing (the activation on Bot1's own turn is the scenario's positive control).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Ornithopter
+The Jolly Balloon Man
+Plains
+Plains x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Jolly Balloon Man.Cast
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.The Jolly Balloon Man.Activate(The Jolly Balloon Man)
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.The Jolly Balloon Man.Activate(Ornithopter)
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.The Jolly Balloon Man.Tapped = false

@@ -1,0 +1,45 @@
+# The Jolly Balloon Man: with its only target illegal as it resolves, the ability does nothing (CR 608.2b): Bot2 bolts the Savannah Lions in
+# response, and no token is made, so nothing is sacrificed at the end step either.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains
+Savannah Lions
+The Jolly Balloon Man
+Plains x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Plains x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Jolly Balloon Man.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.The Jolly Balloon Man.Activate(Savannah Lions)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Savannah Lions
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Plains; The Jolly Balloon Man
+Bot1.Battlefield.The Jolly Balloon Man.Tapped = true

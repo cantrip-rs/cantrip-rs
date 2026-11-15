@@ -1,0 +1,48 @@
+# The Jolly Balloon Man: "{1}, {T}: Create a token that's a copy of another target creature you control, except it's a 1/1 red
+# Balloon creature in addition to its other colors and types and it has flying and haste" (CR 707.2, 707.9b, 111.1). The token copies
+# Savannah Lions (a white 2/1 Cat), so it is a 1/1 white and red Cat Balloon creature with flying and haste; the real Savannah Lions
+# is untouched, and Bot1 keeps its own Lions, Jolly Balloon Man (tapped for the cost) and the four Moxen.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains
+Savannah Lions
+The Jolly Balloon Man
+Plains x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Jolly Balloon Man.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.The Jolly Balloon Man.Activate(Savannah Lions)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Savannah Lions#1.Power = 2
+Bot1.Battlefield.Savannah Lions#1.Toughness = 1
+Bot1.Battlefield.Savannah Lions#1.Colors = White
+Bot1.Battlefield.Savannah Lions#1.Keywords = (absent)
+Bot1.Battlefield.Savannah Lions#2.Token = true
+Bot1.Battlefield.Savannah Lions#2.Power = 1
+Bot1.Battlefield.Savannah Lions#2.Toughness = 1
+Bot1.Battlefield.Savannah Lions#2.Colors = Red; White
+Bot1.Battlefield.Savannah Lions#2.Subtypes = Balloon; Cat
+Bot1.Battlefield.Savannah Lions#2.Types = Creature
+Bot1.Battlefield.Savannah Lions#2.Keywords = Flying; Haste
+Bot1.Battlefield.The Jolly Balloon Man.Tapped = true
+Bot1.Battlefield.Count = 8

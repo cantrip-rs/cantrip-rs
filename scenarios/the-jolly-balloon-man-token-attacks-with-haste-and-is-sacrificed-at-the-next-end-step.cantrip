@@ -1,0 +1,37 @@
+# The Jolly Balloon Man: the Balloon copy has haste, so it attacks the turn it is made (CR 702.10a, 302.6) and, flying, deals 1; "Sacrifice it at the
+# beginning of the next end step" (CR 603.7): once the end step has begun the token is gone (it ceased to exist as a token, so
+# nothing is in the graveyard, CR 111.7) and the real Ornithopter stays.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Ornithopter
+The Jolly Balloon Man
+Plains
+Plains x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Jolly Balloon Man.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.The Jolly Balloon Man.Activate(Ornithopter)
+Bot1.Pass
+Bot1.Attack(Ornithopter#2)
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter; The Jolly Balloon Man
+Bot1.Graveyard.Count = 0
