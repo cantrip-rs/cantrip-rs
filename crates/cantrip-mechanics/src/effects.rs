@@ -3668,3 +3668,16 @@ pub fn this_gains_shroud_doesnt_untap_next_untap_step_then_taps(g: &mut dyn Game
     g.tap_together(&[item.object]);
     Ok(())
 }
+
+/// "You may exile [that creature]. If you do, return it to the battlefield under its owner's control" (CR 701.13, 400.7, 111.7):
+/// asked of the ability's controller only while the creature is still the permanent the ability meant (CR 400.7), and on a yes it
+/// is exiled and comes back at once as a new object, a token not coming back at all. `exile_and_return` does the moving.
+pub fn may_exile_then_return(g: &mut dyn Game, item: &StackItem, creature: ObjectId) -> Result<(), Suspend> {
+    if !is_live(g, creature) || !g.is_on_battlefield(creature) {
+        return Ok(());
+    }
+    if ask_may(g, item.controller, item.object, Purpose::Optional)? {
+        crate::exile_and_return(g, &[creature])?;
+    }
+    Ok(())
+}
