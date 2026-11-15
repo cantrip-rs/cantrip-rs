@@ -158,3 +158,19 @@ pub fn first_target_bites_second_for_twice_its_power(g: &mut dyn Game, item: &St
     }
     Ok(())
 }
+
+/// "[Creature] deals damage equal to its power to each other creature" (CR 120.3, 608.2h, 120.8): the creature is the source (so its
+/// abilities and colors count), its power is the one it has as the spell resolves, and every other creature on the battlefield, whoever
+/// controls it, is dealt that much at once; a creature with no power deals none. Nibelheim Aflame and Waltz of Rage print it.
+pub fn deals_damage_equal_to_its_power_to_each_other_creature(g: &mut dyn Game, creature: ObjectId) {
+    let power = damage_equal_to_power(g, creature);
+    let hits: Vec<(ObjectId, Target, u32)> = g
+        .state()
+        .battlefield()
+        .iter()
+        .copied()
+        .filter(|&id| id != creature && g.chars(id).is(CardType::Creature))
+        .map(|id| (creature, Target::Object(id), power))
+        .collect();
+    g.damage_together(&hits);
+}
