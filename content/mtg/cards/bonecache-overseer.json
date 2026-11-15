@@ -1,0 +1,8 @@
+{
+  "name": "Bonecache Overseer",
+  "manaCost": "{B}",
+  "type": "Creature — Squirrel Warlock",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}, Pay 1 life: Draw a card. Activate only if three or more cards left your graveyard this turn or if you've sacrificed a Food this turn."
+}

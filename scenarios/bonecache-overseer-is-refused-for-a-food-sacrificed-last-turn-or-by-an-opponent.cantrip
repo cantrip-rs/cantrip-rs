@@ -1,0 +1,72 @@
+# Bonecache Overseer {B} (1/1): "Activate only if ... you've sacrificed a Food this turn." Bot1 sacrifices a Food on turn 1 (the one
+# City Pigeon left when it was Bolted, for 3 life), so on turn 3 that Food no longer counts and the Overseer is refused. Then Bot2
+# sacrifices its own Food (from Gilded Goose) on Bot1's turn: an opponent's sacrifice is not "you've sacrificed", so the Overseer is
+# still refused and Bot1 loses no life.
+
+[Bot1 Deck]
+Mox Jet
+Bonecache Overseer
+Mox Pearl
+City Pigeon
+Mox Ruby
+Lightning Bolt
+Black Lotus
+Island x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Gilded Goose
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bonecache Overseer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.City Pigeon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.City Pigeon)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Food Token.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Gilded Goose.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Food Token.Tapped = false
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Bonecache Overseer.Activate
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Food Token.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 23
+! Bot1.Battlefield.Bonecache Overseer.Activate
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 23
+Bot1.Battlefield.Bonecache Overseer.Tapped = false

@@ -1,0 +1,53 @@
+# Bonecache Overseer {B} (1/1): "Activate only if three or more cards left your graveyard this turn or if you've sacrificed a Food
+# this turn." On turn 1 Bot1 casts the Overseer and a City Pigeon, then Lightning Bolts the Pigeon: its leave trigger makes a Food.
+# On turn 3 the Overseer is refused with the Food merely on the battlefield; once Bot1 sacrifices the Food ({2}, {T}, gain 3 life)
+# the Overseer may draw, paying 1 life. Nothing left the graveyard (the Pigeon and Bolt stay there), so it is the Food that counts.
+
+[Bot1 Deck]
+Mox Jet
+Bonecache Overseer
+Mox Pearl
+Mox Ruby
+City Pigeon
+Lightning Bolt
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bonecache Overseer.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.City Pigeon.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.City Pigeon)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Bonecache Overseer; Food Token
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Bonecache Overseer.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Food Token.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+Bot1.Battlefield.Bonecache Overseer.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot1.Hand.Count = 3
+Bot1.Graveyard = City Pigeon; Lightning Bolt
