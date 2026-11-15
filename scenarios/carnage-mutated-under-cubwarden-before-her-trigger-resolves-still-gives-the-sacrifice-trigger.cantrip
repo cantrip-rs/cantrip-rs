@@ -1,0 +1,77 @@
+# Carnage, Crimson Chaos's enters trigger gives the creature it returns "When this creature deals combat damage to a
+# player, sacrifice it" - an ability of Carnage's card, whatever the object it resolves for has become (CR 113.7a, 603.3).
+# With High Fae Trickster letting Bot1 cast spells as though they had flash (CR 702.8a), Bot1 responds to the trigger by
+# casting Cubwarden on turn 9 for its mutate cost over Carnage, on top (CR 702.140c): the merged creature has Cubwarden's
+# characteristics and Carnage's abilities too (CR 702.140e). The trigger then returns Memnite (discarded to Faithless
+# Looting on turn 1), which gains both abilities. On turn 11 it attacks, as it must, deals 1 to Bot2, and is sacrificed.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+High Fae Trickster
+Mountain
+Faithless Looting
+Memnite
+Island
+Swamp
+Black Lotus
+Carnage, Crimson Chaos
+Cubwarden
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.High Fae Trickster.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Memnite; Island)
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Carnage, Crimson Chaos.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cubwarden.Cast(Carnage, Crimson Chaos; Ability: Mutate)
+Bot1.Pass
+Bot1.Modes(1)
+Bot1.Pass
+[T9 Bot1.Main2]
+? Bot1.Battlefield.Cubwarden.Power = 3
+? Bot1.Battlefield.Memnite.Power = 1
+[T11 Bot1.Main2]
+
+[Expect]
+Turn = 11
+Bot2.Life = 19
+Bot1.Battlefield.Memnite = (absent)
+Bot1.Graveyard.Count = 4
