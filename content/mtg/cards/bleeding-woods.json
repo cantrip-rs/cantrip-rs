@@ -1,0 +1,5 @@
+{
+  "name": "Bleeding Woods",
+  "type": "Land",
+  "oracleText": "This land enters tapped unless a player has 13 or less life.\n{T}: Add {R} or {G}."
+}

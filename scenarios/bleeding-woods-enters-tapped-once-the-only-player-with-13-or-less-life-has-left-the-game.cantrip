@@ -1,0 +1,27 @@
+# CR 800.4a, 614.1d: "a player" is a player in the game. In a game of three Bot3 starts at 5 life, the only player with 13 or
+# less, and concedes in turn 1's first main phase after both others pass. Bot1's Bleeding Woods then enters tapped: the
+# player who has left no longer has a life total to count.
+
+[Life]
+Bot3: 5
+
+[Bot1 Deck]
+Bleeding Woods
+Forest x19
+
+[Bot2 Deck]
+Forest x20
+
+[Bot3 Deck]
+Forest x20
+
+[Actions]
+Bot1.Pass
+Bot2.Pass
+Bot3.Concede
+Bot1.Hand.Bleeding Woods.Play
+? Bot1.Battlefield.Bleeding Woods.Tapped = true
+
+[Expect]
+Bot3.Status = Lost
+Bot1.Battlefield.Bleeding Woods.Tapped = true

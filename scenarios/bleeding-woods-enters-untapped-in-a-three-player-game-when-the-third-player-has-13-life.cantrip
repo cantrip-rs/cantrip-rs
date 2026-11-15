@@ -1,0 +1,28 @@
+# CR 614.1d: the positive control for bleeding-woods-enters-tapped-once-the-only-player-with-13-or-less-life-has-left-the-game.
+# In a game of three, neither Bot1 (20) nor Bot2 (20) has 13 or less life but Bot3 does (13, exactly): any player counts, not
+# only the controller and the player to its left, so Bleeding Woods enters untapped and taps for {G}.
+
+[Life]
+Bot3: 13
+
+[Bot1 Deck]
+Bleeding Woods
+Forest x19
+
+[Bot2 Deck]
+Forest x20
+
+[Bot3 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Bleeding Woods.Play
+? Bot1.Battlefield.Bleeding Woods.Tapped = false
+Bot1.Battlefield.Bleeding Woods.Activate(Color: Green)
+? Bot1.Mana = {G}
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot3.Life = 13
+Bot1.Battlefield.Bleeding Woods.Tapped = true
