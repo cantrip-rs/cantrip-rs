@@ -1,0 +1,48 @@
+# Horrid Vigor on the attacking Grizzly Bears after Bot2's Hill Giant (3/3) blocks it: the 2 damage kills the Giant only because of
+# deathtouch (CR 702.2b), and the Bears survive the Giant's 3 damage, lethal for a 2/2, only because they are indestructible
+# (CR 702.12b): damage stays marked (3) but destroys nothing (CR 704.5g).
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Grizzly Bears
+Mox Emerald
+Horrid Vigor
+Island x20
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Hill Giant
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Hill Giant.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Hill Giant > Grizzly Bears)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Horrid Vigor.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = Deathtouch; Indestructible
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Hill Giant; Black Lotus
+Bot1.Battlefield.Grizzly Bears.Damage = 3
+Bot1.Graveyard = Horrid Vigor; Black Lotus
+Stack.Count = 0

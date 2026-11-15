@@ -1,0 +1,42 @@
+# "Target creature" is any creature: Bot1 casts Horrid Vigor on Bot2's Hill Giant, which has deathtouch and indestructible for
+# the turn (Bot1's own Grizzly Bears is untouched), and has neither once the turn is over (CR 514.2, 611.2a): "until end of turn".
+
+[Bot1 Deck]
+Forest
+Grizzly Bears
+Mox Emerald
+Horrid Vigor
+Island x20
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Hill Giant
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Hill Giant.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Horrid Vigor.Cast(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Hill Giant.Keywords = Deathtouch; Indestructible
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Hill Giant.Keywords = (absent)
+Bot1.Graveyard = Horrid Vigor
+Stack.Count = 0
