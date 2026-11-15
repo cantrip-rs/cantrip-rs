@@ -1,0 +1,44 @@
+# Sunshower Druid (CR 115.1d, 122.1a, 608.2b): "When this creature enters, put a +1/+1 counter on target creature and you gain 1 life." Any creature
+# is a legal target, an opponent's included, but not a noncreature artifact (Bot1's Mox Jet is refused). Bot1's Druid puts its counter on
+# Bot2's Ornithopter and Bot1 gains 1 (21); Bot2's Druid targets itself (its own creature) and Bot2 gains 1 (21). Each resolution gives
+# exactly one counter and exactly one life; Bot1's own Ornithopter gets none.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Ornithopter
+Sunshower Druid
+Island x16
+
+[Bot2 Deck]
+Mox Emerald
+Ornithopter
+Sunshower Druid
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Sunshower Druid.Cast
+! Bot1.Target(Mox Jet)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Sunshower Druid.Cast
+Bot2.Target(Bot2.Battlefield.Sunshower Druid)
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 21
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Sunshower Druid.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Sunshower Druid.Counters.PlusOnePlusOne = (absent)

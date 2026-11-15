@@ -1,0 +1,32 @@
+# Sunshower Druid's one target (Bot2's Ornithopter) is killed in response to the ability (Bot2's Lightning Bolt), so the ability does not
+# resolve (CR 608.2b, the 2024-07-26 ruling): it puts no counter on anything (the Druid itself has none) and Bot1 does not gain 1 life.
+
+[Bot1 Deck]
+Mox Emerald
+Sunshower Druid
+Island x18
+
+[Bot2 Deck]
+Mountain
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Sunshower Druid.Cast
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Life = 20
+Bot1.Battlefield.Sunshower Druid.Counters.PlusOnePlusOne = (absent)
+Stack.Count = 0
