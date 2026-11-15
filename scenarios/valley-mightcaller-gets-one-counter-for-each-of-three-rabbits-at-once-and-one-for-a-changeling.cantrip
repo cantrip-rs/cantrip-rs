@@ -1,0 +1,44 @@
+# Valley Mightcaller (1/1 Trample, {G}): "Whenever another Frog, Rabbit, Raccoon, or Squirrel you control enters, put a +1/+1 counter on
+# this creature." Turn 1: Black Lotus pays for the Mightcaller and Hop to It, whose three 1/1 white Rabbit tokens enter at once: the
+# ability triggers once for each of them (CR 603.2c, 603.6a), three counters. Turn 3: Changeling Wayfinder (every creature type, so a
+# Frog, a Rabbit, a Raccoon and a Squirrel at once) triggers it once, not four times: one more counter (its search is declined).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Valley Mightcaller
+Hop to It
+Changeling Wayfinder
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Valley Mightcaller.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hop to It.Cast
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Valley Mightcaller.Counters.PlusOnePlusOne = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Changeling Wayfinder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Valley Mightcaller.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Valley Mightcaller.Power = 5
+Bot1.Battlefield.Valley Mightcaller.Toughness = 5
+Bot1.Battlefield.Changeling Wayfinder.Power = 1

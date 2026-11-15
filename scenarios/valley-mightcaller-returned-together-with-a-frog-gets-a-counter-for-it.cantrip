@@ -1,0 +1,57 @@
+# Valley Mightcaller (1/1 Trample, {G}): "Whenever another Frog, Rabbit, Raccoon, or Squirrel you control enters, put a +1/+1 counter on
+# this creature." Creatures that enter at the same time as it trigger it too (the 2024-07-26 ruling; CR 603.6a, 603.10a: it looks at the
+# game as the event happens, when it is already there). Turn 1: Black Lotus pays for the Mightcaller and Poison Dart Frog (a Frog: one
+# counter, a 2/2), and Pyroclasm (2 damage to each creature) kills both. Turn 5: Raise the Past returns both (each mana value 2 or
+# less) at once, and the new Mightcaller - a new object without the old counter (CR 400.7) - gets a counter for the Frog: a 2/2 with
+# one counter, not zero and not two.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Valley Mightcaller
+Poison Dart Frog
+Pyroclasm
+Plains
+Plains
+Raise the Past
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Valley Mightcaller.Cast
+Bot1.Hand.Poison Dart Frog.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Valley Mightcaller.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pyroclasm.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Poison Dart Frog; Valley Mightcaller; Pyroclasm; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Raise the Past.Cast
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Valley Mightcaller.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Valley Mightcaller.Power = 2
+Bot1.Battlefield.Valley Mightcaller.Toughness = 2
+Bot1.Battlefield.Poison Dart Frog.Power = 1
+Bot1.Graveyard = Raise the Past; Pyroclasm; Black Lotus

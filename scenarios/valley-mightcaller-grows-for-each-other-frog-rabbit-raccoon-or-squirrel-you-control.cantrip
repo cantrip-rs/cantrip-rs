@@ -1,0 +1,64 @@
+# Valley Mightcaller (CR 603.6a): "Whenever another Frog, Rabbit, Raccoon, or Squirrel you control enters, put a +1/+1 counter on this
+# creature." Bot1 casts it (a Frog itself: no counter for its own entering, "another"), then in turn a Frog (Poison Dart Frog), a Rabbit
+# (Nasty Little Rabbit), a Raccoon (Bramble Familiar) and a Squirrel (The Unbeatable Squirrel Girl, whose own trigger makes a Squirrel token
+# too: two more). A creature of none of the four types (Ornithopter) and Bot2's Frog (not "you control") give nothing. One counter each:
+# 1, 2, 3, then 5.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Valley Mightcaller
+Poison Dart Frog
+Nasty Little Rabbit
+Bramble Familiar
+Ornithopter
+The Unbeatable Squirrel Girl
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Poison Dart Frog
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Valley Mightcaller.Cast
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Valley Mightcaller.Counters.PlusOnePlusOne = (absent)
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Poison Dart Frog.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Valley Mightcaller.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Poison Dart Frog.Cast
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Valley Mightcaller.Counters.PlusOnePlusOne = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Nasty Little Rabbit.Cast
+Bot1.Battlefield.Poison Dart Frog.Activate(Ability: any color; Color: G)
+Bot1.Hand.Bramble Familiar.Cast
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Valley Mightcaller.Counters.PlusOnePlusOne = 3
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Poison Dart Frog.Activate(Ability: any color; Color: G)
+Bot1.Battlefield.Bramble Familiar.Activate(Ability: Add)
+Bot1.Hand.The Unbeatable Squirrel Girl.Cast
+[T8 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Valley Mightcaller.Counters.PlusOnePlusOne = 5
+Bot1.Battlefield.Valley Mightcaller.Power = 6
+Bot1.Battlefield.Valley Mightcaller.Toughness = 6
+Bot1.Battlefield.Valley Mightcaller.Keywords = Trample

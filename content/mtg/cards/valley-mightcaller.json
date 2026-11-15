@@ -1,0 +1,11 @@
+{
+  "name": "Valley Mightcaller",
+  "manaCost": "{G}",
+  "type": "Creature — Frog Warrior",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Trample\nWhenever another Frog, Rabbit, Raccoon, or Squirrel you control enters, put a +1/+1 counter on this creature.",
+  "keywords": [
+    "Trample"
+  ]
+}
