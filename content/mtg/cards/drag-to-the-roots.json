@@ -1,0 +1,6 @@
+{
+  "name": "Drag to the Roots",
+  "manaCost": "{2}{B}{G}",
+  "type": "Instant",
+  "oracleText": "Delirium — This spell costs {2} less to cast as long as there are four or more card types among cards in your graveyard.\nDestroy target nonland permanent."
+}
