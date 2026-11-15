@@ -1,0 +1,51 @@
+# Jackdaw Savior copied by Bot1's Phantasmal Image (MV 2, a copy has MV 3, CR 707.2): the Image dies and its own copied trigger
+# may not return "another target creature card" = the Image card itself (the card the source became, CR 400.7; cf. Fiendish Panda,
+# Morcant's Loyalist found_all_after_move). Nothing else is in the graveyard, so the trigger has no target.
+
+[Bot1 Deck]
+Island
+Island
+Phantasmal Image
+Island x20
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Jackdaw Savior
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Jackdaw Savior.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Phantasmal Image.Cast
+Bot1.Pass
+Bot1.Accept
+? Bot1.Battlefield.Jackdaw Savior.Power = 3
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Jackdaw Savior)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Phantasmal Image
+LeftBattlefield = Black Lotus (tapped); Jackdaw Savior

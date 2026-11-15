@@ -1,0 +1,54 @@
+# Jackdaw Savior: the only creature card in Bot1's graveyard when it dies is Harvestrite Host, mana value 3 - equal to the Savior's, not lesser. The
+# trigger has no legal target and is removed from the stack (CR 603.3d): the Host stays in the graveyard and nothing enters.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Entomb
+Plains
+Plains
+Jackdaw Savior
+Plains
+Plains
+Harvestrite Host
+Plains x18
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Harvestrite Host)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Jackdaw Savior.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Jackdaw Savior.Power = 3
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Jackdaw Savior)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot1.Graveyard = Jackdaw Savior; Entomb; Harvestrite Host
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Plains; Plains
+Bot1.Graveyard = Jackdaw Savior; Entomb; Harvestrite Host

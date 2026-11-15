@@ -1,0 +1,49 @@
+# Jackdaw Savior only answers itself or a creature with flying (CR 603.10a): Bot1's Savannah Lions (no flying) dying to Bot2's Lightning Bolt triggers nothing,
+# although a Memnite (mana value 0, a legal target for a creature of mana value 1) waits in the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Black Lotus
+Entomb
+Plains
+Savannah Lions
+Jackdaw Savior
+Memnite
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Jackdaw Savior.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Savannah Lions)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Savannah Lions; Entomb; Memnite; Black Lotus
+Bot1.Battlefield.Jackdaw Savior.Power = 3

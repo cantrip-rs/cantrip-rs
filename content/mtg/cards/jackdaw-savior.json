@@ -1,0 +1,11 @@
+{
+  "name": "Jackdaw Savior",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Bird Cleric",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Flying\nWhenever this creature or another creature you control with flying dies, return another target creature card with lesser mana value from your graveyard to the battlefield.",
+  "keywords": [
+    "Flying"
+  ]
+}

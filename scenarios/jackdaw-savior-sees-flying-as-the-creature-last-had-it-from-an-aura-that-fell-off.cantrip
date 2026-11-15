@@ -1,0 +1,61 @@
+# Jackdaw Savior judges "with flying" by the creature as it last was on the battlefield (CR 603.10a): Bot1's Savannah Lions has no flying, but Bot1 flashes
+# Feather of Flight onto it in response to Bot2's Lightning Bolt. The Lions dies as a flier, the Aura falls off with it, and the Savior still triggers,
+# returning the Memnite (mana value 0, lesser than the Lions' 1).
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Entomb
+Plains
+Savannah Lions
+Jackdaw Savior
+Feather of Flight
+Memnite
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Jackdaw Savior.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Savannah Lions)
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Feather of Flight.Cast(Bot1.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Savannah Lions.Keywords = Flying
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1

@@ -1,0 +1,54 @@
+# Jackdaw Savior only answers a creature YOU control with flying (CR 603.10a): Bot2 bolts its own Suntail Hawk, a flier Bot1 does not control, and nothing
+# triggers although a Memnite waits in Bot1's graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Black Lotus
+Entomb
+Plains
+Jackdaw Savior
+Plains
+Memnite
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Suntail Hawk
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Jackdaw Savior.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Suntail Hawk.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Suntail Hawk)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Entomb; Memnite; Black Lotus
+Bot2.Graveyard = Suntail Hawk; Lightning Bolt
