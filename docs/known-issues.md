@@ -96,8 +96,22 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-166](#ki-166-a-player-is-offered-at-most-56-mana-abilities-of-their-own) | A player is offered at most 56 mana abilities of their own | Pri-3 | Won't fix: beyond practical scale |
 | [KI-167](#ki-167-jotun-grunts-graveyard-choice-is-captioned-as-choosing-an-opponent) | Jötun Grunt's graveyard choice is captioned as choosing an opponent | Pri-2 | Open |
 | [KI-168](#ki-168-card-mutate-hangs-on-a-mutant-that-loops-forever) | card-mutate hangs on a mutant that loops forever | Pri-3 | Open |
+| [KI-169](#ki-169-raging-rivers-piles-and-labels-dont-show-which-resolution-they-belong-to) | Raging River's piles and labels don't show which resolution they belong to | Pri-2 | Open |
 
 ## Issues
+
+### KI-169: Raging River's piles and labels don't show which resolution they belong to
+
+| Priority | Status | Area | Found |
+| --- | --- | --- | --- |
+| Pri-2 | Open | client / host view (`crates/cantrip-cards/src/cards/raging_river.rs` rule texts) | 2026-11-15, reviewing Raging River (#1043) |
+
+**Notes.** Raging River marks each defending creature's pile ("In the "left" pile") and each attacker's label as effects
+lasting the combat, and the rules pair a label with its own resolution's piles by effect timestamp. The rule texts are fixed
+strings, so with two resolutions in one combat (a copied trigger, Isshin) or two Rivers, a creature can show both "In the
+"left" pile" and "In the "right" pile" and the player can't see which pile goes with which label. The game itself is right;
+only the display is ambiguous. A fix names the resolution (or its River) in the shown text. The extra "Labelled by Raging
+River" start mark shown on attackers is true but redundant with the label line. Display only.
 
 ### KI-168: card-mutate hangs on a mutant that loops forever
 
