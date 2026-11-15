@@ -1,0 +1,45 @@
+# Manifold Mouse's target is "Mouse you control" (CR 115.1, 205.3m). With the Mouse, its offspring token and a Memnite (a creature,
+# not a Mouse) in play, the targets of the two beginning-of-combat abilities (the Mouse's and the token's) may not be Memnite: the
+# refusal is shown, then both abilities target the Mouse and the choices (double strike, trample) are made. Memnite has no keyword.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Memnite
+Manifold Mouse
+Mountain x14
+
+[Bot2 Deck]
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Manifold Mouse.Cast(Kicked: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+! Bot1.Target(Memnite)
+Bot1.Target(Manifold Mouse#1)
+Bot1.Target(Manifold Mouse#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Double strike)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Trample)
+
+[Expect]
+Bot1.Battlefield.Manifold Mouse#1.Keywords = DoubleStrike; Trample
+Bot1.Battlefield.Memnite.Keywords = (absent)

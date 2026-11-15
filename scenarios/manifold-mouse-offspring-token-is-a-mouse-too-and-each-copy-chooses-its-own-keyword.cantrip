@@ -1,0 +1,59 @@
+# Manifold Mouse ({1}{R}, 1/2) cast with offspring {2} makes a 1/1 token copy (CR 702.175a), a Mouse with the same ability, so at
+# the beginning of combat on turn 1 two abilities trigger (CR 603.2). Both target the token (a Mouse Bot1 controls), and each
+# resolves by choosing its own keyword (CR 608.2d): double strike from one, trample from the other; the original Mouse gets
+# nothing. The grants end with the turn. On turn 3 both abilities target the original Mouse (double strike and trample again), and
+# it attacks as a 1/2 with double strike: 1 first-strike and 1 regular damage, Bot2 20 to 18.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Manifold Mouse
+Mountain x14
+
+[Bot2 Deck]
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Manifold Mouse.Cast(Kicked: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Target(Manifold Mouse#2)
+Bot1.Target(Manifold Mouse#2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Double strike)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Trample)
+? Bot1.Battlefield.Manifold Mouse#2.Keywords = DoubleStrike; Trample
+? Bot1.Battlefield.Manifold Mouse#1.Keywords = (absent)
+[T3 Bot1.BeginCombat]
+? Bot1.Battlefield.Manifold Mouse#2.Keywords = (absent)
+Bot1.Target(Manifold Mouse#1)
+Bot1.Target(Manifold Mouse#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Double strike)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Trample)
+Bot1.Attack(Manifold Mouse#1 > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Manifold Mouse#1.Keywords = DoubleStrike; Trample

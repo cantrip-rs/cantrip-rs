@@ -1,0 +1,33 @@
+# Manifold Mouse alone (cast without offspring): at the beginning of combat on Bot1's turn 1 it targets itself (the only Mouse Bot1
+# controls) and Bot1 chooses trample, so it has Trample and not double strike until end of turn (CR 608.2d, 611.2a). It attacks
+# for 1 (Bot2 19). On Bot2's turn 2 there is no beginning-of-combat trigger (it is "on your turn") and the keyword is gone.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Manifold Mouse
+Mountain x14
+
+[Bot2 Deck]
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Manifold Mouse.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Trample)
+? Bot1.Battlefield.Manifold Mouse.Keywords = Trample
+[T2 Bot2.BeginCombat]
+? Bot1.Battlefield.Manifold Mouse.Keywords = (absent)
+? Stack.Count = 0
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Manifold Mouse.Keywords = (absent)
