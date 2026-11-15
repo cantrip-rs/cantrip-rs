@@ -1,0 +1,55 @@
+# Undead Sprinter: "You may cast this card from your graveyard if a non-Zombie creature died this turn. If you do, this creature
+# enters with a +1/+1 counter on it." (CR 601.2, 122.1, 700.4) Turn 1 Bot1 casts the 2/2 Sprinter from its hand and an Ornithopter;
+# Bot2 Bolts the Sprinter on turn 2. On turn 3 nothing has died yet, so the Sprinter cannot be cast from the graveyard even with
+# the mana. Bot1 Bolts its own Ornithopter, which is not a Zombie, and may then cast the Sprinter from the graveyard; it enters
+# with a +1/+1 counter and is a 3/3.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Ruby
+Undead Sprinter
+Ornithopter
+Lightning Bolt
+Swamp x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Undead Sprinter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Undead Sprinter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Undead Sprinter
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+! Bot1.Graveyard.Undead Sprinter.Cast
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Ornithopter; Lightning Bolt; Undead Sprinter
+Bot1.Graveyard.Undead Sprinter.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Undead Sprinter.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Undead Sprinter.Power = 3
+Bot1.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Battlefield.Undead Sprinter.Keywords = Haste; Trample

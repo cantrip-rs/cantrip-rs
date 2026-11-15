@@ -1,0 +1,46 @@
+# Undead Sprinter: "If you do, this creature enters with a +1/+1 counter on it" follows only its own permission (CR 601.3). Bolted
+# on turn 2, on turn 3 no creature has died this turn, but Yawgmoth's Will (paid with a Black Lotus) lets Bot1 cast it from the
+# graveyard anyway, and it enters as a plain 2/2 without a counter.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Undead Sprinter
+Black Lotus
+Yawgmoth's Will
+Swamp x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Undead Sprinter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Undead Sprinter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Undead Sprinter
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Yawgmoth's Will.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Undead Sprinter.Cast(Ability: Yawgmoth's Will)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Undead Sprinter.Power = 2
