@@ -1,0 +1,34 @@
+# Thistledown Players: the target is a nonland permanent, so a Plains (CR 305.1, a land) is refused, and the attacking Players itself is
+# a legal target, which untaps it as it attacks (CR 701.26a, 508.1f). It deals its 3 damage and is untapped afterwards.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Thistledown Players
+Plains
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Thistledown Players.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Attack(Thistledown Players > Bot2)
+! Bot1.Target(Bot1.Battlefield.Plains)
+Bot1.Target(Bot1.Battlefield.Thistledown Players)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Thistledown Players.Tapped = false
+Bot1.Battlefield.Plains.Tapped = true
+Bot2.Life = 17

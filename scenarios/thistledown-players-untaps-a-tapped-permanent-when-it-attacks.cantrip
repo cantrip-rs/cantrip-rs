@@ -1,0 +1,32 @@
+# Thistledown Players: "Whenever this creature attacks, untap target nonland permanent." (CR 701.26a). Bot1 taps a Mox Pearl for mana
+# on its third turn, attacks, and the trigger untaps that Mox; the Players stay tapped as attackers (they have no vigilance).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Thistledown Players
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Thistledown Players.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Attack(Thistledown Players > Bot2)
+Bot1.Target(Bot1.Battlefield.Mox Pearl#1)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Mox Pearl#1.Tapped = false
+Bot1.Battlefield.Mox Pearl#2.Tapped = false
+Bot1.Battlefield.Thistledown Players.Tapped = true
+Bot2.Life = 17

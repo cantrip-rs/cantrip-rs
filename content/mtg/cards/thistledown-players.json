@@ -1,0 +1,8 @@
+{
+  "name": "Thistledown Players",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Mouse Bard",
+  "oracleText": "Whenever this creature attacks, untap target nonland permanent.",
+  "power": 3,
+  "toughness": 3
+}

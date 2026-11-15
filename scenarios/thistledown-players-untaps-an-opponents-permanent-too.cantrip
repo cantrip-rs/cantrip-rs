@@ -1,0 +1,33 @@
+# Thistledown Players: "target nonland permanent" is not limited to your own (CR 115.1, 701.26a): Bot2 tapped its Mox Jet on its own turn
+# and the Players' trigger untaps it.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Thistledown Players
+Plains x16
+
+[Bot2 Deck]
+Mox Jet
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Thistledown Players.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+[T3 Bot1.Main1]
+Bot1.Attack(Thistledown Players > Bot2)
+Bot1.Target(Bot2.Battlefield.Mox Jet)
+[Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Mox Jet.Tapped = false
+Bot1.Battlefield.Thistledown Players.Tapped = true
