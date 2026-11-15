@@ -29,10 +29,9 @@ pub fn resolve(g: &mut dyn Game, item: &StackItem, n: i32, keywords: &[Keyword],
             g.one_instruction(&mut |g| {
                 g.add_effect(item.object, creature, EffectKind::AddKeywords(Keywords::of(keywords)), Duration::EndOfTurn);
                 if let Some(index) = ability {
-                    // A copy's ability is the one of the card it copies (CR 707.2).
-                    let o = g.obj(item.object);
-                    let this = o.copied_card().unwrap_or(o.card);
-                    g.add_effect(item.object, creature, EffectKind::AddAbility(AbilityRef::delayed(this, index)), Duration::EndOfTurn);
+                    // The ability the card whose backup this is lists (a copy's is the card it copies, CR 707.2), whatever
+                    // card the object it resolves for has now (a merged creature's top, CR 702.140e).
+                    g.add_effect(item.object, creature, EffectKind::AddAbility(AbilityRef::delayed(item.ability.card, index)), Duration::EndOfTurn);
                 }
                 Ok(())
             })?;
