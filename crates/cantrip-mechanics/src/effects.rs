@@ -1536,6 +1536,42 @@ fn damage_upkeep_player<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Res
     Ok(())
 }
 
+const PAY_TO_PREVENT_AURA_DAMAGE: Question = Question::new(
+    "PayToPreventAuraDamage",
+    "pay any amount of mana?",
+    "This Aura then deals 2 damage to you, and 1 of that damage is prevented for each mana you paid",
+    "Pay {cost}",
+    "Don't pay",
+);
+
+/// "At the beginning of the upkeep of enchanted [permanent]'s controller, that player may pay any amount of mana. This Aura
+/// deals 2 damage to that player. Prevent X of that damage, where X is the amount of mana that player paid this way." (CR
+/// 503.1a, 608.2d, 608.2c, 615.7.) Errant Minion (enchant creature) and Power Leak (enchant enchantment) print it; the card
+/// lists `UPKEEP_DAMAGE_PREVENTED_BY_MANA_PAID` first in its `granted_preventions`. "That player" is the enchanted permanent's
+/// controller whose upkeep it is, fixed as the ability triggers (CR 603.3), whoever controls the permanent or the Aura by now.
+/// Any amount of mana is one mana, of any type, paid any number of times, the number chosen by the payer as they pay - a cost
+/// with no {X} in it, so mana that may be spent only on costs that contain {X} can't pay it; declining pays none (a player
+/// who has left the game pays nothing, CR 800.4f, and is dealt no damage, CR 800.4a). The damage is dealt by the Aura - as it
+/// last existed, if it has left the battlefield (CR 113.7a) - and the prevention is a shield of X on that damage alone,
+/// ordered by that player with any other effect on it (CR 616.1), preventing none of damage that can't be prevented (CR
+/// 615.12) and none of any later damage.
+pub const fn enchanted_permanents_upkeep_damage_prevented_by_mana_paid(text: &'static str) -> AbilityDef {
+    triggered(crate::triggers::ENCHANTED_PERMANENTS_CONTROLLERS_UPKEEP_HOST, pay_then_upkeep_damage_preventing_paid, text)
+}
+
+/// The prevention `enchanted_permanents_upkeep_damage_prevented_by_mana_paid` applies: damage dealt by the Aura
+/// (`prevention::DAMAGE_DEALT_BY`), up to the mana paid. Listed first in the card's `granted_preventions`.
+pub const UPKEEP_DAMAGE_PREVENTED_BY_MANA_PAID: GrantedPreventionDef =
+    GrantedPreventionDef { hint: "prevents X of that damage, X the mana paid", ..crate::prevention::DAMAGE_DEALT_BY }
+        .text("Prevent X of that damage, where X is the amount of mana that player paid this way.");
+
+fn pay_then_upkeep_damage_preventing_paid(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let player = PlayerId(item.data[0] as u8);
+    let paid = g.may_pay_times(player, item.object, item.object, mana("{1}"), ANY_NUMBER_OF_TIMES, &PAY_TO_PREVENT_AURA_DAMAGE)?;
+    g.damage_preventing(item.object, Target::Player(player), 2, paid, item.ability.card, 0);
+    Ok(())
+}
+
 /// "Surveil N" (CR 701.25) for the ability's controller. The surveil lands and Dragon's Rage Channeler print it.
 pub fn surveil(g: &mut dyn Game, item: &StackItem, n: usize) -> Result<(), Suspend> {
     crate::surveil(g, item.controller, item.object, n)
