@@ -1,0 +1,9 @@
+{
+  "name": "Frantic Strength",
+  "manaCost": "{2}{G}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature\nEnchanted creature gets +2/+2 and has trample.",
+  "keywords": [
+    "Flash"
+  ]
+}

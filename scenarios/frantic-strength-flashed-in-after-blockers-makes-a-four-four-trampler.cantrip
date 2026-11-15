@@ -1,0 +1,55 @@
+# Frantic Strength has flash (CR 702.8a): Bot1 casts it during combat, after Bot2's Hill Giant (3/3) blocks the attacking Grizzly Bears.
+# The Bears become 4/4 with trample: they survive the Giant's 3 damage (CR 704.5g), assign it lethal damage (3, CR 702.19b) and trample
+# the last 1 through to Bot2 (20 -> 19).
+
+[Bot1 Deck]
+Forest
+Grizzly Bears
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Frantic Strength
+Island x20
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Hill Giant
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Hill Giant.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Hill Giant > Grizzly Bears)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Frantic Strength.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 4
+? Bot1.Battlefield.Grizzly Bears.Toughness = 4
+? Bot1.Battlefield.Grizzly Bears.Keywords = Trample
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Graveyard = Hill Giant; Black Lotus
+Bot1.Battlefield.Grizzly Bears.Damage = 3
+Stack.Count = 0
