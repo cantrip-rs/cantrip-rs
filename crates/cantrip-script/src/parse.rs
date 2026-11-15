@@ -539,8 +539,9 @@ impl ScriptStep {
         }
         if let Some(rest) = line.strip_prefix('!') {
             let action = ActionStep::parse(rest.trim(), number)?;
-            if !matches!(action.verb, ScriptVerb::Play | ScriptVerb::Cast | ScriptVerb::Activate | ScriptVerb::Foretell | ScriptVerb::Suspend | ScriptVerb::TakeCompanion | ScriptVerb::Block | ScriptVerb::Attack | ScriptVerb::Search | ScriptVerb::Accept | ScriptVerb::Modes | ScriptVerb::Target | ScriptVerb::Divide | ScriptVerb::Undo | ScriptVerb::PayCost | ScriptVerb::RemoveCounters) && !action.verb.is_question() {
-                return Err(ParseError("a refusal (!) names a Play, Cast, Activate, Foretell, Suspend, TakeCompanion, Block, Attack, Search, Accept, Modes, Number, Target, Divide, Undo or PayCost that must not be offered".into()));
+            let bare_replace = action.verb == ScriptVerb::Replace && action.positional().next().is_none() && !action.text.contains('(');
+            if !matches!(action.verb, ScriptVerb::Play | ScriptVerb::Cast | ScriptVerb::Activate | ScriptVerb::Foretell | ScriptVerb::Suspend | ScriptVerb::TakeCompanion | ScriptVerb::Block | ScriptVerb::Attack | ScriptVerb::Search | ScriptVerb::Accept | ScriptVerb::Modes | ScriptVerb::Target | ScriptVerb::Divide | ScriptVerb::Undo | ScriptVerb::PayCost | ScriptVerb::RemoveCounters) && !action.verb.is_question() && !bare_replace {
+                return Err(ParseError("a refusal (!) names a Play, Cast, Activate, Foretell, Suspend, TakeCompanion, Block, Attack, Search, Accept, Modes, Number, Target, Divide, Undo or PayCost that must not be offered, or a bare Replace".into()));
             }
             return Ok(ScriptStep::Refused { line: number, text: line.to_string(), action });
         }
@@ -906,6 +907,22 @@ Island
             ScriptStep::Refused { action, .. } => assert_eq!((action.verb, action.positional().count()), (ScriptVerb::Block, 0)),
             other => panic!("{other:?}"),
         }
+    }
+
+    #[test]
+    fn a_refusal_may_be_a_bare_replace() {
+        let script = GameScript::parse("[Bot1 Deck]
+Island
+[Bot2 Deck]
+Island
+[Actions]
+! Bot2.Replace
+", "x").unwrap();
+        match &script.steps[0] {
+            ScriptStep::Refused { action, .. } => assert_eq!((action.verb, action.positional().count()), (ScriptVerb::Replace, 0)),
+            other => panic!("{other:?}"),
+        }
+        assert!(GameScript::parse("[Bot1 Deck]\nIsland\n[Bot2 Deck]\nIsland\n[Actions]\n! Bot2.Replace(Leyline of the Void)\n", "x").is_err());
     }
 
     #[test]

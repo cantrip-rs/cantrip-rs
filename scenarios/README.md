@@ -499,7 +499,9 @@ that would ask.
 The same holds for the other questions, written bare: `! Bot1.Choose`, `! Bot1.Decline`, `! Bot1.Discard`, `! Bot1.Colors`, `! Bot1.Name`,
 `! Bot1.Arrange`, `! Bot1.ChoosePlayer`, `! Bot1.Modes` and `! Bot1.Target` (without arguments) fail if that player is asked that kind
 of question before their next priority: a discard, a search result, a placement or a target that should not be asked for (an
-empty hand, a lone candidate, nothing to reveal). Pair each with a scenario that does ask it.
+empty hand, a lone candidate, nothing to reveal). Pair each with a scenario that does ask it. A bare `! Bot1.Replace` is the
+same for the order of replacement effects (CR 616.1): it fails if Bot1 is asked which of several applies first, showing that
+an effect does not apply to an event alongside another one that does.
 
 With a player, `! Bot1.ChoosePlayer(Bot1)` is judged at that player's next player choice instead: it fails if the question
 would accept that player (Shinryu, Transcendent Rival's "choose an opponent" refuses its controller). Put it before the line

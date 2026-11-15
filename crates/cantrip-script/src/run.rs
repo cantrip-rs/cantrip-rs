@@ -635,7 +635,7 @@ impl<'s> Run<'s> {
                 && ((action.verb.is_question() && !(matches!(action.verb, ScriptVerb::Choose | ScriptVerb::ChoosePlayer | ScriptVerb::Colors | ScriptVerb::Name | ScriptVerb::Number) && action.positional().next().is_some())
                     && !(matches!(action.verb, ScriptVerb::Choose) && action.text.contains('('))
                     && !(matches!(action.verb, ScriptVerb::Arrange) && !action.raw_arguments.trim().is_empty()))
-                    || (matches!(action.verb, ScriptVerb::Target | ScriptVerb::Modes | ScriptVerb::Block | ScriptVerb::Attack)
+                    || (matches!(action.verb, ScriptVerb::Target | ScriptVerb::Modes | ScriptVerb::Block | ScriptVerb::Attack | ScriptVerb::Replace)
                         && action.positional().next().is_none()
                         // `! Bot1.Attack()` is the declaration of no attackers, not the absence of the question.
                         && !(action.verb == ScriptVerb::Attack && action.text.contains('('))
