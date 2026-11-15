@@ -12,11 +12,10 @@ fn creatures_you_control(g: &dyn Game, player: PlayerId) -> Vec<ObjectId> {
 /// I, II: "Until your next turn, creatures you control gain '{T}: Add one mana of any color.'" The creatures are the
 /// ones their controller has as the chapter resolves, fixed then (CR 611.2c); the grant outlives the Saga.
 fn grant_mana(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let me = g.obj(item.object).card;
     let creatures = creatures_you_control(g, item.controller);
     instruction(g, |g| {
         for id in creatures {
-            g.add_effect(item.object, id, EffectKind::AddAbility(AbilityRef::delayed(me, 0)), Duration::UntilNextTurnOf(item.controller));
+            g.add_effect(item.object, id, EffectKind::AddAbility(AbilityRef::delayed(item.ability.card, 0)), Duration::UntilNextTurnOf(item.controller));
         }
     });
     Ok(())
