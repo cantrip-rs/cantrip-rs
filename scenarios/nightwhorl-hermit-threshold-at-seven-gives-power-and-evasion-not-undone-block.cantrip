@@ -1,0 +1,97 @@
+# Nightwhorl Hermit {2}{U}, 1/4 vigilance: "Threshold - as long as there are seven or more cards in your graveyard, this creature gets +1/+0
+# and can't be blocked" (CR 207.2c, 604.1, 509.1b). Bot1's graveyard holds six cards (Black Lotus, Thought Scour and its two milled Islands,
+# two Opts) on turn 3 while Bot2's own graveyard holds three more (Thought Scour and two milled Islands: nine cards between them, which
+# must not count): Hermit is still 1/4 and Ornithopter blocks it. After blockers a seventh card (Opt) makes it 2/4, which kills the 0/2
+# Ornithopter, but it stays blocked (no damage to Bot2). On turn 5 at seven cards it is 2/4 and Memnite may not block it; with vigilance it is still untapped after attacking.
+
+[Bot1 Deck]
+Black Lotus
+Nightwhorl Hermit
+Mox Sapphire
+Mox Sapphire
+Thought Scour
+Opt
+Opt
+Island x2
+Opt
+Island x18
+
+[Bot2 Deck]
+Island
+Thought Scour
+Ornithopter
+Memnite
+Island x6
+Island x6
+Island x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Nightwhorl Hermit.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 1
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 4
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+? Bot1.Graveyard.Count = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Thought Scour.Cast(Bot2)
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard.Count = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+? Bot1.Graveyard.Count = 6
+? Bot1.Battlefield.Nightwhorl Hermit.Power = 1
+? Bot1.Battlefield.Nightwhorl Hermit.Toughness = 4
+Bot1.Attack(Nightwhorl Hermit > Bot2)
+Bot2.Block(Ornithopter > Nightwhorl Hermit)
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+? Bot1.Graveyard.Count = 7
+? Bot1.Battlefield.Nightwhorl Hermit.Power = 2
+? Bot1.Battlefield.Nightwhorl Hermit.Toughness = 4
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+? Bot2.Graveyard.Count = 4
+[T4 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Attack(Nightwhorl Hermit > Bot2)
+! Bot2.Block(Memnite > Nightwhorl Hermit)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Nightwhorl Hermit.Tapped = false
+Bot2.Life = 18
+Bot2.Battlefield.Memnite.Damage = 0
+Bot1.Battlefield.Nightwhorl Hermit.Power = 2
+Bot1.Battlefield.Nightwhorl Hermit.Toughness = 4
+Bot1.Battlefield.Nightwhorl Hermit.Keywords = CantBeBlocked; Vigilance
