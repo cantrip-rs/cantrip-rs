@@ -1,0 +1,58 @@
+# Combat Celebrant's exertion adds a combat phase; Bot2's Steel Wall blocks Memnite, then Merciful Mandate ends that first
+# combat, skipping its end of combat step (CR 724.2d-e). The turn's first combat is over all the same, so in the added
+# combat's beginning of combat step Glyph of Reincarnation can be cast (CR 506.8d): Memnite dies and comes back.
+[Bot1 Deck]
+Black Lotus
+Combat Celebrant
+Memnite
+Mox Pearl
+Mox Emerald
+Mox Jet
+Merciful Mandate
+Glyph of Reincarnation
+Plains x20
+[Bot2 Deck]
+Steel Wall
+Island
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Combat Celebrant.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Steel Wall.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Combat Celebrant; Memnite)
+Bot1.Accept
+Bot2.Block(Steel Wall > Memnite)
+[T3 Bot1.DeclareBlockers]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Merciful Mandate.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T3 Bot1.BeginCombat]
+? Bot2.Life = 20
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Glyph of Reincarnation.Cast(Bot2.Battlefield.Steel Wall)
+? Step = BeginCombat
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite)
+[Expect]
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Graveyard = Glyph of Reincarnation; Black Lotus

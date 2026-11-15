@@ -1,0 +1,60 @@
+# Blaze of Glory makes Bot2's Steel Wall block both of Bot1's Hinterland Sanctifiers. After combat Bot1 casts Glyph of
+# Reincarnation at the Wall: both die, and the two creature cards owed come back from Bot1's graveyard as one event - the
+# Sanctifiers themselves - so each sees the other enter (CR 603.6a, 603.2) and Bot1 gains 2 life. Put onto the battlefield
+# one at a time, only the first would see the second. Bot1: 20, +1 as the second Sanctifier was cast, +2 = 23.
+[Bot1 Deck]
+Black Lotus
+Hinterland Sanctifier
+Hinterland Sanctifier
+Mox Emerald
+Glyph of Reincarnation
+Plains
+Plains
+Plains x20
+[Bot2 Deck]
+Steel Wall
+Mox Pearl
+Blaze of Glory
+Island
+Island
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Hinterland Sanctifier.Cast
+Bot1.Pass
+Bot1.Hand.Hinterland Sanctifier.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Steel Wall.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Blaze of Glory.Cast(Bot2.Battlefield.Steel Wall)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Hinterland Sanctifier#1; Hinterland Sanctifier#2)
+Bot2.Block(Steel Wall > Hinterland Sanctifier#1; Steel Wall > Hinterland Sanctifier#2)
+[T3 Bot1.Main2]
+? Bot1.Life = 21
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Glyph of Reincarnation.Cast(Bot2.Battlefield.Steel Wall)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Hinterland Sanctifier#1; Hinterland Sanctifier#2)
+[Expect]
+Bot1.Life = 23
+Bot1.Battlefield.Hinterland Sanctifier#1.Tapped = false
+Bot1.Battlefield.Hinterland Sanctifier#2.Tapped = false
+Bot1.Graveyard = Glyph of Reincarnation; Black Lotus

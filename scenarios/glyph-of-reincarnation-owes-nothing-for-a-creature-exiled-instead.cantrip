@@ -1,0 +1,60 @@
+# Bot2's Steel Wall blocks Bot1's Memnite, and Bot2 has Leyline of the Void. After combat Bot1 casts Glyph of Reincarnation
+# at the Wall: Memnite is destroyed, but exiled instead of put into the graveyard, so it did not die (CR 700.4, 614.6) and no
+# creature card is owed - Ornithopter, in Bot1's graveyard since before the Leyline, stays there and nothing is asked.
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Emerald
+Ornithopter
+Lightning Bolt
+Memnite
+Glyph of Reincarnation
+Swamp x20
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Leyline of the Void
+Steel Wall
+Island
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Leyline of the Void.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Steel Wall.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite)
+Bot2.Block(Steel Wall > Memnite)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Glyph of Reincarnation.Cast(Bot2.Battlefield.Steel Wall)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose
+[Expect]
+Bot1.Battlefield.Memnite = (absent)
+Bot1.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Battlefield.Ornithopter = (absent)

@@ -1,0 +1,74 @@
+# Bot1 has stolen Bot2's Memnite with Control Magic and attacks with it; Bot2's Steel Wall and Phyrexian Walker both block it.
+# After combat Bot2 destroys Control Magic, so Memnite is Bot2's again (CR 613.1b), and Bot1 casts Glyph of Reincarnation at
+# Bot2's Wall. Memnite dies into its owner's graveyard, but the card comes from the graveyard of the player who controlled
+# it the last time the Wall blocked it - Bot1, neither its owner nor its controller as it died - and enters under Bot1's
+# control, its owner's. A reading of either of the others would offer only Bot2's graveyard, which holds Memnite.
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Control Magic
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Mox Emerald
+Glyph of Reincarnation
+Island x20
+[Bot2 Deck]
+Steel Wall
+Memnite
+Phyrexian Walker
+Mox Pearl
+Disenchant
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Steel Wall.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Control Magic.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite)
+Bot2.Block(Steel Wall > Memnite; Phyrexian Walker > Memnite)
+[T5 Bot1.Main2]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Control Magic)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Memnite.Tapped = true
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Glyph of Reincarnation.Cast(Bot2.Battlefield.Steel Wall)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter)
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot2.Battlefield.Memnite = (absent)
+Bot2.Graveyard = Memnite; Disenchant
+Bot2.Battlefield.Count = 4

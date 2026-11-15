@@ -1,0 +1,84 @@
+# Bot1 attacks with Drudge Skeletons and Memnite; Bot2's Steel Wall blocks the Skeletons and Phyrexian Walker blocks Memnite.
+# Glyph of Reincarnation can't be cast before combat or during it (CR 506.8), nor at a creature that is no Wall. In the
+# postcombat main phase Bot2 casts it at its own Wall: the Skeletons are destroyed though they have a regeneration shield
+# (CR 701.19c), Memnite - blocked, but not by that Wall - is not, and Bot2 puts a creature card from the graveyard of the
+# player who controlled the Skeletons when the Wall blocked them (Bot1) onto the battlefield under its owner's control, not
+# from its own graveyard, which holds Bot2's Memnite.
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Ornithopter
+Lightning Bolt
+Drudge Skeletons
+Memnite
+Lightning Bolt
+Swamp x20
+[Bot2 Deck]
+Mox Emerald
+Steel Wall
+Phyrexian Walker
+Memnite
+Glyph of Reincarnation
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Drudge Skeletons.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Steel Wall.Cast
+Bot2.Pass
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+! Bot2.Hand.Glyph of Reincarnation.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Drudge Skeletons; Memnite)
+Bot2.Block(Steel Wall > Drudge Skeletons; Phyrexian Walker > Memnite)
+[T3 Bot1.EndCombat]
+Bot1.Pass
+! Bot2.Hand.Glyph of Reincarnation.Cast
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Drudge Skeletons.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot2.Hand.Glyph of Reincarnation.Cast(Bot1.Battlefield.Memnite)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Glyph of Reincarnation.Cast(Bot2.Battlefield.Steel Wall)
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Ornithopter)
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Memnite.Tapped = true
+Bot1.Battlefield.Drudge Skeletons = (absent)
+Bot1.Graveyard.Count = 3
+Bot2.Graveyard = Glyph of Reincarnation; Memnite
+Bot2.Battlefield.Count = 4

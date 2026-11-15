@@ -1,0 +1,84 @@
+# Bot2's Steel Wall blocks Memnite on turn 3. On turn 5 Combat Celebrant's exertion adds a combat phase: in the first the
+# Wall blocks a Warrior token, and Glyph of Reincarnation can't yet be cast in that combat's end of combat step; in the second
+# it blocks Phyrexian Walker, and in that combat's end of combat step - after the turn's first combat (CR 506.8, 506.8d) - Bot1
+# casts the Glyph at the Wall. The token and Phyrexian Walker, blocked this turn in either combat, die; Memnite, blocked only on
+# an earlier turn, does not. Two died, so two creature cards come from Bot1's graveyard, both at once: Phyrexian Walker, the
+# very creature just destroyed (the 2004-10-04 ruling), and Ornithopter, which Bot2 bolted. The token is in that graveyard
+# until the state-based actions, but it is no card (CR 111.1, 704.5d) and can't be chosen.
+[Bot1 Deck]
+Black Lotus
+Combat Celebrant
+Memnite
+Phyrexian Walker
+Mox Pearl
+Mox Emerald
+Ornithopter
+Secure the Wastes
+Glyph of Reincarnation
+Plains x20
+[Bot2 Deck]
+Steel Wall
+Island
+Mox Ruby
+Lightning Bolt
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Combat Celebrant.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Steel Wall.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Secure the Wastes.Cast(X: 1)
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite)
+Bot2.Block(Steel Wall > Memnite)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Combat Celebrant; Warrior Token)
+Bot1.Accept
+Bot2.Block(Steel Wall > Warrior Token)
+[T5 Bot1.EndCombat]
+! Bot1.Hand.Glyph of Reincarnation.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Phyrexian Walker)
+Bot2.Block(Steel Wall > Phyrexian Walker)
+[T5 Bot1.EndCombat]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Glyph of Reincarnation.Cast(Bot2.Battlefield.Steel Wall)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Warrior Token)
+Bot1.Choose(Phyrexian Walker; Ornithopter)
+[Expect]
+Bot1.Battlefield.Phyrexian Walker.Tapped = false
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Battlefield.Warrior Token = (absent)
+Bot1.Graveyard = Glyph of Reincarnation; Secure the Wastes; Black Lotus
+Bot2.Battlefield.Steel Wall.Tapped = false
+Bot2.Life = 16

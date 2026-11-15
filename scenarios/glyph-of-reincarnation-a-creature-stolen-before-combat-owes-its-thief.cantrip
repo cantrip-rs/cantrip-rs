@@ -1,0 +1,63 @@
+# Bot1 takes Bot2's Memnite with Act of Treason and attacks with it; Bot2's Steel Wall blocks it. After combat Bot1 casts
+# Glyph of Reincarnation at the Wall: Memnite dies into its owner's graveyard, Bot2's, but the card comes from the graveyard
+# of the player who controlled it when the Wall blocked it - Bot1. The change of control earlier this turn, before that
+# block, is no part of the answer (CR 509.1h, 110.2). Bot2's graveyard holds Memnite, so a reading of its owner, or of who
+# had it before the Act, would offer only that.
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Emerald
+Ornithopter
+Lightning Bolt
+Act of Treason
+Glyph of Reincarnation
+Swamp x20
+[Bot2 Deck]
+Steel Wall
+Memnite
+Island
+Island
+Island
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Steel Wall.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Act of Treason.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite)
+Bot2.Block(Steel Wall > Memnite)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Glyph of Reincarnation.Cast(Bot2.Battlefield.Steel Wall)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter)
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot2.Graveyard = Memnite
+Bot2.Battlefield.Steel Wall.Tapped = false
