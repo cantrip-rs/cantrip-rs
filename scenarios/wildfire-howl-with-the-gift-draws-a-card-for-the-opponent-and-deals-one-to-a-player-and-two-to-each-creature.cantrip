@@ -1,0 +1,56 @@
+# Wildfire Howl {1}{R}{R} with the gift promised, aimed at Bot2: Bot2 draws a card before the other effects (CR 702.174j), then takes 1 damage as the any-target while every creature - Bot1's Ornithopter (dies) and Bot2's
+# Wall of Stone (2 marked) - is dealt 2. A player target is accepted, two targets are not (the promise makes
+# one, CR 601.2c), and neither is none: the promise makes the target required.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Ornithopter
+Wildfire Howl
+Island
+Island x14
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Wall of Stone
+Island x16
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wall of Stone.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot2.Hand.Count = 4
+Bot1.Hand.Wildfire Howl.Cast
+Bot1.Accept
+! Bot1.Target(Count: 0)
+! Bot1.Target(Bot2; Bot1)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Ornithopter; Wildfire Howl
+Bot1.Life = 20
+Bot2.Life = 19
+Bot2.Hand.Count = 5
+Bot2.Battlefield.Wall of Stone.Damage = 2

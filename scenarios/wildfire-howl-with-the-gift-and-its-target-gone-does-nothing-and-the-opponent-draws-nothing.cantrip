@@ -1,0 +1,60 @@
+# Wildfire Howl {1}{R}{R} with the gift, aimed at Bot2's Wall of Stone, which Bot2 exiles with Swords to Plowshares in response (CR 608.2b; ruling 2024-07-26): the only target is illegal, so the spell doesn't resolve - no creature is damaged
+# (Bot1's Ornithopter survives) and the gift is never given, so Bot2 draws no card (its hand is 3 before Swords, 2 after).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Ornithopter
+Wildfire Howl
+Island
+Island x14
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Wall of Stone
+Mox Pearl
+Swords to Plowshares
+Island x15
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wall of Stone.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot2.Hand.Count = 3
+Bot1.Hand.Wildfire Howl.Cast
+Bot1.Accept
+Bot1.Target(Bot2.Battlefield.Wall of Stone)
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot2.Battlefield.Wall of Stone)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Wildfire Howl
+Bot1.Battlefield.Ornithopter.Damage = 0
+Bot2.Hand.Count = 2
+Exile.Count = 1

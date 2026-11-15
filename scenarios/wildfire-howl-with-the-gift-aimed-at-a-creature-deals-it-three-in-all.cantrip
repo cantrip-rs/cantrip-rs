@@ -1,0 +1,53 @@
+# Wildfire Howl {1}{R}{R} with the gift, aimed at Bot2's Wall of Stone: the target takes its 1 and the 2 every creature is dealt - 3 in all (CR 120.3, 608.2c) - while Bot1's Ornithopter (not the target) takes only 2 and dies;
+# no player is hurt.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Ornithopter
+Wildfire Howl
+Island
+Island x14
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Wall of Stone
+Island x16
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wall of Stone.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot2.Hand.Count = 4
+Bot1.Hand.Wildfire Howl.Cast
+Bot1.Accept
+Bot1.Target(Bot2.Battlefield.Wall of Stone)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Ornithopter; Wildfire Howl
+Bot1.Life = 20
+Bot2.Life = 20
+Bot2.Hand.Count = 5
+Bot2.Battlefield.Wall of Stone.Damage = 3
