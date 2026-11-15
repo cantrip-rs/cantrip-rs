@@ -1147,6 +1147,15 @@ pub static SQUIRREL: CardDef = CardDef {
     ..token!(Squirrel)
 };
 
+/// The 1/1 black Snail creature token (CR 111.4). Wick, the Whorled Mind makes it.
+pub static SNAIL: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Black)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Snail)
+};
+
 /// A 1/1 blue Fish creature token (CR 702.174f). Into the Flood Maw's gift makes it, tapped.
 pub static FISH: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::Blue)),
