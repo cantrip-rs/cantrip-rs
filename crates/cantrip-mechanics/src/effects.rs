@@ -83,6 +83,26 @@ pub fn enters_with_a_counter<const KIND: usize>(_: &mut dyn Game, entering: &mut
     Ok(())
 }
 
+/// "This permanent enters with `N` [kind] counters on it" (CR 614.1c, 122.6): `KIND` is `CounterKind::X as usize`. A
+/// replacement of how it enters, so a permanent entering as a copy of it has them too (CR 707.9a) and one that becomes a copy
+/// of it on the battlefield does not. Divine Intervention (two intervention), Braided Net, Gemstone Mine, Icatian
+/// Moneychanger, Peter Parker's Camera, Reckoner Bankbuster and Wishclaw Talisman (three), Fylgja (four healing) and Dark
+/// Depths (ten ice) print it; +1/+1 counters are `enters_with_plus_one_counters`, and one counter `enters_with_a_counter`.
+pub fn enters_with_counters<const KIND: usize, const N: i32>(_: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
+    entering.counters[KIND] += N;
+    Ok(())
+}
+
+/// "Remove a [kind] counter from this permanent" as an effect, not a cost (CR 122.1): `KIND` is `CounterKind::X as usize`.
+/// With none on it, or once it has left the battlefield (CR 400.7), nothing happens. Divine Intervention's and the depletion
+/// lands' upkeep abilities ("At the beginning of your upkeep, remove a [kind] counter from this ..."), Dark Depths' "{3}:
+/// Remove an ice counter from Dark Depths" and the ability Dread Wight gives ("{4}: Remove a paralyzation counter from this
+/// creature").
+pub fn remove_a_counter_from_this<const KIND: usize>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.remove_counters(item.object, CounterKind::ALL[KIND], 1);
+    Ok(())
+}
+
 /// "This permanent enters with `N` +1/+1 counters on it" (CR 614.1c, 122.1). Botanical Brawler, Costume Closet (two) and
 /// Triskelion (three) print it; one is `enters_with_a_counter`.
 pub fn enters_with_plus_one_counters<const N: i32>(_: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {

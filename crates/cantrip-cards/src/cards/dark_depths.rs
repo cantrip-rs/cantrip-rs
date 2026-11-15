@@ -1,4 +1,5 @@
 use cantrip_api::*;
+use cantrip_mechanics::effects;
 use cantrip_oracle as oracle;
 
 /// Marit Lage, a legendary 20/20 black Avatar creature token with flying and indestructible (CR 111.4, 205.4a): named by the
@@ -15,20 +16,6 @@ pub static MARIT_LAGE: CardDef = CardDef {
     keywords: Keywords::of(&[Keyword::Flying, Keyword::Indestructible]),
     ..CardDef::BLANK
 };
-
-/// "Dark Depths enters with ten ice counters on it" (CR 614.1c, 122.6). A replacement of how it enters, so a permanent
-/// entering as a copy of it has it too (CR 707.9a: Vesuva), and one that becomes a copy of it on the battlefield does not
-/// (Thespian's Stage's ruling).
-fn enters_with_ten_ice(_: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
-    entering.counters[CounterKind::Ice as usize] += 10;
-    Ok(())
-}
-
-/// "{3}: Remove an ice counter from Dark Depths." The removal is the effect, not a cost: with none on it, nothing happens.
-fn remove_ice(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.remove_counters(item.object, CounterKind::Ice, 1);
-    Ok(())
-}
 
 /// "When Dark Depths has no ice counters on it": a state trigger (CR 603.8), true of Dark Depths on the battlefield. It
 /// triggers once and not again while it is on the stack (the ruling).
@@ -47,9 +34,13 @@ fn sacrifice_for_marit_lage(g: &mut dyn Game, item: &StackItem) -> Result<(), Su
 }
 
 pub static CARD: CardDef = CardDef {
-    enters: Some(enters_with_ten_ice),
+    // "Dark Depths enters with ten ice counters on it" (CR 614.1c, 122.6): a replacement of how it enters, so a permanent
+    // entering as a copy of it has it too (CR 707.9a: Vesuva), and one that becomes a copy of it on the battlefield does not
+    // (Thespian's Stage's ruling).
+    enters: Some(effects::enters_with_counters::<{ CounterKind::Ice as usize }, 10>),
     abilities: &[
-        ability(cost("{3}"), remove_ice, "{3}: Remove an ice counter from Dark Depths."),
+        // The removal is the effect, not a cost: with none on it, nothing happens.
+        ability(cost("{3}"), effects::remove_a_counter_from_this::<{ CounterKind::Ice as usize }>, "{3}: Remove an ice counter from Dark Depths."),
         state_triggered(no_ice, sacrifice_for_marit_lage, "When Dark Depths has no ice counters on it, sacrifice it. If you do, create Marit Lage, a legendary 20/20 black Avatar creature token with flying and indestructible."),
     ],
     ..oracle::DARK_DEPTHS

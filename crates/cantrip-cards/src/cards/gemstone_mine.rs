@@ -1,11 +1,6 @@
 use cantrip_api::*;
+use cantrip_mechanics::effects;
 use cantrip_oracle as oracle;
-
-/// This land enters with three mining counters on it.
-fn enters_with_mining_counters(_: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
-    entering.counters[CounterKind::Mining as usize] += 3;
-    Ok(())
-}
 
 /// Add one mana of any color. If there are no mining counters on this land, sacrifice it (CR 605.3a): as the ability
 /// resolves, so the mana is added either way.
@@ -19,7 +14,8 @@ fn add_one_of_any_color(g: &mut dyn Game, asker: &Asker, color: Option<Color>) -
 }
 
 pub static CARD: CardDef = CardDef {
-    enters: Some(enters_with_mining_counters),
+    // This land enters with three mining counters on it (CR 614.1c, 122.6).
+    enters: Some(effects::enters_with_counters::<{ CounterKind::Mining as usize }, 3>),
     abilities: &[mana_ability(TAP.and(remove_counters(CounterKind::Mining, 1)), add_any_color(1).by(add_one_of_any_color), "{T}, Remove a mining counter from this land: Add one mana of any color. If there are no mining counters on this land, sacrifice it.")],
     ..oracle::GEMSTONE_MINE
 };

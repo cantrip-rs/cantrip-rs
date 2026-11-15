@@ -1,12 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::triggers;
+use cantrip_mechanics::{effects, triggers};
 use cantrip_oracle as oracle;
-
-/// This creature enters with three credit counters (CR 614.1c).
-fn enters_with_credit(_: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
-    entering.counters[CounterKind::Credit as usize] += 3;
-    Ok(())
-}
 
 /// The entering creature deals damage to the trigger's controller (CR 113.7a).
 fn damage_you(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -33,6 +27,7 @@ pub static CARD: CardDef = CardDef {
         ability(SACRIFICE_THIS, gain_credit_life, "Sacrifice this creature: You gain 1 life for each credit counter on this creature. Activate only during your upkeep.")
             .condition(cantrip_mechanics::your_upkeep),
     ],
-    enters: Some(enters_with_credit),
+    // This creature enters with three credit counters (CR 614.1c).
+    enters: Some(effects::enters_with_counters::<{ CounterKind::Credit as usize }, 3>),
     ..oracle::ICATIAN_MONEYCHANGER
 };

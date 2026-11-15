@@ -445,11 +445,6 @@ pub fn depletion_prevents_untap(q: &dyn Query, asker: &Asker, id: ObjectId) -> b
     id == asker.source && q.obj(id).counters(CounterKind::Depletion) > 0
 }
 
-fn remove_depletion_counter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.remove_counters(item.object, CounterKind::Depletion, 1);
-    Ok(())
-}
-
 fn add_chosen_color_and_depletion(g: &mut dyn Game, asker: &Asker, chosen: Option<Color>) -> Result<(), Suspend> {
     let Some(color) = chosen else { return Ok(()) };
     g.add_mana(asker.controller, color.mana(), 1);
@@ -467,7 +462,7 @@ pub const fn depletion_land(a: Color, b: Color, text: &'static str) -> [AbilityD
     [
         triggered(
             triggers::YOUR_UPKEEP,
-            remove_depletion_counter,
+            effects::remove_a_counter_from_this::<{ CounterKind::Depletion as usize }>,
             "At the beginning of your upkeep, remove a depletion counter from this land.",
         ),
         mana_ability(TAP, add_by(add_chosen_color_and_depletion).choose_color().colors(ColorSet(ColorSet::of(a).0 | ColorSet::of(b).0)).yields_any(1), text),

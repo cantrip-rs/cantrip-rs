@@ -1,12 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::{craft, targets};
+use cantrip_mechanics::{craft, effects, targets};
 use cantrip_oracle as oracle;
-
-/// "This artifact enters with three net counters on it" (CR 122.6, 614.1c).
-fn enters_with_net_counters(_: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
-    entering.counters[CounterKind::Net as usize] += 3;
-    Ok(())
-}
 
 /// "Tap another target nonland permanent. Its activated abilities can't be activated for as long as it remains tapped"
 /// (CR 701.26a, 602.5, 611.2b). A resolved effect, so it lasts after the Net is gone - crafted into Braided Quipu, say - and
@@ -43,7 +37,8 @@ pub static BACK: CardDef = CardDef {
 };
 
 pub static CARD: CardDef = CardDef {
-    enters: Some(enters_with_net_counters),
+    // "This artifact enters with three net counters on it" (CR 122.6, 614.1c).
+    enters: Some(effects::enters_with_counters::<{ CounterKind::Net as usize }, 3>),
     abilities: &[
         ability(
             TAP.and(remove_counters(CounterKind::Net, 1)),

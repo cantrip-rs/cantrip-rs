@@ -1,12 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::triggers;
+use cantrip_mechanics::{effects, triggers};
 use cantrip_oracle as oracle;
-
-/// "{4}: Remove a paralyzation counter from this creature." (CR 608.2).
-fn remove_paralyzation_counter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.remove_counters(item.object, CounterKind::Paralyzation, 1);
-    Ok(())
-}
 
 /// "At end of combat, put a paralyzation counter on each creature blocking or blocked by this creature and tap those creatures. Each of those creatures doesn't untap during its controller's untap step for as long as it has a paralyzation counter on it. Each of those creatures gains "{4}: Remove a paralyzation counter from this creature."" (CR 608.2h, 611.2a, 122.1).
 fn paralyze_blockers_and_blocked(
@@ -47,7 +41,7 @@ pub static CARD: CardDef = CardDef {
     delayed: &[
         ability(
             cost("{4}"),
-            remove_paralyzation_counter,
+            effects::remove_a_counter_from_this::<{ CounterKind::Paralyzation as usize }>,
             "{4}: Remove a paralyzation counter from this creature.",
         ),
     ],
