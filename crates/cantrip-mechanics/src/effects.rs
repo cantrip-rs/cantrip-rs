@@ -1400,7 +1400,9 @@ pub const fn attacks_gain_life<const N: i32>(text: &'static str) -> AbilityDef {
     triggered(crate::triggers::THIS_ATTACKS, gain_life_amount::<N>, text)
 }
 
-fn gain_life_amount<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+/// "You gain N life" as an effect function (CR 119.3), for abilities that do nothing else. Onulet and Haywire Mite gain it when
+/// they die, Shopkeeper's Bane when it attacks, Cautious Survivor at the beginning of your second main phase.
+pub fn gain_life_amount<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     gain_life(g, item, N)
 }
 
