@@ -1,0 +1,62 @@
+# Trial of Agony: two target creatures controlled by the same opponent (CR 115.1, 109.4), that player choosing which takes 5 damage and the other
+# unable to block this turn (CR 509.1b). Bot1 refuses its own Bear and Mystic + Elves (two different opponents), then targets Bot2's Mystic
+# and Memnite. Bot2, not Bot1, chooses: Memnite takes the 5 and dies, and Mystic is refused as a blocker while Bot2's untargeted Ornithopter may block.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Runeclaw Bear
+Trial of Agony
+Mountain x16
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Memnite
+Ornithopter
+Forest x16
+
+[Bot3 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Runeclaw Bear.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot3.Main1]
+Bot3.Hand.Forest.Play
+Bot3.Battlefield.Forest.Activate
+Bot3.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Trial of Agony.Cast
+! Bot1.Target(Runeclaw Bear)
+! Bot1.Target(Elvish Mystic; Llanowar Elves)
+! Bot1.Target(Memnite)
+! Bot1.Target(Elvish Mystic; Memnite; Ornithopter)
+Bot1.Target(Elvish Mystic; Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot2.Choose(Memnite)
+Bot1.Attack(Runeclaw Bear > Bot2)
+! Bot2.Block(Elvish Mystic > Runeclaw Bear)
+Bot2.Block(Ornithopter > Runeclaw Bear)
+[Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Ornithopter; Memnite
+Bot2.Battlefield.Elvish Mystic.Damage = 0
+Bot3.Battlefield.Llanowar Elves.Damage = 0

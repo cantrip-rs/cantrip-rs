@@ -1,0 +1,42 @@
+# Trial of Agony's ruling (CR 608.2b, 2024-09-20): if one of the two target creatures is an illegal target as it resolves, its controller
+# "chooses" the remaining one and it is dealt 5 damage. On turn 3 Bot1 targets Bot2's Elvish Mystic and Memnite; in response Bot1's Lightning Bolt
+# kills Memnite, then Trial of Agony resolves and Bot2 "chooses" the Mystic, the only legal target, which takes 5.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Trial of Agony
+Lightning Bolt
+Mountain x16
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Memnite
+Forest x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Trial of Agony.Cast
+Bot1.Target(Elvish Mystic; Memnite)
+Bot1.Hand.Lightning Bolt.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Elvish Mystic)
+[Bot1.Main2]
+? Bot2.Graveyard = Elvish Mystic; Memnite
+
+[Expect]
+Bot2.Battlefield.Count = 1
+Bot1.Graveyard = Trial of Agony; Lightning Bolt
