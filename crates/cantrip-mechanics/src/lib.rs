@@ -88,6 +88,7 @@ pub mod learn;
 pub mod level_up;
 pub mod lands;
 pub mod land_until_cast;
+pub mod lasting_rules;
 pub mod mana;
 pub mod manifest;
 pub mod manifest_dread;

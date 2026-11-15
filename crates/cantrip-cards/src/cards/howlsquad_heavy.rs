@@ -2,13 +2,8 @@ use cantrip_api::*;
 use cantrip_mechanics::max_speed::max_speed;
 use cantrip_mechanics::statics::{have_haste, other_of_subtype_you_control};
 use cantrip_mechanics::triggers::BEGINNING_OF_YOUR_COMBAT;
-use cantrip_mechanics::{lands, permanents_with_subtype_you_control, tokens};
+use cantrip_mechanics::{lands, lasting_rules, permanents_with_subtype_you_control, tokens};
 use cantrip_oracle as oracle;
-
-/// "That token attacks this combat if able" (CR 508.1d, 611.2c): the token this ability made, named as the lasting rule starts.
-fn that_token(_: &dyn Query, _: &Asker, about: Target, id: ObjectId) -> bool {
-    about.object() == Some(id)
-}
 
 /// "Create a 1/1 red Goblin creature token. That token attacks this combat if able." (CR 111.1, 508.1d): the requirement is an
 /// effect of this ability, lasting until the end of this combat, on the token it made - not on a token another ability made.
@@ -40,7 +35,12 @@ pub static CARD: CardDef = CardDef {
         "At the beginning of combat on your turn, create a 1/1 red Goblin creature token. That token attacks this combat if able.",
     )],
     delayed: &[mana_ability(TAP, add_by(add_red_for_each_goblin), "{T}: Add {R} for each Goblin you control.")],
-    lasting_rules: &[LastingRule { text: "That token attacks this combat if able.", rule: LastingRuleKind::MustAttack, applies: that_token }],
+    // "That token attacks this combat if able" (CR 508.1d, 611.2c): the token this ability made, named as the lasting rule starts.
+    lasting_rules: &[LastingRule {
+        text: "That token attacks this combat if able.",
+        rule: LastingRuleKind::MustAttack,
+        applies: lasting_rules::the_object_named,
+    }],
     statics: &[
         static_ability(Layer::Ability, other_of_subtype_you_control::<{ lands::sub(Subtype::Goblin) }>, have_haste, "Other Goblins you control have haste."),
         max_speed("Max speed \u{2014} {T}: Add {R} for each Goblin you control."),

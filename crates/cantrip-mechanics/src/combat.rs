@@ -281,14 +281,13 @@ fn compel_target_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
 /// Nettling Imp and Norritt print it; Arcum's Whistle words it its own way.
 pub const COMPEL_TARGET: TargetSpec = target(compel_target_filter);
 
-fn compel_must_attack(_: &dyn Query, _: &Asker, about: Target, id: ObjectId) -> bool {
-    about.object() == Some(id)
-}
-
 /// "That creature attacks this turn if able" (CR 508.1d, 611.2a): the card's `lasting_rules` entry, started by
 /// `must_attack_and_destroy_if_it_doesnt`. Nettling Imp and Norritt print it; Arcum's Whistle words it its own way.
-pub const MUST_ATTACK_THIS_TURN: LastingRule =
-    LastingRule { text: "That creature attacks this turn if able.", rule: LastingRuleKind::MustAttack, applies: compel_must_attack };
+pub const MUST_ATTACK_THIS_TURN: LastingRule = LastingRule {
+    text: "That creature attacks this turn if able.",
+    rule: LastingRuleKind::MustAttack,
+    applies: crate::lasting_rules::the_object_named,
+};
 
 /// The delayed body of `DESTROY_IT_IF_IT_DIDNT_ATTACK` (CR 701.8): destroy the creature unless it attacked this turn. Arcum's
 /// Whistle words its clause differently and declares this body with its own text.
