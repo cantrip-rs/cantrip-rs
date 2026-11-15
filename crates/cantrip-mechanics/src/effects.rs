@@ -3376,6 +3376,19 @@ pub fn attacking_creatures_get(g: &mut dyn Game, source: ObjectId, power: i32, t
     });
 }
 
+/// "Attacking creatures you control get +`P`/+`T` until end of turn" (CR 611.2c) as an ability's whole effect: the creatures
+/// attacking as it resolves that its controller controls, and none that attack or are put onto the battlefield attacking later.
+/// One instruction. Painter's Studio's Defaced Gallery prints it.
+pub fn attacking_creatures_you_control_get<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let attackers: Vec<ObjectId> = g.permanents_of(item.controller).into_iter().filter(|&id| g.is_attacking(id)).collect();
+    instruction(g, |g| {
+        for id in attackers {
+            crate::pump(g, item.object, id, P, T);
+        }
+    });
+    Ok(())
+}
+
 /// "Blocking creatures get +`power`/+`toughness` until end of turn" (CR 611.2c): the creatures blocking as `source`'s spell
 /// or ability resolves, whoever controls them, and none that block later. One instruction. Piety and Rally print it.
 pub fn blocking_creatures_get(g: &mut dyn Game, source: ObjectId, power: i32, toughness: i32) {
