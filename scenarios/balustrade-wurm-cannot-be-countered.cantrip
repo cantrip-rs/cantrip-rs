@@ -1,0 +1,35 @@
+# "This spell can't be countered" (CR 101.2): Bot2's Counterspell targets Balustrade Wurm legally but does nothing, and the Wurm enters.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Balustrade Wurm
+Island x16
+
+[Bot2 Deck]
+Island
+Black Lotus
+Counterspell
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Balustrade Wurm.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Counterspell.Cast(Stack.Balustrade Wurm)
+
+[Expect]
+Stack.Count = 0
+Bot2.Graveyard = Counterspell; Black Lotus
+Bot1.Battlefield.Balustrade Wurm.Power = 5
+Bot1.Battlefield.Balustrade Wurm.Toughness = 5
+Bot1.Battlefield.Balustrade Wurm.Keywords = CantBeCountered; Haste; Trample
