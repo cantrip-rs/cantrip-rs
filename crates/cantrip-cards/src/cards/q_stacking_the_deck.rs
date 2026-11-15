@@ -17,7 +17,7 @@ fn still_exiled(q: &dyn Query, asker: &Asker) -> bool {
 
 /// "Create a copy of this card. You may cast the copy." (CR 707.12, 608.2g): the copy is made in exile from the card as it
 /// is, and cast as the ability resolves for its own costs, or not at all - a copy that isn't cast ceases to exist (CR 707.10a,
-/// 704.5e). A copy of a permanent spell becomes a token (CR 707.12b).
+/// 704.5e). A copy of a permanent spell becomes a token (CR 707.10f, 608.3f).
 fn copy_and_cast(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     copy::may_cast_a_copy_paying_costs(g, item.controller, item.object)
 }
@@ -30,8 +30,7 @@ fn enters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.end_sentence();
     let Some(card) = library::exile_until_any_nonland(g, item.controller, None) else { return Ok(()) };
     g.end_sentence();
-    let this = g.obj(item.object).card;
-    g.add_effect(item.object, card, EffectKind::AddAbility(AbilityRef::delayed(this, 0)), Duration::Indefinite);
+    g.add_effect(item.object, card, EffectKind::AddAbility(AbilityRef::delayed(item.ability.card, 0)), Duration::Indefinite);
     Ok(())
 }
 
