@@ -1,0 +1,85 @@
+# Thought Shucker {1}{U}, 1/3: "Threshold — {1}{U}: Put a +1/+1 counter on this creature and draw a card. Activate only if there are seven
+# or more cards in your graveyard and only once" (CR 207.2c, 602.5b). On turn 3 Bot1 has six cards in its graveyard (Black Lotus, Thought
+# Scour and its two milled Islands, two Opts) and two mana in its pool: the ability is refused. A seventh card (Opt) allows it, on turn 5
+# it is activated (2/4, one card drawn), and a second activation with mana to spare is refused, as it may be activated only once: on turn 7 too (CR 602.5b, "only
+# once" is not "once each turn").
+
+[Bot1 Deck]
+Black Lotus
+Thought Shucker
+Mox Sapphire
+Mox Sapphire
+Thought Scour
+Opt
+Opt
+Island x2
+Opt
+Island x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Thought Shucker.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 1
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 4
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+? Bot1.Graveyard.Count = 5
+[T2 Bot2.Main1]
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+? Bot1.Graveyard.Count = 6
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Thought Shucker.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+? Bot1.Graveyard.Count = 7
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+? Bot1.Battlefield.Thought Shucker.Power = 1
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Thought Shucker.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thought Shucker.Power = 2
+? Bot1.Hand.Count = 4
+? Bot1.Battlefield.Thought Shucker.Toughness = 4
+! Bot1.Battlefield.Thought Shucker.Activate
+[T5 Bot1.Main2]
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+! Bot1.Battlefield.Thought Shucker.Activate
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Thought Shucker.Counters.PlusOnePlusOne = 1
+Bot1.Graveyard.Count = 7
