@@ -218,6 +218,14 @@ pub fn artifact_entered_under_control_this_turn(history: History<'_>, player: Pl
     history.entered().any(|e| e.controller == player && e.is(CardType::Artifact))
 }
 
+/// "A land entered the battlefield under your control this turn" (CR 603.6a): a permanent that entered this turn under `player`'s
+/// control and was a land as it entered (the controller and card types `Event::Entered` holds), whatever has happened to it since.
+/// A land that came in under an opponent's control does not count, nor does one that came in on an earlier turn. Zimone,
+/// All-Questioning and Earth Rumble Wrestlers print it.
+pub fn land_entered_under_control_this_turn(history: History<'_>, player: PlayerId) -> bool {
+    history.entered().any(|e| e.controller == player && e.is(CardType::Land))
+}
+
 /// The number of permanents `player` has sacrificed this turn (CR 701.21a): every permanent that went from the battlefield to a
 /// graveyard as a sacrifice this turn, token or not, under that player's control as it left. Asked of the history (CR 603.10a).
 /// Obsessive Pursuit counts them; Phoenix Fleet Airship asks whether there was one ("if you sacrificed a permanent this turn").
