@@ -1,0 +1,80 @@
+# Haunted Screen (3): "{T}: Add {W} or {B}." "{T}, Pay 1 life: Add {G}, {U}, or {R}." (CR 605.1a, 119.4) and "{7}: Put seven +1/+1
+# counters on this artifact. It becomes a 0/0 Spirit creature in addition to its other types. Activate only once." (CR 602.5b,
+# 122.1, 205.1b). Turn 1 three Moxen pay for it ({3}, the pool empty right after); the first ability gives {B} (green refused,
+# and the life-paying ability refuses white) with no life paid. Turn 3 one Mox pays for a Lightning Bolt, the Screen gives {R} for
+# one life, Black Lotus and two Moxen add up to six mana and the {7} is refused (nothing else can pay); a seventh from Mox Pearl
+# and it is paid exactly (the pool empty after): the Screen becomes a 7/7 Spirit artifact creature. Turn 5, with seven mana
+# again, the second activation is refused.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Haunted Screen
+Black Lotus
+Mox Pearl
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Haunted Screen.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Haunted Screen.Activate(Ability: {T}: Add; Color: Green)
+! Bot1.Battlefield.Haunted Screen.Activate(Ability: Pay 1 life; Color: White)
+Bot1.Battlefield.Haunted Screen.Activate(Ability: {T}: Add; Color: Black)
+? Bot1.Mana = {B}
+? Bot1.Life = 20
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Haunted Screen.Types = Artifact
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot1.Battlefield.Haunted Screen.Activate(Ability: Pay 1 life; Color: Red)
+? Bot1.Mana = {R}
+? Bot1.Life = 19
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Haunted Screen.Activate(Ability: {7}; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Haunted Screen.Activate(Ability: {7})
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Haunted Screen.Power = 7
+? Bot1.Battlefield.Haunted Screen.Toughness = 7
+? Bot1.Battlefield.Haunted Screen.Types = Artifact; Creature
+? Bot1.Battlefield.Haunted Screen.Subtypes = Spirit
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Haunted Screen.Activate(Ability: {T}: Add; Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+? Bot1.Mana = {W}{W}{U}{U}{B}{R}{G}
+! Bot1.Battlefield.Haunted Screen.Activate(Ability: {7})
+
+[Expect]
+Bot1.Battlefield.Haunted Screen.Power = 7
+Bot1.Battlefield.Haunted Screen.Toughness = 7
+Bot1.Battlefield.Haunted Screen.Subtypes = Spirit
+Bot2.Life = 17
