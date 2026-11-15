@@ -1,0 +1,36 @@
+# Whiskervale Forerunner's valiant is "a spell or ability you control": Bot2's Lightning Bolt targeting the 3/4 Forerunner (it
+# survives with 3 damage) does not trigger it, so Bot1 looks at nothing and the library is untouched.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Whiskervale Forerunner
+Memnite
+Plains x17
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Whiskervale Forerunner.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Whiskervale Forerunner)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Whiskervale Forerunner.Damage = 3
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Whiskervale Forerunner
+Bot1.Library.Count = 14
+Stack.Count = 0
