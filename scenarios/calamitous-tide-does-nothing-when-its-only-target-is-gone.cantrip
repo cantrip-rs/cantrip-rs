@@ -1,0 +1,56 @@
+# Calamitous Tide with its only target destroyed in response: every target is illegal, so the spell does not resolve at all
+# (CR 608.2b) and its draw and discard never happen. Bot1's hand stays Forest alone and Tide goes to the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Memnite
+Calamitous Tide
+Island
+Forest
+Plains
+Mountain
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Calamitous Tide.Cast
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Ornithopter; Lightning Bolt
+Bot2.Battlefield = Mox Ruby; Memnite
+Bot1.Hand = Forest
+Bot1.Graveyard = Calamitous Tide; Black Lotus
+Bot1.Library.Count = 12

@@ -1,0 +1,56 @@
+# Calamitous Tide aimed at Bot2's Ornithopter and Memnite; in response Bot2 Lightning Bolts the Ornithopter. A spell with a
+# target left still resolves, doing nothing to the illegal one (CR 608.2b): the Memnite returns to Bot2's hand, the dead
+# Ornithopter stays in Bot2's graveyard, and Bot1 still draws two (Plains, Mountain) and discards Forest.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Memnite
+Calamitous Tide
+Island
+Forest
+Plains
+Mountain
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Calamitous Tide.Cast
+Bot1.Target(Bot2.Battlefield.Ornithopter; Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Forest)
+
+[Expect]
+Bot2.Graveyard = Ornithopter; Lightning Bolt
+Bot2.Hand = Memnite; Island; Island; Island; Island
+Bot2.Battlefield = Mox Ruby
+Bot1.Hand = Plains; Mountain
+Bot1.Graveyard = Calamitous Tide; Forest; Black Lotus
