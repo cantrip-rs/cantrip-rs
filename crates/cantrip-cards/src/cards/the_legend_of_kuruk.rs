@@ -3,12 +3,6 @@ use cantrip_mechanics::triggers::YOU_CAST_A_SPELL;
 use cantrip_mechanics::{effects, exile_and_return_transformed, tokens};
 use cantrip_oracle as oracle;
 
-/// I, II: "Scry 2, then draw a card" (CR 701.22): the scry is done in full, then the card is drawn.
-fn scry_then_draw(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::scry(g, item, 2)?;
-    effects::draw(g, item, 1)
-}
-
 /// III: "Exile this Saga, then return it to the battlefield transformed under your control": the ability's controller's, who
 /// need not own it (CR 712.14a). A Saga that is not a double-faced card, a copy of one, stays in exile (the ruling).
 fn chapter_three(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -43,8 +37,8 @@ pub static BACK: CardDef = CardDef {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        chapter(1, scry_then_draw, "I \u{2014} Scry 2, then draw a card."),
-        chapter(2, scry_then_draw, "II \u{2014} Scry 2, then draw a card."),
+        chapter(1, effects::scry_then_draw::<2>, "I \u{2014} Scry 2, then draw a card."),
+        chapter(2, effects::scry_then_draw::<2>, "II \u{2014} Scry 2, then draw a card."),
         chapter(3, chapter_three, "III \u{2014} Exile this Saga, then return it to the battlefield transformed under your control."),
     ],
     back: Some(&BACK),
