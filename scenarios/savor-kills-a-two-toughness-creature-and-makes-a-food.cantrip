@@ -1,0 +1,34 @@
+# Savor gives target creature -2/-2 until end of turn and makes a Food token for the spell's controller, not the target's (CR 111.10b,
+# 608.2c): Bot2's Ornithopter (0/2) has toughness exactly 2, so it dies (CR 704.5f). The pool is empty right after the cast: {1}{B} exactly.
+
+[Bot1 Deck]
+Mox Jet
+Swamp
+Savor
+Swamp x17
+
+[Bot2 Deck]
+Ornithopter
+Swamp x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Savor.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Ornithopter = (absent)
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield = Food Token; Mox Jet; Swamp
+Bot1.Graveyard = Savor

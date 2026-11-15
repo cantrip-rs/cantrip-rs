@@ -1,0 +1,39 @@
+# Savor's only target is killed in response (Lightning Bolt on Bot1's Memnite), so the spell is countered on resolution (CR 608.2b)
+# and no Food is made: -2/-2 never happens and the second instruction is not followed.
+
+[Bot1 Deck]
+Mox Jet
+Swamp
+Savor
+Memnite
+Swamp x17
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot1.Pass
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Savor.Cast(Bot1.Battlefield.Memnite)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Jet; Swamp
+Bot1.Graveyard = Savor; Memnite
