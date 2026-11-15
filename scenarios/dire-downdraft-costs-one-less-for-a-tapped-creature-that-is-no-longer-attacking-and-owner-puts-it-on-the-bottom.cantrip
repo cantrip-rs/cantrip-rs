@@ -1,0 +1,54 @@
+# Dire Downdraft costs {1} less if it targets a tapped creature too. Bot2's Llanowar Elves attacked on turn 4 and are still tapped
+# in the second main phase, no longer attacking, so Bot1's three Moxen pay {2}{U} exactly. Bot2 chooses the bottom of its library.
+# The Elves dealt 1 damage in combat.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Dire Downdraft
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x10
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Llanowar Elves > Bot1)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dire Downdraft.Cast(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Decline
+
+[Expect]
+Bot2.Battlefield.Count = 1
+Bot1.Life = 19
+Bot1.Graveyard = Dire Downdraft

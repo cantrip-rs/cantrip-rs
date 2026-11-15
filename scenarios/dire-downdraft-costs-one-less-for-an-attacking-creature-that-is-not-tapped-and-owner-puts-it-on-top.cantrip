@@ -1,0 +1,67 @@
+# Dire Downdraft ({3}{U}, instant) costs {1} less if it targets an attacking or tapped creature (CR 601.2f, 118.7a). Bot2's
+# Action News Crew has vigilance, so when it attacks it stays untapped: only "attacking" applies. On turn 3 it is neither
+# attacking nor tapped and Bot1's three Moxen are short of {3}{U}; on turn 4 the same three pay exactly {2}{U}. Its owner Bot2
+# accepts the top of its library, so the Crew is drawn again, and it deals no damage.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Dire Downdraft
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Mox Pearl
+Mox Ruby
+Action News Crew
+Plains
+Plains
+Plains
+Plains
+Plains x10
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Action News Crew.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Hand.Dire Downdraft.Cast(Bot2.Battlefield.Action News Crew; Mana: short)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Action News Crew > Bot1)
+? Bot2.Battlefield.Action News Crew.Tapped = false
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dire Downdraft.Cast(Bot2.Battlefield.Action News Crew)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Accept
+
+[Expect]
+Bot2.Battlefield.Count = 2
+Bot2.Library.Top = Action News Crew
+Bot1.Life = 20
+Bot1.Graveyard = Dire Downdraft

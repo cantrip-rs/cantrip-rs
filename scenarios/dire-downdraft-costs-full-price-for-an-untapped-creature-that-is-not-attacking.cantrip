@@ -1,0 +1,52 @@
+# Dire Downdraft targeting an untapped creature that is not attacking gets no reduction: Bot1's four Moxen pay the full {3}{U}.
+# Bot2's Llanowar Elves are bounced to the top of its library by their owner.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Dire Downdraft
+Island
+Island
+Island x11
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x10
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dire Downdraft.Cast(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Accept
+
+[Expect]
+Bot2.Battlefield.Count = 1
+Bot2.Library.Top = Llanowar Elves
+Bot1.Graveyard = Dire Downdraft
