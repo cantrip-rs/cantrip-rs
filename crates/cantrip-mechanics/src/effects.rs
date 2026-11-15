@@ -2989,6 +2989,12 @@ pub fn first_target_gains_flying(g: &mut dyn Game, item: &StackItem) -> Result<(
     first_target_gains_until_end_of_turn::<{ Keywords::of(&[Keyword::Flying]).0 }>(g, item)
 }
 
+/// "Target creature gains hexproof until end of turn" (CR 702.11b, 611.2a): the ability's first target. A target no longer legal gains
+/// nothing (CR 608.2b). Saru, Unthreatened and Plumecreed Escort print it.
+pub fn first_target_gains_hexproof(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    first_target_gains_until_end_of_turn::<{ Keywords::of(&[Keyword::Hexproof]).0 }>(g, item)
+}
+
 /// "This creature gains first strike until end of turn" (CR 702.7a): `this_gains_until_end_of_turn` for first strike.
 pub fn this_gains_first_strike(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     this_gains_until_end_of_turn(g, item, Keyword::FirstStrike)
