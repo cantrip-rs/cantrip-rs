@@ -227,6 +227,32 @@ pub fn only_before_combat_damage_step(q: &dyn Query, _: &Asker) -> bool {
         && !q.history().this_turn().iter().any(|r| matches!(r.event, Event::StepBegan { step: Step::EndOfCombat }))
 }
 
+/// "Cast this spell only after combat" (CR 506.8, 506.8d): once the turn's first combat phase is over - in a postcombat main
+/// phase or the ending phase, or during a later combat phase of the turn. A turn whose combat phase was skipped has its
+/// postcombat main phase after the precombat main phase (CR 505.1a), which is where the skipped phase's place was (as
+/// CR 506.8e places a skipped phase's point for "before"). Glyph of Reincarnation and Jabari's Influence print it.
+pub fn cast_only_after_combat(q: &dyn Query, _: &Asker) -> bool {
+    match q.state().turn.step() {
+        Step::PostcombatMain | Step::End | Step::Cleanup => true,
+        Step::BeginCombat | Step::DeclareAttackers | Step::DeclareBlockers | Step::CombatDamage | Step::EndOfCombat => {
+            !in_first_combat_phase_or_before(q)
+        }
+        _ => false,
+    }
+}
+
+/// How many times `step` has begun this turn.
+fn began_this_turn(q: &dyn Query, step: Step) -> usize {
+    q.history().this_turn().iter().filter(|r| matches!(r.event, Event::StepBegan { step: s } if s == step)).count()
+}
+
+/// Whether the turn has not yet left its first combat phase (CR 506.8d): no beginning of combat step but the current one has
+/// begun - every combat phase has one (CR 506.1), even one an effect ends before its end of combat step (CR 724.2d-e) - and no
+/// postcombat main phase, which follows a skipped combat phase too (CR 505.1a, 506.8e).
+fn in_first_combat_phase_or_before(q: &dyn Query) -> bool {
+    began_this_turn(q, Step::BeginCombat) <= 1 && began_this_turn(q, Step::PostcombatMain) == 0
+}
+
 /// "Activate only before attackers are declared" (CR 506.8a, 506.8d): the turn has not reached the declare attackers step, and
 /// none has begun this turn (so not in a second combat phase's beginning of combat step). Arcum's Whistle and Norritt print it
 /// (and it is the second half of `during_opponents_turn_before_attackers`).

@@ -276,6 +276,19 @@ pub fn targets_gain(g: &mut dyn Game, item: &StackItem, keyword: Keyword) -> Res
     Ok(())
 }
 
+/// The permanents of `left` that a move of their own put into a graveyard - for creatures, "died this way" (CR 700.4) - by
+/// their ids on the battlefield (their last-known information, CR 608.2h): one that regenerated, was indestructible or went
+/// elsewhere instead did not, and a merged permanent counts once however many cards it became (CR 730.2, 730.3c). Hellfire
+/// and Glyph of Reincarnation ("creatures that died this way") and Volcanic Eruption ("Mountains put into a graveyard this
+/// way") read it.
+pub fn put_into_a_graveyard(q: &dyn Query, left: &LeftBattlefield) -> Vec<ObjectId> {
+    left.permanents()
+        .iter()
+        .copied()
+        .filter(|&old| q.obj(old).became.is_some_and(|new| q.obj(new).zone.is(ZoneKind::Graveyard)))
+        .collect()
+}
+
 /// "Destroy all nonland permanents with mana value `limit` or less" (CR 701.8a): every such permanent on the battlefield,
 /// destroyed at once. The permanents it destroyed, for what the rest of the text does with them. Culling Ritual (2) and
 /// Pest Control (1) print it.

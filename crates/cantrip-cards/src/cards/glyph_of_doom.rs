@@ -1,20 +1,12 @@
 use cantrip_api::*;
-use cantrip_mechanics::targets;
+use cantrip_mechanics::{history, targets};
 use cantrip_oracle as oracle;
 
 /// "Destroy all creatures that were blocked by that creature this turn" (CR 509.1h, 701.8a): the history of this turn's blocks,
 /// so a creature that stopped being blocked, or a Wall that left, still counts.
 fn delayed_1(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(&wall) = g.event_objects(item).first() else { return Ok(()) };
-    let mut blocked: Vec<ObjectId> = Vec::new();
-    for record in g.history().this_turn().iter() {
-        if let Event::Blocks { blocker, attacker, .. } = record.event {
-            if blocker == wall && !blocked.contains(&attacker) {
-                blocked.push(attacker);
-            }
-        }
-    }
-    blocked.retain(|&id| g.state().battlefield().contains(&id) && g.chars(id).is(CardType::Creature));
+    let blocked = history::creatures_blocked_by_this_turn(g, wall);
     g.destroy_all(&blocked);
     Ok(())
 }

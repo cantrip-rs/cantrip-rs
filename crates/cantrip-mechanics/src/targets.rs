@@ -1194,6 +1194,16 @@ fn mount_or_vehicle_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
 /// it is a creature right now. Lagorin, Soul of Alacria ("each of up to two") and Daring Mechanic print it.
 pub const MOUNT_OR_VEHICLE: TargetSpec = target(mount_or_vehicle_filter);
 
+fn wall_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    permanent_of_any_subtype(q, asker, t, &[Subtype::Wall])
+}
+
+/// "Target Wall" and "Enchant Wall" (CR 115.1, 205.3m, 303.4a): a permanent on the battlefield, any controller's, with the
+/// creature type Wall as the layers made it, read through the words of the text of the object that asks (CR 612.2). Ali Baba,
+/// Dwarven Demolition Team, Goblin Digging Team, Tunnel, Word of Blasting and Glyph of Reincarnation target it; Animate Wall
+/// enchants it.
+pub const WALL: TargetSpec = target(wall_filter);
+
 /// "Target card from your graveyard" (CR 115.1): any card in the graveyard of the ability's controller, still the card that
 /// was there (CR 400.7). Eternal Witness, Emeritus of Abundance, Bala Ged Recovery, Cathartic Parting, Tamiyo, Collector of Tales
 /// and Quintorius Kand ("any number of target cards from your graveyard") print it.

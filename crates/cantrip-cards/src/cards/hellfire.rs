@@ -20,13 +20,7 @@ fn destroy_all_nonblack_creatures_hellfire(
     };
     let destroyed = g.destroy_all(&nonblack_creatures);
     g.end_sentence();
-    // A creature died if its own move put it into a graveyard: a merged creature dies once, however many cards it became
-    // (CR 730.2, 730.3c).
-    let died = destroyed
-        .permanents()
-        .iter()
-        .filter(|&&old| g.obj(old).became.is_some_and(|new| g.obj(new).zone.is(ZoneKind::Graveyard)))
-        .count() as u32;
+    let died = cantrip_mechanics::effects::put_into_a_graveyard(g, &destroyed).len() as u32;
     g.damage_together(&[(item.object, Target::Player(item.controller), died + 3)]);
     Ok(())
 }

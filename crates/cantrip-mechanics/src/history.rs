@@ -243,6 +243,23 @@ pub fn put_into_graveyard_from_battlefield_this_turn(q: &dyn Query, owner: Playe
         .collect()
 }
 
+/// "Creatures that were blocked by [`blocker`] this turn" (CR 509.1, 509.1h): each attacker this turn's blocks made it block,
+/// once however often, that is still the object it was (CR 400.7) and still a creature on the battlefield. Asked of the
+/// history, so a creature that has since been removed from combat, or a blocker that has since left, still counts. Glyph of
+/// Doom and Glyph of Reincarnation print it.
+pub fn creatures_blocked_by_this_turn(q: &dyn Query, blocker: ObjectId) -> Vec<ObjectId> {
+    let mut blocked: Vec<ObjectId> = Vec::new();
+    for record in q.history().select(EventQuery::kind(EventMask::BLOCKS).object(blocker).this_turn()) {
+        if let Event::Blocks { blocker: b, attacker, .. } = record.event {
+            if b == blocker && !blocked.contains(&attacker) {
+                blocked.push(attacker);
+            }
+        }
+    }
+    blocked.retain(|&id| q.state().battlefield().contains(&id) && q.chars(id).is(CardType::Creature));
+    blocked
+}
+
 /// Whether `permanent` entered the battlefield this turn (CR 400.7: it is the object that move made). Asked of a history
 /// so that a static ability's condition reads it too (`LayerQuery::history`): Shardmage's Rescue's "as long as this Aura
 /// entered this turn", The Wandering Emperor's, power-up's cost.
