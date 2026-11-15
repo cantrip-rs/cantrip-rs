@@ -1,0 +1,49 @@
+# Infernal Phantom: "When this creature dies, it deals damage equal to its power to any target" (CR 700.4, 113.7a, 608.2h). After
+# Exploration it is 4/3 until end of turn, and Bot1's Lightning Bolt on it (3) kills it: the 4 it last had is dealt to Bot2 (20 -> 16),
+# while a noncreature artifact (a Mox) is not a legal target (CR 115.4).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Jet
+Infernal Phantom
+Exploration
+Lightning Bolt
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Infernal Phantom.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Exploration.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Infernal Phantom.Power = 4
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Infernal Phantom)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Mox Ruby)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Infernal Phantom; Lightning Bolt
+Bot2.Life = 16
