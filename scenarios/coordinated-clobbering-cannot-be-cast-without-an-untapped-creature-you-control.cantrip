@@ -1,0 +1,27 @@
+# At least one source is needed ("one or two"): with {G} available and the opponent's Wall of Mist as the recipient, but no creature of yours, it cannot be
+# cast (CR 601.2c, 115.1). Casting it targeting only the opponent's creature is refused too.
+
+[Bot1 Deck]
+Mox Emerald
+Coordinated Clobbering
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Wall of Mist
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wall of Mist.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Coordinated Clobbering.Cast
+! Bot1.Hand.Coordinated Clobbering.Cast(Bot2.Battlefield.Wall of Mist)
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Coordinated Clobbering.Colors = Green
+Bot2.Battlefield.Wall of Mist.Damage = 0

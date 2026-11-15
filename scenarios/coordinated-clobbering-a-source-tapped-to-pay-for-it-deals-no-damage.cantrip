@@ -1,0 +1,40 @@
+# Both creatures are untapped when Coordinated Clobbering is cast, but Llanowar Elves is tapped for the {G} that pays for it, so it is an illegal
+# target as the spell begins to resolve and deals no damage; Grizzly Bears still deals its 2 (CR 608.2b, ruling 2024-09-20).
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Grizzly Bears
+Llanowar Elves
+Coordinated Clobbering
+Forest
+Island
+Island x12
+
+[Bot2 Deck]
+Island
+Black Lotus
+Wall of Mist
+Island x12
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Llanowar Elves.Cast
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wall of Mist.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Coordinated Clobbering.Cast
+Bot1.Target(Bot1.Battlefield.Llanowar Elves; Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Wall of Mist)
+Bot1.Battlefield.Llanowar Elves.Activate
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Grizzly Bears.Tapped = true
+Bot2.Battlefield.Wall of Mist.Damage = 2
