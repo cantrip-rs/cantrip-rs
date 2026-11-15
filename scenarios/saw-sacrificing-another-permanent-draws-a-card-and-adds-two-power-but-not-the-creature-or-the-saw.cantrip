@@ -1,0 +1,57 @@
+# Saw: "Equipped creature gets +2/+0." "Whenever equipped creature attacks, you may sacrifice a permanent other than that
+# creature or this Equipment. If you do, draw a card." (CR 701.21a, 608.2c). Turn 1: four Moxen pay for Saw and its Equip {2} on
+# Ornithopter. Turn 3 the Ornithopter (2/2) attacks: the creature and the Saw are not offered to be sacrificed, a Mox Sapphire
+# is, only one permanent may be chosen (two are refused), and sacrificing it draws the Lightning Bolt under the turn-three draw; the Ornithopter hits for 2.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Saw
+Ornithopter
+Plains
+Island
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Saw.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Saw.Activate(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Pass
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Ornithopter)
+! Bot1.Choose(Saw)
+! Bot1.Choose(Mox Jet; Mox Ruby)
+Bot1.Choose(Mox Sapphire)
+[T3 Bot1.Main2]
+? Bot1.Hand = Plains; Island; Lightning Bolt
+? Bot2.Life = 18
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Saw; Ornithopter
+Bot1.Graveyard = Mox Sapphire
+Bot1.Hand = Plains; Island; Lightning Bolt
+Bot2.Life = 18
