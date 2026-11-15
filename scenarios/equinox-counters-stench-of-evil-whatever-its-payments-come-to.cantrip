@@ -1,0 +1,35 @@
+# Stench of Evil destroys every Plains, then asks each Plains' controller whether to pay {2} against its damage (CR
+# 118.12): whatever they answer, Bot1's enchanted Plains has been destroyed by the spell, so Equinox counters it (CR
+# 608.2). The payments that follow the destruction need not be tried one by one: what has been destroyed stays destroyed.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Equinox
+Island
+Plains x11
+
+[Bot2 Deck]
+Swamp
+Black Lotus
+Stench of Evil
+Swamp x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Equinox.Cast(Plains)
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Stench of Evil.Cast
+Bot1.Battlefield.Plains.Activate(Stack.Stench of Evil; Ability: Counter)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Equinox; Mox Pearl; Plains
+Bot1.Life = 20
+Bot2.Graveyard = Stench of Evil; Black Lotus

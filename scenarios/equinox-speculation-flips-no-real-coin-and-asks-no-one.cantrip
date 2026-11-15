@@ -1,0 +1,40 @@
+# Equinox's ability may target any spell (rulings): Game of Chaos destroys no land, so it is not countered. Working that out
+# resolved Game of Chaos on a hidden copy of the game (CR 608.2) - flipping coins and asking whether to flip again - and
+# none of it reached the game: no one is asked anything while the ability resolves, and the one coin the scenario fixes
+# is still there for the real flip, which Bot2 wins.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Equinox
+Plains x12
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Game of Chaos
+Mountain x12
+
+[Dice]
+1
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Equinox.Cast(Plains)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Game of Chaos.Cast(Bot1)
+Bot1.Battlefield.Plains.Activate(Stack.Game of Chaos; Ability: Counter)
+Bot1.Pass
+Bot2.Pass
+! Bot2.Accept
+Bot2.Decline
+
+[Expect]
+Bot2.Life = 21
+Bot1.Life = 19
+Bot2.Graveyard = Game of Chaos; Black Lotus

@@ -1,0 +1,33 @@
+# Equinox (CR 608.2, 701.6, 701.8a): Bot2's Stone Rain aimed at Bot1's enchanted Plains would destroy a land Bot1 controls
+# if it resolved now - its one way of resolving does - so the Plains' granted ability counters it and the Plains stays.
+# The ability targets a spell: it is offered on Stone Rain, and not on a permanent.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Equinox
+Plains x12
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Stone Rain
+Mountain x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Equinox.Cast(Plains)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Stone Rain.Cast(Bot1.Battlefield.Plains)
+! Bot1.Battlefield.Plains.Activate(Bot2.Battlefield.Mountain; Ability: Counter)
+Bot1.Battlefield.Plains.Activate(Stack.Stone Rain; Ability: Counter)
+
+[Expect]
+Bot1.Battlefield = Equinox; Mox Pearl; Plains
+Bot1.Battlefield.Plains.Tapped = true
+Bot2.Graveyard = Stone Rain; Black Lotus

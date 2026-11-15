@@ -1,0 +1,30 @@
+# Equinox does not counter a spell that has lands sacrificed (rulings; CR 701.21a is not 701.8a): Bot2's Balance, cast
+# with no land of its own, makes Bot1 sacrifice its enchanted Plains. Balance is not countered, and the Plains goes.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Equinox
+Plains x12
+
+[Bot2 Deck]
+Black Lotus
+Balance
+Island x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Equinox.Cast(Plains)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Balance.Cast
+Bot1.Battlefield.Plains.Activate(Stack.Balance; Ability: Counter)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Pearl
+Bot1.Graveyard = Equinox; Plains
+Bot2.Graveyard.Count = 4

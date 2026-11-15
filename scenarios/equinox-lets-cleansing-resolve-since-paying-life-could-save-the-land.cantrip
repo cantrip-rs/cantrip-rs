@@ -1,0 +1,42 @@
+# Equinox does not counter a spell that would destroy a land only if a choice is made (rulings, CR 608.2): Cleansing
+# destroys Bot1's enchanted Plains only unless a player pays 1 life, so it is not countered. Equinox's speculation tried
+# paying on a hidden copy of the game only: no one's life changed, and the real Cleansing then asks for real - both save
+# nothing, and every land is destroyed (Equinox, enchanting nothing, follows its Plains, CR 704.5m).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Equinox
+Plains x12
+
+[Bot2 Deck]
+Plains
+Black Lotus
+Cleansing
+Plains x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Equinox.Cast(Plains)
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Cleansing.Cast
+Bot1.Battlefield.Plains.Activate(Stack.Cleansing; Ability: Counter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+? Bot2.Life = 20
+? Bot1.Battlefield = Equinox; Mox Pearl; Plains
+Bot2.Choose()
+Bot1.Choose()
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Battlefield = Mox Pearl
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Cleansing; Plains; Black Lotus

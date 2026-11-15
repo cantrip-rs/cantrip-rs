@@ -1,0 +1,40 @@
+# Equinox does not counter a spell that destroys only an opponent's land (CR 608.2): Bot2 aims Cleansing Wildfire at its own
+# Mountain. Equinox's speculation played it out on a hidden copy - a search, a shuffle and a draw from Bot2's library - and
+# none of it reached the game: for real, Bot2 declines the search, nothing is shuffled, and Bot2 draws the Lightning Bolt
+# that was on top of its library all along.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Equinox
+Plains x12
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Cleansing Wildfire
+Island x4
+Island
+Lightning Bolt
+Mountain
+Island x8
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Equinox.Cast(Plains)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Cleansing Wildfire.Cast(Bot2.Battlefield.Mountain)
+Bot1.Battlefield.Plains.Activate(Stack.Cleansing Wildfire; Ability: Counter)
+Bot2.Decline
+
+[Expect]
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Cleansing Wildfire; Mountain; Black Lotus
+Bot2.Hand = Island; Island; Island; Island; Island; Lightning Bolt
+Bot2.Library.Count = 9
+Bot1.Battlefield = Equinox; Mox Pearl; Plains
