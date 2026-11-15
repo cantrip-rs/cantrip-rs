@@ -2396,6 +2396,29 @@ impl cantrip_api::Game for Cx<'_> {
         ops::damage_together(self, damage)
     }
 
+    fn damage_preventing(&mut self, source: ObjectId, target: Target, amount: u32, prevent: u32, card: CardId, index: u8) -> u32 {
+        if prevent == 0 {
+            return ops::damage(self, source, target, amount, false);
+        }
+        // CR 608.2c: "Prevent X of that damage" modifies the damage the sentence before deals - one instruction.
+        self.instruction(
+            |cx| {
+                // A shield (CR 615.7) of damage from `source` to anyone: about no object, so it begins and lasts though
+                // its source has left its zone and deals the damage as it last existed (CR 113.7a).
+                let before = cx.s().effects.len();
+                let kind = EffectKind::Prevention { card, index, to: Target::None, shield: Shield::Next(prevent) };
+                cx.begin_effect(source, source, kind, Duration::EndOfTurn);
+                let shield = cx.s().effects.get(before).map(|e| e.timestamp);
+                let dealt = ops::damage(cx, source, target, amount, false);
+                // What it has not used up is about no other damage (CR 608.2c): it ends with the event, which no duration
+                // says. A shield used up has already ended (CR 615.7).
+                cx.st().effects_retain(|e| Some(e.timestamp) != shield);
+                dealt
+            },
+            |_| true,
+        )
+    }
+
     fn heal(&mut self, permanent: ObjectId) {
         ops::heal(self, permanent)
     }

@@ -937,6 +937,16 @@ pub trait Game: Query {
     /// event, so "whenever this deals damage" triggers once. Each entry is a source, a recipient and an amount; an effect
     /// that heals the damage already marked does not heal what the event itself dealt. How much each was dealt, in order.
     fn damage_together(&mut self, damage: &[(ObjectId, Target, u32)]) -> Vec<u32>;
+    /// "[source] deals `amount` damage to [target]. Prevent `prevent` of that damage" (CR 608.2c, 615.1, 615.7): the later
+    /// sentence modifies the damage the earlier one deals, so the two are one instruction. The prevention effect - the
+    /// definition `card` lists `index`th in its `granted_preventions`, of damage whose source is `source`
+    /// (`cantrip_mechanics::prevention::DAMAGE_DEALT_BY`) - is a shield of `prevent` that applies to that one damage event
+    /// alone, wherever replacement effects send it: the affected player orders it with the event's other replacement and
+    /// prevention effects (CR 616.1), it prevents none of damage that can't be prevented (CR 615.12), and what it has not
+    /// used up is gone once the event has been dealt, so it never prevents later damage - which an effect a card makes with
+    /// `add_effect` cannot do, since no duration ends with one damage event. It applies though `source` has left its zone
+    /// and deals the damage as it last existed. A shield of 0 is no effect at all. How much was dealt, as `damage` says. Errant Minion and Power Leak print it.
+    fn damage_preventing(&mut self, source: ObjectId, target: Target, amount: u32, prevent: u32, card: CardId, index: u8) -> u32;
     /// Removes all damage marked on `permanent` (CR 701.69a). A permanent with no marked damage is unchanged.
     fn heal(&mut self, permanent: ObjectId);
     /// Destroys permanents at once (CR 701.8a, 101.4, 603.10a): a leaves-the-battlefield ability sees all of them leave. An
