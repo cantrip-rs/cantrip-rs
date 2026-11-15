@@ -1,0 +1,32 @@
+# House Cartographer, Survival with no land card in the library: every card is revealed, none goes to hand, and all of it is put
+# on the bottom in a random order, so the library keeps its size (12 Grizzly Bears after the turn 3 draw of Lightning Bolt) and the
+# hand grows only by the draw (CR 701.20, 401.4). Hand: 7 - 3 cast + Bolt = 5.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+House Cartographer
+Giant Growth x4
+Lightning Bolt
+Grizzly Bears x12
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.House Cartographer.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(House Cartographer > Bot2)
+[T3 Bot1.Main2]
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Library.Count = 12
+Bot1.Graveyard.Count = 0
+Bot2.Life = 18
