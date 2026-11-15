@@ -1,0 +1,58 @@
+# Hauntwoods Shrieker: "Reveal target face-down permanent" is any player's (CR 115.1, 708.2), and the Shrieker's controller turns it up
+# (CR 701.40b), not the permanent's controller. Both players cast a Shrieker with Black Lotus (Bot1 on turn 1, Bot2 on turn 2).
+# On turn 4 Bot2's Shrieker attacks and its trigger manifests dread for Bot2: Grizzly Bears goes face down, Lightning Bolt to the
+# graveyard. Bot1 then activates its own Shrieker ({1}{G} from the Moxen it left untapped) on Bot2's face-down permanent, is asked
+# whether to turn it up and does: a Grizzly Bears under Bot2's control. Bot1 takes 3 from the attack.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Hauntwoods Shrieker
+Island x3
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Hauntwoods Shrieker
+Island x5
+Island
+Island
+Grizzly Bears
+Lightning Bolt
+Island x8
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hauntwoods Shrieker.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Hauntwoods Shrieker.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Hauntwoods Shrieker > Bot1)
+Bot2.Arrange(Grizzly Bears | Lightning Bolt)
+? Bot2.Battlefield..FaceDown = true
+? Bot2.Battlefield..FaceDownName = Grizzly Bears
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Hauntwoods Shrieker.Activate(Bot2.Battlefield.#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot2.Battlefield.Grizzly Bears.FaceDown = (absent)
+[T4 Bot2.Main2]
+[Expect]
+Turn = 4
+Stack.Count = 0
+Bot2.Battlefield.Grizzly Bears.FaceDown = (absent)
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot2.Battlefield.Grizzly Bears.Toughness = 2
+Bot2.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Life = 17

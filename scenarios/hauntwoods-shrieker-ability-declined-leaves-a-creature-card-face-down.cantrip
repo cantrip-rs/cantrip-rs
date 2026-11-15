@@ -1,0 +1,43 @@
+# Hauntwoods Shrieker: "If it's a creature card, you may turn it face up." The may is the controller's (CR 608.2d, 701.40b): after
+# the Snapcaster Mage manifested by the attack trigger is revealed and Bot1 declines, it stays a face-down 2/2.
+# See the other Shrieker scenario for the opening: Black Lotus for the Shrieker on turn 1, the attack on turn 3.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Hauntwoods Shrieker
+Island x3
+Island
+Snapcaster Mage
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hauntwoods Shrieker.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Hauntwoods Shrieker > Bot2)
+Bot1.Arrange(Snapcaster Mage | Lightning Bolt)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Hauntwoods Shrieker.Activate(Bot1.Battlefield.#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield..FaceDownName = Snapcaster Mage
+Bot1.Battlefield..Power = 2
+Bot1.Revealed = Snapcaster Mage
+Bot1.Graveyard = Lightning Bolt; Black Lotus
