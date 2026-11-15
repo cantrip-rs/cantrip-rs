@@ -1745,6 +1745,7 @@ counter_kinds! {
     Stash = 96, "stash", "Stash";
     Divinity = 97, "divinity", "Divinity";
     Possession = 98, "possession", "Possession";
+    Nest = 99, "nest", "Nest";
 }
 
 impl CounterKind {
@@ -2426,7 +2427,7 @@ mod carrion_counter_tests {
         assert_eq!(CounterKind::Revival as usize, 95);
         assert_eq!(CounterKind::Stash as usize, 96);
         assert_eq!(CounterKind::Divinity as usize, 97);
-        assert_eq!(CounterKind::COUNT, 99);
+        assert_eq!(CounterKind::COUNT, 100);
         assert!(!CounterKind::POWER_TOUGHNESS.iter().any(|(kind, _, _)| *kind == carrion));
     }
     #[test]
