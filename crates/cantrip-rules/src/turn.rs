@@ -1537,7 +1537,10 @@ fn declare_blockers(cx: &mut Cx) -> R<()> {
     }
     // CR 614.1a, 509.1: a replacement effect a resolved spell made ("this turn, instead of declaring blockers, ...",
     // Camouflage) replaces the declaration. Of several, the defending player would apply one, leaving no declaration for the
-    // others (CR 616.1); Camouflage's alone are printed, all the same procedure, so the first is the one.
+    // others (CR 616.1); Camouflage's alone are printed, all the same procedure, so the first is the one. It replaces the
+    // declaration whoever would make it, so an effect that has another player choose the blocks (`ChoosesBlocks`, Melee) has
+    // nothing left to apply to: the replacement's own words name who chooses ("each defending player chooses ... and
+    // divides them into piles"), and the rest is at random.
     let instead = cx.s().effects.iter().find(|e| matches!(e.kind, EffectKind::BlockersInstead { .. })).copied();
     let declared = if let Some(instead) = instead {
         Some(blocks_instead(cx, &instead, defender, &attackers, &allowed, &rule_sources)?)
@@ -1559,13 +1562,16 @@ fn declare_blockers(cx: &mut Cx) -> R<()> {
         } else {
             // CR 509.1b-c: each attacker's limits, and the blocks effects require if able, with the most of them a declaration can obey.
             let requirements = block_rules(cx, &attackers, &allowed, &rule_sources);
+            // A defending player who has left blocks with nothing (CR 800.4a): no one else declares their blocks. One an effect
+            // has another player choose the blocks for ("you choose which creatures block this combat and how those creatures
+            // block", Melee) still has them made, by that player.
+            let declarer = blocks_chosen_by(cx).filter(|_| !cx.s().player(defender).lost).unwrap_or(defender);
             let costly = !requirements.costs.is_empty();
             let kind = RequestKind::DeclareBlockers { eligible, attackers, allowed, requirements };
             if costly {
-                declare_paid_blocks(cx, defender, kind)?
+                declare_paid_blocks(cx, declarer, defender, kind)?
             } else {
-                // A defending player who has left blocks with nothing (CR 800.4a): no one else declares their blocks.
-                match cx.ask_rule(defender, kind)? {
+                match cx.ask_rule(declarer, kind)? {
                     Some(Answer::Block(blocks)) => Some(blocks),
                     _ => None,
                 }
@@ -1644,12 +1650,21 @@ fn declare_blockers(cx: &mut Cx) -> R<()> {
 /// the game returns to the moment before it, the mana abilities activated while paying undone but those that may not be
 /// (`takeback`), and blockers are declared again, the question saying so (`BlockRequirements::taken_back`). None when the
 /// defending player has left (CR 800.4a).
-fn declare_paid_blocks(cx: &mut Cx, defender: PlayerId, mut kind: RequestKind) -> R<Option<Vec<(ObjectId, ObjectId)>>> {
+///
+/// The declaration is `declarer`'s - the defending player's, or the player an effect has choose the blocks
+/// (`EffectKind::ChoosesBlocks`) - and the payment always the defending player's, whose creatures block: under such an effect
+/// the defending player decides whether to pay, and if they don't, the chooser declares again (Odric, Master Tactician's
+/// ruling; CR 509.1d-f, 101.1).
+fn declare_paid_blocks(cx: &mut Cx, declarer: PlayerId, defender: PlayerId, mut kind: RequestKind) -> R<Option<Vec<(ObjectId, ObjectId)>>> {
     loop {
         let mark = cx.s().mark();
         let log_mark = cx.g.log.len();
         let since = crate::takeback::since(cx.g);
-        let Some(Answer::Block(blocks)) = cx.ask_rule(defender, kind.clone())? else { return Ok(None) };
+        // A defending player who has left blocks with nothing (CR 800.4a), whoever was declaring for them.
+        if cx.s().player(defender).lost {
+            return Ok(None);
+        }
+        let Some(Answer::Block(blocks)) = cx.ask_rule(declarer, kind.clone())? else { return Ok(None) };
         let RequestKind::DeclareBlockers { requirements, .. } = &mut kind else { return Ok(Some(blocks)) };
         let total = requirements.total_cost(&blocks);
         if total.is_zero() {
@@ -1677,6 +1692,18 @@ fn declare_paid_blocks(cx: &mut Cx, defender: PlayerId, mut kind: RequestKind) -
             Err(stop) => return Err(stop),
         }
     }
+}
+
+/// The player an effect has choose which creatures block and how those creatures block, in place of the defending player
+/// (CR 509.1, 101.1; `EffectKind::ChoosesBlocks`): the controller of such an effect who is still in the game. Of several,
+/// the one created last decides, as the last created control of a player does (CR 723.1a).
+fn blocks_chosen_by(cx: &Cx) -> Option<PlayerId> {
+    cx.s()
+        .effects
+        .iter()
+        .filter(|e| e.kind == EffectKind::ChoosesBlocks && cx.s().in_game(e.controller))
+        .max_by_key(|e| e.timestamp)
+        .map(|e| e.controller)
 }
 
 /// Whether a creature has first strike or double strike now (CR 702.7b, 702.4b).

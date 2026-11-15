@@ -1795,6 +1795,12 @@ pub enum EffectKind {
     /// Camouflage's "this turn, instead of declaring blockers, ...". About no object, so it outlives its `affected` object,
     /// which is only the source.
     BlockersInstead { card: CardId, index: u8 },
+    /// "You choose which creatures block this combat and how those creatures block" (CR 509.1, 101.1): the effect's
+    /// controller, not the defending player, makes each declaration of blockers while the effect lasts - which creatures
+    /// block and which attackers each blocks, under the same restrictions and requirements (CR 509.1a-c). Melee's "this
+    /// combat" (`Duration::EndOfCombat`); Master Warcraft's and Berserker's Frenzy's "this turn", and Odric, Master
+    /// Tactician's, print it too. About the player, so it outlives its `affected` object, which is only the source.
+    ChoosesBlocks,
     /// A regeneration shield (CR 701.19a, 614.8): the next time the permanent would be destroyed this turn, it is
     /// tapped, its damage removed and it is removed from combat instead. One effect for each shield.
     RegenerationShield,
@@ -1947,6 +1953,7 @@ impl EffectKind {
                 | EffectKind::SpellAlternative { .. }
                 | EffectKind::LastingRule { .. }
                 | EffectKind::BlockersInstead { .. }
+                | EffectKind::ChoosesBlocks
         ) || matches!(self, EffectKind::Prevention { to, .. } if to.object().is_none())
             || matches!(self, EffectKind::Replacement { to, .. } if to != Target::None)
     }

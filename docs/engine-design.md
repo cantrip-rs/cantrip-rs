@@ -3014,6 +3014,17 @@ whole allow (`solve`: menace, "can't be blocked by more than one creature"); onl
 the defending player asked which, through the ordinary `DeclareBlockers` question narrowed to those blocks. The blocks are then
 made and announced, and the unblocked attackers named (CR 509.1g-h), exactly as after a declaration.
 
+Another player making the declaration (CR 509.1, 101.1: Melee's "you choose which creatures block this combat and how those
+creatures block"; Master Warcraft, Berserker's Frenzy and Odric, Master Tactician print it) is `EffectKind::ChoosesBlocks`, a
+player effect about no object: while it lasts, `turn::declare_blockers` asks the ordinary `DeclareBlockers` question - the
+same eligible creatures, allowed blocks, restrictions and requirements - of the effect's controller instead of the defending
+player (`turn::blocks_chosen_by`; of several, the one created last, as with control of a player, CR 723.1a). Nothing else
+changes: the blocks are the defending player's creatures', made and announced as after any declaration. A block that costs
+something (CR 509.1d-f) is paid for by the defending player, whose creature it is, and if they don't pay, the chooser
+declares again (`turn::declare_paid_blocks` takes the declarer and the payer apart; Odric, Master Tactician's ruling).
+Under `BlockersInstead` as well, the replacement wins: it replaces the declaration whoever would make it, and its own words
+say the defending player makes its piles, so the chooser has nothing to choose.
+
 A resolved rule about a set that can still gain members (CR 611.2c: an effect that changes no characteristics is a rule of
 the game, and reaches objects that weren't there as it began) is `EffectKind::LastingRule { card, index, about }`, naming the
 `index`th of the `CardDef::lasting_rules` of the card that made it, made by `Game::add_lasting_rule`: a `LastingRule { text,

@@ -813,6 +813,17 @@ impl<'a> Projector<'a> {
                 let text = instead.text;
                 summary.pending_effects.push(if p == self.viewer { format!("{name}: {text}") } else { format!("Their {name}'s effect: {text}") });
             }
+            // "You choose which creatures block this combat and how those creatures block" (CR 509.1: Melee): about no object,
+            // said beside the life total of the player who chooses, named for the card that made it.
+            if e.kind == EffectKind::ChoosesBlocks {
+                let name = self.game.name(e.source);
+                let until = self.until_text(e.duration);
+                summary.pending_effects.push(if p == self.viewer {
+                    format!("{name}: You choose which creatures block{until} and how those creatures block.")
+                } else {
+                    format!("Their {name}'s effect: They choose which creatures block{until} and how those creatures block.")
+                });
+            }
         }
         // A play rule a resolved ability gave the player for a duration (CR 611.2a, 401.2: "until end of turn, you may play cards
         // from the top of your library"): a permission about the player, on no object (the card may be gone), said in the rule's
