@@ -1,0 +1,38 @@
+# Spellgyre, the first mode: "Counter target spell." On turn 2 Bot2 casts a Lightning Bolt at Bot1 and Bot1 answers with Spellgyre
+# (four mana from a Black Lotus and a Mox Sapphire), choosing the counter mode, so the Bolt never resolves and Bot1 takes no damage.
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Spellgyre
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Spellgyre.Cast
+Bot1.Modes(Counter target spell)
+Bot1.Target(Stack.Lightning Bolt)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Graveyard = Lightning Bolt
+Bot1.Graveyard = Spellgyre; Black Lotus

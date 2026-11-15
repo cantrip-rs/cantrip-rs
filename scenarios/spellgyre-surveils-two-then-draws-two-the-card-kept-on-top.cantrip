@@ -1,0 +1,30 @@
+# Spellgyre, the second mode: "Surveil 2, then draw two cards." The top two cards are Lightning Bolt and Counterspell, then Island and
+# Mountain: Counterspell goes to the graveyard and Lightning Bolt stays on top, so the surveil finishes before the draw and the
+# two cards drawn are the Bolt that was kept and the Island beneath.
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Spellgyre
+Island x4
+Lightning Bolt
+Counterspell
+Island
+Mountain
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Spellgyre.Cast
+Bot1.Modes(Surveil 2, then draw two cards)
+Bot1.Arrange(Lightning Bolt | Counterspell)
+
+[Expect]
+Bot1.Graveyard = Spellgyre; Counterspell; Black Lotus
+Bot1.Hand = Island; Island; Island; Island; Lightning Bolt; Island

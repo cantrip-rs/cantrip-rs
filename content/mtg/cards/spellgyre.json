@@ -1,0 +1,6 @@
+{
+  "name": "Spellgyre",
+  "manaCost": "{2}{U}{U}",
+  "type": "Instant",
+  "oracleText": "Choose one —\n• Counter target spell.\n• Surveil 2, then draw two cards. (To surveil 2, look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)"
+}
