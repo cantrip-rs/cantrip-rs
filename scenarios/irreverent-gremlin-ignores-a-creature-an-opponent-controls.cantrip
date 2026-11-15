@@ -1,0 +1,32 @@
+# Irreverent Gremlin: "another creature you control" (CR 109.4): an Ornithopter that enters under Bot2's control on turn 2 asks
+# Bot1 nothing, and Bot1's hand and library are as they were.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Irreverent Gremlin
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Irreverent Gremlin.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Battlefield = Ornithopter
+Stack.Count = 0
+Bot1.Hand.Count = 4
+Bot1.Graveyard.Count = 0

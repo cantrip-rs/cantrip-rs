@@ -1,0 +1,47 @@
+# Irreverent Gremlin: "another creature you control with power 2 or less" is checked as the creature enters, counters included
+# (CR 603.6a; the 2024-09-20 ruling). Walking Ballista cast for X = 2 enters as a 2/2 (two +1/+1 counters), which is not more than
+# 2: Bot1 discards the Island and draws the Forest (the library's top card).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Irreverent Gremlin
+Walking Ballista
+Island
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Irreverent Gremlin.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Walking Ballista.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+
+[Expect]
+Bot1.Graveyard = Island; Black Lotus
+Bot1.Hand = Forest
+Bot1.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 2
