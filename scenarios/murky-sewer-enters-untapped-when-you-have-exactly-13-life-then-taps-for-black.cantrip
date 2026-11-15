@@ -1,0 +1,28 @@
+# Murky Sewer: a player at 13 life - exactly the limit - lets it enter untapped, and the player may be its own controller (a
+# player is any player, CR 614.1d); Bot1 starts at 13 and Bot2 at 20. It taps at once for {B}, the second color it
+# prints, and makes no other color, nor colorless.
+
+[Life]
+Bot1: 13
+
+[Bot1 Deck]
+Murky Sewer
+Plains x19
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Murky Sewer.Play
+? Bot1.Battlefield.Murky Sewer.Tapped = false
+! Bot1.Battlefield.Murky Sewer.Activate(Color: White)
+! Bot1.Battlefield.Murky Sewer.Activate(Color: Red)
+! Bot1.Battlefield.Murky Sewer.Activate(Color: Green)
+! Bot1.Battlefield.Murky Sewer.Activate(Color: Colorless)
+Bot1.Battlefield.Murky Sewer.Activate(Color: Black)
+? Bot1.Mana = {B}
+
+[Expect]
+Bot1.Life = 13
+Bot2.Life = 20
+Bot1.Battlefield.Murky Sewer.Tapped = true
