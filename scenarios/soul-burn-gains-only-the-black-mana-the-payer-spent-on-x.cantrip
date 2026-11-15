@@ -1,0 +1,39 @@
+# Soul Burn: "You gain life equal to the damage dealt, but not more than the amount of {B} spent on X" (CR 107.3, 601.2h).
+# The pool holds {B}{B}{B}{B}{R}{G} (Black Lotus, Mox Jet, Mox Ruby, Gleemox chosen green) for X=3: {3}{2}{B}. X's part may be
+# paid with black and/or red, so the pool pays it in two shapes - three black, or two black and the red - and which mana pays X
+# is the payer's choice as they pay. Bot1 spends the red first, which pays X, then the black: the {B}, two more on X, one on
+# the generic {2}, with the green. Soul Burn deals exactly 3 to the opponent (20 to 17), and Bot1 gains 2, the black spent on
+# X, not the 3 damage dealt (20 to 22).
+[Bot1 Deck]
+Soul Burn
+Black Lotus
+Mox Jet
+Mox Ruby
+Gleemox
+Swamp x2
+Swamp x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Soul Burn.Cast(Bot2; X: 3; Spend: R, B, B, B, B, G)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 17

@@ -1,0 +1,44 @@
+# Soul Burn: "Spend only black and/or red mana on X" (CR 107.3, 601.2h). The pool holds {B}{R}{G}{G}{U} (Mox Jet, Mox Ruby,
+# Gleemox chosen green, Mox Emerald, Mox Sapphire). X=2 would cost {2}{2}{B}, five mana, but X's two need black or red beside
+# the {B}, and there is only the red: its payment cannot be finished, and Bot1 cancels it. X=1 is paid with the black on {B},
+# the red on X and the greens on {2}, the blue left (Spend: names the order). Soul Burn deals exactly 1 to the opponent, and
+# Bot1 gains nothing: no black was spent on X.
+[Bot1 Deck]
+Soul Burn
+Mox Jet
+Mox Ruby
+Gleemox
+Mox Emerald
+Mox Sapphire
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Soul Burn.Cast(Bot2; X: 2)
+Bot1.Cancel
+Bot1.Hand.Soul Burn.Cast(Bot2; X: 1; Spend: B, R, G, G)
+Bot1.Pass
+? Bot1.Mana = {U}
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19

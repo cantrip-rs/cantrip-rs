@@ -1,0 +1,67 @@
+# Soul Burn X=3, all three of X paid with black, at Personal Incarnation (6/6), whose owner Bot1, at 1 life, activates it
+# twice in response: "The next 1 damage that would be dealt to this creature this turn is dealt to its owner instead" (CR
+# 614.9). The 3 damage is split - 1 to the Incarnation, 2 to Bot1 - and each recipient's share counts up to that recipient's
+# own cap: the Incarnation's 1 under its toughness 6, but Bot1's 2 only up to the 1 life Bot1 had before the damage. Bot2
+# gains 2 (20 to 22), not the 3 dealt in all, though 3 black was spent on X and 3 is under the Incarnation's toughness.
+# Bot1, at -1, loses the game (CR 704.5a).
+[Life]
+Bot1: 1
+
+[Bot1 Deck]
+Personal Incarnation
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Swamp
+Soul Burn
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Personal Incarnation.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Soul Burn.Cast(Bot1.Battlefield.Personal Incarnation; X: 3; Spend: B, B, B, B, B, R)
+Bot2.Pass
+Bot1.Battlefield.Personal Incarnation.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Personal Incarnation.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 22
+Bot1.Life = -1
+Bot1.Battlefield.Personal Incarnation.Damage = 1
+Result = Bot2 won

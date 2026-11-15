@@ -1,0 +1,56 @@
+# Drain Life X=3 at Personal Incarnation (6/6), whose controller activates it once in response: "The next 1 damage that would
+# be dealt to this creature this turn is dealt to its owner instead" (CR 614.9). The 3 damage is split - 2 to the Incarnation,
+# 1 to Bot1 - and all 3 is damage Drain Life dealt: each recipient's share counts, up to its own cap (the creature's
+# toughness 6, the player's 20 life before), so Bot2 gains 3, not only the 2 the creature took (20 to 23). Bot2 pays
+# {3}{1}{B} with black only: Black Lotus, Mox Jet and a Swamp.
+[Bot1 Deck]
+Personal Incarnation
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Swamp
+Drain Life
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Personal Incarnation.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Drain Life.Cast(Bot1.Battlefield.Personal Incarnation; X: 3)
+Bot2.Pass
+Bot1.Battlefield.Personal Incarnation.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Personal Incarnation.Damage = 2
+? Bot1.Life = 19
+
+[Expect]
+Bot2.Life = 23

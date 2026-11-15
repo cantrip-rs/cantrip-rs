@@ -1,0 +1,52 @@
+# Soul Burn X=3 at Devoted Hero (1/2). The pool is {B}{B}{B}{B}{B}{W} (Black Lotus, Mox Jet, Gleemox chosen black, Mox
+# Pearl) for {3}{2}{B}: X's part takes black or red, and only black is there, so the pool pays it one way - three black on
+# X, the {B}, and a black and the white on {2}. 3 damage is dealt and 3 black was spent on X, but no more than the
+# creature's toughness, 2, is gained, so Bot1 goes from 20 to 22, not 23. The Hero dies to the damage (CR 704.5g), so the
+# cap was read before it.
+[Bot1 Deck]
+Soul Burn
+Black Lotus
+Mox Jet
+Gleemox
+Mox Pearl
+Swamp x3
+Swamp x20
+
+[Bot2 Deck]
+Mox Pearl
+Devoted Hero
+Plains x5
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Devoted Hero.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Soul Burn.Cast(Bot2.Battlefield.Devoted Hero; X: 3)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 20
+Bot2.Battlefield = Mox Pearl
+Bot2.Graveyard = Devoted Hero

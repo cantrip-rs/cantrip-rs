@@ -1,0 +1,37 @@
+# Soul Burn aimed at its own caster ("any target", CR 115.4), with the same pool as the red-first payment - {B}{B}{B}{B}{R}{G}
+# for X=3 - but the black spent first: the {B}, then all three of X, and the red and the green on the generic {2} (CR 601.2h).
+# Bot1 takes the 3 damage and gains 3 - the black spent on X, the damage dealt, and no more than Bot1's 20 life before it - so
+# ends where it began, at 20.
+[Bot1 Deck]
+Soul Burn
+Black Lotus
+Mox Jet
+Mox Ruby
+Gleemox
+Swamp x2
+Swamp x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Soul Burn.Cast(Bot1; X: 3; Spend: B, B, B, B, R, G)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
