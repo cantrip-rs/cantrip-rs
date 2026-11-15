@@ -1,0 +1,47 @@
+# Flesh Burrower (2/2 deathtouch): "Whenever this creature attacks, another target creature you control gains deathtouch until end of
+# turn." (CR 603.2, 611.2a, 702.2). Cast on turn 1 with Mox Emerald and Mox Jet; Memnite and Ornithopter are Bot1's other creatures. On
+# turn 3 the Burrower attacks and the trigger may not target the Burrower itself ("another"), nor Bot2's Ornithopter (not controlled by
+# Bot1); Bot1 chooses Memnite, which has deathtouch that turn (the Ornithopter does not) and does not on turn 5, while the Burrower keeps its own.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Ornithopter
+Memnite
+Flesh Burrower
+Island x2
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Flesh Burrower.Cast
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Attack(Flesh Burrower > Bot2)
+! Bot1.Target(Flesh Burrower)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Deathtouch
+? Bot1.Battlefield.Flesh Burrower.Keywords = Deathtouch
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Battlefield.Flesh Burrower.Keywords = Deathtouch
