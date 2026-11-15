@@ -1,0 +1,53 @@
+# Sonar Strike: "4 damage to target attacking, blocking, or tapped creature. You gain 3 life if you control a Bat." Bot2 attacks with
+# Aegis Turtle (0/5) and keeps Alpine Grizzly home untapped, which is neither attacking, blocking nor tapped and so is not a
+# legal target (CR 115.1). Bot1 controls Eyetwitch, a Bat, so the Strike gains 3 life (CR 119.3); the Turtle, not dying, shows
+# the damage is exactly 4 (CR 120.3).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Pearl
+Mox Jet
+Eyetwitch
+Sonar Strike
+Plains x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Alpine Grizzly
+Aegis Turtle
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Eyetwitch.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Alpine Grizzly.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Aegis Turtle.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Aegis Turtle > Bot1)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+! Bot1.Hand.Sonar Strike.Cast(Bot2.Battlefield.Alpine Grizzly)
+Bot1.Hand.Sonar Strike.Cast(Bot2.Battlefield.Aegis Turtle)
+[Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Sonar Strike
+Bot2.Battlefield.Aegis Turtle.Damage = 4
+Bot1.Life = 23

@@ -1,0 +1,6 @@
+{
+  "name": "Sonar Strike",
+  "manaCost": "{1}{W}",
+  "type": "Instant",
+  "oracleText": "Sonar Strike deals 4 damage to target attacking, blocking, or tapped creature. You gain 3 life if you control a Bat."
+}

@@ -1,0 +1,47 @@
+# Sonar Strike: "tapped" alone is enough - Alpine Grizzly attacked on turn 4 and stays tapped through Bot1's turn 5, no longer
+# attacking, so it is a legal target only as a tapped creature (CR 115.1). Bot1 controls no Bat (Bot2's Eyetwitch does not count:
+# "you control"), so the Strike gains no life: Bot1 stays at 16 after the Grizzly's 4 damage (CR 119.3).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Pearl
+Sonar Strike
+Plains x16
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Black Lotus
+Alpine Grizzly
+Eyetwitch
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Alpine Grizzly.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Eyetwitch.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Alpine Grizzly > Bot1)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Sonar Strike.Cast(Bot2.Battlefield.Alpine Grizzly)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Sonar Strike
+Bot2.Graveyard = Alpine Grizzly; Black Lotus
+Bot1.Life = 16
