@@ -1860,6 +1860,14 @@ activating abilities (CR 602.5) forbids a special action: `static_rules::activat
 so Clarion Conqueror leaves a face-down creature to be turned up and Sorcerous Spyglass leaves its named card to be
 foretold or suspended. What would stop suspend's cast stops suspending, judged as a cast (`cast_barred`, CR 116.2f).
 
+An action an effect lets a player take at a later time (CR 116.2c: Guardian Angel's "until end of turn, you may pay {1} any
+time you could cast an instant. If you do, ...") belongs to the player, not to any object: the resolving spell makes an
+`EffectKind::PlayerSpecialAction` naming a `special_action` ability of its card's `delayed` list and what it is about ("that
+permanent or player"), and while the effect lasts the player is offered it any time they have priority, a spell with split
+second on the stack included (CR 702.61b), as an `ActivateAbility` option numbered from `PLAYER_SPECIAL_ACTION` and offered
+from the card, wherever it has gone - as Channel's mana ability is (`EffectKind::PlayerManaAbility`). Taking it is the same
+`special_action` any other is, its effect handed the effect's subject as its first target.
+
 "As an additional cost to cast this spell, you may sacrifice any number of nonland permanents. This spell costs {1} less
 to cast for each permanent sacrificed this way" (Rottenmouth Viper) is `VariableCost::SacrificeAnyNumber`: how many is
 announced as the spell is cast (CR 601.2b), kept as its `x` though its mana cost has no {X}, so the total cost is determined

@@ -1827,6 +1827,14 @@ pub enum EffectKind {
     /// Gwenom, Remorseless's "until end of turn, you may look at the top card of your library any time and you may play cards
     /// from the top of your library" (for life); The Belligerent's, for mana.
     PlayerPlayRule(AbilityRef),
+    /// An action the effect lets its controller take at a later time, for as long as it lasts (CR 116.2c): a special action,
+    /// the `special_action` ability `ability` of the source card's `delayed` list, taken any time they have priority - paid
+    /// for and done at once, with no stack (CR 116.1). `about` is what the resolution that made the effect named for it to
+    /// act on ("that permanent or player"), handed to the action's effect as its first target; `Target::None` for nothing.
+    /// About the player, so it outlives its `affected` object, which is only the source. Guardian Angel's "until end of
+    /// turn, you may pay {1} any time you could cast an instant. If you do, prevent the next 1 damage that would be dealt to
+    /// that permanent or player this turn".
+    PlayerSpecialAction { ability: AbilityRef, about: Target },
     /// A copy effect (CR 707.2, layer 1) on the `affected` permanent, for its duration (CR 611.2b): it holds the copiable
     /// values it was applied over, put back when it ends (or handed to the next later copy effect on the permanent, CR
     /// 613.7: `GameState::effect_remove`). The copy the latest one makes is in `Obj::copy`.
@@ -1921,6 +1929,7 @@ impl EffectKind {
                 | EffectKind::PlayFromGraveyard
                 | EffectKind::PlayerManaAbility(_)
                 | EffectKind::PlayerPlayRule(_)
+                | EffectKind::PlayerSpecialAction { .. }
                 | EffectKind::NextSpellCantBeCountered
                 | EffectKind::SkipNextTurn(_)
                 | EffectKind::ControlNextTurn { .. }

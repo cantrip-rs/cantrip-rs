@@ -174,6 +174,12 @@ pub enum ActionKind {
 /// object: the nth effect that gave them one, added to this. Its `source` is the card that gave it, wherever it is now.
 pub const PLAYER_MANA_ABILITY: u8 = 200;
 
+/// The `index` of an `ActivateAbility` option that is an action an effect lets the player take at a later time (CR 116.2c,
+/// `EffectKind::PlayerSpecialAction`) and not an ability of any object: the nth such effect of theirs, added to this, below
+/// `PLAYER_MANA_ABILITY`. Its `source` is the card whose effect it is, wherever it is now.
+pub const PLAYER_SPECIAL_ACTION: u8 = 64;
+const _: () = assert!(crate::object::MAX_ABILITIES <= PLAYER_SPECIAL_ACTION as usize, "an object's own abilities are numbered below it");
+
 /// The steps of paying for a spell with assist (CR 702.132a) a `PayCosts` question can be: the player the caster chose
 /// activates mana abilities (`ConfirmCasting` when done), then the caster does, then the chosen player announces how much of
 /// the generic mana they pay (`most` at most) and pays it from their pool alone; then the caster pays the rest from theirs,

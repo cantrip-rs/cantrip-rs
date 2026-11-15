@@ -1778,11 +1778,12 @@ impl<'s> Run<'s> {
         any
     }
 
-    /// A mana ability the player has of their own (CR 605.1a, 611.2a), named by the card that gave it and no zone,
-    /// `Bot1.Channel.Activate`: it has no source, so it is offered wherever that card has gone.
+    /// A mana ability the player has of their own (CR 605.1a, 611.2a), or an action an effect lets them take at a later time
+    /// (CR 116.2c), named by the card that gave it and no zone, `Bot1.Channel.Activate`: it has no source, so it is offered
+    /// wherever that card has gone.
     fn is_players_ability(&self, step: &ActionStep, option: &ActionOption) -> bool {
         let (Some(source), Some(card)) = (option.source, &step.card) else { return false };
-        option.index >= PLAYER_MANA_ABILITY
+        option.index >= PLAYER_SPECIAL_ACTION
             && step.zone.is_none()
             && self.game.cards.get(self.game.state.obj(source).card).name.eq_ignore_ascii_case(card)
     }

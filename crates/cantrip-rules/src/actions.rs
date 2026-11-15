@@ -537,6 +537,7 @@ fn options_offered(cx: &Cx, player: PlayerId) -> Vec<ActionOption> {
     // Split second (CR 702.61a-b): with such a spell on the stack, mana abilities and special actions are all anyone may do
     // (`activated_options` offers only the special actions then).
     activated_options(cx, player, &std::cell::OnceCell::new(), &mut options);
+    player_special_action_options(cx, player, &mut options);
     if split_second(cx) {
         return options;
     }
@@ -9862,6 +9863,14 @@ fn describe_way(cards: &CardTable, state: &GameState, log: &[Record], option: &A
                 EffectKind::PlayerManaAbility(a) => cards.ability(a).text(),
                 _ => "",
             }),
+        ActionKind::ActivateAbility if option.index >= PLAYER_SPECIAL_ACTION => state
+            .effects
+            .iter()
+            .find_map(|e| match e.kind {
+                EffectKind::PlayerSpecialAction { ability, .. } if e.source == source => Some(cards.ability(ability).text()),
+                _ => None,
+            })
+            .unwrap_or(""),
         ActionKind::ActivateAbility => {
             let chars = layers::chars(cards, state, log, source);
             chars.abilities().nth(option.index as usize).map(|a| cards.ability(a).text()).unwrap_or("")
@@ -9955,6 +9964,10 @@ pub fn act(cx: &mut Cx, player: PlayerId) -> R<Flow> {
         ActionKind::ActivateAbility if action.index >= PLAYER_MANA_ABILITY => {
             activate_mana(cx, player, source, action.index, action.color, false, &[])?;
         }
+        ActionKind::ActivateAbility if action.index >= PLAYER_SPECIAL_ACTION => {
+            crate::library_visibility::hold(cx);
+            player_special_action(cx, player, action.index - PLAYER_SPECIAL_ACTION)?;
+        }
         ActionKind::ActivateAbility => {
             let ability = cx.chars(source).abilities().nth(action.index as usize).expect("ability");
             let def = activated(cx, ability).expect("an activated ability");
@@ -9966,7 +9979,7 @@ pub fn act(cx: &mut Cx, player: PlayerId) -> R<Flow> {
                 // costs and targets to its effect.
                 let by = cx.link_of_nth(source, action.index as usize);
                 if def.special_action {
-                    special_action(cx, player, source, ability, by)?;
+                    special_action(cx, player, source, ability, by, &[])?;
                 } else {
                     activate(cx, player, source, ability, action.index, &action.targets, action.granted_by, action.paid_by, by)?;
                 }
@@ -12682,8 +12695,9 @@ pub fn special_action_costs(game: &crate::Game, player: PlayerId, source: Object
 }
 
 /// A special action (CR 116.2) from an ability: its mana cost is paid, and its effect done at once with no stack. The
-/// effect asks no questions and has no targets.
-fn special_action(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: AbilityRef, by: Option<Linked>) -> R<()> {
+/// effect asks no questions and has no targets: `about` is what an effect that allows the action named for it to act on
+/// (`player_special_action`), which it reads as its targets, none of them chosen now.
+fn special_action(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: AbilityRef, by: Option<Linked>, about: &[Target]) -> R<()> {
     let def = activated(cx, ability).expect("activated");
     // Its cost changes applied as the payer announces and splits them (CR 601.2b, 118.7e), as a cast's are.
     let costed = Costed::SpecialAction(source, ability);
@@ -12755,12 +12769,53 @@ fn special_action(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: Abil
     if let Some(n) = x {
         cx.st().update_obj(source, |o| o.x = n);
     }
-    let mut item = stack_item(StackKind::Activated, source, ability, player, &[]);
+    let mut item = stack_item(StackKind::Activated, source, ability, player, about);
     // How the source acquired the ability (CR 607.5): what its effect is linked by.
     item.acquired = by.map_or_else(|| cx.s().copy_acquired(source), |by| by.acquired);
     // A special action's effect is done at once; a question it asked would have nowhere to be answered.
     let _ = (def.effect)(cx, &item);
     Ok(())
+}
+
+/// The effects that let `player` take an action at a later time (CR 116.2c), in the order they began: what the options
+/// `PLAYER_SPECIAL_ACTION + n` number.
+fn player_special_actions(state: &GameState, player: PlayerId) -> impl Iterator<Item = &ContinuousEffect> {
+    state.effects.iter().filter(move |e| matches!(e.kind, EffectKind::PlayerSpecialAction { .. }) && e.controller == player)
+}
+
+/// The actions effects let `player` take at a later time (CR 116.2c), offered any time they have priority while the effect
+/// lasts - with a spell with split second on the stack too, as every special action is (CR 702.61b) - where they could pay
+/// for it, as a special action whose cost they cannot meet is not (`activated_options`). Each is offered from the card whose
+/// effect it is, wherever that has gone, as a player's own mana ability is. As many as the options can number
+/// (`PLAYER_MANA_ABILITY - PLAYER_SPECIAL_ACTION`); a later one past them is not offered.
+fn player_special_action_options(cx: &Cx, player: PlayerId, options: &mut Vec<ActionOption>) {
+    let mut available = None;
+    for (n, effect) in player_special_actions(cx.s(), player).enumerate() {
+        let Some(index) = u8::try_from(n).ok().and_then(|n| PLAYER_SPECIAL_ACTION.checked_add(n)).filter(|&i| i < PLAYER_MANA_ABILITY) else { break };
+        let EffectKind::PlayerSpecialAction { ability, .. } = effect.kind else { continue };
+        let Some(def) = activated(cx, ability) else { continue };
+        let whole = special_action_whole_cost(cx, effect.source, ability, def);
+        if !can_pay_other_as(cx, effect.source, player, &whole, Judged::Activation, None, None) {
+            continue;
+        }
+        // An {X} is judged at the least it may be announced as (CR 107.3a); mana of any color pays for it where an effect
+        // says so (CR 609.4b). A special action is no ability, so mana limited to abilities can't pay for it (CR 106.6).
+        let owed = at_least_x(special_action_cost(cx, player, effect.source, ability, def), def.x_cant_be_zero);
+        let owed = if static_rules::spend_any_color_for(cx, player, effect.source, SpendingFor::Other) { owed.paid_with_any_color() } else { owed };
+        if !owed.is_zero() && !available.get_or_insert_with(|| self::available(cx, player)).covers_for(&owed, &ManaPayment::Other) {
+            continue;
+        }
+        options.push(ActionOption::on(ActionKind::ActivateAbility, effect.source, index));
+    }
+}
+
+/// Taking the action the `n`th effect that allows one lets `player` take (CR 116.2c): a special action, its cost paid and its
+/// effect done at once, about what the effect names (`EffectKind::PlayerSpecialAction`).
+fn player_special_action(cx: &mut Cx, player: PlayerId, n: u8) -> R<()> {
+    let Some(&effect) = player_special_actions(cx.s(), player).nth(usize::from(n)) else { return Err(Stop::Cancel) };
+    let EffectKind::PlayerSpecialAction { ability, about } = effect.kind else { return Err(Stop::Cancel) };
+    let named = [about];
+    special_action(cx, player, effect.source, ability, None, if about == Target::None { &[] } else { &named })
 }
 
 fn mana_activation_record(cx: &Cx, player: PlayerId, source: ObjectId, index: u8, color: Option<Color>, colorless: bool, targets: Vec<Target>) -> crate::takeback::Activation {
