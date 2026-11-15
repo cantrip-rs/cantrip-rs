@@ -1,0 +1,55 @@
+# Dewdrop Cure's "mana value 2 or less" (CR 202.3): Alaborn Trooper (mana value 3) in Bot1's graveyard is refused as a target, while Memnite and Ornithopter (mana value 0) are returned.
+# Bot1 casts all three on turn 1 and Wrath of God destroys them on turn 3; the gift is promised, so Bot2 draws.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Pearl
+Memnite
+Alaborn Trooper
+Ornithopter
+Wrath of God
+Plains
+Dewdrop Cure
+Plains x12
+
+[Bot2 Deck]
+Island x21
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Alaborn Trooper.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Wrath of God.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Dewdrop Cure.Cast
+Bot1.Accept
+! Bot1.Target(Bot1.Graveyard.Alaborn Trooper)
+Bot1.Target(Bot1.Graveyard.Memnite; Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Memnite; Mox Pearl; Mox Pearl; Ornithopter; Plains; Plains
+Bot1.Graveyard = Dewdrop Cure; Wrath of God; Alaborn Trooper
+Bot2.Hand.Count = 8
