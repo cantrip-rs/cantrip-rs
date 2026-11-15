@@ -1,0 +1,47 @@
+# Break Down the Door, mode 1: "Exile target artifact." (CR 700.2, 701.13a, 115.1). Bot2 has Mox Emerald, Mox Pearl and Sylvan Library; Bot1's own Moxen
+# are artifacts too. The Library, an enchantment, is not a legal target of this mode, and Bot2's Mox Pearl is exiled. Nothing else is touched.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Break Down the Door
+Island x3
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Sylvan Library
+Swamp x4
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Sylvan Library.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Break Down the Door.Cast
+Bot1.Modes(1)
+! Bot1.Target(Bot2.Battlefield.Sylvan Library)
+Bot1.Target(Bot2.Battlefield.Mox Pearl)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+[Expect]
+Exile = Mox Pearl
+Bot2.Battlefield = Mox Emerald; Sylvan Library
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby
+Bot1.Graveyard = Break Down the Door
