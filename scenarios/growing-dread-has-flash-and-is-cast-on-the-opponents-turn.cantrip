@@ -1,0 +1,37 @@
+# Growing Dread has flash (CR 702.8a): Bot1 keeps {G}{U} open through its own turn and casts it during Bot2's main phase;
+# when it enters Bot1 manifests dread (Bot1 chooses Lightning Bolt face down, Snapcaster Mage to the graveyard).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Growing Dread
+Island
+Island
+Island
+Island
+Snapcaster Mage
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Growing Dread.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Arrange(Lightning Bolt | Snapcaster Mage)
+
+[Expect]
+Bot1.Battlefield.Growing Dread.Types = Enchantment
+Bot1.Battlefield.Growing Dread.Keywords = Flash
+Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield..FaceDownName = Lightning Bolt
+Bot1.Graveyard = Snapcaster Mage
