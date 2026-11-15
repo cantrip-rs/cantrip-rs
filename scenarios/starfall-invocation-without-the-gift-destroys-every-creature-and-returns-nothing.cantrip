@@ -1,0 +1,40 @@
+# Starfall Invocation cast without promising the gift: Bot2 draws nothing and no creature card comes back. The same board as the
+# scenario with the gift (Memnite and Ornithopter for Bot1, a Phyrexian Walker for Bot2): all three die and none is returned.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Gleemox
+Memnite
+Ornithopter
+Starfall Invocation
+Plains
+Plains x13
+
+[Bot2 Deck]
+Phyrexian Walker
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Starfall Invocation.Cast
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Hand.Count = 7
+Bot2.Graveyard = Phyrexian Walker
+Bot1.Graveyard = Starfall Invocation; Ornithopter; Memnite; Black Lotus
+Bot1.Battlefield = Mox Pearl; Gleemox

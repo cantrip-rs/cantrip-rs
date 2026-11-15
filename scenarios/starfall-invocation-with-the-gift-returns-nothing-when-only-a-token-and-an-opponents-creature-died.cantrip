@@ -1,0 +1,47 @@
+# Starfall Invocation promised: "return a creature card put into your graveyard this way". Only a Rabbit token (no card, CR 111.7)
+# of Bot1's and Bot2's Phyrexian Walker (in Bot2's graveyard) die, so there is nothing to return and nothing is asked: Bot1 ends
+# with no creature, the opponent still drew the gift card, and Carrot Cake (not a creature) survives.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Gleemox
+Carrot Cake
+Starfall Invocation
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Phyrexian Walker
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Carrot Cake.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains | )
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Starfall Invocation.Cast
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Hand.Count = 8
+Bot2.Graveyard = Phyrexian Walker
+Bot1.Graveyard = Starfall Invocation; Black Lotus
+Bot1.Battlefield = Mox Pearl; Gleemox; Carrot Cake

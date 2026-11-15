@@ -1,0 +1,46 @@
+# Starfall Invocation: "Gift a card. Destroy all creatures. If the gift was promised, return a creature card put into your
+# graveyard this way to the battlefield under your control." Bot1 has a Memnite and an Ornithopter, Bot2 a Phyrexian Walker. Cast
+# promising the gift on turn 3, Bot2 draws a card first, then all three creatures die. Bot1 chooses between its own two: Bot2's
+# Walker (in Bot2's graveyard) is refused, and the Ornithopter comes back under Bot1's control, the Memnite staying dead.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Gleemox
+Memnite
+Ornithopter
+Starfall Invocation
+Plains
+Plains x13
+
+[Bot2 Deck]
+Phyrexian Walker
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Starfall Invocation.Cast
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+? Bot2.Hand.Count = 8
+! Bot1.Choose(Phyrexian Walker)
+Bot1.Choose(Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Hand.Count = 8
+Bot2.Graveyard = Phyrexian Walker
+Bot1.Graveyard = Starfall Invocation; Memnite; Black Lotus
+Bot1.Battlefield = Mox Pearl; Gleemox; Ornithopter
+Bot1.Battlefield.Ornithopter.Tapped = false
