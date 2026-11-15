@@ -1,0 +1,49 @@
+# Bear Trap deals exactly 3 damage (CR 120.3): Bot2's Serra Angel (4/4, cast with Black Lotus and two Moxen) survives it
+# with 3 damage marked, while the Trap, sacrificed as a cost, is in Bot1's graveyard. Bot1 cast the Trap at sorcery speed
+# on turn 1 and, on turn 3, targets a creature its opponent controls with exactly {3} from three Moxen.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Bear Trap
+Island x11
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Serra Angel
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bear Trap.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Serra Angel.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Bear Trap.Activate(Bot2.Battlefield.Serra Angel)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Bear Trap
+? Bot2.Battlefield.Serra Angel.Damage = 3
+
+[Expect]
+Bot1.Graveyard = Bear Trap
+Bot2.Battlefield.Serra Angel.Damage = 3
