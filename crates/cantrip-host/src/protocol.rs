@@ -384,6 +384,9 @@ pub enum ManaSpendFilterView {
     /// exiled with this artifact" (CR 106.6) - the card where it is, or the spell it became as it is cast. With no card
     /// beside it, one gone anywhere else or none ever exiled, it pays for nothing.
     Card,
+    /// Spells with one of the subtypes named beside it, or the special action of unlocking a door: "Room spells and unlock
+    /// doors" (CR 709.5e).
+    SubtypeSpellsOrUnlockingDoors,
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Serialize, Deserialize)]

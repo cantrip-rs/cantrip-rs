@@ -738,6 +738,7 @@ public sealed partial class MainPage
         (ManaSpendFilterView.SubtypeCreatureSpellsOrAbilities, _) => $"{CardActions.Subtypes(subtypes).ToLowerInvariant()} creatures & abilities",
         (ManaSpendFilterView.SubtypeSpellsOrAbilities, _) => $"{CardActions.Subtypes(subtypes).ToLowerInvariant()} spells & abilities",
         (ManaSpendFilterView.SubtypeSpellsOrEquipAbilities, _) => $"{CardActions.Subtypes(subtypes).ToLowerInvariant()} spells & equip abilities",
+        (ManaSpendFilterView.SubtypeSpellsOrUnlockingDoors, _) => $"{CardActions.Subtypes(subtypes).ToLowerInvariant()} spells & unlocking doors",
         (ManaSpendFilterView.SubtypeSpellsOrAbilitiesOfPermanents, _) =>
             $"{CardActions.Subtypes(subtypes).ToLowerInvariant()} spells & battlefield {CardActions.Subtypes(subtypes).ToLowerInvariant()} abilities",
         (ManaSpendFilterView.SubtypeSpells, ManaSpendEffectView.CantBeCountered) => $"{CardActions.Subtypes(subtypes).ToLowerInvariant()} spells · uncounterable",
@@ -804,6 +805,8 @@ public sealed partial class MainPage
                 $"Spend this mana only to cast {CardActions.Subtypes(subtypes)} creature spells or activate abilities of {CardActions.Subtypes(subtypes)} creature sources.",
             ManaSpendFilterView.SubtypeSpellsOrAbilities =>
                 $"Spend this mana only to cast {CardActions.Subtypes(subtypes)} spells or activate abilities of {CardActions.Subtypes(subtypes)} sources.",
+            ManaSpendFilterView.SubtypeSpellsOrUnlockingDoors =>
+                $"Spend this mana only to cast {CardActions.Subtypes(subtypes)} spells or unlock doors.",
             ManaSpendFilterView.SubtypeSpellsOrEquipAbilities =>
                 $"Spend this mana only to cast {CardActions.Subtypes(subtypes)} spells or activate equip abilities.",
             ManaSpendFilterView.SubtypeSpellsOrAbilitiesOfPermanents when subtypes.Count == 0 =>

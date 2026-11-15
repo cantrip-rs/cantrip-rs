@@ -226,6 +226,12 @@ artifact", `ManaRestriction::Card`) is the `ManaSpendFilterView` `Card`, with th
 where it is, or for the spell it became as it is cast, and none for a card gone anywhere else. The host reads the card back
 from the option offered, never from what the handle names now. Version 240.
 
+**Mana for Rooms and doors.** Mana that may be spent only to cast Room spells and unlock doors (CR 106.6, 709.5e: Smoky
+Lounge's "Spend this mana only to cast Room spells and unlock doors") is the `ManaSpendFilterView`
+`SubtypeSpellsOrUnlockingDoors`, with the subtypes beside it as for `SubtypeSpells`. Unlocking a door is a special action
+(CR 116.2), so the restriction says so itself rather than through an ability kind. The pool chip reads "room spells & unlocking
+doors", its tooltip "Spend this mana only to cast Room spells or unlock doors." Version 241.
+
 An unrestricted `SeparatePiles` selection (`AnyNumber`, no parts or candidate restriction) uses the existing non-targeted
 `ChooseTargetPromptMessage` presentation; its `TargetsChosenAnswer` is translated to the engine's card selection and
 checked by the same validator. A pile-choice mode names its members, with an empty pile named "nothing" (CR 700.3d). The same

@@ -7774,7 +7774,7 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
                 .flatten();
             let a = judged.then(|| own.as_ref().unwrap_or_else(|| available.get_or_init(|| self::available(cx, player))));
             // A special action is no ability, so mana limited to activating abilities can't pay for it (CR 116.2, 106.6).
-            let payment = if def.special_action { ManaPayment::Other } else { ability_payment(cx, id, chars.types, chars.subtypes, def.equip) };
+            let payment = if def.special_action { payment_for(cx, player, id, special_action_paying(cx, ability)) } else { ability_payment(cx, id, chars.types, chars.subtypes, def.equip) };
             let covered = |a: &Available, owed: ManaCost, targets: &[Target]| {
                 let owed = at_least_x(with_defined_x(cx, &asker, def, owed, targets), def.x_cant_be_zero);
                 // A special action is no activated ability (CR 116.2): what changes the cost of activating abilities does not
@@ -12887,6 +12887,17 @@ fn special_action_cost(cx: &Cx, player: PlayerId, source: ObjectId, ability: Abi
     change_with(cx, &cost_change_sources(cx), player, Costed::SpecialAction(source, ability), printed, None, &[])
 }
 
+/// Whether the special action `ability` is unlocking a door (CR 709.5e), which the mana limited to "unlock doors" may pay.
+fn unlocks_a_door(cx: &Cx, ability: AbilityRef) -> bool {
+    ability.card == cx.cards().intrinsic && matches!(ability.index, cantrip_api::intrinsic::UNLOCK_LEFT | cantrip_api::intrinsic::UNLOCK_RIGHT)
+}
+
+/// What paying for the special action `ability` is, as far as restricted mana is concerned (CR 116.2, 106.6): unlocking a door,
+/// or any other special action.
+fn special_action_paying(cx: &Cx, ability: AbilityRef) -> Paying {
+    if unlocks_a_door(cx, ability) { Paying::Unlocking } else { Paying::Other }
+}
+
 fn special_action_printed_cost(cx: &Cx, source: ObjectId, ability: AbilityRef, def: &ActivatedDef) -> ManaCost {
     let card = cx.s().obj(source).card;
     match cx.cards().turn_up(ability) {
@@ -12980,7 +12991,7 @@ fn special_action(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: Abil
     let mana = at_least(mana, least);
     let counter = choose_counter_kind(cx, player, source, &whole)?;
     if mana != ManaCost::ZERO {
-        pay_mana(cx, player, source, mana)?;
+        pay_mana_with(cx, player, source, mana, &Helpers { purpose: special_action_paying(cx, ability), ..Helpers::NONE })?;
     }
     // The rest of the cost is chosen as it is paid (CR 601.2h by way of 602.2b), once the mana is: the permanents and the
     // creatures to tap, which a mana ability activated while paying (CR 601.2g) may have tapped or sacrificed, and the cards
@@ -14686,6 +14697,7 @@ fn payment_for(cx: &Cx, player: PlayerId, source: ObjectId, purpose: Paying) -> 
             spell_payment(cx, player, source, cx.s().restricted_of(player).any(|(r, _)| r.names_subtypes()))
         }
         Paying::Activating(payment) => payment,
+        Paying::Unlocking => ManaPayment::UnlockDoor,
         _ => ManaPayment::Other,
     }
 }
@@ -14856,6 +14868,8 @@ pub(crate) enum Paying {
     Casting,
     /// Activating an ability, its source as it was when the activation began (CR 602.2a, 113.7a).
     Activating(ManaPayment),
+    /// Unlocking a door (CR 709.5e), a special action (CR 116.2): only mana limited to unlocking doors is limited to it.
+    Unlocking,
     Other,
 }
 
