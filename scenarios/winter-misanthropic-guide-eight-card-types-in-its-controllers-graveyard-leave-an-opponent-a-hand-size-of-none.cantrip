@@ -1,0 +1,58 @@
+# Winter, Misanthropic Guide's "seven minus the number of those card types" with eight card types is a negative number, and a
+# calculation that would set a game value negative uses zero (CR 107.1b): the opponent's maximum hand size is none, not a
+# wrapped count. On turn 5 Bot1 casts Peer Past the Veil and discards a hand of an artifact creature (Ornithopter), a battle
+# (Invasion of Ixalan), a planeswalker (Jace, the Mind Sculptor), a sorcery (Ponder), an enchantment (Pacifism) and a land
+# (Island); with Peer Past the Veil itself, an instant, that is eight card types. At its turn 6 cleanup Bot2 discards its whole
+# hand.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Winter, Misanthropic Guide
+Peer Past the Veil
+Ornithopter
+Invasion of Ixalan
+Jace, the Mind Sculptor
+Ponder
+Pacifism
+Island
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Winter, Misanthropic Guide.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Peer Past the Veil.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 8
+[T6 Bot2.Main2]
+Bot2.Pass
+Bot1.Pass
+Bot2.Discard(Island; Island; Island; Island; Island; Island; Island; Island; Island; Island)
+? Bot2.Hand.Count = 0
+
+[Expect]
+Turn = 7
+Bot2.Graveyard.Count = 14

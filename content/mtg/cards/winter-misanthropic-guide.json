@@ -1,0 +1,8 @@
+{
+  "name": "Winter, Misanthropic Guide",
+  "manaCost": "{1}{B}{R}{G}",
+  "type": "Legendary Creature — Human Warlock",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Ward {2}\nAt the beginning of your upkeep, each player draws two cards.\nDelirium — As long as there are four or more card types among cards in your graveyard, each opponent's maximum hand size is equal to seven minus the number of those card types."
+}

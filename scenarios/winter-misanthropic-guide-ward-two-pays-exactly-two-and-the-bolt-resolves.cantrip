@@ -1,0 +1,46 @@
+# Winter, Misanthropic Guide, "ward {2}": Bot2 has a Black Lotus (three red), so after paying the Lightning Bolt it can pay
+# exactly {2}; the Bolt resolves and deals 3 damage to the 3/4. Three mana would have been too much to ask. Winter came down
+# on turn 1 off three Moxen and a Mountain.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mountain
+Winter, Misanthropic Guide
+Mountain x20
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Winter, Misanthropic Guide.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Winter, Misanthropic Guide)
+Bot2.PayCost
+? Bot2.Mana =
+[T2 Bot2.Main2]
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.Winter, Misanthropic Guide.Damage = 3
+Bot2.Graveyard = Lightning Bolt; Black Lotus

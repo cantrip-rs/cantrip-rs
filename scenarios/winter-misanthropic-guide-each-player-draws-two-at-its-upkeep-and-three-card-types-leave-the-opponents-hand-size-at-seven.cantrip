@@ -1,0 +1,67 @@
+# Winter, Misanthropic Guide: "At the beginning of your upkeep, each player draws two cards", and the maximum hand size of
+# seven stays an opponent's while the controller's graveyard holds only three card types (the delirium needs four). Turn 1:
+# Bot1 casts Winter off Mox Jet, Mox Ruby, Mox Emerald and a Mountain, and an Ornithopter. Turn 2: Bot2 kills the Ornithopter
+# with a Lightning Bolt (an artifact and a creature). Turn 3: Bot1 draws three cards (two at the upkeep) and Bot2 two, and Bot1
+# casts Chain Lightning (a sorcery): three types. Bot2, with eight cards at its turn 4 cleanup, discards one down to seven.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mountain
+Winter, Misanthropic Guide
+Ornithopter
+Chain Lightning
+Lightning Bolt
+Mountain
+Mountain
+Mountain x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Winter, Misanthropic Guide.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Ornithopter
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 4
+? Bot2.Hand.Count = 7
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Chain Lightning.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+Bot2.Pass
+Bot1.Pass
+Bot2.Discard(Island)
+? Bot2.Hand.Count = 7
+
+[Expect]
+Bot1.Graveyard = Chain Lightning; Ornithopter
+Bot2.Graveyard = Island; Lightning Bolt
