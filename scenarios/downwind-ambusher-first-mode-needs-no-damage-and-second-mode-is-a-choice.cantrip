@@ -1,0 +1,59 @@
+# Downwind Ambusher: with a damaged Wall of Wood and an undamaged one on the other side, both modes are legal and Bot1 chooses.
+# Choosing the first mode and the undamaged Wall (0/3, -1/2) shrinks it without destroying anything: the damaged Wall (2 damage) is
+# not destroyed, since the destroy mode was not chosen.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Shock
+Downwind Ambusher
+Swamp x20
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Wall of Wood
+Wall of Wood
+Forest x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Wall of Wood.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Wall of Wood.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Wall of Wood)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Downwind Ambusher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(1)
+Bot1.Target(Bot2.Battlefield.Wall of Wood#2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Forest; Mox Emerald; Wall of Wood; Wall of Wood
+Bot2.Battlefield.Wall of Wood#1.Damage = 2
+Bot2.Battlefield.Wall of Wood#1.Toughness = 3
+Bot2.Battlefield.Wall of Wood#2.Toughness = 2
+Bot2.Graveyard.Count = 0

@@ -1,0 +1,56 @@
+# Downwind Ambusher ({3}{B}, flash 4/2): "When this creature enters, choose one — Target creature an opponent controls gets -1/-1
+# until end of turn." Bot1 flashes it in on Bot2's turn 2 and shrinks Bot2's Memnite (1/1), which dies. Bot1's own Memnite is no
+# target (positive control: Bot2's Memnite is), and Bot2's Ornithopter, untargeted, is untouched. Nothing was dealt damage, so the second mode has no legal target and
+# only the first mode is available.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Memnite
+Downwind Ambusher
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Downwind Ambusher.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Memnite
+Bot2.Battlefield = Ornithopter
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Downwind Ambusher.Power = 4
+Bot1.Battlefield.Downwind Ambusher.Toughness = 2
+Bot1.Battlefield.Memnite.Toughness = 1
+Stack.Count = 0
