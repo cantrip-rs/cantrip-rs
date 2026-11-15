@@ -1,0 +1,37 @@
+# Kitsa, Otterball Elite: "{T}: Draw a card, then discard a card." Cast on turn 1, on turn 3 (no longer summoning sick) Bot1 taps it to loot.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Kitsa, Otterball Elite
+Mox Jet
+Mox Ruby
+Lightning Bolt
+Island
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kitsa, Otterball Elite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 5
+Bot1.Battlefield.Kitsa, Otterball Elite.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 6
+Bot1.Choose(Island)
+? Bot1.Hand.Count = 5
+
+[Expect]
+Bot1.Battlefield.Kitsa, Otterball Elite.Tapped = true
+Bot1.Graveyard.Count = 1

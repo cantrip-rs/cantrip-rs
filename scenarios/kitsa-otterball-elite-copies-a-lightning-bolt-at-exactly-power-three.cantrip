@@ -1,0 +1,49 @@
+# Kitsa, Otterball Elite: "{2}, {T}: Copy target instant or sorcery spell you control. ... Activate only if Kitsa's power is 3 or greater." With a Mox and a Lightning Bolt cast
+# (prowess, +1/+1 each) it is 2/4 while the Bolt's prowess trigger is unresolved, and the copy is refused (CR 602.5b); once it resolves it is 3/5 and Kitsa copies the Bolt: Bot2 takes 3 from each (CR 707.10).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Kitsa, Otterball Elite
+Mox Jet
+Mox Ruby
+Lightning Bolt
+Island
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kitsa, Otterball Elite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Battlefield.Kitsa, Otterball Elite.Power = 2
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Battlefield.Kitsa, Otterball Elite.Power = 2
+! Bot1.Battlefield.Kitsa, Otterball Elite.Activate(Stack.Lightning Bolt; Ability: {2}, {T}: Copy)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kitsa, Otterball Elite.Power = 3
+Bot1.Battlefield.Kitsa, Otterball Elite.Activate(Stack.Lightning Bolt; Ability: {2}, {T}: Copy)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14
