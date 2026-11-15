@@ -1,0 +1,11 @@
+{
+  "name": "Starlit Soothsayer",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Bat Cleric",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying\nAt the beginning of your end step, if you gained or lost life this turn, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "keywords": [
+    "Flying"
+  ]
+}

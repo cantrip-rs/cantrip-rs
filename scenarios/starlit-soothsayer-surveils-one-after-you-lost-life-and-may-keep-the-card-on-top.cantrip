@@ -1,0 +1,38 @@
+# Starlit Soothsayer: losing life counts as much as gaining it. Bot1's own Lightning Bolt takes 3 life on turn 1; at the end step it
+# surveils 1 and leaves the Swamp on top of its library (no card goes to the graveyard but the Bolt).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Starlit Soothsayer
+Lightning Bolt
+Plains
+Plains
+Plains
+Swamp
+Island
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Starlit Soothsayer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+Bot1.Arrange(Swamp | )
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Library.Top = Swamp
+Bot1.Library.Count = 12
