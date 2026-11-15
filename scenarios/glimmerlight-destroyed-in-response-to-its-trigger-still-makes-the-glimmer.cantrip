@@ -1,0 +1,46 @@
+# Glimmerlight: "When this Equipment enters, create a 1/1 white Glimmer enchantment creature token." The trigger is independent
+# of its source (CR 113.7a): on turn 3 Bot2 Disenchants the Glimmerlight with its trigger on the stack, and the trigger still
+# creates the Glimmer for Bot1 - a 1/1 with nothing attached, as the Equipment is in the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Glimmerlight
+Island x17
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Disenchant
+Swamp x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Glimmerlight.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Glimmerlight)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Glimmerlight
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Glimmerlight
+Bot1.Battlefield = Mox Jet; Mox Ruby; Glimmer Token
+Bot1.Battlefield.Glimmer Token.Power = 1
+Bot1.Battlefield.Glimmer Token.Toughness = 1
+Bot1.Battlefield.Glimmer Token.Types = Enchantment; Creature
+Bot2.Battlefield.Count = 2

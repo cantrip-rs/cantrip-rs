@@ -1,0 +1,6 @@
+{
+  "name": "Glimmerlight",
+  "manaCost": "{2}",
+  "type": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, create a 1/1 white Glimmer enchantment creature token.\nEquipped creature gets +1/+1.\nEquip {1} ({1}: Attach to target creature you control. Equip only as a sorcery.)"
+}
