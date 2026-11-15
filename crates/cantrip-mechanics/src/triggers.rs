@@ -160,6 +160,13 @@ pub fn this_is_tapped(q: &dyn Query, asker: &Asker) -> bool {
     q.obj(asker.source).tapped
 }
 
+/// "Survival \u{2014} At the beginning of your second main phase, if this creature is tapped, [effect]" (an ability word, CR 207.2c:
+/// it has no rules meaning). The condition is an intervening "if" (CR 603.4), checked as it triggers and again as it resolves.
+/// Kona, Rescue Beastie, Cautious Survivor and Defiant Survivor print it.
+pub const fn survival(effect: Effect, text: &'static str) -> AbilityDef {
+    triggered(YOUR_SECOND_MAIN_PHASE, effect, text).condition(this_is_tapped)
+}
+
 /// An intervening "if you control two or more tapped creatures" (CR 603.4), checked as the ability triggers and again as it
 /// resolves, so it does nothing if they have untapped or died by then. Dawnstrike Vanguard and Flight-Deck Coordinator print it.
 pub fn you_control_two_or_more_tapped_creatures(q: &dyn Query, asker: &Asker) -> bool {
