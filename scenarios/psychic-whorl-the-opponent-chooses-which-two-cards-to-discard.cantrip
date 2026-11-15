@@ -1,0 +1,31 @@
+# Psychic Whorl: "Target opponent discards two cards" is the opponent's own choice (CR 701.9b, not a random or caster's pick):
+# Bot2 holds a Lightning Bolt, an Island and five Plains and chooses to discard the Bolt and the Island; the Plains stay.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Psychic Whorl
+Swamp x16
+
+[Bot2 Deck]
+Lightning Bolt
+Island
+Plains x5
+Swamp x13
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Psychic Whorl.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Lightning Bolt; Island)
+
+[Expect]
+Bot2.Graveyard = Island; Lightning Bolt
+Bot2.Hand = Plains; Plains; Plains; Plains; Plains

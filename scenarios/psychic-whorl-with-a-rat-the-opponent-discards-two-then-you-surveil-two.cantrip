@@ -1,0 +1,39 @@
+# Psychic Whorl with a Rat: Bot2 discards two cards (CR 701.9a), then Bot1, who controls a Typhoid Rats (a Rat), surveils 2
+# (CR 701.25a): the Lightning Bolt stays on top and the Counterspell under it goes to the graveyard. Three Moxen pay for the Whorl
+# and the Swamp for the Rats, all in turn 1, the Rats resolving first.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Swamp
+Typhoid Rats
+Psychic Whorl
+Swamp
+Lightning Bolt
+Counterspell
+Swamp x12
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Typhoid Rats.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Psychic Whorl.Cast(Bot2)
+Bot1.Pass
+Bot1.Arrange(Lightning Bolt | Counterspell)
+
+[Expect]
+Bot2.Hand.Count = 5
+Bot2.Graveyard.Count = 2
+Bot1.Graveyard = Psychic Whorl; Counterspell
+Bot1.Library.Top = Lightning Bolt

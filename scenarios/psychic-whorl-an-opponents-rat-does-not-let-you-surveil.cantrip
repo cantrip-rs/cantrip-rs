@@ -1,0 +1,42 @@
+# Psychic Whorl: "if you control a Rat" means a Rat under Bot1's control (CR 109.4). Bot2's Typhoid Rats does not count, so
+# Bot1, who controls no Rat, makes Bot2 discard two cards and does not surveil: Bot1 drew the Lightning Bolt for turn 3 and the
+# Counterspell is still on top, and nothing asks Bot1 to arrange.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Psychic Whorl
+Swamp x3
+Lightning Bolt
+Counterspell
+Swamp x12
+
+[Bot2 Deck]
+Swamp
+Typhoid Rats
+Ornithopter x18
+
+[Actions]
+Bot1.Pass
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Typhoid Rats.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Psychic Whorl.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Typhoid Rats.Subtypes = Rat
+Bot2.Graveyard.Count = 2
+Bot1.Graveyard = Psychic Whorl
+Bot1.Library.Top = Counterspell

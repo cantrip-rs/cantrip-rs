@@ -1,0 +1,36 @@
+# Psychic Whorl without a Rat: Bot1 controls only an Ornithopter (a Thopter, not a Rat), so Bot2 still discards two cards but
+# there is no surveil (CR 701.9a, 701.25a): the Lightning Bolt stays on top of Bot1's library and the Counterspell is not binned
+# (nothing asks Bot1 to arrange anything).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Ornithopter
+Psychic Whorl
+Swamp x2
+Lightning Bolt
+Counterspell
+Swamp x12
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Psychic Whorl.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Hand.Count = 5
+Bot2.Graveyard.Count = 2
+Bot1.Graveyard = Psychic Whorl
+Bot1.Library.Top = Lightning Bolt
