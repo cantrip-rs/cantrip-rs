@@ -1,0 +1,35 @@
+# Glidedive Duo ({4}{B}, 3/3 flying): "When this creature enters, each opponent loses 2 life and you gain 2 life." Bot1 casts it on turn 1 with Black Lotus and two Moxen: Bot2 goes
+# to 18 and Bot1 to 22 as the trigger resolves (CR 119.3, 603.6a); nothing happens when the Duo is cast, only when it enters.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Glidedive Duo
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Glidedive Duo.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+? Bot1.Life = 20
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+? Bot1.Life = 22
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22
+Bot1.Battlefield.Glidedive Duo.Power = 3
