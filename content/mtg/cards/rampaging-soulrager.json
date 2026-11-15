@@ -1,0 +1,8 @@
+{
+  "name": "Rampaging Soulrager",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Spirit",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "This creature gets +3/+0 as long as there are two or more unlocked doors among Rooms you control."
+}
