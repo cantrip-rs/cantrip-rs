@@ -1,0 +1,66 @@
+# Knightfisher (a Bird itself): "Whenever another nontoken Bird you control enters, create a 1/1 blue Fish creature token." It does not trigger as it enters itself, nor for Bot2's
+# Birds of Paradise on turn 2; Bot1's own Birds of Paradise on turn 3 makes one Fish (CR 603.6a, 111.1).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Knightfisher
+Mox Emerald
+Birds of Paradise
+Island x16
+
+[Bot2 Deck]
+Forest
+Birds of Paradise
+Forest x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Knightfisher.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 6
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Birds of Paradise.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 6
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Count = 6
+? Bot2.Battlefield = Birds of Paradise; Forest
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Birds of Paradise.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Island; Knightfisher; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Birds of Paradise; Fish Token
+Bot1.Battlefield.Fish Token.Power = 1
+Bot1.Battlefield.Fish Token.Colors = Blue
