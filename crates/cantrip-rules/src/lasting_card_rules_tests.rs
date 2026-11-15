@@ -80,7 +80,7 @@ fn rule(game: &mut Game, index: u8, card: ObjectId, about: Target) {
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 
 /// What you are offered to do with each card with priority.
@@ -97,7 +97,7 @@ fn resolving(game: &mut Game) -> Cx<'_> {
     let serial = game.state.stack.last().expect("the spell").serial;
     game.state.frame_push(cantrip_state::Frame::new(cantrip_state::FrameKind::Resolve { serial }));
     let frame = game.state.agenda.len() - 1;
-    Cx { g: game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 
 /// CR 101.2, 601.3, 305.1, 701.18b: the cards a rule binding you takes in can't be cast or played as a land by you, with

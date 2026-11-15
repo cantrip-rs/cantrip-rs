@@ -21,7 +21,7 @@ static SOURCE: CardDef = CardDef {
 static FILLER: CardDef = CardDef { name: "Next turn delay filler", types: TypeSet::of(&[CardType::Land]), ..CardDef::BLANK };
 
 fn cx(g: &mut Game) -> Cx<'_> {
-    Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
+    Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 fn game() -> (Game, ObjectId) {
     game_with(2)

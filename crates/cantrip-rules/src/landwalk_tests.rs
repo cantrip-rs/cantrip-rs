@@ -14,7 +14,7 @@ static CREATURE: CardDef = CardDef {
     name: "Walker", types: TypeSet::of(&[CardType::Creature]), power: Some(2), toughness: Some(2), ..CardDef::BLANK
 };
 fn cx(g: &mut Game) -> Cx<'_> {
-    Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
+    Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 fn position(keyword: Keyword, land_type: Option<Subtype>, supertype: Supertypes, land_owner: PlayerId) -> (Game, ObjectId, ObjectId, ObjectId) {
     let land = Box::leak(Box::new(CardDef { name: "Walked land", types: TypeSet::of(&[CardType::Land]),

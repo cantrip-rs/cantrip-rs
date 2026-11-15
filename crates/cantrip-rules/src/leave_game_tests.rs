@@ -62,7 +62,7 @@ static LOSS_WITNESS: CardDef = CardDef {
 };
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 
 fn put(game: &mut Game, def: &'static CardDef, owner: PlayerId, controller: PlayerId) -> ObjectId {
@@ -387,7 +387,7 @@ fn a_concession_waits_for_a_question_put_to_a_player_still_in_the_game() {
     game.state.frame_push(cantrip_state::Frame::new(cantrip_state::FrameKind::Settle));
     let frame = game.state.agenda.len() - 1;
     game.state.update_frame(frame, |f| f.conceded.push((0, P2)));
-    let mut cx = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+    let mut cx = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     let pay = RequestKind::UnlessPays { source, subject: source, total: ManaCost::ZERO, remaining: ManaCost::ZERO, life: 0, life_payable: false,
         question: &ASKED, options: Vec::new(), x: None, times: None, removes: None };
     assert_eq!(cx.ask_core(p4, pay, false).ok(), Some(Answer::Pass), "a cost of a player who left is not paid, unasked");

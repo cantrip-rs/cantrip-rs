@@ -1,0 +1,45 @@
+# Council's Judgment in a game of three. Bot1 votes for Bot3's Sol Ring; Bot2 concedes as it is asked to vote, and so is
+# no longer one of the players who vote (CR 800.4a, 701.38a): no one votes in its place. Bot3 votes for its Mox Sapphire,
+# one vote each, and both are exiled.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Plains
+Council's Judgment
+Plains x12
+
+[Bot2 Deck]
+Plains x20
+
+[Bot3 Deck]
+Mox Sapphire
+Sol Ring
+Plains x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot3.Main1]
+Bot3.Hand.Mox Sapphire.Cast
+Bot3.Battlefield.Mox Sapphire.Activate
+Bot3.Hand.Sol Ring.Cast
+[T4 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Council's Judgment.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Choose(Sol Ring)
+Bot2.Concede
+Bot3.Choose(Mox Sapphire)
+Bot1.Pass
+[T4 Bot1.Main2]
+
+[Expect]
+Bot2.Status = Lost
+Exile = Mox Sapphire; Sol Ring
+Bot3.Battlefield.Count = 0

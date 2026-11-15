@@ -133,14 +133,14 @@ fn attached(g: &mut Game, def: &'static CardDef, host: ObjectId) -> ObjectId {
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 
 /// The state-based actions performed in a settling frame of the game's own, as the rules perform them.
 fn state_based_actions(g: &mut Game) {
     g.state.frame_push(Frame::new(FrameKind::Settle));
     let frame = g.state.agenda.len() - 1;
-    let mut cx = Cx { g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+    let mut cx = Cx { g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     crate::settle::state_based_actions_alone(&mut cx).expect("nothing is asked");
 }
 
@@ -258,7 +258,7 @@ fn resolve_spell(g: &mut Game, def: &'static CardDef, spell: ObjectId, targets: 
     let serial = g.state.stack.last().expect("the spell").serial;
     g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
     let frame = g.state.agenda.len() - 1;
-    let mut cx = Cx { g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+    let mut cx = Cx { g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     crate::resolve::resolve(&mut cx).expect("nothing is asked");
 }
 
@@ -298,7 +298,7 @@ fn resolve_bestowed(g: &mut Game, host: ObjectId) -> ObjectId {
     let serial = g.state.stack.last().expect("the spell").serial;
     g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
     let frame = g.state.agenda.len() - 1;
-    let mut cx = Cx { g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+    let mut cx = Cx { g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     crate::resolve::resolve(&mut cx).expect("nothing is asked");
     spell
 }

@@ -434,7 +434,7 @@ fn a_target_gone_is_still_judged_with_the_others_as_it_last_was() {
     assert!(legal(&g, 0) && legal(&g, 1), "total mana value 3");
     // One leaves the graveyard: it is illegal, and Two, with One as it last was, still within 3 (Run Away Together's ruling).
     {
-        let mut cx = crate::Cx { g: &mut g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        let mut cx = crate::Cx { g: &mut g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
         crate::ops::move_to_for(&mut cx, one, Zone::exile(YOU), ZoneReason::Other);
     }
     assert!(!legal(&g, 0) && legal(&g, 1));

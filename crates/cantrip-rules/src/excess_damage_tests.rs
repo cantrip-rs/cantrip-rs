@@ -126,7 +126,7 @@ fn cx(g: &mut Game) -> Cx<'_> {
         lineage: Vec::new(), damage: None,
         asked_at: None,
         doer: None,
-        producing: None,
+        producing: None, reached: None,
     }
 }
 fn hit(g: &mut Game, source: ObjectId, target: ObjectId, amount: u32) -> Option<DamageResult> {

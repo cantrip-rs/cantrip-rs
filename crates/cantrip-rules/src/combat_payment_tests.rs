@@ -50,7 +50,7 @@ fn put(g: &mut Game, d: &'static CardDef, p: PlayerId) -> ObjectId {
     let ts=g.state.timestamp();g.state.update_obj(id,|o|{o.controlled_since=0;o.timestamp=ts;});
     g.state.zone_push(Zone::BATTLEFIELD,id);g.state.see_statics();id
 }
-fn cx(g: &mut Game) -> Cx<'_> { Cx { g,frame:0,cursor:0,mana_source:None,entering:None,lineage:vec![],damage:None,asked_at:None,doer:None,producing:None } }
+fn cx(g: &mut Game) -> Cx<'_> { Cx { g,frame:0,cursor:0,mana_source:None,entering:None,lineage:vec![],damage:None,asked_at:None,doer:None,producing:None, reached:None } }
 fn next(g: &mut Game) -> Request {
     for _ in 0..100 { g.run();let r=g.pending().cloned().expect("question");match r.kind {
         RequestKind::Priority{..} => g.answer(r.id,r.player,Answer::Pass).unwrap(),

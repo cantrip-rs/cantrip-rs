@@ -69,7 +69,7 @@ fn board(def: &'static CardDef, counters: i32, x: u32, modifier: Option<&'static
     g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
     (g, object)
 }
-fn cx(g: &mut Game) -> Cx<'_> { Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None } }
+fn cx(g: &mut Game) -> Cx<'_> { Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None } }
 fn number(g: &mut Game, value: u32) {
     g.run(); let ask = g.pending().cloned().unwrap();
     assert!(matches!(ask.kind, RequestKind::ChooseNumber { .. }));

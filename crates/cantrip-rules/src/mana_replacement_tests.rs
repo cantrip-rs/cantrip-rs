@@ -200,7 +200,7 @@ fn put(g: &mut Game, def: &'static CardDef) -> ObjectId {
 }
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 
 /// Taps `source` for its mana from priority, naming `color` where it names one, and answers each order of replacement

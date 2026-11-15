@@ -27,7 +27,7 @@ fn board()->Game {
     g.state.update_turn(|t|{t.number=1;t.active=YOU;t.priority=YOU;t.set_step(Step::PrecombatMain);});g
 }
 fn put(g:&mut Game,def:&'static CardDef,zone:Zone)->ObjectId{let id=g.state.push_obj(Obj::new(g.cards.id_of(def),YOU,zone));g.state.zone_push(zone,id);g.state.see_statics();id}
-fn cx(g:&mut Game)->Cx<'_>{Cx {g,frame:0,cursor:0,mana_source:None,entering:None,lineage:Vec::new(),damage:None,asked_at:None,doer:None,producing:None}}
+fn cx(g:&mut Game)->Cx<'_>{Cx {g,frame:0,cursor:0,mana_source:None,entering:None,lineage:Vec::new(),damage:None,asked_at:None,doer:None,producing:None, reached:None}}
 fn activate(g:&mut Game,source:ObjectId){g.run();let r=g.pending().cloned().unwrap();let RequestKind::Priority {options}=&r.kind else {panic!()};let opt=options.iter().find(|o|o.source==Some(source)&&o.kind==ActionKind::ActivateAbility).unwrap();g.answer(r.id,r.player,Answer::Act(Action::of(opt))).unwrap();g.run();}
 fn resolve(g:&mut Game){for _ in 0..20 {g.run();if g.state.stack.is_empty(){return}let r=g.pending().cloned().unwrap();assert!(matches!(r.kind,RequestKind::Priority {..}));g.answer(r.id,r.player,Answer::Pass).unwrap();}panic!("unresolved");}
 #[test]

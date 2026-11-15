@@ -1,0 +1,54 @@
+# Innocent Blood in a game of three. Bot2 controls Bot3's Tamiyo, Collector of Tales (Harmless Offering), so Bot1's spell
+# can't make Bot2 sacrifice its Memnite (CR 101.2). Bot3 is asked which Memnite to sacrifice and concedes: Tamiyo leaves
+# with Bot3 then (CR 800.4a), after Bot2's sacrifice was already decided, so Bot2 keeps its Memnite.
+[Bot1 Deck]
+Swamp
+Innocent Blood
+Island x30
+[Bot2 Deck]
+Memnite
+Island x30
+[Bot3 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Tamiyo, Collector of Tales
+Harmless Offering
+Memnite
+Memnite
+Island x30
+[Actions]
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot3.Main1]
+Bot3.Hand.Black Lotus.Cast
+Bot3.Hand.Mox Sapphire.Cast
+Bot3.Hand.Mox Ruby.Cast
+Bot3.Hand.Mox Jet.Cast
+Bot3.Hand.Mox Pearl.Cast
+Bot3.Battlefield.Black Lotus.Activate(Color: Green)
+Bot3.Battlefield.Mox Sapphire.Activate
+Bot3.Hand.Tamiyo, Collector of Tales.Cast
+Bot3.Battlefield.Mox Ruby.Activate
+Bot3.Battlefield.Mox Jet.Activate
+Bot3.Battlefield.Mox Pearl.Activate
+Bot3.Hand.Harmless Offering.Cast
+Bot3.Target(Bot2)
+Bot3.Target(Tamiyo, Collector of Tales)
+[T6 Bot3.Main1]
+? Bot2.Battlefield.Tamiyo, Collector of Tales.Counters.Loyalty = 5
+Bot3.Hand.Memnite#1.Cast
+Bot3.Hand.Memnite.Cast
+[T7 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Innocent Blood.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot3.Concede
+[Expect]
+Bot3.Status = Lost
+Bot2.Battlefield = Memnite

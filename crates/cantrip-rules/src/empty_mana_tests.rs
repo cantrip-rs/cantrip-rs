@@ -11,7 +11,7 @@ fn board()->(Game,ObjectId) {
     let mut g=Game::new(cards,&Setup {decks:vec![vec![],vec![]],..Default::default()});
     let id=g.state.push_obj(Obj::new(cards.id_of(&HOLDER),YOU,Zone::BATTLEFIELD));g.state.zone_push(Zone::BATTLEFIELD,id);g.state.see_statics();(g,id)
 }
-fn cx(g:&mut Game)->Cx<'_>{Cx {g,frame:usize::MAX,cursor:0,mana_source:None,entering:None,lineage:Vec::new(),damage:None,asked_at:None,doer:None,producing:None}}
+fn cx(g:&mut Game)->Cx<'_>{Cx {g,frame:usize::MAX,cursor:0,mana_source:None,entering:None,lineage:Vec::new(),damage:None,asked_at:None,doer:None,producing:None, reached:None}}
 #[test]
 fn explicit_loss_empties_every_pool_and_lifetime_even_under_a_step_boundary_keep_rule() {
     let (mut g,source)=board();

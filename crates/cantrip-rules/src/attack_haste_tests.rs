@@ -23,7 +23,7 @@ fn board()->Game {
     let spell=g.state.push_obj(Obj::new(cards.id_of(&SPELL),YOU,Zone::hand(YOU)));g.state.zone_push(Zone::hand(YOU),spell);g
 }
 fn put(g:&mut Game,d:&'static CardDef,p:PlayerId)->ObjectId{let id=g.state.push_obj(Obj::new(g.cards.id_of(d),p,Zone::BATTLEFIELD));g.state.zone_push(Zone::BATTLEFIELD,id);g.state.update_obj(id,|o|o.controlled_since=1);g.state.see_statics();id}
-fn cx(g:&mut Game)->Cx<'_>{Cx {g,frame:0,cursor:0,mana_source:None,entering:None,lineage:Vec::new(),damage:None,asked_at:None,doer:None,producing:None}}
+fn cx(g:&mut Game)->Cx<'_>{Cx {g,frame:0,cursor:0,mana_source:None,entering:None,lineage:Vec::new(),damage:None,asked_at:None,doer:None,producing:None, reached:None}}
 fn offered(g:&mut Game)->Vec<ObjectId>{g.run();match &g.pending().unwrap().kind {RequestKind::DeclareAttackers {eligible,..}=>eligible.clone(),RequestKind::Priority {..}=>vec![],other=>panic!("{other:?}")}}
 #[test]
 fn the_attack_exception_does_not_grant_haste_or_unlock_tap_symbol_abilities() {

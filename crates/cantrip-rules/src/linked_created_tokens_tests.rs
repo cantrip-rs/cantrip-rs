@@ -13,7 +13,7 @@ fn replacement_token(g: &mut dyn cantrip_api::Game, a: &Asker, _: &Proposal, _: 
     g.create_tokens(token, a.controller, 1, false).unwrap();
 }
 static REPLACE: CardDef = CardDef { name: "Unrelated creation replacement", types: TypeSet::of(&[CardType::Enchantment]), replacements: &[replacement(ReplacementKind::LifeChange, gain, gain_more, "gain more and make a token").then(replacement_token)], ..CardDef::BLANK };
-fn cx(g: &mut Game) -> Cx<'_> { Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: vec![], damage: None, asked_at: None, doer: None, producing: None } }
+fn cx(g: &mut Game) -> Cx<'_> { Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: vec![], damage: None, asked_at: None, doer: None, producing: None, reached: None } }
 #[test]
 fn created_tokens_capture_exact_link_and_specific_creating_ability() {
     let cards = Box::leak(Box::new(CardTable::new([&SOURCE, &TOKEN, &REPLACE])));

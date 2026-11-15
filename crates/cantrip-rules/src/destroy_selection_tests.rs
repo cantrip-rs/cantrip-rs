@@ -26,7 +26,7 @@ fn cx(game: &mut Game) -> Cx<'_> {
         damage: None,
         asked_at: None,
         doer: None,
-        producing: None,
+        producing: None, reached: None,
     }
 }
 fn board() -> (Game, ObjectId, ObjectId) {

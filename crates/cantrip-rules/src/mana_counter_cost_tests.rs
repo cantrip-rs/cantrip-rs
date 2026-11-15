@@ -82,7 +82,7 @@ fn put(game: &mut Game, def: &'static CardDef, zone: Zone) -> ObjectId {
     game.state.zone_push(zone, id);
     game.state.update_obj(id, |o| o.x = 9);
     if zone.is(ZoneKind::Battlefield) {
-        let mut cx = Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
         crate::counters::put(&mut cx, id, CounterKind::Charge, 5, YOU, crate::counters::How::Effect);
     }
     game.state.see_statics();
@@ -262,7 +262,7 @@ fn could_produce_ignores_counter_cost_payability_and_includes_the_two_mana_repla
     let mut game = game(); let source = put(&mut game, &STORE, Zone::BATTLEFIELD);
     game.state.update_obj(source, |o| o.remove_counters(CounterKind::Charge, 5));
     let types = |game: &mut Game| {
-        let cx = Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        let cx = Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
         crate::actions::producible_types(&cx, source)
     };
     assert_eq!(types(&mut game), (ColorSet::of(Color::Green), false));

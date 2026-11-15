@@ -169,7 +169,7 @@ fn resolving() -> (Game, ObjectId, usize) {
 /// The resolving ability's own text is read: its source says Goblin to it, though it says Elf now.
 fn own(g: &mut Game, frame: usize) -> Cx<'_> {
     g.own_text.set(true);
-    Cx { g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
+    Cx { g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 
 fn reads_its_own_text(cx: &Cx, id: ObjectId) {

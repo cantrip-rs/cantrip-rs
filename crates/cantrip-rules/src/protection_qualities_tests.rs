@@ -114,7 +114,7 @@ fn a_dragon_equipment_can_not_equip_a_creature_with_protection_from_dragons_but_
     let host = put(&mut game, &DRAGON_WARDED, 0);
     let dragon = put(&mut game, &DRAGON_EQUIPMENT, 1);
     let plain = put(&mut game, &PLAIN_EQUIPMENT, 1);
-    let cx = crate::Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+    let cx = crate::Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     let q: &dyn Query = &cx;
     assert!(q.chars(host).protection_subtypes.has(Subtype::Dragon));
     assert!(!crate::attach::host_allows(&cx, dragon, host, true), "a Dragon can't equip it (CR 702.16d)");
@@ -127,7 +127,7 @@ fn an_equipment_of_mana_value_three_can_not_equip_a_creature_with_protection_fro
     let host = put(&mut game, &VALUE_WARDED, 0);
     let costly = put(&mut game, &COSTLY_EQUIPMENT, 1);
     let cheap = put(&mut game, &CHEAP_EQUIPMENT, 1);
-    let cx = crate::Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+    let cx = crate::Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     let q: &dyn Query = &cx;
     assert_eq!(q.chars(host).protection_mana_value, Some(3));
     assert!(!crate::attach::host_allows(&cx, costly, host, true), "mana value 3 is covered (CR 702.16d)");
@@ -165,7 +165,7 @@ fn a_resolved_effect_grants_protection_from_a_subtype_a_mana_value_and_colored_s
     grant(&mut game, bear, EffectKind::ProtectionFromManaValueAtLeast(5));
     grant(&mut game, bear, EffectKind::ProtectionFromManaValueAtLeast(3));
     grant(&mut game, bear, EffectKind::ProtectionFromColoredSpells);
-    let cx = crate::Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+    let cx = crate::Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     let q: &dyn Query = &cx;
     let c = q.chars(bear);
     assert!(c.protection_subtypes.has(Subtype::Dragon) && c.protection_subtypes.has(Subtype::Demon), "each subtype instance adds its own");
@@ -185,7 +185,7 @@ fn losing_all_abilities_takes_granted_protection_from_a_subtype_a_mana_value_and
     grant(&mut game, bear, EffectKind::ProtectionFromManaValueAtLeast(3));
     grant(&mut game, bear, EffectKind::ProtectionFromColoredSpells);
     grant(&mut game, bear, EffectKind::LoseAllAbilities);
-    let cx = crate::Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+    let cx = crate::Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     let q: &dyn Query = &cx;
     assert!(!q.chars(bear).has_protection(), "CR 613.1f: what is granted before the loss goes with it");
 }
@@ -199,7 +199,7 @@ fn damage_targeting_and_blocking_read_the_same_judgment_of_a_source_by_type_and_
     let plain = put(&mut game, &PLAIN_EQUIPMENT, 1);
     let costly = put(&mut game, &COSTLY_EQUIPMENT, 1);
     let cheap = put(&mut game, &CHEAP_EQUIPMENT, 1);
-    let cx = crate::Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+    let cx = crate::Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     let q: &dyn Query = &cx;
     let judged = |host: ObjectId, source: ObjectId| q.chars(host).protected_from_by(&q.chars(source), || q.mana_value(source), PlayerId(1));
     assert!(judged(dragon_host, dragon) && !judged(dragon_host, plain), "a Dragon source is covered, another type is not");

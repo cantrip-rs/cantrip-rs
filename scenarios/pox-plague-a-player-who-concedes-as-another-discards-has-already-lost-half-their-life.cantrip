@@ -1,0 +1,41 @@
+# Pox Plague in a game of three. Every player loses half their life first; then Bot1 is asked which cards to discard, and
+# Bot2 concedes then. Bot2 had already lost half its life when it left (CR 104.3a: a concession comes when it is made), so
+# it left at 10 life; Bot3 discards half its hand and Bot1 sacrifices half its permanents.
+
+[Bot1 Deck]
+Swamp
+Swamp
+Black Lotus
+Pox Plague
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+[T4 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Pox Plague.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot2.Concede
+Bot1.Choose(Island; Island)
+Bot3.Choose(Island; Island; Island)
+Bot1.Choose(Swamp)
+
+[Expect]
+Bot2.Status = Lost
+Bot1.Life = 10
+Bot2.Life = 10
+Bot3.Life = 10
+Bot3.Hand.Count = 4
+Bot1.Battlefield = Swamp

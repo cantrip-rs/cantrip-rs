@@ -30,7 +30,7 @@ static OGRE: CardDef =
     CardDef { name: "Reveal Test Ogre", cost: generic(3), types: TypeSet::of(&[CardType::Creature]), power: Some(3), toughness: Some(3), ..CardDef::BLANK };
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 
 /// A game of `players`, `active`'s main phase with priority and an empty stack.

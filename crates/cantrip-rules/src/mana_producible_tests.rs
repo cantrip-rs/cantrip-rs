@@ -8,7 +8,7 @@ fn in_frame<T>(g: &mut Game, kind: cantrip_state::FrameKind, answers: Vec<Answer
     g.state.frame_push(cantrip_state::Frame::new(kind));
     let frame = g.state.agenda.len() - 1;
     g.state.update_frame(frame, |f| f.answers = answers.into_iter().map(|a| (None, a)).collect());
-    f(&mut crate::Cx { g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None })
+    f(&mut crate::Cx { g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None })
 }
 
 fn assert_capability_isolated(g: &mut Game, source: ObjectId, expected: (ColorSet, bool)) {
@@ -24,7 +24,7 @@ fn assert_capability_isolated(g: &mut Game, source: ObjectId, expected: (ColorSe
     assert_eq!(g.producible_types(source), expected, "Game query of {}", g.chars(source).name);
     let reader = crate::resolve::Reader { cards: g.cards, state: &g.state, events: &g.log };
     assert_eq!(reader.producible_types(source), expected, "raw-state Reader query");
-    let cx = crate::Cx { g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+    let cx = crate::Cx { g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     assert_eq!(cx.producible_types(source), expected, "in-flight Cx query");
     assert!(snapshot(cx.g) == state, "every state field, including stack, zones and mana, is unchanged");
     assert_eq!(format!("{:?}", cx.g.log), history, "history is unchanged");
@@ -417,7 +417,7 @@ fn raw_state_reader_and_frame_query_agree_with_the_games_query() {
     let land = put(&mut g, &COSTLY, 1);
     let reader = crate::resolve::Reader { cards: g.cards, state: &g.state, events: &g.log };
     assert_eq!(reader.producible_types(land), g.producible_types(land));
-    let cx = crate::Cx { g: &mut g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+    let cx = crate::Cx { g: &mut g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     assert_eq!(cx.producible_types(land), (ColorSet(0b11111), false));
 }
 

@@ -67,7 +67,7 @@ fn put(g: &mut Game, t: &CardTable, card: &'static CardDef, zone: Zone) -> Objec
     id
 }
 fn cx(g: &mut Game) -> Cx<'_> {
-    Cx { g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: vec![], damage: None, asked_at: None, doer: None, producing: None }
+    Cx { g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: vec![], damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 
 #[test]
@@ -217,7 +217,7 @@ fn a_canceled_attempt_does_not_leak_into_a_later_entry_of_the_same_object() {
     g.state.frame_push(Frame::new(FrameKind::Settle));
     let frame = g.state.agenda.len() - 1;
     g.state.update_frame(frame, |f| f.answers = vec![(None, Answer::Index(0))]);
-    let mut context = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: vec![], damage: None, asked_at: None, doer: None, producing: None };
+    let mut context = Cx { g: &mut g, frame, cursor: 0, mana_source: None, entering: None, lineage: vec![], damage: None, asked_at: None, doer: None, producing: None, reached: None };
     cantrip_api::Game::put_onto_battlefield(&mut context, entering, YOU, false).unwrap();
     assert!(context.s().obj(entering).became.is_none(), "the first attempt did not move");
     assert!(context.g.log.iter().any(|r| matches!(r.event, Event::EntrySacrifice { sacrificed, .. } if sacrificed == forest)));

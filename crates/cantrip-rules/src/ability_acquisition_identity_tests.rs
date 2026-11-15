@@ -48,7 +48,7 @@ fn sacrificial_mana(g:&mut dyn cantrip_api::Game,a:&Asker,_:Option<Color>)->Resu
 static SAC_MANA: CardDef = CardDef { name:"Sacrificial mana creature",types:TypeSet::of(&[CardType::Creature]),power:Some(1),toughness:Some(1),
     abilities:&[mana_ability(Cost {sacrifice_self:true,..Cost::NONE},Adds {pool:ManaPool([1,0,0,0,0,0]),..add_by(sacrificial_mana)},"Sacrifice this creature: Add {W}.")],..CardDef::BLANK };
 static LENDER: CardDef = CardDef { name:"External static lender",delayed:&[granted_static(Layer::Ability,borrowed,"This creature has all activated abilities of creature cards in graveyards.")],..CardDef::BLANK };
-fn cx(g: &mut Game, frame: usize) -> Cx<'_> { Cx { g, frame, cursor:0, mana_source:None, entering:None, lineage:vec![], damage: None, asked_at:None, doer:None, producing:None } }
+fn cx(g: &mut Game, frame: usize) -> Cx<'_> { Cx { g, frame, cursor:0, mana_source:None, entering:None, lineage:vec![], damage: None, asked_at:None, doer:None, producing:None, reached:None } }
 fn game() -> Game {
     let cards = Box::leak(Box::new(CardTable::new([&TOUCH,&BODY,&BATS,&PRIEST,&OOZE,&DANCE,&LOCUS,&ONCE,&FREE,&ONCE_TURN,&SAC_MANA,&LENDER])));
     let mut g=Game::new(cards,&Setup { decks:vec![vec![],vec![]], ..Default::default() });

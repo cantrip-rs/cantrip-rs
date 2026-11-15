@@ -13,7 +13,7 @@ static CREATURE: CardDef = CardDef { name: "Exile predicate creature", types: Ty
     power: Some(2), toughness: Some(2), ..CardDef::BLANK };
 
 fn cx(g: &mut Game) -> Cx<'_> { Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None,
-    lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None } }
+    lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None } }
 fn put(g: &mut Game, def: &'static CardDef, zone: Zone) -> ObjectId {
     let id = g.state.push_obj(Obj::new(g.cards.id_of(def), YOU, zone));
     g.state.zone_push(zone, id); g.state.see_statics(); id

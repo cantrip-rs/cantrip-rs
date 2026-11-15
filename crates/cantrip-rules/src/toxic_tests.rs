@@ -94,7 +94,7 @@ fn put(g: &mut Game, def: &'static CardDef, controller: PlayerId) -> ObjectId {
 }
 
 fn cx(g: &mut Game) -> Cx<'_> {
-    Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
+    Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 
 /// `source` deals `amount` damage to `target`, combat damage or not, as one event of its own.

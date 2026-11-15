@@ -19,7 +19,7 @@ fn board()->(Game,ObjectId) {
     let id=g.state.push_obj(Obj::new(cards.id_of(&PERMANENT),YOU,Zone::BATTLEFIELD));g.state.zone_push(Zone::BATTLEFIELD,id);g.state.see_statics();
     (g,id)
 }
-fn cx(g:&mut Game)->Cx<'_>{Cx {g,frame:0,cursor:0,mana_source:None,entering:None,lineage:Vec::new(),damage:None,asked_at:None,doer:None,producing:None}}
+fn cx(g:&mut Game)->Cx<'_>{Cx {g,frame:0,cursor:0,mana_source:None,entering:None,lineage:Vec::new(),damage:None,asked_at:None,doer:None,producing:None, reached:None}}
 fn step(g:&mut Game, player:PlayerId, step:Step) {
     g.state.update_turn(|t|{t.active=player;t.priority=player;t.set_step(step);});crate::settle::step_began(&mut cx(g),step);
 }

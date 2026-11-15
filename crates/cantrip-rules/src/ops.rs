@@ -6369,7 +6369,7 @@ mod tests {
     fn entering_counters(on_battlefield: &[&'static CardDef]) -> Vec<(&'static str, i32)> {
         let (mut game, held) = game_with(on_battlefield);
         let hand = Zone::hand(PlayerId(0));
-        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
         let mut out = Vec::new();
         for &id in &held {
             let mut entering = entering(id);
@@ -6411,7 +6411,7 @@ mod tests {
         let relic = held[1];
         let row = *game.state.obj(relic);
         let battlefield = game.state.battlefield().to_vec();
-        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
         let would = as_it_would_exist(&mut cx, &entering(relic));
         assert!(would.chars.is(CardType::Creature) && would.chars.is(CardType::Artifact) && would.lost);
         assert!(*cx.s().obj(relic) == row && cx.s().battlefield() == battlefield.as_slice());
@@ -6428,7 +6428,7 @@ mod tests {
     fn a_name_an_effect_set_is_the_last_known_name_of_a_permanent_that_left() {
         let (mut game, _) = game_with(&[&ANIMATOR]);
         let animator = game.state.battlefield()[0];
-        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
         cantrip_api::Game::add_effect(&mut cx, animator, animator, EffectKind::SetName("Everflame"), Duration::Indefinite);
         assert_eq!(cx.chars(animator).name, "Everflame");
         let card = move_to(&mut cx, animator, Zone::graveyard(PlayerId(0)));
@@ -6455,7 +6455,7 @@ mod tests {
     /// it" (persist's words, CR 702.79a), `on_battlefield` there first.
     fn minus_counters(on_battlefield: &[&'static CardDef]) -> Vec<(&'static str, i32)> {
         let (mut game, held) = game_with(on_battlefield);
-        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
         let mut out = Vec::new();
         for &id in &held {
             let new = put_onto_battlefield_with(&mut cx, &[(id, PlayerId(0), false)], ZoneReason::Other, &[(CounterKind::MinusOne, 1)]).expect("nothing is asked")[0];
@@ -6488,7 +6488,7 @@ mod tests {
         // The object left its zone before the effect resolves: its old reference no longer moves anything, but the
         // owner's library is still shuffled.
         let (mut game, source) = game_with_library();
-        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
         put_into_graveyard(&mut cx, &[source]);
         let rng = cx.s().rng;
         put_into_library(&mut cx, &[source], LibraryPlace::ShuffledIn);
@@ -6508,7 +6508,7 @@ mod tests {
         });
         game.state.zone_push(Zone::BATTLEFIELD, source);
         game.state.see_statics();
-        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
         let rng = cx.s().rng;
         let moved = put_into_library(&mut cx, &[source], LibraryPlace::ShuffledIn);
         assert_eq!(cx.s().obj(moved[0]).zone, Zone::exile(PlayerId(0)));
@@ -6520,7 +6520,7 @@ mod tests {
         game.state.zone_remove(hand, source);
         game.state.update_obj(source, |o| o.zone = Zone::PHASED_OUT);
         game.state.zone_push(Zone::PHASED_OUT, source);
-        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
         let rng = cx.s().rng;
         put_into_library(&mut cx, &[source], LibraryPlace::ShuffledIn);
         assert_eq!(cx.s().obj(source).zone, Zone::PHASED_OUT);
@@ -6534,7 +6534,7 @@ mod tests {
     fn tap_only_changes_a_live_untapped_permanent_on_the_battlefield() {
         let (mut game, held) = game_with(&[&ANIMATOR]);
         let permanent = game.state.battlefield()[0];
-        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
         cantrip_api::Game::tap(&mut cx, permanent);
         assert!(cx.s().obj(permanent).tapped);
         assert_eq!(cx.g.log.iter().filter(|r| matches!(r.event, Event::Tapped { permanent: id } if id == permanent)).count(), 1);

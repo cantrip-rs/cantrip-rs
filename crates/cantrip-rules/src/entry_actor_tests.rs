@@ -61,7 +61,7 @@ fn resolving(g: &mut Game, actor: PlayerId) -> usize {
     at
 }
 fn cx(g: &mut Game, frame: usize) -> Cx<'_> {
-    Cx { g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
+    Cx { g, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 fn putter(g: &Game, permanent: ObjectId) -> Option<PlayerId> {
     g.log.iter().find_map(|r| match r.event {

@@ -24,7 +24,7 @@ static WITNESS: CardDef = CardDef {
     ], ..CREATURE
 };
 fn cx(g: &mut Game) -> Cx<'_> {
-    Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
+    Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 fn game() -> Game {
     let table = Box::leak(Box::new(CardTable::new([&CREATURE, &STRIKER, &WITNESS, &BATTLE])));

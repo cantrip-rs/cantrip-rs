@@ -34,7 +34,7 @@ fn put(g:&mut Game,def:&'static CardDef,p:PlayerId,tapped:bool)->ObjectId {
     let id=g.state.push_obj(Obj::new(g.cards.id_of(def),p,Zone::BATTLEFIELD));g.state.zone_push(Zone::BATTLEFIELD,id);
     g.state.update_obj(id,|o|o.tapped=tapped);g.state.see_statics();id
 }
-fn cx(g:&mut Game)->Cx<'_>{Cx {g,frame:0,cursor:0,mana_source:None,entering:None,lineage:Vec::new(),damage:None,asked_at:None,doer:None,producing:None}}
+fn cx(g:&mut Game)->Cx<'_>{Cx {g,frame:0,cursor:0,mana_source:None,entering:None,lineage:Vec::new(),damage:None,asked_at:None,doer:None,producing:None, reached:None}}
 fn start(g:&mut Game)->Request {g.run();g.pending().cloned().unwrap()}
 fn choose(g:&mut Game,r:&Request,ids:Vec<ObjectId>){g.answer(r.id,r.player,Answer::Cards(ids)).unwrap();g.run();}
 fn direct(g:&mut Game){crate::turn::untap_step(&mut cx(g),YOU).expect("no choice needed");}

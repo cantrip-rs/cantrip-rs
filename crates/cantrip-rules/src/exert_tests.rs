@@ -12,7 +12,7 @@ fn game() -> (Game, ObjectId) {
     (g, id)
 }
 fn cx(g: &mut Game) -> Cx<'_> {
-    Cx { g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
+    Cx { g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 fn untap(g: &mut Game, active: PlayerId) {
     g.state.update_turn(|t| { t.active = active; t.set_step(Step::Untap); });

@@ -29,7 +29,7 @@ fn position(amount: i32, answers: Vec<Answer>) -> (RulesGame, ObjectId) {
 }
 fn cx(g: &mut RulesGame) -> Cx<'_> {
     Cx { g, frame:0, cursor:0, mana_source:None, entering:None, lineage:vec![], damage:None,
-        asked_at:None, doer:None, producing:None }
+        asked_at:None, doer:None, producing:None, reached:None }
 }
 fn action(kind: ActionKind) -> Answer { Answer::Act(Action::of(&ActionOption::simple(kind))) }
 fn offered(amount: i32, chosen: u32, cost: &Cost) -> Vec<ActionOption> {

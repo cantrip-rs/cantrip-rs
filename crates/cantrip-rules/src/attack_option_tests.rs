@@ -561,7 +561,7 @@ fn put_into_combat_is_not_an_exert_permission_or_a_paid_attack_cost() {
     let mut g = game();
     let source = put(&mut g, &EXERTER, YOU);
     g.state.update_turn(|t| { t.set_step(Step::DeclareAttackers); t.attacked = true; });
-    let mut cx = crate::Cx { g: &mut g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+    let mut cx = crate::Cx { g: &mut g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     crate::ops::enter_attacking(&mut cx, &[source], Target::Player(THEM));
     assert!(g.state.attackers.iter().any(|a| a.id == source), "creature entered attacking");
     assert_eq!(g.state.obj(source).marks.exerted_by, 0, "putting into combat does not exert");

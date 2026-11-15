@@ -73,7 +73,7 @@ fn cx(g: &mut Game) -> Cx<'_> {
         damage: None,
         asked_at: None,
         doer: None,
-        producing: None,
+        producing: None, reached: None,
     }
 }
 fn sync(g: &mut Game) {

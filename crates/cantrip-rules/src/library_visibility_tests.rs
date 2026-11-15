@@ -21,7 +21,7 @@ static C: CardDef = CardDef { name: "Library C", types: TypeSet::of(&[CardType::
 
 fn cx(game: &mut Game) -> Cx<'_> {
     Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None,
-        lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
+        lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 
 fn put(game: &mut Game, def: &'static CardDef, zone: Zone) -> ObjectId {
@@ -449,7 +449,7 @@ fn effect_reveal_scopes_nest_and_a_shuffle_hides_the_old_identity() {
     g.state.frame_push(Frame::new(FrameKind::BeginStep));
     let card = ids[0];
     fn scope(game: &mut Game) -> Cx<'_> { Cx { g: game, frame: 0, cursor: 0, mana_source: None, entering: None,
-        lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None } }
+        lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None } }
     scope(&mut g).begin_effect_reveal(YOU, &[card]);
     scope(&mut g).begin_effect_reveal(YOU, &[card]);
     assert!(g.revealed_in_hidden_zones().contains(&card));
@@ -479,7 +479,7 @@ fn reordered_effect_revealed_card_is_renewed_and_undo_restores_scope() {
     while !g.state.agenda.is_empty() { g.state.frame_remove(0); }
     g.state.frame_push(Frame::new(FrameKind::BeginStep));
     let mut scope = Cx { g: &mut g, frame: 0, cursor: 0, mana_source: None, entering: None,
-        lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     scope.begin_effect_reveal(YOU, &[a]);
     let before = scope.g.state.clone();
     let mark = scope.g.state.mark();

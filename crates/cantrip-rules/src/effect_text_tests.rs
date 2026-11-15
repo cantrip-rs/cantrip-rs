@@ -81,7 +81,7 @@ fn table() -> (Game, ObjectId, ObjectId, ObjectId) {
 
 fn cx(g: &mut Game) -> Cx<'_> {
     Cx { g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None,
-        lineage: vec![], damage: None, asked_at: None, doer: None, producing: None }
+        lineage: vec![], damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 
 fn change(cx: &mut Cx, source: ObjectId, from: Color, to: Color) {

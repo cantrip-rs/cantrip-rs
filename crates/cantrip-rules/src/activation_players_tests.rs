@@ -64,7 +64,7 @@ fn put(g:&mut RulesGame, def:&'static CardDef, controller:PlayerId, zone:Zone)->
     let id=g.state.push_obj(Obj::new(g.cards.id_of(def),controller,zone));
     g.state.zone_push(zone,id);g.state.see_statics();id
 }
-fn cx(g:&mut RulesGame)->Cx<'_> { Cx {g,frame:0,cursor:0,mana_source:None,entering:None,lineage:Vec::new(),damage:None,asked_at:None,doer:Some(THEM),producing:None} }
+fn cx(g:&mut RulesGame)->Cx<'_> { Cx {g,frame:0,cursor:0,mana_source:None,entering:None,lineage:Vec::new(),damage:None,asked_at:None,doer:Some(THEM),producing:None, reached:None} }
 fn options(g:&mut RulesGame, player:PlayerId, source:ObjectId)->Vec<u8> {
     priority_options(&mut cx(g),player).into_iter().filter(|o|o.source==Some(source)).map(|o|o.index).collect()
 }

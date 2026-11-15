@@ -57,7 +57,7 @@ static BEAR: CardDef = CardDef {
 };
 
 fn cx(game: &mut Game) -> Cx<'_> {
-    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
+    Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 
 /// The first Bear to die this turn had the granted ability just before it died - the history then held no death - so it
@@ -550,7 +550,7 @@ fn a_card_revealed_earlier_is_hidden_again_as_it_moves() {
     let (mut game, librarian, in_hand) = librarian_game();
     // Revealed as a player's action (`Cause::Player`) ...
     game.state.frame_push(Frame::new(FrameKind::Act { player: PlayerId(0) }));
-    let mut act = Cx { g: &mut game, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+    let mut act = Cx { g: &mut game, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     cantrip_api::Game::reveal(&mut act, PlayerId(0), &[in_hand]);
     assert!(matches!(game.log.last().map(|r| r.cause), Some(Cause::Player(_))));
     // ... and moved by something else, the rules' own (`Cause::Rules`).
@@ -654,7 +654,7 @@ fn a_forgotten_reveal_and_move_verb_is_found() {
     let serial = game.state.stack.last().expect("the ability").serial;
     game.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
     let frame = game.state.agenda.len() - 1;
-    let mut cx = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+    let mut cx = Cx { g: &mut game, frame, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
     cantrip_api::Game::reveal(&mut cx, PlayerId(0), &[in_hand]);
     crate::ops::verify_reveal_carried(&cx, in_hand);
 }

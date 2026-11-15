@@ -627,7 +627,7 @@ impl Game {
         } else {
             // A scenario's deal: seven each, in turn order, kept.
             for p in game.state.apnap().collect::<Vec<_>>() {
-                let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+                let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
                 for _ in 0..7 {
                     ops::draw(&mut cx, p);
                 }
@@ -696,7 +696,7 @@ impl Game {
             }
             // RX-1: a game as long as the engine records is a draw, between two frames, so that no frame is left half done.
             if self.log.len() >= self.max_events {
-                let mut cx = Cx { g: self, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+                let mut cx = Cx { g: self, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
                 ops::end_game(&mut cx, Outcome::Draw);
                 cx.record(Event::GameDrawn { reason: DrawReason::EventLimit });
                 return;
@@ -715,7 +715,7 @@ impl Game {
 
             let kind = self.state.agenda[at].kind;
             let (flow, asked_at) = {
-                let mut cx = Cx { g: self, frame: at, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+                let mut cx = Cx { g: self, frame: at, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
                 let flow = match kind {
                     FrameKind::Opening => turn::opening(&mut cx),
                     FrameKind::BeginStep => turn::begin_step(&mut cx),
@@ -814,13 +814,13 @@ impl Game {
                 Err(Stop::Cancel) => {
                     // Everything the announcement did is undone (CR 733.1) but the mana abilities that may not be
                     // (`takeback`), and the frame goes.
-                    let mut cx = Cx { g: self, frame: at, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+                    let mut cx = Cx { g: self, frame: at, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
                     takeback::take_back(&mut cx, mark, log_mark as usize, takeback::Since::frame(objects_mark));
                     self.state.frame_remove(at);
                 }
             }
             {
-                let mut cx = Cx { g: self, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+                let mut cx = Cx { g: self, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
                 library_visibility::sync(&mut cx);
             }
             self.forget();
@@ -957,7 +957,7 @@ impl Game {
         if self.state.is_over() || outcome == Outcome::InProgress {
             return;
         }
-        let mut cx = Cx { g: self, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: self, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
         ops::end_game(&mut cx, outcome);
     }
 
@@ -995,7 +995,7 @@ impl Game {
             }
         }
         if now {
-            let mut cx = Cx { g: self, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None };
+            let mut cx = Cx { g: self, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None };
             ops::concede(&mut cx, player);
         }
         // A staged run's question to the player who left is made by another, or not at all (CR 800.4f-h).
@@ -1365,6 +1365,9 @@ pub(crate) struct Cx<'a> {
     /// to whichever player's pool (Spectral Searchlight's "that player adds"). None outside such an ability, and while nothing
     /// could replace its mana.
     pub producing: Option<Vec<Produced>>,
+    /// The player the last "each player" step of this run reached (`Game::still_in_game`): a question put to them until the
+    /// next step reaches another is theirs as one of "each player" (`ask_core`), however many their step asks. None before any.
+    pub reached: Option<PlayerId>,
 }
 
 /// One addition of mana to a pool held as part of a production (`Cx::producing`): the player whose pool it goes to, its type,
@@ -1460,6 +1463,11 @@ impl<'a> Cx<'a> {
         // A player who has left the game makes no choice: a cost is not paid, and anything else is chosen by another player
         // (CR 800.4f-h). Any question this asks is one of the run's, replayed as the others are.
         if self.g.state.player(player).lost {
+            // But a player who concedes as an "each player" step that reached them, still in the game, asks them is no longer one
+            // of "each player" (CR 800.4a, `cantrip_mechanics::players`): no one is asked in their place.
+            if self.reached == Some(player) {
+                return Ok(Answer::Pass);
+            }
             return match cantrip_state::stand_in(&self.g.state, &kind, player) {
                 // No one is asked: a procedure that can tell asks through `ask_rule`.
                 cantrip_state::StandIn::Unpaid | cantrip_state::StandIn::NotAsked => Ok(Answer::Pass),
@@ -2293,7 +2301,9 @@ impl cantrip_api::Game for Cx<'_> {
     }
 
     fn still_in_game(&mut self, player: PlayerId) -> bool {
-        self.concessions_here();
+        // A concession at this point of the run is made at the question it was made at (`ask_core`), not at a step that comes
+        // before it (CR 104.3a).
+        self.reached = Some(player);
         !self.g.state.player(player).lost
     }
 

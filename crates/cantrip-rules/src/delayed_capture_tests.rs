@@ -7,7 +7,7 @@ const YOU: PlayerId = PlayerId(0);
 const THEM: PlayerId = PlayerId(1);
 
 fn cx(g: &mut Game) -> Cx<'_> {
-    Cx { g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: vec![], damage: None, asked_at: None, doer: None, producing: None }
+    Cx { g, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: vec![], damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 fn capture(g: &mut dyn Rules, when: DelayedWhen, source: ObjectId, controller: PlayerId, ability: AbilityRef, subject: Target, members: &[ObjectId]) {
     g.delayed_trigger_with(when, source, controller, ability, subject, members);

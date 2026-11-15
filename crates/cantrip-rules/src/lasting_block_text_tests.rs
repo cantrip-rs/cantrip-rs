@@ -33,7 +33,7 @@ fn block_restriction_keeps_source_words_instead_of_the_affected_creatures_words(
         let attacker = put(&RED, PlayerId(0));
         let unaffected = put(&RED, PlayerId(0));
         let red = put(&RED, PlayerId(1)); let blue = put(&BLUE, PlayerId(1)); let green = put(&GREEN, PlayerId(1));
-        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: vec![], damage: None, asked_at: None, doer: None, producing: None };
+        let mut cx = Cx { g: &mut game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: vec![], damage: None, asked_at: None, doer: None, producing: None, reached: None };
         let change = |cx: &mut Cx, id, from, to| cantrip_api::Game::add_effect(cx, id, id,
             EffectKind::ChangeText { from: Word::Color(from), to: Word::Color(to) }, Duration::Indefinite);
         if changed_before { change(&mut cx, source, Color::Red, Color::Blue); }

@@ -12,7 +12,7 @@ fn board() -> (Game, ObjectId) {
     g.state.frame_push(Frame::new(FrameKind::Act { player: PlayerId(0) }));
     (g, source)
 }
-fn cx(g: &mut Game) -> Cx<'_> { Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None } }
+fn cx(g: &mut Game) -> Cx<'_> { Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None } }
 fn ask(g: &mut Game, source: ObjectId, least: u32, most: u32) -> Result<u32, Suspend> {
     cantrip_mechanics::choose::number(&mut cx(g), PlayerId(0), source, least, most, "Put counters")
 }

@@ -17,7 +17,7 @@ fn position(snow: bool) -> (Game, ObjectId) {
     (g, id)
 }
 fn cx(g: &mut Game, source: ObjectId) -> Cx<'_> {
-    Cx { g, frame: 0, cursor: 0, mana_source: Some(source), entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
+    Cx { g, frame: 0, cursor: 0, mana_source: Some(source), entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 #[test]
 fn snow_source_mana_pays_a_snow_symbol() {

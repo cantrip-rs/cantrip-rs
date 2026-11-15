@@ -25,7 +25,7 @@ fn four_types(q: &dyn Query, _: &Asker, ids: &[ObjectId]) -> bool {
 }
 static BATTLE: ExileSelection = ExileSelection { candidates: battlefield, valid: any };
 static GRAVE: ExileSelection = ExileSelection { candidates: graveyard, valid: four_types };
-fn cx(g: &mut RulesGame) -> Cx<'_> { Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: vec![], damage: None, asked_at: None, doer: None, producing: None } }
+fn cx(g: &mut RulesGame) -> Cx<'_> { Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: vec![], damage: None, asked_at: None, doer: None, producing: None, reached: None } }
 fn position(answers: Vec<Answer>) -> (RulesGame, ObjectId, ObjectId, ObjectId) {
     static TABLE: OnceLock<CardTable> = OnceLock::new();
     let cards = TABLE.get_or_init(|| CardTable::new([&BODY,&REPLACE,&HYBRID_A,&HYBRID_B]));

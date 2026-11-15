@@ -77,7 +77,7 @@ fn board_with(def: &'static CardDef) -> (Game, ObjectId, ObjectId) {
     (g, source, creature)
 }
 fn cx(g: &mut Game) -> Cx<'_> {
-    Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None }
+    Cx { g, frame: 0, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), damage: None, asked_at: None, doer: None, producing: None, reached: None }
 }
 fn payment(g: &mut Game, source: ObjectId, subject: ObjectId) -> Request {
     assert!(cantrip_api::Game::may_pay(&mut cx(g), PAYER, source, subject, put_counters(CounterKind::MinusOne, 1), &ASK).is_err());

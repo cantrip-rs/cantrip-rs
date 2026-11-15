@@ -19,7 +19,7 @@ fn setup()->Game{
     g.state.update_turn(|t|{t.number=2;t.active=YOU;t.priority=YOU;});g
 }
 fn put(g:&mut Game,d:&'static CardDef,p:PlayerId)->ObjectId{let id=g.state.push_obj(Obj::new(g.cards.id_of(d),p,Zone::BATTLEFIELD));g.state.zone_push(Zone::BATTLEFIELD,id);g.state.see_statics();id}
-fn cx(g:&mut Game)->Cx<'_>{Cx {g,frame:0,cursor:0,mana_source:None,entering:None,lineage:Vec::new(),damage:None,asked_at:None,doer:None,producing:None}}
+fn cx(g:&mut Game)->Cx<'_>{Cx {g,frame:0,cursor:0,mana_source:None,entering:None,lineage:Vec::new(),damage:None,asked_at:None,doer:None,producing:None, reached:None}}
 fn begin(g:&mut Game,player:PlayerId,step:Step){g.state.update_turn(|t|{t.active=player;t.priority=player;t.set_step(step);});assert!(matches!(turn::begin_step(&mut cx(g)),Ok(Flow::Done)));}
 fn began(g:&Game,step:Step)->bool{g.history().this_turn().iter().any(|r|matches!(r.event,Event::StepBegan{step:s} if s==step))}
 #[test]
