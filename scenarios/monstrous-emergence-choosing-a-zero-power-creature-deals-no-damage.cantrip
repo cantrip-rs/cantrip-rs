@@ -1,0 +1,44 @@
+# Monstrous Emergence: "damage equal to the power of the creature you chose" (CR 120.3, 608.2h): Bot1 chooses its Ornithopter (0/2),
+# the only creature it controls, so the spell deals 0 damage to Bot2's Grizzly Bears (CR 120.8: 0 damage is not dealt) and the Bears
+# has no damage marked. The beheld creature's power, 0, is what counts - not at least one.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Ornithopter
+Monstrous Emergence
+Forest x3
+Forest x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Monstrous Emergence.Cast(Target: Grizzly Bears)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Battlefield.Ornithopter.Damage = 0
+Bot1.Graveyard = Monstrous Emergence
+Stack.Count = 0

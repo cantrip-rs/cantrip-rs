@@ -1,0 +1,47 @@
+# Monstrous Emergence: "choose a creature you control" (CR 701.4a): Bot1 chooses its Elvish Mystic (1/1) on the battlefield - only chosen, nothing is revealed and the
+# Mystic stays - and the spell deals damage equal to its power, 1, to Bot2's Grizzly Bears (2/2), which survives with 1 damage. The amount is the beheld creature's power, not
+# the target's or a fixed number. The Bears is Bot2's creature, which is not one Bot1 controls, so it is not offered to be chosen.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Elvish Mystic
+Monstrous Emergence
+Forest x3
+Forest x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Monstrous Emergence.Cast(Target: Grizzly Bears)
+! Bot1.Choose(Grizzly Bears)
+Bot1.Choose(Elvish Mystic)
+? Bot1.Revealed = (absent)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Grizzly Bears.Damage = 1
+Bot1.Battlefield.Elvish Mystic.Damage = 0
+Bot1.Graveyard = Monstrous Emergence

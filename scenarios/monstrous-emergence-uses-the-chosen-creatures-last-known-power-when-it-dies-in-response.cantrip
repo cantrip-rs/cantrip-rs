@@ -1,0 +1,53 @@
+# Monstrous Emergence's ruling (2024-09-20): "If that creature is no longer on the battlefield when Monstrous Emergence resolves, use that creature's power as it last
+# existed on the battlefield" (CR 608.2h). Bot1 chooses its Elvish Mystic (1/1), and Bot2 kills it in response with a Lightning Bolt. The spell still resolves and deals 1
+# damage, the Mystic's last-known power, to Bot2's Grizzly Bears (2/2), which survives.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Elvish Mystic
+Monstrous Emergence
+Forest x3
+Forest x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Grizzly Bears
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Monstrous Emergence.Cast(Target: Grizzly Bears)
+Bot1.Choose(Elvish Mystic)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Target: Elvish Mystic)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Elvish Mystic
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Grizzly Bears.Damage = 1
+Bot1.Graveyard = Monstrous Emergence; Elvish Mystic

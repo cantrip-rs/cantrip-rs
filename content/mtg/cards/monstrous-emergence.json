@@ -1,0 +1,6 @@
+{
+  "name": "Monstrous Emergence",
+  "manaCost": "{1}{G}",
+  "type": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, choose a creature you control or reveal a creature card from your hand.\nMonstrous Emergence deals damage equal to the power of the creature you chose or the card you revealed to target creature."
+}
