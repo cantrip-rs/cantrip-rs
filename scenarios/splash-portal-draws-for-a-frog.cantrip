@@ -1,0 +1,40 @@
+# Splash Portal on a Frog: Splash Lasher ({3}{U}, a Frog Wizard) is blinked on turn 3 and "that creature is a Frog", so a card is drawn.
+# Its enters ability (up to one target creature) is declined each time, so nothing else changes.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Splash Lasher
+Splash Portal
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Splash Lasher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Splash Portal.Cast(Bot1.Battlefield.Splash Lasher)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 4

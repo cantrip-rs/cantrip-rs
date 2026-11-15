@@ -1,0 +1,37 @@
+# Bot2's Ornithopter is not a creature Bot1 controls, so Splash Portal refuses it; Bot1's own Ornithopter is a legal target. An Artifact
+# Creature - Thopter is not a Bird, Frog, Otter or Rat: it returns and nothing is drawn (the hand stays at the three Islands and the turn-3 draw).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Ornithopter
+Splash Portal
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+! Bot1.Hand.Splash Portal.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Hand.Splash Portal.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Battlefield.Ornithopter.SummoningSick = true
+Bot2.Battlefield.Count = 1
+Exile.Count = 0

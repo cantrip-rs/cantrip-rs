@@ -1,0 +1,36 @@
+# Splash Portal exiles Bot1's Thieving Otter and returns it, and "if that creature is a Bird, Frog, Otter, or Rat, draw a card": the Otter
+# is one, so a card is drawn (hand: two Islands and the drawn Island). The Otter is a new object (CR 400.7), back under Bot1's control.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Thieving Otter
+Splash Portal
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Thieving Otter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Splash Portal.Cast(Bot1.Battlefield.Thieving Otter)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Thieving Otter.SummoningSick = true
+Bot1.Graveyard = Splash Portal; Black Lotus
+Exile.Count = 0

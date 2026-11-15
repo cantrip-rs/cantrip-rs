@@ -1,0 +1,32 @@
+# Black Lotus pays for Otterball Antics ({U}, an Otter token) and Splash Portal ({1}{U}). The token is exiled and ceases to exist
+# (CR 111.7, 400.7), so no Otter returns and "that creature" is nothing to draw for: the hand stays three Islands.
+
+[Bot1 Deck]
+Black Lotus
+Otterball Antics
+Splash Portal
+Island
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Otterball Antics.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Otter Token.Subtypes = Otter
+Bot1.Hand.Splash Portal.Cast(Bot1.Battlefield.Otter Token)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Battlefield.Count = 0
+Exile.Count = 0

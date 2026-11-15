@@ -1,0 +1,47 @@
+# Splash Portal draws a card "if that creature is a Bird, Frog, Otter, or Rat". A Bird (Plumecreed Escort, turn 3) and a Rat (Shoreline
+# Looter, turn 5) each draw one card, so every creature type of the list but Frog is covered here (Frog and Otter in other scenarios).
+# Lotus and two Moxen pay for both creatures on turn 1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Plumecreed Escort
+Shoreline Looter
+Splash Portal
+Splash Portal
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Plumecreed Escort.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Shoreline Looter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Splash Portal.Cast(Bot1.Battlefield.Plumecreed Escort)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Splash Portal.Cast(Bot1.Battlefield.Shoreline Looter)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 4
