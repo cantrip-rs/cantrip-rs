@@ -16,7 +16,7 @@ use cantrip_api::*;
 /// before, a copy among them (CR 702.192a, 707.10). A spell that was countered or had no legal target did not resolve.
 fn is_the_first_to_resolve(q: &dyn Query, item: &StackItem) -> bool {
     !q.history().all().iter().any(|r| {
-        matches!(r.event, Event::Resolved { source, ability }
+        matches!(r.event, Event::Resolved { source, ability, .. }
             if ability.is_spell() && q.obj(source).controller == item.controller && crate::same_name(q, source, item.object))
     })
 }

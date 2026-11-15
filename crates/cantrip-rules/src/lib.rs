@@ -1180,7 +1180,7 @@ impl Game {
                     if chain.contains(&by.object) { by.text = self.cards.linked_card(ability.card); }
                 }
                 Event::AbilityActivated { source, ability, .. }
-                | Event::Resolved { source, ability }
+                | Event::Resolved { source, ability, .. }
                 | Event::Triggered { source, ability }
                 | Event::ModesChosen { source, ability, .. }
                 | Event::Done { source, ability, .. } => patch(*source, ability),

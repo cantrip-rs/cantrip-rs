@@ -272,7 +272,7 @@ pub(crate) fn verify_reveal_carried(cx: &Cx, id: ObjectId) {
                  `move_together_revealed`, `bring_into_hand_revealed`, `discard_revealed`; CR 701.20a, 603.10a)",
                 cx.g.name(id)
             ),
-            Event::Resolved { source, ability } if matches!(cause, Cause::Ability { source: s, ability: a, .. } if source == s && ability == a) => return,
+            Event::Resolved { source, ability, .. } if matches!(cause, Cause::Ability { source: s, ability: a, .. } if source == s && ability == a) => return,
             _ => {}
         }
     }

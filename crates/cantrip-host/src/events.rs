@@ -249,7 +249,7 @@ impl Tracker {
                 self.run = Some((record.cause, next + out.len() as u64));
             }
             // An ability that has resolved is told of where it did, after the entries its effect made (CR 608.2m).
-            if let Event::Resolved { source, ability } = record.event {
+            if let Event::Resolved { source, ability, .. } = record.event {
                 let resolved = self
                     .stack
                     .iter()

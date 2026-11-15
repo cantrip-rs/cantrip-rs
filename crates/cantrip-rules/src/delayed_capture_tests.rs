@@ -292,7 +292,7 @@ fn delayed_capture_stack_copy_and_tree_goto_keep_both_roles() {
         fork.answer(r.id, r.player, Answer::Pass).unwrap();
     }
     assert!(fork.state.stack.is_empty()); assert_eq!(fork.state.delayed.len(), 1);
-    assert_eq!(fork.log.iter().filter(|r| matches!(r.event, Event::Resolved { source: s, ability } if s == source && ability == item.ability)).count(), 2);
+    assert_eq!(fork.log.iter().filter(|r| matches!(r.event, Event::Resolved { source: s, ability, .. } if s == source && ability == item.ability)).count(), 2);
     let after = fork.checkpoint(); let after_state = fork.state.clone(); let after_log = fork.log.clone();
     fork.goto(root); assert!(fork.state == before); assert_eq!(fork.log, before_log);
     fork.goto(after); assert!(fork.state == after_state); assert_eq!(fork.log, after_log);

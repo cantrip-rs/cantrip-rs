@@ -594,7 +594,7 @@ impl<'a> History<'a> {
     pub fn resolutions(&self, source: ObjectId, ability: AbilityRef) -> usize {
         self.this_turn()
             .iter()
-            .filter(|r| matches!(r.event, Event::Resolved { source: s, ability: a } if s == source && a == ability))
+            .filter(|r| matches!(r.event, Event::Resolved { source: s, ability: a, .. } if s == source && a == ability))
             .count()
     }
 

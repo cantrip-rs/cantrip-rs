@@ -697,7 +697,7 @@ fn resolve_inner(cx: &mut Cx, summarize_terminal_mana: bool) -> R<Flow> {
                 if cant_enchant || ops::instant_or_sorcery_entering(cx, item.object, entering.transformed) {
                     leave_stack(cx, std::slice::from_ref(&item), ZoneReason::Resolve);
                     let card = cx.s().obj(item.object).card;
-                    cx.record(Event::Resolved { source: item.object, ability: AbilityRef::spell(card) });
+                    cx.record(Event::Resolved { source: item.object, ability: AbilityRef::spell(card), serial: item.serial });
                     return Ok(Flow::Done);
                 }
                 ops::move_together(
@@ -753,7 +753,7 @@ fn resolve_inner(cx: &mut Cx, summarize_terminal_mana: bool) -> R<Flow> {
             // It has resolved (CR 608.2, 608.3), for the history: paradigm's "the first time a spell you control with this
             // spell's name has resolved this game" (CR 702.192a).
             let card = cx.s().obj(item.object).card;
-            cx.record(Event::Resolved { source: item.object, ability: AbilityRef::spell(card) });
+            cx.record(Event::Resolved { source: item.object, ability: AbilityRef::spell(card), serial: item.serial });
         }
         StackKind::Activated | StackKind::Triggered => {
             // The ability's condition and instructions are its own text, as it was put on the stack (CR 113.7a,
@@ -769,7 +769,7 @@ fn resolve_inner(cx: &mut Cx, summarize_terminal_mana: bool) -> R<Flow> {
                     AbilityDef::Static(_) | AbilityDef::PlayRule(_) | AbilityDef::RegenerationBan(_) | AbilityDef::BlockAllowance(_) => unreachable!("a static ability is never on the stack"),
                 })?;
                 // It has resolved (CR 608.2m: "the first time this ability has resolved this turn").
-                cx.record(Event::Resolved { source: item.object, ability: item.ability });
+                cx.record(Event::Resolved { source: item.object, ability: item.ability, serial: item.serial });
             }
             // It leaves the stack as it finishes resolving (CR 608.2n), found by its serial: what it did may have taken an
             // item below it off the stack (Ertai Resurrected countering an ability), moving it down. An ability that ended

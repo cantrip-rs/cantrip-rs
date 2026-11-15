@@ -228,7 +228,7 @@ fn in_draw_step_of(n: u32) -> impl Fn(&Game) -> bool {
 fn triggered_in(game: &Game, tomb: ObjectId) -> Vec<u32> {
     game.log
         .iter()
-        .filter(|r| matches!(r.event, Event::Resolved { source, ability } if source == tomb && ability.is_delayed()))
+        .filter(|r| matches!(r.event, Event::Resolved { source, ability, .. } if source == tomb && ability.is_delayed()))
         .map(|r| r.turn)
         .collect()
 }

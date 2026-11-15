@@ -426,8 +426,12 @@ pub enum Event {
     /// An activated or triggered ability of this object finished resolving (CR 608.2m), or, with `AbilityRef::spell`, this
     /// spell did (CR 608.2, 608.3): a copy too, and a permanent spell once it is on the battlefield; a spell that was countered
     /// or had no legal target did not resolve (CR 608.2b). Paradigm's "the first time a spell you control with this spell's
-    /// name has resolved this game" reads it.
-    Resolved { source: ObjectId, ability: AbilityRef },
+    /// name has resolved this game" reads it. `serial` is the item that resolved (`StackItem::serial`): which of an ability's
+    /// instances on the stack it was, since one may leave the stack without resolving and with no record (a countered
+    /// ability ceases to exist, CR 701.6a). Information noted as an activated ability resolves, about that activation (CR
+    /// 607.2e: Ice Cauldron's "note the type and amount of mana spent to pay this activation cost"), is the activation of
+    /// this serial (`History::ability_cost_objects`).
+    Resolved { source: ObjectId, ability: AbilityRef, serial: u32 },
     /// A triggered ability of this object triggered and was put on the stack: what "triggers only N times each turn" counts.
     Triggered { source: ObjectId, ability: AbilityRef },
     /// `player` chose the modes of a modal spell or ability of this object (CR 601.2b, 602.2b, 603.3c, 700.2), as a
