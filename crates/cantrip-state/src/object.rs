@@ -2633,6 +2633,12 @@ pub enum ManaRestriction {
     /// "If that mana is spent on a creature spell, it gains haste until end of turn" (CR 106.6; Arena of Glory): it may
     /// be spent on anything, and does that to a creature spell it pays for.
     GainsHaste,
+    /// "If that mana is spent on a [subtype] creature spell, it gains haste until end of turn" (CR 106.6; Carnelian Orb of
+    /// Dragonkind's Dragon): an effect of the mana itself, no triggered ability (CR 603.1), so nothing goes on the stack. It
+    /// may be spent on anything, as `GainsHaste`'s may, and gives haste only to a creature spell with one of these subtypes as
+    /// it is on the stack while the mana is spent (CR 601.2h), the subtypes read through the source's words as the mana is
+    /// added (CR 612.2, `restriction_from`) and kept with the mana.
+    SubtypeGainsHaste(SubtypeSet),
     /// "Spend this mana only to cast a legendary spell, and that spell can't be countered" (CR 106.6, 701.6; Delighted
     /// Halfling): a limit and an effect, each independent of the other, carried by the mana itself.
     LegendaryUncounterable,
@@ -2978,7 +2984,7 @@ impl ManaRestriction {
         if let ManaRestriction::Subtypes(SubtypeSpells { creature: true, abilities: Some(AbilitiesOf::Permanents), .. }) = self {
             return false;
         }
-        if let ManaRestriction::Subtypes(_) | ManaRestriction::ManaValue(_) | ManaRestriction::Card(_) = self {
+        if let ManaRestriction::Subtypes(_) | ManaRestriction::SubtypeGainsHaste(_) | ManaRestriction::ManaValue(_) | ManaRestriction::Card(_) = self {
             return true;
         }
         if let ManaRestriction::AnyOf(_) = self {
@@ -3001,9 +3007,16 @@ impl ManaRestriction {
         false
     }
 
-    /// Whether it limits mana by the subtypes of the spell it pays for, which only then need working out.
+    /// Whether it limits mana by the subtypes of the spell it pays for, or does something only to a spell of some subtypes
+    /// (`SubtypeGainsHaste`), which only then need working out.
     pub fn names_subtypes(self) -> bool {
-        matches!(self, ManaRestriction::Subtypes(_))
+        matches!(self, ManaRestriction::Subtypes(_) | ManaRestriction::SubtypeGainsHaste(_))
+    }
+
+    /// Whether it limits what the mana may be spent on at all: mana that only does something to what it pays for, and may
+    /// pay for anything (`GainsHaste`, `SubtypeGainsHaste`), is spent as ordinary mana is (CR 106.6).
+    pub fn limits(self) -> bool {
+        !matches!(self, ManaRestriction::GainsHaste | ManaRestriction::SubtypeGainsHaste(_))
     }
 
     /// The card it limits mana to (`Card`), whose spell is the only one it pays for.
@@ -3044,7 +3057,7 @@ impl ManaRestriction {
             // "Can't be spent to cast spells from your hand": everything but casting a spell from the hand.
             (ManaRestriction::NotSpellsFrom(zone), ManaPayment::Spell { from, .. }) => from != zone,
             (ManaRestriction::NotSpellsFrom(_), _) => true,
-            (ManaRestriction::GainsHaste, _) => true,
+            (ManaRestriction::GainsHaste | ManaRestriction::SubtypeGainsHaste(_), _) => true,
             (ManaRestriction::LegendaryUncounterable | ManaRestriction::LegendarySpells, ManaPayment::Spell { legendary, .. }) => legendary,
             (ManaRestriction::YourCommander, ManaPayment::Spell { commander, .. }) => commander,
             (ManaRestriction::Card(only), ManaPayment::Spell { card, .. }) => only != ObjectId::NONE && card == only,
@@ -3069,14 +3082,33 @@ impl ManaRestriction {
         }
     }
 
-    /// What spending this mana on a spell does to it (CR 106.6): `MANA_GIVES_HASTE`, `MANA_MAKES_UNCOUNTERABLE`.
+    /// What spending this mana on a spell may do to it (CR 106.6): `MANA_GIVES_HASTE`, `MANA_MAKES_UNCOUNTERABLE`. What it
+    /// does to the one it is spent on is `effects_on`.
     pub fn effects(self) -> u8 {
         match self {
-            ManaRestriction::GainsHaste => MANA_GIVES_HASTE,
+            ManaRestriction::GainsHaste | ManaRestriction::SubtypeGainsHaste(_) => MANA_GIVES_HASTE,
             ManaRestriction::LegendaryUncounterable => MANA_MAKES_UNCOUNTERABLE,
             ManaRestriction::Subtypes(s) if s.uncounterable => MANA_MAKES_UNCOUNTERABLE,
             _ => 0,
         }
+    }
+
+    /// What spending this mana on `payment` does to it (CR 106.6): `effects`, but for `SubtypeGainsHaste` haste only for a
+    /// creature spell with one of its subtypes, as it is on the stack (CR 601.2h) - `payment`'s subtypes filled
+    /// (`effects_ask_payment`) - and nothing for anything else.
+    pub fn effects_on(self, payment: &ManaPayment) -> u8 {
+        match (self, payment) {
+            (ManaRestriction::SubtypeGainsHaste(wanted), ManaPayment::Spell { types, subtypes, .. }) => {
+                if types.has(CardType::Creature) && wanted.intersects(*subtypes) { MANA_GIVES_HASTE } else { 0 }
+            }
+            (ManaRestriction::SubtypeGainsHaste(_), _) => 0,
+            _ => self.effects(),
+        }
+    }
+
+    /// Whether what it does depends on what it is spent on (`effects_on`), which is then worked out.
+    pub fn effects_ask_payment(self) -> bool {
+        matches!(self, ManaRestriction::SubtypeGainsHaste(_))
     }
 
     /// The name a scenario's `Spend:` and the state dump write it by: the limit and the effect, as the C# engine does.
@@ -3093,6 +3125,11 @@ impl ManaRestriction {
         // The card is named by whoever can see it (the state dump: "Card Lightning Bolt").
         if let ManaRestriction::Card(_) = self {
             return "Card".to_string();
+        }
+        // "DragonCreatureSpellsGainHaste".
+        if let ManaRestriction::SubtypeGainsHaste(subtypes) = self {
+            let types: Vec<String> = subtypes.iter().map(|t| t.name().replace(' ', "")).collect();
+            return format!("{}CreatureSpellsGainHaste", types.join("Or"));
         }
         if let ManaRestriction::Subtypes(s) = self {
             let types: Vec<String> = s.subtypes.iter().map(|t| t.name().replace(' ', "")).collect();
@@ -3144,7 +3181,13 @@ impl ManaRestriction {
             };
             return Some(ManaRestriction::ManaValue(ManaValueSpells { at_least: n.parse().ok()?, or_x }));
         }
-        // A subtype restriction: "DragonSpells", "DragonOrOmenSpells", "ElfCreatureSpells", with "CantBeCountered".
+        // A subtype restriction: "DragonSpells", "DragonOrOmenSpells", "ElfCreatureSpells", with "CantBeCountered"; or the
+        // haste of a subtype's creature spells: "DragonCreatureSpellsGainHaste".
+        if let [one] = text.as_slice()
+            && let Some(body) = one.strip_suffix("creaturespellsgainhaste")
+        {
+            return Some(ManaRestriction::SubtypeGainsHaste(names(body)?));
+        }
         let uncounterable = text.iter().any(|w| w == "cantbecountered");
         if text.len() != 1 + uncounterable as usize {
             return None;
@@ -3599,6 +3642,40 @@ mod tests {
         assert!(plaza.is_known() && plaza != halfling);
         assert_eq!(ManaRestriction::parse("LegendarySpells".split_whitespace()), Some(plaza));
         assert_eq!(ManaRestriction::parse("LegendarySpells, CantBeCountered".split_whitespace()), Some(halfling));
+    }
+
+    /// "If that mana is spent on a Dragon creature spell, it gains haste until end of turn" (CR 106.6; Carnelian Orb of
+    /// Dragonkind): it pays for anything, and gives haste only to a creature spell with the subtype.
+    #[test]
+    fn mana_that_gives_a_subtypes_creature_spells_haste_pays_for_anything() {
+        let spell = |types: &[CardType], subtypes: &[Subtype]| ManaPayment::Spell {
+            types: TypeSet::of(types),
+            subtypes: SubtypeSet::of(subtypes),
+            legendary: false,
+            mana_value: 3,
+            x: false,
+            from: ZoneKind::Hand,
+            commander: false,
+            card: ObjectId::NONE,
+        };
+        let restriction = ManaRestriction::SubtypeGainsHaste(SubtypeSet::of(&[Subtype::Dragon]));
+        let dragon = spell(&[CardType::Creature], &[Subtype::Dragon]);
+        let goblin = spell(&[CardType::Creature], &[Subtype::Goblin]);
+        let kindred = spell(&[CardType::Kindred, CardType::Sorcery], &[Subtype::Dragon]);
+        for payment in [dragon, goblin, kindred, ManaPayment::Other, ManaPayment::PlayerAbility] {
+            assert!(restriction.may_pay(&payment));
+        }
+        assert_eq!(restriction.effects_on(&dragon), MANA_GIVES_HASTE);
+        assert_eq!(restriction.effects_on(&goblin), 0);
+        assert_eq!(restriction.effects_on(&kindred), 0);
+        assert_eq!(restriction.effects_on(&ManaPayment::Other), 0);
+        assert_eq!(restriction.effects(), MANA_GIVES_HASTE);
+        assert!(restriction.effects_ask_payment() && restriction.names_subtypes() && !restriction.limits());
+        assert!(!ManaRestriction::GainsHaste.effects_ask_payment() && !ManaRestriction::GainsHaste.limits());
+        assert_eq!(ManaRestriction::GainsHaste.effects_on(&goblin), MANA_GIVES_HASTE);
+        assert!(restriction.is_known());
+        assert_eq!(restriction.name(), "DragonCreatureSpellsGainHaste");
+        assert_eq!(ManaRestriction::parse("DragonCreatureSpellsGainHaste".split_whitespace()), Some(restriction));
     }
 
     /// "Spend this mana only to cast your commander" (CR 106.6, 903.3d; Queen's Diamond): a spell that is the payer's own

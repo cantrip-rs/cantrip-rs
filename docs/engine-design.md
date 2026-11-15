@@ -2576,7 +2576,10 @@ type), `NonSpells(types)` only for casting a spell with none of the card types (
 of the Ancient Way's "a noncreature spell": an artifact creature spell is a creature spell), `ManaValue(ManaValueSpells)`
 only for casting a spell whose mana value on the stack is N or greater, X counted as announced and a split card's cast
 half alone, or, where it says so, whose mana cost has {X} (Ashling, Rimebound's 4; Troyan, Gutsy Explorer's 5 or {X}),
-`LegendarySpells` only for casting a legendary spell (Plaza of Heroes), and `NotNonartifactSpells`, `GainsHaste` and `LegendaryUncounterable` are the three single cards' own. A subtype
+`LegendarySpells` only for casting a legendary spell (Plaza of Heroes), and `NotNonartifactSpells`, `GainsHaste` and `LegendaryUncounterable` are the three single cards' own.
+`SubtypeGainsHaste(subtypes)` limits nothing and gives haste only to a creature spell with one of the subtypes (Carnelian
+Orb of Dragonkind's "a Dragon creature spell", CR 106.6): an effect of the mana, no trigger, so what it does is judged
+per mana as it is spent (`ManaRestriction::effects_on`, the spell's subtypes worked out for it). A subtype
 is any of hundreds, so the pool's list holds whatever restrictions the game made; those with no subtype or number are a named list
 (`ManaRestriction::NAMED`, which the build checks a card's `.only_for` against). A mana ability's restriction is made
 concrete as it is activated (`actions::restriction_from`): its subtype words read through its source's words (CR 612),

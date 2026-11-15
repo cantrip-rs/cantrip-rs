@@ -6018,7 +6018,7 @@ pub struct Available {
     grantors: Vec<ObjectId>,
     /// Restricted mana the pool and the mana sources hold, one entry per restriction (CR 106.6): its mana of stated kinds,
     /// and its mana of any one color a mana ability adds (Great Hall of the Biblioplex, Delighted Halfling). Each pays
-    /// only what `Available::covers_for` says it may. Mana that pays anything (`GainsHaste`) is in `fixed`.
+    /// only what `Available::covers_for` says it may. Mana that pays anything (`ManaRestriction::limits`) is in `fixed`.
     restricted: Vec<(ManaRestriction, [u32; 6], u32)>,
     /// The player may spend mana as though it were mana of any color for every payment (CR 609.4b: Mycosynth Lattice).
     any_color: bool,
@@ -6181,7 +6181,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
     let changers = cost_change_sources(cx);
     let mut restricted: Vec<(ManaRestriction, [u32; 6], u32)> = Vec::new();
     for (restriction, pool) in cx.s().restricted_of(player) {
-        if restriction == ManaRestriction::GainsHaste {
+        if !restriction.limits() {
             // Mana that pays anything is not a limit (CR 106.6): it is spent as ordinary mana is.
             for m in 0..6 {
                 fixed[m] += pool.0[m];
@@ -6192,7 +6192,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
     }
     let mut snow = Vec::new();
     for entry in cx.s().mana_from_of(player).filter(|e| e.snow) {
-        let restriction = entry.restriction.filter(|r| *r != ManaRestriction::GainsHaste);
+        let restriction = entry.restriction.filter(|r| r.limits());
         for m in 0..6 {
             let n = entry.pool.0[m];
             if n == 0 { continue; }
@@ -6312,7 +6312,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
                 fixed: def.adds.0,
                 k: u32::from(def.adds_any),
                 types: if def.adds_any > 0 { any_types(cx, id, player, def, by) } else { 0 },
-                restriction: def.restricted.filter(|&r| r != ManaRestriction::GainsHaste).map(|r| restriction_from(cx, id, r, by)),
+                restriction: def.restricted.filter(|r| r.limits()).map(|r| restriction_from(cx, id, r, by)),
                 cost: ManaCost { x: 0, ..cost.mana },
                 source: ability_payment(cx, id, chars.types, chars.subtypes, false),
                 extra: [0; 6],
@@ -6344,7 +6344,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
                         fixed: o.mana.0,
                         k: 0,
                         types: 0,
-                        restriction: o.restriction.filter(|&r| r != ManaRestriction::GainsHaste),
+                        restriction: o.restriction.filter(|r| r.limits()),
                         ..alternative
                     };
                     let types = replaced.produces(None);
@@ -14727,6 +14727,11 @@ fn cast_card(cx: &Cx, payer: PlayerId, spell: ObjectId) -> ObjectId {
 /// through the source's words (CR 612: Artificial Evolution makes Maelstrom of the Spirit Dragon's mana for Elf spells),
 /// and "the chosen type" is the creature type chosen for it as it entered (CR 607.2a, 614.12a), or none if none was.
 pub fn restriction_from(cx: &Cx, source: ObjectId, restriction: ManaRestriction, by: Option<Linked>) -> ManaRestriction {
+    // "If that mana is spent on a Dragon creature spell" (Carnelian Orb of Dragonkind): its subtypes read the same way.
+    if let ManaRestriction::SubtypeGainsHaste(subtypes) = restriction {
+        let words = cantrip_api::words(cx.s(), source);
+        return ManaRestriction::SubtypeGainsHaste(subtypes.iter().fold(SubtypeSet::NONE, |set, t| set.with(words.subtype(t))));
+    }
     let ManaRestriction::Subtypes(mut s) = restriction else { return restriction };
     if s.chosen {
         let chosen = cx.s().chosen_subtype(by.unwrap_or_else(|| cx.text_linked(source)));
@@ -14737,6 +14742,20 @@ pub fn restriction_from(cx: &Cx, source: ObjectId, restriction: ManaRestriction,
         s.subtypes = s.subtypes.iter().fold(SubtypeSet::NONE, |set, t| set.with(words.subtype(t)));
     }
     ManaRestriction::Subtypes(s)
+}
+
+/// What mana under `restriction` does to what it is spent on, paying for `source` (CR 106.6): what any such mana does
+/// (`ManaRestriction::effects`), or, for mana whose effect depends on it (`effects_ask_payment`: Carnelian Orb of
+/// Dragonkind's haste for a Dragon creature spell), what it does to this payment, the spell's subtypes worked out.
+fn spent_effects(cx: &Cx, player: PlayerId, source: ObjectId, purpose: Paying, restriction: ManaRestriction) -> u8 {
+    if !restriction.effects_ask_payment() {
+        return restriction.effects();
+    }
+    let payment = match purpose {
+        Paying::Casting if cx.s().obj(source).zone.is(ZoneKind::Stack) => spell_payment(cx, player, source, true),
+        _ => payment_for(cx, player, source, purpose),
+    };
+    restriction.effects_on(&payment)
 }
 
 /// The restricted mana `player` has that may pay for `source`, with its restriction.
@@ -14769,7 +14788,7 @@ fn take_mana(cx: &mut Cx, player: PlayerId, source: ObjectId, purpose: Paying, s
         for (restriction, _) in &restricted {
             let take = crate::takeback::spend(cx, player, Some(*restriction), mana, need, cantrip_state::ManaPick::Any, taken, record);
             if take > 0 {
-                used |= restriction.effects();
+                used |= spent_effects(cx, player, source, purpose, *restriction);
             }
             need -= take;
         }
@@ -15169,7 +15188,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
                         return Err(Stop::Cancel);
                     }
                     if let Some(r) = restriction {
-                        used |= r.effects();
+                        used |= spent_effects(cx, player, source, helpers.purpose, r);
                     }
                     paid.0[mana as usize] += got;
                     if index + 1 < count {
@@ -15217,7 +15236,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
                     if n == 0 { continue; }
                     if take_group(cx, player, group, n, &told, &mut taken, record) != n { return Err(Stop::Cancel); }
                     paid.0[group.mana as usize] += n;
-                    if let Some(r) = group.restriction { used |= r.effects(); }
+                    if let Some(r) = group.restriction { used |= spent_effects(cx, player, source, helpers.purpose, r); }
                 }
                 add_on_x(&mut on_x, Some(x));
                 break;
@@ -15319,7 +15338,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
                         let from = action.source.map(|source| (source, action.rider));
                         let group = ManaGroup { mana, snow: action.snow, restriction: action.restriction, from, n: 1 };
                         if take_group(cx, player, group, 1, &told, &mut taken, record) != 1 { return Err(Stop::Cancel); }
-                        if let Some(r) = action.restriction { used |= r.effects(); }
+                        if let Some(r) = action.restriction { used |= spent_effects(cx, player, source, helpers.purpose, r); }
                         paid.0[mana as usize] += 1;
                         if action.pay_snow { owed.snow -= 1; } else { spend_noting_x(any, &mut owed, mana, generic_paid, &convoking, &mut on_x); }
                         let mut left = owed;
@@ -15333,7 +15352,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
                         // Only mana of a restriction that may pay for this (CR 106.6): `validate` holds the answer
                         // to the options, which offer no other.
                         Some(r) => {
-                            used |= r.effects();
+                            used |= spent_effects(cx, player, source, helpers.purpose, r);
                             crate::takeback::spend(cx, player, Some(r), mana, 1, cantrip_state::ManaPick::Any, &mut taken, record);
                         }
                         // Mana of the source the option names, or of none a rule tells apart (CR 106.3).

@@ -841,6 +841,8 @@ public sealed partial class MainPage
 
         return effect switch
         {
+            ManaSpendEffectView.GainsHaste when filter == ManaSpendFilterView.None && subtypes.Count > 0 =>
+                text + $" A {CardActions.Subtypes(subtypes)} creature spell it is spent on gains haste until end of turn.",
             ManaSpendEffectView.GainsHaste => text + " A creature spell it is spent on gains haste until end of turn.",
             ManaSpendEffectView.CantBeCountered => text + " The spell it is spent on can't be countered.",
             _ => text,

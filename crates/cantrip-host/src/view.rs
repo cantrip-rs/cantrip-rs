@@ -144,6 +144,12 @@ pub fn restriction_view(restriction: ManaRestriction) -> (ManaSpendFilterView, M
         }
         ManaRestriction::NotNonartifactSpells => ManaSpendFilterView::NotNonartifactSpells,
         ManaRestriction::GainsHaste => ManaSpendFilterView::None,
+        // No limit; the subtypes beside its haste say which creature spells it gives haste to (Carnelian Orb of Dragonkind's
+        // Dragons).
+        ManaRestriction::SubtypeGainsHaste(named) => {
+            subtypes = named.iter().map(|t| t.name().to_string()).collect();
+            ManaSpendFilterView::None
+        }
         // Told apart on the wire by their effects.
         ManaRestriction::LegendaryUncounterable | ManaRestriction::LegendarySpells => ManaSpendFilterView::LegendarySpells,
         ManaRestriction::YourCommander => ManaSpendFilterView::YourCommander,
@@ -235,6 +241,14 @@ pub fn restriction_of(filter: ManaSpendFilterView, effect: ManaSpendEffectView, 
                 _ => None,
             },
         }));
+    }
+    // Haste for creature spells of the subtypes beside it, with no limit.
+    if (filter, effect) == (ManaSpendFilterView::None, ManaSpendEffectView::GainsHaste) && !subtypes.is_empty() {
+        let mut named = SubtypeSet::NONE;
+        for name in subtypes {
+            named = named.with(Subtype::named(name)?);
+        }
+        return Some(ManaRestriction::SubtypeGainsHaste(named));
     }
     let unions = ManaRestriction::ANY_OF.into_iter().map(ManaRestriction::AnyOf);
     ManaRestriction::NAMED.into_iter().map(|(r, _)| r).chain(unions).find(|&r| restriction_view(r) == (filter, effect, Vec::new(), 0))
@@ -2434,6 +2448,11 @@ mod tests {
         let (filter, effect, subtypes, mana_value) = restriction_view(cauldron);
         assert_eq!(filter, ManaSpendFilterView::Card);
         assert_eq!(restriction_of(filter, effect, &subtypes, mana_value, ObjectId(7)), Some(cauldron));
+        // Carnelian Orb of Dragonkind's: no limit, haste, and the subtype it gives haste for beside them.
+        let carnelian = ManaRestriction::SubtypeGainsHaste(SubtypeSet::of(&[Subtype::Dragon]));
+        let (filter, effect, subtypes, mana_value) = restriction_view(carnelian);
+        assert_eq!((filter, effect, subtypes.as_slice()), (ManaSpendFilterView::None, ManaSpendEffectView::GainsHaste, ["Dragon".to_string()].as_slice()));
+        assert_eq!(restriction_of(filter, effect, &subtypes, mana_value, ObjectId::NONE), Some(carnelian));
     }
 
     /// A power and toughness printed as stars are not a number on the printed card: the goyfs' sizes are their abilities'

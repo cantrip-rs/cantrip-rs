@@ -390,6 +390,8 @@ pub enum ManaSpendFilterView {
 pub enum ManaSpendEffectView {
     #[default]
     None,
+    /// A creature spell it pays for gains haste until end of turn - with no filter and subtypes beside it, only a creature
+    /// spell with one of them (`spend_subtypes`).
     GainsHaste,
     CantBeCountered,
 }
@@ -494,7 +496,8 @@ pub struct RestrictedManaView {
     pub filter: ManaSpendFilterView,
     pub effect: ManaSpendEffectView,
     /// For `SubtypeSpells` and `SubtypeCreatureSpells`: the subtypes, any one of which the spell must have; empty for a
-    /// chosen type never chosen, which no spell has.
+    /// chosen type never chosen, which no spell has. With no filter and `GainsHaste`: the subtypes a creature spell must
+    /// have one of to gain haste ("a Dragon creature spell"); empty for any creature spell.
     pub spend_subtypes: Vec<String>,
     /// For `ManaValueSpells` and `ManaValueOrXSpells`: the least mana value the spell may have; 0 otherwise.
     pub spend_mana_value: i32,

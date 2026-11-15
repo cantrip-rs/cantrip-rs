@@ -274,7 +274,10 @@ public sealed class CardActions
 
                 if (option.Effect == ManaSpendEffectView.GainsHaste)
                 {
-                    notes.Add("a creature spell it pays for gains haste");
+                    // With no filter, subtypes say which creature spells (Carnelian Orb of Dragonkind's Dragons).
+                    notes.Add(option.Filter == ManaSpendFilterView.None && option.SpendSubtypes is { Count: > 0 }
+                        ? $"a {Subtypes(option.SpendSubtypes)} creature spell it pays for gains haste"
+                        : "a creature spell it pays for gains haste");
                 }
                 else if (option.Effect == ManaSpendEffectView.CantBeCountered)
                 {
