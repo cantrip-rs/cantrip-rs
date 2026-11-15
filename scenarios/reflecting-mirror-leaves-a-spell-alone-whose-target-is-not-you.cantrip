@@ -1,0 +1,55 @@
+# Reflecting Mirror changes a spell's target only "if that target is you" - that spell's own target, as the ability
+# resolves. Bot1 casts Stream of Life (X 1) at itself, then Lightning Bolt at Bot2 on top of it, and reflects its own
+# Bolt, paying exactly twice its mana value (the two Moxen left, the pool empty after). The Mirror may target the Bolt (a
+# spell with a single target), but the Bolt's target is Bot2, so nothing changes and Bot2 takes the 3 damage. Were the
+# "if" ignored, or read off the Stream of Life under it, which does target Bot1, the Bolt would turn on Bot1, the only
+# other player.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Reflecting Mirror
+Forest
+Stream of Life
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Reflecting Mirror.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Stream of Life.Cast(Bot1; X: 1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Reflecting Mirror.Activate(Stack.Lightning Bolt)
+Bot1.Pass
+? Bot1.Mana =
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 17
+Bot1.Battlefield.Reflecting Mirror.Tapped = true
+Bot1.Graveyard = Stream of Life; Lightning Bolt

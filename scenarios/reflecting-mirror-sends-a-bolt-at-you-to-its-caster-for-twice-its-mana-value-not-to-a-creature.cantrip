@@ -1,0 +1,80 @@
+# Reflecting Mirror: "{X}, {T}: Change the target of target spell with a single target if that target is you. The new
+# target must be a player. X is twice the mana value of that spell." X is defined by the text (CR 107.3c): it is not
+# announced, and is determined with the total cost once the target spell is announced (CR 601.2f by way of 602.2b).
+# Bot2 casts Braingeyser with X 1 (mana value 3 on the stack, CR 202.3e) at Bot1, then Lightning Bolt (mana value 1) at
+# Bot1. Bot1 has four mana to pay with (Black Lotus and an untapped Mox): the Mirror can't target the Braingeyser, which
+# would cost six (it would cost four if its X were not counted), but can target the Bolt for exactly two - Black Lotus's
+# three blue leaves one. The Bolt's new target must be a player: Bot2's Ornithopter is a legal target for it but not
+# offered, so Bot2, the only other player, is taken without a question (CR 115.7a). The Braingeyser still draws Bot1 a card.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Sol Ring
+Reflecting Mirror
+Black Lotus
+Island x10
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Braingeyser
+Lightning Bolt
+Ornithopter
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Reflecting Mirror.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Braingeyser.Cast(Bot1; X: 1)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+! Bot1.Battlefield.Reflecting Mirror.Activate(Stack.Braingeyser; Mana: short)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Reflecting Mirror.Activate(Stack.Lightning Bolt)
+? Bot1.Mana = {U}
+Bot1.Pass
+! Bot1.Target
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 17
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Reflecting Mirror.Tapped = true
+Bot1.Hand.Count = 1
+Bot2.Graveyard = Braingeyser; Lightning Bolt

@@ -1,0 +1,68 @@
+# Reflecting Mirror in a game of three: the Mirror's controller changes the target (CR 115.7a), choosing among the other
+# players who are legal targets, never a creature ("The new target must be a player"). Bot2 casts Lightning Bolt at Bot1;
+# Bot1 reflects it for {2} and, of Bot2 and Bot3, sends it at Bot3 - Bot2's Ornithopter, a legal target for the Bolt, is
+# not offered. Were the Bolt's controller asked, Bot2 would choose.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Sol Ring
+Reflecting Mirror
+Black Lotus
+Island x10
+
+[Bot2 Deck]
+Island
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Island x16
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Reflecting Mirror.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Reflecting Mirror.Activate(Stack.Lightning Bolt)
+? Bot1.Mana = {U}
+Bot1.Pass
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot3)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot3.Life = 17
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Reflecting Mirror.Tapped = true
+Bot2.Graveyard = Lightning Bolt
