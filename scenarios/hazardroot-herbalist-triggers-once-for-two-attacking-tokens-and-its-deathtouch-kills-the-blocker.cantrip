@@ -1,0 +1,66 @@
+# Hazardroot Herbalist (1/4): "Whenever you attack, target creature you control gets +1/+0 until end of turn. If that creature is a
+# token, it also gains deathtouch until end of turn." Turn 1: Black Lotus and four Moxen pay for Esika's Chariot (two 2/2 Cats) and the
+# Herbalist. Turn 2 Bot2 casts Craw Wurm (6/4) off its own Black Lotus and Moxen. Turn 3 Bot1 attacks with both Cats: "whenever you
+# attack" triggers once (CR 508.3a, 603.2), not once per attacker, so only the targeted Cat becomes a 3/2 with deathtouch and the
+# other stays a 2/2 without it. The Wurm blocks the deathtouch Cat and is destroyed by its 3 damage (CR 702.2b, 704.5h) though its
+# toughness is 4; the Cat dies too. The unblocked Cat hits for 2 (Bot2 20 -> 18).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Esika's Chariot
+Hazardroot Herbalist
+Forest x13
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Pearl
+Craw Wurm
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Esika's Chariot.Cast
+Bot1.Hand.Hazardroot Herbalist.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Craw Wurm.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Cat Token#1 > Bot2; Cat Token#2 > Bot2)
+Bot1.Target(Bot1.Battlefield.Cat Token#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cat Token#1.Power = 3
+? Bot1.Battlefield.Cat Token#1.Keywords = Deathtouch
+? Bot1.Battlefield.Cat Token#2.Power = 2
+? Bot1.Battlefield.Cat Token#2.Keywords = (absent)
+Bot2.Block(Craw Wurm > Cat Token#1)
+[Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Craw Wurm; Black Lotus
+Bot1.Battlefield = Cat Token; Esika's Chariot; Hazardroot Herbalist; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby
+Bot2.Battlefield = Mox Emerald; Mox Jet; Mox Pearl
+Bot1.Battlefield.Cat Token.Power = 2
+Bot2.Life = 18
+Bot1.Battlefield.Hazardroot Herbalist.Power = 1

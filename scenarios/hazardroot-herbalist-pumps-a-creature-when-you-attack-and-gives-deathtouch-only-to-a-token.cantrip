@@ -1,0 +1,59 @@
+# Hazardroot Herbalist (1/4): "Whenever you attack, target creature you control gets +1/+0 until end of turn. If that creature is a
+# token, it also gains deathtouch until end of turn." Turn 1: Black Lotus and four Moxen pay for Esika's Chariot (two 2/2 Cats) and the
+# Herbalist. Turn 2 Bot2 casts a Memnite. Turn 3: Bot1 attacks with the Herbalist alone and the trigger targets it (Bot2's Memnite is
+# refused): it is a 2/4 without deathtouch (not a token), and it hits for 2 (Bot2 20 -> 18). Turn 5: Bot1 attacks with a Cat only;
+# the trigger targets that Cat (a token), a 3/2 with deathtouch, while the Herbalist is a plain 1/4 again (the earlier turn's +1/+0
+# is gone). On turn 4 Bot2 did not attack, so no trigger ran then, and nothing triggers when Bot1 does not attack.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Esika's Chariot
+Hazardroot Herbalist
+Forest x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Esika's Chariot.Cast
+Bot1.Hand.Hazardroot Herbalist.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Hazardroot Herbalist.Power = 1
+Bot1.Attack(Hazardroot Herbalist > Bot2)
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Hazardroot Herbalist)
+[Bot1.Main2]
+? Bot1.Battlefield.Hazardroot Herbalist.Power = 2
+? Bot1.Battlefield.Hazardroot Herbalist.Toughness = 4
+? Bot1.Battlefield.Hazardroot Herbalist.Keywords = (absent)
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Hazardroot Herbalist.Power = 1
+Bot1.Attack(Cat Token > Bot2)
+Bot1.Target(Bot1.Battlefield.Cat Token)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Cat Token#1.Power = 3
+Bot1.Battlefield.Cat Token#1.Keywords = Deathtouch
+Bot1.Battlefield.Cat Token#2.Power = 2
+Bot1.Battlefield.Cat Token#2.Keywords = (absent)
+Bot2.Life = 15
+Bot1.Battlefield.Hazardroot Herbalist.Power = 1
+Bot1.Battlefield.Hazardroot Herbalist.Keywords = (absent)
