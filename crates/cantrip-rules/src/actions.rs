@@ -3962,7 +3962,7 @@ fn offer_spell(cx: &Cx, asker: &Asker, def: &'static CardDef, option: &mut Actio
         let met = |if_promised: bool| {
             specs.iter().all(|spec| {
                 !spec.required()
-                    || (if if_promised { target_candidates_if_promised(cx, asker, spec) } else { target_candidates(cx, asker, spec) }).len() >= spec.min as usize
+                    || (if if_promised { target_candidates_if_promised(cx, asker, spec) } else { target_candidates(cx, asker, spec) }).len() >= spec.when_promised(if_promised).min as usize
             })
         };
         return def.has_kicker() || met(false) || (def.gift.is_some() && met(true));
@@ -4422,7 +4422,7 @@ fn some_announcement<K: PartialEq>(
     for (segment, specs) in segments.iter().enumerate() {
         let expanded = crate::resolve::expand_specs(cx.s(), asker.controller, specs);
         let n = expanded.len();
-        slots.extend(expanded.into_iter().map(|(spec, player, _)| (spec.when_kicked(kicked), player, segment, n)));
+        slots.extend(expanded.into_iter().map(|(spec, player, _)| (spec.when_kicked(kicked).when_promised(gift), player, segment, n)));
     }
     let watching = Watching { alike: std::cell::RefCell::new(Vec::new()), told: std::cell::Cell::new(false) };
     let mut search = AnnouncementSearch { q, asker, slots, counted, gift, key, covered, seen: Vec::new(), budget, named, watching };
@@ -11780,8 +11780,9 @@ fn choose_slots_after(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bo
     let start = targets.len();
     let mut of = vec![0; start];
     for (spec, slot_player, at) in &slots {
-        // CR 702.33a, 601.2c: "if this spell was kicked, instead choose ...", the kicker announced by now.
-        let spec = &spec.when_kicked(kicked);
+        // CR 702.33a, 601.2c: "if this spell was kicked, instead choose ...", the kicker announced by now; CR 702.174a,
+        // 601.2c: "if the gift was promised, instead choose ...", the gift announced before the targets (CR 702.174m).
+        let spec = &spec.when_kicked(kicked).when_promised(spell && cx.s().obj(source).gift.is_some());
         let before = targets.len();
         'slot: {
             let candidates = target_candidates_given(cx, &asker, spec, &targets, Target::None, *slot_player, x);

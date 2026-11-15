@@ -129,6 +129,7 @@ The rest of a card is written the same way, one constructor each, the rare parts
 spell: spell(&[targets::CREATURE], effect),                       // `spell(&[], effect)` for none
 target(filter), up_to_one(filter), up_to(3, filter),               // target slots; `targets::X.optional()`, `.between(min, max)`, `.counted()`,
                                                                   // `.if_kicked(0, TargetSpec::ANY_NUMBER)` ("if this spell was kicked, instead choose any number of ...")
+                                                                  // `.between(0, 2).if_promised(0, 3)` ("if the gift was promised, instead choose up to three ...", Dewdrop Cure)
                                                                   // slots in printed order, a slot of several targets anywhere: `item.spec_targets(n)` is where slot n's targets are
                                                                   // a filter is asked of the players, the battlefield, the stack, every graveyard and every
                                                                   // exile (CR 115.1, 400.2), so it names the zone it takes: `zone.is(ZoneKind::Exile)` for

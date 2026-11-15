@@ -954,17 +954,17 @@ pub const fn spell(targets: &'static [TargetSpec], effect: Effect) -> Option<Spe
 
 /// One target that passes the filter (CR 115.1).
 pub const fn target(filter: TargetFilter) -> TargetSpec {
-    TargetSpec { min: 1, max: 1, filter, label: "", if_kicked: None, together: None, opponent_chooses: false }
+    TargetSpec { min: 1, max: 1, filter, label: "", if_kicked: None, if_promised: None, together: None, opponent_chooses: false }
 }
 
 /// "Up to one target" (CR 115.1d).
 pub const fn up_to_one(filter: TargetFilter) -> TargetSpec {
-    TargetSpec { min: 0, max: 1, filter, label: "", if_kicked: None, together: None, opponent_chooses: false }
+    TargetSpec { min: 0, max: 1, filter, label: "", if_kicked: None, if_promised: None, together: None, opponent_chooses: false }
 }
 
 /// "Up to N targets" (CR 115.1d).
 pub const fn up_to(n: u32, filter: TargetFilter) -> TargetSpec {
-    TargetSpec { min: 0, max: n, filter, label: "", if_kicked: None, together: None, opponent_chooses: false }
+    TargetSpec { min: 0, max: n, filter, label: "", if_kicked: None, if_promised: None, together: None, opponent_chooses: false }
 }
 
 impl TargetSpec {
@@ -987,6 +987,13 @@ impl TargetSpec {
     /// Eagles Are Coming!'s and Divine Resilience's "instead choose any number of target creatures" is `if_kicked(0, n)`.
     pub const fn if_kicked(self, min: u32, max: u32) -> TargetSpec {
         TargetSpec { if_kicked: Some((min, max)), ..self }
+    }
+
+    /// "If the gift was promised, instead choose between `min` and `max` of these targets" (CR 702.174a, 601.2c): Dewdrop
+    /// Cure's "up to two target creature cards ... If the gift was promised, instead ... up to three" is
+    /// `between(0, 2).if_promised(0, 3)`.
+    pub const fn if_promised(self, min: u32, max: u32) -> TargetSpec {
+        TargetSpec { if_promised: Some((min, max)), ..self }
     }
 
     /// The same slot, its targets together judged by the set rule `rule` (`TargetSpec::together`, CR 601.2c, 115.1): "any
