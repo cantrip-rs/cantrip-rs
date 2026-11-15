@@ -1,0 +1,8 @@
+{
+  "name": "Brave-Kin Duo",
+  "manaCost": "{W}",
+  "type": "Creature — Rabbit Mouse",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{1}, {T}: Target creature gets +1/+1 until end of turn. Activate only as a sorcery."
+}

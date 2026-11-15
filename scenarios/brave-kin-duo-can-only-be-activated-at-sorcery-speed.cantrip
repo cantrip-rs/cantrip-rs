@@ -1,0 +1,56 @@
+# Brave-Kin Duo's ability is sorcery-speed (CR 307.1): on Bot1's own turn with a spell (Savannah Lions) on the stack it cannot be activated, nor on
+# Bot2's turn with the Dwarven Trader on the stack, but it can target the Duo itself once Bot1's main phase has an empty stack (the {T} cost does not stop that).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Brave-Kin Duo
+Eager Cadet
+Plains
+Savannah Lions
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Dwarven Trader
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Brave-Kin Duo.Cast
+Bot1.Pass
+! Bot1.Battlefield.Brave-Kin Duo.Activate(Bot1.Battlefield.Brave-Kin Duo)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Eager Cadet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+! Bot1.Battlefield.Brave-Kin Duo.Activate(Bot1.Battlefield.Eager Cadet)
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Brave-Kin Duo.Activate(Bot1.Battlefield.Brave-Kin Duo)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Brave-Kin Duo.Power = 2
+? Bot1.Battlefield.Brave-Kin Duo.Toughness = 2
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Dwarven Trader.Cast
+! Bot1.Battlefield.Brave-Kin Duo.Activate(Bot1.Battlefield.Eager Cadet)
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Brave-Kin Duo.Power = 1
+Bot1.Battlefield.Brave-Kin Duo.Toughness = 1
