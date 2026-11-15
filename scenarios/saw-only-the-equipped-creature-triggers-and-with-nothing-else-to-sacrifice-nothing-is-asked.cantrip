@@ -1,0 +1,61 @@
+# Saw: "Whenever equipped creature attacks, ..." triggers only for the creature it is attached to, and with no permanent to
+# offer (other than that creature and the Equipment) nothing is asked and nothing is drawn. Two Black Lotuses pay for Saw and
+# Equip {2}, and are sacrificed doing it. Turn 3 the unequipped Ornithopter#2 attacks (no trigger - the equipped Ornithopter#1 would be
+# a legal sacrifice, so a trigger would ask and draw); on turn 5 the equipped Ornithopter#1 attacks and the other Ornithopter is
+# the one permanent offered: sacrificed, it draws the Lightning Bolt under the turn-five draw.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Saw
+Ornithopter
+Ornithopter
+Plains
+Island
+Island
+Island
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Saw.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Saw.Activate(Bot1.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot1.Attack(Ornithopter#2 > Bot2)
+? Stack.Count = 0
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Hand = Plains; Island; Island
+? Bot2.Life = 20
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot1.Attack(Ornithopter#1 > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Ornithopter#1)
+! Bot1.Choose(Saw)
+Bot1.Choose(Ornithopter#2)
+[T5 Bot1.Main2]
+? Bot1.Hand = Plains; Island; Island; Island; Lightning Bolt
+? Bot2.Life = 18
+
+[Expect]
+Bot1.Battlefield = Saw; Ornithopter
+Bot1.Graveyard = Ornithopter; Black Lotus; Black Lotus
+Bot1.Hand = Plains; Island; Island; Island; Lightning Bolt
+Bot2.Life = 18

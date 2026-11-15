@@ -1,0 +1,50 @@
+# Saw: "you may sacrifice a permanent other than that creature or this Equipment. If you do, draw a card." Same board as
+# the sacrificing scenario, but Bot1 chooses nothing (the up-to-one choice answered empty): no Mox is sacrificed, nothing is
+# drawn - the Lightning Bolt stays on the library - and the equipped Ornithopter still deals its 2.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Saw
+Ornithopter
+Plains
+Island
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Saw.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Saw.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[T3 Bot1.Main2]
+? Bot1.Hand = Plains; Island
+? Bot2.Life = 18
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Mox Sapphire; Saw; Ornithopter
+Bot1.Graveyard = 
+Bot1.Hand = Plains; Island
+Bot2.Life = 18
