@@ -1,0 +1,8 @@
+{
+  "name": "Victor, Valgavoth's Seneschal",
+  "manaCost": "{1}{W}{B}",
+  "type": "Legendary Creature — Human Warlock",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Eerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, surveil 2 if this is the first time this ability has resolved this turn. If it's the second time, each opponent discards a card. If it's the third time, put a creature card from a graveyard onto the battlefield under your control."
+}
