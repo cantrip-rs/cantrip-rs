@@ -6,7 +6,7 @@ use cantrip_oracle as oracle;
 const CREATURE: u16 = TypeSet::of(&[CardType::Creature]).0;
 
 /// "Combat damage can't be prevented" (CR 615.12): the combat damage of every source, whoever controls it.
-fn combat_damage(_: &dyn Query, _: &Asker, _: ObjectId, combat: bool) -> bool {
+fn combat_damage(_: &dyn Query, _: &Asker, _: ObjectId, _: Target, combat: bool) -> bool {
     combat
 }
 

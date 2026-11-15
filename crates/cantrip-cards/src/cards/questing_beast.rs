@@ -4,7 +4,7 @@ use cantrip_oracle as oracle;
 
 /// "Combat damage that would be dealt by creatures you control can't be prevented" (CR 615.12): the damage of any
 /// creature its controller controls, the Beast included, and only combat damage.
-fn creatures_you_control_deal_unpreventable_combat_damage(q: &dyn Query, asker: &Asker, source: ObjectId, combat: bool) -> bool {
+fn creatures_you_control_deal_unpreventable_combat_damage(q: &dyn Query, asker: &Asker, source: ObjectId, _: Target, combat: bool) -> bool {
     combat && q.controller(source) == asker.controller && q.chars(source).is(CardType::Creature)
 }
 

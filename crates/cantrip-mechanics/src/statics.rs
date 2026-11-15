@@ -767,7 +767,7 @@ pub fn opponents_cant_draw_more_than_one_card_each_turn(q: &dyn Query, asker: &A
 
 /// "Damage can't be prevented" (CR 615.12) as a `CardDef::unpreventable_damage` entry: all damage, from any source, combat
 /// or not, while the permanent is on the battlefield. Sunspine Lynx, Leyline of Punishment and Everlasting Torment print it.
-pub fn damage_cant_be_prevented(_: &dyn Query, _: &Asker, _: ObjectId, _: bool) -> bool {
+pub fn damage_cant_be_prevented(_: &dyn Query, _: &Asker, _: ObjectId, _: Target, _: bool) -> bool {
     true
 }
 

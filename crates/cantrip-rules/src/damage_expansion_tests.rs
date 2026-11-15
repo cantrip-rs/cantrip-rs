@@ -111,6 +111,8 @@ fn game() -> Game {
         &STATE_CAP_ZERO,
         &REDIRECT_OTHER_TO_YOU,
         &PLAIN_DOUBLER,
+        &SEALED,
+        &SEALED_CREATURE,
     ])));
     let mut g = Game::new(
         cards,
@@ -2126,4 +2128,52 @@ fn all_zero_damage_has_no_result_event_or_replacement_question() {
     assert_eq!(batch.snapshot_count(), 0);
     batch.rest_of_preventions(&mut cx);
     assert!(cx.g.pending().is_none());
+}
+
+/// "If [this spell] would deal damage ..., that damage can't be prevented or dealt instead to another permanent or player"
+/// (Lava Burst), here of all its damage.
+fn its_own_damage(_: &dyn Query, a: &Asker, source: ObjectId, _: Target, _: bool) -> bool {
+    source == a.source
+}
+static SEALED: CardDef = CardDef {
+    name: "Damage sealed sorcery",
+    types: TypeSet::of(&[CardType::Sorcery]),
+    unpreventable_damage: &[its_own_damage],
+    unredirectable_damage: &[its_own_damage],
+    ..CardDef::BLANK
+};
+/// The same rules printed on a creature, whose abilities don't function while it is a spell (CR 113.6).
+static SEALED_CREATURE: CardDef = CardDef {
+    name: "Damage sealed creature",
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    ..SEALED
+};
+/// `spell`, on the stack under THEM, deals 5 damage to `to` - or, where not `own`, another source does while it is there -
+/// with `modifier` on the battlefield under YOU: YOU's and THEM's life.
+fn sealed_hit(spell: &'static CardDef, modifier: &'static CardDef, to: PlayerId, own: bool) -> (i32, i32) {
+    let mut g = game();
+    let sealed = g.state.push_obj(Obj::new(g.cards.id_of(spell), THEM, Zone::STACK));
+    g.state.zone_push(Zone::STACK, sealed);
+    let source = if own { sealed } else { put(&mut g, &SOURCE, THEM) };
+    put(&mut g, modifier, YOU);
+    let mut cx = cx(&mut g, source);
+    cx.damage(source, Target::Player(to), 5);
+    (cx.state().player(YOU).life, cx.state().player(THEM).life)
+}
+/// CR 113.6, 614.9, 615.12: an instant's or sorcery's static abilities function while it is a spell on the stack, so damage
+/// it says can't be redirected is redirected neither in part (Harm's Way) nor whole, and damage it says can't be prevented is
+/// not prevented. A creature spell's don't: its damage is redirected and prevented as any other's. Nor is another source's
+/// damage, which the rules don't name, while the spell is there.
+#[test]
+fn a_spells_own_rules_keep_its_damage_from_redirection_and_prevention() {
+    assert_eq!(sealed_hit(&SEALED, &SPLIT, YOU, true), (15, 20), "no part redirected");
+    assert_eq!(sealed_hit(&SEALED_CREATURE, &SPLIT, YOU, true), (17, 18), "two redirected");
+    assert_eq!(sealed_hit(&SEALED, &SPLIT, YOU, false), (17, 18), "another source's: two redirected");
+    assert_eq!(sealed_hit(&SEALED, &REDIRECT_OTHER_TO_YOU, THEM, true), (20, 15), "not redirected");
+    assert_eq!(sealed_hit(&SEALED_CREATURE, &REDIRECT_OTHER_TO_YOU, THEM, true), (15, 20), "redirected");
+    assert_eq!(sealed_hit(&SEALED, &PREVENT_ALL, YOU, true), (15, 20), "not prevented");
+    assert_eq!(sealed_hit(&SEALED_CREATURE, &PREVENT_ALL, YOU, true), (20, 20), "prevented");
+    assert_eq!(sealed_hit(&SEALED, &PREVENT_ALL, YOU, false), (20, 20), "another source's: prevented");
 }

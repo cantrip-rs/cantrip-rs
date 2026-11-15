@@ -248,16 +248,35 @@ pub fn cant_enter(cx: &Cx, card: ObjectId) -> bool {
     !bans.is_empty() && enter_banned(cx, &bans, card)
 }
 
-/// Whether a static ability makes the damage `source` is about to deal unpreventable (CR 615.12). Asked only when
-/// protection would prevent it, which is rare, so the battlefield is searched then.
-pub fn damage_cant_be_prevented(cx: &Cx, source: ObjectId, combat: bool) -> bool {
-    for (id, controller, def, by) in sources(cx, |d| !d.unpreventable_damage.is_empty()) {
-        let asker = Asker { instance: None, source: id, controller, by, spell: false };
-        if def.unpreventable_damage.iter().any(|rule| rule(cx, &asker, source, combat)) {
-            return true;
+/// The objects with a static ability about damage, as `sources` gives them: the permanents with one, and the instant and
+/// sorcery spells with one, whose abilities function on the stack (CR 113.6) - Lava Burst's "if Lava Burst would deal damage
+/// to a creature, that damage can't be prevented".
+fn damage_sources<'a>(cx: &'a Cx, has: impl Fn(&CardDef) -> bool + Copy + 'a) -> impl Iterator<Item = (ObjectId, PlayerId, &'static CardDef, Option<Linked>)> + 'a {
+    let spells = cx.s().zone(Zone::STACK).iter().copied().filter(move |&id| {
+        cx.cards().texts_linked(cx.s(), id).any(|(c, _)| has(cx.card(c))) && {
+            let chars = cx.chars(id);
+            chars.is(CardType::Instant) || chars.is(CardType::Sorcery)
         }
-    }
-    false
+    });
+    sources(cx, has).chain(spells.flat_map(move |id| source_texts(cx, id, has)))
+}
+
+/// Whether a static ability makes the damage `source` is about to deal to `target` unpreventable (CR 615.12).
+pub fn damage_cant_be_prevented(cx: &Cx, source: ObjectId, target: Target, combat: bool) -> bool {
+    damage_sources(cx, |d| !d.unpreventable_damage.is_empty()).any(|(id, controller, def, by)| {
+        let asker = Asker { instance: None, source: id, controller, by, spell: false };
+        def.unpreventable_damage.iter().any(|rule| rule(cx, &asker, source, target, combat))
+    })
+}
+
+/// Whether a static ability keeps the damage `source` is about to deal to `target` from being dealt instead to another
+/// permanent or player (`CardDef::unredirectable_damage`): no redirection effect applies to it (CR 614.9). Asked only as
+/// one would.
+pub fn damage_cant_be_redirected(cx: &Cx, source: ObjectId, target: Target, combat: bool) -> bool {
+    damage_sources(cx, |d| !d.unredirectable_damage.is_empty()).any(|(id, controller, def, by)| {
+        let asker = Asker { instance: None, source: id, controller, by, spell: false };
+        def.unredirectable_damage.iter().any(|rule| rule(cx, &asker, source, target, combat))
+    })
 }
 
 /// Whether a static ability of a permanent on the battlefield keeps the ability `item` from being countered (CR 101.2,

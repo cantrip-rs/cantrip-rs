@@ -3157,9 +3157,17 @@ pub enum CauseKind {
 /// "Spells and abilities your opponents control can't cause you to discard cards or sacrifice permanents."
 pub type CauseRule = fn(&dyn Query, &Asker, PlayerId, PlayerId, CauseKind) -> bool;
 
-/// A static ability that says some damage can't be prevented (CR 615.12): true for the damage a source is about to deal,
-/// `combat` or not. "Combat damage that would be dealt by creatures you control can't be prevented."
-pub type UnpreventableRule = fn(&dyn Query, &Asker, ObjectId, bool) -> bool;
+/// A static ability that says some damage can't be prevented (CR 615.12): true for the damage a source is about to deal to
+/// a recipient - whom the damage would be dealt to now, as the effects applied so far have left it (CR 616.1f) - `combat`
+/// or not. "Combat damage that would be dealt by creatures you control can't be prevented"; "if Lava Burst would deal
+/// damage to a creature, that damage can't be prevented".
+pub type UnpreventableRule = fn(&dyn Query, &Asker, ObjectId, Target, bool) -> bool;
+
+/// A static ability that says some damage can't be dealt instead to another permanent or player: no redirection effect
+/// (CR 614.9) applies to it, whole or in part. True, as `UnpreventableRule` is, for the damage a source is about to deal to
+/// the recipient it would be dealt to now. Lava Burst's "that damage can't be ... dealt instead to another permanent or
+/// player".
+pub type UnredirectableRule = fn(&dyn Query, &Asker, ObjectId, Target, bool) -> bool;
 
 /// A static ability that says an activated or triggered ability on the stack can't be countered (CR 101.2, 701.6a): true
 /// for `item`, asked as an effect would counter it. Spider-Punk's "Spells and abilities can't be countered" (its spells half
@@ -3907,8 +3915,11 @@ pub struct CardDef {
     /// Its static abilities that give players protection from players ("You have protection from each of your opponents",
     /// CR 702.16k), while it is on the battlefield with its abilities.
     pub player_protection: &'static [PlayerProtectionRule],
-    /// Its static abilities that make some damage unpreventable (CR 615.12).
+    /// Its static abilities that make some damage unpreventable (CR 615.12), while it is on the battlefield with its
+    /// abilities - or, an instant or sorcery's, while it is a spell on the stack (CR 113.6).
     pub unpreventable_damage: &'static [UnpreventableRule],
+    /// Its static abilities that keep some damage from being redirected (CR 614.9), where `unpreventable_damage` functions.
+    pub unredirectable_damage: &'static [UnredirectableRule],
     /// Its static abilities that keep activated and triggered abilities on the stack from being countered (CR 101.2,
     /// 701.6a), while it is on the battlefield with its abilities.
     pub uncounterable_abilities: &'static [UncounterableAbilityRule],
@@ -4206,6 +4217,7 @@ impl CardDef {
         player_keywords: &[],
         player_protection: &[],
         unpreventable_damage: &[],
+        unredirectable_damage: &[],
         uncounterable_abilities: &[],
         mana_kept: &[],
         cant_gain_life: &[],
@@ -4322,6 +4334,7 @@ impl CardDef {
             (!self.player_keywords.is_empty(), "player keywords"),
             (!self.player_protection.is_empty(), "player protection"),
             (!self.unpreventable_damage.is_empty(), "unpreventable damage"),
+            (!self.unredirectable_damage.is_empty(), "unredirectable damage"),
             (!self.uncounterable_abilities.is_empty(), "uncounterable abilities"),
             (!self.mana_kept.is_empty(), "kept mana"),
             (!self.cant_gain_life.is_empty(), "a life gain rule"),

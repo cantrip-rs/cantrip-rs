@@ -525,7 +525,7 @@ fn candidates_for(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Opti
     let subject = subject_of(proposal);
     // Damage a prevention effect may prevent (CR 615.12): where it can't be, none of them applies.
     let preventable = match proposal {
-        Proposal::Damage(d) => crate::ops::damage_can_be_prevented(cx, d.source, d.combat),
+        Proposal::Damage(d) => crate::ops::damage_can_be_prevented(cx, d.source, d.target, d.combat),
         _ => false,
     };
     let mut found = Vec::new();
@@ -958,25 +958,32 @@ fn note_put_by(before: &Proposal, after: &mut Proposal, controller: PlayerId) {
     }
 }
 
-/// CR 614.9: an invalid redirection does nothing; it does not replace valid damage with no damage.
+/// CR 614.9: an invalid redirection does nothing; it does not replace valid damage with no damage. Nor does one of damage
+/// a static ability says can't be dealt instead to another permanent or player (`static_rules::damage_cant_be_redirected`).
 /// Replacement functions are pure, so an invalid effect is neither offered nor consumed nor followed by its `then`.
-fn valid_redirection(q: &dyn Query, before: &Proposal, apply: impl FnOnce(&mut Proposal)) -> bool {
+fn valid_redirection(cx: &Cx, before: &Proposal, apply: impl FnOnce(&mut Proposal)) -> bool {
     let Proposal::Damage(original) = before else { return true };
     let mut after = *before;
     apply(&mut after);
     let Proposal::Damage(changed) = after else { unreachable!("a replacement cannot change the event kind") };
-    original.target == changed.target || damage_recipient(q, original.target) && damage_recipient(q, changed.target)
+    original.target == changed.target || redirectable(cx, original) && damage_recipient(cx, changed.target)
 }
 
 /// Partial redirection obeys the same recipient authority as whole redirection
 /// (CR 614.9). An impossible redirection neither reduces the original damage nor
 /// consumes its once-only effect.
-fn valid_damage_components(q: &dyn Query, before: &Proposal, components: &[DamageComponent]) -> bool {
+fn valid_damage_components(cx: &Cx, before: &Proposal, components: &[DamageComponent]) -> bool {
     let Proposal::Damage(original) = before else { return components.is_empty() };
     components.iter().all(|c| match *c {
-        DamageComponent::Redirected { target, amount } if amount > 0 => damage_recipient(q, original.target) && damage_recipient(q, target),
+        DamageComponent::Redirected { target, amount } if amount > 0 => redirectable(cx, original) && damage_recipient(cx, target),
         _ => true,
     })
+}
+
+/// Whether the damage may be dealt to another recipient than the one it would be dealt to now: that one is still a
+/// recipient of damage (CR 614.9), and no static ability says the damage can't be dealt instead to another permanent or player.
+fn redirectable(cx: &Cx, d: &DamageEvent) -> bool {
+    damage_recipient(cx, d.target) && !crate::static_rules::damage_cant_be_redirected(cx, d.source, d.target, d.combat)
 }
 
 fn damage_recipient(q: &dyn Query, target: Target) -> bool {
@@ -1935,7 +1942,7 @@ pub(crate) fn shields(cx: &Cx, d: &DamageEvent) -> Option<(ObjectId, u32)> {
     if !cx.s().effects.iter().any(|e| matches!(e.kind, EffectKind::Prevention { shield: Shield::Next(_), .. })) {
         return None;
     }
-    if !crate::ops::damage_can_be_prevented(cx, d.source, d.combat) {
+    if !crate::ops::damage_can_be_prevented(cx, d.source, d.target, d.combat) {
         return None;
     }
     let mut found: Option<(ObjectId, u32)> = None;
@@ -1956,7 +1963,7 @@ pub(crate) fn shields(cx: &Cx, d: &DamageEvent) -> Option<(ObjectId, u32)> {
 
 /// Whether a prevention effect may prevent this damage (CR 615.12).
 fn damage_can_be_prevented(cx: &Cx, d: &DamageEvent) -> bool {
-    crate::ops::damage_can_be_prevented(cx, d.source, d.combat)
+    crate::ops::damage_can_be_prevented(cx, d.source, d.target, d.combat)
 }
 
 /// A prevention effect a spell or ability made that has more to do once the damage event it prevented some of has been

@@ -1338,7 +1338,12 @@ that gain life, and an effect a spell or ability makes that a player can't lose 
 
 "Damage can't be prevented" (CR 615.12) is asked by `ops::damage_can_be_prevented` before any prevention: a turn an effect said
 so (Bonecrusher Giant's Stomp) or a `CardDef::unpreventable_damage` static (Questing Beast's combat damage,
-`statics::damage_cant_be_prevented` for Sunspine Lynx and Leyline of Punishment). Every prevention effect asks it.
+`statics::damage_cant_be_prevented` for Sunspine Lynx and Leyline of Punishment). Every prevention effect asks it. A rule is
+told the damage's source and its recipient as the effects applied so far have left it, and functions on a permanent or on
+an instant or sorcery spell on the stack (CR 113.6; Lava Burst's damage to a creature). "Can't be dealt instead to another
+permanent or player" is a `CardDef::unredirectable_damage` static, read where those are: `replace::valid_redirection` and
+`valid_damage_components` refuse a redirection of such damage, whole or in part (CR 614.9), as they refuse one from a
+recipient that can no longer be dealt damage.
 
 ### Excess damage
 
