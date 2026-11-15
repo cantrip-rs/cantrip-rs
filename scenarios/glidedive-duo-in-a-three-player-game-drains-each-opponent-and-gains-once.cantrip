@@ -1,0 +1,31 @@
+# Glidedive Duo: "each opponent loses 2 life and you gain 2 life" (CR 119.3): in a three-player game Bot2 and Bot3 each lose 2 (18) and Bot1 gains 2 once (22).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Glidedive Duo
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Glidedive Duo.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot3.Life = 18
+Bot1.Life = 22

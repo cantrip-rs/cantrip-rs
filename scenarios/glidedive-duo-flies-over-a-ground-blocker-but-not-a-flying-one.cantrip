@@ -1,0 +1,44 @@
+# Glidedive Duo (flying): Bot2's Memnite cannot block it but Ornithopter can (CR 702.9b). On turn 3 the Duo attacks: the ground Memnite's block is refused (!), the flying Ornithopter blocks and
+# takes 3, dying, while the Duo takes 0 and survives.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Glidedive Duo
+Swamp x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Glidedive Duo.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Glidedive Duo > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareBlockers]
+! Bot2.Block(Memnite > Glidedive Duo)
+Bot2.Block(Ornithopter > Glidedive Duo)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield = Memnite
+Bot1.Battlefield.Glidedive Duo.Damage = 0
+Bot2.Life = 18
