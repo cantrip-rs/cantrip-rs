@@ -1,0 +1,67 @@
+# Waltz of Rage's ruling (CR 608.2b, 2024-09-20): if the target creature is illegal as it tries to resolve, it doesn't resolve and none of its effects happen: no damage, and the
+# delayed triggered ability is never made, so a creature of yours dying later this turn exiles nothing. Bot2 Bolts the targeted Bear in response, Waltz is countered on resolution:
+# Memnite and Elvish Mystic take no damage; then Bot2 Bolts Memnite and it dies without exiling the top card of the library.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Runeclaw Bear
+Waltz of Rage
+Memnite
+Lightning Bolt
+Mountain x14
+
+[Bot2 Deck]
+Forest
+Mox Ruby
+Mox Ruby
+Elvish Mystic
+Lightning Bolt
+Lightning Bolt
+Forest x14
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Runeclaw Bear.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Waltz of Rage.Cast(Runeclaw Bear)
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Runeclaw Bear)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Waltz of Rage; Runeclaw Bear
+? Bot2.Battlefield.Elvish Mystic.Damage = 0
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Exile =
+Bot1.Graveyard = Memnite; Waltz of Rage; Runeclaw Bear
+Bot2.Battlefield.Elvish Mystic.Damage = 0
