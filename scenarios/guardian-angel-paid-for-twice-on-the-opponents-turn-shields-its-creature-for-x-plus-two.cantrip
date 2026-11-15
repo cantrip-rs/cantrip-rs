@@ -1,0 +1,61 @@
+# Guardian Angel with X=1 on Bot1's own Kraken Hatchling (0/4), cast in response to Bot2's Lightning Bolt on Bot2's turn,
+# then {1} paid twice while the Bolt waits: a shield of 1 and two of 1 more (CR 615.7), each payment a special action taken
+# with priority and done at once (CR 116.2c, 116.1). The Bolt (3) and then a Shock (2) deal 5 damage: 3 prevented, 2 dealt.
+# The pool is checked after each payment ({1} exactly), and Bot2, whom the effect is not about, is offered no payment.
+[Bot1 Deck]
+Kraken Hatchling
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Guardian Angel
+Island x10
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Shock
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kraken Hatchling.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Kraken Hatchling)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Guardian Angel.Cast(Kraken Hatchling; X: 1)
+Bot1.Pass
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Guardian Angel.Activate
+? Bot1.Mana =
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Guardian Angel.Activate
+? Bot1.Mana =
+? Stack.Count = 1
+! Bot2.Guardian Angel.Activate
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Kraken Hatchling)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Kraken Hatchling.Damage = 2
+Bot1.Graveyard = Guardian Angel

@@ -1,0 +1,48 @@
+# Fork copies Guardian Angel (X=0 on Bot2), the copy's target changed to Bot1 (CR 707.10). The copy resolves first and
+# ceases to exist as it leaves the stack (CR 707.10a), but its effect lasts: until end of turn Bot1 may pay {1} to shield
+# "that player", Bot1, as well as Bot2 for the original (CR 116.2c). The first payment offered is the copy's; Bot1's own
+# Shock then deals him 1 of 2.
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Fork
+Guardian Angel
+Shock
+Mox Ruby
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Guardian Angel.Cast(Bot2; X: 0)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Fork.Cast(Stack.Guardian Angel)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Guardian Angel.Activate
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Shock.Cast(Bot1)
+Bot1.Pass
+[T1 Bot1.End]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Graveyard = Shock; Guardian Angel; Fork; Black Lotus

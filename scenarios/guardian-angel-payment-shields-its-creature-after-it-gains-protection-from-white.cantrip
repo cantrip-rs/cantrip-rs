@@ -1,0 +1,46 @@
+# "Prevent the next 1 damage that would be dealt to that permanent" names the creature Guardian Angel targeted, which
+# nothing targets as {1} is paid (CR 116.2c): once Mother of Runes has given herself protection from white, and so is no
+# legal target for a white spell, paying {1} twice still shields her (protection stops no prevention effect, CR 702.16).
+# Bot1's own Shock (red) then deals her nothing, and the 1/1 lives.
+[Bot1 Deck]
+Plains
+Mother of Runes
+Guardian Angel
+Shock
+Mox Ruby
+Mox Jet
+Mox Emerald
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Mother of Runes.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Guardian Angel.Cast(Mother of Runes; X: 0)
+Bot1.Pass
+Bot1.Battlefield.Mother of Runes.Activate(Mother of Runes)
+Bot2.Pass
+Bot1.Colors(White)
+? Bot1.Battlefield.Mother of Runes.ProtectionFrom = White
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Guardian Angel.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Guardian Angel.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Mother of Runes)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Mother of Runes.Damage = 0
+Bot1.Graveyard = Shock; Guardian Angel

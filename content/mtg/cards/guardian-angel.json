@@ -1,0 +1,6 @@
+{
+  "name": "Guardian Angel",
+  "manaCost": "{X}{W}",
+  "type": "Instant",
+  "oracleText": "Prevent the next X damage that would be dealt to any target this turn. Until end of turn, you may pay {1} any time you could cast an instant. If you do, prevent the next 1 damage that would be dealt to that permanent or player this turn."
+}

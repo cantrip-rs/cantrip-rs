@@ -1,0 +1,50 @@
+# Paying Guardian Angel's {1} is a special action (CR 116.2c), which players may take while a spell with split second is
+# on the stack (CR 702.61b), as they may activate mana abilities: with Bot2's Krosan Grip on the stack targeting Bot1's Mox
+# Jet, Bot1 taps that Mox and pays {1}, shielding himself (Guardian Angel cast earlier with X=0 on Bot1). His own Shock on
+# himself afterwards deals 1 of its 2.
+[Bot1 Deck]
+Guardian Angel
+Shock
+Mox Pearl
+Mox Jet
+Mox Ruby
+Island x12
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Mox Sapphire
+Krosan Grip
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Guardian Angel.Cast(Bot1; X: 0)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Krosan Grip.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Guardian Angel.Activate
+? Stack.Count = 1
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Graveyard = Shock; Mox Jet; Guardian Angel

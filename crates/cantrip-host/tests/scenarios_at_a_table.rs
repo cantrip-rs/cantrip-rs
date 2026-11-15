@@ -39,6 +39,45 @@ fn at_a_table(name: &str, text: &str) -> Result<(), String> {
     Err("the scenario went on too long at the table".into())
 }
 
+/// A player's own ability or action (CR 605.1a, 611.2a: Channel's; CR 116.2c: Guardian Angel's "pay {1}") is offered on no
+/// card, named by the card that gave it, and taken by an answer naming no card - the card that gave it may be anywhere, or
+/// gone: the scenarios that take them pass at a table with Bot1 driven, and the option the step offers says so.
+#[test]
+fn a_players_own_ability_or_action_is_offered_and_taken_on_no_card() {
+    for name in [
+        "guardian-angel-pays-from-the-players-own-rail-in-the-browser",
+        "guardian-angel-copied-by-fork-lets-its-controller-pay-for-the-copys-target",
+        "channel-pays-life-from-the-players-own-rail-in-the-browser",
+    ] {
+        let text = std::fs::read_to_string(scripts().join(format!("{name}.cantrip"))).unwrap();
+        at_a_table(name, &text).unwrap_or_else(|report| panic!("{name}: {report}"));
+    }
+    let text = std::fs::read_to_string(scripts().join("guardian-angel-pays-from-the-players-own-rail-in-the-browser.cantrip")).unwrap();
+    let Ok(mut session) = Session::scenario(&text, "own", Vec::new(), &[1]) else { panic!("the scenario is dealt") };
+    let mut step = session.step();
+    for _ in 0..1_000 {
+        let expected = step["Scenario"]["Expected"].clone();
+        let answer: AnswerPayload = serde_json::from_value(expected["Answer"].clone()).unwrap();
+        if let AnswerPayload::TakeActionAnswer(a) = &answer
+            && a.kind == ActionKindView::ActivateAbility
+            && a.ability_index >= i32::from(cantrip_engine::PLAYER_SPECIAL_ACTION)
+        {
+            assert_eq!(a.source, ViewHandle::NONE, "the answer names no card");
+            let mut own = Vec::new();
+            activation_rows(&step["Requests"], &serde_json::to_value(ViewHandle::NONE).unwrap(), &mut own);
+            assert!(
+                own.iter().any(|o| o["GrantedBy"] == "Guardian Angel" && o["CostText"] == "{1}"),
+                "the option is on no card, named for the card that gave it, with its cost: {own:?}"
+            );
+            return;
+        }
+        let id = expected["RequestId"].as_u64().unwrap() as u32;
+        let Ok(next) = session.answer(id, expected["Seat"].as_i64().unwrap() as i32, &answer) else { panic!("the answer is taken") };
+        step = next;
+    }
+    panic!("Guardian Angel's payment was never asked for");
+}
+
 /// Every string a step's requests hold under the key `key`, for every option of the card `source` (a handle) when given.
 fn fields(value: &Value, key: &str, source: Option<&Value>, out: &mut Vec<(String, Value)>) {
     match value {

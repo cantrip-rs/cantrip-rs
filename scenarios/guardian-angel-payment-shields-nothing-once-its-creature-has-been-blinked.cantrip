@@ -1,0 +1,40 @@
+# "Prevent the next 1 damage that would be dealt to that permanent" is the creature Guardian Angel targeted, as that object:
+# once Ephemerate has exiled Kraken Hatchling and returned it, the Hatchling is a new object (CR 400.7), and {1} paid
+# after that shields nothing (CR 116.2c). Bot1's own Shock then deals the new Hatchling all 2.
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Mox Ruby
+Kraken Hatchling
+Guardian Angel
+Ephemerate
+Shock
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kraken Hatchling.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Guardian Angel.Cast(Kraken Hatchling; X: 0)
+Bot1.Pass
+Bot1.Hand.Ephemerate.Cast(Kraken Hatchling)
+Bot1.Pass
+Bot1.Guardian Angel.Activate
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Kraken Hatchling)
+Bot1.Pass
+[T1 Bot1.End]
+
+[Expect]
+Bot1.Battlefield.Kraken Hatchling.Damage = 2

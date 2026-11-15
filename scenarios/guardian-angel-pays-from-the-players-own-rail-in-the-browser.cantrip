@@ -1,0 +1,38 @@
+# Browser
+# Guardian Angel's "you may pay {1}" belongs to the player, not to any card (CR 116.2c): once the spell has resolved (X=0,
+# on Bot1) the page shows it on Bot1's own rail, a lit button saying the card and the cost, its tooltip the words and whom
+# it shields, and beside the life total the effect it comes from. A click on it pays {1} from the Mox Jet's floating
+# mana, and Bot1's Shock on himself then deals 1 of its 2.
+[Bot1 Deck]
+Guardian Angel
+Shock
+Mox Pearl
+Mox Jet
+Mox Ruby
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Guardian Angel.Cast(Bot1; X: 0)
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+? Client.Bot1.Own = Guardian Angel · {1}
+? Client.Bot1.Own.Tooltip = Guardian Angel: Until end of turn, you may pay {1} any time you could cast an instant. If you do, prevent the next 1 damage that would be dealt to that permanent or player this turn (on you).
+? Client.Bot1.Facts = Guardian Angel: Until end of turn, you may pay {1} any time you could cast an instant. If you do, prevent the next 1 damage that would be dealt to that permanent or player this turn (on you); Prevent the next 0 damage that would be dealt to you this turn (Guardian Angel)
+Bot1.Guardian Angel.Activate
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 19
