@@ -1,0 +1,62 @@
+# Restricted Office: "When you unlock this door, destroy all creatures with power 3 or greater." Casting the door unlocks
+# it as the Room enters, which triggers it (CR 709.5d, 709.5h). Power is read as the ability resolves (CR 608.2h): Bot1's
+# Ornithopter, pumped by Giant Growth to exactly 3, and Bot2's 5/3 Juggernaut are destroyed; Bot1's 1/1 Memnite and
+# Bot2's 2/1 Alpha Myr stay. Lecture Hall stays locked, so nothing has hexproof.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Emerald
+Memnite
+Ornithopter
+Giant Growth
+Restricted Office // Lecture Hall
+Plains
+Mox Jet
+Plains x11
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Juggernaut
+Alpha Myr
+Mox Jet
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Juggernaut.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Alpha Myr.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Ornithopter)
+Bot1.Pass
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Restricted Office // Lecture Hall.Cast(Ability: Restricted Office)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Memnite; Mox Emerald; Mox Jet; Mox Pearl; Plains; Plains; Restricted Office
+Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Graveyard = Ornithopter; Giant Growth
+Bot2.Graveyard = Juggernaut; Black Lotus
+Bot2.Battlefield.Alpha Myr.Power = 2
