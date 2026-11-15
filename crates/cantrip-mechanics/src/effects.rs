@@ -2471,6 +2471,18 @@ pub fn may_return_this_card_to_battlefield(g: &mut dyn Game, item: &StackItem) -
     Ok(())
 }
 
+const RETURN_TO_HAND: Question = Question::new("ReturnToHand", "return it from your graveyard to your hand?", "", "Return it", "Leave it");
+
+/// "You may return this card from your graveyard to your hand" (CR 113.6k): `ask_may_this_card` with the question worded for
+/// the hand, and the card returned to its owner's hand on a yes. Nothing is asked once it is no longer the object that
+/// triggered (CR 400.7). Squee, Goblin Nabob and Fear of Infinity print it.
+pub fn may_return_this_card_to_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if ask_may_this_card(g, item, Purpose::Ask(&RETURN_TO_HAND))? {
+        g.return_to_hand(&[item.object]);
+    }
+    Ok(())
+}
+
 /// "Return this card from your graveyard to the battlefield" and "Put this card from your hand onto the battlefield" (CR
 /// 400.7): the ability's own source, put onto the battlefield untapped under its controller; nothing if it is no longer the
 /// object the ability came from (the core skips a card that changed zones). Darklight Phoenix and Cauldron Familiar print
