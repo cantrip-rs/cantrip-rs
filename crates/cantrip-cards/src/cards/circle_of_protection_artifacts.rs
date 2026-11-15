@@ -21,6 +21,7 @@ pub static CARD: CardDef = CardDef {
         damage: "damage from the chosen artifact source",
         of_it: None,
         applies: artifact_source,
+        portion: None,
         then: None,
         gain_prevented: false,
         text: "The next time an artifact source of your choice would deal damage to you this turn, prevent that damage.",

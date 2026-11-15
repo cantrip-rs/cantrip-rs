@@ -53,7 +53,7 @@ fn all_damage(_: &dyn Query, _: &Asker, _: ObjectId, _: &DamageEvent) -> bool {
 
 static SHIELD: CardDef = CardDef {
     name: "Departed damage shield probe",
-    granted_preventions: &[GrantedPreventionDef { hint: "prevent the next damage", damage: "damage", of_it: None, applies: all_damage, then: None, gain_prevented: false, text: "" }],
+    granted_preventions: &[GrantedPreventionDef { hint: "prevent the next damage", damage: "damage", of_it: None, applies: all_damage, portion: None, then: None, gain_prevented: false, text: "" }],
     ..CardDef::BLANK
 };
 

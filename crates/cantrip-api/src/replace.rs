@@ -524,6 +524,9 @@ pub struct GrantedPreventionDef {
     /// object so. None for one about whom the damage is dealt to, or about no object.
     pub of_it: Option<&'static str>,
     pub applies: GrantedPreventionApplies,
+    /// How much of the damage it applies to it prevents, where that is not all of it (CR 615.1: "completely or partially
+    /// prevent"): "prevent half that damage, rounded down" (Dark Sphere). None for all of it.
+    pub portion: Option<PreventionPortion>,
     /// What the effect does besides preventing the damage (CR 615.5; see [`PreventionThen`]): "If damage is prevented this
     /// way, Deflecting Palm deals that much damage to that source's controller." None for an effect that only prevents.
     pub then: Option<PreventionThen>,
@@ -540,6 +543,17 @@ pub struct GrantedPreventionDef {
     /// it empty and each card using it gives its own (`.text(..)`), held to its Oracle text by
     /// `crates/cantrip-cards/tests/waiting_texts_match_oracle.rs`.
     pub text: &'static str,
+}
+
+/// The part of the damage a prevention effect a spell or ability made prevents, where it prevents only part of it (CR 615.1):
+/// `amount`, judged on the damage as the effects applied so far have left it (CR 616.1f) - so two such effects apply one
+/// after the other, the second to what the first left (Dark Sphere's ruling) - and never more than the effect's `Shield`
+/// allows. An effect that prevents none of a damage event this way is not used up by it (CR 609.7b). `words` say how much,
+/// before what the effect is shown to prevent: "half, rounded down, of".
+#[derive(Clone, Copy)]
+pub struct PreventionPortion {
+    pub amount: PreventionAmountFn,
+    pub words: &'static str,
 }
 
 /// Damage a prevention effect prevented of one part of a damage event (CR 615.5): from `source` to `target`, `amount` of it

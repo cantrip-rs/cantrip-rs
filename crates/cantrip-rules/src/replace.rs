@@ -823,7 +823,8 @@ fn prevents_all(cx: &Cx, c: &Candidate) -> bool {
             e.timestamp == timestamp
                 && matches!(e.kind, EffectKind::Prevention { card, index, shield: Shield::All, .. }
                     if cx.cards().get(card).granted_preventions[index as usize].then.is_none()
-                        && !cx.cards().get(card).granted_preventions[index as usize].gain_prevented)
+                        && !cx.cards().get(card).granted_preventions[index as usize].gain_prevented
+                        && cx.cards().get(card).granted_preventions[index as usize].portion.is_none())
         }),
         _ => false,
     }
@@ -1222,9 +1223,18 @@ fn apply_each(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enter
                     let mut e = cx.s().effects[at];
                     let as_applied = e;
                     let EffectKind::Prevention { card, index, to, shield } = e.kind else { unreachable!("a prevention effect") };
+                    // CR 615.1, 616.1f: all of the damage as it now is, or the part of it the effect's definition says.
+                    let of_it = match cx.cards().get(card).granted_preventions[index as usize].portion {
+                        None => d.amount,
+                        Some(portion) => {
+                            let asker = Asker { instance: None, source: e.source, controller: e.controller, by: None, spell: false };
+                            let reads = WithWords { q: &*cx, source: e.source, words: e.words };
+                            (portion.amount)(&reads, &asker, d).min(d.amount)
+                        }
+                    };
                     let prevented = match shield {
-                        Shield::All | Shield::NextTime => d.amount,
-                        Shield::Next(left) => left.min(d.amount),
+                        Shield::All | Shield::NextTime => of_it,
+                        Shield::Next(left) => left.min(of_it),
                     };
                     let part = Prevented { source: d.source, target: d.target, amount: prevented, combat: d.combat };
                     prevent(cx, d, prevented, source);

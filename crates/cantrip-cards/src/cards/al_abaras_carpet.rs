@@ -39,6 +39,7 @@ pub static CARD: CardDef = CardDef {
             damage: "damage",
             of_it: None,
             applies: made_1_applies,
+            portion: None,
             then: None,
             gain_prevented: false,
             text: "Prevent all damage that would be dealt to you this turn by attacking creatures without flying.",

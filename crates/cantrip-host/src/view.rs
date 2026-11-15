@@ -990,12 +990,15 @@ impl<'a> Projector<'a> {
     fn prevention_text(&self, e: &ContinuousEffect, whom: &str) -> Option<String> {
         let EffectKind::Prevention { card, index, shield, .. } = e.kind else { return None };
         let card = self.game.cards.get(card);
-        let damage = card.granted_preventions.get(index as usize)?.damage;
+        let def = card.granted_preventions.get(index as usize)?;
+        let damage = def.damage;
+        // Part of it (CR 615.1): "Prevent half, rounded down, of the next damage ...".
+        let part = def.portion.map(|p| format!("{} ", p.words)).unwrap_or_default();
         let how = match shield {
-            Shield::All => format!("Prevent all {damage}"),
-            Shield::Next(n) => format!("Prevent the next {n} {damage}"),
-            // CR 615.8: the next time it would be dealt, all of it.
-            Shield::NextTime => format!("Prevent the next {damage}"),
+            Shield::All => format!("Prevent {part}all {damage}"),
+            Shield::Next(n) => format!("Prevent {part}the next {n} {damage}"),
+            // CR 615.8: the next time it would be dealt, all of it (or the part of it the effect says).
+            Shield::NextTime => format!("Prevent {part}the next {damage}"),
         };
         let to = match card.granted_preventions.get(index as usize)?.of_it {
             Some(of_it) if whom == "it" => format!(" {of_it}"),

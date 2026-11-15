@@ -1934,7 +1934,8 @@ impl EffectKind {
     }
 }
 
-/// How much damage a prevention effect a spell or ability made prevents (CR 615.1, 615.7).
+/// How much damage a prevention effect a spell or ability made prevents (CR 615.1, 615.7). Of each damage it applies to, it
+/// prevents all, or the part its definition's `portion` says ("prevent half that damage", Dark Sphere), within what this allows.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum Shield {
     /// All of the damage it applies to, for as long as it lasts: "prevent all damage that would be dealt to target

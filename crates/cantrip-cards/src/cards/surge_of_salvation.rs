@@ -17,6 +17,7 @@ const BLACK_OR_RED: GrantedPreventionDef = GrantedPreventionDef {
     damage: "damage from black and/or red sources",
     of_it: None,
     applies: black_or_red_to_your_creatures,
+    portion: None,
     then: None,
     gain_prevented: false,
     text: "Prevent all damage that black and/or red sources would deal to creatures you control this turn.",

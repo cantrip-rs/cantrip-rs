@@ -24,11 +24,11 @@ fn combat(_: &dyn Query, _: &Asker, _: ObjectId, d: &DamageEvent) -> bool {
 /// Damage of any kind from any source, to whom the effect names: "prevent the next 3 damage that would be dealt to any
 /// target this turn" (Healing Salve; Bandage's next 1, Mending Hands' next 4).
 /// The card gives its own words (`.text(..)`).
-pub const ANY_DAMAGE: GrantedPreventionDef = GrantedPreventionDef { hint: "prevents the damage", damage: "damage", of_it: None, applies: any, then: None, gain_prevented: false, text: "" };
+pub const ANY_DAMAGE: GrantedPreventionDef = GrantedPreventionDef { hint: "prevents the damage", damage: "damage", of_it: None, applies: any, portion: None, then: None, gain_prevented: false, text: "" };
 
 /// Combat damage only (CR 510.2): "prevent all combat damage that would be dealt this turn" (Fog, Holy Day, Moment's
 /// Peace). The card gives its own words (`.text(..)`).
-pub const COMBAT_DAMAGE: GrantedPreventionDef = GrantedPreventionDef { hint: "prevents all combat damage", damage: "combat damage", of_it: None, applies: combat, then: None, gain_prevented: false, text: "" };
+pub const COMBAT_DAMAGE: GrantedPreventionDef = GrantedPreventionDef { hint: "prevents all combat damage", damage: "combat damage", of_it: None, applies: combat, portion: None, then: None, gain_prevented: false, text: "" };
 
 fn dealt_by(_: &dyn Query, _: &Asker, source: ObjectId, d: &DamageEvent) -> bool {
     d.source == source
@@ -37,7 +37,7 @@ fn dealt_by(_: &dyn Query, _: &Asker, source: ObjectId, d: &DamageEvent) -> bool
 /// Damage of any kind whose source is the object the effect is about (CR 615.1, 120.1): "prevent all damage that would be
 /// dealt by [that creature]". Once that object has left the zone it was in it is a new object (CR 400.7), which the effect
 /// is not about. Old Fat Spider Can't See Me and Gideon of the Trials (+1) print it. The card gives its own words (`.text(..)`).
-pub const DAMAGE_DEALT_BY: GrantedPreventionDef = GrantedPreventionDef { hint: "prevents all damage dealt by that permanent", damage: "damage", of_it: Some("dealt by it"), applies: dealt_by, then: None, gain_prevented: false, text: "" };
+pub const DAMAGE_DEALT_BY: GrantedPreventionDef = GrantedPreventionDef { hint: "prevents all damage dealt by that permanent", damage: "damage", of_it: Some("dealt by it"), applies: dealt_by, portion: None, then: None, gain_prevented: false, text: "" };
 
 fn combat_dealt_by(_: &dyn Query, _: &Asker, source: ObjectId, d: &DamageEvent) -> bool {
     d.combat && d.source == source
@@ -45,7 +45,7 @@ fn combat_dealt_by(_: &dyn Query, _: &Asker, source: ObjectId, d: &DamageEvent) 
 
 /// Combat damage (CR 510.2) whose source is the object the effect is about (CR 615.1): "prevent all combat damage that would be
 /// dealt by target creature this turn". Horn of Deafening and Lady Evangela print it. The card gives its own words (`.text(..)`).
-pub const COMBAT_DAMAGE_DEALT_BY: GrantedPreventionDef = GrantedPreventionDef { hint: "prevents all combat damage dealt by that creature", damage: "combat damage", of_it: Some("dealt by it"), applies: combat_dealt_by, then: None, gain_prevented: false, text: "" };
+pub const COMBAT_DAMAGE_DEALT_BY: GrantedPreventionDef = GrantedPreventionDef { hint: "prevents all combat damage dealt by that creature", damage: "combat damage", of_it: Some("dealt by it"), applies: combat_dealt_by, portion: None, then: None, gain_prevented: false, text: "" };
 
 fn combat_dealt_to_and_by(_: &dyn Query, _: &Asker, creature: ObjectId, d: &DamageEvent) -> bool {
     d.combat && (d.source == creature || d.target == Target::Object(creature))
@@ -59,6 +59,7 @@ pub const COMBAT_DAMAGE_DEALT_TO_AND_BY: GrantedPreventionDef = GrantedPreventio
     damage: "combat damage",
     of_it: Some("to and dealt by it"),
     applies: combat_dealt_to_and_by,
+    portion: None,
     then: None,
     gain_prevented: false,
     text: "Prevent all combat damage that would be dealt to and dealt by that creature this turn.",
@@ -254,6 +255,7 @@ pub const FROM_CHOSEN_SOURCE: GrantedPreventionDef = GrantedPreventionDef {
     damage: "damage from the chosen source",
     of_it: None,
     applies: from_chosen_source,
+    portion: None,
     then: None,
     gain_prevented: false,
     text: "",
@@ -263,12 +265,11 @@ pub const FROM_CHOSEN_SOURCE: GrantedPreventionDef = GrantedPreventionDef {
 /// spell or ability's controller chooses a source as it resolves (`choose_source`, any source), and the effect watches for the
 /// next damage event in which it would deal damage to them - all of that damage is prevented, and the effect is used up
 /// once the event has been dealt. The card lists `FROM_CHOSEN_SOURCE` (or a definition of the same damage with its own
-/// `then`) `index`th in its `granted_preventions`. Deflecting Palm, Haazda Shield Mate, Invulnerability, Reverse Damage,
-/// Intervention Pact. The source chosen, if any.
+/// `then`, or a `portion` of it) `index`th in its `granted_preventions`. Deflecting Palm, Haazda Shield Mate, Invulnerability,
+/// Reverse Damage, Intervention Pact. The source chosen, if any.
 pub fn next_time_chosen_source_would_damage_you(g: &mut dyn Game, item: &StackItem, index: u8) -> Result<Option<ObjectId>, Suspend> {
     next_time_source_would_damage_you(g, item, index, SOURCE)
 }
-
 /// `next_time_chosen_source_would_damage_you` for a source `rule` allows ("a black or red source of your choice": `SOURCE`
 /// with `source_of_colors` as a part), judged as it is chosen (CR 609.7a) and again, by the card's `applies`
 /// (`from_chosen_source_of_colors`), as it would deal damage (CR 609.7b). Circle of Protection: Artifacts; the colored
