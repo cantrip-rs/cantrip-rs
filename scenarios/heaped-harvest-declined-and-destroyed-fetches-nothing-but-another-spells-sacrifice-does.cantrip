@@ -1,0 +1,75 @@
+# Heaped Harvest searches only "when this artifact enters and when you sacrifice it", and only if the player says yes. Turn 1: the first
+# Heaped Harvest enters and the search is declined: nothing is fetched (four permanents: three Moxen and it). Turn 2: Bot2's Disenchant
+# destroys it, which is not a sacrifice: no search is offered and no land arrives. Turn 3: the second Heaped Harvest enters and a
+# Forest is fetched (accepted). Turn 5: Deadly Dispute sacrifices it as an additional cost, which is a sacrifice, and a Mountain is
+# fetched (accepted): Moxen, Forest, Mountain and the Treasure Deadly Dispute makes.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Heaped Harvest
+Heaped Harvest
+Deadly Dispute
+Island
+Island x3
+Forest
+Mountain
+Island x8
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Disenchant
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Heaped Harvest.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Battlefield.Count = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Heaped Harvest)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 3
+? Bot1.Graveyard = Heaped Harvest
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Heaped Harvest.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Search(Forest)
+? Bot1.Battlefield.Count = 5
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Deadly Dispute.Cast
+Bot1.Choose(Heaped Harvest)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Search(Mountain)
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Mountain.Tapped = true
+Bot1.Graveyard.Count = 3

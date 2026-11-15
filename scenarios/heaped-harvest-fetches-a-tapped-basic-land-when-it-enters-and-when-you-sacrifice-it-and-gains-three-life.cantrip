@@ -1,0 +1,52 @@
+# Heaped Harvest ({2}{G} Food artifact): "When this artifact enters and when you sacrifice it, you may search your library for a basic
+# land card, put it onto the battlefield tapped, then shuffle. {2}, {T}, Sacrifice this artifact: You gain 3 life." Turn 1: it enters,
+# the search is accepted, the nonbasic Tundra is refused (a basic land card only) and a Forest is put onto the battlefield tapped.
+# Turn 3: the {2}, {T}, sacrifice ability costs it; the sacrifice triggers the search a second time (a Mountain, tapped), and 3 life
+# is gained (20 -> 23). The Forest from turn 1 untapped as the turn began.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Heaped Harvest
+Island x3
+Tundra
+Forest
+Mountain
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Heaped Harvest.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Search(Tundra)
+Bot1.Search(Forest)
+? Bot1.Battlefield.Forest.Tapped = true
+? Bot1.Life = 20
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Forest.Tapped = false
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Heaped Harvest.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Search(Mountain)
+
+[Expect]
+Bot1.Life = 23
+Bot1.Battlefield.Mountain.Tapped = true
+Bot1.Battlefield.Forest.Tapped = false
+Bot1.Graveyard = Heaped Harvest
