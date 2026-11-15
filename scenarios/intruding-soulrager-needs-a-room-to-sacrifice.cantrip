@@ -1,0 +1,42 @@
+# Intruding Soulrager's cost is "Sacrifice a Room" (CR 701.21a, 118.3): a Mox Pearl, an artifact, is not one, so turn 3's
+# activation is not offered, and Bot2 stays at 20. With Roaring Furnace cast on turn 3 as well it is, and Bot2 takes 2.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Intruding Soulrager
+Mox Pearl
+Roaring Furnace // Steaming Sauna
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Intruding Soulrager.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+! Bot1.Battlefield.Intruding Soulrager.Activate
+? Bot2.Life = 20
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Roaring Furnace // Steaming Sauna.Cast(Ability: Roaring Furnace)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Intruding Soulrager.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
