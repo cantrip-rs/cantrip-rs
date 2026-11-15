@@ -1,0 +1,62 @@
+# Rootwise Survivor, Survival: "At the beginning of your second main phase, if this creature is tapped, put three +1/+1 counters on
+# up to one target land you control. That land becomes a 0/0 Elemental creature in addition to its other types. It gains haste until
+# your next turn." Rootwise (haste) is cast on turn 3 and attacks, so it is tapped at the second main phase. Bot2's Island is no
+# target (the refusal: "you control", CR 115.1), Bot1's Forest is. The Forest gets three counters and becomes a 0/0 Elemental
+# creature that is still a Forest land (3/3 with the counters, CR 613.1d, 613.4c); the Island beside it is untouched. The haste lasts
+# through Bot2's turn 4 (until Bot1's next turn begins, CR 611.2a) and is gone on turn 5, while the creature and its counters stay.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Forest
+Island
+Rootwise Survivor
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Rootwise Survivor.Cast
+Bot1.Pass
+Bot1.Attack(Rootwise Survivor > Bot2)
+[T3 Bot1.Main2]
+! Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Target(Forest)
+? Bot1.Battlefield.Forest.Types = Land
+Bot1.Pass
+[T3 Bot1.End]
+? Bot1.Battlefield.Forest.Types = Land; Creature
+? Bot1.Battlefield.Forest.Subtypes = Elemental; Forest
+? Bot1.Battlefield.Forest.Power = 3
+? Bot1.Battlefield.Forest.Toughness = 3
+? Bot1.Battlefield.Forest.Keywords = Haste
+? Bot1.Battlefield.Island.Types = Land
+? Bot2.Battlefield.Island.Types = Land
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Forest.Keywords = Haste
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Forest.Types = Land; Creature
+Bot1.Battlefield.Forest.Power = 3
+Bot1.Battlefield.Forest.Toughness = 3
+Bot1.Battlefield.Forest.Keywords = (absent)
+Bot1.Battlefield.Island.Types = Land
+Bot2.Life = 17
