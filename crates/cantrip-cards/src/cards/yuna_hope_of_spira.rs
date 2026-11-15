@@ -1,4 +1,5 @@
 use cantrip_api::*;
+use cantrip_mechanics::effects;
 use cantrip_mechanics::statics::grant_delayed_ability;
 use cantrip_mechanics::triggers::{ward, YOUR_END_STEP};
 use cantrip_mechanics::targets;
@@ -21,19 +22,10 @@ fn have_trample_lifelink_and_ward(view: &dyn LayerQuery, source: ObjectId, chars
     grant_delayed_ability(view, source, chars);
 }
 
-/// "Return up to one target enchantment card from your graveyard to the battlefield with a finality counter on it": the
-/// counter is on it as it enters (CR 122.6, 614.1c).
-fn return_with_finality(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(card) = targets::object(g, item, 0) {
-        g.put_onto_battlefield_with_counters(card, item.controller, false, &[(CounterKind::Finality, 1)])?;
-    }
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
         YOUR_END_STEP,
-        return_with_finality,
+        effects::return_target_card_with_finality,
         "At the beginning of your end step, return up to one target enchantment card from your graveyard to the battlefield with a finality counter on it.",
     )
     .targets(&[targets::ENCHANTMENT_CARD_IN_YOUR_GRAVEYARD.between(0, 1)])],
