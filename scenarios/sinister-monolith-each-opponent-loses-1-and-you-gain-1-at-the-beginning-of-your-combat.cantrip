@@ -1,0 +1,37 @@
+# Sinister Monolith: "At the beginning of combat on your turn, each opponent loses 1 life and you gain 1 life." Bot1 casts it on
+# turn 1 (Black Lotus and Mox Jet pay {3}{B}) and the trigger resolves at its first combat (Bot2 19, Bot1 21). It does not trigger at
+# Bot2's turn-2 combat (still 19 and 21) and does again at turn 3's (Bot2 18, Bot1 22).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Sinister Monolith
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sinister Monolith.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Life = 21
+[T2 Bot2.BeginCombat]
+? Bot2.Life = 19
+? Bot1.Life = 21
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 18
+Bot1.Life = 22
