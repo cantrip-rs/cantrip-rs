@@ -1,0 +1,83 @@
+# Merseine on a Room made a creature by Opalescence (Glorious Anthem keeps it alive at mana value 0). A Room has the mana
+# cost of its unlocked doors alone, and none at all with neither unlocked (CR 709.5). Bot1 casts Unholy Annex, then
+# Ephemerate blinks the Room: it returns as a new object with neither door unlocked (CR 709.5d), so with no mana cost, and
+# Merseine on it can't be paid for (CR 118.6) even with mana to spare - not a free {0}. Once Bot1 pays {2}{B} to unlock
+# Unholy Annex (CR 709.5e), the creature's mana cost is {2}{B}, and that is what removes a net counter: exactly {B}{W}{W}
+# in the pool, nothing left. Ephemerate's rebound is declined (the default).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Jet
+Mox Pearl
+Unholy Annex // Ritual Chamber
+Opalescence
+Glorious Anthem
+Plains
+Black Lotus
+Ephemerate
+Merseine
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Opalescence.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Glorious Anthem.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Unholy Annex.Power = 4
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ephemerate.Cast(Bot1.Battlefield.Unholy Annex)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Merseine.Cast(Bot1.Battlefield.#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..Doors.Count = 0
+? Bot1.Battlefield.Merseine.Counters.Net = 3
+! Bot1.Battlefield.Merseine.Activate
+[T7 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.#1.Activate(Ability: left door)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+? Bot1.Battlefield.Unholy Annex.Power = 4
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Merseine.Activate
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Merseine.Counters.Net = 2
+Bot1.Battlefield.Merseine.AttachedTo = Unholy Annex

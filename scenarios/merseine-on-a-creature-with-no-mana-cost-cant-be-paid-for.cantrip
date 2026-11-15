@@ -1,0 +1,28 @@
+# Merseine on Dryad Arbor, a land creature with no mana cost: a cost based on the mana cost of an object with none is
+# unpayable (CR 118.6, 202.1b), so its controller can't remove a net counter, even with mana to spare (the refusal is
+# judged again with more mana) - not a free {0}. Merseine on Walking Ballista, whose cost comes to {0} and is paid, is the
+# case beside it.
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Merseine
+Dryad Arbor
+Island x20
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Dryad Arbor.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merseine.Cast(Bot1.Battlefield.Dryad Arbor)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Merseine.AttachedTo = Dryad Arbor
+! Bot1.Battlefield.Merseine.Activate
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Merseine.Activate
+[Expect]
+Bot1.Battlefield.Merseine.Counters.Net = 3

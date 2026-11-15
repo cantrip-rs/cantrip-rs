@@ -1,0 +1,62 @@
+# Merseine (Bot2's) on Bot1's Phyrexian Metamorph that copies nothing, kept alive by Glorious Anthem: the activation cost is
+# the Metamorph's mana cost, {3}{U/P}. How a Phyrexian symbol of an activation cost is paid is announced as the ability is
+# proposed (CR 118.13a, 601.2b, 107.4f), the symbols its cost takes from the creature included: Bot1 pays the {U/P} with 2
+# life though an untapped Mox Sapphire could pay it, and the {3} with the three other Moxen, so the Sapphire stays untapped.
+[Bot1 Deck]
+Black Lotus
+Glorious Anthem
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Phyrexian Metamorph
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Merseine
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Glorious Anthem.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Phyrexian Metamorph.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Merseine.Cast(Bot1.Battlefield.Phyrexian Metamorph)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Merseine.Counters.Net = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Merseine.Activate
+Bot1.Modes(1)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 18
+Bot1.Battlefield.Mox Sapphire.Tapped = false
+Bot2.Battlefield.Merseine.Counters.Net = 2

@@ -1,0 +1,43 @@
+# Merseine on its own controller's Kitchen Finks: the controller of the enchanted creature is the Aura's controller here,
+# so they may activate it (CR 602.2), and its cost is the Finks' mana cost, {1}{G/W}{G/W}, hybrid symbols and all
+# (CR 602.2b, 601.2f): exactly {G}{W}{U} in the pool pays it, and nothing is left.
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Kitchen Finks
+Merseine
+Island
+Island x20
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Kitchen Finks.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merseine.Cast(Bot1.Battlefield.Kitchen Finks)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Merseine.Counters.Net = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Merseine.Activate
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Merseine.Counters.Net = 2
+Bot1.Battlefield.Merseine.AttachedTo = Kitchen Finks

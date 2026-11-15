@@ -1,0 +1,6 @@
+{
+  "name": "Merseine",
+  "manaCost": "{2}{U}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nThis Aura enters with three net counters on it.\nEnchanted creature doesn't untap during its controller's untap step if this Aura has a net counter on it.\nPay enchanted creature's mana cost: Remove a net counter from this Aura. Only the controller of the enchanted creature may activate this ability."
+}

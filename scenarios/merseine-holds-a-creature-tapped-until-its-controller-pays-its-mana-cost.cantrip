@@ -1,0 +1,65 @@
+# Bot1's Merseine enchants Bot2's Llanowar Elves and enters with three net counters. Only the creature's controller may
+# activate it (CR 602.2): Bot1, who controls the Aura, can't; Bot2 can't either while it has only blue mana, since the cost
+# is the Elves' mana cost, {G}, colored symbol and all (the ruling), and with green mana Bot2 pays exactly {G} for each
+# counter. The Elves, tapped for mana, stay tapped through Bot2's untap step while a net counter is on the Aura (CR 502.3),
+# and untap in the first untap step after the last one is gone.
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Merseine
+Island x20
+[Bot2 Deck]
+Llanowar Elves
+Forest
+Mox Sapphire
+Forest
+Forest
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merseine.Cast(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Merseine.Counters.Net = 3
+! Bot1.Battlefield.Merseine.Activate
+! Bot2.Battlefield.Merseine.Activate(Mana: short)
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Llanowar Elves.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Merseine.Activate
+? Bot2.Mana = {G}
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Merseine.Counters.Net = 2
+Bot2.Battlefield.Merseine.Activate
+Bot2.Pass
+? Bot2.Mana =
+Bot1.Pass
+? Bot1.Battlefield.Merseine.Counters.Net = 1
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Merseine.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Merseine.Counters.Net = (absent)
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+[T8 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Tapped = false
+Bot1.Battlefield.Merseine.AttachedTo = Llanowar Elves

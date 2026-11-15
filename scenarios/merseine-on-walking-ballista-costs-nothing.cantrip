@@ -1,0 +1,35 @@
+# Merseine on Walking Ballista, whose mana cost is {X}{X}: paying an object's mana cost with {X} in it off the stack takes
+# X as 0 (CR 107.3h), so the cost is {0} and is paid with no mana at all - Ballista has a mana cost, unlike Dryad Arbor
+# (merseine-on-a-creature-with-no-mana-cost-cant-be-paid-for). Every mana source is spent first, so nothing could pay more.
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Emerald
+Mox Jet
+Walking Ballista
+Merseine
+Island x20
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Walking Ballista.Cast(X: 1)
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merseine.Cast(Bot1.Battlefield.Walking Ballista)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+Bot1.Battlefield.Merseine.Activate
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Merseine.Counters.Net = 2
+Bot1.Battlefield.Merseine.AttachedTo = Walking Ballista

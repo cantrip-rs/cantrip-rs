@@ -1,0 +1,43 @@
+# Merseine on Sacred Cat's embalmed token: a copy of the card "except it's white, it has no mana cost, and it's a Zombie"
+# (CR 702.128a, 707.9b), so it has no mana cost though the card it copies has {W}, and the ability's cost, based on it, is
+# unpayable (CR 118.6): with Mox Pearl untapped Bot1 still can't remove a net counter - neither the card's {W} nor a free
+# {0}. Faithless Looting discards the Cat; Mox Pearl pays the embalm, and the Lotus and Mox Sapphire Merseine.
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Sacred Cat
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Merseine
+Island x20
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Sacred Cat; Island)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Sacred Cat.Activate(Ability: Embalm)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sacred Cat.ManaValue = 0
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merseine.Cast(Bot1.Battlefield.Sacred Cat)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Merseine.AttachedTo = Sacred Cat
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Merseine.Activate
+[Expect]
+Bot1.Battlefield.Merseine.Counters.Net = 3

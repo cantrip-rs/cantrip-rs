@@ -1,0 +1,65 @@
+# Merseine (Bot2's) on Bot1's Vault Skirge, {1}{B/P}, with Bot1's Zirda, the Dawnwaker: "abilities you activate ... cost {2}
+# less ... can't reduce the mana in that cost to less than one mana". How the {B/P} is paid is announced as the ability is
+# proposed (CR 118.13a, 601.2b), before the total is determined (CR 601.2f): paid with 2 life, the mana in the cost is {1},
+# which Zirda can't take below one. So on turn 2, with every source of Bot1's tapped, the ability is not offered (not a free
+# {0} and 2 life); on turn 3 Mox Ruby's {R} and 2 life pay it, and nothing is left in the pool.
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+Zirda, the Dawnwaker
+Vault Skirge
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Merseine
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Zirda, the Dawnwaker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vault Skirge.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Merseine.Cast(Bot1.Battlefield.Vault Skirge)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Merseine.Counters.Net = 3
+? Bot1.Battlefield.Mox Ruby.Tapped = true
+? Bot1.Life = 20
+! Bot1.Battlefield.Merseine.Activate(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Merseine.Activate
+Bot1.Modes(1)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+[Expect]
+Bot1.Life = 18
+Bot2.Battlefield.Merseine.Counters.Net = 2
