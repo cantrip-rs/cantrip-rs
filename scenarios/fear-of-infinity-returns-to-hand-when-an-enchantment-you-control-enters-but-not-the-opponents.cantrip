@@ -1,0 +1,46 @@
+# Fear of Infinity, Eerie: "Whenever an enchantment you control enters ... you may return this card from your graveyard to your hand"
+# (CR 603.2, 113.6m). Entomb puts it in Bot1's graveyard. Bot2's Crusade entering is an enchantment Bot1 does not control, so
+# nothing triggers; Bot1's own Bad Moon entering does, and accepting returns the card to its owner's hand.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Entomb
+Bad Moon
+Plains
+Plains
+Fear of Infinity
+Plains x12
+
+[Bot2 Deck]
+Mox Pearl
+Crusade
+Plains
+Plains x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Fear of Infinity)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Crusade.Cast
+? Bot1.Graveyard = Entomb; Fear of Infinity
+? Bot1.Hand.Count = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bad Moon.Cast
+Bot1.Accept
+
+[Expect]
+Bot1.Graveyard = Entomb
+Bot1.Hand = Fear of Infinity; Plains; Plains; Plains
+Bot1.Battlefield = Bad Moon; Mox Jet; Mox Jet; Mox Jet
