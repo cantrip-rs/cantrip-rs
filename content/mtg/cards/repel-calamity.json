@@ -1,0 +1,6 @@
+{
+  "name": "Repel Calamity",
+  "manaCost": "{1}{W}",
+  "type": "Instant",
+  "oracleText": "Destroy target creature with power or toughness 4 or greater."
+}
