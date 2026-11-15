@@ -1,0 +1,22 @@
+# Etched Cornfield: one life more than the limit. Both players at 14 life is not "13 or less", so it enters tapped (CR 614.1d);
+# the controller at 13 (enters-untapped scenario) and an opponent at 13 are the other side of the same line.
+
+[Life]
+Bot1: 14
+Bot2: 14
+
+[Bot1 Deck]
+Etched Cornfield
+Plains x19
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Etched Cornfield.Play
+? Bot1.Battlefield.Etched Cornfield.Tapped = true
+
+[Expect]
+Bot1.Life = 14
+Bot2.Life = 14
+Bot1.Battlefield.Etched Cornfield.Tapped = true
