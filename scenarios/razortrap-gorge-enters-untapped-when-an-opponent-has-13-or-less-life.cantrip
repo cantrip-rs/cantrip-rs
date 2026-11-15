@@ -1,0 +1,23 @@
+# Razortrap Gorge: the player with 13 or less life may be an opponent, not only the land's controller (Bot1 stays at 20, Bot2 starts
+# at 13): "a player", CR 614.1d. It enters untapped and taps for {B}.
+
+[Life]
+Bot2: 13
+
+[Bot1 Deck]
+Razortrap Gorge
+Plains x19
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Razortrap Gorge.Play
+? Bot1.Battlefield.Razortrap Gorge.Tapped = false
+Bot1.Battlefield.Razortrap Gorge.Activate(Color: Black)
+? Bot1.Mana = {B}
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 13
+Bot1.Battlefield.Razortrap Gorge.Tapped = true
