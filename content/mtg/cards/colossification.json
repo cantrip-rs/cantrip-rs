@@ -1,0 +1,6 @@
+{
+  "name": "Colossification",
+  "manaCost": "{5}{G}{G}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nWhen this Aura enters, tap enchanted creature.\nEnchanted creature gets +20/+20."
+}
