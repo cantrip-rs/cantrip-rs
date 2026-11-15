@@ -1,0 +1,42 @@
+# Star Charter: losing life counts as much as gaining it. Bot2's Lightning Bolt hits Bot1 on Bot1's third turn; at its end step the look
+# at Alpine Grizzly, Memnite, Plains, Plains finds Memnite (power 1) and Bot1 declines to take it ("you may"): all four go to the bottom.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Star Charter
+Plains
+Plains
+Plains
+Plains
+Plains
+Alpine Grizzly
+Memnite
+Plains
+Plains
+Plains x8
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Star Charter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[T3 Bot1.End]
+Bot1.Arrange( | Alpine Grizzly; Memnite; Plains; Plains)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Hand.Count = 5
+Bot1.Library.Count = 12

@@ -1,0 +1,40 @@
+# Star Charter: "You may reveal a creature card with power 3 or less from among them and put it into your hand." One card, not two.
+# Bot1 gains 2 life with Sami's Curiosity. The top four hold two eligible creatures (Memnite and Thistledown Players), so taking both
+# is refused (CR 701.20a) and taking just Memnite is accepted, the other three going to the bottom.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Star Charter
+Sami's Curiosity
+Plains
+Plains
+Memnite
+Thistledown Players
+Plains
+Plains
+Plains x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Star Charter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Sami's Curiosity.Cast
+[T1 Bot1.End]
+! Bot1.Arrange(Memnite; Thistledown Players | Plains; Plains)
+Bot1.Arrange(Memnite | Thistledown Players; Plains; Plains)
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 22
+Bot1.Hand = Plains; Plains; Memnite
+Bot1.Library.Count = 12
+Bot1.Revealed = Memnite

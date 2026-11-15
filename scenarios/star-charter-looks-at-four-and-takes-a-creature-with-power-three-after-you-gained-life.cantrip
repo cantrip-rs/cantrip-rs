@@ -1,0 +1,42 @@
+# Star Charter: "At the beginning of your end step, if you gained or lost life this turn, look at the top four cards of your library. You may
+# reveal a creature card with power 3 or less from among them and put it into your hand. Put the rest on the bottom ... random order."
+# Bot1 gains 2 life with Sami's Curiosity. The top four are Alpine Grizzly (power 4, one too many), Plains (not a creature), Thistledown
+# Players (power 3, the boundary) and Memnite; the first two cannot go to the hand (refused), Players does (CR 701.20a, 603.4).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Star Charter
+Sami's Curiosity
+Plains
+Plains
+Alpine Grizzly
+Plains
+Thistledown Players
+Memnite
+Plains x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Star Charter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Sami's Curiosity.Cast
+[T1 Bot1.End]
+! Bot1.Arrange(Alpine Grizzly | Plains; Thistledown Players; Memnite)
+! Bot1.Arrange(Plains | Alpine Grizzly; Thistledown Players; Memnite)
+Bot1.Arrange(Thistledown Players | Alpine Grizzly; Plains; Memnite)
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 22
+Bot1.Hand = Plains; Plains; Thistledown Players
+Bot1.Library.Count = 12
+Bot1.Revealed = Thistledown Players
