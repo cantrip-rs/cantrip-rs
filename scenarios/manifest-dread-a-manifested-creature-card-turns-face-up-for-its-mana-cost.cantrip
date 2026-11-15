@@ -1,0 +1,40 @@
+# Manifest Dread: "Turn it face up any time for its mana cost if it's a creature card" (CR 701.62a, 701.40b). Bot1 casts it with two
+# Moxen, manifests Llanowar Elves from the top two cards and mills the Island; then turns the 2/2 face up as a special action
+# for the Elves' {G} from its Forest. Face up it is a 1/1 Llanowar Elves, the same permanent, still untapped (CR 708.8).
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Jet
+Manifest Dread
+Island x3
+Llanowar Elves
+Island
+Island x10
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Manifest Dread.Cast
+Bot1.Arrange(Llanowar Elves | Island)
+Bot1.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Power = 2
+Bot1.Battlefield.#1.Activate
+Bot1.Battlefield.Forest.Activate
+? Bot1.Battlefield.Llanowar Elves.FaceDown = (absent)
+
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Battlefield.Llanowar Elves.Toughness = 1
+Bot1.Battlefield.Llanowar Elves.Tapped = false
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.Count = 4
+Bot1.Graveyard = Manifest Dread; Island
+Stack.Count = 0
