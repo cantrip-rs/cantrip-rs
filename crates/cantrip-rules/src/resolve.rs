@@ -297,6 +297,10 @@ impl Query for Given<'_> {
         self.q.producible_types(permanent)
     }
 
+    fn speculate_resolution(&self, item: Target, settled: &dyn Fn(&cantrip_api::Speculated<'_>) -> bool, visit: &mut dyn FnMut(&cantrip_api::Speculated<'_>) -> std::ops::ControlFlow<()>) -> cantrip_api::Speculation<()> {
+        self.q.speculate_resolution(item, settled, visit)
+    }
+
     fn linked_card(&self, card: CardId) -> CardId {
         self.q.linked_card(card)
     }

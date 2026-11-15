@@ -257,6 +257,10 @@ impl Query for AsSpell<'_> {
         self.q.producible_types(permanent)
     }
 
+    fn speculate_resolution(&self, item: Target, settled: &dyn Fn(&cantrip_api::Speculated<'_>) -> bool, visit: &mut dyn FnMut(&cantrip_api::Speculated<'_>) -> std::ops::ControlFlow<()>) -> cantrip_api::Speculation<()> {
+        self.q.speculate_resolution(item, settled, visit)
+    }
+
     fn linked_card(&self, card: CardId) -> CardId {
         self.q.linked_card(card)
     }
@@ -342,6 +346,10 @@ impl Query for WithWords<'_> {
 
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
         self.q.producible_types(permanent)
+    }
+
+    fn speculate_resolution(&self, item: Target, settled: &dyn Fn(&cantrip_api::Speculated<'_>) -> bool, visit: &mut dyn FnMut(&cantrip_api::Speculated<'_>) -> std::ops::ControlFlow<()>) -> cantrip_api::Speculation<()> {
+        self.q.speculate_resolution(item, settled, visit)
     }
 
     fn words(&self, id: ObjectId) -> Words {
@@ -3894,6 +3902,10 @@ impl Query for Announcing<'_> {
         self.q.producible_types(permanent)
     }
 
+    fn speculate_resolution(&self, item: Target, settled: &dyn Fn(&cantrip_api::Speculated<'_>) -> bool, visit: &mut dyn FnMut(&cantrip_api::Speculated<'_>) -> std::ops::ControlFlow<()>) -> cantrip_api::Speculation<()> {
+        self.q.speculate_resolution(item, settled, visit)
+    }
+
     fn linked_card(&self, card: CardId) -> CardId {
         self.q.linked_card(card)
     }
@@ -4008,6 +4020,11 @@ impl Query for Watch<'_> {
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
         self.w.told.set(true);
         self.q.producible_types(permanent)
+    }
+
+    fn speculate_resolution(&self, item: Target, settled: &dyn Fn(&cantrip_api::Speculated<'_>) -> bool, visit: &mut dyn FnMut(&cantrip_api::Speculated<'_>) -> std::ops::ControlFlow<()>) -> cantrip_api::Speculation<()> {
+        self.w.told.set(true);
+        self.q.speculate_resolution(item, settled, visit)
     }
 
     fn linked_card(&self, card: CardId) -> CardId {
@@ -4714,6 +4731,10 @@ impl Query for AsFace<'_> {
 
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
         self.cx.producible_types(permanent)
+    }
+
+    fn speculate_resolution(&self, item: Target, settled: &dyn Fn(&cantrip_api::Speculated<'_>) -> bool, visit: &mut dyn FnMut(&cantrip_api::Speculated<'_>) -> std::ops::ControlFlow<()>) -> cantrip_api::Speculation<()> {
+        self.cx.speculate_resolution(item, settled, visit)
     }
 
     fn linked_card(&self, card: CardId) -> CardId {
@@ -8497,6 +8518,10 @@ impl Query for QueryAsFace<'_> {
 
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
         self.q.producible_types(permanent)
+    }
+
+    fn speculate_resolution(&self, item: Target, settled: &dyn Fn(&cantrip_api::Speculated<'_>) -> bool, visit: &mut dyn FnMut(&cantrip_api::Speculated<'_>) -> std::ops::ControlFlow<()>) -> cantrip_api::Speculation<()> {
+        self.q.speculate_resolution(item, settled, visit)
     }
 
     fn linked_card(&self, card: CardId) -> CardId {
@@ -13252,18 +13277,48 @@ fn listed_productions(def: &ActivatedDef, any: u8) -> Vec<[u32; 6]> {
 /// A deterministic replay prefix for chance operations in an advice copy. A new operation tries its first
 /// outcome and queues every other outcome, retaining only questions answered before that operation. Later
 /// questions can depend on the chance result and must be announced anew (CR 106.7, 705, 706).
+///
+/// A speculative resolution (`speculate`) plays on through the engine's own runs, which redo a frame's run from its start
+/// as each answer arrives: there an operation is known by its place in its frame's run (`speculate::Probing`), so a run
+/// redone meets the outcomes it had, and the answers it was given before it are counted by the speculation.
 pub(crate) struct HypotheticalChance {
     route: Vec<u32>,
     chosen: Vec<u32>,
-    alternatives: Vec<(usize, Vec<u32>)>,
+    pub(crate) alternatives: Vec<(usize, Vec<u32>)>,
     pub(crate) terminal_types: u8,
+    pub(crate) probing: Option<Box<crate::speculate::Probing>>,
 }
 
 impl HypotheticalChance {
-    fn new(route: Vec<u32>) -> Self { Self { route, chosen: Vec::new(), alternatives: Vec::new(), terminal_types: 0 } }
+    fn new(route: Vec<u32>) -> Self { Self { route, chosen: Vec::new(), alternatives: Vec::new(), terminal_types: 0, probing: None } }
 
-    pub(crate) fn choose(&mut self, count: u32, answers_used: usize) -> u32 {
-        let at = self.chosen.len();
+    /// A speculative resolution's chance: `route` the outcomes it replays, in the order their operations were first met.
+    pub(crate) fn probing(route: Vec<u32>, probing: crate::speculate::Probing) -> Self {
+        Self { probing: Some(Box::new(probing)), ..Self::new(route) }
+    }
+
+    /// How many outcomes have been chosen so far: where the next new operation's outcome goes in a route.
+    pub(crate) fn chosen_len(&self) -> usize {
+        self.chosen.len()
+    }
+
+    /// The outcomes chosen, in the order their operations were first met.
+    pub(crate) fn chosen(&self) -> &[u32] {
+        &self.chosen
+    }
+
+    pub(crate) fn choose(&mut self, count: u32, answers_used: usize, run: crate::speculate::Run) -> u32 {
+        let (at, answers_used) = match self.probing.as_mut() {
+            Some(probing) => {
+                let key = probing.call_key(run);
+                // An operation of a run redone: the outcome it had.
+                if let Some(i) = probing.met(key) {
+                    return self.chosen.get(i).copied().unwrap_or(0).min(count.saturating_sub(1));
+                }
+                (self.chosen.len(), probing.fed)
+            }
+            None => (self.chosen.len(), answers_used),
+        };
         // The replay is of the same operations in the same order, so a replayed outcome is one of this one's.
         let value = if let Some(&value) = self.route.get(at) {
             value.min(count.saturating_sub(1))
@@ -13495,7 +13550,7 @@ fn effect_productions(cx: &Cx, id: ObjectId, player: PlayerId, definition: &Abil
                         return Some(out);
                     };
                     // More answers than runs are left (those made and those waiting): the first of them are tried, what they find stands (KI-124).
-                    let tries = match answers_to_try(&request.kind, MOST_RUNS.saturating_sub(runs + waiting.len())) {
+                    let tries = match answers_to_try(cx.cards(), &request.kind, false, MOST_RUNS.saturating_sub(runs + waiting.len())) {
                         Ok((tries, true)) => tries,
                         Ok((tries, false)) => {
                             gap(format!("more than {MOST_RUNS} answers to try"));
@@ -13547,7 +13602,16 @@ fn hypothetical_modes(cx: &mut Cx, asker: &Asker, ability: AbilityRef, modal: &M
 /// chosen again (CR 700.2, 700.2d: modes are performed in printed order, whatever order they were chosen in) - and the
 /// colors of "in any combination" as a multiset (CR 106.1b), a "you may", a number, a player, which replacement effect
 /// applies first, with whether that is all of them. For any other question, why not.
-fn answers_to_try(kind: &RequestKind, budget: usize) -> Result<(Vec<Answer>, bool), String> {
+///
+/// A speculative resolution (`speculate`) asks it of every question a resolution may ask (`ordered`): the cards of a choice
+/// or a search then in every order, since where the cards chosen go may follow it (the last chosen of Brainstorm's is put on
+/// top); each action a payment offers (a mana ability, for each color it may name and each set of its targets; paying;
+/// declining; raising and lowering its X; an announcement of X); which cost to pay next; a creature type; every card name
+/// the question allows (CR 201.3); where each card looked at goes, in every order where an order is kept (a library's top
+/// and bottom, a graveyard's); the counters removed from among permanents; and the cards of a cost's tapping for power,
+/// evidence or crafting as a set. A question no resolution asks - priority, combat, mulligans, the order of triggers - is
+/// one it does not try. Every answer is still checked against its question before it is given (`validate::check`).
+pub(crate) fn answers_to_try(cards: &CardTable, kind: &RequestKind, ordered: bool, budget: usize) -> Result<(Vec<Answer>, bool), String> {
     /// Each choice of `least..=most` of `n` items by index, ascending: a set (`again` false) or a multiset (`again`).
     /// False, with the first `budget` of them, where there are more.
     fn choices(n: usize, least: usize, most: usize, again: bool, budget: usize, out: &mut Vec<Vec<usize>>) -> bool {
@@ -13579,11 +13643,60 @@ fn answers_to_try(kind: &RequestKind, budget: usize) -> Result<(Vec<Answer>, boo
             let all = choices(candidates.len(), *least as usize, *count as usize, false, budget, &mut sets);
             Ok((sets.into_iter().map(|set| Answer::Targets(set.into_iter().map(|i| candidates[i]).collect())).collect(), all))
         }
-        RequestKind::ChooseCards { cards, rule, .. } => {
-            let most = rule.count.most().map_or(cards.len(), |n| (n as usize).min(cards.len()));
+        RequestKind::ChooseCards { cards: listed, rule, .. } | RequestKind::SearchLibrary { library: listed, rule, .. } => {
+            let most = rule.count.most().map_or(listed.len(), |n| (n as usize).min(listed.len()));
             let mut sets = Vec::new();
-            let all = choices(cards.len(), 0, most, false, budget, &mut sets);
-            Ok((sets.into_iter().map(|set| Answer::Cards(set.into_iter().map(|i| cards[i]).collect())).collect(), all))
+            let mut all = choices(listed.len(), 0, most, false, budget, &mut sets);
+            if ordered {
+                let mut orders = Vec::new();
+                for set in &sets {
+                    all &= permutations(set, budget, &mut orders);
+                }
+                sets = orders;
+            }
+            Ok((sets.into_iter().map(|set| Answer::Cards(set.into_iter().map(|i| listed[i]).collect())).collect(), all))
+        }
+        RequestKind::UnlessPays { options, .. } => {
+            let mut out = Vec::new();
+            let all = options.iter().all(|o| option_actions(o, budget, &mut out));
+            Ok((out, all))
+        }
+        RequestKind::PayCosts { options, announcing, least, most, .. } => {
+            let mut out = Vec::new();
+            let mut all = options.iter().all(|o| option_actions(o, budget, &mut out));
+            if *announcing {
+                all &= u64::from(*most).saturating_sub(u64::from(*least)) < budget.saturating_sub(out.len()) as u64;
+                let room = budget.saturating_sub(out.len());
+                out.extend((*least..=*most).take(room).map(Answer::Announce));
+            }
+            Ok((out, all))
+        }
+        RequestKind::ChooseCostPayment { choices: payments, .. } =>
+            Ok(((0..payments.len()).take(budget).map(Answer::CostPayment).collect(), payments.len() <= budget)),
+        RequestKind::ChooseSubtype { choices: subtypes, .. } =>
+            Ok((subtypes.iter().take(budget).map(|&s| Answer::Subtype(s)).collect(), subtypes.len() <= budget)),
+        RequestKind::ChooseName { kind: named, .. } => {
+            let names: Vec<CardId> = crate::validate::nameable(cards, *named).collect();
+            let all = names.len() <= budget;
+            Ok((names.into_iter().take(budget).map(|c| Answer::Name(Some(c))).collect(), all))
+        }
+        RequestKind::DistributeCards { cards: looked, destinations, may_shuffle, .. } => {
+            let mut out = Vec::new();
+            if *may_shuffle {
+                out.push(Answer::Placements { placements: vec![Vec::new(); destinations.len()], shuffle: true });
+            }
+            let all = placements(looked, destinations, budget, &mut out);
+            Ok((out, all))
+        }
+        RequestKind::RemoveCounters { pools, total, up_to, .. } => {
+            let mut out = Vec::new();
+            let all = removals(pools, *total as u32, *up_to, 0, &mut Vec::new(), budget, &mut out);
+            Ok((out, all))
+        }
+        RequestKind::TapForPower { cards: offered, .. } | RequestKind::CollectEvidence { cards: offered, .. } | RequestKind::Craft { cards: offered, .. } => {
+            let mut sets = Vec::new();
+            let all = choices(offered.len(), 0, offered.len(), false, budget, &mut sets);
+            Ok((sets.into_iter().map(|set| Answer::Cards(set.into_iter().map(|i| offered[i]).collect())).collect(), all))
         }
         RequestKind::OrderReplacementOccurrences { occurrences } =>
             Ok(((0..occurrences.len()).take(budget).map(Answer::CostPayment).collect(), occurrences.len() <= budget)),
@@ -13650,6 +13763,156 @@ fn answers_to_try(kind: &RequestKind, budget: usize) -> Result<(Vec<Answer>, boo
             Err(format!("it asks {}, whose answers are not tried", kind.split([' ', '{', '(']).next().unwrap_or("")))
         }
     }
+}
+
+/// Every order of `set`, added to `out` while it holds fewer than `budget`: false where some were left out.
+fn permutations(set: &[usize], budget: usize, out: &mut Vec<Vec<usize>>) -> bool {
+    fn visit(rest: &mut Vec<usize>, at: &mut Vec<usize>, budget: usize, out: &mut Vec<Vec<usize>>) -> bool {
+        if rest.is_empty() {
+            if out.len() >= budget {
+                return false;
+            }
+            out.push(at.clone());
+            return true;
+        }
+        for i in 0..rest.len() {
+            let item = rest.remove(i);
+            at.push(item);
+            let went = visit(rest, at, budget, out);
+            at.pop();
+            rest.insert(i, item);
+            if !went {
+                return false;
+            }
+        }
+        true
+    }
+    visit(&mut set.to_vec(), &mut Vec::new(), budget, out)
+}
+
+/// Each action an option of a payment may be answered with (`Action::of`): for each color its mana ability may name (none,
+/// where it may name nothing, CR 106.7) and each set of its targets (CR 601.2c). False where `budget` left some out.
+fn option_actions(option: &ActionOption, budget: usize, out: &mut Vec<Answer>) -> bool {
+    let colors: Vec<Option<Color>> = if option.color_choices.is_empty() {
+        vec![None]
+    } else {
+        let mut named: Vec<Option<Color>> = Color::ALL.into_iter().filter(|&c| option.color_choices.has(c)).map(Some).collect();
+        if option.names_nothing {
+            named.push(None);
+        }
+        named
+    };
+    let required = option.targets_required as usize;
+    let least = if option.targets_optional { 0 } else { required };
+    let mut target_sets: Vec<Vec<Target>> = Vec::new();
+    let mut at = Vec::new();
+    fn sets(candidates: &[Target], least: usize, most: usize, from: usize, at: &mut Vec<Target>, out: &mut Vec<Vec<Target>>) {
+        if at.len() >= least {
+            out.push(at.clone());
+        }
+        if at.len() < most {
+            for i in from..candidates.len() {
+                at.push(candidates[i]);
+                sets(candidates, least, most, i + 1, at, out);
+                at.pop();
+            }
+        }
+    }
+    sets(&option.target_candidates, least, required, 0, &mut at, &mut target_sets);
+    for color in colors {
+        for targets in &target_sets {
+            if out.len() >= budget {
+                return false;
+            }
+            out.push(Answer::Act(Action { color, targets: targets.clone(), ..Action::of(option) }));
+        }
+    }
+    true
+}
+
+/// Every placement of the cards looked at among `destinations` (`Answer::Placements`): each card in one that takes it, the
+/// cards of one that keeps an order (a library's top or bottom, a graveyard's order, CR 401.4, 404.3) in each order, of any
+/// other as a set. `validate` judges how many each takes. False where `budget` left some out.
+fn placements(cards: &[ObjectId], destinations: &[Destination], budget: usize, out: &mut Vec<Answer>) -> bool {
+    fn ordered(d: &Destination) -> bool {
+        matches!(d.kind, DestinationKind::LibraryTop | DestinationKind::LibraryBottom | DestinationKind::GraveyardOrder)
+    }
+    #[allow(clippy::too_many_arguments)]
+    fn place(cards: &[ObjectId], destinations: &[Destination], at: usize, chosen: &mut Vec<Vec<ObjectId>>, budget: usize, out: &mut Vec<Answer>) -> bool {
+        if at == cards.len() {
+            if crate::validate::distribution_problem(cards, destinations, chosen).is_some() {
+                return true;
+            }
+            // Each ordering of every destination that keeps one.
+            fn orders(destinations: &[Destination], d: usize, chosen: &mut Vec<Vec<ObjectId>>, budget: usize, out: &mut Vec<Answer>) -> bool {
+                if d == destinations.len() {
+                    if out.len() >= budget {
+                        return false;
+                    }
+                    out.push(Answer::Placements { placements: chosen.clone(), shuffle: false });
+                    return true;
+                }
+                if !ordered(&destinations[d]) || chosen[d].len() < 2 {
+                    return orders(destinations, d + 1, chosen, budget, out);
+                }
+                let these = chosen[d].clone();
+                let mut each = Vec::new();
+                permutations(&(0..these.len()).collect::<Vec<_>>(), usize::MAX, &mut each);
+                for order in each {
+                    chosen[d] = order.iter().map(|&i| these[i]).collect();
+                    if !orders(destinations, d + 1, chosen, budget, out) {
+                        chosen[d] = these;
+                        return false;
+                    }
+                }
+                chosen[d] = these;
+                true
+            }
+            return orders(destinations, 0, chosen, budget, out);
+        }
+        for d in 0..destinations.len() {
+            if !destinations[d].eligible.contains(&cards[at]) || chosen[d].len() >= destinations[d].max as usize {
+                continue;
+            }
+            chosen[d].push(cards[at]);
+            let went = place(cards, destinations, at + 1, chosen, budget, out);
+            chosen[d].pop();
+            if !went {
+                return false;
+            }
+        }
+        true
+    }
+    place(cards, destinations, 0, &mut vec![Vec::new(); destinations.len()], budget, out)
+}
+
+/// Every removal of counters from among `pools` (`Answer::Counters`): `total` of them, or with `up_to` from none to `total`
+/// (CR 122.1). False where `budget` left some out.
+fn removals(pools: &[CounterPool], total: u32, up_to: bool, at: usize, taken: &mut Vec<(ObjectId, CounterKind, u32)>, budget: usize, out: &mut Vec<Answer>) -> bool {
+    let sum: u32 = taken.iter().map(|t| t.2).sum();
+    if at == pools.len() {
+        if sum == total || (up_to && sum <= total) {
+            if out.len() >= budget {
+                return false;
+            }
+            out.push(Answer::Counters(taken.clone()));
+        }
+        return true;
+    }
+    let pool = pools[at];
+    for n in 0..=pool.count.min(total - sum) {
+        if n > 0 {
+            taken.push((pool.object, pool.kind, n));
+        }
+        let went = removals(pools, total, up_to, at + 1, taken, budget, out);
+        if n > 0 {
+            taken.pop();
+        }
+        if !went {
+            return false;
+        }
+    }
+    true
 }
 
 /// A permanent was tapped for mana (CR 106.12, 605.1b) and produced `produced`: the fact is recorded, and, if it produced any

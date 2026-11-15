@@ -3437,6 +3437,33 @@ components (CR 730.3b), which nothing in exile reads.
 
 Meld (CR 701.42, 712.4) is built on the same merge. A meld card's `CardDef::meld` names its counterpart and the pair's combined back face, a `CardDef` registered in the card table by itself so it can be named (CR 201.4e), and never a back face (`back`): a meld card can't transform or convert (CR 712.4c). `Game::meld` (`ops::meld`) checks that the two objects are the two cards of one pair - no token, no copy of a card (CR 701.42b-c) - and puts the first onto the battlefield entering as the combined face (`Entering::copy`, so its own "enters" replacements are that face's, CR 614.12) with `Entering::melded` naming the second. As the first arrives (CR 712.14c) `merge::meld_with` makes the second a `MergedPart` with `melded` set - no object any more, followed to the permanent by `became` (CR 400.7) - and gives the permanent a `Merge` whose own face is the combined face, recorded as `Event::Melded` after the one zone change. The permanent has only that face's characteristics (CR 712.8g), and its mana value is the sum of its two cards' front faces' (`mana_value_of`), while it has them. Leaving, it is a merged permanent leaving: one permanent, two cards (CR 712.21). The host shows the meld card, not either card, while nothing is placed over it.
 
+### Speculative resolution
+
+"Counter target spell if it would destroy a land you control" (Equinox) asks what a stack object would do if it resolved
+now (CR 608.2), as it is and wherever it is on the stack. `Query::speculate_resolution` (`cantrip_api::speculate`, and
+`speculate_settled`; the core in `cantrip-rules/src/speculate.rs`) answers it by resolving the object for real on a hidden
+copy (`Game::hypothetical`), with the engine's own runs: a `Resolve` frame for the object goes on top of the copy's agenda,
+over a sentinel frame waiting on a question no one answers, so `Game::run` stops once the resolution is done - before
+state-based actions and before triggered abilities are put on the stack (CR 704.3, 603.3), where the resolution ends - and
+`Game::answer` gives it its answers, replayed as a frame's run replays them. Each way it can go is a branch: each legal
+answer to each question (`actions::answers_to_try`, shared with the mana-capability judge and checked by `validate::check`)
+and each chance outcome (`actions::HypotheticalChance`, also shared; an operation is known by its place in its frame's run,
+so a run redone meets the outcomes it had). Each branch is played from the copy's start, the copy rolled back to it by its
+journal between branches. A branch played to the end is an outcome, handed to the caller's visitor, whose `Break` ends the
+search; a part-way branch the caller's `settled` says is decided ("a land has been destroyed") is visited in place of every
+outcome below it.
+
+What the search does not tell apart it does not try: a shuffle chooses only the places of its new order that a record or a
+question after it names (every way of learning a hidden card is an event), the rest left as they were, and a branch that
+reads another place is played again choosing it; the order an owner arranges cards put into a graveyard together (CR
+404.3) is asked only where the resolving object reads it; and a payment met again in the same position, after the same
+answers before it began, with the same pool as a set, is not followed twice (the order mana abilities were activated in).
+The work is bounded (KI-164).
+
+Nothing reaches the game: the copy is the only thing played on and is thrown away; its questions are asked of no one and
+its records are its own; its chance comes from no generator; and the reads of the past its runs make are counted for the
+game's run under way as one. Nothing runs unless a card asks, so an ordinary game pays nothing for it.
+
 ### Legal moves as a first-class output
 
 Every pending request comes with its legal answers enumerated, cheaply and in a stable order. The client's prompt

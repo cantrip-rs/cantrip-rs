@@ -92,8 +92,29 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-161](#ki-161-a-scenarios--modes-refusal-does-not-check-what-a-subtype-question-offers) | A scenario's `! Modes(...)` refusal does not check what a subtype question offers | Pri-3 | Open |
 | [KI-162](#ki-162-the-client-shows-no-duration-for-an-effect-that-changes-a-lands-types) | The client shows no duration for an effect that changes a land's types | Pri-2 | Open |
 | [KI-163](#ki-163-a-choose-question-offering-one-card-drops-its-rules-words-from-the-caption) | A choose question offering one card drops its rule's words from the caption | Pri-2 | Open |
+| [KI-164](#ki-164-a-speculative-resolution-follows-at-most-262144-runs-and-answers) | A speculative resolution follows at most 262,144 runs and answers | Pri-3 | Won't fix: beyond practical scale |
 
 ## Issues
+
+### KI-164: A speculative resolution follows at most 262,144 runs and answers
+
+| Priority | Status | Area | Found |
+| --- | --- | --- | --- |
+| Pri-3 | Won't fix: beyond practical scale | engine (`crates/cantrip-rules/src/speculate.rs`) | 2026-11-15, building Equinox's speculative resolution |
+
+**Notes.** What a stack object would do if it resolved now (`Query::speculate_resolution`, CR 608.2) is found by playing
+its resolution on a hidden copy once for each legal answer and each chance outcome. Each run of the resolution, and each
+answer it is given (an answer plays the run again from its start), counts one; past 262,144 the outcomes visited stand and
+the speculation is `Unjudged` (Equinox then does not counter: it has not found that the spell would destroy your land), and
+with `CANTRIP_VERIFY` it panics naming the object, so a scenario reaching it fails. The bound is about two seconds of work
+and keeps a speculation from holding a table up. The visitor's own break (Equinox's at the first way that destroys none of
+your lands) and its `settled` cut (a way that has destroyed one already) end nearly every search at once; shuffles are tried
+only at the places the resolution goes on to read, a graveyard's order only where something reads it, and a payment's
+mana abilities as the set activated, not every order. What is left is a resolution that asks a long run of questions
+before it destroys your land, every answer of every one destroying it: no printed land destruction spell does - Armageddon,
+Jokulhaups, Stench of Evil and Cleansing Wildfire destroy first and ask after, and a spell that asks first (Cleansing, Lava
+Blister) is settled by the first answer that saves the land. A die, a coin or a pick at random before the destruction gives
+a few outcomes each; past the bound it takes some eighteen two-way choices before it.
 
 ### KI-163: A choose question offering one card drops its rule's words from the caption
 

@@ -14,6 +14,9 @@ mod delayed_capture_tests;
 #[cfg(test)]
 mod rebound_hand_tests;
 mod takeback;
+mod speculate;
+#[cfg(test)]
+mod speculate_tests;
 #[cfg(test)]
 mod base_power_tests;
 #[cfg(test)]
@@ -1730,19 +1733,26 @@ impl<'a> Cx<'a> {
     /// Random choices in a hypothetical resolution branch over every possible outcome (CR 106.7, 705, 706).
     /// Actual games keep their ordinary generator and scripted faces.
     fn roll_face(&mut self, sides: u32) -> u32 {
-        if let Some(chance) = self.g.hypothetical_chance.as_mut() {
-            chance.choose(sides, self.cursor) + 1
+        if self.g.hypothetical_chance.is_some() {
+            self.chance(sides) + 1
         } else {
             self.g.state.roll_die(sides)
         }
     }
 
     pub(crate) fn random_below(&mut self, bound: u32) -> u32 {
-        if let Some(chance) = self.g.hypothetical_chance.as_mut() {
-            chance.choose(bound, self.cursor)
+        if self.g.hypothetical_chance.is_some() {
+            self.chance(bound)
         } else {
             self.g.state.random(bound)
         }
+    }
+
+    /// A chance operation's outcome in a hypothetical run (`actions::HypotheticalChance`), one of `count`.
+    fn chance(&mut self, count: u32) -> u32 {
+        let run = speculate::Run::of(self);
+        let cursor = self.cursor;
+        self.g.hypothetical_chance.as_mut().map_or(0, |chance| chance.choose(count, cursor, run))
     }
     pub fn record(&mut self, event: Event) {
         let turn = self.g.state.turn;
@@ -1956,6 +1966,10 @@ impl Query for Game {
         actions::producible_types_in(self, permanent)
     }
 
+    fn speculate_resolution(&self, item: Target, settled: &dyn Fn(&cantrip_api::Speculated<'_>) -> bool, visit: &mut dyn FnMut(&cantrip_api::Speculated<'_>) -> std::ops::ControlFlow<()>) -> cantrip_api::Speculation<()> {
+        speculate::speculate(self, item, settled, visit)
+    }
+
     fn state(&self) -> &GameState {
         &self.state
     }
@@ -2037,6 +2051,10 @@ impl Query for Cx<'_> {
 
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {
         actions::producible_types(self, permanent)
+    }
+
+    fn speculate_resolution(&self, item: Target, settled: &dyn Fn(&cantrip_api::Speculated<'_>) -> bool, visit: &mut dyn FnMut(&cantrip_api::Speculated<'_>) -> std::ops::ControlFlow<()>) -> cantrip_api::Speculation<()> {
+        speculate::speculate(self.g, item, settled, visit)
     }
 
     fn state(&self) -> &GameState {

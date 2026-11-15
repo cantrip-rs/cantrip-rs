@@ -43,6 +43,59 @@ impl EntersAttacking {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Suspend;
 
+/// One way a speculative resolution came out (`Query::speculate_resolution`): the hidden copy of the game as the end of the
+/// resolution left it, read as any game is (`game.history()` holds the whole past, these records included), and the records
+/// the resolution made, in the order it made them. `ended` is false for a way cut short as settled, where the resolution was
+/// still to ask a question.
+pub struct Speculated<'a> {
+    pub game: &'a dyn Query,
+    pub records: &'a [Record],
+    pub ended: bool,
+}
+
+/// What a speculative resolution came to (`speculate`).
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Speculation<R> {
+    /// A visit broke off with this value: the outcomes after it were not visited.
+    Decided(R),
+    /// Every outcome was visited, and every visit went on.
+    Undecided,
+    /// The resolution has more ways to come out than the engine follows (docs/known-issues.md, KI-164): not every outcome
+    /// was visited, and none broke off.
+    Unjudged,
+    /// `item` names no spell or ability on the stack: there is nothing to resolve, and nothing was visited.
+    NotOnStack,
+}
+
+/// Visits each way the spell or ability `item` would come out if it resolved now (`Query::speculate_resolution`, CR 608.2):
+/// `visit` sees each outcome and breaks off with a value once that value is decided. What a card says it "would" do is
+/// every outcome doing it (break with `false` on the first that does not; `Undecided` then means it would); what it
+/// "could" do is any outcome doing it (break with `true` on the first that does). Equinox asks it.
+pub fn speculate<R>(q: &dyn Query, item: Target, visit: impl FnMut(&Speculated<'_>) -> std::ops::ControlFlow<R>) -> Speculation<R> {
+    speculate_settled(q, item, |_| false, visit)
+}
+
+/// `speculate`, with `settled` saying of a way the resolution has come part of that every outcome going on from it would be
+/// visited alike (`Query::speculate_resolution`): it is visited in their place, `ended` false. What has happened stays
+/// happened, so "the resolution has destroyed one of your lands so far" settles "would destroy a land you control".
+pub fn speculate_settled<R>(q: &dyn Query, item: Target, settled: impl Fn(&Speculated<'_>) -> bool,
+    mut visit: impl FnMut(&Speculated<'_>) -> std::ops::ControlFlow<R>) -> Speculation<R> {
+    let mut decided = None;
+    let came = q.speculate_resolution(item, &settled, &mut |outcome| match visit(outcome) {
+        std::ops::ControlFlow::Break(value) => {
+            decided = Some(value);
+            std::ops::ControlFlow::Break(())
+        }
+        std::ops::ControlFlow::Continue(()) => std::ops::ControlFlow::Continue(()),
+    });
+    match (came, decided) {
+        (_, Some(value)) => Speculation::Decided(value),
+        (Speculation::Unjudged, None) => Speculation::Unjudged,
+        (Speculation::NotOnStack, None) => Speculation::NotOnStack,
+        _ => Speculation::Undecided,
+    }
+}
+
 /// Whether an object is still the object it was: it has not changed zones (CR 400.7) or ceased to exist.
 pub fn is_live(q: &dyn Query, id: ObjectId) -> bool {
     let obj = q.obj(id);
@@ -215,6 +268,23 @@ pub trait Query {
     /// Implemented by the rules host; a detached query used only for other questions cannot judge mana production.
     fn producible_types(&self, _permanent: ObjectId) -> (ColorSet, bool) {
         panic!("mana production requires a rules-host query")
+    }
+
+    /// Speculative resolution (CR 608.2): what the spell or ability `item` on the stack (`Target::Object` for a spell,
+    /// `Target::Ability` for an ability) would do if it resolved now, as it is and wherever it is on the stack. The engine
+    /// resolves it on a hidden copy of the game, once for each way it could come out - each legal answer to each question
+    /// its resolution asks (its targets stay as chosen) and each outcome of each random event - and hands `visit` each
+    /// outcome as the end of that resolution leaves it: before state-based actions and before any triggered ability is put
+    /// on the stack (CR 704.3, 603.3). `ControlFlow::Break` ends the search at once; `Continue` asks for the next outcome.
+    /// `settled` may cut a way short where the resolution has yet to ask something: true for a part-way outcome
+    /// (`Speculated::ended` false) says every outcome that goes on from it would be visited alike, and it is visited
+    /// instead of them. A shuffle's order, and the order an owner arranges cards put into a graveyard together (CR 404.3),
+    /// are tried only as far as the resolution goes on to tell them apart; an outcome shows them in one such order.
+    /// Nothing of it reaches the game: no player is asked or shown anything, nothing is recorded and no random value is
+    /// drawn from the game's generator. Prefer [`speculate`], which carries a value out of the visit.
+    /// Implemented by the rules host; a detached query cannot resolve anything.
+    fn speculate_resolution(&self, _item: Target, _settled: &dyn Fn(&Speculated<'_>) -> bool, _visit: &mut dyn FnMut(&Speculated<'_>) -> std::ops::ControlFlow<()>) -> Speculation<()> {
+        panic!("speculative resolution requires a rules-host query")
     }
 
     /// The "defending player" of `attacker`, an attacking creature or one that attacked (CR 508.5, 310.9d): the player it

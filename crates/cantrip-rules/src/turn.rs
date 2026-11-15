@@ -46,6 +46,11 @@ pub(crate) fn shuffle_in(cx: &mut Cx, zone: Zone) {
         shuffle(cx.st(), zone);
         return;
     }
+    // A speculative resolution tries only the orders that what it goes on to do can tell apart (`speculate::shuffle`).
+    if cx.g.hypothetical_chance.as_ref().is_some_and(|c| c.probing.is_some()) {
+        crate::speculate::shuffle(cx, zone);
+        return;
+    }
     let mut cards = cx.s().zone(zone).to_vec();
     for i in (1..cards.len()).rev() {
         let j = cx.random_below(i as u32 + 1) as usize;

@@ -926,7 +926,7 @@ fn move_together_entering_event(
 /// happen in the game, so the order they arrived in is as good as any their owner could choose, and no game pays a prompt
 /// for it - as several effects that each prevent all of some damage are not ordered (`replace::prevents_all`).
 fn arrange_graveyards(cx: &mut Cx, binned: &[(PlayerId, ObjectId)]) {
-    if !graveyard_order_read(cx) {
+    if !graveyard_order_read(cx) || crate::speculate::graveyard_order_unread(cx) {
         return;
     }
     let players: Vec<PlayerId> = cx.s().apnap().collect();
