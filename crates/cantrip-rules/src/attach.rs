@@ -163,8 +163,9 @@ pub(crate) fn aura_hosts(cx: &Cx, aura: ObjectId, aura_chars: &Chars, controller
     hosts
 }
 
-/// Whether a card about to enter does so as an Aura that chooses what it enchants (CR 303.4f): one that prints an enchant
-/// ability, or one the effect putting it there makes an Aura (`EntersAs::aura`).
+/// Whether a card about to enter may do so as an Aura that chooses what it enchants (CR 303.4f): one that prints an enchant
+/// ability, or one the effect putting it there makes an Aura (`EntersAs::aura`). Whether it is an Aura as it enters is
+/// judged on it as it would exist there (`choose_aura_hosts`, CR 614.12).
 fn enters_as_aura(cx: &Cx, m: &ops::Moving) -> bool {
     let Some(e) = m.entering else { return false };
     let card = e.copy.map(|c| c.card).unwrap_or(cx.s().obj(m.id).card);
@@ -191,6 +192,11 @@ pub fn choose_aura_hosts(cx: &mut Cx, moves: &mut Vec<ops::Moving>) -> R<()> {
         // Judged on the Aura as it would be on the battlefield (CR 614.12): its enchant abilities as the layers leave them,
         // and a creature card an effect returns as an Aura enchantment no creature.
         let prospective = ops::as_it_would_exist(cx, &e);
+        // Only an Aura entering chooses, or stays where it is with nothing to enchant (CR 303.4f-g): an Aura card the effect
+        // puts there as a non-Aura (Takklemaggot's "as a non-Aura enchantment") is no Aura as it enters, and enters unattached.
+        if !prospective.chars.has_subtype(Subtype::Aura) {
+            continue;
+        }
         let hosts = aura_hosts(cx, moves[i].id, &prospective.chars, e.controller, prospective.mana_value, &entering);
         let chosen = match hosts.len() {
             0 => {

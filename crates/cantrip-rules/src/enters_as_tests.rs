@@ -281,6 +281,42 @@ fn an_aura_enchantment_has_no_other_enchantment_type() {
     assert_eq!(chars.subtypes, SubtypeSet::of(&[Subtype::Aura]));
 }
 
+/// "As a non-Aura enchantment" (Takklemaggot): the Aura card's enchantment subtype gone as it enters (CR 614.12).
+static AS_NON_AURA: EntersAs = EntersAs { loses_subtypes_of: &[CardType::Enchantment], ..EntersAs::NONE };
+
+/// An Aura card an effect puts onto the battlefield as a non-Aura is no Aura as it enters, so it chooses nothing (CR 303.4f)
+/// and is not kept where it is for want of something to enchant (CR 303.4g): with a creature its "enchant creature" would
+/// allow, and with none, it enters unattached, nobody asked, and the state-based actions leave it there (CR 704.5m is about
+/// Auras). The same card put onto the battlefield plainly is still an Aura, and is attached.
+#[test]
+fn an_aura_card_put_onto_the_battlefield_as_a_non_aura_enters_unattached() {
+    for with_a_creature in [true, false] {
+        let mut g = game();
+        if with_a_creature {
+            put(&mut g, &BEAR, YOU, Zone::BATTLEFIELD);
+        }
+        let card = put(&mut g, &TWO_ENCHANTS, YOU, Zone::graveyard(YOU));
+        let ability = AbilityRef { card: g.cards.id_of(&TWO_ENCHANTS), index: 0 };
+        let item = crate::actions::stack_item(StackKind::Triggered, card, ability, YOU, &[]);
+        let back = cantrip_api::Game::put_onto_battlefield_as(&mut cx(&mut g), card, YOU, &item, &AS_NON_AURA).expect("nothing to ask");
+        let back = back.expect("it entered");
+        let o = *g.state.obj(back);
+        assert_eq!((o.attached_to, o.attached_player), (None, None));
+        let chars = cx(&mut g).chars(back);
+        assert_eq!(chars.types, TypeSet::of(&[CardType::Enchantment]));
+        assert_eq!(chars.subtypes, SubtypeSet::of(&[]));
+        assert!(!crate::settle::state_based_actions_alone(&mut cx(&mut g)).unwrap_or(true), "no Aura: it stays");
+        assert!(g.state.battlefield().contains(&back));
+    }
+
+    // Put onto the battlefield as itself, the same card is an Aura and chooses the one creature it could enchant.
+    let mut g = game();
+    let bear = put(&mut g, &BEAR, YOU, Zone::BATTLEFIELD);
+    let card = put(&mut g, &TWO_ENCHANTS, YOU, Zone::graveyard(YOU));
+    let aura = cantrip_api::Game::put_onto_battlefield(&mut cx(&mut g), card, YOU, false).expect("one host");
+    assert_eq!(g.state.obj(aura).attached_to, Some(bear));
+}
+
 /// An instant or sorcery whose card types are set keeps that type and its spell types (CR 205.1a).
 #[test]
 fn set_types_leave_a_sorcery_a_sorcery() {
