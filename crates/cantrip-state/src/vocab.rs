@@ -1749,6 +1749,7 @@ counter_kinds! {
     Sleight = 98, "sleight", "Sleight";
     Cube = 99, "cube", "Cube";
     Glyph = 100, "glyph", "Glyph";
+    Possession = 101, "possession", "Possession";
 }
 
 impl CounterKind {
@@ -2433,7 +2434,8 @@ mod carrion_counter_tests {
         assert_eq!(CounterKind::Sleight as usize, 98);
         assert_eq!(CounterKind::Cube as usize, 99);
         assert_eq!(CounterKind::Glyph as usize, 100);
-        assert_eq!(CounterKind::COUNT, 101);
+        assert_eq!(CounterKind::Possession as usize, 101);
+        assert_eq!(CounterKind::COUNT, 102);
         assert!(!CounterKind::POWER_TOUGHNESS.iter().any(|(kind, _, _)| *kind == carrion));
     }
     #[test]
