@@ -1,0 +1,44 @@
+# Parting Gust with the gift promised: Bot2 gets a tapped 1/1 Fish before the rest, and Bot2's Grizzly Bears is exiled and never comes back, not even at the end step (CR 702.174j, 608.2b).
+
+[Bot1 Deck]
+Plains
+Plains
+Parting Gust
+Plains x10
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Forest x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Parting Gust.Cast
+Bot1.Accept
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Exile = Grizzly Bears
+? Bot2.Battlefield = Forest; Mox Emerald; Fish Token
+? Bot2.Battlefield.Fish Token.Tapped = true
+[T3 Bot1.End]
+? Stack.Count = 0
+
+[Expect]
+Exile = Grizzly Bears
+Bot2.Battlefield = Forest; Mox Emerald; Fish Token
+Bot2.Battlefield.Fish Token.Tapped = true
+Bot1.Battlefield.Count = 2

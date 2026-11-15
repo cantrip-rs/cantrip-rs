@@ -1,0 +1,43 @@
+# "Target nontoken creature": Bot1's Rabbit token (from Carrot Cake) is refused as the target (CR 115.1, 111.1), the Memnite is accepted and exiled for the end step with the gift not promised.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Carrot Cake
+Memnite
+Parting Gust
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Carrot Cake.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rabbit Token.Token = true
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Parting Gust.Cast
+Bot1.Decline
+! Bot1.Target(Bot1.Battlefield.Rabbit Token)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Memnite
+Bot1.Battlefield.Rabbit Token.Token = true

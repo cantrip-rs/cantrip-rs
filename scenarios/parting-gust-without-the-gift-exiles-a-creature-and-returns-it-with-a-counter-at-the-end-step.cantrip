@@ -1,0 +1,48 @@
+# Parting Gust without the gift promised: on turn 3 Bot1 exiles its own Memnite, which comes back at the beginning of the next end step with a +1/+1 counter (a 2/2, a new object, summoning sick).
+# Before the end step it is in exile, and the opponent gets no Fish.
+
+[Bot1 Deck]
+Plains
+Memnite
+Parting Gust
+Plains
+Plains
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Parting Gust.Cast
+Bot1.Decline
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Exile = Memnite
+? Bot1.Battlefield = Plains; Plains
+? Exile = Memnite
+[T3 Bot1.End]
+? Stack.Count = 1
+? Exile = Memnite
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot1.Battlefield = Memnite; Plains; Plains
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Memnite.SummoningSick = true
+Bot1.Battlefield.Memnite.Tapped = false
+Bot2.Battlefield.Count = 0
+Bot1.Graveyard = Parting Gust
