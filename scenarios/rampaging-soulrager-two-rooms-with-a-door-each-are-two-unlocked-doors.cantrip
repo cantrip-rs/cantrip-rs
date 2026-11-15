@@ -1,0 +1,42 @@
+# Rampaging Soulrager: two Rooms, each with a single unlocked door, are two unlocked doors among Rooms Bot1 controls: the Soulrager is 4/4
+# as it enters.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Gleemox
+Roaring Furnace // Steaming Sauna
+Roaring Furnace // Steaming Sauna
+Rampaging Soulrager
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Roaring Furnace // Steaming Sauna.Cast(Ability: Roaring Furnace)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Roaring Furnace // Steaming Sauna.Cast(Ability: Roaring Furnace)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rampaging Soulrager.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rampaging Soulrager.Power = 4
+
+[Expect]
+Turn = 3

@@ -1,0 +1,62 @@
+# Rampaging Soulrager: "+3/+0 as long as there are two or more unlocked doors among Rooms you control". Bot1's Roaring Furnace // Steaming Sauna
+# (cast as Roaring Furnace) has one door unlocked, and Bot2's own Unholy Annex Room one more, which is not "Rooms you control": the Soulrager
+# stays 1/4 in turn 3. Bot1 then unlocks Steaming Sauna for {3}{U}{U} (CR 709.5e): one Room, but two unlocked doors, and the Soulrager is 4/4.
+
+[Bot1 Deck]
+Mox Ruby
+Gleemox
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Roaring Furnace // Steaming Sauna
+Rampaging Soulrager
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Unholy Annex // Ritual Chamber
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Roaring Furnace // Steaming Sauna.Cast(Ability: Roaring Furnace)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rampaging Soulrager.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rampaging Soulrager.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Rampaging Soulrager.Power = 1
+Bot1.Battlefield.Roaring Furnace.Activate(Ability: right door)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Battlefield.Rampaging Soulrager.Power = 4
+? Bot1.Battlefield.Rampaging Soulrager.Toughness = 4
+
+[Expect]
+Turn = 3
