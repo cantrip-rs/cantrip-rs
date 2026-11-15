@@ -1,0 +1,41 @@
+# -2/-2 is a "until end of turn" effect (CR 514.2, 611.2a): Bot2's Kraken Hatchling (0/4) survives as -2/2, shows it right
+# after the spell, and is back to 0/4 on its controller's turn (the effect ended at cleanup). The Food is still made.
+
+[Bot1 Deck]
+Mox Jet
+Swamp
+Savor
+Swamp x17
+
+[Bot2 Deck]
+Island
+Kraken Hatchling
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Kraken Hatchling.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Savor.Cast(Bot2.Battlefield.Kraken Hatchling)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Kraken Hatchling.Power = -2
+? Bot2.Battlefield.Kraken Hatchling.Toughness = 2
+? Bot1.Battlefield.Food Token.Token = true
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Kraken Hatchling.Power = 0
+Bot2.Battlefield.Kraken Hatchling.Toughness = 4
+Bot1.Battlefield = Food Token; Mox Jet; Swamp
