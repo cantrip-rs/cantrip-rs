@@ -1,0 +1,6 @@
+{
+  "name": "Baseball Bat",
+  "manaCost": "{G}{W}",
+  "type": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, attach it to target creature you control.\nEquipped creature gets +1/+1.\nWhenever equipped creature attacks, tap up to one target creature.\nEquip {3} ({3}: Attach to target creature you control. Equip only as a sorcery.)"
+}

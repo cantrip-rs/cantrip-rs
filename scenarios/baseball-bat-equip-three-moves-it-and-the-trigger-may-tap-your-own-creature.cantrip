@@ -1,0 +1,68 @@
+# Baseball Bat: "When this Equipment enters, attach it to target creature you control" - with two of Bot1's creatures and
+# Bot2's Ornithopter in play, Bot1 chooses Savannah Lions (a creature outside the filter, Mox Pearl, is refused). Equip {3}
+# (CR 702.6) costs exactly three: paid with the three mana in the pool, which leaves it empty and the fourth source untapped.
+# The +1/+1 follows the Bat to Grizzly Bears (3/3) and leaves the Lions (2/1). "Tap up to one target creature" accepts a
+# creature its controller has: the Lions are tapped by the attacking Bears.
+
+[Bot1 Deck]
+Forest
+Plains
+Mox Pearl
+Mox Emerald
+Savannah Lions
+Grizzly Bears
+Baseball Bat
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Baseball Bat.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Mox Pearl)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Baseball Bat.AttachedTo = Savannah Lions
+? Bot1.Battlefield.Savannah Lions.Power = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Baseball Bat.Activate(Grizzly Bears)
+? Bot1.Mana =
+? Bot1.Battlefield.Mox Emerald.Tapped = false
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Baseball Bat.AttachedTo = Grizzly Bears
+? Bot1.Battlefield.Grizzly Bears.Power = 3
+? Bot1.Battlefield.Savannah Lions.Power = 2
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot1.Target(Savannah Lions)
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Savannah Lions.Tapped = true
+? Bot2.Battlefield.Ornithopter.Tapped = false
+
+[Expect]
+Turn = 5
+Bot2.Life = 17

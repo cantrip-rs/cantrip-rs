@@ -1,0 +1,47 @@
+# Baseball Bat: "When this Equipment enters, attach it to target creature you control" (CR 701.3, 603.6a): only a creature
+# its controller has qualifies - the lone legal target, Savannah Lions, is chosen although Bot2 has an Ornithopter - and the
+# Bat gives +1/+1 to what it is attached to (Savannah Lions 2/1 becomes 3/2, CR 301.5). "Whenever equipped creature attacks,
+# tap up to one target creature": any creature may be chosen, so Bot2's Ornithopter, which can no longer block, is tapped
+# and the 3/2 Lions' attack is unblocked.
+
+[Bot1 Deck]
+Forest
+Mox Pearl
+Mox Emerald
+Savannah Lions
+Baseball Bat
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Baseball Bat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Baseball Bat.AttachedTo = Savannah Lions
+? Bot1.Battlefield.Savannah Lions.Power = 3
+? Bot1.Battlefield.Savannah Lions.Toughness = 2
+[T5 Bot1.Main1]
+Bot1.Attack(Savannah Lions > Bot2)
+! Bot1.Target(Bot2.Battlefield.Ornithopter; Savannah Lions)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+[T5 Bot1.Main2]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+
+[Expect]
+Turn = 5
+Bot2.Life = 17
