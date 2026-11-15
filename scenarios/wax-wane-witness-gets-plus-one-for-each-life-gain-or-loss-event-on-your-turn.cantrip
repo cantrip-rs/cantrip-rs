@@ -1,0 +1,55 @@
+# Wax-Wane Witness: "Whenever you gain or lose life during your turn, this creature gets +1/+0 until end of turn." Bot1 casts it on
+# turn 1 (a 2/4), gains 3 life with Healing Salve (3/4) and then loses 3 to a Lightning Bolt of its own (4/4): one trigger per life
+# event, gain or loss, however much (CR 603.2c). By turn 3 the pump has worn off (a 2/4 again).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Gleemox
+Wax-Wane Witness
+Healing Salve
+Plains
+Lightning Bolt
+Plains x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wax-Wane Witness.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wax-Wane Witness.Power = 2
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wax-Wane Witness.Power = 3
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wax-Wane Witness.Power = 4
+? Bot1.Battlefield.Wax-Wane Witness.Toughness = 4
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Wax-Wane Witness.Power = 2
+Bot1.Battlefield.Wax-Wane Witness.Toughness = 4
+Bot1.Life = 20

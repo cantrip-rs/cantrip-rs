@@ -1,0 +1,9 @@
+{
+  "name": "Wax-Wane Witness",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Bat Cleric",
+  "oracleText": "Flying, vigilance\nWhenever you gain or lose life during your turn, this creature gets +1/+0 until end of turn.",
+  "power": 2,
+  "toughness": 4,
+  "keywords": ["Flying", "Vigilance"]
+}

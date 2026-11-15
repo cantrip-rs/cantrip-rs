@@ -1,0 +1,63 @@
+# Wax-Wane Witness only counts life changes of its controller during its controller's turn. Bot1 casts it on turn 1 and holds a
+# Healing Salve and a Lightning Bolt: on turn 2 (Bot2's turn) Bot1 gains 3 and loses 3 and the Witness stays a 2/4. On turn 3
+# (Bot1's turn) Bot2 gains 3 life with a Salve of their own and it is still a 2/4: positive controls that only the controller's
+# own life, on its own turn, counts.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Gleemox
+Wax-Wane Witness
+Healing Salve
+Plains
+Lightning Bolt
+Plains x9
+
+[Bot2 Deck]
+Mox Pearl
+Healing Salve
+Island x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wax-Wane Witness.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+? Stack.Count = 0
+? Bot1.Battlefield.Wax-Wane Witness.Power = 2
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Healing Salve.Cast
+Bot2.Modes(1)
+Bot2.Target(Bot2)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 23
+Bot1.Life = 20
+Bot1.Battlefield.Wax-Wane Witness.Power = 2
