@@ -1,0 +1,42 @@
+# Valley Questcaller: "Whenever one or more other Rabbits ... you control enter, scry 1" (CR 603.2c, the ruling). Hop to It's three
+# Rabbit tokens enter together, so the ability triggers once and Bot1 scries once (Swamp to the bottom, Forest stays on top), not
+# three times; each token gets +1/+1 from Questcaller.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Valley Questcaller
+Hop to It
+Plains
+Swamp
+Forest
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Valley Questcaller.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Hop to It.Cast
+Bot1.Pass
+? Stack.Count = 1
+Bot1.Arrange( | Swamp)
+? Stack.Count = 0
+! Bot1.Arrange
+
+[Expect]
+Bot1.Library.Top = Forest
+Bot1.Battlefield = Mox Pearl; Mox Pearl; Mox Pearl; Rabbit Token; Rabbit Token; Rabbit Token; Valley Questcaller
+Bot1.Battlefield.Rabbit Token#1.Power = 2
+Bot1.Battlefield.Rabbit Token#3.Toughness = 2

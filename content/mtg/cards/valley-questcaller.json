@@ -1,0 +1,8 @@
+{
+  "name": "Valley Questcaller",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Rabbit Warrior",
+  "oracleText": "Whenever one or more other Rabbits, Bats, Birds, and/or Mice you control enter, scry 1.\nOther Rabbits, Bats, Birds, and Mice you control get +1/+1.",
+  "power": 2,
+  "toughness": 3
+}
