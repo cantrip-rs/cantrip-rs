@@ -107,6 +107,14 @@ fn any_target_other_than_those_chosen_filter(q: &dyn Query, asker: &Asker, t: Ta
 pub const ANY_TARGET_OTHER_THAN_THOSE_CHOSEN: TargetSpec = target(any_target_other_than_those_chosen_filter);
 pub const CREATURE: TargetSpec = target(creature_filter);
 
+fn creature_other_than_those_chosen_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_filter(q, asker, t) && !q.chosen_targets().contains(&t)
+}
+
+/// "Other target creature" after an earlier target of the same spell or ability (CR 115.1, 115.3): a creature, but not one already
+/// chosen for it. The Super Hero Civil War (III) and Mabel's Mettle print it.
+pub const CREATURE_OTHER_THAN_THOSE_CHOSEN: TargetSpec = target(creature_other_than_those_chosen_filter);
+
 /// "Target Wall creature" (CR 115.1, 205.3m): any controller's Wall creature on the battlefield.
 /// Glyph of Life and Glyph of Doom print it. The subtype is read through the source's text (CR 612.2).
 pub const WALL_CREATURE: TargetSpec = target(wall_creature_filter);
