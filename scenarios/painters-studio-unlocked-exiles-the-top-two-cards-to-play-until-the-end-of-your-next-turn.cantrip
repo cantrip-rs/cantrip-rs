@@ -1,0 +1,42 @@
+# Painter's Studio // Defaced Gallery, cast as Painter's Studio: "When you unlock this door, exile the top two cards of your library. You may
+# play them until the end of your next turn." Casting the half unlocks it as it enters (CR 709.5d). The top two cards are a Mountain and a
+# Lightning Bolt: in Bot1's next turn (3) it plays the exiled Mountain as its land drop and casts the exiled Bolt at Bot2.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Painter's Studio // Defaced Gallery
+Island
+Island
+Island
+Mountain
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Painter's Studio // Defaced Gallery.Cast(Ability: Painter's Studio)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Exile = Lightning Bolt; Mountain
+Bot1.Exile.Mountain.Play
+? Exile = Lightning Bolt
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt
+Bot1.Battlefield = Mountain; Painter's Studio; Mox Pearl; Mox Jet; Mox Ruby

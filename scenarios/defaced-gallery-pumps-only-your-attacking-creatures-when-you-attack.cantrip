@@ -1,0 +1,40 @@
+# Painter's Studio // Defaced Gallery, cast as Defaced Gallery: "Whenever you attack, attacking creatures you control get +1/+0 until end of
+# turn." In turn 3 Bot1 attacks with its Memnite alone while its Ornithopter stays home: the attacking Memnite is 2/1 and Bot2 takes 2, while
+# the Ornithopter that was not attacking stays 0/2.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Painter's Studio // Defaced Gallery
+Memnite
+Ornithopter
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Painter's Studio // Defaced Gallery.Cast(Ability: Defaced Gallery)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Ornithopter.Power = 0
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
