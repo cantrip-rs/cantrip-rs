@@ -1,0 +1,6 @@
+{
+  "name": "Psychic Whorl",
+  "manaCost": "{2}{B}",
+  "type": "Sorcery",
+  "oracleText": "Target opponent discards two cards. Then if you control a Rat, surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)"
+}
