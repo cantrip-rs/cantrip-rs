@@ -1591,6 +1591,14 @@ pub fn damage_each_opponent_n<const N: u32>(g: &mut dyn Game, item: &StackItem) 
     Ok(())
 }
 
+/// "[This source] deals that much damage to target [permanent]" for a triggered ability that carries the amount of the damage that
+/// triggered it (`.damage_amount()`, CR 120.3, 603.10a): the amount is read from the trigger, the target is slot 0. Questing
+/// Beast and Fear of Burning Alive print it.
+pub fn this_deals_that_much_damage_to_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    crate::damage_target(g, item, 0, item.matched_damage_amount());
+    Ok(())
+}
+
 /// "[This source] deals `n` damage to each opponent and you gain `n` life" (CR 120.3, 119.3): `damage_each_opponent`, then the
 /// controller gains the life whether or not the damage was dealt (CR 608.2c). Extended Absence, Screeching Soulbreaker, Eye of
 /// Jace, Aurelia, the Law Above, Quintorius Kand, Sanctum Lurker, Ark of Hunger and Colossus of the Blood Age print it.

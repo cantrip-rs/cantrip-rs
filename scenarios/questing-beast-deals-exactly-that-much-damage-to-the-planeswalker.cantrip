@@ -1,0 +1,37 @@
+# Questing Beast deals the damage it dealt to Bot2 again, exactly that much (4), to the planeswalker Bot2 controls: Karn,
+# Scion of Urza (loyalty 5) survives with 1 loyalty left, so an amount one too high or too low shows.
+[Bot1 Deck]
+Forest x2
+Black Lotus
+Questing Beast
+Llanowar Elves
+Forest x2
+Forest x20
+[Bot2 Deck]
+Forest
+Black Lotus
+Karn, Scion of Urza
+Swamp x3
+Swamp x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Hand.Black Lotus.Cast
+[Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Karn, Scion of Urza.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Questing Beast.Cast
+Bot1.Attack(Questing Beast > Bot2; Llanowar Elves > Bot2)
+[Bot1.Main2]
+[Expect]
+Bot2.Life = 15
+Bot2.Battlefield.Karn, Scion of Urza.Counters.Loyalty = 1
