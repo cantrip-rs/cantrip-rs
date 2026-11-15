@@ -1,0 +1,67 @@
+# Summon: Primal Odin's chapter II gives it "Whenever this creature deals combat damage to a player, that player loses
+# the game", an ability of the card whose ability resolves (CR 613.1f), the card a copy copies (CR 707.2). Bot1's Clone
+# enters as a copy of Bot2's Odin on turn 3, with a lore counter (CR 714.3a): its chapter I destroys Bot2's Odin, its
+# chapter II on turn 5 gives it the ability, and its combat damage that turn makes Bot2 lose.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Clone
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Jet
+Summon: Primal Odin
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet#1.Activate
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Battlefield.Mox Jet#3.Activate
+Bot2.Hand.Summon: Primal Odin.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Clone.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Summon: Primal Odin = (absent)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Summon: Primal Odin > Bot2)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Result = Bot1 won

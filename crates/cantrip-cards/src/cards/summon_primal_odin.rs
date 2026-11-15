@@ -8,8 +8,7 @@ use cantrip_oracle as oracle;
 /// stays on the battlefield, and is not tied to its lore counters (the creature's text below the type line applies whatever
 /// they are).
 fn zantetsuken(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let me = g.obj(item.object).card;
-    g.add_effect(item.object, item.object, EffectKind::AddAbility(AbilityRef::delayed(me, 0)), Duration::Indefinite);
+    g.add_effect(item.object, item.object, EffectKind::AddAbility(AbilityRef::delayed(item.ability.card, 0)), Duration::Indefinite);
     Ok(())
 }
 
