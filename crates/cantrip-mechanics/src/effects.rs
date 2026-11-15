@@ -926,6 +926,16 @@ pub fn draw_a_card_and_lose_1_life(g: &mut dyn Game, item: &StackItem) -> Result
     Ok(())
 }
 
+/// "Reveal the top card of your library and put that card into your hand. You lose life equal to its mana value" (CR 701.20,
+/// 119.3): the reveal and the move are one instruction, the life lost is the value as it was revealed (CR 608.2h); nothing from
+/// an empty library. Dark Confidant and Darkstar Augur print it.
+pub fn reveal_top_card_to_hand_you_lose_life_equal_to_its_mana_value(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some((_, value)) = crate::library::reveal_top_to_hand(g, item.controller) {
+        g.lose_life(item.controller, value as i32);
+    }
+    Ok(())
+}
+
 /// "Draw N cards, then put two cards from your hand on top of your library in any order" (CR 121.1, 401.4): the two are
 /// chosen together (CR 608.2d) and put back one at a time in the order chosen, so the last chosen ends on top; either may be
 /// a card that was already in hand (ruling 2024-06-07), not only one of the N just drawn. Brainsurge (four), Brainstorm and
