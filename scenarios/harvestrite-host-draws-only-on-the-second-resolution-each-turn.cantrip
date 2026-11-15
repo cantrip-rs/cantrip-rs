@@ -1,0 +1,54 @@
+# Harvestrite Host: whenever it or another Rabbit you control enters, target creature you control gets +1/+0 until end of turn (CR 611.2a), and the
+# second time this ability has resolved this turn it also draws a card. The Host itself entering is the first resolution (+1/+0, no draw);
+# a Brave-Kin Duo (a Rabbit) is the second (+1/+0 on the Host, draw); a second Duo is the third (+1/+0, no draw).
+
+[Bot1 Deck]
+Mox Pearl
+Black Lotus
+Plains
+Harvestrite Host
+Brave-Kin Duo
+Brave-Kin Duo
+Plains
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Harvestrite Host.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Harvestrite Host.Power = 4
+? Bot1.Battlefield.Harvestrite Host.Toughness = 3
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Brave-Kin Duo.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Harvestrite Host)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Harvestrite Host.Power = 5
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Brave-Kin Duo.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Harvestrite Host)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Harvestrite Host.Power = 6
+? Bot1.Hand.Count = 2
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Harvestrite Host.Power = 3

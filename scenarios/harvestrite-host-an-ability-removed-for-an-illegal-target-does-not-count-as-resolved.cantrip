@@ -1,0 +1,76 @@
+# Harvestrite Host: an ability whose only target is illegal on resolution does not resolve (CR 608.2b), so it neither pumps nor draws and does not count
+# as one of the turn's resolutions (the ruling). Turn 3: Bot1's first Duo's trigger targets that Duo and Bot2's Lightning Bolt kills the Duo in response:
+# nothing is drawn. Bot1's second Duo's trigger then resolves as the first resolution of the turn (+1/+0 on the Host, no draw), and its third Duo
+# is the second resolution and draws.
+
+[Bot1 Deck]
+Mox Pearl
+Black Lotus
+Plains
+Harvestrite Host
+Brave-Kin Duo
+Brave-Kin Duo
+Brave-Kin Duo
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Harvestrite Host.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Brave-Kin Duo.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Brave-Kin Duo)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Brave-Kin Duo)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Graveyard = Brave-Kin Duo; Black Lotus
+? Bot1.Hand.Count = 2
+? Bot1.Battlefield.Harvestrite Host.Power = 3
+Bot1.Hand.Brave-Kin Duo.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Harvestrite Host)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Harvestrite Host.Power = 4
+? Bot1.Hand.Count = 1
+Bot1.Hand.Brave-Kin Duo.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Harvestrite Host)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Harvestrite Host.Power = 5
+? Bot1.Hand.Count = 1
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Hand.Count = 1

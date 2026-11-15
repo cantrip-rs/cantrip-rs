@@ -1,0 +1,8 @@
+{
+  "name": "Harvestrite Host",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Rabbit Citizen",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever this creature or another Rabbit you control enters, target creature you control gets +1/+0 until end of turn. Then draw a card if this is the second time this ability has resolved this turn."
+}
