@@ -1,0 +1,44 @@
+# Three card types is not delirium (CR 207.2c): Bot1's graveyard holds the Wurm, a Forest and Wheel of Fortune (creature, land, sorcery) while Bot2's has an artifact too -
+# only your own graveyard counts - so with all {2}{G}{G} available and an empty stack the Wurm can't be brought back.
+
+[Bot1 Deck]
+Sol Ring
+Mountain
+Wheel of Fortune
+Balustrade Wurm
+Forest
+Forest
+Forest
+Forest
+Ornithopter
+Forest x14
+
+[Bot2 Deck]
+Mox Jet
+Island x25
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mountain.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+! Bot1.Graveyard.Balustrade Wurm.Activate
+
+[Expect]
+Bot1.Graveyard.Balustrade Wurm.Power = 5
+Bot1.Battlefield.Balustrade Wurm = (absent)
+Bot2.Graveyard.Mox Jet.Colors.Count = 0
