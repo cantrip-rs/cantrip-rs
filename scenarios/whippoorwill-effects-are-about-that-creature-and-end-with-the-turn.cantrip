@@ -1,0 +1,102 @@
+# Whippoorwill's effects are about the creature it targeted, and only for the turn (CR 611.2a, 514.2). On turn 3 Bot1 activates
+# it on Bot2's Drudge Skeletons; Bot2 then bolts Whippoorwill, and Bot1's Healing Salve prevents that damage: damage to another
+# creature can still be prevented that turn. On turn 5 Bot1 bolts the Skeletons and Bot2's Healing Salve prevents it all, then
+# bolts them again and Bot2 regenerates them: both effects have ended, so the Skeletons are unhurt, then destroyed and
+# regenerated (tapped, CR 701.19a), never dying.
+
+[Bot1 Deck]
+Mox Emerald
+Whippoorwill
+Mox Pearl
+Healing Salve
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Mox Emerald
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Pearl
+Drudge Skeletons
+Lightning Bolt
+Healing Salve
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Whippoorwill.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Drudge Skeletons.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Whippoorwill.Activate(Bot2.Battlefield.Drudge Skeletons)
+? Bot1.Battlefield.Whippoorwill.Tapped = true
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Whippoorwill)
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Prevent the next 3 damage)
+Bot1.Target(Bot1.Battlefield.Whippoorwill)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Whippoorwill.Damage = 0
+? Bot2.Graveyard = Lightning Bolt
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Drudge Skeletons)
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Healing Salve.Cast
+Bot2.Modes(Prevent the next 3 damage)
+Bot2.Target(Bot2.Battlefield.Drudge Skeletons)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot2.Battlefield.Drudge Skeletons.Damage = 0
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Drudge Skeletons)
+Bot1.Pass
+Bot2.Battlefield.Drudge Skeletons.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Drudge Skeletons.Tapped = true
+Bot2.Battlefield.Drudge Skeletons.Damage = 0
+Bot2.Graveyard = Healing Salve; Lightning Bolt

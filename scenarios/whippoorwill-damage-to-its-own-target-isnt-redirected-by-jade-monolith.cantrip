@@ -1,0 +1,68 @@
+# Whippoorwill's "damage that would be dealt to that creature this turn can't be ... dealt instead to another permanent or
+# player" (CR 614.9), with the controller's own creature as the target: Bot1 activates it targeting Whippoorwill itself. Bot2
+# then bolts Whippoorwill; in response Bot1 activates Jade Monolith ("the next time a source of your choice would deal damage to
+# target creature this turn, that source deals that damage to you instead") on it, choosing the Bolt. The redirection does
+# nothing: Whippoorwill is dealt the 3 and Bot1 none, and as it dies its own delayed ability exiles it (CR 603.7c, 400.7e).
+
+[Bot1 Deck]
+Mox Emerald
+Whippoorwill
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Jade Monolith
+Mox Emerald
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Whippoorwill.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Jade Monolith.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Whippoorwill.Activate(Bot1.Battlefield.Whippoorwill)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Whippoorwill)
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Jade Monolith.Activate(Bot1.Battlefield.Whippoorwill)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Stack.Lightning Bolt)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Exile = Whippoorwill
+Bot2.Graveyard = Lightning Bolt

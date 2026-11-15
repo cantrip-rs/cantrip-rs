@@ -1,0 +1,86 @@
+# Whippoorwill's ability on Bot2's Drudge Skeletons: it can't be regenerated this turn (CR 701.19c), damage that would be dealt
+# to it this turn can't be prevented (CR 615.12), and when it dies this turn it is exiled (CR 603.7c, 400.7e) - all effects of
+# the resolved ability, which outlive Whippoorwill (CR 611.2a). With one green source of two, the ability is refused; Bot1 then
+# casts a second Mox Emerald and pays {G}{G} exactly (the pool empty after). Bot1 bolts the Skeletons; in response Bot2 bolts
+# Whippoorwill, shields the Skeletons with Healing Salve's "prevent the next 3 damage" and regenerates them. Whippoorwill dies
+# first, then the Bolt deals its 3 to the Skeletons anyway, they are destroyed and not regenerated, and they die and are
+# exiled from the graveyard.
+
+[Bot1 Deck]
+Mox Emerald
+Whippoorwill
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Island
+Island
+Mox Emerald
+Island x10
+
+[Bot2 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Pearl
+Mox Ruby
+Drudge Skeletons
+Healing Salve
+Lightning Bolt
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Whippoorwill.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Drudge Skeletons.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Whippoorwill.Activate(Bot2.Battlefield.Drudge Skeletons; Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Whippoorwill.Activate(Bot2.Battlefield.Mox Jet)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Whippoorwill.Activate(Bot2.Battlefield.Drudge Skeletons)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Drudge Skeletons)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Whippoorwill)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Healing Salve.Cast
+Bot2.Modes(Prevent the next 3 damage)
+Bot2.Target(Bot2.Battlefield.Drudge Skeletons)
+Bot2.Battlefield.Drudge Skeletons.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Drudge Skeletons
+Bot2.Battlefield.Drudge Skeletons = (absent)
+Bot2.Graveyard = Lightning Bolt; Healing Salve
+Bot1.Graveyard = Lightning Bolt; Whippoorwill

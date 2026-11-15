@@ -1,0 +1,8 @@
+{
+  "name": "Whippoorwill",
+  "manaCost": "{G}",
+  "type": "Creature — Bird",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{G}{G}, {T}: Target creature can't be regenerated this turn. Damage that would be dealt to that creature this turn can't be prevented or dealt instead to another permanent or player. When the creature dies this turn, exile the creature."
+}
