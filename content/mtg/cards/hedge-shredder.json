@@ -1,0 +1,8 @@
+{
+  "name": "Hedge Shredder",
+  "manaCost": "{2}{G}{G}",
+  "type": "Artifact — Vehicle",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Whenever this Vehicle attacks, you may mill two cards.\nWhenever one or more land cards are put into your graveyard from your library, put them onto the battlefield tapped.\nCrew 1 (Tap any number of creatures you control with total power 1 or more: This Vehicle becomes an artifact creature until end of turn.)"
+}

@@ -1,0 +1,50 @@
+# Hedge Shredder (5/5 Vehicle, Crew 1): crewing needs total power 1 (CR 702.122a), so Bot1's Ornithopter (power 0) cannot, and its
+# Memnite (power 1, summoning sick, which a crew cost ignores) can. The crewed Shredder attacks, Bot1 accepts "you may mill two cards"
+# and the Forest and Mountain it mills are both put onto the battlefield tapped by one ability (CR 603.2c); the Shredder deals its 5.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Hedge Shredder
+Memnite
+Ornithopter
+Island
+Island
+Island
+Forest
+Mountain
+Island x10
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hedge Shredder.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+# The Ornithopter's power is 0: it alone does not make a crew of 1.
+! Bot1.Battlefield.Hedge Shredder.Activate(Ability: Crew)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Hedge Shredder.Activate(Ability: Crew)
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Hedge Shredder > Bot2)
+Bot1.Accept
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield = Forest; Hedge Shredder; Memnite; Mountain; Mox Emerald; Ornithopter
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.Mountain.Tapped = true
+Bot1.Graveyard = Black Lotus
+Bot1.Library.Count = 10
