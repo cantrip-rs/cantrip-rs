@@ -1,0 +1,52 @@
+# Leyline of Mutation's alternative cost is exactly {W}{U}{B}{R}{G} (CR 118.9) and is for "spells you cast" (CR 601.2b). Bot2 begins with its Leyline on the
+# battlefield and Bot1 has none: with all five Moxen tapped, Bot1 is not offered the alternative cost for Blightsteel Colossus (the refusal). On turn 2 Bot2 has
+# only four Moxen (no green): its own Leyline's cost is still not payable, so the Colossus in its hand is not cast either.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Blightsteel Colossus
+Plains x14
+
+[Bot2 Deck]
+Leyline of Mutation
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Blightsteel Colossus
+Plains
+Plains x12
+
+[Actions]
+Bot2.Accept
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Blightsteel Colossus.Cast(Ability: Pay {W}{U}{B}{R}{G})
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Blightsteel Colossus.Cast(Ability: Pay {W}{U}{B}{R}{G}; Mana: short)
+
+[Expect]
+Bot1.Hand = Blightsteel Colossus; Plains
+Bot2.Hand = Blightsteel Colossus; Plains; Plains
