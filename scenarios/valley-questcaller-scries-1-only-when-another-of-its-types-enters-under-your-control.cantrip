@@ -1,0 +1,51 @@
+# Valley Questcaller: "Whenever one or more other Rabbits, Bats, Birds, and/or Mice you control enter, scry 1" (CR 701.22a). Questcaller
+# entering itself, a Memnite (a Construct) entering, and Bot2's Warren Elder (a Rabbit under Bot2) entering all ask Bot1 nothing; a
+# Thistledown Players (a Mouse) entering does, and the scry sends Swamp to the bottom, leaving Forest on top.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Pearl
+Valley Questcaller
+Thistledown Players
+Memnite
+Plains
+Swamp
+Forest
+Plains x11
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Warren Elder
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Valley Questcaller.Cast
+Bot1.Pass
+! Bot1.Arrange
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+! Bot1.Arrange
+Bot1.Hand.Thistledown Players.Cast
+Bot1.Arrange( | Swamp)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Warren Elder.Cast
+Bot1.Pass
+! Bot1.Arrange
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Library.Top = Forest
+Bot1.Battlefield.Thistledown Players.Power = 4
+Bot1.Battlefield.Thistledown Players.Toughness = 4
