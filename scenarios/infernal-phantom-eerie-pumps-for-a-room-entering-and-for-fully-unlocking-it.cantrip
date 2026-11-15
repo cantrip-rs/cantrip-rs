@@ -1,0 +1,57 @@
+# Infernal Phantom, Eerie: "Whenever an enchantment you control enters and whenever you fully unlock a Room, this creature gets
+# +2/+0 until end of turn" (CR 603.6a, 709.5i). Turn 3 Glassworks // Shattered Yard is cast as Glassworks: the Room is an
+# enchantment entering, so the Phantom is 4/3. Turn 5 it is 2/3 again; unlocking Shattered Yard, the Room's other door, fully
+# unlocks it and the Phantom is 4/3 again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Infernal Phantom
+Glassworks // Shattered Yard
+Mountain
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Infernal Phantom.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Infernal Phantom.Power = 2
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Glassworks // Shattered Yard.Cast(Ability: Glassworks)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Infernal Phantom.Power = 4
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Infernal Phantom.Power = 2
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Glassworks.Activate(Ability: right door)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Infernal Phantom.Power = 4
+Bot1.Battlefield.Infernal Phantom.Toughness = 3
