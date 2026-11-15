@@ -1,0 +1,6 @@
+{
+  "name": "Starfall Invocation",
+  "manaCost": "{3}{W}{W}",
+  "type": "Sorcery",
+  "oracleText": "Gift a card (You may promise an opponent a gift as you cast this spell. If you do, they draw a card before its other effects.)\nDestroy all creatures. If the gift was promised, return a creature card put into your graveyard this way to the battlefield under your control."
+}
