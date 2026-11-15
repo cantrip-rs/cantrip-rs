@@ -1,0 +1,58 @@
+# Hall of Storm Giants's animation grants ward {3} (CR 702.21a), an ability of the card whose ability resolves (CR
+# 613.1f), the card a copy copies (CR 707.2). Bot1's Vesuva enters as a copy of Bot2's Hall on turn 3; animated on
+# turn 5, it is the target of Bot2's Lightning Bolt, which is countered when Bot2 does not pay {3}.
+
+[Bot1 Deck]
+Island
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Vesuva
+Island x20
+
+[Bot2 Deck]
+Hall of Storm Giants
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Hall of Storm Giants.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Vesuva.Play
+Bot1.Accept
+Bot1.Target(Bot2.Battlefield.Hall of Storm Giants)
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Hall of Storm Giants.Activate(Ability: {T}: Add {U})
+Bot1.Battlefield.Hall of Storm Giants.Activate(Ability: Until end of turn)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hall of Storm Giants.Power = 7
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Hall of Storm Giants)
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot1.Battlefield.Hall of Storm Giants.Damage = 0
+Bot2.Graveyard = Lightning Bolt

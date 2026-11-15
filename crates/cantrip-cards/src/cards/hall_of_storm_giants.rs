@@ -8,7 +8,6 @@ use cantrip_oracle as oracle;
 /// list holds, granted for the turn (CR 702.21a).
 fn becomes_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let me = item.object;
-    let card = g.obj(me).card;
     let words = g.words(me);
     let animation = Animation {
         power: 7,
@@ -19,7 +18,7 @@ fn becomes_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         all_creature_types: false,
         replaces_creature_types: false,
         keywords: Keywords::NONE,
-        ability: Some(AbilityRef::delayed(card, 0)),
+        ability: Some(AbilityRef::delayed(item.ability.card, 0)),
     };
     animate(g, me, me, &animation, Duration::EndOfTurn);
     Ok(())
