@@ -95,8 +95,20 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-165](#ki-165-a-player-is-offered-at-most-136-actions-effects-let-them-take-at-a-later-time) | A player is offered at most 136 actions effects let them take at a later time | Pri-3 | Won't fix: beyond practical scale |
 | [KI-166](#ki-166-a-player-is-offered-at-most-56-mana-abilities-of-their-own) | A player is offered at most 56 mana abilities of their own | Pri-3 | Won't fix: beyond practical scale |
 | [KI-167](#ki-167-jotun-grunts-graveyard-choice-is-captioned-as-choosing-an-opponent) | Jötun Grunt's graveyard choice is captioned as choosing an opponent | Pri-2 | Open |
+| [KI-168](#ki-168-card-mutate-hangs-on-a-mutant-that-loops-forever) | card-mutate hangs on a mutant that loops forever | Pri-3 | Open |
 
 ## Issues
+
+### KI-168: card-mutate hangs on a mutant that loops forever
+
+| Priority | Status | Area | Found |
+| --- | --- | --- | --- |
+| Pri-3 | Open | tooling (`tools/maintenance/card-mutate.py`) | 2026-11-15, reviewing Wildwood Scourge (#3055) |
+
+**Notes.** `card-mutate.py` runs each mutant's corpus with no timeout. A mutant that makes a trigger feed itself
+(Wildwood Scourge with its "non-Hydra" check removed, two Scourges feeding each other) never finishes, so the run hangs
+until `target/mutate/corpus.exe` is killed by hand. Such a mutant is caught, not survived. A fix gives each mutant run
+a timeout and counts a timeout as caught. Tooling only.
 
 ### KI-167: Jötun Grunt's graveyard choice is captioned as choosing an opponent
 
