@@ -310,6 +310,8 @@ mod resolving_counter_cost_tests;
 #[cfg(test)]
 mod counter_ceiling_tests;
 #[cfg(test)]
+mod counter_maximum_tests;
+#[cfg(test)]
 mod wide_number_tests;
 #[cfg(test)]
 mod regeneration_ban_tests;

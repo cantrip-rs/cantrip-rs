@@ -222,6 +222,7 @@ fn check_once(cx: &mut Cx) -> R<bool> {
     let mut bound: Vec<crate::day_night::Bound> = Vec::new();
     let mut battles: Vec<(ObjectId, bool)> = Vec::new();
     let mut annihilate: Vec<(ObjectId, i32)> = Vec::new();
+    let mut ceilings: Vec<(ObjectId, CounterKind, i32)> = Vec::new();
     let mut roles: Vec<(ObjectId, ObjectId, PlayerId, u32)> = Vec::new();
     for &id in cx.s().battlefield() {
         if !stays(cx, id) {
@@ -232,6 +233,22 @@ fn check_once(cx: &mut Cx) -> R<bool> {
         let both = cx.s().obj(id).counters(CounterKind::PlusOne).min(cx.s().obj(id).counters(CounterKind::MinusOne));
         if both > 0 {
             annihilate.push((id, both));
+        }
+        // CR 704.5r: a permanent with an ability that says it can't have more than N counters of a kind on it, and more
+        // than N on it, loses all but N of them - the fewest such an ability allows, where it has several. Removed below.
+        if cx.s().obj(id).has_counters() {
+            for card in cx.cards().texts(cx.s(), cx.s().obj(id)) {
+                for &(kind, most) in cx.card(card).counter_ceilings {
+                    let excess = cx.s().obj(id).counters(kind) - most;
+                    if excess <= 0 || cx.lost_all_abilities(id) {
+                        continue;
+                    }
+                    match ceilings.iter_mut().find(|&&mut (other, k, _)| other == id && k == kind) {
+                        Some(found) => found.2 = found.2.max(excess),
+                        None => ceilings.push((id, kind, excess)),
+                    }
+                }
+            }
         }
         let chars = cx.chars(id);
         if let Some(daybound) = crate::day_night::role(chars.keywords) {
@@ -467,6 +484,13 @@ fn check_once(cx: &mut Cx) -> R<bool> {
         if live(cx.s(), id) && cx.s().obj(id).zone.is(ZoneKind::Battlefield) {
             counters::remove(cx, id, CounterKind::PlusOne, n);
             counters::remove(cx, id, CounterKind::MinusOne, n);
+            acted = true;
+        }
+    }
+    // CR 704.5r, 122.4, at the same time as the rest (CR 704.3).
+    for (id, kind, n) in ceilings {
+        if live(cx.s(), id) && cx.s().obj(id).zone.is(ZoneKind::Battlefield) {
+            counters::remove(cx, id, kind, n);
             acted = true;
         }
     }

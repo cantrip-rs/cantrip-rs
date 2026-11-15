@@ -3994,6 +3994,12 @@ pub struct CardDef {
     /// "artifacts, creatures, enchantments, and lands can't have counters put on them". It entering with counters is
     /// counters being put on it too (CR 122.6).
     pub counter_bans: &'static [CounterBan],
+    /// Its static abilities that say this permanent can't have more than N counters of a kind on it (CR 122.4), each that
+    /// kind and its N: while it has more than N of that kind on it, all but N are removed from it as a state-based action
+    /// (CR 704.5r). Nothing stops them being put on it first. Read off every rules text the permanent has while it has its
+    /// abilities (CR 613.1f), so one that becomes a copy of the card has it too. Rasputin Dreamweaver's "can't have more
+    /// than seven dream counters on it".
+    pub counter_ceilings: &'static [(CounterKind, i32)],
     /// Its static abilities that keep cards in some zones from entering the battlefield (CR 101.2), while it is on the
     /// battlefield with its abilities: Grafdigger's Cage's "creature cards in graveyards and libraries can't enter the
     /// battlefield".
@@ -4268,6 +4274,7 @@ impl CardDef {
         win_rules: &[],
         infect_damage_to: &[],
         counter_bans: &[],
+        counter_ceilings: &[],
         enter_rules: &[],
         land_play_rules: &[],
         player_counter_bans: &[],
@@ -4385,6 +4392,7 @@ impl CardDef {
             (!self.win_rules.is_empty(), "win rules"),
             (!self.infect_damage_to.is_empty(), "an infect damage rule"),
             (!self.counter_bans.is_empty(), "counter bans"),
+            (!self.counter_ceilings.is_empty(), "counter ceilings"),
             (!self.enter_rules.is_empty(), "enter rules"),
             (!self.land_play_rules.is_empty(), "land play rules"),
             (!self.player_counter_bans.is_empty(), "player counter bans"),
