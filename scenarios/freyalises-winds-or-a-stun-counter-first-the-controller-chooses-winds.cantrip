@@ -1,0 +1,50 @@
+# Freyalise's Winds and a stun counter both replace the untap of a permanent that has both counters (CR 122.1d, 614.1a), and
+# the permanent's controller chooses which applies (CR 616.1e); the other then no longer applies, as the event is no untap
+# any more (CR 614.6, 616.1f). Bot1's Rapier Wit taps Bot2's Ornithopter on Bot1's turn and stuns it, and the tap gives it a
+# wind counter. In Bot2's untap step on turn four Bot2 applies the Winds first: every wind counter comes off and the stun
+# counter stays. On turn six the stun counter alone replaces the untap.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Freyalise's Winds
+Mox Pearl
+Mox Pearl
+Rapier Wit
+Island
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Freyalise's Winds.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Rapier Wit.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = 1
+? Bot2.Battlefield.Ornithopter.Counters.Wind = 1
+Bot2.Replace(wind counters)
+[T4 Bot2.Upkeep]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = 1
+? Bot2.Battlefield.Ornithopter.Counters.Wind = (absent)
+[T6 Bot2.Upkeep]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Ornithopter.Counters.Stun = (absent)
+Bot2.Battlefield.Ornithopter.Counters.Wind = (absent)

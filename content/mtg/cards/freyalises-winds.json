@@ -1,0 +1,6 @@
+{
+  "name": "Freyalise's Winds",
+  "manaCost": "{2}{G}{G}",
+  "type": "Enchantment",
+  "oracleText": "Whenever a permanent becomes tapped, put a wind counter on it.\nIf a permanent with a wind counter on it would untap during its controller's untap step, remove all wind counters from it instead."
+}

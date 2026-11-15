@@ -1,0 +1,54 @@
+# Freyalise's Winds replaces only an untap that would happen in the permanent's controller's own untap step (CR 502.3,
+# 614.1a; the 2009-10-01 ruling: "first you determine which of your permanents will untap, then you untap them"). Bot1's
+# Mana Vault "doesn't untap during your untap step": tapped for mana with Winds out, it gets a wind counter and keeps it
+# through Bot1's untap step on turn three. Bot2's Bender's Waterskin, tapped on turn two, untaps "during each other
+# player's untap step" - Bot1's, not its controller's - so it untaps on turn three and keeps its wind counter too.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Emerald
+Freyalise's Winds
+Mana Vault
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Bender's Waterskin
+Island x25
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Freyalise's Winds.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Mana Vault.Cast
+Bot1.Pass
+Bot1.Battlefield.Mana Vault.Activate
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Mana Vault.Counters.Wind = 1
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Bender's Waterskin.Cast
+Bot2.Pass
+Bot2.Battlefield.Bender's Waterskin.Activate(Color: Blue)
+[T2 Bot2.End]
+? Bot2.Battlefield.Bender's Waterskin.Tapped = true
+? Bot2.Battlefield.Bender's Waterskin.Counters.Wind = 1
+[T3 Bot1.Upkeep]
+
+[Expect]
+Bot1.Battlefield.Mana Vault.Tapped = true
+Bot1.Battlefield.Mana Vault.Counters.Wind = 1
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.Forest.Counters.Wind = (absent)
+Bot2.Battlefield.Bender's Waterskin.Tapped = false
+Bot2.Battlefield.Bender's Waterskin.Counters.Wind = 1

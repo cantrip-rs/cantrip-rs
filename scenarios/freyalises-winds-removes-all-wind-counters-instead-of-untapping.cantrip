@@ -1,0 +1,63 @@
+# Freyalise's Winds: "Whenever a permanent becomes tapped, put a wind counter on it. If a permanent with a wind counter on it
+# would untap during its controller's untap step, remove all wind counters from it instead." (CR 603.2, 614.1a, 502.3)
+# Bot1's Mox Emerald is tapped to cast it, before it is on the battlefield: no counter, and it untaps on turn three. Bot1's
+# Forest is tapped for mana, untapped by Twiddle - an effect's untap, no untap step's, so the counter stays - and tapped
+# again: two wind counters. On turn three it stays tapped and both come off (all of them, not one); Mox Sapphire, tapped
+# once, likewise. Bot2's Forest, tapped on turn two, keeps its counter through Bot1's untap step (not its controller's)
+# and loses it, staying tapped, in Bot2's on turn four. With no counter left, Bot1's Forest untaps on turn five.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Emerald
+Freyalise's Winds
+Mox Sapphire
+Twiddle
+Island
+Island x20
+
+[Bot2 Deck]
+Forest x25
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Freyalise's Winds.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Twiddle.Cast(Bot1.Battlefield.Forest)
+Bot1.Modes(Untap)
+? Bot1.Battlefield.Forest.Tapped = false
+Bot1.Battlefield.Forest.Activate
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Forest.Tapped = true
+? Bot1.Battlefield.Forest.Counters.Wind = 2
+? Bot1.Battlefield.Mox Sapphire.Counters.Wind = 1
+? Bot1.Battlefield.Mox Emerald.Tapped = true
+? Bot1.Battlefield.Mox Emerald.Counters.Wind = (absent)
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+[T3 Bot1.Upkeep]
+? Bot1.Battlefield.Forest.Tapped = true
+? Bot1.Battlefield.Forest.Counters.Wind = (absent)
+? Bot1.Battlefield.Mox Sapphire.Tapped = true
+? Bot1.Battlefield.Mox Sapphire.Counters.Wind = (absent)
+? Bot1.Battlefield.Mox Emerald.Tapped = false
+? Bot2.Battlefield.Forest.Tapped = true
+? Bot2.Battlefield.Forest.Counters.Wind = 1
+[T4 Bot2.Upkeep]
+? Bot2.Battlefield.Forest.Tapped = true
+? Bot2.Battlefield.Forest.Counters.Wind = (absent)
+[T5 Bot1.Upkeep]
+
+[Expect]
+Bot1.Battlefield.Forest.Tapped = false
+Bot1.Battlefield.Mox Sapphire.Tapped = false
+Bot2.Battlefield.Forest.Tapped = true
