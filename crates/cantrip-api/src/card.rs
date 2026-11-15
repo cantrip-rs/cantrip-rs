@@ -549,6 +549,16 @@ pub type CostChange = fn(&dyn Query, ObjectId, PlayerId, Costed, &[Target]) -> C
 /// player activating it, as the ability it is (`Asker::by`, CR 607.5); otherwise as `CostChange`.
 pub type AbilityCostChange = fn(&dyn Query, &Asker, Costed, &[Target]) -> CostDelta;
 
+/// A static ability that applies an additional cost of permanents to a spell or ability (CR 118.8, 601.2f): "spells cost an
+/// additional 'Sacrifice a Swamp' to cast for each black mana symbol in their mana costs" (Drought), "activated abilities of
+/// nontoken Rebels cost an additional 'Sacrifice a land' to activate" (Brutal Suppression). What it adds to the total cost
+/// of `costed` when `player` pays, by the permanent `source` that has it (`None` when it adds nothing): determined with the
+/// rest of the total cost once the targets are announced, and paid with it (CR 601.2f-h), separately from every other part
+/// of the cost - its permanents are chosen as it is paid, by its own filter. The filter is asked as `source`'s (its `Asker`
+/// names `source` and the payer), so it reads the words of `source`'s text (CR 612). The mana and life a static ability
+/// adds are `CostDelta`'s.
+pub type CostAddition = fn(&dyn Query, ObjectId, PlayerId, Costed) -> Option<PermanentCost>;
+
 /// A cost change a resolving spell or ability makes for a duration (CR 611.2a/c, 601.2f): "artifact spells you cast this
 /// turn cost {1} less to cast" (Armor Wars), "artifact, instant, and sorcery spells you cast this turn cost {2} less"
 /// (Urza, Planeswalker), "spells they cast this turn cost {2} more" (Academy Loremaster). The effect
@@ -3678,6 +3688,9 @@ pub struct CardDef {
     /// every activated ability, mana abilities included (CR 605.3, 602.2b): a change that leaves mana abilities alone ("unless
     /// they're mana abilities", "that aren't mana abilities") says so itself (`ActivatedDef::is_mana_ability`).
     pub cost_changes: &'static [CostChange],
+    /// Its static abilities that add a cost of permanents to what other things cost (CR 118.8, 601.2f), while it is on the
+    /// battlefield: asked as `cost_changes` are, of every spell cast and every activated ability, mana abilities included.
+    pub cost_additions: &'static [CostAddition],
     /// A spell's own cost changes (CR 601.2f): "this spell costs {1} less to cast for each ..." (affinity, Embercleave).
     /// They work wherever the spell is cast from, and the spell is their `source`. The core asks them only as the card is
     /// cast (`Costed::Spell`), never for an ability of it or of its permanent, nor for a special action (CR 116.1), so a
@@ -4076,6 +4089,7 @@ impl CardDef {
         granted_preventions: &[],
         cast_limit: 0,
         cost_changes: &[],
+        cost_additions: &[],
         own_cost_changes: &[],
         lasting_cost_changes: &[],
         lasting_block_rules: &[],
@@ -4213,6 +4227,7 @@ impl CardDef {
             (self.abilities.iter().any(|a| matches!(a, AbilityDef::Static(_))), "a static ability in its abilities"),
             (self.cast_limit > 0, "a cast limit"),
             (!self.cost_changes.is_empty(), "cost changes"),
+            (!self.cost_additions.is_empty(), "cost additions"),
             (!self.grants_pay_with.is_empty(), "convoke, delve or improvise it gives"),
             (!self.ability_alternatives.is_empty(), "alternative costs for abilities"),
             (!self.granted_ways.is_empty(), "ways it gives to cast cards"),
@@ -4525,7 +4540,7 @@ pub struct CardTable {
     /// Which cards have a static ability that gives other objects abilities (layer 6, CR 613.1f): with one on the board, any
     /// permanent may have a state trigger its card does not print.
     pub ability_grants: Vec<bool>,
-    /// Which cards have cost changes (CR 601.2f): the board is looked at for their sources, never for the card table's
+    /// Which cards have cost changes or cost additions (CR 601.2f, 118.8): the board is looked at for their sources, never for the card table's
     /// sake (a table holds every card, so "does any card" is always true).
     pub cost_changes: Vec<bool>,
     /// Which cards give spells convoke, delve or improvise (`CardDef::grants_pay_with`): their sources are found on the board.
@@ -5108,7 +5123,7 @@ impl CardTable {
         let mana_replaces: Vec<bool> =
             cards.iter().map(|c| c.replacements.iter().any(|r| r.kind == ReplacementKind::ManaProduction)).collect();
         let any_cast_limit = cards.iter().any(|c| c.cast_limit > 0);
-        let cost_changes: Vec<bool> = cards.iter().map(|c| !c.cost_changes.is_empty()).collect();
+        let cost_changes: Vec<bool> = cards.iter().map(|c| !c.cost_changes.is_empty() || !c.cost_additions.is_empty()).collect();
         let pay_with_grants: Vec<bool> = cards.iter().map(|c| !c.grants_pay_with.is_empty()).collect();
         let activation_rules: Vec<bool> = cards.iter().map(|c| !c.activation_rules.is_empty()).collect();
         let trigger_rules: Vec<bool> = cards.iter().map(|c| !c.trigger_rules.is_empty() || !c.additional_triggers.is_empty()).collect();

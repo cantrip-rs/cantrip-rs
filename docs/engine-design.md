@@ -1782,6 +1782,17 @@ whole of the life the total cost asks - an additional "pay X life", Phyrexian sy
 (CR 119.4, 118.3): a cast or activation that cannot is taken back (CR 733). The advice counts it too: a single-target cast
 announced with its action is not offered at a target whose tax its caster could not pay (`added_life_payable`).
 
+A static ability may apply an additional cost of permanents (CR 118.8, `CardDef::cost_additions`, a `CostAddition`):
+Drought's "spells cost an additional 'Sacrifice a Swamp' to cast for each black mana symbol in their mana costs", Brutal
+Suppression's "activated abilities of nontoken Rebels cost an additional 'Sacrifice a land'". It is asked of every spell
+cast and every activated ability, mana abilities included, with the rest of the total cost once the targets are announced
+(`cost_additions`, CR 601.2f), and becomes a part of the total of its own (`CostOrigin::Imposed(source)`), paid apart from
+every other part by its own filter (CR 601.2h). Its filter is asked as the permanent that applies it (`SpellPayment::asked_as`),
+so it reads the words of that permanent's text (CR 612.2: a Magical Hack on Drought makes it "Sacrifice an Island"). The
+advice offers no cast or activation whose payer controls too few permanents that could pay it (`imposed_payable`): nothing
+before payment (CR 601.2a-g) can give them more, so it refuses only what could never be paid. The mana and life a static
+ability adds stay `CostDelta`'s.
+
 A cost change may be made by a resolving spell or ability for a duration rather than be a static ability (CR 611.2a/c:
 Armor Wars's "artifact spells you cast this turn cost {1} less to cast", Urza, Planeswalker's +2, Academy Loremaster's
 "spells they cast this turn cost {2} more"): an `EffectKind::SpellCostChange { card, index, player }` about the player,

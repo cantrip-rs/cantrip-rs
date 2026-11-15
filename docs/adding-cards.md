@@ -415,7 +415,11 @@ shapes have an example:
   spell or ability (CR 601.2c): the total cost is determined after them (CR 601.2f), so "equip abilities you activate
   that target this creature cost {2} less" (`attach::equip_targeting_this_costs_less::<2>`, Dwarven Mauler) and "costs
   {1} less for each color of the creature it targets" (Dragonfire Blade) read them; an action whose target is announced
-  with it is offered only with the targets its cost could then be paid for. A change a resolving spell or ability makes
+  with it is offered only with the targets its cost could then be paid for. An additional cost of permanents a static
+  ability applies to other spells or abilities ("spells cost an additional 'Sacrifice a Swamp' to cast for each black mana
+  symbol in their mana costs": Drought) is `CardDef.cost_additions`, each returning the `PermanentCost` it adds
+  (`Cost::sacrifice(n, filter).permanents`) or `None`; its filter is asked as the card's own permanent, so it reads its
+  words through `q.words(asker.source)`. A change a resolving spell or ability makes
   for the turn ("artifact spells you cast this turn cost {1} less to cast": Armor Wars, Urza, Planeswalker, Academy
   Loremaster's "spells they cast this turn cost {2} more") is a `LastingCostChange { text, change }` in the card's
   `lasting_cost_changes`, made with `g.spells_cost_this_turn(item, player, index)`: it changes `player`'s spells (only

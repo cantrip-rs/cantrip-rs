@@ -14,6 +14,8 @@ pub enum CostOrigin {
     Modal(usize),
     Targets,
     GrantedOptional(usize),
+    /// An additional cost a static ability of this permanent applies to the spell or ability (CR 118.8, 601.2f).
+    Imposed(crate::ObjectId),
 }
 
 /// The distinct part within a component that an object paid. A discard index names an instruction in the component's

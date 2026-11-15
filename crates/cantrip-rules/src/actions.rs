@@ -2512,6 +2512,16 @@ impl SpellPayment<'_> {
             _ => (source, scope),
         }
     }
+    /// What its filter is asked as (`Asker::source`, `Asker::by`): the spell or ability `source` paid for, as `scope` says, or the
+    /// permanent whose static ability applied it, where it is such an additional cost (CR 118.8, `CardDef::cost_additions`) -
+    /// the words of that permanent's text name what pays it (CR 612).
+    fn asked_as(&self, source: ObjectId, scope: PaymentScope) -> (ObjectId, Option<Linked>) {
+        match self {
+            Self::Permanent { origin, .. } => asked_as(*origin, source, scope),
+            _ => (source, scope.by()),
+        }
+    }
+
     /// Which part of the total cost it comes from, for its label (`source_label`).
     fn source_text(&self) -> SourceText {
         match self {
@@ -2523,6 +2533,14 @@ impl SpellPayment<'_> {
             | Self::TapSelf { source_text, .. } | Self::SacrificeSelf { source_text, .. } | Self::MoveSelf { source_text, .. } => *source_text,
             Self::Mana | Self::Reducer(_) => SourceText::Own,
         }
+    }
+}
+
+/// What a part of a cost from `origin` is asked as (`SpellPayment::asked_as`).
+fn asked_as(origin: CostOrigin, source: ObjectId, scope: PaymentScope) -> (ObjectId, Option<Linked>) {
+    match origin {
+        CostOrigin::Imposed(by) => (by, None),
+        _ => (source, scope.by()),
     }
 }
 
@@ -2541,6 +2559,7 @@ fn source_label(cx: &Cx, scope: PaymentScope, permission: Option<Grant>, name: &
             CostOrigin::Optional => format!("optional cost of {name}"),
             CostOrigin::Kicker(_) => format!("kicker cost of {name}"),
             CostOrigin::Modal(_) => format!("escalate cost of {name}"),
+            CostOrigin::Imposed(by) => format!("additional cost from {}", cx.chars(by).name),
             _ => format!("cost of {name}"),
         },
         SourceText::Granted(ability, giver) => format!("{}: {}", cx.chars(giver).name, cx.cards().ability(ability).text()),
@@ -2728,7 +2747,8 @@ impl Footprint {
 /// What a step of a cost's payment may act on, as `pay_scheduled_costs` would pay it now.
 fn footprint(cx: &Cx, player: PlayerId, spell: ObjectId, scope: PaymentScope, taken: &[ObjectId], step: &SpellPayment<'_>) -> Footprint {
     let (spell, scope) = step.context(spell, scope);
-    let asker = Asker { instance: None, source: spell, controller: player, by: scope.by(), spell: matches!(scope, PaymentScope::Spell) };
+    let (asked_as, by) = step.asked_as(spell, scope);
+    let asker = Asker { instance: None, source: asked_as, controller: player, by, spell: matches!(scope, PaymentScope::Spell) && asked_as == spell };
     let hand = || -> Vec<ObjectId> { cx.s().zone(Zone::hand(player)).iter().copied().filter(|&id| id != spell && !taken.contains(&id)).collect() };
     let graveyard = || -> Vec<ObjectId> { cx.s().zone(Zone::graveyard(player)).iter().copied().filter(|&id| id != spell && !taken.contains(&id)).collect() };
     match step {
@@ -2923,7 +2943,8 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
             let controls = |id: ObjectId| live(cx.s(), id) && cx.s().obj(id).zone.is(ZoneKind::Battlefield) && cx.s().obj(id).controller == player;
             let source_usable = || live(cx.s(), spell) && cx.s().obj(spell).zone.is(ZoneKind::Battlefield)
                 && (controls(spell) || matches!(scope, PaymentScope::Ability { .. } | PaymentScope::ManaAbility { .. }));
-            let asker = Asker { instance: None, source: spell, controller: player, by: scope.by(), spell: matches!(scope, PaymentScope::Spell) };
+            let (asked_as, by) = step.asked_as(spell, scope);
+            let asker = Asker { instance: None, source: asked_as, controller: player, by, spell: matches!(scope, PaymentScope::Spell) && asked_as == spell };
             match step {
             SpellPayment::Life { amount, .. } => can_pay_life_for(cx, player, *amount, scope.paid_for()).then_some(i),
             SpellPayment::Energy { amount, .. } => (u32::from(cx.s().player(player).energy()) >= *amount).then_some(i),
@@ -3375,7 +3396,8 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
             }
             SpellPayment::Permanent { origin, component, cost, objects, combat_attackers, .. } => {
                 let selected = if objects.is_empty() {
-                    choose_permanents_apart(cx, player, spell, cost, scope.paid_for(), scope.by(), &reserved)?
+                    let (asker, by) = asked_as(origin, spell, scope);
+                    choose_permanents_apart(cx, player, asker, cost, scope.paid_for(), by, &reserved)?
                 } else { objects.to_vec() };
                 if let PaymentScope::ManaAbility { colors: Some((which, color, colorless)), .. } = scope && which == component
                     && !cost.tap_permanents && cost.permanents.is_some_and(|p| p.action == PermanentAction::Sacrifice) {
@@ -3480,6 +3502,10 @@ fn mana_ability_options_as(cx: &Cx, player: PlayerId, window: ManaWindow, option
             let costed = Costed::Ability(id, ability, by);
             let cost = mana_activation_cost(cx, &changers, player, costed, def);
             if !can_pay_other_as(cx, id, player, &cost, judged, Some(CostFor::ManaAbility), by) {
+                continue;
+            }
+            // The additional costs static abilities apply to it (CR 118.8, 605.3a), judged where its cost changes are.
+            if !imposed_payable(cx, &changers, cx, player, costed, Some(CostFor::ManaAbility)) {
                 continue;
             }
             // "Activate only if ..." (CR 602.5b), as Fanatic of Rhonas's ferocious mana.
@@ -4666,6 +4692,57 @@ fn cost_change_sources(cx: &Cx) -> Vec<ObjectId> {
             cx.cards().texts(cx.s(), obj).any(|c| cx.cards().cost_changes[c.0 as usize]) && !cx.lost_all_abilities(id)
         })
         .collect()
+}
+
+/// The additional costs of permanents the static abilities on the battlefield apply to `costed` paid by `player` (CR 118.8,
+/// `CardDef::cost_additions`), each a part of the total cost of its own (CR 601.2f), paid apart from the rest (CR 601.2h) and
+/// named by the permanent that applies it, of those the permanents `sources` apply (`cost_change_sources`). Empty, so
+/// unallocated, in nearly every game.
+fn cost_additions(cx: &Cx, sources: &[ObjectId], player: PlayerId, costed: Costed) -> Vec<(CostOrigin, Cost)> {
+    cost_additions_as(cx, sources, cx, player, costed)
+        .into_iter()
+        .map(|(source, permanents)| (CostOrigin::Imposed(source), Cost { permanents: Some(permanents), ..Cost::NONE }))
+        .collect()
+}
+
+/// The permanents on the battlefield whose static abilities apply additional costs (`CardDef::cost_additions`): a part of
+/// `cost_change_sources`, empty in nearly every game.
+fn cost_addition_sources(cx: &Cx) -> Vec<ObjectId> {
+    let mut sources = cost_change_sources(cx);
+    sources.retain(|&id| cx.cards().texts(cx.s(), cx.s().obj(id)).any(|c| !cx.card(c).cost_additions.is_empty()));
+    sources
+}
+
+/// The additional costs of `cost_additions` that the permanents `sources` apply (`cost_change_sources`, or a part of it
+/// holding every one that has `cost_additions`), each with the permanent that applies it, asked through `q`: the game, or the
+/// spell as it would be cast (`AsFace`).
+fn cost_additions_as(cx: &Cx, sources: &[ObjectId], q: &dyn Query, player: PlayerId, costed: Costed) -> Vec<(ObjectId, PermanentCost)> {
+    let mut added = Vec::new();
+    for &source in sources {
+        // A merged permanent's other components' are its own (CR 702.140e), each read as its own card's.
+        for (card, link) in cx.cards().texts_linked(cx.s(), source) {
+            for addition in cx.card(card).cost_additions {
+                let permanents = match link {
+                    Some(link) => addition(&crate::merge::AsText { q, source, link }, source, player, costed),
+                    None => addition(q, source, player, costed),
+                };
+                added.extend(permanents.map(|p| (source, p)));
+            }
+        }
+    }
+    added
+}
+
+/// Whether `player` controls permanents enough to pay each additional cost of permanents static abilities would apply to
+/// `costed` (advice, CR 118.8, 601.2h), paid for `paid`, as `cost_additions_as` reads them: an action that could not is not
+/// offered. Nothing between offering it and paying (CR 601.2a-g: no mana ability) gives the payer a permanent that could pay
+/// it, so this refuses only what could never be paid; one that passes is judged again as it is paid.
+fn imposed_payable(cx: &Cx, sources: &[ObjectId], q: &dyn Query, player: PlayerId, costed: Costed, paid: Option<CostFor>) -> bool {
+    cost_additions_as(cx, sources, q, player, costed).into_iter().all(|(by, p)| {
+        let cost = Cost { permanents: Some(p), ..Cost::NONE };
+        let asker = Asker { instance: None, source: by, controller: player, by: None, spell: false };
+        cx.permanents_of(player).into_iter().filter(|&id| pays_permanents(cx, &cost, &p, &asker, id, paid)).count() >= p.count as usize
+    })
 }
 
 /// Whether a cost change a resolved spell or ability made still lasts (CR 611.2c, `EffectKind::SpellCostChange`): read from
@@ -6043,6 +6120,10 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
             if !can_pay_activation(cx, id, player, &cost, Some(CostFor::ManaAbility), by) {
                 continue;
             }
+            // The additional costs static abilities apply to it (CR 118.8, 605.3a), judged where its cost changes are.
+            if !imposed_payable(cx, &changers, cx, player, costed, Some(CostFor::ManaAbility)) {
+                continue;
+            }
             // "Activate only if ..." (CR 602.5b): a Verge's second color is not there without its land type.
             if let Some(condition) = def.condition
                 && !condition(cx, &Asker { instance: Some(AbilityInstance {ability,acquisition:instance_nth(cx,id,&chars,index)}), source: id, controller: player, by, spell: false })
@@ -7414,6 +7495,8 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             granted_in_exile.push(e.affected);
         }
     }
+    // What applies additional costs to activations (CR 118.8), found once, when an ability is first judged.
+    let imposing = std::cell::OnceCell::new();
     // Abilities of permanents, then abilities that function from the hand (cycling) and the graveyard (unearth), then the
     // exile zone's granted ones.
     let given = layers::acquisition_possible(cx.cards(), cx.s());
@@ -7506,6 +7589,11 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             // ("Morph—Pay 5 life") is offered only where that could be paid (CR 702.37e, 118.3).
             let whole = if def.special_action { special_action_whole_cost(cx, id, ability, def) } else { def.cost };
             if !ability_cost_payable(cx, id, player, &whole, def, by) {
+                continue;
+            }
+            // The additional costs static abilities apply to it (CR 118.8, 602.2b); a special action is no ability (CR 116.1).
+            let costed = if def.special_action { Costed::SpecialAction(id, ability) } else { Costed::Ability(id, ability, by) };
+            if !imposed_payable(cx, imposing.get_or_init(|| cost_addition_sources(cx)), cx, player, costed, activating(def)) {
                 continue;
             }
             // An X that can't be 0 counting targets there are none of ("X target ...", CR 107.3a, 601.2c): nothing may be
@@ -8722,11 +8810,29 @@ struct Offer<'a> {
     granted: std::cell::OnceCell<Vec<Given<GrantedWay>>>,
     exile_casts: std::cell::OnceCell<Vec<Given<ExileCast>>>,
     alternatives: std::cell::OnceCell<Vec<Given<SpellAlternative>>>,
+    /// What applies additional costs to spells (CR 118.8, `cost_addition_sources`), found when a spell is first judged.
+    imposing: std::cell::OnceCell<Vec<ObjectId>>,
 }
 
 impl<'a> Offer<'a> {
     fn available(&self) -> &Available {
         self.available.get_or_init(|| available(self.cx, self.player))
+    }
+
+    /// Whether the additional costs static abilities apply (CR 118.8) to `card` cast as `face` could be paid
+    /// (`imposed_payable`), read on the spell it would be: the face cast, or the face-down spell (CR 709.3, 715.4, 708.4).
+    fn imposed_payable(&self, card: ObjectId, face: &'static CardDef) -> bool {
+        let cx = self.cx;
+        let sources = self.imposing.get_or_init(|| cost_addition_sources(cx));
+        if sources.is_empty() {
+            return true;
+        }
+        let paid = Some(CostFor::Spell);
+        if std::ptr::eq(face, cx.card(cx.s().obj(card).card)) {
+            imposed_payable(cx, sources, cx, self.player, Costed::Spell(card), paid)
+        } else {
+            imposed_payable(cx, sources, &AsFace { cx, spell: card, face: cx.card_id(face) }, self.player, Costed::Spell(card), paid)
+        }
     }
 
     fn granted(&self) -> &[Given<GrantedWay>] {
@@ -8867,7 +8973,7 @@ impl<'a> Offer<'a> {
                 continue;
             }
             // An additional cost is owed with every way of casting it (CR 118.8, 601.2f).
-            if !can_pay_cast_parts(cx, card, player, &way.cost, &route.additional) || !extra_payable(cx, card, player, face) {
+            if !can_pay_cast_parts(cx, card, player, &way.cost, &route.additional) || !extra_payable(cx, card, player, face) || !self.imposed_payable(card, face) {
                 continue;
             }
             let mut cost = add_extra_totals(way.cost, route.additional);
@@ -8922,7 +9028,7 @@ impl<'a> Offer<'a> {
             if route.life() && !can_pay_other(cx, card, player, &life_for_mana_value(face)) {
                 continue;
             }
-            if !extra_payable(cx, card, player, face) {
+            if !extra_payable(cx, card, player, face) || !self.imposed_payable(card, face) {
                 continue;
             }
             let instant = if route.terms.sorcery_speed { Some(false) } else { speed.of_judged(def, way, face) };
@@ -9139,7 +9245,7 @@ impl<'a> Offer<'a> {
                     continue;
                 }
                 let Some(cost) = usable_cost(way.what, q, &way.asker(), card, player) else { continue };
-                if !can_pay_other(cx, card, player, &cost) || !extra_payable(cx, card, player, face) {
+                if !can_pay_other(cx, card, player, &cost) || !extra_payable(cx, card, player, face) || !self.imposed_payable(card, face) {
                     continue;
                 }
                 let a = self.available();
@@ -9174,6 +9280,7 @@ fn castable_ways(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<Avai
         granted: std::cell::OnceCell::new(),
         exile_casts: std::cell::OnceCell::new(),
         alternatives: std::cell::OnceCell::new(),
+        imposing: std::cell::OnceCell::new(),
     };
     for zone in cast_zones(cx, player, barred) {
         for &card in cx.s().zone(zone) {
@@ -10558,6 +10665,10 @@ fn cast(
         extra = add_extra_totals(extra, added);
         cost.mana = add_cost(cost.mana, added.mana);
     }
+    // CR 118.8, 601.2f: an additional cost a static ability applies to the spell ("spells cost an additional 'Sacrifice a
+    // Swamp' to cast", Drought) joins the total as one of its own parts, its permanents chosen as it is paid (CR 601.2h); a
+    // cast that cannot pay it is taken back.
+    extra_parts.extend(cost_additions(cx, &cost_change_sources(cx), player, Costed::Spell(spell)));
     announce_hybrids(cx, player, spell, Costed::Spell(spell), &mut cost.mana, &targets, any)?;
     let split = announce_reduction(cx, player, spell, Costed::Spell(spell), &cost.mana, &targets, any)?;
     let (added_life, least);
@@ -12404,15 +12515,18 @@ fn activate(
     announce_hybrids(cx, player, source, Costed::Ability(source, ability, by), &mut mana, &targets, AnyMana::No)?;
     let split = announce_reduction(cx, player, source, Costed::Ability(source, ability, by), &mana, &targets, AnyMana::No)?;
     let added_life;
+    let changers = cost_change_sources(cx);
     (mana, added_life) = {
-        let (cost, life, least) = change_parts_split(cx, &cost_change_sources(cx), player, Costed::Ability(source, ability, by), mana, None, &targets, &split);
+        let (cost, life, least) = change_parts_split(cx, &changers, player, Costed::Ability(source, ability, by), mana, None, &targets, &split);
         (at_least(cost, least), life)
     };
     let life = life + added_life;
     if added_life > 0 && i64::from(payable_life_for(cx, player, paid)) < i64::from(life) + i64::from(whole.life) {
         return Err(Stop::Cancel);
     }
-
+    // CR 118.8: the additional costs static abilities apply to it are part of the total, determined and locked in with it
+    // (CR 601.2f, 602.2b), and paid with the rest of it.
+    let imposed = cost_additions(cx, &changers, player, Costed::Ability(source, ability, by));
 
     // CR 601.2g: mana abilities precede every payment operation. Other source-specific operations still need to
     // join the same scheduler; the common object, mana, life, energy, counter, reveal and zone costs use it now.
@@ -12428,7 +12542,8 @@ fn activate(
     }
     let Some(serial) = cx.s().stack.last().map(|item| item.serial) else { return Err(Stop::Cancel) };
     let scope = PaymentScope::Ability { serial, linked: cx.linked(&item), paid, by, granter, cycling: def.cycling };
-    let extra: Vec<_> = chosen_cost.into_iter().map(|part| (CostOrigin::CastingWay, part)).collect();
+    let mut extra: Vec<_> = chosen_cost.into_iter().map(|part| (CostOrigin::CastingWay, part)).collect();
+    extra.extend(imposed);
     let extra_chosen = vec![Vec::new(); extra.len()];
     let (chosen, symbol_exiles, attacking, _, _, _, _, _, _) = pay_scheduled_costs(cx, player, source, scope, &def.cost, &[], &extra, &extra_chosen, &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(item.x), 0, false, None, &[])?;
 
@@ -12791,12 +12906,15 @@ fn activate_mana_as(
     let costed = Costed::Ability(source, ability, by);
     announce_hybrids(cx, player, source, costed, &mut mana, &[], AnyMana::No)?;
     let split = announce_reduction(cx, player, source, costed, &mana, &[], AnyMana::No)?;
-    let (total, added_life, least) = change_parts_split(cx, &cost_change_sources(cx), player, costed, mana, None, &[], &split);
+    let changers = cost_change_sources(cx);
+    let (total, added_life, least) = change_parts_split(cx, &changers, player, costed, mana, None, &[], &split);
     mana = at_least(total, least);
     let life = life + added_life;
     if !can_pay_life_for(cx, player, life + def.cost.life, paid) {
         return Err(Stop::Cancel);
     }
+    // CR 118.8, 605.3a: the additional costs static abilities apply to it, part of the total (CR 601.2f, 602.2b).
+    let imposed = cost_additions(cx, &changers, player, costed);
     note_activation(cx, source, index as usize, def);
     // How it was given, read before any cost moves the source (CR 113.7a).
     let granted = Grant::of(granted_by(cx, source, None, index as usize, ability, &std::cell::OnceCell::new()));
@@ -12825,7 +12943,7 @@ fn activate_mana_as(
         }
 
         helpers.abilities_closed = true;
-        pay_scheduled_costs(cx, player, source, scope, &def.cost, &chosen, &[], &[], &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(x.unwrap_or(0)), 0, false, script, &[])
+        pay_scheduled_costs(cx, player, source, scope, &def.cost, &chosen, &imposed, &vec![Vec::new(); imposed.len()], &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(x.unwrap_or(0)), 0, false, script, &[])
     })();
     if !mana.is_zero() { crate::takeback::end_paying(cx.g); }
     let (_, _, _, _, _, _, _, _, pending_color) = payment?;
@@ -13069,7 +13187,8 @@ fn activate_player_mana_effect(cx: &mut Cx, player: PlayerId, source: ObjectId, 
     let costed = Costed::PlayerAbility(player, ability, effect);
     announce_hybrids(cx, player, source, costed, &mut mana, &[], AnyMana::No)?;
     let split = announce_reduction(cx, player, source, costed, &mana, &[], AnyMana::No)?;
-    let (total, added_life, least) = change_parts_split(cx, &cost_change_sources(cx), player, costed, mana, None, &[], &split);
+    let changers = cost_change_sources(cx);
+    let (total, added_life, least) = change_parts_split(cx, &changers, player, costed, mana, None, &[], &split);
     let mut total = total;
     if let Some(VariableCost::SacrificeAnyNumber { less_each, .. }) = def.cost.variable {
         // A reduction past the generic mana there is takes it all, never colored mana (CR 118.7a).
@@ -13079,6 +13198,8 @@ fn activate_player_mana_effect(cx: &mut Cx, player: PlayerId, source: ObjectId, 
     mana = at_least(total, least);
     let life = life + added_life;
     if !can_pay_life_for(cx, player, life + def.cost.life, paid) { return Err(Stop::Cancel); }
+    // CR 118.8, 605.3a: the additional costs static abilities apply to it, part of the total (CR 601.2f, 602.2b).
+    let imposed = cost_additions(cx, &changers, player, costed);
     let mut helpers = Helpers { purpose: Paying::Activating(ManaPayment::PlayerAbility), mana_ability: true, ..Helpers::NONE };
     if !mana.is_zero() { crate::takeback::begin_paying(cx.g); }
     let payment = (|| -> R<_> {
@@ -13099,7 +13220,7 @@ fn activate_player_mana_effect(cx: &mut Cx, player: PlayerId, source: ObjectId, 
             mana_activation_window(cx, player, source, mana, &helpers, 0, true)?;
         }
         helpers.abilities_closed = true;
-        pay_scheduled_costs(cx, player, source, PaymentScope::PlayerManaAbility, &def.cost, &[], &[], &[], &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(x.unwrap_or(0)), sacrificed_any_number, false, script, &[])
+        pay_scheduled_costs(cx, player, source, PaymentScope::PlayerManaAbility, &def.cost, &[], &imposed, &vec![Vec::new(); imposed.len()], &[], &[], &[], &[], None, life, 0, mana, &helpers, None, u32::from(x.unwrap_or(0)), sacrificed_any_number, false, script, &[])
     })();
     if !mana.is_zero() { crate::takeback::end_paying(cx.g); }
     payment?;

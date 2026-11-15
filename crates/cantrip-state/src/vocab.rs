@@ -496,6 +496,16 @@ impl ManaCost {
         out
     }
 
+    /// Its mana symbols of `color` (CR 107.4, 202.2): hybrid ({U/R}, {2/U}, {C/U}) and Phyrexian symbols of the color each
+    /// count once, numeric and other colors' symbols not.
+    pub fn symbols_of(&self, color: Color) -> u32 {
+        let mana = color.mana();
+        self.symbols[mana as usize]
+            + self.hybrid.iter().flatten().filter(|(a, b)| *a == mana || *b == mana).count() as u32
+            + self.phyrexian[mana as usize]
+            + self.twobrid[mana as usize]
+    }
+
     pub fn mana_value(&self) -> u32 {
         self.generic
             + self.snow
