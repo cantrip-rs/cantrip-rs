@@ -10,7 +10,7 @@ pub static SCION_OF_THE_DEEP: CardDef = CardDef {
     has_cost: false,
     colors: Some(ColorSet::of(Color::Blue)),
     types: TypeSet::of(&[CardType::Creature]),
-    supertypes: Supertypes { basic: false, legendary: true, snow: false },
+    supertypes: Supertypes { basic: false, legendary: true, snow: false, world: false },
     subtypes: SubtypeSet::of(&[Subtype::Octopus]),
     power: Some(8),
     toughness: Some(8),
