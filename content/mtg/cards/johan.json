@@ -1,0 +1,8 @@
+{
+  "name": "Johan",
+  "manaCost": "{3}{R}{G}{W}",
+  "type": "Legendary Creature — Human Wizard",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "At the beginning of combat on your turn, you may have Johan gain \"Johan can't attack\" until end of combat. If you do, attacking doesn't cause creatures you control to tap this combat if Johan is untapped."
+}

@@ -1,0 +1,40 @@
+# Johan's beginning-of-combat "you may" answered no: Johan gains nothing and no rule begins, so on turn 3 Johan and the
+# Ornithopter both attack and both become tapped by attacking (CR 508.1f), and Johan deals its 5 damage.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Johan
+Ornithopter
+Plains
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Johan.Cast
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Battlefield.Ornithopter.LastingRules = (absent)
+[T3 Bot1.Attackers]
+Bot1.Attack(Johan; Ornithopter > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Johan.Tapped = true
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot2.Life = 15

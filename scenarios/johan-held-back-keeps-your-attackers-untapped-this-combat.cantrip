@@ -1,0 +1,53 @@
+# Johan: "At the beginning of combat on your turn, you may have Johan gain "Johan can't attack" until end of combat. If you
+# do, attacking doesn't cause creatures you control to tap this combat if Johan is untapped." Bot1 has Johan and an
+# Ornithopter from turn 1, Bot2 an Ornithopter of its own. On turn 3 Bot1 says yes: Johan has the ability (CR 113.1a) and
+# can't be declared an attacker (CR 508.1c), and the rule takes in Bot1's creatures, not Bot2's nor Bot1's Mox (CR 611.2c), so Bot1's
+# Ornithopter attacks and stays untapped (CR 508.1f). Both last only until the combat ends (CR 511.3): in the second main
+# phase Johan has no such ability and no creature is under the rule.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Johan
+Ornithopter
+Plains
+Plains x15
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Johan.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Battlefield.Johan.Keywords = CantAttack
+? Bot1.Battlefield.Ornithopter.LastingRules = Attacking doesn't cause creatures you control to tap this combat if Johan is untapped.
+? Bot2.Battlefield.Ornithopter.LastingRules = (absent)
+? Bot1.Battlefield.Mox Ruby.LastingRules = (absent)
+[T3 Bot1.Attackers]
+! Bot1.Attack(Johan > Bot2)
+Bot1.Attack(Ornithopter > Bot2)
+? Bot1.Battlefield.Ornithopter.Tapped = false
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Johan.Tapped = false
+Bot1.Battlefield.Johan.Keywords = (absent)
+Bot1.Battlefield.Ornithopter.LastingRules = (absent)

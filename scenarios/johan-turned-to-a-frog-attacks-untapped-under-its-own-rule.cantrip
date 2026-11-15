@@ -1,0 +1,47 @@
+# "Johan can't attack" is an ability Johan gains (CR 113.1a), but "attacking doesn't cause creatures you control to tap" is a
+# rule of the game, no ability of anything (CR 611.2c). Bot1 says yes on turn 3, then turns its own Johan into a Frog that
+# has lost all its abilities (Turn to Frog, CR 613.1f): Johan may attack again, the rule still holds, and Johan is itself an
+# untapped creature Bot1 controls, so it attacks without becoming tapped (CR 508.1f) and deals 1 damage as a 1/1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Johan
+Mox Sapphire
+Mox Jet
+Turn to Frog
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Johan.Cast
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Turn to Frog.Cast(Bot1.Battlefield.Johan)
+[T3 Bot1.Attackers]
+Bot1.Attack(Johan > Bot2)
+? Bot1.Battlefield.Johan.Tapped = false
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Johan.Tapped = false
+Bot1.Battlefield.Johan.Power = 1
+Bot2.Life = 19

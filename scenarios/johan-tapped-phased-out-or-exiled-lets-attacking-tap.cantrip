@@ -1,0 +1,82 @@
+# Johan's rule holds only "if Johan is untapped", read as attackers are declared (CR 508.1f), not as the ability resolves.
+# Bot1 says yes at each of three beginnings of combat, and each time Bot2 answers after the ability has resolved: on turn 3
+# Twiddle taps Johan; on turn 5 Talon Gates of Madara, put onto the battlefield from Bot2's hand, phases Johan out, and a
+# phased-out permanent is treated as though it doesn't exist (CR 702.26b); on turn 7 Swords to Plowshares exiles Johan, and
+# the card in exile is a new object (CR 400.7). Each time Bot1's Ornithopter becomes tapped by attacking.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Johan
+Ornithopter
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Twiddle
+Talon Gates of Madara
+Swords to Plowshares
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Johan.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Twiddle.Cast(Bot1.Battlefield.Johan)
+Bot2.Modes(Tap)
+? Bot1.Battlefield.Johan.Tapped = true
+[T3 Bot1.Attackers]
+Bot1.Attack(Ornithopter > Bot2)
+? Bot1.Battlefield.Ornithopter.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot2.Hand.Talon Gates of Madara.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Target(Bot1.Battlefield.Johan)
+[T5 Bot1.Attackers]
+Bot1.Attack(Ornithopter > Bot2)
+? Bot1.Battlefield.Ornithopter.Tapped = true
+? Bot1.PhasedOut.Johan.Tapped = false
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Johan)
+[T7 Bot1.Attackers]
+Bot1.Attack(Ornithopter > Bot2)
+? Bot1.Battlefield.Ornithopter.Tapped = true
+[T7 Bot1.Main2]
+
+[Expect]
+Exile = Johan
+Bot1.Life = 25
+Bot1.Battlefield.Ornithopter.Tapped = true
