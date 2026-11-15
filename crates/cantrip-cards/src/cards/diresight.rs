@@ -1,0 +1,5 @@
+use cantrip_api::*;
+use cantrip_mechanics::effects;
+use cantrip_oracle as oracle;
+
+pub static CARD: CardDef = CardDef { spell: spell(&[], effects::surveil_2_then_draw_2_you_lose_2_life), ..oracle::DIRESIGHT };

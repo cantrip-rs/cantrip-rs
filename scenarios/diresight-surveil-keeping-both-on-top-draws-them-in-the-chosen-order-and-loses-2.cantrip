@@ -1,0 +1,37 @@
+# Diresight: "Surveil 2, then draw two cards. You lose 2 life." The library is Island, Mountain, Forest, ...: Bot1 surveils Island and Mountain, keeps both on
+# top with Mountain first, and the draws are those two, Mountain then Island (surveil first, CR 701.25a, 608.2c). Nothing goes to the graveyard but the
+# spell and Black Lotus, and Bot1 ends at 18 life, having surveilled two of two.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Diresight
+Plains
+Plains
+Plains
+Plains
+Island
+Mountain
+Forest
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Diresight.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Mountain; Island |)
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains; Mountain; Island
+Bot1.Graveyard = Diresight; Black Lotus
+Bot1.Library.Top = Forest
+Bot1.Life = 18
+Bot1.Surveilled = 2 requested, 2 looked
+Stack.Count = 0

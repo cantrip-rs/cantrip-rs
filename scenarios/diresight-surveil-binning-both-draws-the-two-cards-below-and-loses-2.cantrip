@@ -1,0 +1,35 @@
+# Diresight: both surveilled cards, Island and Mountain, go to the graveyard, so the two cards drawn are the ones below them, Forest and Swamp
+# (CR 701.25a: the surveil is done before the draw), and Bot1 loses 2 life after drawing, ending at 18.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Diresight
+Plains
+Plains
+Plains
+Plains
+Island
+Mountain
+Forest
+Swamp
+Swamp x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Diresight.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Island; Mountain)
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains; Forest; Swamp
+Bot1.Graveyard.Count = 4
+Bot1.Life = 18
+Stack.Count = 0
