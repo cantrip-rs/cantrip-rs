@@ -1,0 +1,63 @@
+# Dewdrop Cure with its gift promised (CR 702.174a): the slot takes up to three targets (CR 601.2c), and the opponent draws a card as it resolves (CR 702.174j).
+# Wrath of God on turn 3 puts Bot1's Memnite, Memnite and Ornithopter in its graveyard and Bot2's Memnite in Bot2's; the three of Bot1's return together under its control, untapped,
+# and Bot2's stays (refused as a target: it is not in Bot1's graveyard).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Pearl
+Memnite
+Memnite
+Ornithopter
+Wrath of God
+Plains
+Dewdrop Cure
+Plains x12
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Wrath of God.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Wrath of God; Ornithopter; Memnite; Memnite
+? Bot2.Graveyard = Memnite
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Dewdrop Cure.Cast
+Bot1.Accept
+? Bot2.Hand.Count = 7
+! Bot1.Target(Bot2.Graveyard.Memnite)
+! Bot1.Target(Bot1.Graveyard.Wrath of God)
+Bot1.Target(Bot1.Graveyard.Memnite#1; Bot1.Graveyard.Memnite#2; Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Memnite; Memnite; Mox Pearl; Mox Pearl; Ornithopter; Plains; Plains
+Bot1.Battlefield.Memnite#1.Tapped = false
+Bot1.Battlefield.Memnite#1.SummoningSick = true
+Bot1.Graveyard = Dewdrop Cure; Wrath of God
+Bot2.Graveyard = Memnite
+Bot2.Hand.Count = 8

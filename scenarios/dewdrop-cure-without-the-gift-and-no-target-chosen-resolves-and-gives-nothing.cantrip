@@ -1,0 +1,50 @@
+# Dewdrop Cure's "up to two" may be none (CR 601.2c) without the gift too: it resolves with no target chosen, returns nothing, and Bot2 draws nothing.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Pearl
+Memnite
+Memnite
+Ornithopter
+Wrath of God
+Plains
+Dewdrop Cure
+Plains x12
+
+[Bot2 Deck]
+Island x21
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Wrath of God.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Dewdrop Cure.Cast
+Bot1.Decline
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Pearl; Mox Pearl; Plains; Plains
+Bot1.Graveyard = Dewdrop Cure; Wrath of God; Ornithopter; Memnite; Memnite
+Bot2.Hand.Count = 7

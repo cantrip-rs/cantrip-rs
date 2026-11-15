@@ -1,0 +1,76 @@
+# Dewdrop Cure promised at three creature cards (CR 608.2b): in response Bot2's Scavenging Ooze exiles Ornithopter from Bot1's graveyard. As it resolves the other two targets are
+# still legal and return together; the spell resolves, so Bot2 draws its gift (CR 702.174j) - the opponent's Ooze also grew by a +1/+1 counter for the creature card it exiled.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Pearl
+Memnite
+Memnite
+Ornithopter
+Wrath of God
+Plains
+Dewdrop Cure
+Plains x12
+
+[Bot2 Deck]
+Memnite
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Scavenging Ooze
+Island
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Wrath of God.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Hand.Scavenging Ooze.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Dewdrop Cure.Cast
+Bot1.Accept
+Bot1.Target(Bot1.Graveyard.Memnite#1; Bot1.Graveyard.Memnite#2; Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Battlefield.Scavenging Ooze.Activate(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Memnite; Memnite; Mox Pearl; Mox Pearl; Plains; Plains
+Bot1.Graveyard = Dewdrop Cure; Wrath of God
+Exile = Ornithopter
+Bot2.Battlefield.Scavenging Ooze.Power = 3
+Bot2.Life = 21
+Bot2.Hand.Count = 4

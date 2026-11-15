@@ -1,0 +1,62 @@
+# Dewdrop Cure with its gift promised takes at most three targets (CR 601.2c): with four creature cards of mana value 0 in Bot1's graveyard (Wrath of God on turn 5), choosing all four is refused, and
+# three of them return together; the fourth stays in the graveyard. Bot2's own Memnite in its graveyard is refused as a target, and Bot2 draws the gift.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Pearl
+Memnite
+Memnite
+Memnite
+Ornithopter
+Plains
+Wrath of God
+Dewdrop Cure
+Plains x12
+
+[Bot2 Deck]
+Memnite
+Island x21
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Wrath of God.Cast
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T7 Bot1.Main1]
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Dewdrop Cure.Cast
+Bot1.Accept
+! Bot1.Target(Bot2.Graveyard.Memnite)
+! Bot1.Target(Bot1.Graveyard.Memnite#1; Bot1.Graveyard.Memnite#2; Bot1.Graveyard.Memnite#3; Bot1.Graveyard.Ornithopter)
+Bot1.Target(Bot1.Graveyard.Memnite#1; Bot1.Graveyard.Memnite#2; Bot1.Graveyard.Memnite#3)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Memnite; Memnite; Memnite; Mox Pearl; Mox Pearl; Plains; Plains
+Bot1.Graveyard = Dewdrop Cure; Wrath of God; Ornithopter
+Bot2.Graveyard = Memnite
+Bot2.Hand.Count = 8
