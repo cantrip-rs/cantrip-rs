@@ -408,7 +408,7 @@ pub fn each_opponent_sacrifices_choices(
     kind: fn(&dyn Query, ObjectId) -> bool,
 ) -> Result<Vec<(PlayerId, ObjectId)>, Suspend> {
     let players: Vec<PlayerId> = g.state().apnap().filter(|&p| p != controller).collect();
-    sacrifice_together(g, &players, source, count, kind)
+    sacrifice_together(g, &players, source, u32::from(count), kind)
 }
 
 /// "Each player sacrifices `count` [kind] of their choice" (CR 701.21a, 101.4): as `each_opponent_sacrifices` but for every
@@ -420,8 +420,19 @@ pub fn each_player_sacrifices(
     count: u8,
     kind: fn(&dyn Query, ObjectId) -> bool,
 ) -> Result<Vec<(PlayerId, ObjectId)>, Suspend> {
+    each_player_sacrifices_x(g, source, u32::from(count), kind)
+}
+
+/// `each_player_sacrifices` for a count worked out as the effect resolves, as wide as X (CR 107.3): Meathook Massacre II's
+/// "each player sacrifices X creatures of their choice", X what it was cast with.
+pub fn each_player_sacrifices_x(
+    g: &mut dyn Game,
+    source: ObjectId,
+    x: u32,
+    kind: fn(&dyn Query, ObjectId) -> bool,
+) -> Result<Vec<(PlayerId, ObjectId)>, Suspend> {
     let players: Vec<PlayerId> = g.state().apnap().collect();
-    sacrifice_together(g, &players, source, count, kind)
+    sacrifice_together(g, &players, source, x, kind)
 }
 
 /// "Each opponent chooses [one permanent of each of `kinds`] from among the [`among`] permanents they control, then
@@ -475,7 +486,7 @@ fn sacrifice_together(
     g: &mut dyn Game,
     players: &[PlayerId],
     source: ObjectId,
-    count: u8,
+    count: u32,
     kind: fn(&dyn Query, ObjectId) -> bool,
 ) -> Result<Vec<(PlayerId, ObjectId)>, Suspend> {
     let mut chosen = Vec::new();
@@ -495,19 +506,19 @@ fn sacrifice_together(
 /// of them taken when there are no more than `count`. `sacrifice_chosen` filters by kind; Break Under Pressure's "with the
 /// greatest mana value among creatures and planeswalkers they control" cannot be a kind.
 pub fn sacrifice_one_of(g: &mut dyn Game, player: PlayerId, source: ObjectId, count: u8, eligible: Vec<ObjectId>) -> Result<LeftBattlefield, Suspend> {
-    let chosen = chosen_to_sacrifice(g, player, source, count, eligible)?;
+    let chosen = chosen_to_sacrifice(g, player, source, u32::from(count), eligible)?;
     Ok(g.sacrifice(player, &chosen))
 }
 
 /// What `player` will sacrifice of `eligible`: of those they can sacrifice (`Game::can_sacrifice`, CR 701.21a, 101.2 - "you can't try
 /// to sacrifice [it], fail, and therefore ignore the effect"), all of them when there are no more than `count`, otherwise
 /// `count` of their choice. Nothing is sacrificed yet, so that several players' choices can be sacrificed together (CR 101.4).
-fn chosen_to_sacrifice(g: &mut dyn Game, player: PlayerId, source: ObjectId, count: u8, eligible: Vec<ObjectId>) -> Result<Vec<ObjectId>, Suspend> {
+fn chosen_to_sacrifice(g: &mut dyn Game, player: PlayerId, source: ObjectId, count: u32, eligible: Vec<ObjectId>) -> Result<Vec<ObjectId>, Suspend> {
     let eligible: Vec<ObjectId> = eligible.into_iter().filter(|&id| g.can_sacrifice(player, id)).collect();
     if eligible.len() <= count as usize {
         return Ok(eligible);
     }
-    choose::cards(g, player, source, Purpose::Sacrifice, eligible, u32::from(count), false)
+    choose::cards(g, player, source, Purpose::Sacrifice, eligible, count, false)
 }
 
 /// "An untapped creature you control" as the permanents a cost taps (CR 118.3): `TAP_AN_UNTAPPED_CREATURE` taps one, Group Project's
