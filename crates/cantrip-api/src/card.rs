@@ -907,6 +907,11 @@ pub struct Cost {
     /// The cards `exile_from_graveyard` exiles must pass this filter: "Exile three creature cards from your graveyard"
     /// (Drivnod, Carnage Dominus). `None` takes any card.
     pub exile_from_graveyard_of: Option<ObjectFilter>,
+    /// The cards `exile_from_graveyard` exiles come from a single graveyard, any player's, rather than the payer's own:
+    /// "Exile two creature cards from a single graveyard" (Night Soil), "Exile a Fungus card from a graveyard" (Thelon of
+    /// Havenwood). Which graveyard is chosen with the cards, as the cost is chosen (CR 601.2h by way of 602.2b); payable
+    /// only while one graveyard holds that many such cards (CR 118.3).
+    pub exile_from_a_graveyard: bool,
     /// Exert this permanent (CR 701.43a): it won't untap during its controller's next untap step.
     pub exert: bool,
     /// Tap any number of untapped creatures you control, other than the source, with total power N or more
@@ -1186,6 +1191,7 @@ impl Cost {
             pay_x_life,
             exile_from_graveyard,
             exile_from_graveyard_of,
+            exile_from_a_graveyard,
             exert,
             tap_creatures,
             emerge,
@@ -1227,6 +1233,7 @@ impl Cost {
             && !pay_x_life
             && exile_from_graveyard == 0
             && exile_from_graveyard_of.is_none()
+            && !exile_from_a_graveyard
             && !exert
             && tap_creatures.is_none()
             && !emerge
@@ -1253,6 +1260,8 @@ impl Cost {
     /// discards, permanents and graveyard exiles each multiplied. The parts that can only be paid once are left as
     /// they are.
     pub fn times(self, n: u8) -> Cost {
+        // Paid over, each exile from a single graveyard would choose its own graveyard: not one exile of more cards.
+        debug_assert!(n <= 1 || !self.exile_from_a_graveyard, "an exile from a single graveyard can't be paid over");
         let mut c = self;
         for _ in 1..n {
             c.mana.generic += self.mana.generic;
@@ -1380,7 +1389,13 @@ impl Cost {
         }
         c.life += other.life;
         c.energy = c.energy.saturating_add(other.energy);
+        // Two exiles each from a single graveyard of its own choosing are not one exile from one graveyard.
+        assert!(
+            self.exile_from_graveyard == 0 || other.exile_from_graveyard == 0 || !self.exile_from_a_graveyard && !other.exile_from_a_graveyard,
+            "an exile from a single graveyard can't be combined with another exile from a graveyard"
+        );
         c.exile_from_graveyard += other.exile_from_graveyard;
+        c.exile_from_a_graveyard |= other.exile_from_a_graveyard;
         if c.exile_from_graveyard_of.is_none() {
             c.exile_from_graveyard_of = other.exile_from_graveyard_of;
         }
@@ -1475,6 +1490,7 @@ impl Cost {
             pay_x_life: false,
             exile_from_graveyard: 0,
             exile_from_graveyard_of: None,
+            exile_from_a_graveyard: false,
             exert: false,
             tap_creatures: None,
             emerge: false,

@@ -994,7 +994,7 @@ fn can_pay_other_judged(cx: &Cx, source: ObjectId, controller: PlayerId, cost: &
         }
     }
     if cost.exile_from_graveyard > 0 {
-        let have = graveyard_exiles(cx, controller, source, cost, by).len();
+        let have = most_in_one_graveyard(cx, cost, &graveyard_exiles(cx, controller, source, cost, by));
         if have + discarded_for_graveyard() < cost.exile_from_graveyard as usize && !fed().graveyard_covers(have, cost.exile_from_graveyard as usize) {
             return false;
         }
@@ -1673,16 +1673,44 @@ fn symbol_exiles(cx: &Cx, player: PlayerId, source: ObjectId, color: Color) -> V
     cx.s().zone(Zone::graveyard(player)).iter().copied().filter(|&c| c != source && cx.chars(c).colors.has(color)).collect()
 }
 
-/// The cards of `player`'s graveyard a cost may exile: any but the source, or those of the quality it names (CR 601.2h).
+/// The graveyards a cost exiles cards from: `player`'s, or every player's for one "from a single graveyard"
+/// (`Cost::exile_from_a_graveyard`).
+fn exile_graveyards(cx: &Cx, player: PlayerId, cost: &Cost) -> Vec<PlayerId> {
+    if cost.exile_from_a_graveyard { cx.s().seats().collect() } else { vec![player] }
+}
+
+/// The cards of the graveyards a cost exiles from (`exile_graveyards`) it may exile: any but the source, or those of the
+/// quality it names (CR 601.2h).
 fn graveyard_exiles(cx: &Cx, player: PlayerId, source: ObjectId, cost: &Cost, by: Option<Linked>) -> Vec<ObjectId> {
     let asker = Asker { instance: None, source, controller: player, by, spell: false };
-    cx.s()
-        .zone(Zone::graveyard(player))
-        .iter()
-        .copied()
-        .filter(|&c| c != source && cost.exile_from_graveyard_of.is_none_or(|f| f(cx, &asker, c)))
-        .collect()
+    let keep = |c: ObjectId| c != source && cost.exile_from_graveyard_of.is_none_or(|f| f(cx, &asker, c));
+    let mut out: Vec<ObjectId> = cx.s().zone(Zone::graveyard(player)).iter().copied().filter(|&c| keep(c)).collect();
+    if cost.exile_from_a_graveyard {
+        for owner in cx.s().seats().filter(|&p| p != player) {
+            out.extend(cx.s().zone(Zone::graveyard(owner)).iter().copied().filter(|&c| keep(c)));
+        }
+    }
+    out
 }
+
+/// The most of `cards`, a cost's `graveyard_exiles`, that are in any one graveyard: as many as its exile could take of
+/// them. All of them for an exile from the payer's graveyard, whose cards are all there.
+fn most_in_one_graveyard(cx: &Cx, cost: &Cost, cards: &[ObjectId]) -> usize {
+    if !cost.exile_from_a_graveyard {
+        return cards.len();
+    }
+    cx.s().seats().map(|owner| cards.iter().filter(|&&c| cx.s().obj(c).zone == Zone::graveyard(owner)).count()).max().unwrap_or(0)
+}
+
+/// "From a single graveyard" (CR 601.2h): the cards chosen are all of one graveyard. A selection part, so the answer is
+/// checked by it and a client offers only the cards of the graveyard of the first card chosen.
+fn of_one_graveyard(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
+    let Some(&first) = choice.selected.first() else { return Verdict::any(choice) };
+    let zone = q.obj(first).zone;
+    Verdict::each(choice, |c| q.obj(c).zone == zone)
+}
+
+const OF_ONE_GRAVEYARD: Part = select::part(&(of_one_graveyard as SelectFn), 0, "from a single graveyard");
 
 /// Chooses the cards a cost exiles from the graveyard (CR 601.2h), always asked, even when the choice is forced: a number of
 /// them (escape's), then the cards collect evidence or a count of mana symbols takes. One card pays one cost (CR 118.3): none
@@ -1694,13 +1722,26 @@ fn choose_exiles(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost, t
 fn choose_exiles_by(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost, taken: &[ObjectId], by: Option<Linked>) -> R<Vec<ObjectId>> {
     let mut out = Vec::new();
     if cost.exile_from_graveyard > 0 {
+        let n = usize::from(cost.exile_from_graveyard);
         let eligible: Vec<ObjectId> = graveyard_exiles(cx, player, source, cost, by).into_iter().filter(|c| !taken.contains(c)).collect();
+        // The graveyards that hold enough of them: the payer's own, or for an exile "from a single graveyard" any player's.
+        let graveyards: Vec<Zone> = exile_graveyards(cx, player, cost)
+            .into_iter()
+            .map(Zone::graveyard)
+            .filter(|&zone| eligible.iter().filter(|&&c| cx.s().obj(c).zone == zone).count() >= n)
+            .collect();
         // Too few to exile is a cost that can't be paid (CR 601.2h): the cast or activation is taken back (CR 733.1).
-        if eligible.len() < usize::from(cost.exile_from_graveyard) {
+        if graveyards.is_empty() {
             return Err(Stop::Cancel);
         }
-        let shown = cx.s().zone(Zone::graveyard(player)).iter().copied().filter(|&c| c != source).collect();
-        let ask = RequestKind::choose_cards(source, Purpose::ExileToPay, shown, eligible, u32::from(cost.exile_from_graveyard), false, "");
+        let eligible: Vec<ObjectId> = eligible.into_iter().filter(|&c| graveyards.contains(&cx.s().obj(c).zone)).collect();
+        let shown: Vec<ObjectId> = graveyards.iter().flat_map(|&zone| cx.s().zone(zone).iter().copied()).filter(|&c| c != source).collect();
+        let mut rule = Selection::listed(Count::Exactly(u32::from(cost.exile_from_graveyard)), &shown, eligible);
+        // All of them from the one graveyard the first card chosen is in (CR 601.2h).
+        if graveyards.len() > 1 {
+            rule = rule.with(OF_ONE_GRAVEYARD);
+        }
+        let ask = RequestKind::ChooseCards { source, purpose: Purpose::ExileToPay, cards: shown, rule: Box::new(rule) };
         match cx.ask_core(player, ask, true)? {
             Answer::Cards(cards) => out = cards,
             _ => return Err(Stop::Cancel),
@@ -2599,7 +2640,12 @@ fn append_fixed_payments<'a>(out: &mut Vec<SpellPayment<'a>>, origin: CostOrigin
             out.push(SpellPayment::Blight { origin, component, cost: part, count, source_text: source_text });
         }
         if part.exile_from_graveyard > 0 {
-            let cost = Cost { exile_from_graveyard: part.exile_from_graveyard, exile_from_graveyard_of: part.exile_from_graveyard_of, ..Cost::NONE };
+            let cost = Cost {
+                exile_from_graveyard: part.exile_from_graveyard,
+                exile_from_graveyard_of: part.exile_from_graveyard_of,
+                exile_from_a_graveyard: part.exile_from_a_graveyard,
+                ..Cost::NONE
+            };
             out.push(SpellPayment::ZoneExile { origin, component, cost, part: CostPart::GraveyardExile, source_text: source_text });
         }
         if part.exile_from_hand.is_some_and(|(n, _)| n > 0) {
@@ -2957,7 +3003,10 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
             SpellPayment::Blight { .. } => (!blight_candidates(cx, player).is_empty()).then_some(i),
             SpellPayment::ZoneExile { cost, part, .. } => {
                 let available = match part {
-                    CostPart::GraveyardExile => graveyard_exiles(cx, player, spell, cost, scope.by()).into_iter().filter(|id| !taken.contains(id)).count() >= usize::from(cost.exile_from_graveyard),
+                    CostPart::GraveyardExile => {
+                        let eligible: Vec<ObjectId> = graveyard_exiles(cx, player, spell, cost, scope.by()).into_iter().filter(|id| !taken.contains(id)).collect();
+                        most_in_one_graveyard(cx, cost, &eligible) >= usize::from(cost.exile_from_graveyard)
+                    }
                     CostPart::HandExile => {
                         let (n, filter) = cost.exile_from_hand.expect("hand exile component");
                         cx.s().zone(Zone::hand(player)).iter().filter(|&&id| id != spell && !taken.contains(&id) && filter(cx, &asker, id)).count() >= usize::from(n)
@@ -3078,7 +3127,12 @@ fn pay_scheduled_costs(cx: &mut Cx, player: PlayerId, spell: ObjectId, scope: Pa
                 SpellPayment::Blight { count, .. } => CostPaymentChoice { label: format!("Blight {count} — {source_text}"), objects: Vec::new(), kind: CostPaymentKind::Counters },
                 SpellPayment::ZoneExile { cost, part, .. } => {
                     let action = match part {
-                        CostPart::GraveyardExile => format!("Exile {} card{} from graveyard", cost.exile_from_graveyard, if cost.exile_from_graveyard == 1 { "" } else { "s" }),
+                        CostPart::GraveyardExile => format!(
+                            "Exile {} card{} from {}graveyard",
+                            cost.exile_from_graveyard,
+                            if cost.exile_from_graveyard == 1 { "" } else { "s" },
+                            if cost.exile_from_a_graveyard { "a single " } else { "" }
+                        ),
                         CostPart::HandExile => {
                             let n = cost.exile_from_hand.expect("hand exile component").0;
                             format!("Exile {n} card{} from hand", if n == 1 { "" } else { "s" })
@@ -15537,6 +15591,7 @@ fn resolution_parts(cost: &Cost) -> bool {
         pay_x_life: _,
         exile_from_graveyard: _,
         exile_from_graveyard_of: _,
+        exile_from_a_graveyard: _,
         exert,
         tap_creatures: _,
         emerge,

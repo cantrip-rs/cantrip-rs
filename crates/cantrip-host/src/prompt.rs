@@ -122,7 +122,8 @@ fn cost_text_of(cost: &Cost, name: &str) -> String {
     }
     if cost.exile_from_graveyard > 0 {
         let n = cost.exile_from_graveyard;
-        parts.push(format!("Exile {n} other card{} from your graveyard", if n == 1 { "" } else { "s" }));
+        let s = if n == 1 { "" } else { "s" };
+        parts.push(if cost.exile_from_a_graveyard { format!("Exile {n} card{s} from a single graveyard") } else { format!("Exile {n} other card{s} from your graveyard") });
     }
     parts.join(", ")
 }

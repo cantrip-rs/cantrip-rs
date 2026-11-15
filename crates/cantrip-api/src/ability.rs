@@ -133,6 +133,13 @@ pub const fn exile_from_graveyard_of(n: u8, filter: ObjectFilter) -> Cost {
     Cost { exile_from_graveyard: n, exile_from_graveyard_of: Some(filter), ..Cost::NONE }
 }
 
+/// "Exile N [quality] cards from a single graveyard" (Night Soil) or "Exile a [quality] card from a graveyard" (Thelon of
+/// Havenwood): the cards of one graveyard, any player's, chosen as the cost is chosen (CR 601.2h by way of 602.2b), and
+/// payable only while one graveyard holds that many of them (CR 118.3).
+pub const fn exile_from_a_graveyard_of(n: u8, filter: ObjectFilter) -> Cost {
+    Cost { exile_from_graveyard: n, exile_from_graveyard_of: Some(filter), exile_from_a_graveyard: true, ..Cost::NONE }
+}
+
 /// "Exile any number of [color] cards from your graveyard with N or more [color] mana symbols among their mana costs": the
 /// graveyard's cards of the color, other than the source, chosen as the cost is chosen (CR 601.2h by way of 602.2b), whose
 /// symbols of the color (CR 700.5) add up to N or more. The exiled cards are the ability's `Query::cost_objects`. Baron
