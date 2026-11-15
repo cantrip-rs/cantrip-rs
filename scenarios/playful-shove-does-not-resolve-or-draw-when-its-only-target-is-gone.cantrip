@@ -1,0 +1,35 @@
+# If Playful Shove's only target is illegal as it tries to resolve, the spell doesn't resolve and none of its effects
+# happen: no card is drawn (CR 608.2b). Bot1 targets its own Ornithopter, then bounces it in response with Unsummon.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Sapphire
+Ornithopter
+Playful Shove
+Unsummon
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Playful Shove.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unsummon.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Hand.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 2
+Bot1.Graveyard = Playful Shove; Unsummon
+Bot1.Life = 20

@@ -1,0 +1,54 @@
+# Playful Shove deals exactly 1 damage to any target and then draws a card (CR 120.3, 121.1). Bot1 hits Bot2 (life 20 -> 19)
+# and then Bot2's Llanowar Elves (1/1), which dies of that single point. A target that is not a player, creature or
+# planeswalker (a Mox Ruby) is refused.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Playful Shove
+Playful Shove
+Island x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+? Bot1.Hand.Count = 4
+! Bot1.Hand.Playful Shove.Cast(Bot1.Battlefield.Mox Ruby#1)
+Bot1.Hand.Playful Shove.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Hand.Count = 4
+Bot1.Hand.Playful Shove.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 19
+Bot1.Life = 20
+Bot2.Graveyard = Llanowar Elves
+Bot1.Graveyard = Playful Shove; Playful Shove
+Bot1.Hand.Count = 4

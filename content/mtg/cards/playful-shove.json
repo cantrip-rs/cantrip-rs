@@ -1,0 +1,6 @@
+{
+  "name": "Playful Shove",
+  "manaCost": "{1}{R}",
+  "type": "Sorcery",
+  "oracleText": "Playful Shove deals 1 damage to any target.\nDraw a card."
+}
