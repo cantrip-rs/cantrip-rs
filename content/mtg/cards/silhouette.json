@@ -1,0 +1,6 @@
+{
+  "name": "Silhouette",
+  "manaCost": "{1}{U}",
+  "type": "Instant",
+  "oracleText": "Choose target creature. If a spell or ability that targets that creature would cause a source to deal damage to that creature this turn, prevent that damage."
+}

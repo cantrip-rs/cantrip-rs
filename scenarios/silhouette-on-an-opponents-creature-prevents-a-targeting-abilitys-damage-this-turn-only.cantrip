@@ -1,0 +1,68 @@
+# Silhouette (CR 615.1, 120.2b, 514.2): "Choose target creature. If a spell or ability that targets that creature would cause a
+# source to deal damage to that creature this turn, prevent that damage." Any creature may be chosen: on turn 3 Bot1 casts it on
+# Bot2's Aegis Turtle (0/5) - not on Bot2's Island, no creature. Bot1's Prodigal Sorcerer's ability then targets the Turtle, and its
+# 1 damage is prevented. The effect lasts only the turn: on turn 5 the same ability deals the Turtle 1 damage.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Prodigal Sorcerer
+Silhouette
+Island x10
+
+[Bot2 Deck]
+Island
+Aegis Turtle
+Island x15
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Prodigal Sorcerer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Hand.Silhouette.Cast(Bot2.Battlefield.Island)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silhouette.Cast(Bot2.Battlefield.Aegis Turtle)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Prodigal Sorcerer.Activate(Bot2.Battlefield.Aegis Turtle)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot2.Battlefield.Aegis Turtle.Damage = 0
+[T5 Bot1.Main1]
+Bot1.Battlefield.Prodigal Sorcerer.Activate(Bot2.Battlefield.Aegis Turtle)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 5
+Stack.Count = 0
+Bot2.Battlefield.Aegis Turtle.Damage = 1
+Bot1.Graveyard = Silhouette

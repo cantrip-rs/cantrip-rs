@@ -1,0 +1,88 @@
+# Silhouette (CR 615.1, 120.2a-b, 701.14a): "If a spell or ability that targets that creature would cause a source to deal damage
+# to that creature this turn, prevent that damage" prevents only damage dealt to that creature, and none that is no spell's or
+# ability's. On turn 3 Bot1 casts Silhouette on its Grizzled Leotau (1/5), then Plow Through has the Leotau fight Bot2's Hill
+# Giant (3/3): the Giant's 3 damage to the Leotau, which Plow Through targets, is prevented; the Leotau's 1 to the Giant is dealt.
+# Then the Leotau attacks and the Giant blocks: combat damage is caused by no spell or ability, so the Giant's 3 is dealt to the
+# Leotau, and the Giant has 2 in all.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Grizzled Leotau
+Silhouette
+Plow Through
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Hill Giant
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzled Leotau.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silhouette.Cast(Bot1.Battlefield.Grizzled Leotau)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Plow Through.Cast
+Bot1.Modes(fights)
+Bot1.Target(Bot1.Battlefield.Grizzled Leotau)
+Bot1.Target(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Grizzled Leotau.Damage = 0
+? Bot2.Battlefield.Hill Giant.Damage = 1
+Bot1.Attack(Grizzled Leotau > Bot2)
+Bot2.Block(Hill Giant > Grizzled Leotau)
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Grizzled Leotau.Damage = 3
+Bot2.Battlefield.Hill Giant.Damage = 2
+Bot1.Graveyard.Count = 2

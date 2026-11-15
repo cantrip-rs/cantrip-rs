@@ -1,0 +1,90 @@
+# Silhouette (CR 615.1, 120.2b): "Choose target creature. If a spell or ability that targets that creature would cause a source to
+# deal damage to that creature this turn, prevent that damage." On Bot2's turn 4 Bot2 casts Bite Down, its Hill Giant (3/3) to deal
+# 3 damage to Bot1's Aegis Turtle (0/5); Bot1 answers with Silhouette on its own Turtle (a player is no creature to choose). The
+# Giant is the source, Bite Down the spell that targets the Turtle and causes the damage: all 3 is prevented. Bot2's Pyroclasm then
+# deals 2 damage to each creature without targeting: that is not prevented, so the Turtle ends with 2 damage - 5, and dead, had
+# Bite Down's not been prevented; 0 had the effect prevented all damage to it.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Aegis Turtle
+Silhouette
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Hill Giant
+Bite Down
+Pyroclasm
+Island x10
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Aegis Turtle.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Bite Down.Cast
+Bot2.Target(Bot2.Battlefield.Hill Giant)
+Bot2.Target(Bot1.Battlefield.Aegis Turtle)
+Bot2.Pass
+! Bot1.Hand.Silhouette.Cast(Bot2)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silhouette.Cast(Bot1.Battlefield.Aegis Turtle)
+Bot1.Pass
+Bot2.Pass
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Aegis Turtle.Damage = 0
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Pyroclasm.Cast
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Turn = 4
+Stack.Count = 0
+Bot1.Battlefield.Aegis Turtle.Damage = 2
+Bot2.Battlefield.Hill Giant.Damage = 2
+Bot1.Graveyard = Silhouette
+# Preventing it gains Silhouette's controller nothing.
+Bot1.Life = 20
