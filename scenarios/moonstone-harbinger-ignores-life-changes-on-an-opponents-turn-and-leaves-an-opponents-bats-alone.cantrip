@@ -1,0 +1,60 @@
+# Moonstone Harbinger: "during your turn" and "Bats you control". On turn 2 (Bot2's turn) Bot1 gains 3 life with Healing Salve and the
+# Harbinger stays a 1/3. Bot2 has cast its own Dakmor Bat; on turn 3 Bot1 gains 3 life again, the Harbinger becomes a 2/3 and Bot2's
+# Bat is still a plain 1/1 flyer.
+
+[Bot1 Deck]
+Black Lotus
+Moonstone Harbinger
+Healing Salve
+Healing Salve
+Plains
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Dakmor Bat
+Island x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Moonstone Harbinger.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Dakmor Bat.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Stack.Count = 0
+? Bot1.Battlefield.Moonstone Harbinger.Power = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 26
+Bot1.Battlefield.Moonstone Harbinger.Power = 2
+Bot2.Battlefield.Dakmor Bat.Power = 1
+Bot2.Battlefield.Dakmor Bat.Keywords = Flying

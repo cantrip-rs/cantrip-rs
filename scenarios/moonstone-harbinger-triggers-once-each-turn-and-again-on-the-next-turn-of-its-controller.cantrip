@@ -1,0 +1,58 @@
+# Moonstone Harbinger: "This ability triggers only once each turn" (CR 603.2g). On turn 1 Bot1 gains 3 life with Healing Salve (2/3)
+# and then loses 3 to its own Lightning Bolt: no second trigger, still a 2/3 and nothing on the stack. The pump wears off, and on turn 3 a
+# second Healing Salve triggers it again (a 2/3).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Moonstone Harbinger
+Healing Salve
+Lightning Bolt
+Plains
+Healing Salve
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Moonstone Harbinger.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Bot1.Battlefield.Moonstone Harbinger.Power = 2
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+? Stack.Count = 0
+? Bot1.Battlefield.Moonstone Harbinger.Power = 2
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Moonstone Harbinger.Power = 1
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 23
+Bot1.Battlefield.Moonstone Harbinger.Power = 2
