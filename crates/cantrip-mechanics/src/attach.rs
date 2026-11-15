@@ -268,6 +268,17 @@ pub fn tap_attached(g: &mut dyn Game, item: &StackItem) -> Option<ObjectId> {
     Some(creature)
 }
 
+/// "At the beginning of the upkeep of enchanted creature's controller, put a [kind] counter on that creature" (CR 122.6), for
+/// `ENCHANTED_PERMANENTS_CONTROLLERS_UPKEEP_HOST`: the creature the Aura enchanted as the upkeep began, the trigger's subject,
+/// wherever the Aura has gone since; one that has left the battlefield gets nothing (CR 400.7). Essence Flare and Takklemaggot
+/// put a -0/-1 counter, Unstable Mutation a -1/-1 counter.
+pub fn put_counter_on_that_creature(g: &mut dyn Game, item: &StackItem, kind: CounterKind) -> Result<(), Suspend> {
+    if let Some(creature) = item.subject.object() {
+        g.add_counters(creature, kind, 1);
+    }
+    Ok(())
+}
+
 /// "When this Aura enters, tap enchanted creature/permanent" as a triggered effect: taps the permanent the Aura is attached to as
 /// the trigger resolves (CR 303.4m, 701.26a, 608.2h). Frozen in Ice, Paralyze, Sleep Magic, Tractor Beam and others print it.
 pub fn tap_enchanted(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
