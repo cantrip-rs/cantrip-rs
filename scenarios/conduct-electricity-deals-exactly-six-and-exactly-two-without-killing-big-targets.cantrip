@@ -1,0 +1,71 @@
+# Conduct Electricity deals exactly 6 damage to its creature target and exactly 2 to its creature token target (CR 120.3), read
+# off the damage marked on creatures that survive: Baloth Prime (10/10) is marked 6 and Bot1's own 3/3 Golem token (from
+# Sandstorm Salvager) is marked 2, and neither dies. The token is Bot1's own: "target creature token" is any controller's.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Sandstorm Salvager
+Mox Ruby
+Mox Jet
+Mox Emerald
+Conduct Electricity
+Mountain x3
+Mountain x10
+
+[Bot2 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Sol Ring
+Baloth Prime
+Swamp x3
+Swamp x10
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Sandstorm Salvager.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Hand.Baloth Prime.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Conduct Electricity.Cast
+Bot1.Target(Baloth Prime)
+Bot1.Target(Golem Token)
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Baloth Prime.Damage = 6
+Bot1.Battlefield.Golem Token.Damage = 2
+Bot1.Graveyard.Count = 2
+Stack.Count = 0

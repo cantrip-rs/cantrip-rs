@@ -1,0 +1,60 @@
+# Conduct Electricity may name the same creature token in both slots (CR 115.3 forbids only the same target twice for one "target" word): the Rabbit takes 6 and 2 together as one event (CR 120.4b) and dies once, the other two Rabbits and Concealing Curtains are untouched.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Conduct Electricity
+Mountain x3
+Mountain x10
+
+[Bot2 Deck]
+Swamp
+Mox Pearl
+Mox Jet
+Sol Ring
+Concealing Curtains
+Hop to It
+Swamp x2
+Swamp x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Concealing Curtains.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Hand.Hop to It.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Conduct Electricity.Cast
+Bot1.Target(Rabbit Token#1)
+Bot1.Target(Rabbit Token#1)
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Hop to It
+Bot2.Battlefield.Count = 7
+Bot2.Battlefield.Concealing Curtains.Damage = 0
+Bot2.Battlefield.Rabbit Token#1.Damage = 0
+Bot2.Battlefield.Rabbit Token#2.Damage = 0
+Stack.Count = 0

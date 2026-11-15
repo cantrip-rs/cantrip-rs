@@ -1,0 +1,68 @@
+# Conduct Electricity targets Bot2's Concealing Curtains (6) and a Rabbit token (2). In response Bot2 Lightning Bolts that Rabbit with Mox Ruby, so the token target is gone on resolution; the spell still resolves (CR 608.2b: it is countered only when every target is illegal), does what it can to the legal target, and Concealing Curtains takes 6 and dies. The 2 damage goes to no one.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Conduct Electricity
+Mountain x3
+Mountain x10
+
+[Bot2 Deck]
+Swamp
+Mox Pearl
+Mox Jet
+Sol Ring
+Concealing Curtains
+Hop to It
+Mox Ruby
+Lightning Bolt
+Swamp x2
+Swamp x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Concealing Curtains.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Hand.Hop to It.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Conduct Electricity.Cast
+Bot1.Target(Concealing Curtains)
+Bot1.Target(Rabbit Token#1)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Rabbit Token#1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Concealing Curtains; Lightning Bolt; Hop to It
+Bot2.Battlefield.Count = 7
+Bot2.Battlefield.Rabbit Token#1.Damage = 0
+Bot2.Battlefield.Rabbit Token#2.Damage = 0
+Stack.Count = 0
