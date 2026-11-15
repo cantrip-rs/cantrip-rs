@@ -1,0 +1,50 @@
+# Mabel's Mettle with its first target gone: Bot2 Lightning Bolts the Eager Cadet in response, so the +2/+2 has no legal target as the spell
+# resolves, but the spell still resolves for its other, legal target and the Savannah Lions gets +1/+1 (CR 608.2b).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Plains
+Plains
+Eager Cadet
+Savannah Lions
+Mabel's Mettle
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Eager Cadet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mabel's Mettle.Cast
+Bot1.Target(Eager Cadet)
+Bot1.Target(Savannah Lions)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Eager Cadet)
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Mabel's Mettle; Eager Cadet
+Bot1.Battlefield.Savannah Lions.Power = 3
+Bot1.Battlefield.Savannah Lions.Toughness = 2
