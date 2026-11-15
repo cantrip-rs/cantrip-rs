@@ -1,0 +1,31 @@
+# Seasoned Warrenguard: the token must be one "you control". Bot2 controls a Spirit token (Group Project) and Bot1 none, so the
+# attacking Warrenguard stays 1/2 and deals 1 (CR 111.1, 109.4).
+
+[Bot1 Deck]
+Mox Pearl
+Seasoned Warrenguard
+Plains x18
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Group Project
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Seasoned Warrenguard.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Group Project.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Seasoned Warrenguard > Bot2)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Seasoned Warrenguard.Power = 1
+Bot2.Life = 19
