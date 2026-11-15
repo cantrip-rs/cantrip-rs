@@ -197,6 +197,21 @@ static PROMISE: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+static ONE_OR_PROMISED_TWO: [TargetSpec; 1] = [TargetSpec { if_promised: Some((2, 2)), ..target(permanent) }];
+
+/// {4} sorcery, gift a card: "This spell costs {4} less to cast if it has two or more targets. Target permanent, or if the
+/// gift was promised, two target permanents: you gain 3 life."
+static PAIR_PROMISED: CardDef = CardDef {
+    name: "Slot Test Promised Pair",
+    cost: FOUR,
+    has_cost: true,
+    types: TypeSet::of(&[CardType::Sorcery]),
+    spell: spell(&ONE_OR_PROMISED_TWO, gain_three),
+    gift: Some(GiftDef { kind: Gift::Card, give: give_nothing }),
+    own_cost_changes: &[less_for_two],
+    ..CardDef::BLANK
+};
+
 /// The slot after a divided triggered slot: a permanent, judged with the targets the slots before it chose (CR 601.2c) -
 /// here only once the divided slot has chosen one, so a later slot asked without the divided slot's targets has no
 /// candidate and the ability is removed (CR 603.3d).
@@ -429,7 +444,7 @@ static GRID: CardDef = CardDef {
 
 /// Your precombat main phase with priority, nothing anywhere.
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&SPLIT_AND_PAIR, &SPLIT_AND_PAIR_TRIGGER, &FILLER, &BEAR, &TOWN, &PAIR, &SINGLE, &ENGINE, &CHOICE, &SWARM, &STRIKE, &DOUBLE, &PROMISE, &SPLIT, &RITE, &GRAFT, &SURGE, &WINGS, &WINGS_AURA, &DIAL, &HIVE, &BULK, &VOLLEY, &PAIRS, &COVENANT, &GRID])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&SPLIT_AND_PAIR, &SPLIT_AND_PAIR_TRIGGER, &FILLER, &BEAR, &TOWN, &PAIR, &SINGLE, &ENGINE, &CHOICE, &SWARM, &STRIKE, &DOUBLE, &PROMISE, &PAIR_PROMISED, &SPLIT, &RITE, &GRAFT, &SURGE, &WINGS, &WINGS_AURA, &DIAL, &HIVE, &BULK, &VOLLEY, &PAIRS, &COVENANT, &GRID])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -653,6 +668,16 @@ fn a_spell_whose_gift_widens_its_target_is_offered_promised_at_what_makes_it_aff
     assert!(offered(&mut g, promise).is_some(), "promised, it may target the caster's Bear for {{1}} (CR 702.174m, 601.2f)");
     let (mut g, promise, _, _) = board(&PROMISE, false);
     assert!(offered(&mut g, promise).is_none(), "only the opponent's Bear: {{4}}");
+}
+
+#[test]
+fn a_spell_whose_gift_adds_a_target_is_offered_promised_where_two_targets_make_it_affordable() {
+    let (mut g, pair, _, _) = board(&PAIR_PROMISED, true);
+    assert!(offered(&mut g, pair).is_some(), "promised with two targets it costs nothing (CR 702.174a, 601.2c, 601.2f)");
+    let mut g = game();
+    put(&mut g, &BEAR, THEM, Zone::BATTLEFIELD);
+    let pair = put(&mut g, &PAIR_PROMISED, YOU, Zone::hand(YOU));
+    assert!(offered(&mut g, pair).is_none(), "one permanent: no two different targets, so {{4}}");
 }
 
 #[test]

@@ -768,6 +768,10 @@ pub struct TargetSpec {
     /// targets when the spell or the ability's source was kicked, in place of `min` and `max`. The kicker is announced
     /// before the targets are chosen, so the slot is asked once it is known (`TargetSpec::when_kicked`).
     pub if_kicked: Option<(u32, u32)>,
+    /// "If the gift was promised, instead choose ..." (CR 702.174a, 601.2b-c): the slot's smallest and largest number of
+    /// targets when the spell's gift was promised, in place of `min` and `max`. The gift is announced before the targets
+    /// are chosen (CR 702.174m), so the slot is asked once it is known (`TargetSpec::when_promised`).
+    pub if_promised: Option<(u32, u32)>,
     /// The rule of the slot's targets together (CR 601.2c, 603.3d, 115.1): a set rule of `cantrip_mechanics::select`
     /// (`Part::is_set_rule`, which a choice of cards and a library search are judged by too, docs/engine-design.md "Selection
     /// rules") - "with total mana value X or less" (`select::total_mana_value_at_most`), "with different mana values"
@@ -841,6 +845,15 @@ impl TargetSpec {
     pub const fn when_kicked(self, kicked: u8) -> TargetSpec {
         match self.if_kicked {
             Some((min, max)) if kicked > 0 => TargetSpec { min, max, if_kicked: None, ..self },
+            _ => self,
+        }
+    }
+
+    /// The slot as it is chosen for a spell whose gift was (`promised`) or was not promised: with the bounds `if_promised`
+    /// gives when it was (CR 702.174a, 601.2c), otherwise as printed.
+    pub const fn when_promised(self, promised: bool) -> TargetSpec {
+        match self.if_promised {
+            Some((min, max)) if promised => TargetSpec { min, max, if_promised: None, ..self },
             _ => self,
         }
     }
