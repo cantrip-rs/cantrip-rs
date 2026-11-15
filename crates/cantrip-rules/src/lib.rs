@@ -3259,7 +3259,11 @@ impl cantrip_api::Game for Cx<'_> {
     }
 
     fn change_target(&mut self, of: Target, chooser: PlayerId) -> Result<(), Suspend> {
-        ops::change_target(self, of, chooser).map_err(|_| Suspend)
+        ops::change_target(self, of, chooser, None).map_err(|_| Suspend)
+    }
+
+    fn change_target_where(&mut self, of: Target, chooser: PlayerId, new: fn(&dyn Query, Target) -> bool) -> Result<(), Suspend> {
+        ops::change_target(self, of, chooser, Some(new)).map_err(|_| Suspend)
     }
 
     fn change_a_target_to(&mut self, of: Target, to: ObjectId, chooser: PlayerId) -> Result<(), Suspend> {

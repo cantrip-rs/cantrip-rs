@@ -3500,8 +3500,10 @@ pub fn choose_new_targets(cx: &mut Cx, spell: ObjectId, chooser: PlayerId) -> R<
 /// "Change the target of target spell or ability" (CR 115.7a), a spell or an ability on the stack: each target must be changed
 /// to another legal target (its current one is never offered), and must be if it can be. If any target has no other legal
 /// target, none changes (CR 115.7a, 115.7e). A target with exactly one other choice is changed without asking. Legality is the
-/// spell's or ability's own (its source and controller); `chooser` is who answers. Each new target becomes a target.
-pub fn change_target(cx: &mut Cx, of: Target, chooser: PlayerId) -> R<()> {
+/// spell's or ability's own (its source and controller); `chooser` is who answers. Each new target becomes a target. An
+/// effect that says what the new target must be ("The new target must be a player": Rebound, Reflecting Mirror) gives it as
+/// `new`: a target is then changed only to another legal one `new` allows, and none is changed if any target has none.
+pub fn change_target(cx: &mut Cx, of: Target, chooser: PlayerId, new: Option<fn(&dyn Query, Target) -> bool>) -> R<()> {
     let at = match of {
         Target::Object(o) => cx.s().stack.iter().position(|i| i.kind == StackKind::Spell && i.object == o),
         Target::Ability(serial) => cx.s().stack.iter().position(|i| i.kind != StackKind::Spell && i.serial == serial),
@@ -3525,7 +3527,7 @@ pub fn change_target(cx: &mut Cx, of: Target, chooser: PlayerId) -> R<()> {
         let others: Vec<Target> =
             crate::actions::item_target_candidates(cx, &asker, &spec, &all[..slot], &item, slot_player)
                 .into_iter()
-                .filter(|&t| t != all[slot] && fits_together(cx, &item, &all, slot, &spec, t))
+                .filter(|&t| t != all[slot] && new.is_none_or(|new| new(&*cx, t)) && fits_together(cx, &item, &all, slot, &spec, t))
                 .collect();
         if others.is_empty() {
             return Ok(());

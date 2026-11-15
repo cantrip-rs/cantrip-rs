@@ -1823,6 +1823,10 @@ pub trait Game: Query {
     /// `Target::Ability`) on the stack has each of its targets changed to another legal one, `chooser` choosing; if any has no
     /// other legal target, none changes. A target with one other choice is not asked.
     fn change_target(&mut self, of: Target, chooser: PlayerId) -> Result<(), Suspend>;
+    /// "Change the target of target spell ... The new target must be a [kind]" (CR 115.7a): [`Game::change_target`], each new
+    /// target also one `new` allows - "a player" (Rebound, Reflecting Mirror), "a creature" (Silver Wyvern). Each target can
+    /// be changed only to another legal target that `new` allows; if any has none, none changes.
+    fn change_target_where(&mut self, of: Target, chooser: PlayerId, new: fn(&dyn Query, Target) -> bool) -> Result<(), Suspend>;
     /// "Change a target of target spell or ability to [this]" (CR 115.7b): one target of the spell or ability (a
     /// `Target::Object` spell or a `Target::Ability`) on the stack becomes `to`, if `to` is a legal target for it and the
     /// change leaves its other targets legal; `chooser` chooses which when more than one may change. A target that already
