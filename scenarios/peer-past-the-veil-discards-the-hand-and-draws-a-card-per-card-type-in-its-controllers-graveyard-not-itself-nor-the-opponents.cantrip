@@ -1,0 +1,65 @@
+# Peer Past the Veil, "Discard your hand. Then draw X cards, where X is the number of card types among cards in your
+# graveyard." Turn 1: Bot1 casts Chain Lightning (a sorcery) at Bot2. Turn 2: Bot2 casts Lightning Bolt (an instant) at Bot1, so the
+# instant is a type only in the opponent's graveyard. Turn 3: Bot1 casts Peer Past the Veil with Ornithopter and an Island in hand,
+# discarding both: the graveyard then holds a sorcery, a land, an artifact and a creature (the Ornithopter has two types) and X is
+# 4, counting the discarded cards (the discard comes first), neither Peer Past the Veil itself (an instant, still on the stack,
+# CR 608.2n) nor Bot2's Lightning Bolt. Bot1 draws Plains, Forest, Swamp and Mountain.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Chain Lightning
+Peer Past the Veil
+Island
+Ornithopter
+Island
+Plains
+Forest
+Swamp
+Mountain
+Island x8
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Chain Lightning.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Chain Lightning
+? Bot1.Hand = Island; Ornithopter; Peer Past the Veil
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Peer Past the Veil.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Forest; Mountain; Plains; Swamp
+Bot1.Graveyard.Count = 4
+Bot2.Graveyard = Lightning Bolt
+Bot1.Library.Top = Island
