@@ -1,0 +1,39 @@
+# Sinister Monolith: "{T}, Pay 2 life, Sacrifice this artifact: Draw two cards. Activate only as a sorcery." Bot1 casts it on turn 1 and
+# cannot activate it on Bot2's turn 2 (sorcery speed). On turn 3 it activates with an empty stack: Bot1 pays 2 life, loses the Monolith
+# and draws two cards (the turn-3 draw plus two). The Monolith is in the graveyard and was never tapped for mana.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Sinister Monolith
+Plains
+Swamp
+Island
+Forest
+Mountain
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sinister Monolith.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+! Bot1.Battlefield.Sinister Monolith.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sinister Monolith.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+? Bot1.Battlefield = Mox Jet
+? Bot1.Graveyard = Sinister Monolith; Black Lotus
+
+[Expect]
+Bot1.Life = 19
+Bot1.Hand.Count = 7
