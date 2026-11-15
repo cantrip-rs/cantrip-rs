@@ -80,6 +80,7 @@ pub mod exert;
 pub mod exchange;
 pub mod evoke;
 pub mod for_mirrodin;
+pub mod forage;
 pub mod delayed;
 pub mod effects;
 pub mod foretell;
