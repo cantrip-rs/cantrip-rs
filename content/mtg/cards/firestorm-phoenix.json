@@ -1,0 +1,11 @@
+{
+  "name": "Firestorm Phoenix",
+  "manaCost": "{4}{R}{R}",
+  "type": "Creature — Phoenix",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flying\nIf this creature would die, return it to its owner's hand instead. Until that player's next turn, that player plays with that card revealed in their hand and can't play it.",
+  "keywords": [
+    "Flying"
+  ]
+}

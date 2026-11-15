@@ -1,0 +1,47 @@
+# Bot1 holds two Firestorm Phoenixes and casts one; on their next turn the opponent's Lightning Bolt kills it in their
+# upkeep and it returns to their hand. Its effect is about that card alone (the ruling: "that particular card can't be played
+# before your next turn begins, but a different Firestorm Phoenix in your hand can", CR 400.7): the opponent sees one
+# Phoenix of the two in that hand, and a Phoenix may still be cast - the other one - with mana to spare.
+
+[Bot1 Deck]
+Firestorm Phoenix
+Firestorm Phoenix
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mountain
+Mountain x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Firestorm Phoenix.Cast
+Bot1.Pass
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Upkeep]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Firestorm Phoenix)
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand = Firestorm Phoenix; Firestorm Phoenix; Mountain; Mountain
+! Bot1.Hand.Firestorm Phoenix.Cast(Mana: short)
+
+[Expect]
+Bot2.Sees.Bot1.Hand = Firestorm Phoenix
+Bot2.Sees.Bot1.Hand.Count = 1

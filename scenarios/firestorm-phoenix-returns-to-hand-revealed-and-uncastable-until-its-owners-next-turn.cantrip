@@ -1,0 +1,54 @@
+# Firestorm Phoenix, a flyer, is dealt lethal damage by its own controller's Lightning Bolt in their first main phase.
+# Instead of dying it returns to its owner's hand, not the graveyard (CR 614.1a, 700.4). Until that player's next turn they
+# play with it revealed - the opponent sees it in their hand, on their own turn as well (CR 701.20a) - and can't cast it,
+# though it is their main phase with the stack empty and mana to spare (CR 101.2, 701.18b). On the owner's next turn the
+# card is hidden again and may be cast (CR 611.2a).
+
+[Bot1 Deck]
+Firestorm Phoenix
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Firestorm Phoenix.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Firestorm Phoenix.Keywords = Flying
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Firestorm Phoenix)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Firestorm Phoenix
+? Bot1.Graveyard = Lightning Bolt; Black Lotus
+? Bot2.Sees.Bot1.Hand = Firestorm Phoenix
+! Bot1.Hand.Firestorm Phoenix.Cast
+[T2 Bot2.Main1]
+? Bot2.Sees.Bot1.Hand = Firestorm Phoenix
+[T3 Bot1.Main1]
+! Bot1.Hand.Firestorm Phoenix.Cast(Mana: short)
+
+[Expect]
+Bot1.Hand = Firestorm Phoenix; Mountain
+Bot2.Sees.Bot1.Hand.Count = 0
