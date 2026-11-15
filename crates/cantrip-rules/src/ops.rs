@@ -1305,6 +1305,19 @@ pub fn unlock_door(cx: &mut Cx, id: ObjectId, door: u8, player: PlayerId) {
     cx.emit(Event::DoorUnlocked { permanent: id, door, player });
 }
 
+/// Locks a door of a Room (CR 709.5g): the permanent loses the half's unlocked designation and is the same object (CR 709.5c), so
+/// it has neither half's name, mana cost or rules text if no door is left unlocked (CR 709). Nothing if it is not a Room on the
+/// battlefield or the door is already locked. Nothing triggers on it: only an unlock does (CR 709.5h).
+pub fn lock_door(cx: &mut Cx, id: ObjectId, door: u8) {
+    if !live(cx.s(), id) || !cx.s().obj(id).zone.is(ZoneKind::Battlefield) || cx.s().obj(id).marks.doors & door == 0 {
+        return;
+    }
+    if !cx.card(cx.chars(id).card).is_room() {
+        return;
+    }
+    cx.st().update_obj(id, |o| o.marks.doors &= !door);
+}
+
 /// A card name, an object or a player chosen for a permanent as an ability of it resolves, or as it transforms (CR 607.2d,
 /// 712.20): kept by the permanent as the object it is now, so a new object it becomes has none (CR 400.7), and a later
 /// choice of the same kind by the same ability replaces an earlier one. Nothing if it is no longer on the battlefield.
