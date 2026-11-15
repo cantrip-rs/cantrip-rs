@@ -1959,6 +1959,17 @@ pub fn creature_you_control_enters(q: &dyn Query, me: &Asker, event: &Event) -> 
     }
 }
 
+/// "Whenever a face-down permanent you control enters" (CR 603.6a, 708.3): any permanent that entered face down (a manifest, a
+/// cloak, a disguise or morph cast face down), under your control as it entered, this one's own manifest included - read from the
+/// `EnteredFaceDown` event recorded with its move, as Cryptid Inspector and Oblivious Bookworm read it, not from the permanent as
+/// it is now. Threats Around Every Corner prints it.
+pub fn face_down_permanent_you_control_enters(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::EnteredFaceDown { permanent, controller } if *controller == me.controller => Fired::about(Target::Object(*permanent)),
+        _ => None,
+    }
+}
+
 /// "Whenever a creature you control with power 4 or greater enters" (CR 603.6a): any creature, this one included, under your
 /// control as it entered, whose power as it entered is 4 or more - the static abilities that apply to it and the counters it
 /// entered with count (the 2019-05-03 ruling on Kiora, Behemoth Beckoner). Garruk, Curse Breaker and Kiora, Behemoth
@@ -2845,6 +2856,7 @@ pub const EACH_PLAYERS_BEGINNING_OF_COMBAT: Trigger = when(EventMask::STEP_BEGAN
 pub const EACH_END_STEP: Trigger = when(EventMask::STEP_BEGAN, each_end_step);
 pub const END_OF_COMBAT: Trigger = when(EventMask::STEP_BEGAN, end_of_combat);
 pub const CREATURE_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_you_control_enters);
+pub const FACE_DOWN_PERMANENT_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ENTERED_FACE_DOWN, face_down_permanent_you_control_enters);
 pub const CREATURE_WITH_POWER_FOUR_OR_MORE_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_with_power_four_or_more_you_control_enters);
 pub const CREATURE_YOU_CONTROL_ATTACKS: Trigger = when_asked(EventMask::ATTACKS, creature_you_control_attacks);
 
