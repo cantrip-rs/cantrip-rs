@@ -1,0 +1,50 @@
+# Plumecreed Escort: "target creature you control gains hexproof until end of turn" (CR 702.11b, 115.1, 514.2). On turn 3 Bot1 casts the
+# Escort with Bot2's Memnite on the battlefield: Memnite is not a legal target (refused), so the Escort targets itself, not Bot1's Ornithopter. It has hexproof
+# for the turn: Bot2 can't Lightning Bolt it (Mox Ruby untapped). On turn 4 the hexproof is gone and the Bolt kills it.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Plumecreed Escort
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Memnite
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Plumecreed Escort.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Memnite)
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Target(Bot1.Battlefield.Plumecreed Escort)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Plumecreed Escort.Keywords = Flash; Flying; Hexproof
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Plumecreed Escort)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Plumecreed Escort.Keywords = Flash; Flying
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Plumecreed Escort)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Plumecreed Escort

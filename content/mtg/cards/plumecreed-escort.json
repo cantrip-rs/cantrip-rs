@@ -1,0 +1,12 @@
+{
+  "name": "Plumecreed Escort",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Bird Scout",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flash\nFlying\nWhen this creature enters, target creature you control gains hexproof until end of turn.",
+  "keywords": [
+    "Flash",
+    "Flying"
+  ]
+}

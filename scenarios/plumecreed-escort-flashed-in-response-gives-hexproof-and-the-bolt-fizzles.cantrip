@@ -1,0 +1,45 @@
+# Plumecreed Escort {1}{U}, flash, flying: "When this creature enters, target creature you control gains hexproof until end of turn"
+# (CR 702.8a, 702.11b, 608.2b). On turn 2 Bot2 casts Lightning Bolt at Bot1's Ornithopter; in response Bot1 flashes in the Escort
+# (two Mox Sapphires) and its trigger targets the Ornithopter. The trigger resolves first, the Ornithopter has hexproof from then on,
+# so on resolution the Bolt's only target is illegal and it is countered: the Ornithopter takes no damage and survives.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Ornithopter
+Plumecreed Escort
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Plumecreed Escort.Cast
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Hexproof
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Damage = 0
+Bot1.Battlefield = Mox Sapphire; Mox Sapphire; Ornithopter; Plumecreed Escort
+Bot2.Graveyard = Lightning Bolt
