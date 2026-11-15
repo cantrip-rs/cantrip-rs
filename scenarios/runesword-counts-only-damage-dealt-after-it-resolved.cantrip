@@ -1,0 +1,100 @@
+# Runesword's effects are about the damage its creature deals from the time the ability resolved on (CR 611.2c): Bot1's
+# attacking Triskelion pings Bot2's Hill Giant before Runesword's ability resolves, so the Giant, dying to Shock later
+# that turn, goes to the graveyard; the Grizzly Bears it kills in combat afterwards are exiled instead of dying. Twiddle
+# untaps Runesword for a second activation on the same creature that turn, whose effects add nothing to the first's but
+# the second +2/+0.
+[Bot1 Deck]
+Runesword
+Triskelion
+Black Lotus
+Black Lotus
+Sol Ring
+Mox Sapphire
+Island
+Black Lotus
+Twiddle
+Black Lotus
+Island x20
+[Bot2 Deck]
+Hill Giant
+Grizzly Bears
+Black Lotus
+Mox Emerald
+Mountain
+Shock
+Mountain
+Mountain x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Runesword.Cast
+Bot1.Pass
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Triskelion.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Triskelion > Bot2)
+Bot1.Battlefield.Triskelion.Activate(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Runesword.Activate(Bot1.Battlefield.Triskelion)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Twiddle.Cast(Bot1.Battlefield.Runesword)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Untap)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Runesword.Activate(Bot1.Battlefield.Triskelion)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Triskelion.Power = 7
+Bot2.Block(Grizzly Bears > Triskelion)
+Bot1.Pass
+Bot2.Pass
+! Bot2.Replace
+[T7 Bot1.Main2]
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Hill Giant)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Exile = Grizzly Bears
+Bot2.Graveyard = Hill Giant; Shock; Black Lotus
+Bot1.Battlefield.Runesword.Tapped = true

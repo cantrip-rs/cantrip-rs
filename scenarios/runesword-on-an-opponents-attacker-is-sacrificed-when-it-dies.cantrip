@@ -1,0 +1,65 @@
+# Runesword's controller may target an opponent's attacking creature. Bot1 pumps Bot2's attacking Hill Giant and blocks it
+# with its own Hill Giant: the pumped Giant's damage kills Bot1's Giant, which is exiled instead of dying (the replacement
+# is about whatever creature the targeted one deals damage to, whoever controls it), while Bot2's Giant, dealt damage by
+# the other one, dies as usual. It left the battlefield this turn, so Bot1 sacrifices Runesword (CR 603.7c, 701.21a).
+[Bot1 Deck]
+Runesword
+Black Lotus
+Black Lotus
+Mox Pearl
+Mox Ruby
+Hill Giant
+Mountain
+Mountain x20
+[Bot2 Deck]
+Hill Giant
+Black Lotus
+Mountain
+Mountain x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Runesword.Cast
+Bot1.Pass
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Hill Giant > Bot1)
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mountain#3.Activate
+Bot1.Battlefield.Runesword.Activate(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Hill Giant.Power = 5
+Bot1.Block(Hill Giant > Hill Giant)
+[T6 Bot2.Main2]
+[Expect]
+Exile = Hill Giant
+Bot2.Graveyard = Hill Giant; Black Lotus
+Bot1.Battlefield.Runesword = (absent)
+Bot1.Graveyard = Runesword; Black Lotus; Black Lotus

@@ -1,0 +1,91 @@
+# One Runesword, untapped by Twiddle, used on two of Bot2's attackers in one turn: the second activation's effects are
+# about the second creature, from the time the second resolved (CR 611.2c), so Llanowar Elves, pinged to death by the
+# second target (Triskelion) after it, are exiled instead of dying (CR 614.1a), though Runesword already made such an
+# effect that turn about the first target (Ornithopter). Bot1's Phyrexian Walker, pinged by the Triskelion between the two
+# resolutions and Shocked to death later that turn, goes to the graveyard: its damage is from before the second began.
+[Bot1 Deck]
+Runesword
+Black Lotus
+Black Lotus
+Island
+Twiddle
+Phyrexian Walker
+Island
+Black Lotus
+Black Lotus
+Island x20
+[Bot2 Deck]
+Triskelion
+Ornithopter
+Llanowar Elves
+Black Lotus
+Black Lotus
+Forest
+Mountain
+Shock
+Mountain x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Runesword.Cast
+Bot1.Pass
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Triskelion.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Triskelion > Bot1; Ornithopter > Bot1)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Runesword.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Triskelion.Activate(Bot1.Battlefield.Phyrexian Walker)
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Twiddle.Cast(Bot1.Battlefield.Runesword)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Untap)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Runesword.Activate(Bot2.Battlefield.Triskelion)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 2
+? Bot2.Battlefield.Triskelion.Power = 5
+Bot2.Battlefield.Triskelion.Activate(Bot2.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+[T6 Bot2.Main2]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Phyrexian Walker)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Exile = Llanowar Elves
+Bot1.Battlefield.Phyrexian Walker = (absent)

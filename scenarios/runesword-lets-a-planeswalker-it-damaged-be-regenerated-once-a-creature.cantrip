@@ -1,0 +1,106 @@
+# "If the creature deals damage to a creature this turn, the creature dealt damage can't be regenerated this turn" is about
+# damage dealt to a creature (CR 120.3d-e, 701.19c): Bot1's Runesworded Triskelion pings Bot2's Daretti, Scrap Savant while
+# it is no creature, only an artifact under Mycosynth Lattice. Ensoul Artifact then makes it a 5/5 creature, Death Ward
+# gives it a regeneration shield and Shatter destroys it. It can be regenerated, so two replacement effects apply - the
+# regeneration and Runesword's exile, since it is now a creature dealt damage by the targeted creature (CR 614.1a, 700.4) -
+# and Bot2 orders the regeneration first (CR 616.1): it stays, tapped, and nothing is exiled.
+[Bot1 Deck]
+Runesword
+Black Lotus
+Black Lotus
+Island
+Sol Ring
+Triskelion
+Mox Sapphire
+Black Lotus
+Black Lotus
+Ensoul Artifact
+Shatter
+Island x20
+[Bot2 Deck]
+Daretti, Scrap Savant
+Mycosynth Lattice
+Black Lotus
+Black Lotus
+Mountain
+Plains
+Death Ward
+Mox Ruby
+Mox Pearl
+Mountain x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Runesword.Cast
+Bot1.Pass
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Mycosynth Lattice.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Triskelion.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Daretti, Scrap Savant.Cast
+Bot2.Pass
+[T9 Bot1.DeclareAttackers]
+Bot1.Attack(Triskelion > Bot2)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Runesword.Activate(Bot1.Battlefield.Triskelion)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Triskelion.Activate(Bot2.Battlefield.Daretti, Scrap Savant)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Daretti, Scrap Savant.Counters.Loyalty = 2
+[T9 Bot1.Main2]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Ensoul Artifact.Cast(Bot2.Battlefield.Daretti, Scrap Savant)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Daretti, Scrap Savant.Power = 5
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Death Ward.Cast(Bot2.Battlefield.Daretti, Scrap Savant)
+Bot2.Pass
+Bot1.Pass
+Bot1.Hand.Shatter.Cast(Bot2.Battlefield.Daretti, Scrap Savant)
+Bot1.Pass
+Bot2.Pass
+Bot2.Replace(Daretti, Scrap Savant)
+[T9 Bot1.End]
+[Expect]
+Bot2.Battlefield.Daretti, Scrap Savant.Tapped = true
+Exile.Count = 0

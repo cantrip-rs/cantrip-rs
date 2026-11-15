@@ -1,0 +1,89 @@
+# Runesword's ability on Bot1's attacking Grizzly Bears, blocked by Drudge Skeletons with a regeneration shield: the Bears
+# get +2/+0 until end of turn only, for exactly {3}; a creature that is not attacking can't be the target. The Bears' 4
+# damage destroys the Skeletons, which can't be regenerated (CR 701.19c, 611.2c) and would die, so they are exiled instead
+# (CR 614.1a, 700.4). The Bears survive, so Runesword stays, and their dying on a later turn does not sacrifice it ("this
+# turn").
+[Bot1 Deck]
+Runesword
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Forest
+Grizzly Bears
+Forest x20
+[Bot2 Deck]
+Drudge Skeletons
+Mox Jet
+Mox Ruby
+Swamp
+Shock
+Mountain
+Swamp
+Swamp x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Runesword.Cast
+Bot1.Pass
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Drudge Skeletons.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+! Bot1.Battlefield.Runesword.Activate(Bot1.Battlefield.Grizzly Bears)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Drudge Skeletons > Grizzly Bears)
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Forest#3.Activate
+Bot1.Battlefield.Runesword.Activate(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 4
+? Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Drudge Skeletons.Activate
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main2]
+? Exile = Drudge Skeletons
+? Bot1.Battlefield.Grizzly Bears.Power = 4
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+[T6 Bot2.Main2]
+[Expect]
+Exile = Drudge Skeletons
+Bot2.Graveyard = Shock
+Bot1.Graveyard = Grizzly Bears; Black Lotus
+Bot1.Battlefield.Runesword.Tapped = true

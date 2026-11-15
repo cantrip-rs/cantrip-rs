@@ -1,0 +1,77 @@
+# Two Runeswords' abilities on the same attacking Triskelion make two effects (CR 611.2c): when the Triskelion pings Llanowar
+# Elves to death after both resolved, both replacement effects apply, so the Elves' controller chooses which one exiles them
+# (CR 616.1) - either way they are exiled instead of dying.
+[Bot1 Deck]
+Runesword
+Runesword
+Black Lotus
+Black Lotus
+Black Lotus
+Black Lotus
+Island
+Black Lotus
+Black Lotus
+Island x20
+[Bot2 Deck]
+Triskelion
+Llanowar Elves
+Black Lotus
+Black Lotus
+Forest
+Mountain
+Mountain
+Mountain x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Runesword.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Runesword.Cast
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Triskelion.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Triskelion > Bot1)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Runesword.Activate(Bot2.Battlefield.Triskelion)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Runesword.Activate(Bot2.Battlefield.Triskelion)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Triskelion.Power = 8
+Bot2.Battlefield.Triskelion.Activate(Bot2.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+Bot2.Replace(Runesword)
+[T6 Bot2.Main2]
+[Expect]
+Exile = Llanowar Elves

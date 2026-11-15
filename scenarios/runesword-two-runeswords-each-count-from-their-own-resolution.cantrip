@@ -1,0 +1,96 @@
+# Two Runeswords on two of Bot2's attackers in one turn: each one's effects are about its own creature, from the time its
+# own ability resolved (CR 611.2c). Runesword A resolves on Ornithopter; Bot2's Triskelion then pings Bot2's Grizzly Bears;
+# Runesword B resolves on the Triskelion, which pings Llanowar Elves to death - exiled instead (B's effect). The Bears,
+# dealt damage by the Triskelion only before B's ability resolved, die to Shock later that turn and go to the graveyard.
+[Bot1 Deck]
+Runesword
+Runesword
+Black Lotus
+Black Lotus
+Black Lotus
+Black Lotus
+Island
+Black Lotus
+Black Lotus
+Island x20
+[Bot2 Deck]
+Triskelion
+Ornithopter
+Grizzly Bears
+Llanowar Elves
+Black Lotus
+Black Lotus
+Black Lotus
+Mountain
+Shock
+Mountain
+Mountain x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Runesword.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Runesword.Cast
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Triskelion.Cast
+Bot2.Pass
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Triskelion > Bot1; Ornithopter > Bot1)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Runesword.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Triskelion.Activate(Bot2.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Runesword.Activate(Bot2.Battlefield.Triskelion)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 2
+? Bot2.Battlefield.Triskelion.Power = 5
+Bot2.Battlefield.Triskelion.Activate(Bot2.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+[T6 Bot2.Main2]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Exile = Llanowar Elves
+Bot2.Graveyard = Grizzly Bears; Shock; Black Lotus; Black Lotus; Black Lotus

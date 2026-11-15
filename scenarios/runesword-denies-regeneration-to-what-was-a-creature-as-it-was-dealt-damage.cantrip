@@ -1,0 +1,92 @@
+# "If the creature deals damage to a creature this turn, the creature dealt damage can't be regenerated this turn" asks
+# what the permanent was as it was dealt the damage (CR 120.3d-e, 701.19c). Bot2's Grim Monolith is a 2/2 artifact
+# creature under March of the Machines when Bot1's Runesworded Triskelion deals it 1 damage, and has a regeneration
+# shield from Death Ward. March is destroyed, so the Monolith is a noncreature artifact as Disenchant destroys it: it still
+# can't be regenerated, and goes to the graveyard - not exiled, since it is no creature as it is put there (CR 700.4).
+[Bot1 Deck]
+Runesword
+Triskelion
+Black Lotus
+Black Lotus
+Black Lotus
+Black Lotus
+Island
+Island x20
+[Bot2 Deck]
+March of the Machines
+Black Lotus
+Plains
+Grim Monolith
+Death Ward
+Disenchant
+Plains
+Disenchant
+Plains
+Plains x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Runesword.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Triskelion.Cast
+Bot1.Pass
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.March of the Machines.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains#1.Activate
+Bot2.Battlefield.Plains#2.Activate
+Bot2.Hand.Grim Monolith.Cast
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Triskelion > Bot2)
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Island#3.Activate
+Bot1.Battlefield.Runesword.Activate(Bot1.Battlefield.Triskelion)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Plains#1.Activate
+Bot2.Hand.Death Ward.Cast(Bot2.Battlefield.Grim Monolith)
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Triskelion.Activate(Bot2.Battlefield.Grim Monolith)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grim Monolith.Damage = 1
+Bot2.Battlefield.Grim Monolith.Activate(Ability: {T})
+Bot2.Battlefield.Plains#2.Activate
+Bot2.Hand.Disenchant.Cast(Bot2.Battlefield.March of the Machines)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Grim Monolith.Types = Artifact
+Bot2.Battlefield.Plains#3.Activate
+Bot2.Hand.Disenchant.Cast(Bot2.Battlefield.Grim Monolith)
+Bot2.Pass
+Bot1.Pass
+[T7 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Grim Monolith = (absent)
+Bot2.Graveyard = Disenchant; Grim Monolith; Disenchant; March of the Machines; Death Ward; Black Lotus
