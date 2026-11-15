@@ -1,0 +1,56 @@
+# Broodspinner: Reach lets the 2/3 block Bot2's Ornithopter (0/2 flying) (CR 702.17b), which the two damage destroys. On turn 5
+# the two Black Lotuses are sacrificed for mana (artifact) and the Broodspinner for its "{4}{B}{G}, {T}, Sacrifice this creature"
+# ability (creature): two card types among cards in Bot1's graveyard, so two Insects and not a third (Bot2's Ornithopter, in its own
+# graveyard, is not counted; the other scenario pins that with a card type only Bot2 has).
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Broodspinner
+Black Lotus
+Black Lotus
+Swamp
+Island
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x23
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Broodspinner.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island; Island |)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+Bot1.Block(Broodspinner > Ornithopter)
+[T4 Bot2.Main2]
+? Bot2.Battlefield.Ornithopter = (absent)
+? Bot2.Graveyard = Ornithopter
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Broodspinner.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Insect Token#1.Power = 1
+Bot1.Battlefield.Insect Token#2.Power = 1
+Bot1.Battlefield.Insect Token#3 = (absent)
+Bot1.Graveyard.Count = 3
