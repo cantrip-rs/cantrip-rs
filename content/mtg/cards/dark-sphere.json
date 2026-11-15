@@ -1,0 +1,6 @@
+{
+  "name": "Dark Sphere",
+  "manaCost": "{0}",
+  "type": "Artifact",
+  "oracleText": "{T}, Sacrifice this artifact: The next time a source of your choice would deal damage to you this turn, prevent half that damage, rounded down."
+}

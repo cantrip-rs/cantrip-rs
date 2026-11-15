@@ -1,0 +1,66 @@
+# Dark Sphere's ruling (CR 616.1, 616.1f): "If two or more of these effects would apply, you apply them sequentially." Bot2's
+# Disintegrate for 5 aims at Bot1, who sacrifices both Spheres in response, choosing it each time. The first shield prevents
+# 2 (half of 5, rounded down), the second half of the 3 left, rounded down: 1. Bot1 takes 2 (18). Halving the original 5
+# twice would leave 1 (19); one shield only, 3 (17). Before the Disintegrate resolves, Bot2's Shock at Bot1 resolves while
+# both shields wait: it is another source, so neither touches it and it is dealt in full (18) - a shield taking any source's
+# damage would have prevented 1 of it (19) - and the Disintegrate then leaves Bot1 at 16.
+
+[Bot1 Deck]
+Dark Sphere
+Dark Sphere
+Island x25
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Black Lotus
+Disintegrate
+Shock
+Island x25
+
+[Actions]
+Bot1.Hand.Dark Sphere#1.Cast
+Bot1.Pass
+Bot1.Hand.Dark Sphere.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Disintegrate.Cast(Bot1; X: 5)
+Bot1.Battlefield.Dark Sphere#1.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Stack.Disintegrate)
+Bot1.Battlefield.Dark Sphere.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Stack.Disintegrate)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 18
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 16
+Prevented = 2 Disintegrate > Bot1 by Dark Sphere; 1 Disintegrate > Bot1 by Dark Sphere

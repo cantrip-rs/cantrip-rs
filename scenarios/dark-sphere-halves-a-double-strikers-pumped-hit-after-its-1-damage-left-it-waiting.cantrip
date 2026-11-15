@@ -1,0 +1,74 @@
+# Dark Sphere (CR 615.1, 615.8, 609.7b, 611.2a): "the next time a source of your choice would deal damage to you this turn,
+# prevent half that damage, rounded down". Bot2 Twiddles one Sphere tapped on turn 2: its {T} cost can't be paid, so it can't
+# be activated that turn. Bot1 sacrifices the other Sphere at the end of Bot2's turn 2 choosing Bot2's Fencing Ace
+# (double strike, 1/1), which deals no damage that turn: "this turn", so it is gone by turn 4. On turn 4 the Ace attacks and
+# Bot1 sacrifices the other Sphere choosing it. Its first-strike 1 damage: half of 1, rounded down, is 0 - the shield prevents
+# no damage, so it is not used up (CR 609.7b) and Bot1 takes 1. Bot2 then Giant Growths the Ace (4/4): its regular 4 damage
+# is the next time, half of it (2) is prevented and Bot1 takes 2: 20 - 1 - 2 = 17. Rounded up, the 1 would have been
+# prevented and used the shield up (16); the first Sphere's shield, had it lasted, would have halved the 4 again (18).
+
+[Bot1 Deck]
+Dark Sphere
+Dark Sphere
+Island x25
+
+[Bot2 Deck]
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Fencing Ace
+Giant Growth
+Twiddle
+Island x25
+
+[Actions]
+Bot1.Hand.Dark Sphere#1.Cast
+Bot1.Pass
+Bot1.Hand.Dark Sphere.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Twiddle.Cast(Bot1.Battlefield.Dark Sphere#2)
+Bot2.Pass
+Bot1.Pass
+Bot2.Modes(Tap)
+? Bot1.Battlefield.Dark Sphere#2.Tapped = true
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Fencing Ace.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.End]
+! Bot1.Battlefield.Dark Sphere#2.Activate
+Bot1.Battlefield.Dark Sphere#1.Activate
+? Bot1.Graveyard = Dark Sphere
+? Bot1.Battlefield.Dark Sphere.Tapped = true
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Fencing Ace)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Fencing Ace > Bot1)
+[T4 Bot2.DeclareBlockers]
+Bot1.Battlefield.Dark Sphere.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Fencing Ace)
+[T4 Bot2.CombatDamage]
+? Bot1.Life = 19
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Giant Growth.Cast(Fencing Ace)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Graveyard = Dark Sphere; Dark Sphere
+Prevented = 2 Fencing Ace > Bot1 by Dark Sphere
