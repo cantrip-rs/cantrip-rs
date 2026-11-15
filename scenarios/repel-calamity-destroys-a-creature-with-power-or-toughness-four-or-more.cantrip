@@ -1,0 +1,60 @@
+# Repel Calamity: "Destroy target creature with power or toughness 4 or greater." Alpine Grizzly (4/2) qualifies by power alone and
+# Consulate Skygate (0/4) by toughness alone, each exactly at 4, so both are destroyed; Adrenaline Jockey (3/3) is one short on
+# both and is not a legal target (CR 115.1, 208.1), though Bot1 could pay for it.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Repel Calamity
+Repel Calamity
+Repel Calamity
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Black Lotus
+Alpine Grizzly
+Consulate Skygate
+Adrenaline Jockey
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Alpine Grizzly.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Consulate Skygate.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Repel Calamity.Cast(Bot2.Battlefield.Alpine Grizzly)
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Repel Calamity.Cast(Bot2.Battlefield.Consulate Skygate)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Adrenaline Jockey.Cast
+[T5 Bot1.Main1]
+! Bot1.Hand.Repel Calamity.Cast(Bot2.Battlefield.Adrenaline Jockey)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Repel Calamity; Repel Calamity
+Bot2.Graveyard = Alpine Grizzly; Consulate Skygate; Black Lotus
+Bot2.Battlefield.Adrenaline Jockey.Power = 3
