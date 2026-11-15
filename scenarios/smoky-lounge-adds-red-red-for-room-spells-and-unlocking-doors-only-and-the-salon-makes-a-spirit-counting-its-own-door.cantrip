@@ -1,0 +1,61 @@
+# Smoky Lounge's "At the beginning of your first main phase, add {R}{R}. Spend this mana only to cast Room spells and unlock
+# doors" (CR 106.6, 709.5e). Bot1 casts it as Smoky Lounge on turn 1 with Black Lotus's {R}{R}{R}, and on turn 3 the {R}{R}
+# arrive in the pool. They cannot cast Mind Stone, a nonRoom spell, though it costs only {2} (with nothing else untapped
+# the cast is refused), nor pay Mind Stone's "{1}, {T}, Sacrifice this artifact: Draw a card" (an ability); Mind Stone is
+# cast with Mox Sapphires' {U}{U} instead (`Spend: U, U`). The {R}{R} then pay, with a {U} and Mind Stone's {C}, for unlocking
+# Misty Salon's door ({3}{U}), a special action that is neither a spell nor an ability. "When you unlock this door" makes
+# an X/X blue flying Spirit, X being the unlocked doors among Rooms Bot1 controls as it resolves: this Room's two,
+# the door just unlocked counted with the one from before (CR 709.5c): a 2/2.
+
+[Bot1 Deck]
+Black Lotus
+Smoky Lounge // Misty Salon
+Mind Stone
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Island
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Smoky Lounge // Misty Salon.Cast(Ability: Smoky Lounge)
+Bot1.Pass
+[T3 Bot1.Main1]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}{R} (RoomSpellsOrUnlockingDoors)
+! Bot1.Hand.Mind Stone.Cast(Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Mind Stone.Cast(Spend: U, U)
+Bot1.Pass
+? Bot1.Mana = {R}{R} (RoomSpellsOrUnlockingDoors)
+! Bot1.Battlefield.Mind Stone.Activate(Ability: Draw a card; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Battlefield.Mind Stone.Activate(Ability: Add {C})
+Bot1.Battlefield.Smoky Lounge.Activate(Ability: right door; Spend: R, R, U, C)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Mana =
+Bot1.Battlefield.Smoky Lounge // Misty Salon.Doors = Smoky Lounge; Misty Salon
+Bot1.Battlefield.Spirit Token.Power = 2
+Bot1.Battlefield.Spirit Token.Toughness = 2
+Bot1.Battlefield.Spirit Token.Colors = Blue
+Bot1.Battlefield.Spirit Token.Keywords = Flying

@@ -1,0 +1,45 @@
+# Artificial Evolution changes "Spirit" to "Elf" in the Misty Salon spell's text, and the change carries to the Room it
+# becomes (CR 400.7a). Its door unlocks as it enters, and the trigger of the changed text makes a 1/1 blue Elf with flying,
+# named for its subtypes (CR 612.4, 111.4: a token is what the text that makes it says), not a Spirit. One door is unlocked,
+# so X is 1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Smoky Lounge // Misty Salon
+Island
+Artificial Evolution
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Smoky Lounge // Misty Salon.Cast(Ability: Misty Salon)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Artificial Evolution.Cast(Stack.Misty Salon)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Spirit)
+Bot1.Modes(Elf)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Spirit Token = (absent)
+Bot1.Battlefield.Elf Token.Power = 1
+Bot1.Battlefield.Elf Token.Toughness = 1
+Bot1.Battlefield.Elf Token.Subtypes = Elf
+Bot1.Battlefield.Elf Token.Colors = Blue
+Bot1.Battlefield.Elf Token.Keywords = Flying

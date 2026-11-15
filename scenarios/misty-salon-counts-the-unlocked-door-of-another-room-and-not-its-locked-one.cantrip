@@ -1,0 +1,50 @@
+# Misty Salon's "X is the number of unlocked doors among Rooms you control" (CR 709.5c): a Room counts each door unlocked, not
+# the whole card. Turn 1, Bot1 casts one Smoky Lounge // Misty Salon as Smoky Lounge with Black Lotus's {R}{R}{R}; its Misty
+# Salon door stays locked and is not counted. On turn 3 the {R}{R} it adds (spendable on a Room spell, `Spend: R, R, U, U`)
+# and two Mox Sapphires pay the second copy cast as Misty Salon ({3}{U}), which unlocks as it enters (CR 709.5h): the
+# trigger counts the first Room's one door and this one's, so a 2/2 blue flying Spirit, not a 3/3 (a Room's both halves) nor a 1/1.
+
+[Bot1 Deck]
+Black Lotus
+Smoky Lounge // Misty Salon
+Smoky Lounge // Misty Salon
+Mox Sapphire
+Mox Sapphire
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Smoky Lounge // Misty Salon.Cast(Ability: Smoky Lounge)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}{R} (RoomSpellsOrUnlockingDoors)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Smoky Lounge // Misty Salon.Cast(Ability: Misty Salon; Spend: R, R, U, U)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Mana =
+Bot1.Battlefield.Smoky Lounge.Doors = Smoky Lounge
+Bot1.Battlefield.Misty Salon.Doors = Misty Salon
+Bot1.Battlefield.Spirit Token.Power = 2
+Bot1.Battlefield.Spirit Token.Toughness = 2
