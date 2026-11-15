@@ -1171,6 +1171,13 @@ pub fn exile_top_card_play_until_end_of_next_turn(g: &mut dyn Game, item: &Stack
     Ok(())
 }
 
+/// "Exile the top `N` cards of your library. You may play them until the end of your next turn" as a resolving ability's whole
+/// effect: `exile_top_play_until_end_of_next_turn` for the ability's controller, `N` cards. Painter's Studio prints it with two.
+pub fn exile_top_cards_play_until_end_of_next_turn<const N: usize>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    exile_top_play_until_end_of_next_turn(g, item.controller, N);
+    Ok(())
+}
+
 /// "Exile the top `count` cards of your library. You may play [it / those cards] this turn" (`exile_top_may_play`): the grant
 /// is to play, not only cast, a land among them under the ordinary land-play rules, until the cleanup step (CR 514.2). The
 /// cards still in exile. Laelia, the Blade Reforged, Emberheart Challenger and Experimental Synthesizer (one card each) print it.
