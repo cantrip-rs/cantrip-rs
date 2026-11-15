@@ -6,12 +6,7 @@ use cantrip_oracle as oracle;
 /// instead. The promise is announced before the target is chosen (CR 601.2b-c, 702.174m), so the target is judged by it,
 /// and again as the spell resolves (CR 608.2b).
 fn creature_or_nonland_permanent(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    let filter = if gift::promised(q, asker.source) {
-        targets::NONLAND_PERMANENT_AN_OPPONENT_CONTROLS
-    } else {
-        targets::CREATURE_AN_OPPONENT_CONTROLS
-    };
-    (filter.filter)(q, asker, t)
+    gift::target_by_promise(q, asker, t, &targets::NONLAND_PERMANENT_AN_OPPONENT_CONTROLS, &targets::CREATURE_AN_OPPONENT_CONTROLS)
 }
 
 /// "Gift a tapped Fish" (CR 702.174f): the Fish is the card's own token.

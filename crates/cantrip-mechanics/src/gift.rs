@@ -62,6 +62,14 @@ pub fn promised(q: &dyn Query, spell: ObjectId) -> bool {
     q.obj(spell).gift.is_some() || q.gift_assumed()
 }
 
+/// A target that depends on the promise: "target [A]. If the gift was promised, instead target [B]" (CR 702.174m): the spell on
+/// the stack is judged against `if_promised` when the gift was promised and against `otherwise` when it was not, both when the
+/// target is announced (CR 601.2b-c) and again as the spell resolves (CR 608.2b). Into the Flood Maw and Long River's Pull use it.
+pub fn target_by_promise(q: &dyn Query, asker: &Asker, t: Target, if_promised: &TargetSpec, otherwise: &TargetSpec) -> bool {
+    let filter = if promised(q, asker.source) { if_promised } else { otherwise };
+    (filter.filter)(q, asker, t)
+}
+
 /// The intervening "if" (CR 603.4, 702.174b): its gift cost was paid. The gift triggered ability has it, and so does a
 /// permanent's own "when this enters, if the gift was promised" (Scrapshooter).
 pub fn paid(q: &dyn Query, asker: &Asker) -> bool {
