@@ -1,0 +1,8 @@
+{
+  "name": "Most Valuable Slayer",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Human Warrior",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Whenever you attack, target attacking creature gets +1/+0 and gains first strike until end of turn."
+}
