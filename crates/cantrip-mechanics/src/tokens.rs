@@ -994,6 +994,16 @@ pub static SPIDER: CardDef = CardDef {
     ..token!(Spider)
 };
 
+/// The 2/2 green Spider creature token with reach. Twitching Doll makes it.
+pub static SPIDER_2_2: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Green)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    keywords: Keywords::of(&[Keyword::Reach]),
+    ..token!(Spider)
+};
+
 /// The 1/2 green Spider creature token with reach. Arasta of the Endless Web, Brood Weaver and Twin-Silk Spider make it.
 pub static SPIDER_1_2: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::Green)),
