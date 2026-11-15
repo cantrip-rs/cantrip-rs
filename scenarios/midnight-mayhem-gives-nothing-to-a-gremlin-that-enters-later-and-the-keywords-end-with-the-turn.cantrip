@@ -1,0 +1,50 @@
+# Midnight Mayhem's "Gremlins you control gain menace, lifelink, and haste until end of turn" (CR 611.2c, 514.2) affects only
+# the Gremlins Bot1 controls as it resolves: the Phyrexian Gremlins Bot1 casts after it resolves, on the same turn, gains
+# nothing. The three tokens keep the keywords to the end of the turn and lose them as it ends: on Bot2's turn they have none.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Jet
+Black Lotus
+Midnight Mayhem
+Phyrexian Gremlins
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Midnight Mayhem.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gremlin Token#1.Keywords = Haste; Lifelink; Menace
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Phyrexian Gremlins.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Phyrexian Gremlins.Keywords = (absent)
+? Bot1.Battlefield.Gremlin Token#3.Keywords = Haste; Lifelink; Menace
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Gremlin Token#1.Keywords = (absent)
+? Bot1.Battlefield.Gremlin Token#2.Keywords = (absent)
+? Bot1.Battlefield.Gremlin Token#3.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield = Gremlin Token; Gremlin Token; Gremlin Token; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Phyrexian Gremlins
+Bot1.Graveyard = Black Lotus; Midnight Mayhem
