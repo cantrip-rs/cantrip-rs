@@ -1,0 +1,76 @@
+# Gossip's Talent level 2: "target attacking creature with power 3 or less" (CR 115.1, 601.2c). On turn 5 Bot1 attacks with Earth
+# Elemental (power 4), Memnite (power 1) and Ornithopter (power 0): naming the Earth Elemental is refused, the Memnite is the
+# target and can't be blocked, and Bot2's Ornithopter may still block the Earth Elemental and dies (CR 704.5g). Bot2 takes 1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Memnite
+Earth Elemental
+Ornithopter
+Gossip's Talent
+Island x14
+
+[Bot2 Deck]
+Island
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Earth Elemental.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gossip's Talent.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Gossip's Talent.Activate(Ability: Level 2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Earth Elemental > Bot2; Memnite > Bot2; Ornithopter > Bot2)
+! Bot1.Target(Bot1.Battlefield.Earth Elemental)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+! Bot2.Block(Bot2.Battlefield.Ornithopter > Bot1.Battlefield.Memnite)
+Bot2.Block(Bot2.Battlefield.Ornithopter > Bot1.Battlefield.Earth Elemental)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Ornithopter; Island

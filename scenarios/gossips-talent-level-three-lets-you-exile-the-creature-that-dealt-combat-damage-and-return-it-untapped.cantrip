@@ -1,0 +1,73 @@
+# Gossip's Talent level 3: "Whenever a creature you control deals combat damage to a player, you may exile it, then return it to
+# the battlefield under its owner's control." Bot1 reaches level 3 on turn 3 (level 2's trigger makes the only attacker,
+# Grizzly Bears, unblockable and is not what is tested here). The Bears deal 2 to Bot2 and Bot1 accepts: they are exiled and
+# return untapped, a new object, no longer attacking (CR 400.7, 506.4).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Grizzly Bears
+Gossip's Talent
+Island
+Island x14
+
+[Bot2 Deck]
+Island
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gossip's Talent.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Gossip's Talent.Activate(Ability: Level 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Gossip's Talent.Activate(Ability: Level 3)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot2.Life = 18
+? Bot1.Battlefield.Grizzly Bears.Tapped = false
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Grizzly Bears.Tapped = false
