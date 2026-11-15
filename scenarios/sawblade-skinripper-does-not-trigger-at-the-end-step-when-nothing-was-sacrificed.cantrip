@@ -1,0 +1,54 @@
+# Sawblade Skinripper's end step trigger has the intervening "if you sacrificed one or more permanents this turn" (CR 603.4):
+# on turn 1 and again on turn 3 Bot1 sacrifices nothing, so the ability never goes on the stack and asks for no target, and Bot2
+# loses no life. A permanent Bot1 merely loses another way (a Lightning Bolt killing its Ornithopter on turn 2) is not a sacrifice.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mountain
+Sawblade Skinripper
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sawblade Skinripper.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T1 Bot1.End]
+! Bot1.Target
+? Stack.Count = 0
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.End]
+! Bot1.Target
+? Stack.Count = 0
+Bot1.Pass
+[T4 Bot2.Upkeep]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Ornithopter

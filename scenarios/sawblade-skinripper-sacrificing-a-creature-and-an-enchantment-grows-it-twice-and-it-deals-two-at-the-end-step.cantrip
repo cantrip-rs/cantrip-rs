@@ -1,0 +1,62 @@
+# Sawblade Skinripper, "{2}, Sacrifice another creature or enchantment: Put a +1/+1 counter on this creature" and "At the
+# beginning of your end step, if you sacrificed one or more permanents this turn, this creature deals that much damage to any
+# target" (CR 701.21a, 603.4). Bot1 casts it on turn 1 with an Ornithopter and, on turn 3, an Authority of the Consuls, then
+# sacrifices both to it: only a creature or enchantment other than the Skinripper may be (not itself, a Mox or a land), and
+# each pays {2}. At the end step it has two counters and, two permanents sacrificed, deals 2 damage to Bot2.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mountain
+Sawblade Skinripper
+Ornithopter
+Authority of the Consuls
+Mountain
+Mountain x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sawblade Skinripper.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Authority of the Consuls.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Sawblade Skinripper.Activate
+! Bot1.Choose(Sawblade Skinripper)
+! Bot1.Choose(Mox Jet)
+! Bot1.Choose(Mountain)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Sawblade Skinripper.Activate
+Bot1.Choose(Authority of the Consuls)
+Bot1.Pass
+[T3 Bot1.End]
+Bot1.Target(Bot2)
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Sawblade Skinripper.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Sawblade Skinripper.Power = 5
+Bot1.Graveyard = Authority of the Consuls; Ornithopter

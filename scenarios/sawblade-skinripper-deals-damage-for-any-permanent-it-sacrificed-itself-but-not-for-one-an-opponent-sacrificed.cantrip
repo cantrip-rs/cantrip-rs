@@ -1,0 +1,49 @@
+# Sawblade Skinripper's "that much damage" counts every permanent Bot1 sacrificed this turn, whatever it is and whatever the
+# sacrifice was for (CR 701.21a): on turn 3 Bot1 sacrifices a Black Lotus for mana, a single permanent, and at its end step the
+# Skinripper deals 1 damage, though Bot2 sacrificed a Black Lotus of its own that turn too (its sacrifices are not Bot1's).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mountain
+Sawblade Skinripper
+Black Lotus
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Island x19
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sawblade Skinripper.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+[T3 Bot1.End]
+Bot1.Target(Bot2)
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot1.Graveyard = Black Lotus
+Bot2.Graveyard = Black Lotus
+Bot1.Battlefield.Sawblade Skinripper.Keywords = Menace
