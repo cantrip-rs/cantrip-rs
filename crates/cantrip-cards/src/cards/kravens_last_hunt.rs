@@ -2,14 +2,6 @@ use cantrip_api::*;
 use cantrip_mechanics::{effects, library, targets};
 use cantrip_oracle as oracle;
 
-/// I: "Mill five cards. When you do, ..." The reflexive trigger exists only if five cards were milled (CR 701.17b, 603.12), and
-/// chooses its target once they are in the graveyard.
-fn mill_and_reflex(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let this = g.card_id(&CARD);
-    library::mill_then_reflexive(g, item, 5, AbilityRef::delayed(this, 0));
-    Ok(())
-}
-
 /// "This Saga deals damage equal to the greatest power among creature cards in your graveyard to target creature" (CR 120.3,
 /// 208.1): read as the trigger resolves, so the milled cards count, and only the controller's graveyard does; a power of 0 or
 /// less (or no creature card) is no damage (CR 107.1b). A target gone by then is left alone (CR 608.2b).
@@ -27,7 +19,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         chapter(
             1,
-            mill_and_reflex,
+            library::mill_then_reflexive_trigger::<5>,
             "I \u{2014} Mill five cards. When you do, this Saga deals damage equal to the greatest power among creature cards in your graveyard to target creature.",
         ),
         chapter(2, effects::target_creature_gets::<2, 2>, "II \u{2014} Target creature you control gets +2/+2 until end of turn.")

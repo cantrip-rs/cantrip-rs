@@ -2,14 +2,6 @@ use cantrip_api::*;
 use cantrip_mechanics::{effects, library, targets, triggers};
 use cantrip_oracle as oracle;
 
-/// Chapter II: "Mill four cards. When you do, return target creature card from your graveyard to your hand." The reflexive
-/// trigger exists only if the cards were milled (CR 603.12), and chooses its target after milling.
-fn mill_and_reflex(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let this = g.card_id(&CARD);
-    library::mill_then_reflexive(g, item, 4, AbilityRef::delayed(this, 0));
-    Ok(())
-}
-
 /// "Return target creature card from your graveyard to your hand": a target gone by resolution is left alone (CR 608.2b).
 fn return_it(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(card) = targets::object(g, item, 0) else { return Ok(()) };
@@ -42,7 +34,7 @@ fn counters_and_keywords(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspe
 pub static CARD: CardDef = CardDef {
     abilities: &[
         chapter(1, effects::destroy_all_creatures, "I \u{2014} Destroy all creatures."),
-        chapter(2, mill_and_reflex, "II \u{2014} Mill four cards. When you do, return target creature card from your graveyard to your hand."),
+        chapter(2, library::mill_then_reflexive_trigger::<4>, "II \u{2014} Mill four cards. When you do, return target creature card from your graveyard to your hand."),
         chapter(
             3,
             attacks_alone_this_turn,
