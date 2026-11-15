@@ -171,6 +171,19 @@ pub fn target_creature_gets_and_gains_trample<const P: i32, const T: i32>(g: &mu
     Ok(())
 }
 
+/// "Target creature gets +`P`/+`T` and gains indestructible until end of turn" (CR 611.2a, 702.12b): one instruction, the creature
+/// being the ability's first target; nothing if it is no longer a legal target as the spell or ability resolves (CR 608.2b). Dark
+/// Endurance (+2/+0), Masterful Flourish (+1/+0) and Hardened Escort (+1/+0, another creature you control) print it.
+pub fn target_creature_gets_and_gains_indestructible<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = crate::targets::object(g, item, 0) {
+        instruction(g, |g| {
+            crate::pump(g, item.object, creature, P, T);
+            gain_indestructible_until_end_of_turn(g, item.object, creature);
+        });
+    }
+    Ok(())
+}
+
 /// "One or two target creatures each get +`P`/+`T` until end of turn" (CR 611.2a): every target still legal as the spell
 /// resolves (CR 608.2b), pumped as one instruction. Appeal to Eirdu (+2/+1), Opera Love Song's mode (+2/+0) and Spiritcall
 /// Enthusiast's Scrollboost (+2/+2) print it.
