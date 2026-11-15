@@ -1,0 +1,61 @@
+# "When you next cast an instant or sorcery spell this turn" (CR 603.7b, 707.10c). Turn 1: Cursed Recording is tapped and a delayed
+# ability waits, but no spell is cast and it ends with the turn (Delayed.Count 0 on turn 3). The Lightning Bolt cast on turn 3
+# is not copied. Recording untapped, so it is tapped again; the next Bolt is copied, and Bot1 keeps the copy's target (the same
+# target again, CR 707.10c): Bot2 takes 3 + 3 + 3.
+
+[Bot1 Deck]
+Black Lotus
+Mountain
+Cursed Recording
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Cursed Recording.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Cursed Recording.Activate
+Bot1.Pass
+Bot2.Pass
+? Delayed.Count = 1
+[T3 Bot1.Main1]
+? Delayed.Count = 0
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot1.Battlefield.Cursed Recording.Activate
+Bot1.Pass
+Bot2.Pass
+? Delayed.Count = 1
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Triggers(put a time counter; copy that spell)
+? Stack.Count = 3
+Bot1.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 11
+Bot1.Life = 20
+Bot1.Battlefield.Cursed Recording.Counters.Time = 2
