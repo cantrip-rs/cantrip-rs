@@ -177,6 +177,17 @@ pub fn create_token_copy_of_it(
     Ok(())
 }
 
+/// "Create a token that's a copy of [something], [with its exceptions]. Exile that token at the beginning of the next end step"
+/// (CR 707.2, 111.1, 603.7, 603.7c): a token with the copiable `values` (the card applies its copy exceptions to them, CR 707.9b)
+/// for the ability's controller, and the delayed ability number `ability` of its card (`delayed::exile_subject`) about the token
+/// this resolution made, so it exiles that token and not a later permanent (CR 400.7). Reg Barclay, Fidgety Fantasist and Stormsplitter
+/// print it.
+pub fn create_token_copy_exiled_at_next_end_step(g: &mut dyn Game, item: &StackItem, values: Copiable, ability: u8) -> Result<(), Suspend> {
+    let tokens = g.create_token_copies_of(values, item.controller, 1)?;
+    crate::delayed::at_next_end_step_about(g, item, ability, &tokens);
+    Ok(())
+}
+
 /// "Create a token that's a copy of [a card], except it's a [subtype] in addition to its other types" (CR 707.2, 707.9b, 111.1) for
 /// `controller`: the copiable values of `card` (an exiled card is copied as it was printed), with the creature type `subtype` as a
 /// word of `source`'s text (CR 612) added, and with "it isn't legendary" too when `nonlegendary`. A copy of the token has the

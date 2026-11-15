@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::triggers::YOU_DRAW_YOUR_SECOND_CARD;
-use cantrip_mechanics::{delayed, targets};
+use cantrip_mechanics::{copy, delayed, targets};
 use cantrip_oracle as oracle;
 
 /// "Seek out — Whenever you draw your second card each turn, create a token that's a copy of another target creature
@@ -18,9 +18,7 @@ fn copy_as_illusion(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         .with_type(CardType::Artifact)
         .with_subtype(g.words(item.object).subtype(Subtype::Illusion))
         .with_keyword(Keyword::Haste);
-    let token = g.create_token_copies_of(values, item.controller, 1)?;
-    delayed::at_next_end_step_about(g, item, 0, &token);
-    Ok(())
+    copy::create_token_copy_exiled_at_next_end_step(g, item, values, 0)
 }
 
 pub static CARD: CardDef = CardDef {
