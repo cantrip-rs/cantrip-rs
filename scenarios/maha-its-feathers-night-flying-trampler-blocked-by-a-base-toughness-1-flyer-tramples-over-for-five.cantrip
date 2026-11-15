@@ -1,0 +1,43 @@
+# Maha, Its Feathers Night attacks on turn 3 (cast turn 1). Bot2's Memnite (no flying) cannot block it, and Bot2's Ornithopter (0/2
+# flying, base toughness 1 under Maha) does: lethal damage is 1, so five of Maha's six trample over to Bot2 (20 to 15) and the
+# Ornithopter dies. Maha takes no damage.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Maha, Its Feathers Night
+Swamp x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Maha, Its Feathers Night.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Maha, Its Feathers Night > Bot2)
+! Bot2.Block(Memnite > Maha, Its Feathers Night)
+Bot2.Block(Ornithopter > Maha, Its Feathers Night)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Maha, Its Feathers Night.Damage = 0
