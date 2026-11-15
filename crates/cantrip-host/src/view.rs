@@ -1322,10 +1322,21 @@ impl<'a> Projector<'a> {
                 view.lost_abilities.push(def.abilities[index].text().to_string());
             }
         }
+        let lost_all = Query::lost_all_abilities(self.game, id);
+        // Its printed enchant ability (CR 702.5a) is the card's `enchant`, not one of its `abilities`: lost alone - Animate
+        // Dead's and Takklemaggot's "it loses 'enchant creature'" (`EffectKind::LoseEnchant`, CR 613.1f) - its line, "Enchant
+        // ...", is lost. With all its abilities, the walk below names it.
+        if !lost_all
+            && def.enchant.is_some()
+            && !c.abilities().any(|a| a == AbilityRef::enchant(c.card))
+            && let Some(line) = view.oracle_text.split('\n').find(|line| line.starts_with("Enchant "))
+        {
+            view.lost_abilities.push(line.to_string());
+        }
         // Lost all its abilities (CR 613.1f): its static abilities, cost changes, replacement effects and other rules lines
         // are gone too, which no keyword or ability above names. A line of keywords alone, or one of the abilities above, is
         // judged above, so a keyword or ability had again after the loss is not called lost.
-        if Query::lost_all_abilities(self.game, id) {
+        if lost_all {
             // A line that is reminder text alone ("({T}: Add {R} or {G}.)") reminds of the abilities of a basic land type
             // (CR 305.6): lost only if the land no longer has one, as under Humility, not under Blood Sun's "except mana
             // abilities", which keeps them.
@@ -2162,6 +2173,39 @@ mod tests {
         let mut handles = HandleSpace::new();
         let handle = handles.handle(id);
         assert_eq!(projector.describe(id, handle, None, &mut handles).lost_abilities, ["Snow forestwalk"]);
+    }
+
+    /// A printed enchant ability lost alone (`EffectKind::LoseEnchant`, CR 613.1f) is named lost, as any printed ability is:
+    /// Takklemaggot returned as a non-Aura enchantment and Animate Dead once its enters ability resolved. While it has it,
+    /// nothing is lost.
+    #[test]
+    fn a_lost_printed_enchant_ability_is_named_lost() {
+        let cards = cantrip_engine::cards();
+        let owner = PlayerId(0);
+        let names = vec!["A".to_string(), "B".to_string()];
+        let faces = HashSet::new();
+        for (name, line) in [("Animate Dead", "Enchant creature card in a graveyard")] {
+            let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+            let card = cards.find(name).unwrap();
+            let id = game.state.push_obj(Obj::new(card, owner, Zone::BATTLEFIELD));
+            game.state.zone_push(Zone::BATTLEFIELD, id);
+            let lost = |game: &Game| {
+                let projector = Projector { game, viewer: owner, names: &names, conceded: &[false, false], faces: &faces };
+                let mut handles = HandleSpace::new();
+                let handle = handles.handle(id);
+                projector.describe(id, handle, None, &mut handles).lost_abilities
+            };
+            assert!(lost(&game).is_empty(), "{name}: with its enchant ability, nothing is lost");
+            let timestamp = game.state.timestamp();
+            game.state.effect_push(ContinuousEffect { source: id, controller: owner, timestamp, affected: id,
+                kind: EffectKind::LoseEnchant(card), duration: Duration::Indefinite, words: Words::NONE });
+            assert_eq!(lost(&game), [line], "{name}");
+            // Then all its abilities lost too: the walk of its text names the line, once.
+            let timestamp = game.state.timestamp();
+            game.state.effect_push(ContinuousEffect { source: id, controller: owner, timestamp, affected: id,
+                kind: EffectKind::LoseAllAbilities, duration: Duration::Indefinite, words: Words::NONE });
+            assert_eq!(lost(&game).iter().filter(|l| *l == line).count(), 1, "{name}: all lost, named once");
+        }
     }
 
     /// An effect lasting until its controller's next untap step (Orcish Farmer) shows that duration.
