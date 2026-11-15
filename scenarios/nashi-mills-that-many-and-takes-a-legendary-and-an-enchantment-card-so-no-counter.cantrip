@@ -1,0 +1,38 @@
+# Nashi, Searcher in the Dark: "Whenever Nashi deals combat damage to a player, you mill that many cards. You may put any number of
+# legendary and/or enchantment cards from among them into your hand. If you put no cards into your hand this way, put a +1/+1
+# counter on Nashi" (CR 510.2, 701.17a, 608.2d). Nashi hits for 2 on turn 3 and mills Moat (an enchantment) and Arabella (a
+# legendary creature); Bot1 takes both, so no counter goes on and Nashi stays a 2/2. Dark Ritual is the next card, left unmilled.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Nashi, Searcher in the Dark
+Island
+Island
+Island
+Island
+Island
+Moat
+Arabella, Abandoned Doll
+Dark Ritual
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Nashi, Searcher in the Dark.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Nashi, Searcher in the Dark)
+Bot1.Choose(Moat; Arabella, Abandoned Doll)
+
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard.Count = 0
+Bot1.Library.Count = 1
+Bot1.Hand = Island; Island; Island; Island; Island; Moat; Arabella, Abandoned Doll
+Bot1.Battlefield.Nashi, Searcher in the Dark.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Nashi, Searcher in the Dark.Power = 2

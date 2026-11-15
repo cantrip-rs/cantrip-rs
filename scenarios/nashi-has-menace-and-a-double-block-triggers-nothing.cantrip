@@ -1,0 +1,41 @@
+# Nashi, Searcher in the Dark has menace (CR 702.110b): a lone Ornithopter may not block it, but two may, and then Nashi deals its combat
+# damage to creatures, not a player, so nothing triggers (the stack is empty once damage is dealt) and nothing is milled.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Nashi, Searcher in the Dark
+Island
+Island
+Island
+Island
+Island
+Moat
+Dark Ritual
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Plains x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Nashi, Searcher in the Dark.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Nashi, Searcher in the Dark)
+! Bot2.Block(Ornithopter#1 > Nashi, Searcher in the Dark)
+Bot2.Block(Ornithopter#1 > Nashi, Searcher in the Dark; Ornithopter#2 > Nashi, Searcher in the Dark)
+[T3 Bot1.Damage]
+? Stack.Count = 0
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Library.Count = 2
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Nashi, Searcher in the Dark.Counters.PlusOnePlusOne = (absent)

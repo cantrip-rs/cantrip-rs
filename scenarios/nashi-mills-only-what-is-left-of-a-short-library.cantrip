@@ -1,0 +1,33 @@
+# Nashi, Searcher in the Dark: it deals 2, but only Moat is left in the library after the turn 3 draw, so it mills that one
+# card (CR 701.17b) and Bot1 takes it: no counter.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Nashi, Searcher in the Dark
+Island
+Island
+Island
+Island
+Island
+Moat
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Nashi, Searcher in the Dark.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Nashi, Searcher in the Dark)
+Bot1.Choose(Moat)
+
+[Expect]
+Bot2.Life = 18
+Bot1.Library.Count = 0
+Bot1.Graveyard.Count = 0
+Bot1.Hand = Island; Island; Island; Island; Island; Moat
+Bot1.Battlefield.Nashi, Searcher in the Dark.Counters.PlusOnePlusOne = (absent)

@@ -1,0 +1,11 @@
+{
+  "name": "Nashi, Searcher in the Dark",
+  "manaCost": "{U}{B}",
+  "type": "Legendary Creature — Rat Ninja Wizard",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Menace\nWhenever Nashi deals combat damage to a player, you mill that many cards. You may put any number of legendary and/or enchantment cards from among them into your hand. If you put no cards into your hand this way, put a +1/+1 counter on Nashi.",
+  "keywords": [
+    "Menace"
+  ]
+}
