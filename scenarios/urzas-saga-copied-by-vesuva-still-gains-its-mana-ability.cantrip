@@ -1,0 +1,31 @@
+# Urza's Saga's chapter I gives it "{T}: Add {C}", an ability of the card whose ability resolves (CR 613.1f), the card a
+# copy copies (CR 707.2). Bot1's Vesuva enters tapped as a copy of Bot2's Urza's Saga on turn 3, with a lore counter (CR
+# 714.3a); its chapter I gives it the ability, and in Bot1's next upkeep it taps for {C}.
+
+[Bot1 Deck]
+Island
+Vesuva
+Island x20
+
+[Bot2 Deck]
+Urza's Saga
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Urza's Saga.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Vesuva.Play
+Bot1.Accept
+Bot1.Target(Bot2.Battlefield.Urza's Saga)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Urza's Saga.Activate
+? Bot1.Mana = {C}
+Bot1.Pass
+
+[Expect]
+Turn = 5
+Bot1.Battlefield.Urza's Saga.Tapped = true

@@ -5,15 +5,13 @@ use cantrip_oracle as oracle;
 
 /// I: "This Saga gains '{T}: Add {C}.'", for as long as it stays (CR 611.2a).
 fn chapter_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let me = g.obj(item.object).card;
-    g.add_effect(item.object, item.object, EffectKind::AddAbility(AbilityRef::delayed(me, 0)), Duration::Indefinite);
+    g.add_effect(item.object, item.object, EffectKind::AddAbility(AbilityRef::delayed(item.ability.card, 0)), Duration::Indefinite);
     Ok(())
 }
 
 /// II: "This Saga gains '{2}, {T}: Create a 0/0 colorless Construct ...'", independently of its lore counters.
 fn chapter_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let me = g.obj(item.object).card;
-    g.add_effect(item.object, item.object, EffectKind::AddAbility(AbilityRef::delayed(me, 1)), Duration::Indefinite);
+    g.add_effect(item.object, item.object, EffectKind::AddAbility(AbilityRef::delayed(item.ability.card, 1)), Duration::Indefinite);
     Ok(())
 }
 
