@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::{choose, select};
-use cantrip_mechanics::targets;
+use cantrip_mechanics::{greatest_power, targets};
 use cantrip_oracle as oracle;
 
 const ASK: Question = Question::new("PutCounters", "put two +1/+1 counters on a creature?", "It gains lifelink until end of turn", "Choose a creature", "No creature");
@@ -52,26 +52,7 @@ fn return_creatures(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// opponent, in turn order, when several tie; all of them sacrificed together.
 fn sacrifice_greatest(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let opponents: Vec<PlayerId> = g.state().apnap().filter(|&p| p != item.controller).collect();
-    let mut doomed: Vec<(PlayerId, ObjectId)> = Vec::new();
-    for who in opponents {
-        if !cantrip_mechanics::players::reached(g, who) {
-            continue;
-        }
-        let mine: Vec<(ObjectId, i32)> = g
-            .permanents_of(who)
-            .into_iter()
-            .filter(|&id| g.chars(id).is(CardType::Creature))
-            .map(|id| (id, targets::power_or_last_known(g, id)))
-            .collect();
-        let Some(greatest) = mine.iter().map(|&(_, p)| p).max() else { continue };
-        let eligible: Vec<ObjectId> = mine.iter().filter(|&&(_, p)| p == greatest).map(|&(id, _)| id).collect();
-        let picked = choose::select(g, who, item.object, Purpose::Sacrifice, eligible, select::Selection::new(select::Count::Exactly(1)))?;
-        if let Some(&card) = picked.first() {
-            doomed.push((who, card));
-        }
-    }
-    g.sacrifice_each(&doomed);
-    Ok(())
+    greatest_power::sacrifice_one_with_the_greatest_power(g, item.object, &opponents)
 }
 
 static MODAL: ModalDef = modes(&[
