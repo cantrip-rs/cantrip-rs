@@ -1,0 +1,8 @@
+{
+  "name": "Three Tree Rootweaver",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Mole Druid",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "{T}: Add one mana of any color."
+}

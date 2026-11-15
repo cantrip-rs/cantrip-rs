@@ -1,0 +1,37 @@
+# Three Tree Rootweaver ({1}{G}, 1/3): "{T}: Add one mana of any color." (CR 106.1a, 605.1a): the color is the player's choice and
+# the mana is exactly that color. Turn 5 it makes {B} and only {B}: the pool holds that one mana, and the Bolt waits.
+# Turn 7 it makes {R} and that alone pays for the Bolt, a color none of the deck's lands make: Bot2 20 -> 17, and it is tapped
+# while both Forests are not.
+
+[Bot1 Deck]
+Forest
+Forest
+Three Tree Rootweaver
+Lightning Bolt
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.Three Tree Rootweaver.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Three Tree Rootweaver.Activate(Color: Black)
+? Bot1.Mana = {B}
+[T7 Bot1.Main1]
+Bot1.Battlefield.Three Tree Rootweaver.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Three Tree Rootweaver.Tapped = true
+Bot1.Battlefield.Forest#1.Tapped = false
+Bot1.Battlefield.Forest#2.Tapped = false
+Bot1.Graveyard = Lightning Bolt

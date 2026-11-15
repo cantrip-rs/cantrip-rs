@@ -1,0 +1,32 @@
+# Three Tree Rootweaver's "{T}: Add one mana of any color." (CR 106.1a, 605.1a, 302.6): the turn it is cast it cannot be tapped (refusal). Two
+# turns later it can: the pool is empty before, and after it holds exactly one mana, of a color none of this deck's lands make ({R}).
+# It is a 1/3 Mole Druid.
+
+[Bot1 Deck]
+Forest
+Forest
+Three Tree Rootweaver
+Island x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.Three Tree Rootweaver.Cast
+! Bot1.Battlefield.Three Tree Rootweaver.Activate
+Bot1.Pass
+[T5 Bot1.Main1]
+? Bot1.Mana =
+Bot1.Battlefield.Three Tree Rootweaver.Activate(Color: Red)
+? Bot1.Mana = {R}
+
+[Expect]
+Bot1.Battlefield.Three Tree Rootweaver.Tapped = true
+Bot1.Battlefield.Three Tree Rootweaver.Power = 1
+Bot1.Battlefield.Three Tree Rootweaver.Toughness = 3
