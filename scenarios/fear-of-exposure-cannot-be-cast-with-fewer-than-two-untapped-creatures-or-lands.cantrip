@@ -1,0 +1,42 @@
+# Only Bot1's own untapped creatures and lands can be tapped: an artifact (Mox Pearl), a tapped land, and the opponent's untapped Ornithopter and Island are
+# not counted, so with only Ornithopter countable the spell can't be cast though the mana is there (a Lotus and a tapped Forest). A second land makes it castable.
+
+[Bot1 Deck]
+Black Lotus
+Forest
+Mox Pearl
+Ornithopter
+Fear of Exposure
+Island
+Plains
+Island x12
+
+[Bot2 Deck]
+Island
+Ornithopter
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+! Bot1.Hand.Fear of Exposure.Cast
+! Bot1.Hand.Fear of Exposure.Cast(Tap: Ornithopter; Tap: Mox Pearl)
+! Bot1.Hand.Fear of Exposure.Cast(Tap: Ornithopter; Tap: Forest)
+! Bot1.Hand.Fear of Exposure.Cast(Tap: Ornithopter; Tap: Bot2.Battlefield.Ornithopter)
+! Bot1.Hand.Fear of Exposure.Cast(Tap: Ornithopter; Tap: Bot2.Battlefield.Island)
+Bot1.Hand.Island.Play
+Bot1.Hand.Fear of Exposure.Cast(Tap: Ornithopter; Tap: Island)
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Fear of Exposure.Power = 5
+Bot1.Battlefield.Mox Pearl.Tapped = false
+Bot2.Battlefield.Ornithopter.Tapped = false
+Bot2.Battlefield.Island.Tapped = false
