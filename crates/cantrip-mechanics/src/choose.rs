@@ -84,6 +84,19 @@ pub fn cards_from_kind(
     select(g, player, source, purpose, shown, rule)
 }
 
+/// "For each card type, you may [do something with] a card of that type from among" `shown` (CR 205.2a, 608.2d): one question per
+/// card type that some card not yet chosen has, up to one card each, in the order of `CardType::ALL`. A card is counted as only
+/// one of its types, so an artifact creature chosen for artifact is no longer there to be the creature. The cards chosen, in
+/// the order chosen; nothing is asked when no card has a type left. Atraxa, Grand Unifier and Portent of Calamity print it.
+pub fn one_of_each_card_type(g: &mut dyn Game, player: PlayerId, source: ObjectId, purpose: Purpose, shown: &[ObjectId]) -> Result<Vec<ObjectId>, Suspend> {
+    let mut chosen: Vec<ObjectId> = Vec::new();
+    for t in CardType::ALL {
+        let eligible: Vec<ObjectId> = shown.iter().copied().filter(|&c| !chosen.contains(&c) && g.chars(c).is(t)).collect();
+        chosen.extend(cards_from(g, player, source, purpose, shown.to_vec(), eligible, 1, true)?);
+    }
+    Ok(chosen)
+}
+
 /// "Any number of" `eligible` (CR 608.2d: none, some or all), chosen from among `shown`, every one of which the player sees,
 /// the choice worded as the card words it (`kind`, empty for "card"). Nothing is asked when nothing is eligible. Kept for
 /// existing cards; new cards use `select` with `select::ANY_NUMBER`.
