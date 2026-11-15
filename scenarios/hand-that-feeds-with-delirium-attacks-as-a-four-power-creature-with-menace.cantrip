@@ -1,0 +1,55 @@
+# Hand That Feeds: "Delirium - Whenever this creature attacks while there are four or more card types among cards in your
+# graveyard, it gets +2/+0 and gains menace until end of turn." On turn 1 Bot1 casts the 2/2 with Mountain and Mox Ruby, then
+# Black Lotus pays for a Wheel of Fortune that puts the Lotus (artifact), the Wheel (sorcery), an Ornithopter (artifact
+# creature) and an Island (land) into Bot1's graveyard: artifact, sorcery, creature, land, exactly four types (CR 207.2c).
+# On turn 3 it attacks: 4/2 with menace, so Bot2's lone Ornithopter cannot block it (menace, CR 702.111b) and Bot2 takes
+# 4. The pump lasts until end of turn only (CR 514.2): on turn 4 it is a 2/2 without menace again.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Wheel of Fortune
+Ornithopter
+Island
+Mox Ruby
+Hand That Feeds
+Island x16
+
+[Bot2 Deck]
+Island x7
+Ornithopter
+Island x12
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Hand That Feeds.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+? Bot1.Graveyard.Count = 4
+? Bot1.Battlefield.Hand That Feeds.Power = 2
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Hand That Feeds > Bot2)
+? Stack = Hand That Feeds
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hand That Feeds.Power = 4
+? Bot1.Battlefield.Hand That Feeds.Toughness = 2
+? Bot1.Battlefield.Hand That Feeds.Keywords = Menace
+! Bot2.Block(Ornithopter > Hand That Feeds)
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Hand That Feeds.Power = 2
+Bot1.Battlefield.Hand That Feeds.Keywords = (absent)
+Bot2.Life = 16
