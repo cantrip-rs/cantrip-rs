@@ -1,0 +1,52 @@
+# Most Valuable Slayer: "Whenever you attack, target attacking creature gets +1/+0 and gains first strike until end of turn" (CR 508.3d,
+# 115.1, 611.2a). Bot1 attacks with the Slayer and an Ornithopter; the one trigger cannot target Bot2's Ornithopter, which is not attacking
+# (CR 506.4). It gives the Ornithopter +1/+0 (1/2) and first strike, so Bot2 takes 2 + 1 = 3. The pump and the keyword
+# are gone when the turn is over (the Ornithopter flies by itself).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Most Valuable Slayer
+Ornithopter
+Island
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Most Valuable Slayer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Most Valuable Slayer > Bot2; Ornithopter > Bot2)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+? Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Keywords = FirstStrike; Flying
+? Bot1.Battlefield.Most Valuable Slayer.Power = 2
+? Bot1.Battlefield.Most Valuable Slayer.Keywords = (absent)
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot2.Life = 17
