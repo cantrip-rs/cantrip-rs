@@ -1,0 +1,32 @@
+# Arabella, Abandoned Doll: X counts creatures "with power 2 or less" as the layers give the power when the trigger resolves
+# (CR 208.1, 608.2h). Giant Growth makes her 4/6, so she no longer counts herself: X = 0, no damage dealt and no life gained.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Arabella, Abandoned Doll
+Giant Growth
+Plains x15
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Arabella, Abandoned Doll.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Arabella, Abandoned Doll)
+Bot1.Pass
+Bot1.Attack(Arabella, Abandoned Doll > Bot2)
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Battlefield.Arabella, Abandoned Doll.Power = 4
