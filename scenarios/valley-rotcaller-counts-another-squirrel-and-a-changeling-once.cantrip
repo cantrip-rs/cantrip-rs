@@ -1,0 +1,48 @@
+# Valley Rotcaller: X counts the other Squirrels, Bats, Lizards and Rats Bot1 controls. Bot1 controls two Rotcallers and a Changeling
+# Wayfinder (every creature type, CR 702.73a) and attacks with one Rotcaller: the other Rotcaller is a Squirrel and counts, and the
+# Wayfinder is a Squirrel, a Bat, a Lizard and a Rat at once but one permanent, so it counts once. X is 2: Bot2 loses 2 to the
+# trigger and 1 to combat damage, and Bot1 gains 2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Swamp
+Valley Rotcaller
+Valley Rotcaller
+Changeling Wayfinder
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Valley Rotcaller.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Valley Rotcaller.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Changeling Wayfinder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Valley Rotcaller > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 22

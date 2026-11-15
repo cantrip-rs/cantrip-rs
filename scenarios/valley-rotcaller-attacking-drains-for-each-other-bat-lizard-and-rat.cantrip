@@ -1,0 +1,42 @@
+# Valley Rotcaller: "Whenever this creature attacks, each opponent loses X life and you gain X life, where X is the number of other
+# Squirrels, Bats, Lizards, and Rats you control." Bot1 controls the Rotcaller (a Squirrel, but not "other"), an Eyetwitch (Bat), an
+# Iridescent Vinelasher (Lizard) and a Engine Rat (Rat), so X is 3; Bot2's own Engine Rat does not count ("you control") and cannot
+# block alone against menace. Bot2 loses 3 to the trigger and 1 to combat damage, and Bot1 gains 3.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Valley Rotcaller
+Eyetwitch
+Iridescent Vinelasher
+Engine Rat
+Swamp x13
+
+[Bot2 Deck]
+Black Lotus
+Engine Rat
+Swamp x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Valley Rotcaller.Cast
+Bot1.Hand.Eyetwitch.Cast
+Bot1.Hand.Iridescent Vinelasher.Cast
+Bot1.Hand.Engine Rat.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Engine Rat.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Valley Rotcaller > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Life = 23

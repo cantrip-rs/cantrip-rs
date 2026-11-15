@@ -1,0 +1,11 @@
+{
+  "name": "Valley Rotcaller",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Squirrel Warlock",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Menace\nWhenever this creature attacks, each opponent loses X life and you gain X life, where X is the number of other Squirrels, Bats, Lizards, and Rats you control.",
+  "keywords": [
+    "Menace"
+  ]
+}
