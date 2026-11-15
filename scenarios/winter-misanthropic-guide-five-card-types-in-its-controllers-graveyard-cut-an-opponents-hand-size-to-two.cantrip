@@ -1,0 +1,69 @@
+# Winter, Misanthropic Guide's maximum hand size is seven minus the number of types, whatever that number: with a fifth type
+# in Bot1's graveyard on turn 3 (a land, Strip Mine sacrificed to destroy Bot2's Island, besides the Ornithopter, Chain
+# Lightning and Lightning Bolt of the four-type game), Bot2 at its turn 4 cleanup holds eight cards and keeps two.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mountain
+Winter, Misanthropic Guide
+Ornithopter
+Chain Lightning
+Lightning Bolt
+Strip Mine
+Mountain
+Mountain x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Winter, Misanthropic Guide.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Chain Lightning.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Strip Mine.Play
+Bot1.Battlefield.Strip Mine.Activate(Ability: Destroy; Bot2.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+Bot2.Pass
+Bot1.Pass
+Bot2.Discard(Island; Island; Island; Island; Island; Island)
+? Bot2.Hand.Count = 2
+
+[Expect]
+Bot1.Graveyard = Strip Mine; Lightning Bolt; Chain Lightning; Ornithopter

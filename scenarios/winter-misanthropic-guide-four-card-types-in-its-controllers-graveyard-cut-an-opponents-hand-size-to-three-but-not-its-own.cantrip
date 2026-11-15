@@ -1,0 +1,74 @@
+# Winter, Misanthropic Guide's delirium: "each opponent's maximum hand size is equal to seven minus the number of those card
+# types". Bot1's graveyard holds four types on turn 3 (the Ornithopter Bot2's Lightning Bolt killed: an artifact and a creature;
+# Chain Lightning, a sorcery; Lightning Bolt, an instant), so at its turn 4 cleanup Bot2, with eight cards, keeps three and
+# discards five. The rule is no one's but the opponents': at its own turn 5 cleanup Bot1 holds four cards, over three, and is
+# not asked to discard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mountain
+Winter, Misanthropic Guide
+Ornithopter
+Chain Lightning
+Lightning Bolt
+Mountain
+Mountain
+Mountain x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Winter, Misanthropic Guide.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Chain Lightning.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+Bot2.Pass
+Bot1.Pass
+Bot2.Discard(Island; Island; Island; Island; Island)
+? Bot2.Hand.Count = 3
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+[T5 Bot1.End]
+Bot1.Pass
+! Bot1.Discard
+[T6 Bot2.Upkeep]
+
+[Expect]
+Bot1.Hand.Count = 4
