@@ -268,6 +268,21 @@ pub fn return_exiled_to_battlefield(g: &mut dyn Game, item: &StackItem) -> Resul
     Ok(())
 }
 
+/// "Return it to the battlefield under its owner's control with a [counter] on it": the card the delayed ability set up by
+/// `exile_target_then_return_at_next_end_step` is about, or each card a merged permanent became (CR 730.3c), if still the card
+/// it was and still in exile (CR 603.7c, 400.7; a token has ceased to exist, CR 111.7), put onto the battlefield together
+/// (CR 101.4), each under its owner's control and entering with `counters` (CR 122.6). Parting Gust (a +1/+1 counter) and
+/// Salvation Swan (a flying counter) print it.
+pub fn return_exiled_with_counters(g: &mut dyn Game, item: &StackItem, counters: &[(CounterKind, i32)]) -> Result<(), Suspend> {
+    let cards = match item.subject {
+        Target::Object(card) => vec![card],
+        _ => g.event_objects(item).to_vec(),
+    };
+    let entering: Vec<(ObjectId, PlayerId, bool)> = crate::library::still_exiled(g, &cards).into_iter().map(|c| (c, g.obj(c).owner, false)).collect();
+    g.put_all_onto_battlefield_with_counters(&entering, counters)?;
+    Ok(())
+}
+
 /// "Return it to your hand": the delayed ability's subject, if it is still the object it was on the battlefield (CR 603.7c,
 /// 400.7); it goes to its owner's hand (CR 400.3), and `return_to_hand` leaves an object that has changed zones alone.
 /// Anzrag's Rampage prints it at the next end step.
