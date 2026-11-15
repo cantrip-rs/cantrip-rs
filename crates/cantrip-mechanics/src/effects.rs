@@ -3722,3 +3722,16 @@ pub fn unlock_a_locked_door(g: &mut dyn Game, player: PlayerId, source: ObjectId
     g.unlock_door(room, door, player);
     Ok(())
 }
+
+/// "Target creature gets +P/+T and gains reach until end of turn. Untap it." (CR 611.2a, 701.26a, 608.2b): the spell's first target,
+/// pumped and given reach for the rest of the turn as one sentence, then untapped; nothing for a target no longer legal as it resolves.
+/// Tethermage's Advantage (+2/+2) and High Stride (+1/+3) print it.
+pub fn first_target_gets_and_gains_reach_until_end_of_turn_then_untap<const P: i32, const T: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    instruction(g, |g| {
+        crate::pump(g, item.object, creature, P, T);
+        gain_until_end_of_turn(g, item.object, creature, Keyword::Reach);
+    });
+    g.untap(creature);
+    Ok(())
+}
