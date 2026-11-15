@@ -1,0 +1,54 @@
+# Flash on Bot2's turn: Bot2's Lightning Bolt (3 damage) targets Bot1's Grizzly Bears and Bot1 responds with Frantic Strength, so the 4/4
+# Bears survive with 3 damage marked (+2/+2, CR 704.5g). A second Bolt (3 more, 6 total >= 4) kills them, and Frantic Strength, no longer
+# attached to anything, is put into its owner's graveyard as a state-based action (CR 704.5m).
+
+[Bot1 Deck]
+Forest
+Grizzly Bears
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Frantic Strength
+Island x20
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Frantic Strength.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Grizzly Bears.Damage = 3
+? Bot1.Battlefield.Grizzly Bears.Toughness = 4
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Frantic Strength; Grizzly Bears
+Bot1.Battlefield.Count = 5
+Bot2.Graveyard = Lightning Bolt; Lightning Bolt; Black Lotus
+Stack.Count = 0
