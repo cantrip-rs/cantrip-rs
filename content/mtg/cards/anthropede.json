@@ -1,0 +1,11 @@
+{
+  "name": "Anthropede",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Insect",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Reach\nWhen this creature enters, you may discard a card or pay {2}. When you do, destroy target Room.",
+  "keywords": [
+    "Reach"
+  ]
+}

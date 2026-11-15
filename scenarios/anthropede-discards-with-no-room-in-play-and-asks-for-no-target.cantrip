@@ -1,0 +1,37 @@
+# With no Room anywhere the ability still resolves: Bot1 discards Lightning Bolt (the discard is a choice of the resolving
+# ability, not a cost), and the reflexive "destroy target Room" (CR 603.12) has no legal target, so the ability is removed from the stack
+# (CR 603.3d) and nothing is asked or destroyed.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Anthropede
+Lightning Bolt
+Mox Emerald
+Mox Jet
+Island
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Roaring Furnace // Steaming Sauna
+Island x14
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Anthropede.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Discard a card)
+Bot1.Choose(Lightning Bolt)
+! Bot1.Target
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Battlefield.Anthropede.Toughness = 4
+Stack.Count = 0
