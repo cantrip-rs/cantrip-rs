@@ -1,0 +1,54 @@
+# Drought's "Sacrifice a Swamp" is a land type in its text, which Magical Hack changes (CR 612.2): once its Swamp is Island,
+# Bot2's Dark Ritual is refused on turn 2 with only a Swamp out (and {B} from a Mox Jet to pay with), and on turn 4, with an
+# Island played beside the Swamp, the Ritual takes the Island and the Swamp stays. Bot1 pays the upkeep {W}{W} on turn 3.
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Drought
+Magical Hack
+Plains x20
+[Bot2 Deck]
+Swamp
+Mox Jet
+Dark Ritual
+Island
+Forest x20
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Drought.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Magical Hack.Cast(Bot1.Battlefield.Drought)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Swamp)
+Bot1.Modes(Island)
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot2.Hand.Dark Ritual.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.PayCost
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Dark Ritual.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Mana = {B}{B}{B}
+[Expect]
+Bot2.Graveyard = Dark Ritual; Island
+Bot2.Battlefield.Swamp.Tapped = false
+Bot2.Battlefield.Island = (absent)

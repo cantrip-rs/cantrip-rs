@@ -1,0 +1,71 @@
+# Drought's "black mana symbol" names a color with a color word of its text, which Sleight of Mind changes (CR 612.2): once
+# both its "black"s are "red", Bot2's Drowned "{B}: Regenerate" keeps Bot2's Swamp on turn 2, its Dark Ritual ({B}) keeps
+# the Swamp on turn 4, and its red Lightning Bolt then takes it. Bot1 pays the upkeep {W}{W} on turn 3.
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Drought
+Sleight of Mind
+Plains x20
+[Bot2 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Drowned
+Dark Ritual
+Lightning Bolt
+Forest x20
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Drought.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleight of Mind.Cast(Bot1.Battlefield.Drought)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Black)
+Bot1.Colors(Red)
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Drowned.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Drowned.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Swamp.Tapped = false
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.PayCost
+[T4 Bot2.Main1]
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Dark Ritual.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Swamp.Tapped = true
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Life = 17
+Bot2.Battlefield.Swamp = (absent)
+Bot2.Graveyard = Lightning Bolt; Swamp; Dark Ritual

@@ -1,0 +1,68 @@
+# Drought's additional "Sacrifice a Swamp" is paid as one choice of all the Swamps it asks (CR 601.2h), and that choice may be
+# given up, taking the cast or activation back (CR 601.2, 733): under Bot2's Drought, Bot1 casts Dark Ritual, pays its {B}
+# with a Swamp, and cancels at the Swamp to sacrifice - the Ritual is back in hand, the Swamp untapped, no mana floating and
+# both Swamps still out. The same for Drowned's "{B}: Regenerate". Then Bot1 casts the Ritual off Mox Jet and sacrifices a
+# Swamp: the cancelled payments cost nothing. Each cancel is at the Swamp to sacrifice, a choice of cards that must take one
+# (`! Bot1.Choose()`).
+[Bot1 Deck]
+Swamp
+Mox Sapphire
+Mox Jet
+Drowned
+Swamp
+Dark Ritual
+Island
+Island x20
+[Bot2 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Drought
+Island x20
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Drowned.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Drought.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Battlefield.Swamp.Activate
+! Bot1.Choose()
+Bot1.Cancel
+? Stack.Count = 0
+? Bot1.Mana =
+? Bot1.Hand.Dark Ritual.Colors = Black
+? Bot1.Battlefield.Swamp#1.Tapped = false
+? Bot1.Battlefield.Swamp#2.Tapped = false
+Bot1.Battlefield.Drowned.Activate
+Bot1.Battlefield.Swamp.Activate
+! Bot1.Choose()
+Bot1.Cancel
+? Stack.Count = 0
+? Bot1.Mana =
+? Bot1.Battlefield.Swamp#1.Tapped = false
+? Bot1.Battlefield.Swamp#2.Tapped = false
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {B}{B}{B}
+[Expect]
+Turn = 3
+Bot1.Graveyard = Dark Ritual; Swamp
+Bot1.Battlefield.Swamp.Tapped = false
+Bot1.Battlefield.Drowned.Types = Creature

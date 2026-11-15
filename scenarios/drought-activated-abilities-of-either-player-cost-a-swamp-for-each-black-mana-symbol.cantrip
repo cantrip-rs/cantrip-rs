@@ -1,0 +1,84 @@
+# Drought: "Activated abilities cost an additional "Sacrifice a Swamp" to activate for each black mana symbol in their
+# activation costs." (CR 118.8, 602.2b), and "At the beginning of your upkeep, sacrifice this enchantment unless you pay
+# {W}{W}." Bot2 casts the blue Drowned with its Swamp out and keeps the Swamp (a spell with no black symbol), then activates
+# Drowned's "{B}: Regenerate" with the Swamp's own mana and sacrifices it; with no Swamp left that ability is refused, though
+# an untapped Mox Jet could pay its {B}.
+# Bot1's Fetid Heath "{W/B}, {T}: Add ..." is a mana ability whose hybrid {W/B} is a black mana symbol (the ruling, CR
+# 107.4e): refused on turn 3 with no Swamp, it takes the Swamp on turn 5. Bot1 pays the upkeep {W}{W} exactly on turns 3
+# and 5 and declines on turn 7: Drought is sacrificed, and the Heath's ability then costs no Swamp.
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Mox Jet
+Drought
+Fetid Heath
+Swamp
+Island x20
+[Bot2 Deck]
+Swamp
+Mox Sapphire
+Mox Emerald
+Drowned
+Mox Jet
+Island x20
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Drought.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Drowned.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Swamp.Tapped = false
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Drowned.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Swamp
+! Bot2.Battlefield.Drowned.Activate
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.PayCost
+[T3 Bot1.Main1]
+Bot1.Hand.Fetid Heath.Play
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Fetid Heath.Activate(Ability: {W/B}, {T})
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.PayCost
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Fetid Heath.Activate(Ability: {W/B}, {T})
+Bot1.Colors(Black; Black)
+? Bot1.Mana = {B}{B}
+? Bot1.Battlefield.Swamp = (absent)
+[T7 Bot1.Upkeep]
+Bot1.Pass
+! Bot1.PayCost
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Fetid Heath.Activate(Ability: {W/B}, {T})
+Bot1.Colors(Black; Black)
+? Bot1.Mana = {B}{B}
+[Expect]
+Bot1.Battlefield.Drought = (absent)
+Bot1.Graveyard = Drought; Swamp; Black Lotus
+Bot2.Graveyard = Swamp
+Bot2.Battlefield.Drowned.Types = Creature
