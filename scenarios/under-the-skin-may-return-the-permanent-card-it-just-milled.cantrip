@@ -1,0 +1,34 @@
+# Under the Skin: "Manifest dread. You may return a permanent card from your graveyard to your hand." (CR 701.62a, 608.2c). The manifest dread is
+# done first, so the card it put into the graveyard is among the cards to choose from: Snapcaster Mage is manifested, the Island is milled, and the
+# Island (a permanent card, CR 110.4a) is returned to the hand.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Under the Skin
+Island x3
+Snapcaster Mage
+Island
+Island x10
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Under the Skin.Cast
+Bot1.Arrange(Snapcaster Mage | Island)
+Bot1.Choose(Island)
+? Bot1.Battlefield..FaceDownName = Snapcaster Mage
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island
+Bot1.Graveyard = Under the Skin
+Bot1.Battlefield.Count = 4
+Bot1.Library.Count = 10
