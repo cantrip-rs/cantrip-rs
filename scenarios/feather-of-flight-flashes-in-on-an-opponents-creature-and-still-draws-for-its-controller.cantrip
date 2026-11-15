@@ -1,0 +1,49 @@
+# Feather of Flight has flash (CR 702.8a) and can enchant any creature, an opponent's too: on Bot2's turn, with its Dwarven Trader entering, Bot1
+# flashes the Feather onto it (in response to nothing, with the Trader resolved), draws a card, and the Trader is a 2/1 flier.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Eager Cadet
+Feather of Flight
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Dwarven Trader
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Eager Cadet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Dwarven Trader.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Feather of Flight.Cast(Bot2.Battlefield.Dwarven Trader)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Dwarven Trader.Power = 2
+? Bot2.Battlefield.Dwarven Trader.Keywords = Flying
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+[T3 Bot1.Main1]
+
+[Expect]
+Bot2.Battlefield.Dwarven Trader.Power = 2
