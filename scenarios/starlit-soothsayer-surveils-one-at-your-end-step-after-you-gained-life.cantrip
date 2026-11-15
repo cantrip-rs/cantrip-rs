@@ -1,0 +1,40 @@
+# Starlit Soothsayer: "At the beginning of your end step, if you gained or lost life this turn, surveil 1." Bot1 casts it on turn 1 and
+# gains 3 life with Healing Salve; at the end step it surveils 1 and puts the top card (Swamp) into the graveyard, the next card staying on top.
+
+[Bot1 Deck]
+Black Lotus
+Starlit Soothsayer
+Healing Salve
+Plains
+Plains
+Plains
+Plains
+Swamp
+Island
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Starlit Soothsayer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+Bot1.Arrange( | Swamp)
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 23
+Bot1.Graveyard = Swamp; Healing Salve; Black Lotus
+Bot1.Library.Top = Island
+Bot1.Library.Count = 11
