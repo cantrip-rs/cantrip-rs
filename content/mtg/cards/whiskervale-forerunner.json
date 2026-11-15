@@ -1,0 +1,8 @@
+{
+  "name": "Whiskervale Forerunner",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Mouse Bard",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Valiant — Whenever this creature becomes the target of a spell or ability you control for the first time each turn, look at the top five cards of your library. You may reveal a creature card with mana value 3 or less from among them. You may put it onto the battlefield if it's your turn. If you don't put it onto the battlefield, put it into your hand. Put the rest on the bottom of your library in a random order."
+}

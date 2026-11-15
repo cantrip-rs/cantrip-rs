@@ -1,0 +1,60 @@
+# Whiskervale Forerunner's valiant (CR 603.2): Bot1's Healing Salve targets the Forerunner on Bot1's own turn, so it looks at the top
+# five cards (Island, Hill Giant, Ornithopter, Plains, Memnite - the fifth card counts, the Forest sixth does not), reveals the Memnite
+# (a creature card of mana value 0) and puts it onto the battlefield untapped because it is Bot1's turn. Hill Giant (mana value 4)
+# cannot be chosen, and only one card may be: the other four go to the bottom, leaving the Forest on top.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Gleemox
+Whiskervale Forerunner
+Healing Salve
+Plains
+Plains
+Island
+Hill Giant
+Ornithopter
+Plains
+Memnite
+Forest
+Plains x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Whiskervale Forerunner.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Prevent the next 3 damage)
+Bot1.Target(Bot1.Battlefield.Whiskervale Forerunner)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Hill Giant)
+! Bot1.Choose(Memnite; Ornithopter)
+Bot1.Choose(Memnite)
+? Bot1.Revealed = Memnite
+Bot1.Accept
+? Bot1.Battlefield = Mox Pearl; Gleemox; Whiskervale Forerunner; Memnite
+? Bot1.Hand.Count = 2
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Gleemox; Whiskervale Forerunner; Memnite
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Hand.Count = 2
+Bot1.Library.Count = 13
+Bot1.Library.Top = Forest
+Bot1.Graveyard = Healing Salve; Black Lotus
+Stack.Count = 0

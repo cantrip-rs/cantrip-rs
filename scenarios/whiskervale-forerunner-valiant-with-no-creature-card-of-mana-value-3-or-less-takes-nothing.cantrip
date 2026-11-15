@@ -1,0 +1,53 @@
+# Whiskervale Forerunner with nothing to take: the top five are an Island, Hill Giant (mana value 4) and three Plains, and a Memnite
+# is only sixth, so no card may be revealed. Bot1 still looks at them and all five go to the bottom (the Memnite is then on top):
+# the hand and the battlefield do not change.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Gleemox
+Whiskervale Forerunner
+Healing Salve
+Plains
+Plains
+Island
+Hill Giant
+Plains
+Plains
+Plains
+Memnite
+Plains x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Whiskervale Forerunner.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Prevent the next 3 damage)
+Bot1.Target(Bot1.Battlefield.Whiskervale Forerunner)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Hill Giant)
+! Bot1.Choose(Memnite)
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Gleemox; Whiskervale Forerunner
+Bot1.Hand = Plains; Plains
+Bot1.Library.Count = 14
+Bot1.Library.Top = Memnite
+Bot1.Looked = Island; Hill Giant; Plains; Plains; Plains
+Stack.Count = 0

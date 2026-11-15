@@ -1,0 +1,55 @@
+# Whiskervale Forerunner's valiant is "for the first time each turn" (CR 603.2): the first Healing Salve on it looks at the top five
+# and puts the Memnite onto the battlefield; a second Healing Salve targeting it the same turn triggers nothing, so the Salve is the
+# only thing on the stack and nobody is asked anything.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Pearl
+Gleemox
+Whiskervale Forerunner
+Healing Salve
+Healing Salve
+Memnite
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Whiskervale Forerunner.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Prevent the next 3 damage)
+Bot1.Target(Bot1.Battlefield.Whiskervale Forerunner)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite)
+Bot1.Accept
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Library.Count = 15
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Prevent the next 3 damage)
+Bot1.Target(Bot1.Battlefield.Whiskervale Forerunner)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 15
+
+[Expect]
+Stack.Count = 0
+Bot1.Library.Count = 15
+Bot1.Graveyard = Healing Salve; Healing Salve; Black Lotus

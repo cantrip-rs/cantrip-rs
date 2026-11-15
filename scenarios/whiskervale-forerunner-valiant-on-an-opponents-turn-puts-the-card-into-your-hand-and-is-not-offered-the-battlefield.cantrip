@@ -1,0 +1,55 @@
+# Whiskervale Forerunner's valiant on Bot2's turn: Bot1 flashes in a Healing Salve on its own Forerunner during Bot2's turn. "You may put
+# it onto the battlefield if it's your turn" does not apply (CR 608.2c), so Bot1 is not asked: the revealed Thistledown Players (mana value 3)
+# goes into Bot1's hand. A creature card with mana value 4 (Hill Giant) cannot be revealed.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Gleemox
+Whiskervale Forerunner
+Healing Salve
+Plains
+Plains
+Island
+Hill Giant
+Thistledown Players
+Plains
+Plains
+Forest
+Plains x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Whiskervale Forerunner.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Prevent the next 3 damage)
+Bot1.Target(Bot1.Battlefield.Whiskervale Forerunner)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Hill Giant)
+Bot1.Choose(Thistledown Players)
+? Bot1.Hand = Plains; Plains; Thistledown Players
+? Bot1.Battlefield = Mox Pearl; Gleemox; Whiskervale Forerunner
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Gleemox; Whiskervale Forerunner
+Bot1.Hand = Plains; Plains; Thistledown Players
+Bot1.Library.Count = 13
+Bot1.Library.Top = Forest
+Stack.Count = 0
