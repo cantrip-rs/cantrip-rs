@@ -869,7 +869,9 @@ pub fn this_gets_and_gains_flying<const P: i32, const T: i32>(g: &mut dyn Game, 
     this_gets_and_gains(g, item, P, T, Keyword::Flying)
 }
 
-fn creatures_on_the_battlefield(g: &dyn Game) -> Vec<ObjectId> {
+/// Every creature on the battlefield right now, whoever controls it, in battlefield order: what "all creatures" means as a
+/// spell resolves (CR 608.2c). Day of Judgment, Wrath of God and Starfall Invocation destroy them.
+pub fn creatures_on_the_battlefield(g: &dyn Game) -> Vec<ObjectId> {
     g.state().battlefield().iter().copied().filter(|&id| g.chars(id).is(CardType::Creature)).collect()
 }
 
