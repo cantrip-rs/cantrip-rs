@@ -10,11 +10,9 @@ fn put_permanent_card(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
 }
 
 pub static CARD: CardDef = CardDef {
-    abilities: &[triggered(
-        triggers::YOUR_SECOND_MAIN_PHASE,
+    abilities: &[triggers::survival(
         put_permanent_card,
         "Survival \u{2014} At the beginning of your second main phase, if Kona is tapped, you may put a permanent card from your hand onto the battlefield.",
-    )
-    .condition(triggers::this_is_tapped)],
+    )],
     ..oracle::KONA_RESCUE_BEASTIE
 };
