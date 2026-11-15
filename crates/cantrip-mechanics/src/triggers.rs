@@ -722,11 +722,18 @@ pub fn this_enters_or_attacks(q: &dyn Query, source: ObjectId, event: &Event) ->
     this_enters(q, source, event).or_else(|| this_attacks(q, source, event))
 }
 
+/// "When you sacrifice this permanent" (CR 603.2, 701.21a): its controller sacrificing it, read as it last was on the battlefield.
+/// The ability is `.on_sacrifice()`, which looks back (CR 603.10a). Disturbing Mirth and Ordeal of Nylea print it. The `listens` mask
+/// is `ZONE_CHANGE`.
+pub fn you_sacrifice_this(q: &dyn Query, asker: &Asker, event: &Event) -> Option<Fired> {
+    if sacrificed_by(q, asker.controller, event) == Some(asker.source) { Fired::PLAIN } else { None }
+}
+
 /// "When this permanent enters and when you sacrifice it" (CR 603.2, 603.6a, 701.21a): one triggered ability with two conditions,
 /// its own entering the battlefield, or its controller sacrificing it, read as it last was on the battlefield. The ability is
 /// `.on_sacrifice()`, which looks back (CR 603.10a). Carrot Cake and Heaped Harvest print it. The `listens` mask is `ZONE_CHANGE`.
 pub fn this_enters_or_you_sacrifice_it(q: &dyn Query, asker: &Asker, event: &Event) -> Option<Fired> {
-    this_enters(q, asker.source, event).or_else(|| if sacrificed_by(q, asker.controller, event) == Some(asker.source) { Fired::PLAIN } else { None })
+    this_enters(q, asker.source, event).or_else(|| you_sacrifice_this(q, asker, event))
 }
 
 /// "Whenever this creature attacks" where the ability is about whom it attacks: the player attacked, or the
@@ -2872,6 +2879,7 @@ fn a_player_casts_their_second_spell(_: &dyn Query, _: ObjectId, event: &Event) 
 
 pub const A_PLAYER_CASTS_THEIR_SECOND_SPELL: Trigger = when(EventMask::SPELL_CAST, a_player_casts_their_second_spell);
 pub const THIS_ENTERS_OR_YOU_SACRIFICE_IT: Trigger = when_asked(EventMask::ZONE_CHANGE, this_enters_or_you_sacrifice_it);
+pub const YOU_SACRIFICE_THIS: Trigger = when_asked(EventMask::ZONE_CHANGE, you_sacrifice_this);
 pub const THIS_ENTERS_OR_ATTACKS: Trigger = when(EventMask(EventMask::ZONE_CHANGE.0 | EventMask::ATTACKS.0), this_enters_or_attacks);
 pub const THIS_ATTACKS_DEFENDER: Trigger = when(EventMask::ATTACKS, this_attacks_defender);
 pub const EQUIPPED_CREATURE_ATTACKS: Trigger = when(EventMask::ATTACKS, equipped_creature_attacks);
