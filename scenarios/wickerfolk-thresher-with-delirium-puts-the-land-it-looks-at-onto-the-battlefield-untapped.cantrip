@@ -1,0 +1,50 @@
+# Wickerfolk Thresher, "Delirium — Whenever this creature attacks, if there are four or more card types among cards in your graveyard, look at the
+# top card of your library. If it's a land card, you may put it onto the battlefield. If you don't put the card onto the battlefield, put it into your
+# hand." Turn 1: Faithless Looting (sorcery) draws the Thresher and a Forest and discards Ornithopter (artifact, creature) and Lightning Bolt (instant):
+# four types, so delirium. Turn 3 the Thresher attacks (the draw was an Island); the Mountain on top of the library is looked at and put onto the
+# battlefield untapped (not tapped, CR 305.1: it is not played, so no land drop is used), and it is not put into the hand (CR 603.4, 701.20a).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Faithless Looting
+Ornithopter
+Lightning Bolt
+Wickerfolk Thresher
+Forest
+Island
+Mountain
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot1.Choose(Ornithopter; Lightning Bolt)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Wickerfolk Thresher.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Wickerfolk Thresher > Bot2)
+Bot1.Accept
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Mountain.Tapped = false
+Bot1.Hand = Island
+Bot1.Graveyard.Count = 3
+Bot1.LandsPlayed = 0
+Bot2.Life = 15
