@@ -47,6 +47,13 @@ pub fn except_by_haste(q: &dyn Query, on: ObjectId, blocker: ObjectId, attacker:
 /// The `LastingBlockRule` of `except_by_haste`.
 pub const EXCEPT_BY_HASTE: LastingBlockRule = LastingBlockRule { text: "Can't be blocked except by creatures with haste", allows: except_by_haste };
 
+/// "This creature must be blocked if able" (CR 509.1c) as a `CardDef::must_be_blocked` entry: the requirement is on this creature as
+/// an attacker, and any creature that can block it obeys it. A creature that can't be blocked, or that nothing able to block can
+/// reach, is required nothing (the rulings). Vinebred Brawler, Raphael, Ninja Destroyer and Fear of Being Hunted print it.
+pub fn this_must_be_blocked_if_able(_: &dyn Query, source: ObjectId, attacker: ObjectId) -> bool {
+    attacker == source
+}
+
 /// "An unblocked creature" (CR 509.1h, 508.4d): an attacking creature that is not blocked, from the declare blockers step on -
 /// before blockers are declared an attacking creature is neither blocked nor unblocked. Veteran Bodyguard, Kjeldoran Royal Guard
 /// and Forcefield print it, and ninjutsu and sneak return one (`unblocked_attacker_you_control`).
