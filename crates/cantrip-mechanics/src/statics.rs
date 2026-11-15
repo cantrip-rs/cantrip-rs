@@ -185,8 +185,14 @@ pub fn itself_during_your_turn(q: &dyn LayerQuery, source: ObjectId, affected: O
 /// Threshold's "as long as there are seven or more cards in your graveyard" (CR 207.2c,
 /// 604.1), affecting only itself. Decaying Soil and Void Extrapolator print it.
 pub fn itself_with_threshold(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, _: &Chars) -> bool {
+    source == affected && source_has_threshold(q, source)
+}
+
+/// Whether seven or more cards are in the graveyard of `source`'s controller (CR 207.2c), each asked again whenever
+/// characteristics are computed: the condition of a threshold static that affects more than the source itself (Mindwhisker).
+pub fn source_has_threshold(q: &dyn LayerQuery, source: ObjectId) -> bool {
     let state = q.state();
-    source == affected && state.zone(Zone::graveyard(state.obj(source).controller)).len() >= 7
+    state.zone(Zone::graveyard(state.obj(source).controller)).len() >= 7
 }
 
 /// The number of cards of a card type in the graveyard of `source`'s controller (never tokens, CR 111.7), each judged as the layers
