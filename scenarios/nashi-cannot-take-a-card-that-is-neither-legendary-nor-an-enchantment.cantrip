@@ -1,0 +1,35 @@
+# Nashi, Searcher in the Dark: of the two milled cards, Rancor (an enchantment) and Dark Ritual (an instant, neither legendary nor
+# an enchantment), only Rancor may be put into hand: choosing Dark Ritual is refused. Taking one card still means no counter.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Nashi, Searcher in the Dark
+Island
+Island
+Island
+Island
+Island
+Rancor
+Dark Ritual
+Island
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Nashi, Searcher in the Dark.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Nashi, Searcher in the Dark)
+! Bot1.Choose(Dark Ritual)
+Bot1.Choose(Rancor)
+
+[Expect]
+Bot1.Graveyard = Dark Ritual
+Bot1.Hand = Island; Island; Island; Island; Island; Rancor
+Bot1.Battlefield.Nashi, Searcher in the Dark.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Nashi, Searcher in the Dark.Power = 2
