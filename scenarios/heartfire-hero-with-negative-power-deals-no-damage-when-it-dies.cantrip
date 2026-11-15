@@ -1,0 +1,40 @@
+# Heartfire Hero's death trigger deals damage equal to its power. Bot2's Last Gasp on turn 2 gives the 1/1 -3/-3, so it dies with
+# power -2 as it last existed (CR 608.2h). A negative power means no damage is dealt (CR 120.8), so the trigger resolves
+# and neither Bot2 nor Bot1 changes life (both stay at 20); it must not deal 1 or 0-clamped-up damage.
+
+[Bot1 Deck]
+Mox Ruby
+Heartfire Hero
+Island x5
+Island x13
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Last Gasp
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Heartfire Hero.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Last Gasp.Cast(Bot1.Battlefield.Heartfire Hero)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Heartfire Hero
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot1.Life = 20
+Stack.Count = 0
+Bot1.Graveyard = Heartfire Hero

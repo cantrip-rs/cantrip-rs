@@ -1,0 +1,35 @@
+# Heartfire Hero with no counters has power 1, so when it dies (Bot2's Lightning Bolt on turn 2) its death trigger deals 1
+# damage to each opponent: Bot2 goes from 20 to 19 (CR 603.10a, 120.3). Bot1, its controller, loses no life.
+
+[Bot1 Deck]
+Mox Ruby
+Heartfire Hero
+Island x5
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Heartfire Hero.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Heartfire Hero)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Heartfire Hero
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 20
+Stack.Count = 0

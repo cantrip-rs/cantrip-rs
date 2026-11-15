@@ -1,0 +1,58 @@
+# Heartfire Hero's valiant triggers "for the first time each turn" (CR 603.2). Turn 1: Bot1 casts the Hero, then Snakeskin Veil
+# (a spell Bot1 controls, which puts its own +1/+1 counter on the target) on it: the first targeting this turn, so valiant puts
+# a counter on it before the Veil resolves (3 counters... see the checks: 2 after the trigger and the Veil), and a second Veil
+# the same turn is not the first time, so only the Veil's own counter arrives (3 counters, a 4/4). Turn 3 is a new turn: a
+# third Veil is the first time again, so it gets the Veil's counter plus valiant's (5 counters, a 6/6).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Heartfire Hero
+Snakeskin Veil
+Snakeskin Veil
+Snakeskin Veil
+Forest
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Heartfire Hero.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Heartfire Hero.Power = 1
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Snakeskin Veil.Cast(Heartfire Hero)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Heartfire Hero.Counters.PlusOnePlusOne = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Heartfire Hero.Counters.PlusOnePlusOne = 2
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Snakeskin Veil.Cast(Heartfire Hero)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Heartfire Hero.Counters.PlusOnePlusOne = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Snakeskin Veil.Cast(Heartfire Hero)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Heartfire Hero.Counters.PlusOnePlusOne = 5
+Bot1.Battlefield.Heartfire Hero.Power = 6
+Bot1.Battlefield.Heartfire Hero.Toughness = 6
+Bot1.Graveyard = Snakeskin Veil; Snakeskin Veil; Snakeskin Veil
+Stack.Count = 0

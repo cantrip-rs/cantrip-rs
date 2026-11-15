@@ -1,0 +1,64 @@
+# Heartfire Hero's valiant counts only spells and abilities ITS CONTROLLER controls, and its death trigger reads its power as it
+# last was on the battlefield (CR 603.2, 608.2h, 113.7a). Turn 1: Bot1 casts the Hero and Basilisk Collar and pays equip {2},
+# which targets the Hero: valiant puts a +1/+1 counter on it (a 2/2). Turn 2: Bot2 Lightning Bolts the Hero. That targeting is
+# not Bot1's, so valiant does not trigger again (the stack holds only the Bolt, and the counter count stays 1). The Bolt kills
+# the 2/2, and its death trigger deals 2 (its last power, counter included) to Bot2, who goes from 20 to 18. The Collar gave it
+# lifelink, which it still has as it last existed (CR 702.15b, 608.2h), so Bot1 gains 2 (22).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Heartfire Hero
+Basilisk Collar
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Heartfire Hero.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Basilisk Collar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Basilisk Collar.Activate(Heartfire Hero)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Heartfire Hero.Counters.PlusOnePlusOne = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Heartfire Hero.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Heartfire Hero)
+Bot2.Battlefield.Mox Ruby.Activate
+? Stack.Count = 1
+? Bot1.Battlefield.Heartfire Hero.Counters.PlusOnePlusOne = 1
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Heartfire Hero
+? Bot2.Life = 20
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22
+Stack.Count = 0
+Bot1.Graveyard = Heartfire Hero
