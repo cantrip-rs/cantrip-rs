@@ -1,0 +1,63 @@
+# Jackdaw Savior also triggers when another creature you control with flying dies (CR 603.10a), and "lesser" is measured against THAT creature's mana
+# value, not the Savior's: Bot2's Lightning Bolt kills Bot1's Suntail Hawk (mana value 1), so of the Memnite (0) and Grizzly Bears (2) in the graveyard only
+# the Memnite is a legal target. It returns; the Savior stays on the battlefield.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Entomb
+Entomb
+Plains
+Suntail Hawk
+Jackdaw Savior
+Plains
+Memnite
+Grizzly Bears
+Plains x18
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Suntail Hawk.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Grizzly Bears)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Jackdaw Savior.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Jackdaw Savior.Power = 3
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Suntail Hawk)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Jackdaw Savior.Power = 3
+Bot1.Graveyard = Suntail Hawk; Entomb; Grizzly Bears; Entomb
