@@ -1,0 +1,58 @@
+# "For each 1 damage prevented this way" (CR 615.7, 616.1): only what Sacred Boon's own shield prevented counts, not another
+# shield's on the same creature. Bot1's Ornithopter gets Healing Salve's shield (3) and Sacred Boon's (3) in response to Bot2's
+# first Shock; Bot1 has the Salve apply first to each Shock: it prevents all of the first (2) and the last 1 of the second,
+# leaving 1 for Sacred Boon. 4 damage was prevented to the Ornithopter in all, but only 1 by Sacred Boon: at the end step it
+# gets 1 +0/+1 counter.
+
+[Bot1 Deck]
+Ornithopter
+Mox Pearl
+Mox Jet
+Plains
+Healing Salve
+Sacred Boon
+Plains
+Plains x10
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Shock
+Shock
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Prevent the next 3 damage)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sacred Boon.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Replace(Healing Salve)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Replace(Healing Salve)
+? Bot1.Battlefield.Ornithopter.Damage = 0
+[T3 Bot1.Upkeep]
+
+[Expect]
+Prevented = 2 Shock > Ornithopter by Healing Salve; 1 Shock > Ornithopter by Healing Salve; 1 Shock > Ornithopter by Sacred Boon
+Bot1.Battlefield.Ornithopter.Counters.Plus0Plus1 = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3

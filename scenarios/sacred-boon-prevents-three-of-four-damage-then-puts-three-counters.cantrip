@@ -1,0 +1,65 @@
+# Sacred Boon on your own creature (CR 615.7, 603.7): a shield of the next 3 damage, then at the beginning of the next end step
+# a +0/+1 counter for each 1 damage it prevented. Bot1's Ornithopter (0/2) is Shocked twice on Bot2's turn 2, Sacred Boon cast
+# in response to the first: the first Shock is prevented whole (2), the second only in part (1 of 2, the shield's last) and 1
+# is dealt - the shield counts damage, not events. At the end step of the same turn (the next one to begin) the Ornithopter
+# gets 3 counters, as one placement, its power unchanged.
+
+[Bot1 Deck]
+Ornithopter
+Mox Pearl
+Mox Jet
+Sacred Boon
+Plains
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Shock
+Shock
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sacred Boon.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Damage = 0
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Ornithopter.Damage = 1
+? Bot1.Battlefield.Ornithopter.Counters.Plus0Plus1 = (absent)
+[T2 Bot2.End]
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Ornithopter.Toughness = 5
+[T3 Bot1.Upkeep]
+
+[Expect]
+Prevented = 2 Shock > Ornithopter by Sacred Boon; 1 Shock > Ornithopter by Sacred Boon
+Bot1.Battlefield.Ornithopter.Counters.Plus0Plus1 = 3
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 5
