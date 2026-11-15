@@ -1,0 +1,6 @@
+{
+  "name": "Threats Around Every Corner",
+  "manaCost": "{3}{G}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, manifest dread.\nWhenever a face-down permanent you control enters, search your library for a basic land card, put it onto the battlefield tapped, then shuffle."
+}
