@@ -531,7 +531,10 @@ pub fn begin_step(cx: &mut Cx) -> R<Flow> {
     if turn.step() != Step::Untap {
         // CR 103.8a skips the first draw STEP, including its triggers and priority, not just its draw action.
         let first_draw = turn.step() == Step::Draw && turn.number == 1 && active == turn.starting && cx.s().players.len() == 2 && !turn.phase_additional;
-        if first_draw || crate::static_rules::skips_step(cx, active, turn.step()) {
+        if first_draw
+            || (turn.step() == Step::Draw && skip_draw_step(cx, active)?)
+            || crate::static_rules::skips_step(cx, active, turn.step())
+        {
             return Ok(Flow::Done);
         }
         crate::settle::step_began(cx, turn.step());
@@ -654,6 +657,34 @@ fn take_controlled_turn(cx: &mut Cx, player: PlayerId) {
     }
     // An effect that begins changes the game with no event (CR 603.8).
     cx.state_changed();
+}
+
+/// Whether the active player skips their draw step, about to begin, by a permanent's "if you would begin your draw step,
+/// you may skip that step instead. If you do, ..." (Fasting, `CardDef::step_begin`; CR 614.10, 500.11): of a permanent the
+/// player controls, which they may decline. Each that applies is offered in turn, and the first accepted skips the step and
+/// does what it says it does then. A static ability's "skip your draw step" (Necropotence, `CardDef::skip_steps`), which
+/// must be applied, is asked after: with both, the player chooses which applies (CR 616.1), and accepting an optional one
+/// is choosing it while declining it leaves the step to the effect that must skip it - the outcomes the choice of CR 616.1
+/// offers, no more and no fewer. Nothing is asked when no optional one applies. What an accepted one does then is the first
+/// thing to happen after the skipped step: nothing comes between it and the next step (CR 614.10b).
+fn skip_draw_step(cx: &mut Cx, player: PlayerId) -> R<bool> {
+    // Each definition of each permanent the player controls with such a rule, a merged permanent's other components'
+    // among them (CR 702.140e), each asked as its own card's; a permanent that lost all its abilities has none
+    // (CR 613.1f). An empty list allocates nothing.
+    let optional: Vec<(ObjectId, Option<Linked>, &'static StepBeginRule)> = cx.s().battlefield().iter()
+        .filter(|&&id| cx.s().obj(id).controller == player)
+        .flat_map(|&id| cx.cards().texts_linked(cx.s(), id).map(move |(card, by)| (id, card, by)))
+        .flat_map(|(id, card, by)| cx.card(card).step_begin.iter().map(move |rule| (id, by, rule)))
+        .filter(|&(id, _, _)| !cx.lost_all_abilities(id))
+        .collect();
+    for (id, by, rule) in optional {
+        if cx.ask_rule(player, RequestKind::May { source: id, purpose: Purpose::Ask(rule.question) })? == Some(Answer::Yes) {
+            // A replacement effect's own doing, its controller's (CR 609.1, 614.10).
+            cx.acting_as(player, |cx| (rule.on_skip)(cx, &Asker { instance: None, source: id, controller: player, by, spell: false }))?;
+            return Ok(true);
+        }
+    }
+    Ok(false)
 }
 
 /// What the effect that makes a player skip their next turn does, for the player who orders it with an optional skip of the

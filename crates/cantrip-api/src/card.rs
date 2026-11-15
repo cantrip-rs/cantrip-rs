@@ -3070,6 +3070,19 @@ pub struct TurnBeginRule {
     pub hint: &'static str,
 }
 
+/// A replacement of the draw step beginning (CR 614.10, 500.11): "if you would begin your draw step, you may skip that step
+/// instead. If you do, [on_skip]". Fasting. It is the draw step of its controller's turn alone that it may skip, and nothing
+/// of a skipped draw step happens: no draw, no "at the beginning of" trigger, no priority. A static ability that must skip
+/// the same step (`SkipStep`: Necropotence) leaves its controller the choice which applies (CR 616.1), so it is still asked:
+/// declining leaves the step to the effect that must skip it.
+#[derive(Clone, Copy)]
+pub struct StepBeginRule {
+    /// What the effect does once its controller has chosen to skip the draw step.
+    pub on_skip: fn(&mut dyn Game, &Asker) -> Result<(), Suspend>,
+    /// What its controller is asked, in the card's words.
+    pub question: &'static Question,
+}
+
 /// The condition of a "for as long as" duration a card's spell or ability gives its effect (CR 611.2b), as
 /// `Duration::AsLongAs`: Old Man of the Sea's "for as long as this creature remains tapped and that creature's power remains
 /// less than or equal to this creature's power".
@@ -3977,6 +3990,8 @@ pub struct CardDef {
     pub cause_rules: &'static [CauseRule],
     /// Its replacements of its controller's turn beginning (CR 614.10).
     pub turn_begin: &'static [TurnBeginRule],
+    /// Its replacements of its controller's draw step beginning (CR 614.10).
+    pub step_begin: &'static [StepBeginRule],
     /// The conditions of the "for as long as" durations its spells and abilities give their effects (CR 611.2b), which a
     /// `Duration::AsLongAs` names by index.
     pub lasting: &'static [Lasting],
@@ -4178,6 +4193,7 @@ impl CardDef {
         activate_as_though_haste: &[],
         cause_rules: &[],
         turn_begin: &[],
+        step_begin: &[],
         lasting: &[],
         may_not_untap: false,
         untap_in_others_untap_steps: &[],
@@ -4289,6 +4305,7 @@ impl CardDef {
             (!self.activate_as_though_haste.is_empty(), "activating as though with haste"),
             (!self.cause_rules.is_empty(), "cause rules"),
             (!self.turn_begin.is_empty(), "a turn-begin replacement"),
+            (!self.step_begin.is_empty(), "a step-begin replacement"),
             (!self.untap_in_others_untap_steps.is_empty(), "untapping in others' untap steps"),
             (!self.instant_activation.is_empty(), "instant-speed activation rules"),
             (!self.flash_rules.is_empty(), "flash rules"),
