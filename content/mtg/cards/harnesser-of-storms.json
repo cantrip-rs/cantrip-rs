@@ -1,0 +1,8 @@
+{
+  "name": "Harnesser of Storms",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Otter Wizard",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Whenever you cast a noncreature or Otter spell, you may exile the top card of your library. Until end of turn, you may play that card. This ability triggers only once each turn."
+}

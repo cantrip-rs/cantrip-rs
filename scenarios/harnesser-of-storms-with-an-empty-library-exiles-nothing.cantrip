@@ -1,0 +1,38 @@
+# Harnesser of Storms. Bot1's whole deck is the seven cards in hand, so the library is empty. A noncreature spell still triggers it,
+# and it resolves exiling nothing (CR 701.13 only moves the cards there are): no card is in exile and Bot1 can carry on.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Harnesser of Storms
+Mox Emerald
+Sol Ring
+Lightning Bolt
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Harnesser of Storms.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Exile.Count = 0
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Emerald.Tapped = false
+
+[Expect]
+Bot1.Library.Count = 0

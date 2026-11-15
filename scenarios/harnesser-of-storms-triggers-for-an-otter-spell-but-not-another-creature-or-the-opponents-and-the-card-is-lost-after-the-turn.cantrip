@@ -1,0 +1,68 @@
+# Harnesser of Storms. Turn 1: Memnite (a creature, not an Otter) does not trigger it. Elusive Otter (an Otter creature spell) does:
+# Bot1 exiles the top card, a Mountain, and chooses not to play it. Turn 2: Bot2's Mox Ruby is not a spell Bot1 cast (CR 603.2): no
+# trigger. Turn 3: the Mountain is no longer playable (CR 611.2a, "until end of turn" has ended), and the second turn's Lightning Bolt
+# triggers it again (and Elusive Otter's prowess), which Bot1 declines, so the next Mountain stays in the library (still only one card in exile).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Harnesser of Storms
+Elusive Otter
+Memnite
+Mountain
+Lightning Bolt
+Mountain
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Harnesser of Storms.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Elusive Otter.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Exile = Mountain
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Exile.Count = 1
+[T3 Bot1.Main1]
+! Bot1.Exile.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Triggers(Harnesser of Storms; Elusive Otter)
+? Stack.Count = 3
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 1
+
+[Expect]
+Bot2.Life = 17

@@ -1,0 +1,58 @@
+# Harnesser of Storms. Turn 1: after the Harnesser resolves, Bot1 casts Mox Emerald (a noncreature spell) and the trigger exiles the
+# top card, a Mountain, which Bot1 plays from exile as the land drop (CR 305.1). Sol Ring is a second noncreature spell the same turn:
+# the ability triggers only once each turn (CR 603.2g), so nothing is on the stack but Sol Ring itself and no question is asked.
+# Turn 3: it triggers again; Lightning Bolt (a noncreature spell) exiles the next Mountain and Bot1 plays that one too.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Harnesser of Storms
+Mox Emerald
+Sol Ring
+Lightning Bolt
+Mountain
+Island
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Harnesser of Storms.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Exile = Mountain
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Exile.Mountain.Play
+Bot1.Hand.Sol Ring.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Exile.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
