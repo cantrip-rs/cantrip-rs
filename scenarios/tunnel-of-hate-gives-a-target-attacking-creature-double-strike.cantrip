@@ -1,0 +1,52 @@
+# Painter's Studio-style Room Ticket Booth // Tunnel of Hate, cast as Tunnel of Hate: "Whenever you attack, target attacking creature gains
+# double strike until end of turn." Bot1 attacks with a Memnite and an Ornithopter: Bot2's untapped, non-attacking Memnite is not a legal
+# target, and with the 1/1 Memnite chosen it deals 1 first-strike and 1 regular damage, while the Ornithopter deals none.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Emerald
+Ticket Booth // Tunnel of Hate
+Memnite
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ticket Booth // Tunnel of Hate.Cast(Ability: Tunnel of Hate)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2; Ornithopter > Bot2)
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = DoubleStrike
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18

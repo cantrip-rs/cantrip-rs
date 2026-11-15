@@ -1,0 +1,35 @@
+# Ticket Booth // Tunnel of Hate, cast as Ticket Booth: "When you unlock this door, manifest dread." Casting the
+# half unlocks it as it enters (CR 709.5d): the top two cards of Bot1's library are a Memnite and a Lightning Bolt, the Memnite goes onto the
+# battlefield face down as a 2/2 and the Bolt into the graveyard (CR 701.62a).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Ticket Booth // Tunnel of Hate
+Island
+Island
+Island
+Memnite
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ticket Booth // Tunnel of Hate.Cast(Ability: Ticket Booth)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Memnite | Lightning Bolt)
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Power = 2
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt
