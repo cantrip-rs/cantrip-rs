@@ -1817,6 +1817,18 @@ fn layers_with_entries(cx: &Ctx) -> u16 {
     mask
 }
 
+/// How a static ability printed on `text`, one of `source`'s texts (`CardTable::texts_linked`), is asked: by a merged
+/// component's link where it is one (CR 702.140e); by `source`'s own link but naming `text` where `text` is an unlocked
+/// door rather than the Room's text (CR 709.5, 607.1: a door's abilities are linked as the Room's, but what one gives -
+/// "the card's delayed ability" - is printed on the door); else as `source`'s own text.
+fn asked_as(cards: &CardTable, state: &GameState, source: ObjectId, text: CardId, link: Option<Linked>) -> Option<(Linked, CardId)> {
+    match link {
+        Some(link) => Some((link, text)),
+        None if text != cards.current(state.obj(source)) => Some((cards.linked_to(state, source), text)),
+        None => None,
+    }
+}
+
 /// Every continuous effect of layer `li` over the whole game, in timestamp order (CR 613.7): the static abilities of the
 /// permanents (and cards that function elsewhere) that have them still, those effects granted permanents to give others,
 /// resolved effects and keyword counters, and those effects granted objects themselves.
@@ -1839,7 +1851,7 @@ fn collect_entries(cx: &Ctx, li: usize) -> Vec<GEntry> {
                         continue;
                     }
                     let first = &statics[first_part(statics, i)];
-                    let by = link.map(|l| (l, text));
+                    let by = asked_as(cards, state, source, text, link);
                     let kind = GKind::Static { source, st, first, continues: st.continues, by };
                     entries.push(GEntry { kind, timestamp: state.obj(source).timestamp, seq: 0 });
                 }
@@ -2953,7 +2965,7 @@ pub fn control_order(cards: &CardTable, state: &GameState, log: &[Record]) -> Ve
         for source in static_sources(cards, state).controllers.clone() {
             for (text, link) in cards.texts_linked(state, source) {
                 for st in cards.get(text).statics.iter().filter(|s| s.layer == Layer::Control) {
-                    entries.push((state.obj(source).timestamp, 0, Control::Static { source, st, by: link.map(|l| (l, text)) }));
+                    entries.push((state.obj(source).timestamp, 0, Control::Static { source, st, by: asked_as(cards, state, source, text, link) }));
                 }
             }
         }
