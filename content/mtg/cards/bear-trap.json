@@ -1,0 +1,9 @@
+{
+  "name": "Bear Trap",
+  "manaCost": "{1}",
+  "type": "Artifact",
+  "oracleText": "Flash\n{3}, {T}, Sacrifice this artifact: It deals 3 damage to target creature.",
+  "keywords": [
+    "Flash"
+  ]
+}

@@ -1,0 +1,46 @@
+# Bear Trap: "{3}, {T}, Sacrifice this artifact: It deals 3 damage to target creature." The ability's source is the colorless
+# artifact (CR 113.7, 702.16b): Bot2's Angelic Curator (protection from artifacts) cannot be targeted, while White Knight
+# (protection from black) can, and takes 3 - more than its 2 toughness.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Bear Trap
+Island x11
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Angelic Curator
+White Knight
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bear Trap.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.White Knight.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Angelic Curator.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Bear Trap.Activate(Bot2.Battlefield.Angelic Curator)
+Bot1.Battlefield.Bear Trap.Activate(Bot2.Battlefield.White Knight)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Bear Trap
+Bot2.Graveyard = White Knight; Black Lotus
+Bot2.Battlefield.Angelic Curator.Damage = 0
