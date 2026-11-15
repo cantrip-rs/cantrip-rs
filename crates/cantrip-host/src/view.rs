@@ -2184,7 +2184,7 @@ mod tests {
         let owner = PlayerId(0);
         let names = vec!["A".to_string(), "B".to_string()];
         let faces = HashSet::new();
-        for (name, line) in [("Animate Dead", "Enchant creature card in a graveyard")] {
+        for (name, line) in [("Takklemaggot", "Enchant creature"), ("Animate Dead", "Enchant creature card in a graveyard")] {
             let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
             let card = cards.find(name).unwrap();
             let id = game.state.push_obj(Obj::new(card, owner, Zone::BATTLEFIELD));

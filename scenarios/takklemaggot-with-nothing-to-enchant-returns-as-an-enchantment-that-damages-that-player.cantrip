@@ -1,0 +1,57 @@
+# Bot1's Takklemaggot kills Bot2's Memnite at Bot2's upkeep. The only creature left, Bot1's White Knight, has protection from
+# black, so it is no creature Takklemaggot could enchant (CR 303.4f, 702.16c) and Bot2 can't choose one: Takklemaggot returns
+# under Bot1's control as a non-Aura enchantment (no subtype, attached to nothing, and not put away by the state-based actions,
+# CR 704.5m), and deals 1 damage to Bot2 - the dead creature's controller, not its own controller - at Bot2's upkeeps alone:
+# not at Bot1's, and not at the upkeep it returned in, which had already begun (CR 603.2).
+[Bot1 Deck]
+Takklemaggot
+Black Lotus
+Mox Pearl
+White Knight
+Plains
+Swamp
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.White Knight.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Takklemaggot.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+? Bot2.Graveyard = Memnite
+? Bot1.Battlefield.Takklemaggot.Types = Enchantment
+? Bot1.Battlefield.Takklemaggot.Subtypes = (absent)
+? Bot1.Battlefield.Takklemaggot.AttachedTo = (absent)
+? Bot2.Life = 20
+[T5 Bot1.Main1]
+? Bot1.Life = 20
+? Bot2.Life = 20
+[T6 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Takklemaggot.Types = Enchantment
+Bot1.Battlefield.Takklemaggot.Subtypes = (absent)
+Bot1.Battlefield.White Knight.Toughness = 2
+Bot1.Life = 20
+Bot2.Life = 19

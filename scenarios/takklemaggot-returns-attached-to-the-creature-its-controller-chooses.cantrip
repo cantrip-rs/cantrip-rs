@@ -1,0 +1,64 @@
+# Bot1's Takklemaggot enchants Bot2's Memnite. At Bot2's upkeep the -0/-1 counter kills it, and Bot2 - the dead creature's
+# controller - chooses a creature Takklemaggot could enchant: Bot1's Humble Budoka, which has shroud (not targeted, the
+# ruling), but not Bot1's White Knight, which has protection from black (CR 303.4f, 702.16c), and Bot2 can't choose none
+# while there is one (the ruling). Takklemaggot returns attached to the Budoka under Bot1's control, and at Bot1's upkeep puts a -0/-1 counter on it (CR 608.2k).
+[Bot1 Deck]
+Takklemaggot
+Black Lotus
+Mox Pearl
+Mox Emerald
+White Knight
+Humble Budoka
+Plains
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.White Knight.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Humble Budoka.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Takklemaggot.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Takklemaggot.AttachedTo = Memnite
+! Bot2.Choose(White Knight)
+! Bot2.Choose()
+Bot2.Choose(Humble Budoka)
+? Bot2.Graveyard = Memnite
+? Bot1.Battlefield.Takklemaggot.AttachedTo = Humble Budoka
+? Bot1.Battlefield.Humble Budoka.Counters.Plus0Minus1 = (absent)
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Takklemaggot.AttachedTo = Humble Budoka
+Bot1.Battlefield.Takklemaggot.Subtypes = Aura
+Bot1.Battlefield.Humble Budoka.Counters.Plus0Minus1 = 1
+Bot1.Battlefield.Humble Budoka.Power = 2
+Bot1.Battlefield.Humble Budoka.Toughness = 1
+Bot1.Battlefield.White Knight.Toughness = 2
+Bot1.Life = 20
+Bot2.Life = 20

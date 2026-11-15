@@ -1,0 +1,58 @@
+# Bot1 takes Bot2's Memnite with Control Magic and enchants it with Takklemaggot. At Bot1's upkeep - the upkeep of
+# enchanted creature's controller - the -0/-1 counter kills it. "That creature's controller" is its controller as it last
+# existed (CR 608.2h), Bot1, not its owner Bot2: Bot1 chooses, and must choose Bot2's Ornithopter, the one creature
+# Takklemaggot could enchant (the ruling). Takklemaggot returns attached to it under Bot1's control.
+[Bot1 Deck]
+Control Magic
+Takklemaggot
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Island
+Island
+Swamp x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Control Magic.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Takklemaggot.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Takklemaggot.AttachedTo = Memnite
+Bot1.Choose(Ornithopter)
+? Bot2.Graveyard = Memnite
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Takklemaggot.AttachedTo = Ornithopter
+Bot2.Battlefield.Ornithopter.Counters.Plus0Minus1 = (absent)

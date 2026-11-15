@@ -1,0 +1,54 @@
+# Bot1's Takklemaggot kills Bot2's Memnite at Bot2's upkeep and goes to the graveyard; with its ability on the stack, Bot2 exiles
+# Bot1's graveyard with Tormod's Crypt. The ability returns the card only if it is still in that graveyard (the ruling, CR
+# 400.7): nothing returns and Bot2 is asked to choose nothing, though Bot1's Grizzly Bears could have been enchanted.
+[Bot1 Deck]
+Takklemaggot
+Black Lotus
+Grizzly Bears
+Mox Emerald
+Forest
+Swamp
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Memnite
+Tormod's Crypt
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Tormod's Crypt.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Takklemaggot.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Memnite
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot2.Pass
+Bot1.Pass
+! Bot2.Choose
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Takklemaggot = (absent)
+Exile = Black Lotus; Takklemaggot
+Bot1.Battlefield.Grizzly Bears.Counters.Plus0Minus1 = (absent)
