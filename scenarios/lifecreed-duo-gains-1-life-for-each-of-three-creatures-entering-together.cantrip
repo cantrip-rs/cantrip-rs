@@ -1,0 +1,38 @@
+# Lifecreed Duo: "Whenever another creature you control enters, you gain 1 life" triggers once for each creature (CR 603.2c): Hop to
+# It's three Rabbit tokens enter together and Bot1 gains 3 life, from three separate triggers.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Pearl
+Lifecreed Duo
+Hop to It
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Lifecreed Duo.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Hop to It.Cast
+Bot1.Pass
+? Stack = Hop to It
+? Bot1.Life = 20
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 23
+Bot1.Battlefield = Lifecreed Duo; Mox Pearl; Mox Pearl; Rabbit Token; Rabbit Token; Rabbit Token
