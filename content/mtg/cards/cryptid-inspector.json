@@ -1,0 +1,11 @@
+{
+  "name": "Cryptid Inspector",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Elf Warrior",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Vigilance\nWhenever a face-down permanent you control enters and whenever this creature or another permanent you control is turned face up, put a +1/+1 counter on this creature.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
