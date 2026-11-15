@@ -298,7 +298,7 @@ pub fn hexproof_from_text(qualities: HexproofFrom) -> String {
 }
 
 /// The keywords as a card's text words them, for the ones an effect gave an object or took from it.
-const KEYWORD_WORDS: [(Keyword, &str); 74] = [
+const KEYWORD_WORDS: [(Keyword, &str); 85] = [
     (Keyword::Flying, "Flying"),
     (Keyword::Haste, "Haste"),
     (Keyword::Vigilance, "Vigilance"),
@@ -367,6 +367,17 @@ const KEYWORD_WORDS: [(Keyword, &str); 74] = [
     (Keyword::SnowTowerwalk, "Snow towerwalk"),
     (Keyword::SnowTownwalk, "Snow townwalk"),
     (Keyword::SnowUrzaswalk, "Snow Urza'swalk"),
+    (Keyword::Cavewalk, "Cavewalk"),
+    (Keyword::Gatewalk, "Gatewalk"),
+    (Keyword::Lairwalk, "Lairwalk"),
+    (Keyword::Locuswalk, "Locuswalk"),
+    (Keyword::Minewalk, "Minewalk"),
+    (Keyword::Planetwalk, "Planetwalk"),
+    (Keyword::PowerPlantwalk, "Power-plantwalk"),
+    (Keyword::Spherewalk, "Spherewalk"),
+    (Keyword::Towerwalk, "Towerwalk"),
+    (Keyword::Townwalk, "Townwalk"),
+    (Keyword::Urzaswalk, "Urza'swalk"),
     (Keyword::Wither, "Wither"),
     (Keyword::Phasing, "Phasing"),
     (Keyword::CantBeCopied, "This spell can't be copied."),

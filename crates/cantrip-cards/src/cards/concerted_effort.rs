@@ -4,8 +4,8 @@ use cantrip_mechanics::triggers;
 use cantrip_oracle as oracle;
 
 /// The abilities Concerted Effort hands out, in the order its text lists them: "flying ... fear, first strike, double
-/// strike, landwalk, protection, trample, and vigilance." Each landwalk is an ability of its own (`ALL_LANDWALKS`: the basic,
-/// snow, nonbasic, legendary and Desert ones), and protection is granted from what the creatures are protected from, beside
+/// strike, landwalk, protection, trample, and vigilance." Each landwalk is an ability of its own (`ALL_LANDWALKS`: the landwalk
+/// and the snow landwalk of each land type, snow landwalk, nonbasic landwalk and legendary landwalk), and protection is granted from what the creatures are protected from, beside
 /// the keywords.
 fn keywords() -> Vec<Keyword> {
     [Keyword::Flying, Keyword::Fear, Keyword::FirstStrike, Keyword::DoubleStrike]

@@ -66,6 +66,21 @@ fn snow_landwalk_of_a_nonbasic_land_type_requires_a_snow_land_of_that_type() {
     }
 }
 
+/// CR 702.14c: landwalk of a land type that is no basic land type - Illusionary Presence's "landwalk of the chosen type" -
+/// needs a land of that type, snow or not, and not a land of another type.
+#[test]
+fn landwalk_of_a_nonbasic_land_type_requires_a_land_of_that_type() {
+    for (walk, land_type) in [(Keyword::Gatewalk, Subtype::Gate), (Keyword::Urzaswalk, Subtype::Urzas),
+        (Keyword::Cavewalk, Subtype::Cave), (Keyword::PowerPlantwalk, Subtype::PowerPlant)] {
+        for (actual, snow, blocks) in [(land_type, false, false), (land_type, true, false), (Subtype::Lair, false, true)] {
+            let (mut g, a, b, _) = position(walk, Some(actual), supertype(false, false, snow), THEM);
+            assert_eq!(blockable(&mut g, a, b), blocks, "{walk:?}, {actual:?}, snow {snow}");
+        }
+        let (mut g, a, b, _) = position(walk, Some(land_type), supertype(false, false, false), YOU);
+        assert!(blockable(&mut g, a, b), "only the defender's lands count");
+    }
+}
+
 #[test]
 fn all_landwalk_qualifiers_require_a_land_and_the_current_qualifier() {
     for (walk, subtype, yes, no) in [

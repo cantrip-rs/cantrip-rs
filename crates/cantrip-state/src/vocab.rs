@@ -1433,18 +1433,53 @@ pub enum Keyword {
     SnowTowerwalk = 78,
     SnowTownwalk = 79,
     SnowUrzaswalk = 80,
+    /// Landwalk of each land type that is neither a basic land type nor Desert (CR 702.14a,c, 205.3i): "can't be blocked
+    /// as long as defending player controls a land of that type". An effect that lets a player choose any land type gives
+    /// one of these (Illusionary Presence's "landwalk of the chosen type"; its 2005-11-01 ruling: any land subtype that
+    /// exists).
+    Cavewalk = 81,
+    Gatewalk = 82,
+    Lairwalk = 83,
+    Locuswalk = 84,
+    Minewalk = 85,
+    Planetwalk = 86,
+    PowerPlantwalk = 87,
+    Spherewalk = 88,
+    Towerwalk = 89,
+    Townwalk = 90,
+    Urzaswalk = 91,
 }
 
 impl Keyword {
     /// Every supported landwalk variant (CR 702.14a), for effects referring to landwalk without a qualifier.
-    pub const ALL_LANDWALKS: [Keyword; 26] = [
+    pub const ALL_LANDWALKS: [Keyword; 37] = [
         Self::Plainswalk, Self::Islandwalk, Self::Swampwalk, Self::Mountainwalk, Self::Forestwalk,
         Self::NonbasicLandwalk, Self::LegendaryLandwalk, Self::SnowPlainswalk, Self::SnowIslandwalk,
         Self::SnowSwampwalk, Self::SnowMountainwalk, Self::SnowForestwalk, Self::SnowLandwalk, Self::Desertwalk,
         Self::SnowCavewalk, Self::SnowDesertwalk, Self::SnowGatewalk, Self::SnowLairwalk, Self::SnowLocuswalk,
         Self::SnowMinewalk, Self::SnowPlanetwalk, Self::SnowPowerPlantwalk, Self::SnowSpherewalk, Self::SnowTowerwalk,
         Self::SnowTownwalk, Self::SnowUrzaswalk,
+        Self::Cavewalk, Self::Gatewalk, Self::Lairwalk, Self::Locuswalk, Self::Minewalk, Self::Planetwalk,
+        Self::PowerPlantwalk, Self::Spherewalk, Self::Towerwalk, Self::Townwalk, Self::Urzaswalk,
     ];
+
+    /// Each landwalk naming a land type alone, and that land type (CR 702.14c, 205.3i): one for every land type
+    /// (`SubtypeSet::LAND_TYPES`), the basic ones first (`Keyword::LANDWALKS`). The blocking rule reads this table.
+    pub const LAND_TYPE_LANDWALKS: [(Keyword, Subtype); 17] = [
+        (Self::Plainswalk, Subtype::Plains), (Self::Islandwalk, Subtype::Island), (Self::Swampwalk, Subtype::Swamp),
+        (Self::Mountainwalk, Subtype::Mountain), (Self::Forestwalk, Subtype::Forest),
+        (Self::Cavewalk, Subtype::Cave), (Self::Desertwalk, Subtype::Desert), (Self::Gatewalk, Subtype::Gate),
+        (Self::Lairwalk, Subtype::Lair), (Self::Locuswalk, Subtype::Locus), (Self::Minewalk, Subtype::Mine),
+        (Self::Planetwalk, Subtype::Planet), (Self::PowerPlantwalk, Subtype::PowerPlant),
+        (Self::Spherewalk, Subtype::Sphere), (Self::Towerwalk, Subtype::Tower), (Self::Townwalk, Subtype::Town),
+        (Self::Urzaswalk, Subtype::Urzas),
+    ];
+
+    /// The landwalk naming `land_type` (CR 702.14c): "landwalk of the chosen type" for a land type chosen from all of them
+    /// (CR 205.3i). None for a subtype that is no land type. `Keyword::landwalk` is the basic land types' alone.
+    pub fn landwalk_of(land_type: Subtype) -> Option<Keyword> {
+        Keyword::LAND_TYPE_LANDWALKS.iter().find(|&&(_, t)| t == land_type).map(|&(k, _)| k)
+    }
 
     /// Each snow landwalk naming a land type, and that land type (CR 702.14c, 205.3i): one for every land type
     /// (`SubtypeSet::LAND_TYPES`), the basic ones first. Snow remains a separate restriction after a text change.
@@ -2434,7 +2469,7 @@ mod landwalk_keyword_tests {
             assert!(Keywords::of(&[walk]).has_landwalk());
             assert!(Keywords::LANDWALKS.has(walk));
         }
-        assert_eq!(Keywords::LANDWALKS.0.count_ones(), 26);
+        assert_eq!(Keywords::LANDWALKS.0.count_ones(), 37);
         assert_eq!(Keywords::of(&[Keyword::Flying]).for_effect(), Keywords::of(&[Keyword::Flying]));
     }
 
@@ -2451,5 +2486,24 @@ mod landwalk_keyword_tests {
         assert_eq!(seen.0.count_ones(), 17);
         assert_eq!(Keyword::snow_landwalk_of(Subtype::Island), Some(Keyword::SnowIslandwalk));
         assert_eq!(Keyword::snow_landwalk_of(Subtype::Elf), None);
+    }
+
+    /// CR 702.14c, 205.3i: every land type has its landwalk, a distinct ability that is a landwalk and no snow landwalk.
+    #[test]
+    fn every_land_type_has_one_landwalk() {
+        let mut seen = Keywords::NONE;
+        for land_type in SubtypeSet::LAND_TYPES.iter() {
+            let walk = Keyword::landwalk_of(land_type).expect("a landwalk for each land type");
+            assert!(!seen.has(walk), "{land_type:?} shares its landwalk");
+            assert!(Keywords::LANDWALKS.has(walk));
+            assert_ne!(Some(walk), Keyword::snow_landwalk_of(land_type));
+            seen = seen.with(walk);
+        }
+        assert_eq!(seen.0.count_ones(), 17);
+        for (walk, land_type) in Keyword::LANDWALKS {
+            assert_eq!(Keyword::landwalk_of(land_type), Some(walk), "the basic landwalks are the same keywords");
+        }
+        assert_eq!(Keyword::landwalk_of(Subtype::Desert), Some(Keyword::Desertwalk));
+        assert_eq!(Keyword::landwalk_of(Subtype::Elf), None);
     }
 }

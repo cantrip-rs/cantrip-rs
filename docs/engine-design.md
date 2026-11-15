@@ -3185,11 +3185,13 @@ after its attacker left. New incarnations and a later combat do not inherit the 
 
 ### Landwalk
 
-Landwalk (CR 702.14) is an evasion ability, represented by exact core keywords: five ordinary basic-landwalks,
-a snow landwalk of each of the seventeen land types (CR 205.3i; `Keyword::SNOW_LANDWALKS`, `snow_landwalk_of`), snow
-landwalk, desertwalk, nonbasic landwalk and legendary landwalk. Rime Dryad and
+Landwalk (CR 702.14) is an evasion ability, represented by exact core keywords: a landwalk of each of the seventeen
+land types (CR 205.3i; `Keyword::LAND_TYPE_LANDWALKS`, `landwalk_of`; the five basic ones, `Keyword::LANDWALKS`, are
+what a text change of a basic land type word moves between), a snow landwalk of each of them (`Keyword::SNOW_LANDWALKS`,
+`snow_landwalk_of`), snow landwalk, nonbasic landwalk and legendary landwalk. Rime Dryad and
 Legions of Lim-Dûl print snow forestwalk and snow swampwalk; Barbarian Guides gives "snow landwalk of the chosen type"
-for any land type chosen, and a snow land can have any land type (Glittering Frost's "enchanted land is snow" on a Gate);
+and Illusionary Presence "landwalk of the chosen type" for any land type chosen, and a snow land can have any land type
+(Glittering Frost's "enchanted land is snow" on a Gate);
 Zombie Musher prints snow landwalk, Desert Nomads
 desertwalk, Dryad Sophisticate nonbasic landwalk, and Livonya Silone and Ayumi, the Last Visitor legendary landwalk.
 `turn::can_block` reads the defending player's current lands (CR 702.14c), including their current land type,

@@ -129,6 +129,17 @@ fn keyword_name(k: u8) -> &'static str {
         78 => "SnowTowerwalk",
         79 => "SnowTownwalk",
         80 => "SnowUrzaswalk",
+        81 => "Cavewalk",
+        82 => "Gatewalk",
+        83 => "Lairwalk",
+        84 => "Locuswalk",
+        85 => "Minewalk",
+        86 => "Planetwalk",
+        87 => "PowerPlantwalk",
+        88 => "Spherewalk",
+        89 => "Towerwalk",
+        90 => "Townwalk",
+        91 => "Urzaswalk",
         _ => "?",
     }
 }

@@ -1309,10 +1309,9 @@ fn can_block(cx: &Cx, blocker: ObjectId, attacker: ObjectId, rule_sources: &[Obj
             if cx.s().obj(id).controller != defending { return false; }
             let land = cx.chars(id);
             land.is(CardType::Land) && (
-                Keyword::LANDWALKS.iter().any(|&(walk, ty)| walks.has(walk) && land.has_subtype(ty))
+                Keyword::LAND_TYPE_LANDWALKS.iter().any(|&(walk, ty)| walks.has(walk) && land.has_subtype(ty))
                 || (land.supertypes.snow && Keyword::SNOW_LANDWALKS.iter().any(|&(walk, ty)| walks.has(walk) && land.has_subtype(ty)))
                 || (walks.has(Keyword::SnowLandwalk) && land.supertypes.snow)
-                || (walks.has(Keyword::Desertwalk) && land.has_subtype(Subtype::Desert))
                 || (walks.has(Keyword::NonbasicLandwalk) && !land.supertypes.basic)
                 || (walks.has(Keyword::LegendaryLandwalk) && land.supertypes.legendary)
             )
