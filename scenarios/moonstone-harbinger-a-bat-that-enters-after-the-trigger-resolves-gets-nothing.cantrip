@@ -1,0 +1,44 @@
+# Moonstone Harbinger: the Bats that get +1/+0 and deathtouch are the ones Bot1 controls as the ability resolves (CR 611.2c). Bot1 gains
+# 3 life with Healing Salve and only then casts Dakmor Bat: the Harbinger is a 2/3, the new Bat a plain 1/1 flyer.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Moonstone Harbinger
+Dakmor Bat
+Healing Salve
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Moonstone Harbinger.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Moonstone Harbinger.Power = 2
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dakmor Bat.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Moonstone Harbinger.Power = 2
+Bot1.Battlefield.Dakmor Bat.Power = 1
+Bot1.Battlefield.Dakmor Bat.Keywords = Flying

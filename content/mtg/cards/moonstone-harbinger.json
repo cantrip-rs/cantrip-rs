@@ -1,0 +1,12 @@
+{
+  "name": "Moonstone Harbinger",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Bat Warrior",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Flying, deathtouch\nWhenever you gain or lose life during your turn, Bats you control get +1/+0 and gain deathtouch until end of turn. This ability triggers only once each turn.",
+  "keywords": [
+    "Flying",
+    "Deathtouch"
+  ]
+}
