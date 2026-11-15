@@ -1,0 +1,61 @@
+# "If the player chooses a permanent spell, the effect will apply to ... any damage dealt by the permanent that spell becomes
+# when it resolves" (CR 609.7a). Bot2 casts Flametongue Kavu; in response Bot1 activates Jade Monolith targeting its Yoked Ox
+# (0/4) and chooses the Kavu spell on the stack. The Kavu resolves and its enters ability deals 4 damage to the Ox: that is
+# damage from the permanent the chosen spell became, so the Kavu deals it to Bot1 instead and the Ox lives. The effect is
+# about a source that has since become another object, so it must outlive it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl x2
+Jade Monolith
+Yoked Ox
+Island x2
+Island x25
+
+[Bot2 Deck]
+Mox Ruby x4
+Flametongue Kavu
+Island x25
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Jade Monolith.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Yoked Ox.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Flametongue Kavu.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Jade Monolith.Activate(Bot1.Battlefield.Yoked Ox)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Stack.Flametongue Kavu)
+Bot2.Target(Bot1.Battlefield.Yoked Ox)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 16
+Bot2.Life = 20
+Bot1.Battlefield.Yoked Ox.Damage = 0

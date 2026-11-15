@@ -2244,6 +2244,38 @@ mod tests {
         assert!(projector.describe(target, handle, None, &mut handles).granted_abilities.is_empty());
     }
 
+    /// Jade Monolith's effect is about the chosen source and names the creature damage to which it replaces: it is shown on
+    /// both, and on nothing else.
+    #[test]
+    fn a_resolved_replacement_naming_a_recipient_is_visible_on_the_source_and_the_recipient() {
+        let cards = cantrip_engine::cards();
+        let mut game = Game::new(cards, &Setup { decks: vec![vec![], vec![]], ..Default::default() });
+        let owner = PlayerId(0);
+        let card = cards.find("Jade Monolith").unwrap();
+        let mut put = |name: &str, controller: PlayerId| {
+            let id = game.state.push_obj(Obj::new(cards.find(name).unwrap(), controller, Zone::BATTLEFIELD));
+            game.state.zone_push(Zone::BATTLEFIELD, id);
+            id
+        };
+        let (monolith, chosen, creature, other) = (put("Jade Monolith", owner), put("Fencing Ace", PlayerId(1)), put("Grizzly Bears", owner), put("Yoked Ox", owner));
+        let timestamp = game.state.timestamp();
+        game.state.effect_push(ContinuousEffect { source: monolith, controller: owner, timestamp, affected: chosen,
+            kind: EffectKind::Replacement { card, index: 0, to: Target::Object(creature) }, duration: Duration::EndOfTurn, words: Words::NONE });
+        let names = vec!["A".to_string(), "B".to_string()];
+        let faces = HashSet::new();
+        let projector = Projector { game: &game, viewer: owner, names: &names, conceded: &[false, false], faces: &faces };
+        let shown = |id: ObjectId| {
+            let mut handles = HandleSpace::new();
+            let handle = handles.handle(id);
+            projector.describe(id, handle, None, &mut handles).granted_abilities.into_iter().map(|a| a.text).collect::<Vec<_>>()
+        };
+        let text = "The next time a source of your choice would deal damage to target creature this turn, that source deals that damage to you instead (Jade Monolith).";
+        assert_eq!(shown(chosen), [text]);
+        assert_eq!(shown(creature), [text]);
+        assert!(shown(other).is_empty());
+        assert!(shown(monolith).is_empty());
+    }
+
     #[test]
     fn resolved_regeneration_shields_and_bans_are_visible_until_removed() {
         let cards = cantrip_engine::cards();

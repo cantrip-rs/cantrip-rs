@@ -1,0 +1,64 @@
+# Jade Monolith: "{1}: The next time a source of your choice would deal damage to target creature this turn, that source deals
+# that damage to you instead" (CR 609.7a, 614.1a, 614.9). Bot1 blocks Bot2's Fencing Ace (1/1 double strike) with its Grizzly
+# Bears, pays exactly {1} (the Island, the pool left empty) to target the Bears, and chooses the Ace as the source. The Ace's
+# first-strike damage to the Bears is the next time: the Ace deals that 1 damage to Bot1, the ability's controller, instead
+# of the Bears. The effect is then used up, so the regular-damage hit is dealt to the Bears: Bot1 19, the Bears 1 damage.
+
+[Bot1 Deck]
+Mox Emerald x4
+Jade Monolith
+Grizzly Bears
+Island
+Island x25
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Fencing Ace
+Island x25
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Jade Monolith.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Fencing Ace.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Fencing Ace > Bot1)
+Bot1.Block(Grizzly Bears > Fencing Ace)
+[T4 Bot2.DeclareBlockers]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Jade Monolith.Activate(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Fencing Ace)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 20
+Bot1.Battlefield.Grizzly Bears.Damage = 1
+Bot2.Graveyard = Fencing Ace

@@ -1,0 +1,58 @@
+# Jade Monolith's effect lasts only "this turn" (CR 611.2a, 514.2). On turn 3 Bot1 pays exactly {1} (the Island) to target
+# its Yoked Ox (0/4) and chooses Bot2's Fencing Ace, which deals no damage that turn. On turn 4 the Ace (1/1 double strike)
+# attacks and the Ox blocks: the effect has ended, so both hits are dealt to the Ox and none to Bot1.
+
+[Bot1 Deck]
+Mox Pearl x4
+Jade Monolith
+Yoked Ox
+Island x26
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Fencing Ace
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Jade Monolith.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Fencing Ace.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Yoked Ox.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Jade Monolith.Activate(Bot1.Battlefield.Yoked Ox)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Fencing Ace)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Fencing Ace > Bot1)
+Bot1.Block(Yoked Ox > Fencing Ace)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Yoked Ox.Damage = 2

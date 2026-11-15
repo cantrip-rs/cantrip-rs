@@ -1,0 +1,56 @@
+# Jade Monolith may target an opponent's creature, and only a creature: not a player, not a noncreature artifact (CR 115.1).
+# Bot1 casts Lightning Bolt and then Shock at Bot2's Phyrexian Walker (0/3), then activates Jade Monolith targeting the Walker
+# and, as it resolves, chooses the Bolt on the stack as the source (CR 609.7a). Shock resolves first: it is another source,
+# so its 2 damage is dealt to the Walker and the effect waits. The Bolt then deals its 3 damage to Bot1 instead of the Walker
+# (CR 614.9), which survives.
+
+[Bot1 Deck]
+Mox Ruby x4
+Jade Monolith
+Shock
+Lightning Bolt
+Island x25
+
+[Bot2 Deck]
+Phyrexian Walker
+Mox Pearl
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Jade Monolith.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Phyrexian Walker)
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Phyrexian Walker)
+! Bot1.Battlefield.Jade Monolith.Activate(Bot2)
+! Bot1.Battlefield.Jade Monolith.Activate(Bot2.Battlefield.Mox Pearl)
+Bot1.Battlefield.Jade Monolith.Activate(Bot2.Battlefield.Phyrexian Walker)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Stack.Lightning Bolt)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 20
+Bot2.Battlefield.Phyrexian Walker.Damage = 2

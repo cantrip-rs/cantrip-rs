@@ -1,0 +1,72 @@
+# Jade Monolith's effect watches only for damage from the chosen source to the target creature (CR 609.7a, 614.1a). Bot1
+# blocks Bot2's Fencing Ace (1/1 double strike) with Grizzly Bears and Balduvian Bears, targets Grizzly Bears and chooses the
+# Ace. The Ace's first-strike damage goes to Balduvian Bears: not to the target, so it is dealt there and the effect is not
+# used up (CR 609.7b). Its regular damage goes to Grizzly Bears, and that is redirected: the Ace deals it to Bot1 instead.
+
+[Bot1 Deck]
+Mox Emerald x4
+Jade Monolith
+Grizzly Bears
+Balduvian Bears
+Island
+Island x25
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Fencing Ace
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Jade Monolith.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Fencing Ace.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Battlefield.Mox Emerald#4.Activate
+Bot1.Hand.Balduvian Bears.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Fencing Ace > Bot1)
+Bot1.Block(Grizzly Bears > Fencing Ace; Balduvian Bears > Fencing Ace)
+[T4 Bot2.DeclareBlockers]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Jade Monolith.Activate(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Fencing Ace)
+Bot2.AssignDamage(Fencing Ace > Balduvian Bears: 1)
+? Bot1.Battlefield.Balduvian Bears.Damage = 1
+? Bot1.Life = 20
+Bot2.AssignDamage(Fencing Ace > Grizzly Bears: 1)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 20
+Bot1.Battlefield.Balduvian Bears.Damage = 1
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Bot2.Graveyard = Fencing Ace
