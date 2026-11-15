@@ -1,0 +1,8 @@
+{
+  "name": "Agate-Blade Assassin",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Lizard Assassin",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Whenever this creature attacks, defending player loses 1 life and you gain 1 life."
+}

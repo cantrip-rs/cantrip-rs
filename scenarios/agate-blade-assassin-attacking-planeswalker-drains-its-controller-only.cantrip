@@ -1,0 +1,46 @@
+# Agate-Blade Assassin: "defending player" is the controller of the planeswalker it attacks (CR 508.5). Bot1 attacks Bot2's Liliana of the Veil
+# (loyalty 3) with the Assassin: Bot2 loses 1 life to the trigger, Bot1 gains 1, and the Assassin's 1 damage takes the loyalty to 2, not Bot2's life.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Agate-Blade Assassin
+Swamp x17
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Liliana of the Veil
+Swamp x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Agate-Blade Assassin.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Liliana of the Veil.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Agate-Blade Assassin > Liliana of the Veil)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Life = 21
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 21
+Bot2.Battlefield.Liliana of the Veil.Counters.Loyalty = 2

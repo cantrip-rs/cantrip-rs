@@ -1,0 +1,34 @@
+# Agate-Blade Assassin: "defending player", not "each opponent" (CR 508.5). In a three-player game Bot1 attacks Bot2 with the Assassin: Bot2 loses
+# 1 to the trigger and 1 to combat damage (18), Bot1 gains 1 (21), and Bot3 loses nothing (20).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Agate-Blade Assassin
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Agate-Blade Assassin.Cast
+[T4 Bot1.DeclareAttackers]
+Bot1.Attack(Agate-Blade Assassin > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Bot2.Life = 19
+? Bot3.Life = 20
+[T4 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot3.Life = 20
+Bot1.Life = 21
