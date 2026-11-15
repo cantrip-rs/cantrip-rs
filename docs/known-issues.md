@@ -89,7 +89,6 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-147](#ki-147-two-tablet-browser-tests-wait-forever-for-unos-splash-to-go) | Two tablet browser tests wait forever for Uno's splash to go | Pri-3 | Open |
 | [KI-159](#ki-159-a-scenarios-spend-that-no-payment-asks-about-is-ignored) | A scenario's `Spend:` that no payment asks about is ignored | Pri-3 | Open |
 | [KI-160](#ki-160-a-granted-replicate-cost-is-announced-at-most-tens-of-millions-of-times) | A granted replicate cost is announced at most tens of millions of times | Pri-3 | Won't fix: beyond practical scale |
-| [KI-161](#ki-161-a-scenarios--modes-refusal-does-not-check-what-a-subtype-question-offers) | A scenario's `! Modes(...)` refusal does not check what a subtype question offers | Pri-3 | Open |
 | [KI-162](#ki-162-the-client-shows-no-duration-for-an-effect-that-changes-a-lands-types) | The client shows no duration for an effect that changes a land's types | Pri-2 | Open |
 | [KI-163](#ki-163-a-choose-question-offering-one-card-drops-its-rules-words-from-the-caption) | A choose question offering one card drops its rule's words from the caption | Pri-2 | Open |
 | [KI-164](#ki-164-an-x-paid-in-mana-is-announced-at-most-about-two-billion) | An X paid in mana is announced at most about two billion | Pri-3 | Won't fix: beyond practical scale |
@@ -152,21 +151,6 @@ drops the rule's words and reads "Camouflage: choose up to a creature", which is
 is for. Camouflage meets it whenever only one creature still has room for a pile (a defender with one creature), and it
 affects every `Choose` question with words and one card offered. A fix keeps the rule's words in the one-card caption.
 Display only.
-
-### KI-161: A scenario's `! Modes(...)` refusal does not check what a subtype question offers
-
-| Priority | Status | Area | Found |
-| --- | --- | --- | --- |
-| Pri-3 | Open | harness | 2026-11-14, reviewing Illusionary Terrain (PR #3008) |
-
-**Notes.** A `! Bot1.Modes(Forest)` line after the first of two basic land type questions cannot fail: it still holds when
-the second `ChooseSubtype` question does offer Forest, so the refusal does not look at the subtypes a `ChooseSubtype` question
-offers (it likely checks only the modes and labels the source's own text could offer). No scenario therefore pins the "a
-different one" rule of `text_change::two_basic_land_types` for Illusionary Terrain, Magical Hack, Mind Bend or Trait Doctoring;
-the host test `illusionary_terrain_choices` catches it instead. A fix makes `! Modes(<subtype>)` read the pending question's
-offered subtypes (in `cantrip-script`'s refusal check) and fail when one is offered.
-
-**Scenarios.** `illusionary-terrain-first-and-second-types-are-ordered` has the line that cannot fail.
 
 ### KI-162: The client shows no duration for an effect that changes a land's types
 

@@ -468,6 +468,8 @@ does ("choose one, or both if ..."). A mode named by text that the question does
 (`! Bot1.Modes(Fuse)`, a fused cast over a mana-value limit) - but only when it is a mode the question's source could offer
 somewhere (its faces and halves, a fuse card's fused cast, its modes, ways, alternative costs and labels); any other text
 is a typo, and fails. `! Bot1.Modes(Count: 0)` refuses choosing no mode at all ("choose one or both" takes at least one). Pair it with the same line where the condition holds.
+At a subtype question ("choose a land type", a text change's "a different one"), `! Bot1.Modes(Elf)` fails if the question
+offers that subtype; a name that is no subtype at all proves nothing, and fails.
 
 A card choice, `! Bot1.Choose(Thopter)`, is checked at that player's next choice of cards (a sacrifice or discard cost, a card
 chosen from a revealed hand) and fails if the named card is among those it may take; it fails as proving nothing when no such

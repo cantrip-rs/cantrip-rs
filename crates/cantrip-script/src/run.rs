@@ -2200,6 +2200,19 @@ impl<'s> Run<'s> {
                     return fail(format!("line {line} says {text} must not be a choice the question allows, but it is"));
                 }
             }
+            // `! Bot1.Modes(Elf)` at a subtype question ("choose a land type", a text change's "a different one"): the named
+            // subtype is no answer the question accepts, judged by the rules' own check of the answer. A name that is no
+            // subtype at all is a typo, and proves nothing.
+            RequestKind::ChooseSubtype { .. } => {
+                for spec in action.positional() {
+                    let Some(subtype) = Subtype::named(spec.trim()) else {
+                        return fail(format!("line {line}: {text} proves nothing: no subtype is named {}", spec.trim()));
+                    };
+                    if check_answer(&self.game, request, &Answer::Subtype(subtype)).is_ok() {
+                        return fail(format!("line {line} says {text} must not be a choice the question allows, but it is"));
+                    }
+                }
+            }
             RequestKind::ChooseDividedTargets { candidates, .. } => {
                 // `! Bot1.Divide(Grizzly Bears: 1; Bot2.Battlefield.Elvish Mystic: 1)`: a target named that the question
                 // does not offer, though it is in the game, makes the division refused (CR 601.2c).
