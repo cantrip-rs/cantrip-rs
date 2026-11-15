@@ -1,0 +1,8 @@
+{
+  "name": "Spineseeker Centipede",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Insect",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "When this creature enters, search your library for a basic land card, reveal it, put it into your hand, then shuffle.\nDelirium — This creature gets +1/+2 and has vigilance as long as there are four or more card types among cards in your graveyard."
+}

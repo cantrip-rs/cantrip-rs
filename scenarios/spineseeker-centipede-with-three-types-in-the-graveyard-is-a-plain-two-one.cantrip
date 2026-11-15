@@ -1,0 +1,45 @@
+# Spineseeker Centipede's delirium needs four types (CR 207.2c): Faithless Looting (sorcery), an Island (land) and Lightning Bolt (instant) are only three,
+# so it stays a 2/1 without vigilance. Its enter trigger still searches: the Mountain goes to the hand.
+
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Faithless Looting
+Island
+Lightning Bolt
+Spineseeker Centipede
+Forest
+Island
+Mountain
+Tolarian Academy
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot1.Choose(Island; Lightning Bolt)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Spineseeker Centipede.Cast
+Bot2.Pass
+Bot1.Search(Mountain)
+? Bot1.Revealed = Mountain
+
+[Expect]
+Bot1.Hand = Forest; Mountain
+Bot1.Battlefield.Spineseeker Centipede.Power = 2
+Bot1.Battlefield.Spineseeker Centipede.Toughness = 1
+Bot1.Battlefield.Spineseeker Centipede.Keywords = (absent)
+Bot1.Graveyard.Count = 3
