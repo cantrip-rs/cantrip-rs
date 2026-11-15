@@ -1,0 +1,38 @@
+# High Stride: "Target creature gets +1/+3 and gains reach until end of turn. Untap it." After Elvish Mystic attacks (T5) it is
+# tapped and 1/1; the instant makes it 2/4 with reach and untaps it (CR 613.4c, 701.26a, 609.4). The power is +1 and the
+# toughness +3, not the other way round, and the card costs {G}.
+
+[Bot1 Deck]
+Forest
+Forest
+Elvish Mystic
+High Stride
+Forest x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.Elvish Mystic.Cast
+[T5 Bot1.Main1]
+Bot1.Attack(Elvish Mystic)
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Elvish Mystic.Tapped = true
+? Bot1.Battlefield.Elvish Mystic.Power = 1
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Hand.High Stride.Cast(Bot1.Battlefield.Elvish Mystic)
+Bot1.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Elvish Mystic.Power = 2
+Bot1.Battlefield.Elvish Mystic.Toughness = 4
+Bot1.Battlefield.Elvish Mystic.Keywords = Reach
+Bot1.Battlefield.Elvish Mystic.Tapped = false
+Bot1.Graveyard = High Stride
+Bot2.Life = 19

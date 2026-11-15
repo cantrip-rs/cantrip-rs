@@ -1,0 +1,40 @@
+# High Stride: "Target creature" is any creature, an opponent's included, and "until end of turn" ends with the turn it was cast
+# in (CR 514.2, 611.2a). Bot2's untapped Elvish Mystic is 2/4 with reach after Bot1's T3 cast, and a plain 1/1 again at Bot2's
+# next turn (T4); it stays untapped through the untap instruction (CR 701.26a). The same creature on an earlier turn would not
+# have changed, so the T4 check is against the base values.
+
+[Bot1 Deck]
+Forest
+Forest
+High Stride
+Forest x17
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Forest x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Hand.High Stride.Cast(Bot2.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Elvish Mystic.Power = 2
+? Bot2.Battlefield.Elvish Mystic.Toughness = 4
+? Bot2.Battlefield.Elvish Mystic.Keywords = Reach
+? Bot2.Battlefield.Elvish Mystic.Tapped = false
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Elvish Mystic.Power = 1
+? Bot2.Battlefield.Elvish Mystic.Toughness = 1
+? Bot2.Battlefield.Elvish Mystic.Keywords = (absent)
+
+[Expect]
+Bot1.Graveyard = High Stride
+Bot2.Battlefield.Elvish Mystic.Power = 1
