@@ -270,6 +270,13 @@ pub const FROM_CHOSEN_SOURCE: GrantedPreventionDef = GrantedPreventionDef {
 pub fn next_time_chosen_source_would_damage_you(g: &mut dyn Game, item: &StackItem, index: u8) -> Result<Option<ObjectId>, Suspend> {
     next_time_source_would_damage_you(g, item, index, SOURCE)
 }
+
+/// `next_time_chosen_source_would_damage_you` as the whole of a resolving spell or ability's effect, its card listing the
+/// definition first (index 0) in its `granted_preventions`: Deflecting Palm, Reverse Damage, Pentagram of the Ages, Dark Sphere.
+pub fn resolve_next_time_chosen_source_would_damage_you(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    next_time_chosen_source_would_damage_you(g, item, 0)?;
+    Ok(())
+}
 /// `next_time_chosen_source_would_damage_you` for a source `rule` allows ("a black or red source of your choice": `SOURCE`
 /// with `source_of_colors` as a part), judged as it is chosen (CR 609.7a) and again, by the card's `applies`
 /// (`from_chosen_source_of_colors`), as it would deal damage (CR 609.7b). Circle of Protection: Artifacts; the colored
