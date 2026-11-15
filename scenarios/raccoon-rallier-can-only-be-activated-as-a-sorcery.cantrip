@@ -1,0 +1,41 @@
+# Raccoon Rallier's ability is sorcery-speed (CR 602.5d, 307.1): it is refused while a spell is on the stack and on the opponent's turn (the Rallier, cast on turn 1,
+# is not summoning sick or tapped either time), and allowed with an empty stack in its controller's own main phase.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Raccoon Rallier
+Grizzly Bears
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Raccoon Rallier.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+! Bot1.Battlefield.Raccoon Rallier.Activate(Bot1.Battlefield.Raccoon Rallier)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Raccoon Rallier.Tapped = false
+[T4 Bot2.Main1]
+! Bot1.Battlefield.Raccoon Rallier.Activate(Bot1.Battlefield.Grizzly Bears)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Raccoon Rallier.Activate(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = Haste
+
+[Expect]
+Bot1.Battlefield.Raccoon Rallier.Tapped = true

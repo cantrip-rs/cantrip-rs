@@ -1,0 +1,50 @@
+# Raccoon Rallier: "{T}: Target creature you control gains haste until end of turn. Activate only as a sorcery." Bot1's Rallier (cast turn 1) taps on turn 3 to give the
+# Grizzly Bears just cast haste, which then attack for 2 (Bot2 20 -> 18); a creature Bot2 controls is refused as the target, and the haste is gone by turn 5 (CR 611.2a, 302.6).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Raccoon Rallier
+Grizzly Bears
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Raccoon Rallier.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+! Bot1.Battlefield.Raccoon Rallier.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Raccoon Rallier.Activate(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = Haste
+? Bot1.Battlefield.Raccoon Rallier.Tapped = true
+Bot1.Attack(Grizzly Bears > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Raccoon Rallier.Keywords = (absent)
