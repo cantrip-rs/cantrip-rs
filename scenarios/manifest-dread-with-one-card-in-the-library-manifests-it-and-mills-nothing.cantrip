@@ -1,0 +1,32 @@
+# Manifest Dread: "Manifest dread" with one card in the library (CR 701.62a, ruling 2024-09-20): the player looks at that card and
+# puts it onto the battlefield face down as a 2/2 (the one placement the choice allows: one card must go face down); there is
+# no other card, so nothing is put into the graveyard but the spell.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Manifest Dread
+Island x4
+Snapcaster Mage
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Manifest Dread.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Snapcaster Mage)
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Snapcaster Mage
+? Bot1.Battlefield..Power = 2
+
+[Expect]
+Bot1.Battlefield.Count = 3
+Bot1.Graveyard = Manifest Dread
+Bot1.Library.Count = 0
+Stack.Count = 0

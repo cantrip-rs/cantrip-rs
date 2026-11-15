@@ -1,0 +1,35 @@
+# Manifest Dread: "Manifest dread" (CR 701.62a). Its controller looks at the top two cards of their library, puts one onto the
+# battlefield face down as a 2/2 creature (CR 708.2a, 701.40a) and the other into their graveyard. Cast on turn 1 with two Moxen
+# ({1}{G}); the top two cards are Snapcaster Mage and Lightning Bolt and the player manifests the Bolt, so the card put onto the
+# battlefield is the one chosen, not the top one, and the Mage is milled.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Manifest Dread
+Island x4
+Snapcaster Mage
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Manifest Dread.Cast
+Bot1.Arrange(Lightning Bolt | Snapcaster Mage)
+Bot1.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Lightning Bolt
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+
+[Expect]
+Bot1.Battlefield.Count = 3
+Bot1.Graveyard = Manifest Dread; Snapcaster Mage
+Bot1.Library.Count = 10
+Stack.Count = 0
