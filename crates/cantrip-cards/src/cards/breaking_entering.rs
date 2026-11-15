@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{choose, effects, graveyards, haste_until_end_of_turn, select, targets};
+use cantrip_mechanics::{effects, haste_until_end_of_turn, targets};
 use cantrip_oracle as oracle;
 
 /// Entering: "Put a creature card from a graveyard onto the battlefield under your control. It gains haste until end of
@@ -7,13 +7,9 @@ use cantrip_oracle as oracle;
 /// milled by a fused Breaking may be chosen (CR 702.102d, 608.2d); it is not optional, so one is chosen whenever any
 /// graveyard holds a creature card.
 fn entering(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let you = item.controller;
-    let graveyards: Vec<ObjectId> = graveyards::cards_in_graveyards(g.state()).collect();
-    let Some(&card) = choose::select(g, you, item.object, Purpose::PutOntoBattlefield, graveyards, select::creature_cards(select::as_many_as_can(1)))?.first() else {
-        return Ok(());
-    };
-    let entered = g.put_onto_battlefield(card, you, false)?;
-    haste_until_end_of_turn(g, item.object, entered);
+    if let Some(entered) = effects::put_a_creature_card_from_a_graveyard_onto_the_battlefield(g, item)? {
+        haste_until_end_of_turn(g, item.object, entered);
+    }
     Ok(())
 }
 

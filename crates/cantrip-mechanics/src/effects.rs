@@ -2374,6 +2374,20 @@ pub fn return_this_card_with_finality(g: &mut dyn Game, item: &StackItem) -> Res
     Ok(())
 }
 
+/// "Put a creature card from a graveyard onto the battlefield under your control" (CR 608.2d, 400.7): the controller chooses,
+/// as the effect resolves and without targeting, one creature card from any player's graveyard, and it comes under their
+/// control. Returns the object that entered, none when no graveyard holds a creature card. Breaking // Entering's Entering
+/// and Victor, Valgavoth's Seneschal print it.
+pub fn put_a_creature_card_from_a_graveyard_onto_the_battlefield(g: &mut dyn Game, item: &StackItem) -> Result<Option<ObjectId>, Suspend> {
+    let you = item.controller;
+    let cards: Vec<ObjectId> = crate::graveyards::cards_in_graveyards(g.state()).collect();
+    let rule = crate::select::creature_cards(crate::select::as_many_as_can(1));
+    let Some(&card) = crate::choose::select(g, you, item.object, Purpose::PutOntoBattlefield, cards, rule)?.first() else {
+        return Ok(None);
+    };
+    Ok(Some(g.put_onto_battlefield(card, you, false)?))
+}
+
 /// "Return target card from your graveyard to the battlefield with a finality counter on it" (CR 400.7, 122.6, 614.1c): the
 /// first target, put onto the battlefield under its controller's control with the counter already on it, so it is exiled
 /// instead of dying (CR 122.1h). Nothing if the target is gone (CR 608.2b), which also reads "up to one target" with none
