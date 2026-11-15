@@ -680,6 +680,17 @@ pub fn plus_power_per_other_artifact_you_control(view: &dyn LayerQuery, source: 
     chars.power = chars.power.map(|v| v + artifacts - itself);
 }
 
+/// "Gets +`P`/+`T` for each other [subtype] you control" (CR 613.4c, layer 7c): the other permanents under the source's
+/// controller's control that have the creature type `SUBTYPE` (a `Subtype` as `u16`, `lands::sub`) as the earlier layers made them,
+/// the type read through the words of the source's text (CR 612.2), counted again whenever characteristics are computed. Boneclub
+/// Berserker (Goblin, +2/+0) and Persistent Marshstalker (Rat, +1/+0) print it.
+pub fn plus_per_other_subtype_you_control<const SUBTYPE: u16, const P: i32, const T: i32>(view: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
+    let Some(word) = subtype_word(view, source, SUBTYPE) else { return };
+    let others = crate::lands::count_you_control(view, source, &|c| c.has_subtype(word)) - i32::from(view.chars(source).has_subtype(word));
+    chars.power = chars.power.map(|v| v + others * P);
+    chars.toughness = chars.toughness.map(|v| v + others * T);
+}
+
 /// "... has trample" (CR 702.19, layer 6) as a static ability's `StaticDef::apply`. Ajani's Anguish, Keen-Eyed Curator, Orcrist
 /// and Rancor print it.
 pub fn have_trample(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
