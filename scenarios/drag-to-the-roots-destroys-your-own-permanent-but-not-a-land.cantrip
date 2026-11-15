@@ -1,0 +1,45 @@
+# Drag to the Roots: "Destroy target nonland permanent." (CR 701.8a, 115.1). With four card types in Bot1's graveyard (Entomb,
+# an Ornithopter, a Swamp) the spell costs {B}{G}; Bot2's Island is no legal target, Bot1's own tapped Mox Emerald is, and it is
+# destroyed.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Entomb
+Entomb
+Drag to the Roots
+Swamp
+Swamp
+Ornithopter
+Island
+Swamp
+Island x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Ornithopter)
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Swamp)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Drag to the Roots.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Drag to the Roots.Cast(Bot1.Battlefield.Mox Emerald)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Mox Emerald = (absent)
+Bot1.Graveyard = Drag to the Roots; Mox Emerald; Entomb; Swamp; Entomb; Ornithopter
+Bot2.Battlefield.Island.Tapped = false

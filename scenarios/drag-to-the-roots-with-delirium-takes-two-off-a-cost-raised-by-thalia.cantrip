@@ -1,0 +1,58 @@
+# Drag to the Roots' delirium takes exactly {2} off the total cost (CR 601.2f, 118.7a): increases are applied first, then the
+# reduction. On turn 2 Bot2's Thalia, Guardian of Thraben makes Bot1's noncreature spells cost {1} more. On turn 3 Bot1's
+# graveyard holds Entomb (an instant) and an Ornithopter (an artifact creature); a second Entomb, {1}{B} under Thalia, puts a
+# Swamp there too: four card types. Drag to the Roots is then {2}{B}{G} + {1} - {2} = {1}{B}{G}, paid by Black Lotus's last {B},
+# Mox Jet's {B} and Mox Emerald's {G} with nothing left over, and Thalia is destroyed.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+Entomb
+Entomb
+Drag to the Roots
+Island
+Island
+Ornithopter
+Swamp
+Island x10
+
+[Bot2 Deck]
+Mox Pearl
+Plains
+Thalia, Guardian of Thraben
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Ornithopter)
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Thalia, Guardian of Thraben.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Thalia, Guardian of Thraben.Tapped = false
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Entomb; Ornithopter
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Swamp)
+? Bot1.Mana = {B}
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Drag to the Roots.Cast(Bot2.Battlefield.Thalia, Guardian of Thraben)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Thalia, Guardian of Thraben = (absent)
+Bot2.Graveyard = Thalia, Guardian of Thraben
+Bot1.Graveyard = Drag to the Roots; Entomb; Swamp; Black Lotus; Entomb; Ornithopter

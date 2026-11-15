@@ -1,0 +1,63 @@
+# Drag to the Roots: "Delirium - This spell costs {2} less to cast as long as there are four or more card types among cards in your
+# graveyard. Destroy target nonland permanent." (CR 601.2f, 118.7a, 207.2c). On turn 1 Bot1's Entomb puts itself (an instant) and an
+# Ornithopter (an artifact creature) into its graveyard: three types, and on turn 2 Bot2's Entomb puts a Swamp, a land, into
+# Bot2's graveyard, which is not Bot1's. On turn 3 Bot1 has a Mox Jet, a Mox Emerald and a Swamp: the {2}{B}{G} spell is
+# refused for want of mana (the Swamp is no fourth type for Bot1, nor are Bot2's cards). A second Entomb puts a Swamp in
+# Bot1's graveyard: four types, the cost is {B}{G}, paid by the Mox Emerald and the Swamp with nothing left, and Bot2's Mox Jet is destroyed.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Entomb
+Entomb
+Drag to the Roots
+Swamp
+Swamp
+Ornithopter
+Island
+Swamp
+Island x12
+
+[Bot2 Deck]
+Mox Jet
+Entomb
+Island
+Island
+Island
+Island
+Island
+Island
+Swamp
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Ornithopter)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Swamp)
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Entomb; Ornithopter
+? Bot2.Graveyard = Entomb; Swamp
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Drag to the Roots.Cast(Bot2.Battlefield.Mox Jet; Mana: short)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Swamp)
+? Bot1.Graveyard = Entomb; Swamp; Entomb; Ornithopter
+Bot1.Hand.Drag to the Roots.Cast(Bot2.Battlefield.Mox Jet)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Mox Jet = (absent)
+Bot2.Graveyard = Mox Jet; Entomb; Swamp
