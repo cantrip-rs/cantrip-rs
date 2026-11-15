@@ -1,0 +1,58 @@
+# Downwind Ambusher, second mode: "Destroy target creature an opponent controls that was dealt damage this turn." Bot1 Shocks one of
+# Bot2's two Walls of Wood (0/3, it survives with 2 damage), then casts the Ambusher and chooses the second mode: only the damaged
+# Wall is a legal target (the target is taken without asking) and it is destroyed while the undamaged Wall stays.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Shock
+Downwind Ambusher
+Swamp x20
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Wall of Wood
+Wall of Wood
+Forest x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Wall of Wood.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Wall of Wood.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Wall of Wood)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Downwind Ambusher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Wall of Wood
+Bot2.Battlefield = Forest; Mox Emerald; Wall of Wood
+Bot2.Battlefield.Wall of Wood.Damage = 0
+Bot1.Battlefield.Downwind Ambusher.Damage = 0
+Stack.Count = 0

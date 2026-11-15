@@ -1,0 +1,11 @@
+{
+  "name": "Downwind Ambusher",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Skunk Assassin",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Flash\nWhen this creature enters, choose one —\n• Target creature an opponent controls gets -1/-1 until end of turn.\n• Destroy target creature an opponent controls that was dealt damage this turn.",
+  "keywords": [
+    "Flash"
+  ]
+}

@@ -1,0 +1,44 @@
+# Downwind Ambusher, first mode: "gets -1/-1 until end of turn" (CR 611.2a, 514.2). Bot1 casts it on its own turn 3 targeting Bot2's
+# Ornithopter (0/2), which survives as a -1/1 and is a 0/2 again on turn 4.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Downwind Ambusher
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Downwind Ambusher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = -1
+? Bot2.Battlefield.Ornithopter.Toughness = 1
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
