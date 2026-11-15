@@ -1,0 +1,57 @@
+# Conductive Machete (4): "When this Equipment enters, manifest dread, then attach this Equipment to that creature." (CR 701.62a,
+# 701.3a), "Equipped creature gets +2/+1." and "Equip {4}" (CR 702.6a). Turn 1 Black Lotus and Mox Ruby pay exactly {4} (the pool
+# empty right after); of Llanowar Elves and Lightning Bolt the Elves goes face down (a 2/2) and the Bolt to the graveyard, and the
+# Machete attaches to that face-down creature, which is then a 4/3. On turn 3 the Equip, paid with exactly four mana, moves it to
+# Ornithopter (0/2 -> 2/3) and the face-down creature goes back to 2/2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Conductive Machete
+Ornithopter
+Plains
+Plains
+Llanowar Elves
+Lightning Bolt
+Plains x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Conductive Machete.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Llanowar Elves | Lightning Bolt)
+? Bot1.Graveyard = Lightning Bolt; Black Lotus
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Llanowar Elves
+? Bot1.Battlefield..Power = 4
+? Bot1.Battlefield..Toughness = 3
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Conductive Machete.Activate(Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+
+[Expect]
+Bot1.Battlefield.Conductive Machete.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 3
