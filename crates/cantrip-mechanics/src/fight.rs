@@ -144,3 +144,17 @@ pub fn targets_each_bite_last(g: &mut dyn Game, item: &StackItem) {
         .collect();
     g.damage_together(&hits);
 }
+
+/// "Target creature you control deals damage equal to twice its power to target [creature]" as a whole effect (CR 120.3, 609.7,
+/// 608.2b): `first_target_bites_second` with the damage doubled. The power is read as the spell resolves (CR 608.2c), a creature
+/// with none (or less) dealing none (CR 120.8); twice a positive 32-bit power fits an unsigned one. If either target is illegal
+/// then, no damage is dealt. Punishing Punch and Polliwallop print it.
+pub fn first_target_bites_second_for_twice_its_power(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let (Some(creature), Some(victim)) = (targets::object(g, item, 0), targets::object(g, item, 1)) {
+        let power = damage_equal_to_power(g, creature);
+        if power > 0 {
+            g.damage(creature, Target::Object(victim), 2 * power);
+        }
+    }
+    Ok(())
+}
