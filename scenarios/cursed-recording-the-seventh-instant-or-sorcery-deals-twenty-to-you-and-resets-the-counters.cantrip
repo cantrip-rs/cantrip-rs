@@ -1,0 +1,104 @@
+# "Whenever you cast an instant or sorcery spell, put a time counter on this artifact. Then if there are seven or more time counters on
+# it, remove those counters and it deals 20 damage to you" (CR 122.1a, 608.2c, 120.3). Turn 1: Bot1 pays for Cursed Recording with
+# Black Lotus and a Mountain, then a Lightning Helix (Mox Ruby and Mox Pearl) at Bot2 is the first spell, gaining 3
+# to 23. Turn 3: Manamorphose, each cast paid by the mana the one before added, is the second to the sixth: after the sixth there are
+# six counters and no damage. The seventh gives the seventh counter, removes all of them and deals exactly 20 (23 to 3); the eighth
+# starts again at one counter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mountain
+Cursed Recording
+Lightning Helix
+Manamorphose
+Manamorphose x25
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Cursed Recording.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cursed Recording.Counters.Time = (absent)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cursed Recording.Counters.Time = 1
+? Bot1.Life = 23
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Manamorphose.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Red; Red)
+? Bot1.Mana = {R}{R}
+? Bot1.Battlefield.Cursed Recording.Counters.Time = 2
+Bot1.Hand.Manamorphose.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Red; Red)
+? Bot1.Mana = {R}{R}
+? Bot1.Battlefield.Cursed Recording.Counters.Time = 3
+Bot1.Hand.Manamorphose.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Red; Red)
+? Bot1.Mana = {R}{R}
+? Bot1.Battlefield.Cursed Recording.Counters.Time = 4
+Bot1.Hand.Manamorphose.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Red; Red)
+? Bot1.Mana = {R}{R}
+? Bot1.Battlefield.Cursed Recording.Counters.Time = 5
+Bot1.Hand.Manamorphose.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Red; Red)
+? Bot1.Mana = {R}{R}
+? Bot1.Battlefield.Cursed Recording.Counters.Time = 6
+? Bot1.Life = 23
+Bot1.Hand.Manamorphose.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Red; Red)
+? Bot1.Battlefield.Cursed Recording.Counters.Time = (absent)
+? Bot1.Life = 3
+Bot1.Hand.Manamorphose.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Red; Red)
+
+[Expect]
+Bot1.Battlefield.Cursed Recording.Counters.Time = 1
+Bot1.Life = 3
+Bot2.Life = 17
+Result = InProgress

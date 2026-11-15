@@ -1,0 +1,62 @@
+# "{T}: When you next cast an instant or sorcery spell this turn, copy that spell. You may choose new targets for the copy" (CR 603.7b,
+# 707.10, 707.10c). Cursed Recording is tapped (an artifact, so no summoning sickness) and a delayed ability waits. The first Lightning
+# Bolt, at Bot2, is copied and Bot1 aims the copy at itself: 3 damage each, and the copy is not cast, so it adds no time counter. The
+# ability tapped Recording, so it cannot be activated again; the second Bolt is not copied ("next" is once): Bot2 ends at 14, Bot1 at 17.
+
+[Bot1 Deck]
+Black Lotus
+Mountain
+Cursed Recording
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Cursed Recording.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Cursed Recording.Activate
+Bot1.Pass
+Bot2.Pass
+? Delayed.Count = 1
+? Bot1.Battlefield.Cursed Recording.Tapped = true
+! Bot1.Battlefield.Cursed Recording.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Triggers(put a time counter; copy that spell)
+? Stack.Count = 3
+Bot1.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Delayed.Count = 0
+? Bot1.Life = 17
+? Bot2.Life = 17
+? Bot1.Battlefield.Cursed Recording.Counters.Time = 1
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 14
+Bot1.Battlefield.Cursed Recording.Counters.Time = 2
