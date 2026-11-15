@@ -1,0 +1,8 @@
+{
+  "name": "Twitching Doll",
+  "manaCost": "{1}{G}",
+  "type": "Artifact Creature — Spider Toy",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{T}: Add one mana of any color. Put a nest counter on this creature.\n{T}, Sacrifice this creature: Create a 2/2 green Spider creature token with reach for each counter on this creature. Activate only as a sorcery."
+}

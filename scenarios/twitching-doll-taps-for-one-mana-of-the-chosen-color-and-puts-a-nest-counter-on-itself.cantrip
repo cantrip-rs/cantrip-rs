@@ -1,0 +1,39 @@
+# Twitching Doll {1}{G} Artifact Creature (2/2): "{T}: Add one mana of any color. Put a nest counter on this creature." Bot1 casts it on turn 1 with Mox
+# Emerald and Mox Jet. On turn 3 (no longer summoning sick) it taps for red, chosen on activation: that one red mana pays for Lightning Bolt (Bot2 takes 3),
+# and a nest counter is on the Doll. Tapped, it cannot make a second mana.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Twitching Doll
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Twitching Doll.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Twitching Doll.Counters.Nest = (absent)
+Bot1.Battlefield.Twitching Doll.Activate(Ability: Add; Color: Red)
+? Bot1.Mana = {R}
+? Bot1.Battlefield.Twitching Doll.Counters.Nest = 1
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt
+Bot1.Battlefield.Twitching Doll.Tapped = true
+Bot1.Battlefield.Twitching Doll.Counters.Nest = 1
+Bot1.Battlefield.Twitching Doll.Power = 2
+Bot1.Battlefield.Twitching Doll.Toughness = 2

@@ -1,0 +1,48 @@
+# Twitching Doll's "Create a 2/2 green Spider creature token with reach for each counter on this creature" counts counters of every
+# kind, not only nest counters (CR 122.1, 608.2h). The Doll taps for white on turn 3 (one nest counter) to cast Luminarch Aspirant,
+# whose beginning-of-combat trigger puts a +1/+1 counter on the Doll. On turn 5 the Doll, with one nest counter and one +1/+1
+# counter, is sacrificed: two green 2/2 Spiders with reach arrive (one if only nest counters were counted).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Twitching Doll
+Luminarch Aspirant
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Twitching Doll.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Twitching Doll.Activate(Ability: Add; Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Luminarch Aspirant.Cast
+Bot1.Pass
+Bot1.Target(Twitching Doll)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Twitching Doll.Counters.Nest = 1
+? Bot1.Battlefield.Twitching Doll.Counters.PlusOnePlusOne = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Twitching Doll.Activate(Ability: Create a 2/2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Twitching Doll
+Bot1.Battlefield.Spider Token#1.Power = 2
+Bot1.Battlefield.Spider Token#1.Toughness = 2
+Bot1.Battlefield.Spider Token#1.Colors = Green
+Bot1.Battlefield.Spider Token#2.Keywords = Reach
+Bot1.Battlefield.Count = 6
