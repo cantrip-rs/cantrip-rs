@@ -1,0 +1,29 @@
+# Peculiar Lighthouse: "This land enters tapped unless a player has 13 or less life." Both players start at 20 life, so it enters tapped
+# (CR 614.1d), untaps on turn 3 and taps for {U} (the first color it prints: the pool check pins it); it makes no
+# other color, nor colorless.
+
+[Bot1 Deck]
+Peculiar Lighthouse
+Plains x19
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Peculiar Lighthouse.Play
+? Bot1.Battlefield.Peculiar Lighthouse.Tapped = true
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Peculiar Lighthouse.Tapped = false
+! Bot1.Battlefield.Peculiar Lighthouse.Activate(Color: White)
+! Bot1.Battlefield.Peculiar Lighthouse.Activate(Color: Black)
+! Bot1.Battlefield.Peculiar Lighthouse.Activate(Color: Green)
+! Bot1.Battlefield.Peculiar Lighthouse.Activate(Color: Colorless)
+Bot1.Battlefield.Peculiar Lighthouse.Activate(Color: Blue)
+? Bot1.Mana = {U}
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Battlefield.Peculiar Lighthouse.Tapped = true

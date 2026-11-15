@@ -1,0 +1,23 @@
+# Peculiar Lighthouse: the player with 13 or less life may be an opponent, not only the land's controller (Bot1 stays at 20, Bot2 starts
+# at 13): "a player", CR 614.1d. It enters untapped and taps for {U}.
+
+[Life]
+Bot2: 13
+
+[Bot1 Deck]
+Peculiar Lighthouse
+Plains x19
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Peculiar Lighthouse.Play
+? Bot1.Battlefield.Peculiar Lighthouse.Tapped = false
+Bot1.Battlefield.Peculiar Lighthouse.Activate(Color: Blue)
+? Bot1.Mana = {U}
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 13
+Bot1.Battlefield.Peculiar Lighthouse.Tapped = true
