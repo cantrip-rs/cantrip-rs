@@ -1,0 +1,56 @@
+# Festival of Embers is a permission, not an alternative cost (CR 118.9a, 601.2b, 601.2f): Bot2's Duress puts Bot1's Fireblast in its graveyard, and on turn 3,
+# with the Festival out, Bot1 casts the Fireblast from there for its own alternative cost - sacrificing its two Mountains rather than paying {4}{R}{R} - with the
+# Festival's 1 life owed on top, paid once (Bot1 19). Bot2 takes 4 and the Fireblast is exiled as it resolves.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Festival of Embers
+Fireblast
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Swamp
+Duress
+Swamp x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Duress.Cast(Bot1)
+Bot2.Choose(Fireblast)
+? Bot1.Graveyard = Fireblast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Festival of Embers.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+Bot1.Graveyard.Fireblast.Cast(Bot2; Ability: Sacrifice)
+Bot1.Choose(Mountain; Mountain)
+? Bot1.Life = 19
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 19
+Bot2.Life = 16
+Bot1.Battlefield = Festival of Embers; Mox Ruby; Mox Jet; Mox Pearl; Mox Emerald
+Bot1.Graveyard.Count = 0
+Exile = Fireblast; Mountain; Mountain

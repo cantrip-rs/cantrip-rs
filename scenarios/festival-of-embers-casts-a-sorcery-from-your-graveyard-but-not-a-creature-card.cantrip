@@ -1,0 +1,60 @@
+# Festival of Embers casts "instant and sorcery spells": Bot1's Chain Lightning (a sorcery, Bot2 17) is cast again from its graveyard on turn 5, for {R} and 1 life
+# (Bot1 19, Bot2 14), and is exiled. Its Memnite, killed by Bot2's Lightning Bolt on turn 2, sits in the graveyard too but is no instant or sorcery, so it cannot be
+# cast from there. Bot2's own Bolt, in Bot2's graveyard, is not Bot1's to cast and stays there.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Chain Lightning
+Memnite
+Festival of Embers
+Mountain x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Chain Lightning.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Memnite; Chain Lightning
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Festival of Embers.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Graveyard.Memnite.Cast
+Bot1.Graveyard.Chain Lightning.Cast(Bot2; Ability: During your turn)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 14
+Exile = Chain Lightning
+Bot1.Graveyard = Memnite
+Bot2.Graveyard = Lightning Bolt

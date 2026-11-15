@@ -1,0 +1,56 @@
+# Festival of Embers lets "instant and sorcery spells" be cast from your graveyard, judged on the face being cast (CR 715.3, 715.3a):
+# Bonecrusher Giant, discarded to Faithless Looting on turn 1, is cast from Bot1's graveyard on turn 5 as Stomp (an instant - Adventure)
+# for {1}{R} and the Festival's 1 life (Bot1 19), dealing 2 to Bot2 (18), while the Giant itself, a creature spell, is refused though the
+# mana is there (Mox Jet still untapped). Stomp, cast as an Adventure, goes on its adventure in exile as it resolves (CR 715.3d).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Faithless Looting
+Bonecrusher Giant
+Festival of Embers
+Mountain x12
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Bonecrusher Giant; Mountain)
+? Bot1.Graveyard.Count = 3
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Festival of Embers.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain#1.Activate
+! Bot1.Graveyard.Bonecrusher Giant.Cast(Ability: Bonecrusher Giant: During your turn)
+Bot1.Graveyard.Bonecrusher Giant.Cast(Bot2; Ability: Stomp: During your turn)
+? Bot1.Life = 19
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 19
+Bot2.Life = 18
+Exile = Bonecrusher Giant

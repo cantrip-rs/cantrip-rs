@@ -1,0 +1,82 @@
+# Festival of Embers: "If a card or token would be put into your graveyard from anywhere, exile it instead." Bot1 casts Festival on turn 1, then Blood Artist and
+# Lingering Souls on turn 3 (two Spirit tokens). On turn 4 Bot2's Lightning Bolt kills a Spirit: the token is exiled instead of dying, so Blood Artist does not trigger
+# (both lives 20), while Bot2's own Bolt goes to Bot2's graveyard. Lingering Souls itself was exiled as it resolved. On turn 5 Bot1 pays {1}{R} to sacrifice the Festival, which is exiled as it leaves (it is a card
+# bound for Bot1's graveyard). On turn 6 Bot2's second Bolt kills the other Spirit, which dies normally, and Blood Artist triggers: Bot2 19, Bot1 21.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Festival of Embers
+Blood Artist
+Lingering Souls
+Plains x12
+
+[Bot2 Deck]
+Mountain
+Mountain
+Lightning Bolt
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Festival of Embers.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Blood Artist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 9
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Spirit Token#1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 8
+? Bot1.Life = 20
+? Bot2.Life = 20
+? Bot2.Graveyard = Lightning Bolt; Island
+? Bot1.Graveyard.Count = 0
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Festival of Embers.Activate
+Bot1.Pass
+Bot2.Pass
+? Exile = Festival of Embers; Lingering Souls
+? Bot1.Graveyard.Count = 0
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Spirit Token)
+Bot2.Pass
+Bot1.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 19

@@ -1,0 +1,61 @@
+# Festival of Embers' permission is "by paying 1 life in addition to their other costs" (CR 118.8, 601.2b), and a player can pay
+# life only if their life total is at least the payment (CR 119.4). Turn 1 Bot1 casts Lightning Bolt (Bot2 17), which goes to the
+# graveyard; turn 3 it casts the Festival with the five Moxen. Turn 7 it casts Lich with the Swamp and a Dark Ritual: Bot1 loses
+# all 20 life and stays in the game at 0 (Lich). With {R} floating, the Bolt in its graveyard may not be cast by the Festival's
+# permission, since its total cost, {R} and 1 life, can't be paid (CR 601.2f-h): a cast by the way is offered only for a total its
+# caster can pay. The positive control is festival-of-embers-casts-an-instant-from-your-graveyard-for-its-cost-and-1-life-and-exiles-it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Lightning Bolt
+Swamp
+Festival of Embers
+Lich
+Dark Ritual
+Mountain x10
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Festival of Embers.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Lich.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 0
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Graveyard.Lightning Bolt.Cast(Bot2; Ability: During your turn)
+
+[Expect]
+Bot1.Life = 0
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt
