@@ -1,0 +1,70 @@
+# Impossible Inferno: "deals 6 damage to target creature. Delirium - If there are four or more card types among cards in your graveyard,
+# exile the top card of your library. You may play it until the end of your next turn" (CR 120.3, 207.2c, 701.13a, 611.2a). On turn 1 Black
+# Lotus pays for a Wheel of Fortune that puts a sorcery (the Wheel), an artifact (the Lotus), an artifact creature (Ornithopter) and a land
+# (the Islands) into Bot1's graveyard: four types. Bot2 draws a Black Lotus and a Glacial Wall (0/7). On turn 3 the Inferno cannot target a
+# player; aimed at the Wall it leaves it alive with exactly 6 damage, and exiles Bot1's top card, a Mountain (Bot2's library is untouched).
+# The Mountain is not played that turn, and is played on turn 5 as the land for the turn, the end of Bot1's next turn.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Wheel of Fortune
+Ornithopter
+Island
+Island
+Island
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Impossible Inferno
+Island
+Island
+Island
+Mountain
+Island x8
+
+[Bot2 Deck]
+Island x7
+Black Lotus
+Glacial Wall
+Island x5
+Island x6
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Glacial Wall.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+! Bot1.Hand.Impossible Inferno.Cast(Bot2)
+Bot1.Hand.Impossible Inferno.Cast(Bot2.Battlefield.Glacial Wall)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Glacial Wall.Damage = 6
+? Exile = Mountain
+[T5 Bot1.Main1]
+Bot1.Exile.Mountain.Play
+
+[Expect]
+Bot2.Battlefield.Glacial Wall.Damage = 0
+Exile.Count = 0
+Bot1.Battlefield.Count = 6
+Bot2.Library.Count = 4
+Bot1.Graveyard.Count = 7

@@ -1,0 +1,46 @@
+# Delirium - "four or more card types among cards in your graveyard" (CR 207.2c): Bot1's graveyard holds a Culling the Weak (instant)
+# and the Ornithopter it sacrificed (artifact, creature): three types, one short. Bot2's graveyard holds a Forest (land) discarded to
+# Mox Diamond, which is not Bot1's graveyard. Impossible Inferno kills Bot1's own Dryad Arbor (a land creature, 1/1): a land, the
+# fourth type, but the Arbor is put into the graveyard only after the Inferno has finished resolving (CR 704.3), so nothing is
+# exiled; the top card of Bot1's library stays where it is.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Ornithopter
+Culling the Weak
+Impossible Inferno
+Dryad Arbor
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Mox Diamond
+Forest
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Dryad Arbor.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Diamond.Cast
+Bot2.Accept
+Bot2.Choose(Forest)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Culling the Weak.Cast
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Impossible Inferno.Cast(Bot1.Battlefield.Dryad Arbor)
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Dryad Arbor; Impossible Inferno; Culling the Weak; Ornithopter
+Bot2.Graveyard = Forest
+Exile.Count = 0
+Bot1.Library.Count = 12

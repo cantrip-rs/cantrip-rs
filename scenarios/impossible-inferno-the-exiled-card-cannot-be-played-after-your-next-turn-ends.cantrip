@@ -1,0 +1,63 @@
+# "You may play it until the end of your next turn" (CR 611.2a): with delirium (the Wheel of Fortune's four types, as in the other
+# scenario) the Inferno on turn 3 exiles a Lightning Bolt. It is not cast that turn, nor on turn 5, and on turn 7 - after the end of
+# Bot1's next turn - with a Mox Ruby's mana in the pool it can no longer be cast and stays in exile.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Wheel of Fortune
+Ornithopter
+Island
+Island
+Island
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Impossible Inferno
+Island
+Island
+Island
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x7
+Black Lotus
+Glacial Wall
+Island x5
+Island x6
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Glacial Wall.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Impossible Inferno.Cast(Bot2.Battlefield.Glacial Wall)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Exile = Lightning Bolt
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+
+[Expect]
+Exile = Lightning Bolt
+Bot2.Life = 20
