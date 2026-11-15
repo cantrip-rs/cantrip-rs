@@ -2,15 +2,6 @@ use cantrip_api::*;
 use cantrip_mechanics::{library, targets, triggers::THIS_ENTERS_IF_CAST};
 use cantrip_oracle as oracle;
 
-/// "When this creature enters, if you cast it, mill four cards (CR 701.17). When you do, ..." The reflexive trigger
-/// (CR 603.12) follows only if four cards were milled, and chooses its target as it goes on the stack, the cards just
-/// milled included.
-fn mill_and_reflex(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let this = g.card_id(&CARD);
-    library::mill_then_reflexive(g, item, 4, AbilityRef::delayed(this, 0));
-    Ok(())
-}
-
 /// "Return target creature card with mana value 3 or less from your graveyard to the battlefield": it enters under the
 /// ability's controller's control (CR 110.2a). A target gone by resolution is left alone (CR 608.2b).
 fn return_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -22,7 +13,7 @@ fn return_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
         THIS_ENTERS_IF_CAST,
-        mill_and_reflex,
+        library::mill_then_reflexive_trigger::<4>,
         "When this creature enters, if you cast it, mill four cards. When you do, return target creature card with mana value 3 or less from your graveyard to the battlefield.",
     )],
     delayed: &[delayed_trigger(

@@ -1075,6 +1075,14 @@ pub fn mill_then_reflexive(g: &mut dyn Game, item: &StackItem, count: u32, refle
     }
 }
 
+/// "Mill `N` cards. When you do, [the card's first delayed ability]" as the whole effect of a triggered ability or chapter: `mill_then_reflexive` of `N`
+/// with the card's own delayed ability 0, chosen as it goes on the stack (CR 603.12), the milled cards included. Primal Witchstalker (4),
+/// Yathan Roadwatcher (4), The Last Ronin (II, 4), Kraven's Last Hunt (I, 5) and Wick's Patrol (3) print it.
+pub fn mill_then_reflexive_trigger<const N: u32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    mill_then_reflexive(g, item, N, AbilityRef::delayed(item.ability.card, 0));
+    Ok(())
+}
+
 /// "In any order" (CR 401.4): `player` puts `cards` on one `end` of their library (`DestinationKind::LibraryTop` or
 /// `LibraryBottom`) in the order they choose, the first highest and the last lowest. Nobody is asked about fewer than two cards. The cards in
 /// that order, for `put_into_library` or `arrange_library`. Bow of Nylea and Valakut Awakening put cards on the bottom,
