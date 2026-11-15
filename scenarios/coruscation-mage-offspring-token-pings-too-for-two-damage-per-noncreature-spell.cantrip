@@ -1,0 +1,44 @@
+# Coruscation Mage cast with offspring {2} makes a 1/1 token copy (CR 702.175a), which has the ability too: one noncreature spell
+# (Mox Pearl) triggers both, each dealing 1 to each opponent (Bot2 20 to 18).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Coruscation Mage
+Mox Pearl
+Mountain x14
+
+[Bot2 Deck]
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Coruscation Mage.Cast(Kicked: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 6
+? Bot2.Life = 20
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Triggers(Coruscation Mage; Coruscation Mage)
+? Stack.Count = 3
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Stack.Count = 0

@@ -1,0 +1,46 @@
+# Coruscation Mage triggers on spells YOU cast. Turn 2: Bot2 casts Mox Ruby (noncreature, but not Bot1's): nothing happens (both
+# at 20). Turn 3: Bot1 casts Mox Pearl; the trigger goes on the stack and Bot2 responds with Lightning Bolt on the Mage (2/2), which
+# dies. The ability still resolves (CR 113.7a), the Mage dealing 1 as it last existed: Bot2 goes to 19.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Coruscation Mage
+Mox Pearl
+Mountain x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Coruscation Mage.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot1.Life = 20
+? Bot2.Life = 20
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+? Stack.Count = 2
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Coruscation Mage)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Coruscation Mage
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 20
+Bot1.Graveyard = Coruscation Mage
