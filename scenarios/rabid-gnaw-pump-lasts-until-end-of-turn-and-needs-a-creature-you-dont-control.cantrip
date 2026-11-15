@@ -1,0 +1,50 @@
+# Rabid Gnaw: Bot1's Ornithopter (0/2) gets +1/+0 and then deals damage equal to its power - 1, not 0 - to Bot2's Llanowar Elves (1/1), which dies. The +1/+0 changes only
+# power (the toughness stays 2) and ends with the turn (CR 514.2). The second target must be one Bot1 doesn't control: its other Ornithopter is refused.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Ornithopter
+Ornithopter
+Rabid Gnaw
+Island x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Rabid Gnaw.Cast
+! Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Target(Bot1.Battlefield.Ornithopter#1)
+! Bot1.Target(Bot1.Battlefield.Ornithopter#2)
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Llanowar Elves
+? Bot1.Battlefield.Ornithopter#1.Power = 1
+? Bot1.Battlefield.Ornithopter#1.Toughness = 2
+? Bot1.Battlefield.Ornithopter#2.Power = 0
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Ornithopter#1.Power = 0
+
+[Expect]
+Bot1.Battlefield.Ornithopter#1.Power = 0
+Bot1.Battlefield.Ornithopter#1.Toughness = 2
+Bot1.Graveyard = Rabid Gnaw
