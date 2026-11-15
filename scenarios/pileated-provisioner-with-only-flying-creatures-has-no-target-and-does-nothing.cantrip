@@ -1,0 +1,57 @@
+# Pileated Provisioner with no creature you control without flying but itself and a Suntail Hawk (both fly) has no legal
+# target: its enters trigger is not put on the stack (CR 603.3d) and nobody is asked for a target. Bot2's Dwarven Trader
+# without flying is no target either: it is not Bot1's.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Pileated Provisioner
+Suntail Hawk
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Dwarven Trader
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Suntail Hawk.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Dwarven Trader.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Pileated Provisioner.Cast
+Bot1.Pass
+! Bot1.Target
+[Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Pileated Provisioner.Power = 3
+Bot1.Battlefield.Pileated Provisioner.Toughness = 4
+Bot1.Battlefield.Pileated Provisioner.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Suntail Hawk.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Dwarven Trader.Counters.PlusOnePlusOne = (absent)
