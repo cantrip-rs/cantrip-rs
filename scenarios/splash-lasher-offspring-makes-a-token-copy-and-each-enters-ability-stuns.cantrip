@@ -1,0 +1,54 @@
+# Splash Lasher cast for {3}{U} plus offspring {1}{U} (Black Lotus and three Moxen). As it enters, the offspring trigger makes a
+# 1/1 token copy (CR 702.175a) and the Lasher's own enters ability taps and stuns Bot2's Llanowar Elves. The token copy has the
+# enters ability too (CR 707.2) and taps and stuns the Elves again, already tapped (the counter goes on regardless, CR 122.1d):
+# two stun counters. The token is 1/1 and the Lasher 3/3.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Black Lotus
+Splash Lasher
+Island
+Island x15
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x15
+
+[Actions]
+Bot1.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Splash Lasher.Cast(Kicked: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot2.Battlefield.Llanowar Elves.Counters.Stun = 2
+Bot1.Battlefield.Splash Lasher#2.Token = true
+Bot1.Battlefield.Splash Lasher#2.Power = 1
+Bot1.Battlefield.Splash Lasher#1.Power = 3

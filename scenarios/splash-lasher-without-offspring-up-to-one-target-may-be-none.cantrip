@@ -1,0 +1,46 @@
+# Splash Lasher cast without paying offspring (Kicked: 0): no token copy is made, and its enters ability is "up to one target",
+# so Bot1 chooses no target: the Llanowar Elves are neither tapped nor stunned (CR 601.2c, 115.1).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Mox Ruby
+Splash Lasher
+Island
+Island x15
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x15
+
+[Actions]
+Bot1.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Splash Lasher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Tapped = false
+Bot2.Battlefield.Llanowar Elves.Counters.Stun = (absent)
+Bot1.Battlefield.Splash Lasher.Power = 3
+Bot1.Battlefield.Count = 5

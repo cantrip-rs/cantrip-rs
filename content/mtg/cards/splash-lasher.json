@@ -1,0 +1,8 @@
+{
+  "name": "Splash Lasher",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Frog Wizard",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Offspring {1}{U} (You may pay an additional {1}{U} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\nWhen this creature enters, tap up to one target creature and put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)"
+}
