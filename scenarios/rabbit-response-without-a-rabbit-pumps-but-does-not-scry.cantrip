@@ -1,0 +1,53 @@
+# Rabbit Response: the scry is conditional on "a Rabbit". Bot1's Chance-Met Elves (an Elf Warrior, 3/2) and Ornithopter are
+# pumped to 5/3 and 2/3 but Bot1 controls no Rabbit, so nothing is scried and the Elves' "whenever you scry" gets no counter.
+# The Rabbit Warren Elder is Bot2's, which "you control" does not count (CR 701.22a, 608.2c).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Pearl
+Mox Emerald
+Chance-Met Elves
+Ornithopter
+Rabbit Response
+Swamp
+Mountain
+Forest
+Plains x10
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Warren Elder
+Island x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Chance-Met Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Warren Elder.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Rabbit Response.Cast
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Chance-Met Elves.Power = 5
+Bot1.Battlefield.Chance-Met Elves.Toughness = 3
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot2.Battlefield.Warren Elder.Power = 2
+Bot1.Library.Top = Mountain
