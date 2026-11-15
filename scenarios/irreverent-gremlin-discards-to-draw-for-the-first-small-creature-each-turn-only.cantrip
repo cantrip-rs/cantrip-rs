@@ -1,0 +1,56 @@
+# Irreverent Gremlin: "Whenever another creature you control with power 2 or less enters, you may discard a card. If you do, draw
+# a card. Do this only once each turn." (CR 603.2, 603.2h, 701.9, 121.1). Casting the Gremlin does nothing (it is not "another"
+# creature to itself). The first Ornithopter on turn 1 offers the discard: Bot1 discards the Island and draws the Forest (the
+# library's top card). The second Ornithopter that turn triggers nothing, the once having been done (no question is asked and the
+# Gremlin has menace). On turn 3 the once-each-turn is new: the third Ornithopter discards the Forest and draws the Island (the Swamp was the turn-3 draw).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Irreverent Gremlin
+Ornithopter
+Ornithopter
+Ornithopter
+Island
+Forest
+Swamp
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Irreverent Gremlin.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+? Stack.Count = 0
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+? Bot1.Graveyard = Island
+? Bot1.Hand = Forest; Ornithopter; Ornithopter
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Hand.Count = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Forest)
+
+[Expect]
+Bot1.Graveyard = Forest; Island
+Bot1.Hand.Count = 2
+Bot1.Battlefield.Irreverent Gremlin.Keywords = Menace

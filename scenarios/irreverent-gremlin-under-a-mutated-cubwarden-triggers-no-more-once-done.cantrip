@@ -1,0 +1,48 @@
+# Irreverent Gremlin with Cubwarden mutated over it (CR 702.140c, 702.140e): the merged permanent is Cubwarden with the Gremlin's
+# ability. "Do this only once each turn" (CR 603.2h): once Bot1 has discarded for one of Cubwarden's two Cat tokens, the ability
+# triggers no more that turn - the Ornithopter cast after puts nothing on the stack.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Irreverent Gremlin
+Black Lotus
+Cubwarden
+Ornithopter
+Island
+Island
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Irreverent Gremlin.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cubwarden.Cast(Irreverent Gremlin; Ability: Mutate)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Choose(Island#1)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Graveyard = Island; Black Lotus
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Tapped = false
+? Stack.Count = 0
+
+[Expect]
+Turn = 3
+Bot1.Hand = Forest; Island

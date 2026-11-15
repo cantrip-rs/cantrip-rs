@@ -1,0 +1,45 @@
+# Irreverent Gremlin: "You may discard a card. If you do, draw a card. Do this only once each turn." Declining is not doing it
+# (CR 603.2h), so the second Ornithopter the same turn is still offered the discard. Bot1 declines for the first Ornithopter
+# (Choose() takes no card: Bot1 keeps the Island and draws nothing), discards the Island for the second and draws the Forest.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Irreverent Gremlin
+Ornithopter
+Ornithopter
+Island
+Island
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Irreverent Gremlin.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Bot1.Hand = Island; Island; Ornithopter
+? Bot1.Library.Count = 13
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island#1)
+
+[Expect]
+Bot1.Graveyard = Island
+Bot1.Hand = Forest; Island
+Bot1.Library.Count = 12
