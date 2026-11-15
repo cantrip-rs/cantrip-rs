@@ -1,0 +1,92 @@
+# The Rollercrusher Ride: "Delirium - If a source you control would deal noncombat damage to a permanent or player while there are four or
+# more card types among cards in your graveyard, it deals double that damage instead." Bot1's Lightning Bolt (instant) kills its own Memnite
+# (artifact creature) and its Chain Lightning (sorcery) hits Bot2: those two deal their 3 undoubled, there being none, then three, types
+# (instant, artifact, creature) in the graveyard before Chain Lightning arrives there. With a fourth type (sorcery) in the graveyard, the
+# Ride's own 1 damage to Bot2's 2/2 Runeclaw Bear (X = 1) is doubled to 2, and it dies. Bot2's Lightning Bolt to Bot1's face in turn 4 is
+# a source Bot2 controls, not Bot1: it deals just 3 (Chain Lightning offers its copy to Bot2, who declines). And in turn 5 Bot1's hasty
+# Monastery Swiftspear hits for its 1 combat damage, which is not doubled (Bot2 ends at 17 - 1 = 16).
+
+[Bot1 Deck]
+Mox Ruby
+Gleemox
+Mox Emerald
+Mox Sapphire
+Memnite
+Lightning Bolt
+Chain Lightning
+The Rollercrusher Ride
+Monastery Swiftspear
+Mountain x12
+
+[Bot2 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Runeclaw Bear
+Lightning Bolt
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Memnite; Lightning Bolt
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Chain Lightning.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot2.Decline
+? Bot1.Graveyard = Chain Lightning; Memnite; Lightning Bolt
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Runeclaw Bear.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Rollercrusher Ride.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Runeclaw Bear)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Runeclaw Bear
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Monastery Swiftspear.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Monastery Swiftspear > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 16

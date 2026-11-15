@@ -1,0 +1,77 @@
+# The Rollercrusher Ride: "When The Rollercrusher Ride enters, it deals X damage to each of up to X target creatures." Cast for X = 2 with five
+# Moxen, it targets at most two creatures, whoever controls them: a third is refused, and the two chosen (Bot2's 3/3 Hill Giant and its
+# Memnite) are each dealt exactly 2, so the Memnite dies and the Hill Giant survives with 2 damage marked, while the untargeted Ornithopter is
+# untouched. With fewer than four card types in Bot1's graveyard there is no delirium, so the damage is not doubled (it would kill the Giant).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+The Rollercrusher Ride
+Mountain x12
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Hill Giant
+Memnite
+Ornithopter
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Rollercrusher Ride.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Hill Giant; Bot2.Battlefield.Memnite; Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Hill Giant; Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Hill Giant.Damage = 2
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Memnite
+Bot2.Battlefield = Ornithopter; Hill Giant; Mox Sapphire; Mox Emerald; Mox Jet; Mox Ruby
+Bot1.Battlefield = The Rollercrusher Ride; Mox Sapphire; Mox Emerald; Mox Pearl; Mox Jet; Mox Ruby

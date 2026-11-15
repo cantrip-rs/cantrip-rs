@@ -1,0 +1,6 @@
+{
+  "name": "The Rollercrusher Ride",
+  "manaCost": "{X}{2}{R}",
+  "type": "Legendary Enchantment",
+  "oracleText": "Delirium — If a source you control would deal noncombat damage to a permanent or player while there are four or more card types among cards in your graveyard, it deals double that damage instead.\nWhen The Rollercrusher Ride enters, it deals X damage to each of up to X target creatures."
+}
