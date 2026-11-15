@@ -732,6 +732,7 @@ Snow source mana (CR 107.4h) retains its production-time quality. `Spend:` items
 `BotN.Library.Top` is the name of the card on top of that player's library (CR 401.1), whoever can see it; absent for an empty library.
 `BotN.Sees.BotM.LibraryTop` is the current top card name visible to that viewer, or `(hidden)`; it uses the engine visibility projection, including CR 401.5's announcement barrier.
 `BotN.Sees.BotM.LibraryTopObject` is that visible card's object ID, or `(hidden)`. Assert its initial ID beside a later inequality to prove identity renewal (CR 401.6, 701.20d) without exposing a hidden card.
+`BotN.Sees.BotM.Hand` (with `.Count`, unordered) lists the cards of another player's hand that viewer sees now, by name, through the same visibility projection: a card a reveal in effect shows everyone (CR 701.20a; Firestorm Phoenix's "plays with that card revealed in their hand"), the hand of a player they control (CR 723.4). Empty while they see none of it; written only for another player's hand.
 
 `BotN.Exertions` (with `.Count`) lists that player's exertions this turn in event order, one name per
 exertion (CR 701.43b). It differs from a permanent's `.Exerted`, which marks a pending missed untap.

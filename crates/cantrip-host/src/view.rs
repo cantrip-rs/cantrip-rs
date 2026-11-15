@@ -1373,6 +1373,22 @@ impl<'a> Projector<'a> {
         text
     }
 
+    /// Each resolved rule about an open set that takes `id` in now (CR 611.2c), on its face in its card's words and named for
+    /// it: no ability of the object says so.
+    fn lasting_rules(&self, view: &mut ObjectView, id: ObjectId) {
+        let game = self.game;
+        for e in game.state.effects.iter() {
+            if let EffectKind::LastingRule { card, index, .. } = e.kind
+                && let Some(rule) = game.cards.get(card).lasting_rules.get(index as usize)
+                && game.lasting_rule_applies(e, id)
+            {
+                let name = game.cards.get(card).name;
+                let text = crate::text::changed_text(rule.text, name, e.words);
+                view.granted_abilities.push(AbilityTextView { text: format!("{text} ({name})"), spent: false });
+            }
+        }
+    }
+
     fn describe(&self, id: ObjectId, handle: ViewHandle, item: Option<StackItem>, handles: &mut HandleSpace) -> ObjectView {
         let game = self.game;
         let s = &game.state;
@@ -1621,6 +1637,11 @@ impl<'a> Projector<'a> {
         if (on_battlefield || zone.is(ZoneKind::Stack)) && !obj.face_down {
             self.ability_changes(&mut view, id, &c, obj.copy);
         }
+        // A resolved rule about cards that takes in this card in a hand (CR 611.2c: Firestorm Phoenix's "that player plays with
+        // that card revealed in their hand and can't play it"), in its card's words and named for it.
+        if zone.is(ZoneKind::Hand) {
+            self.lasting_rules(&mut view, id);
+        }
         // "Can't attack", "can't block", "can't be blocked [except by ...]" and "blocks if able" from a resolved effect (CR 508.1c, 509.1b-c), with how long they last: no ability
         // of the creature says so, so its face does.
         if on_battlefield {
@@ -1782,16 +1803,7 @@ impl<'a> Projector<'a> {
             }
             // A resolved rule about an open set that takes it in now (CR 611.2c: Falter's "creatures without flying can't block
             // this turn"), in its card's words and named for it: no ability of the permanent says so.
-            for e in s.effects.iter() {
-                if let EffectKind::LastingRule { card, index, .. } = e.kind
-                    && let Some(rule) = game.cards.get(card).lasting_rules.get(index as usize)
-                    && game.lasting_rule_applies(e, id)
-                {
-                    let name = game.cards.get(card).name;
-                    let text = crate::text::changed_text(rule.text, name, e.words);
-                    view.granted_abilities.push(AbilityTextView { text: format!("{text} ({name})"), spent: false });
-                }
-            }
+            self.lasting_rules(&mut view, id);
             // "Can't attack" from a static ability while its condition holds (CR 508.1c: Patchwork Beastie without delirium).
             if c.is(CardType::Creature) && !game.attack_rules_allow(id) {
                 view.granted_abilities.push(AbilityTextView { text: "Can't attack.".to_string(), spent: false });

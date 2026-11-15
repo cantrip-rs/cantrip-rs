@@ -116,6 +116,8 @@ pub fn observable(game: &Game, viewer: PlayerId, extra: &HashSet<ObjectId>) -> H
     visible.extend(s.battlefield().iter().copied());
     visible.extend(s.zone(Zone::PHASED_OUT).iter().copied());
     visible.extend(s.zone(Zone::COMMAND).iter().copied());
+    // The cards of hands a rule keeps public one by one, beside the whole hands above (Firestorm Phoenix's "that card").
+    visible.extend(game.revealed_hand_cards());
     visible.extend(stack_entries(s).iter().map(StackEntry::key));
     // A card in a hand or a library while a reveal of it is in effect: what the cost or announcement of a spell or ability
     // on the stack revealed, a miracle card (CR 701.20a). The card an ability was activated from there is shown by the

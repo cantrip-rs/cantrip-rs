@@ -419,6 +419,12 @@ impl StateDump {
                 let top = s.zone(Zone::library(owner)).first().copied();
                 d.set(format!("{b}.Sees.{owner_bot}.LibraryTop"), top.filter(|id| shown.contains(id)).map_or("(hidden)".to_string(), |id| game.known_name(id).to_string()));
                 d.set(format!("{b}.Sees.{owner_bot}.LibraryTopObject"), top.filter(|id| shown.contains(id)).map_or("(hidden)".to_string(), |id| id.0.to_string()));
+                // The cards of another player's hand this player sees, by name (a reveal in effect, CR 701.20a; the hand of a
+                // player they control, CR 723.4): empty while they see none of it.
+                if owner != p {
+                    let seen: Vec<String> = s.zone(Zone::hand(owner)).iter().filter(|id| shown.contains(id)).map(|&id| game.known_name(id).to_string()).collect();
+                    d.list(&format!("{b}.Sees.{owner_bot}.Hand"), seen, false);
+                }
             }
             // How they lost (CR 104.3), from the history: absent for a player who has not, or who left another way.
             if let Some(reason) = game.log.iter().find_map(|r| match r.event {
@@ -1080,7 +1086,7 @@ fn writable(key: &str) -> bool {
         return true;
     }
     if let Some((owner, property)) = rest.strip_prefix("Sees.Bot").and_then(|r| r.split_once('.')) {
-        return owner.parse::<u8>().is_ok() && matches!(property, "LibraryTop" | "LibraryTopObject");
+        return owner.parse::<u8>().is_ok() && matches!(property, "LibraryTop" | "LibraryTopObject" | "Hand" | "Hand.Count");
     }
     if let Some(commander) = rest.strip_prefix("Commander.") {
         if let Some(name) = commander.strip_suffix(".CastCount") {
@@ -1209,6 +1215,9 @@ Bot1.Battlefield.Data probe.Counters.Corpse = (absent)
         assert!(writable("Monarch"));
         assert!(writable("Bot1.Sees.Bot2.LibraryTop"));
         assert!(writable("Bot2.Sees.Bot1.LibraryTopObject"));
+        assert!(writable("Bot2.Sees.Bot1.Hand"));
+        assert!(writable("Bot2.Sees.Bot1.Hand.Count"));
+        assert!(!writable("Bot2.Sees.Bot1.Hands"));
         assert!(!writable("Bot1.Sees.Bot2"));
         assert!(!writable("Bot1.Sees.BotX.LibraryTopObject"));
         assert!(!writable("Bot1.Sees.Bot2.LibraryTopObjct"));

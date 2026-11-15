@@ -1047,7 +1047,7 @@ pub fn phase_in_banned(q: &dyn Query, cards: &'static CardTable, id: ObjectId) -
 }
 
 /// The rules about an open set of objects that resolved spells and abilities made (CR 611.2c, `EffectKind::LastingRule`) that
-/// say `rule` of the permanent `id` now: one for each such effect whose set takes in `id` as it is now, asked as the effect's
+/// say `rule` of the object `id` now (a permanent, or a card for a rule about cards): one for each such effect whose set takes in `id` as it is now, asked as the effect's
 /// source and controller with what its words named (`OpenSet`). A rule of the game, not an ability of `id` or of the source,
 /// so it holds whatever abilities either has lost (CR 613.1f), and it outlives the source (CR 611.2a).
 pub fn lasting_rules_on<'a>(
@@ -1067,6 +1067,15 @@ pub fn lasting_rules_on<'a>(
             }),
         _ => false,
     })
+}
+
+/// Whether a resolved rule about an open set forbids `player` to play the card `card` where it is now (CR 101.2, 601.3, 305.1,
+/// 701.18b; `LastingRuleKind::CantBePlayed`): to cast it as a spell or play it as a land, whatever permission they have. The
+/// rule binds the player its words named (`about`: Firestorm Phoenix's "that player"), or every player where they named none.
+/// Asked as a cast or a land play is offered or begun; one look at the effects, which is all it costs where none is such a rule.
+pub fn play_forbidden(q: &dyn Query, cards: &'static CardTable, card: ObjectId, player: PlayerId) -> bool {
+    lasting_rules_on(q, cards, card, LastingRuleKind::CantBePlayed)
+        .any(|e| !matches!(e.kind, EffectKind::LastingRule { about: Target::Player(bound), .. } if bound != player))
 }
 
 /// Whether a resolved effect says the permanent `id`, which `active` controls, doesn't untap during `active`'s untap step

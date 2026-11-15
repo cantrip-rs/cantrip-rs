@@ -308,6 +308,8 @@ mod regeneration_ban_tests;
 #[cfg(test)]
 mod lasting_rules_tests;
 #[cfg(test)]
+mod lasting_card_rules_tests;
+#[cfg(test)]
 mod untap_bans_tests;
 #[cfg(test)]
 mod untap_others_tests;
@@ -1292,6 +1294,12 @@ impl Game {
     /// Continuous public hand visibility, independent of a one-time reveal action.
     pub fn revealed_hands(&self) -> u8 {
         hand_visibility::mask(self, self.cards)
+    }
+
+    /// The cards of hands a resolved rule keeps public one by one (`LastingRuleKind::RevealedInHand`: Firestorm Phoenix),
+    /// beside the whole hands of `revealed_hands`.
+    pub fn revealed_hand_cards(&self) -> Vec<ObjectId> {
+        hand_visibility::cards(self, self.cards)
     }
 
     /// Whether `player` may look at the top card of their library any time (CR 401.2), as a permanent they control says.

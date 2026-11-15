@@ -2765,8 +2765,9 @@ pub struct BlockersInstead {
     pub blocks: fn(&mut dyn Game, &Asker, &DefendingCreatures) -> Result<Vec<(ObjectId, ObjectId)>, Suspend>,
 }
 
-/// Whether a rule a resolving spell or ability made about an open set of objects applies to the permanent `id` now (CR
-/// 611.2c): asked whenever the rule is read, of the permanent as it is then, so the set takes in what arrives or comes to
+/// Whether a rule a resolving spell or ability made about an open set of objects applies to the object `id` now (CR
+/// 611.2c) - a permanent, or a card outside the battlefield for a rule about cards (`LastingRuleKind::CantBePlayed`,
+/// `RevealedInHand`): asked whenever the rule is read, of the object as it is then, so the set takes in what arrives or comes to
 /// match it later and lets go of what stops matching. `asker` is the effect's source - which may have left the battlefield,
 /// so it is never asked who controls it - and the effect's controller, "you"; `about` is what the effect's words named as
 /// it resolved, as `EffectKind::LastingRule` holds it: "target opponent" (Exhaustion), or `Target::None`.
@@ -2774,7 +2775,8 @@ pub type OpenSet = fn(&dyn Query, &Asker, Target, ObjectId) -> bool;
 
 /// What a `LastingRule` says of each permanent it applies to: the rules read of one object (`EffectKind`'s `CantBlock` and
 /// `DoesntUntap`, and "attacks each combat if able" as a requirement, not an ability), here of a set. "Can't attack", "can't
-/// be blocked" and "blocks if able" join it with the first printed card that says one of a set.
+/// be blocked" and "blocks if able" join it with the first printed card that says one of a set. Two are about cards outside the
+/// battlefield rather than permanents: "can't be played" and "revealed in a hand".
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum LastingRuleKind {
     /// "Can't attack" (CR 508.1c): a resolved rule about an open set that takes the creature in, as Peace in Our Time's
@@ -2803,6 +2805,18 @@ pub enum LastingRuleKind {
     /// (`static_rules::lasting_rules_barring_attacks`). Chronomantic Escape's "until your next turn, creatures can't attack
     /// you".
     CantAttackYou,
+    /// "[That player] can't play [that card]" (CR 101.2, 601.3, 305.1, 701.18b): the player the rule's words named (its `about`,
+    /// `Target::Player`) may not cast a card the set takes in as a spell or play it as a land, from wherever it is and by
+    /// whatever lets them - a restriction takes precedence over every permission (CR 101.2). Another player an effect lets play
+    /// it (Sen Triplets) still may; a rule that named no player (`Target::None`) binds every player. Asked of the card as a cast
+    /// or a land play is offered or begun (CR 601.2a); putting it onto the battlefield is no play, so an effect that does still
+    /// may. Firestorm Phoenix's "that player ... can't play it".
+    CantBePlayed,
+    /// "Plays with [that card] revealed in their hand" (CR 701.20a, 701.18c): a card in a hand that the set takes in is public
+    /// while the rule lasts, as a hand a static ability reveals is (`PlayRule::HandRevealed`), one card of it rather than all:
+    /// `hand_visibility` shows it to every seat and records it, and the moves into and out of the hand say it was public. Only
+    /// a card in a hand: one that leaves it is a new object (CR 400.7). Firestorm Phoenix.
+    RevealedInHand,
 }
 
 /// A rule a resolving spell or ability gives an open set of objects for a duration (CR 611.2c): "creatures without flying
@@ -2814,11 +2828,11 @@ pub enum LastingRuleKind {
 #[derive(Clone, Copy)]
 pub struct LastingRule {
     /// What it says, in the card's own words with their duration ("Creatures without flying can't block this turn."):
-    /// shown beside its controller's life total, and on each permanent it applies to, while it lasts.
+    /// shown beside its controller's life total, and on each object it applies to, while it lasts.
     pub text: &'static str,
     /// What the rule is.
     pub rule: LastingRuleKind,
-    /// Which permanents it applies to, asked as the rule is read.
+    /// Which objects it applies to, asked as the rule is read: permanents, or the cards a rule about cards reads.
     pub applies: OpenSet,
 }
 

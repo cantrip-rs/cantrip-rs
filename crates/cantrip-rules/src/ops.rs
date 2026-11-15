@@ -208,7 +208,7 @@ fn seen_by_all_in(g: &crate::Game, id: ObjectId, revealed_by_move: bool) -> bool
                 || (o.zone.is(ZoneKind::Library)
                     && crate::library_visibility::reveals(g, o.owner)
                     && crate::library_visibility::top(g, o.owner) == Some(id))
-                || (o.zone.is(ZoneKind::Hand) && g.revealed_hands() & (1 << o.zone.player.0) != 0)
+                || (o.zone.is(ZoneKind::Hand) && crate::hand_visibility::revealed(g, g.cards, id))
                 || s.stack.iter().any(|i| match i.kind {
                     // The cards its cost or announcement revealed are among the objects its cost chose (`StackItem::members`):
                     // a spell's spliced cards and those it beheld (CR 702.47a, 701.4a), revealed from its announcement
@@ -414,6 +414,7 @@ fn move_together_entering_event(
     // they all move. The last-known information of each permanent leaving is taken before any of them leaves (CR 603.10a).
     crate::hand_visibility::sync(cx);
     let hands_before = crate::hand_visibility::mask(cx, cx.cards());
+    let cards_before = crate::hand_visibility::cards(cx, cx.cards());
     let mut plans: Vec<Plan> = Vec::with_capacity(moves.len());
     let mut regenerating: Vec<(ObjectId, bool)> = Vec::new();
     let mut shielded: Vec<ObjectId> = Vec::new();
@@ -851,7 +852,7 @@ fn move_together_entering_event(
         if from.is(ZoneKind::Battlefield) {
             remove_from_combat(cx, &[m.id]);
         }
-        events.push(Event::ZoneChange { old: m.id, new: new_id, from, to, reason, part: false, put_by: change.put_by.filter(|_| to.is(ZoneKind::Battlefield)), enchanted_left: aura_hosts.iter().find_map(|&(a, h)| (a == m.id).then_some(h)), from_revealed_hand: from.is(ZoneKind::Hand) && hands_before & (1 << from.player.0) != 0, to_revealed_hand: false });
+        events.push(Event::ZoneChange { old: m.id, new: new_id, from, to, reason, part: false, put_by: change.put_by.filter(|_| to.is(ZoneKind::Battlefield)), enchanted_left: aura_hosts.iter().find_map(|&(a, h)| (a == m.id).then_some(h)), from_revealed_hand: from.is(ZoneKind::Hand) && (hands_before & (1 << from.player.0) != 0 || cards_before.contains(&m.id)), to_revealed_hand: false });
         events.extend(melded);
         events.append(&mut part_events);
         // CR 708.9: a face-down permanent or spell that moves to any other zone is revealed to all players by its owner as
@@ -913,9 +914,13 @@ fn move_together_entering_event(
     }
     let lost = apply_life_changes(cx, prepared_life, &mut events);
     let hands_after = crate::hand_visibility::mask(cx, cx.cards());
+    // A card a rule keeps public alone is judged by the rule as it now stands. One the rule finds through this very move's
+    // record (Firestorm Phoenix's "that card", the object the Phoenix became) is not yet in the history here: its arrival is
+    // public by where it came from, and `hand_visibility::sync` shows it to each seat once the batch is recorded.
+    let cards_after = crate::hand_visibility::cards(cx, cx.cards());
     for event in &mut events {
-        if let Event::ZoneChange { to, to_revealed_hand, .. } = event {
-            *to_revealed_hand = to.is(ZoneKind::Hand) && hands_after & (1 << to.player.0) != 0;
+        if let Event::ZoneChange { new, to, to_revealed_hand, .. } = event {
+            *to_revealed_hand = to.is(ZoneKind::Hand) && (hands_after & (1 << to.player.0) != 0 || cards_after.contains(new));
         }
     }
     cx.emit_batch(&events, Some(crate::settle::Before { battlefield: &before, then: &then, seen_by_all: &seen }));

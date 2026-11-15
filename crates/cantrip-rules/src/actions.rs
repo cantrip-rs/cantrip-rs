@@ -8086,9 +8086,10 @@ fn land_plays(cx: &Cx, player: PlayerId, options: &mut Vec<ActionOption>) {
     let bans = crate::static_rules::land_play_bans(cx);
     let forbidden = |id: ObjectId, face: CardId| !bans.is_empty() && crate::static_rules::land_play_forbidden(cx, &bans, player, id, face);
     // A land card is played as itself; a modal double-faced card whose back face is a land may be played as that
-    // (CR 712.12), from wherever a land could be played.
+    // (CR 712.12), from wherever a land could be played. A card a resolved rule says this player can't play isn't, as either
+    // (CR 101.2, 701.18b: Firestorm Phoenix).
     let offer = |id: ObjectId, by: Option<Grant>, options: &mut Vec<ActionOption>| {
-        if !bans.is_empty() && crate::static_rules::enter_banned(cx, &bans, id) {
+        if (!bans.is_empty() && crate::static_rules::enter_banned(cx, &bans, id)) || crate::static_rules::play_forbidden(cx, cx.cards(), id, player) {
             return;
         }
         // A card exiled face down is judged as the land it would be (CR 406.3a).
@@ -8154,7 +8155,7 @@ fn land_plays(cx: &Cx, player: PlayerId, options: &mut Vec<ActionOption>) {
     // judging the card as that face (CR 712.8a: "play a land" asks of the face that is played).
     let mut granted: Option<Vec<Given<GrantedWay>>> = None;
     let mut by_way = |id: ObjectId, from: ZoneKind, options: &mut Vec<ActionOption>| {
-        if !bans.is_empty() && crate::static_rules::enter_banned(cx, &bans, id) {
+        if (!bans.is_empty() && crate::static_rules::enter_banned(cx, &bans, id)) || crate::static_rules::play_forbidden(cx, cx.cards(), id, player) {
             return;
         }
         let card = cx.s().obj(id).card;
@@ -8262,9 +8263,12 @@ fn cast_barred(cx: &Cx, player: PlayerId) -> ZoneKinds {
     static_rules::cast_barred(cx, player)
 }
 
-/// Whether the card's own restriction on when it may be cast ("Cast this spell only ...", CR 601.3) allows it now.
+/// Whether the card `asker.source`, to be cast as `face`, may be begun to be cast now as far as that card goes (CR 601.3): its
+/// own restriction on when it may be cast ("Cast this spell only ...") allows it, and no resolved rule forbids its caster,
+/// `asker.controller`, to play that card (`static_rules::play_forbidden`: Firestorm Phoenix's "that player ... can't play it",
+/// CR 101.2). Asked of every cast alike, with priority or as an effect resolves.
 fn cast_only_if_met(cx: &Cx, face: &'static CardDef, asker: &Asker) -> bool {
-    face.cast_only_if.is_none_or(|only_if| only_if(cx, asker))
+    face.cast_only_if.is_none_or(|only_if| only_if(cx, asker)) && !static_rules::play_forbidden(cx, cx.cards(), asker.source, asker.controller)
 }
 
 /// One static ability of a permanent on the battlefield, of a kind its card lists apart from its `abilities`: a way it
@@ -11166,8 +11170,9 @@ pub fn could_play_land_during_resolution(cx: &Cx, card: ObjectId) -> bool {
         return false;
     }
     // One a static ability keeps from entering can't be played (CR 305.1, 101.2), nor one a static ability forbids to be
-    // played (`LandPlayRule`): the effect is a permission to play it, and a restriction takes precedence (CR 101.2).
-    if !cx.card(obj.card).is(CardType::Land) || cx.s().player(player).lost {
+    // played (`LandPlayRule`), nor one a resolved rule says can't be played (Firestorm Phoenix's): the effect is a permission
+    // to play it, and a restriction takes precedence (CR 101.2).
+    if !cx.card(obj.card).is(CardType::Land) || cx.s().player(player).lost || crate::static_rules::play_forbidden(cx, cx.cards(), card, player) {
         return false;
     }
     let bans = crate::static_rules::land_play_bans(cx);

@@ -1,4 +1,5 @@
-//! Continuous public hands: Enduring Renewal, Revelation and Zur's Weirding.
+//! Continuous public hands: Enduring Renewal, Revelation and Zur's Weirding; and
+//! single cards of a hand a resolved rule keeps revealed (Firestorm Phoenix).
 //! A visibility rule is not a reveal action. History records what seats were
 //! shown, and moves record visibility on each side of their simultaneous batch.
 use crate::{Cx, actions, layers};
@@ -43,10 +44,58 @@ pub(crate) fn mask(q: &dyn Query, cards: &CardTable) -> u8 {
     mask
 }
 
+/// The cards of hands that a resolved rule keeps public one by one (`LastingRuleKind::RevealedInHand`, CR 701.20a: Firestorm
+/// Phoenix's "that player plays with that card revealed in their hand"), beside the whole hands `mask` makes public. The hands
+/// are walked only while some resolved rule about an open set lasts, which is none in nearly every game.
+pub(crate) fn cards(q: &dyn Query, table: &'static CardTable) -> Vec<ObjectId> {
+    let s = q.state();
+    if !s.effects.iter().any(|e| matches!(e.kind, EffectKind::LastingRule { .. })) {
+        return Vec::new();
+    }
+    s.seats()
+        .flat_map(|p| s.zone(Zone::hand(p)).iter().copied())
+        .filter(|&id| crate::static_rules::lasting_rules_on(q, table, id, LastingRuleKind::RevealedInHand).next().is_some())
+        .collect()
+}
+
+/// Whether `id`, a card in a hand, is public now: its whole hand is (`mask`), or a rule keeps it so alone (`cards`).
+pub(crate) fn revealed(q: &dyn Query, table: &'static CardTable, id: ObjectId) -> bool {
+    let zone = q.obj(id).zone;
+    zone.is(ZoneKind::Hand)
+        && (mask(q, table) & (1 << zone.player.0) != 0
+            || crate::static_rules::lasting_rules_on(q, table, id, LastingRuleKind::RevealedInHand).next().is_some())
+}
+
+/// Whether `player` has been shown `card` since it arrived where it is (an object in a hand is that card only from its
+/// arrival, CR 400.7): read back through the history to that arrival.
+fn shown_since_it_arrived(q: &dyn Query, player: PlayerId, card: ObjectId) -> bool {
+    for r in q.history().all().iter().rev() {
+        match r.event {
+            Event::Shown { player: p, card: c } if p == player && c == card => return true,
+            Event::ZoneChange { new, .. } if new == card => return false,
+            _ => {}
+        }
+    }
+    false
+}
+
 pub(crate) fn sync(cx: &mut Cx) {
     let mask = mask(cx, cx.cards());
     let gained = mask & !cx.s().shown_hands;
     cx.st().set_shown_hands(mask);
+    // A card a rule keeps public alone, in a hand not public as a whole, is shown to each other seat once, as it becomes public.
+    for card in cards(cx, cx.cards()) {
+        let owner = cx.s().obj(card).zone.player;
+        if mask & (1 << owner.0) != 0 {
+            continue;
+        }
+        let seats: Vec<_> = cx.s().apnap().filter(|&p| p != owner).collect();
+        for player in seats {
+            if !shown_since_it_arrived(cx, player, card) {
+                cx.record(Event::Shown { player, card });
+            }
+        }
+    }
     if gained == 0 {
         return;
     }

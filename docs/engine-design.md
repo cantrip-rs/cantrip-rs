@@ -3001,6 +3001,16 @@ controls don't untap during their next untap step"; "target player", for Headlin
 beside each per-object effect (`static_rules::lasting_rules_on`: `turn::attack_rules`, `cant_block`, `untap_step`), from the effects and not from any object's abilities, so neither the source's nor the permanent's losing
 abilities ends it, and it outlives its source. `LastingRule` also captures its creation-time `Words`, read through `WithWords` by both `lasting_rules_on` and
 `lasting_rules_barring_attacks`. The objects' characteristics remain live; only the rule's words are fixed.
+Two kinds are about cards rather than permanents. `CantBePlayed` (CR 101.2, 701.18b) forbids the player its words named (`about`;
+every player for none) every cast and land play of a card its set takes in, with priority or as an effect resolves, whatever
+permits it (`static_rules::play_forbidden`, asked by `actions::cast_only_if_met` of every cast and by each land-play offer);
+another player an effect lets play it still may. `RevealedInHand` (CR 701.20a) makes a card in a hand public while it lasts,
+through the continuous hand visibility a static ability's `PlayRule::HandRevealed` uses, one card rather than a whole hand
+(`hand_visibility::cards`, `Game::revealed_hand_cards`): every seat's projection holds it, `ops::seen_by_all` treats it as
+public for the look-back of a move (CR 603.10a), `hand_visibility::sync` records it shown to each other seat (`Event::Shown`),
+and a move out of the hand says it left a public hand (`from_revealed_hand`). Firestorm Phoenix
+makes both from its replacement effect, about "that card": its open set asks the history for the one object the Phoenix became
+in a hand (CR 400.7), so no flag or record follows the card.
 Island Sanctuary's islandwalk exception thus survives a later Magical Hack of the enchantment. A set the words fix as
 the effect resolves ("each attacking creature doesn't untap during its controller's next untap step", Tangle;
 "those creatures", Frost Breath) is an effect on each object instead:
