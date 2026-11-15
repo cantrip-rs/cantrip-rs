@@ -1,0 +1,31 @@
+# Under the Skin returns only a permanent card (CR 110.4a): the milled Lightning Bolt (an instant) is refused, and since it is the only card in the graveyard
+# nothing can be returned, so the hand (the three Islands drawn) and graveyard are as the manifest dread left them.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Under the Skin
+Island x3
+Island
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Under the Skin.Cast
+Bot1.Arrange(Island | Lightning Bolt)
+! Bot1.Choose(Lightning Bolt)
+? Bot1.Battlefield..FaceDownName = Island
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Graveyard = Under the Skin; Lightning Bolt
