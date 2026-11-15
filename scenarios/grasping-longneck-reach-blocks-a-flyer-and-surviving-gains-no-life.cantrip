@@ -1,0 +1,43 @@
+# Reach lets Grasping Longneck block a flying attacker (CR 702.17b); Llanowar Elves, with no reach, is refused as the blocker of the
+# same Mesa Pegasus. The Longneck (4/2, an enchantment creature) kills the 1/1 Pegasus and takes 1, so it survives: "when this creature
+# dies" does not trigger and Bot1 stays at 20.
+
+[Bot1 Deck]
+Black Lotus
+Grasping Longneck
+Llanowar Elves
+Forest
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mesa Pegasus
+Plains
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grasping Longneck.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Mesa Pegasus.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Mesa Pegasus > Bot1)
+! Bot1.Block(Llanowar Elves > Mesa Pegasus)
+Bot1.Block(Grasping Longneck > Mesa Pegasus)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Grasping Longneck.Damage = 1
+Bot1.Battlefield.Grasping Longneck.Keywords = Reach
+Bot1.Battlefield.Grasping Longneck.Types = Enchantment; Creature
+Bot1.Battlefield.Llanowar Elves.Damage = 0
+Bot2.Graveyard = Mesa Pegasus; Black Lotus
+Stack.Count = 0

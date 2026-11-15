@@ -1,0 +1,11 @@
+{
+  "name": "Grasping Longneck",
+  "manaCost": "{2}{G}",
+  "type": "Enchantment Creature — Horror",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Reach\nWhen this creature dies, you gain 2 life.",
+  "keywords": [
+    "Reach"
+  ]
+}

@@ -1,0 +1,33 @@
+# "When this creature dies, you gain 2 life" (CR 603.10a, 700.4): Bot2's Lightning Bolt kills the 4/2 Longneck, and its controller Bot1,
+# not Bot2, gains exactly 2: 20 to 22, with Bot2 still at 20. Life is checked before the Bolt so the gain is the trigger's, not
+# something earlier.
+
+[Bot1 Deck]
+Black Lotus
+Grasping Longneck
+Island x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grasping Longneck.Cast
+? Bot1.Life = 20
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grasping Longneck)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 20
+Bot1.Graveyard = Grasping Longneck; Black Lotus
+Bot1.Battlefield.Count = 0
+Stack.Count = 0
