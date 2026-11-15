@@ -3476,3 +3476,69 @@ pub fn gain_control_of_target_while_source_on_battlefield(g: &mut dyn Game, item
     g.gain_control(item.object, creature, item.controller, Duration::WhileSourceOnBattlefield);
     Ok(())
 }
+
+/// What the damage may take from any recipient, read before the damage is dealt: each player's life total and each
+/// planeswalker's loyalty, since the damage may be redirected (CR 614.9) to one the spell never named, and may not take all of
+/// it (CR 120.3b, 120.3c).
+struct DrainedBefore {
+    lives: Vec<i32>,
+    loyalties: Vec<(ObjectId, i32)>,
+}
+
+impl DrainedBefore {
+    fn read(g: &dyn Game) -> DrainedBefore {
+        let lives = g.state().players.iter().map(|player| player.life).collect();
+        let loyalties = g
+            .state()
+            .battlefield()
+            .iter()
+            .filter(|&&id| g.chars(id).types.has(CardType::Planeswalker))
+            .map(|&id| (id, g.obj(id).counters(CounterKind::Loyalty)))
+            .collect();
+        DrainedBefore { lives, loyalties }
+    }
+
+    /// The most life the damage may gain, from `recipient`: a player's life total or a planeswalker's loyalty as they were
+    /// before the damage, a creature's toughness as it is (not reduced by damage marked on it, Drain Life's ruling of
+    /// 2004-10-04); a creature that is also a planeswalker is under both.
+    fn cap(&self, g: &dyn Game, recipient: Target) -> i64 {
+        let Target::Object(id) = recipient else {
+            return recipient.player().map_or(0, |player| self.lives.get(player.0 as usize).map_or(0, |&life| i64::from(life)));
+        };
+        let mut cap = i64::MAX;
+        if g.chars(id).types.has(CardType::Creature) {
+            cap = cap.min(i64::from(g.chars(id).toughness.unwrap_or(0)));
+        }
+        if let Some(&(_, loyalty)) = self.loyalties.iter().find(|&&(walker, _)| walker == id) {
+            cap = cap.min(i64::from(loyalty));
+        }
+        cap
+    }
+}
+
+/// "[This] deals X damage to any target. You gain life equal to the damage dealt, but not more than the player's life total
+/// before the damage was dealt, the planeswalker's loyalty before the damage was dealt, or the creature's toughness": `source`
+/// deals `amount` damage to `target`, and this is the life it lets be gained, never below 0. The damage dealt is what the
+/// damage events of this one instruction record after prevention and replacement (CR 120.3), so a prevented or reduced hit
+/// gains less. A replacement may send the damage, or part of it, to another recipient (CR 614.9: Personal Incarnation's
+/// "the next 1 damage ... is dealt to its owner instead", Harm's Way), and what reaches each is still damage dealt: each
+/// recipient's share counts, up to that recipient's cap - the player, planeswalker or creature the text names is the one
+/// dealt that damage. The caps are read before the damage, since it may remove life or loyalty (CR 120.3), a creature's
+/// toughness as it is. Drain Life prints it; Soul Burn prints it under one more cap, the {B} spent on X.
+pub fn deal_damage_for_drained_life(g: &mut dyn Game, source: ObjectId, target: Target, amount: u32) -> i64 {
+    let before = DrainedBefore::read(g);
+    let since = g.history().head() as usize;
+    g.damage(source, target, amount);
+    let mut dealt: Vec<(Target, i64)> = Vec::new();
+    for record in &g.history().all()[since..] {
+        if let Event::Damage { source: from, target: to, amount, .. } = record.event
+            && from == source
+        {
+            match dealt.iter_mut().find(|(recipient, _)| *recipient == to) {
+                Some((_, total)) => *total += i64::from(amount),
+                None => dealt.push((to, i64::from(amount))),
+            }
+        }
+    }
+    dealt.into_iter().map(|(recipient, total)| total.min(before.cap(g, recipient).max(0))).sum()
+}
