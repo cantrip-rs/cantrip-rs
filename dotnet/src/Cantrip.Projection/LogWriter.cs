@@ -365,6 +365,7 @@ public static class LogWriter
                         "The game is a draw: it went round a loop in which every player only passed (CR 104.4b).",
                     DrawReasonView.AllLost => "The game is a draw: every player lost at once (CR 104.4a).",
                     DrawReasonView.EventLimit => "The game is a draw: it reached the most events the engine records.",
+                    DrawReasonView.Effect => "The game is a draw: an effect says so (CR 104.4c).",
                     _ => "The game is a draw.",
                 };
             }

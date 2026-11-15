@@ -173,6 +173,9 @@ for mana, a creature to enlist tapped for mana): it is taken back (CR 733.1), an
 asked again has `TakenBack` true, which the web client says and with which `AttackCosts.Within` declares only attacks
 that cost nothing. Version 237.
 
+**A draw an effect states.** "The game is a draw" (Divine Intervention, CR 104.4c) ends the game with `GameEndedEvent`'s
+`Outcome` a draw and its `DrawReason` `Effect`, which the game log and the language model's notes say. Version 238.
+
 **An optional replacement of damage says which damage.** "You may have that damage dealt to you instead" (Blood of the
 Martyr, CR 614.1a) is asked once for each part of the damage it could replace - each creature Pyroclasm would damage - as a
 worded `MayPromptMessage` (`Purpose::AskDamage` in the engine) whose `Event` is that damage in words, as the effects so far

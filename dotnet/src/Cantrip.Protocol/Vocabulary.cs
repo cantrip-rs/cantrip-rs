@@ -147,6 +147,9 @@ public enum DrawReasonView
 
     /// <summary>The game reached the most events the engine records (<c>docs/rules-exceptions.md</c>, RX-1).</summary>
     EventLimit = 3,
+
+    /// <summary>An effect stated that the game is a draw (CR 104.4c): Divine Intervention's.</summary>
+    Effect = 4,
 }
 
 /// <summary>Why a player is no longer in the game (CR 104.3).</summary>
