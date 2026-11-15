@@ -1,0 +1,66 @@
+# Skullsnap Nuisance, Eerie: both halves say "you": "an enchantment you control enters" and "you fully unlock a Room". Bot1's
+# Skullsnap Nuisance is on the battlefield while Bot2 casts Unholy Annex // Ritual Chamber as Unholy Annex on turn 2 (an
+# enchantment entering under Bot2's control) and unlocks Ritual Chamber on turn 4 (Bot2 fully unlocking its Room): Bot1
+# surveils neither time.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Skullsnap Nuisance
+Island x17
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Unholy Annex // Ritual Chamber
+Swamp
+Swamp
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Skullsnap Nuisance.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot2.Battlefield.Unholy Annex.Doors = Unholy Annex
+? Bot1.Surveilled = (absent)
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp#1.Activate
+Bot2.Battlefield.Swamp#2.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Unholy Annex.Activate(Ability: right door)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Unholy Annex // Ritual Chamber.Doors = Unholy Annex; Ritual Chamber
+
+[Expect]
+Bot1.Surveilled = (absent)
+Bot2.Surveilled = (absent)
+Bot2.Battlefield.Demon Token.Power = 6
