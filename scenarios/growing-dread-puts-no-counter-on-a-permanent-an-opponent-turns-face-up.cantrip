@@ -1,0 +1,73 @@
+# Growing Dread: "Whenever you turn a permanent face up" - not an opponent turning up a permanent of theirs. Bot1 has it in
+# play (its manifest is Snapcaster Mage), and on turn 2 Bot2 casts Abzan Guide face down for {3} (Black Lotus) and turns it
+# face up for its morph cost {2}{W}{B}{G} from five Moxen: a plain 4/4 with no +1/+1 counter and no trigger on the stack.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Growing Dread
+Island
+Island
+Island
+Island
+Snapcaster Mage
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Black Lotus
+Abzan Guide
+Mox Pearl
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Island x13
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Growing Dread.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Snapcaster Mage | Lightning Bolt)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Abzan Guide.Cast(Ability: Morph)
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.#1.Activate(Ability: morph cost)
+? Stack.Count = 0
+
+[Expect]
+Bot2.Battlefield.Abzan Guide.Power = 4
+Bot2.Battlefield.Abzan Guide.Toughness = 4
+Bot2.Battlefield.Abzan Guide.Counters.PlusOnePlusOne = (absent)

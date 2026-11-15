@@ -1,0 +1,44 @@
+# Growing Dread ({G}{U}, flash): "When this enchantment enters, manifest dread" - Snapcaster Mage goes onto the battlefield face
+# down and Lightning Bolt into the graveyard (CR 701.62a) - and "whenever you turn a permanent face up, put a +1/+1 counter on
+# it" (CR 708.7, 603.2): turning the Mage up for its mana cost {1}{U}, a special action, puts a counter on it, a 3/2 (CR 122.1a).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Growing Dread
+Island
+Island
+Island
+Island
+Snapcaster Mage
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Growing Dread.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Snapcaster Mage | Lightning Bolt)
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Power = 2
+? Bot1.Graveyard = Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.#1.Activate
+? Bot1.Battlefield.Snapcaster Mage.FaceDown = (absent)
+
+[Expect]
+Bot1.Battlefield.Snapcaster Mage.Power = 3
+Bot1.Battlefield.Snapcaster Mage.Toughness = 2
+Bot1.Battlefield.Snapcaster Mage.Counters.PlusOnePlusOne = 1
