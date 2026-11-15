@@ -1,0 +1,35 @@
+# Undead Sprinter: "if a non-Zombie creature died this turn" (CR 700.4, 608.2h). The Sprinter is itself a Zombie: Bot1 casts it and
+# Bolts it the same turn, so a creature has died this turn, but it was a Zombie, and with the mana for it ({B}{R} from the
+# second Mox Jet and Mox Ruby) the Sprinter still cannot be cast from the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Ruby
+Mountain
+Undead Sprinter
+Lightning Bolt
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Undead Sprinter.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Undead Sprinter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Undead Sprinter; Lightning Bolt
+! Bot1.Graveyard.Undead Sprinter.Cast
+
+[Expect]
+Bot1.Battlefield.Count = 5

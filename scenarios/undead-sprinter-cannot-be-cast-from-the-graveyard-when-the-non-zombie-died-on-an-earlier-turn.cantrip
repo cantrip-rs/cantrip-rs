@@ -1,0 +1,44 @@
+# Undead Sprinter: the death must be "this turn" (CR 700.4). On turn 2 Bot2 Bolts both the Sprinter and Bot1's Ornithopter, so a
+# non-Zombie creature died, but on turn 3 it is a turn ago and the Sprinter cannot be cast from the graveyard even with its mana
+# ready (and the Sprinter that died alongside it was a Zombie anyway).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Undead Sprinter
+Ornithopter
+Swamp x16
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Undead Sprinter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Undead Sprinter)
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Ornithopter; Undead Sprinter
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Graveyard.Undead Sprinter.Cast
+
+[Expect]
+Bot1.Graveyard = Ornithopter; Undead Sprinter
