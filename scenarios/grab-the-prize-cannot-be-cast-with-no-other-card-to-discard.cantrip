@@ -1,0 +1,27 @@
+# Grab the Prize: the additional cost is a discarded card (CR 601.2b, 601.2h): with the spell the only card in Bot1's hand there is
+# nothing to discard (the spell has left the hand, CR 601.2a), so the cast is refused with the {1}{R} ready to pay.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Grab the Prize
+Ornithopter
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Hand = Grab the Prize
+! Bot1.Hand.Grab the Prize.Cast

@@ -1,0 +1,34 @@
+# Grab the Prize: "As an additional cost to cast this spell, discard a card. Draw two cards. If the discarded card wasn't a land
+# card, Grab the Prize deals 2 damage to each opponent." (CR 601.2b, 118.8, 120.3). Bot1 discards the Ornithopter (not a land) and
+# draws the two top cards, the Forest and the Swamp; Bot2 goes 20 -> 18. With its hand empty but for the spell the cast is refused
+# (nothing to discard) even with the mana ready.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Grab the Prize
+Ornithopter
+Island
+Island
+Island
+Forest
+Swamp
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grab the Prize.Cast
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Grab the Prize; Ornithopter
+Bot1.Hand = Forest; Island; Island; Island; Swamp
+Bot2.Life = 18

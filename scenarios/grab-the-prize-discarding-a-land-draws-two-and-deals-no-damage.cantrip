@@ -1,0 +1,32 @@
+# Grab the Prize: "If the discarded card wasn't a land card, Grab the Prize deals 2 damage to each opponent." Bot1 discards an
+# Island (a land card): it draws the Forest and the Swamp and Bot2 stays at 20.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Grab the Prize
+Ornithopter
+Island
+Island
+Island
+Forest
+Swamp
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grab the Prize.Cast
+Bot1.Choose(Island#1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Grab the Prize; Island
+Bot1.Hand = Forest; Island; Island; Ornithopter; Swamp
+Bot2.Life = 20
