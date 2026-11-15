@@ -1,0 +1,46 @@
+# Spineseeker Centipede enters with four card types in its controller's graveyard (Faithless Looting: sorcery, Ornithopter: artifact and creature, Lightning Bolt: instant),
+# so delirium (CR 207.2c) makes it a 3/3 with vigilance. Its enter trigger searches for a basic land, reveals it, puts it into the hand (CR 701.23); the
+# Mountain is taken, and the nonbasic Tolarian Academy is refused.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Faithless Looting
+Ornithopter
+Lightning Bolt
+Spineseeker Centipede
+Forest
+Island
+Mountain
+Tolarian Academy
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot1.Choose(Ornithopter; Lightning Bolt)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Spineseeker Centipede.Cast
+Bot2.Pass
+! Bot1.Search(Tolarian Academy)
+Bot1.Search(Mountain)
+? Bot1.Revealed = Mountain
+
+[Expect]
+Bot1.Hand = Forest; Mountain
+Bot1.Battlefield.Spineseeker Centipede.Power = 3
+Bot1.Battlefield.Spineseeker Centipede.Toughness = 3
+Bot1.Battlefield.Spineseeker Centipede.Keywords = Vigilance
+Bot1.Graveyard.Count = 3

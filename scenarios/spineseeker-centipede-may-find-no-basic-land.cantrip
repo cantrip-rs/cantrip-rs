@@ -1,0 +1,45 @@
+# The search may come up empty (CR 701.23b): Bot1 takes no land, the Mountain stays in the library and the hand has no new card. Delirium (four types) still applies.
+
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Faithless Looting
+Ornithopter
+Lightning Bolt
+Spineseeker Centipede
+Forest
+Island
+Mountain
+Tolarian Academy
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot1.Choose(Ornithopter; Lightning Bolt)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Spineseeker Centipede.Cast
+Bot2.Pass
+Bot1.Search()
+
+
+[Expect]
+Bot1.Hand = Forest
+Bot1.Battlefield.Spineseeker Centipede.Power = 3
+Bot1.Battlefield.Spineseeker Centipede.Toughness = 3
+Bot1.Battlefield.Spineseeker Centipede.Keywords = Vigilance
+Bot1.Graveyard.Count = 3
+Bot1.Library.Count = 12
