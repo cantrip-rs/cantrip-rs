@@ -1,0 +1,50 @@
+# Mabel's Mettle's second target is "up to one": cast with only Eager Cadet (+2/+2), it resolves and Savannah Lions is not touched
+# (CR 601.2c). The two targets must be different creatures (CR 115.3): naming the Cadet for both is refused, and the Cadet alone
+# is the legal answer.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Plains
+Plains
+Eager Cadet
+Savannah Lions
+Mabel's Mettle
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Eager Cadet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mabel's Mettle.Cast
+Bot1.Target(Eager Cadet)
+! Bot1.Target(Eager Cadet)
+Bot1.Target()
+Bot1.Pass
+[Bot1.Main2]
+? Bot1.Battlefield.Eager Cadet.Power = 3
+? Bot1.Battlefield.Savannah Lions.Power = 2
+
+[Expect]
+Bot1.Battlefield.Savannah Lions.Toughness = 1
+Bot1.Graveyard = Mabel's Mettle
