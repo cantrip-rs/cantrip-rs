@@ -1,0 +1,53 @@
+# Browser
+# Divine Intervention at a table, Bot1 a browser page: its upkeep ability removes its last intervention counter in Bot1's
+# turn 3 upkeep, Bot1 having removed it, so the game is a draw (CR 104.4c), and the page says why - the game log, which the
+# game-over panel reads its detail from, says an effect made the game a draw. The headless scenarios say when it triggers
+# and when it doesn't.
+
+[Bot1 Deck]
+Divine Intervention
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Divine Intervention.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Divine Intervention.Counters.Intervention = 1
+[T5 Bot1.Upkeep]
+
+[Expect]
+Result = Draw
+DrawReason = Effect
+Turn = 5
+Step = Upkeep
+Bot1.Status = (absent)
+Bot2.Status = (absent)
+Client.Bot1.Over = true
+Client.Bot1.Log.Has = The game is a draw: an effect says so (CR 104.4c).

@@ -1,0 +1,99 @@
+# Divine Intervention's last ability triggers only if its controller removes the last intervention counter from it (its
+# ruling): one removed by another player's effect doesn't trigger it, and it can't trigger ever after. Each player has one:
+# Bot1's, down to one counter after Bot1's turn 3 upkeep, loses it on turn 4 to Bot2's Vampire Hexmage - the last counter,
+# removed by the controller of that ability (CR 608.2c), Bot2 - and the game goes on: neither Bot1's Divine Intervention
+# (Bot2 removed it) nor Bot2's (not its counter) triggers. Bot1's turn 5 upkeep ability finds no counter to remove (CR
+# 122.1), and the game still goes on; Bot2's own Divine Intervention, which Bot2's turn 4 upkeep took to one counter, takes
+# its last in Bot2's turn 6 upkeep, and that draws the game (CR 104.4c).
+
+[Bot1 Deck]
+Divine Intervention
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Plains x20
+
+[Bot2 Deck]
+Divine Intervention
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Swamp
+Vampire Hexmage
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Divine Intervention.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Divine Intervention.Cast
+Bot2.Pass
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Divine Intervention.Counters.Intervention = 1
+? Bot2.Battlefield.Divine Intervention.Counters.Intervention = 1
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Vampire Hexmage.Cast
+Bot2.Pass
+Bot2.Battlefield.Vampire Hexmage.Activate(Bot1.Battlefield.Divine Intervention)
+Bot2.Pass
+Bot1.Pass
+? Result = InProgress
+? Bot1.Battlefield.Divine Intervention.Counters.Intervention = (absent)
+? Bot2.Battlefield.Divine Intervention.Counters.Intervention = 1
+[T5 Bot1.Main1]
+? Result = InProgress
+? Bot1.Battlefield.Divine Intervention.Counters.Intervention = (absent)
+[T6 Bot2.Upkeep]
+
+[Expect]
+Result = Draw
+DrawReason = Effect
+Turn = 6
+Step = Upkeep
+Bot1.Battlefield.Divine Intervention.Counters.Intervention = (absent)
+Bot2.Battlefield.Divine Intervention.Counters.Intervention = (absent)
+Bot2.Graveyard = Vampire Hexmage; Black Lotus

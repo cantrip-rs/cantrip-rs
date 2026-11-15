@@ -1,0 +1,57 @@
+# "When you remove the last intervention counter" triggers however its controller removes it (its ruling), not only by its
+# upkeep ability. Bot1 casts Divine Intervention on turn 1 (a Swamp played for one of its eight mana), it loses a counter in
+# Bot1's turn 3 upkeep, and then Bot1's own Vampire Hexmage removes the last one in Bot1's turn 3 main phase - Bot1 the
+# controller of that ability (CR 608.2c) - so the game is a draw at once (CR 104.4c), still in that main phase.
+
+[Bot1 Deck]
+Divine Intervention
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Swamp
+Vampire Hexmage
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Divine Intervention.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vampire Hexmage.Cast
+Bot1.Pass
+? Bot1.Battlefield.Divine Intervention.Counters.Intervention = 1
+? Result = InProgress
+Bot1.Battlefield.Vampire Hexmage.Activate(Bot1.Battlefield.Divine Intervention)
+
+[Expect]
+Result = Draw
+DrawReason = Effect
+Turn = 3
+Step = Main1
+Bot1.Battlefield.Divine Intervention.Counters.Intervention = (absent)
+Bot1.Graveyard = Vampire Hexmage; Black Lotus
+Bot1.Status = (absent)
+Bot2.Status = (absent)

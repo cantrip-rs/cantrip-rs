@@ -1,0 +1,62 @@
+# "You" in Divine Intervention's abilities is its controller, not its owner (CR 109.5). Bot1 casts it on turn 1, its own
+# turn 3 upkeep ability takes it to one counter, and Bot1 then gives it to Bot2 with Harmless Offering (CR 613.1b). Its upkeep
+# ability now triggers at the beginning of Bot2's upkeep, not its owner's, and Bot2 controls that ability (CR 608.2c), so
+# when it removes the last intervention counter in Bot2's turn 4 upkeep, its controller removed it and the game is a draw
+# (CR 104.4c), though its owner did not remove it.
+
+[Bot1 Deck]
+Divine Intervention
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mountain
+Harmless Offering
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Divine Intervention.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Divine Intervention.Counters.Intervention = 1
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Divine Intervention)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Divine Intervention.Counters.Intervention = 1
+? Result = InProgress
+[T4 Bot2.Upkeep]
+
+[Expect]
+Result = Draw
+DrawReason = Effect
+Turn = 4
+Step = Upkeep
+Bot2.Battlefield.Divine Intervention.Counters.Intervention = (absent)
+Bot1.Status = (absent)
+Bot2.Status = (absent)
