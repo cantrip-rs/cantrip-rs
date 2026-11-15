@@ -12,14 +12,8 @@ fn reveal_and_take(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Whenever this creature enters or attacks, you may mill two cards." With fewer than two cards in the library the
-/// player can't choose to (CR 701.17b), so nothing is asked.
-fn may_mill_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::may_mill(g, item, 2)
-}
-
 pub static BACK: CardDef = CardDef {
-    abilities: &[triggered(THIS_ENTERS_OR_ATTACKS, may_mill_two, "Whenever this creature enters or attacks, you may mill two cards.")],
+    abilities: &[triggered(THIS_ENTERS_OR_ATTACKS, effects::you_may_mill::<2>, "Whenever this creature enters or attacks, you may mill two cards.")],
     ..oracle::DREAD_OSSEOSAUR
 };
 
