@@ -1,0 +1,39 @@
+# Agate-Blade Assassin: the trigger is independent of its source once on the stack (CR 113.7a, 603.10a): Bot2 bolts the attacking Assassin in
+# response, and the trigger still makes the player it attacked lose 1 life and Bot1 gain 1 (CR 508.5).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Agate-Blade Assassin
+Swamp x17
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Agate-Blade Assassin.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Agate-Blade Assassin > Bot2)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Agate-Blade Assassin)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 2
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 21
+Bot1.Graveyard = Agate-Blade Assassin

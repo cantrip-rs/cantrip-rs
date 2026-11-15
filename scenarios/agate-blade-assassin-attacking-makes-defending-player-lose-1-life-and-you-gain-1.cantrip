@@ -1,0 +1,30 @@
+# Agate-Blade Assassin: "Whenever this creature attacks, defending player loses 1 life and you gain 1 life." Cast on turn 1 with two Moxen and attacking
+# unblocked on turn 3, Bot2 loses 1 to the trigger and 1 to combat damage (20 to 18) and Bot1 gains 1 (21).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Agate-Blade Assassin
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Agate-Blade Assassin.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Agate-Blade Assassin > Bot2)
+? Bot2.Life = 20
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Life = 21
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 21
