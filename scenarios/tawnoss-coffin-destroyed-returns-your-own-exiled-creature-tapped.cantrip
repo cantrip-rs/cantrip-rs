@@ -1,0 +1,71 @@
+# Tawnos's Coffin exiles Bot1's own Ornithopter, equipped with Paradise Mantle: an Equipment is no Aura, so it stays on
+# the battlefield, unattached. When Bot2 destroys the Coffin, the delayed ability triggers on its leaving the battlefield
+# and returns Ornithopter under its owner's control, tapped (CR 603.7, 603.6c; the ruling).
+[Bot1 Deck]
+Tawnos's Coffin
+Gleemox
+Mox Jet
+Mox Ruby
+Island
+Ornithopter
+Paradise Mantle
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Shatter
+Island
+Island
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Paradise Mantle.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tawnos's Coffin.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Paradise Mantle.Activate(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Paradise Mantle.AttachedTo = Ornithopter
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Tawnos's Coffin.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shatter.Cast(Tawnos's Coffin)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Exile =
+Bot1.Graveyard = Tawnos's Coffin
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Paradise Mantle.AttachedTo = (absent)

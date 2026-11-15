@@ -1,0 +1,78 @@
+# A merged creature (Cubwarden under Ornithopter) carries Bot2's Holy Strength (attached first) and Bot1's Flight, and
+# Tawnos's Coffin exiles them all. When the Coffin untaps in Bot1's untap step, both cards of the merged creature return
+# as separate permanents (CR 730.3c) and both Auras enter at once; each Aura's owner chooses which of them it is
+# attached to as it enters (CR 303.4d), the active player first, then Bot2, who is not the ability's controller (CR
+# 101.4). Bot1 chooses Cubwarden, which is not the first offered; it must choose exactly one, neither none nor both.
+[Bot1 Deck]
+Plains
+Ornithopter
+Gleemox
+Mox Jet
+Mox Ruby
+Tawnos's Coffin
+Black Lotus
+Cubwarden
+Flight
+Plains
+Island x20
+
+[Bot2 Deck]
+Plains
+Holy Strength
+Island x30
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tawnos's Coffin.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Holy Strength.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Cubwarden.Cast(Ornithopter; Ability: Mutate)
+Bot1.Pass
+Bot1.Modes(2)
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Hand.Flight.Cast(Ornithopter)
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Tawnos's Coffin.Activate(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 4
+Bot1.Accept
+! Bot1.Choose()
+! Bot1.Choose(Cubwarden; Ornithopter)
+Bot1.Choose(Cubwarden)
+Bot2.Choose(Ornithopter)
+[T7 Bot1.Main1]
+
+[Expect]
+Exile =
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Cubwarden.Tapped = true
+Bot1.Battlefield.Flight.AttachedTo = Cubwarden
+Bot2.Battlefield.Holy Strength.AttachedTo = Ornithopter

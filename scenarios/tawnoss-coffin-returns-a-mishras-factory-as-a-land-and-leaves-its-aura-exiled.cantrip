@@ -1,0 +1,55 @@
+# Tawnos's Coffin exiles an animated Mishra's Factory enchanted by Holy Strength. When the Coffin untaps, the Factory card
+# returns tapped though it is no creature now (the ruling: only that it was one on the battlefield matters), and Holy
+# Strength, which can't enchant a noncreature land, stays exiled (the ruling; CR 303.4i).
+[Bot1 Deck]
+Tawnos's Coffin
+Gleemox
+Mox Jet
+Mox Ruby
+Mox Pearl
+Island
+Holy Strength
+Mishra's Factory
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tawnos's Coffin.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mishra's Factory.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mishra's Factory.Activate(Ability: becomes)
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Holy Strength.Cast(Mishra's Factory)
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Tawnos's Coffin.Activate(Mishra's Factory)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 2
+Bot1.Accept
+[T5 Bot1.Main1]
+
+[Expect]
+Exile = Holy Strength
+Bot1.Battlefield.Mishra's Factory.Tapped = true
+Bot1.Battlefield.Mishra's Factory.Types = Land

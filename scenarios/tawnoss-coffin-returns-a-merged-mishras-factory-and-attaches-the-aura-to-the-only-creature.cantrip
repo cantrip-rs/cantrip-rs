@@ -1,0 +1,67 @@
+# Cubwarden mutates over an animated Mishra's Factory, Holy Strength enchants the merged creature, and Tawnos's Coffin
+# exiles them. When the Coffin untaps, both cards return tapped (CR 730.3c), the Factory as a land; Holy Strength can
+# enchant only Cubwarden, so it is attached to it with no choice asked (CR 303.4f, 303.4i).
+[Bot1 Deck]
+Tawnos's Coffin
+Gleemox
+Mox Jet
+Mox Ruby
+Island
+Black Lotus
+Mishra's Factory
+Cubwarden
+Holy Strength
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tawnos's Coffin.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mishra's Factory.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mishra's Factory.Activate(Ability: becomes)
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Cubwarden.Cast(Mishra's Factory; Ability: Mutate)
+Bot1.Pass
+Bot1.Modes(1)
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Holy Strength.Cast(Cubwarden)
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Tawnos's Coffin.Activate(Cubwarden)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 3
+Bot1.Accept
+Bot1.Pass
+! Bot1.Choose
+[T7 Bot1.Main1]
+
+[Expect]
+Exile =
+Bot1.Battlefield.Mishra's Factory.Tapped = true
+Bot1.Battlefield.Mishra's Factory.Types = Land
+Bot1.Battlefield.Cubwarden.Tapped = true
+Bot1.Battlefield.Holy Strength.AttachedTo = Cubwarden

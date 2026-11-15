@@ -1,0 +1,54 @@
+# A bestowed Springheart Nantuko on Ornithopter is exiled with it by Tawnos's Coffin; in exile it is an enchantment
+# creature card, not an Aura (CR 400.7, 702.103b). When the Coffin untaps, Ornithopter returns tapped, and "return the
+# other exiled cards ... attached to that permanent" puts the Nantuko onto the battlefield unattached (CR 303.4h).
+[Bot1 Deck]
+Tawnos's Coffin
+Gleemox
+Mox Jet
+Mox Ruby
+Island
+Ornithopter
+Black Lotus
+Springheart Nantuko
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tawnos's Coffin.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Springheart Nantuko.Cast(Bot1.Battlefield.Ornithopter; Ability: Bestow)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Springheart Nantuko.AttachedTo = Ornithopter
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Tawnos's Coffin.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 2
+Bot1.Accept
+[T5 Bot1.Main1]
+
+[Expect]
+Exile =
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Springheart Nantuko.AttachedTo = (absent)

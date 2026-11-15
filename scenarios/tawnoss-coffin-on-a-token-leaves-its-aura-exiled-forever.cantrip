@@ -1,0 +1,55 @@
+# Tawnos's Coffin exiles a Warrior token enchanted by Holy Strength. The token ceases to exist in exile, so when the
+# Coffin untaps no card returns, and "if you do" leaves Holy Strength exiled forever (the ruling; CR 111.7, 603.7c).
+[Bot1 Deck]
+Tawnos's Coffin
+Gleemox
+Mox Jet
+Mox Ruby
+Mox Pearl
+Island
+Secure the Wastes
+Holy Strength
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tawnos's Coffin.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Secure the Wastes.Cast(X: 1)
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Holy Strength.Cast(Warrior Token)
+Bot1.Pass
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Tawnos's Coffin.Activate(Warrior Token)
+Bot1.Pass
+Bot2.Pass
+? Exile = Holy Strength
+Bot1.Accept
+[T7 Bot1.Main1]
+
+[Expect]
+Exile = Holy Strength
+Bot1.Battlefield.Tawnos's Coffin.Tapped = false
+Bot1.Battlefield.Warrior Token = (absent)

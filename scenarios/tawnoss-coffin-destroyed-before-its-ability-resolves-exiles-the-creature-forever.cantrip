@@ -1,0 +1,62 @@
+# Bot2 destroys Tawnos's Coffin in response to its ability. The ability still exiles Memnite, and the delayed ability it
+# creates watches a Coffin that is already gone, so it never triggers: Memnite stays exiled (CR 603.7a; the ruling).
+[Bot1 Deck]
+Tawnos's Coffin
+Gleemox
+Mox Jet
+Mox Ruby
+Island
+Black Lotus
+Island
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Shatter
+Memnite
+Island
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tawnos's Coffin.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Tawnos's Coffin.Activate(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shatter.Cast(Tawnos's Coffin)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Exile = Memnite
+[T5 Bot1.Main1]
+
+[Expect]
+Exile = Memnite
+Bot1.Graveyard = Tawnos's Coffin; Black Lotus
+Bot2.Battlefield.Memnite = (absent)

@@ -1,0 +1,6 @@
+{
+  "name": "Tawnos's Coffin",
+  "manaCost": "{4}",
+  "type": "Artifact",
+  "oracleText": "You may choose not to untap this artifact during your untap step.\n{3}, {T}: Exile target creature and all Auras attached to it. Note the number and kind of counters that were on that creature. When this artifact leaves the battlefield or becomes untapped, return that exiled card to the battlefield under its owner's control tapped with the noted number and kind of counters on it. If you do, return the other exiled cards to the battlefield under their owner's control attached to that permanent."
+}

@@ -1,0 +1,99 @@
+# Tawnos's Coffin exiles Bot2's Icatian Javelineers (a javelin counter and a +1/+1 counter from Honor) with both Auras on
+# it - Bot2's Holy Strength and Bot1's Flight - but not Bot1's Lance on Ornithopter. Bot1 keeps the Coffin tapped through
+# one untap step (it stays exiled), then lets it untap: the delayed ability returns Javelineers under its owner's control
+# tapped with the noted +1/+1 counter and javelin counter - and a second javelin counter from its own "enters with a
+# javelin counter", which applies to it entering this way too - and each Aura under its owner's control attached to it
+# (CR 502.3, 603.7, 122.6, 614.1c).
+# The {3} is paid from four black mana, one left; a noncreature artifact is no legal target. With one permanent to attach
+# to, no Aura's owner is asked where it goes.
+[Bot1 Deck]
+Tawnos's Coffin
+Gleemox
+Mox Jet
+Mox Ruby
+Island
+Ornithopter
+Lance
+Flight
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Gleemox
+Icatian Javelineers
+Honor
+Holy Strength
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tawnos's Coffin.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Gleemox.Cast
+Bot2.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Icatian Javelineers.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Honor.Cast(Icatian Javelineers)
+Bot2.Pass
+Bot2.Battlefield.Gleemox.Activate(Color: White)
+Bot2.Hand.Holy Strength.Cast(Icatian Javelineers)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Lance.Cast(Ornithopter)
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Flight.Cast(Bot2.Battlefield.Icatian Javelineers)
+Bot1.Pass
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Tawnos's Coffin.Activate(Bot2.Battlefield.Mox Pearl)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Tawnos's Coffin.Activate(Bot2.Battlefield.Icatian Javelineers)
+? Bot1.Mana = {B}
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 3
+? Bot1.Battlefield.Lance.AttachedTo = Ornithopter
+Bot1.Decline
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Tawnos's Coffin.Tapped = true
+? Exile.Count = 3
+Bot1.Accept
+Bot1.Pass
+! Bot1.Choose
+[T9 Bot1.Main1]
+
+[Expect]
+Exile =
+Bot1.Battlefield.Tawnos's Coffin.Tapped = false
+Bot2.Battlefield.Icatian Javelineers.Tapped = true
+Bot2.Battlefield.Icatian Javelineers.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Icatian Javelineers.Counters.Javelin = 2
+Bot2.Battlefield.Holy Strength.AttachedTo = Icatian Javelineers
+Bot1.Battlefield.Flight.AttachedTo = Icatian Javelineers
+Bot1.Battlefield.Lance.AttachedTo = Ornithopter
