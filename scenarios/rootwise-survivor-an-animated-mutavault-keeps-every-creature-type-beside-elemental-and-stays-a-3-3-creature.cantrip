@@ -1,0 +1,52 @@
+# Rootwise Survivor: "That land becomes a 0/0 Elemental creature in addition to its other types" (CR 205.1b, 613.1d). Mutavault,
+# animated on turn 3 before Survival ({1}: 2/2 creature with all creature types until end of turn), is targeted at the second main
+# phase: it keeps all creature types beside Elemental (the Elemental type is added, none lost); the 0/0 is a later base
+# power and toughness than its 2/2 (CR 613.4b, timestamp order), so it is 3/3 with the counters. At the end of the turn Mutavault's
+# own effect wears off, and what Rootwise made lasts: a 3/3 Elemental creature land with Mutavault's single land type and no more.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mutavault
+Rootwise Survivor
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mutavault.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Rootwise Survivor.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mutavault.Activate(Ability: becomes)
+Bot1.Attack(Rootwise Survivor > Bot2)
+[T3 Bot1.Main2]
+Bot1.Target(Mutavault)
+Bot1.Pass
+[T3 Bot1.End]
+? Bot1.Battlefield.Mutavault.Subtypes = (every creature type)
+? Bot1.Battlefield.Mutavault.Power = 3
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Mutavault.Types = Land; Creature
+Bot1.Battlefield.Mutavault.Subtypes = Elemental
+Bot1.Battlefield.Mutavault.Power = 3
+Bot1.Battlefield.Mutavault.Toughness = 3
