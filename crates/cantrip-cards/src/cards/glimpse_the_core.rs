@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::library::{search_to_battlefield, Find};
-use cantrip_mechanics::targets;
+use cantrip_mechanics::{effects, targets};
 use cantrip_oracle as oracle;
 
 /// "Search your library for a basic Forest card, put that card onto the battlefield tapped, then shuffle" (CR 701.23): a
@@ -20,16 +20,9 @@ fn cave_card_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target) -> bool 
     targets::card_in_your_graveyard(q, asker, t, &[]) && matches!(t, Target::Object(id) if q.chars(id).has_subtype(Subtype::Cave))
 }
 
-/// "Return target Cave card from your graveyard to the battlefield tapped." A spell whose only target is gone does not
-/// resolve (CR 608.2b), so the target is legal here (a card that has left the graveyard is a new object, CR 400.7).
-fn return_a_cave(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    targets::object(g, item, 0).map(|card| g.put_onto_battlefield(card, item.controller, true)).transpose()?;
-    Ok(())
-}
-
 static MODAL: ModalDef = modes(&[
     mode(search_for_a_forest, "Search your library for a basic Forest card, put that card onto the battlefield tapped, then shuffle."),
-    mode(return_a_cave, "Return target Cave card from your graveyard to the battlefield tapped.").targets(&[target(cave_card_in_your_graveyard)]),
+    mode(effects::return_first_target_to_battlefield_tapped, "Return target Cave card from your graveyard to the battlefield tapped.").targets(&[target(cave_card_in_your_graveyard)]),
 ]);
 
 pub static CARD: CardDef = CardDef { spell: Some(SpellDef::MODAL), modal: Some(&MODAL), ..oracle::GLIMPSE_THE_CORE };

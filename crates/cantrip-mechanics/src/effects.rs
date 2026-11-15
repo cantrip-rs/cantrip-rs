@@ -2419,6 +2419,15 @@ pub fn return_first_target_to_battlefield(g: &mut dyn Game, item: &StackItem) ->
     Ok(())
 }
 
+/// "Return target [card] from your graveyard to the battlefield tapped" (CR 400.3, 110.2a): `return_first_target_to_battlefield`, but the
+/// card enters tapped. Deadly Plot's second mode, Glimpse the Core's, Helping Hand and Phoenix Down print it.
+pub fn return_first_target_to_battlefield_tapped(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(card) = crate::targets::object(g, item, 0) {
+        g.put_onto_battlefield(card, item.controller, true)?;
+    }
+    Ok(())
+}
+
 /// "Return [up to N] target [creature cards] from your graveyard to the battlefield. Put a +1/+1 counter on each of them" (CR 400.3,
 /// 122.1): the targets still legal enter under your control (CR 608.2b, 110.2a), all at once; then, as the next sentence (CR 608.2c),
 /// one +1/+1 counter goes on each that did enter - a new object each (CR 400.7), one instruction (CR 122.6). A card a replacement
