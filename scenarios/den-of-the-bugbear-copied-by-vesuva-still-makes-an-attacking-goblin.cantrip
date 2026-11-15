@@ -1,0 +1,46 @@
+# Den of the Bugbear's animation grants "Whenever this creature attacks, create a 1/1 red Goblin creature token that's
+# tapped and attacking", an ability of the card whose ability resolves (CR 613.1f), the card a copy copies (CR 707.2).
+# Bot1's Vesuva enters as a copy of Bot2's Den on turn 3; animated on turn 5, it attacks and makes an attacking Goblin.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Vesuva
+Island x20
+
+[Bot2 Deck]
+Den of the Bugbear
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Den of the Bugbear.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Vesuva.Play
+Bot1.Accept
+Bot1.Target(Bot2.Battlefield.Den of the Bugbear)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Den of the Bugbear.Activate(Ability: Until end of turn)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Den of the Bugbear > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot2.Life = 16
+Bot1.Battlefield.Goblin Token.Power = 1
