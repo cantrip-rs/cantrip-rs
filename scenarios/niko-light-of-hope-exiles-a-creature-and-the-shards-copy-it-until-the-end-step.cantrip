@@ -1,0 +1,58 @@
+# Niko, Light of Hope: "When Niko enters, create two Shard tokens", then "{2}, {T}: Exile target nonlegendary creature you control.
+# Shards you control become copies of it until the next end step. Return it to the battlefield under its owner's control at the
+# beginning of the next end step." (CR 707.2, 611.2c, 603.7, 400.7) Niko enters on turn 1 with two Shards. On turn 3 Ornithopter is
+# cast and exiled by Niko: the two Shards are Ornithopters (artifact creatures, 0/2) until the end step begins, when they are
+# Shards again and the Ornithopter comes back.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Niko, Light of Hope
+Ornithopter
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Niko, Light of Hope.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Niko, Light of Hope.Activate(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Exile = Ornithopter
+? Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Niko, Light of Hope; Ornithopter; Ornithopter
+? Bot1.Battlefield.Ornithopter#1.Types = Artifact; Creature
+? Bot1.Battlefield.Ornithopter#2.Types = Artifact; Creature
+? Bot1.Battlefield.Niko, Light of Hope.Tapped = true
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Exile =
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Niko, Light of Hope; Ornithopter; Shard Token; Shard Token
+Bot1.Battlefield.Shard Token#1.Types = Enchantment
+Bot1.Battlefield.Shard Token#2.Types = Enchantment

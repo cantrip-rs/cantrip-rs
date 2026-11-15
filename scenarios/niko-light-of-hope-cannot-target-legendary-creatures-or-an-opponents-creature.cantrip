@@ -1,0 +1,47 @@
+# Niko, Light of Hope: "Exile target nonlegendary creature you control" (CR 115.1, 205.4a, 109.5). On turn 3 Bot1 controls Niko (legendary),
+# an Ornithopter, and two Shard tokens (enchantments, not creatures); Bot2 controls a Memnite. Of those only the Ornithopter can be
+# targeted; Niko itself, Bot2's Memnite and a Shard are refused.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Niko, Light of Hope
+Ornithopter
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Niko, Light of Hope.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Niko, Light of Hope.Activate(Niko, Light of Hope)
+! Bot1.Battlefield.Niko, Light of Hope.Activate(Memnite)
+! Bot1.Battlefield.Niko, Light of Hope.Activate(Shard Token)
+
+[Expect]
+Turn = 3
+Exile =
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Niko, Light of Hope; Ornithopter; Shard Token; Shard Token
+Bot2.Battlefield = Memnite

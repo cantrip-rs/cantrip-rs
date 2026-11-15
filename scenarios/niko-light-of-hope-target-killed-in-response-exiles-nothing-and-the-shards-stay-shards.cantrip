@@ -1,0 +1,60 @@
+# Niko, Light of Hope: "If the target creature is an illegal target as Niko's last ability tries to resolve, it won't resolve and none of its
+# effects will happen. Shards you control won't become copies of the creature." (CR 608.2b; the ruling) On turn 3 Bot1 activates Niko
+# targeting its Ornithopter and Bot2 destroys it in response with Infernal Grasp: nothing is exiled, no delayed return is set up, and the
+# two Shards stay Shards.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Niko, Light of Hope
+Ornithopter
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Jet
+Infernal Grasp
+Swamp x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Niko, Light of Hope.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Niko, Light of Hope.Activate(Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Infernal Grasp.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+
+[Expect]
+Turn = 3
+Exile =
+Delayed.Count = 0
+Bot1.Graveyard = Ornithopter
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Niko, Light of Hope; Shard Token; Shard Token
+Bot1.Battlefield.Niko, Light of Hope.Tapped = true

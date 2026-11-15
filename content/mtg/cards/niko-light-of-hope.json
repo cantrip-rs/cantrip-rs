@@ -1,0 +1,8 @@
+{
+  "name": "Niko, Light of Hope",
+  "manaCost": "{2}{W}{U}",
+  "type": "Legendary Creature — Human Wizard",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "When Niko enters, create two Shard tokens. (They're enchantments with \"{2}, Sacrifice this token: Scry 1, then draw a card.\")\n{2}, {T}: Exile target nonlegendary creature you control. Shards you control become copies of it until the next end step. Return it to the battlefield under its owner's control at the beginning of the next end step."
+}

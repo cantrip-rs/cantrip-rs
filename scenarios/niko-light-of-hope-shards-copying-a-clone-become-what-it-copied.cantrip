@@ -1,0 +1,57 @@
+# Niko, Light of Hope, the ruling: Shards that become copies of a creature that is itself copying something become what that
+# creature copies (CR 707.2, 707.3). On turn 3 Clone enters as a copy of Bot1's Ornithopter, and Niko exiles the Clone: the two
+# Shards become 0/2 flying Ornithopters, not Clones (a 0/0 Clone would have no choice to make as it does not enter, and would die).
+# The Clone is the card that went to exile.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Niko, Light of Hope
+Ornithopter
+Clone
+Island x14
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Niko, Light of Hope.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Clone.Cast
+Bot1.Accept
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+? Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Niko, Light of Hope; Ornithopter; Ornithopter; Shard Token; Shard Token
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Niko, Light of Hope.Activate(Ornithopter#2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Exile = Clone
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Niko, Light of Hope; Ornithopter; Ornithopter; Ornithopter
+Bot1.Battlefield.Ornithopter#2.Types = Artifact; Creature
+Bot1.Battlefield.Ornithopter#2.Power = 0
+Bot1.Battlefield.Ornithopter#2.Toughness = 2
+Bot1.Battlefield.Ornithopter#2.Keywords = Flying
+Bot1.Battlefield.Ornithopter#3.Toughness = 2
+Bot1.Battlefield.Ornithopter#3.Keywords = Flying
