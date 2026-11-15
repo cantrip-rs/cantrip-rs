@@ -1,11 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::{targets, untapped_creature_you_control};
+use cantrip_mechanics::targets;
 use cantrip_oracle as oracle;
-
-/// An untapped creature controlled by the spell's controller (CR 115.1a).
-fn target_creature(q: &dyn Query, asker: &Asker, target: Target) -> bool {
-    matches!(target, Target::Object(id) if targets::permanent(q, id) && untapped_creature_you_control(q, asker, id))
-}
 
 /// Tap the creature, then add colorless mana equal to its mana value (CR 701.26a, 106.3).
 fn resolve(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -18,6 +13,6 @@ fn resolve(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 }
 
 pub static CARD: CardDef = CardDef {
-    spell: spell(&[target(target_creature)], resolve),
+    spell: spell(&[targets::UNTAPPED_CREATURE_YOU_CONTROL], resolve),
     ..oracle::ENERGY_TAP
 };
