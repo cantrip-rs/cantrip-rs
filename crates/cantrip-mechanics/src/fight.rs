@@ -80,6 +80,19 @@ pub fn pump_first_target_then_it_fights_second(g: &mut dyn Game, item: &StackIte
     targets_fight(g, item, 0, 1);
 }
 
+/// "Target creature you control gets +P/+T until end of turn. Then it deals damage equal to its power to [up to one] target creature [an
+/// opponent controls / you don't control]" (CR 611.2a, 608.2c, 120.3): the creature is the spell's first target and the victim its second,
+/// each judged as the spell resolves (CR 608.2b). The pump comes first and ends a sentence, so the damage is the power it gives; with
+/// no second target, or a gone one, only the pump happens, and with the first gone nothing does. Assert Perfection (+1/+0) and
+/// Rabid Gnaw print it.
+pub fn pump_first_target_then_it_bites_second(g: &mut dyn Game, item: &StackItem, power: i32, toughness: i32) {
+    if let Some(creature) = targets::object(g, item, 0) {
+        crate::pump(g, item.object, creature, power, toughness);
+    }
+    g.end_sentence();
+    targets_bite(g, item, 0, 1);
+}
+
 /// "[Creature] deals damage equal to its power to [target]" (CR 120.3, 609.7, 120.8): one-sided, the creature being the
 /// source of the damage, so its abilities (lifelink, deathtouch) and colors count. Its power is read now, as the spell or
 /// ability resolves (CR 608.2c); a creature with no power deals none. Hard-Hitting Question and Archdruid's Charm print it.
