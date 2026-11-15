@@ -1,0 +1,71 @@
+# Daring Waverider {4}{U}{U}, 4/4: the target must be an instant or sorcery card. Faithless Looting on turn 1 discards a Memnite
+# (an artifact creature card, mana value 0, under the limit but the wrong type) and a Lightning Bolt (instant, mana value 1). On
+# turn 3 the trigger refuses the Memnite and takes the Bolt, which deals 3 to Bot2 (20 to 17) and is exiled.
+
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Memnite
+Lightning Bolt
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Daring Waverider
+Island
+Island x12
+
+[Bot2 Deck]
+Mountain
+Shock
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Memnite; Lightning Bolt)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Daring Waverider.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Memnite)
+Bot1.Target(Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Exile = Lightning Bolt
+Bot1.Graveyard = Faithless Looting; Memnite

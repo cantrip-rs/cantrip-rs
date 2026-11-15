@@ -1,0 +1,77 @@
+# Daring Waverider {4}{U}{U}, 4/4: "When this creature enters, you may cast target instant or sorcery card with mana value 4 or less
+# from your graveyard without paying its mana cost. If that spell would be put into your graveyard, exile it instead." Faithless
+# Looting on turn 1 discards Truck Toss (mana value 4, exactly at the limit) and Light of Judgment (5, just past it); Bot2's
+# Lightning Bolt (1) is in Bot2's graveyard. On turn 3 the trigger refuses the Light of Judgment and the opponent's Bolt and takes
+# Truck Toss, which deals 4 damage to Bot2 (20 to 16) for no mana (all six sources were spent on the Waverider), and is exiled
+# instead of going to the graveyard.
+
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Truck Toss
+Light of Judgment
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Daring Waverider
+Island
+Island x12
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Truck Toss; Light of Judgment)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Daring Waverider.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Light of Judgment)
+! Bot1.Target(Lightning Bolt)
+Bot1.Target(Truck Toss)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 16
+Exile = Truck Toss
+Bot1.Graveyard = Faithless Looting; Light of Judgment
+Bot2.Graveyard = Lightning Bolt
+Bot1.Battlefield.Daring Waverider.Power = 4
