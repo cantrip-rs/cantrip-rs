@@ -1,0 +1,9 @@
+{
+  "name": "Feather of Flight",
+  "manaCost": "{1}{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature\nWhen this Aura enters, draw a card.\nEnchanted creature gets +1/+0 and has flying.",
+  "keywords": [
+    "Flash"
+  ]
+}

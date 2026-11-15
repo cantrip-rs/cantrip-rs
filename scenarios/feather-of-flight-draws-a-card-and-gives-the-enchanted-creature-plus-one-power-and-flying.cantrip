@@ -1,0 +1,45 @@
+# Feather of Flight: when it enters, its controller draws a card (the trigger leaves the stack once the Aura is attached), and the enchanted Eager Cadet
+# gets +1/+0 and flying (CR 303.4, 613.4c). Bot1's hand is one Plains after the Cadet and the Feather, then two with the draw.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Eager Cadet
+Feather of Flight
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Dwarven Trader
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Eager Cadet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Feather of Flight.Cast(Eager Cadet)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Eager Cadet.Power = 2
+? Bot1.Battlefield.Eager Cadet.Toughness = 1
+? Bot1.Battlefield.Eager Cadet.Keywords = Flying
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Feather of Flight.Power = (absent)
+Bot1.Hand.Count = 2

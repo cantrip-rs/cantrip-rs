@@ -1,0 +1,49 @@
+# Feather of Flight goes to the graveyard as a state-based action when the enchanted creature dies (CR 704.5m): Bot2's Lightning Bolt kills the 2/1
+# Cadet; the card already drawn stays drawn.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Eager Cadet
+Feather of Flight
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Dwarven Trader
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Eager Cadet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Feather of Flight.Cast(Eager Cadet)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Eager Cadet)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Feather of Flight; Eager Cadet
+Bot1.Battlefield.Count = 4
+Bot1.Hand.Count = 3
