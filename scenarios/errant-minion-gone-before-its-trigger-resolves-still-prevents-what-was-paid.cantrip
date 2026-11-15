@@ -1,0 +1,40 @@
+# Errant Minion leaves the battlefield before its trigger resolves: with its trigger on the stack in Bot2's upkeep, Bot2 returns its
+# enchanted Memnite to hand with Unsummon, and the Aura goes to its owner's graveyard. The trigger still resolves: Bot2 pays one mana,
+# and the Aura deals the 2 damage as it last existed (CR 113.7a), 1 of it prevented - the prevention is of that damage, not of an
+# object the Aura has stopped being (CR 608.2c, 615.7).
+
+[Bot1 Deck]
+Black Lotus
+Errant Minion
+Island x20
+
+[Bot2 Deck]
+Memnite
+Mox Sapphire
+Mox Jet
+Unsummon
+Island x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Errant Minion.Cast(Bot2.Battlefield.Memnite)
+[T4 Bot2.Upkeep]
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Unsummon.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Errant Minion; Black Lotus
+? Stack.Count = 1
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.PayCost(Times: 1)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 20

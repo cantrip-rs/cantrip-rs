@@ -1,0 +1,53 @@
+# Errant Minion's "Prevent X of that damage" is a prevention effect on that damage, which the player it would be dealt to orders
+# with the event's other replacement effects (CR 615.1a, 616.1). Bot1 controls Furnace of Rath and an Errant Minion on Bot2's
+# Memnite. At Bot2's upkeep on turn 4 Bot2 pays one mana and has the Furnace apply first: 4 damage, 1 of it prevented, Bot2 takes 3.
+# On turn 6 Bot2 pays one again and has the Minion's prevention apply first: 1 of the 2 prevented, the other 1 doubled, Bot2 takes 2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Furnace of Rath
+Errant Minion
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Island x20
+
+[Bot2 Deck]
+Memnite
+Mox Emerald
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Furnace of Rath.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Errant Minion.Cast(Bot2.Battlefield.Memnite)
+[T4 Bot2.Upkeep]
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.PayCost(Times: 1)
+Bot2.Replace(Furnace of Rath)
+? Bot2.Life = 17
+[T6 Bot2.Upkeep]
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.PayCost(Times: 1)
+Bot2.Replace(Errant Minion)
+[T6 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Life = 20
+Prevented = 1 Errant Minion > Bot2 by Errant Minion; 1 Errant Minion > Bot2 by Errant Minion
