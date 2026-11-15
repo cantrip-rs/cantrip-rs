@@ -1,0 +1,43 @@
+# Nocturnal Hunger, gift not promised, whose only target is killed in response (Lightning Bolt on Bot1's Memnite): the spell does
+# not resolve (CR 608.2b), so Bot1 loses no life: still 20 (the Bolt hits Memnite, not Bot1).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Swamp
+Nocturnal Hunger
+Memnite
+Swamp x17
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Nocturnal Hunger.Cast
+Bot1.Decline
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Bot1.Graveyard = Nocturnal Hunger; Memnite

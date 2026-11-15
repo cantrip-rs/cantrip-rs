@@ -1,0 +1,49 @@
+# "If the gift wasn't promised, you lose 2 life" does not depend on the creature dying: Bot2's indestructible Darksteel Myr survives
+# the destroy (CR 702.12b) and Bot1 still loses 2 life (CR 608.2c). With the gift, the Food still arrives and no life is lost
+# (shown in the other scenarios).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Swamp
+Nocturnal Hunger
+Swamp x17
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Darksteel Myr
+Swamp x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Darksteel Myr.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Nocturnal Hunger.Cast
+Bot1.Decline
+Bot1.Target(Bot2.Battlefield.Darksteel Myr)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 18
+Bot2.Battlefield.Darksteel Myr.Keywords = Indestructible
+Bot1.Graveyard = Nocturnal Hunger

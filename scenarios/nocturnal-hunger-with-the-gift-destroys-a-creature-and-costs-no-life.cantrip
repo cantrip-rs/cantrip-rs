@@ -1,0 +1,40 @@
+# Nocturnal Hunger with the gift promised (CR 702.174a): the opponent, Bot2, creates a Food (CR 702.174d), the target creature is
+# destroyed, and since the gift was promised Bot1 loses no life. The pool is empty right after the cast: {2}{B} exactly.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Swamp
+Nocturnal Hunger
+Swamp x17
+
+[Bot2 Deck]
+Ornithopter
+Swamp x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Nocturnal Hunger.Cast
+Bot1.Accept
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield = Food Token
+Bot2.Graveyard = Ornithopter
+Bot1.Life = 20
+Bot1.Graveyard = Nocturnal Hunger
+Bot1.Battlefield = Mox Jet; Mox Ruby; Swamp
