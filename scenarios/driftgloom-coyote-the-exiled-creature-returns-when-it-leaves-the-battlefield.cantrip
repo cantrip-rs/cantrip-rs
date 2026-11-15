@@ -1,0 +1,59 @@
+# Driftgloom Coyote exiles Bot2's Grizzly Bears (and gets a +1/+1 counter). When Bot2 exiles the Coyote with Swords to Plowshares on turn 4 the Bears return to the battlefield (CR 610.3,
+# "until this creature leaves the battlefield"), and Bot1 gains 4 life, the Coyote's power with its counter.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Plains
+Black Lotus
+Driftgloom Coyote
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Forest
+Mox Pearl
+Mox Emerald
+Grizzly Bears
+Swords to Plowshares
+Forest
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Driftgloom Coyote.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Driftgloom Coyote)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Exile = Driftgloom Coyote
+Bot1.Life = 24
+Bot2.Battlefield = Forest; Mox Pearl; Mox Emerald; Grizzly Bears
+Bot2.Battlefield.Grizzly Bears.SummoningSick = true

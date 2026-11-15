@@ -1,0 +1,51 @@
+# Driftgloom Coyote exiles Bot2's Hill Giant (power 3, not "2 or less"): the Giant is exiled and the Coyote stays a 3/4 with no counter.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Plains
+Black Lotus
+Driftgloom Coyote
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Hill Giant
+Mountain
+Mountain
+Mountain
+Mountain
+Mountain x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Driftgloom Coyote.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile = Hill Giant
+Bot2.Battlefield = Mountain
+Bot1.Battlefield.Driftgloom Coyote.Power = 3
+Bot1.Battlefield.Driftgloom Coyote.Toughness = 4

@@ -1,0 +1,8 @@
+{
+  "name": "Driftgloom Coyote",
+  "manaCost": "{3}{W}{W}",
+  "type": "Creature — Elemental Coyote",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "When this creature enters, exile target creature an opponent controls until this creature leaves the battlefield. If that creature had power 2 or less, put a +1/+1 counter on this creature."
+}
