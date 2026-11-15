@@ -1,0 +1,69 @@
+# Long River Lurker: "When this creature enters, target creature you control can't be blocked this turn. Whenever that creature
+# deals combat damage this turn, you may exile it. If you do, return it to the battlefield under its owner's control." On turn 3 the
+# Lurker enters and makes Bot1's Grizzly Bears unblockable: Bot2's Ornithopter may not block it (CR 509.1b), the Bears deal 2 and
+# Bot1 accepts: the Bears are exiled and come back untapped, a new object (CR 400.7), not attacking. Bot2's Ornithopter is
+# refused as a target (a creature, but not Bot1's) (CR 115.1).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Grizzly Bears
+Long River Lurker
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Island
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Long River Lurker.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+! Bot2.Block(Bot2.Battlefield.Ornithopter > Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot2.Life = 18
+? Bot1.Battlefield.Grizzly Bears.Tapped = false
+
+[Expect]
+Bot2.Life = 18

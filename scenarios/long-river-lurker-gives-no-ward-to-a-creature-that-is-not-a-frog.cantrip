@@ -1,0 +1,46 @@
+# Long River Lurker: only "other Frogs you control" have ward {1}. Bot1's Ornithopter is not a Frog, and Bot2's only mana, a Mox Ruby,
+# pays for the Lightning Bolt with none left for a ward, which it never meets: the Bolt kills the Ornithopter.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Ruby
+Long River Lurker
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Long River Lurker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Ornithopter)
+[T2 Bot2.Main2]
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.Ornithopter = (absent)
+Bot1.Graveyard = Ornithopter

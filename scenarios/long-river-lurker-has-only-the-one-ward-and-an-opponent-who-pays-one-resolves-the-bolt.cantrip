@@ -1,0 +1,49 @@
+# Long River Lurker has "Ward {1}" itself, and "Other Frogs you control have ward {1}" does not give it a second one: Bot2 has two
+# Moxen, one pays for the Lightning Bolt and the other for the single ward trigger, so the Bolt resolves and kills the 2/3 Lurker (CR 702.21a).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Ruby
+Long River Lurker
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Long River Lurker.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Lightning Bolt.Cast(Long River Lurker)
+Bot2.PayCost
+[T2 Bot2.Main2]
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.Long River Lurker = (absent)
+Bot1.Graveyard = Long River Lurker
+Bot2.Graveyard = Lightning Bolt

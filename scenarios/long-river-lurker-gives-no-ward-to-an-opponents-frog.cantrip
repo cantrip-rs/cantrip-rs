@@ -1,0 +1,53 @@
+# Long River Lurker: "Other Frogs you control". Bot2's Bellowing Crier is a Frog, but not one Bot1 controls, so it has no ward: Bot1's Lightning
+# Bolt, paid with its only mana, a Mox Ruby, kills it.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Long River Lurker
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Bellowing Crier
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Long River Lurker.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Bellowing Crier.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Island)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bellowing Crier)
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot2.Battlefield.Bellowing Crier = (absent)
+Bot2.Graveyard = Bellowing Crier; Island
