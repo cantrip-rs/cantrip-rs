@@ -1,0 +1,33 @@
+# "Enchant creature or Food" (CR 303.4): Bot1 makes a Food token with Pawpatch Formation, and a Mox Emerald - an artifact, but neither a
+# creature nor a Food - is not a legal thing to enchant (the refusal). The Food token is. It stays a colorless Food artifact with
+# Sugar Coat attached to it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Pawpatch Formation
+Sugar Coat
+Island x2
+Forest x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Pawpatch Formation.Cast
+Bot1.Modes(Draw a card)
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Sugar Coat.Cast(Bot1.Battlefield.Mox Emerald)
+Bot1.Hand.Sugar Coat.Cast(Bot1.Battlefield.Food Token)
+
+[Expect]
+Bot1.Battlefield.Food Token.Types = Artifact
+Bot1.Battlefield.Food Token.Subtypes = Food
+Bot1.Battlefield.Food Token.Colors = (absent)
+Bot1.Battlefield.Sugar Coat.AttachedTo = Food Token

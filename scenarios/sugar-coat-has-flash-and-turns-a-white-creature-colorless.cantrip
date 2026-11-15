@@ -1,0 +1,36 @@
+# Sugar Coat has flash (CR 702.8a): on turn 2, once Bot2's Savannah Lions has resolved, Bot1 casts it at it in Bot2's own first main phase,
+# when a sorcery could not be cast. The white Human Soldier creature is a colorless Food artifact, and Bot2's Plains is only a land.
+
+[Bot1 Deck]
+Black Lotus
+Sugar Coat
+Island x18
+
+[Bot2 Deck]
+Plains
+Savannah Lions
+Plains x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Savannah Lions.Colors = White
+? Bot2.Battlefield.Savannah Lions.Types = Creature
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sugar Coat.Cast(Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 2
+Bot2.Battlefield.Savannah Lions.Colors = (absent)
+Bot2.Battlefield.Savannah Lions.Types = Artifact
+Bot2.Battlefield.Savannah Lions.Subtypes = Food
+Bot1.Battlefield.Sugar Coat.AttachedTo = Savannah Lions

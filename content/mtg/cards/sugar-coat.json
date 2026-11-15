@@ -1,0 +1,9 @@
+{
+  "name": "Sugar Coat",
+  "manaCost": "{2}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature or Food\nEnchanted permanent is a colorless Food artifact with \"{2}, {T}, Sacrifice this artifact: You gain 3 life\" and loses all other card types and abilities.",
+  "keywords": [
+    "Flash"
+  ]
+}

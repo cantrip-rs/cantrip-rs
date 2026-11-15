@@ -1,0 +1,45 @@
+# Sugar Coat on Bot2's Birds of Paradise (CR 613.1d, 613.1e, 613.1f): it stops being a green Bird creature and is a colorless Food artifact, losing
+# its flying and its mana ability. On turn 4 Bot2 pays {2} from two Forests and taps and sacrifices it: the one ability it has gains Bot2
+# 3 life, and no mana is added to the pool; Sugar Coat, left enchanting nothing, goes to Bot1's graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Sugar Coat
+Island x18
+
+[Bot2 Deck]
+Forest
+Birds of Paradise
+Forest x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Birds of Paradise.Cast
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Birds of Paradise.Types = Creature
+? Bot2.Battlefield.Birds of Paradise.Colors = Green
+? Bot2.Battlefield.Birds of Paradise.Keywords = Flying
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sugar Coat.Cast(Bot2.Battlefield.Birds of Paradise)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Birds of Paradise.Types = Artifact
+? Bot2.Battlefield.Birds of Paradise.Subtypes = Food
+? Bot2.Battlefield.Birds of Paradise.Colors = (absent)
+? Bot2.Battlefield.Birds of Paradise.Keywords = (absent)
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest#1.Activate
+Bot2.Battlefield.Forest#2.Activate
+Bot2.Battlefield.Birds of Paradise.Activate
+
+[Expect]
+Turn = 4
+Bot2.Life = 23
+Bot2.Mana =
+Bot2.Graveyard = Birds of Paradise
+Bot1.Graveyard = Sugar Coat; Black Lotus
