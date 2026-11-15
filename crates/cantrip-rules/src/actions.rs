@@ -8191,7 +8191,7 @@ fn land_rules(cx: &Cx, player: PlayerId) -> LandRules {
         PlayRule::LibraryTop | PlayRule::LibraryTopLands => {
             rules.top_lands.push(Grant { object: source, ability });
         }
-        PlayRule::HandRevealed(_) | PlayRule::LibraryTopSpells(..) | PlayRule::MaximumHandSize(_) | PlayRule::LookAtLibraryTop | PlayRule::RevealLibraryTop | PlayRule::While(..) => {}
+        PlayRule::HandRevealed(_) | PlayRule::LibraryTopSpells(..) | PlayRule::MaximumHandSize(_) | PlayRule::MaximumHandSizeOf(_) | PlayRule::LookAtLibraryTop | PlayRule::RevealLibraryTop | PlayRule::While(..) => {}
     });
     // "You may play an additional land this turn" (CR 305.2, 611.2c): an effect a resolved spell or ability made, added to
     // the rest - the number a player can play is the sum of everything that increases it.
@@ -8227,6 +8227,16 @@ pub fn maximum_hand_size(cx: &Cx, player: PlayerId) -> Option<u32> {
             says(play_rule_timestamp(cx, source, ability), *maximum);
         }
     });
+    // A permanent that sets other players' maximum (CR 402.2): each player's permanents are asked about `player`.
+    for controller in cx.s().seats() {
+        each_play_rule_named(cx, cx.cards(), controller, true, |source, ability, rule| {
+            if let PlayRule::MaximumHandSizeOf(applies) = rule
+                && let Some(maximum) = applies(cx, &Asker::new(source, controller), player)
+            {
+                says(play_rule_timestamp(cx, source, ability), Some(maximum));
+            }
+        });
+    }
     newest.map_or(Some(7), |(_, maximum)| maximum)
 }
 

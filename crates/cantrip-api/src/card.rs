@@ -3550,6 +3550,11 @@ pub enum PlayRule {
     /// wins, whichever way it reads (CR 613.11, 613.7), an effect of a resolved spell (`EffectKind::MaximumHandSize`) in the
     /// same order.
     MaximumHandSize(Option<u32>),
+    /// "Each opponent's maximum hand size is N" (CR 402.2): the rule is asked about every player, with the permanent as source
+    /// and its controller, and says the maximum it sets for the ones it applies to (`None`: not that player). It is judged
+    /// with `MaximumHandSize` and the effects of resolved spells, the effect with the newest timestamp deciding (CR 613.11,
+    /// 613.7). Winter, Misanthropic Guide.
+    MaximumHandSizeOf(fn(&dyn Query, &Asker, PlayerId) -> Option<u32>),
 }
 
 /// What else may pay a spell's total cost besides mana (CR 601.2f-h): convoke (CR 702.51a), delve (CR 702.66a) and
