@@ -1,0 +1,47 @@
+# Power Leak: "Enchant enchantment. At the beginning of the upkeep of enchanted enchantment's controller, that player may pay any
+# amount of mana. This Aura deals 2 damage to that player. Prevent X of that damage, where X is the amount of mana that player paid
+# this way." Bot1 casts it on Bot2's Flood (not on Bot2's Memnite: enchant enchantment, CR 303.4a). On turn 4, Bot2's upkeep, Bot2 -
+# the enchanted enchantment's controller, not the Aura's - pays one mana (Mox Sapphire) and is dealt 1 of the 2 damage. On turn 6
+# Bot2 declines and is dealt all 2 (CR 608.2d, 608.2c, 615.7). Bot1, the Aura's controller, is dealt nothing.
+
+[Bot1 Deck]
+Black Lotus
+Power Leak
+Island x20
+
+[Bot2 Deck]
+Flood
+Memnite
+Mox Sapphire
+Island x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Flood.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+! Bot1.Hand.Power Leak.Cast(Bot2.Battlefield.Memnite)
+Bot1.Hand.Power Leak.Cast(Bot2.Battlefield.Flood)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {U}
+[T4 Bot2.Upkeep]
+? Stack.Count = 1
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.PayCost(Times: 1)
+? Bot2.Mana =
+? Bot2.Life = 19
+? Bot1.Life = 20
+[T6 Bot2.Upkeep]
+Bot2.Decline
+[T6 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 20
+Bot1.Battlefield.Power Leak.AttachedTo = Flood
