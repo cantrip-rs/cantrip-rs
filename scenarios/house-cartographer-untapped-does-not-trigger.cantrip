@@ -1,0 +1,35 @@
+# House Cartographer, Survival's "if this creature is tapped" (CR 603.4): Cartographer does not attack on turn 3, so it is untapped
+# at the beginning of the second main phase and nothing is revealed. The library is untouched (Bears and Elves still on top, 14
+# cards after the turn 3 draw) and the Forest is still in it. The control is the scenario where Cartographer attacks first.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+House Cartographer
+Island x4
+Lightning Bolt
+Grizzly Bears
+Llanowar Elves
+Forest
+Island x12
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.House Cartographer.Cast
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.House Cartographer.Tapped = false
+Bot1.Pass
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Library.Count = 15
+Bot1.Library.Top = Grizzly Bears
+Bot2.Life = 20

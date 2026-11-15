@@ -1,0 +1,44 @@
+# House Cartographer, Survival: "At the beginning of your second main phase, if this creature is tapped, reveal cards from the top
+# of your library until you reveal a land card. Put that card into your hand and the rest on the bottom of your library in a random
+# order." Cartographer is cast on turn 1 and attacks on turn 3 (no vigilance, so tapped). The library is Grizzly Bears, Llanowar Elves, Forest, then
+# twelve Islands after the turn 3 draw (Lightning Bolt): the two creature cards are revealed before the Forest, the Forest (and not
+# the Island under it) goes to hand, and the Bears and Elves go to the bottom (14 left; their order is random, so only that
+# they are in the library, below the Islands, is checked). Hand: 7 - 3 cast + Bolt + Forest = 6 (CR 701.20, 401.4, 603.4).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+House Cartographer
+Island x4
+Lightning Bolt
+Grizzly Bears
+Llanowar Elves
+Forest
+Island x12
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.House Cartographer.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.House Cartographer.Tapped = false
+Bot1.Attack(House Cartographer > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.House Cartographer.Tapped = true
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Hand.Count = 6
+Bot1.Hand.Forest.Colors.Count = 0
+Bot1.Library.Count = 14
+Bot1.Library.Top = Island
+Bot1.Library.Grizzly Bears.Power = 2
+Bot1.Library.Llanowar Elves.Power = 1
+Bot1.Graveyard.Count = 0
+Bot2.Life = 18
