@@ -836,6 +836,13 @@ public sealed class Decisions
     /// </summary>
     private AnswerPayload Block(GameClient client, DeclareBlockersPromptMessage prompt)
     {
+        // The blocks declared before were taken back, their cost to block given up (CR 509.1f, 733.1): the engine's own
+        // declaration, which costs nothing, rather than asking for the same blocks again.
+        if (prompt.TakenBack)
+        {
+            return prompt.Default();
+        }
+
         var answer = new BlockersDeclaredAnswer();
 
         if (prompt.Eligible.Count == 0 || prompt.Attackers.Count == 0)

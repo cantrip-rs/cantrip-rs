@@ -2805,6 +2805,14 @@ public sealed class PayCostsPromptMessage : PromptPayload
     [Key(35)]
     public bool ManaAbilities { get; set; }
 
+    /// <summary>
+    /// The blocking creatures whose cost to block this pays (CR 509.1d-f: Hipparion's "can't block creatures with power 3 or
+    /// greater unless you pay {1}"), when it is one: <see cref="Spell"/> is then the permanent whose static ability makes
+    /// blocking cost something (the first, when several do), and giving up takes the declaration of blockers back, to be made
+    /// again. Empty for any other payment.
+    /// </summary>
+    [Key(36)]
+    public List<ViewHandle> Blockers { get; set; } = [];
 }
 
 /// <summary>The steps of a payment with assist (CR 702.132a), as <see cref="PayCostsPromptMessage.AssistStep"/> names them.</summary>
@@ -3277,6 +3285,14 @@ public sealed class DeclareBlockersPromptMessage : PromptPayload
     /// </summary>
     [Key(11)]
     public List<int> BlockCapacities { get; set; } = [];
+
+    /// <summary>
+    /// The declaration made before this one in the same step was taken back, its cost to block not paid (CR 509.1f, 733.1):
+    /// said so the player knows why they are asked again, and so a seat that answers alike each time declares something else.
+    /// <see cref="Suggested"/>, the default, costs nothing: no requirement is obeyed by paying (CR 509.1c).
+    /// </summary>
+    [Key(12)]
+    public bool TakenBack { get; set; }
 
     /// <summary>How many attackers <paramref name="blocker"/> can block; <see cref="int.MaxValue"/> for any number, 1 for one not listed.</summary>
     public int CapacityOf(ViewHandle blocker)

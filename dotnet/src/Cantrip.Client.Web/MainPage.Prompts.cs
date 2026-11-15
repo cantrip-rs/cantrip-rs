@@ -430,6 +430,18 @@ public sealed partial class MainPage
                         ? $"{name} asks it  ·  your pool covers it  ·  {how}"
                         : $"{name} asks it  ·  {prompt.Remaining} still to pay  ·  {how}  ·  Cancel declares attackers again");
             }
+            // A cost to block (CR 509.1d-f), the same: what it pays for is the block, and giving it up takes the declaration back.
+            else if (prompt.Blockers.Count > 0)
+            {
+                string blockers = prompt.Blockers.Count == 1
+                    ? client.Object(prompt.Blockers[0])?.Name ?? "1 creature"
+                    : $"{prompt.Blockers.Count} creatures";
+                Prompt(
+                    $"Pay {prompt.Total} to block with {blockers}",
+                    covered
+                        ? $"{name} asks it  ·  your pool covers it  ·  {how}"
+                        : $"{name} asks it  ·  {prompt.Remaining} still to pay  ·  {how}  ·  Cancel declares blockers again");
+            }
             else
             {
                 // Life the total cost asks besides its mana (CR 119.4, 601.2h: Terror of the Peaks' additional 3 life), paid
@@ -2629,7 +2641,10 @@ public sealed partial class MainPage
             held
                 ?? (_pending.Count > 0
                 ? $"Choose an attacker to block ({_pending.Count} selected){CapacityHint(prompt)}"
-                : issue ?? $"{prompt.Attackers.Count} attacking  ·  {blockers} blocking"));
+                : issue ?? (prompt.TakenBack && declared.Count == 0
+                    // The declaration before was taken back, its cost to block not paid (CR 509.1f, 733.1).
+                    ? $"The blocks were taken back: their cost wasn't paid  ·  {prompt.Attackers.Count} attacking"
+                    : $"{prompt.Attackers.Count} attacking  ·  {blockers} blocking")));
 
         AddButton(
             (_blocking.Count == 0 ? "No blocks" : $"Block with {blockers}") + (verdict is { Cost.Length: > 0 } ? $" for {verdict.Cost}" : string.Empty),

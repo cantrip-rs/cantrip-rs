@@ -512,6 +512,13 @@ public sealed class RandomPlay : IAutoPlayer
     /// </summary>
     private AnswerPayload Block(DeclareBlockersPromptMessage prompt)
     {
+        // The declaration before was taken back, its cost to block not paid (CR 509.1f, 733.1): the engine's own, which costs
+        // nothing, rather than another draw that might cost the same again.
+        if (prompt.TakenBack)
+        {
+            return prompt.Default();
+        }
+
         var answer = new BlockersDeclaredAnswer();
 
         foreach (ViewHandle blocker in prompt.Eligible)

@@ -213,6 +213,13 @@ showing the player. The answer is still checked when it is given. Version 205. `
 creature", 0 for "can block any number of creatures"; a creature blocking several is declared with one block of each, and
 "blocks each attacking creature if able" (Blaze of Glory) is a requirement for each attacker. Version 230.
 
+**Costs to block.** A declaration whose `Verdict` has a `Cost` (CR 509.1d: Hipparion's "can't block creatures with power 3
+or greater unless you pay {1}") is paid once it is sent, through a `PayCostsPromptMessage` whose `Blockers` are the creatures
+whose blocks it pays for and whose `Spell` is the permanent asking it (the first, when several do); `Attackers` is empty.
+Giving it up (`CancelCasting`) takes the declaration back (CR 733.1), and the `DeclareBlockersPromptMessage` asked again has
+`TakenBack` true, which the web client says and with which the automatic seats declare `Suggested`, which costs nothing. The
+web client titles the payment "Pay {1} to block with Hipparion". Version 239.
+
 An unrestricted `SeparatePiles` selection (`AnyNumber`, no parts or candidate restriction) uses the existing non-targeted
 `ChooseTargetPromptMessage` presentation; its `TargetsChosenAnswer` is translated to the engine's card selection and
 checked by the same validator. A pile-choice mode names its members, with an empty pile named "nothing" (CR 700.3d). The same

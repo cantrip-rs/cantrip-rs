@@ -156,6 +156,13 @@ public static class AutoPlay
     /// </summary>
     private static BlockersDeclaredAnswer Block(GameClient client, DeclareBlockersPromptMessage prompt)
     {
+        // The declaration before was taken back, its cost to block not paid (CR 509.1f, 733.1): the engine's own, which costs
+        // nothing, rather than the same blocks again.
+        if (prompt.TakenBack)
+        {
+            return (BlockersDeclaredAnswer)prompt.Default();
+        }
+
         var answer = new BlockersDeclaredAnswer();
         HashSet<int> used = [];
         List<ViewHandle> unblocked = [];
