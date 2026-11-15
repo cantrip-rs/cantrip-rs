@@ -359,11 +359,18 @@ pub fn arrived_this_turn(q: &dyn Query, object: ObjectId) -> bool {
 /// With `under`, only those that player controlled as they died (Callous Sell-Sword's "under your control"; the leaving
 /// object's row is as it was when it left). Spymaster's Vault counts them all.
 pub fn creatures_died_this_turn(q: &dyn Query, under: Option<PlayerId>) -> usize {
+    creatures_died_this_turn_that(q, under, |_| true)
+}
+
+/// The creatures that died this turn (CR 700.4) as `creatures_died_this_turn` counts them, only those whose last known information
+/// `matching` accepts: a creature judged as it last existed on the battlefield (CR 608.2h), so a "non-Zombie creature died" is one
+/// that was not a Zombie as it left. Undead Sprinter asks whether there was one.
+pub fn creatures_died_this_turn_that(q: &dyn Query, under: Option<PlayerId>, matching: impl Fn(&LastKnown) -> bool) -> usize {
     q.history()
         .select(EventQuery::kind(EventMask::ZONE_CHANGE).from(ZoneKind::Battlefield).to(ZoneKind::Graveyard).this_turn())
         .filter(|r| {
             matches!(r.event, Event::ZoneChange { old, .. }
-                if q.state().last_known(old).is_some_and(|l| l.types.has(CardType::Creature))
+                if q.state().last_known(old).is_some_and(|l| l.types.has(CardType::Creature) && matching(l))
                     && under.is_none_or(|p| q.obj(old).controller == p))
         })
         .count()

@@ -9,7 +9,7 @@ use cantrip_api::*;
 use crate::history;
 
 /// "You may cast this card from your graveyard" (CR 601.2, 404.1): this card, by its owner.
-fn this_card_by_its_owner(_: &dyn Query, asker: &Asker, card: ObjectId, player: PlayerId) -> bool {
+pub fn this_card_by_its_owner(_: &dyn Query, asker: &Asker, card: ObjectId, player: PlayerId) -> bool {
     card == asker.source && player == asker.controller
 }
 
@@ -31,9 +31,15 @@ pub const PERMISSION: ExileCast = ExileCast {
 /// counter when the spell it was was cast by its own `PERMISSION`. A cast from the graveyard by another permission (Yawgmoth's
 /// Will, Lurrus of the Dream-Den) is not "if you do", so it enters without one.
 pub fn enters_with_finality_if_cast_by_it(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
+    enters_with_counter_if_cast_by_it(g, entering, CounterKind::Finality)
+}
+
+/// "If you do, it enters with a [`kind`] counter on it" (CR 122.1, 614.1c, 601.3): the rider `enters_with_finality_if_cast_by_it`
+/// is, with any one counter. Undead Sprinter's +1/+1 counter is it.
+pub fn enters_with_counter_if_cast_by_it(g: &mut dyn Game, entering: &mut Entering, kind: CounterKind) -> Result<(), Suspend> {
     let own = AbilityRef::exile_cast(g.obj(entering.object).card, 0);
     if history::cast_of(g, entering.object).and_then(|cast| cast.granted_by()).is_some_and(|by| by.ability == own) {
-        entering.counters[CounterKind::Finality as usize] += 1;
+        entering.counters[kind as usize] += 1;
     }
     Ok(())
 }
