@@ -1,0 +1,68 @@
+# Beastie Beatdown without delirium (CR 207.2c): Bot1's graveyard holds a Culling the Weak (instant) and the Ornithopter it
+# sacrificed (artifact, creature): three types, one short of four, so no counters; the Grizzly Bears deal their own 2 to
+# Bot2's Cogwork Librarian (3/3), which survives. Bot2's graveyard holds a Forest (a fourth type, land) discarded to Mox Diamond:
+# it is not Bot1's graveyard and does not count - had it counted, the Bears would have gotten counters and killed the Librarian.
+# Both targets are required: two of Bot1's own creatures, or the opponent's creature first and Bot1's second, are refused.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Ornithopter
+Grizzly Bears
+Culling the Weak
+Beastie Beatdown
+Island x13
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Cogwork Librarian
+Mox Diamond
+Forest
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Cogwork Librarian.Cast
+Bot2.Hand.Mox Diamond.Cast
+Bot2.Accept
+Bot2.Choose(Forest)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Beastie Beatdown.Cast(Bot1.Battlefield.Grizzly Bears; Bot1.Battlefield.Ornithopter)
+! Bot1.Hand.Beastie Beatdown.Cast(Bot2.Battlefield.Cogwork Librarian; Bot1.Battlefield.Grizzly Bears)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Culling the Weak.Cast
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot1.Hand.Beastie Beatdown.Cast
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Cogwork Librarian)
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Cogwork Librarian.Damage = 2
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Graveyard = Beastie Beatdown; Culling the Weak; Ornithopter
+Bot2.Graveyard = Forest
