@@ -273,6 +273,10 @@ impl Query for AsSpell<'_> {
         self.q.state()
     }
 
+    fn instructing(&self) -> Option<&StackItem> {
+        self.q.instructing()
+    }
+
     fn card(&self, id: CardId) -> &'static CardDef {
         self.q.card(id)
     }
@@ -381,6 +385,10 @@ impl Query for WithWords<'_> {
 
     fn state(&self) -> &GameState {
         self.q.state()
+    }
+
+    fn instructing(&self) -> Option<&StackItem> {
+        self.q.instructing()
     }
 
     fn card(&self, id: CardId) -> &'static CardDef {
@@ -4013,6 +4021,10 @@ impl Query for Announcing<'_> {
         self.q.state()
     }
 
+    fn instructing(&self) -> Option<&StackItem> {
+        self.q.instructing()
+    }
+
     fn mana_value(&self, id: ObjectId) -> u32 {
         self.q.mana_value(id)
     }
@@ -4128,6 +4140,11 @@ impl Query for Watch<'_> {
     fn state(&self) -> &GameState {
         self.w.told.set(true);
         self.q.state()
+    }
+
+    fn instructing(&self) -> Option<&StackItem> {
+        self.w.told.set(true);
+        self.q.instructing()
     }
 
     fn mana_value(&self, id: ObjectId) -> u32 {
@@ -4885,6 +4902,10 @@ impl Query for AsFace<'_> {
 
     fn state(&self) -> &GameState {
         self.cx.s()
+    }
+
+    fn instructing(&self) -> Option<&StackItem> {
+        self.cx.instructing()
     }
 
     /// A nonmodal double-faced card judged as its back face, as it would be cast transformed, has its front face's mana value
@@ -8751,6 +8772,10 @@ impl Query for QueryAsFace<'_> {
 
     fn state(&self) -> &GameState {
         self.q.state()
+    }
+
+    fn instructing(&self) -> Option<&StackItem> {
+        self.q.instructing()
     }
 
     fn card(&self, id: CardId) -> &'static CardDef {

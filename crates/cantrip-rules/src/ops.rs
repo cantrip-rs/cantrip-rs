@@ -3157,8 +3157,8 @@ fn create_tokens_entering(
     }
     // Record the resolving ability's linked identity only for actual token creations. Unlike the general event cause,
     // this retains acquisition and the specific creating ability (CR 607.2c, 607.5).
-    if spell.is_none() && !cx.g.check.replacement_callback && cx.mana_source.is_none() && cx.g.mana_interval.is_none() {
-        if let Some(item) = cx.resolving().copied().filter(|item| item.kind != StackKind::Spell) {
+    if spell.is_none() {
+        if let Some(item) = cx.instructing().copied().filter(|item| item.kind != StackKind::Spell) {
             let by = Query::linked(cx, &item);
             for &token in &created {
                 events.push(Event::TokenCreatedByAbility { token, by, ability: item.ability });

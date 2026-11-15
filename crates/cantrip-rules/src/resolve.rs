@@ -313,6 +313,10 @@ impl Query for Given<'_> {
         self.q.state()
     }
 
+    fn instructing(&self) -> Option<&StackItem> {
+        self.q.instructing()
+    }
+
     fn events(&self) -> &[Record] {
         self.q.events()
     }

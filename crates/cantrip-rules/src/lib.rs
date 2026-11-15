@@ -193,6 +193,8 @@ mod emblem_maker_tests;
 #[cfg(test)]
 mod instant_sorcery_entering_tests;
 #[cfg(test)]
+mod instructing_tests;
+#[cfg(test)]
 mod attached_entry_tests;
 #[cfg(test)]
 mod enters_as_tests;
@@ -1936,6 +1938,16 @@ impl<'a> Cx<'a> {
         s.stack.iter().rev().find(|i| i.serial == serial).or_else(|| s.left_stack.iter().rev().find(|i| i.serial == serial))
     }
 
+    /// The spell or ability resolving while its own instructions are carried out (CR 608.2c, `Query::instructing`): not while
+    /// a mana ability resolves in the middle of it (CR 605.3b), nor while a replacement or prevention effect does what it
+    /// does besides changing the event (CR 614.1a, 615.5).
+    pub(crate) fn instructing(&self) -> Option<&StackItem> {
+        if self.g.check.replacement_callback || self.mana_source.is_some() || self.g.mana_interval.is_some() {
+            return None;
+        }
+        self.resolving()
+    }
+
     /// Runs `f` reading the resolving ability's own text, or (`own` false) every other ability's: `Game::own_text`. What the
     /// resolving ability's condition, targets and instructions read of its source's words is the ability's text as it was put
     /// on the stack (CR 113.7a); what the engine asks of other abilities in the middle of them - what triggers, what replaces
@@ -2084,6 +2096,10 @@ impl Query for Cx<'_> {
 
     fn mana_ability_x(&self) -> Option<u32> {
         self.g.mana_activation_x
+    }
+
+    fn instructing(&self) -> Option<&StackItem> {
+        Cx::instructing(self)
     }
 
     fn producible_types(&self, permanent: ObjectId) -> (ColorSet, bool) {

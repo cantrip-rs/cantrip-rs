@@ -532,6 +532,15 @@ pub trait Query {
         None
     }
 
+    /// The spell or ability whose instructions are being carried out now (CR 608.2c): the one resolving, whose effect is
+    /// whatever they do, the damage they have any source deal included (CR 120.2b). `None` outside a resolution, and inside
+    /// one while what is carried out is not its instructions: a mana ability's, which resolves at once (CR 605.3b), or what a
+    /// replacement or prevention effect does besides changing the event (CR 614.1a, 615.5), that effect's own. Silhouette's
+    /// "if a spell or ability that targets that creature would cause a source to deal damage to that creature".
+    fn instructing(&self) -> Option<&StackItem> {
+        None
+    }
+
     /// The cards in exile that were exiled with `by` (CR 607.2a): what an ability linked to the one that exiled them refers
     /// to - an ability of the same object printed in the same text (`Linked`), so cards exiled by an ability of another text
     /// the object has (a copy effect's, a granted one's) are not among them (CR 607.5). A permanent that left and came back

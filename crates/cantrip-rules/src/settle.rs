@@ -1430,6 +1430,10 @@ impl Query for BoardThen<'_> {
         self.q.state()
     }
 
+    fn instructing(&self) -> Option<&StackItem> {
+        self.q.instructing()
+    }
+
     fn linked_card(&self, card: CardId) -> CardId {
         self.q.linked_card(card)
     }
