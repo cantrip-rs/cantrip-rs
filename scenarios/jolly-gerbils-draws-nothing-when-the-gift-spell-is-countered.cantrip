@@ -1,0 +1,49 @@
+# A gift that is promised but never given (CR 702.174j: the spell is countered before it resolves) does not trigger the Gerbils: Bot2 counters Bot1's Dawn's Truce with Counterspell, so neither player
+# draws and Bot1 ends with 3 cards in hand, Bot2 with 4.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Jolly Gerbils
+Dawn's Truce
+Plains
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Counterspell
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jolly Gerbils.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Dawn's Truce.Cast
+Bot1.Accept
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Counterspell.Cast(Stack.Dawn's Truce)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 3
+Bot1.Graveyard = Dawn's Truce
+Bot2.Graveyard = Counterspell

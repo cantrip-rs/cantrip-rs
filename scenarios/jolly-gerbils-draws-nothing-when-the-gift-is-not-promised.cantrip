@@ -1,0 +1,39 @@
+# No gift is given when Dawn's Truce is cast without the gift promised (Bot1 declines), so the Gerbils draw nothing: Bot1 has 3 cards in hand and Bot2 7 (its turn-2 draw and Island).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Jolly Gerbils
+Dawn's Truce
+Plains
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jolly Gerbils.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Dawn's Truce.Cast
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 3
+Bot2.Hand.Count = 7
+Bot1.Graveyard = Dawn's Truce

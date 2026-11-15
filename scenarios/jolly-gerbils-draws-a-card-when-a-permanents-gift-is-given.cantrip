@@ -1,0 +1,46 @@
+# A permanent's gift is given as its gift triggered ability resolves (CR 702.174b), and then the Gerbils draw too: Bot1 casts Scrapshooter promising the gift on turn 3, Bot2 draws the gift card
+# and Bot1 draws from the Gerbils. Bot1 has 3 cards in hand (draw to 5, Mox Emerald, Forest, Scrapshooter played, the Gerbils' card); Bot2 has 8 (7, turn-2 draw, Island played, the gift).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Jolly Gerbils
+Scrapshooter
+Mox Emerald
+Forest
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jolly Gerbils.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Scrapshooter.Cast
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 3
+Bot2.Hand.Count = 8

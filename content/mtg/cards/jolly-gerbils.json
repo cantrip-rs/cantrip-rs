@@ -1,0 +1,8 @@
+{
+  "name": "Jolly Gerbils",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Hamster Citizen",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Whenever you give a gift, draw a card."
+}
