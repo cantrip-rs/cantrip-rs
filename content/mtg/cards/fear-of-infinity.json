@@ -1,0 +1,12 @@
+{
+  "name": "Fear of Infinity",
+  "manaCost": "{1}{U}{B}",
+  "type": "Enchantment Creature — Nightmare",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, lifelink\nThis creature can't block.\nEerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, you may return this card from your graveyard to your hand.",
+  "keywords": [
+    "Flying",
+    "Lifelink"
+  ]
+}

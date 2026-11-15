@@ -1,0 +1,44 @@
+# Fear of Infinity, Eerie: "you may return this card" - Bad Moon enters under Bot1's control with Fear of Infinity in the
+# graveyard (Entomb), Bot1 declines, and the card stays there; a later enchantment (Glorious Anthem) is asked about again
+# and accepting then returns it.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Entomb
+Bad Moon
+Glorious Anthem
+Mox Pearl
+Mox Pearl
+Fear of Infinity
+Plains x11
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Fear of Infinity)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bad Moon.Cast
+Bot1.Decline
+? Bot1.Graveyard = Entomb; Fear of Infinity
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Glorious Anthem.Cast
+Bot1.Accept
+
+[Expect]
+Bot1.Graveyard = Entomb
+Bot1.Hand = Fear of Infinity; Plains
+Bot1.Battlefield = Bad Moon; Glorious Anthem; Mox Jet; Mox Jet; Mox Jet; Mox Pearl; Mox Pearl

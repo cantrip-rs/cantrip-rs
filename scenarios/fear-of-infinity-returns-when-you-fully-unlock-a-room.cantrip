@@ -1,0 +1,55 @@
+# Fear of Infinity, Eerie: "whenever you fully unlock a Room" (CR 709.5i). Unholy Annex // Ritual Chamber is cast as its left
+# door (an enchantment entering, which Fear, still in the library, does not see). Entomb then puts Fear of Infinity in the
+# graveyard; unlocking the right door is the special action that fully unlocks the Room, and Bot1 accepts the return.
+# Setup follows nykthos-counts-both-doors-of-a-room-once-both-are-unlocked.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Unholy Annex // Ritual Chamber
+Mox Jet
+Mox Jet
+Mox Jet
+Entomb
+Swamp
+Swamp
+Fear of Infinity
+Swamp x10
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Unholy Annex.Doors = Unholy Annex
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Entomb.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Search(Fear of Infinity)
+? Bot1.Graveyard = Entomb; Fear of Infinity; Black Lotus
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Unholy Annex.Activate(Ability: right door)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Pass
+Bot1.Accept
+
+[Expect]
+Bot1.Hand = Fear of Infinity; Swamp; Swamp

@@ -1,0 +1,44 @@
+# Fear of Infinity ({1}{U}{B}, 2/2): "this creature can't block" (CR 509.1a) - on Bot2's turn one Savannah Lions attacks and
+# the untapped Fear of Infinity may not be declared as a blocker, so Bot1 takes 2 - and flying and lifelink (CR 702.9b, 702.15b):
+# on turn 5 it attacks and the other, untapped Savannah Lions may not block it, and its 2 damage gains Bot1 2 life.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Fear of Infinity
+Plains x16
+
+[Bot2 Deck]
+Mox Pearl
+Plains
+Savannah Lions
+Savannah Lions
+Plains x16
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fear of Infinity.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Hand.Savannah Lions.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Savannah Lions#1 > Bot1)
+! Bot1.Block(Fear of Infinity > Savannah Lions#1)
+[T5 Bot1.Main1]
+Bot1.Attack(Fear of Infinity > Bot2)
+! Bot2.Block(Savannah Lions#2 > Fear of Infinity)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18
