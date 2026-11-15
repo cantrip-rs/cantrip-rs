@@ -356,6 +356,10 @@ pub struct Game {
     /// The resolved replacement/prevention whose follow-up instructions are running. Bookkeeping of a call only;
     /// other abilities asked during it read their own text, as with a resolving stack ability.
     pub(crate) effect_words: std::cell::Cell<Option<(ObjectId, Words)>>,
+    /// The replacement effects that applied to the zone changes being worked out, with more to do once those have happened
+    /// (`ReplacementDef::afterward`, CR 614.6), in the order they applied. Each move or creation keeps its own and does them
+    /// once it is announced (`ops`). Bookkeeping of a call, not of the game.
+    pub(crate) afterward: Vec<replace::Afterward>,
     /// The current mana activation's X, scoped across nested activations and reset before suspension returns.
     pub(crate) mana_activation_x: Option<u32>,
     /// The "when that mana is spent" delayed ability the mana ability being activated gives the mana it produces
@@ -449,7 +453,7 @@ impl Clone for Game {
             history_end: self.history_end,
             check: StateCheck::NONE,
             spells_as_cast: Default::default(),
-            own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), mana_activation_x: None, mana_rider: 0, mana_interval: None,
+            own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None,
             takeback: Default::default(),
         }
     }
@@ -471,7 +475,7 @@ impl Game {
             check: StateCheck::NONE,
             spells_as_cast: Default::default(),
             own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None,
-            effect_words: Default::default(), mana_activation_x: None, mana_rider: 0, mana_interval: None,
+            effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None,
             takeback: Default::default(),
         }
     }
@@ -610,7 +614,7 @@ impl Game {
             t.priority = chooser;
         });
 
-        let mut game = Game { state, log: Vec::new(), tree: tree::Tree::new(), at: tree::NodeId::ROOT, cards, verify: false, max_events: MAX_GAME_EVENTS, history_end: None, check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() };
+        let mut game = Game { state, log: Vec::new(), tree: tree::Tree::new(), at: tree::NodeId::ROOT, cards, verify: false, max_events: MAX_GAME_EVENTS, history_end: None, check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() };
         // CR 103.2b: the companion chosen as the deck was built is revealed once the starting player is known, if the starting
         // deck - the library as dealt - fulfils its condition; one that doesn't is a sideboard card, and nothing is said of it.
         for (p, id) in companions {
@@ -1054,7 +1058,7 @@ impl Game {
         let state = self.state.clone_with_journal_from(floor);
         let root = self.tree.next();
         let tree = tree::Tree::rooted(root, (state.mark(), self.log.len()));
-        Game { state, log: self.log.clone(), tree, at: root, cards: self.cards, verify: self.verify, max_events: self.max_events, history_end: None, check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() }
+        Game { state, log: self.log.clone(), tree, at: root, cards: self.cards, verify: self.verify, max_events: self.max_events, history_end: None, check: StateCheck::NONE, spells_as_cast: Default::default(), own_text: Default::default(), producible_path: Default::default(), hypothetical_chance: None, effect_words: Default::default(), afterward: Vec::new(), mana_activation_x: None, mana_rider: 0, mana_interval: None, takeback: Default::default() }
     }
 
     /// Gives the game's generator another seed (`GameState::reseed`): a fork for search that must not shuffle or roll

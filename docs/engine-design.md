@@ -1287,6 +1287,16 @@ before it draws; connive 0 is no event, CR 701.50e): "instead you draw a card, t
 leaves the event as it was and draws in its `then`, the card meeting the draw replacements, so the connive that follows draws and
 discards after it. The creature is read as it was if it has left the battlefield (CR 701.50b).
 
+A modified event whose own part comes first and the effect's after it - "that player instead puts that land onto the
+battlefield then sacrifices a land" (Land Equilibrium) - leaves the zone change as it was and does the rest in its
+`afterward` (`ReplacementDef::afterward`, zone changes only), not its `then`: a `then` runs as the effect applies, before
+anything moves. The effects that apply to the moves of one move or creation with more to do are kept on `Game::afterward`,
+scoped to that call (`replace::afterward_scope`, so a move made in the middle of it keeps its own), and done once the moves
+have happened and been announced, in the order the effects applied, before the instruction or action that made them goes on
+(`replace::rest_of_replacements`, CR 614.6): two lands put onto the battlefield together both enter, then each is followed
+by its sacrifice. What the rest does meets only the effects that had not yet applied to the event (`Cx::lineage`, CR
+614.5). A land played that way is still played (CR 305.1): the move is not replaced, so the play's record follows it.
+
 Replacement effects of a gain or loss of life (CR 614.1a: "you gain that much life plus 1 instead", "they lose twice that much
 life instead", "that player loses that much life instead") are `ReplacementKind::LifeChange` effects over a
 `Proposal::LifeChange { player, amount }`, `amount` signed (a gain above zero, a loss below), applied by `change_life` through

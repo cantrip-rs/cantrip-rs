@@ -1217,6 +1217,13 @@ impl ReplacementDef {
         ReplacementDef { then: Some(then), ..self }
     }
 
+    /// What the modified event does once the event itself has happened (CR 614.6): "instead puts that land onto the
+    /// battlefield then sacrifices a land" (`ReplacementDef::afterward`).
+    pub const fn afterward(self, afterward: ReplacementThen) -> ReplacementDef {
+        assert!(matches!(self.kind, ReplacementKind::ZoneChange), "only a zone change replacement has more to do after its event");
+        ReplacementDef { afterward: Some(afterward), ..self }
+    }
+
     /// Adds damage components to this same damage event (CR 120.4b-d, 614.6).
     pub const fn with_damage(self, damage: ReplacementDamage) -> ReplacementDef {
         assert!(matches!(self.kind, ReplacementKind::Damage), "only a damage replacement adds damage components");

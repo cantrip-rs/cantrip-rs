@@ -365,6 +365,7 @@ static NO_REPLACEMENT: ReplacementDef = ReplacementDef {
     applies: nothing_applies,
     apply: nothing_done,
     then: None,
+    afterward: None,
     damage: None,
     optional: None,
     in_graveyard: false,
@@ -1571,6 +1572,49 @@ fn apply_printed(cx: &mut Cx, proposal: &mut Proposal, source: ObjectId, index: 
         let after = *proposal;
         run_then(cx, applied, source, controller, |cx| then(cx, &asker, &before, &after));
     }
+    // The rest of the modified event, once the event has happened (CR 614.6): kept until the move or creation is announced.
+    if let Some(afterward) = def.afterward {
+        cx.g.afterward.push(Afterward { afterward, asker, before, after: *proposal, applied: applied.to_vec() });
+    }
+}
+
+/// A replacement effect that applied to a zone change and has more of the modified event to do once the event has happened
+/// (`ReplacementDef::afterward`, CR 614.6), as it applied: the event as proposed to it and as it left it, and the effects
+/// that had applied to the event by then (CR 614.5).
+pub(crate) struct Afterward {
+    afterward: ReplacementThen,
+    asker: Asker,
+    before: Proposal,
+    after: Proposal,
+    applied: Vec<Applied>,
+}
+
+/// The zone changes of one move or creation (`ops`) are worked out, each meeting its replacement effects, with `afterward`
+/// the effects that applied to them with more to do: a scope for those, the caller's own kept apart and given back by
+/// `afterward_done`, so a move a replacement's instructions make in the middle of it keeps its own.
+pub(crate) fn afterward_scope(cx: &mut Cx) -> Vec<Afterward> {
+    std::mem::take(&mut cx.g.afterward)
+}
+
+/// The scope `afterward_scope` opened ends: the caller's are given back, and those the move or creation gathered are returned.
+pub(crate) fn afterward_done(cx: &mut Cx, outer: Vec<Afterward>) -> Vec<Afterward> {
+    std::mem::replace(&mut cx.g.afterward, outer)
+}
+
+/// The rest of the modified events of a move or creation that has happened and been announced (CR 614.6), in the order the
+/// effects applied: each done by its effect's controller (CR 609.1), what it does meeting only the replacement effects that
+/// had not yet had their opportunity at the event (CR 614.5), before the instruction or action that made the event goes on
+/// (`ReplacementDef::afterward`).
+pub(crate) fn rest_of_replacements(cx: &mut Cx, rest: Vec<Afterward>) {
+    if rest.is_empty() {
+        return;
+    }
+    // Each effect's rest is its own text, its source's now (`Cx::own_text`).
+    cx.instruction(|cx| cx.own_text(false, |cx| {
+        for Afterward { afterward, asker, before, after, applied } in rest {
+            run_then(cx, &applied, asker.source, asker.controller, |cx| afterward(cx, &asker, &before, &after));
+        }
+    }), |_| true);
 }
 
 /// A lasting effect a spell or ability made (CR 611.2), `e` with its definition `def`, applied to the event as a printed one

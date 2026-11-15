@@ -441,6 +441,13 @@ pub struct ReplacementDef {
     pub mana_types: Option<fn(&dyn Query, &Asker, ObjectId, PlayerId) -> Vec<Mana>>,
     /// Game operations the effect performs as it applies (see [`ReplacementThen`]).
     pub then: Option<ReplacementThen>,
+    /// Game operations of the modified event that follow the event itself (CR 614.6): "that player instead puts that land onto
+    /// the battlefield then sacrifices a land" (Land Equilibrium). The event goes on as the effects leave it, and once it has
+    /// happened and been announced - the object where it went, with everything else that moved with it (CR 101.4) - this is
+    /// done, before the instruction or action that made the event goes on, and before state-based actions are checked or
+    /// triggered abilities put on the stack (CR 117.5). It is told the event as it was proposed and as the effect left it, as
+    /// `then` is. Zone changes only (`afterward`).
+    pub afterward: Option<ReplacementThen>,
     /// Additional components of a damage event; see [`ReplacementDamage`].
     pub damage: Option<ReplacementDamage>,
     /// "You may ... instead" (CR 614.1a): the effect's "you", its source's controller (CR 109.5), is asked this as the effect would apply, and declining it
@@ -628,6 +635,7 @@ impl ReplacementDef {
         fixed_mana: None,
         mana_types: None,
         then: None,
+        afterward: None,
         damage: None,
         optional: None,
         in_graveyard: false,

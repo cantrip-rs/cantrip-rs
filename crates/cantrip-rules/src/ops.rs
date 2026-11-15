@@ -365,6 +365,22 @@ fn move_together_entering_event(
     attacking: Option<Target>,
     life: &[(PlayerId, i64)],
 ) -> (Vec<ObjectId>, Vec<ObjectId>, i32) {
+    // The replacement effects that apply to these moves with more of their modified events to do once the moves have
+    // happened (CR 614.6), done at the end.
+    let outer = replace::afterward_scope(cx);
+    let moved = move_together_entering_moves(cx, moves, reason, attacking, life);
+    let rest = replace::afterward_done(cx, outer);
+    replace::rest_of_replacements(cx, rest);
+    moved
+}
+
+fn move_together_entering_moves(
+    cx: &mut Cx,
+    moves: &[Moving],
+    reason: ZoneReason,
+    attacking: Option<Target>,
+    life: &[(PlayerId, i64)],
+) -> (Vec<ObjectId>, Vec<ObjectId>, i32) {
     // An object moves once however many times the batch names it: a permanent a spell targets twice ("destroy target
     // artifact and target creature" at an artifact creature, CR 115.3) is destroyed once (CR 400.7). The first move kept.
     // And an object that has changed zones or ceased to exist since it was named is not moved at all: it became a new
@@ -2924,6 +2940,29 @@ pub fn create_token_attached(cx: &mut Cx, card: CardId, controller: PlayerId, ho
 /// anything else enters unattached (CR 303.4h). The choice is the effect's, not a target (hexproof does not matter).
 #[allow(clippy::too_many_arguments)]
 fn create_tokens_onto(
+    cx: &mut Cx,
+    tokens: &[(CardId, PlayerId)],
+    tapped: bool,
+    copies: Copies,
+    with: &[(CounterKind, i32)],
+    words: Words,
+    spell: Option<&StackItem>,
+    host: Option<ObjectId>,
+    defender: Option<AttackEntry<'_>>,
+) -> R<Vec<ObjectId>> {
+    // The replacement effects that apply to the tokens' entry with more of their modified events to do once they are
+    // created (CR 614.6), done at the end; none where the creation stops on a question.
+    let outer = replace::afterward_scope(cx);
+    let created = create_tokens_entering(cx, tokens, tapped, copies, with, words, spell, host, defender);
+    let rest = replace::afterward_done(cx, outer);
+    if created.is_ok() {
+        replace::rest_of_replacements(cx, rest);
+    }
+    created
+}
+
+#[allow(clippy::too_many_arguments)]
+fn create_tokens_entering(
     cx: &mut Cx,
     tokens: &[(CardId, PlayerId)],
     tapped: bool,
