@@ -1,0 +1,50 @@
+# Cryptid Inspector manifested face down is a 2/2 with no abilities (CR 708.2a), so its own entering face down triggers nothing; turned face
+# up (CR 701.40b) it is "this creature ... turned face up" and puts a +1/+1 counter on itself (a 3/4, not a 4/5).
+#
+# Turn 1: Black Lotus pays for Hauntwoods Shrieker. Turn 3 the Shrieker attacks and manifests the Inspector (Arrange puts it first) with
+# Lightning Bolt into the graveyard; the three Moxen pay {2}{G} to turn it face up.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Pearl
+Hauntwoods Shrieker
+Island x2
+Island
+Cryptid Inspector
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hauntwoods Shrieker.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Hauntwoods Shrieker > Bot2)
+Bot1.Arrange(Cryptid Inspector | Lightning Bolt)
+? Bot1.Battlefield..FaceDownName = Cryptid Inspector
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..Power = 2
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.#1.Activate
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield.Cryptid Inspector.FaceDown = (absent)
+Bot1.Battlefield.Cryptid Inspector.Power = 3
+Bot1.Battlefield.Cryptid Inspector.Toughness = 4
+Bot1.Battlefield.Cryptid Inspector.Keywords = Vigilance
