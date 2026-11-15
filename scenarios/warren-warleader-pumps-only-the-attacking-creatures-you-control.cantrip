@@ -1,0 +1,43 @@
+# Warren Warleader: "Attacking creatures you control get +1/+1 until end of turn." Bot1 attacks on turn 3 with the Warleader and a
+# Memnite and keeps an Ornithopter home. The second mode pumps just the two attackers (5/5 and 2/2) and not the creature that did
+# not attack (0/2): Bot2 takes 5 + 2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Warren Warleader
+Memnite
+Ornithopter
+Plains x4
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Warren Warleader.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Warren Warleader > Bot2; Memnite > Bot2)
+Bot1.Modes(Attacking creatures)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Warren Warleader.Power = 5
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Ornithopter.Power = 0
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Warren Warleader.Power = 5
+Bot1.Battlefield.Warren Warleader.Toughness = 5
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2

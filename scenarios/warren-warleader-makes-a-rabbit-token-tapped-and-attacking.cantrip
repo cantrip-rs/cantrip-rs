@@ -1,0 +1,39 @@
+# Warren Warleader: "Whenever you attack, choose one — Create a 1/1 white Rabbit creature token that's tapped and attacking." Bot1
+# casts it on turn 1 without offspring (no token copy) and attacks with it on turn 3: the first mode makes a Rabbit token that
+# enters tapped and attacking, so Bot2 takes 4 + 1. The token was never declared as an attacker, so the ability does not trigger
+# a second time for it (the ruling), and the Warleader itself stays 4/4 (the other mode was not chosen).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Warren Warleader
+Plains x4
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Warren Warleader.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Warren Warleader > Bot2)
+Bot1.Modes(Create a 1/1)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Count = 3
+? Bot1.Battlefield.Rabbit Token.Tapped = true
+? Bot1.Battlefield.Rabbit Token.Power = 1
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Count = 3
+Bot1.Battlefield.Warren Warleader.Power = 4
+Bot1.Battlefield.Warren Warleader.Toughness = 4
+Bot1.Battlefield.Rabbit Token.Power = 1
+Bot1.Battlefield.Rabbit Token.Toughness = 1

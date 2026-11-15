@@ -1,0 +1,33 @@
+# Warren Warleader: "Whenever you attack" is its controller's attack only. Bot2's Memnite attacks Bot1 on turn 4 and the Warleader
+# does not trigger, so no Rabbit token is made.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Warren Warleader
+Plains x4
+Plains x13
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Warren Warleader.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Count = 2
+Bot1.Life = 19

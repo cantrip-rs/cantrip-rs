@@ -1,0 +1,45 @@
+# Warren Warleader: cast with offspring {2} (its additional cost) it makes a 1/1 token copy as it enters (CR 702.175a), and the token
+# has the ability too. Both attack on turn 3 and each trigger takes the second mode: the Warleader gets +2/+2 (6/6) and the token
+# copy (a 1/1 Rabbit Knight) 3/3, so Bot2 takes 6 + 3.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Gleemox
+Plains
+Warren Warleader
+Plains x4
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Warren Warleader.Cast(Kicked: 1)
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Warren Warleader#2.Power = 1
+[T3 Bot1.Main1]
+Bot1.Attack(Warren Warleader#1 > Bot2; Warren Warleader#2 > Bot2)
+Bot1.Modes(Attacking creatures)
+Bot1.Modes(Attacking creatures)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 11
+Bot1.Battlefield.Warren Warleader#1.Power = 6
+Bot1.Battlefield.Warren Warleader#2.Power = 3
