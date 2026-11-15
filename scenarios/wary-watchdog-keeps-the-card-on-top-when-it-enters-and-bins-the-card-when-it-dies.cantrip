@@ -1,0 +1,46 @@
+# Wary Watchdog, the other answers to the same two surveils (CR 701.25a): the Swamp on top is kept as it enters (the graveyard stays empty);
+# when Lightning Bolt kills the Watchdog, the same Swamp is still on top and this time it is put into the graveyard on the death trigger, so the
+# Forest below is the card left on top.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Wary Watchdog
+Island x4
+Swamp
+Forest
+Island x14
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Mountain x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wary Watchdog.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Swamp |)
+? Bot1.Graveyard.Count = 0
+? Bot1.Library.Top = Swamp
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Wary Watchdog)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Arrange(| Swamp)
+
+[Expect]
+Bot1.Graveyard = Swamp; Wary Watchdog
+Bot1.Library.Top = Forest

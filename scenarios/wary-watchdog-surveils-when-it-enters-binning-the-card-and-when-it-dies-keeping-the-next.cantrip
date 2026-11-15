@@ -1,0 +1,46 @@
+# Wary Watchdog: "When this creature enters or dies, surveil 1" (CR 701.25, 603.6a, 603.6c). The Swamp on top is put into the graveyard as it
+# enters; Lightning Bolt then kills the Watchdog (toughness 1) and the same ability triggers on its death (CR 603.10a), where the Forest is
+# kept on top, so it is drawn at the turn 3 draw (the Bolt, the Mountain and the Mox are Bot2's).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Wary Watchdog
+Island x4
+Swamp
+Forest
+Island x14
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Mountain x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wary Watchdog.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(| Swamp)
+? Bot1.Graveyard = Swamp
+? Bot1.Library.Top = Forest
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Wary Watchdog)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Arrange(Forest |)
+
+[Expect]
+Bot1.Graveyard = Wary Watchdog; Swamp
+Bot1.Library.Top = Forest
