@@ -1,0 +1,57 @@
+# Intrepid Rabbit's enters trigger gives target creature YOU control +1/+1 until end of turn (CR 115.1, 611.2a). Cast without offspring it makes no token.
+# The opponent's Dwarven Trader is refused as the target; the Eager Cadet becomes 2/2 until end of turn (1/1 again after, CR 514.2) and the Rabbit stays 3/2.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Plains
+Eager Cadet
+Intrepid Rabbit
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Dwarven Trader
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Eager Cadet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Dwarven Trader.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Intrepid Rabbit.Cast
+Bot1.Pass
+! Bot1.Target(Bot2.Battlefield.Dwarven Trader)
+Bot1.Target(Eager Cadet)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Eager Cadet.Power = 2
+? Bot1.Battlefield.Eager Cadet.Toughness = 2
+? Bot1.Battlefield.Intrepid Rabbit.Power = 3
+? Bot1.Battlefield.Count = 8
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Eager Cadet.Power = 1
+Bot1.Battlefield.Intrepid Rabbit.Power = 3
+Bot1.Battlefield.Intrepid Rabbit.Toughness = 2
