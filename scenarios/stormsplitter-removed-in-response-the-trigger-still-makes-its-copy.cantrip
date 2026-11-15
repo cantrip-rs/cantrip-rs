@@ -1,0 +1,50 @@
+# Stormsplitter, exiled by Bot2's Swords to Plowshares in response to its trigger (CR 608.2h, 113.7a; ruling 2024-07-26): the trigger still resolves and the token is a copy
+# of Stormsplitter as it last existed - a 1/4 with the same ability - which is exiled at the next end step.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mountain
+Stormsplitter
+Lightning Bolt
+Mountain x14
+
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Stormsplitter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Stormsplitter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stormsplitter.Token = true
+? Bot1.Battlefield.Stormsplitter.Power = 1
+? Bot1.Battlefield.Stormsplitter.Toughness = 4
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Stormsplitter = (absent)
+
+[Expect]
+Bot2.Life = 17
+Exile.Count = 1

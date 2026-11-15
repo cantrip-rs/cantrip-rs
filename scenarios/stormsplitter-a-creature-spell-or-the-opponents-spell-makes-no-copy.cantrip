@@ -1,0 +1,55 @@
+# Stormsplitter triggers only for an instant or sorcery spell that Bot1 casts (CR 603.2): Bot1's Memnite (an artifact creature) makes no token, and neither does
+# Bot2's Lightning Bolt at the Stormsplitter (it takes 3 damage, a 1/4 survives). Bot1's own Lightning Bolt on turn 3 is the positive control: one token.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mountain
+Stormsplitter
+Memnite
+Lightning Bolt
+Mountain x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Stormsplitter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stormsplitter#2 = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Stormsplitter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stormsplitter#2 = (absent)
+? Bot1.Battlefield.Stormsplitter.Damage = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stormsplitter#2.Token = true
+? Bot1.Battlefield.Stormsplitter#3 = (absent)
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Count = 7

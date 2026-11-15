@@ -1,0 +1,56 @@
+# Stormsplitter: a sorcery counts as well as an instant, and the token copy has the ability too (CR 707.2, 603.2): Gitaxian Probe (a sorcery, paid with 2 life) makes one
+# token; Lightning Bolt then triggers the Stormsplitter and that token each, two more - three tokens in all, each a 1/4 with haste - and all are exiled at the end step.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mountain
+Stormsplitter
+Lightning Bolt
+Gitaxian Probe
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Stormsplitter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Gitaxian Probe.Cast(Bot2)
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+? Bot1.Battlefield.Stormsplitter#2.Token = true
+? Bot1.Battlefield.Stormsplitter#3 = (absent)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stormsplitter#3.Token = true
+? Bot1.Battlefield.Stormsplitter#4.Token = true
+? Bot1.Battlefield.Stormsplitter#5 = (absent)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Stormsplitter#2 = (absent)
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 18
+Bot1.Battlefield.Count = 5
