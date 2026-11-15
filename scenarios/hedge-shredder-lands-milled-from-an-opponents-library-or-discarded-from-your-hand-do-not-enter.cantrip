@@ -1,0 +1,52 @@
+# Hedge Shredder watches land cards put into YOUR graveyard FROM YOUR LIBRARY. Bot1's Thought Scour mills two Forests from Bot2's
+# library into Bot2's graveyard: neither enters for Bot1. Faithless Looting then draws two Forests and Bot1 discards two Forests from
+# its hand to its own graveyard: they come from the hand, not the library, and stay in the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Hedge Shredder
+Mox Sapphire
+Mox Ruby
+Thought Scour
+Faithless Looting
+Forest
+Forest
+Forest
+Forest
+Island x10
+
+[Bot2 Deck]
+Forest x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hedge Shredder.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Forest#1; Forest#2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Forest; Forest
+Bot2.Battlefield = Forest
+Bot1.Battlefield = Hedge Shredder; Mox Emerald; Mox Ruby; Mox Sapphire
+Bot1.Graveyard = Faithless Looting; Forest; Forest; Thought Scour; Black Lotus

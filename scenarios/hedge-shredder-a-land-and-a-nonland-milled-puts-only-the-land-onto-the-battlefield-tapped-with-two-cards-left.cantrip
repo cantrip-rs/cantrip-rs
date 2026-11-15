@@ -1,0 +1,42 @@
+# Hedge Shredder: with exactly two cards in the library "you may mill two cards" can still be chosen (CR 701.17b). A Forest and a Mox Jet
+# are milled; "one or more land cards" is met by the one, which enters tapped, and the Mox Jet stays in the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Hedge Shredder
+Memnite
+Island
+Island
+Island
+Island
+Forest
+Mox Jet
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hedge Shredder.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Hedge Shredder.Activate(Ability: Crew)
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Hedge Shredder > Bot2)
+Bot1.Accept
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield = Forest; Hedge Shredder; Memnite; Mox Emerald
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Graveyard = Mox Jet; Black Lotus
+Bot1.Library.Count = 0

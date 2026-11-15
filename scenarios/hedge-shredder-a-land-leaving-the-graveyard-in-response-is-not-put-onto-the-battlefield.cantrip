@@ -1,0 +1,43 @@
+# Hedge Shredder: the ability puts the land cards that were put into the graveyard, if they are still there (CR 400.7). With the land
+# trigger on the stack Bot1 exiles its own graveyard with Tormod's Crypt: the milled Forest is a new object in exile and does not
+# enter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Hedge Shredder
+Memnite
+Tormod's Crypt
+Island
+Island
+Island
+Forest
+Island
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hedge Shredder.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Hedge Shredder.Activate(Ability: Crew)
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Hedge Shredder > Bot2)
+Bot1.Accept
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot1)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield = Hedge Shredder; Memnite; Mox Emerald
+Exile = Black Lotus; Forest; Island; Tormod's Crypt
