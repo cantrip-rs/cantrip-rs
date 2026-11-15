@@ -76,7 +76,7 @@ static REDUCER: CardDef = CardDef { name: "X Mana Test Reducer", types: TypeSet:
 /// "Sorcery spells you cast cost {1} more to cast."
 fn sorceries_cost_more(q: &dyn Query, source: ObjectId, player: PlayerId, costed: Costed, _: &[Target]) -> CostDelta {
     match costed {
-        Costed::Spell(spell) if player == q.controller(source) && q.chars(spell).is(CardType::Sorcery) => CostDelta { more: 1, ..CostDelta::NONE },
+        Costed::Spell(spell) if player == q.controller(source) && q.chars(spell).is(CardType::Sorcery) => CostDelta::more(1),
         _ => CostDelta::NONE,
     }
 }

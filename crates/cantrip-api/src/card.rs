@@ -461,12 +461,13 @@ pub enum Costed {
     SpecialAction(ObjectId, AbilityRef),
 }
 
-/// What a cost change does to a cost (CR 601.2f, 118.7, 118.8): generic mana it adds, an amount of mana it takes off,
-/// and life it adds.
+/// What a cost change does to a cost (CR 601.2f, 118.7, 118.8): mana it adds, an amount of mana it takes off, and life it
+/// adds.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct CostDelta {
-    /// Generic mana added: "costs {1} more" (CR 601.2f).
-    pub more: u32,
+    /// The mana added (CR 601.2f): "costs {1} more" is generic mana, "black spells you cast cost {B} more" (Derelor, Andradite
+    /// Leech) a colored symbol. An increase is not X's (`ManaCost::add_generic`), and `x` is not read.
+    pub more: ManaCost,
     /// Life added as an additional cost (CR 118.8, 601.2f): "spells your opponents cast that target this creature cost an
     /// additional 3 life to cast" (Terror of the Peaks). Part of the total cost once the targets are announced, paid with
     /// the rest of it (CR 601.2h), and payable only by a player whose life total is at least the whole of the life the total
@@ -493,11 +494,16 @@ pub struct CostDelta {
 
 impl CostDelta {
     /// No change.
-    pub const NONE: CostDelta = CostDelta { more: 0, less: ManaCost::ZERO, life: 0, at_least: 0, less_to_one: 0 };
+    pub const NONE: CostDelta = CostDelta { more: ManaCost::ZERO, less: ManaCost::ZERO, life: 0, at_least: 0, less_to_one: 0 };
 
-    /// "Costs {n} more."
+    /// "Costs {n} more": `n` generic mana added.
     pub const fn more(n: u32) -> CostDelta {
-        CostDelta { more: n, ..CostDelta::NONE }
+        CostDelta { more: ManaCost { generic: n, ..ManaCost::ZERO }, ..CostDelta::NONE }
+    }
+
+    /// "Costs {B} more": an amount of mana added that may be colored (CR 601.2f).
+    pub const fn more_mana(mana: ManaCost) -> CostDelta {
+        CostDelta { more: mana, ..CostDelta::NONE }
     }
 
     /// "Costs an additional n life" (CR 118.8, 601.2f).

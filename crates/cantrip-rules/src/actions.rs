@@ -5259,9 +5259,8 @@ fn change_parts_split(
 ) -> (ManaCost, u32, u8) {
     let (more, less, life, least, discount) = deltas(cx, sources, player, costed, face, targets);
     let less = split_reduction(&less, split);
-    let mut cost = cost;
-    // An increase is not X's (Atalya's ruling): `add_generic`.
-    cost.add_generic(more);
+    // An increase is not X's (Atalya's ruling): `plus` keeps its generic mana out of X's.
+    let cost = cost.plus(&more);
     let mut first = cost;
     any_announcement(&cost, &less, &mut |c| {
         first = c;
@@ -5285,8 +5284,7 @@ fn change_any(
     covered: &mut dyn FnMut(ManaCost, u8) -> bool,
 ) -> bool {
     let (more, whole, _, least, discount) = deltas_as(cx, sources, player, costed, face, targets, announced);
-    let mut cost = cost;
-    cost.add_generic(more);
+    let cost = cost.plus(&more);
     // Each way the payer could split a reduction by hybrid mana (CR 118.7e).
     let n = reduction_choices(&whole).min(8);
     (0u32..1 << n).any(|mask| {
@@ -5363,9 +5361,9 @@ fn reduced(cost: ManaCost, less: &ManaCost, discount: u32) -> ManaCost {
     cost
 }
 
-/// What the cost changes come to (CR 601.2f): the generic mana they add, the mana they take off, the life they add
-/// (CR 118.8), the least the total may come to (`CostDelta::at_least`), and the "less to one" reduction.
-fn deltas(cx: &Cx, sources: &[ObjectId], player: PlayerId, costed: Costed, face: Option<CardId>, targets: &[Target]) -> (u32, ManaCost, u32, u8, u32) {
+/// What the cost changes come to (CR 601.2f): the mana they add, the mana they take off, the life they add (CR 118.8), the
+/// least the total may come to (`CostDelta::at_least`), and the "less to one" reduction.
+fn deltas(cx: &Cx, sources: &[ObjectId], player: PlayerId, costed: Costed, face: Option<CardId>, targets: &[Target]) -> (ManaCost, ManaCost, u32, u8, u32) {
     deltas_as(cx, sources, player, costed, face, targets, None)
 }
 
@@ -5379,7 +5377,7 @@ fn deltas_as(
     face: Option<CardId>,
     targets: &[Target],
     announced: Option<&Obj>,
-) -> (u32, ManaCost, u32, u8, u32) {
+) -> (ManaCost, ManaCost, u32, u8, u32) {
     deltas_watched(cx, sources, player, costed, face, targets, announced, None)
 }
 
@@ -5395,7 +5393,7 @@ fn deltas_watched(
     targets: &[Target],
     announced: Option<&Obj>,
     watching: Option<&Watching>,
-) -> (u32, ManaCost, u32, u8, u32) {
+) -> (ManaCost, ManaCost, u32, u8, u32) {
     // The thing costed is its own source for the changes it carries itself (affinity; an ability's own, channel's).
     let (id, ability) = match costed {
         Costed::Spell(id) => (id, None),
@@ -5430,7 +5428,7 @@ fn deltas_watched(
         } else { 0 }
     } else { 0 };
     if sources.is_empty() && own.is_empty() && ability_own.is_none() && !lasting && commander_tax == 0 {
-        return (0, ManaCost::ZERO, 0, 0, 0);
+        return (ManaCost::ZERO, ManaCost::ZERO, 0, 0, 0);
     }
     let view;
     let as_face: &dyn Query = match (face, costed) {
@@ -5470,13 +5468,13 @@ fn deltas_watched(
         }
         None => announced_q,
     };
-    let mut more = commander_tax;
+    let mut more = ManaCost { generic: commander_tax, ..ManaCost::ZERO };
     let mut less = ManaCost::ZERO;
     let mut life = 0u32;
     let mut least = 0u8;
     let mut discount = 0u32;
     let mut add = |delta: CostDelta| {
-        more += delta.more as u32;
+        more = more.plus(&delta.more);
         less = less.plus(&delta.less);
         life += delta.life as u32;
         least = least.max(delta.at_least);
@@ -11727,9 +11725,7 @@ fn announce_reduction(cx: &mut Cx, player: PlayerId, source: ObjectId, costed: C
             .into_iter()
             .find(|&mask| {
                 let split: Vec<bool> = (0..n).map(|i| mask & (1 << i) != 0).collect();
-                let mut total = *cost;
-                total.add_generic(more);
-                can_afford(cx, player, source, &any.view(&reduce(total, &split_reduction(&whole, &split))))
+                can_afford(cx, player, source, &any.view(&reduce(cost.plus(&more), &split_reduction(&whole, &split))))
             })
             .map(|mask| (0..n as u8).filter(|&i| mask & (1 << i) != 0).collect())
             .unwrap_or_default()
@@ -11768,7 +11764,10 @@ fn announce_hybrids(cx: &mut Cx, player: PlayerId, source: ObjectId, costed: Cos
     let (more, whole, ..) = deltas(cx, &cost_change_sources(cx), player, costed, None, targets);
     // A reduction by hybrid mana is split after this (CR 118.7e): a cost symbol either half could meet is asked about.
     let less = reduction_reach(&whole);
-    let met = met_hybrids(cost, &less);
+    // Increases come first (CR 601.2f): a colored one ("{B} more") absorbs a reduction of its type before a hybrid symbol does.
+    // Only the cost's own hybrid symbols are announced here, as its slots hold them.
+    let mut met = met_hybrids(&cost.plus(&more), &less);
+    met.retain(|(slot, _)| cost.hybrid[*slot].is_some());
     if met.is_empty() {
         return Ok(());
     }
@@ -11802,9 +11801,7 @@ fn announce_hybrids(cx: &mut Cx, player: PlayerId, source: ObjectId, costed: Cos
             .into_iter()
             .find(|&mask| {
                 let chosen: Vec<bool> = (0..n).map(|i| mask & (1 << i) != 0).collect();
-                let mut total = announced(&chosen);
-                total.add_generic(more);
-                let total = reduce(total, &less);
+                let total = reduce(announced(&chosen).plus(&more), &less);
                 can_afford(cx, player, source, &any.view(&total))
             })
             .map(|mask| (0..n as u8).filter(|&i| mask & (1 << i) != 0).collect())
