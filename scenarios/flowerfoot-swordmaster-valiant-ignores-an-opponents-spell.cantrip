@@ -1,0 +1,39 @@
+# Flowerfoot Swordmaster's valiant counts only what ITS CONTROLLER controls (CR 603.2): Bot2's Lightning Bolt aimed at it triggers nothing, so Bot1's Brave-Kin Duo is
+# still 1/1 as the Swordmaster (a 1/2) dies to the Bolt.
+
+[Bot1 Deck]
+Mox Pearl
+Plains
+Flowerfoot Swordmaster
+Brave-Kin Duo
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Flowerfoot Swordmaster.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Brave-Kin Duo.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Flowerfoot Swordmaster)
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Brave-Kin Duo.Power = 1
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Flowerfoot Swordmaster
+Bot1.Battlefield.Brave-Kin Duo.Power = 1

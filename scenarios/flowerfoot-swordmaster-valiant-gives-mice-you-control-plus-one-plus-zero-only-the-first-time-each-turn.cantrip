@@ -1,0 +1,65 @@
+# Flowerfoot Swordmaster's valiant: the first time each turn it becomes the target of a spell or ability its controller controls, Mice its controller controls get
+# +1/+0 until end of turn (CR 611.2c, 205.3). Turn 3: Giant Growth on the Swordmaster (5/5 with the trigger) also pumps Bot1's Brave-Kin Duo (a Rabbit Mouse, 2/1) but not Bot1's
+# Savannah Lions (a Cat, still 2/1 from its own power) nor Bot2's Brave-Kin Duo (1/1). The Duo's own ability targets the Swordmaster a second time the same turn:
+# +1/+1 only, no second +1/+0 to the Mice.
+
+[Bot1 Deck]
+Mox Pearl
+Black Lotus
+Plains
+Flowerfoot Swordmaster
+Brave-Kin Duo
+Giant Growth
+Savannah Lions
+Plains x20
+
+[Bot2 Deck]
+Mox Pearl
+Brave-Kin Duo
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Flowerfoot Swordmaster.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Brave-Kin Duo.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Brave-Kin Duo.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Giant Growth.Cast(Flowerfoot Swordmaster)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Flowerfoot Swordmaster.Power = 5
+? Bot1.Battlefield.Flowerfoot Swordmaster.Toughness = 5
+? Bot1.Battlefield.Brave-Kin Duo.Power = 2
+? Bot1.Battlefield.Savannah Lions.Power = 2
+? Bot2.Battlefield.Brave-Kin Duo.Power = 1
+Bot1.Battlefield.Brave-Kin Duo.Activate(Bot1.Battlefield.Flowerfoot Swordmaster)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Flowerfoot Swordmaster.Power = 6
+? Bot1.Battlefield.Flowerfoot Swordmaster.Toughness = 6
+? Bot1.Battlefield.Brave-Kin Duo.Power = 2
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Flowerfoot Swordmaster.Power = 1
+Bot1.Battlefield.Brave-Kin Duo.Power = 1
