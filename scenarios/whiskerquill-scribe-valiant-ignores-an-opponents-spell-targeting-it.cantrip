@@ -1,0 +1,35 @@
+# Whiskerquill Scribe's valiant only counts "a spell or ability you control" (CR 603.2): Bot2's Lightning Bolt targeting the Scribe does not trigger it, so Bot1 isn't asked to discard and the hand stays at 4.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Whiskerquill Scribe
+Island
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x19
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Whiskerquill Scribe.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Whiskerquill Scribe)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Whiskerquill Scribe = (absent)
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 3
+Bot1.Graveyard.Count = 1

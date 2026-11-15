@@ -1,0 +1,8 @@
+{
+  "name": "Whiskerquill Scribe",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Mouse Citizen",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Valiant — Whenever this creature becomes the target of a spell or ability you control for the first time each turn, you may discard a card. If you do, draw a card."
+}
