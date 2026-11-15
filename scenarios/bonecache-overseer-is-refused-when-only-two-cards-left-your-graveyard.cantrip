@@ -1,0 +1,39 @@
+# Bonecache Overseer {B} (1/1): "Activate only if three or more cards left your graveyard this turn or if you've sacrificed a Food
+# this turn." One Lightning Bolt is in Bot1's graveyard on turn 3; a Tormod's Crypt is cast and sacrificed, exiling the Bolt and the
+# Crypt itself: two cards left the graveyard, one short, so the untapped Overseer is still refused and Bot1 loses no life.
+
+[Bot1 Deck]
+Mox Jet
+Bonecache Overseer
+Mox Ruby
+Lightning Bolt
+Tormod's Crypt
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bonecache Overseer.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = 
+! Bot1.Battlefield.Bonecache Overseer.Activate
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Bonecache Overseer.Tapped = false
