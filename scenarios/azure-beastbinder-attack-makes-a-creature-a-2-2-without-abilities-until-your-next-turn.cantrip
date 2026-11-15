@@ -1,0 +1,47 @@
+# Azure Beastbinder: "Whenever this creature attacks, up to one target artifact, creature, or planeswalker an opponent controls loses
+# all abilities until your next turn. If it's a creature, it also has base power and toughness 2/2 until your next turn."
+# Bot2's Llanowar Elves (1/1, taps for {G}) becomes a 2/2 with no mana ability from turn 3 until Bot1's turn 5 begins (CR 611.2a,
+# 613.4b); on turn 4 it cannot be tapped for mana, on turn 5 it is a 1/1 that can again.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Azure Beastbinder
+Island x17
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Azure Beastbinder.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Azure Beastbinder > Bot2)
+Bot1.Target(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves.Power = 2
+? Bot2.Battlefield.Llanowar Elves.Toughness = 2
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Llanowar Elves.Power = 2
+! Bot2.Battlefield.Llanowar Elves.Activate
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Llanowar Elves.Power = 1
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Toughness = 1

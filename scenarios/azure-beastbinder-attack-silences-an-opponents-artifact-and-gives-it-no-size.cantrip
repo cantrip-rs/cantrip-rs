@@ -1,0 +1,47 @@
+# Azure Beastbinder: the 2/2 is only "if it's a creature". Bot2's Mox Emerald (an artifact) loses its mana ability until Bot1's
+# next turn (CR 613.1f) and gets no size, having none. Bot1's own Mox Sapphire is refused: it is not "an opponent controls".
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Azure Beastbinder
+Island x17
+
+[Bot2 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Jace, the Mind Sculptor
+Island x17
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Azure Beastbinder.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Azure Beastbinder > Bot2)
+! Bot1.Target(Bot1.Battlefield.Mox Sapphire)
+Bot1.Target(Bot2.Battlefield.Mox Emerald)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Mox Emerald.Power = (absent)
+! Bot2.Battlefield.Mox Emerald.Activate
+? Bot2.Mana = 
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Mox Emerald.Power = (absent)
+
+[Expect]
+Bot2.Life = 19

@@ -1,0 +1,62 @@
+# Azure Beastbinder: "up to one target artifact, creature, or planeswalker an opponent controls loses all abilities until your
+# next turn." Bot2's Jace, the Mind Sculptor (a planeswalker, no artifact or creature) may be targeted, while Bot2's Island (none
+# of the three) is refused. Jace loses its loyalty abilities (CR 613.1f), so on Bot2's turn 4 none can be activated; it is no
+# creature, so it gets no size (CR 613.4b).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Azure Beastbinder
+Island x17
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Jace, the Mind Sculptor
+Island x17
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Azure Beastbinder.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Jace, the Mind Sculptor.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Azure Beastbinder > Bot2)
+! Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Target(Bot2.Battlefield.Jace, the Mind Sculptor)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Jace, the Mind Sculptor.Power = (absent)
+! Bot2.Battlefield.Jace, the Mind Sculptor.Activate
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Jace, the Mind Sculptor.Power = (absent)
+
+[Expect]
+Bot2.Battlefield.Jace, the Mind Sculptor.Counters.Loyalty = 3
+Bot2.Life = 19
