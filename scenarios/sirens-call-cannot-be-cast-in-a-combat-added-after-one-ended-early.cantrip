@@ -1,0 +1,59 @@
+# Siren's Call's "before attackers are declared" is the turn's first combat phase's (CR 506.8d). World at War adds a combat
+# phase after the second main phase. Bot2 casts Siren's Call in the first combat's beginning of combat step, then Merciful
+# Mandate ends that combat before any attackers are declared (CR 724.2d). The first combat is over all the same, so in the
+# added combat's beginning of combat step the second Siren's Call is refused.
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+World at War
+Merciful Mandate
+Plains x20
+[Bot2 Deck]
+Island
+Mox Sapphire
+Siren's Call
+Siren's Call
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.World at War.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Siren's Call.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merciful Mandate.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T3 Bot1.Main2]
+[T3 Bot1.BeginCombat]
+! Bot2.Hand.Siren's Call.Cast
+[Expect]
+Step = BeginCombat
+Bot2.Graveyard = Siren's Call

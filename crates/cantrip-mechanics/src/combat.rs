@@ -219,12 +219,12 @@ pub fn activate_only_during_combat(q: &dyn Query, _: &Asker) -> bool {
 }
 
 /// "Cast this spell / activate only before the combat damage step" (CR 506.8d, 506.8e, 506.8g): any step of the turn up to the
-/// combat damage step, but only of the turn's first combat phase, so not once an end of combat step has begun (a second
-/// combat phase, as Aurelia, the Warleader's, is too late), even when the damage step of the first was skipped. Berserk and
-/// Angus Mackenzie print it, as a cast restriction (`CardDef::cast_only_if`) and an activation condition.
+/// combat damage step, but only of the turn's first combat phase, so not in its end of combat step nor in a later combat phase
+/// (Aurelia, the Warleader's is too late), even when the damage step of the first was skipped or an effect ended it first
+/// (Merciful Mandate, CR 724.2d). Berserk and Angus Mackenzie print it, as a cast restriction
+/// (`CardDef::cast_only_if`) and an activation condition.
 pub fn only_before_combat_damage_step(q: &dyn Query, _: &Asker) -> bool {
-    q.state().turn.step() < Step::CombatDamage
-        && !q.history().this_turn().iter().any(|r| matches!(r.event, Event::StepBegan { step: Step::EndOfCombat }))
+    q.state().turn.step() < Step::CombatDamage && in_first_combat_phase_or_before(q)
 }
 
 /// "Cast this spell only after combat" (CR 506.8, 506.8d): once the turn's first combat phase is over - in a postcombat main
@@ -253,12 +253,12 @@ fn in_first_combat_phase_or_before(q: &dyn Query) -> bool {
     began_this_turn(q, Step::BeginCombat) <= 1 && began_this_turn(q, Step::PostcombatMain) == 0
 }
 
-/// "Activate only before attackers are declared" (CR 506.8a, 506.8d): the turn has not reached the declare attackers step, and
-/// none has begun this turn (so not in a second combat phase's beginning of combat step). Arcum's Whistle and Norritt print it
-/// (and it is the second half of `during_opponents_turn_before_attackers`).
+/// "Activate only before attackers are declared" (CR 506.8a, 506.8d): the turn has not reached the declare attackers step of its
+/// first combat phase - so not in a later combat phase's beginning of combat step, even when an effect ended the first before
+/// attackers were declared (Merciful Mandate, CR 724.2d). Arcum's Whistle and Norritt print it (and it is the second half of
+/// `during_opponents_turn_before_attackers`).
 pub fn before_attackers_are_declared(q: &dyn Query, _: &Asker) -> bool {
-    q.state().turn.step() < Step::DeclareAttackers
-        && !q.history().this_turn().iter().any(|r| matches!(r.event, Event::StepBegan { step: Step::DeclareAttackers }))
+    q.state().turn.step() < Step::DeclareAttackers && in_first_combat_phase_or_before(q)
 }
 
 /// "Cast this spell / activate only during an opponent's turn, before attackers are declared" (CR 506.8a, 506.8d, 506.8e,

@@ -1,0 +1,51 @@
+# Berserk's "only before the combat damage step" is the turn's first combat phase's (CR 506.8d). Combat Celebrant's exertion adds
+# a combat phase; Berserk is cast in the first combat's declare attackers step, then Merciful Mandate, paid in part with Llanowar
+# Elves, ends that combat before its damage step, skipping its end of combat step (CR 724.2d-e). The Mandate untapped the Elves,
+# so a second Berserk could be paid for, but the first combat is over all the same, so in the added combat's beginning of
+# combat step it is refused.
+[Bot1 Deck]
+Black Lotus
+Combat Celebrant
+Mox Emerald
+Mox Pearl
+Llanowar Elves
+Berserk
+Berserk
+Merciful Mandate
+Plains x20
+[Bot2 Deck]
+Island x30
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Combat Celebrant.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Combat Celebrant)
+Bot1.Accept
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Berserk.Cast(Bot1.Battlefield.Combat Celebrant)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareBlockers]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Hand.Merciful Mandate.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T3 Bot1.BeginCombat]
+? Bot1.Battlefield.Llanowar Elves.Tapped = false
+! Bot1.Hand.Berserk.Cast
+[Expect]
+Step = BeginCombat
+Bot2.Life = 20
+Bot1.Hand = Berserk
