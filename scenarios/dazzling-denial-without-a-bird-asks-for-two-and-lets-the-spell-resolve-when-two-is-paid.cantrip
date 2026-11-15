@@ -1,0 +1,49 @@
+# Without a Bird (Bot1 has only a Memnite) Dazzling Denial asks Bot2 for {2}. Bot2 has exactly two Moxen left after casting
+# Ancestral Recall, pays them, and the spell resolves: three cards drawn.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Memnite
+Dazzling Denial
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Ancestral Recall
+Island
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Ancestral Recall.Cast(Bot2)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dazzling Denial.Cast(Ancestral Recall)
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.PayCost
+[Bot2.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot2.Graveyard = Ancestral Recall
+Bot1.Graveyard = Dazzling Denial
+Bot2.Hand.Count = 7
