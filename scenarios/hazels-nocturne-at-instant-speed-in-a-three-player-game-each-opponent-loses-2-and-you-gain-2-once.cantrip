@@ -1,0 +1,41 @@
+# Hazel's Nocturne is an instant (CR 304.1): Bot1 casts it on Bot2's turn 2 with no creature card in the graveyard to target, and in this three-player game "each opponent" loses 2 together,
+# Bot2 and Bot3 each to 18 (CR 119.3, 101.4), while Bot1 gains 2 once, to 22 (not once for each opponent).
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Hazel's Nocturne
+Swamp
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Hand.Hazel's Nocturne.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18
+Bot3.Life = 18
+Bot1.Graveyard = Hazel's Nocturne
