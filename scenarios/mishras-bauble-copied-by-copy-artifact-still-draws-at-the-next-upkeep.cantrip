@@ -1,0 +1,41 @@
+# Mishra's Bauble's "Draw a card at the beginning of the next turn's upkeep" is a delayed ability of the card whose
+# ability resolves (CR 603.7), the card a copy copies (CR 707.2). Bot1's Copy Artifact enters as a copy of Bot2's
+# Mishra's Bauble; sacrificed for its ability on turn 3, it makes Bot1 draw in Bot2's upkeep on turn 4.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Copy Artifact
+Island x20
+
+[Bot2 Deck]
+Mishra's Bauble
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mishra's Bauble.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Copy Artifact.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Bot2.Battlefield.Mishra's Bauble)
+Bot1.Pass
+? Bot1.Hand.Count = 5
+Bot1.Battlefield.Mishra's Bauble.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Copy Artifact
+[T4 Bot2.Main1]
+
+[Expect]
+Turn = 4
+Bot1.Hand.Count = 6
+Bot2.Battlefield.Mishra's Bauble.Tapped = false
