@@ -2182,6 +2182,59 @@ pub fn choose_to_discard_a_card_or_lose_life(
     Ok(())
 }
 
+/// One player's part of "[player] loses `life` life unless they sacrifice a nonland permanent of their choice or discard a card" (CR 608.2d,
+/// 701.9, 701.21a, 119.3): the player chooses to sacrifice a nonland permanent, to discard a card, or to lose the life, the one choice
+/// left to a player with neither a permanent they can sacrifice nor a card (and nothing is asked of them then), and a player who has been
+/// eliminated is asked nothing. A permanent already in `sacrificed` or a card already in `discarded` is not offered again, for text that
+/// asks the same player more than once. The choice goes into `sacrificed`, `discarded` or `losses` (`Together`'s fields), for the caller
+/// to do them all together, one action (CR 101.4; `Game::together`). The question is the card's own: its `labels` must be, in order,
+/// "Sacrifice a nonland permanent", "Discard a card" and "Lose N life". Rottenmouth Viper (each opponent, 4 life, once for each
+/// counter) and Thornplate Intimidator (a target opponent, 3 life) print it.
+pub fn choose_sacrifice_nonland_or_discard_or_lose_life(
+    g: &mut dyn Game,
+    item: &StackItem,
+    player: PlayerId,
+    life: i32,
+    sacrificed: &mut Vec<(PlayerId, ObjectId)>,
+    discarded: &mut Vec<ObjectId>,
+    losses: &mut Vec<(PlayerId, i32)>,
+) -> Result<(), Suspend> {
+    const SACRIFICE: u8 = 0;
+    const DISCARD: u8 = 1;
+    const LOSE: u8 = 2;
+    if !crate::players::reached(g, player) {
+        return Ok(());
+    }
+    let asker = g.item_asker(item, player);
+    let permanents: Vec<ObjectId> = g
+        .permanents_of(player)
+        .into_iter()
+        .filter(|&id| crate::targets::filters::nonland(g, &asker, id) && !sacrificed.iter().any(|&(_, s)| s == id) && g.can_sacrifice(player, id))
+        .collect();
+    let hand = g.state().zone(Zone::hand(player)).to_vec();
+    let cards: Vec<ObjectId> = hand.iter().copied().filter(|c| !discarded.contains(c)).collect();
+    let mut options = Vec::new();
+    if !permanents.is_empty() {
+        options.push(SACRIFICE);
+    }
+    if !cards.is_empty() {
+        options.push(DISCARD);
+    }
+    options.push(LOSE);
+    let choice = if options.len() == 1 {
+        LOSE
+    } else {
+        let labels = options.iter().map(|&i| Label::Card(item.ability.card, i)).collect();
+        options[crate::choose::one_of(g, player, item.object, labels)? as usize]
+    };
+    match choice {
+        SACRIFICE => sacrificed.extend(crate::choose::cards(g, player, item.object, Purpose::Sacrifice, permanents, 1, false)?.into_iter().map(|id| (player, id))),
+        DISCARD => discarded.extend(crate::choose::cards_from(g, player, item.object, Purpose::Discard, hand, cards, 1, false)?),
+        _ => losses.push((player, -life)),
+    }
+    Ok(())
+}
+
 /// "Each player sacrifices `N` creature[s] of their choice" (CR 701.21a, 101.4): every player, the controller included, chooses
 /// in turn order from the active player knowing the earlier choices, and the creatures chosen are sacrificed together; a player
 /// with fewer than `N` creatures sacrifices them all. Innocent Blood, Dghor, Bloodletter, Liliana, Dreadhorde General (two) and
