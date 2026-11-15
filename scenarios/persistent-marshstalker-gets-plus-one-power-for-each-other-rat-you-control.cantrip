@@ -1,0 +1,47 @@
+# Persistent Marshstalker: "+1/+0 for each other Rat you control" (CR 613.4c). Alone it is its printed 3/1 (it is a Rat itself,
+# but "other"); a first Typhoid Rats makes it 4/1, a second 5/1, and Bot2's own Typhoid Rats (an opponent's Rat) changes
+# nothing. A Black Lotus and a Mox Jet pay for the Marshstalker and both Rats.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Persistent Marshstalker
+Typhoid Rats
+Typhoid Rats
+Swamp x3
+Swamp x15
+
+[Bot2 Deck]
+Swamp
+Typhoid Rats
+Swamp x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Persistent Marshstalker.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Persistent Marshstalker.Power = 3
+Bot1.Hand.Typhoid Rats.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Persistent Marshstalker.Power = 4
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Typhoid Rats.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Persistent Marshstalker.Power = 5
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Typhoid Rats.Cast
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Persistent Marshstalker.Power = 5
+Bot1.Battlefield.Persistent Marshstalker.Toughness = 1
+Bot2.Battlefield.Typhoid Rats.Power = 1

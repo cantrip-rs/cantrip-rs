@@ -1,0 +1,57 @@
+# Persistent Marshstalker: turn 1 Black Lotus pays for Entomb (fetching the Marshstalker into the graveyard), four Dark Rituals
+# and a Typhoid Rats; Lotus, Entomb, the Marshstalker and the four Rituals make seven cards in the graveyard (threshold). On
+# turn 7 the Rats attacks, the trigger (functioning from the graveyard, CR 113.6m) asks for {2}{B}, paid from three Swamps, and
+# the Marshstalker returns as a new object tapped and attacking (CR 508.4): 3 base +1 for the other Rat = 4, plus the Rats's 1
+# = 5 combat damage, 20 - 5 = 15. Three Swamps come one a turn (turns 3, 5, 7), so no mana is left from turn 1.
+
+[Bot1 Deck]
+Black Lotus
+Entomb
+Dark Ritual
+Dark Ritual
+Dark Ritual
+Dark Ritual
+Typhoid Rats
+Swamp
+Swamp
+Swamp
+Persistent Marshstalker
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Persistent Marshstalker)
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Hand.Typhoid Rats.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+? Bot1.Graveyard.Count = 7
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Typhoid Rats > Bot2)
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Swamp#3.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+? Bot1.Battlefield.Persistent Marshstalker.Tapped = true
+? Bot1.Battlefield.Persistent Marshstalker.Power = 4
+? Combat.Attackers = Persistent Marshstalker > Bot2; Typhoid Rats > Bot2
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Graveyard.Count = 6
+Bot1.Battlefield.Persistent Marshstalker.Tapped = true
