@@ -8,13 +8,6 @@ fn you_cant_get_poison(_: &dyn Query, asker: &Asker, player: PlayerId, kind: Pla
     player == asker.controller && kind == PlayerCounter::Poison
 }
 
-/// "Creatures your opponents control" (CR 613.1f, layer 6): judged on what the earlier layers made the object, and by
-/// control.
-fn your_opponents_creatures(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
-    let s = q.state();
-    so_far.is(CardType::Creature) && s.obj(affected).controller != s.obj(source).controller
-}
-
 /// "... lose infect" (CR 613.1f): layer 6, so infect given in a later timestamp applies over it (the Glistening Oil ruling).
 fn lose_infect(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
     chars.keywords = Keywords(chars.keywords.0 & !(1 << Keyword::Infect as u8));
@@ -23,6 +16,6 @@ fn lose_infect(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
 pub static CARD: CardDef = CardDef {
     player_counter_bans: &[you_cant_get_poison],
     counter_bans: &[statics::no_minus_counters_on_your_creatures],
-    statics: &[static_ability(Layer::Ability, your_opponents_creatures, lose_infect, "Creatures your opponents control lose infect.")],
+    statics: &[static_ability(Layer::Ability, statics::your_opponents_creatures, lose_infect, "Creatures your opponents control lose infect.")],
     ..oracle::MELIRA_SYLVOK_OUTCAST
 };

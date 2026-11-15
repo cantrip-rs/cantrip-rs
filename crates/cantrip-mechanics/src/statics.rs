@@ -11,6 +11,13 @@ pub fn your_creatures(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, 
     so_far.is(CardType::Creature) && q.controller(affected) == q.controller(source)
 }
 
+/// "Creatures your opponents control" (CR 613.1f, layer 6): every creature, as the earlier layers made it, under the control of
+/// a player other than the source's controller (CR 102.2), both read through the view (`LayerQuery::controller`, CR 613.1b). M.O.D.O.K.,
+/// Melira, Sylvok Outcast and Mindwhisker use it as `StaticDef::affects`.
+pub fn your_opponents_creatures(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
+    so_far.is(CardType::Creature) && q.controller(affected) != q.controller(source)
+}
+
 /// "Creatures you control with +1/+1 counters on them" (CR 613.1f).
 /// Agatha's Soul Cauldron and Vigorbloom Vanguard use it.
 pub fn your_creatures_with_plus_one_counters(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
