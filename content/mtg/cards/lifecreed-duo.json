@@ -1,0 +1,11 @@
+{
+  "name": "Lifecreed Duo",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Bat Bird",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying\nWhenever another creature you control enters, you gain 1 life.",
+  "keywords": [
+    "Flying"
+  ]
+}
