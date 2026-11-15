@@ -1,0 +1,42 @@
+# Wick, the Whorled Mind: "you control". Bot1's Wick makes a Snail on turn 1. On turn 2 Bot2 casts their own Wick: it does not
+# trigger Bot1's Wick (another Rat, but not one Bot1 controls), and Bot2 creates their own Snail even though Bot1 controls one.
+# Both Snails stay 1/1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Wick, the Whorled Mind
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Wick, the Whorled Mind
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wick, the Whorled Mind.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wick, the Whorled Mind.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Snail Token.Power = 1
+Bot1.Battlefield.Count = 3
+Bot2.Battlefield.Snail Token.Power = 1
+Bot2.Battlefield.Count = 3

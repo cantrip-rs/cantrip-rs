@@ -1,0 +1,40 @@
+# Wick, the Whorled Mind: "put a +1/+1 counter on a Snail you control" is a choice, not a target (CR 608.2d). Universal Automaton
+# has changeling, so it is a Snail as well as a Rat (CR 702.73a). Wick makes a 1/1 Snail token. Universal Automaton then enters:
+# Bot1 controls two Snails (the token and the Automaton itself), and chooses where the one +1/+1 counter goes. Here: Snail Token.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Wick, the Whorled Mind
+Universal Automaton
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wick, the Whorled Mind.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Universal Automaton.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Snail Token)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Snail Token.Power = 2
+Bot1.Battlefield.Snail Token.Toughness = 2
+Bot1.Battlefield.Universal Automaton.Power = 1
+Bot1.Battlefield.Universal Automaton.Toughness = 1
+Bot1.Battlefield.Count = 5

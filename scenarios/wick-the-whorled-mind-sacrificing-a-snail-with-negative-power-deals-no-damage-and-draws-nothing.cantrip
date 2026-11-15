@@ -1,0 +1,58 @@
+# Wick, the Whorled Mind: "{U}{B}{R}, Sacrifice a Snail: Wick deals damage equal to the sacrificed creature's power to each opponent.
+# Then draw cards equal to the sacrificed creature's power." Wick's Snail token is given -1/-0 twice by two Fleeting Distractions
+# (a -1/1) and then sacrificed: its power as it last was is below 0, so Bot2 takes no damage and Bot1 draws no cards (CR 107.1b,
+# 120.8, 121.1). Bot1's hand is the two cards the Distractions drew.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Wick, the Whorled Mind
+Fleeting Distraction
+Fleeting Distraction
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wick, the Whorled Mind.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Snail Token.Power = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Fleeting Distraction.Cast(Bot1.Battlefield.Snail Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Fleeting Distraction.Cast(Bot1.Battlefield.Snail Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Snail Token.Power = -1
+? Bot1.Hand.Count = 2
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Wick, the Whorled Mind.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Snail Token = (absent)
+Bot2.Life = 20
+Bot1.Hand.Count = 2

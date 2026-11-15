@@ -1,0 +1,59 @@
+# Wick, the Whorled Mind: "Whenever Wick or another Rat you control enters, create a 1/1 black Snail creature token if you don't
+# control a Snail. Otherwise, put a +1/+1 counter on a Snail you control." Wick enters with no Snail: a 1/1 black Snail. A Memnite
+# (not a Rat) changes nothing. An Engine Rat then enters while Bot1 controls the Snail: it gets a +1/+1 counter (2/2), and no
+# second Snail is made. On turn 3, "{U}{B}{R}, Sacrifice a Snail": Wick deals damage equal to the Snail's power as it last was (2) to
+# Bot2 and Bot1 draws two cards (3 in hand with the turn-3 draw).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Wick, the Whorled Mind
+Engine Rat
+Memnite
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wick, the Whorled Mind.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Snail Token.Power = 1
+? Bot1.Battlefield.Snail Token.Toughness = 1
+? Bot1.Battlefield.Snail Token.Colors = Black
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Snail Token.Power = 1
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Engine Rat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Snail Token.Power = 2
+? Bot1.Battlefield.Snail Token.Toughness = 2
+? Bot1.Battlefield.Count = 7
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Wick, the Whorled Mind.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Count = 6

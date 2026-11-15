@@ -1,0 +1,8 @@
+{
+  "name": "Wick, the Whorled Mind",
+  "manaCost": "{3}{B}",
+  "type": "Legendary Creature — Rat Warlock",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Whenever Wick or another Rat you control enters, create a 1/1 black Snail creature token if you don't control a Snail. Otherwise, put a +1/+1 counter on a Snail you control.\n{U}{B}{R}, Sacrifice a Snail: Wick deals damage equal to the sacrificed creature's power to each opponent. Then draw cards equal to the sacrificed creature's power."
+}
