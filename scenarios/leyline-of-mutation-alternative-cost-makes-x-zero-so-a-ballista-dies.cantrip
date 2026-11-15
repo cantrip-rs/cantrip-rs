@@ -1,0 +1,36 @@
+# Leyline of Mutation's {W}{U}{B}{R}{G} is paid "rather than" the mana cost (CR 118.9), so X is 0 (CR 107.3b): Bot1, who accepted the Leyline onto the
+# battlefield, pays it for Walking Ballista ({X}{X}) and the Ballista enters with no counters, a 0/0 that dies (CR 704.5f).
+
+[Bot1 Deck]
+Leyline of Mutation
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Walking Ballista
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Accept
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Walking Ballista.Cast(Ability: Pay {W}{U}{B}{R}{G})
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Walking Ballista
+Bot1.Battlefield = Leyline of Mutation; Mox Pearl; Mox Sapphire; Mox Jet; Mox Ruby; Mox Emerald
