@@ -3170,11 +3170,11 @@ fn apply_effect(cards: &CardTable, effect: &ContinuousEffect, layer: Layer, char
             // CR 205.4b: a supertype gained or lost leaves the other supertypes, the card types and the subtypes as they were.
             (Layer::Type, EffectKind::AddSupertypes(s)) => {
                 let had = chars.supertypes;
-                chars.supertypes = Supertypes { basic: had.basic || s.basic, legendary: had.legendary || s.legendary, snow: had.snow || s.snow };
+                chars.supertypes = Supertypes { basic: had.basic || s.basic, legendary: had.legendary || s.legendary, snow: had.snow || s.snow, world: had.world || s.world };
             }
             (Layer::Type, EffectKind::LoseSupertypes(s)) => {
                 let had = chars.supertypes;
-                chars.supertypes = Supertypes { basic: had.basic && !s.basic, legendary: had.legendary && !s.legendary, snow: had.snow && !s.snow };
+                chars.supertypes = Supertypes { basic: had.basic && !s.basic, legendary: had.legendary && !s.legendary, snow: had.snow && !s.snow, world: had.world && !s.world };
             }
             (Layer::Type, EffectKind::AddSubtype(s)) => chars.subtypes = chars.subtypes.with(s),
             // CR 305.7: the land's land types are set, and the abilities its rules text gives it are gone with them.

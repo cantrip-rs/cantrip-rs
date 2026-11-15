@@ -2,7 +2,7 @@ use cantrip_api::*;
 use cantrip_mechanics::targets;
 use cantrip_oracle as oracle;
 
-const SNOW: Supertypes = Supertypes { basic: false, legendary: false, snow: true };
+const SNOW: Supertypes = Supertypes { basic: false, legendary: false, snow: true, world: false };
 
 /// "Target nonsnow basic land" (CR 115.1, 205.4c, 205.4g): a land with the basic supertype and without snow, as the layers
 /// make it. A land with a basic land type but not the basic supertype (a dual land) is no basic land (the ruling).
