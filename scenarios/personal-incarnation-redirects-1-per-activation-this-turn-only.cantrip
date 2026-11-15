@@ -1,0 +1,90 @@
+# Personal Incarnation: "{0}: The next 1 damage that would be dealt to this creature this turn is dealt to its owner
+# instead" (CR 614.1a, 614.9, 616.1f) and "When this creature dies, its owner loses half their life, rounded up" (CR 119.3,
+# 107.1a). Bot1 (starting at 22) activates it once on turn 1, off an empty pool: that effect ends with the turn, so Bot2's
+# first Lightning Bolt on turn 2 deals all 3 to the Incarnation. Bot1 then activates it three times. Bot2's Shock to Bot1
+# is not damage to the Incarnation and leaves them waiting. They apply one after another to Bot2's second Bolt, 1 each,
+# the last to the 1 damage the others left, so all 3 are dealt to Bot1 and none to the Incarnation. They are then used
+# up: the third Bolt, in the end step, deals all 3 to it again. With 6 damage it dies, and Bot1, at 17, loses 9.
+
+[Life]
+Bot1: 22
+
+[Bot1 Deck]
+Personal Incarnation
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain
+Shock
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Personal Incarnation.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Personal Incarnation.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Personal Incarnation)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Personal Incarnation.Damage = 3
+? Bot1.Life = 22
+Bot1.Battlefield.Personal Incarnation.Activate
+Bot1.Battlefield.Personal Incarnation.Activate
+Bot1.Battlefield.Personal Incarnation.Activate
+Bot1.Pass
+[T2 Bot2.Main2]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 20
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Personal Incarnation)
+Bot2.Pass
+Bot1.Pass
+Bot1.Replace(Personal Incarnation)
+Bot1.Replace(Personal Incarnation)
+? Bot1.Battlefield.Personal Incarnation.Damage = 3
+? Bot1.Life = 17
+[T2 Bot2.End]
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Personal Incarnation)
+[T3 Bot1.Upkeep]
+
+[Expect]
+Bot1.Life = 8
+Bot2.Life = 20
+Bot1.Battlefield.Personal Incarnation = (absent)
+Bot1.Graveyard = Personal Incarnation; Black Lotus

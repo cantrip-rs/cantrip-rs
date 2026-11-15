@@ -1,0 +1,78 @@
+# Personal Incarnation under an opponent's control: "Only this creature's owner may activate this ability" (CR 602.2) and
+# "its owner" (the rulings: the owner loses life, not the controller). Bot2 takes Bot1's Incarnation with Control Magic.
+# Bot2, its controller, may not activate it; Bot1, its owner, may. Bot2's Lightning Bolt to it then deals 1 to Bot1 - its
+# owner, not the effect's or the creature's controller - and 2 to it. Bot2's Terror destroys it: the trigger is Bot2's,
+# but Bot1, its owner, at 19 loses 10, rounded up, and Bot2 loses nothing.
+
+[Bot1 Deck]
+Personal Incarnation
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Control Magic
+Mox Ruby
+Lightning Bolt
+Mox Jet
+Mox Emerald
+Terror
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Personal Incarnation.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Control Magic.Cast(Bot1.Battlefield.Personal Incarnation)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Personal Incarnation.Damage = 0
+! Bot2.Battlefield.Personal Incarnation.Activate
+Bot1.Battlefield.Personal Incarnation.Activate
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Personal Incarnation)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Personal Incarnation.Damage = 2
+? Bot1.Life = 19
+? Bot2.Life = 20
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Terror.Cast(Bot2.Battlefield.Personal Incarnation)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 9
+Bot2.Life = 20
+Bot1.Graveyard = Personal Incarnation; Black Lotus
+Bot2.Battlefield.Personal Incarnation = (absent)

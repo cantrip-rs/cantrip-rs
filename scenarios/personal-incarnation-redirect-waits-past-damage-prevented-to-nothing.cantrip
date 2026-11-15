@@ -1,0 +1,67 @@
+# Personal Incarnation's redirection effect, ordered after a prevention shield that leaves none of the damage (CR 616.1f,
+# 609.7b): it is not used up. Bot1 activates the Incarnation and puts Healing Salve's shield of 3 on it. Bot2's first
+# Lightning Bolt meets both; Bot1 applies the Salve first, which prevents all 3, and with no damage left the redirection
+# no longer applies. Bot2's second Bolt is then the next damage: 1 of it is dealt to Bot1 and 2 to the Incarnation.
+
+[Bot1 Deck]
+Personal Incarnation
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Healing Salve
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Personal Incarnation.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Battlefield.Personal Incarnation.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Prevent the next 3 damage)
+Bot1.Target(Bot1.Battlefield.Personal Incarnation)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Personal Incarnation)
+Bot2.Pass
+Bot1.Pass
+Bot1.Replace(Healing Salve)
+? Bot1.Battlefield.Personal Incarnation.Damage = 0
+? Bot1.Life = 20
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Personal Incarnation)
+[T2 Bot2.End]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Personal Incarnation.Damage = 2

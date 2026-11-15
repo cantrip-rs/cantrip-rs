@@ -1,0 +1,8 @@
+{
+  "name": "Personal Incarnation",
+  "manaCost": "{3}{W}{W}{W}",
+  "type": "Creature — Avatar Incarnation",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "{0}: The next 1 damage that would be dealt to this creature this turn is dealt to its owner instead. Only this creature's owner may activate this ability.\nWhen this creature dies, its owner loses half their life, rounded up."
+}
