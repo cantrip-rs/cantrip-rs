@@ -1,0 +1,40 @@
+# Alania's Pathmaker: "When this creature enters, exile the top card of your library. Until the end of your next turn, you may play
+# that card." The permission begins as soon as the card is exiled (CR 611.2a), so Bot1 may play the exiled Forest at once as this turn's
+# land drop (CR 305.1, 601.3), well before the end of its next turn. Bot2's library is untouched.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Alania's Pathmaker
+Island
+Island
+Island
+Island
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Alania's Pathmaker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Forest
+? Bot2.Library.Count = 13
+Bot1.Exile.Forest.Play
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Alania's Pathmaker; Forest
+Exile.Count = 0
+Bot2.Library.Count = 13

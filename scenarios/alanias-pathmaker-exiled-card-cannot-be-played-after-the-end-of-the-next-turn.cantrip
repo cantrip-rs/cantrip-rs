@@ -1,0 +1,43 @@
+# Alania's Pathmaker: the permission ends at the end of Bot1's next turn (CR 514.2). The exiled Forest is not played on turn 1 or
+# turn 3, and on turn 5, with a land drop open, Bot1 may no longer play it from exile; the Island played right after is
+# the control that the drop was open.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Alania's Pathmaker
+Island
+Island
+Island
+Island
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Alania's Pathmaker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Forest
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+! Bot1.Exile.Forest.Play
+Bot1.Hand.Island.Play
+
+[Expect]
+Turn = 5
+Exile = Forest
+Bot1.Battlefield = Mox Ruby; Alania's Pathmaker; Island; Island

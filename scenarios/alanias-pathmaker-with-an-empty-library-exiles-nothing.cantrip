@@ -1,0 +1,36 @@
+# Alania's Pathmaker entering with Bot1's library empty (its deck is its seven-card opening hand) has no top card to exile, so
+# nothing is exiled and nothing may be played; Bot1 has not drawn from an empty library, so it has not lost.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Alania's Pathmaker
+Island
+Island
+Island
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Alania's Pathmaker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+
+[Expect]
+Result = InProgress
+Exile.Count = 0
+Bot1.Library.Count = 0
+Bot1.Battlefield = Mox Ruby; Alania's Pathmaker

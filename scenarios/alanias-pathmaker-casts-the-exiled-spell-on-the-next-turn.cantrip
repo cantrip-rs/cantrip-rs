@@ -1,0 +1,44 @@
+# Alania's Pathmaker exiles a nonland card (Lightning Bolt) and it may be *played*, which for a spell is cast (CR 601.2, 118.9): on
+# turn 3 Bot1 taps a Mountain and casts the Bolt from exile at Bot2 (3 damage), paying its mana cost; it is then in Bot1's graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Alania's Pathmaker
+Mountain
+Mountain
+Mountain
+Mountain
+Lightning Bolt
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Alania's Pathmaker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Exile.Count = 0
+Bot1.Graveyard = Lightning Bolt; Black Lotus

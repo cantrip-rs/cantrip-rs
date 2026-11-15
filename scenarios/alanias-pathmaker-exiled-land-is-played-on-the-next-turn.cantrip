@@ -1,0 +1,40 @@
+# Alania's Pathmaker: the permission lasts through Bot1's *next* turn (turn 3), not only this one. Bot1 plays an Island from
+# hand on turn 1 (its land drop) and the Forest from exile as its land drop on turn 3 (CR 305.1, 514.2).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Alania's Pathmaker
+Island
+Island
+Island
+Island
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Alania's Pathmaker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Forest
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Exile.Forest.Play
+? Exile.Count = 0
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Alania's Pathmaker; Island; Forest
+Exile.Count = 0
