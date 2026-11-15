@@ -10,12 +10,11 @@ fn become_scout(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
     let ferengi = g.words(item.object).subtype(Subtype::Ferengi);
     let scout = g.words(item.object).subtype(Subtype::Scout);
-    let card = g.obj(item.object).card;
     instruction(g, |g| {
         g.add_effect(item.object, item.object, EffectKind::SetCreatureType(scout), Duration::Indefinite);
         g.add_effect(item.object, item.object, EffectKind::AddSubtype(ferengi), Duration::Indefinite);
         g.add_effect(item.object, item.object, EffectKind::SetPt(3, 4), Duration::Indefinite);
-        g.add_effect(item.object, item.object, EffectKind::AddAbility(AbilityRef::delayed(card, 0)), Duration::Indefinite);
+        g.add_effect(item.object, item.object, EffectKind::AddAbility(AbilityRef::delayed(item.ability.card, 0)), Duration::Indefinite);
     });
     Ok(())
 }
@@ -28,12 +27,11 @@ fn become_officer(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
     let ferengi = g.words(item.object).subtype(Subtype::Ferengi);
     let officer = g.words(item.object).subtype(Subtype::Officer);
-    let card = g.obj(item.object).card;
     instruction(g, |g| {
         g.add_effect(item.object, item.object, EffectKind::SetCreatureType(officer), Duration::Indefinite);
         g.add_effect(item.object, item.object, EffectKind::AddSubtype(ferengi), Duration::Indefinite);
-        g.add_effect(item.object, item.object, EffectKind::AddAbility(AbilityRef::delayed(card, 1)), Duration::Indefinite);
-        g.add_effect(item.object, item.object, EffectKind::AddAbility(AbilityRef::delayed(card, 2)), Duration::Indefinite);
+        g.add_effect(item.object, item.object, EffectKind::AddAbility(AbilityRef::delayed(item.ability.card, 1)), Duration::Indefinite);
+        g.add_effect(item.object, item.object, EffectKind::AddAbility(AbilityRef::delayed(item.ability.card, 2)), Duration::Indefinite);
     });
     Ok(())
 }

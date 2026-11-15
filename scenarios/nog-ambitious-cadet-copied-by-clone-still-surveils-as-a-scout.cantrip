@@ -1,0 +1,61 @@
+# Nog, Ambitious Cadet's {1} makes him a Scout that gains "Whenever Nog becomes tapped, surveil 2", an ability of the
+# card whose ability resolves (CR 613.1f), the card a copy copies (CR 707.2). Bot1's Clone enters as a copy of Bot2's Nog
+# on turn 3 and activates it; attacking on turn 5 taps it, and Bot1 surveils both top cards into the graveyard.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Clone
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Emerald
+Nog, Ambitious Cadet
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Nog, Ambitious Cadet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Clone.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Nog, Ambitious Cadet.Activate(Ability: {1})
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Nog, Ambitious Cadet.Power = 3
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Nog, Ambitious Cadet > Bot2)
+Bot1.Arrange(| Island; Island)
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot1.Graveyard.Count = 2
+Bot2.Life = 17
