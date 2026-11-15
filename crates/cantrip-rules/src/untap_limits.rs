@@ -14,8 +14,12 @@ fn rules<'a>(q: &'a dyn Query, cards: Option<&'a CardTable>, player: PlayerId) -
             Some(ref c) if c.merged != 0 && obj.marks.face_down_as.is_none() => q.state().merged_sources(c).len(),
             _ => 0,
         };
-        CardTable::texts_of(q.state(), obj, current).enumerate().flat_map(move |(i, card)| {
-            let by = (i > 0 && i <= components).then(|| Linked { object: source, text: q.linked_card(card), acquired: q.state().copy_acquired(source) });
+        // A Room's unlocked doors follow its own card (`CardTable::texts`); validation, with no table, reads none, as
+        // `CardDef::door_unsupported` refuses a door with an untap limit.
+        let doors = cards.map_or([None, None], |cards| cards.unlocked_door_ids(obj, current));
+        let first = 1 + doors.iter().flatten().count();
+        CardTable::texts_with_doors(q.state(), obj, current, doors).enumerate().flat_map(move |(i, card)| {
+            let by = (i >= first && i < first + components).then(|| Linked { object: source, text: q.linked_card(card), acquired: q.state().copy_acquired(source) });
             let asker = Asker { source, controller: obj.controller, by, spell: false, instance: None };
             q.card(card).untap_limits.iter().filter(move |r| !q.lost_all_abilities(source) && (r.applies)(q, &asker, player)).map(move |r| (asker, r))
         })

@@ -8181,16 +8181,10 @@ pub fn each_play_rule_named(q: &dyn Query, cards: &CardTable, player: PlayerId, 
                 continue;
             }
             let asker = Asker { instance: None, source: id, controller: player, by: None, spell: false };
-            // A merged permanent has its other components' play rules too (CR 702.140e), each named by its own card.
+            // A merged permanent has its other components' play rules too (CR 702.140e), and a Room its unlocked doors'
+            // (CR 709.5), each named by its own card.
             for card in cards.texts(s, obj) {
-                let def = cards.get(card);
-                if def.is_room() {
-                    for door in def.unlocked_doors(obj.marks.doors) {
-                        walk(q, &asker, cards.id_of(door), door.play_rules, &mut 0, true, &mut f);
-                    }
-                } else {
-                    walk(q, &asker, card, def.play_rules, &mut 0, true, &mut f);
-                }
+                walk(q, &asker, card, cards.get(card).play_rules, &mut 0, true, &mut f);
             }
         }
     }

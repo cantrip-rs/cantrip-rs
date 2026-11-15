@@ -3779,13 +3779,16 @@ Known gaps:
   name, CR 707.9b: the rule takes away only the halves' names), and the unlock special action (CR 709.5e, 116.2m) is given
   once layer 6 is done, one per locked door, as turning a face-down permanent face up is (`layers::unlock_actions`,
   `intrinsic::UNLOCK_LEFT`/`UNLOCK_RIGHT`, cost read off the door), so an effect that takes all abilities (Humility over
-  an Opalescence-animated Room) does not take it. `Event::DoorUnlocked` is what "when you unlock this door" listens for,
-  and a door's play rules (`CardDef::play_rules`, Steaming Sauna's "You have no maximum hand size") apply while it is
-  unlocked (`actions::each_play_rule`). A copy of a Room spell becomes a token Room with the cast door unlocked, its
-  copiable values the whole card's with the exceptions the spell had (`resolve_copy_as_token`, CR 707.10f, 709.5d). Not
-  yet: a door with static abilities, replacement effects or an enters rule (the card table refuses one), instructions to
-  unlock or lock a door (`Game::unlock_door` exists for the first, nothing locks), and "fully unlocks"; no card in
-  content copies a Room spell, so only a Rust test (`room_copy_tests`) reaches that copy.
+  an Opalescence-animated Room) does not take it. `Event::DoorUnlocked` is what "when you unlock this door" listens for.
+  An unlocked door's rules text is the permanent's (CR 709.5): `CardTable::texts` walks each unlocked door right after
+  the Room's own card, so a door's static abilities (Porcelain Gallery, Lecture Hall), its play rules (Steaming Sauna's
+  "You have no maximum hand size") and every standing rule a card lists apply while it is unlocked, at the Room's
+  timestamp (CR 613.7a), and a locked door's do not. A copy of a Room spell becomes a token Room with the cast door
+  unlocked, its copiable values the whole card's with the exceptions the spell had (`resolve_copy_as_token`, CR 707.10f,
+  709.5d). Not yet: what the walk can't give a door (`CardDef::door_unsupported`: a characteristic-defining,
+  ability-removing or land-type static, replacement effects, an enters rule, among others; the card table refuses one),
+  instructions to unlock or lock a door (`Game::unlock_door` exists for the first, nothing locks), and "fully unlocks";
+  no card in content copies a Room spell, so only a Rust test (`room_copy_tests`) reaches that copy.
 
 ## Open questions
 

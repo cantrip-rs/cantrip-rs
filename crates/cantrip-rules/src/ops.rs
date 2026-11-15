@@ -1319,6 +1319,8 @@ pub fn unlock_door(cx: &mut Cx, id: ObjectId, door: u8, player: PlayerId) {
         return;
     }
     cx.st().update_obj(id, |o| o.marks.doors |= door);
+    // An unlocked door's static abilities are the permanent's now (CR 709.5, `CardTable::texts`).
+    note_statics(cx, id);
     cx.emit(Event::DoorUnlocked { permanent: id, door, player });
 }
 

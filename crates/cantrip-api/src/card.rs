@@ -4472,16 +4472,22 @@ impl CardDef {
         self.split.is_some() && self.subtypes.has(Subtype::Room)
     }
 
-    /// What this door of a Room has that the engine does not take from its door (CR 709.5), if anything: the Room permanent
-    /// has an unlocked door's abilities (`layers::doors`) and play rules, and nothing else of its text. Everything a card
-    /// does while on the battlefield besides those - static abilities, replacement and prevention effects, an entering rule,
-    /// and each standing rule a card lists - is read off the Room card, so it would be absent; a triggered ability that
-    /// functions outside the battlefield would be too, as the doors' abilities are given on the battlefield alone; and a
-    /// keyword the door printed would be the whole card's whether or not the door is unlocked. `CardTable::new` refuses a
-    /// door that has any. What a door does as a spell (its cost, targets and effect, its own cost changes) is its own.
+    /// What this door of a Room has that the engine does not take from its door (CR 709.5), if anything. An unlocked
+    /// door's text is the permanent's (`CardTable::texts` walks it right after the Room's card), so its abilities
+    /// (`layers::doors`), its static abilities and every standing rule a card lists are read off the door exactly as off
+    /// any permanent's card, and a locked door's are not. What is left is what the walk can't give a door, refused by
+    /// `CardTable::new` so that it is never quietly absent: a characteristic-defining ability, which functions in every
+    /// zone (CR 604.3), and a static ability that takes abilities or sets land types, which the entering and layer guards
+    /// read off the Room's card; replacement and prevention effects and an entering rule, which would be asked of the
+    /// Room as it enters, before or as its door is unlocked; a triggered ability that functions outside the battlefield,
+    /// as a door has no text anywhere else; a keyword, which would be the whole card's whether or not the door is
+    /// unlocked; and the rules that are read off the object's own card rather than its texts (a cast limit, a
+    /// designation keyword, a permanent's rule, a cleanup rider, basic land types, cause rules), or by a reader with no
+    /// card table (untap limits, `untap_limits::rules`), or off a card in its own zone (casting it from exile, ways to
+    /// cast it). What a door does as a spell (its cost, targets and effect, its own cost changes) is its own.
     pub fn door_unsupported(&self) -> Option<&'static str> {
         let refused = [
-            (!self.statics.is_empty(), "static abilities"),
+            (self.statics.iter().any(|s| s.own || s.loses_all || s.sets_land_subtypes), "a characteristic-defining, ability-removing or land-type-setting static ability"),
             (!self.replacements.is_empty(), "replacement effects"),
             (!self.preventions.is_empty(), "prevention effects"),
             (self.enters.is_some() || self.enters_as_copy.is_some(), "an enters rule"),
@@ -4489,81 +4495,11 @@ impl CardDef {
             (self.abilities.iter().any(|a| matches!(a, AbilityDef::Triggered(t) if t.functions != crate::ability::ON_THE_BATTLEFIELD)), "a triggered ability that functions outside the battlefield"),
             (self.abilities.iter().any(|a| matches!(a, AbilityDef::Static(_))), "a static ability in its abilities"),
             (self.cast_limit > 0, "a cast limit"),
-            (!self.cost_changes.is_empty(), "cost changes"),
-            (!self.cost_additions.is_empty(), "cost additions"),
-            (!self.grants_pay_with.is_empty(), "convoke, delve or improvise it gives"),
-            (!self.ability_alternatives.is_empty(), "alternative costs for abilities"),
             (!self.granted_ways.is_empty(), "ways it gives to cast cards"),
-            (!self.spell_alternatives.is_empty(), "alternative costs it gives spells"),
             (!self.exile_casts.is_empty(), "casting from exile it allows"),
-            (!self.granted_miracles.is_empty(), "miracle it gives"),
-            (!self.cast_rules.is_empty(), "cast rules"),
-            (!self.spell_rules.is_empty(), "spell rules"),
-            (!self.block_rules.is_empty(), "block rules"),
-            (!self.landwalk_exceptions.is_empty(), "landwalk blocking exceptions"),
-            (!self.additional_blocks.is_empty(), "additional blocks"),
-            (!self.blocker_limits.is_empty(), "blocker limits"),
-            (!self.block_capacities.is_empty(), "block capacities"),
-            (!self.block_requirements.is_empty(), "block requirements"),
-            (!self.must_be_blocked.is_empty(), "must be blocked"),
-            (!self.block_costs.is_empty(), "block costs"),
-            (!self.attack_rules.is_empty(), "attack rules"),
-            (!self.attacks_as_though_haste.is_empty(), "attack-only haste permissions"),
-            (!self.attack_alone_rules.is_empty(), "a rule against attacking alone"),
             (!self.combat_groups.is_empty(), "combat group restrictions"),
-            (!self.attack_costs.is_empty(), "attack costs"),
-            (!self.attack_cost_rules.is_empty(), "attack payments"),
-            (!self.attack_limits.is_empty(), "attack limits"),
-            (!self.attacks_despite_defender.is_empty(), "attacking despite defender"),
-            (!self.goads.is_empty(), "static goads"),
-            (!self.targeting_rules.is_empty(), "targeting rules"),
-            (!self.player_keywords.is_empty(), "player keywords"),
-            (!self.player_protection.is_empty(), "player protection"),
-            (!self.unpreventable_damage.is_empty(), "unpreventable damage"),
-            (!self.unredirectable_damage.is_empty(), "unredirectable damage"),
-            (!self.uncounterable_abilities.is_empty(), "uncounterable abilities"),
-            (!self.mana_kept.is_empty(), "kept mana"),
-            (!self.cant_gain_life.is_empty(), "a life gain rule"),
-            (!self.cant_lose_life.is_empty(), "a life loss rule"),
-            (!self.cant_draw.is_empty(), "a draw rule"),
-            (!self.coin_flip_rules.is_empty(), "a coin flip rule"),
-            (!self.loss_rules.is_empty(), "loss rules"),
-            (!self.win_rules.is_empty(), "win rules"),
-            (!self.infect_damage_to.is_empty(), "an infect damage rule"),
-            (!self.counter_bans.is_empty(), "counter bans"),
-            (!self.counter_ceilings.is_empty(), "counter ceilings"),
-            (!self.enter_rules.is_empty(), "enter rules"),
-            (!self.permanent_enter_rules.is_empty(), "permanent enter rules"),
-            (!self.land_play_rules.is_empty(), "land play rules"),
-            (!self.player_counter_bans.is_empty(), "player counter bans"),
-            (!self.cost_bans.is_empty(), "cost bans"),
-            (!self.sacrifice_bans.is_empty(), "sacrifice bans"),
-            (!self.regeneration_bans.is_empty(), "regeneration bans"),
-            (!self.face_up_bans.is_empty(), "face-up bans"),
-            (!self.untap_bans.is_empty(), "untap bans"),
-            (!self.untap_limits.is_empty(), "untap limits"),
-            (!self.skip_steps.is_empty(), "skipped steps"),
-            (!self.phase_in_bans.is_empty(), "phase-in bans"),
-            (!self.cant_become_untapped.is_empty(), "rules against becoming untapped"),
-            (!self.damage_by_toughness.is_empty(), "damage by toughness"),
-            (!self.damage_by_absolute_power.is_empty(), "damage by absolute power"),
-            (!self.tap_power.is_empty(), "tap power"),
-            (!self.stations_by_toughness.is_empty(), "stations by toughness"),
-            (!self.damage_stays.is_empty(), "a damage-stays rule"),
-            (!self.mana_told_apart.is_empty(), "a mana source rule"),
-            (!self.zero_loyalty_stays.is_empty(), "a zero-loyalty rule"),
-            (!self.legend_rule_exempt.is_empty(), "a legend rule exemption"),
-            (!self.spend_any_color.is_empty(), "a spend-as-any-color rule"),
-            (!self.activate_as_though_haste.is_empty(), "activating as though with haste"),
             (!self.cause_rules.is_empty(), "cause rules"),
-            (!self.turn_begin.is_empty(), "a turn-begin replacement"),
-            (!self.step_begin.is_empty(), "a step-begin replacement"),
-            (!self.untap_in_others_untap_steps.is_empty(), "untapping in others' untap steps"),
-            (!self.instant_activation.is_empty(), "instant-speed activation rules"),
-            (!self.flash_rules.is_empty(), "flash rules"),
-            (!self.activation_rules.is_empty(), "activation rules"),
-            (!self.trigger_rules.is_empty(), "trigger rules"),
-            (!self.additional_triggers.is_empty(), "additional triggers"),
+            (!self.untap_limits.is_empty(), "untap limits"),
             (self.ascend || self.storied || self.start_your_engines, "a designation keyword"),
             (self.may_not_untap || self.granted_once_each_turn.is_some() || self.extra_power_up_activations > 0 || self.exhaust_as_though_unactivated, "a permanent's rule"),
             (self.untimely_cleanup_rider, "a cleanup rider"),
@@ -5554,9 +5490,8 @@ impl CardTable {
                     table.wholes[back.0 as usize] = Some(CardId(front as u16));
                 }
             }
-            // A Room's doors (CR 709.5): the abilities and play rules of an unlocked one are the permanent's. What a door's
-            // text does beyond those is read off the card, not off the door, so a door that has any is refused until it
-            // follows the designations (`CardDef::door_unsupported`): never quietly absent.
+            // A Room's doors (CR 709.5): an unlocked one's text is the permanent's (`texts`). What the walk can't give a
+            // door is refused (`CardDef::door_unsupported`): never quietly absent.
             let card = table.cards[front];
             if card.is_room() {
                 let (left, right) = card.split.expect("a Room is a split card");
@@ -5565,8 +5500,6 @@ impl CardTable {
                         panic!("{}: a door with {what} is not supported yet (CR 709.5)", half.name);
                     }
                 }
-                // The Room is looked at for play rules, which `actions::each_play_rule` takes from its unlocked doors.
-                table.play_rules[front] |= !left.play_rules.is_empty() || !right.play_rules.is_empty();
                 // And for the triggered abilities its doors print, which `layers::doors` gives it while they are unlocked:
                 // those that look back (CR 603.10a), state triggers (CR 603.8) and triggered mana abilities (CR 605.1b).
                 let triggered = |f: fn(&TriggeredDef) -> bool| {
@@ -5717,33 +5650,55 @@ impl CardTable {
     /// activation rules - each named by the card it is printed on. One definition for any other object; none of a face-down
     /// permanent's components gives it anything (CR 708.2). Last, each text an exception of its copiable values adds
     /// (`Copiable::with_text`, CR 707.9b), once for each instance (CR 113.2c): Firion, Wild Rose Warrior's token's "This
-    /// Equipment's equip abilities cost {2} less to activate." A face-down permanent has none of them either.
+    /// Equipment's equip abilities cost {2} less to activate." A face-down permanent has none of them either. A Room's
+    /// unlocked doors come right after the Room's own card (CR 709.5: a locked door's rules text is not the permanent's,
+    /// an unlocked one's is), each named by the door it is printed on, so a door's static abilities and standing rules are
+    /// read exactly as any card's; a copy of a Room has the doors its own designations unlock (CR 709.5c).
     ///
     /// The hottest walk of the engine (every static, cost change, replacement and trigger reads it, for each permanent): an
     /// object with no exception text anywhere - nearly every one - walks a plain list of its own and its components' cards,
-    /// a small iterator; any other walks `texts_with_exclusions`, without the exclusions (which only the layers read), boxed
-    /// so that the plain walk does not carry its size.
+    /// a small iterator; any other - a Room with an unlocked door among them - walks `texts_with_exclusions`, without the
+    /// exclusions (which only the layers read), boxed so that the plain walk does not carry its size.
     #[inline]
     pub fn texts<'a>(&self, s: &'a GameState, obj: &'a Obj) -> impl Iterator<Item = CardId> + use<'a> {
-        Self::texts_of(s, obj, self.current(obj))
+        self.texts_of(s, obj, self.current(obj))
+    }
+
+    /// The unlocked doors of `obj` when `card` is the Room it has (CR 709.5), left first: none for any other card, and
+    /// none for a Room with no unlocked designation (any Room off the battlefield, CR 709.5c), which costs one test.
+    #[inline]
+    pub fn unlocked_door_ids(&self, obj: &Obj, card: CardId) -> [Option<CardId>; 2] {
+        let doors = obj.marks.doors;
+        let halves = if doors == 0 { None } else { self.halves.get(card.0 as usize).copied().flatten() };
+        halves.map_or([None, None], |(l, r)| [Some(l).filter(|_| doors & DOOR_LEFT != 0), Some(r).filter(|_| doors & DOOR_RIGHT != 0)])
     }
 
     /// The same text walk when the current definition is already known, preserving component and CDA exclusions.
     #[inline]
-    pub fn texts_of<'a>(s: &'a GameState, obj: &'a Obj, card: CardId) -> impl Iterator<Item = CardId> + use<'a> {
+    pub fn texts_of<'a>(&self, s: &'a GameState, obj: &'a Obj, card: CardId) -> impl Iterator<Item = CardId> + use<'a> {
+        Self::texts_with_doors(s, obj, card, self.unlocked_door_ids(obj, card))
+    }
+
+    /// `texts_of` with the Room's unlocked doors given (`unlocked_door_ids`), for a reader with no card table to find
+    /// them in, which passes none (`[None, None]`) and so reads no door's rules.
+    #[inline]
+    pub fn texts_with_doors<'a>(s: &'a GameState, obj: &'a Obj, card: CardId, doors: [Option<CardId>; 2]) -> impl Iterator<Item = CardId> + use<'a> {
         let copy = obj.copy.as_ref().filter(|_| obj.marks.face_down_as.is_none());
         let sources = copy.filter(|c| c.merged != 0).map_or(&[][..], |c| s.merged_sources(c));
-        if no_exception_texts(copy, sources) {
+        // A Room with an unlocked door is rare, and takes the full walk, so the plain one stays as small as it was.
+        if no_exception_texts(copy, sources) && doors == [None, None] {
             Texts::Own(std::iter::once(card).chain(sources.iter().map(|v| v.card)))
         } else {
-            let all: Box<dyn Iterator<Item = CardId> + 'a> = Box::new(Self::texts_with_exclusions(s, card, copy).map(|(card, _, _)| card));
+            let all: Box<dyn Iterator<Item = CardId> + 'a> = Box::new(Self::texts_with_exclusions(s, card, doors, copy).map(|(card, _, _)| card));
             Texts::Excepted(all)
         }
     }
 
     /// The same text walk with its component of origin and CR 707.9d exclusions. An exception text belongs to the
-    /// component whose values acquired it, not the card defining the quoted ability. No state beyond copiable values.
-    fn texts_with_exclusions<'a>(s: &'a GameState, card: CardId, copy: Option<&'a Copiable>) -> impl Iterator<Item = (CardId, Option<CardId>, CdaExclusions)> + use<'a> {
+    /// component whose values acquired it, not the card defining the quoted ability. No state beyond copiable values and a
+    /// Room's unlocked `doors`, which are the object's own text (no component's) and copy no exclusion of a copy's
+    /// characteristic-defining abilities (`CardDef::door_unsupported` refuses a door that has one).
+    fn texts_with_exclusions<'a>(s: &'a GameState, card: CardId, doors: [Option<CardId>; 2], copy: Option<&'a Copiable>) -> impl Iterator<Item = (CardId, Option<CardId>, CdaExclusions)> + use<'a> {
         let sources = copy.filter(|c| c.merged != 0).map_or(&[][..], |c| s.merged_sources(c));
         let excluded = copy.map_or(CdaExclusions::NONE, Copiable::excluded_cdas);
         let merged_excluded = copy.map_or(CdaExclusions::NONE, Copiable::merged_excluded_cdas);
@@ -5751,7 +5706,7 @@ impl CardTable {
             std::iter::once((v.card, Some(v.card), v.excluded_cdas().union(merged_excluded)))
                 .chain(v.extra_texts_with_exclusions().map(move |(card, excluded)| (card, Some(v.card), excluded.union(merged_excluded))))
         });
-        let own = std::iter::once((card, None, excluded)).chain(components);
+        let own = std::iter::once((card, None, excluded)).chain(doors.into_iter().flatten().map(|door| (door, None, CdaExclusions::NONE))).chain(components);
         match copy.filter(|c| c.extra_abilities[0].instances > 0) {
             None => Texts::Own(own),
             Some(c) => Texts::Excepted(own.chain(c.extra_texts_with_exclusions().map(|(card, excluded)| (card, None, excluded)))),
@@ -5769,7 +5724,7 @@ impl CardTable {
         let copy = obj.copy.as_ref().filter(|_| obj.marks.face_down_as.is_none());
         let sources = copy.filter(|c| c.merged != 0).map_or(&[][..], |c| s.merged_sources(c));
         let card = self.current(obj);
-        if no_exception_texts(copy, sources) {
+        if no_exception_texts(copy, sources) && obj.marks.doors == 0 {
             Texts::Own(std::iter::once((card, None)).chain(sources.iter().map(move |v| (v.card, Some(self.component_link(s, id, v.card))))))
         } else {
             let all: Box<dyn Iterator<Item = (CardId, Option<Linked>)> + 'a> =
@@ -5789,7 +5744,7 @@ impl CardTable {
     /// The same walk for the values the layers are judging, including a face-down permanent as it would be face up
     /// (CR 708.8). This changes no row: the layers supply the effective primary card and copy values they already use.
     pub fn texts_linked_with_exclusions_of<'a>(&'a self, s: &'a GameState, id: ObjectId, card: CardId, copy: Option<&'a Copiable>) -> impl Iterator<Item = (CardId, Option<Linked>, CdaExclusions)> + use<'a> {
-        Self::texts_with_exclusions(s, card, copy).map(move |(card, component, excluded)| {
+        Self::texts_with_exclusions(s, card, self.unlocked_door_ids(s.obj(id), card), copy).map(move |(card, component, excluded)| {
             (card, component.map(|c| self.component_link(s, id, c)), excluded)
         })
     }
