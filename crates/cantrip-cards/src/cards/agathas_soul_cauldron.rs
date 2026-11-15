@@ -32,8 +32,7 @@ fn exile_card(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let creature = g.chars(card).is(CardType::Creature);
     let moved = g.exile_with(&[card], g.linked(item), false);
     if creature && moved.first().is_some_and(|&c| g.obj(c).zone.is(ZoneKind::Exile)) {
-        let me = g.obj(item.object).card;
-        g.reflexive_trigger(item.object, item.controller, AbilityRef::delayed(me, 0), Target::None);
+        g.reflexive_trigger(item.object, item.controller, AbilityRef::delayed(item.ability.card, 0), Target::None);
     }
     Ok(())
 }
