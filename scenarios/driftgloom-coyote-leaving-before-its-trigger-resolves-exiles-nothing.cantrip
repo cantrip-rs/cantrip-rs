@@ -1,0 +1,57 @@
+# CR 610.3c: with the Coyote already gone when its trigger resolves, Bot2's Grizzly Bears is not exiled at all (and there is no Coyote to put a counter on). Bot2 answers the trigger
+# with Swords to Plowshares on the Coyote.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Plains
+Black Lotus
+Driftgloom Coyote
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Forest
+Mox Pearl
+Mox Emerald
+Grizzly Bears
+Swords to Plowshares
+Forest
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Driftgloom Coyote.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Driftgloom Coyote)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile = Driftgloom Coyote
+Bot1.Life = 23
+Bot2.Battlefield = Forest; Mox Pearl; Mox Emerald; Grizzly Bears
