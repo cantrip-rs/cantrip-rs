@@ -1,0 +1,65 @@
+# Fecund Greenshell (4/6 Reach, {3}{G}{G}): "Whenever this creature or another creature you control with toughness greater than its
+# power enters, look at the top card of your library. If it's a land card, you may put it onto the battlefield tapped. Otherwise,
+# put it into your hand." Black Lotus ({G}{G}{G}), Mox Emerald and Mox Jet pay for it on turn 1 (the Mox Pearl pays for the
+# next creature). The Greenshell itself enters (toughness 6 > power 4) and the Forest on top is put onto the battlefield tapped
+# (accepted). Devoted Hero (1/2: toughness greater by one) enters and the next Forest is declined: it goes into the hand,
+# not back on top (Bloomburrow release notes: "If the top card of your library is a land card, you may choose to put it into your
+# hand rather than onto the battlefield tapped"). Memnite (1/1, toughness equal to power) does not trigger it: the Lightning Bolt
+# stays on top.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Pearl
+Fecund Greenshell
+Devoted Hero
+Memnite
+Forest
+Forest
+Lightning Bolt
+Island x2
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fecund Greenshell.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Battlefield.Forest.Tapped = true
+? Bot1.Library = Forest; Lightning Bolt; Island; Island
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Devoted Hero.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Hand = Memnite; Forest
+? Bot1.Library = Lightning Bolt; Island; Island
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Fecund Greenshell.Keywords = Reach
+Bot1.Battlefield.Devoted Hero.Power = 1
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Library = Lightning Bolt; Island; Island
+Bot1.Hand = Forest

@@ -1,0 +1,47 @@
+# Fecund Greenshell: when it enters (toughness 6 > power 4) the top card, Lightning Bolt, is not a land card, so "Otherwise, put it
+# into your hand" (CR 608.2c) and the Bolt is in Bot1's hand. "Another creature you control": on turn 2 Bot2's Triton Shorethief (1/2,
+# toughness greater than power) enters, and Bot1's Greenshell does not trigger, so Bot1's Island on top of the library stays there.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Fecund Greenshell
+Island x3
+Lightning Bolt
+Island x2
+
+[Bot2 Deck]
+Island
+Triton Shorethief
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fecund Greenshell.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Island; Island; Island; Lightning Bolt
+? Bot1.Library = Island; Island
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Triton Shorethief.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Triton Shorethief.Power = 1
+Bot1.Hand = Island; Island; Island; Lightning Bolt
+Bot1.Library = Island; Island

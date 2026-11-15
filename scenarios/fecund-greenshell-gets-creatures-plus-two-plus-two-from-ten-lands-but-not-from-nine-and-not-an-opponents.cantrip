@@ -1,0 +1,84 @@
+# Fecund Greenshell (4/6): "As long as you control ten or more lands, creatures you control get +2/+2" (CR 604.1, 613.4c). Turn 1:
+# Lotus, Emerald and Jet pay for the Greenshell, Pearl for Devoted Hero (1/2), and each enters trigger puts a Forest onto the battlefield
+# tapped: two lands. A Forest played every turn from turn 3 makes nine lands on turn 15: the Greenshell is still 4/6 and the Hero 1/2
+# (one land short). The tenth Forest, on turn 17, makes the Greenshell 6/8 and the Hero 3/4, while Bot2's Triton Shorethief (1/2,
+# its controller has two lands) is unchanged: the static pumps only creatures its controller controls.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Pearl
+Fecund Greenshell
+Devoted Hero
+Forest
+Forest x10
+Island x3
+
+[Bot2 Deck]
+Island
+Triton Shorethief
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fecund Greenshell.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Devoted Hero.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Battlefield.Count = 7
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Triton Shorethief.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T11 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T13 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T15 Bot1.Main1]
+Bot1.Hand.Forest.Play
+? Bot1.Battlefield.Count = 14
+? Bot1.Battlefield.Fecund Greenshell.Power = 4
+? Bot1.Battlefield.Fecund Greenshell.Toughness = 6
+? Bot1.Battlefield.Devoted Hero.Power = 1
+? Bot1.Battlefield.Devoted Hero.Toughness = 2
+[T17 Bot1.Main1]
+Bot1.Hand.Forest.Play
+? Bot1.Battlefield.Count = 15
+? Bot2.Battlefield.Triton Shorethief.Power = 1
+? Bot2.Battlefield.Triton Shorethief.Toughness = 2
+
+[Expect]
+Bot1.Battlefield.Fecund Greenshell.Power = 6
+Bot1.Battlefield.Fecund Greenshell.Toughness = 8
+Bot1.Battlefield.Devoted Hero.Power = 3
+Bot1.Battlefield.Devoted Hero.Toughness = 4
+Bot2.Battlefield.Triton Shorethief.Power = 1
+Bot2.Battlefield.Triton Shorethief.Toughness = 2

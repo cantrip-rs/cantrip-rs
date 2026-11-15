@@ -1,0 +1,60 @@
+# Fecund Greenshell triggers only when a creature "enters" (CR 603.6a), not on any other zone change. On turn 1 the Greenshell and Devoted
+# Hero (1/2) enter and put two Forests onto the battlefield. On turn 3 Bot1 exiles its own Hero with Swords to Plowshares: the Hero
+# leaves the battlefield, which is not an entering, so the top card of the library (Island) is not looked at or moved: it stays on top
+# and the hand holds only the Forest drawn for the turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Pearl
+Fecund Greenshell
+Devoted Hero
+Swords to Plowshares
+Forest
+Forest
+Forest
+Island x2
+Lightning Bolt
+Island x5
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fecund Greenshell.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Devoted Hero.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T3 Bot1.Main1]
+? Bot1.Library = Island; Island; Lightning Bolt; Island; Island; Island; Island; Island
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Devoted Hero)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+
+[Expect]
+Exile = Devoted Hero
+Bot1.Hand = Forest
+Bot1.Library = Island; Island; Lightning Bolt; Island; Island; Island; Island; Island
