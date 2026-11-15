@@ -1,0 +1,84 @@
+# Blacksmith's Talent. Turn 1: the Class enters (level 1) and makes a Sword token (CR 111.4, 301.5); at beginning of combat nothing
+# triggers yet (level 2 not reached), so Memnite stays a 1/1. The Sword is equipped to Memnite for {2} (a 2/2). Turn 3: level 2
+# ({2}{R}), then at the beginning of combat the trigger attaches the Sword to Memnite again: nothing to move, still a 2/2, it
+# attacks for 2 (Bot2 18) with no double strike or haste (level 3 not reached). Turn 5: level 3 ({3}{R}); the equipped Memnite has
+# double strike and haste during Bot1's turn only, and hits for 4 (Bot2 14). On turn 6 (Bot2's turn) the static does not apply.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Blacksmith's Talent
+Memnite
+Island
+Island x12
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Blacksmith's Talent.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sword.Token = true
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Sword.Activate(Bot1.Battlefield.Memnite; Ability: Equip)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Blacksmith's Talent.Activate(Ability: Level 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Blacksmith's Talent.ClassLevel = 2
+[T3 Bot1.BeginCombat]
+Bot1.Target(Sword)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+Bot1.Attack(Memnite > Bot2)
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+[T4 Bot2.Main1]
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Blacksmith's Talent.Activate(Ability: Level 3)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Blacksmith's Talent.ClassLevel = 3
+? Bot1.Battlefield.Memnite.Keywords = DoubleStrike; Haste
+[T5 Bot1.BeginCombat]
+Bot1.Target(Sword)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Memnite > Bot2)
+[T6 Bot2.Main1]
+? Bot2.Life = 14
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 2

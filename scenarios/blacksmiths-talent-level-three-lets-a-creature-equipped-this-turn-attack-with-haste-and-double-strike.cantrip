@@ -1,0 +1,57 @@
+# Blacksmith's Talent. Turn 5, level 3: Memnite is cast this turn, so without haste it could not attack (CR 302.6), and the key below still reads it as having come under control this turn; but the beginning-of-combat
+# trigger attaches the Sword to it and the Sword's wielder has double strike and haste during Bot1's turn (CR 702.10): it attacks as a
+# 2/2 double striker for 4 (Bot2 16). Level 3 was reached by paying for each level in turn.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Blacksmith's Talent
+Memnite
+Island x13
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Blacksmith's Talent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Blacksmith's Talent.Activate(Ability: Level 2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Blacksmith's Talent.Activate(Ability: Level 3)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.SummoningSick = true
+[T5 Bot1.BeginCombat]
+Bot1.Target(Sword)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Memnite > Bot2)
+[T6 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 16

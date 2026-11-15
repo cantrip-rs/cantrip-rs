@@ -1,0 +1,38 @@
+# Blacksmith's Talent. At level 1 (CR 716.2a) its beginning-of-combat ability does not exist yet: at Bot1's beginning of combat on turn 1
+# nothing triggers, so Bot1 is not asked for targets, and the Sword and the creature stay as they were. Bot1 holds priority in the step
+# (a mana ability, which does not use the stack) so the stack is read once any trigger would have been put on it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Blacksmith's Talent
+Memnite
+Island x13
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Blacksmith's Talent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Battlefield.Mox Pearl.Activate
+? Stack.Count = 0
+? Bot1.Battlefield.Memnite.Power = 1
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
