@@ -1,0 +1,50 @@
+# Lava Burst's damage to a player can be prevented (its ruling: only damage to a creature can't be). Bot1 casts Lava Burst
+# with X 4 at Bot2, paying exactly {4}{R}; Bot2 answers with Healing Salve's "prevent the next 3 damage" on itself, and loses
+# only the 1 left. Lava Burst can target an opponent, but not a noncreature artifact: "any target" is a creature, player,
+# planeswalker or battle (CR 115.4).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Lava Burst
+Island x10
+
+[Bot2 Deck]
+Mox Pearl
+Healing Salve
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.Lava Burst.Cast(Bot2.Battlefield.Mox Pearl)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Hand.Lava Burst.Cast(Bot2; X: 4)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Healing Salve.Cast
+Bot2.Modes(Prevent the next 3 damage)
+Bot2.Target(Bot2)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Graveyard = Lava Burst

@@ -1,0 +1,69 @@
+# Lava Burst's damage to a creature can't be dealt instead to another permanent or player; its damage to a player can (its
+# rulings; CR 614.9). Bot1 casts Lava Burst with X 1 at its own Ornithopter, and Bot2 answers with Reverberation ("all damage
+# that would be dealt this turn by target sorcery spell is dealt to that spell's controller instead"): the Ornithopter is
+# dealt the 1 damage and Bot1 none. Bot1's second Lava Burst, X 2 at Bot2, meets a second Reverberation and is dealt to
+# Bot1 instead.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Jet
+Mox Jet
+Ornithopter
+Lava Burst
+Lava Burst
+Island x10
+
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Reverberation
+Reverberation
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Lava Burst.Cast(Bot1.Battlefield.Ornithopter; X: 1)
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Hand.Reverberation.Cast(Stack.Lava Burst)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Ornithopter.Damage = 1
+? Bot1.Life = 20
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Hand.Lava Burst.Cast(Bot2; X: 2)
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Reverberation.Cast(Stack.Lava Burst)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Damage = 1
+Bot1.Life = 18
+Bot2.Life = 20
