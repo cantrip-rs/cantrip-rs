@@ -2529,6 +2529,17 @@ pub fn return_this_card_with_finality(g: &mut dyn Game, item: &StackItem) -> Res
     Ok(())
 }
 
+/// "Return target card from your graveyard to the battlefield with a finality counter on it" (CR 400.7, 122.6, 614.1c): the
+/// first target, put onto the battlefield under its controller's control with the counter already on it, so it is exiled
+/// instead of dying (CR 122.1h). Nothing if the target is gone (CR 608.2b), which also reads "up to one target" with none
+/// chosen. Rite of the Moth and Yuna, Hope of Spira print it.
+pub fn return_target_card_with_finality(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(card) = crate::targets::object(g, item, 0) {
+        g.put_onto_battlefield_with_counters(card, item.controller, false, &[(CounterKind::Finality, 1)])?;
+    }
+    Ok(())
+}
+
 /// "Return this card from your graveyard to the battlefield tapped" (CR 400.7): `return_this_card_to_battlefield`, entering
 /// tapped. Otharri, Suns' Glory and Teacher's Pest print it.
 pub fn return_this_card_to_battlefield_tapped(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
