@@ -1,0 +1,50 @@
+# Attack-in-the-Box (2/4): "Whenever this creature attacks, you may have it get +4/+0 until end of turn. If you do, sacrifice it
+# at the beginning of the next end step." (CR 608.2d, 611.2a, 603.7). Turn 1 three Moxen pay for it. Turn 3 it attacks and Bot1
+# accepts: it is a 6/4 (toughness unchanged), hits Bot2 for 6, is still on the battlefield in the second main phase, and is
+# sacrificed at the beginning of the end step.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Attack-in-the-Box
+Plains
+Island
+Swamp
+Island x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Attack-in-the-Box.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Attack-in-the-Box.Power = 2
+Bot1.Pass
+Bot1.Attack(Attack-in-the-Box > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Attack-in-the-Box.Power = 6
+? Bot1.Battlefield.Attack-in-the-Box.Toughness = 4
+[T3 Bot1.Main2]
+? Bot2.Life = 14
+? Bot1.Battlefield.Attack-in-the-Box.Power = 6
+[T4 Bot2.Main1]
+? Bot1.Graveyard = Attack-in-the-Box
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl
+Bot1.Graveyard = Attack-in-the-Box
+Bot2.Life = 14

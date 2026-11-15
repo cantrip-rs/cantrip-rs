@@ -1,0 +1,44 @@
+# Attack-in-the-Box: "you may have it get +4/+0 until end of turn. If you do, sacrifice it..." Bot1 declines the "may": the
+# creature stays a 2/4, deals only 2, and nothing is sacrificed at the end step - it is still on the battlefield on turn 4.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Attack-in-the-Box
+Plains
+Island
+Swamp
+Island x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Attack-in-the-Box.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot1.Attack(Attack-in-the-Box > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Attack-in-the-Box.Power = 2
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Attack-in-the-Box.Power = 2
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Attack-in-the-Box
+Bot1.Graveyard = 
+Bot2.Life = 18

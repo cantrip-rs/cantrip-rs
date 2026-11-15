@@ -1,0 +1,57 @@
+# Attack-in-the-Box: "...If you do, sacrifice it at the beginning of the next end step." The delayed trigger is about that object
+# (CR 603.7c, 400.7). Turn 3 it attacks, Bot1 accepts (a 6/4, Bot2 takes 6); in the second main phase Bot1 Unsummons it and recasts
+# it with Black Lotus: the new Attack-in-the-Box is a 2/4 the end step leaves alone, and it is still on the battlefield on turn 4.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Attack-in-the-Box
+Mox Sapphire
+Unsummon
+Black Lotus
+Island x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Attack-in-the-Box.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot1.Attack(Attack-in-the-Box > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 14
+? Delayed.Count = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unsummon.Cast(Bot1.Battlefield.Attack-in-the-Box)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Attack-in-the-Box.Power = 2
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Attack-in-the-Box.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Attack-in-the-Box.Power = 2
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Attack-in-the-Box.Power = 2
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Mox Sapphire; Attack-in-the-Box
+Bot1.Graveyard = Black Lotus; Unsummon
+Bot2.Life = 14
