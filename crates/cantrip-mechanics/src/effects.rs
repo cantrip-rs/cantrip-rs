@@ -3272,3 +3272,23 @@ pub fn gain_control_of_target_while_source_on_battlefield(g: &mut dyn Game, item
     g.gain_control(item.object, creature, item.controller, Duration::WhileSourceOnBattlefield);
     Ok(())
 }
+
+/// "Unlock a locked door of [a Room]" (CR 709.5f): `player` chooses a locked half of the Room as the effect happens, named as the
+/// halves are, which is no choice at all with one locked half; a Room that entered with neither half cast has both locked (CR
+/// 709.5d). The chosen door is unlocked by `player`, so "when you unlock this door" sees them (CR 709.5h). Nothing if the Room has
+/// no locked door left. Ghostly Dancers and Ghostly Keybearer print it.
+pub fn unlock_a_locked_door(g: &mut dyn Game, player: PlayerId, source: ObjectId, room: ObjectId) -> Result<(), Suspend> {
+    let Some((left, right)) = g.card(g.chars(room).card).split else { return Ok(()) };
+    let unlocked = g.obj(room).marks.doors;
+    let locked: Vec<(u8, &'static CardDef)> = [(DOOR_LEFT, left), (DOOR_RIGHT, right)].into_iter().filter(|&(door, _)| unlocked & door == 0).collect();
+    let door = match locked.as_slice() {
+        [] => return Ok(()),
+        [(only, _)] => *only,
+        _ => {
+            let labels = locked.iter().map(|&(_, half)| Label::Name(g.card_id(half))).collect();
+            locked[crate::choose::one_of(g, player, source, labels)? as usize].0
+        }
+    };
+    g.unlock_door(room, door, player);
+    Ok(())
+}
