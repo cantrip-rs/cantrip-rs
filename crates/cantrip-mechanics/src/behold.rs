@@ -49,6 +49,15 @@ pub fn beheld(item: &StackItem) -> bool {
     item.paid > 0
 }
 
+/// "The power of the creature you chose or the card you revealed" (CR 701.4a, 601.2h, 608.2h, 707.10): the power of the creature
+/// the spell's behold additional cost chose, as it last existed on the battlefield, or of the card it revealed from the hand, as the
+/// card has it; 0 where nothing was beheld or its power is negative. A copy uses the original spell's choice. Monstrous Emergence
+/// prints it.
+pub fn beheld_power(q: &dyn Query, spell: ObjectId) -> u32 {
+    q.history().spell_cost_objects(spell, CostOrigin::PrintedAdditional, 0, CostPart::Behold)
+        .next().map_or(0, |beheld| q.chars(beheld).power.unwrap_or(0).max(0) as u32)
+}
+
 /// A Dragon, read through the words of the card whose text says it (CR 612): a permanent or a card in a hand.
 pub fn dragon(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
     q.chars(id).has_subtype(q.words(asker.source).subtype(Subtype::Dragon))
