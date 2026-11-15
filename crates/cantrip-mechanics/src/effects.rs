@@ -2295,6 +2295,12 @@ pub fn may_mill_a_card(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
     may_mill(g, item, 1)
 }
 
+/// "You may mill two cards" (CR 701.17a, 701.17b): `may_mill` of two cards, for an ability's whole effect. Dread Osseosaur
+/// (Visage of Dread) and Hedge Shredder print it.
+pub fn may_mill_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    may_mill(g, item, 2)
+}
+
 /// "You may [do something with] this card" (CR 113.6k): `ask_may` for a card that triggered from a zone it
 /// functions in, asked only while the card is still the object that triggered (CR 400.7). Once it has left, nothing is asked
 /// and the answer is no. Squee, Goblin Nabob and Vengevine ("you may return this card from your graveyard") and Creeping
