@@ -4,8 +4,8 @@
 //!
 //! The "enters tapped" part of a land is `mana::enters_tapped`, `mana::enters_tapped_unless_pay_two_life` (shock lands) or
 //! `enters_tapped_unless_you_control`, `enters_tapped_unless_you_control_three_or_more_other`,
-//! `enters_tapped_unless_you_control_either`, `enters_tapped_unless_you_reveal` or
-//! `enters_tapped_unless_opponents_control` or `enters_tapped_unless_two_or_more_opponents` below; the card sets it in `enters`.
+//! `enters_tapped_unless_you_control_either`, `enters_tapped_unless_you_reveal`,
+//! `enters_tapped_unless_opponents_control`, `enters_tapped_unless_a_player_has_life_at_most` or `enters_tapped_unless_two_or_more_opponents` below; the card sets it in `enters`.
 
 use crate::library::{ask_may_search, find_to_battlefield, find_to_hand, find_to_top, search_to_battlefield, Find};
 use crate::select;
@@ -193,6 +193,17 @@ pub fn enters_tapped_unless_opponents_control<const N: usize>(g: &mut dyn Game, 
         .filter(|&id| g.obj(id).became.is_none() && g.chars(id).is(CardType::Land))
         .count();
     if lands < N {
+        entering.tapped = true;
+    }
+    Ok(())
+}
+
+/// "This land enters tapped unless a player has N or less life" (CR 614.1d, 614.12): any player still in the game, its own
+/// controller included, at the life total each has as the land enters (CR 119.1). The ten Duskmourn dual lands print it with
+/// N = 13 (Abandoned Campground, Bleeding Woods, Etched Cornfield, Lakeside Shack, Murky Sewer, Neglected Manor, Peculiar
+/// Lighthouse, Raucous Carnival, Razortrap Gorge, Strangled Cemetery).
+pub fn enters_tapped_unless_a_player_has_life_at_most<const N: i32>(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
+    if !g.state().apnap().any(|player| g.state().player(player).life <= N) {
         entering.tapped = true;
     }
     Ok(())
