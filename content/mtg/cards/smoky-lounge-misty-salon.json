@@ -1,0 +1,18 @@
+{
+  "name": "Smoky Lounge // Misty Salon",
+  "oracleText": "",
+  "halves": [
+    {
+      "name": "Smoky Lounge",
+      "manaCost": "{2}{R}",
+      "type": "Enchantment — Room",
+      "oracleText": "At the beginning of your first main phase, add {R}{R}. Spend this mana only to cast Room spells and unlock doors.\n(You may cast either half. That door unlocks on the battlefield. As a sorcery, you may pay the mana cost of a locked door to unlock it.)"
+    },
+    {
+      "name": "Misty Salon",
+      "manaCost": "{3}{U}",
+      "type": "Enchantment — Room",
+      "oracleText": "When you unlock this door, create an X/X blue Spirit creature token with flying, where X is the number of unlocked doors among Rooms you control.\n(You may cast either half. That door unlocks on the battlefield. As a sorcery, you may pay the mana cost of a locked door to unlock it.)"
+    }
+  ]
+}
