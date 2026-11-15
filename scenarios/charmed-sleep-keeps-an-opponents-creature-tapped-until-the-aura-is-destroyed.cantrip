@@ -1,0 +1,51 @@
+# Charmed Sleep {1}{U}{U}: "Enchant creature. When this Aura enters, tap enchanted creature. Enchanted creature doesn't untap
+# during its controller's untap step." Bot1 enchants Bot2's Ornithopter on turn 3: it is tapped as the Aura enters (the trigger
+# resolves), is still tapped after Bot2's turn-4 untap step, and untaps in the turn-6 untap step once Bot2 Disenchants the Aura
+# on turn 4 (CR 502.3: the ban lasts only while the Aura is attached).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Ruby
+Charmed Sleep
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Mox Pearl
+Disenchant
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Island.Play
+? Bot2.Battlefield.Ornithopter.Tapped = false
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Charmed Sleep.Cast(Bot2.Battlefield.Ornithopter)
+? Bot2.Battlefield.Ornithopter.Tapped = false
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Charmed Sleep)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+[T6 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = false
+Bot1.Graveyard = Charmed Sleep
