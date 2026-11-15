@@ -94,8 +94,22 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-164](#ki-164-an-x-paid-in-mana-is-announced-at-most-about-two-billion) | An X paid in mana is announced at most about two billion | Pri-3 | Won't fix: beyond practical scale |
 | [KI-165](#ki-165-a-player-is-offered-at-most-136-actions-effects-let-them-take-at-a-later-time) | A player is offered at most 136 actions effects let them take at a later time | Pri-3 | Won't fix: beyond practical scale |
 | [KI-166](#ki-166-a-player-is-offered-at-most-56-mana-abilities-of-their-own) | A player is offered at most 56 mana abilities of their own | Pri-3 | Won't fix: beyond practical scale |
+| [KI-167](#ki-167-jotun-grunts-graveyard-choice-is-captioned-as-choosing-an-opponent) | Jötun Grunt's graveyard choice is captioned as choosing an opponent | Pri-2 | Open |
 
 ## Issues
+
+### KI-167: Jötun Grunt's graveyard choice is captioned as choosing an opponent
+
+| Priority | Status | Area | Found |
+| --- | --- | --- | --- |
+| Pri-2 | Open | client (`dotnet/src/Cantrip.Client.Web/MainPage.Prompts.cs`) | 2026-11-15, reviewing Night Soil (#3087) |
+
+**Notes.** Jötun Grunt's cumulative upkeep asks which graveyard to put two cards from with a player choice whose verb is
+`PutOnBottom` (`crates/cantrip-mechanics/src/cumulative_upkeep.rs`, the Jötun Grunt payment branch). The web client has no
+caption for that verb, so `FillChoosePlayer` falls through to its default near line 1412: "Jötun Grunt: choose an opponent"
+and "The player you choose PutOnBottom". It is wrong twice: the graveyard may be the payer's own, and the verb key shows raw.
+A fix gives the verb its own caption ("choose a graveyard to put two cards from on the bottom of their owner's library").
+Display only.
 
 ### KI-166: A player is offered at most 56 mana abilities of their own
 
