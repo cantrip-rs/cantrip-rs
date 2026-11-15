@@ -1,0 +1,48 @@
+# Hive of the Eye Tyrant's animation grants "Whenever this creature attacks, exile target card from defending player's
+# graveyard", an ability of the card whose ability resolves (CR 613.1f), the card a copy copies (CR 707.2). Bot1's
+# Vesuva enters as a copy of Bot2's Hive on turn 3; animated on turn 5, it attacks and exiles the Island Bot2 discarded.
+
+[Bot1 Deck]
+Swamp
+Mox Ruby
+Mox Jet
+Mox Pearl
+Vesuva
+Island x20
+
+[Bot2 Deck]
+Hive of the Eye Tyrant
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Hive of the Eye Tyrant.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Vesuva.Play
+Bot1.Accept
+Bot1.Target(Bot2.Battlefield.Hive of the Eye Tyrant)
+[T5 Bot1.Main1]
+? Bot2.Graveyard = Island
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Hive of the Eye Tyrant.Activate(Ability: Until end of turn)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Hive of the Eye Tyrant > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot2.Life = 17
+Bot2.Graveyard.Count = 0
+Exile = Island

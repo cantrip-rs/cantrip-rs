@@ -7,7 +7,6 @@ use cantrip_oracle as oracle;
 /// type are the ones its own text has now (CR 612). Each activation grants its own instance of the trigger (the ruling).
 fn becomes_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let me = item.object;
-    let card = g.obj(me).card;
     let words = g.words(me);
     let animation = Animation {
         power: 3,
@@ -18,7 +17,7 @@ fn becomes_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         all_creature_types: false,
         replaces_creature_types: false,
         keywords: Keywords::of(&[Keyword::Menace]),
-        ability: Some(AbilityRef::delayed(card, 0)),
+        ability: Some(AbilityRef::delayed(item.ability.card, 0)),
     };
     animate(g, me, me, &animation, Duration::EndOfTurn);
     Ok(())
