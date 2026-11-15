@@ -1,0 +1,11 @@
+{
+  "name": "Intruding Soulrager",
+  "manaCost": "{U}{R}",
+  "type": "Creature — Spirit",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Vigilance\n{T}, Sacrifice a Room: This creature deals 2 damage to each opponent. Draw a card.",
+  "keywords": [
+    "Vigilance"
+  ]
+}

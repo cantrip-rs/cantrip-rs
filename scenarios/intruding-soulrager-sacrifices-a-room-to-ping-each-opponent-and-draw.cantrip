@@ -1,0 +1,49 @@
+# Intruding Soulrager: "Vigilance. {T}, Sacrifice a Room: This creature deals 2 damage to each opponent. Draw a card."
+# (CR 702.20, 602.2, 701.21, 120.3, 121.1). Turn 1 it is summoning sick, so the {T} cost is out of reach (CR 302.6). Turn 3
+# it attacks and, with vigilance, is still untapped, so it can pay {T} in the declare attackers step; the Room goes to the
+# graveyard beside the Black Lotus (the only Room, so no choice is asked), Bot2 takes 2 (20 to 18, before combat damage) and Bot1 draws.
+
+[Bot1 Deck]
+Black Lotus
+Roaring Furnace // Steaming Sauna
+Mox Sapphire
+Mox Ruby
+Intruding Soulrager
+Mox Pearl
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Roaring Furnace // Steaming Sauna.Cast(Ability: Roaring Furnace)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Intruding Soulrager.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Intruding Soulrager.Activate
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 3
+Bot1.Attack(Intruding Soulrager > Bot2)
+? Bot1.Battlefield.Intruding Soulrager.Tapped = false
+Bot1.Battlefield.Intruding Soulrager.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Hand.Count = 4
+Bot1.Graveyard = Roaring Furnace // Steaming Sauna; Black Lotus
+Bot1.Battlefield.Intruding Soulrager.Tapped = true
