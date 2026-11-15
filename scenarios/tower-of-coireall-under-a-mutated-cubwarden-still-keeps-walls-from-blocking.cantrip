@@ -1,0 +1,72 @@
+# Tower of Coireall's "{T}: Target creature can't be blocked by Walls this turn" makes a rule of Tower's card, whatever
+# the object it resolves for has become (CR 113.7a). Animate Artifact makes Tower a 2/2 artifact creature on turn 1, and
+# on turn 3 Cubwarden mutates over it, on top (CR 702.140c): the merged creature is a Cubwarden, no artifact (the Aura
+# falls off, CR 704.5m), with Tower's ability too (CR 702.140e). On turn 5 the merged creature taps for it, targeting a
+# Cat token, and Bot2's Wall of Wood cannot block that Cat: Bot2 takes 1 and Bot1 gains 1 from its lifelink.
+
+[Bot1 Deck]
+Tower of Coireall
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Black Lotus
+Animate Artifact
+Plains
+Cubwarden
+Island x14
+
+[Bot2 Deck]
+Forest
+Wall of Wood
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tower of Coireall.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Animate Artifact.Cast(Tower of Coireall)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tower of Coireall.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Wall of Wood.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cubwarden.Cast(Tower of Coireall; Ability: Mutate)
+Bot1.Pass
+Bot1.Modes(1)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Cubwarden.Types = Creature
+[T5 Bot1.Main1]
+Bot1.Battlefield.Cubwarden.Activate(Cat Token#1; Ability: Walls)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Cat Token#1 > Bot2)
+! Bot2.Block(Wall of Wood > Cat Token)
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot2.Life = 19
+Bot1.Life = 21
+Bot1.Battlefield.Cubwarden.Tapped = true

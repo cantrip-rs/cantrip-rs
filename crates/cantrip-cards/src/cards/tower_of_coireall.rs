@@ -8,16 +8,8 @@ fn target_creature_cant_be_blocked(
     item: &StackItem,
 ) -> Result<(), Suspend> {
     let objects_0 = targets::object(g, item, 0);
-    let kind_0_0_0 = {
-        let q: &dyn Query = g;
-        EffectKind::BlockRestriction {
-            card: {
-                let o = q.state().obj(item.object);
-                o.copied_card().unwrap_or(o.card)
-            },
-            index: 0,
-        }
-    };
+    // The rule Tower's card lists, whatever card the object it resolves for has now (a merged creature's top, CR 702.140e).
+    let kind_0_0_0 = EffectKind::BlockRestriction { card: item.ability.card, index: 0 };
     instruction(
         g,
         |g| {
