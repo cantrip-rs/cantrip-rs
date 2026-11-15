@@ -1699,6 +1699,14 @@ pub fn scry(g: &mut dyn Game, item: &StackItem, n: usize) -> Result<(), Suspend>
     crate::scry(g, item.controller, item.object, n)
 }
 
+/// "Scry N, then draw a card" (CR 701.22, 121.1): the scry is done in full, then the card is drawn. Opt, Preordain, Omen of the Sea,
+/// The Legend of Kuruk's chapters and the Shard token print it.
+pub fn scry_then_draw<const N: usize>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    scry(g, item, N)?;
+    g.end_sentence();
+    draw(g, item, 1)
+}
+
 /// "Scry 2" (CR 701.22) for the ability's controller, as a function the ability takes whole. Candy Trail, Giant's Boulder,
 /// Oteclan Landmark, Planetarium of Wan Shi Tong, Simulacrum Synthesizer, Stormwing Entity and Guardian of New Benalia print it.
 pub fn scry_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
