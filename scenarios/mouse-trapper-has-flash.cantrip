@@ -1,0 +1,38 @@
+# Mouse Trapper has flash (CR 702.8a): on Bot2's turn 2, with Bot2's Dwarven Trader on the battlefield, Bot1 casts it from hand with the Moxen it left untapped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mouse Trapper
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Dwarven Trader
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Dwarven Trader.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mouse Trapper.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Mouse Trapper.Power = 3
+Bot1.Battlefield.Mouse Trapper.Toughness = 2
+Bot1.Battlefield.Mouse Trapper.Keywords = Flash

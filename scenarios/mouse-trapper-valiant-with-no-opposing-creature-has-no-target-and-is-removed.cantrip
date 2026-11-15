@@ -1,0 +1,42 @@
+# Mouse Trapper's valiant with no creature an opponent controls: the trigger has no legal target (CR 603.3d) and is removed from the stack, never asking Bot1
+# for one; the Giant Growth still resolves.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Black Lotus
+Mouse Trapper
+Giant Growth
+Giant Growth
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mouse Trapper.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Giant Growth.Cast(Mouse Trapper)
+! Bot1.Target
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mouse Trapper.Power = 6
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Mouse Trapper.Power = 3

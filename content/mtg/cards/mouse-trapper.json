@@ -1,0 +1,11 @@
+{
+  "name": "Mouse Trapper",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Mouse Soldier",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flash\nValiant — Whenever this creature becomes the target of a spell or ability you control for the first time each turn, tap target creature an opponent controls.",
+  "keywords": [
+    "Flash"
+  ]
+}
