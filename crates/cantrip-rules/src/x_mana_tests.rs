@@ -42,6 +42,16 @@ static DRAIN: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+/// Soul Burn's cost and its restriction: "{X}{2}{B} ... Spend only black and/or red mana on X."
+static SOUL: CardDef = CardDef {
+    name: "X Mana Test Soul",
+    cost: mana("{X}{2}{B}"),
+    types: TypeSet::of(&[CardType::Sorcery]),
+    spell: spell(&[], nothing),
+    x_mana: XMana::either(Mana::B, Mana::R),
+    ..CardDef::BLANK
+};
+
 /// Crypt Rats's ability: "{X}: ... Spend only black mana on X."
 static RATS: CardDef = CardDef {
     name: "X Mana Test Rats",
@@ -145,7 +155,7 @@ static WARDEN: CardDef = CardDef { name: "X Mana Test Warden", types: TypeSet::o
 /// Your precombat main phase with priority, nothing anywhere.
 fn game() -> Game {
     let table: &'static CardTable = Box::leak(Box::new(CardTable::new([
-        &SWAMP, &MOUNTAIN, &DRAIN, &RATS, &GOLEM, &REDUCER, &TAXER, &MARCH, &FODDER, &KICKED_RATS, &BEAR, &SAP, &WARDEN,
+        &SWAMP, &MOUNTAIN, &DRAIN, &RATS, &GOLEM, &REDUCER, &TAXER, &MARCH, &FODDER, &KICKED_RATS, &BEAR, &SAP, &WARDEN, &SOUL,
     ])));
     let deck = || vec![table.id_of(&SWAMP); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
@@ -635,4 +645,71 @@ fn the_most_x_of_a_waterbend_cost_counts_what_may_be_tapped_for_it() {
     let r = announce(&mut g, bender);
     // No mana, but each Bear may be tapped for {1} of X (CR 701.67a-b): X 2, as the priority menu judges it.
     assert_eq!(most_x(&g, &r), Some(2));
+}
+
+/// The mana of each type the casting of the one spell cast spent on its X (`Event::SpentOnX`), recorded for the spell it
+/// became on the stack (CR 400.7).
+fn spent_on_x(g: &Game) -> [u32; 6] {
+    let spell = g.history().all().iter().find_map(|rec| match &rec.event {
+        Event::Cast(c) => Some(c.spell),
+        _ => None,
+    });
+    let mut out = [0; 6];
+    for rec in g.history().all() {
+        if let Event::SpentOnX { on, cast: true, mana, n, .. } = rec.event
+            && Some(on) == spell
+        {
+            out[mana as usize] += n;
+        }
+    }
+    out
+}
+
+#[test]
+fn which_mana_pays_x_is_the_payers_choice_and_is_recorded() {
+    let mut g = game();
+    let spell = put(&mut g, &SOUL, Zone::hand(YOU));
+    add_mana(&mut g, &[Mana::B, Mana::B, Mana::B, Mana::B, Mana::R, Mana::G]);
+    let r = announce(&mut g, spell);
+    // {3}{2}{B}: X's three may be three black, or two black and the red - the same mana spent either way, but not the same
+    // mana spent on X (CR 107.3, 601.2h), so the pool is not spent for the payer: they spend it unit by unit.
+    let r = announce_as(&mut g, &r, 3);
+    let r = spend(&mut g, &r, Mana::R);
+    // The red went on X: what is left of it, two, the black alone may pay, so the pool pays the rest its one way.
+    assert!(matches!(r.kind, RequestKind::Priority { .. }), "paid its one way, got {:?}", r.kind);
+    assert_eq!(spent_on_x(&g), [0, 0, 2, 1, 0, 0]);
+}
+
+#[test]
+fn a_pool_that_pays_x_one_way_is_spent_and_records_it() {
+    let mut g = game();
+    let spell = put(&mut g, &DRAIN, Zone::hand(YOU));
+    add_mana(&mut g, &[Mana::B, Mana::B, Mana::R]);
+    let r = announce(&mut g, spell);
+    let r = announce_paid(&mut g, &r, 1);
+    assert!(matches!(r.kind, RequestKind::Priority { .. }), "paid its one way, got {:?}", r.kind);
+    assert_eq!(spent_on_x(&g), [0, 0, 1, 0, 0, 0]);
+}
+
+#[test]
+fn snow_mana_in_the_pool_pays_no_x_only_black_may() {
+    let mut g = game();
+    let spell = put(&mut g, &DRAIN, Zone::hand(YOU));
+    add_mana(&mut g, &[Mana::B, Mana::B]);
+    g.state.add_mana(YOU, Mana::G, 1, ObjectId::NONE, None, ManaLasts::Step, true);
+    let r = announce(&mut g, spell);
+    // {1}{1}{B} from {B}{B} and a snow {G}: black on X and the {B}, the green on {1} - one way, spent at once.
+    let r = announce_paid(&mut g, &r, 1);
+    assert!(matches!(r.kind, RequestKind::Priority { .. }), "paid its one way, got {:?}", r.kind);
+    assert_eq!(spent_on_x(&g), [0, 0, 1, 0, 0, 0]);
+
+    let mut g = game();
+    let spell = put(&mut g, &DRAIN, Zone::hand(YOU));
+    add_mana(&mut g, &[Mana::B, Mana::G]);
+    g.state.add_mana(YOU, Mana::G, 1, ObjectId::NONE, None, ManaLasts::Step, true);
+    let r = announce(&mut g, spell);
+    // {B}{G} and a snow {G} cover three mana, but not X's black: nothing pays the cost for the payer (CR 107.3, 601.2h).
+    let r = announce_paid(&mut g, &r, 1);
+    assert!(matches!(r.kind, RequestKind::PayCosts { announcing: false, .. }), "the cost is not paid, got {:?}", r.kind);
+    assert_eq!(spent_on_x(&g), [0; 6]);
 }

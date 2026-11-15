@@ -14225,6 +14225,46 @@ fn spend(owed: &mut ManaCost, mana: Mana) {
     }
 }
 
+/// One unit of `mana` spent on `owed` as `any` lets it be spent (`AnyMana::spend`), counted in `on_x` where it paid X's part
+/// of a cost whose X only some mana may pay (CR 107.3, 601.2h) - by its own type, whatever it was spent as though it were
+/// (CR 609.4b). X's part is what is left of it once what has paid generic mana instead of mana (`generic_paid`: delve,
+/// improvise, waterbend) and the creatures tapped for convoke have paid theirs (`convoked`), which take X's part first.
+fn spend_noting_x(any: AnyMana, owed: &mut ManaCost, mana: Mana, generic_paid: u32, convoking: &[ColorSet], on_x: &mut [u32; 6]) {
+    if owed.x_mana.is_any() {
+        return any.spend(owed, mana);
+    }
+    let x_left = |owed: &ManaCost| {
+        let mut cost = *owed;
+        cost.generic -= generic_paid.min(cost.generic);
+        convoked(&cost, convoking).x_part()
+    };
+    let before = x_left(owed);
+    any.spend(owed, mana);
+    if x_left(owed) < before {
+        on_x[mana as usize] += 1;
+    }
+}
+
+/// The mana of each type that pays X's part of `due` (CR 107.3, 601.2h) where the pool pays it one way: the one shape X's
+/// part could be paid in (`ManaCost::x_shapes`) that `pays`, nothing where `due` has no such part. `None` where more than
+/// one shape could be paid: which mana pays X is then the payer's choice, made as they spend the mana unit by unit.
+fn x_paid_one_way(due: &ManaCost, pays: impl Fn(&ManaCost) -> bool) -> Option<[u32; 6]> {
+    if due.x_part() == 0 {
+        return Some([0; 6]);
+    }
+    let mut one = None;
+    for shape in due.x_shapes() {
+        if !pays(&shape) {
+            continue;
+        }
+        if one.is_some() {
+            return None;
+        }
+        one = Some(std::array::from_fn(|m| shape.symbols[m] - due.symbols[m]));
+    }
+    one
+}
+
 /// What a payment may spend on a cost's symbols (CR 609.4b): only the mana each asks for, mana as though it were of any
 /// color (Mycosynth Lattice: a colored or hybrid symbol), or mana of any type (Cruelclaw's Heist: {C} too).
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -15105,6 +15145,8 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
     let mut bent: u32 = 0;
     // The mana spent, unit by unit, with the source of each (CR 106.3).
     let mut taken: Vec<(ObjectId, Mana, u32, bool, u32)> = Vec::new();
+    // The mana of each type spent on X's part, where only some mana may pay it (CR 107.3, 601.2h: `Event::SpentOnX`).
+    let mut on_x = [0u32; 6];
     let record = helpers.mana_ability;
     // A mana ability activated again as a take-back keeps it (`takeback`, CR 733.1) pays as it paid then: the same mana
     // abilities activated, the same mana spent, and nothing asked.
@@ -15159,15 +15201,25 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
         let told_mana = told_pools(cx, player, &told);
         let qualified = due.snow > 0 || cx.s().mana_from_of(player).any(|m| m.snow);
         let groups = if qualified && !helpers.no_mana { Some(quality_groups(cx, player, source, helpers.purpose, &told)) } else { None };
+        // Which mana pays X's part, where only some mana may (CR 107.3, 601.2h), is the payer's choice as much as which pays
+        // the rest: the pool pays the cost one way only where it pays X's part one way. Mana spent as though it were another
+        // type pays X as its own type still (CR 609.4b), so a payment that may spend it so has no one way of paying X's part.
+        let x_restricted = left.x_part() > 0 && !left.x_mana.is_any();
+        let x_one_way = |pays: &dyn Fn(&ManaCost) -> bool| {
+            if !x_restricted { Some([0; 6]) } else if any == AnyMana::No { x_paid_one_way(&due, pays) } else { None }
+        };
         if let Some(groups) = &groups {
             decided = Ways::Many;
-            if let Some((plan, true)) = quality_plan(groups, &due).filter(|_| candidates.is_empty() && checkpoint.is_none()) {
+            if let Some((plan, true)) = quality_plan(groups, &due).filter(|_| candidates.is_empty() && checkpoint.is_none())
+                && let Some(x) = x_one_way(&|shape| quality_plan(groups, shape).is_some())
+            {
                 for (group, n) in groups.iter().copied().zip(plan) {
                     if n == 0 { continue; }
                     if take_group(cx, player, group, n, &told, &mut taken, record) != n { return Err(Stop::Cancel); }
                     paid.0[group.mana as usize] += n;
                     if let Some(r) = group.restriction { used |= r.effects(); }
                 }
+                add_on_x(&mut on_x, Some(x));
                 break;
             }
         }
@@ -15201,6 +15253,10 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
                 decided = Ways::Many;
             }
         }
+        let x_paid = if matches!(decided, Ways::One(_)) { x_one_way(&|shape| !matches!(ways(&pool, shape), Ways::None)) } else { None };
+        if matches!(decided, Ways::One(_)) && x_paid.is_none() {
+            decided = Ways::Many;
+        }
         let spend_pool = |cx: &mut Cx, paid: &mut ManaPool, used: &mut u8, taken: &mut Vec<(ObjectId, Mana, u32, bool, u32)>, spent: [u32; 6]| {
             *used |= take_mana(cx, player, source, helpers.purpose, &spent, taken, record);
             for mana in Mana::ALL {
@@ -15212,13 +15268,14 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
         {
             if checkpoint.is_none() {
                 spend_pool(cx, &mut paid, &mut used, &mut taken, spent);
+                add_on_x(&mut on_x, x_paid);
                 break;
             }
             let Some(mana) = Mana::ALL.into_iter().find(|m| spent[*m as usize] > 0) else { break };
             let mut one = [0; 6];
             one[mana as usize] = 1;
             spend_pool(cx, &mut paid, &mut used, &mut taken, one);
-            any.spend(&mut owed, mana);
+            spend_noting_x(any, &mut owed, mana, generic_paid, &convoking, &mut on_x);
             let mut left = owed;
             left.generic -= generic_paid.min(left.generic);
             if !convoked(&left, &convoking).is_zero() {
@@ -15264,7 +15321,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
                         if take_group(cx, player, group, 1, &told, &mut taken, record) != 1 { return Err(Stop::Cancel); }
                         if let Some(r) = action.restriction { used |= r.effects(); }
                         paid.0[mana as usize] += 1;
-                        if action.pay_snow { owed.snow -= 1; } else { any.spend(&mut owed, mana); }
+                        if action.pay_snow { owed.snow -= 1; } else { spend_noting_x(any, &mut owed, mana, generic_paid, &convoking, &mut on_x); }
                         let mut left = owed;
                         left.generic -= generic_paid.min(left.generic);
                         if !convoked(&left, &convoking).is_zero() {
@@ -15289,7 +15346,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
                         }
                     }
                     paid.0[mana as usize] += 1;
-                    any.spend(&mut owed, mana);
+                    spend_noting_x(any, &mut owed, mana, generic_paid, &convoking, &mut on_x);
                     let mut left = owed;
                     left.generic -= generic_paid.min(left.generic);
                     if !convoked(&left, &convoking).is_zero() {
@@ -15299,6 +15356,7 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
                 ActionKind::ConfirmCasting => {
                     let Ways::One(spent) = decided else { return Err(Stop::Cancel) };
                     spend_pool(cx, &mut paid, &mut used, &mut taken, spent);
+                    add_on_x(&mut on_x, x_paid);
                     break;
                 }
                 ActionKind::TapToPay => {
@@ -15357,8 +15415,21 @@ fn pay_mana_inner(cx: &mut Cx, player: PlayerId, source: ObjectId, mut total: Ma
         let cast = helpers.purpose == Paying::Casting && cx.s().obj(source).zone.is(ZoneKind::Stack);
         record_spent(cx, player, source, cast, &taken);
     }
+    if on_x != [0; 6] {
+        let cast = helpers.purpose == Paying::Casting && cx.s().obj(source).zone.is(ZoneKind::Stack);
+        for mana in Mana::ALL.into_iter().filter(|&m| on_x[m as usize] > 0) {
+            cx.record(Event::SpentOnX { player, on: source, cast, mana, n: on_x[mana as usize] });
+        }
+    }
     commit_mana_helpers(cx, source, scope, &mut tapped_to_pay, &mut helper_receipts, &mut delved);
     Ok((paid, used))
+}
+
+/// `x`, the mana of each type a payment made one way spent on X's part (`x_paid_one_way`), added to what it has spent on it.
+fn add_on_x(on_x: &mut [u32; 6], x: Option<[u32; 6]>) {
+    for (spent, n) in on_x.iter_mut().zip(x.unwrap_or_default()) {
+        *spent += n;
+    }
 }
 
 /// Life being paid, as the change to a life total: never more than the payer has (CR 119.4, judged before it is paid), so

@@ -279,6 +279,12 @@ pub enum Event {
     /// `rider` is the "when that mana is spent" delayed ability the mana carried (`ManaFrom::rider`), 0 for none: one event
     /// for each source and rider.
     ManaSpent { player: PlayerId, source: ObjectId, on: ObjectId, cast: bool, mana: ManaTally, snow: u32, rider: u32 },
+    /// Of the mana `player` spent to pay a cost of `on` (as `ManaSpent` says), `n` of the type `mana` paid its X, where only
+    /// some mana may be spent on X ("Spend only black and/or red mana on X", CR 107.3, 601.2h): which mana pays which part
+    /// of a cost is the payer's choice as it is paid, and the mana's own type, not one it was spent as though it were (CR
+    /// 609.4b). One record for each type, after the payment's `ManaSpent`: "the amount of {B} spent on X" (Soul Burn).
+    /// Only recorded.
+    SpentOnX { player: PlayerId, on: ObjectId, cast: bool, mana: Mana, n: u32 },
     /// `creature` convoked `spell` (CR 702.51c): it was tapped to pay for mana in the spell's total cost (CR 702.51a,
     /// 601.2h) as the spell was cast. Recorded as it is tapped, right after its `Tapped`, so a spell's come before its
     /// `Cast`; a tap for mana or for improvise is no convoke. It names the creature and copies nothing out of it: what it
@@ -581,6 +587,7 @@ impl Event {
             | Event::Exerted { player, .. }
             | Event::TappedForMana { player, .. }
             | Event::ManaSpent { player, .. }
+            | Event::SpentOnX { player, .. }
             | Event::BecameMonarch { player }
             | Event::TookInitiative { player }
             | Event::GaveGift { player, .. }
@@ -671,6 +678,7 @@ impl Event {
             Event::Unattached { attachment, from } => attachment == object || from == object,
             Event::Attached { attachment, to } => attachment == object || to == Target::Object(object),
             Event::ManaSpent { source, on, .. } => source == object || on == object,
+            Event::SpentOnX { on, .. } => on == object,
             Event::Convoked { creature, spell } | Event::TappedForTeamwork { creature, spell } => creature == object || spell == object,
             Event::Crewed { creature, vehicle } => creature == object || vehicle == object,
             Event::Saddled { creature, mount } => creature == object || mount == object,
@@ -807,7 +815,7 @@ impl EventMask {
             Event::TurnBegan { .. } => EventMask::TURN_BEGAN,
             Event::DungeonCompleted { .. } => EventMask::DUNGEON_COMPLETED,
             Event::GameLost { .. } | Event::GameDrawn { .. } => EventMask::GAME_OVER,
-            Event::ManaSpent { .. } => EventMask::MANA_SPENT,
+            Event::ManaSpent { .. } | Event::SpentOnX { .. } => EventMask::MANA_SPENT,
             Event::Convoked { .. } => EventMask::CONVOKED,
             Event::Entered { .. } => EventMask::ENTERED,
             Event::Shown { .. } => EventMask::SHOWN,

@@ -193,6 +193,7 @@ fn only_mana(records: &[Record]) -> bool {
         | Event::CountersRemoved { .. }
         | Event::TappedForMana { .. }
         | Event::ManaSpent { .. }
+        | Event::SpentOnX { .. }
         | Event::LifeChange { .. }
         | Event::AbilityActivated { .. }
         | Event::Resolved { .. }
