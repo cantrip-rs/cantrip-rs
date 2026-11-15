@@ -1,0 +1,36 @@
+# Vault Skirge, {1}{B/P}: Bot1 pays the {B/P} with 2 life (CR 107.4f, 601.2b) and the {1} with Mox Ruby. On turn 3 it
+# attacks with flying (CR 702.9b: Bot2's Grizzly Bears can't block it) and lifelink (CR 702.15b): Bot2 loses 1, Bot1 gains 1.
+[Bot1 Deck]
+Mox Ruby
+Vault Skirge
+Island x20
+[Bot2 Deck]
+Forest
+Grizzly Bears
+Mox Emerald
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Vault Skirge.Cast
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Vault Skirge)
+! Bot2.Block(Grizzly Bears > Vault Skirge)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Vault Skirge.Keywords = Flying; Lifelink
+Bot1.Life = 19
+Bot2.Life = 19

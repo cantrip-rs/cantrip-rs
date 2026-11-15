@@ -1,0 +1,12 @@
+{
+  "name": "Vault Skirge",
+  "manaCost": "{1}{B/P}",
+  "type": "Artifact Creature — Phyrexian Imp",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "({B/P} can be paid with either {B} or 2 life.)\nFlying\nLifelink (Damage dealt by this creature also causes you to gain that much life.)",
+  "keywords": [
+    "Flying",
+    "Lifelink"
+  ]
+}
