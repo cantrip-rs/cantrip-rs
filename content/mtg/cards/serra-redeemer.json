@@ -1,0 +1,9 @@
+{
+  "name": "Serra Redeemer",
+  "manaCost": "{3}{W}{W}",
+  "type": "Creature — Angel Soldier",
+  "oracleText": "Flying\nWhenever another creature you control with power 2 or less enters, put two +1/+1 counters on that creature.",
+  "power": 2,
+  "toughness": 4,
+  "keywords": ["Flying"]
+}
