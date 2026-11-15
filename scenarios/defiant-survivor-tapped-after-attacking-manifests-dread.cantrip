@@ -1,0 +1,47 @@
+# Defiant Survivor, Survival: "At the beginning of your second main phase, if this creature is tapped, manifest dread." It is cast on turn 1
+# with three Moxen (the hand is the first seven cards, so turn 3 draws the Island and the library top is Snapcaster Mage then Lightning
+# Bolt), attacks on turn 3 (tapped), and at the second main phase Bot1 manifests dread (CR 701.62a): the Mage goes onto the battlefield
+# face down as a 2/2 (CR 708.2a) and the Bolt into the graveyard. On Bot2's turn 4 the Survivor is still tapped, but it is not Bot1's
+# second main phase (CR 603.2, "your"): nothing is manifested.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Defiant Survivor
+Island x3
+Island
+Snapcaster Mage
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Defiant Survivor.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Defiant Survivor > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Defiant Survivor.Tapped = true
+Bot1.Arrange(Snapcaster Mage | Lightning Bolt)
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Snapcaster Mage
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+[T4 Bot2.Main2]
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 5
+Bot1.Graveyard = Lightning Bolt
+Bot2.Life = 17
+Stack.Count = 0
