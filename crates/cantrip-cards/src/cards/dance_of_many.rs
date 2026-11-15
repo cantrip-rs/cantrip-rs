@@ -2,14 +2,6 @@ use cantrip_api::*;
 use cantrip_mechanics::{effects, targets, triggers};
 use cantrip_oracle as oracle;
 
-/// "When this enchantment enters, create a token that's a copy of target nontoken creature." (CR 115.1).
-fn create_token_thats_copy_target_target_0(q: &dyn Query, _: &Asker, t: Target) -> bool {
-    matches!(
-        t, Target::Object(id) if cantrip_mechanics::targets::permanent(q, id) && ((! (q
-        .state().obj(id).token) && q.chars(id).is(CardType::Creature)))
-    )
-}
-
 /// "When this enchantment enters, create a token that's a copy of target nontoken creature." The token is remembered by this
 /// ability (CR 607.2c) for the linked abilities below: an ability a copy or grant effect gave the object later is not linked to
 /// it (CR 607.5).
@@ -51,7 +43,7 @@ pub static CARD: CardDef = CardDef {
                 create_token_thats_copy_target,
                 "When this enchantment enters, create a token that's a copy of target nontoken creature.",
             )
-            .targets(&[target(create_token_thats_copy_target_target_0)]),
+            .targets(&[targets::NONTOKEN_CREATURE]),
         triggered(
             triggers::THIS_LEAVES,
             exile_token,
