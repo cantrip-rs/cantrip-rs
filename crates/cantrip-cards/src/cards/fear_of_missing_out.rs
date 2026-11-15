@@ -1,11 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::{delirium, effects, targets, triggers::THIS_ENTERS};
+use cantrip_mechanics::{effects, targets, triggers::THIS_ENTERS, you_have_delirium};
 use cantrip_oracle as oracle;
-
-/// An intervening "if" (CR 603.4): delirium.
-fn has_delirium(q: &dyn Query, asker: &Asker) -> bool {
-    delirium(q, asker.controller)
-}
 
 /// Untap target creature. After this phase, there is an additional combat phase (CR 500.8).
 fn untap_and_extra_combat(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -21,7 +16,7 @@ pub static CARD: CardDef = CardDef {
         triggered(THIS_ENTERS, |g, item| effects::discard_then_draw(g, item, 1), "When this creature enters, discard a card, then draw a card."),
         triggered(cantrip_mechanics::triggers::THIS_ATTACKS_FOR_THE_FIRST_TIME_EACH_TURN,untap_and_extra_combat, "Delirium \u{2014} Whenever this creature attacks for the first time each turn, if there are four or more card types among cards in your graveyard, untap target creature. After this phase, there is an additional combat phase.")
             .targets(&[targets::CREATURE])
-            .condition(has_delirium),
+            .condition(you_have_delirium),
     ],
     ..oracle::FEAR_OF_MISSING_OUT
 };
