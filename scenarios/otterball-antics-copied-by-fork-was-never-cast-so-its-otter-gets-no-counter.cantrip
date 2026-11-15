@@ -1,0 +1,40 @@
+# Otterball Antics: "If this spell was cast from anywhere other than your hand, put a +1/+1 counter on that creature." A copy of the spell
+# was never cast (CR 707.10), so it has no zone it was cast from. Bot1 casts Antics from the hand and copies it with Fork: the original
+# makes a plain 1/1 Otter, and so does the copy (a second 1/1, not a 2/2). Neither gets a counter.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Ruby
+Mox Ruby
+Otterball Antics
+Fork
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Otterball Antics.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Fork.Cast(Stack.Otterball Antics)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Otter Token#1.Power = 1
+Bot1.Battlefield.Otter Token#1.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Otter Token#2.Power = 1
+Bot1.Battlefield.Otter Token#2.Counters.PlusOnePlusOne = (absent)
+Bot1.Graveyard = Otterball Antics; Fork
