@@ -1152,13 +1152,19 @@ pub fn discard_any_number_then_draw(g: &mut dyn Game, player: PlayerId, source: 
     Ok(())
 }
 
-/// "Each player draws a card" (CR 121.1, 121.2c): every player still in the game draws one, in turn order from the active
-/// player. Faerie Mastermind and Geier Reach Sanitarium print it.
-pub fn each_player_draws_a_card(g: &mut dyn Game, _: &StackItem) -> Result<(), Suspend> {
+/// "Each player draws `N` cards" (CR 121.1, 121.2c): every player still in the game draws them, in turn order from the active
+/// player. Winter, Misanthropic Guide prints it for two.
+pub fn each_player_draws<const N: u32>(g: &mut dyn Game, _: &StackItem) -> Result<(), Suspend> {
     for player in g.state().apnap().collect::<Vec<_>>() {
-        g.draw(player, 1);
+        g.draw(player, N);
     }
     Ok(())
+}
+
+/// "Each player draws a card" (CR 121.1, 121.2c): `each_player_draws` for one. Faerie Mastermind and Geier Reach Sanitarium
+/// print it.
+pub fn each_player_draws_a_card(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    each_player_draws::<1>(g, item)
 }
 
 /// "You and target opponent each draw `n` cards" (CR 121.1, 121.2c): the ability's controller and the target player in slot `slot`
