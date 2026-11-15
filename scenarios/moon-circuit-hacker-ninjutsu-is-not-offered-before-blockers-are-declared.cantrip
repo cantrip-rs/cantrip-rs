@@ -1,0 +1,30 @@
+# Ninjutsu returns an unblocked attacker (CR 702.49a), and before blockers are declared an attacking creature is neither
+# blocked nor unblocked (CR 509.1h): in the declare attackers step Moon-Circuit Hacker's ninjutsu is not offered, and once
+# no blocker has been declared for the attacking Memnite it is, and the Hacker enters tapped and attacking in its place.
+[Bot1 Deck]
+Memnite
+Moon-Circuit Hacker
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Attack(Memnite > Bot2)
+? Step = Attackers
+! Bot1.Hand.Moon-Circuit Hacker.Activate
+[T3 Bot1.Blockers]
+Bot1.Hand.Moon-Circuit Hacker.Activate
+Bot1.Battlefield.Island.Activate
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Moon-Circuit Hacker.Tapped = true
+Bot1.Hand.Memnite.Power = 1
+Bot2.Life = 18

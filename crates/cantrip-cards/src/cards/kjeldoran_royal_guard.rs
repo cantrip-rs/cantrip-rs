@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::replacements;
+use cantrip_mechanics::{combat, replacements};
 use cantrip_oracle as oracle;
 
 /// "{T}: All combat damage that would be dealt to you by unblocked creatures this turn is dealt to this creature instead." (CR 614.1a).
@@ -10,15 +10,7 @@ fn made_1_applies(
     proposal: &Proposal,
 ) -> bool {
     let Proposal::Damage(e) = proposal else { return false };
-    let (source, target, combat) = (e.source, &e.target, e.combat);
-    if combat && !q.state().obj(source).zone.is(ZoneKind::Stack)
-        && (q.state().attackers.iter().any(|a| a.id == source && !a.blocked)
-            && q.chars(source).is(CardType::Creature))
-        && matches!(* target, Target::Player(p) if asker.controller == p)
-    {
-        return true;
-    }
-    false
+    e.combat && combat::is_unblocked(q, e.source) && matches!(e.target, Target::Player(p) if asker.controller == p)
 }
 
 /// "{T}: All combat damage that would be dealt to you by unblocked creatures this turn is dealt to this creature instead." (CR 614.1a).
