@@ -1,0 +1,41 @@
+# Portent of Calamity with X = 4 (Mox Sapphire, Mox Ruby and a Black Lotus pay {4}{U}): the top four cards are Lightning Bolt,
+# Counterspell, an Island and Savannah Lions. Bot1 exiles the Bolt as the instant (an instant card is exiled only once, so the
+# Counterspell is left), the Island as the land and the Lions as the creature; the Counterspell goes to the graveyard with the
+# Portent. Only three cards were exiled, so there is no free spell to cast (CR 118.9, "four or more"), and all three go to the hand.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Portent of Calamity
+Island x3
+Lightning Bolt
+Counterspell
+Island
+Savannah Lions
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Portent of Calamity.Cast(X: 4)
+Bot1.Choose(Savannah Lions)
+? Bot1.Revealed = Lightning Bolt; Counterspell; Island; Savannah Lions
+Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Island)
+? Exile.Count = 0
+? Stack.Count = 0
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Portent of Calamity; Counterspell; Black Lotus
+Bot1.Hand = Island; Island; Island; Lightning Bolt; Island; Savannah Lions
+Exile.Count = 0
+Bot1.Library.Count = 9

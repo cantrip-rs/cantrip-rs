@@ -1,0 +1,40 @@
+# Portent of Calamity with X = 4 (Mox Sapphire, Mox Ruby and a Black Lotus pay {4}{U}): the top four cards are Lightning Bolt, Island,
+# Ornithopter and Savannah Lions. Bot1 exiles one card for each of four types: the Bolt (instant), the Island (land), the Ornithopter
+# (artifact, so it is no longer there to be the creature) and the Lions (creature). Four were exiled, so Bot1 may cast a spell from
+# among them for free: the Bolt at Bot2. The three other cards - the Island, which can't be cast, and the two creatures - go to the hand.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Portent of Calamity
+Island x3
+Lightning Bolt
+Island
+Ornithopter
+Savannah Lions
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Portent of Calamity.Cast(X: 4)
+Bot1.Choose(Ornithopter)
+Bot1.Choose(Savannah Lions)
+Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Island)
+Bot1.Choose(Lightning Bolt)
+Bot1.Target(Bot2)
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt; Portent of Calamity; Black Lotus
+Exile.Count = 0
+Bot1.Hand = Island; Island; Island; Island; Ornithopter; Savannah Lions

@@ -1,0 +1,37 @@
+# Portent of Calamity with X = 4: the same four cards are exiled, and Bot1 declines the free cast (CR 608.2g: "you may"), so all four
+# exiled cards, the Lightning Bolt included, go to the hand.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Portent of Calamity
+Island x3
+Lightning Bolt
+Island
+Ornithopter
+Savannah Lions
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Portent of Calamity.Cast(X: 4)
+Bot1.Choose(Ornithopter)
+Bot1.Choose(Savannah Lions)
+Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Island)
+Bot1.Choose()
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Portent of Calamity; Black Lotus
+Exile.Count = 0
+Bot1.Hand = Island; Island; Island; Island; Lightning Bolt; Ornithopter; Savannah Lions

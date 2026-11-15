@@ -1,0 +1,21 @@
+# Portent of Calamity with X = 0 (just the Mox Sapphire's {U}): no card is revealed, exiled or put into the graveyard, and the library is untouched.
+
+[Bot1 Deck]
+Mox Sapphire
+Portent of Calamity
+Island x5
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Portent of Calamity.Cast(X: 0)
+
+[Expect]
+Bot1.Graveyard = Portent of Calamity
+Exile.Count = 0
+Bot1.Library.Count = 14
