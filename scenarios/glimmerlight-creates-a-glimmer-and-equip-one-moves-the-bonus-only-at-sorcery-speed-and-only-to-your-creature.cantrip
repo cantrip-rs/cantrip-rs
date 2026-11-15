@@ -1,0 +1,64 @@
+# Glimmerlight: "When this Equipment enters, create a 1/1 white Glimmer enchantment creature token." (CR 111.1), "Equipped
+# creature gets +1/+1." and "Equip {1}" (CR 702.6a, 301.5). Turn 1: two Moxen pay for it; the trigger makes a Glimmer
+# (1/1 white enchantment creature) which the Equip, paid with exactly one Mox Pearl (the pool empty right after), makes a 2/2.
+# On Bot2's turn 2, with a Mox untapped to pay, an equip is refused at instant speed (Bot2's Ornithopter spell
+# is on the stack), and on turn 3 Bot2's own Ornithopter is not a target; the equip moves to Bot1's Ornithopter and the
+# Glimmer goes back to 1/1 while the Ornithopter becomes 1/3.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Glimmerlight
+Ornithopter
+Mox Sapphire
+Island x11
+
+[Bot2 Deck]
+Ornithopter
+Swamp x6
+Swamp x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Glimmerlight.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+! Bot1.Battlefield.Glimmerlight.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Glimmer Token.Power = 1
+? Bot1.Battlefield.Glimmer Token.Toughness = 1
+? Bot1.Battlefield.Glimmer Token.Colors = White
+? Bot1.Battlefield.Glimmer Token.Subtypes = Glimmer
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Glimmerlight.Activate(Bot1.Battlefield.Glimmer Token)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Glimmer Token.Power = 2
+? Bot1.Battlefield.Glimmer Token.Toughness = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+! Bot1.Battlefield.Glimmerlight.Activate(Bot1.Battlefield.Ornithopter)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Glimmerlight.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Glimmerlight.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Glimmer Token.Power = 1
+Bot1.Battlefield.Glimmer Token.Toughness = 1
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Glimmerlight.AttachedTo = Ornithopter
+Bot2.Battlefield.Ornithopter.Power = 0
