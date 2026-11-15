@@ -5391,7 +5391,35 @@ fn change_parts_split(
     targets: &[Target],
     split: &[bool],
 ) -> (ManaCost, u32, u8) {
+    change_parts_announced(cx, sources, player, costed, cost, face, targets, split, &ManaCost::ZERO)
+}
+
+/// The symbols an ability's own cost change adds that are announced as it is proposed (`own_ways_of_paying`, CR 118.13a,
+/// 601.2b) taken out of what the changes add (CR 601.2f): the cost they are added to holds them already, as announced.
+fn without_announced(mut more: ManaCost, announced: &ManaCost) -> ManaCost {
+    for i in 0..5 {
+        more.phyrexian[i] -= announced.phyrexian[i].min(more.phyrexian[i]);
+        more.twobrid[i] -= announced.twobrid[i].min(more.twobrid[i]);
+    }
+    more
+}
+
+/// `change_parts_split` for a cost that holds, as announced, the symbols `announced` the ability's own change adds: they
+/// are not added again, so the reductions and the least mana it may come to meet the cost as announced (CR 601.2f).
+#[allow(clippy::too_many_arguments)]
+fn change_parts_announced(
+    cx: &Cx,
+    sources: &[ObjectId],
+    player: PlayerId,
+    costed: Costed,
+    cost: ManaCost,
+    face: Option<CardId>,
+    targets: &[Target],
+    split: &[bool],
+    announced: &ManaCost,
+) -> (ManaCost, u32, u8) {
     let (more, less, life, least, discount) = deltas(cx, sources, player, costed, face, targets);
+    let more = without_announced(more, announced);
     let less = split_reduction(&less, split);
     // An increase is not X's (Atalya's ruling): `plus` keeps its generic mana out of X's.
     let cost = cost.plus(&more);
@@ -5417,8 +5445,26 @@ fn change_any(
     announced: Option<&Obj>,
     covered: &mut dyn FnMut(ManaCost, u8) -> bool,
 ) -> bool {
+    change_any_announced(cx, sources, player, costed, cost, face, targets, announced, &ManaCost::ZERO, covered)
+}
+
+/// `change_any` for a cost that holds, as announced, the symbols `own` the ability's own change adds
+/// (`change_parts_announced`).
+#[allow(clippy::too_many_arguments)]
+fn change_any_announced(
+    cx: &Cx,
+    sources: &[ObjectId],
+    player: PlayerId,
+    costed: Costed,
+    cost: ManaCost,
+    face: Option<CardId>,
+    targets: &[Target],
+    announced: Option<&Obj>,
+    own: &ManaCost,
+    covered: &mut dyn FnMut(ManaCost, u8) -> bool,
+) -> bool {
     let (more, whole, _, least, discount) = deltas_as(cx, sources, player, costed, face, targets, announced);
-    let cost = cost.plus(&more);
+    let cost = cost.plus(&without_announced(more, own));
     // Each way the payer could split a reduction by hybrid mana (CR 118.7e).
     let n = reduction_choices(&whole).min(8);
     (0u32..1 << n).any(|mask| {
@@ -7554,6 +7600,9 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
     }
     // What applies additional costs to activations (CR 118.8), found once, when an ability is first judged.
     let imposing = std::cell::OnceCell::new();
+    // Whether a permanent on the battlefield changes costs (`cost_change_sources`), found once, when an ability whose printed
+    // cost has no mana is first judged: nearly never.
+    let changing = std::cell::OnceCell::new();
     // Abilities of permanents, then abilities that function from the hand (cycling) and the graveyard (unearth), then the
     // exile zone's granted ones.
     let given = layers::acquisition_possible(cx.cards(), cx.s());
@@ -7662,9 +7711,13 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             // (CR 602.2b): a seat handed it would cancel at the payment and be handed it again, forever.
             let owed = if def.special_action { special_action_cost(cx, player, id, ability, def) } else { def.cost.mana };
             // An {X} is judged at the least it may be announced as (CR 107.3a, 601.2b): 0, or 1 where X can't be 0. A printed
-            // cost of no mana is judged too where the ability's own cost change may add mana to it as the total cost is
-            // determined (CR 601.2f by way of 602.2b: Merseine's "Pay enchanted creature's mana cost").
-            let judged = (at_least_x(owed, def.x_cant_be_zero).mana_value() > 0 || def.cost_change.is_some()) && !def.tap_creatures_for_mana;
+            // cost of no mana is judged too wherever something may add mana to it as the total cost is determined (CR 601.2f by
+            // way of 602.2b): the ability's own cost change (Merseine's "Pay enchanted creature's mana cost"), or a permanent
+            // that changes costs (Skyseer's Chariot's tax on a crew ability, Anointed Peacekeeper's).
+            let judged = (at_least_x(owed, def.x_cant_be_zero).mana_value() > 0
+                || def.cost_change.is_some()
+                || *changing.get_or_init(|| !cost_change_sources(cx).is_empty()))
+                && !def.tap_creatures_for_mana;
             // What pays for it (`activation_available`), its waterbend judged at the least X may be announced as.
             let own = judged
                 .then(|| {
@@ -7684,18 +7737,27 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
                 let any_color = static_rules::spend_any_color_for(cx, player, id, if def.special_action { SpendingFor::Other } else { SpendingFor::Activating });
                 // Its Phyrexian symbols paid with life where the life total allows, beside the life the cost pays
                 // (CR 107.4f, 601.2b by way of 602.2b, 116.2b), as the activation announces them (`announce_life`).
-                let judge = |cost: ManaCost| {
-                    let cost = phyrexian_with_life(cx, player, cost, whole.life, activating(def));
+                let judge = |cost: ManaCost, life: u32| {
+                    let cost = phyrexian_with_life(cx, player, cost, life, activating(def));
                     a.covers_for(&if any_color { cost.paid_with_any_color() } else { cost }, &payment)
                 };
                 if def.special_action {
                     // Its own cost changes, each way a reduction by hybrid mana could be split (CR 118.7e) and the hybrid
                     // symbols it meets announced (CR 601.2b), as `special_action` asks them.
                     let printed = at_least_x(special_action_printed_cost(cx, id, ability, def), def.x_cant_be_zero);
-                    change_any(cx, &a.changers, player, Costed::SpecialAction(id, ability), printed, None, &[], None, &mut |c, least| judge(at_least(c, least)))
+                    change_any(cx, &a.changers, player, Costed::SpecialAction(id, ability), printed, None, &[], None, &mut |c, least| judge(at_least(c, least), whole.life))
                 } else {
-                    // Each way the hybrid symbols a reduction meets could be announced (CR 601.2b): covered if any is.
-                    change_any(cx, &a.changers, player, Costed::Ability(id, ability, by), owed, None, targets, None, &mut |c, least| judge(at_least(c, least)))
+                    // How its Phyrexian symbols are paid is announced as it is proposed, before the total is determined (CR
+                    // 118.13a, 601.2b, 601.2f) - those printed and those its own cost change makes part of its activation cost
+                    // (`own_ways_of_paying`) - each paid with life where the life total allows, as `activate` would have them:
+                    // a reduction and its floor ("can't reduce the mana in that cost to less than one mana") meet the cost as
+                    // announced. Each way the hybrid symbols a reduction meets could be announced (CR 601.2b): covered if any is.
+                    let own = own_ways_of_paying(cx, player, id, ability, by, def, targets);
+                    let proposed = owed.plus(&own);
+                    let announced = phyrexian_with_life(cx, player, proposed, whole.life, activating(def));
+                    let with_color = announced.symbols.iter().sum::<u32>() - proposed.symbols.iter().sum::<u32>();
+                    let life = whole.life + 2 * (proposed.phyrexian.iter().sum::<u32>() - with_color);
+                    change_any_announced(cx, &a.changers, player, Costed::Ability(id, ability, by), announced, None, targets, None, &own, &mut |c, least| judge(at_least(c, least), life))
                 }
             };
             // The total cost is determined once the targets are announced (CR 601.2c, 601.2f, 602.2b), so a change that reads
@@ -12578,6 +12640,11 @@ fn activate(
             item.x = announce_x(cx, player, source, mana, None, None, u32::from(least_x(def.x_cant_be_zero)), most, false, 0, VariableCost::TapX(filter).governs())?;
         }
     }
+    // CR 118.13a, 601.2b by way of 602.2b: how each symbol that can be paid in more than one way is paid is announced as the
+    // ability is proposed - those the ability's own cost change makes part of its activation cost among them (Merseine's
+    // "Pay enchanted creature's mana cost"), which the change adds again as the total is determined and are taken out there.
+    let own_ways = own_ways_of_paying(cx, player, source, ability, by, def, targets);
+    mana = mana.plus(&own_ways);
     announce_twobrids(cx, player, source, &mut mana, AnyMana::No)?;
     let life = announce_life(cx, player, source, &mut mana, AnyMana::No, paid)?;
     // What the mana paying its cost pays for (CR 106.6): the source as the ability is activated, as it begins to be put on
@@ -12617,7 +12684,8 @@ fn activate(
     let added_life;
     let changers = cost_change_sources(cx);
     (mana, added_life) = {
-        let (cost, life, least) = change_parts_split(cx, &changers, player, Costed::Ability(source, ability, by), mana, None, &targets, &split);
+        // The own change's symbols are in `mana` as announced above, so they are not added again (`change_parts_announced`).
+        let (cost, life, least) = change_parts_announced(cx, &changers, player, Costed::Ability(source, ability, by), mana, None, &targets, &split, &own_ways);
         (at_least(cost, least), life)
     };
     let life = life + added_life;
@@ -12666,6 +12734,16 @@ fn activate(
     ops::became_targets(cx, targets.iter().copied(), source, player, true);
     ops::commit_crime(cx, player, source, &targets);
     Ok(())
+}
+
+/// The symbols of an activation cost that its own cost change makes (`ActivatedDef::cost_change`, CR 601.2f by way of
+/// 602.2b) and that can be paid in more than one way, so are announced as the ability is proposed (CR 118.13a, 601.2b):
+/// its Phyrexian symbols (CR 107.4f) and monocolored hybrid symbols with a generic half (CR 107.4e). Read with the
+/// targets announced with the action. Nothing for an ability with no change of its own.
+fn own_ways_of_paying(cx: &Cx, player: PlayerId, source: ObjectId, ability: AbilityRef, by: Option<Linked>, def: &ActivatedDef, targets: &[Target]) -> ManaCost {
+    let Some(change) = def.cost_change else { return ManaCost::ZERO };
+    let more = change(cx, &Asker { instance: None, source, controller: player, by, spell: false }, Costed::Ability(source, ability, by), targets).more;
+    ManaCost { phyrexian: more.phyrexian, twobrid: more.twobrid, ..ManaCost::ZERO }
 }
 
 /// The first step of activating an ability (CR 602.2a): the player announces it, and if `source` is a card in a hidden zone

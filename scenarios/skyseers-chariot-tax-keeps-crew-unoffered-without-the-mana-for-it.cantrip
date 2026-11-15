@@ -1,0 +1,59 @@
+# Bot1's Skyseer's Chariot names Smuggler's Copter: activated abilities of sources with that name cost {2} more (CR 601.2f
+# by way of 602.2b), Crew 1 included, whose printed cost has no mana. With no mana left, Bot2 is not offered Crew (it could
+# not be paid, and would only be taken back); on turn 4, with its four Moxen untapped, Bot2 crews, paying {2} and tapping
+# Grizzly Bears, and the Copter becomes an artifact creature.
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Skyseer's Chariot
+Smuggler's Copter
+Grizzly Bears
+Mountain x13
+[Bot2 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Smuggler's Copter
+Grizzly Bears
+Island
+Island x13
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Skyseer's Chariot.Cast
+Bot1.Name(Smuggler's Copter)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Smuggler's Copter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Mana =
+! Bot2.Battlefield.Smuggler's Copter.Activate(Ability: Crew; Mana: short)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot2.Choose(Grizzly Bears)
+Bot2.Pass
+? Bot2.Mana =
+Bot1.Pass
+[Expect]
+Bot2.Battlefield.Smuggler's Copter.Types = Artifact; Creature
+Bot2.Battlefield.Grizzly Bears.Tapped = true
