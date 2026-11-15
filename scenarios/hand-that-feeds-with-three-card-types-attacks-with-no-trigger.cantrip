@@ -1,0 +1,47 @@
+# Hand That Feeds with three card types in Bot1's graveyard, one short of delirium (CR 207.2c): Black Lotus (artifact), Wheel
+# of Fortune (sorcery) and an Ornithopter (artifact creature) are artifact, sorcery and creature. Attacking on turn 3 it does
+# not trigger: it stays a 2/2 without menace, so Bot2's Ornithopter (0/2) blocks it and dies to its 2 damage, and Bot2's life stays 20.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Wheel of Fortune
+Ornithopter
+Mox Sapphire
+Mox Ruby
+Hand That Feeds
+Island x16
+
+[Bot2 Deck]
+Island x7
+Ornithopter
+Island x12
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Hand That Feeds.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+? Bot1.Graveyard.Count = 3
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Hand That Feeds > Bot2)
+? Stack.Count = 0
+Bot2.Block(Ornithopter > Hand That Feeds)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Hand That Feeds.Power = 2
+Bot1.Battlefield.Hand That Feeds.Keywords = (absent)
+Bot2.Life = 20
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard.Count = 8
