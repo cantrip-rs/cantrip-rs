@@ -91,8 +91,22 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-160](#ki-160-a-granted-replicate-cost-is-announced-at-most-tens-of-millions-of-times) | A granted replicate cost is announced at most tens of millions of times | Pri-3 | Won't fix: beyond practical scale |
 | [KI-161](#ki-161-a-scenarios--modes-refusal-does-not-check-what-a-subtype-question-offers) | A scenario's `! Modes(...)` refusal does not check what a subtype question offers | Pri-3 | Open |
 | [KI-162](#ki-162-the-client-shows-no-duration-for-an-effect-that-changes-a-lands-types) | The client shows no duration for an effect that changes a land's types | Pri-2 | Open |
+| [KI-163](#ki-163-a-choose-question-offering-one-card-drops-its-rules-words-from-the-caption) | A choose question offering one card drops its rule's words from the caption | Pri-2 | Open |
 
 ## Issues
+
+### KI-163: A choose question offering one card drops its rule's words from the caption
+
+| Priority | Status | Area | Found |
+| --- | --- | --- | --- |
+| Pri-2 | Open | client (`dotnet/src/Cantrip.Client/CardChoicePresentation.cs`) | 2026-11-14, reviewing Camouflage (#1011) |
+
+**Notes.** A `Purpose::Choose` question whose selection rule has words reads, with two or more cards offered, "Camouflage:
+choose up to N creatures you control to put in the next pile". With exactly one card offered, the caption code near line 130
+drops the rule's words and reads "Camouflage: choose up to a creature", which is not false but no longer says what the choice
+is for. Camouflage meets it whenever only one creature still has room for a pile (a defender with one creature), and it
+affects every `Choose` question with words and one card offered. A fix keeps the rule's words in the one-card caption.
+Display only.
 
 ### KI-161: A scenario's `! Modes(...)` refusal does not check what a subtype question offers
 
