@@ -150,6 +150,15 @@ fn nonlegendary_creature_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool
 /// Mirrorweave and Yoshimaru, Scrappy Stray print it; checked again as the ability resolves (CR 608.2b).
 pub const NONLEGENDARY_CREATURE: TargetSpec = target(nonlegendary_creature_filter);
 
+fn nonlegendary_creature_you_control_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    nonlegendary_creature_filter(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) == asker.controller)
+}
+
+/// "Target nonlegendary creature you control" (CR 115.1, 205.4a, 109.5): a creature on the battlefield, as the layers give it now,
+/// without the legendary supertype, under the ability's controller; checked again as the ability resolves (CR 608.2b). Kiki-Jiki,
+/// Mirror Breaker, Naga Fleshcrafter and Niko, Light of Hope print it.
+pub const NONLEGENDARY_CREATURE_YOU_CONTROL: TargetSpec = target(nonlegendary_creature_you_control_filter);
+
 fn legendary_creature_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     creature_filter(q, asker, t) && matches!(t, Target::Object(id) if q.chars(id).supertypes.legendary)
 }
