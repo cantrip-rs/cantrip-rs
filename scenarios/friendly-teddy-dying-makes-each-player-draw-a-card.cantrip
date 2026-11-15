@@ -1,0 +1,42 @@
+# Friendly Teddy: "When this creature dies, each player draws a card." Bot1 casts it on turn 1; on turn 2 Bot2 (who has
+# drawn Swamp for the turn) Bolts it, and when it dies both players draw: Bot1 the Ornithopter on top of its library,
+# Bot2 the Memnite under its turn-two draw. The controller draws as well as the opponent.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Friendly Teddy
+Plains x4
+Ornithopter
+Plains x12
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Swamp x5
+Swamp
+Memnite
+Swamp x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Friendly Teddy.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Friendly Teddy)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+? Bot1.Graveyard = Friendly Teddy
+? Bot1.Hand = Plains; Plains; Plains; Plains; Ornithopter
+? Bot2.Hand = Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Memnite
+
+[Expect]
+Bot1.Graveyard = Friendly Teddy
+Bot1.Hand = Plains; Plains; Plains; Plains; Ornithopter
+Bot2.Hand = Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Memnite
+Bot2.Graveyard = Lightning Bolt

@@ -1,0 +1,8 @@
+{
+  "name": "Friendly Teddy",
+  "manaCost": "{2}",
+  "type": "Artifact Creature — Bear Toy",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature dies, each player draws a card."
+}
