@@ -1,0 +1,42 @@
+# Niko, Light of Hope: the Shard tokens it creates are enchantments with "{2}, Sacrifice this token: Scry 1, then draw a card"
+# (CR 111.10, 701.22, 121.1). On turn 3 Bot1 sacrifices one Shard: Lightning Bolt, on top of the library, goes to the bottom, and the
+# card drawn is the one beneath it. The other Shard remains.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Niko, Light of Hope
+Island
+Island
+Island
+Lightning Bolt
+Black Lotus
+Island x12
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Niko, Light of Hope.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Shard Token#1.Activate
+Bot1.Arrange( | Lightning Bolt)
+
+[Expect]
+Turn = 3
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Niko, Light of Hope; Shard Token
+Bot1.Hand = Black Lotus; Island; Island; Island
