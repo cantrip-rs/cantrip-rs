@@ -1,0 +1,53 @@
+# Delirium (CR 207.2c): after Wheel of Fortune the Wurm, Mox Emerald, a Forest and Wheel are in Bot1's graveyard: creature, artifact, land and sorcery, exactly four types.
+# {2}{G}{G} is paid exactly: with {G}{G}{R}{C}{C} in the pool one mana is left over. The ability is a sorcery-speed one (CR 602.5d): with Ornithopter on the stack it is refused; once it has resolved the Wurm returns
+# with a finality counter (CR 122.1h), untapped, and with haste attacks the turn it returns.
+
+[Bot1 Deck]
+Sol Ring
+Mountain
+Wheel of Fortune
+Balustrade Wurm
+Mox Emerald
+Forest
+Forest
+Forest
+Ornithopter
+Forest x14
+
+[Bot2 Deck]
+Island
+Island x25
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mountain.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Graveyard.Balustrade Wurm.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Graveyard.Balustrade Wurm.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}
+Bot1.Attack(Balustrade Wurm > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Balustrade Wurm.Counters.Finality = 1
+Bot1.Battlefield.Balustrade Wurm.Tapped = true
+Bot1.Graveyard.Balustrade Wurm = (absent)
+Bot2.Life = 15
