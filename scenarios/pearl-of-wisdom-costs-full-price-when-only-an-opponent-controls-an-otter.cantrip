@@ -1,0 +1,40 @@
+# Pearl of Wisdom: the reduction is for an Otter "you control" (CR 601.2f). Bot2's Thieving Otter (cast with Black Lotus on turn 2) does not
+# make Bot1's Pearl cheaper: on turn 3 two Mox Sapphires give {U}{U}, one short of {2}{U} (Mana: short). With Black Lotus's three blue added
+# it is cast for the full {2}{U}, leaving two blue, and draws two cards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Pearl of Wisdom
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Thieving Otter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Thieving Otter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+! Bot1.Hand.Pearl of Wisdom.Cast(Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Pearl of Wisdom.Cast
+? Bot1.Mana = {U}{U}
+
+[Expect]
+Bot1.Hand.Count = 6
