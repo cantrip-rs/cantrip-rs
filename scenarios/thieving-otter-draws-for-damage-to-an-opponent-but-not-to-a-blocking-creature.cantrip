@@ -1,0 +1,36 @@
+# Thieving Otter {2}{U} 2/2: "Whenever this creature deals damage to an opponent, draw a card" (CR 603.2, 120.2, 121.1). On turn 3 Bot2's
+# Ornithopter blocks it: the damage goes to a creature, nothing is drawn (6 cards in hand after the turn's draw, and still 6). On turn 5
+# nothing blocks: Bot2 goes to 18 and Bot1 draws one card, on top of the turn's draw (7 before combat, 8 after).
+
+[Bot1 Deck]
+Black Lotus
+Thieving Otter
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Thieving Otter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Thieving Otter > Bot2)
+Bot2.Block(Ornithopter > Thieving Otter)
+[T3 Bot1.Main2]
+? Bot1.Hand.Count = 6
+? Bot2.Life = 20
+[T5 Bot1.Main1]
+? Bot1.Hand.Count = 7
+Bot1.Attack(Thieving Otter > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Hand.Count = 8

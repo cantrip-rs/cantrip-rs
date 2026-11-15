@@ -1,0 +1,8 @@
+{
+  "name": "Thieving Otter",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Otter",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever this creature deals damage to an opponent, draw a card."
+}

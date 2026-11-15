@@ -1,0 +1,34 @@
+# Thieving Otter: "Whenever this creature deals damage to an opponent" (CR 603.2, 120.2): only the Otter's own damage. On turn 3 the
+# Otter and Memnite attack; Bot2's Ornithopter blocks the Otter, Memnite deals 1 to Bot2, and Bot1 draws nothing for it (5 cards in
+# hand after the turn's draw, still 5).
+
+[Bot1 Deck]
+Black Lotus
+Thieving Otter
+Memnite
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Thieving Otter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 5
+Bot1.Attack(Thieving Otter > Bot2; Memnite > Bot2)
+Bot2.Block(Ornithopter > Thieving Otter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Hand.Count = 5
+Bot2.Graveyard = Ornithopter
