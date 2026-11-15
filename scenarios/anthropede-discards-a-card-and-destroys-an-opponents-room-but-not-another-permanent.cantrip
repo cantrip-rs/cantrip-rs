@@ -1,0 +1,59 @@
+# Anthropede: "When this creature enters, you may discard a card or pay {2}. When you do, destroy target Room." Bot1 chooses the
+# discard (the first option offered, Modes(1)) and discards Lightning Bolt; only then does the reflexive ability choose its target
+# (CR 603.12). Bot2 has two Rooms, Roaring Furnace and Unholy Annex, and other permanents: Ornithopter and Mox Jet are
+# not Rooms and are refused. Bot1 destroys Unholy Annex: only that Room goes to Bot2's graveyard, the other stays, and
+# Anthropede stays as a 3/4.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Anthropede
+Lightning Bolt
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Roaring Furnace // Steaming Sauna
+Unholy Annex // Ritual Chamber
+Ornithopter
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Roaring Furnace // Steaming Sauna.Cast(Ability: Roaring Furnace)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Unholy Annex // Ritual Chamber.Cast(Ability: Unholy Annex)
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Anthropede.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(1)
+Bot1.Choose(Lightning Bolt)
+! Bot1.Target(Ornithopter)
+! Bot1.Target(Mox Jet)
+Bot1.Target(Unholy Annex)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot2.Graveyard = Unholy Annex // Ritual Chamber; Black Lotus
+Bot2.Battlefield = Mox Jet; Mox Ruby; Roaring Furnace; Ornithopter
+Bot1.Battlefield.Anthropede.Power = 3
+Bot1.Battlefield.Anthropede.Toughness = 4
+Stack.Count = 0
