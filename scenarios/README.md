@@ -552,9 +552,9 @@ kind, place it where the action could otherwise be taken, with a wait or `BotN.P
 `Key = Value` against the dump. A failing script prints every key. The keys are:
 
 - `Turn`, `Step`, `ActivePlayer`, `PriorityPlayer`, `Result` (`InProgress`, `Bot1 won`, `Draw`)
-- `DrawReason` (`MandatoryLoop`, `AllLost`, `EventLimit`), why a drawn game is drawn (a loop every player only passed in,
-  come round three times, `docs/rules-exceptions.md` RX-4; CR 104.4a: every player left lost at once; the event limit,
-  RX-1), from the history; absent for a game not drawn
+- `DrawReason` (`MandatoryLoop`, `AllLost`, `EventLimit`, `Effect`), why a drawn game is drawn (a loop every player only
+  passed in, come round three times, `docs/rules-exceptions.md` RX-4; CR 104.4a: every player left lost at once; the event
+  limit, RX-1; CR 104.4c: an effect said so, Divine Intervention's), from the history; absent for a game not drawn
 - `Monarch` (`Bot1`), once a player has become the monarch (CR 725) and absent until then; `Initiative` likewise (CR 726)
 - `DayNight` (`Day`, `Night`), once the game has a designation (CR 731.1) and absent while it is neither. The game's
   own, so it names no player.

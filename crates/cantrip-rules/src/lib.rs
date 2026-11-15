@@ -2854,6 +2854,10 @@ impl cantrip_api::Game for Cx<'_> {
         ops::lose_game(self, player);
     }
 
+    fn draw_game(&mut self) {
+        ops::draw_game(self);
+    }
+
     fn give_experience(&mut self, player: PlayerId, amount: u32) {
         // Counters the effect's controller puts on the player (CR 122.6, 608.2), a replacement of counters being put
         // applying (Vorinclex's "on a permanent or player").

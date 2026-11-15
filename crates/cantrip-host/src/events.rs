@@ -228,6 +228,7 @@ impl Tracker {
                     DrawReason::AllLost => DrawReasonView::AllLost,
                     DrawReason::MandatoryLoop => DrawReasonView::MandatoryLoop,
                     DrawReason::EventLimit => DrawReasonView::EventLimit,
+                    DrawReason::Effect => DrawReasonView::Effect,
                 };
             }
             Event::Scried { player, count, .. } => out.push(Proto::Scried { player, count: crate::prompt::wire(count) }),

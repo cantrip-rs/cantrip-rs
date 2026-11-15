@@ -172,6 +172,8 @@ pub enum DrawReasonView {
     MandatoryLoop,
     /// The game reached the most events the engine records (`docs/rules-exceptions.md`, RX-1).
     EventLimit,
+    /// An effect stated that the game is a draw (CR 104.4c): Divine Intervention's.
+    Effect,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]

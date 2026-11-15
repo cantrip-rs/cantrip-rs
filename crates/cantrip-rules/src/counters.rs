@@ -273,8 +273,11 @@ pub fn remove(cx: &mut Cx, id: ObjectId, kind: CounterKind, n: i32) {
     let total = cx.s().obj(id).counters(kind);
     ops::end_lapsed_durations(cx, id);
     // What came off is recorded, with what removed it as the record's cause: "a mire counter has not been removed from with
-    // this artifact" (Cyclopean Tomb) asks the history.
-    cx.emit(Event::CountersRemoved { object: id, kind, amount: before - total, total });
+    // this artifact" (Cyclopean Tomb) asks the history. And with the player who removed it, as counters put are with the player
+    // who put them (CR 122.6a): the player whose action or cost it is, or the controller of the effect doing it; none for the
+    // rules' own (CR 704.5q). "When you remove the last intervention counter" (Divine Intervention) asks it.
+    let by = cx.acting_player();
+    cx.emit(Event::CountersRemoved { object: id, kind, amount: before - total, total, by });
 }
 
 /// "Move" up to `n` counters of one kind from `from` onto `to` (CR 122.5): taken off `from` and put onto `to` by the player doing it

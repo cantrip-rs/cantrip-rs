@@ -1688,6 +1688,7 @@ counter_kinds! {
     Music = 90, "music", "Music";
     Vow = 91, "vow", "Vow";
     Doom = 92, "doom", "Doom";
+    Intervention = 93, "intervention", "Intervention";
 }
 
 impl CounterKind {
@@ -2366,13 +2367,13 @@ mod carrion_counter_tests {
         assert_eq!(CounterKind::Film as usize, 64);
         assert_eq!(CounterKind::Peace as usize, 65);
         assert_eq!(CounterKind::Vow as usize, 91);
-        assert_eq!(CounterKind::COUNT, 93);
+        assert_eq!(CounterKind::COUNT, 94);
         assert!(!CounterKind::POWER_TOUGHNESS.iter().any(|(kind, _, _)| *kind == carrion));
     }
     #[test]
     fn the_doom_counter_name_appends_without_changing_existing_ids() {
         assert_eq!(CounterKind::Music as u8, 90);
-        for (kind, id, name, token) in [(CounterKind::Doom, 92, "doom", "Doom")] {
+        for (kind, id, name, token) in [(CounterKind::Doom, 92, "doom", "Doom"), (CounterKind::Intervention, 93, "intervention", "Intervention")] {
             assert_eq!(kind as usize, id);
             assert_eq!(CounterKind::ALL[id], kind);
             assert_eq!(kind.name(), name);assert_eq!(kind.token(), token);

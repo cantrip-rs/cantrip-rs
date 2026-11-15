@@ -82,6 +82,30 @@ fn the_state_based_action_records_both_kinds() {
     assert_eq!(cx.s().obj(id).counters(CounterKind::PlusOne), 1);
 }
 
+/// The player who removed counters: the player whose doing it is (`Cx::acting_player`), another than the object's
+/// controller here; and none for the rules' own removal (CR 704.5q). "When you remove the last intervention counter" (Divine
+/// Intervention's ruling) asks it.
+#[test]
+fn a_removal_records_the_player_who_removed_them_and_none_for_the_rules() {
+    const THEM: PlayerId = PlayerId(1);
+    let by = |cx: &Cx, from: usize| -> Vec<Option<PlayerId>> {
+        cx.g.log[from..].iter().filter_map(|r| match r.event { Event::CountersRemoved { by, .. } => Some(by), _ => None }).collect()
+    };
+    let mut game = game();
+    let id = bear(&mut game);
+    let mut cx = cx(&mut game);
+    counters::put(&mut cx, id, CounterKind::PlusOne, 3, YOU, counters::How::Effect);
+    counters::put(&mut cx, id, CounterKind::MinusOne, 1, YOU, counters::How::Effect);
+    let from = cx.g.log.len();
+    cx.doer = Some(THEM);
+    counters::remove(&mut cx, id, CounterKind::PlusOne, 1);
+    assert_eq!(by(&cx, from), vec![Some(THEM)]);
+    cx.doer = None;
+    let from = cx.g.log.len();
+    assert_eq!(settle::state_based_actions_alone(&mut cx), Ok(true));
+    assert_eq!(by(&cx, from), vec![None, None]);
+}
+
 /// CR 122.2: counters on a permanent that leaves the battlefield are not removed; they cease to exist. Nothing is recorded.
 #[test]
 fn leaving_the_battlefield_removes_no_counters() {

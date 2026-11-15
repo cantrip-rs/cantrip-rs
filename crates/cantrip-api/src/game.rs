@@ -1356,6 +1356,9 @@ pub trait Game: Query {
     fn win_game(&mut self, player: PlayerId);
     /// An effect states that `player` loses the game (CR 104.3e): they are out at once, and the last one left has won.
     fn lose_game(&mut self, player: PlayerId);
+    /// An effect states that the game is a draw (CR 104.4c): it ends at once, no player having won or lost. A player who
+    /// "can't lose the game" or whose opponents "can't win the game" (Platinum Angel) does not stop it: nobody wins or loses.
+    fn draw_game(&mut self);
     /// `player` gets poison counters (CR 122.1f); ten lose the game (CR 704.5c).
     fn give_poison(&mut self, player: PlayerId, amount: u32);
     /// `player` gets experience counters (CR 122.1).

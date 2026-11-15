@@ -5937,6 +5937,17 @@ pub fn lose_game(cx: &mut Cx, player: PlayerId) {
     leaves_having_lost(cx, player, LossReason::Effect);
 }
 
+/// An effect states that the game is a draw (CR 104.4c): it ends at once, with no winner and no loser. Nothing stops it:
+/// "can't lose the game" and "can't win the game" (CR 104.3, Platinum Angel) are about losing and winning, and in a draw
+/// nobody does either. Cantrip plays no limited range of influence (CR 104.4e), so the draw is the whole game's.
+pub fn draw_game(cx: &mut Cx) {
+    if cx.s().is_over() {
+        return;
+    }
+    end_game(cx, Outcome::Draw);
+    cx.record(Event::GameDrawn { reason: DrawReason::Effect });
+}
+
 /// A player concedes (CR 104.3a): they lose and leave the game at once, which nothing prevents ("can't lose the game" does not
 /// stop it); the monarch and the initiative pass on (CR 725.4, 726.4) and their objects leave (CR 800.4a).
 /// Conceding is a player's action (CR 104.3a), so it breaks the run of passes: every player still in passes again, with what

@@ -359,9 +359,13 @@ pub enum Event {
     /// "a land that a mire counter has not been removed from with this artifact" (Cyclopean Tomb) asks it. `total` is how
     /// many of that kind it has once they are off, so "when the last time counter is removed from this card" (suspend, CR
     /// 702.62a) and "when the last defense counter is removed from this permanent" (a Siege, CR 310.12b) read the event as
-    /// the counters come off (CR 603.2): `total` 0, however many came off at once. Filed with the counters put
-    /// (`EventMask::COUNTERS`), which is what an ability listening for either is asked of.
-    CountersRemoved { object: ObjectId, kind: CounterKind, amount: i32, total: i32 },
+    /// the counters come off (CR 603.2): `total` 0, however many came off at once. `by` is the player who removed them, as
+    /// `CountersPut`'s `by` is the player who put them: the player whose action or cost it was (CR 601.2h, 602.2b), or the
+    /// controller of the spell, ability or replacement effect whose effect removed them (CR 608.2c); none when the rules did it
+    /// (the state-based action of CR 704.5q). "When you remove the last intervention counter from this enchantment" (Divine
+    /// Intervention) asks it: its ruling has it trigger only when its controller removes that counter, however that happens.
+    /// Filed with the counters put (`EventMask::COUNTERS`), which is what an ability listening for either is asked of.
+    CountersRemoved { object: ObjectId, kind: CounterKind, amount: i32, total: i32, by: Option<PlayerId> },
     /// A permanent transformed (CR 701.27a): its other face is up now.
     Transformed { object: ObjectId },
     /// `player` gave a gift (CR 702.174c) to `to`: an instant or sorcery spell they control whose gift cost was paid
@@ -527,6 +531,8 @@ pub enum DrawReason {
     MandatoryLoop,
     /// The game reached the most events the engine records (`MAX_GAME_EVENTS`; `docs/rules-exceptions.md`, RX-1).
     EventLimit,
+    /// An effect stated that the game is a draw (CR 104.4c): Divine Intervention's.
+    Effect,
 }
 
 impl Event {

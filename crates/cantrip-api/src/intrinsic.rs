@@ -168,7 +168,7 @@ fn suspended(q: &dyn Query, asker: &Asker) -> bool {
 /// came off together (CR 603.2c).
 fn last_time_counter_removed(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
     match *event {
-        Event::CountersRemoved { object, kind: CounterKind::Time, amount, total: 0 } if object == source && amount > 0 => Fired::PLAIN,
+        Event::CountersRemoved { object, kind: CounterKind::Time, amount, total: 0, .. } if object == source && amount > 0 => Fired::PLAIN,
         _ => None,
     }
 }
@@ -222,7 +222,7 @@ fn caster_controls(q: &dyn Query, e: &ContinuousEffect) -> bool {
 /// left, however they came off, once however many came off together (CR 603.2c).
 fn last_defense_counter_removed(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
     match *event {
-        Event::CountersRemoved { object, kind: CounterKind::Defense, amount, total: 0 } if object == source && amount > 0 => Fired::PLAIN,
+        Event::CountersRemoved { object, kind: CounterKind::Defense, amount, total: 0, .. } if object == source && amount > 0 => Fired::PLAIN,
         _ => None,
     }
 }
