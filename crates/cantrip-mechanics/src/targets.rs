@@ -55,6 +55,10 @@ fn creature_you_control_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool 
     creature_filter(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) == asker.controller)
 }
 
+fn untapped_creature_you_control_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_you_control_filter(q, asker, t) && matches!(t, Target::Object(id) if !q.obj(id).tapped)
+}
+
 fn creature_you_dont_control_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     creature_filter(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) != asker.controller)
 }
@@ -314,6 +318,11 @@ fn opponent_or_planeswalker_filter(q: &dyn Query, asker: &Asker, t: Target) -> b
 /// battlefield, whoever controls it. Bedeck // Bedazzle and Eternal Flame print it.
 pub const OPPONENT_OR_PLANESWALKER: TargetSpec = target(opponent_or_planeswalker_filter);
 pub const CREATURE_YOU_CONTROL: TargetSpec = target(creature_you_control_filter);
+
+/// "Untapped creature you control" as a target (CR 115.1, 701.26): a creature on the battlefield its caster controls that is untapped when
+/// the spell or ability is put on the stack and again as it resolves, a tapped creature no longer being a legal target (CR 608.2b). Energy
+/// Tap and Coordinated Clobbering print it.
+pub const UNTAPPED_CREATURE_YOU_CONTROL: TargetSpec = target(untapped_creature_you_control_filter);
 
 /// "Target creature you own": a creature on the battlefield whose owner is the caster, whoever controls it (CR 108.3, 115.1).
 /// The Eagles Are Coming! and Northampton Farm print it.
