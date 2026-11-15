@@ -1,0 +1,43 @@
+# Threats Around Every Corner: "When this enchantment enters, manifest dread" (CR 701.62a) puts the Snapcaster Mage onto the battlefield face down
+# (the Lightning Bolt is milled), and that face-down permanent entering under Bot1's control triggers the second ability (CR 603.6a): Bot1 searches
+# for a basic land card, the Forest is put onto the battlefield tapped, and the library is shuffled (CR 701.23). A nonbasic land is refused.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Threats Around Every Corner
+Mox Sapphire
+Island
+Snapcaster Mage
+Lightning Bolt
+Forest
+Tolarian Academy
+Island x9
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Threats Around Every Corner.Cast
+Bot2.Pass
+Bot1.Arrange(Snapcaster Mage | Lightning Bolt)
+! Bot1.Search(Tolarian Academy)
+Bot1.Search(Forest)
+? Bot1.Battlefield.Forest.Tapped = true
+? Bot1.Battlefield..FaceDownName = Snapcaster Mage
+
+[Expect]
+Bot1.Battlefield.Count = 7
+Bot1.Graveyard = Lightning Bolt
+Bot1.Library.Count = 10
+Bot1.Hand = Mox Sapphire; Island

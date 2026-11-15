@@ -1,0 +1,54 @@
+# Threats Around Every Corner triggers only for a face-down permanent under its controller's control (CR 603.6a). After Bot1's own manifest and fetch
+# on turn 1, Bot2's Manifest Dread on turn 2 puts a face-down permanent onto the battlefield under Bot2's control, and on turn 3 Bot1 casts a face-up
+# Mox Sapphire: neither makes Bot1 search (nothing is asked, the library keeps its cards).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Threats Around Every Corner
+Mox Sapphire
+Island
+Snapcaster Mage
+Lightning Bolt
+Forest
+Island x10
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Manifest Dread
+Island x4
+Swamp
+Swamp
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Threats Around Every Corner.Cast
+Bot2.Pass
+Bot1.Arrange(Snapcaster Mage | Lightning Bolt)
+Bot1.Search(Forest)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Manifest Dread.Cast
+Bot2.Arrange(Island | Swamp)
+? Bot2.Battlefield..FaceDown = true
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+
+[Expect]
+Bot1.Battlefield.Count = 8
+Bot1.Library.Count = 9
+Stack.Count = 0

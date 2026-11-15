@@ -1,0 +1,45 @@
+# Threats Around Every Corner's second ability is not tied to its own manifest (CR 603.6a): on turn 1 its manifest dread fetches a tapped Forest, and on
+# turn 3 Bot1's Manifest Dread puts another face-down permanent onto the battlefield, so Bot1 fetches a second tapped basic land (an Island, the only
+# basic land type left in the library; the Forest from turn 1 untapped in the meantime). Each search shuffles the library (CR 701.23).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Threats Around Every Corner
+Manifest Dread
+Mox Sapphire
+Snapcaster Mage
+Lightning Bolt
+Forest
+Island x10
+
+[Bot2 Deck]
+Swamp x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Threats Around Every Corner.Cast
+Bot2.Pass
+Bot1.Arrange(Snapcaster Mage | Lightning Bolt)
+Bot1.Search(Forest)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Manifest Dread.Cast
+Bot1.Arrange(Island | Island)
+Bot1.Search(Island)
+
+[Expect]
+Bot1.Battlefield.Count = 10
+Bot1.Battlefield.Forest.Tapped = false
+Bot1.Battlefield.Island.Tapped = true
