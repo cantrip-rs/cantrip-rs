@@ -1,0 +1,12 @@
+{
+  "name": "Maha, Its Feathers Night",
+  "manaCost": "{3}{B}{B}",
+  "type": "Legendary Creature — Elemental Bird",
+  "power": 6,
+  "toughness": 5,
+  "oracleText": "Flying, trample\nWard—Discard a card.\nCreatures your opponents control have base toughness 1.",
+  "keywords": [
+    "Flying",
+    "Trample"
+  ]
+}

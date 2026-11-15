@@ -1,0 +1,42 @@
+# Maha, Its Feathers Night sets base toughness (layer 7b); effects that modify toughness apply after it (layer 7c, CR 613.4c). Bot2's
+# Ornithopter (0/2 -> base 0/1) gets Giant Growth (+3/+3) and is a 3/4, not a 3/5; at the end of the turn it is a 0/1 again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Maha, Its Feathers Night
+Swamp x20
+
+[Bot2 Deck]
+Mox Emerald
+Ornithopter
+Giant Growth
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Maha, Its Feathers Night.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Giant Growth.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Ornithopter.Power = 3
+? Bot2.Battlefield.Ornithopter.Toughness = 4
+[T3 Bot1.Main1]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 1

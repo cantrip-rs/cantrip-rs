@@ -1,0 +1,38 @@
+# Maha, Its Feathers Night: "Creatures your opponents control have base toughness 1" (CR 613.4b). Bot1 casts Maha on turn 1 (Black
+# Lotus, Mox Jet, Mox Pearl); Bot2's Ornithopter (0/2), cast afterwards, is a 0/1 at once (the effect is continuous, CR 611.3),
+# while Bot1's own Ornithopter keeps toughness 2 and Maha stays 6/5. Power is untouched.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Ornithopter
+Maha, Its Feathers Night
+Swamp x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Maha, Its Feathers Night.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 1
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Maha, Its Feathers Night.Power = 6
+Bot1.Battlefield.Maha, Its Feathers Night.Toughness = 5

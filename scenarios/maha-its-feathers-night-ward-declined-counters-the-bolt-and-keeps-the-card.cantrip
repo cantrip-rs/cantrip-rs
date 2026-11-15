@@ -1,0 +1,35 @@
+# Maha, Its Feathers Night: Bot2 declines the ward cost, so the Bolt is countered, Maha is undamaged and Bot2 keeps its Island (hand: 7 + the turn-2 draw - Mox Ruby - Lightning Bolt = 6).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Maha, Its Feathers Night
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island
+Plains x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Maha, Its Feathers Night.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Maha, Its Feathers Night)
+Bot2.Decline
+
+[Expect]
+Bot2.Graveyard = Lightning Bolt
+Bot2.Hand.Count = 6
+Bot1.Battlefield.Maha, Its Feathers Night.Damage = 0
