@@ -704,6 +704,25 @@ pub fn may_put_land_onto_battlefield_tapped(
     Ok(g.is_on_battlefield(arrived))
 }
 
+/// "Look at the top card of your library. If it's a land card, you may put it onto the battlefield tapped. If you don't put the card
+/// onto the battlefield, put it into your hand." (CR 701.20a, 608.2c): the card is looked at whatever it is, a land is offered
+/// (`may_put_land_onto_battlefield_tapped`), and a card that did not enter - a nonland card, a land the player declined, one a replacement
+/// effect stopped - goes to the hand, wherever it now is. An empty library does nothing. Risen Reef and Fecund Greenshell print it.
+pub fn look_at_top_land_onto_battlefield_else_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let looked = top_of_library(g, item.controller, 1);
+    g.look_at(item.controller, &looked);
+    g.end_sentence();
+    for original in looked {
+        let entered = may_put_land_onto_battlefield_tapped(g, item.controller, item.object, original)?;
+        g.end_sentence();
+        if !entered {
+            let card = g.found_after_move(original).unwrap_or(original);
+            g.return_to_hand(&[card]);
+        }
+    }
+    Ok(())
+}
+
 /// "Look at the top `count` cards of your library. Put up to `most` [`kind`] cards [with total mana value N or less]
 /// from among them onto the battlefield. Put the rest on the bottom of your library in a random order [or
 /// `Rest::BottomChosen`: "in any order"]." (CR 401.2, 401.4): the player sees every card looked at (a smaller library
